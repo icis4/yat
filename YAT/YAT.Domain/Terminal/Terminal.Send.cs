@@ -630,7 +630,7 @@ namespace YAT.Domain
 											break;
 										}
 
-									////case Parser.Keyword.Repeat: is yet pending (FR #13) and requires parser support for strings.
+									////case Parser.Keyword.Repeat: is yet pending (FR #13) and requires parser support for strings (FR #404).
 									////{
 									////}
 
@@ -757,7 +757,7 @@ namespace YAT.Domain
 					var format = TerminalSettings.Display.TimeStampFormat;
 					var useUtc = TerminalSettings.Display.TimeStampUseUtc;
 
-				////if (!ArrayEx.IsNullOrEmpty(result.Args)) // with argument is yet pending (FR #400) and requires parser support for strings.
+				////if (!ArrayEx.IsNullOrEmpty(result.Args)) // with argument is yet pending (FR #400) and requires parser support for strings (FR #404).
 				////	format = result.Args[0];
 
 					var now = DateTime.Now;                                                        // No enclosure!
@@ -774,13 +774,43 @@ namespace YAT.Domain
 					break;
 				}
 
+				case Parser.Keyword.Port:
+				{
+					if (TerminalSettings.IO.IOType == IOType.SerialPort)
+					{
+						var settings = new MKY.IO.Serial.SerialPort.SerialPortSettings(TerminalSettings.IO.SerialPort); // Clone to ensure decoupling while
+						settings.ClearChanged();                                                                        // changing and reapplying settings.
+
+						if (!ArrayEx.IsNullOrEmpty(result.Args))
+						{
+							MKY.IO.Ports.SerialPortId portId;
+							if (MKY.IO.Ports.SerialPortId.TryFrom(result.Args[0], out portId))
+								settings.PortId = portId;
+						}
+
+						if (settings.HaveChanged)
+						{
+							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+
+							Exception ex;
+							if (!TryChangeSettingsOnTheFly(settings, out ex))
+								InlineDisplayElement(IODirection.Bidir, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Bidir, "Changing the serial COM port has failed! " + ex.Message));
+						}
+					}
+					else
+					{
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "This keyword only applies to serial COM ports.", true));
+					}
+
+					break;
+				}
+
 				case Parser.Keyword.PortSettings:
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
-						var port = (MKY.IO.Serial.SerialPort.SerialPort)this.UnderlyingIOProvider;
-						var setting = new MKY.IO.Serial.SerialPort.SerialPortSettings(port.Settings); // Clone to ensure decoupling while
-						setting.ClearChanged();                                                       // changing and reapplying settings.
+						var settings = new MKY.IO.Serial.SerialPort.SerialPortSettings(TerminalSettings.IO.SerialPort); // Clone to ensure decoupling while
+						settings.ClearChanged();                                                                        // changing and reapplying settings.
 
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
 						{
@@ -788,31 +818,31 @@ namespace YAT.Domain
 							{
 								MKY.IO.Ports.BaudRateEx baudRate;
 								if (MKY.IO.Ports.BaudRateEx.TryFrom(result.Args[0], out baudRate))
-									setting.Communication.BaudRate = baudRate;
+									settings.Communication.BaudRate = baudRate;
 
 								if (result.Args.Length > 1)
 								{
 									MKY.IO.Ports.DataBitsEx dataBits;
 									if (MKY.IO.Ports.DataBitsEx.TryFrom(result.Args[1], out dataBits))
-										setting.Communication.DataBits = dataBits;
+										settings.Communication.DataBits = dataBits;
 
 									if (result.Args.Length > 2)
 									{
 										MKY.IO.Ports.ParityEx parity;
 										if (MKY.IO.Ports.ParityEx.TryFrom(result.Args[2], out parity))
-											setting.Communication.Parity = parity;
+											settings.Communication.Parity = parity;
 
 										if (result.Args.Length > 3)
 										{
 											MKY.IO.Ports.StopBitsEx stopBits;   // 1.5 is not (yet) supported as the keyword args are limited to int.
 											if (MKY.IO.Ports.StopBitsEx.TryFrom(result.Args[3], out stopBits))
-												setting.Communication.StopBits = stopBits;
+												settings.Communication.StopBits = stopBits;
 
 											if (result.Args.Length > 4)
 											{
 												MKY.IO.Serial.SerialPort.SerialFlowControlEx flowControl;
 												if (MKY.IO.Serial.SerialPort.SerialFlowControlEx.TryFrom(result.Args[4], out flowControl))
-													setting.Communication.FlowControl = flowControl;
+													settings.Communication.FlowControl = flowControl;
 											}
 										}
 									}
@@ -820,12 +850,12 @@ namespace YAT.Domain
 							}
 						}
 
-						if (setting.Communication.HaveChanged)
+						if (settings.Communication.HaveChanged)
 						{
 							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 							Exception ex;
-							if (!TryApplySettings(port, setting, out ex))
+							if (!TryChangeSettingsOnTheFly(settings, out ex))
 								InlineDisplayElement(IODirection.Bidir, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Bidir, "Changing serial COM port settings has failed! " + ex.Message));
 						}
 					}
@@ -841,23 +871,22 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
-						var port = (MKY.IO.Serial.SerialPort.SerialPort)this.UnderlyingIOProvider;
-						var setting = new MKY.IO.Serial.SerialPort.SerialPortSettings(port.Settings); // Clone to ensure decoupling while
-						setting.ClearChanged();                                                       // changing and reapplying settings.
+						var settings = new MKY.IO.Serial.SerialPort.SerialPortSettings(TerminalSettings.IO.SerialPort); // Clone to ensure decoupling while
+						settings.ClearChanged();                                                                        // changing and reapplying settings.
 
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
 						{
 							MKY.IO.Ports.BaudRateEx baudRate;
 							if (MKY.IO.Ports.BaudRateEx.TryFrom(result.Args[0], out baudRate))
-								setting.Communication.BaudRate = baudRate;
+								settings.Communication.BaudRate = baudRate;
 						}
 
-						if (setting.Communication.HaveChanged)
+						if (settings.Communication.HaveChanged)
 						{
 							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 							Exception ex;
-							if (!TryApplySettings(port, setting, out ex))
+							if (!TryChangeSettingsOnTheFly(settings, out ex))
 								InlineDisplayElement(IODirection.Bidir, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Bidir, "Changing baud rate has failed! " + ex.Message));
 						}
 					}
@@ -873,23 +902,22 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
-						var port = (MKY.IO.Serial.SerialPort.SerialPort)this.UnderlyingIOProvider;
-						var setting = new MKY.IO.Serial.SerialPort.SerialPortSettings(port.Settings); // Clone to ensure decoupling while
-						setting.ClearChanged();                                                       // changing and reapplying settings.
+						var settings = new MKY.IO.Serial.SerialPort.SerialPortSettings(TerminalSettings.IO.SerialPort); // Clone to ensure decoupling while
+						settings.ClearChanged();                                                                        // changing and reapplying settings.
 
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
 						{
 							MKY.IO.Ports.StopBitsEx stopBits;
 							if (MKY.IO.Ports.StopBitsEx.TryFrom(result.Args[0], out stopBits))
-								setting.Communication.StopBits = stopBits;
+								settings.Communication.StopBits = stopBits;
 						}
 
-						if (setting.Communication.HaveChanged)
+						if (settings.Communication.HaveChanged)
 						{
 							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 							Exception ex;
-							if (!TryApplySettings(port, setting, out ex))
+							if (!TryChangeSettingsOnTheFly(settings, out ex))
 								InlineDisplayElement(IODirection.Bidir, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Bidir, "Changing stop bits has failed! " + ex.Message));
 						}
 					}
@@ -905,23 +933,22 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
-						var port = (MKY.IO.Serial.SerialPort.SerialPort)this.UnderlyingIOProvider;
-						var setting = new MKY.IO.Serial.SerialPort.SerialPortSettings(port.Settings); // Clone to ensure decoupling while
-						setting.ClearChanged();                                                       // changing and reapplying settings.
+						var settings = new MKY.IO.Serial.SerialPort.SerialPortSettings(TerminalSettings.IO.SerialPort); // Clone to ensure decoupling while
+						settings.ClearChanged();                                                                        // changing and reapplying settings.
 
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
 						{
 							MKY.IO.Ports.DataBitsEx dataBits;
 							if (MKY.IO.Ports.DataBitsEx.TryFrom(result.Args[0], out dataBits))
-								setting.Communication.DataBits = dataBits;
+								settings.Communication.DataBits = dataBits;
 						}
 
-						if (setting.Communication.HaveChanged)
+						if (settings.Communication.HaveChanged)
 						{
 							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 							Exception ex;
-							if (!TryApplySettings(port, setting, out ex))
+							if (!TryChangeSettingsOnTheFly(settings, out ex))
 								InlineDisplayElement(IODirection.Bidir, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Bidir, "Changing data bits has failed! " + ex.Message));
 						}
 					}
@@ -937,23 +964,22 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
-						var port = (MKY.IO.Serial.SerialPort.SerialPort)this.UnderlyingIOProvider;
-						var setting = new MKY.IO.Serial.SerialPort.SerialPortSettings(port.Settings); // Clone to ensure decoupling while
-						setting.ClearChanged();                                                       // changing and reapplying settings.
+						var settings = new MKY.IO.Serial.SerialPort.SerialPortSettings(TerminalSettings.IO.SerialPort); // Clone to ensure decoupling while
+						settings.ClearChanged();                                                                        // changing and reapplying settings.
 
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
 						{
 							MKY.IO.Ports.ParityEx parity;
 							if (MKY.IO.Ports.ParityEx.TryFrom(result.Args[0], out parity))
-								setting.Communication.Parity = parity;
+								settings.Communication.Parity = parity;
 						}
 
-						if (setting.Communication.HaveChanged)
+						if (settings.Communication.HaveChanged)
 						{
 							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 							Exception ex;
-							if (!TryApplySettings(port, setting, out ex))
+							if (!TryChangeSettingsOnTheFly(settings, out ex))
 								InlineDisplayElement(IODirection.Bidir, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Bidir, "Changing parity has failed! " + ex.Message));
 						}
 					}
@@ -969,23 +995,22 @@ namespace YAT.Domain
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
-						var port = (MKY.IO.Serial.SerialPort.SerialPort)this.UnderlyingIOProvider;
-						var setting = new MKY.IO.Serial.SerialPort.SerialPortSettings(port.Settings); // Clone to ensure decoupling while
-						setting.ClearChanged();                                                       // changing and reapplying settings.
+						var settings = new MKY.IO.Serial.SerialPort.SerialPortSettings(TerminalSettings.IO.SerialPort); // Clone to ensure decoupling while
+						settings.ClearChanged();                                                                        // changing and reapplying settings.
 
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
 						{
 							MKY.IO.Serial.SerialPort.SerialFlowControlEx flowControl;
 							if (MKY.IO.Serial.SerialPort.SerialFlowControlEx.TryFrom(result.Args[0], out flowControl))
-								setting.Communication.FlowControl = flowControl;
+								settings.Communication.FlowControl = flowControl;
 						}
 
-						if (setting.Communication.HaveChanged)
+						if (settings.Communication.HaveChanged)
 						{
 							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
 							Exception ex;
-							if (!TryApplySettings(port, setting, out ex))
+							if (!TryChangeSettingsOnTheFly(settings, out ex))
 								InlineDisplayElement(IODirection.Bidir, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Bidir, "Changing flow control has failed! " + ex.Message));
 						}
 					}
@@ -1416,33 +1441,39 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		protected static bool TryApplySettings(MKY.IO.Serial.SerialPort.SerialPort port, MKY.IO.Serial.SerialPort.SerialPortSettings settings, out Exception exception)
+		protected virtual bool TryChangeSettingsOnTheFly(MKY.IO.Serial.SerialPort.SerialPortSettings settings, out Exception exception)
 		{
-			try
+			var port = (this.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+			if (port != null)
 			{
-				// Attention:
-				// Similar code exists in Model.Terminal.ApplySettings() but including change of terminal settings (.yat file).
-				// Changes here may have to be applied there too.
-
-				if (port.IsStarted) // Port is started, stop and restart it with the new settings:
+				try
 				{
-					port.Stop(); // Attention, do not Stop() the whole terminal as that will also stop the currently ongoing send thread!
-					port.Settings = settings;
-					port.Start();
-				}
-				else // Port is stopped, simply set the new settings:
-				{
-					port.Settings = settings;
-				}
+					// Attention:
+					// Similar code exists in Model.Terminal.ApplyTerminalSettings().
+					// Changes here may have to be applied there too.
 
-				exception = null;
-				return (true);
+					if (port.IsStarted) // Port is started, stop and restart it with the new settings:
+					{
+						port.Stop(); // Attention, do not Stop() the whole terminal as that will also stop the currently ongoing send thread!
+						port.Settings = settings;
+						port.Start();
+					}
+					else // Port is stopped, simply set the new settings:
+					{
+						port.Settings = settings;
+					}
+				}
+				catch (Exception ex)
+				{
+					exception = ex;
+					return (false);
+				}
 			}
-			catch (Exception ex)
-			{
-				exception = ex;
-				return (false);
-			}
+
+			// Reflect the change in the settings:
+			TerminalSettings.IO.SerialPort = settings;
+			exception = null;
+			return (true);
 		}
 
 		/// <remarks>

@@ -27,10 +27,12 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
+using MKY.Collections.Generic;
 using MKY.Net;
 
 using NUnit.Framework;
@@ -45,6 +47,41 @@ namespace YAT.Domain.Test
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public static class Utilities
 	{
+		#region Types
+		//==========================================================================================
+		// Types
+		//==========================================================================================
+
+		/// <typeparam name="T">The (simple) settings type.</typeparam>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize the 'utility' nature of this delegate.")]
+		[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Why not?")]
+		public delegate TerminalSettings TerminalSettingsDelegate<T>(T arg);
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize the 'utility' nature of this class.")]
+		public static class TransmissionSettings
+		{
+			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
+			public static IEnumerable<Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>> SerialPortLoopbackPairs
+			{
+				get
+				{
+					foreach (MKY.IO.Ports.Test.SerialPortPairConfigurationElement ce in MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackPairs)
+					{
+						var tsm = new TerminalSettingsDelegate<string>(GetSerialPortTextSettings);
+						var pA = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortA);
+						var pB = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortB);
+						string name = "SerialPortLoopbackPairs_" + ce.PortA + "_" + ce.PortB;
+						string[] cats = { MKY.IO.Ports.Test.ConfigurationCategoryStrings.LoopbackPairsAreAvailable };
+						yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>(pA, pB, name, cats));
+					}
+				}
+			}
+		}
+
+		#endregion
+
 		#region Constants
 		//==========================================================================================
 		// Constants
@@ -86,6 +123,16 @@ namespace YAT.Domain.Test
 			settings.TerminalType = TerminalType.Text;
 			settings.UpdateTerminalTypeDependentSettings();
 			settings.TextTerminal.ShowEol = true; // Required for easier test verification (byte count).
+			return (settings);
+		}
+
+		internal static TerminalSettings GetSerialPortTextSettings(string portId)
+		{
+			var settings = GetTextSettings();
+			settings.IO.IOType = IOType.SerialPort;
+			settings.IO.SerialPort.PortId = portId;
+			settings.UpdateIOTypeDependentSettings();
+			settings.UpdateIOSettingsDependentSettings();
 			return (settings);
 		}
 

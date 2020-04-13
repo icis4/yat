@@ -117,14 +117,15 @@ namespace YAT.Domain.Parser
 			@"Use [Ctrl+B] to break an ongoing ""\!(" + (KeywordEx)Keyword.LineRepeat + @")"" operation." + Environment.NewLine +
 			Environment.NewLine +
 			@"""Send the current time stamp ""\!(" + (KeywordEx)Keyword.TimeStamp + @"())"" formatted according to [View > Format Settings... > Options > Time Stamp]." + Environment.NewLine +
-			Environment.NewLine +                                                                                             // \remind (2018-06-13 / MKY) flow control as integer since yet limited to parsing integer values.
+			Environment.NewLine +
+			@"Change serial COM port to COM10 ""\!(" + (KeywordEx)Keyword.Port + @"(10))""." + Environment.NewLine +          // \remind (2018-06-13 / MKY) flow control as integer since yet limited to parsing integer values (FR #404).
 			@"Change serial COM port settings to the specified values ""\!(" + (KeywordEx)Keyword.PortSettings + @"(19200, 7, 1))"" (all values must be specified as integer values)." + Environment.NewLine +
 			@"Change baud rate to the specified value ""\!(" + (KeywordEx)Keyword.Baud + @"(19200))""." + Environment.NewLine +
 			@"Change data bits to the specified value ""\!(" + (KeywordEx)Keyword.DataBits + @"(7))""." + Environment.NewLine +
 			@"Change parity to the specified value ""\!(" + (KeywordEx)Keyword.Parity + @"(2))"" (value must be specified as corresponding integer value)." + Environment.NewLine +
 			@"Change stop bits to the specified value ""\!(" + (KeywordEx)Keyword.StopBits + @"(2))""." + Environment.NewLine +
 			@"Change flow control to the specified value ""\!(" + (KeywordEx)Keyword.FlowControl + @"(1))"" (value must be specified as corresponding integer value)." + Environment.NewLine +
-			@"These keywords only apply to serial COM ports." + Environment.NewLine +               // \remind (2018-06-13 / MKY) flow control as integer since yet limited to parsing integer values.
+			@"These keywords only apply to serial COM ports." + Environment.NewLine +               // \remind (2018-06-13 / MKY) flow control as integer since yet limited to parsing integer values (FR #404).
 			Environment.NewLine +
 			@"Framing errors on ""\!(" + (KeywordEx)Keyword.FramingErrorsOn + @")""." + Environment.NewLine +
 			@"Framing errors off ""\!(" + (KeywordEx)Keyword.FramingErrorsOff + @")""." + Environment.NewLine +

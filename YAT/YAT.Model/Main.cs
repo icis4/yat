@@ -1402,8 +1402,8 @@ namespace YAT.Model
 						var portId = t.IOSerialPortId;
 						if (portId != null)
 						{
-							string inUseText;
-							if (t.IsOpen)
+							string inUseText; // Attention: Same texts are used in YAT.View.Forms.TerminalSettings.SetControls().
+							if (t.IsOpen)     //            Changes below likely have to be applied there too.
 								inUseText = "(in use by " + t.IndicatedName + ")";
 							else
 								inUseText = "(selected by " + t.IndicatedName + ")";
