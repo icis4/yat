@@ -55,6 +55,8 @@ namespace YAT.Domain.Test.Terminal
 			{
 				foreach (var preset in TimeStampFormatPresetEx.GetItems())
 					yield return (preset.ToFormat());
+
+				yield return ("yy MM dd HH mm ss"); // Some user defined format.
 			}
 		}
 
@@ -98,11 +100,15 @@ namespace YAT.Domain.Test.Terminal
 				byte[] parseResult;
 
 				var settingsTx = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+				settingsTx.Display.TimeStampFormat = format;
+				settingsTx.Display.TimeStampUseUtc = useUtc;
 				using (var terminalTx = new Domain.TextTerminal(settingsTx))
 				{
 					Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");
 
 					var settingsRx = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+					settingsRx.Display.TimeStampFormat = format;
+					settingsRx.Display.TimeStampUseUtc = useUtc;
 					using (var terminalRx = new Domain.TextTerminal(settingsRx))
 					{
 						Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started");

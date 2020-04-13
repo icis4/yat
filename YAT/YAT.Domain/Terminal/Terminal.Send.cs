@@ -754,18 +754,20 @@ namespace YAT.Domain
 
 				case Parser.Keyword.TimeStamp:
 				{
-					string format = TerminalSettings.Display.TimeStampFormat;
+					var format = TerminalSettings.Display.TimeStampFormat;
+					var useUtc = TerminalSettings.Display.TimeStampUseUtc;
+
 				////if (!ArrayEx.IsNullOrEmpty(result.Args)) // with argument is yet pending (FR #400) and requires parser support for strings.
 				////	format = result.Args[0];
 
-					var now = DateTime.Now;                                                                                          // No enclosure!
-					var de = new DisplayElement.TimeStampInfo(now, Direction.Tx, format, TerminalSettings.Display.TimeStampUseUtc, "", "");
+					var now = DateTime.Now;                                                        // No enclosure!
+					var de = new DisplayElement.TimeStampInfo(now, Direction.Tx, format, useUtc, "", "");
 					var text = de.Text;
 
 					Parser.Result[] parseResult;
 					string textSuccessfullyParsed;                 // A date/time format may conflict with YAT syntax.
 					if (DoTryParse(text, Radix.String, Parser.Mode.NoEscapes, out parseResult, out textSuccessfullyParsed))
-						DoSendText(sendingIsBusyChangedEventHelper, parseResult); // Results in recursion; OK since keyword has been replaced by result.
+						AppendTimeStampToPendingPacketWithoutForwardingToRawTerminalYet(parseResult, conflateDataQueue);
 					else
 						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(text, textSuccessfullyParsed)));
 
@@ -1299,6 +1301,22 @@ namespace YAT.Domain
 			return (sb.ToString());
 		}
 
+		/// <remarks>Explicitly named 'TimeStamp' to make purpose more obvious. Could also be renamed to 'ByteResults'.</remarks>
+		protected virtual void AppendTimeStampToPendingPacketWithoutForwardingToRawTerminalYet(Parser.Result[] parseResult, Queue<byte> conflateDataQueue)
+		{
+			lock (conflateDataQueue)
+			{
+				foreach (var result in parseResult)
+				{
+					var bytesResult = (result as Parser.BytesResult);
+					if (bytesResult != null)
+						AppendToPendingPacketWithoutForwardingToRawTerminalYet(bytesResult.Bytes, conflateDataQueue);
+					else
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A time stamp to be appended must only consist of 'Parser.BytesResult'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+		}
+
 		/// <summary></summary>
 		protected static void AppendToPendingPacketWithoutForwardingToRawTerminalYet(byte[] data, Queue<byte> conflateDataQueue)
 		{
@@ -1309,26 +1327,19 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
-		protected virtual void AppendToPendingPacketAndForwardToRawTerminal(ReadOnlyCollection<byte> data, Queue<byte> conflateDataQueue)
-		{
-			byte[] a = new byte[data.Count];
-			data.CopyTo(a, 0);
-
-			AppendToPendingPacketAndForwardToRawTerminal(a, conflateDataQueue);
-		}
-
-		/// <summary></summary>
-		protected virtual void AppendToPendingPacketAndForwardToRawTerminal(byte[] data, Queue<byte> conflateDataQueue)
-		{
-			lock (conflateDataQueue)
-			{
-				foreach (byte b in data)
-					conflateDataQueue.Enqueue(b);
-			}
-
-			ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
-		}
+	////Kept because referred to by TextTerminal.ProcessInLineKeywords().
+	////
+	/////// <summary></summary>
+	////protected virtual void AppendToPendingPacketAndForwardToRawTerminal(byte[] data, Queue<byte> conflateDataQueue)
+	////{
+	////	lock (conflateDataQueue)
+	////	{
+	////		foreach (byte b in data)
+	////			conflateDataQueue.Enqueue(b);
+	////	}
+	////
+	////	ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+	////}
 
 		/// <remarks>
 		/// Not the best approach to require to call this method at so many locations...
