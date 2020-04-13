@@ -117,9 +117,8 @@ namespace YAT.Domain.Parser
 			@"Use [Ctrl+B] to break an ongoing ""\!(" + (KeywordEx)Keyword.LineRepeat + @")"" operation." + Environment.NewLine +
 			Environment.NewLine +
 			@"""Send the current time stamp ""\!(" + (KeywordEx)Keyword.TimeStamp + @"())"" formatted according to [View > Format Settings... > Options > Time Stamp]." + Environment.NewLine +
-			Environment.NewLine +
-			@"Change I/O settings to the specified values ""\!(" + (KeywordEx)Keyword.IOSettings + @"(19200, 7, 1))"" (all values must be specified as integer values)." + Environment.NewLine +
-			@"Changing I/O settings is yet limited to serial COM ports." +                                    // \remind (2018-06-13 / MKY) flow control as integer since yet limited to parsing integer values.
+			Environment.NewLine +                                                                                             // \remind (2018-06-13 / MKY) flow control as integer since yet limited to parsing integer values.
+			@"Change serial COM port settings to the specified values ""\!(" + (KeywordEx)Keyword.PortSettings + @"(19200, 7, 1))"" (all values must be specified as integer values)." + Environment.NewLine +
 			@"Change baud rate to the specified value ""\!(" + (KeywordEx)Keyword.Baud + @"(19200))""." + Environment.NewLine +
 			@"Change data bits to the specified value ""\!(" + (KeywordEx)Keyword.DataBits + @"(7))""." + Environment.NewLine +
 			@"Change parity to the specified value ""\!(" + (KeywordEx)Keyword.Parity + @"(2))"" (value must be specified as corresponding integer value)." + Environment.NewLine +
