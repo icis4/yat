@@ -91,7 +91,7 @@ namespace MKY.IO.Ports
 
 		/// <summary></summary>
 		public SerialPortCollection()
-			: base(SerialPortId.LastStandardPortNumber - SerialPortId.FirstStandardPortNumber + 1)
+			: base(SerialPortId.TypicalStandardPortCount)
 		{
 		}
 
@@ -102,16 +102,16 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Fills list with all ports from <see cref="SerialPortId.FirstStandardPortNumber"/> to
-		/// <see cref="SerialPortId.LastStandardPortNumber"/>.
+		/// Fills list with all ports from <see cref="SerialPortId.FirstTypicalStandardPortNumber"/> to
+		/// <see cref="SerialPortId.LastTypicalStandardPortNumber"/>.
 		/// </summary>
-		public virtual void FillWithStandardPorts()
+		public virtual void FillWithTypicalStandardPorts()
 		{
 			lock (this)
 			{
 				Clear();
 
-				for (int i = SerialPortId.FirstStandardPortNumber; i <= SerialPortId.LastStandardPortNumber; i++)
+				for (int i = SerialPortId.FirstTypicalStandardPortNumber; i <= SerialPortId.LastTypicalStandardPortNumber; i++)
 					Add(new SerialPortId(i));
 
 				Sort();
