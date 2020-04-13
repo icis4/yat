@@ -141,11 +141,11 @@ namespace YAT.View.Controls
 			}
 			catch (Exception ex)
 			{
-				this.ports.FillWithStandardPorts();
+				this.ports.FillWithTypicalStandardPorts();
 
 				this.exception = ex;
 				this.exceptionLead = "There was an error while retrieving the serial COM ports from the system!";
-				this.exceptionHint = "The port list has been defaulted with the standard ports.";
+				this.exceptionHint = "The port list has been defaulted with the typical standard ports.";
 
 				return (DialogResult.Abort);
 			}

@@ -106,7 +106,7 @@ namespace YAT.Model
 
 		/// <remarks>
 		/// Values in descriptions correspond to <see cref="MKY.IO.Ports.SerialPortId.FirstStandardPortNumber"/>
-		/// and <see cref="MKY.IO.Ports.SerialPortId.MaxStandardPortNumber"/>
+		/// and <see cref="MKY.IO.Ports.SerialPortId.LastStandardPortNumber"/>
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "SerialPort", ShortName = "p", Description =

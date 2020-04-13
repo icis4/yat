@@ -67,10 +67,19 @@ namespace MKY.IO.Ports
 		public const int FirstStandardPortNumber = 1;
 
 		/// <summary></summary>
-		public const int LastStandardPortNumber = 256;
+		public const int LastStandardPortNumber = 65536;
 
 		/// <summary></summary>
-		public const int MaxStandardPortNumber = 65536;
+		public const int StandardPortCount = (LastStandardPortNumber - FirstStandardPortNumber + 1);
+
+		/// <summary></summary>
+		public const int FirstTypicalStandardPortNumber = FirstStandardPortNumber;
+
+		/// <summary></summary>
+		public const int LastTypicalStandardPortNumber = 256;
+
+		/// <summary></summary>
+		public const int TypicalStandardPortCount = (LastTypicalStandardPortNumber - FirstTypicalStandardPortNumber + 1);
 
 		/// <summary>
 		/// First standard port name as string.
@@ -651,7 +660,13 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static bool IsStandardPortNumber(int standardPortNumber)
 		{
-			return ((standardPortNumber >= FirstStandardPortNumber) && (standardPortNumber <= MaxStandardPortNumber));
+			return ((standardPortNumber >= FirstStandardPortNumber) && (standardPortNumber <= LastStandardPortNumber));
+		}
+
+		/// <summary></summary>
+		public static bool IsTypicalStandardPortNumber(int standardPortNumber)
+		{
+			return ((standardPortNumber >= FirstTypicalStandardPortNumber) && (standardPortNumber <= LastTypicalStandardPortNumber));
 		}
 
 		/// <summary></summary>
@@ -770,7 +785,7 @@ namespace MKY.IO.Ports
 		public SerialPortIdConverter()
 		{
 			this.portList = new SerialPortCollection();
-			this.portList.FillWithStandardPorts();
+			this.portList.FillWithTypicalStandardPorts();
 		}
 
 		/// <summary>
