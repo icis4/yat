@@ -41,11 +41,11 @@ using NUnit.Framework;
 namespace YAT.Domain.Test.Terminal
 {
 	/// <summary></summary>
-	public static class TimeStampTestData
+	public static class KeywordTimeStampTestData
 	{
-		#region Test Cases
+		#region Format
 		//==========================================================================================
-		// Test Cases
+		// Format
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -61,7 +61,7 @@ namespace YAT.Domain.Test.Terminal
 		}
 
 		/// <summary></summary>
-		public static IEnumerable TestCases
+		public static IEnumerable TestCasesFormats
 		{
 			get
 			{
@@ -78,16 +78,16 @@ namespace YAT.Domain.Test.Terminal
 
 	/// <summary></summary>
 	[TestFixture]
-	public class KeywordTest
+	public class KeywordTimeStampTest
 	{
-		#region Tests
+		#region Format
 		//==========================================================================================
-		// Test
+		// Format
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(TimeStampTestData), "TestCases")] // Test is mandatory, it shall not be excludable. 'IPv4LoopbackIsAvailable' is probed below.
-		public virtual void TestTimeStamp(string format, bool useUtc)
+		[Test, TestCaseSource(typeof(KeywordTimeStampTestData), "TestCasesFormats")] // Test is mandatory, it shall not be excludable. 'IPv4LoopbackIsAvailable' is probed below.
+		public virtual void TestFormat(string format, bool useUtc)
 		{
 			if (!ConfigurationProvider.Configuration.IPv4LoopbackIsAvailable)
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");

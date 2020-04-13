@@ -528,74 +528,77 @@ namespace YAT.Domain.Test.Parser
 			get
 			{
 				// Keywords:
-				yield return (new TestCaseData(@"\!(Clear)",					Domain.Parser.Keyword.Clear,                null));
-				yield return (new TestCaseData(@"\!(Clear())",					Domain.Parser.Keyword.Clear,                null));
-				yield return (new TestCaseData(@"\!(Delay)",					Domain.Parser.Keyword.Delay,                null));
-				yield return (new TestCaseData(@"\!(Delay())",					Domain.Parser.Keyword.Delay,                null));
-				yield return (new TestCaseData(@"\!(Delay(10))",				Domain.Parser.Keyword.Delay,                new int[] { 10 }));
-				yield return (new TestCaseData(@"\!(LineDelay)",				Domain.Parser.Keyword.LineDelay,            null));
-				yield return (new TestCaseData(@"\!(LineDelay())",				Domain.Parser.Keyword.LineDelay,            null));
-				yield return (new TestCaseData(@"\!(LineDelay(10))",			Domain.Parser.Keyword.LineDelay,            new int[] { 10 }));
-				yield return (new TestCaseData(@"\!(LineInterval)",				Domain.Parser.Keyword.LineInterval,         null));
-				yield return (new TestCaseData(@"\!(LineInterval())",			Domain.Parser.Keyword.LineInterval,         null));
-				yield return (new TestCaseData(@"\!(LineInterval(10))",			Domain.Parser.Keyword.LineInterval,         new int[] { 10 }));
-			////yield return (new TestCaseData(@"\!(Repeat)",					Domain.Parser.Keyword.Repeat,               null)); is yet pending (FR #13) and requires parser support for strings.
-				yield return (new TestCaseData(@"\!(LineRepeat)",				Domain.Parser.Keyword.LineRepeat,           null));
-				yield return (new TestCaseData(@"\!(LineRepeat())",				Domain.Parser.Keyword.LineRepeat,           null));
-				yield return (new TestCaseData(@"\!(LineRepeat(10))",			Domain.Parser.Keyword.LineRepeat,           new int[] { 10 }));
-				yield return (new TestCaseData(@"\!(TimeStamp)",				Domain.Parser.Keyword.TimeStamp,            null));
-				yield return (new TestCaseData(@"\!(TimeStamp())",				Domain.Parser.Keyword.TimeStamp,            null));
-				yield return (new TestCaseData(@"\!(Eol)",						Domain.Parser.Keyword.Eol,                  null));
-				yield return (new TestCaseData(@"\!(Eol())",					Domain.Parser.Keyword.Eol,                  null));
-				yield return (new TestCaseData(@"\!(NoEol)",					Domain.Parser.Keyword.NoEol,                null));
-				yield return (new TestCaseData(@"\!(NoEol())",					Domain.Parser.Keyword.NoEol,                null));
-				yield return (new TestCaseData(@"\!(PortSettings)",				Domain.Parser.Keyword.PortSettings,         null));
-				yield return (new TestCaseData(@"\!(PortSettings())",			Domain.Parser.Keyword.PortSettings,         null));
-				yield return (new TestCaseData(@"\!(PortSettings(9600))",		Domain.Parser.Keyword.PortSettings,         new int[] { 9600 }));
-				yield return (new TestCaseData(@"\!(PortSettings(9600,8))",		Domain.Parser.Keyword.PortSettings,         new int[] { 9600, 8 }));
-				yield return (new TestCaseData(@"\!(PortSettings(9600;8;0))",	Domain.Parser.Keyword.PortSettings,         new int[] { 9600, 8, 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
-				yield return (new TestCaseData(@"\!(PortSettings(9600|8|0))",	Domain.Parser.Keyword.PortSettings,         new int[] { 9600, 8, 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
-				yield return (new TestCaseData(@"\!(Baud)",						Domain.Parser.Keyword.Baud,                 null));
-				yield return (new TestCaseData(@"\!(Baud())",					Domain.Parser.Keyword.Baud,                 null));
-				yield return (new TestCaseData(@"\!(Baud(9600))",				Domain.Parser.Keyword.Baud,                 new int[] { 9600 }));
-				yield return (new TestCaseData(@"\!(DataBits)",					Domain.Parser.Keyword.DataBits,             null));
-				yield return (new TestCaseData(@"\!(DataBits())",				Domain.Parser.Keyword.DataBits,             null));
-				yield return (new TestCaseData(@"\!(DataBits(7))",				Domain.Parser.Keyword.DataBits,             new int[] { 7 }));
-				yield return (new TestCaseData(@"\!(Parity)",					Domain.Parser.Keyword.Parity,               null));
-				yield return (new TestCaseData(@"\!(Parity())",					Domain.Parser.Keyword.Parity,               null));
-				yield return (new TestCaseData(@"\!(Parity(0))",				Domain.Parser.Keyword.Parity,               new int[] { 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
-				yield return (new TestCaseData(@"\!(Parity(1))",				Domain.Parser.Keyword.Parity,               new int[] { 1 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
-				yield return (new TestCaseData(@"\!(Parity(2))",				Domain.Parser.Keyword.Parity,               new int[] { 2 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
-				yield return (new TestCaseData(@"\!(StopBits)",					Domain.Parser.Keyword.StopBits,             null));
-				yield return (new TestCaseData(@"\!(StopBits())",				Domain.Parser.Keyword.StopBits,             null));
-				yield return (new TestCaseData(@"\!(StopBits(0))",				Domain.Parser.Keyword.StopBits,             new int[] { 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
-				yield return (new TestCaseData(@"\!(StopBits(1))",				Domain.Parser.Keyword.StopBits,             new int[] { 1 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
-				yield return (new TestCaseData(@"\!(StopBits(2))",				Domain.Parser.Keyword.StopBits,             new int[] { 2 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
-				yield return (new TestCaseData(@"\!(FlowControl)",				Domain.Parser.Keyword.FlowControl,          null));
-				yield return (new TestCaseData(@"\!(FlowControl())",			Domain.Parser.Keyword.FlowControl,          null));
-				yield return (new TestCaseData(@"\!(FlowControl(0))",			Domain.Parser.Keyword.FlowControl,          new int[] { 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
-				yield return (new TestCaseData(@"\!(FlowControl(1))",			Domain.Parser.Keyword.FlowControl,          new int[] { 1 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
-				yield return (new TestCaseData(@"\!(FlowControl(2))",			Domain.Parser.Keyword.FlowControl,          new int[] { 2 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
-				yield return (new TestCaseData(@"\!(FlowControl(3))",			Domain.Parser.Keyword.FlowControl,          new int[] { 3 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values.
-				yield return (new TestCaseData(@"\!(FramingErrorsOn)",			Domain.Parser.Keyword.FramingErrorsOn,      null));
-				yield return (new TestCaseData(@"\!(FramingErrorsOn())",		Domain.Parser.Keyword.FramingErrorsOn,      null));
-				yield return (new TestCaseData(@"\!(FramingErrorsOff)",			Domain.Parser.Keyword.FramingErrorsOff,     null));
-				yield return (new TestCaseData(@"\!(FramingErrorsOff())",		Domain.Parser.Keyword.FramingErrorsOff,     null));
-				yield return (new TestCaseData(@"\!(FramingErrorsRestore)",		Domain.Parser.Keyword.FramingErrorsRestore, null));
-				yield return (new TestCaseData(@"\!(FramingErrorsRestore())",	Domain.Parser.Keyword.FramingErrorsRestore, null));
-				yield return (new TestCaseData(@"\!(OutputBreakOn)",			Domain.Parser.Keyword.OutputBreakOn,        null));
-				yield return (new TestCaseData(@"\!(OutputBreakOn())",			Domain.Parser.Keyword.OutputBreakOn,        null));
-				yield return (new TestCaseData(@"\!(OutputBreakOff)",			Domain.Parser.Keyword.OutputBreakOff,       null));
-				yield return (new TestCaseData(@"\!(OutputBreakOff())",			Domain.Parser.Keyword.OutputBreakOff,       null));
-				yield return (new TestCaseData(@"\!(OutputBreakToggle)",		Domain.Parser.Keyword.OutputBreakToggle,    null));
-				yield return (new TestCaseData(@"\!(OutputBreakToggle())",		Domain.Parser.Keyword.OutputBreakToggle,    null));
-				yield return (new TestCaseData(@"\!(ReportID)",					Domain.Parser.Keyword.ReportId,             null));
-				yield return (new TestCaseData(@"\!(ReportID())",				Domain.Parser.Keyword.ReportId,             null));
-				yield return (new TestCaseData(@"\!(ReportID(0))",				Domain.Parser.Keyword.ReportId,             new int[] { 0x00 }));
-				yield return (new TestCaseData(@"\!(ReportID(1))",				Domain.Parser.Keyword.ReportId,             new int[] { 0x01 }));
-				yield return (new TestCaseData(@"\!(ReportID(0x00))",			Domain.Parser.Keyword.ReportId,             new int[] { 0x00 }));
-				yield return (new TestCaseData(@"\!(ReportID(0x3F))",			Domain.Parser.Keyword.ReportId,             new int[] { 0x3F }));
-				yield return (new TestCaseData(@"\!(ReportID(0xFF))",			Domain.Parser.Keyword.ReportId,             new int[] { 0xFF }));
+				yield return (new TestCaseData(@"\!(Clear)",					Domain.Parser.Keyword.Clear,				null));
+				yield return (new TestCaseData(@"\!(Clear())",					Domain.Parser.Keyword.Clear,				null));
+				yield return (new TestCaseData(@"\!(Delay)",					Domain.Parser.Keyword.Delay,				null));
+				yield return (new TestCaseData(@"\!(Delay())",					Domain.Parser.Keyword.Delay,				null));
+				yield return (new TestCaseData(@"\!(Delay(10))",				Domain.Parser.Keyword.Delay,				new int[] { 10 }));
+				yield return (new TestCaseData(@"\!(LineDelay)",				Domain.Parser.Keyword.LineDelay,			null));
+				yield return (new TestCaseData(@"\!(LineDelay())",				Domain.Parser.Keyword.LineDelay,			null));
+				yield return (new TestCaseData(@"\!(LineDelay(10))",			Domain.Parser.Keyword.LineDelay,			new int[] { 10 }));
+				yield return (new TestCaseData(@"\!(LineInterval)",				Domain.Parser.Keyword.LineInterval,			null));
+				yield return (new TestCaseData(@"\!(LineInterval())",			Domain.Parser.Keyword.LineInterval,			null));
+				yield return (new TestCaseData(@"\!(LineInterval(10))",			Domain.Parser.Keyword.LineInterval,			new int[] { 10 }));
+			////yield return (new TestCaseData(@"\!(Repeat)",					Domain.Parser.Keyword.Repeat,				null)); is yet pending (FR #13) and requires parser support for strings (FR #404).
+				yield return (new TestCaseData(@"\!(LineRepeat)",				Domain.Parser.Keyword.LineRepeat,			null));
+				yield return (new TestCaseData(@"\!(LineRepeat())",				Domain.Parser.Keyword.LineRepeat,			null));
+				yield return (new TestCaseData(@"\!(LineRepeat(10))",			Domain.Parser.Keyword.LineRepeat,			new int[] { 10 }));
+				yield return (new TestCaseData(@"\!(TimeStamp)",				Domain.Parser.Keyword.TimeStamp,			null));
+				yield return (new TestCaseData(@"\!(TimeStamp())",				Domain.Parser.Keyword.TimeStamp,			null));
+				yield return (new TestCaseData(@"\!(Eol)",						Domain.Parser.Keyword.Eol,					null));
+				yield return (new TestCaseData(@"\!(Eol())",					Domain.Parser.Keyword.Eol,					null));
+				yield return (new TestCaseData(@"\!(NoEol)",					Domain.Parser.Keyword.NoEol,				null));
+				yield return (new TestCaseData(@"\!(NoEol())",					Domain.Parser.Keyword.NoEol,				null));
+				yield return (new TestCaseData(@"\!(Port)",						Domain.Parser.Keyword.Port,					null));
+				yield return (new TestCaseData(@"\!(Port())",					Domain.Parser.Keyword.Port,					null));
+				yield return (new TestCaseData(@"\!(Port(1))",					Domain.Parser.Keyword.Port,					new int[] { 1 }));
+				yield return (new TestCaseData(@"\!(PortSettings)",				Domain.Parser.Keyword.PortSettings,			null));
+				yield return (new TestCaseData(@"\!(PortSettings())",			Domain.Parser.Keyword.PortSettings,			null));
+				yield return (new TestCaseData(@"\!(PortSettings(9600))",		Domain.Parser.Keyword.PortSettings,			new int[] { 9600 }));
+				yield return (new TestCaseData(@"\!(PortSettings(9600,8))",		Domain.Parser.Keyword.PortSettings,			new int[] { 9600, 8 }));
+				yield return (new TestCaseData(@"\!(PortSettings(9600;8;0))",	Domain.Parser.Keyword.PortSettings,			new int[] { 9600, 8, 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values (FR #404).
+				yield return (new TestCaseData(@"\!(PortSettings(9600|8|0))",	Domain.Parser.Keyword.PortSettings,			new int[] { 9600, 8, 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values (FR #404).
+				yield return (new TestCaseData(@"\!(Baud)",						Domain.Parser.Keyword.Baud,					null));
+				yield return (new TestCaseData(@"\!(Baud())",					Domain.Parser.Keyword.Baud,					null));
+				yield return (new TestCaseData(@"\!(Baud(9600))",				Domain.Parser.Keyword.Baud,					new int[] { 9600 }));
+				yield return (new TestCaseData(@"\!(DataBits)",					Domain.Parser.Keyword.DataBits,				null));
+				yield return (new TestCaseData(@"\!(DataBits())",				Domain.Parser.Keyword.DataBits,				null));
+				yield return (new TestCaseData(@"\!(DataBits(7))",				Domain.Parser.Keyword.DataBits,				new int[] { 7 }));
+				yield return (new TestCaseData(@"\!(Parity)",					Domain.Parser.Keyword.Parity,				null));
+				yield return (new TestCaseData(@"\!(Parity())",					Domain.Parser.Keyword.Parity,				null));
+				yield return (new TestCaseData(@"\!(Parity(0))",				Domain.Parser.Keyword.Parity,				new int[] { 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values (FR #404).
+				yield return (new TestCaseData(@"\!(Parity(1))",				Domain.Parser.Keyword.Parity,				new int[] { 1 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values (FR #404).
+				yield return (new TestCaseData(@"\!(Parity(2))",				Domain.Parser.Keyword.Parity,				new int[] { 2 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values (FR #404).
+				yield return (new TestCaseData(@"\!(StopBits)",					Domain.Parser.Keyword.StopBits,				null));
+				yield return (new TestCaseData(@"\!(StopBits())",				Domain.Parser.Keyword.StopBits,				null));
+				yield return (new TestCaseData(@"\!(StopBits(0))",				Domain.Parser.Keyword.StopBits,				new int[] { 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values (FR #404).
+				yield return (new TestCaseData(@"\!(StopBits(1))",				Domain.Parser.Keyword.StopBits,				new int[] { 1 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values (FR #404).
+				yield return (new TestCaseData(@"\!(StopBits(2))",				Domain.Parser.Keyword.StopBits,				new int[] { 2 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values (FR #404).
+				yield return (new TestCaseData(@"\!(FlowControl)",				Domain.Parser.Keyword.FlowControl,			null));
+				yield return (new TestCaseData(@"\!(FlowControl())",			Domain.Parser.Keyword.FlowControl,			null));
+				yield return (new TestCaseData(@"\!(FlowControl(0))",			Domain.Parser.Keyword.FlowControl,			new int[] { 0 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values (FR #404).
+				yield return (new TestCaseData(@"\!(FlowControl(1))",			Domain.Parser.Keyword.FlowControl,			new int[] { 1 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values (FR #404).
+				yield return (new TestCaseData(@"\!(FlowControl(2))",			Domain.Parser.Keyword.FlowControl,			new int[] { 2 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values (FR #404).
+				yield return (new TestCaseData(@"\!(FlowControl(3))",			Domain.Parser.Keyword.FlowControl,			new int[] { 3 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values (FR #404).
+				yield return (new TestCaseData(@"\!(FramingErrorsOn)",			Domain.Parser.Keyword.FramingErrorsOn,		null));
+				yield return (new TestCaseData(@"\!(FramingErrorsOn())",		Domain.Parser.Keyword.FramingErrorsOn,		null));
+				yield return (new TestCaseData(@"\!(FramingErrorsOff)",			Domain.Parser.Keyword.FramingErrorsOff,		null));
+				yield return (new TestCaseData(@"\!(FramingErrorsOff())",		Domain.Parser.Keyword.FramingErrorsOff,		null));
+				yield return (new TestCaseData(@"\!(FramingErrorsRestore)",		Domain.Parser.Keyword.FramingErrorsRestore,	null));
+				yield return (new TestCaseData(@"\!(FramingErrorsRestore())",	Domain.Parser.Keyword.FramingErrorsRestore,	null));
+				yield return (new TestCaseData(@"\!(OutputBreakOn)",			Domain.Parser.Keyword.OutputBreakOn,		null));
+				yield return (new TestCaseData(@"\!(OutputBreakOn())",			Domain.Parser.Keyword.OutputBreakOn,		null));
+				yield return (new TestCaseData(@"\!(OutputBreakOff)",			Domain.Parser.Keyword.OutputBreakOff,		null));
+				yield return (new TestCaseData(@"\!(OutputBreakOff())",			Domain.Parser.Keyword.OutputBreakOff,		null));
+				yield return (new TestCaseData(@"\!(OutputBreakToggle)",		Domain.Parser.Keyword.OutputBreakToggle,	null));
+				yield return (new TestCaseData(@"\!(OutputBreakToggle())",		Domain.Parser.Keyword.OutputBreakToggle,	null));
+				yield return (new TestCaseData(@"\!(ReportID)",					Domain.Parser.Keyword.ReportId,				null));
+				yield return (new TestCaseData(@"\!(ReportID())",				Domain.Parser.Keyword.ReportId,				null));
+				yield return (new TestCaseData(@"\!(ReportID(0))",				Domain.Parser.Keyword.ReportId,				new int[] { 0x00 }));
+				yield return (new TestCaseData(@"\!(ReportID(1))",				Domain.Parser.Keyword.ReportId,				new int[] { 0x01 }));
+				yield return (new TestCaseData(@"\!(ReportID(0x00))",			Domain.Parser.Keyword.ReportId,				new int[] { 0x00 }));
+				yield return (new TestCaseData(@"\!(ReportID(0x3F))",			Domain.Parser.Keyword.ReportId,				new int[] { 0x3F }));
+				yield return (new TestCaseData(@"\!(ReportID(0xFF))",			Domain.Parser.Keyword.ReportId,				new int[] { 0xFF }));
 
 				// Whitespace:
 				yield return (new TestCaseData(@"\!( Delay)",					Domain.Parser.Keyword.Delay, null));

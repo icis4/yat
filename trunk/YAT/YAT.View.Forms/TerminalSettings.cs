@@ -588,9 +588,9 @@ namespace YAT.View.Forms
 				(
 					this.terminalId,
 					this.settingsInEdit.Terminal.IO.SerialPort.PortId,
-					this.terminalIsOpen,
+					this.terminalIsOpen,     // Attention: Same texts are used in YAT.Model.Main.SerialPortCollection_InUseLookupRequest().
 					(this.terminalIsOpen ? "(in use by this terminal)" : "(selected by this terminal)")
-				);
+				);                           //            Changes above likely have to be applied there too.
 
 				serialPortSettings.BaudRate     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.BaudRate;
 				serialPortSettings.DataBits     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.DataBits;
