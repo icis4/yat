@@ -52,7 +52,7 @@ namespace YAT.Domain.Parser
 		TimeStamp,
 		Eol,
 		NoEol,
-		IOSettings,
+		PortSettings,
 		Baud,
 		DataBits,
 		Parity,
@@ -103,7 +103,7 @@ namespace YAT.Domain.Parser
 		private const string TimeStamp_string            = "TimeStamp";
 		private const string Eol_string                  = "EOL";
 		private const string NoEol_string                = "NoEOL";
-		private const string IOSettings_string           = "IOSettings";
+		private const string PortSettings_string         = "PortSettings";
 		private const string Baud_string                 = "Baud";
 		private const string StopBits_string             = "StopBits";
 		private const string Parity_string               = "Parity";
@@ -158,7 +158,7 @@ namespace YAT.Domain.Parser
 				case Keyword.TimeStamp:            return (TimeStamp_string);
 				case Keyword.Eol:                  return (Eol_string);
 				case Keyword.NoEol:                return (NoEol_string);
-				case Keyword.IOSettings:           return (IOSettings_string);
+				case Keyword.PortSettings:         return (PortSettings_string);
 				case Keyword.Baud:                 return (Baud_string);
 				case Keyword.DataBits:             return (DataBits_string);
 				case Keyword.Parity:               return (Parity_string);
@@ -203,7 +203,7 @@ namespace YAT.Domain.Parser
 			a.Add(new KeywordEx(Keyword.TimeStamp));
 			a.Add(new KeywordEx(Keyword.Eol));
 			a.Add(new KeywordEx(Keyword.NoEol));
-			a.Add(new KeywordEx(Keyword.IOSettings));
+			a.Add(new KeywordEx(Keyword.PortSettings));
 			a.Add(new KeywordEx(Keyword.Baud));
 			a.Add(new KeywordEx(Keyword.DataBits));
 			a.Add(new KeywordEx(Keyword.Parity));
@@ -236,7 +236,7 @@ namespace YAT.Domain.Parser
 			////case Keyword.Repeat:       return (3); is yet pending (FR #13) and requires parser support for strings.
 				case Keyword.LineRepeat:   return (1);
 			////case Keyword.TimeStamp:    return (1); with argument is yet pending (FR #400) and requires parser support for strings.
-				case Keyword.IOSettings:   return (5);
+				case Keyword.PortSettings: return (5);
 				case Keyword.Baud:         return (1);
 				case Keyword.DataBits:     return (1);
 				case Keyword.Parity:       return (1);
@@ -264,7 +264,7 @@ namespace YAT.Domain.Parser
 				                                                 //// Attention, a similar validation exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.LineRepeat:   return ((argValue >= 1) || (argValue == Settings.SendSettings.LineRepeatInfinite));
 			////case Keyword.TimeStamp:    return (ValidateTimeStampArg(argIndex, argValue)); with argument is yet pending (FR #400) and requires parser support for strings.
-				case Keyword.IOSettings:   return (MKY.IO.Ports.BaudRateEx.IsPotentiallyValid(argValue) || MKY.IO.Ports.DataBitsEx.IsDefined(argValue) || MKY.IO.Ports.ParityEx.IsDefined(argValue) || MKY.IO.Ports.StopBitsEx.IsDefined(argValue) || MKY.IO.Serial.SerialPort.SerialFlowControlEx.IsDefined(argValue) );
+				case Keyword.PortSettings: return (MKY.IO.Ports.BaudRateEx.IsPotentiallyValid(argValue) || MKY.IO.Ports.DataBitsEx.IsDefined(argValue) || MKY.IO.Ports.ParityEx.IsDefined(argValue) || MKY.IO.Ports.StopBitsEx.IsDefined(argValue) || MKY.IO.Serial.SerialPort.SerialFlowControlEx.IsDefined(argValue) );
 				                                                 //// Attention, a similar validation exists in 'View.Controls.SerialPortSettings'. Changes here may have to be applied there too.
 				case Keyword.Baud:         return (MKY.IO.Ports.BaudRateEx.IsPotentiallyValid(argValue));
 				case Keyword.DataBits:     return (MKY.IO.Ports.DataBitsEx                     .IsDefined(argValue));
@@ -308,7 +308,7 @@ namespace YAT.Domain.Parser
 				case Keyword.TimeStamp:            return (noArgSupportedMessage);                                                   // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.Eol:                  return (noArgSupportedMessage);
 				case Keyword.NoEol:                return (noArgSupportedMessage);
-				case Keyword.IOSettings:           return ("one or more integer values indicating the settings, separated by ',' (comma) or ';' (semicolon) or '|' (pipe)");
+				case Keyword.PortSettings:         return ("one or more integer values indicating the settings, separated by ',' (comma) or ';' (semicolon) or '|' (pipe)");
 				case Keyword.Baud:                 return ("an integer value of 1 or more indicating the number of bits per second");
 				case Keyword.DataBits:             return ("an integer value of 4 to 8"); // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.Parity:               return ("an integer value where 0 = None, 1 = Odd, 2 = Even, 3 = Mark, 4 = Space");
@@ -428,9 +428,9 @@ namespace YAT.Domain.Parser
 				result = Keyword.NoEol;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, IOSettings_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, PortSettings_string))
 			{
-				result = Keyword.IOSettings;
+				result = Keyword.PortSettings;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, Baud_string))

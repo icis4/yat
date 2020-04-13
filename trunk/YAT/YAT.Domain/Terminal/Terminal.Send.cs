@@ -774,7 +774,7 @@ namespace YAT.Domain
 					break;
 				}
 
-				case Parser.Keyword.IOSettings:
+				case Parser.Keyword.PortSettings:
 				{
 					if (TerminalSettings.IO.IOType == IOType.SerialPort)
 					{
@@ -831,7 +831,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Changing I/O settings is yet limited to serial COM ports (limitation #71).", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "This keyword only applies to serial COM ports.", true));
 					}
 
 					break;

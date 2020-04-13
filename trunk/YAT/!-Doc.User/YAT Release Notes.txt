@@ -114,8 +114,6 @@ New:
 Important changes:
 - Using term "I/O" instead of "Port" for terminal, settings,... for reducing mix-up of term in YAT
   with TCP and UDP "Port" terminology, where a "Port" only is a part of the overall "I/O" subsystem.
-  As a consequence, the \!(PortSettings()) keyword introduced in the previous version has been
-  renamed to \!(IOSettings()) (related to feature request #71).
 - High FTDI baud rates added to list of standard baud rates (feature request #398).
 - Sending refactored (precondition for feature requests #19, #333, #387 and fix of bug #176).
 - Line content and EOL is no longer sent in two separate chunks (feature request #333).
