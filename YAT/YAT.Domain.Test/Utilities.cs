@@ -260,6 +260,58 @@ namespace YAT.Domain.Test
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		/// <remarks>
+		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
+		/// i.e. complete as well as incomplete lines.
+		/// </remarks>
+		/// <remarks>
+		/// Comparison against the completed number of lines is not (yet) possible, change #375
+		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
+		/// </remarks>
+		internal static void WaitForReceivingAndVerifyCounts(Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
+		{
+			// Calculate timeout:
+			int timeout = WaitTimeoutForLineTransmission;
+
+			int rxByteCount = 0;
+			int rxLineCount = 0;
+			int waitTime = 0;
+			do                         // Initially wait to allow async send,
+			{                          //   therefore, use do-while.
+				Thread.Sleep(WaitIntervalForLineTransmission);
+				waitTime += WaitIntervalForLineTransmission;
+
+				Console.Out.WriteLine("Waiting for receiving, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+
+				if (waitTime >= timeout) {
+					Assert.Fail("Transmission timeout! Not enough data received within expected interval.");
+				}
+
+				rxByteCount = terminalRx.GetRepositoryByteCount(RepositoryType.Rx);
+				if (rxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+					Assert.Fail("Transmission error!" +
+					            " Number of received bytes = " + rxByteCount +
+					            " mismatches expected = " + expectedTotalByteCount + ".");
+				}
+
+				rxLineCount = terminalRx.GetRepositoryLineCount(RepositoryType.Rx);
+				if (rxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+					Assert.Fail("Transmission error!" +
+					            " Number of received lines = " + rxLineCount +
+					            " mismatches expected = " + expectedTotalLineCount + ".");
+				}
+			}
+			while ((rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCount));
+
+			Debug.WriteLine("Rx of " + rxByteCount + " bytes / " + rxLineCount + " lines completed");
+
+			Console.Out.WriteLine("...done");
+		}
+
+		/// <remarks>
+		/// There are similar utility methods in 'Model.Test.Utilities'.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
+		/// <remarks>
 		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
 		/// </remarks>
 		/// <remarks>

@@ -123,7 +123,7 @@ namespace YAT.Domain.Parser
 			@"Change baud rate to the specified value ""\!(" + (KeywordEx)Keyword.Baud + @"(19200))""." + Environment.NewLine +
 			@"Change data bits to the specified value ""\!(" + (KeywordEx)Keyword.DataBits + @"(7))""." + Environment.NewLine +
 			@"Change parity to the specified value ""\!(" + (KeywordEx)Keyword.Parity + @"(2))"" (value must be specified as corresponding integer value)." + Environment.NewLine +
-			@"Change stop bits to the specified value ""\!(" + (KeywordEx)Keyword.StopBits + @"(2))""." + Environment.NewLine +
+			@"Change stop bits to the specified value ""\!(" + (KeywordEx)Keyword.StopBits + @"(2))"" (value must be specified as integer value, i.e. 1.5 is not supported by this keyword (yet))." + Environment.NewLine +
 			@"Change flow control to the specified value ""\!(" + (KeywordEx)Keyword.FlowControl + @"(1))"" (value must be specified as corresponding integer value)." + Environment.NewLine +
 			@"These keywords only apply to serial COM ports." + Environment.NewLine +               // \remind (2018-06-13 / MKY) flow control as integer since yet limited to parsing integer values (FR #404).
 			Environment.NewLine +
