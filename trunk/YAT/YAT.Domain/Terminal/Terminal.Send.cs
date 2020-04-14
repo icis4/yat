@@ -834,7 +834,7 @@ namespace YAT.Domain
 
 										if (result.Args.Length > 3)
 										{
-											MKY.IO.Ports.StopBitsEx stopBits;   // 1.5 is not (yet) supported as the keyword args are limited to int.
+											MKY.IO.Ports.StopBitsEx stopBits;   // 1.5 is not (yet) supported as the keyword args are limited to integer values (FR #404).
 											if (MKY.IO.Ports.StopBitsEx.TryFrom(result.Args[3], out stopBits))
 												settings.Communication.StopBits = stopBits;
 
