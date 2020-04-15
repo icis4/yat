@@ -111,7 +111,7 @@ namespace YAT.Domain.Test.Terminal
 		public virtual void SerialPortLoopbackPairs(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
 		                                            Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB)
 		{
-			const int WaitForChange   = 1000;
+			const int WaitForChange   = 1500; // 1000 ms is not sufficient.
 			const int WaitForDisposal =  100;
 
 			using (var parser = new Domain.Parser.Parser(Domain.Parser.Mode.NoEscapes))
@@ -199,7 +199,7 @@ namespace YAT.Domain.Test.Terminal
 
 					keyword = @"\!(Baud(19200))\!(DataBits(7))\!(Parity(2))\!(StopBits(2))\!(NoEOL())"; // Not changing flow control, too difficult to verify here.
 					terminalA.SendTextLine(keyword);
-					Thread.Sleep(WaitForChange);
+					Thread.Sleep(WaitForChange * 4);
 					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.BaudRate, Is.EqualTo((int)MKY.IO.Ports.BaudRate.Baud_19200));
 					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.DataBits, Is.EqualTo(     MKY.IO.Ports.DataBits.Seven));
 					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.Parity,   Is.EqualTo(  System.IO.Ports.Parity  .Even));
