@@ -133,8 +133,8 @@ namespace YAT.Domain.Test.Terminal
 						// TimeStamp only:
 						textToSend   = keyword;
 						textExpected = timeStamp;
-						terminalTx.SendTextLine(textToSend);
 						Assert.That(parser.TryParse(textExpected, out parseResult));
+						terminalTx.SendTextLine(textToSend);
 						textByteCount = parseResult.Length;
 						expectedTotalByteCount += (textByteCount + eolByteCount);
 						expectedTotalLineCount++;
@@ -143,8 +143,8 @@ namespace YAT.Domain.Test.Terminal
 						// Prefix + TimeStamp:
 						textToSend   = "AT+DATE=" + keyword;
 						textExpected = "AT+DATE=" + timeStamp;
-						terminalTx.SendTextLine(textToSend);
 						Assert.That(parser.TryParse(textExpected, out parseResult));
+						terminalTx.SendTextLine(textToSend);
 						textByteCount = parseResult.Length;
 						expectedTotalByteCount += (textByteCount + eolByteCount);
 						expectedTotalLineCount++;
@@ -153,8 +153,8 @@ namespace YAT.Domain.Test.Terminal
 						// TimeStamp + Postfix:
 						textToSend   = keyword   + "=NOW";
 						textExpected = timeStamp + "=NOW";
-						terminalTx.SendTextLine(textToSend);
 						Assert.That(parser.TryParse(textExpected, out parseResult));
+						terminalTx.SendTextLine(textToSend);
 						textByteCount = parseResult.Length;
 						expectedTotalByteCount += (textByteCount + eolByteCount);
 						expectedTotalLineCount++;
@@ -163,8 +163,8 @@ namespace YAT.Domain.Test.Terminal
 						// Prefix + TimeStamp + Postfix:
 						textToSend   = "AT+DATE=" +  keyword  + "=NOW";
 						textExpected = "AT+DATE=" + timeStamp + "=NOW";
-						terminalTx.SendTextLine(textToSend);
 						Assert.That(parser.TryParse(textExpected, out parseResult));
+						terminalTx.SendTextLine(textToSend);
 						textByteCount = parseResult.Length;
 						expectedTotalByteCount += (textByteCount + eolByteCount);
 						expectedTotalLineCount++;

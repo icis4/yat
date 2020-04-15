@@ -173,64 +173,64 @@ namespace YAT.Domain.Test.TextTerminal
 						int expectedTotalLineCountB = 0;
 
 						text = ""; // A#1
-						terminalA.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
+						terminalA.SendTextLine(text);
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountA += (textByteCount + eolByteCountAB);
 						expectedTotalLineCountA++;
 						WaitForTransmissionEolAware(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
 						text = "AA"; // A#2
-						terminalA.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
+						terminalA.SendTextLine(text);
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountA += (textByteCount + eolByteCountAB);
 						expectedTotalLineCountA++;
 						WaitForTransmissionEolAware(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
 						text = "ABABAB"; // A#3
-						terminalA.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
+						terminalA.SendTextLine(text);
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountA += (textByteCount + eolByteCountAB);
 						expectedTotalLineCountA++;
 						WaitForTransmissionEolAware(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
 						text = "<CR>"; // B#1
-						terminalB.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
+						terminalB.SendTextLine(text);
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountB += (textByteCount + eolByteCountBA);
 						expectedTotalLineCountB++;
 						WaitForTransmissionEolAware(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
 						text = "<CR><CR>"; // B#2
-						terminalB.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
+						terminalB.SendTextLine(text);
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountB += (textByteCount + eolByteCountBA);
 						expectedTotalLineCountB++;
 						WaitForTransmissionEolAware(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
 						text = "<CR><CR><ESC>"; // B#3
-						terminalB.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
+						terminalB.SendTextLine(text);
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountB += (textByteCount + eolByteCountBA);
 						expectedTotalLineCountB++;
 						WaitForTransmissionEolAware(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
 						text = "<ESC>"; // A#4
-						terminalA.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
+						terminalA.SendTextLine(text);
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountA += (textByteCount + eolByteCountAB);
 						expectedTotalLineCountA++;
 						WaitForTransmissionEolAware(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
 						text = "BBBB"; // B#4
-						terminalB.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
+						terminalB.SendTextLine(text);
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountB += (textByteCount + eolByteCountBA);
 						expectedTotalLineCountB++;
