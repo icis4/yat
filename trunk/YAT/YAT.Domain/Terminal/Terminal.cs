@@ -451,7 +451,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual Settings.TerminalSettings TerminalSettings
+		public virtual Settings.TerminalSettings TerminalSettings
 		{
 			get { return (this.terminalSettings); }
 		}

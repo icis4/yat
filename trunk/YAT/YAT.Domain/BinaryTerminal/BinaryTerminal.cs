@@ -115,7 +115,8 @@ namespace YAT.Domain
 		// Properties
 		//==========================================================================================
 
-		private Settings.BinaryTerminalSettings BinaryTerminalSettings
+		/// <summary></summary>
+		public virtual Settings.BinaryTerminalSettings BinaryTerminalSettings
 		{
 			get
 			{

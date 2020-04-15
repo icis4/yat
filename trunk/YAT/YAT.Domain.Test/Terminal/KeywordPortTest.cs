@@ -111,7 +111,8 @@ namespace YAT.Domain.Test.Terminal
 		public virtual void SerialPortLoopbackPairs(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
 		                                            Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB)
 		{
-			const int WaitForDisposal = 100;
+			const int WaitForChange   = 1000;
+			const int WaitForDisposal =  100;
 
 			using (var parser = new Domain.Parser.Parser(Domain.Parser.Mode.NoEscapes))
 			{
@@ -127,8 +128,12 @@ namespace YAT.Domain.Test.Terminal
 					string text;
 					int textByteCount;
 					int eolByteCount = 2; // Fixed to default of <CR><LF>.
-					int expectedTotalByteCountA = 0;
-					int expectedTotalLineCountA = 0;
+					int expectedTotalByteCountAB = 0;
+					int expectedTotalByteCountBA = 0;
+					int expectedTotalLineCountAB = 0;
+					int expectedTotalLineCountBA = 0;
+
+					// Initial pingpong:
 
 					var settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
 					var standardPortNumberInitiallyB = settingsB.IO.SerialPort.PortId.StandardPortNumber;
@@ -137,38 +142,32 @@ namespace YAT.Domain.Test.Terminal
 						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started");
 						Utilities.WaitForConnection(terminalA, terminalB);
 
-						// Initial pingpong:
 						text = "Ping A>>B";
-						terminalA.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
+						terminalA.SendTextLine(text);
 						textByteCount = parseResult.Length;
-						expectedTotalByteCountA += (textByteCount + eolByteCount);
-						expectedTotalLineCountA++;
-						Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);
+						expectedTotalByteCountAB += (textByteCount + eolByteCount);
+						expectedTotalLineCountAB++;
+						Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
 						text = "Pong B>>A";
-						terminalB.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
+						terminalB.SendTextLine(text);
 						textByteCount = parseResult.Length;
-						expectedTotalByteCountA += (textByteCount + eolByteCount);
-						expectedTotalLineCountA++;
-						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountA, expectedTotalLineCountA);
-
-//YAT.Domain.Test.Terminal.KeywordPortTest.SerialPortLoopbackPairs_COM11_COM12:
-//Transmission timeout! Not enough data transmitted within expected interval.
-//
-//YAT.Domain.Test.Terminal.KeywordPortTest.SerialPortLoopbackPairs_COM21_COM22:
-//System.IO.IOException : Der Anschluss COM22 ist nicht vorhanden.
-//
-//YAT.Domain.Test.Terminal.KeywordPortTest.SerialPortLoopbackPairs_COM31_COM32:
-//System.IO.IOException : Der Anschluss COM31 ist nicht vorhanden.
-//
-//YAT.Domain.Test.Terminal.KeywordPortTest.SerialPortLoopbackPairs_COM101_COM102:
-//Transmission timeout! Not enough data transmitted within expected interval.
+						expectedTotalByteCountBA += (textByteCount + eolByteCount);
+						expectedTotalLineCountBA++;
+						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						terminalB.Stop();
 						Utilities.WaitForDisconnection(terminalB);
 					} // using (terminalB)
+
+					// Swap ports using keyword (A) vs. settings (B):
+
+					keyword = @"\!(Port(" + standardPortNumberInitiallyB + @"))\!(NoEOL())";
+					terminalA.SendTextLine(keyword);
+					Thread.Sleep(WaitForChange);
+					Assert.That(terminalA.TerminalSettings.IO.SerialPort.PortId.StandardPortNumber, Is.EqualTo(standardPortNumberInitiallyB));
 
 					settingsB.IO.SerialPort.PortId = standardPortNumberInitiallyA;
 					using (var terminalB = new Domain.TextTerminal(settingsB))
@@ -176,85 +175,99 @@ namespace YAT.Domain.Test.Terminal
 						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be restarted");
 						Utilities.WaitForConnection(terminalA, terminalB);
 
-						// Swap ports using keyword (A) vs. settings (B)
-						keyword = @"\!(Port(" + standardPortNumberInitiallyB + "))";
 						text = "Swapped A>>B";
-						terminalA.SendTextLine(keyword + text);
 						Assert.That(parser.TryParse(text, out parseResult));
+						terminalA.SendTextLine(text);
 						textByteCount = parseResult.Length;
-						expectedTotalByteCountA += (textByteCount + eolByteCount);
-						expectedTotalLineCountA++;
-						Utilities.WaitForSendingAndVerifyCounts(terminalA, expectedTotalByteCountA, expectedTotalLineCountA);
+						expectedTotalByteCountAB += (textByteCount + eolByteCount);
+						expectedTotalLineCountAB++;
+						Utilities.WaitForSendingAndVerifyCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
 						text = "Swapped B>>A";
-						terminalB.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
+						terminalB.SendTextLine(text);
 						textByteCount = parseResult.Length;
-						expectedTotalByteCountA += (textByteCount + eolByteCount);
-						expectedTotalLineCountA++;
-						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountA, expectedTotalLineCountA);
+						expectedTotalByteCountBA += (textByteCount + eolByteCount);
+						expectedTotalLineCountBA++;
+						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						terminalB.Stop();
 						Utilities.WaitForDisconnection(terminalB);
 					} // using (terminalB)
 
-					settingsB.IO.SerialPort.Communication.BaudRate = (MKY.IO.Ports.BaudRateEx)   MKY.IO.Ports.BaudRate.Baud_19200;
-					settingsB.IO.SerialPort.Communication.DataBits = (MKY.IO.Ports.DataBitsEx)   MKY.IO.Ports.DataBits.Seven;
-					settingsB.IO.SerialPort.Communication.Parity   = (MKY.IO.Ports.ParityEx)  System.IO.Ports.Parity  .Even;
-					settingsB.IO.SerialPort.Communication.StopBits = (MKY.IO.Ports.StopBitsEx)System.IO.Ports.StopBits.Two;
+					// Change settings using keyword (A) vs. settings (B):
+
+					keyword = @"\!(Baud(19200))\!(DataBits(7))\!(Parity(2))\!(StopBits(2))\!(NoEOL())"; // Not changing flow control, too difficult to verify here.
+					terminalA.SendTextLine(keyword);
+					Thread.Sleep(WaitForChange);
+					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.BaudRate, Is.EqualTo((int)MKY.IO.Ports.BaudRate.Baud_19200));
+					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.DataBits, Is.EqualTo(     MKY.IO.Ports.DataBits.Seven));
+					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.Parity,   Is.EqualTo(  System.IO.Ports.Parity  .Even));
+					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.StopBits, Is.EqualTo(  System.IO.Ports.StopBits.Two));
+
+					settingsB.IO.SerialPort.Communication.BaudRate = (int)MKY.IO.Ports.BaudRate.Baud_19200;
+					settingsB.IO.SerialPort.Communication.DataBits =      MKY.IO.Ports.DataBits.Seven;
+					settingsB.IO.SerialPort.Communication.Parity   =   System.IO.Ports.Parity  .Even;
+					settingsB.IO.SerialPort.Communication.StopBits =   System.IO.Ports.StopBits.Two;
 					using (var terminalB = new Domain.TextTerminal(settingsB))
 					{
 						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be restarted");
 						Utilities.WaitForConnection(terminalA, terminalB);
 
-						// Change settings using keyword (A) vs. settings (B)
-						keyword = @"\!(Baud(19200))\!(DataBits(7))\!(Parity(2)\!(StopBits(2)))"; // Not changing flow control, too difficult to verify here.
 						text = "Changed dedicated A>>B";
-						terminalA.SendTextLine(keyword + text);
 						Assert.That(parser.TryParse(text, out parseResult));
+						terminalA.SendTextLine(text);
 						textByteCount = parseResult.Length;
-						expectedTotalByteCountA += (textByteCount + eolByteCount);
-						expectedTotalLineCountA++;
-						Utilities.WaitForSendingAndVerifyCounts(terminalA, expectedTotalByteCountA, expectedTotalLineCountA);
+						expectedTotalByteCountAB += (textByteCount + eolByteCount);
+						expectedTotalLineCountAB++;
+						Utilities.WaitForSendingAndVerifyCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
 						text = "Changed dedicated B>>A";
-						terminalB.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
+						terminalB.SendTextLine(text);
 						textByteCount = parseResult.Length;
-						expectedTotalByteCountA += (textByteCount + eolByteCount);
-						expectedTotalLineCountA++;
-						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountA, expectedTotalLineCountA);
+						expectedTotalByteCountBA += (textByteCount + eolByteCount);
+						expectedTotalLineCountBA++;
+						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						terminalB.Stop();
 						Utilities.WaitForDisconnection(terminalB);
 					} // using (terminalB)
 
-					settingsB.IO.SerialPort.Communication.BaudRate = (MKY.IO.Ports.BaudRateEx)   MKY.IO.Ports.BaudRate.Baud_115200;
-					settingsB.IO.SerialPort.Communication.DataBits = (MKY.IO.Ports.DataBitsEx)   MKY.IO.Ports.DataBits.Eight;
-					settingsB.IO.SerialPort.Communication.Parity   = (MKY.IO.Ports.ParityEx)  System.IO.Ports.Parity  .None;
-					settingsB.IO.SerialPort.Communication.StopBits = (MKY.IO.Ports.StopBitsEx)System.IO.Ports.StopBits.One;
+					// Change settings using keyword (A) vs. settings (B):
+
+					keyword = @"\!(PortSettings(115200, 8, 0, 1))\!(NoEOL())"; // Not changing flow control, too difficult to verify here.
+					terminalA.SendTextLine(keyword);
+					Thread.Sleep(WaitForChange);
+					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.BaudRate, Is.EqualTo((int)MKY.IO.Ports.BaudRate.Baud_115200));
+					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.DataBits, Is.EqualTo(     MKY.IO.Ports.DataBits.Eight));
+					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.Parity,   Is.EqualTo(  System.IO.Ports.Parity  .None));
+					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.StopBits, Is.EqualTo(  System.IO.Ports.StopBits.One));
+
+					settingsB.IO.SerialPort.Communication.BaudRate = (int)MKY.IO.Ports.BaudRate.Baud_115200;
+					settingsB.IO.SerialPort.Communication.DataBits =      MKY.IO.Ports.DataBits.Eight;
+					settingsB.IO.SerialPort.Communication.Parity   =   System.IO.Ports.Parity  .None;
+					settingsB.IO.SerialPort.Communication.StopBits =   System.IO.Ports.StopBits.One;
 					using (var terminalB = new Domain.TextTerminal(settingsB))
 					{
 						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be restarted");
 						Utilities.WaitForConnection(terminalA, terminalB);
 
-						// Change settings using keyword (A) vs. settings (B)
-						keyword = @"\!(PortSettings(115200, 8, 0, 1))";
 						text = "Changed combined A>>B";
-						terminalA.SendTextLine(keyword + text);
 						Assert.That(parser.TryParse(text, out parseResult));
+						terminalA.SendTextLine(text);
 						textByteCount = parseResult.Length;
-						expectedTotalByteCountA += (textByteCount + eolByteCount);
-						expectedTotalLineCountA++;
-						Utilities.WaitForSendingAndVerifyCounts(terminalA, expectedTotalByteCountA, expectedTotalLineCountA);
+						expectedTotalByteCountAB += (textByteCount + eolByteCount);
+						expectedTotalLineCountAB++;
+						Utilities.WaitForSendingAndVerifyCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
 						text = "Changed combined B>>A";
-						terminalB.SendTextLine(text);
 						Assert.That(parser.TryParse(text, out parseResult));
+						terminalB.SendTextLine(text);
 						textByteCount = parseResult.Length;
-						expectedTotalByteCountA += (textByteCount + eolByteCount);
-						expectedTotalLineCountA++;
-						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountA, expectedTotalLineCountA);
+						expectedTotalByteCountBA += (textByteCount + eolByteCount);
+						expectedTotalLineCountBA++;
+						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						terminalB.Stop();
 						Utilities.WaitForDisconnection(terminalB);

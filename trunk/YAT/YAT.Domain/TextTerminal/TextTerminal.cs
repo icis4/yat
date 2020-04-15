@@ -188,7 +188,8 @@ namespace YAT.Domain
 		// Properties
 		//==========================================================================================
 
-		private Settings.TextTerminalSettings TextTerminalSettings
+		/// <summary></summary>
+		public virtual Settings.TextTerminalSettings TextTerminalSettings
 		{
 			get
 			{
