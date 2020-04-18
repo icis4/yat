@@ -43,9 +43,9 @@ namespace YAT.Domain.Test.Terminal
 	/// <summary></summary>
 	public static class KeywordTimeStampTestData
 	{
-		#region Format
+		#region Formats
 		//==========================================================================================
-		// Format
+		// Formats
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -80,14 +80,14 @@ namespace YAT.Domain.Test.Terminal
 	[TestFixture]
 	public class KeywordTimeStampTest
 	{
-		#region Format
+		#region Formats
 		//==========================================================================================
-		// Format
+		// Formats
 		//==========================================================================================
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(KeywordTimeStampTestData), "TestCasesFormats")] // Test is mandatory, it shall not be excludable. 'IPv4LoopbackIsAvailable' is probed below.
-		public virtual void TestFormat(string format, bool useUtc)
+		public virtual void TestFormats(string format, bool useUtc)
 		{
 			if (!ConfigurationProvider.Configuration.IPv4LoopbackIsAvailable)
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
