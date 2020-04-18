@@ -26,11 +26,9 @@
 // Using
 //==================================================================================================
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Threading;
 
 using MKY.Collections.Generic;
@@ -42,11 +40,11 @@ using NUnit.Framework;
 namespace YAT.Domain.Test.Terminal
 {
 	/// <summary></summary>
-	public static class KeywordPortTestData
+	public static class KeywordsSerialPortTestData
 	{
-		#region Format
+		#region Apply
 		//==========================================================================================
-		// Format
+		// Apply
 		//==========================================================================================
 
 		/// <param name="loopbackSettings">
@@ -95,11 +93,11 @@ namespace YAT.Domain.Test.Terminal
 
 	/// <summary></summary>
 	[TestFixture]
-	public class KeywordPortTest
+	public class KeywordsSerialPortTest
 	{
-		#region Port
+		#region Apply
 		//==========================================================================================
-		// Port
+		// Apply
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -107,9 +105,9 @@ namespace YAT.Domain.Test.Terminal
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
-		[Test, TestCaseSource(typeof(KeywordPortTestData), "TestCasesSerialPortLoopbackPairs")]
-		public virtual void SerialPortLoopbackPairs(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
-		                                            Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB)
+		[Test, TestCaseSource(typeof(KeywordsSerialPortTestData), "TestCasesSerialPortLoopbackPairs")]
+		public virtual void TestApplyToSerialPortLoopbackPairs(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
+		                                                       Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB)
 		{
 			const int WaitForChange   = 1500; // 1000 ms is not sufficient.
 			const int WaitForDisposal =  100;
