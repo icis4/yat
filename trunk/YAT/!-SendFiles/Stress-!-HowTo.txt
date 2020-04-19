@@ -1,0 +1,3 @@
+
+.txt files have manually been created
+.dat files have been created by <Script>\Examples\FileGeneration\Simple
