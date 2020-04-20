@@ -906,17 +906,17 @@ namespace MKY.Test.CommandLine
 			TestDevelopmentValidation_type = type;
 
 			// Must not throw an exception:
-			Assert.DoesNotThrow(new TestDelegate(TestDevelopmentValidation_GetConstructorAndCreateObject));
+			Assert.That(new TestDelegate(TestDevelopmentValidation_GetConstructorAndCreateObject), Throws.Nothing);
 
 			// Must throw an exception in case of invalid arguments:
 			if (isValid)
 			{
-				Assert.DoesNotThrow(new TestDelegate(TestDevelopmentValidation_ProcessAndValidate));
+				Assert.That(new TestDelegate(TestDevelopmentValidation_ProcessAndValidate), Throws.Nothing);
 			}
 		#if (DEBUG)
 			else
 			{
-				Assert.Throws<ArgsHandler.DevelopmentValidationException>(new TestDelegate(TestDevelopmentValidation_ProcessAndValidate));
+				Assert.That(new TestDelegate(TestDevelopmentValidation_ProcessAndValidate), Throws.TypeOf<ArgsHandler.DevelopmentValidationException>());
 			}
 		#endif
 		}
