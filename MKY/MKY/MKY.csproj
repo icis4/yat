@@ -168,6 +168,7 @@
     <Compile Include="Text\RegularExpressions\CommonPatternsWithSubCaptures.cs" />
     <Compile Include="Text\RegularExpressions\MatchCollectionEx.cs" />
     <Compile Include="Text\RegularExpressions\RegexEx.cs" />
+    <Compile Include="Threading\ThreadEx.cs" />
     <Compile Include="Time\UserTimeStamp.cs" />
     <Compile Include="Settings\SettingsFileHandler.cs" />
     <Compile Include="Settings\SettingsItem.cs" />
