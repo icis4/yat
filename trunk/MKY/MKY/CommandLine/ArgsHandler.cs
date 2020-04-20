@@ -793,7 +793,7 @@ namespace MKY.CommandLine
 
 						// When executing this validation from the NUnit based test with debugger attached,
 						// the debugger will stop below stating "...Exception was unhandled by user code"
-						// since it apparently doesn't detect that NUnit expects it at Assert.Throws<>().
+						// since it apparently doesn't detect that NUnit expects it at Assert...Throws<>().
 						// Simply continue execution [F5] to continue test execution. Optionally disable
 						// the [Break when this exception type is user-unhandled] setting.
 					}
@@ -806,7 +806,7 @@ namespace MKY.CommandLine
 
 						// When executing this validation from the NUnit based test with debugger attached,
 						// the debugger will stop below stating "...Exception was unhandled by user code"
-						// since it apparently doesn't detect that NUnit expects it at Assert.Throws<>().
+						// since it apparently doesn't detect that NUnit expects it at Assert...Throws<>().
 						// Simply continue execution [F5] to continue test execution. Optionally disable
 						// the [Break when this exception type is user-unhandled] setting.
 					}
@@ -821,7 +821,7 @@ namespace MKY.CommandLine
 
 							// When executing this validation from the NUnit based test with debugger attached,
 							// the debugger will stop below stating "...Exception was unhandled by user code"
-							// since it apparently doesn't detect that NUnit expects it at Assert.Throws<>().
+							// since it apparently doesn't detect that NUnit expects it at Assert...Throws<>().
 							// Simply continue execution [F5] to continue test execution. Optionally disable
 							// the [Break when this exception type is user-unhandled] setting.
 						}
@@ -841,7 +841,7 @@ namespace MKY.CommandLine
 
 							// When executing this validation from the NUnit based test with debugger attached,
 							// the debugger will stop below stating "...Exception was unhandled by user code"
-							// since it apparently doesn't detect that NUnit expects it at Assert.Throws<>().
+							// since it apparently doesn't detect that NUnit expects it at Assert...Throws<>().
 							// Simply continue execution [F5] to continue test execution. Optionally disable
 							// the [Break when this exception type is user-unhandled] setting.
 						}
@@ -862,7 +862,7 @@ namespace MKY.CommandLine
 
 						// When executing this validation from the NUnit based test with debugger attached,
 						// the debugger will stop below stating "...Exception was unhandled by user code"
-						// since it apparently doesn't detect that NUnit expects it at Assert.Throws<>().
+						// since it apparently doesn't detect that NUnit expects it at Assert...Throws<>().
 						// Simply continue execution [F5] to continue test execution. Optionally disable
 						// the [Break when this exception type is user-unhandled] setting.
 					}
