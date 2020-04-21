@@ -345,21 +345,21 @@ namespace MKY.IO.Serial.SerialPort
 									// Solution: Limit output writing to baud rate :-)
 
 									// Reduce chunk size if maximum is limited to baud rate:
-									if (this.settings.BufferMaxBaudRate)
+									if ((maxChunkSize > 0) && this.settings.BufferMaxBaudRate)
 									{
 										int remainingSizeInInterval = (maxFramesPerInterval - maxBaudRatePerInterval.Value);
 										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, Math.Max(remainingSizeInInterval, 0)); // 'max' must be 0 or above.
 									}
 
 									// Reduce chunk size if maximum send rate is specified:
-									if (this.settings.MaxSendRate.Enabled)
+									if ((maxChunkSize > 0) && this.settings.MaxSendRate.Enabled)
 									{
 										int remainingSizeInInterval = (this.settings.MaxSendRate.Size - maxSendRate.Value);
 										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, Math.Max(remainingSizeInInterval, 0)); // 'max' must be 0 or above.
 									}
 
 									// Further reduce chunk size if maximum is specified:
-									if (this.settings.MaxChunkSize.Enabled)
+									if ((maxChunkSize > 0) && this.settings.MaxChunkSize.Enabled)
 									{
 										int maxChunkSizeSetting = this.settings.MaxChunkSize.Size;
 										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, maxChunkSizeSetting); // 'Setting' is always above 0.
@@ -390,6 +390,7 @@ namespace MKY.IO.Serial.SerialPort
 									// Update the send rates with the effective chunk size of the current interval.
 									// This must be done no matter whether writing to port has succeeded or not!
 									// Otherwise, on overload, a rate value may "get stuck" at the limit!
+									// Note that 'Rate.Update(0)' does optimize, i.e. no need to further optimize.
 
 									if (this.settings.BufferMaxBaudRate)
 										maxBaudRatePerInterval.Update(effectiveChunkDataCount);
