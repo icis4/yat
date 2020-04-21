@@ -22,8 +22,31 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of update:
+////#define DEBUG_UPDATE
+
+#endif // DEBUG
+
+#endregion
+
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+
+#endregion
 
 namespace MKY.Time
 {
@@ -139,31 +162,55 @@ namespace MKY.Time
 		/// <summary></summary>
 		public virtual bool Update(int item)
 		{
-			int newValue;
-			return (Update(item, out newValue));
+			int value;
+			return (Update(item, out value));
 		}
 
 		/// <summary></summary>
-		public virtual bool Update(int item, out int newValue)
+		public virtual bool Update(int item, out int value)
 		{
 			var now = DateTime.Now; // A single time stamp for the whole operation.
-			AddItemToQueue(now, item);
-			RemoveObsoleteItemsFromQueue(now);
-			return (CalculateValueFromQueue(now, out newValue));
+
+			if (item != 0)
+				return (AddItemAndUpdate(now, item, out value));
+			else // There is no need to add zero-items to queue; improves performance especially in case of frequent updates.
+				return (UpdateWithoutAdd(now, out value));
+		}
+
+		/// <summary></summary>
+		protected virtual bool AddItemAndUpdate(DateTime timeStamp, int item, out int value)
+		{
+			AddItemToQueue(timeStamp, item);
+			RemoveObsoleteItemsFromQueue(timeStamp);
+			var hasChanged = CalculateValueFromQueue(timeStamp, out value);
+
+			DebugUpdate(string.Format(CultureInfo.InvariantCulture, "Updating with {0} at {1:ss.fff} {2} {3}", item, timeStamp, (hasChanged ? "has changed to" : "has remained at"), value));
+
+			return (hasChanged);
 		}
 
 		/// <summary></summary>
 		public virtual bool Update(DateTime timeStamp)
 		{
-			int newValue;
-			return (Update(timeStamp, out newValue));
+			int value;
+			return (Update(timeStamp, out value));
 		}
 
 		/// <summary></summary>
-		public virtual bool Update(DateTime timeStamp, out int newValue)
+		public virtual bool Update(DateTime timeStamp, out int value)
+		{
+			return (UpdateWithoutAdd(timeStamp, out value));
+		}
+
+		/// <summary></summary>
+		protected virtual bool UpdateWithoutAdd(DateTime timeStamp, out int value)
 		{
 			RemoveObsoleteItemsFromQueue(timeStamp);
-			return (CalculateValueFromQueue(timeStamp, out newValue));
+			var hasChanged = CalculateValueFromQueue(timeStamp, out value);
+
+			DebugUpdate(string.Format(CultureInfo.InvariantCulture, "Updating at {0:ss.fff} {1} {2}", timeStamp, (hasChanged ? "has changed to" : "has remained at"), this.value));
+
+			return (hasChanged);
 		}
 
 		/// <summary></summary>
@@ -212,7 +259,7 @@ namespace MKY.Time
 			}
 		}
 
-		private bool CalculateValueFromQueue(DateTime timeStamp, out int newValue)
+		private bool CalculateValueFromQueue(DateTime timeStamp, out int value)
 		{
 			// Get items from queue:
 			TimeStampItem<int>[] qa;
@@ -244,12 +291,12 @@ namespace MKY.Time
 				}
 
 				// Evaluate the rate:
-				newValue = (int)(Math.Round((double)weighedSum / sumOfWeights));
+				value = (int)(Math.Round((double)weighedSum / sumOfWeights));
 			}
 
-			if (this.value != newValue)
+			if (this.value != value)
 			{
-				this.value = newValue;
+				this.value = value;
 				return (true);
 			}
 			else
@@ -264,6 +311,19 @@ namespace MKY.Time
 		}
 
 		#endregion
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		[Conditional("DEBUG_UPDATE")]
+		private static void DebugUpdate(string message)
+		{
+			Debug.WriteLine(message);
+		}
 
 		#endregion
 	}

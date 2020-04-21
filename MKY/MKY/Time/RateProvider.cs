@@ -265,11 +265,11 @@ namespace MKY.Time
 		{
 			AssertNotDisposed();
 
-			int newValue;
-			bool hasChanged = this.rate.Update(endOfWindow, out newValue);
+			int value;
+			bool hasChanged = this.rate.Update(endOfWindow, out value);
 
 			if (hasChanged && allowChangedEvent)
-				OnRateChanged(new RateEventArgs(newValue));
+				OnRateChanged(new RateEventArgs(value));
 
 			return (hasChanged);
 		}
