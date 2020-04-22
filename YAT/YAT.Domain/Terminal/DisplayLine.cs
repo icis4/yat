@@ -290,7 +290,9 @@ namespace YAT.Domain
 		// Methods
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Required to properly perform content counting.
+		/// </remarks>
 		public new void Add(DisplayElement item)
 		{
 			if (Count <= 0)
@@ -322,6 +324,63 @@ namespace YAT.Domain
 				Add(item);
 		}
 
+		/// <remarks>
+		/// Required to properly perform content counting.
+		/// </remarks>
+		public new void Insert(int index, DisplayElement item)
+		{
+			if (index <= 0)
+			{
+				base.Insert(index, item);
+			}
+			else
+			{
+				// For performance reasons, append the item to the previous item if possible:
+				int previousIndex = (index - 1);
+				if (this[previousIndex].AcceptsAppendOf(item))
+					this[previousIndex].Append(item);
+				else
+					base.Insert(index, item);
+			}
+
+			this.charCount += item.CharCount;
+			this.byteCount += item.ByteCount;
+		}
+
+		/// <remarks>
+		/// Required because <see cref="T:List`1.InsertRange"/> doesn't call <see cref="Insert"/>
+		/// method above because it is 'new'. Call to <see cref="Insert"/> method above is
+		/// required to properly perform content counting.
+		/// </remarks>
+		public new void InsertRange(int index, IEnumerable<DisplayElement> collection)
+		{
+			foreach (var item in collection)
+				Insert(index++, item);
+		}
+
+		/// <remarks>
+		/// Required because <see cref="T:List`1.Remove"/> doesn't call <see cref="RemoveAt"/>
+		/// method below because it is 'new'. Call to <see cref="RemoveAt"/> method below is
+		/// required to properly perform content counting.
+		/// </remarks>
+		public new bool Remove(DisplayElement item)
+		{
+			var itemCharCount = item.CharCount;
+			var itemByteCount = item.ByteCount;
+
+			if (base.Remove(item))
+			{
+				this.charCount -= itemCharCount;
+				this.byteCount -= itemByteCount;
+
+				return (true);
+			}
+			else
+			{
+				return (false);
+			}
+		}
+
 		/// <summary>
 		/// Removes the element at the specified index of the <see cref="DisplayElementCollection"/>.
 		/// </summary>
@@ -332,6 +391,9 @@ namespace YAT.Domain
 		/// <item><description><paramref name="index"/> is equal to or greater than <see cref="T:List`1.Count"/>.</description></item>
 		/// </list>
 		/// </exception>
+		/// <remarks>
+		/// Required to properly perform content counting.
+		/// </remarks>
 		public new void RemoveAt(int index)
 		{
 			this.charCount -= this[index].CharCount;
@@ -352,6 +414,22 @@ namespace YAT.Domain
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The collection is empty!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			RemoveAt(Count - 1);
+		}
+
+		/// <summary>
+		/// Removes all elements at the end until (and including!) an element of the given type is found.
+		/// </summary>
+		public virtual void RemoveLastUntil(Type type)
+		{
+			while (Count > 0)
+			{
+				bool typeFound = (this[Count - 1].GetType() == type);
+
+				RemoveLast();
+
+				if (typeFound)
+					break;
+			}
 		}
 
 		/// <summary>
@@ -412,26 +490,47 @@ namespace YAT.Domain
 				RemoveAt(index + i);
 		}
 
-		/// <summary></summary>
-		public virtual void RemoveRangeAtEnd(int count)
+		/// <remarks>
+		/// Required because <see cref="T:List`1.RemoveAll"/> doesn't call <see cref="RemoveAt"/>
+		/// method above because it is 'new'. Call to <see cref="RemoveAt"/> method above is
+		/// required to properly perform content counting.
+		/// </remarks>
+		public new int RemoveAll(Predicate<DisplayElement> match)
 		{
-			RemoveRange(Count - count, count);
-		}
+			int result = 0;
 
-		/// <summary>
-		/// Removes all elements at the end until (and including!) an element of the given type is found.
-		/// </summary>
-		public virtual void RemoveAtEndUntil(Type type)
-		{
+			int startIndex = 0;
 			while (Count > 0)
 			{
-				bool typeFound = (this[Count - 1].GetType() == type);
+				var index = FindIndex(startIndex, match); // Not the ideal implementation, but considered good enough.
+				if (index >= 0)
+				{
+					RemoveAt(index);
+					result++;
 
-				RemoveLast();
-
-				if (typeFound)
+					if (index < Count) // Continue at same index:
+						startIndex = index;
+					else // Was already at last index:
+						break;
+				}
+				else // -1 indicates not found:
+				{
 					break;
+				}
 			}
+
+			return (result);
+		}
+
+		/// <remarks>
+		/// Required to properly perform content counting.
+		/// </remarks>
+		public new void Clear()
+		{
+			base.Clear();
+
+			this.charCount = 0;
+			this.byteCount = 0;
 		}
 
 		/// <summary>

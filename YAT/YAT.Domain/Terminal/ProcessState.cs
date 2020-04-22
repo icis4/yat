@@ -40,7 +40,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public ProcessState()
 		{
-			Reset();
+			Overall = new OverallState();
+			Line    = new LineState();
 		}
 
 		/// <summary>
@@ -48,8 +49,8 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void Reset()
 		{
-			Overall = new OverallState();
-			Line    = new LineState();
+			Overall.Reset();
+			Line   .Reset();
 		}
 
 		/// <summary>
@@ -89,7 +90,19 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public OverallState()
 		{
-			Reset();
+			DeviceLineBreak    = new DeviceState();
+			DirectionLineBreak = new DirectionState();
+
+			InitializeValues();
+		}
+
+		/// <summary>
+		/// Initializes the state.
+		/// </summary>
+		protected virtual void InitializeValues()
+		{
+			IsFirstLine           = true;
+			PreviousLineTimeStamp = DisplayElement.TimeStampDefault;
 		}
 
 		/// <summary>
@@ -97,10 +110,10 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void Reset()
 		{
-			DeviceLineBreak       = new DeviceState();
-			DirectionLineBreak    = new DirectionState();
-			IsFirstLine           = true;
-			PreviousLineTimeStamp = DisplayElement.TimeStampDefault;
+			DeviceLineBreak   .Reset();
+			DirectionLineBreak.Reset();
+
+			InitializeValues();
 		}
 
 		/// <summary>
@@ -134,8 +147,24 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public DeviceState()
 		{
+			InitializeValues();
+		}
+
+		/// <summary>
+		/// Initializes the state.
+		/// </summary>
+		protected virtual void InitializeValues()
+		{
 			IsFirstChunk = true;
 			Device       = null;
+		}
+
+		/// <summary>
+		/// Resets the state, i.e. restarts processing with an empty repository.
+		/// </summary>
+		public virtual void Reset()
+		{
+			InitializeValues();
 		}
 	}
 
@@ -151,8 +180,24 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public DirectionState()
 		{
+			InitializeValues();
+		}
+
+		/// <summary>
+		/// Initializes the state.
+		/// </summary>
+		protected virtual void InitializeValues()
+		{
 			IsFirstChunk = true;
 			Direction    = IODirection.None;
+		}
+
+		/// <summary>
+		/// Resets the state, i.e. restarts processing with an empty repository.
+		/// </summary>
+		public virtual void Reset()
+		{
+			InitializeValues();
 		}
 	}
 
@@ -177,14 +222,14 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public LineState()
 		{
-			Initialize();
+			InitializeValues();
 			Elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 		}
 
 		/// <summary>
 		/// Initializes the state.
 		/// </summary>
-		protected virtual void Initialize()
+		protected virtual void InitializeValues()
 		{
 			Position  = LinePosition.Begin;
 			TimeStamp = DisplayElement.TimeStampDefault;
@@ -193,13 +238,13 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Resets the state, i.e. restarts processing with an empty repository.
+		/// Resets the state, i.e. restarts processing with an empty line.
 		/// </summary>
 		public virtual void Reset()
 		{
-			Initialize();
-			Elements.Clear();
-		}
+			InitializeValues();
+			Elements.Clear(); // The collection will already have enlarged to the effectively typical line length.
+		}                     // Thus, for performance reasons, clearing rather than recreating the collection.
 
 		/// <summary>
 		/// Notify the begin of a line, i.e. start processing of a line.
