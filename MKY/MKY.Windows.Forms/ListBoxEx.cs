@@ -428,7 +428,7 @@ namespace MKY.Windows.Forms
 			{
 				// Debug output...
 				// ...is not required here, it is already done at all places where 'BottomIndex' is retrieved.
-				// ...and must not be done here, it would result in stack overflow!
+				// ...and must not be done here, it would result in recursion => stack overflow!
 			////DebugCountAndIndices("TopIndex is going to be retrieved")
 
 				int unsafeResult = (TopIndex + (TotalVisibleItemCount - 1));

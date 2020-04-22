@@ -163,9 +163,9 @@ namespace YAT.Domain
 				else if (ExtensionHelper.IsRtfFile(item.FilePath))
 				{
 					string[] lines;
-					RtfReaderHelper.LinesFromRtfFile(item.FilePath, out lines); // Read all at once for simplicity.
-					foreach (string line in lines)
-					{
+					RtfReaderHelper.LinesFromRtfFile(item.FilePath, out lines); // Read file at once for simplicity. Minor limitation:
+					foreach (string line in lines)                              // 'sendingIsBusyChangedEventHelper.RaiseEventIf...' will
+					{                                                           // only be evaluated at DoSendFileLine() below.
 						if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
 							continue;
 

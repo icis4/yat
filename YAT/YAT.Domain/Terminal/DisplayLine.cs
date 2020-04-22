@@ -433,7 +433,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual DisplayElementCollection Clone()
 		{
-			var c = new DisplayElementCollection(Capacity); // Preset the required capacity to improve memory management.
+			var c = new DisplayElementCollection(Count); // Preset the required capacity to improve memory management.
 			CloneTo(c);
 			return (c);
 		}
@@ -631,7 +631,7 @@ namespace YAT.Domain
 		/// </summary>
 		public new DisplayLine Clone()
 		{
-			var c = new DisplayLine(Capacity); // Preset the required capacity to improve memory management.
+			var c = new DisplayLine(Count); // Preset the required capacity to improve memory management.
 			CloneTo(c);
 			return (c);
 		}
@@ -683,12 +683,18 @@ namespace YAT.Domain
 		/// </summary>
 		public DisplayLineCollection Clone()
 		{
-			var c = new DisplayLineCollection(Capacity); // Preset the required capacity to improve memory management.
-
-			foreach (var line in this)
-				c.Add(line.Clone());
-
+			var c = new DisplayLineCollection(Count); // Preset the required capacity to improve memory management.
+			CloneTo(c);
 			return (c);
+		}
+
+		/// <summary>
+		/// Clones this collection to the given collection.
+		/// </summary>
+		public virtual void CloneTo(DisplayLineCollection collection)
+		{
+			foreach (var line in this)
+				collection.Add(line.Clone());
 		}
 
 		#endregion
