@@ -75,49 +75,55 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
+		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		protected override void DoSendFileItem(FileSendItem item, SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper)
+		protected override void DoSendFileItem(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, FileSendItem item)
 		{
 			try
 			{
 				if (ExtensionHelper.IsXmlFile(item.FilePath))
 				{
-					DoSendXmlFileItem(item, sendingIsBusyChangedEventHelper);
+					DoSendXmlFileItem(sendingIsBusyChangedEventHelper, item);
 				}
 				else if (ExtensionHelper.IsTextFile(item.FilePath))
 				{
-					DoSendTextFileItem(item, sendingIsBusyChangedEventHelper);
+					DoSendTextFileItem(sendingIsBusyChangedEventHelper, item);
 				}
 				else // By default treat as binary file:
 				{
-					using (FileStream fs = File.OpenRead(item.FilePath))
-					{
-						long remaining = fs.Length;
-						while (remaining > 0)
-						{
-							byte[] a = new byte[1024]; // 1 KB chunks.
-							int n = fs.Read(a, 0, a.Length);
-							Array.Resize<byte>(ref a, n);
-							DoSendRawData(a);
-							remaining -= n;
-
-							if (DoBreak)
-								break;
-
-							Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
-						}
-					}
-
-					// Note that 'item.DefaultRadix' is not used for sending binary files.
-					// This fact is considered in 'View.Controls.SendFile.SetRecentAndCommandControls()'.
-					// Changes in behavior above will have to be adapted in that control method as well.
+					DoSendBinaryFileItem(sendingIsBusyChangedEventHelper, item);
 				}
 			}
 			catch (Exception ex)
 			{
 				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, @"Error reading file """ + item.FilePath + @""": " + ex.Message));
+			}
+		}
+
+		/// <remarks>
+		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// </remarks>
+		protected virtual void DoSendBinaryFileItem(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, FileSendItem item)
+		{
+			using (FileStream fs = File.OpenRead(item.FilePath))
+			{
+				long remaining = fs.Length;
+				while (remaining > 0)
+				{
+					byte[] chunk = new byte[1024]; // 1 KB chunks.
+					int n = fs.Read(chunk, 0, chunk.Length);
+					Array.Resize<byte>(ref chunk, n);
+
+					DoSendRawData(sendingIsBusyChangedEventHelper, chunk);
+
+					remaining -= n;
+
+					if (DoBreak)
+						break;
+
+					Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
+				}
 			}
 		}
 

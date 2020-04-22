@@ -30,7 +30,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Text.RegularExpressions;
+using System.IO;
+using System.Text;
 using System.Threading;
 
 using MKY.Text;
@@ -62,8 +63,10 @@ namespace YAT.Domain
 				return (p.TryParse(textToParse, out parseResult, out textSuccessfullyParsed, radix));
 		}
 
-		/// <summary></summary>
-		protected override void DoSendTextItem(TextSendItem item, SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper)
+		/// <remarks>
+		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// </remarks>
+		protected override void DoSendTextItem(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, TextSendItem item)
 		{
 			string textToParse = item.Data;
 
@@ -149,42 +152,50 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
+		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		protected override void DoSendFileItem(FileSendItem item, SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper)
+		protected override void DoSendFileItem(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, FileSendItem item)
 		{
 			try
 			{
 				if (ExtensionHelper.IsXmlFile(item.FilePath))
 				{
-					DoSendXmlFileItem(item, sendingIsBusyChangedEventHelper);
+					DoSendXmlFileItem(sendingIsBusyChangedEventHelper, item);
 				}
 				else if (ExtensionHelper.IsRtfFile(item.FilePath))
 				{
-					string[] lines;
-					RtfReaderHelper.LinesFromRtfFile(item.FilePath, out lines); // Read file at once for simplicity. Minor limitation:
-					foreach (string line in lines)                              // 'sendingIsBusyChangedEventHelper.RaiseEventIf...' will
-					{                                                           // only be evaluated at DoSendFileLine() below.
-						if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
-							continue;
-
-						DoSendFileLine(sendingIsBusyChangedEventHelper, line, item.DefaultRadix);
-
-						if (DoBreak)
-							break;
-
-						Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
-					}
+					DoSendRtfFileItem(sendingIsBusyChangedEventHelper, item);
 				}
 				else // By default treat as text file:
 				{
-					DoSendTextFileItem(item, (EncodingEx)TextTerminalSettings.Encoding, sendingIsBusyChangedEventHelper);
+					DoSendTextFileItem(sendingIsBusyChangedEventHelper, item, (EncodingEx)TextTerminalSettings.Encoding);
 				}
 			}
 			catch (Exception ex)
 			{
 				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, @"Error reading file """ + item.FilePath + @""": " + ex.Message));
+			}
+		}
+
+		/// <remarks>
+		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// </remarks>
+		protected virtual void DoSendRtfFileItem(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, FileSendItem item)
+		{
+			string[] lines;
+			RtfReaderHelper.LinesFromRtfFile(item.FilePath, out lines); // Read file at once for simplicity. Minor limitation:
+			foreach (string line in lines)                              // 'sendingIsBusyChangedEventHelper.RaiseEventIf...' will
+			{                                                           // only be evaluated at DoSendFileLine() below.
+				if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
+					continue;
+
+				DoSendFileLine(sendingIsBusyChangedEventHelper, line, item.DefaultRadix);
+
+				if (DoBreak)
+					break;
+
+				Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
 			}
 		}
 

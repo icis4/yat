@@ -294,10 +294,10 @@ namespace YAT.Domain
 				{
 					DebugSend(string.Format("Sending of {0} bytes of raw data has been permitted (sequence number = {1}).", data.Length, sequenceNumber));
 
-					var raiseSendingIsBusyChangedEvent = SendingIsBusyChangedEventHelper.ChunkSizeIsAboveThreshold(data.Length, this.terminalSettings.IO.RoughlyEstimatedMaxBytesPerMillisecond);
-					DoSendPre(raiseSendingIsBusyChangedEvent);
-					DoSendRawData(data);
-					DoSendPost(raiseSendingIsBusyChangedEvent);
+					var sendingIsBusyChangedEvent = new SendingIsBusyChangedEventHelper(DateTime.Now);
+					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised); // Always false for raw data. If needed,
+					DoSendRawData(sendingIsBusyChangedEvent, data);         // event will be raised by DoSendRawData().
+					DoSendPost(sendingIsBusyChangedEvent.EventMustBeRaised);
 
 					DebugSend(string.Format("Sending of {0} bytes of raw data has been completed (sequence number = {1}).", data.Length, sequenceNumber));
 				}
@@ -334,8 +334,8 @@ namespace YAT.Domain
 					DebugSend(string.Format(@"Sending of text ""{0}"" has been permitted (sequence number = {1}).", item.Data, sequenceNumber));
 
 					var sendingIsBusyChangedEvent = new SendingIsBusyChangedEventHelper(DateTime.Now);
-					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised);
-					DoSendTextItem(item, sendingIsBusyChangedEvent);
+					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised); // Always false for text items. If needed,
+					DoSendTextItem(sendingIsBusyChangedEvent, item);        // event will be raised by DoSendTextItem().
 					DoSendPost(sendingIsBusyChangedEvent.EventMustBeRaised);
 
 					DebugSend(string.Format(@"Sending of text ""{0}"" has been completed (sequence number = {1}).", item.Data, sequenceNumber));
@@ -373,8 +373,8 @@ namespace YAT.Domain
 					DebugSend(string.Format(@"Sending of text line ""{0}"" has been permitted (sequence number = {1}).", item.Data, sequenceNumber));
 
 					var sendingIsBusyChangedEvent = new SendingIsBusyChangedEventHelper(DateTime.Now);
-					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised);
-					DoSendTextItem(item, sendingIsBusyChangedEvent);
+					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised); // Always false for text items. If needed,
+					DoSendTextItem(sendingIsBusyChangedEvent, item);        // event will be raised by DoSendTextItem().
 					DoSendPost(sendingIsBusyChangedEvent.EventMustBeRaised);
 
 					DebugSend(string.Format(@"Sending of text line ""{0}"" has been completed (sequence number = {1}).", item.Data, sequenceNumber));
@@ -416,10 +416,10 @@ namespace YAT.Domain
 					DebugSend(string.Format("Sending of {0} text lines has been permitted (sequence number = {1}).", items.Count, sequenceNumber));
 
 					var sendingIsBusyChangedEvent = new SendingIsBusyChangedEventHelper(DateTime.Now);
-					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised);
-
+					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised); // Always false for text items. If needed,
+					                                                      //// event will be raised by DoSendTextItem().
 					foreach (var item in items)
-						DoSendTextItem(item, sendingIsBusyChangedEvent);
+						DoSendTextItem(sendingIsBusyChangedEvent, item);
 
 					DoSendPost(sendingIsBusyChangedEvent.EventMustBeRaised);
 
@@ -457,8 +457,8 @@ namespace YAT.Domain
 					DebugSend(string.Format(@"Sending of ""{0}"" has been permitted (sequence number = {1}).", item.FilePath, sequenceNumber));
 
 					var sendingIsBusyChangedEvent = new SendingIsBusyChangedEventHelper(DateTime.Now);
-					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised);
-					DoSendFileItem(item, sendingIsBusyChangedEvent);
+					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised); // Always false for file items. If needed,
+					DoSendFileItem(sendingIsBusyChangedEvent, item);        // event will be raised by DoSendFileItem().
 					DoSendPost(sendingIsBusyChangedEvent.EventMustBeRaised);
 
 					DebugSend(string.Format(@"Sending of ""{0}"" has been completed (sequence number = {1}).", item.FilePath, sequenceNumber));
@@ -530,9 +530,22 @@ namespace YAT.Domain
 				OnThisRequestSendingIsBusyChanged(false);
 		}
 
-		/// <summary></summary>
-		protected virtual void DoSendRawData(byte[] data)
+		/// <remarks>
+		/// Named "RawData" following "TextItem" terminology ("raw" vs. "text" and .
+		/// <list type="bullet">
+		/// <item><description>"Raw" instead of "Text".</description></item>
+		/// <item><description>"Data" instead of "Item" as there is no 'RawItem'.</description></item>
+		/// </list>
+		/// </remarks>
+		/// <remarks>
+		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// </remarks>
+		protected virtual void DoSendRawData(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, byte[] data)
 		{
+			// Raise the 'IOIsBusyChanged' event if a large chunk is about to be sent:
+			if (sendingIsBusyChangedEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(data.Length, this.terminalSettings.IO.RoughlyEstimatedMaxBytesPerMillisecond))
+				OnThisRequestSendingIsBusyChanged(true);
+
 			ForwardPacketToRawTerminal(data); // Nothing for further processing, simply forward.
 		}
 
@@ -543,8 +556,10 @@ namespace YAT.Domain
 				return (p.TryParse(textToParse, out parseResult, out textSuccessfullyParsed, radix));
 		}
 
-		/// <summary></summary>
-		protected virtual void DoSendTextItem(TextSendItem item, SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper)
+		/// <remarks>
+		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// </remarks>
+		protected virtual void DoSendTextItem(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, TextSendItem item)
 		{
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
@@ -1477,22 +1492,28 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
+		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
-		protected abstract void DoSendFileItem(FileSendItem item, SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper);
+		protected abstract void DoSendFileItem(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, FileSendItem item);
 
 		/// <remarks>
-		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
+		/// Text terminals are <see cref="Encoding"/> aware, binary terminals are not.
 		/// </remarks>
-		protected virtual void DoSendTextFileItem(FileSendItem item, SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper)
+		/// <remarks>
+		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// </remarks>
+		protected virtual void DoSendTextFileItem(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, FileSendItem item)
 		{
-			DoSendTextFileItem(item, Encoding.Default, sendingIsBusyChangedEventHelper);
+			DoSendTextFileItem(sendingIsBusyChangedEventHelper, item, Encoding.Default);
 		}
 
 		/// <remarks>
-		/// The 'Send*File' methods use the 'Send*Data' methods for sending of packets/lines.
+		/// Text terminals are <see cref="Encoding"/> aware, binary terminals are not.
 		/// </remarks>
-		protected virtual void DoSendTextFileItem(FileSendItem item, Encoding encodingFallback, SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper)
+		/// <remarks>
+		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// </remarks>
+		protected virtual void DoSendTextFileItem(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, FileSendItem item, Encoding encodingFallback)
 		{
 			using (var sr = new StreamReader(item.FilePath, encodingFallback, true))
 			{                             // Automatically detect encoding from BOM, otherwise use fallback.
@@ -1512,13 +1533,15 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
-		protected virtual void DoSendXmlFileItem(FileSendItem item, SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper)
+		/// <remarks>
+		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// </remarks>
+		protected virtual void DoSendXmlFileItem(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, FileSendItem item)
 		{
 			string[] lines;
-			XmlReaderHelper.LinesFromFile(item.FilePath, out lines); // Read all at once for simplicity.
-			foreach (string line in lines)
-			{
+			XmlReaderHelper.LinesFromFile(item.FilePath, out lines); // Read file at once for simplicity. Minor limitation:
+			foreach (string line in lines)                           // 'sendingIsBusyChangedEventHelper.RaiseEventIf...' will
+			{                                                        // only be evaluated at DoSendFileLine() below.
 				if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
 					continue;
 
@@ -1531,12 +1554,27 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
-		protected virtual void DoSendFileLine(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, string dataLine, Radix defaultRadix)
+		/// <remarks>
+		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// </remarks>
+		protected virtual void DoSendFileLine(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, string line, Radix defaultRadix)
 		{
 			var parseMode = TerminalSettings.Send.File.ToParseMode();
-			var item = new TextSendItem(dataLine, defaultRadix, parseMode, SendMode.File, true);
-			DoSendTextItem(item, sendingIsBusyChangedEventHelper);
+			var item = new TextSendItem(line, defaultRadix, parseMode, SendMode.File, true);
+			DoSendTextItem(sendingIsBusyChangedEventHelper, item);
+		}
+
+		/// <remarks>
+		/// <see cref="FileSendItem.DefaultRadix"/> is not used for sending raw files.
+		/// This fact is considered in 'View.Controls.SendFile.SetRecentAndCommandControls()'.
+		/// Changes in behavior here will have to be adapted in that control method as well.
+		/// </remarks>
+		/// <remarks>
+		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// </remarks>
+		protected virtual void DoSendFileChunk(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, byte[] chunk)
+		{
+			DoSendRawData(sendingIsBusyChangedEventHelper, chunk);
 		}
 
 		#endregion
