@@ -47,7 +47,7 @@ namespace YAT.Domain
 	/// Implements a collection of display elements.
 	/// </summary>
 	/// <remarks>
-	/// This calls inherits from <see cref="T:List`"/>. However, it only overrides functions
+	/// This class inherits from <see cref="T:List`"/>. However, it only overrides functions
 	/// required for YAT use cases. It is only allowed to add to the list, removing items results
 	/// in an undefined behavior.
 	/// </remarks>
@@ -568,7 +568,7 @@ namespace YAT.Domain
 	/// Implements a display line containing a collection of display elements.
 	/// </summary>
 	/// <remarks>
-	/// This calls redirects to <see cref="DisplayElementCollection"/>. The purpose of this
+	/// This class redirects to <see cref="DisplayElementCollection"/>. The purpose of this
 	/// collection is to add functionality that explicitly applies to a line.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "A display line is a collection of multiple elements, but not a collection of display lines as a name ending in 'Collection' would suggest.")]
@@ -649,7 +649,7 @@ namespace YAT.Domain
 	/// Implements a collection of display lines.
 	/// </summary>
 	/// <remarks>
-	/// This calls redirects to <see cref="T:List`"/>. The sole purpose of this
+	/// This class redirects to <see cref="T:List`"/>. The sole purpose of this
 	/// collection is consistency with <see cref="DisplayElementCollection"/>.
 	/// </remarks>
 	[Serializable]
