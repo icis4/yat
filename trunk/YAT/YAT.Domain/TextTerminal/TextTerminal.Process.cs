@@ -878,7 +878,7 @@ namespace YAT.Domain
 				{
 					lineState.Position = LinePosition.ContentExceeded;
 
-					var message = "Maximal number of charcters per line exceeded! Check the EOL (end-of-line) settings or increase the limit in the advanced terminal settings.";
+					var message = "Maximal number of characters per line exceeded! Check the EOL (end-of-line) settings or increase the limit in the advanced terminal settings.";
 					lineState.Elements.Add(new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true));
 					elementsToAdd.Add(     new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true));
 				}
