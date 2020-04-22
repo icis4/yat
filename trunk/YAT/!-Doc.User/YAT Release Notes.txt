@@ -178,13 +178,16 @@ Limitations and known issues:
      applying several patches to try working around the issue (bugs #224, #254, #293, #316, #317,
      #345, #382, #385, #387, #401, #442). To prevent this issue, refrain from disconnecting a
      device while its port is open. Or, manually close the port after the device got disconnected.
-- The \!(IOSettings()) keyword is yet limited to serial COM ports (feature request #71).
+- The \!(PortSettings()) keyword is yet limited to serial COM ports (feature request #71).
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
   implementation and test environment would be needed to run it on unixoids (feature request #119).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
+- Automatic actions [Filter] and [Suppress] as well as automatic actions and responses based on a
+  text trigger are constrained to handle complete lines. Thus, individual characters incl. control
+  characters like <XOn> as well as incomplete lines will not be displayed until line is complete.
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
+  unknown, could even be a limitation of the memory management of the .NET runtime).
 
 
 YAT 2.1.0 :: 2019-10-04
