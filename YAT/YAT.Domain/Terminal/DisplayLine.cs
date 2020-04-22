@@ -374,22 +374,28 @@ namespace YAT.Domain
 			for (int index = (Count - 1); index >= 0; index--)
 			{
 				var current = this[index];
-				if (current.IsDataContent) // Data content only, e.g. <BS> must not be applied to a <BEL>,
-				{                          // but has to be applied to a <TAB> if that is executed.
+				if (current.IsDataContent)        // Data content only, e.g. <BS> must not be applied to a <BEL>,
+				{                                 // but has to be applied to a <TAB> if that is executed.
 					if (current.CharCount < 1)
 					{
-						RemoveAt(index); // A preceeding whitespace content has to be removed,
-						continue;        // but then continue searching for char.
+						RemoveAt(index);          // A preceeding whitespace content has to be removed,
+						continue;                 // but then continue searching for char.
 					}
 					else if (current.CharCount == 1)
 					{
-						RemoveAt(index); // A single element can be removed,
-						break;           // done.
+						RemoveAt(index);          // A single element can be removed,
+						break;                    // done.
 					}
 					else if (current.CharCount > 1)
 					{
+						var formerCharCount = current.CharCount;
+						var formerByteCount = current.ByteCount;
+
 						current.RemoveLastChar(); // A single element can be removed,
-						break;           // done.
+						                        //// done after adjusting the counts.
+						this.charCount -= (formerCharCount - current.CharCount);
+						this.byteCount -= (formerByteCount - current.ByteCount);
+						break;
 					}
 				}
 			}
