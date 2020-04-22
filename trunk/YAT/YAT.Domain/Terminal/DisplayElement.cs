@@ -847,7 +847,9 @@ namespace YAT.Domain
 			set { this.charCount = value;  }
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Positioned after <see cref="CharCount"/> as counts are displayed at the end of a line.
+		/// </remarks>
 		[XmlAttribute("ByteCount")]
 		public virtual int ByteCount
 		{
@@ -1124,7 +1126,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		private static Pair<byte[], string> PerformDeepClone(Pair<byte[], string> originItem)
-		{
+		{                                                              // Shallow copy of array is good enough for byte[].
 			return (new Pair<byte[], string>((byte[])originItem.Value1.Clone(), originItem.Value2));
 		}
 
