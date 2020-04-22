@@ -7109,8 +7109,8 @@ namespace YAT.View.Forms
 				var autoResponseCondition = (settingsRoot.AutoResponse.IsActive && (settingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
 				                             settingsRoot.AutoResponse.IsByteSequenceTriggered); // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 
-				return (autoActionCondition || autoResponseCondition);
-			}
+				return (!(autoActionCondition || autoResponseCondition));
+			}          // Only if neither condition is given, the 'DisplayElementsAdded' events shall be used.
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
