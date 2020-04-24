@@ -430,14 +430,13 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log_On = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Log_Off = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Log_OpenFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Log_Clear = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Log_Settings = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Panels = new System.Windows.Forms.ToolStripMenuItem();
@@ -3316,7 +3315,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_TerminalMenu_Terminal_Separator_6,
             this.toolStripMenuItem_TerminalMenu_Terminal_Settings,
             this.toolStripMenuItem_TerminalMenu_Terminal_Presets});
-			this.toolStripMenuItem_TerminalMenu_Terminal.MergeAction = System.Windows.Forms.MergeAction.Insert;
+			this.toolStripMenuItem_TerminalMenu_Terminal.MergeAction = System.Windows.Forms.MergeAction.MatchOnly;
 			this.toolStripMenuItem_TerminalMenu_Terminal.MergeIndex = 1;
 			this.toolStripMenuItem_TerminalMenu_Terminal.Name = "toolStripMenuItem_TerminalMenu_Terminal";
 			this.toolStripMenuItem_TerminalMenu_Terminal.Size = new System.Drawing.Size(64, 20);
@@ -3326,6 +3325,7 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_TerminalMenu_Terminal_Start
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_accept_button_16x16;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Start.MergeAction = System.Windows.Forms.MergeAction.Insert;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.MergeIndex = 0;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Name = "toolStripMenuItem_TerminalMenu_Terminal_Start";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
@@ -3337,7 +3337,8 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_TerminalMenu_Terminal_Stop
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_delete_16x16;
-			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.MergeIndex = 0;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.MergeAction = System.Windows.Forms.MergeAction.Insert;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.MergeIndex = 1;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Name = "toolStripMenuItem_TerminalMenu_Terminal_Stop";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.C)));
@@ -3347,13 +3348,15 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Separator_1
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_1.MergeIndex = 0;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_1.MergeAction = System.Windows.Forms.MergeAction.Insert;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_1.MergeIndex = 2;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_1.Name = "toolStripMenuItem_TerminalMenu_Terminal_Separator_1";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_1.Size = new System.Drawing.Size(211, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Break
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_Break.MergeIndex = 0;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Break.MergeAction = System.Windows.Forms.MergeAction.Insert;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Break.MergeIndex = 3;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Break.Name = "toolStripMenuItem_TerminalMenu_Terminal_Break";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Break.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_Break.Size = new System.Drawing.Size(214, 22);
@@ -3362,14 +3365,16 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Separator_2
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_2.MergeIndex = 0;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_2.MergeAction = System.Windows.Forms.MergeAction.Insert;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_2.MergeIndex = 4;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_2.Name = "toolStripMenuItem_TerminalMenu_Terminal_Separator_2";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_2.Size = new System.Drawing.Size(211, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Clear
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_lightning_16x16;
-			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.MergeIndex = 0;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.MergeAction = System.Windows.Forms.MergeAction.Insert;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.MergeIndex = 5;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Name = "toolStripMenuItem_TerminalMenu_Terminal_Clear";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Size = new System.Drawing.Size(214, 22);
@@ -3379,7 +3384,8 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_TerminalMenu_Terminal_Refresh
 			// 
 			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_refresh_16x16;
-			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.MergeIndex = 2;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.MergeAction = System.Windows.Forms.MergeAction.Insert;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.MergeIndex = 6;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Name = "toolStripMenuItem_TerminalMenu_Terminal_Refresh";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Refresh.Size = new System.Drawing.Size(214, 22);
@@ -3996,14 +4002,13 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_TerminalMenu_Log.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem_TerminalMenu_Log_On,
-            this.toolStripMenuItem_TerminalMenu_Log_Separator_1,
             this.toolStripMenuItem_TerminalMenu_Log_Off,
-            this.toolStripMenuItem_TerminalMenu_Log_Separator_2,
+            this.toolStripMenuItem_TerminalMenu_Log_Separator_1,
             this.toolStripMenuItem_TerminalMenu_Log_OpenFile,
             this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory,
-            this.toolStripMenuItem_TerminalMenu_Log_Separator_3,
+            this.toolStripMenuItem_TerminalMenu_Log_Separator_2,
             this.toolStripMenuItem_TerminalMenu_Log_Clear,
-            this.toolStripMenuItem_TerminalMenu_Log_Separator_4,
+            this.toolStripMenuItem_TerminalMenu_Log_Separator_3,
             this.toolStripMenuItem_TerminalMenu_Log_Settings});
 			this.toolStripMenuItem_TerminalMenu_Log.MergeAction = System.Windows.Forms.MergeAction.MatchOnly;
 			this.toolStripMenuItem_TerminalMenu_Log.MergeIndex = 4;
@@ -4024,19 +4029,12 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Log_On.Text = "O&n";
 			this.toolStripMenuItem_TerminalMenu_Log_On.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_On_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_Log_Separator_1
-			// 
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_1.MergeAction = System.Windows.Forms.MergeAction.Replace;
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_1.MergeIndex = 2;
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_1.Name = "toolStripMenuItem_TerminalMenu_Log_Separator_1";
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_1.Size = new System.Drawing.Size(247, 6);
-			// 
 			// toolStripMenuItem_TerminalMenu_Log_Off
 			// 
 			this.toolStripMenuItem_TerminalMenu_Log_Off.Enabled = false;
 			this.toolStripMenuItem_TerminalMenu_Log_Off.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_page_white_delete_16x16;
 			this.toolStripMenuItem_TerminalMenu_Log_Off.MergeAction = System.Windows.Forms.MergeAction.Insert;
-			this.toolStripMenuItem_TerminalMenu_Log_Off.MergeIndex = 3;
+			this.toolStripMenuItem_TerminalMenu_Log_Off.MergeIndex = 1;
 			this.toolStripMenuItem_TerminalMenu_Log_Off.Name = "toolStripMenuItem_TerminalMenu_Log_Off";
 			this.toolStripMenuItem_TerminalMenu_Log_Off.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.F)));
@@ -4044,19 +4042,19 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Log_Off.Text = "O&ff";
 			this.toolStripMenuItem_TerminalMenu_Log_Off.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_Off_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_Log_Separator_2
+			// toolStripMenuItem_TerminalMenu_Log_Separator_1
 			// 
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_2.MergeAction = System.Windows.Forms.MergeAction.Replace;
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_2.MergeIndex = 5;
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_2.Name = "toolStripMenuItem_TerminalMenu_Log_Separator_2";
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_2.Size = new System.Drawing.Size(247, 6);
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_1.MergeAction = System.Windows.Forms.MergeAction.Replace;
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_1.MergeIndex = 4;
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_1.Name = "toolStripMenuItem_TerminalMenu_Log_Separator_1";
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_1.Size = new System.Drawing.Size(247, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log_OpenFile
 			// 
 			this.toolStripMenuItem_TerminalMenu_Log_OpenFile.Enabled = false;
 			this.toolStripMenuItem_TerminalMenu_Log_OpenFile.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_page_white_magnify_16x16;
 			this.toolStripMenuItem_TerminalMenu_Log_OpenFile.MergeAction = System.Windows.Forms.MergeAction.Insert;
-			this.toolStripMenuItem_TerminalMenu_Log_OpenFile.MergeIndex = 6;
+			this.toolStripMenuItem_TerminalMenu_Log_OpenFile.MergeIndex = 5;
 			this.toolStripMenuItem_TerminalMenu_Log_OpenFile.Name = "toolStripMenuItem_TerminalMenu_Log_OpenFile";
 			this.toolStripMenuItem_TerminalMenu_Log_OpenFile.Size = new System.Drawing.Size(250, 22);
 			this.toolStripMenuItem_TerminalMenu_Log_OpenFile.Text = "&Open File(s) in Editor...";
@@ -4066,34 +4064,34 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_folder_explorer_16x16;
 			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.MergeAction = System.Windows.Forms.MergeAction.Insert;
-			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.MergeIndex = 7;
+			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.MergeIndex = 6;
 			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.Name = "toolStripMenuItem_TerminalMenu_Log_OpenDirectory";
 			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.Size = new System.Drawing.Size(250, 22);
 			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.Text = "O&pen Log Folder in File Browser...";
 			this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_OpenDirectory_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_Log_Separator_3
+			// toolStripMenuItem_TerminalMenu_Log_Separator_2
 			// 
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_3.MergeAction = System.Windows.Forms.MergeAction.Insert;
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_3.MergeIndex = 8;
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_3.Name = "toolStripMenuItem_TerminalMenu_Log_Separator_3";
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_3.Size = new System.Drawing.Size(247, 6);
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_2.MergeAction = System.Windows.Forms.MergeAction.Insert;
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_2.MergeIndex = 7;
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_2.Name = "toolStripMenuItem_TerminalMenu_Log_Separator_2";
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_2.Size = new System.Drawing.Size(247, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log_Clear
 			// 
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Enabled = false;
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_page_white_lightning_16x16;
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.MergeAction = System.Windows.Forms.MergeAction.Insert;
-			this.toolStripMenuItem_TerminalMenu_Log_Clear.MergeIndex = 9;
+			this.toolStripMenuItem_TerminalMenu_Log_Clear.MergeIndex = 8;
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Name = "toolStripMenuItem_TerminalMenu_Log_Clear";
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Size = new System.Drawing.Size(250, 22);
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Text = "&Clear";
 			this.toolStripMenuItem_TerminalMenu_Log_Clear.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Log_Clear_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_Log_Separator_4
+			// toolStripMenuItem_TerminalMenu_Log_Separator_3
 			// 
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_4.Name = "toolStripMenuItem_TerminalMenu_Log_Separator_4";
-			this.toolStripMenuItem_TerminalMenu_Log_Separator_4.Size = new System.Drawing.Size(247, 6);
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_3.Name = "toolStripMenuItem_TerminalMenu_Log_Separator_3";
+			this.toolStripMenuItem_TerminalMenu_Log_Separator_3.Size = new System.Drawing.Size(247, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log_Settings
 			// 
@@ -5132,7 +5130,6 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Log_On;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Log_Off;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Log_Clear;
-		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Log_Separator_2;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Log_Settings;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View;
 		private MKY.Windows.Forms.StatusStripEx statusStrip_Terminal;
@@ -5300,10 +5297,10 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Terminal_Separator_5;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_Break;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_Refresh;
-		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Log_Separator_3;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Log_Separator_1;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Log_Separator_2;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Log_Separator_3;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Log_OpenFile;
-		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Log_Separator_4;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MonitorContextMenu_Separator_8;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime;
