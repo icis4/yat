@@ -27,7 +27,6 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics;
 
 using MKY.Threading;
 using MKY.Time;
@@ -51,36 +50,54 @@ namespace MKY.Test.Time
 		[Test]
 		public virtual void TestCreateIntervalLessThanWindow()
 		{
-			var rate1 = new Rate();
-			var rate2 = new Rate(1000, 1500); // Intentionally using an odd interval-window-ratio.
+			var rate1us = new Rate(0.001, 0.0015); // Intentionally using an odd interval-window-ratio.
+			var rate1ms = new Rate(1, 1.5);        // Intentionally using an odd interval-window-ratio.
+			var rate1s  = new Rate(1000, 1500);    // Intentionally using an odd interval-window-ratio.
 		}
 
 		/// <summary></summary>
 		[Test]
 		public virtual void TestCreateIntervalEqualsWindow()
 		{
-			var rate1 = new Rate(1000);
-			var rate2 = new Rate(1000, 1000);
+			var rate    = new Rate();
+			var rate1us = new Rate(0.001);
+			var rate1ms = new Rate(1);
+			var rate1s  = new Rate(1000);
+			var rate1sb = new Rate(1000, 1000);
 		}
 
 		/// <summary></summary>
 		[Test]
 		public virtual void TestCreateIntervalLargerThanWindow()
 		{
-			Assert.That(CreateIntervalLargerThanWindow, Throws.TypeOf<ArgumentOutOfRangeException>());
+			Assert.That(CreateIntervalLargerThanWindow1us, Throws.TypeOf<ArgumentOutOfRangeException>());
+			Assert.That(CreateIntervalLargerThanWindow1ms, Throws.TypeOf<ArgumentOutOfRangeException>());
+			Assert.That(CreateIntervalLargerThanWindow1s, Throws.TypeOf<ArgumentOutOfRangeException>());
 		}
 
 		/// <summary></summary>
-		protected virtual void CreateIntervalLargerThanWindow()
+		protected virtual void CreateIntervalLargerThanWindow1us()
+		{
+			var rate = new Rate(0.001, 0.00075); // Intentionally using an odd interval-window-ratio.
+		}
+
+		/// <summary></summary>
+		protected virtual void CreateIntervalLargerThanWindow1ms()
+		{
+			var rate = new Rate(1, 0.75); // Intentionally using an odd interval-window-ratio.
+		}
+
+		/// <summary></summary>
+		protected virtual void CreateIntervalLargerThanWindow1s()
 		{
 			var rate = new Rate(1000, 750); // Intentionally using an odd interval-window-ratio.
 		}
 
 		/// <summary></summary>
-		[Test]
-		public virtual void TestIntervalLessThanWindow()
+		[Test, Sequential] // Sequential for us / ms / s
+		public virtual void TestIntervalLessThanWindow([Values(0.001, 1, 1000)] double interval, [Values(0.004, 4, 4000)] double window)
 		{
-			var rate = new Rate(1000, 4000);
+			var rate = new Rate(interval, window);
 			var initial = DateTime.Now;
 
 			Assert.That(rate.Update(10), Is.True);
@@ -95,34 +112,37 @@ namespace MKY.Test.Time
 			Assert.That(rate.Update(20), Is.True);
 			Assert.That(rate.Value, Is.EqualTo(24)); // 24 per interval; weighed per interval throughout window.
 
-			// --- 0 ~ 20 ms have passed since 'initial' ---
+			if (DoubleEx.AlmostEquals(interval, 1000)) // Timing controlled tests are limited to work for intervals of 1 second.
+			{
+				// --- 0 ~ 20 ms have passed since 'initial' ---
 
-			ThreadEx.SleepUntilOffset(initial, 1500);
-			Assert.That(rate.Update(DateTime.Now), Is.True);
-			Assert.That(rate.Value, Is.GreaterThanOrEqualTo(12)); // 12..17 per interval; weighed per interval throughout window.
-			Assert.That(rate.Value, Is.LessThanOrEqualTo(17));
+				ThreadEx.SleepUntilOffset(initial, 1500);
+				Assert.That(rate.Update(DateTime.Now), Is.True);
+				Assert.That(rate.Value, Is.GreaterThanOrEqualTo(12)); // 12..17 per interval; weighed per interval throughout window.
+				Assert.That(rate.Value, Is.LessThanOrEqualTo(17));
 
-			ThreadEx.SleepUntilOffset(initial, 3500);
-			Assert.That(rate.Update(DateTime.Now), Is.True);
-			Assert.That(rate.Value, Is.EqualTo(6)); // 6 per interval; weighed per interval throughout window.
+				ThreadEx.SleepUntilOffset(initial, 3500);
+				Assert.That(rate.Update(DateTime.Now), Is.True);
+				Assert.That(rate.Value, Is.EqualTo(6)); // 6 per interval; weighed per interval throughout window.
 
-			Assert.That(rate.Update(20), Is.True);
-			Assert.That(rate.Value, Is.EqualTo(14)); // 14 per interval; weighed per interval throughout window.
+				Assert.That(rate.Update(20), Is.True);
+				Assert.That(rate.Value, Is.EqualTo(14)); // 14 per interval; weighed per interval throughout window.
 
-			ThreadEx.SleepUntilOffset(initial, 4500);
-			Assert.That(rate.Update(DateTime.Now), Is.True);
-			Assert.That(rate.Value, Is.EqualTo(6)); // 6 per interval; weighed per interval throughout window.
+				ThreadEx.SleepUntilOffset(initial, 4500);
+				Assert.That(rate.Update(DateTime.Now), Is.True);
+				Assert.That(rate.Value, Is.EqualTo(6)); // 6 per interval; weighed per interval throughout window.
 
-			ThreadEx.SleepUntilOffset(initial, 8000);
-			Assert.That(rate.Update(DateTime.Now), Is.True);
-			Assert.That(rate.Value, Is.EqualTo(0)); // Back to zero.
+				ThreadEx.SleepUntilOffset(initial, 8000);
+				Assert.That(rate.Update(DateTime.Now), Is.True);
+				Assert.That(rate.Value, Is.EqualTo(0)); // Back to zero.
+			}
 		}
 
 		/// <remarks>Using an odd interval-window-ratio to check for related issues.</remarks>
 		[Test]
-		public virtual void TestIntervalLessThanWindowWithOddRatio()
+		public virtual void TestIntervalLessThanWindowWithOddRatio([Values(0.001, 1, 1000)] double interval, [Values(0.0015, 1.5, 1500)] double window)
 		{
-			var rate = new Rate(1000, 1500);
+			var rate = new Rate(interval, window);
 			var initial = DateTime.Now;
 
 			Assert.That(rate.Update(10), Is.True);
@@ -137,32 +157,35 @@ namespace MKY.Test.Time
 			Assert.That(rate.Update(20), Is.True);
 			Assert.That(rate.Value, Is.EqualTo(40)); // 40 per interval; weighed per interval throughout window.
 
-			// --- 0 ~ 20 ms have passed since 'initial' ---
+			if (DoubleEx.AlmostEquals(interval, 1000)) // Timing controlled tests are limited to work for intervals of 1 second.
+			{
+				// --- 0 ~ 20 ms have passed since 'initial' ---
 
-			ThreadEx.SleepUntilOffset(initial, 500);
-			Assert.That(rate.Update(DateTime.Now), Is.True);
-			Assert.That(rate.Value, Is.GreaterThanOrEqualTo(20)); // Reduced to 20..37 per interval; weighed per interval throughout window.
-			Assert.That(rate.Value, Is.LessThanOrEqualTo(37));
+				ThreadEx.SleepUntilOffset(initial, 500);
+				Assert.That(rate.Update(DateTime.Now), Is.True);
+				Assert.That(rate.Value, Is.GreaterThanOrEqualTo(20)); // Reduced to 20..37 per interval; weighed per interval throughout window.
+				Assert.That(rate.Value, Is.LessThanOrEqualTo(37));
 
-			ThreadEx.SleepUntilOffset(initial, 750);
-			Assert.That(rate.Update(30), Is.True);
-			Assert.That(rate.Value, Is.EqualTo(40)); // Again 40 per interval; weighed per interval throughout window.
+				ThreadEx.SleepUntilOffset(initial, 750);
+				Assert.That(rate.Update(30), Is.True);
+				Assert.That(rate.Value, Is.EqualTo(40)); // Again 40 per interval; weighed per interval throughout window.
 
-			ThreadEx.SleepUntilOffset(initial, 1250);
-			Assert.That(rate.Update(30), Is.True);
-			Assert.That(rate.Value, Is.GreaterThanOrEqualTo(50)); // Increased to 50..60 per interval; weighed per interval throughout window.
-			Assert.That(rate.Value, Is.LessThanOrEqualTo(60));
+				ThreadEx.SleepUntilOffset(initial, 1250);
+				Assert.That(rate.Update(30), Is.True);
+				Assert.That(rate.Value, Is.GreaterThanOrEqualTo(50)); // Increased to 50..60 per interval; weighed per interval throughout window.
+				Assert.That(rate.Value, Is.LessThanOrEqualTo(60));
 
-			ThreadEx.SleepUntilOffset(initial, 3000);
-			Assert.That(rate.Update(DateTime.Now), Is.True);
-			Assert.That(rate.Value, Is.EqualTo(0)); // Back to zero.
+				ThreadEx.SleepUntilOffset(initial, 3000);
+				Assert.That(rate.Update(DateTime.Now), Is.True);
+				Assert.That(rate.Value, Is.EqualTo(0)); // Back to zero.
+			}
 		}
 
 		/// <summary></summary>
-		[Test]
-		public virtual void TestIntervalEqualsWindow()
+		[Test, Sequential] // Sequential for us / ms / s
+		public virtual void TestIntervalEqualsWindow([Values(0.001, 1, 1000)] double interval, [Values(0.001, 1, 1000)] double window)
 		{
-			var rate = new Rate(1000, 1000);
+			var rate = new Rate(interval, window);
 			var initial = DateTime.Now;
 
 			Assert.That(rate.Update(10), Is.True);
@@ -177,23 +200,26 @@ namespace MKY.Test.Time
 			Assert.That(rate.Update(20), Is.True);
 			Assert.That(rate.Value, Is.EqualTo(60)); // 60 per interval; weighed per interval throughout window.
 
-			// --- 0 ~ 20 ms have passed since 'initial' ---
+			if (DoubleEx.AlmostEquals(interval, 1000)) // Timing controlled tests are limited to work for intervals of 1 second.
+			{
+				// --- 0 ~ 20 ms have passed since 'initial' ---
 
-			ThreadEx.SleepUntilOffset(initial, 500);
-			Assert.That(rate.Update(DateTime.Now), Is.False);
-			Assert.That(rate.Value, Is.EqualTo(60)); // Still 60 per interval.
+				ThreadEx.SleepUntilOffset(initial, 500);
+				Assert.That(rate.Update(DateTime.Now), Is.False);
+				Assert.That(rate.Value, Is.EqualTo(60)); // Still 60 per interval.
 
-			ThreadEx.SleepUntilOffset(initial, 750);
-			Assert.That(rate.Update(30), Is.True);
-			Assert.That(rate.Value, Is.EqualTo(90)); // 90 per interval; weighed per interval throughout window.
+				ThreadEx.SleepUntilOffset(initial, 750);
+				Assert.That(rate.Update(30), Is.True);
+				Assert.That(rate.Value, Is.EqualTo(90)); // 90 per interval; weighed per interval throughout window.
 
-			ThreadEx.SleepUntilOffset(initial, 1250);
-			Assert.That(rate.Update(30), Is.True);
-			Assert.That(rate.Value, Is.EqualTo(60)); // Just most recent 2 x 30 per interval.
+				ThreadEx.SleepUntilOffset(initial, 1250);
+				Assert.That(rate.Update(30), Is.True);
+				Assert.That(rate.Value, Is.EqualTo(60)); // Just most recent 2 x 30 per interval.
 
-			ThreadEx.SleepUntilOffset(initial, 2500);
-			Assert.That(rate.Update(DateTime.Now), Is.True);
-			Assert.That(rate.Value, Is.EqualTo(0)); // Back to zero.
+				ThreadEx.SleepUntilOffset(initial, 2500);
+				Assert.That(rate.Update(DateTime.Now), Is.True);
+				Assert.That(rate.Value, Is.EqualTo(0)); // Back to zero.
+			}
 		}
 
 		#endregion
