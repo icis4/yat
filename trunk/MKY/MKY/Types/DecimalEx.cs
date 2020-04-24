@@ -67,17 +67,31 @@ namespace MKY
 		}
 
 		/// <summary>
+		/// Evaluates whether the two given values are almost equal integral values.
+		/// </summary>
+		/// <remarks>
+		/// Same as <code>AlmostEquals(lhs, rhs, 0)</code>.
+		/// </remarks>
+		public static bool AlmostEquals(decimal lhs, decimal rhs)
+		{
+			return (AlmostEquals(lhs, rhs, 0));
+		}
+
+		/// <summary>
 		/// Evaluates whether the two given values are almost equal,
-		/// taking the given number of digits into account.
+		/// taking the given number of decimals into account.
 		/// </summary>
 		/// <exception cref="ArgumentOutOfRangeException">
-		/// <paramref name="digits"/> is less than 0 or greater than 28.
+		/// <paramref name="decimals"/> is less than 0 or greater than 28.
 		/// </exception>
-		public static bool AlmostEquals(decimal lhs, decimal rhs, int digits)
+		/// <remarks>
+		/// Using term "decimals" same as e.g. <see cref="Math.Round(decimal, int)"/>.
+		/// </remarks>
+		public static bool AlmostEquals(decimal lhs, decimal rhs, int decimals)
 		{
 			decimal diff = Math.Abs(lhs - rhs);
 
-			switch (digits)
+			switch (decimals)
 			{
 				case  0: return (diff < 1.0m);
 				case  1: return (diff < 0.1m);
@@ -109,20 +123,34 @@ namespace MKY
 				case 27: return (diff < 0.000000000000000000000000001m);
 				case 28: return (diff < 0.0000000000000000000000000001m);
 
-				default: throw (new ArgumentOutOfRangeException("digits", digits, MessageHelper.InvalidExecutionPreamble + "Value must be from 0 to 28 but is " + digits + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("decimals", decimals, MessageHelper.InvalidExecutionPreamble + "Value must be from 0 to 28 but is " + decimals + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
 		/// <summary>
 		/// Evaluates whether the two given values are rather not equal,
-		/// taking the given number of digits into account.
+		/// taking the given number of decimals into account.
 		/// </summary>
 		/// <exception cref="ArgumentOutOfRangeException">
-		/// <paramref name="digits"/> is less than 0 or greater than 28.
+		/// <paramref name="decimals"/> is less than 0 or greater than 28.
 		/// </exception>
-		public static bool RatherNotEquals(decimal lhs, decimal rhs, int digits)
+		/// <remarks>
+		/// Using term "decimals" same as e.g. <see cref="Math.Round(decimal, int)"/>.
+		/// </remarks>
+		public static bool RatherNotEquals(decimal lhs, decimal rhs, int decimals)
 		{
-			return (!AlmostEquals(lhs, rhs, digits));
+			return (!AlmostEquals(lhs, rhs, decimals));
+		}
+
+		/// <summary>
+		/// Evaluates whether the two given values are rather not equal integral values.
+		/// </summary>
+		/// <remarks>
+		/// Same as <code>RatherNotEquals(lhs, rhs, 0)</code>.
+		/// </remarks>
+		public static bool RatherNotEquals(decimal lhs, decimal rhs)
+		{
+			return (RatherNotEquals(lhs, rhs, 0));
 		}
 
 		/// <summary>
