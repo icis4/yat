@@ -1968,7 +1968,7 @@ namespace YAT.View.Controls
 		///                 0  25  50  75  100
 		///
 		/// Up to 25%, the update is done more or less immediately.
-		/// Above 95%, the update is done every 1125 milliseconds.
+		/// Above 95%, the update is done every 1125 ms.
 		/// Quadratic inbetween, at y = x^2.
 		///
 		/// Rationale:
