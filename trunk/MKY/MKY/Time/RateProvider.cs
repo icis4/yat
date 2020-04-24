@@ -84,7 +84,7 @@ namespace MKY.Time
 
 		private Rate rate;
 
-		private int updateInterval;
+		private double updateInterval;
 		private System.Timers.Timer updateTicker; // Not "using" 'System.Timers' to prevent conflicts with 'System.Threading'.
 
 		#endregion
@@ -113,13 +113,13 @@ namespace MKY.Time
 		}
 
 		/// <summary></summary>
-		public RateProvider(int rateInterval, int updateInterval)
+		public RateProvider(double rateInterval, double updateInterval)
 			: this(rateInterval, rateInterval, updateInterval)
 		{
 		}
 
 		/// <summary></summary>
-		public RateProvider(int rateInterval, int rateWindow, int updateInterval)
+		public RateProvider(double rateInterval, double rateWindow, double updateInterval)
 		{
 			this.rate = new Rate(rateInterval, rateWindow);
 
@@ -211,21 +211,21 @@ namespace MKY.Time
 		//==========================================================================================
 
 		/// <summary></summary>
-		public int UpdateInterval
+		public double UpdateInterval
 		{
 			get { AssertNotDisposed(); return (this.updateInterval);        }
 			set { AssertNotDisposed();         this.updateInterval = value; }
 		}
 
 		/// <summary></summary>
-		public int RateInterval
+		public double RateInterval
 		{
 			get { AssertNotDisposed(); return (this.rate.Interval);        }
 			set { AssertNotDisposed();         this.rate.Interval = value; }
 		}
 
 		/// <summary></summary>
-		public int RateWindow
+		public double RateWindow
 		{
 			get { AssertNotDisposed(); return (this.rate.Window);        }
 			set { AssertNotDisposed();         this.rate.Window = value; }

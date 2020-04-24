@@ -1319,12 +1319,12 @@ namespace MKY.IO.Serial.SerialPort
 		/// -----------------------------------
 		/// Another improvement suggested by Marco Stroppel on 2011-02-17 doesn't work with YAT.
 		///
-		/// Suggestion: The while(BytesAvailable > 0) raises endless events, because I did not call
+		/// Suggestion: The while (BytesAvailable > 0) raises endless events, because I did not call
 		/// the Receive() method. That was, because I receive only the data when the other port to
 		/// write the data is opened. So the BytesAvailable got never zero. My idea was (not knowing
 		/// if this is good) to do something like:
 		///
-		/// while(BytesAvailable > LastTimeBytesAvailable)
+		/// while (BytesAvailable > LastTimeBytesAvailable)
 		/// {
 		///     LastTimeBytesAvailable = BytesAvailable;
 		///     OnDataReceived(EventArgs.Empty);

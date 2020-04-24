@@ -127,37 +127,44 @@ Useful e.g. for sending a text command while a repeating text command is already
 Applies to [Send Text], [Send File] as well as [Predefined Commands].</value>
   </data>
   <data name="checkBox_BufferMaxBaudRate.ToolTip" xml:space="preserve">
-    <value>Limiting writing to the output buffer prevents data loss in case of
+    <value>Limiting writing to the output buffer prevents data loss for e.g.
 USB/COM and SPI/COM converters that have a hardware output
 buffer that is much smaller than the typical software output buffer
-and do not feed the buffer state back to the respective driver.
+but do not feed the buffer state back to the respective driver.
 
 Examples of such limited devices:
 - Some Prolific USB/COM converters are limited to 356 bytes.
 - Some Dell/Intel SPI/COM converters are limited to 56 bytes.
 
-As a consequence, such devices do not support using the typical
-software output buffer size. Either, reduce writing to the baud
-rate, or limit sending with one of the other settings.</value>
+As a consequence, such devices will drop data in case YAT and the
+underlying operating system writes faster to the output buffer than
+the baud rate permits.
+
+Either, tell YAT to limit writing to the speed the baud rate permits
+(minus a safety margin of 15%), or tell YAT to limit sending by one
+of the other settings.</value>
   </data>
   <data name="checkBox_OutputBufferSize.ToolTip" xml:space="preserve">
     <value>Limiting the output buffer improves the responsiveness of hardware
 and/or software flow control, i.e. sending will be suspended sooner.
-Enlarging the output buffer improves throughput.
+Enlarging the output buffer may increase throughput.
 
-Limiting the size of the output buffer also prevents data loss in
-case of USB/COM and SPI/COM converters that have a hardware output
+Limiting the size of the output buffer also prevents data loss for e.g.
+USB/COM and SPI/COM converters that have a hardware output
 buffer that is much smaller than the typical software output buffer
-and do not feed the buffer state back to the respective driver.
+but do not feed the buffer state back to the respective driver.
 
 Examples of such limited devices:
 - Some Prolific USB/COM converters are limited to 356 bytes.
 - Some Dell/Intel SPI/COM converters are limited to 56 bytes.
 
-As a consequence, such devices do not support using the typical
-software output buffer size. Either, reduce the buffer size to the
-hardware buffer size (if known), or limit sending with one of the
-settings below.</value>
+As a consequence, such devices will drop data in case YAT and the
+underlying operating system writes faster to the output buffer than
+the baud rate permits.
+
+Either, if the size of the hardware buffer is known, tell YAT to reduce
+the software buffer accordingly, or tell YAT to limit sending by one
+of the other settings.</value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>60</value>

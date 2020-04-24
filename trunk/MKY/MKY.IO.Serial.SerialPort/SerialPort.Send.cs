@@ -184,14 +184,17 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			// Calculate maximum baud defined send rate:
 			double frameTime   = this.settings.Communication.FrameTime;
-			int    frameTime10 = (int)(Math.Ceiling(frameTime * 10));
+			const int maxFramesPerInterval = 48;                  // Interval shall be rather narrow enough to ensure being inside the limits
+			double interval = (frameTime * maxFramesPerInterval); // even for converters with buffers of just 56 bytes. 48 for two reasons:
+			Rate maxBaudRatePerInterval = new Rate(interval);     //  1) 48/56 => 15% safety margin
+			                                                      //  2) Same as SerialPortSettings.MaxChunkSizeDefault.Length
+			// Typical values:
+			//   baudRate  frameTime  interval
+			// >     9600      ~1 ms     48 ms
+			// >   115.2k     ~85 us      4 ms
+			// >       1M     ~10 us    480 us
 
-			int interval = 50;          // Interval shall be rather narrow to ensure being inside
-			if (interval < frameTime10) // the limits, but ensure that interval is at least 10 times
-				interval = frameTime10; // the frame time.
-
-			Rate maxBaudRatePerInterval = new Rate(interval);
-			int maxFramesPerInterval = (int)(Math.Ceiling((1.0 / frameTime) * interval * 0.75)); // 25% safety margin.
+			bool intervalFourthIsAtLeastOneMillisecond = ((interval / 4) > 1.0);
 
 			// Calculate maximum user defined send rate:
 			Rate maxSendRate = new Rate(this.settings.MaxSendRate.Interval);
@@ -309,6 +312,8 @@ namespace MKY.IO.Serial.SerialPort
 
 						if (!isWriteTimeout && !isOutputBreak)
 						{
+							bool yieldSomeMore = false;
+
 							// Synchronize the send/receive events to prevent mix-ups at the event
 							// sinks, i.e. the send/receive operations shall be synchronized with
 							// signaling of them.
@@ -386,6 +391,25 @@ namespace MKY.IO.Serial.SerialPort
 											OnIOControlChanged(new EventArgs<DateTime>(signalIOControlChangedTimeStamp));
 										}
 									}
+									else
+									{
+										// Further above, Thread.Sleep(TimeSpan.Zero) already yields. However, a
+										// maxChunkSize of 0 indicates that the thread is much faster than the
+										// underlying sending, thus yield some more.
+
+										yieldSomeMore = true;
+
+										// Measurements (2020-04-24) counting the maximum number of loops with
+										// maxChunkSize = 0 (i.e. doing nothing but wasting CPU) during sending
+										// of a file at 9600 baud revealed:
+										//  > Without additional yield: Up to ~12000 loops !!!
+										//  > Current implementation with additional yield: Just ~32 loops max.
+										//
+										// Note: A small maxChunkSize (e.g. 1) indicates that output buffer and/or
+										// send window is becoming available again, thus do not yield/sleep.
+										//
+										// Attention: yield/sleep must not happen within lock(dataEventSyncObj)!
+									}
 
 									// Update the send rates with the effective chunk size of the current interval.
 									// This must be done no matter whether writing to port has succeeded or not!
@@ -397,8 +421,6 @@ namespace MKY.IO.Serial.SerialPort
 
 									if (this.settings.MaxSendRate.Enabled)
 										maxSendRate.Update(effectiveChunkDataCount);
-
-									// Note the Thread.Sleep(TimeSpan.Zero) further above.
 								}
 								finally
 								{
@@ -409,6 +431,9 @@ namespace MKY.IO.Serial.SerialPort
 							{
 								DebugMessage("SendThread() monitor has timed out!");
 							}
+
+							if (yieldSomeMore)
+								Thread.Sleep((intervalFourthIsAtLeastOneMillisecond ? 1 : 0));
 						}
 
 						if (isWriteTimeout) // Timeout detected while trying to call System.IO.Ports.SerialPort.Write().

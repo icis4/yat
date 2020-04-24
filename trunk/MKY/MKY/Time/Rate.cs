@@ -58,9 +58,11 @@ namespace MKY.Time
 		// Fields
 		//==========================================================================================
 
-		private int window;
-		private int interval;
+		private double window;
+		private double interval;
+
 		private int numberOfIntervals;
+		private int[] itemsPerInterval;
 
 		private Queue<TimeStampItem<int>> queue;
 		private int value;
@@ -72,22 +74,25 @@ namespace MKY.Time
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Rate"/> class setting both
+		/// <see cref="Interval"/> and <see cref="Window"/> to a second.
+		/// </summary>
 		public Rate()
-			: this(1000, 5000)
+			: this(1000)
 		{
 		}
 
 		/// <param name="interval">The interval to calculate the value of the rate</param>
 		/// <remarks><see cref="Window"/> will be set to <paramref name="interval"/>.</remarks>
-		public Rate(int interval)
+		public Rate(double interval)
 			: this(interval, interval)
 		{
 		}
 
 		/// <param name="interval">The interval to calculate the value of the rate.</param>
 		/// <param name="window"><see cref="Window"/>.</param>
-		public Rate(int interval, int window)
+		public Rate(double interval, double window)
 		{
 			if (window < interval)
 				throw (new ArgumentOutOfRangeException("window", window, MessageHelper.InvalidExecutionPreamble + "Value must be equal or larger than 'interval' = '" + interval + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -107,9 +112,12 @@ namespace MKY.Time
 		//==========================================================================================
 
 		/// <summary>
-		/// The interval to calculate the value of the rate.
+		/// The interval to calculate the value of the rate, in milliseconds.
 		/// </summary>
-		public int Interval
+		/// <remarks>Set to 0.001 to get <see cref="Value"/> in items per microsecond.</remarks>
+		/// <remarks>Set to 1 to get <see cref="Value"/> in items per millisecond.</remarks>
+		/// <remarks>Set to 1000 to get <see cref="Value"/> in items per second.</remarks>
+		public double Interval
 		{
 			get { return (this.interval); }
 			set
@@ -123,14 +131,14 @@ namespace MKY.Time
 		}
 
 		/// <summary>
-		/// The window to calculate the rate.
+		/// The window to calculate the rate, in milliseconds.
 		/// </summary>
 		/// <remarks>
 		/// If window is larger than <see cref="Interval"/>, a value is calculated for each interval
 		/// and the values are weighed. The value of the less recent interval is weighed most, more
 		/// recent intervals are weighed less.
 		/// </remarks>
-		public int Window
+		public double Window
 		{
 			get { return (this.window); }
 			set
@@ -144,7 +152,7 @@ namespace MKY.Time
 		}
 
 		/// <summary>
-		/// The resulting rate value, in items per millisecond.
+		/// The resulting rate value, in items per interval.
 		/// </summary>
 		public int Value
 		{
@@ -227,8 +235,9 @@ namespace MKY.Time
 
 		private void UpdateNumberOfIntervals()
 		{
-			this.numberOfIntervals = (int)(Math.Ceiling((double)this.window / this.interval));
-		}
+			this.numberOfIntervals = (int)(Math.Ceiling(this.window / this.interval));
+			this.itemsPerInterval = ArrayEx.CreateAndInitializeInstance(this.numberOfIntervals, 0); // Single array instance for performance optimization.
+		}                                                                                           // Makes no sense to allocate and discard on each update.
 
 		private void ClearQueue()
 		{
@@ -267,25 +276,25 @@ namespace MKY.Time
 				qa = this.queue.ToArray();
 
 			// Prepare calculation:
-			int[] valuePerInterval = ArrayEx.CreateAndInitializeInstance(this.numberOfIntervals, 0); // Makes no sense to keep as member.
-			                                                                                       //// Requires initialization to 0 anyway.
+			Array.Clear(this.itemsPerInterval, 0, this.itemsPerInterval.Length);
+
 			unchecked
 			{
 				// Count number of items within each interval:
 				foreach (TimeStampItem<int> tsi in qa) // Queue will only contain items within the window.
 				{
 					TimeSpan ts = (timeStamp - tsi.TimeStamp);
-					int i = Int32Ex.Limit((int)(Math.Round(ts.TotalMilliseconds / this.interval)), 0, (valuePerInterval.Length - 1));
-					valuePerInterval[i] += tsi.Item;
+					int i = Int32Ex.Limit((int)(Math.Round(ts.TotalMilliseconds / this.interval)), 0, (this.itemsPerInterval.Length - 1));
+					this.itemsPerInterval[i] += tsi.Item;
 				}
 
 				// Weigh and sum up the intervals:
 				int weight = this.numberOfIntervals;
 				int weighedSum = 0;
 				int sumOfWeights = 0;
-				foreach (int valueOfInterval in valuePerInterval)
+				foreach (int itemsOfInterval in this.itemsPerInterval)
 				{
-					weighedSum += (valueOfInterval * weight);
+					weighedSum += (itemsOfInterval * weight);
 					sumOfWeights += weight;
 					weight--;
 				}
