@@ -67,12 +67,26 @@ namespace MKY
 		}
 
 		/// <summary>
+		/// Evaluates whether the two given values are almost equal integral values.
+		/// </summary>
+		/// <remarks>
+		/// Same as <code>AlmostEquals(lhs, rhs, 0)</code>.
+		/// </remarks>
+		public static bool AlmostEquals(double lhs, double rhs)
+		{
+			return (AlmostEquals(lhs, rhs, 0));
+		}
+
+		/// <summary>
 		/// Evaluates whether the two given values are almost equal,
 		/// taking the given number of digits into account.
 		/// </summary>
 		/// <exception cref="ArgumentOutOfRangeException">
 		/// <paramref name="digits"/> is less than 0 or greater than 15.
 		/// </exception>
+		/// <remarks>
+		/// Using term "digits" same as e.g. <see cref="Math.Round(double, int)"/>.
+		/// </remarks>
 		public static bool AlmostEquals(double lhs, double rhs, int digits)
 		{
 			double diff = Math.Abs(lhs - rhs);
@@ -107,9 +121,23 @@ namespace MKY
 		/// <exception cref="ArgumentOutOfRangeException">
 		/// <paramref name="digits"/> is less than 0 or greater than 15.
 		/// </exception>
+		/// <remarks>
+		/// Using term "digits" same as e.g. <see cref="Math.Round(double, int)"/>.
+		/// </remarks>
 		public static bool RatherNotEquals(double lhs, double rhs, int digits)
 		{
 			return (!AlmostEquals(lhs, rhs, digits));
+		}
+
+		/// <summary>
+		/// Evaluates whether the two given values are rather not equal integral values.
+		/// </summary>
+		/// <remarks>
+		/// Same as <code>RatherNotEquals(lhs, rhs, 0)</code>.
+		/// </remarks>
+		public static bool RatherNotEquals(double lhs, double rhs)
+		{
+			return (RatherNotEquals(lhs, rhs, 0));
 		}
 
 		/// <summary>
