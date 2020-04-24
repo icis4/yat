@@ -601,6 +601,7 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_MainMenu_Terminal_AllClear
 			// 
+			this.toolStripMenuItem_MainMenu_Terminal_AllClear.MergeIndex = 1;
 			this.toolStripMenuItem_MainMenu_Terminal_AllClear.Name = "toolStripMenuItem_MainMenu_Terminal_AllClear";
 			this.toolStripMenuItem_MainMenu_Terminal_AllClear.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
 			this.toolStripMenuItem_MainMenu_Terminal_AllClear.Size = new System.Drawing.Size(230, 22);
@@ -609,6 +610,7 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_MainMenu_Terminal_AllRefresh
 			// 
+			this.toolStripMenuItem_MainMenu_Terminal_AllRefresh.MergeIndex = 3;
 			this.toolStripMenuItem_MainMenu_Terminal_AllRefresh.Name = "toolStripMenuItem_MainMenu_Terminal_AllRefresh";
 			this.toolStripMenuItem_MainMenu_Terminal_AllRefresh.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
 			this.toolStripMenuItem_MainMenu_Terminal_AllRefresh.Size = new System.Drawing.Size(230, 22);
