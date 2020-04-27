@@ -163,7 +163,7 @@ namespace YAT.Log.Utilities
 			else if ( element is DisplayElement.TimeDurationInfo) { format = this.timeDurationFormat; }
 			else if ( element is DisplayElement.DeviceInfo)       { format = this.deviceFormat;       }
 			else if ( element is DisplayElement.DirectionInfo)    { format = this.directionFormat;    }
-			else if ( element is DisplayElement.DataLength)       { format = this.lengthFormat;       }
+			else if ( element is DisplayElement.ContentLength)    { format = this.lengthFormat;       }
 			else if ((element is DisplayElement.Nonentity)        ||
 			         (element is DisplayElement.ContentSeparator) ||
 			         (element is DisplayElement.InfoSeparator)    ||

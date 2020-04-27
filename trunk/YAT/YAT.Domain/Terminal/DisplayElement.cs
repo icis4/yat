@@ -62,7 +62,7 @@ namespace YAT.Domain
 	[XmlInclude(typeof(TimeDurationInfo))]
 	[XmlInclude(typeof(DeviceInfo))]
 	[XmlInclude(typeof(DirectionInfo))]
-	[XmlInclude(typeof(DataLength))]
+	[XmlInclude(typeof(ContentLength))]
 	[XmlInclude(typeof(FormatElement))]
 	[XmlInclude(typeof(ContentSeparator))]
 	[XmlInclude(typeof(InfoSeparator))]
@@ -443,15 +443,16 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>The length of the data/control content.</summary>
+		/// <remarks>Prefixed "Content" for a) preventing naming conflict and b) orthogonality with <see cref="ContentSeparator"/> .</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
-		public class DataLength : InfoElement
+		public class ContentLength : InfoElement
 		{
 			/// <summary></summary>
 			public int Length { get; }
 
 			/// <remarks>This copy-constructor is required for <see cref="Clone"/>.</remarks>
-			public DataLength(DataLength other)
+			public ContentLength(ContentLength other)
 				: base(other)
 			{
 				Length = other.Length;
@@ -459,7 +460,7 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
-			public DataLength(int length, string enclosureLeft, string enclosureRight)
+			public ContentLength(int length, string enclosureLeft, string enclosureRight)
 				: base(ToText(length, enclosureLeft, enclosureRight))
 			{
 				Length = length;
@@ -933,7 +934,7 @@ namespace YAT.Domain
 			else if (this is TimeDurationInfo) clone = new TimeDurationInfo((TimeDurationInfo)this);
 			else if (this is DeviceInfo)       clone = new DeviceInfo();
 			else if (this is DirectionInfo)    clone = new DirectionInfo();
-			else if (this is DataLength)       clone = new DataLength((DataLength)this);
+			else if (this is ContentLength)    clone = new ContentLength((ContentLength)this);
 			else if (this is ContentSeparator) clone = new ContentSeparator();
 			else if (this is InfoSeparator)    clone = new InfoSeparator();
 			else if (this is LineStart)        clone = new LineStart();

@@ -538,7 +538,7 @@ namespace YAT.Domain
 				if (TerminalSettings.Display.ShowLength)
 				{
 					AddInfoSeparatorIfNecessary(lp);
-					lp.Add(new DisplayElement.DataLength(length, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
+					lp.Add(new DisplayElement.ContentLength(length, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
 				}
 
 				if (TerminalSettings.Display.ShowDuration)

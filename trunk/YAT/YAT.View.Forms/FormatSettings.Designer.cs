@@ -205,9 +205,9 @@ namespace YAT.View.Forms
 			this.label_WhiteSpace.AutoSize = true;
 			this.label_WhiteSpace.Location = new System.Drawing.Point(12, 403);
 			this.label_WhiteSpace.Name = "label_WhiteSpace";
-			this.label_WhiteSpace.Size = new System.Drawing.Size(61, 13);
+			this.label_WhiteSpace.Size = new System.Drawing.Size(77, 13);
 			this.label_WhiteSpace.TabIndex = 40;
-			this.label_WhiteSpace.Text = "&Separators:";
+			this.label_WhiteSpace.Text = "Info Se&parator:";
 			// 
 			// textFormat_WhiteSpace
 			// 
