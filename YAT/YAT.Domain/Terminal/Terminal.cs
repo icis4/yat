@@ -2341,7 +2341,11 @@ namespace YAT.Domain
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named "Message" for compactness and more clarity that somthing will happen
+		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
 		{
