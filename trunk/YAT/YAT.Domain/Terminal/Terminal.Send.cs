@@ -32,6 +32,9 @@
 	// Enable debugging of send:
 ////#define DEBUG_SEND
 
+	// Enable debugging of send:
+////#define DEBUG_BREAK
+
 #endif // DEBUG
 
 #endregion
@@ -237,7 +240,7 @@ namespace YAT.Domain
 			{
 				// Do not call AssertNotDisposed() in a simple get-property.
 
-				return (SendingIsOngoing && (this.sendingIsBusyCount > 0)); // No need to lock (this.sendingIsOngoingSyncObj), retrieving only.
+				return (SendingIsOngoing && (this.sendingIsBusyCount > 0)); // No need to lock (this.sendingIsBusyCount), retrieving only.
 			}
 		}
 
@@ -681,7 +684,7 @@ namespace YAT.Domain
 								}
 							}
 
-							if (DoBreak || doBreak) // (global || local)
+							if (DoBreak || doBreak) // (overall || local)
 								break;
 
 							// Raise the 'IOIsBusyChanged' event if sending already takes quite long:
@@ -1602,8 +1605,12 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void Break()
 		{
+			DebugBreakLead("Break has been requested...");
+
 			lock (this.breakStateSyncObj)
 				this.breakState = true;
+
+			DebugBreakTail("and is active now");
 		}
 
 		/// <summary>
@@ -1611,8 +1618,12 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void ResumeBreak()
 		{
+			DebugBreakLead("Resume from break has been requested...");
+
 			lock (this.breakStateSyncObj)
 				this.breakState = false;
+
+			DebugBreakTail("and break is inactive now");
 		}
 
 		#endregion
@@ -1685,6 +1696,18 @@ namespace YAT.Domain
 		private void DebugSend(string message)
 		{
 			DebugMessage(message);
+		}
+
+		[Conditional("DEBUG_BREAK")]
+		private void DebugBreakLead(string message)
+		{
+			DebugMessageLead(message);
+		}
+
+		[Conditional("DEBUG_BREAK")]
+		private void DebugBreakTail(string message)
+		{
+			Debug.WriteLine(message);
 		}
 
 		#endregion
