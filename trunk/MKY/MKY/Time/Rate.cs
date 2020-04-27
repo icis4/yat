@@ -154,6 +154,14 @@ namespace MKY.Time
 		/// <summary>
 		/// The resulting rate value, in items per interval.
 		/// </summary>
+		/// <remarks>
+		/// Using <c>int</c> rather than <c>double</c> for three reasons:
+		/// <list type="bullet">
+		/// <item><description>Indication whether value has changed on update is straight-forward with an <c>int</c>.</description></item>
+		/// <item><description>Client can set the interval such it fits its needs.</description></item>
+		/// <item><description>Client does not need to round the value.</description></item>
+		/// </list>
+		/// </remarks>
 		public int Value
 		{
 			get { return (this.value); }
