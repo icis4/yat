@@ -256,7 +256,7 @@ namespace YAT.View.Controls
 				fontStyle = settings.DirectionFormat.FontStyle;
 				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticDirectionFontCache, fontName, fontSize, fontStyle);
 			}
-			else if (element is Domain.DisplayElement.DataLength)
+			else if (element is Domain.DisplayElement.ContentLength)
 			{
 				foreColor = settings.LengthFormat.Color;
 				fontStyle = settings.LengthFormat.FontStyle;

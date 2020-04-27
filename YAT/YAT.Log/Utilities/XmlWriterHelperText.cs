@@ -180,7 +180,7 @@ namespace YAT.Log.Utilities
 					}
 				}
 				{
-					var casted = (de as DisplayElement.DataLength);
+					var casted = (de as DisplayElement.ContentLength);
 					if (casted != null)
 					{
 						length = casted.Length;
