@@ -709,6 +709,7 @@ namespace YAT.View.Controls
 
 		private void ConfirmCommand(string filePath)
 		{
+			this.command.ClearDescription(); // An immediate command never has a description.
 			this.command.FilePath = filePath;
 
 			SetRecentAndCommandControls();
