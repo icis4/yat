@@ -452,11 +452,11 @@ namespace YAT.Domain
 		protected virtual void DoSendFile(FileSendItem item, long sequenceNumber)
 		{
 			DebugSend(string.Format(@"Sending of ""{0}"" has been invoked (sequence number = {1}).", item.FilePath, sequenceNumber));
-
-			if (TryEnterRequestGate(sequenceNumber))
-			{
-				try
-				{
+			                                       //// [Send File] shall be treated as a single request and not be interruptable.
+			if (TryEnterRequestGate(sequenceNumber)) // Rationale: Predefined commands may link to (small) files containing multi-line commands
+			{                                        //            which shall be invokable quick-sequentially without waiting for completion.
+				try                                  //   However: Interrupting (large) file transfers might one day be requested.
+				{                                    //            Then, behavior could be made configurable.
 					DebugSend(string.Format(@"Sending of ""{0}"" has been permitted (sequence number = {1}).", item.FilePath, sequenceNumber));
 
 					var sendingIsBusyChangedEvent = new SendingIsBusyChangedEventHelper(DateTime.Now);
