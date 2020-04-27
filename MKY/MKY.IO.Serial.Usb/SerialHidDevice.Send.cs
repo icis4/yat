@@ -47,7 +47,11 @@ namespace MKY.IO.Serial.Usb
 		// Public Methods
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// If the underlying buffer has space, this method will immediately return; otherwise
+		/// this method will be blocking until there is space, or the I/O instance is stopped
+		/// or gets disconnected/closed.
+		/// </remarks>
 		protected virtual bool Send(byte data)
 		{
 			// AssertNotDisposed() is called by 'Send()' below.
@@ -55,13 +59,19 @@ namespace MKY.IO.Serial.Usb
 			return (Send(new byte[] { data }));
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// If the underlying buffer has space, this method will immediately return; otherwise
+		/// this method will be blocking until there is space, or the I/O instance is stopped
+		/// or gets disconnected/closed.
+		/// </remarks>
 		public virtual bool Send(byte[] data)
 		{
 			// AssertNotDisposed() is called by 'IsStarted' below.
 
 			if (IsTransmissive)
 			{
+				var initial = DateTime.Now;
+
 				foreach (byte b in data)
 				{
 					// Wait until there is space in the send queue:
@@ -70,8 +80,13 @@ namespace MKY.IO.Serial.Usb
 						if (IsDisposed || !IsTransmissive) // Check 'IsDisposed' first!
 							return (false);
 
-						Thread.Sleep(TimeSpan.Zero); // Yield to other threads to allow dequeuing.
-					}
+						// Actively yield to other threads to allow dequeuing:
+						var span = (initial - DateTime.Now);
+						if (span.TotalMilliseconds < 4)
+							Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as send
+						else                             // a) is expected to potentially be blocking and
+							Thread.Sleep(1);             // b) is short (max. 4 ms) yet.
+					}                                    // But sleep if longer!
 
 					// There is space for at least one byte:
 					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
@@ -204,7 +219,7 @@ namespace MKY.IO.Serial.Usb
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.
-						Thread.Sleep(TimeSpan.Zero);
+						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as sending shall happen as fast as possible.
 
 						// Handle XOff state:
 						if (this.settings.FlowControlUsesXOnXOff && !OutputIsXOn)

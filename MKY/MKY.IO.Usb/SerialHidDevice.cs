@@ -1114,7 +1114,7 @@ namespace MKY.IO.Usb
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.
-						Thread.Sleep(TimeSpan.Zero);
+						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as receiving shall happen as fast as possible.
 
 						OnDataReceived(EventArgs.Empty);
 

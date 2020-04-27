@@ -223,7 +223,7 @@ namespace MKY.IO.Serial.Socket
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.
-						Thread.Sleep(TimeSpan.Zero);
+						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as sending shall happen as fast as possible.
 
 						// Synchronize the send/receive events to prevent mix-ups at the event
 						// sinks, i.e. the send/receive operations shall be synchronized with

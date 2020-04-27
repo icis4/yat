@@ -208,12 +208,12 @@ namespace MKY.IO.Serial
 		/// Sends data to a the underlying I/O instance.
 		/// </summary>
 		/// <remarks>
-		/// If the underlying buffer has space, this method will immediately return.
-		/// If the underlying buffer is full, this method will wait until there is space,
-		/// of this I/O instance is stopped or gets disconnected/closed.
+		/// If the underlying buffer has space, this method will immediately return; otherwise
+		/// this method will be blocking until there is space, or the I/O instance is stopped
+		/// or gets disconnected/closed.
 		/// </remarks>
 		/// <param name="data">
-		/// An array of type System.Byte that contains the data to be sent.
+		/// An array of type <see cref="byte"/> that contains the data to be sent.
 		/// </param>
 		/// <returns>
 		/// <c>true</c> if data has successfully been sent; otherwise, <c>false</c>.
