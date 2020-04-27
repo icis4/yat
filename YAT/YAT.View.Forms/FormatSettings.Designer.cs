@@ -36,6 +36,7 @@ namespace YAT.View.Forms
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Elements = new System.Windows.Forms.GroupBox();
+			this.monitor_WhiteSpace = new YAT.View.Controls.Monitor();
 			this.label_WhiteSpace = new System.Windows.Forms.Label();
 			this.textFormat_WhiteSpace = new YAT.View.Controls.TextFormat();
 			this.monitor_IOControl = new YAT.View.Controls.Monitor();
@@ -112,7 +113,6 @@ namespace YAT.View.Forms
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.colorDialog = new System.Windows.Forms.ColorDialog();
 			this.monitor_Example = new YAT.View.Controls.Monitor();
-			this.monitor_WhiteSpace = new YAT.View.Controls.Monitor();
 			this.groupBox_Elements.SuspendLayout();
 			this.groupBox_Options.SuspendLayout();
 			this.SuspendLayout();
@@ -199,15 +199,28 @@ namespace YAT.View.Forms
 			this.groupBox_Elements.TabStop = false;
 			this.groupBox_Elements.Text = "Elements";
 			// 
+			// monitor_WhiteSpace
+			// 
+			this.monitor_WhiteSpace.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_WhiteSpace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.monitor_WhiteSpace.Location = new System.Drawing.Point(111, 397);
+			this.monitor_WhiteSpace.Name = "monitor_WhiteSpace";
+			this.monitor_WhiteSpace.ShowStatusPanel = false;
+			this.monitor_WhiteSpace.Size = new System.Drawing.Size(275, 23);
+			this.monitor_WhiteSpace.TabIndex = 41;
+			this.monitor_WhiteSpace.TabStop = false;
+			this.monitor_WhiteSpace.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
+			// 
 			// label_WhiteSpace
 			// 
 			this.label_WhiteSpace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_WhiteSpace.AutoSize = true;
 			this.label_WhiteSpace.Location = new System.Drawing.Point(12, 403);
 			this.label_WhiteSpace.Name = "label_WhiteSpace";
-			this.label_WhiteSpace.Size = new System.Drawing.Size(77, 13);
+			this.label_WhiteSpace.Size = new System.Drawing.Size(61, 13);
 			this.label_WhiteSpace.TabIndex = 40;
-			this.label_WhiteSpace.Text = "Info Se&parator:";
+			this.label_WhiteSpace.Text = "&Separators:";
 			// 
 			// textFormat_WhiteSpace
 			// 
@@ -1069,19 +1082,6 @@ namespace YAT.View.Forms
 			this.monitor_Example.TabIndex = 3;
 			this.monitor_Example.TabStop = false;
 			this.monitor_Example.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
-			// 
-			// monitor_WhiteSpace
-			// 
-			this.monitor_WhiteSpace.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_WhiteSpace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.monitor_WhiteSpace.Location = new System.Drawing.Point(111, 397);
-			this.monitor_WhiteSpace.Name = "monitor_WhiteSpace";
-			this.monitor_WhiteSpace.ShowStatusPanel = false;
-			this.monitor_WhiteSpace.Size = new System.Drawing.Size(275, 23);
-			this.monitor_WhiteSpace.TabIndex = 41;
-			this.monitor_WhiteSpace.TabStop = false;
-			this.monitor_WhiteSpace.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
 			// FormatSettings
 			// 

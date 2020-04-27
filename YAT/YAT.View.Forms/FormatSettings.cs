@@ -927,7 +927,7 @@ namespace YAT.View.Forms
 			var diff = (now - this.initialTimeStamp);
 			var delta      = new TimeSpan(0, 0, 0, 0, 111); // 111 ms
 			var durationTx = new TimeSpan(0, 0, 0, 0,  22); //  22 ms
-			var durationRx = new TimeSpan(0, 0, 0, 0,  3);  //   3 ms
+			var durationRx = new TimeSpan(0, 0, 0, 0,   3); //   3 ms
 
 			var contentSeparator   = this.contentSeparator.ToSeparator();
 			var infoSeparator      = this.infoSeparator.ToSeparator();
@@ -936,9 +936,9 @@ namespace YAT.View.Forms
 
 			var exampleLines = new Domain.DisplayLineCollection(14); // Preset the required capacity to improve memory management.
 
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxData(now, 0x41, "41h")));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxData(now, 0x41, "A")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxControl(now, 0x13, "<CR>")));
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxData(now, 0x42, "42h")));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxData(now, 0x58, "58h")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxControl(now, 0x10, "<LF>")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeStampInfo(   now,        this.timeStampFormat, this.timeStampUseUtc, infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeSpanInfo(    diff,       this.timeSpanFormat,                        infoEnclosureLeft, infoEnclosureRight)));
@@ -946,7 +946,7 @@ namespace YAT.View.Forms
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeDurationInfo(durationTx, this.timeDurationFormat,                    infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DeviceInfo("COM1",                                                       infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx,                                       infoEnclosureLeft, infoEnclosureRight)));
-			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DataLength(2,                                                            infoEnclosureLeft, infoEnclosureRight)));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.ContentLength(0,                                                         infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.IOControlInfo("RTS=on")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.ErrorInfo("Message")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.InfoSeparator("_-°,;")));
@@ -954,7 +954,7 @@ namespace YAT.View.Forms
 			for (int i = 0; i < this.monitors.Length; i++)
 				this.monitors[i].AddLine(exampleLines[i]);
 
-			var exampleComplete = new Domain.DisplayRepository(25 + 21 + 9); // Preset the required capacity to improve memory management.
+			var exampleComplete = new Domain.DisplayRepository(21 + 23 + 9); // Preset the required capacity to improve memory management.
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineStart());
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStampInfo(now, this.timeStampFormat, this.timeStampUseUtc, infoEnclosureLeft, infoEnclosureRight));
@@ -967,17 +967,13 @@ namespace YAT.View.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TxData(now, 0x41, "41h"));
-			exampleComplete.Enqueue(new Domain.DisplayElement.ContentSeparator(Domain.Direction.Tx, contentSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TxData(now, 0x42, "42h"));
-			exampleComplete.Enqueue(new Domain.DisplayElement.ContentSeparator(Domain.Direction.Tx, contentSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.TxData(now, 0x43, "43h"));
-			exampleComplete.Enqueue(new Domain.DisplayElement.ContentSeparator(Domain.Direction.Tx, contentSeparator));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TxData(now, 0x41, "A"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TxData(now, 0x42, "B"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TxData(now, 0x43, "C"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TxControl(now, 0x13, "<CR>"));
-			exampleComplete.Enqueue(new Domain.DisplayElement.ContentSeparator(Domain.Direction.Tx, contentSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TxControl(now, 0x10, "<LF>"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.DataLength(5, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.ContentLength(5, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDurationInfo(durationTx, this.timeDurationFormat, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
@@ -993,13 +989,15 @@ namespace YAT.View.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Rx, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.RxData(now, 0x41, "41h"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.RxData(now, 0x58, "58h"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.ContentSeparator(Domain.Direction.Rx, contentSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.RxData(now, 0x42, "42h"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.RxData(now, 0x59, "59h"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.ContentSeparator(Domain.Direction.Rx, contentSeparator));
+			exampleComplete.Enqueue(new Domain.DisplayElement.RxData(now, 0x5A, "5Ah"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.IOControlInfo(now, Domain.Direction.Tx, "RTS=off"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
-			exampleComplete.Enqueue(new Domain.DisplayElement.DataLength(2, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.ContentLength(3, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDurationInfo(durationRx, this.timeDurationFormat, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());

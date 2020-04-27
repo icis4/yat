@@ -984,9 +984,7 @@ namespace YAT.Domain
 	#endif
 
 		/// <summary>
-		/// Returns <c>true</c> if <paramref name="other"/> can be appended to this element. Only
-		/// data elements of the same direction can be appended. Appending other elements would
-		/// lead to missing elements.
+		/// Returns <c>true</c> if <paramref name="other"/> can be appended to this element.
 		/// </summary>
 		/// <remarks>
 		/// Note that the type of the element also has to be checked. This ensures that control
@@ -1000,7 +998,8 @@ namespace YAT.Domain
 			if (!IsContent || !other.IsContent) // Disallow non-content elements.
 				return (false);
 
-			// TimeStamp may differ.
+		////if (this.timeStamp != other.timeStamp) // TimeStamp may differ.
+		////	return (N/A);
 
 			if (this.direction != other.direction) // Self-explaining.
 				return (false);
