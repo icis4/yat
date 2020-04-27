@@ -291,7 +291,7 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format("Sending of {0} bytes of raw data has been invoked with sequence number {1}.", data.Length, sequenceNumber));
 
-			if (TryEnterRequestGate(sequenceNumber))
+			if (TryEnterRequestGate(sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
@@ -330,7 +330,7 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format(@"Sending of text ""{0}"" has been invoked (sequence number = {1}).", item.Data, sequenceNumber));
 
-			if (TryEnterRequestGate(sequenceNumber))
+			if (TryEnterRequestGate(sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
@@ -369,7 +369,7 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format(@"Sending of text line ""{0}"" has been invoked (sequence number = {1}).", item.Data, sequenceNumber));
 
-			if (TryEnterRequestGate(sequenceNumber))
+			if (TryEnterRequestGate(sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
@@ -412,7 +412,7 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format("Sending of {0} text lines has been invoked (sequence number = {1}).", items.Count, sequenceNumber));
 
-			if (TryEnterRequestGate(sequenceNumber))
+			if (TryEnterRequestGate(sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
@@ -452,11 +452,11 @@ namespace YAT.Domain
 		protected virtual void DoSendFile(FileSendItem item, long sequenceNumber)
 		{
 			DebugSend(string.Format(@"Sending of ""{0}"" has been invoked (sequence number = {1}).", item.FilePath, sequenceNumber));
-			                                       //// [Send File] shall be treated as a single request and not be interruptable.
-			if (TryEnterRequestGate(sequenceNumber)) // Rationale: Predefined commands may link to (small) files containing multi-line commands
-			{                                        //            which shall be invokable quick-sequentially without waiting for completion.
-				try                                  //   However: Interrupting (large) file transfers might one day be requested.
-				{                                    //            Then, behavior could be made configurable.
+
+			if (TryEnterRequestGate(sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
+			{
+				try
+				{
 					DebugSend(string.Format(@"Sending of ""{0}"" has been permitted (sequence number = {1}).", item.FilePath, sequenceNumber));
 
 					var sendingIsBusyChangedEvent = new SendingIsBusyChangedEventHelper(DateTime.Now);
@@ -1228,10 +1228,8 @@ namespace YAT.Domain
 			{
 				if (TerminalSettings.Send.AllowConcurrency)
 				{
-					// PENDING !!!
-
-					// Nothing to do, no need to handle 'nextPermittedSequenceNumber' ?!?
-					// If 'AllowConcurrency' gets disabled, will parent recreate the terminal ?!? No !!! But it probably must...
+					// Nothing to do, no need to handle 'nextPermittedSequenceNumber', as changing
+					// the 'AllowConcurrency' setting will lead to TerminalFactory.RecreateTerminal().
 				}
 				else
 				{

@@ -139,8 +139,8 @@
     <value>204, 56</value>
   </metadata>
   <data name="toolStripMenuItem_SendContextMenu_AllowConcurrency.ToolTipText" xml:space="preserve">
-    <value>By default, commands are sent strictly sequentially, i.e. only one command can be active at a time.
-Enabling this option allows multiple commands being active simultaneously.
+    <value>By default, commands are sent strictly sequentially, i.e. only one command can be active
+at a time. Enabling this option allows multiple commands being active simultaneously.
 Useful e.g. for sending a text command while a repeating text command is already ongoing.
 Applies to [Send Text], [Send File] as well as [Predefined Commands].</value>
   </data>
@@ -151,8 +151,8 @@ Applies to [Send Text], [Send File] as well as [Predefined Commands].</value>
     <value>1016, 17</value>
   </metadata>
   <data name="toolStripMenuItem_TerminalMenu_Send_AllowConcurrency.ToolTipText" xml:space="preserve">
-    <value>By default, commands are sent strictly sequentially, i.e. only one command can be active at a time.
-Enabling this option allows multiple commands being active simultaneously.
+    <value>By default, commands are sent strictly sequentially, i.e. only one command can be active
+at a time. Enabling this option allows multiple commands being active simultaneously.
 Useful e.g. for sending a text command while a repeating text command is already ongoing.
 Applies to [Send Text], [Send File] as well as [Predefined Commands].</value>
   </data>

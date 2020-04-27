@@ -121,8 +121,8 @@
     <value>17, 17</value>
   </metadata>
   <data name="checkBox_AllowConcurrency.ToolTip" xml:space="preserve">
-    <value>By default, commands are sent strictly sequentially, i.e. only one command can be active at a time.
-Enabling this option allows multiple commands being active simultaneously.
+    <value>By default, commands are sent strictly sequentially, i.e. only one command can be active
+at a time. Enabling this option allows multiple commands being active simultaneously.
 Useful e.g. for sending a text command while a repeating text command is already ongoing.
 Applies to [Send Text], [Send File] as well as [Predefined Commands].</value>
   </data>
