@@ -527,7 +527,11 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void toolStripMenuItem_TerminalMenu_File_DropDownOpening(object sender, EventArgs e)
+		/// <remarks>
+		/// Must manually be called by <see cref="Main"/> menu because the terminal's [File] menu is
+		/// merged into the main's [File] menu! This seems to be a limitation of WinForms.
+		/// </remarks>
+		public void toolStripMenuItem_TerminalMenu_File_DropDownOpening(object sender, EventArgs e)
 		{
 			toolStripMenuItem_TerminalMenu_File_SetMenuItems();
 		}
@@ -616,7 +620,11 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void toolStripMenuItem_TerminalMenu_Terminal_DropDownOpening(object sender, EventArgs e)
+		/// <remarks>
+		/// Must manually be called by <see cref="Main"/> menu because the terminal's [File] menu is
+		/// merged into the main's [File] menu! This seems to be a limitation of WinForms.
+		/// </remarks>
+		public void toolStripMenuItem_TerminalMenu_Terminal_DropDownOpening(object sender, EventArgs e)
 		{
 			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
 		}
@@ -1611,7 +1619,11 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void toolStripMenuItem_TerminalMenu_Log_DropDownOpening(object sender, EventArgs e)
+		/// <remarks>
+		/// Must manually be called by <see cref="Main"/> menu because the terminal's [File] menu is
+		/// merged into the main's [File] menu! This seems to be a limitation of WinForms.
+		/// </remarks>
+		public void toolStripMenuItem_TerminalMenu_Log_DropDownOpening(object sender, EventArgs e)
 		{
 			toolStripMenuItem_TerminalMenu_Log_SetMenuItems();
 		}
