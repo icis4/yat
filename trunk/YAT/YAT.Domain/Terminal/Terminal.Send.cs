@@ -663,7 +663,8 @@ namespace YAT.Domain
 											}
 											else
 											{
-												Thread.Sleep(TimeSpan.Zero); // Make sure the application stays responsive while repeating.
+												// Actively yield to other threads to make sure app stays responsive while looping:
+												Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as sending shall happen as fast as possible.
 											}
 
 											break;
@@ -1528,8 +1529,9 @@ namespace YAT.Domain
 					if (DoBreak)
 						break;
 
-					Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
-				}
+					// Actively yield to other threads to make sure app stays responsive while looping:
+					Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as DoSendFileLine()
+				}                                // will sleep depending on state of the event helper.
 			}
 		}
 
@@ -1550,8 +1552,9 @@ namespace YAT.Domain
 				if (DoBreak)
 					break;
 
-				Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
-			}
+				// Actively yield to other threads to make sure app stays responsive while looping:
+				Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as DoSendFileLine()
+			}                                // will sleep depending on state of the event helper.
 		}
 
 		/// <remarks>
@@ -1563,6 +1566,7 @@ namespace YAT.Domain
 			if (sendingIsBusyChangedEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
 				OnThisRequestSendingIsBusyChanged(true);
 
+			// Send the file line:
 			var parseMode = TerminalSettings.Send.File.ToParseMode();
 			var item = new TextSendItem(line, defaultRadix, parseMode, SendMode.File, true);
 			DoSendTextItem(sendingIsBusyChangedEventHelper, item);
@@ -1582,6 +1586,7 @@ namespace YAT.Domain
 			if (sendingIsBusyChangedEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
 				OnThisRequestSendingIsBusyChanged(true);
 
+			// Send the file chunk:
 			DoSendRawData(sendingIsBusyChangedEventHelper, chunk);
 		}
 

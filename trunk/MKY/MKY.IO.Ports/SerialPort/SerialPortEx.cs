@@ -47,7 +47,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
 using System.Threading;
 
@@ -113,7 +112,7 @@ namespace MKY.IO.Ports
 		/// <remarks>
 		/// Required for patches to the 'ObjectDisposedException' issue described in <see cref="Close"/>.
 		/// </remarks>
-		private Stream baseStreamReferenceForCloseSafely;
+		private System.IO.Stream baseStreamReferenceForCloseSafely;
 
 		private SerialPortControlPinCount controlPinCount;
 
@@ -887,7 +886,7 @@ namespace MKY.IO.Ports
 						else
 						{
 							DebugEx.WriteException(GetType(), ex, "Failed to access the port! Safely disposing the internal stream using reflection.");
-							TryToApplyEventLoopHandlerPatchAndCloseBaseStreamSafely((Stream)field.GetValue(this));
+							TryToApplyEventLoopHandlerPatchAndCloseBaseStreamSafely((System.IO.Stream)field.GetValue(this));
 						////this.baseStreamReferenceForCloseSafely is already null.
 						}
 					}
@@ -932,8 +931,16 @@ namespace MKY.IO.Ports
 			{
 				try
 				{
+					var initial = DateTime.Now;
 					while (BytesToWrite > 0)
-						Thread.Sleep(TimeSpan.Zero);
+					{
+						// Actively yield to other threads to allow processing:
+						var span = (initial - DateTime.Now);
+						if (span.TotalMilliseconds < 4)
+							Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as flush
+						else                             // a) is expected to be blocking and
+							Thread.Sleep(1);             // b) is short (max. 4 ms) yet.
+					}                                    // But sleep if longer!
 
 					// Alternatively, base.BaseStream.Flush() could be called.
 					// But that approach doesn't offer flexibility, so no-go.
@@ -1087,7 +1094,7 @@ namespace MKY.IO.Ports
 		/// The solution is to suppress their finalizers at the beginning.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
-		protected static void TryToApplyEventLoopHandlerPatchAndCloseBaseStreamSafely(Stream baseStreamReference)
+		protected static void TryToApplyEventLoopHandlerPatchAndCloseBaseStreamSafely(System.IO.Stream baseStreamReference)
 		{
 			TryToShutdownBaseStreamEventLoopHandler(baseStreamReference);
 
@@ -1096,7 +1103,7 @@ namespace MKY.IO.Ports
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		protected static void CloseBaseStreamSafely(Stream baseStreamReference)
+		protected static void CloseBaseStreamSafely(System.IO.Stream baseStreamReference)
 		{
 			try
 			{
@@ -1122,7 +1129,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
-		protected static void TryToShutdownBaseStreamEventLoopHandler(Stream baseStreamReference)
+		protected static void TryToShutdownBaseStreamEventLoopHandler(System.IO.Stream baseStreamReference)
 		{
 			if (baseStreamReference != null)
 			{

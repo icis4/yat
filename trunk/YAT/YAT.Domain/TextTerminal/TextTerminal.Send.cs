@@ -195,8 +195,9 @@ namespace YAT.Domain
 				if (DoBreak)
 					break;
 
-				Thread.Sleep(TimeSpan.Zero); // Yield to other threads to e.g. allow refreshing of view.
-			}
+				// Actively yield to other threads to make sure app stays responsive while looping:
+				Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as DoSendFileLine()
+			}                                // will sleep depending on state of the event helper.
 		}
 
 		#endregion

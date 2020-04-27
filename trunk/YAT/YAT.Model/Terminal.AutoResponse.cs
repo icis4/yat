@@ -346,7 +346,7 @@ namespace YAT.Model
 					{                                                                   // No lock required, just checking for empty.
 						// Initially, yield to other threads before starting to read the queue,
 						// since it is likely that more triggers are to be enqueued.
-						Thread.Sleep(TimeSpan.Zero);
+						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as processing shall happen as fast as possible.
 
 						Tuple<byte[], string, MatchCollection>[] pendingItems;
 						lock (this.autoResponseQueue) // Lock is required because Queue<T> is not synchronized.
