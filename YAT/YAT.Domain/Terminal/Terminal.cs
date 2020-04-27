@@ -2365,6 +2365,29 @@ namespace YAT.Domain
 			);
 		}
 
+		/// <remarks>
+		/// Name "DebugWrite" would show relation to <see cref="Debug.Write(string)"/>.
+		/// However, named "Message" for orthogonality with <see cref="DebugMessage(string)"/>.
+		/// </remarks>
+		[Conditional("DEBUG")]
+		protected virtual void DebugMessageLead(string message)
+		{
+			Debug.Write
+			(
+				string.Format
+				(
+					CultureInfo.CurrentCulture,
+					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
+					GetType(),
+					"#" + this.instanceId.ToString("D2", CultureInfo.CurrentCulture),
+					"[" + ToShortIOString() + "]",
+					message
+				)
+			);
+		}
+
 		[Conditional("DEBUG_CONTENT_EVENTS")]
 		private void DebugContentEvents(string message)
 		{
