@@ -111,11 +111,11 @@ namespace YAT.Domain
 				long remaining = fs.Length;
 				while (remaining > 0)
 				{
-					byte[] chunk = new byte[1024]; // 1 KB chunks.
+					byte[] chunk = new byte[1024]; // Fixed to 1 KB chunks for simplicity. Note that text files are fixed to lines.
 					int n = fs.Read(chunk, 0, chunk.Length);
 					Array.Resize<byte>(ref chunk, n);
 
-					DoSendRawData(sendingIsBusyChangedEventHelper, chunk);
+					DoSendFileChunk(sendingIsBusyChangedEventHelper, chunk);
 
 					remaining -= n;
 

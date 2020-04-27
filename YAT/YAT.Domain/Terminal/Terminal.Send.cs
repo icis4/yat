@@ -1559,6 +1559,10 @@ namespace YAT.Domain
 		/// </remarks>
 		protected virtual void DoSendFileLine(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, string line, Radix defaultRadix)
 		{
+			// Raise the 'IOIsBusyChanged' event if sending already takes quite long, i.e. file cannot be sent within threshold:
+			if (sendingIsBusyChangedEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
+				OnThisRequestSendingIsBusyChanged(true);
+
 			var parseMode = TerminalSettings.Send.File.ToParseMode();
 			var item = new TextSendItem(line, defaultRadix, parseMode, SendMode.File, true);
 			DoSendTextItem(sendingIsBusyChangedEventHelper, item);
@@ -1574,6 +1578,10 @@ namespace YAT.Domain
 		/// </remarks>
 		protected virtual void DoSendFileChunk(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, byte[] chunk)
 		{
+			// Raise the 'IOIsBusyChanged' event if sending already takes quite long, i.e. file cannot be sent within threshold:
+			if (sendingIsBusyChangedEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
+				OnThisRequestSendingIsBusyChanged(true);
+
 			DoSendRawData(sendingIsBusyChangedEventHelper, chunk);
 		}
 
