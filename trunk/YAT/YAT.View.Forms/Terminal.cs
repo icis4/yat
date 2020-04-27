@@ -7671,8 +7671,8 @@ namespace YAT.View.Forms
 				{
 					if (this.terminal.IsTransmissive)
 					{
-						if (!this.terminal.SendingIsBusy)
-						{
+						if (!this.terminal.SendingIsBusy) // Not checking for 'IsOngoing' as that a) might distract user
+						{                                 // and b) consume unncessary CPU time (draw LED quickly twice).
 							ResetIOStatusFlashing();
 							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
 
@@ -8416,6 +8416,11 @@ namespace YAT.View.Forms
 		// Debug
 		//==========================================================================================
 
+		/// <remarks>
+		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named "Message" for compactness and more clarity that somthing will happen
+		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// </remarks>
 		[Conditional("DEBUG")]
 		private void DebugMessage(string message)
 		{
