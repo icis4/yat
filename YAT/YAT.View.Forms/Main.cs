@@ -626,6 +626,17 @@ namespace YAT.View.Forms
 		{
 			toolStripMenuItem_MainMenu_File_SetChildMenuItems();
 			toolStripMenuItem_MainMenu_File_SetRecentMenuItems();
+
+			this.isSettingControls.Enter(); // This is a workaround to a limitation of WinForms.
+			try                             // See remarks of the terminal's _DropDownOpening().
+			{
+				var t = (ActiveMdiChild as Terminal);
+				t.toolStripMenuItem_TerminalMenu_File_DropDownOpening(sender, e);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void toolStripMenuItem_MainMenu_File_New_Click(object sender, EventArgs e)
@@ -750,6 +761,17 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_MainMenu_Terminal_DropDownOpening(object sender, EventArgs e)
 		{
 			toolStripMenuItem_MainMenu_Terminal_SetChildMenuItems();
+
+			this.isSettingControls.Enter(); // This is a workaround to a limitation of WinForms.
+			try                             // See remarks of the terminal's _DropDownOpening().
+			{
+				var t = (ActiveMdiChild as Terminal);
+				t.toolStripMenuItem_TerminalMenu_Terminal_DropDownOpening(sender, e);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void toolStripMenuItem_MainMenu_Terminal_AllClear_Click(object sender, EventArgs e)
@@ -806,6 +828,17 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_MainMenu_Log_DropDownOpening(object sender, EventArgs e)
 		{
 			toolStripMenuItem_MainMenu_Log_SetChildMenuItems();
+
+			this.isSettingControls.Enter(); // This is a workaround to a limitation of WinForms.
+			try                             // See remarks of the terminal's _DropDownOpening().
+			{
+				var t = (ActiveMdiChild as Terminal);
+				t.toolStripMenuItem_TerminalMenu_Log_DropDownOpening(sender, e);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void toolStripMenuItem_MainMenu_Log_AllOn_Click(object sender, EventArgs e)
