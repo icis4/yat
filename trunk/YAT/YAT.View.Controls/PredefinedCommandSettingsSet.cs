@@ -584,7 +584,14 @@ namespace YAT.View.Controls
 			if (this.isSettingControls)
 				return;
 
-			ConfirmDescription(textBox_Description.Text);
+			var description = textBox_Description.Text;
+			if (description != this.command.SingleLineText)
+				ConfirmDescription(textBox_Description.Text);
+
+			// Do not explicitly set description as long it did not get changed, otherwise all
+			// commands eventually get an explicit description equal than default description.
+			//              ^ e.g. when tabbing through dialog
+			//                     or after returning from multi-line text dialog.
 		}
 
 		private void button_Clear_Click(object sender, EventArgs e)
@@ -807,10 +814,7 @@ namespace YAT.View.Controls
 
 		private void ConfirmDescription(string description)
 		{
-			if (!string.IsNullOrEmpty(description))
-				this.command.Description = description;
-			else
-				this.command.ClearDescription();
+			this.command.Description = description;
 
 			SetControls();
 			OnCommandChanged(EventArgs.Empty);
