@@ -993,7 +993,7 @@ namespace YAT.View.Forms
 			this.toolStripStatusLabel_MainStatus_Time.Name = "toolStripStatusLabel_MainStatus_Time";
 			this.toolStripStatusLabel_MainStatus_Time.Size = new System.Drawing.Size(53, 19);
 			this.toolStripStatusLabel_MainStatus_Time.Text = "23:59:59";
-			this.toolStripStatusLabel_MainStatus_Time.ToolTipText = "Local Time";
+			this.toolStripStatusLabel_MainStatus_Time.ToolTipText = "Local Time (hh:mm:ss)";
 			// 
 			// toolStripStatusLabel_MainStatus_Chrono
 			// 

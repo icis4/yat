@@ -157,6 +157,7 @@ Limitations and known issues:
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
    > System errors are output in local language, even though YAT is all-English (bug #66).
+   > Main window status bar tooltips may flicker in case window is maximized (bug #488).
    > Tool strip combo box slightly flickers when updating item list, e.g. 'Find Pattern' (bug #402).
    > Combo box cannot restore some corner-case cursor positions (bug #403).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
