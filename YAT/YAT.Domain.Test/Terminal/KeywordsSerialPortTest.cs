@@ -26,8 +26,6 @@
 // Using
 //==================================================================================================
 
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
@@ -39,58 +37,6 @@ using NUnit.Framework;
 
 namespace YAT.Domain.Test.Terminal
 {
-	/// <summary></summary>
-	public static class KeywordsSerialPortTestData
-	{
-		#region Apply
-		//==========================================================================================
-		// Apply
-		//==========================================================================================
-
-		/// <param name="loopbackSettings">
-		/// Quadruple of...
-		/// ...Pair(terminalSettingsDelegateA, terminalSettingsArgumentA)...
-		/// ...Pair(terminalSettingsDelegateB, terminalSettingsArgumentB)...
-		/// ...string testCaseName...
-		/// ...string[] testCaseCategories.
-		/// </param>
-		private static IEnumerable<TestCaseData> TestCases(Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings)
-		{
-		////foreach (var data in TestCasesData) // TestCaseData(...) kept for symmetricity with YAT.Model.Test.
-			{
-				// Arguments:
-				var args = new List<object>(2); // data.Arguments);
-				args.Add(loopbackSettings.Value1);
-				args.Add(loopbackSettings.Value2);
-				var tcd = new TestCaseData(args.ToArray()); // TestCaseData(Pair settingsDescriptorA, Pair settingsDescriptorB).
-
-				// Name:
-				tcd.SetName(loopbackSettings.Value3); // + data.TestName);
-
-				// Category(ies):
-				foreach (string cat in loopbackSettings.Value4)
-					tcd.SetCategory(cat);
-
-				yield return (tcd);
-			}
-		}
-
-		/// <summary></summary>
-		public static IEnumerable TestCasesSerialPortLoopbackPairs
-		{
-			get
-			{
-				foreach (var loopbackSettings in Utilities.TransmissionSettings.SerialPortLoopbackPairs)
-				{
-					foreach (var testCase in TestCases(loopbackSettings))
-						yield return (testCase);
-				}
-			}
-		}
-
-		#endregion
-	}
-
 	/// <summary></summary>
 	[TestFixture]
 	public class KeywordsSerialPortTest
@@ -105,7 +51,7 @@ namespace YAT.Domain.Test.Terminal
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
-		[Test, TestCaseSource(typeof(KeywordsSerialPortTestData), "TestCasesSerialPortLoopbackPairs")]
+		[Test, TestCaseSource(typeof(GenericTestData), "TestCasesSerialPortLoopbackPairs")]
 		public virtual void TestApplyToSerialPortLoopbackPairs(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
 		                                                       Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB)
 		{

@@ -86,8 +86,11 @@
     <Compile Include="..\YAT.Version.cs">
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
+    <Compile Include="GenericTestData.cs" />
     <Compile Include="Parser\ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SendFilesProvider.cs" />
+    <Compile Include="Terminal\AllowConcurrencyTest.cs" />
     <Compile Include="Terminal\KeywordsSerialPortTest.cs" />
     <Compile Include="Terminal\KeywordTimeStampTest.cs" />
     <Compile Include="TextTerminal\EolTest.cs" />
