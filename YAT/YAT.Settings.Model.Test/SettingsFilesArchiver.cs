@@ -54,7 +54,7 @@ namespace YAT.Settings.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
-		private static readonly SettingsFilePaths StaticPaths = new SettingsFilePaths("!-Current");
+		private static readonly FilePaths StaticPaths = new FilePaths("!-Current");
 
 		#endregion
 
