@@ -82,7 +82,10 @@ namespace YAT.Model.Types
 		private readonly string[] UndefinedTextLines = new string[] { "" };
 
 		/// <remarks>Explicitly using "[empty]" instead of "[Empty]" same as e.g. "[any]" or "[localhost]".</remarks>
-		private const string EmptyTextDescription = "[empty]";
+		private const string EmptyDescription = "[empty]";
+
+		/// <remarks>Explicitly using "lines..." instead of "Lines..." same as "empty above".</remarks>
+		private const string LinesText = "lines...";
 
 		#endregion
 
@@ -229,10 +232,10 @@ namespace YAT.Model.Types
 		/// Gets and sets description.
 		/// </summary>
 		/// <remarks>
-		/// Description cannot be cleared to "" with setting this property because of XML
-		/// deserialization issues. Instead, use <see cref="ClearDescription()"/>.
+		/// This property shall not be serialized, because a default description text shall not be
+		/// serialized, thus, the helper below is used for serialization.
 		/// </remarks>
-		[XmlElement("Description")]
+		[XmlIgnore]
 		public virtual string Description
 		{
 			get
@@ -249,7 +252,7 @@ namespace YAT.Model.Types
 						if (!string.IsNullOrEmpty(slt))
 							return (slt);
 						else
-							return (EmptyTextDescription);
+							return (EmptyDescription);
 					}
 					else if (IsFilePath)
 					{
@@ -267,11 +270,20 @@ namespace YAT.Model.Types
 			}
 			set
 			{
-				// Ensure that description never becomes 'null'!
-
-				if (!string.IsNullOrEmpty(value))
-					this.description = value;
+				// Ensure that description never becomes 'null' because that would lead to XML serialization issues!
+				this.description = ((value != null) ? (value) : (""));
 			}
+		}
+
+		/// <remarks>
+		/// Required to limit XML serialization to <see cref="description"/> field rather than <see cref="Description"/> property.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
+		[XmlElement("Description")]
+		public virtual string Description_ForSerialization
+		{
+			get { return (this.description); }
+			set { this.description = value;  }
 		}
 
 		/// <summary></summary>
@@ -300,7 +312,7 @@ namespace YAT.Model.Types
 			}
 			set
 			{
-				// Ensure that 'textLines' never become 'null'!
+				// Ensure that 'textLines' never becomes 'null'!
 
 				if ((value != null) && (value.Length >= 1) && (value[0] != null))
 				{
@@ -309,9 +321,9 @@ namespace YAT.Model.Types
 						this.isDefined = true;
 						this.textLines = value;
 					}
-					else // Empty string! Either explicitly defined by the user, or result of XML deserialization!
+					else // Empty string, either explicitly defined by the user, or result of XML deserialization.
 					{
-						// Do not set isDefined = true since it could be the result of the of XML deserialization!
+						// Do not set isDefined = true since it could be the result of the of XML deserialization.
 						this.textLines = value;
 					}
 
@@ -324,6 +336,7 @@ namespace YAT.Model.Types
 					}
 
 					// Attention, don't modify the description as that can be defined separately!
+					// An empty explicit description will result in the default description.
 				}
 				else
 				{
@@ -392,6 +405,7 @@ namespace YAT.Model.Types
 					this.isPartialTextEol = false;
 
 					// Attention, don't modify the description as that can be defined separately!
+					// An empty explicit description will result in the default description.
 				}
 				else
 				{
@@ -484,6 +498,7 @@ namespace YAT.Model.Types
 					this.filePath = "";
 
 					// Attention, don't modify the description as that can be defined separately!
+					// An empty explicit description will result in the default description.
 				}
 				else
 				{
@@ -540,7 +555,7 @@ namespace YAT.Model.Types
 					var sb = new StringBuilder();
 					sb.Append("<");
 					sb.Append(MultiLineText.Length.ToString(CultureInfo.CurrentCulture));
-					sb.Append(" lines...>");
+					sb.Append(" " + LinesText + ">");
 					for (int i = 0; i < MultiLineText.Length; i++)
 					{
 						sb.Append(" [");
@@ -568,6 +583,7 @@ namespace YAT.Model.Types
 					this.filePath = "";
 
 					// Attention, don't modify the description as that can be defined separately!
+					// An empty explicit description will result in the default description.
 				}
 				else
 				{
@@ -599,6 +615,7 @@ namespace YAT.Model.Types
 					this.filePath = "";
 
 					// Attention, don't modify the description as that can be defined separately!
+					// An empty explicit description will result in the default description.
 				}
 				else
 				{
@@ -641,6 +658,7 @@ namespace YAT.Model.Types
 					this.filePath = "";
 
 					// Attention, don't modify the description as that can be defined separately!
+					// An empty explicit description will result in the default description.
 				}
 				else
 				{

@@ -42,6 +42,7 @@
 			this.splitContainer_ExplicitDefaultRadix = new System.Windows.Forms.SplitContainer();
 			this.panel_ExplicitDefaultRadix = new System.Windows.Forms.Panel();
 			this.panel_Command = new System.Windows.Forms.Panel();
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer_ExplicitDefaultRadix)).BeginInit();
 			this.splitContainer_ExplicitDefaultRadix.Panel1.SuspendLayout();
 			this.splitContainer_ExplicitDefaultRadix.Panel2.SuspendLayout();
 			this.splitContainer_ExplicitDefaultRadix.SuspendLayout();
@@ -92,7 +93,9 @@
 			this.textBox_Description.Name = "textBox_Description";
 			this.textBox_Description.Size = new System.Drawing.Size(181, 20);
 			this.textBox_Description.TabIndex = 5;
-			this.toolTip.SetToolTip(this.textBox_Description, "Command description");
+			this.toolTip.SetToolTip(this.textBox_Description, "Command description that will label the button.\r\n\r\nBy default, description resemb" +
+        "les the command.\r\nOptionally, user can enter an arbitrary description.\r\nDeleting" +
+        " the description restores the default.");
 			this.textBox_Description.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_Description_Validating);
 			// 
 			// textBox_SingleLineText
@@ -103,7 +106,7 @@
 			this.textBox_SingleLineText.Name = "textBox_SingleLineText";
 			this.textBox_SingleLineText.Size = new System.Drawing.Size(232, 20);
 			this.textBox_SingleLineText.TabIndex = 0;
-			this.toolTip.SetToolTip(this.textBox_SingleLineText, "Enter text, use [...] to enter multi-line text");
+			this.toolTip.SetToolTip(this.textBox_SingleLineText, resources.GetString("textBox_SingleLineText.ToolTip"));
 			this.textBox_SingleLineText.TextChanged += new System.EventHandler(this.textBox_SingleLineText_TextChanged);
 			this.textBox_SingleLineText.Enter += new System.EventHandler(this.textBox_SingleLineText_Enter);
 			this.textBox_SingleLineText.Leave += new System.EventHandler(this.textBox_SingleLineText_Leave);
@@ -198,6 +201,7 @@
 			this.Enter += new System.EventHandler(this.PredefinedCommandSettingsSet_Enter);
 			this.splitContainer_ExplicitDefaultRadix.Panel1.ResumeLayout(false);
 			this.splitContainer_ExplicitDefaultRadix.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.splitContainer_ExplicitDefaultRadix)).EndInit();
 			this.splitContainer_ExplicitDefaultRadix.ResumeLayout(false);
 			this.panel_ExplicitDefaultRadix.ResumeLayout(false);
 			this.panel_Command.ResumeLayout(false);
