@@ -119,7 +119,7 @@ namespace YAT.Domain
 		protected override void ProcessLineEnd(bool sendEol, Queue<byte> conflateDataQueue)
 		{
 			if (sendEol)             // Just append the EOL, the base method will forward the completed line.
-				AppendToPendingPacketWithoutForwardingToRawTerminalYet(this.txUnidirTextLineState.EolSequence, conflateDataQueue);
+				AppendToPendingPacketWithoutForwardingToRawTerminalYet(TxEolSequence, conflateDataQueue);
 
 			base.ProcessLineEnd(sendEol, conflateDataQueue);
 
