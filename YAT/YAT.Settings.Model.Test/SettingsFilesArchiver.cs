@@ -54,7 +54,7 @@ namespace YAT.Settings.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
-		private static readonly FilePaths StaticPaths = new FilePaths("!-Current");
+		private static readonly Files StaticPaths = new Files("!-Current");
 
 		#endregion
 
@@ -68,8 +68,8 @@ namespace YAT.Settings.Model.Test
 		public virtual void ArchiveLocalUserSettings()
 		{
 			var document = XmlDocumentEx.CreateDefaultDocument(typeof(LocalUserSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
-			ArchiveSchema (document, StaticPaths.Path, "LocalUserSettingsSchema");
-			ArchiveDefault(document, StaticPaths.Path, "LocalUserSettingsDefault");
+			ArchiveSchema (document, StaticPaths.DirectoryPath, "LocalUserSettingsSchema");
+			ArchiveDefault(document, StaticPaths.DirectoryPath, "LocalUserSettingsDefault");
 		}
 
 		/// <summary></summary>
@@ -77,8 +77,8 @@ namespace YAT.Settings.Model.Test
 		public virtual void ArchiveRoamingUserSettings()
 		{
 			var document = XmlDocumentEx.CreateDefaultDocument(typeof(RoamingUserSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
-			ArchiveSchema (document, StaticPaths.Path, "RoamingUserSettingsSchema");
-			ArchiveDefault(document, StaticPaths.Path, "RoamingUserSettingsDefault");
+			ArchiveSchema (document, StaticPaths.DirectoryPath, "RoamingUserSettingsSchema");
+			ArchiveDefault(document, StaticPaths.DirectoryPath, "RoamingUserSettingsDefault");
 		}
 
 		/// <summary></summary>
@@ -86,8 +86,8 @@ namespace YAT.Settings.Model.Test
 		public virtual void ArchiveCommandSettings()
 		{
 			var document = XmlDocumentEx.CreateDefaultDocument(typeof(CommandSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
-			ArchiveSchema (document, StaticPaths.Path, "CommandDefinitionSchema");
-			ArchiveDefault(document, StaticPaths.Path, "CommandDefinitionDefault");
+			ArchiveSchema (document, StaticPaths.DirectoryPath, "CommandDefinitionSchema");
+			ArchiveDefault(document, StaticPaths.DirectoryPath, "CommandDefinitionDefault");
 		}
 
 		/// <summary></summary>
@@ -95,8 +95,8 @@ namespace YAT.Settings.Model.Test
 		public virtual void ArchiveCommandPageSettings()
 		{
 			var document = XmlDocumentEx.CreateDefaultDocument(typeof(CommandPageSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
-			ArchiveSchema (document, StaticPaths.Path, "CommandPageDefinitionSchema");
-			ArchiveDefault(document, StaticPaths.Path, "CommandPageDefinitionDefault");
+			ArchiveSchema (document, StaticPaths.DirectoryPath, "CommandPageDefinitionSchema");
+			ArchiveDefault(document, StaticPaths.DirectoryPath, "CommandPageDefinitionDefault");
 		}
 
 		/// <summary></summary>
@@ -104,8 +104,8 @@ namespace YAT.Settings.Model.Test
 		public virtual void ArchiveCommandPagesSettings()
 		{
 			var document = XmlDocumentEx.CreateDefaultDocument(typeof(CommandPagesSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
-			ArchiveSchema (document, StaticPaths.Path, "CommandPagesDefinitionSchema");
-			ArchiveDefault(document, StaticPaths.Path, "CommandPagesDefinitionDefault");
+			ArchiveSchema (document, StaticPaths.DirectoryPath, "CommandPagesDefinitionSchema");
+			ArchiveDefault(document, StaticPaths.DirectoryPath, "CommandPagesDefinitionDefault");
 		}
 
 		/// <summary></summary>
@@ -116,8 +116,8 @@ namespace YAT.Settings.Model.Test
 			SelectiveTestSetUp();
 
 			var document = XmlDocumentEx.CreateDefaultDocument(typeof(TerminalSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
-			ArchiveSchema (document, StaticPaths.Path, "TerminalSettingsSchema");
-			ArchiveDefault(document, StaticPaths.Path, "TerminalSettingsDefault");
+			ArchiveSchema (document, StaticPaths.DirectoryPath, "TerminalSettingsSchema");
+			ArchiveDefault(document, StaticPaths.DirectoryPath, "TerminalSettingsDefault");
 
 			SelectiveTestTearDown();
 		}
@@ -130,8 +130,8 @@ namespace YAT.Settings.Model.Test
 			SelectiveTestSetUp();
 
 			var document = XmlDocumentEx.CreateDefaultDocument(typeof(WorkspaceSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
-			ArchiveSchema (document, StaticPaths.Path, "WorkspaceSettingsSchema");
-			ArchiveDefault(document, StaticPaths.Path, "WorkspaceSettingsDefault");
+			ArchiveSchema (document, StaticPaths.DirectoryPath, "WorkspaceSettingsSchema");
+			ArchiveDefault(document, StaticPaths.DirectoryPath, "WorkspaceSettingsDefault");
 
 			SelectiveTestTearDown();
 		}

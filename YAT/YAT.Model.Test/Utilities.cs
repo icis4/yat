@@ -539,7 +539,7 @@ namespace YAT.Model.Test
 		{
 			var settings = new TerminalSettingsRoot();
 			settings.TerminalType = Domain.TerminalType.Text;
-			settings.Terminal.TextTerminal.ShowEol = true; // Required for easier test verification (byte count).
+			settings.Terminal.TextTerminal.ShowEol = true; // Required for easier test verification (char/byte count).
 			settings.Terminal.UpdateTerminalTypeDependentSettings();
 			return (settings);
 		}

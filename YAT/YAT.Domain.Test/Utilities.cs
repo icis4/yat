@@ -122,7 +122,7 @@ namespace YAT.Domain.Test
 			var settings = new TerminalSettings();
 			settings.TerminalType = TerminalType.Text;
 			settings.UpdateTerminalTypeDependentSettings();
-			settings.TextTerminal.ShowEol = true; // Required for easier test verification (byte count).
+			settings.TextTerminal.ShowEol = true; // Required for easier test verification (char/byte count).
 			return (settings);
 		}
 
@@ -322,11 +322,8 @@ namespace YAT.Domain.Test
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
-		internal static void WaitForTransmissionAndVerifyCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
+		internal static void WaitForTransmissionAndVerifyCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount, int timeout = WaitTimeoutForLineTransmission)
 		{
-			// Calculate timeout:
-			int timeout = WaitTimeoutForLineTransmission;
-
 			// Attention:
 			// Similar code exists in Model.Test.Utilities.WaitForTransmissionAndVerifyCounts().
 			// Changes here may have to be applied there too.

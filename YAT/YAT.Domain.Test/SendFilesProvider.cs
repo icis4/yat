@@ -64,28 +64,28 @@ namespace YAT.Domain.Test
 
 	#endregion
 
-	#region Types > File Paths
+	#region Types > Files
 	//------------------------------------------------------------------------------------------
-	// Types > File Paths
+	// Types > Files
 	//------------------------------------------------------------------------------------------
 
 	/// <summary></summary>
-	public class FilePaths
+	public class Files
 	{
 		/// <summary></summary>
-		public string Path { get; }
+		public string DirectoryPath { get; }
 
 		/// <summary></summary>
-		public Dictionary<StressTestCase, string> StressFilePaths { get; }
+		public Dictionary<StressTestCase, Tuple<string, int, int>> StressFiles { get; }
 
 		/// <summary></summary>
-		public FilePaths()
+		public Files()
 			: this(null)
 		{
 		}
 
 		/// <summary></summary>
-		public FilePaths(string directory)
+		public Files(string directory)
 		{
 			// Traverse path from "<Root>\YAT\bin\[Debug|Release]\YAT.exe" to "<Root>".
 			System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(Environment.CurrentDirectory);
@@ -94,17 +94,17 @@ namespace YAT.Domain.Test
 
 			// Set path to "<Root>\!-SendFiles\" or "<Root>\!-SendFiles\<Directory>\".
 			if (string.IsNullOrEmpty(directory))
-				Path = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-SendFiles" + System.IO.Path.DirectorySeparatorChar;
+				DirectoryPath = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-SendFiles" + System.IO.Path.DirectorySeparatorChar;
 			else
-				Path = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-SendFiles" + System.IO.Path.DirectorySeparatorChar + directory + System.IO.Path.DirectorySeparatorChar;
+				DirectoryPath = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-SendFiles" + System.IO.Path.DirectorySeparatorChar + directory + System.IO.Path.DirectorySeparatorChar;
 
-			StressFilePaths = new Dictionary<StressTestCase, string>();
+			StressFiles = new Dictionary<StressTestCase, Tuple<string, int, int>>();
 		}
 
 		/// <summary></summary>
-		public void AddStressFileName(StressTestCase fileKey, string fileName)
+		public void AddStressFile(StressTestCase fileKey, string fileName, int fileSize, int lineCount)
 		{
-			StressFilePaths.Add(fileKey, Path + fileName);
+			StressFiles.Add(fileKey, new Tuple<string, int, int>(DirectoryPath + fileName, fileSize, lineCount));
 		}
 	}
 
@@ -126,12 +126,12 @@ namespace YAT.Domain.Test
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of test implementation, especially adding new settings.")]
-		public static readonly FilePaths FilePaths_StressText;
+		public static readonly Files FilePaths_StressText;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of test implementation, especially adding new settings.")]
-		public static readonly FilePaths FilePaths_StressBinary;
+		public static readonly Files FilePaths_StressBinary;
 
 		#endregion
 
@@ -145,20 +145,20 @@ namespace YAT.Domain.Test
 		static SendFilesProvider()
 		{
 			// Stress text:
-			FilePaths_StressText = new FilePaths();
-			FilePaths_StressText.AddStressFileName(StressTestCase.Normal,     "Stress-1-Normal.txt");
-			FilePaths_StressText.AddStressFileName(StressTestCase.Large,      "Stress-2-Large.txt");
-			FilePaths_StressText.AddStressFileName(StressTestCase.EvenLarger, "Stress-3-EvenLarger.txt");
-			FilePaths_StressText.AddStressFileName(StressTestCase.Huge,       "Stress-4-Huge.txt");
-			FilePaths_StressText.AddStressFileName(StressTestCase.Enormous,   "Stress-5-Enormous.txt");
+			FilePaths_StressText = new Files();                                                            // Not including EOF.
+			FilePaths_StressText.AddStressFile(StressTestCase.Normal,     "Stress-1-Normal.txt"    ,     8400,    300);
+			FilePaths_StressText.AddStressFile(StressTestCase.Large,      "Stress-2-Large.txt"     ,    82500,   1500);
+			FilePaths_StressText.AddStressFile(StressTestCase.EvenLarger, "Stress-3-EvenLarger.txt",   275000,   5000);
+			FilePaths_StressText.AddStressFile(StressTestCase.Huge,       "Stress-4-Huge.txt"      ,  1090000,  10000);
+			FilePaths_StressText.AddStressFile(StressTestCase.Enormous,   "Stress-5-Enormous.txt"  , 16300000, 100000);
 
 			// Stress binary:
-			FilePaths_StressBinary = new FilePaths();
-			FilePaths_StressBinary.AddStressFileName(StressTestCase.Normal,     "Stress-1-Normal.dat");
-			FilePaths_StressBinary.AddStressFileName(StressTestCase.Large,      "Stress-2-Large.dat");
-			FilePaths_StressBinary.AddStressFileName(StressTestCase.EvenLarger, "Stress-3-EvenLarger.dat");
-			FilePaths_StressBinary.AddStressFileName(StressTestCase.Huge,       "Stress-4-Huge.dat");
-			FilePaths_StressBinary.AddStressFileName(StressTestCase.Enormous,   "Stress-5-Enormous.dat");
+			FilePaths_StressBinary = new Files();
+			FilePaths_StressBinary.AddStressFile(StressTestCase.Normal,     "Stress-1-Normal.dat"    ,     8192, -1);
+			FilePaths_StressBinary.AddStressFile(StressTestCase.Large,      "Stress-2-Large.dat"     ,    82432, -1);
+			FilePaths_StressBinary.AddStressFile(StressTestCase.EvenLarger, "Stress-3-EvenLarger.dat",   274944, -1);
+			FilePaths_StressBinary.AddStressFile(StressTestCase.Huge,       "Stress-4-Huge.dat"      ,  1089792, -1);
+			FilePaths_StressBinary.AddStressFile(StressTestCase.Enormous,   "Stress-5-Enormous.dat"  , 16299776, -1);
 		}
 
 		#endregion
