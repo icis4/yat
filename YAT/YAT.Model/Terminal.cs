@@ -153,7 +153,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Note that it is not possible to mark a property with [Conditional("TEST")].
 		/// </remarks>
-		public bool DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification { get; set; }
+		public bool DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification { get; set; }
 
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
@@ -532,11 +532,11 @@ namespace YAT.Model
 				CloseAndDisposeTerminal();
 				DisposeLog();
 
-				// ...and finally dispose of the settings:
-				if (!DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification)
+				// ...and finally detach the settings:
+				if (!DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification)
 				{
 					DetachSettingsEventHandlers();
-					DisposeSettingsHandler();
+					DetachSettingsHandler();
 				}
 			}
 
@@ -1154,11 +1154,10 @@ namespace YAT.Model
 			}
 		}
 
-		private void DisposeSettingsHandler()
+		private void DetachSettingsHandler()
 		{
 			if (this.settingsHandler != null)
 			{
-				//this.settingsHandler.Dispose();
 				this.settingsHandler = null;
 			}
 		}
