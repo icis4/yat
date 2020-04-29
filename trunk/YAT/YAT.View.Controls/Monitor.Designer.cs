@@ -146,7 +146,8 @@
 			this.label_TimeStatus_Total.TabIndex = 1;
 			this.label_TimeStatus_Total.Text = "m:ss";
 			this.label_TimeStatus_Total.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			this.toolTip.SetToolTip(this.label_TimeStatus_Total, "Total connect time (m:ss)");
+			this.toolTip.SetToolTip(this.label_TimeStatus_Total, "Total connect time (m:ss)\r\n\r\nDouble-click to reset");
+			this.label_TimeStatus_Total.DoubleClick += new System.EventHandler(this.label_TimeStatus_Total_DoubleClick);
 			// 
 			// label_DataStatus_Unidir
 			// 
@@ -159,7 +160,8 @@
 			this.label_DataStatus_Unidir.TabIndex = 5;
 			this.label_DataStatus_Unidir.Text = "888 | 888 @ 8/s | 8/s";
 			this.label_DataStatus_Unidir.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolTip.SetToolTip(this.label_DataStatus_Unidir, "Number of bytes | lines @ bytes | lines per second");
+			this.toolTip.SetToolTip(this.label_DataStatus_Unidir, "Number of bytes | lines @ bytes | lines per second\r\n\r\nDouble-click to reset");
+			this.label_DataStatus_Unidir.DoubleClick += new System.EventHandler(this.label_DataStatus_Unidir_DoubleClick);
 			// 
 			// label_DataStatus_BidirTx
 			// 
@@ -172,7 +174,8 @@
 			this.label_DataStatus_BidirTx.TabIndex = 4;
 			this.label_DataStatus_BidirTx.Text = "888 | 888 @ 8/s | 8/s";
 			this.label_DataStatus_BidirTx.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			this.toolTip.SetToolTip(this.label_DataStatus_BidirTx, "Number of bytes | lines @ bytes | lines per second");
+			this.toolTip.SetToolTip(this.label_DataStatus_BidirTx, "Number of bytes | lines @ bytes | lines per second\r\n\r\nDouble-click to reset");
+			this.label_DataStatus_BidirTx.DoubleClick += new System.EventHandler(this.label_DataStatus_BidirTx_DoubleClick);
 			// 
 			// label_DataStatus_BidirRx
 			// 
@@ -184,7 +187,8 @@
 			this.label_DataStatus_BidirRx.Size = new System.Drawing.Size(134, 15);
 			this.label_DataStatus_BidirRx.TabIndex = 6;
 			this.label_DataStatus_BidirRx.Text = "888 | 888 @ 8/s | 8/s";
-			this.toolTip.SetToolTip(this.label_DataStatus_BidirRx, "Number of bytes | lines @ bytes | lines per second");
+			this.toolTip.SetToolTip(this.label_DataStatus_BidirRx, "Number of bytes | lines @ bytes | lines per second\r\n\r\nDouble-click to reset");
+			this.label_DataStatus_BidirRx.DoubleClick += new System.EventHandler(this.label_DataStatus_BidirRx_DoubleClick);
 			// 
 			// label_TimeStatus_Active
 			// 
@@ -197,7 +201,8 @@
 			this.label_TimeStatus_Active.TabIndex = 0;
 			this.label_TimeStatus_Active.Text = "m:ss";
 			this.label_TimeStatus_Active.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-			this.toolTip.SetToolTip(this.label_TimeStatus_Active, "Active connect time (m:ss)");
+			this.toolTip.SetToolTip(this.label_TimeStatus_Active, "Active connect time (m:ss)\r\n\r\nDouble-click to reset");
+			this.label_TimeStatus_Active.DoubleClick += new System.EventHandler(this.label_TimeStatus_Active_DoubleClick);
 			// 
 			// label_DataStatus_Back
 			// 
