@@ -38,7 +38,7 @@ namespace YAT.Domain
 	public class TextSendItem
 	{
 		/// <summary></summary>
-		public string Data { get; }
+		public string Text { get; }
 
 		/// <summary></summary>
 		public Radix DefaultRadix { get; }
@@ -53,9 +53,9 @@ namespace YAT.Domain
 		public bool IsLine { get; }
 
 		/// <summary></summary>
-		public TextSendItem(string data, Radix defaultRadix, Parser.Mode parseMode, SendMode sendMode, bool isLine)
+		public TextSendItem(string text, Radix defaultRadix, Parser.Mode parseMode, SendMode sendMode, bool isLine)
 		{
-			Data         = data;
+			Text         = text;
 			DefaultRadix = defaultRadix;
 			ParseMode    = parseMode;
 			SendMode     = sendMode;
@@ -65,7 +65,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected string DataAsPrintableString
 		{
-			get { return (StringEx.ConvertToPrintableString(Data)); }
+			get { return (StringEx.ConvertToPrintableString(Text)); }
 		}
 
 		#region Object Members

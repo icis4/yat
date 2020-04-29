@@ -68,7 +68,7 @@ namespace YAT.Domain
 		/// </remarks>
 		protected override void DoSendTextItem(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, TextSendItem item)
 		{
-			string textToParse = item.Data;
+			string textToParse = item.Text;
 
 			// Check for text exclusion patterns:
 			if (TextTerminalSettings.TextExclusion.Enabled)
