@@ -102,6 +102,8 @@ namespace YAT.Model
 
 		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
 
+		private const int RateIntervalsPerSecond = 4; // 250 ms intervals
+
 		#endregion
 
 		#region Static Fields
@@ -4619,6 +4621,9 @@ namespace YAT.Model
 			}
 		}
 
+		/// <summary>
+		/// The send rate in bytes per second.
+		/// </summary>
 		/// <remarks>
 		/// The value corresponds to the rate of the raw terminal repository.
 		/// The rate of the formatted terminal repository slightly lags behind.
@@ -4630,10 +4635,13 @@ namespace YAT.Model
 				AssertNotDisposed();
 
 			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
-					return (this.txByteRate.RateValue);
+					return (this.txByteRate.RateValue * RateIntervalsPerSecond);
 			}
 		}
 
+		/// <summary>
+		/// The receive rate in bytes per second.
+		/// </summary>
 		/// <remarks>
 		/// The value corresponds to the rate of the raw terminal repository.
 		/// The rate of the formatted terminal repository slightly lags behind.
@@ -4645,10 +4653,13 @@ namespace YAT.Model
 				AssertNotDisposed();
 
 			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
-					return (this.rxByteRate.RateValue);
+					return (this.rxByteRate.RateValue * RateIntervalsPerSecond);
 			}
 		}
 
+		/// <summary>
+		/// The send rate in lines per second.
+		/// </summary>
 		/// <remarks>
 		/// The value corresponds to the completed line count of the formatted terminal repository.
 		/// </remarks>
@@ -4659,10 +4670,13 @@ namespace YAT.Model
 				AssertNotDisposed();
 
 			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
-					return (this.txLineRate.RateValue);
+					return (this.txLineRate.RateValue * RateIntervalsPerSecond);
 			}
 		}
 
+	/////// <summary>
+	/////// The bidir rate in lines per second.
+	/////// </summary>
 	/////// <remarks>
 	/////// The value corresponds to the completed line count of the formatted terminal repository.
 	/////// </remarks>
@@ -4673,10 +4687,13 @@ namespace YAT.Model
 	////		AssertNotDisposed();
 	////
 	////		lock (this.countsRatesSyncObj)
-	////			return (this.bidirLineRate.RateValue) would technically be possible, but doesn't make much sense.
+	////			return (this.bidirLineRate.RateValue * RateIntervalsPerSecond) would technically be possible, but doesn't make much sense.
 	////	}
 	////}
 
+		/// <summary>
+		/// The receive rate in lines per second.
+		/// </summary>
 		/// <remarks>
 		/// The value corresponds to the completed line count of the formatted terminal repository.
 		/// </remarks>
@@ -4687,7 +4704,7 @@ namespace YAT.Model
 				AssertNotDisposed();
 
 			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
-					return (this.rxLineRate.RateValue);
+					return (this.rxLineRate.RateValue * RateIntervalsPerSecond);
 			}
 		}
 
@@ -4705,8 +4722,10 @@ namespace YAT.Model
 
 			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
 				{
-					counts = new BytesLinesTuple(this.txByteCount,          this.txLineCount,          this.rxByteCount,          this.rxLineCount         );
-					rates  = new BytesLinesTuple(this.txByteRate.RateValue, this.txLineRate.RateValue, this.rxByteRate.RateValue, this.rxLineRate.RateValue);
+					counts = new BytesLinesTuple(this.txByteCount,                                   this.txLineCount,
+					                             this.rxByteCount,                                   this.rxLineCount);
+					rates  = new BytesLinesTuple(this.txByteRate.RateValue * RateIntervalsPerSecond, this.txLineRate.RateValue * RateIntervalsPerSecond,
+					                             this.rxByteRate.RateValue * RateIntervalsPerSecond, this.rxLineRate.RateValue * RateIntervalsPerSecond);
 				}
 
 				return (new CountsRatesTuple(counts, rates));
@@ -4742,9 +4761,9 @@ namespace YAT.Model
 
 		private void CreateRates()
 		{
-			int rateInterval   = 1000;
-			int rateWindow     = 5000;
-			int updateInterval =  250;
+			const int rateInterval   = (1000 / RateIntervalsPerSecond); // Resulting in 250 ms intervals.
+			const int rateWindow     =  2000; // Window must not be smaller than 1125 ms as that results in drops to 0 during sending of files.
+			const int updateInterval =   250;
 
 		////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
 			{
