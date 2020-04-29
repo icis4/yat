@@ -26,10 +26,8 @@
 // Using
 //==================================================================================================
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 
 using MKY.Net.Test;
@@ -44,9 +42,71 @@ namespace YAT.Domain.Test.Terminal
 	[TestFixture]
 	public class AllowConcurrencyTest
 	{
-		#region TestNonConcurrentSend
+		#region TestNonConcurrentSendRepeating
 		//==========================================================================================
-		// TestNonConcurrentSend
+		// TestNonConcurrentSendRepeating
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Test] // Test is mandatory, it shall not be excludable. 'IPv4LoopbackIsAvailable' is probed below.
+		public virtual void TestNonConcurrentSendRepeating()
+		{
+			if (!ConfigurationProvider.Configuration.IPv4LoopbackIsAvailable)
+				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			const int WaitForDisposal = 100;
+
+			var settingsTx = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+		////settingsTx.Send.AllowConcurrency is false by default.
+			settingsTx.TextTerminal.LineSendDelay = new TextLineSendDelaySettingTuple(true, 1, 1); // Delay of 1 ms per line, sending over
+			using (var terminalTx = new Domain.TextTerminal(settingsTx))                           // localhost is way too fast otherwise.
+			{                                                                                      //  => 300 lines take 300..600 ms, perfect.
+				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");
+
+				var settingsRx = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+				using (var terminalRx = new Domain.TextTerminal(settingsRx))
+				{
+					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started");
+					Utilities.WaitForConnection(terminalTx, terminalRx);
+
+					var repeatingCount = 300;
+					var repeating = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+					var repeatingLine = string.Format(CultureInfo.InvariantCulture, @"{0}\!(LineRepeat({1}))", repeating, repeatingCount);
+					var repeatingTextExpected = repeating + "<CR><LF>"; // Text settings for testing have 'ShowEOL' = true in order to include EOL in char count.
+					var repeatingLengthExpected = (repeating.Length + 2); // Adjust for EOL.
+					terminalTx.SendTextLine(repeatingLine);
+
+					var subsequentLine = "0123456789"; // Repeating lines only contain characters.
+					var subsequentTextExpected = (subsequentLine + "<CR><LF>"); // Text settings for testing have 'ShowEOL' = true in order to include EOL in char count.
+					var subsequentLengthExpected = (subsequentLine.Length + 2); // Adjust EOL.
+					terminalTx.SendTextLine(subsequentLine); // Immediately invoke sending of subsequent data.
+
+					var expectedTotalByteCount = ((repeatingLengthExpected * repeatingCount) + subsequentLengthExpected);
+					var expectedTotalLineCount = (                           repeatingCount  + 1);                                       // See above, sending takes 300..600 ms.
+					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1000);
+
+					// Verify that last line matches subsequently sent line:
+					var displayLines = terminalRx.RepositoryToDisplayLines(RepositoryType.Rx);
+					var lastLine = displayLines.Last();
+					Assert.That(lastLine.Text, Is.EqualTo(subsequentTextExpected));
+
+					terminalRx.Stop();
+					Utilities.WaitForDisconnection(terminalRx);
+				} // using (terminalB)
+
+				terminalTx.Stop();
+				Utilities.WaitForDisconnection(terminalTx);
+			} // using (terminalA)
+
+			Thread.Sleep(WaitForDisposal);
+		}
+
+		#endregion
+
+		#region TestNonConcurrentSendFile
+		//==========================================================================================
+		// TestNonConcurrentSendFile
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -59,85 +119,43 @@ namespace YAT.Domain.Test.Terminal
 
 			const int WaitForDisposal = 100;
 
-			using (var parser = new Domain.Parser.Parser(Domain.Parser.Mode.NoEscapes))
-			{
-				var settingsTx = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
-			////settingsTx.Send.AllowConcurrency is false by default.
-				using (var terminalTx = new Domain.TextTerminal(settingsTx))
+			var settingsTx = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+		////settingsTx.Send.AllowConcurrency is false by default.
+			settingsTx.TextTerminal.LineSendDelay = new TextLineSendDelaySettingTuple(true, 1, 1); // Delay of 1 ms per line, sending over
+			using (var terminalTx = new Domain.TextTerminal(settingsTx))                           // localhost is way too fast otherwise.
+			{                                                                                      //  => 300 lines of [Stress-1-Normal.txt]
+				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");       //     take 300..600 ms, perfect.
+
+				var settingsRx = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+				using (var terminalRx = new Domain.TextTerminal(settingsRx))
 				{
-					Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");
+					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started");
+					Utilities.WaitForConnection(terminalTx, terminalRx);
 
-					var settingsRx = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
-					using (var terminalRx = new Domain.TextTerminal(settingsRx))
-					{
-						Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started");
-						Utilities.WaitForConnection(terminalTx, terminalRx);
+					var file = SendFilesProvider.FilePaths_StressText.StressFiles[StressTestCase.Normal];
+					terminalTx.SendFile(file.Item1);
 
-						string keyword = @"\!(TimeStamp())";
+					var subsequentLine = "0123456789"; // Stress files only contain characters.
+					var subsequentTextExpected = (subsequentLine + "<CR><LF>"); // Text settings for testing have 'ShowEOL' = true in order to include EOL in char count.
+					var subsequentLengthExpected = (subsequentLine.Length + 2); // Adjust EOL.
+					terminalTx.SendTextLine(subsequentLine); // Immediately invoke sending of subsequent data.
+					                                      // Includes EOL.
+					var expectedTotalByteCount = (file.Item2 + subsequentLengthExpected);
+					var expectedTotalLineCount = (file.Item3 + 1);                                                                       // See above, sending takes 300..600 ms.
+					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1000);
 
-						DateTime now = DateTime.Now;
-						string timeStamp;
-						if (useUtc)        // UTC
-							timeStamp = now.ToUniversalTime().ToString(format, DateTimeFormatInfo.CurrentInfo);
-						else
-							timeStamp = now.ToString(format, DateTimeFormatInfo.CurrentInfo);
+					// Verify that last line matches subsequently sent line:
+					var displayLines = terminalRx.RepositoryToDisplayLines(RepositoryType.Rx);
+					var lastLine = displayLines.Last();
+					Assert.That(lastLine.Text, Is.EqualTo(subsequentTextExpected));
 
-						string textToSend;
-						string textExpected;
-						int textByteCount;
-						int eolByteCount = 2; // Fixed to default of <CR><LF>.
-						int expectedTotalByteCount = 0;
-						int expectedTotalLineCount = 0;
+					terminalRx.Stop();
+					Utilities.WaitForDisconnection(terminalRx);
+				} // using (terminalB)
 
-						// TimeStamp only:
-						textToSend   = keyword;
-						textExpected = timeStamp;
-						Assert.That(parser.TryParse(textExpected, out parseResult));
-						terminalTx.SendTextLine(textToSend);
-						textByteCount = parseResult.Length;
-						expectedTotalByteCount += (textByteCount + eolByteCount);
-						expectedTotalLineCount++;
-						Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
-
-						// Prefix + TimeStamp:
-						textToSend   = "AT+DATE=" + keyword;
-						textExpected = "AT+DATE=" + timeStamp;
-						Assert.That(parser.TryParse(textExpected, out parseResult));
-						terminalTx.SendTextLine(textToSend);
-						textByteCount = parseResult.Length;
-						expectedTotalByteCount += (textByteCount + eolByteCount);
-						expectedTotalLineCount++;
-						Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
-
-						// TimeStamp + Postfix:
-						textToSend   = keyword   + "=NOW";
-						textExpected = timeStamp + "=NOW";
-						Assert.That(parser.TryParse(textExpected, out parseResult));
-						terminalTx.SendTextLine(textToSend);
-						textByteCount = parseResult.Length;
-						expectedTotalByteCount += (textByteCount + eolByteCount);
-						expectedTotalLineCount++;
-						Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
-
-						// Prefix + TimeStamp + Postfix:
-						textToSend   = "AT+DATE=" +  keyword  + "=NOW";
-						textExpected = "AT+DATE=" + timeStamp + "=NOW";
-						Assert.That(parser.TryParse(textExpected, out parseResult));
-						terminalTx.SendTextLine(textToSend);
-						textByteCount = parseResult.Length;
-						expectedTotalByteCount += (textByteCount + eolByteCount);
-						expectedTotalLineCount++;
-						Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
-
-						terminalRx.Stop();
-						Utilities.WaitForDisconnection(terminalRx);
-					} // using (terminalB)
-
-					terminalTx.Stop();
-					Utilities.WaitForDisconnection(terminalTx);
-				} // using (terminalA)
-
-			} // using (parser)
+				terminalTx.Stop();
+				Utilities.WaitForDisconnection(terminalTx);
+			} // using (terminalA)
 
 			Thread.Sleep(WaitForDisposal);
 		}
