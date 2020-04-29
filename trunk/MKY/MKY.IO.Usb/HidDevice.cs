@@ -681,17 +681,18 @@ namespace MKY.IO.Usb
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			if (!IsDisposed)
-			{
-				UnregisterAndDetachStaticDeviceEventHandlers();
+			UnregisterAndDetachStaticDeviceEventHandlers();
 
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-				}
+			// Dispose of managed resources:
+			if (disposing)
+			{
+				// Nothing else to do (yet).
 			}
 
 			base.Dispose(disposing);
@@ -720,7 +721,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.hidDeviceInfo);
 			}
@@ -736,7 +737,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (Info.UsagePage);
 			}
@@ -747,7 +748,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (Info.UsagePageString);
 			}
@@ -758,7 +759,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (Info.UsageId);
 			}
@@ -769,7 +770,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (Info.UsageIdString);
 			}
@@ -782,7 +783,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.inputReportByteLength);
 			}
@@ -793,7 +794,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.outputReportByteLength);
 			}
@@ -804,7 +805,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.featureReportByteLength);
 			}
@@ -815,7 +816,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.linkCollectionNodes);
 			}
@@ -826,7 +827,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.inputButtonCaps);
 			}
@@ -837,7 +838,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.inputValueCaps);
 			}
@@ -849,7 +850,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.inputDataIndices);
 			}
@@ -860,7 +861,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.outputButtonCaps);
 			}
@@ -871,7 +872,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.outputValueCaps);
 			}
@@ -883,7 +884,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.outputDataIndices);
 			}
@@ -894,7 +895,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.featureButtonCaps);
 			}
@@ -905,7 +906,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.featureValueCaps);
 			}
@@ -917,7 +918,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.featureDataIndices);
 			}
@@ -972,7 +973,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public override string ToString()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (Info.ToString());
 		}
@@ -983,7 +984,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public override string ToString(bool insertVidPid)
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (Info.ToString(insertVidPid));
 		}
@@ -994,7 +995,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public virtual string ToString(bool insertVidPid, bool appendUsage)
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (Info.ToString(insertVidPid, appendUsage));
 		}
@@ -1004,7 +1005,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public override string ToShortString()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (Info.ToShortString());
 		}
@@ -1014,7 +1015,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public override string ToLongString()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (Info.ToLongString());
 		}

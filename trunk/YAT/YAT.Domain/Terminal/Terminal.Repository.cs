@@ -67,7 +67,7 @@ namespace YAT.Domain
 		/// <remarks>See remarks in <see cref="RefreshRepositories"/> below.</remarks>
 		public virtual bool ClearRepository(RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
 			if (Monitor.TryEnter(ClearAndRefreshSyncObj, ClearAndRefreshTimeout))
 			{
@@ -93,7 +93,7 @@ namespace YAT.Domain
 		/// <remarks>See remarks in <see cref="RefreshRepositories"/> below.</remarks>
 		public virtual bool ClearRepositories()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
 			if (Monitor.TryEnter(ClearAndRefreshSyncObj, ClearAndRefreshTimeout))
 			{
@@ -119,7 +119,7 @@ namespace YAT.Domain
 		/// <remarks>See remarks in <see cref="RefreshRepositories"/> below.</remarks>
 		public virtual bool RefreshRepository(RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
 			if (Monitor.TryEnter(ClearAndRefreshSyncObj, ClearAndRefreshTimeout))
 			{
@@ -167,7 +167,7 @@ namespace YAT.Domain
 		/// </remarks>
 		public virtual bool RefreshRepositories()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
 			if (Monitor.TryEnter(ClearAndRefreshSyncObj, ClearAndRefreshTimeout))
 			{
@@ -224,7 +224,7 @@ namespace YAT.Domain
 		/// </remarks>
 		public virtual int GetRepositoryByteCount(RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (this.repositorySyncObj)
 			{
@@ -243,7 +243,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual int GetRepositoryLineCount(RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (this.repositorySyncObj)
 			{
@@ -262,7 +262,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual DisplayElementCollection RepositoryToDisplayElements(RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (this.repositorySyncObj)
 			{
@@ -281,7 +281,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual DisplayLineCollection RepositoryToDisplayLines(RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (this.repositorySyncObj)
 			{
@@ -300,7 +300,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual DisplayLine LastDisplayLineAuxiliary(RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (this.repositorySyncObj)
 			{
@@ -319,7 +319,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual void ClearLastDisplayLineAuxiliary(RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (this.repositorySyncObj)
 			{
@@ -344,7 +344,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string RepositoryToExtendedDiagnosticsString(RepositoryType repositoryType, string indent)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (this.repositorySyncObj)
 			{
@@ -363,7 +363,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual List<RawChunk> RepositoryToRawChunks(RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			return (this.rawTerminal.RepositoryToChunks(repositoryType));
 		}

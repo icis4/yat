@@ -85,7 +85,7 @@ namespace YAT.Application
 	/// their own context.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
-	public class Main : IDisposable, IDisposableEx
+	public class Main
 	{
 		#region Constants
 		//==========================================================================================
@@ -175,69 +175,6 @@ namespace YAT.Application
 			this.commandLineArgs = new CommandLineArgs(this.commandLineArgsStrings);
 		}
 
-		#region Disposal
-		//------------------------------------------------------------------------------------------
-		// Disposal
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
-			{
-				DebugMessage("Disposing...");
-
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-				}
-
-				// Set state to disposed:
-				IsDisposed = true;
-
-				DebugMessage("...successfully disposed.");
-			}
-		}
-
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~Main()
-		{
-			Dispose(false);
-
-			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
-		}
-
-		#endregion
-
 		#endregion
 
 		#region Properties
@@ -281,8 +218,6 @@ namespace YAT.Application
 		/// </summary>
 		public virtual MainResult PrepareRun()
 		{
-			AssertNotDisposed();
-
 			if (this.commandLineArgs != null)
 			{
 				// Process and validate command line arguments:
@@ -309,8 +244,6 @@ namespace YAT.Application
 		/// </summary>
 		public virtual MainResult Run()
 		{
-			AssertNotDisposed();
-
 			return (Run(false));
 		}
 
@@ -319,8 +252,6 @@ namespace YAT.Application
 		/// </summary>
 		public virtual MainResult RunFromConsole()
 		{
-			AssertNotDisposed();
-
 			return (Run(true));
 		}
 
@@ -451,8 +382,6 @@ namespace YAT.Application
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, StyleCop isn't able to deal with command line terms such as 'cmd' or 'nv'...")]
 		public virtual MainResult Run(bool runFromConsole, bool runWithView, ApplicationSettingsFileAccess applicationSettingsFileAccess, bool loadSettingsInWelcomeScreen)
 		{
-			AssertNotDisposed();
-
 			MainThreadHelper.SetCurrentThread();
 
 			MainResult result;

@@ -91,16 +91,18 @@ namespace YAT.Domain
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			if (!IsDisposed)
+			DetachBinaryTerminalSettings();
+
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					DetachBinaryTerminalSettings();
-				}
+				// Nothing else to do (yet).
 			}
 
 			base.Dispose(disposing);
@@ -182,7 +184,7 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (ToExtendedDiagnosticsString()); // No 'real' ToString() method required yet.
 		}
@@ -196,7 +198,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public override string ToExtendedDiagnosticsString(string indent = "")
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (indent + "> Type: BinaryTerminal" + Environment.NewLine + base.ToExtendedDiagnosticsString(indent));
 		}

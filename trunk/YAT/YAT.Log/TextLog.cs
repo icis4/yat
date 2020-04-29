@@ -71,9 +71,17 @@ namespace YAT.Log
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			CloseAndDisposeWriterNotSynchronized();
+			// Dispose of managed resources:
+			if (disposing)
+			{
+				CloseAndDisposeWriterNotSynchronized();
+			}
 
 			base.Dispose(disposing);
 		}
@@ -83,7 +91,7 @@ namespace YAT.Log
 		/// <summary></summary>
 		public virtual void ApplySettings(bool enabled, bool isOn, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding, FormatSettings format)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (IsEnabled && IsOn && ((this.encoding != encoding) || (this.format != format)))
 				Close();
@@ -114,7 +122,7 @@ namespace YAT.Log
 		/// <summary></summary>
 		protected override void OpenWriter(System.IO.FileStream stream)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (this.writerSyncObj)
 			{
@@ -145,7 +153,7 @@ namespace YAT.Log
 		/// <summary></summary>
 		protected override void FlushWriter()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (this.writerSyncObj)
 			{
@@ -182,7 +190,7 @@ namespace YAT.Log
 		/// <summary></summary>
 		protected override void CloseWriter()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (this.writerSyncObj)
 			{
@@ -199,7 +207,7 @@ namespace YAT.Log
 				{
 					if (this.xmlWriter != null)
 					{
-						if (!this.xmlWriter.IsDisposed)
+						if (!this.xmlWriter.IsInDisposal)
 						{
 							this.xmlWriter.Close();
 							this.xmlWriter.Dispose();
@@ -215,7 +223,7 @@ namespace YAT.Log
 				{
 					if (this.rtfWriter != null)
 					{
-						if (!this.rtfWriter.IsDisposed)
+						if (!this.rtfWriter.IsUndisposed)
 						{
 							this.rtfWriter.Close();
 							this.rtfWriter.Dispose();
@@ -232,7 +240,7 @@ namespace YAT.Log
 				{
 					if (this.textWriter != null)
 					{
-						if (!this.textWriter.IsDisposed)
+						if (!this.textWriter.IsUndisposed)
 						{
 							this.textWriter.Close();
 							this.textWriter.Dispose();
@@ -252,7 +260,7 @@ namespace YAT.Log
 		/// </remarks>
 		public virtual void WriteLine(Domain.DisplayLine line)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (IsEnabled && IsOn)
 			{

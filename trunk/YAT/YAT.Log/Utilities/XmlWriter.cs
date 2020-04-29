@@ -47,7 +47,7 @@ namespace YAT.Log.Utilities
 	/// <summary>
 	/// Utility class providing XML writer functionality for YAT.
 	/// </summary>
-	public abstract class XmlWriter : IDisposable, IDisposableEx
+	public abstract class XmlWriter : DisposableBase
 	{
 		/// <summary></summary>
 		protected const string Header = @"<?xml version=""1.0"" encoding=""utf-8""?>";
@@ -89,63 +89,25 @@ namespace YAT.Log.Utilities
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				// Dispose of managed resources:
-				if (disposing)
-				{
-					if (this.writer != null)
-						this.writer.Dispose();
-
-					if (this.indentSyncObj != null)
-						this.indentSyncObj.Dispose();
+				if (this.writer != null) {
+					this.writer.Dispose();
+					this.writer = null;
 				}
 
-				// Set state to disposed:
-				this.writer = null;
-				this.indentSyncObj = null;
-				IsDisposed = true;
+				if (this.indentSyncObj != null) {
+					this.indentSyncObj.Dispose();
+					this.indentSyncObj = null;
+				}
 			}
-		}
-
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~XmlWriter()
-		{
-			Dispose(false);
-
-			MKY.Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -160,7 +122,7 @@ namespace YAT.Log.Utilities
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				int indentSize;
 				this.indentSyncObj.EnterReadLock();
@@ -173,7 +135,7 @@ namespace YAT.Log.Utilities
 
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				this.indentSyncObj.EnterWriteLock();
 				{
@@ -194,7 +156,7 @@ namespace YAT.Log.Utilities
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				int indentLevel;
 				this.indentSyncObj.EnterReadLock();
@@ -207,7 +169,7 @@ namespace YAT.Log.Utilities
 
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				this.indentSyncObj.EnterWriteLock();
 				{
@@ -222,7 +184,7 @@ namespace YAT.Log.Utilities
 		/// </summary>
 		public void Indent()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.indentSyncObj.EnterWriteLock();
 			{
@@ -237,7 +199,7 @@ namespace YAT.Log.Utilities
 		/// </summary>
 		public void Unindent()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.indentSyncObj.EnterWriteLock();
 			{
@@ -250,7 +212,7 @@ namespace YAT.Log.Utilities
 		/// <param name="content">The line content without indentation spaces.</param>
 		protected void WriteLine(string content)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (writerSyncObj)
 			{
@@ -277,7 +239,7 @@ namespace YAT.Log.Utilities
 		/// </summary>
 		public void Flush()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (writerSyncObj)
 				this.writer.Flush();
@@ -296,7 +258,7 @@ namespace YAT.Log.Utilities
 		/// </summary>
 		protected void Close(string[] finalLines)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (writerSyncObj)
 			{
@@ -347,27 +309,6 @@ namespace YAT.Log.Utilities
 			}
 		}
 
-		#region Disposal
-		//------------------------------------------------------------------------------------------
-		// Disposal
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		protected override void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
-			{
-				if (disposing)
-				{
-					// Nothing to dispose of (yet).
-				}
-			}
-
-			base.Dispose(disposing);
-		}
-
-		#endregion
-
 		/// <summary></summary>
 		public void WriteLine(RawChunk chunk)
 		{
@@ -378,7 +319,7 @@ namespace YAT.Log.Utilities
 
 		private void WriteLine(XmlTransferRawLine transferLine)
 		{
-			// AssertNotDisposed() is called by WriteLine() further below.
+		////AssertUndisposed() is called by WriteLine() further below.
 
 			// Example (without indentation):
 			// <XmlTransferRawLine TimeStamp="2001-12-23T12:34:56.789-01:00" Device="COM1" Direction="Tx" DataAsBase64="QUJDRA==" />
@@ -441,27 +382,6 @@ namespace YAT.Log.Utilities
 			}
 		}
 
-		#region Disposal
-		//------------------------------------------------------------------------------------------
-		// Disposal
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		protected override void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
-			{
-				if (disposing)
-				{
-					// Nothing to dispose of (yet).
-				}
-			}
-
-			base.Dispose(disposing);
-		}
-
-		#endregion
-
 		/// <summary></summary>
 		public void WriteLine(DisplayLine displayLine)
 		{
@@ -472,7 +392,7 @@ namespace YAT.Log.Utilities
 
 		private void WriteLine(XmlTransferTextLine transferLine)
 		{
-			// AssertNotDisposed() is called by WriteLine() further below.
+		////AssertUndisposed() is called by WriteLine() further below.
 
 			// Example (without indentation):
 			// <XmlTransferTextLine TimeStamp="2001-12-23T12:34:56.789-01:00" Device="COM1" Direction="Tx" Text="ABCD" ErrorText="" Length="4" />

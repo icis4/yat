@@ -35,7 +35,6 @@ using System.Windows.Forms;
 
 using Microsoft.Win32.SafeHandles;
 
-using MKY.Diagnostics;
 using MKY.Windows.Forms;
 
 #endregion
@@ -45,7 +44,7 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// Encapsulates functions and properties that are common to all USB devices.
 	/// </summary>
-	public abstract class Device : IDevice, IDeviceInfo, IDisposable, IDisposableEx
+	public abstract class Device : DisposableBase, IDevice, IDeviceInfo
 	{
 		#region Static Events
 		//==========================================================================================
@@ -767,62 +766,22 @@ namespace MKY.IO.Usb
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+			this.eventHelper.DiscardAllEventsAndExceptions();
 
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			// In any case, ensure that the static event handlers get detached:
+			UnregisterAndDetachStaticDeviceEventHandlers();
+
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				DebugEventManagement.DebugWriteAllEventRemains(this);
-				this.eventHelper.DiscardAllEventsAndExceptions();
-
-				// In any case, ensure that the static event handlers get detached:
-				UnregisterAndDetachStaticDeviceEventHandlers();
-
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-				}
-
-				// Set state to disposed:
-				IsDisposed = true;
+				// Nothing else to do (yet).
 			}
-		}
-
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~Device()
-		{
-			Dispose(false);
-
-			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -848,7 +807,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.deviceInfo);
 			}
@@ -866,7 +825,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (Info.Path);
 			}
@@ -882,7 +841,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (Info.VendorId);
 			}
@@ -893,7 +852,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (Info.VendorIdString);
 			}
@@ -904,7 +863,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (Info.ProductId);
 			}
@@ -915,7 +874,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (Info.ProductIdString);
 			}
@@ -926,7 +885,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (Info.Manufacturer);
 			}
@@ -937,7 +896,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (Info.Product);
 			}
@@ -948,7 +907,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (Info.Serial);
 			}
@@ -977,7 +936,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.isConnected);
 			}
@@ -1061,7 +1020,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public override string ToString()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (Info.ToString());
 		}
@@ -1072,7 +1031,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public virtual string ToString(bool insertVidPid)
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (Info.ToString(insertVidPid));
 		}
@@ -1082,7 +1041,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public virtual string ToShortString()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (Info.ToShortString());
 		}
@@ -1092,7 +1051,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public virtual string ToLongString()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (Info.ToLongString());
 		}

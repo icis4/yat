@@ -321,7 +321,7 @@ namespace YAT.Model
 			try
 			{
 				// Outer loop, processes data after a signal has been received:
-				while (!IsDisposed && this.autoResponseThreadRunFlag) // Check 'IsDisposed' first!
+				while (IsUndisposed && this.autoResponseThreadRunFlag) // Check disposal state first!
 				{
 					try
 					{
@@ -341,9 +341,9 @@ namespace YAT.Model
 					}
 
 					// Inner loop, runs as long as there is data in the send queue.
-					// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
-					while (!IsDisposed && this.autoResponseThreadRunFlag && IsReadyToSend && (this.autoResponseQueue.Count > 0))
-					{                                                                   // No lock required, just checking for empty.
+					// Ensure not to send and forward events during closing anymore. Check disposal state first!
+					while (IsUndisposed && this.autoResponseThreadRunFlag && IsReadyToSend && (this.autoResponseQueue.Count > 0))
+					{                                                                      // No lock required, just checking for empty.
 						// Initially, yield to other threads before starting to read the queue,
 						// since it is likely that more triggers are to be enqueued.
 						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as processing shall happen as fast as possible.
@@ -501,7 +501,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.autoResponseCount);
 			}
@@ -512,7 +512,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void ResetAutoResponseCount()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			int count = Interlocked.Exchange(ref this.autoResponseCount, 0);
 			OnAutoResponseCountChanged_Promptly(new EventArgs<int>(count));
@@ -523,7 +523,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void DeactivateAutoResponse()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			SettingsRoot.AutoResponse.Deactivate();
 			ResetAutoResponseCount();

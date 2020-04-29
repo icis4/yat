@@ -68,7 +68,7 @@ namespace MKY.IO.Serial.Usb
 	/// <remarks>
 	/// This class is implemented using partial classes separating sending/receiving functionality.
 	/// </remarks>
-	public partial class SerialHidDevice : IIOProvider, IXOnXOffHandler, IDisposable, IDisposableEx
+	public partial class SerialHidDevice : DisposableBase, IIOProvider, IXOnXOffHandler
 	{
 		#region Constants
 		//==========================================================================================
@@ -180,63 +180,20 @@ namespace MKY.IO.Serial.Usb
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+			this.eventHelper.DiscardAllEventsAndExceptions();
 
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				DebugEventManagement.DebugWriteAllEventRemains(this);
-				this.eventHelper.DiscardAllEventsAndExceptions();
-
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
-					DisposeDeviceAndThreads();
-				}
-
-				// Set state to disposed:
-				this.sendThreadEvent = null;
-				this.receiveThreadEvent = null;
-				IsDisposed = true;
+				// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
+				DisposeDeviceAndThreads();
 			}
-		}
-
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~SerialHidDevice()
-		{
-			Dispose(false);
-
-			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -253,7 +210,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.settings);
 			}
@@ -264,7 +221,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.device != null)
 					return (this.device.Info);
@@ -280,7 +237,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				var di = Info;
 				if (di != null)
@@ -295,7 +252,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (!IsStarted);
 			}
@@ -306,7 +263,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.device != null);
 			}
@@ -317,7 +274,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.device != null)
 					return (this.device.IsConnected);
@@ -331,7 +288,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.device != null)
 					return (this.device.IsOpen);
@@ -354,7 +311,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.settings.FlowControlUsesXOnXOff);
 			}
@@ -367,7 +324,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (this.settings.FlowControlUsesXOnXOff)
 					return (this.iXOnXOffHelper.InputIsXOn);
@@ -383,7 +340,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (this.settings.FlowControlUsesXOnXOff)
 					return (this.iXOnXOffHelper.OutputIsXOn);
@@ -399,7 +356,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (this.settings.FlowControlUsesXOnXOff)
 					return (this.iXOnXOffHelper.SentXOnCount);
@@ -415,7 +372,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (this.settings.FlowControlUsesXOnXOff)
 					return (this.iXOnXOffHelper.SentXOffCount);
@@ -431,7 +388,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (this.settings.FlowControlUsesXOnXOff)
 					return (this.iXOnXOffHelper.ReceivedXOnCount);
@@ -447,7 +404,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (this.settings.FlowControlUsesXOnXOff)
 					return (this.iXOnXOffHelper.ReceivedXOffCount);
@@ -461,7 +418,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.device);
 			}
@@ -477,7 +434,7 @@ namespace MKY.IO.Serial.Usb
 		/// <summary></summary>
 		public virtual bool Start()
 		{
-			// AssertNotDisposed() is called by 'IsStopped' below.
+		////AssertUndisposed() is called by 'IsStopped' below.
 
 			if (IsStopped)
 				return (TryCreateAndStartDevice());
@@ -489,7 +446,7 @@ namespace MKY.IO.Serial.Usb
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "'Stop' is a common term to start/stop something.")]
 		public virtual void Stop()
 		{
-			// AssertNotDisposed() is called by 'IsStarted' below.
+		////AssertUndisposed() is called by 'IsStarted' below.
 
 			if (IsStarted)
 				DisposeDeviceAndThreads();
@@ -870,7 +827,7 @@ namespace MKY.IO.Serial.Usb
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "Usb.SerialHidDevice uses a 'ReceiveThread' to invoke this event.")]
 		private void device_DataReceived(object sender, EventArgs e)
 		{
-			if (!IsDisposed && IsOpen) // Ensure not to perform any operations during closing anymore. Check 'IsDisposed' first!
+			if (IsUndisposed && IsOpen) // Ensure not to perform any operations during closing anymore. Check disposal state first!
 			{
 				byte[] data;
 				this.device.Receive(out data);
@@ -919,7 +876,7 @@ namespace MKY.IO.Serial.Usb
 				// Immediately invoke the event, but invoke it asynchronously and NOT on this thread!
 				if (signalXOnXOff || signalXOnXOffCount)
 					OnIOControlChangedAsync(new EventArgs<DateTime>(DateTime.Now));
-			} // if (!IsDisposed && ...)
+			} // if (IsUndisposed && ...)
 		}
 
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "Usb.SerialHidDevice uses asynchronous 'Write' to invoke this event.")]
@@ -944,7 +901,7 @@ namespace MKY.IO.Serial.Usb
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOChanged(EventArgs<DateTime> e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseSync(IOChanged, this, e);
 		}
 
@@ -952,7 +909,7 @@ namespace MKY.IO.Serial.Usb
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOControlChanged(EventArgs<DateTime> e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseSync(IOControlChanged, this, e);
 		}
 
@@ -960,7 +917,7 @@ namespace MKY.IO.Serial.Usb
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOControlChangedAsync(EventArgs<DateTime> e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseAsync(IOControlChanged, this, e);
 		}
 
@@ -968,7 +925,7 @@ namespace MKY.IO.Serial.Usb
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
@@ -976,7 +933,7 @@ namespace MKY.IO.Serial.Usb
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		protected virtual void OnDataReceived(DataReceivedEventArgs e)
 		{
-			if (IsOpen) // Make sure to propagate event only if active.
+			if (IsUndisposed && IsOpen) // Make sure to propagate event only if active.
 				this.eventHelper.RaiseSync<DataReceivedEventArgs>(DataReceived, this, e);
 		}
 
@@ -984,7 +941,7 @@ namespace MKY.IO.Serial.Usb
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		protected virtual void OnDataSent(DataSentEventArgs e)
 		{
-			if (IsOpen) // Make sure to propagate event only if active.
+			if (IsUndisposed && IsOpen) // Make sure to propagate event only if active.
 				this.eventHelper.RaiseSync<DataSentEventArgs>(DataSent, this, e);
 		}
 
@@ -1000,7 +957,7 @@ namespace MKY.IO.Serial.Usb
 		/// </summary>
 		public override string ToString()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (ToDeviceInfoString());
 		}
@@ -1008,7 +965,7 @@ namespace MKY.IO.Serial.Usb
 		/// <summary></summary>
 		public virtual string ToShortString()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (ToShortDeviceInfoString());
 		}
@@ -1016,7 +973,7 @@ namespace MKY.IO.Serial.Usb
 		/// <summary></summary>
 		public virtual string ToDeviceInfoString()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value is needed for debugging! All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value is needed for debugging! All underlying fields are still valid after disposal.
 
 			var di = Info;
 			if (di != null)
@@ -1028,7 +985,7 @@ namespace MKY.IO.Serial.Usb
 		/// <summary></summary>
 		public virtual string ToShortDeviceInfoString()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			var di = Info;
 			if (di != null)

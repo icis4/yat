@@ -59,7 +59,7 @@ namespace YAT.Domain.Parser
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Parsable' is a correct English term.")]
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
-	public class Parser : IDisposable, IDisposableEx
+	public class Parser : DisposableBase
 	{
 		#region Constant Help Text
 		//==========================================================================================
@@ -223,58 +223,17 @@ namespace YAT.Domain.Parser
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			// Dispose of managed resources:
+			if (disposing)
 			{
 				DisposeAndReset();
-
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-				}
-
-				// Set state to disposed:
-				IsDisposed = true;
 			}
-		}
-
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~Parser()
-		{
-			Dispose(false);
-
-			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -289,7 +248,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		internal virtual Parser GetNestedParser(ParserState parserState)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			return (new Parser(this, parserState));
 		}
@@ -400,7 +359,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual byte[] Parse(string s, Radix defaultRadix = DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
+		////AssertUndisposed() is called by 'TryParse()' below.
 
 			byte[] result;
 			FormatException formatException = new FormatException("");
@@ -415,7 +374,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual bool TryParse(string s, out byte[] result, Radix defaultRadix = DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
+		////AssertUndisposed() is called by 'TryParse()' below.
 
 			FormatException formatException = new FormatException("");
 			return (TryParse(s, out result, ref formatException, defaultRadix));
@@ -427,7 +386,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual bool TryParse(string s, out byte[] result, out string successfullyParsed, Radix defaultRadix = DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
+		////AssertUndisposed() is called by 'TryParse()' below.
 
 			FormatException formatException = new FormatException("");
 			return (TryParse(s, out result, out successfullyParsed, ref formatException, defaultRadix));
@@ -439,7 +398,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for recursion.")]
 		public virtual bool TryParse(string s, out byte[] result, ref FormatException formatException, Radix defaultRadix = DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
+		////AssertUndisposed() is called by 'TryParse()' below.
 
 			string successfullyParsed;
 			return (TryParse(s, out result, out successfullyParsed, ref formatException, defaultRadix));
@@ -452,7 +411,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
 		public virtual bool TryParse(string s, out byte[] result, out string successfullyParsed, ref FormatException formatException, Radix defaultRadix = DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
+		////AssertUndisposed() is called by 'TryParse()' below.
 
 			Result[] typedResult;
 			if (TryParse(s, out typedResult, out successfullyParsed, ref formatException, defaultRadix))
@@ -484,7 +443,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual bool TryParse(string s, Radix defaultRadix = DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
+		////AssertUndisposed() is called by 'TryParse()' below.
 
 			Result[] result;
 			return (TryParse(s, out result, defaultRadix));
@@ -495,7 +454,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual bool TryParse(string s, out string successfullyParsed, Radix defaultRadix = DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
+		////AssertUndisposed() is called by 'TryParse()' below.
 
 			Result[] result;
 			return (TryParse(s, out result, out successfullyParsed, defaultRadix));
@@ -507,7 +466,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for recursion.")]
 		public virtual bool TryParse(string s, out string successfullyParsed, ref FormatException formatException, Radix defaultRadix = DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
+		////AssertUndisposed() is called by 'TryParse()' below.
 
 			Result[] result;
 			return (TryParse(s, out result, out successfullyParsed, ref formatException, defaultRadix));
@@ -518,7 +477,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual bool TryParse(string s, out Result[] result, Radix defaultRadix = DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
+		////AssertUndisposed() is called by 'TryParse()' below.
 
 			string successfullyParsed;
 			return (TryParse(s, out result, out successfullyParsed, defaultRadix));
@@ -530,7 +489,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual bool TryParse(string s, out Result[] result, out string successfullyParsed, Radix defaultRadix = DefaultRadixDefault)
 		{
-			// AssertNotDisposed() is called by 'TryParse()' below.
+		////AssertUndisposed() is called by 'TryParse()' below.
 
 			FormatException formatException = new FormatException("");
 			return (TryParse(s, out result, out successfullyParsed, ref formatException, defaultRadix));
@@ -543,7 +502,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for recursion.")]
 		public virtual bool TryParse(string s, out Result[] result, out string successfullyParsed, ref FormatException formatException, Radix defaultRadix = DefaultRadixDefault)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			bool doProbe = (s.Length <= 256); // Inhibit probing in order to keep speed at a decent level...
 			InitializeTopLevel(s, defaultRadix, doProbe);
@@ -631,7 +590,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		internal virtual void CommitPendingBytes()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (this.bytesWriter.Length > 0)
 			{
@@ -647,7 +606,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		internal virtual void CommitResult(Result result)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.result.Add(result);
 		}
@@ -710,7 +669,7 @@ namespace YAT.Domain.Parser
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for recursion.")]
 		internal virtual bool TryParseContiguousRadixItem(string s, Radix radix, out byte[] result, ref FormatException formatException)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			switch (radix)
 			{

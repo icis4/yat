@@ -1128,7 +1128,7 @@ namespace YAT.View.Forms
 				if (childIsReady)
 				{
 					var t = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
-					if ((t != null) && (!t.IsDisposed))
+					if ((t != null) && (!t.IsInDisposal))
 					{
 						radixIsReady = !(t.SettingsRoot.Display.SeparateTxRxRadix);
 						if (radixIsReady)
@@ -1296,7 +1296,7 @@ namespace YAT.View.Forms
 				if (childIsReady)
 				{
 					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
-					if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
+					if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 					{
 						isActive                = activeTerminal.SettingsRoot.AutoAction.IsActive;
 
@@ -1423,7 +1423,7 @@ namespace YAT.View.Forms
 			if (childIsReady)
 			{
 				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
-				if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
+				if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 				{
 					triggerUseText          = activeTerminal.SettingsRoot.AutoAction.TriggerOptions.UseText;
 					triggerCaseSensitive    = activeTerminal.SettingsRoot.AutoAction.TriggerOptions.CaseSensitive;
@@ -1465,7 +1465,7 @@ namespace YAT.View.Forms
 			if (childIsReady)
 			{
 				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
-				if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
+				if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 				{
 					var trigger = activeTerminal.SettingsRoot.AutoAction.Trigger;
 
@@ -1531,7 +1531,7 @@ namespace YAT.View.Forms
 				if (childIsReady)
 				{
 					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
-					if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
+					if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 					{
 						isActive                   = activeTerminal.SettingsRoot.AutoResponse.IsActive;
 
@@ -1689,7 +1689,7 @@ namespace YAT.View.Forms
 			if (childIsReady)
 			{
 				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
-				if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
+				if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 				{
 					triggerUseText       = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.UseText;
 					triggerCaseSensitive = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.CaseSensitive;
@@ -1731,7 +1731,7 @@ namespace YAT.View.Forms
 			if (childIsReady)
 			{
 				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
-				if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
+				if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 				{
 					var trigger = activeTerminal.SettingsRoot.AutoResponse.Trigger;
 
@@ -1785,7 +1785,7 @@ namespace YAT.View.Forms
 			if (childIsReady)
 			{
 				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
-				if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
+				if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 				{
 					triggerUseText        = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.UseText;
 					triggerEnableRegex    = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.EnableRegex;
@@ -1815,7 +1815,7 @@ namespace YAT.View.Forms
 			if (childIsReady)
 			{
 				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
-				if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
+				if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 				{
 					var trigger  = activeTerminal.SettingsRoot.AutoResponse.Trigger;
 					var response = activeTerminal.SettingsRoot.AutoResponse.Response;
@@ -1847,7 +1847,7 @@ namespace YAT.View.Forms
 			if (childIsReady)
 			{
 				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
-				if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
+				if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 					count = activeTerminal.AutoActionCount;
 			}
 
@@ -1865,7 +1865,7 @@ namespace YAT.View.Forms
 			if (childIsReady)
 			{
 				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
-				if ((activeTerminal != null) && (!activeTerminal.IsDisposed))
+				if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 					count = activeTerminal.AutoResponseCount;
 			}
 

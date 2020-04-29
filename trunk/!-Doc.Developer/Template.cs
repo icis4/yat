@@ -44,6 +44,8 @@
 using System;
 using System/*.<TODO>*/;
 
+using MKY/*.<TODO>*/;
+
 using YAT/*.<TODO>*/;
 
 #endregion
@@ -125,101 +127,6 @@ namespace YAT/*.<TODO>*/
 
 		#endregion
 
-		#region Object Lifetime
-		//==========================================================================================
-		// Object Lifetime
-		//==========================================================================================
-
-		#region Disposal
-		//------------------------------------------------------------------------------------------
-		// Disposal
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
-			{
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					if (this.toDo != null)
-						this.toDo.Dispose();
-				}
-
-				// Release of unmanaged resources:
-
-				// Set state to disposed:
-				this.toDo = null;
-				IsDisposed = true;
-			}
-		}
-
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~TODO()
-		{
-			Dispose(false);
-
-			MKY.Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
-		}
-
-		#endregion
-
-		#region Disposal
-		//------------------------------------------------------------------------------------------
-		// Disposal
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		protected override void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
-			{
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-				}
-
-				// Release unmanaged resources:
-
-			}
-
-			base.Dispose(disposing);
-		}
-
-		#endregion
-
-		#endregion
-
 		#region Properties
 		//==========================================================================================
 		// Properties
@@ -229,8 +136,6 @@ namespace YAT/*.<TODO>*/
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
-
 				return (this.todo);
 			}
 			set
@@ -318,14 +223,10 @@ namespace YAT/*.<TODO>*/
 		/// </remarks>
 		public override string ToString()
 		{
-			if (IsDisposed)
-				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
-
-			// -OR-
-
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
-
-			return ("TODO");
+			if (IsUndisposed) // AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging.
+				return (ToDo);
+			else
+				return (base.ToString());
 		}
 
 		#endregion
@@ -462,6 +363,72 @@ namespace YAT/*.<TODO>*/
 		public static bool operator !=(TODO lhs, TODO rhs)
 		{
 			return (!(lhs == rhs));
+		}
+
+		#endregion
+	}
+
+//	!!! For classes not yet deriving !!!
+	public class TODO : DisposableBase
+//	!!! When deriving from classes already implementing IDisposable, either implement the auxiliary interface by adapting or copying/pasting code from DisposableBase !!!
+//	public class TODO : IDisposableEx
+//	!!! When deriving from other classes, implement the two interfaces by copying/pasting code from DisposableBase !!!
+//	public class TODO : IDisposable, IDisposableEx
+	{
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
+
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
+		{
+			// Dispose of managed resources:
+			if (disposing)
+			{
+				if (this.toDo != null)
+				{
+					this.toDo.Dispose();
+					this.toDo = null;
+				}
+			}
+
+			// Release of unmanaged resources:
+			this.moreToDo = null;
+
+		//	!!! When deriving from a class that implements DisposableBase, otherwise remove !!!
+			base.Dispose(disposing);
+		}
+
+		#endregion
+
+		#endregion
+
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		public int TODO
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				return (this.todo);
+			}
+			set
+			{
+				this.todo = value;
+			}
 		}
 
 		#endregion

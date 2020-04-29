@@ -85,7 +85,7 @@ namespace YAT.Model
 	/// Using partial classes to ease diffing code of the separated functionality.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
-	public partial class Terminal : IGuidProvider, IDisposable, IDisposableEx
+	public partial class Terminal : DisposableBase, IGuidProvider
 	{
 		#region Constants
 		//==========================================================================================
@@ -500,88 +500,47 @@ namespace YAT.Model
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+			this.eventHelper.DiscardAllEventsAndExceptions();
 
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			DebugMessage("Disposing...");
+
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				DebugEventManagement.DebugWriteAllEventRemains(this);
-				this.eventHelper.DiscardAllEventsAndExceptions();
+				// In the 'normal' case, terminal and log have already been closed, otherwise...
 
-				DebugMessage("Disposing...");
+				// ...detach event handlers to ensure that no more events are received...
+				DetachTerminalEventHandlers();
 
-				// Dispose of managed resources if requested:
-				if (disposing)
+				// ...ensure that threads are stopped and do not raise events anymore...
+				StopAutoActionThread();
+				StopAutoResponseThread();
+
+				// ...ensure that timed objects are stopped and do not raise events anymore...
+				DisposeRates();
+				DisposeChronos();
+				DisposeAutoActionHelper();
+				DisposeAutoResponseHelper();
+
+				// ...close and dispose of terminal and log...
+				CloseAndDisposeTerminal();
+				DisposeLog();
+
+				// ...and finally dispose of the settings:
+				if (!DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification)
 				{
-					// In the 'normal' case, terminal and log have already been closed, otherwise...
-
-					// ...detach event handlers to ensure that no more events are received...
-					DetachTerminalEventHandlers();
-
-					// ...ensure that threads are stopped and do not raise events anymore...
-					StopAutoActionThread();
-					StopAutoResponseThread();
-
-					// ...ensure that timed objects are stopped and do not raise events anymore...
-					DisposeRates();
-					DisposeChronos();
-					DisposeAutoActionHelper();
-					DisposeAutoResponseHelper();
-
-					// ...close and dispose of terminal and log...
-					CloseAndDisposeTerminal();
-					DisposeLog();
-
-					// ...and finally dispose of the settings:
-					if (!DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification)
-					{
-						DetachSettingsEventHandlers();
-						DisposeSettingsHandler();
-					}
+					DetachSettingsEventHandlers();
+					DisposeSettingsHandler();
 				}
-
-				// Set state to disposed:
-				IsDisposed = true;
-
-				DebugMessage("...successfully disposed.");
 			}
-		}
 
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~Terminal()
-		{
-			Dispose(false);
-
-			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
+			DebugMessage("...successfully disposed.");
 		}
 
 		#endregion
@@ -598,7 +557,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.guid);
 			}
@@ -609,7 +568,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.sequentialId);
 			}
@@ -622,7 +581,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.sequentialName);
 			}
@@ -635,7 +594,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (!string.IsNullOrEmpty(this.fileName))
 					return (this.fileName);
@@ -651,7 +610,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (SettingsRoot != null)
 				{
@@ -671,7 +630,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (!string.IsNullOrEmpty(UserName))
 					return (UserName);
@@ -688,7 +647,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.startArgs);
 			}
@@ -699,7 +658,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (SettingsRoot != null)
 					return (SettingsRoot.IOType);
@@ -713,7 +672,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.terminal != null)
 					return (this.terminal.IsStopped);
@@ -727,7 +686,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.terminal != null)
 					return (this.terminal.IsStarted);
@@ -741,7 +700,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.terminal != null)
 					return (this.terminal.IsOpen);
@@ -755,7 +714,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.terminal != null)
 					return (this.terminal.IsConnected);
@@ -769,7 +728,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.terminal != null)
 					return (this.terminal.IsTransmissive);
@@ -783,7 +742,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.terminal != null)
 					return (this.terminal.IsReadyToSend);
@@ -797,7 +756,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.terminal != null)
 					return (this.terminal.SendingIsOngoing);
@@ -815,7 +774,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.terminal != null)
 					return (this.terminal.SendingIsBusy);
@@ -829,7 +788,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.terminal != null)
 					return (this.log.AnyIsOn);
@@ -843,7 +802,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.terminal != null)
 					return (this.log.AllAreOn);
@@ -857,7 +816,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.terminal != null)
 					return (this.log.FileExists);
@@ -871,7 +830,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.terminal.ToShortIOString());
 			}
@@ -882,7 +841,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.terminal.UnderlyingIOProvider);
 			}
@@ -893,7 +852,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.terminal.UnderlyingIOInstance);
 			}
@@ -904,7 +863,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (CaptionHelper.Compose(this.settingsHandler, this.settingsRoot, this.terminal, IndicatedName, IsStarted, IsOpen, IsConnected));
 			}
@@ -913,7 +872,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual string ComposeInvariantCaption(string info)
 		{
-			// Do not call AssertNotDisposed() in a simple get-method.
+		////AssertUndisposed() shall not be called from this simple get-property-style-method.
 
 			return (CaptionHelper.ComposeInvariant(IndicatedName, info));
 		}
@@ -923,7 +882,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (IOStatusHelper.Compose(this.settingsRoot, this.terminal, IsStarted, IsOpen, IsConnected));
 			}
@@ -937,7 +896,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (SettingsRoot != null)
 				{
@@ -960,7 +919,7 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual void SetLastSentMessage(string value)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.lastSentMessage = value;
 		}
@@ -974,7 +933,7 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual void GetLastSentMessage(out string value)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			value = this.lastSentMessage;
 		}
@@ -988,7 +947,7 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual void ClearLastSentMessage(out string cleared)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			cleared = this.lastSentMessage;
 
@@ -1002,7 +961,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.terminal.HasAvailableReceivedMessageForScripting);
 			}
@@ -1015,7 +974,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.terminal.AvailableReceivedMessageCountForScripting);
 			}
@@ -1026,7 +985,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void GetLastEnqueuedReceivedMessageForScripting(out string value)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.terminal.GetLastEnqueuedReceivedMessageForScripting(out value);
 		}
@@ -1036,7 +995,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void ClearLastEnqueuedReceivedMessageForScripting(out string cleared)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.terminal.ClearLastEnqueuedReceivedMessageForScripting(out cleared);
 		}
@@ -1049,7 +1008,7 @@ namespace YAT.Model
 		/// </exception>
 		public virtual void DequeueNextAvailableReceivedMessageForScripting(out string value)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.terminal.DequeueNextAvailableReceivedMessageForScripting(out value);
 		}
@@ -1059,7 +1018,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void GetLastDequeuedReceivedMessageForScripting(out string value)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.terminal.GetLastDequeuedReceivedMessageForScripting(out value);
 		}
@@ -1069,7 +1028,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void ClearLastDequeuedReceivedMessageForScripting(out string cleared)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.terminal.ClearLastDequeuedReceivedMessageForScripting(out cleared);
 		}
@@ -1082,7 +1041,7 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual void GetLastAvailableReceivedMessageForScripting(out string value)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.terminal.GetLastAvailableReceivedMessageForScripting(out value);
 		}
@@ -1092,7 +1051,7 @@ namespace YAT.Model
 		/// </summary>
 		public void ClearAvailableReceivedMessagesForScripting(out string[] clearedLines)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.terminal.ClearAvailableReceivedMessagesForScripting(out clearedLines);
 		}
@@ -1107,13 +1066,13 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.isAutoSocket);
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				this.isAutoSocket = value;
 			}
@@ -1134,7 +1093,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public virtual bool Start()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			// Switch log on if selected:
 			if (SettingsRoot.LogIsOn)
@@ -1199,7 +1158,7 @@ namespace YAT.Model
 		{
 			if (this.settingsHandler != null)
 			{
-				this.settingsHandler.Dispose();
+				//this.settingsHandler.Dispose();
 				this.settingsHandler = null;
 			}
 		}
@@ -1357,7 +1316,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.settingsHandler != null)
 					return (this.settingsHandler.SettingsFilePath);
@@ -1371,7 +1330,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.settingsHandler != null)
 					return (this.settingsHandler.SettingsFileExists);
@@ -1385,7 +1344,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.settingsHandler != null)
 					return (this.settingsHandler.SettingsFileIsReadOnly);
@@ -1399,7 +1358,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.settingsHandler != null)
 					return (this.settingsHandler.SettingsFileIsWritable);
@@ -1413,7 +1372,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.settingsHandler != null)
 					return (this.settingsHandler.SettingsFileSuccessfullyLoaded && !this.settingsRoot.AutoSaved);
@@ -1427,7 +1386,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.settingsHandler != null)
 					return (SettingsFileHasAlreadyBeenNormallySaved && !SettingsFileExists);
@@ -1441,8 +1400,9 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() to still allow reading the settings after the
-				// terminal has been disposed. This is required for certain test cases.
+				// Attention:
+				// AssertUndisposed() must not be called to still allow reading the settings after
+				// the terminal has been disposed. This is required for certain test cases.
 
 				return (this.settingsRoot);
 			}
@@ -1505,7 +1465,7 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual void ApplyTerminalSettings(TerminalExplicitSettings settings)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			// Attention:
 			// Similar code exists in Domain.Terminal.TryChangeSettingsOnTheFly().
@@ -1574,7 +1534,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void ApplyLogSettings(Log.Settings.LogSettings settings)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.settingsRoot.Log = settings;
 			this.log.Settings = this.settingsRoot.Log;
@@ -1594,7 +1554,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual bool Save()
 		{
-			// AssertNotDisposed() is called by 'Save(...)' below.
+		////AssertUndisposed() is called by 'Save(...)' below.
 
 			bool isCanceled;                               // Save even if not changed since explicitly requesting saving.
 			return (SaveConsiderately(false, true, true, true, false, out isCanceled));
@@ -1625,7 +1585,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool SaveConsiderately(bool isWorkspaceClose, bool autoSaveIsAllowed, bool userInteractionIsAllowed, bool saveEvenIfNotChanged, bool canBeCanceled, out bool isCanceled)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			isCanceled = false;
 
@@ -1961,7 +1921,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual bool SaveAs(string filePath)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			var absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(filePath);
 
@@ -2416,7 +2376,7 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual bool CloseConsiderately(bool isWorkspaceClose, bool doSave, bool autoSaveIsAllowed, bool autoDeleteIsRequested)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			OnFixedStatusTextRequest("Closing terminal...");
 
@@ -2846,8 +2806,8 @@ namespace YAT.Model
 
 		private void terminal_IOChanged(object sender, EventArgs<DateTime> e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			// Log:
 			if (this.log.AnyControlIsOn)
@@ -2856,12 +2816,10 @@ namespace YAT.Model
 			// Forward:
 			OnIOChanged(e);
 
-			// Attention, the 'IOChanged' event could trigger close = dispose of terminal!
-
 			bool hasBeenConnected = this.terminal_IOChanged_hasBeenConnected;
 			bool isConnectedNow = ((this.terminal != null) ? (this.terminal.IsConnected) : (false));
 
-			if (!IsDisposed)
+			if (IsUndisposed) // Attention, the 'IOChanged' event above could trigger close = disposal of terminal!
 			{
 				if      ( isConnectedNow && !hasBeenConnected)
 				{
@@ -2887,8 +2845,8 @@ namespace YAT.Model
 
 		private void terminal_IOControlChanged(object sender, Domain.IOControlEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			// Log:
 			if ((e.Texts != null) && (e.Texts.Count > 0))
@@ -2911,8 +2869,8 @@ namespace YAT.Model
 
 		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			// Log:
 			if (this.log.AnyControlIsOn)                                 // Status text is always included (so far).
@@ -2985,8 +2943,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkReceived", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawChunkSent(object sender, EventArgs<Domain.RawChunk> e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			var currentTickStamp = Stopwatch.GetTimestamp();
 			if (currentTickStamp >= this.terminal_RawChunkSent_nextTimedStatusTextRequestTickStamp)
@@ -3051,8 +3009,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RawChunkSent", Rationale = "The raw terminal synchronizes sending/receiving.")]
 		private void terminal_RawChunkReceived(object sender, EventArgs<Domain.RawChunk> e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			var currentTickStamp = Stopwatch.GetTimestamp();
 			if (currentTickStamp >= this.terminal_RawChunkReceived_nextTimedStatusTextRequestTickStamp)
@@ -3098,8 +3056,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsTxAdded(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			// AutoAction for actions that also apply to Tx (e.g. Plot Count/Rate):
 			List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> autoActionTriggers = null; // See terminal_DisplayLinesRxAdded for background.
@@ -3129,8 +3087,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsBidirAdded(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			// AutoAction highlighting:                                              // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
@@ -3157,8 +3115,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsRxAdded(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			// AutoAction:
 			List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> autoActionTriggers = null; // See terminal_DisplayLinesRxAdded for background.
@@ -3247,8 +3205,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineTxReplaced(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			OnCurrentDisplayLineTxReplaced(e);
 
@@ -3260,8 +3218,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineBidirReplaced(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			OnCurrentDisplayLineBidirReplaced(e);
 
@@ -3273,8 +3231,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineRxReplaced(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			OnCurrentDisplayLineRxReplaced(e);
 
@@ -3286,8 +3244,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineTxCleared(object sender, EventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			OnCurrentDisplayLineTxCleared(e);
 
@@ -3299,8 +3257,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineBidirCleared(object sender, EventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			OnCurrentDisplayLineBidirCleared(e);
 
@@ -3312,8 +3270,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineRxCleared(object sender, EventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			OnCurrentDisplayLineRxCleared(e);
 
@@ -3325,8 +3283,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesTxAdded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			// Count:
 			this.txLineCount += e.Lines.Count;
@@ -3362,8 +3320,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesBidirAdded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 		////// Count:
 		////this.bidirLineCount += e.Lines.Count would technically be possible, but doesn't make much sense.
@@ -3410,8 +3368,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesRxAdded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			// Count:
 			this.rxLineCount += e.Lines.Count;
@@ -3511,8 +3469,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryTxCleared(object sender, EventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			OnRepositoryTxCleared(e);
 		}
@@ -3521,8 +3479,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryBidirCleared(object sender, EventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			OnRepositoryBidirCleared(e);
 		}
@@ -3531,8 +3489,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryRxCleared(object sender, EventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			OnRepositoryRxCleared(e);
 		}
@@ -3542,8 +3500,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryTxReloaded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			OnRepositoryTxReloaded(e);
 		}
@@ -3553,8 +3511,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryBidirReloaded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			// AutoAction:                                                           // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
@@ -3583,8 +3541,8 @@ namespace YAT.Model
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryRxReloaded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			// AutoAction:                                                           // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
@@ -4334,7 +4292,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void ClearRepository(Domain.RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (!this.terminal.ClearRepository(repositoryType))
 				OnTimedStatusTextRequest("Clear request has timed out");
@@ -4345,7 +4303,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void ClearRepositories()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (!this.terminal.ClearRepositories())
 				OnTimedStatusTextRequest("Clear request has timed out");
@@ -4356,7 +4314,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void RefreshRepositories()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (!this.terminal.RefreshRepositories())
 				OnTimedStatusTextRequest("Refresh request has timed out");
@@ -4367,7 +4325,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void RefreshRepository(Domain.RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (!this.terminal.RefreshRepository(repositoryType))
 				OnTimedStatusTextRequest("Refresh request has timed out");
@@ -4378,7 +4336,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual Domain.DisplayElementCollection RepositoryToDisplayElements(Domain.RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			return (this.terminal.RepositoryToDisplayElements(repositoryType));
 		}
@@ -4388,7 +4346,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual Domain.DisplayLineCollection RepositoryToDisplayLines(Domain.RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			return (this.terminal.RepositoryToDisplayLines(repositoryType));
 		}
@@ -4398,7 +4356,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual Domain.DisplayLine LastDisplayLineAuxiliary(Domain.RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			return (this.terminal.LastDisplayLineAuxiliary(repositoryType));
 		}
@@ -4408,7 +4366,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void ClearLastDisplayLineAuxiliary(Domain.RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.terminal.ClearLastDisplayLineAuxiliary(repositoryType);
 		}
@@ -4418,7 +4376,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual string RepositoryToExtendedDiagnosticsString(Domain.RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			return (this.terminal.RepositoryToExtendedDiagnosticsString(repositoryType));
 		}
@@ -4435,7 +4393,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual string Format(byte[] data, Domain.IODirection direction)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 			return (this.terminal.Format(data, direction));
 		}
 
@@ -4444,7 +4402,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual string Format(byte[] data, Domain.IODirection direction, Domain.Radix radix)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 			return (this.terminal.Format(data, direction, radix));
 		}
 
@@ -4488,7 +4446,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.activeConnectChrono.TimeSpan);
 			}
@@ -4499,7 +4457,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.totalConnectChrono.TimeSpan);
 			}
@@ -4510,7 +4468,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual void GetConnectTime(out TimeSpan activeConnectTime, out TimeSpan totalConnectTime)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			activeConnectTime = this.activeConnectChrono.TimeSpan;
 			totalConnectTime  = this.totalConnectChrono.TimeSpan;
@@ -4519,7 +4477,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual void ResetConnectTime()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			var now = DateTime.Now; // Ensure that all use exactly the same instant.
 
@@ -4553,7 +4511,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
 					return (this.txByteCount);
@@ -4569,7 +4527,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
 					return (this.rxByteCount);
@@ -4584,7 +4542,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
 					return (this.txLineCount);
@@ -4599,7 +4557,7 @@ namespace YAT.Model
 	////{
 	////	get
 	////	{
-	////		AssertNotDisposed();
+	////		AssertUndisposed();
 	////
 	////		lock (this.countsRatesSyncObj)
 	////			return (this.bidirLineCount) would technically be possible, but doesn't make much sense.
@@ -4614,7 +4572,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
 					return (this.rxLineCount);
@@ -4632,7 +4590,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
 					return (this.txByteRate.RateValue * RateIntervalsPerSecond);
@@ -4650,7 +4608,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
 					return (this.rxByteRate.RateValue * RateIntervalsPerSecond);
@@ -4667,7 +4625,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
 					return (this.txLineRate.RateValue * RateIntervalsPerSecond);
@@ -4684,7 +4642,7 @@ namespace YAT.Model
 	////{
 	////	get
 	////	{
-	////		AssertNotDisposed();
+	////		AssertUndisposed();
 	////
 	////		lock (this.countsRatesSyncObj)
 	////			return (this.bidirLineRate.RateValue * RateIntervalsPerSecond) would technically be possible, but doesn't make much sense.
@@ -4701,7 +4659,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
 					return (this.rxLineRate.RateValue * RateIntervalsPerSecond);
@@ -4716,7 +4674,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				BytesLinesTuple counts, rates;
 
@@ -4735,7 +4693,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual void ResetIOCountAndRate()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 		////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
 			{
@@ -4762,8 +4720,8 @@ namespace YAT.Model
 		private void CreateRates()
 		{
 			const int rateInterval   = (1000 / RateIntervalsPerSecond); // Resulting in 250 ms intervals.
-			const int rateWindow     =  2000; // Window must not be smaller than 1125 ms as that results in drops to 0 during sending of files.
-			const int updateInterval =   250;
+			const int rateWindow     =  2000; // Note that rate may drop to 0 during sending of files or even "jump" to high values at the end.
+			const int updateInterval =   250; // FR #375 "migrate Byte/Line Count/Rate from model to domain" will fix this.
 
 		////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
 			{
@@ -4826,8 +4784,8 @@ namespace YAT.Model
 
 		private void rate_Changed(object sender, RateEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
 
 			OnIORateChanged_Promptly(e);
 			OnIORateChanged_Decimated(e);
@@ -4847,7 +4805,7 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual int GetRepositoryByteCount(Domain.RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			return (this.terminal.GetRepositoryByteCount(repositoryType));
 		}
@@ -4857,7 +4815,7 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual int GetRepositoryLineCount(Domain.RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			return (this.terminal.GetRepositoryLineCount(repositoryType));
 		}
@@ -4876,7 +4834,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.terminal.SerialPortControlPins);
 			}
@@ -4889,7 +4847,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.terminal.SerialPortControlPinCount);
 			}
@@ -4900,7 +4858,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.terminal.SentXOnCount);
 			}
@@ -4911,7 +4869,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.terminal.SentXOffCount);
 			}
@@ -4922,7 +4880,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 			#if !(WITH_SCRIPTING)
 				return (this.terminal.ReceivedXOnCount);
@@ -4938,7 +4896,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 			#if !(WITH_SCRIPTING)
 				return (this.terminal.ReceivedXOffCount);
@@ -4986,7 +4944,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual void ResetFlowControlCount()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 		#if !(WITH_SCRIPTING)
 			this.terminal.ResetFlowControlCount();
@@ -5006,7 +4964,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.terminal.InputBreakCount);
 			}
@@ -5017,7 +4975,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.terminal.OutputBreakCount);
 			}
@@ -5026,7 +4984,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual void ResetBreakCount()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.terminal.ResetBreakCount();
 		}
@@ -5047,7 +5005,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "'RTS' is a common term for serial ports.")]
 		public virtual bool RequestToggleRts()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			MKY.IO.Serial.SerialPort.SerialControlPinState pinState;
 			bool isSuccess = this.terminal.RequestToggleRts(out pinState);
@@ -5073,7 +5031,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "'DTR' is a common term for serial ports.")]
 		public virtual bool RequestToggleDtr()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			MKY.IO.Serial.SerialPort.SerialControlPinState pinState;
 			bool isSuccess = this.terminal.RequestToggleDtr(out pinState);
@@ -5098,7 +5056,7 @@ namespace YAT.Model
 		/// </returns>
 		public virtual bool RequestToggleInputXOnXOff()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			return (this.terminal.RequestToggleInputXOnXOff());
 		}
@@ -5111,7 +5069,7 @@ namespace YAT.Model
 		/// </returns>
 		public virtual bool RequestToggleOutputBreak()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			return (this.terminal.RequestToggleOutputBreak());
 		}
@@ -5777,10 +5735,10 @@ namespace YAT.Model
 		/// </summary>
 		public override string ToString()
 		{
-			if (IsDisposed)
-				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
-
-			return (Caption);
+			if (IsUndisposed) // AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging.
+				return (Caption);
+			else
+				return (base.ToString());
 		}
 
 		#endregion

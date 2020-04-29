@@ -54,7 +54,7 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		public virtual bool Send(byte[] data)
 		{
-			// AssertNotDisposed() is called by 'IsStarted' below.
+		////AssertUndisposed() is called by 'IsStarted' below.
 
 			if (IsTransmissive)
 			{
@@ -65,7 +65,7 @@ namespace MKY.IO.Serial.Socket
 					// Wait until there is space in the send queue:
 					while (this.sendQueue.Count >= SendQueueFixedCapacity) // No lock required, just checking for full.
 					{
-						if (IsDisposed || !IsTransmissive) // Check 'IsDisposed' first!
+						if (IsInDisposal || !IsTransmissive) // Check disposal state first!
 							return (false);
 
 						// Actively yield to other threads to allow dequeuing:
@@ -121,7 +121,7 @@ namespace MKY.IO.Serial.Socket
 			try
 			{
 				// Outer loop, processes data after a signal has been received:
-				while (!IsDisposed && this.sendThreadRunFlag) // Check 'IsDisposed' first!
+				while (IsUndisposed && this.sendThreadRunFlag) // Check disposal state first!
 				{
 					try
 					{
@@ -141,9 +141,9 @@ namespace MKY.IO.Serial.Socket
 					}
 
 					// Inner loop, runs as long as there is data in the send queue.
-					// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
-					while (!IsDisposed && this.sendThreadRunFlag && IsTransmissive && (this.sendQueue.Count > 0))
-					{                                                              // No lock required, just checking for empty.
+					// Ensure not to send and forward events during closing anymore. Check disposal state first!
+					while (IsUndisposed && this.sendThreadRunFlag && IsTransmissive && (this.sendQueue.Count > 0))
+					{                                                               // No lock required, just checking for empty.
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.

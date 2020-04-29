@@ -100,23 +100,23 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 	/// Currently, neither device/driver loses any data. However, measurements of
 	/// 'TestContinuousReceivingOfSIR' (now 'PerformContinuousReceivingOfECHO')
 	/// on 2008-06-15..18 resulted in the following figures:
-	/// 
+	///
 	/// Laptop @ Home (WinXP) with MCT U232:
 	/// - 2008-06-15 @ 1613 :  ~20 missing chars out of   ~600'000 chars total
 	/// - 2008-06-15 @ 1649 :  ~10 missing chars out of   ~360'000 chars total
 	/// - 2008-06-15 @ 1813 :  ~10 missing chars out of   ~360'000 chars total
 	/// - 2008-06-16 @ 1032 : ~130 missing chars out of ~9'000'000 chars total
 	/// - 2008-06-16 @ 2245 :   ~6 missing chars out of   ~360'000 chars total
-	/// 
+	///
 	/// Desktop @ Work (WinXP) with Prolific PL-2303:
 	/// - 2008-06-18 @ 1111 :    0 missing chars out of   ~360'000 chars total :-)
-	/// 
+	///
 	/// => MCT reproducibly lost 1 char/byte per approx. 70'000 chars/bytes !!!
-	/// 
+	///
 	/// Saying hello to StyleCop ;-.
 	/// </remarks>
 	[TestFixture, Explicit("This test fixture assesses the reliability of serial port drivers. It does not perform any tests. It is only useful for measurments and analysis.")]
-	public class ReliabilityAnalysis : IDisposable, IDisposableEx
+	public class ReliabilityAnalysis : DisposableBase
 	{
 		#region Constants
 		//==========================================================================================
@@ -161,71 +161,35 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				// Dispose of managed resources:
-				if (disposing)
-				{
-					if (this.port != null)
-						this.port.Dispose();
-
-					if (this.file != null)
-						this.file.Dispose();
-
-					if (this.receivedDataLock != null)
-						this.receivedDataLock.Dispose();
-
-					if (this.receivedErrorLock != null)
-						this.receivedErrorLock.Dispose();
+				if (this.port != null) {
+					this.port.Dispose();
+					this.port = null;
 				}
 
-				// Set state to disposed:
-				this.port = null;
-				this.file = null;
-				this.receivedDataLock = null;
-				this.receivedErrorLock = null;
-				IsDisposed = true;
+				if (this.file != null) {
+					this.file.Dispose();
+					this.file = null;
+				}
+
+				if (this.receivedDataLock != null) {
+					this.receivedDataLock.Dispose();
+					this.receivedDataLock = null;
+				}
+
+				if (this.receivedErrorLock != null) {
+					this.receivedErrorLock.Dispose();
+					this.receivedErrorLock = null;
+				}
 			}
-		}
-
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		/// 
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		/// 
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~ReliabilityAnalysis()
-		{
-			Dispose(false);
-
-			MKY.Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion

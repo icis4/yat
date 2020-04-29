@@ -42,7 +42,7 @@ namespace YAT.Log.Utilities
 	/// <summary>
 	/// Utility class providing text writer functionality for YAT.
 	/// </summary>
-	public class TextWriter : IDisposable, IDisposableEx
+	public class TextWriter : DisposableBase
 	{
 		private StreamWriter writer;
 		private object writerSyncObj = new object();
@@ -58,59 +58,20 @@ namespace YAT.Log.Utilities
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				// Dispose of managed resources:
-				if (disposing)
-				{
-					if (this.writer != null)
-						this.writer.Dispose();
+				if (this.writer != null) {
+					this.writer.Dispose();
+					this.writer = null;
 				}
-
-				// Set state to disposed:
-				this.writer = null;
-				IsDisposed = true;
 			}
-		}
-
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~TextWriter()
-		{
-			Dispose(false);
-
-			MKY.Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -121,7 +82,7 @@ namespace YAT.Log.Utilities
 		/// </summary>
 		public void Flush()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (writerSyncObj)
 				this.writer.Flush(); // Note that the operating system may delay flushing.
@@ -132,7 +93,7 @@ namespace YAT.Log.Utilities
 		/// </summary>
 		public void Close()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (writerSyncObj)
 				this.writer.Close();
@@ -141,7 +102,7 @@ namespace YAT.Log.Utilities
 		/// <summary></summary>
 		public virtual void WriteLine(DisplayLine line)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (writerSyncObj)
 			{

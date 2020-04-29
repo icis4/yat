@@ -67,9 +67,17 @@ namespace YAT.Log
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			CloseAndDisposeWriterNotSynchronized();
+			// Dispose of managed resources:
+			if (disposing)
+			{
+				CloseAndDisposeWriterNotSynchronized();
+			}
 
 			base.Dispose(disposing);
 		}
@@ -79,7 +87,7 @@ namespace YAT.Log
 		/// <summary></summary>
 		public virtual void ApplySettings(bool enabled, bool isOn, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (IsEnabled && IsOn && (this.encoding != encoding))
 				Close();
@@ -107,7 +115,7 @@ namespace YAT.Log
 		/// <summary></summary>
 		protected override void OpenWriter(FileStream stream)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (this.writerSyncObj)
 			{
@@ -132,7 +140,7 @@ namespace YAT.Log
 		/// <summary></summary>
 		protected override void FlushWriter()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (this.writerSyncObj)
 			{
@@ -161,7 +169,7 @@ namespace YAT.Log
 		/// <summary></summary>
 		protected override void CloseWriter()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (this.writerSyncObj) // Needed to allow calling CloseAndDisposeWriterNotSynchronized() from Dispose().
 			{
@@ -178,7 +186,7 @@ namespace YAT.Log
 				{
 					if (this.xmlWriter != null)
 					{
-						if (!this.xmlWriter.IsDisposed)
+						if (!this.xmlWriter.IsInDisposal)
 						{
 							this.xmlWriter.Close();
 							this.xmlWriter.Dispose();
@@ -195,10 +203,10 @@ namespace YAT.Log
 				{
 					if (this.binaryWriter != null)
 					{
-					////this.binaryWriter.IsDisposed not available.
+					////this.binaryWriter.IsInDisposal is not available.
 
 						this.binaryWriter.Close();
-					////this.binaryWriter.Dispose() not available.
+					////this.binaryWriter.Dispose() is not available.
 
 						this.binaryWriter = null;
 					}
@@ -214,7 +222,7 @@ namespace YAT.Log
 		/// </remarks>
 		public virtual void Write(Domain.RawChunk chunk)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (IsEnabled && IsOn)
 			{

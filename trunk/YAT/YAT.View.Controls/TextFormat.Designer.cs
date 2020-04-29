@@ -14,23 +14,20 @@
 		protected override void Dispose(bool disposing)
 		{
 			// Modified version of the designer generated Dispose() method:
-			if (!IsDisposed)
+
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					if (this.font != null)
-						this.font.Dispose();
+				if (this.font != null) {
+					this.font.Dispose();
+					this.font = null;
 				}
+			}
 
-				// Dispose designer generated managed resources if requested:
-				if (disposing && (components != null))
-				{
-					components.Dispose();
-				}
-
-				// Set state to disposed:
-				this.font = null;
+			// Dispose of designer generated managed resources:
+			if (disposing && (components != null))
+			{
+				components.Dispose();
 			}
 
 			base.Dispose(disposing);

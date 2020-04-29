@@ -54,7 +54,7 @@ namespace MKY.IO.Serial.Usb
 		/// </remarks>
 		protected virtual bool Send(byte data)
 		{
-			// AssertNotDisposed() is called by 'Send()' below.
+		////AssertUndisposed() is called by 'Send()' below.
 
 			return (Send(new byte[] { data }));
 		}
@@ -66,7 +66,7 @@ namespace MKY.IO.Serial.Usb
 		/// </remarks>
 		public virtual bool Send(byte[] data)
 		{
-			// AssertNotDisposed() is called by 'IsStarted' below.
+		////AssertUndisposed() is called by 'IsStarted' below.
 
 			if (IsTransmissive)
 			{
@@ -77,7 +77,7 @@ namespace MKY.IO.Serial.Usb
 					// Wait until there is space in the send queue:
 					while (this.sendQueue.Count >= SendQueueFixedCapacity) // No lock required, just checking for full.
 					{
-						if (IsDisposed || !IsTransmissive) // Check 'IsDisposed' first!
+						if (IsInDisposal || !IsTransmissive) // Check disposal state first!
 							return (false);
 
 						// Actively yield to other threads to allow dequeuing:
@@ -123,7 +123,7 @@ namespace MKY.IO.Serial.Usb
 		/// </summary>
 		public virtual void SignalInputXOn()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			Send(XOnXOff.XOnByte);
 		}
@@ -133,7 +133,7 @@ namespace MKY.IO.Serial.Usb
 		/// </summary>
 		public virtual void SignalInputXOff()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			Send(XOnXOff.XOffByte);
 		}
@@ -143,13 +143,15 @@ namespace MKY.IO.Serial.Usb
 		/// </summary>
 		public virtual void ToggleInputXOnXOff()
 		{
-			// AssertNotDisposed() and FlowControlUsesXOnXOff { get; } are called by the
-			// 'InputIsXOn' property.
+			AssertUndisposed();
 
-			if (InputIsXOn)
-				SignalInputXOff();
-			else
-				SignalInputXOn();
+			if (this.settings.FlowControlUsesXOnXOff) // XOn/XOff information is not available if not in use!
+			{
+				if (InputIsXOn)
+					SignalInputXOff();
+				else
+					SignalInputXOn();
+			}
 		}
 
 		/// <summary>
@@ -157,7 +159,7 @@ namespace MKY.IO.Serial.Usb
 		/// </summary>
 		public virtual void ResetXOnXOffCount()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.iXOnXOffHelper.ResetCounts();
 
@@ -193,7 +195,7 @@ namespace MKY.IO.Serial.Usb
 			try
 			{
 				// Outer loop, processes data after a signal has been received:
-				while (!IsDisposed && this.sendThreadRunFlag) // Check 'IsDisposed' first!
+				while (IsUndisposed && this.sendThreadRunFlag) // Check disposal state first!
 				{
 					try
 					{
@@ -213,9 +215,9 @@ namespace MKY.IO.Serial.Usb
 					}
 
 					// Inner loop, runs as long as there is data in the send queue.
-					// Ensure not to send and forward events during closing anymore. Check 'IsDisposed' first!
-					while (!IsDisposed && this.sendThreadRunFlag && IsTransmissive && (this.sendQueue.Count > 0))
-					{                                                              // No lock required, just checking for empty.
+					// Ensure not to send and forward events during closing anymore. Check disposal state first!
+					while (IsUndisposed && this.sendThreadRunFlag && IsTransmissive && (this.sendQueue.Count > 0))
+					{                                                               // No lock required, just checking for empty.
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.

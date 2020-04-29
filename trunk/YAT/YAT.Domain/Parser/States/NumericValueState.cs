@@ -72,20 +72,19 @@ namespace YAT.Domain.Parser
 		// Disposal
 		//--------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			if (!IsDisposed)
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					if (this.valueWriter != null)
-						this.valueWriter.Dispose();
+				if (this.valueWriter != null) {
+					this.valueWriter.Dispose();
+					this.valueWriter = null;
 				}
-
-				// Set state to disposed:
-				this.valueWriter = null;
 			}
 
 			base.Dispose(disposing);
@@ -96,7 +95,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public override bool TryParse(Parser parser, int parseChar, ref FormatException formatException)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			switch (parser.Radix)
 			{

@@ -2,7 +2,7 @@
 
 namespace YAT.View.Forms
 {
-	partial class Terminal : IDisposableEx // Implemented based on Control.IsDisposed :-)
+	partial class Terminal
 	{
 		/// <summary>
 		/// Required designer variable.

@@ -45,7 +45,7 @@ namespace YAT.View.Utilities
 	/// <summary>
 	/// Utility class providing RTF printer functionality for YAT.
 	/// </summary>
-	public class RtfPrinter : IDisposable, IDisposableEx
+	public class RtfPrinter : DisposableBase
 	{
 		private Color foreColorBrushColor;
 		private Brush foreColorBrush;
@@ -70,66 +70,30 @@ namespace YAT.View.Utilities
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					if (this.foreColorBrush != null)
-						this.foreColorBrush.Dispose();
-
-					if (this.richTextProvider != null)
-						this.richTextProvider.Dispose();
-
-					if (this.reader != null)
-						this.reader.Dispose();
+				if (this.foreColorBrush != null) {
+					this.foreColorBrush.Dispose();
+					this.foreColorBrush = null;
 				}
 
-				// Set state to disposed:
-				this.richTextProvider = null;
-				this.reader = null;
-				IsDisposed = true;
+				if (this.richTextProvider != null) {
+					this.richTextProvider.Dispose();
+					this.richTextProvider = null;
+				}
+
+				if (this.reader != null) {
+					this.reader.Dispose();
+					this.reader = null;
+				}
 			}
-		}
-
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~RtfPrinter()
-		{
-			Dispose(false);
-
-			MKY.Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion

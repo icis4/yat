@@ -216,11 +216,10 @@ namespace YAT.View.Test
 				@"-ke"    // KeepOpenOnError
 			};
 
-			using (var m = new Application.Main(args))
-			{
-				var result = m.Run(false, true, ApplicationSettingsFileAccess.None, false); // <= see YAT.Application.Test.TestFixtureSetUp() for background why without welcome screen.
-				Assert.That(result, Is.EqualTo(Application.MainResult.Success));
-			}
+			var main = new Application.Main(args);
+			var result = main.Run(false, true, ApplicationSettingsFileAccess.None, false); // <= see YAT.Application.Test.TestFixtureSetUp() for background why without welcome screen.
+
+			Assert.That(result, Is.EqualTo(Application.MainResult.Success));
 		}
 
 		#endregion

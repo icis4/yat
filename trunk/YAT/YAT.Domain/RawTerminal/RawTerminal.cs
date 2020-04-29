@@ -51,7 +51,7 @@ namespace YAT.Domain
 	/// Defines a buffered serial interface. The buffers contain raw byte content,
 	/// no formatting is done.
 	/// </summary>
-	public class RawTerminal : IDisposable, IDisposableEx
+	public class RawTerminal : DisposableBase
 	{
 		#region Static Fields
 		//==========================================================================================
@@ -220,73 +220,32 @@ namespace YAT.Domain
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+			this.eventHelper.DiscardAllEventsAndExceptions();
 
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			DebugMessage("Disposing...");
+
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				DebugEventManagement.DebugWriteAllEventRemains(this);
-				this.eventHelper.DiscardAllEventsAndExceptions();
-
-				DebugMessage("Disposing...");
-
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					// In the 'normal' case, I/O will already have been stopped in Stop()...
-					if (this.io != null)
-						this.io.Stop();
-
-					// ...and objects will already have been detached and disposed of in Close():
-					DetachAndDisposeIO();
-					DetachIOSettings();
-					DetachBufferSettings();
-					DisposeRepositories();
+				// In the 'normal' case, I/O will already have been stopped in Stop()...
+				if (this.io != null) {
+					this.io.Stop();
 				}
 
-				// Set state to disposed:
-				this.io = null;
-				IsDisposed = true;
-
-				DebugMessage("...successfully disposed.");
+				// ...and objects will already have been detached and disposed of in Close():
+				DetachAndDisposeIO();
+				DetachIOSettings();
+				DetachBufferSettings();
+				DisposeRepositories();
 			}
-		}
 
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~RawTerminal()
-		{
-			Dispose(false);
-
-			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
+			DebugMessage("...successfully disposed.");
 		}
 
 		#endregion
@@ -303,13 +262,13 @@ namespace YAT.Domain
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.bufferSettings);
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				AttachBufferSettings(value);
 				ApplyBufferSettings();
@@ -321,13 +280,13 @@ namespace YAT.Domain
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.ioSettings);
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				AttachIOSettings(value);
 				ApplyIOSettings();
@@ -339,7 +298,7 @@ namespace YAT.Domain
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.io != null)
 					return (this.io.IsStopped);
@@ -353,7 +312,7 @@ namespace YAT.Domain
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.io != null)
 					return (this.io.IsStarted);
@@ -367,7 +326,7 @@ namespace YAT.Domain
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.io != null)
 					return (this.io.IsOpen);
@@ -381,7 +340,7 @@ namespace YAT.Domain
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.io != null)
 					return (this.io.IsConnected);
@@ -395,7 +354,7 @@ namespace YAT.Domain
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.io != null)
 					return (this.io.IsTransmissive);
@@ -409,7 +368,7 @@ namespace YAT.Domain
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.io);
 			}
@@ -420,7 +379,7 @@ namespace YAT.Domain
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.io.UnderlyingIOInstance);
 			}
@@ -440,7 +399,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual bool Start()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			return (this.io.Start());
 		}
@@ -449,7 +408,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "'Stop' is a common term to start/stop something.")]
 		public virtual void Stop()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.io.Stop();
 		}
@@ -457,7 +416,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual void Close()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			DetachAndDisposeIO();
 			DetachIOSettings();
@@ -472,7 +431,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual void Send(byte[] data)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (IsTransmissive)
 			{
@@ -506,7 +465,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual List<RawChunk> RepositoryToChunks(RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			List<RawChunk> l = null;
 			lock (this.repositorySyncObj)
@@ -527,7 +486,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual void ClearRepository(RepositoryType repositoryType)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (this.repositorySyncObj)
 			{
@@ -548,7 +507,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual void ClearRepositories()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (this.repositorySyncObj) // Lock throughout whole transaction, but not for raising the event!
 			{
@@ -565,7 +524,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string RepositoryToExtendedDiagnosticsString(RepositoryType repositoryType, string indent)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (this.repositorySyncObj)
 			{
@@ -730,30 +689,26 @@ namespace YAT.Domain
 
 		private void io_IOChanged(object sender, EventArgs<DateTime> e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
-			OnIOChanged(e);
+			if (IsUndisposed) // Ensure to not handle event during closing anymore.
+				OnIOChanged(e);
 		}
 
 		private void io_IOControlChanged(object sender, EventArgs<DateTime> e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
-			OnIOControlChanged(e);
+			if (IsUndisposed) // Ensure to not handle event during closing anymore.
+				OnIOControlChanged(e);
 		}
 
 		private void io_IOError(object sender, MKY.IO.Serial.IOErrorEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
-			var spe = (e as MKY.IO.Serial.SerialPortErrorEventArgs);
-			if (spe == null)
-				OnIOError(new IOErrorEventArgs((IOErrorSeverity)e.Severity, (IODirection)e.Direction, e.Message, e.TimeStamp));
-			else
-				OnIOError(new SerialPortErrorEventArgs((IOErrorSeverity)spe.Severity, (IODirection)spe.Direction, spe.Message, spe.SerialPortError, spe.TimeStamp));
+			if (IsUndisposed) // Ensure to not handle event during closing anymore.
+			{
+				var spe = (e as MKY.IO.Serial.SerialPortErrorEventArgs);
+				if (spe == null)
+					OnIOError(new IOErrorEventArgs((IOErrorSeverity)e.Severity, (IODirection)e.Direction, e.Message, e.TimeStamp));
+				else
+					OnIOError(new SerialPortErrorEventArgs((IOErrorSeverity)spe.Severity, (IODirection)spe.Direction, spe.Message, spe.SerialPortError, spe.TimeStamp));
+			}
 		}
 
 		/// <remarks>
@@ -766,7 +721,7 @@ namespace YAT.Domain
 			// do not simply lock() the 'ioDataSyncObj'. Instead, try to get the lock periodically,
 			// but quit = discard the event as soon as the object got disposed of:
 
-			while (!IsDisposed) // Ensure not to handle events during closing anymore.
+			while (IsUndisposed) // Ensure to not handle event during closing anymore.
 			{
 				if (Monitor.TryEnter(this.ioDataSyncObj, staticRandom.Next(50, 200)))
 				{
@@ -791,7 +746,7 @@ namespace YAT.Domain
 				{
 					DebugMessage("io_DataReceived() monitor has timed out!");
 				}
-			} // while (!IsDisposed)
+			} // while (IsUndisposed)
 		}
 
 		/// <remarks>
@@ -804,7 +759,7 @@ namespace YAT.Domain
 			// do not simply lock() the 'ioDataSyncObj'. Instead, try to get the lock periodically,
 			// but quit = discard the event as soon as the object got disposed of:
 
-			while (!IsDisposed) // Ensure not to handle events during closing anymore.
+			while (IsUndisposed) // Ensure to not handle event during closing anymore.
 			{
 				if (Monitor.TryEnter(this.ioDataSyncObj, staticRandom.Next(50, 200)))
 				{
@@ -829,7 +784,7 @@ namespace YAT.Domain
 				{
 					DebugMessage("io_DataSent() monitor has timed out!");
 				}
-			} // while (!IsDisposed)
+			} // while (IsUndisposed)
 		}
 
 		#endregion
@@ -842,42 +797,42 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs<DateTime> e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs<DateTime> e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseSync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnChunkSent(EventArgs<RawChunk> e)
 		{
-			if (IsOpen) // Make sure to propagate event only if active.
+			if (IsUndisposed && IsOpen) // Make sure to propagate event only if active.
 				this.eventHelper.RaiseSync<EventArgs<RawChunk>>(ChunkSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnChunkReceived(EventArgs<RawChunk> e)
 		{
-			if (IsOpen) // Make sure to propagate event only if active.
+			if (IsUndisposed && IsOpen) // Make sure to propagate event only if active.
 				this.eventHelper.RaiseSync<EventArgs<RawChunk>>(ChunkReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(EventArgs<RepositoryType> e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseSync<EventArgs<RepositoryType>>(RepositoryCleared, this, e);
 		}
 
@@ -893,7 +848,7 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			// See below why AssertNotDisposed() is not called on such basic method!
+		////AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging.
 
 			return (ToExtendedDiagnosticsString()); // No 'real' ToString() method required yet.
 		}
@@ -907,24 +862,26 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual string ToExtendedDiagnosticsString(string indent = "")
 		{
-			if (IsDisposed)
-				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method!
-
-			var sb = new StringBuilder();
-			lock (this.repositorySyncObj)
+			if (IsUndisposed) // AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging.
 			{
-				sb.AppendLine(indent + "> TxRepository: ");
-				sb.Append(this.txRepository.ToExtendedDiagnosticsString(indent + "   "));    // Repository will add 'NewLine'.
+				var sb = new StringBuilder();
+				lock (this.repositorySyncObj)
+				{
+					sb.AppendLine(indent + "> TxRepository: ");
+					sb.Append(this.txRepository.ToExtendedDiagnosticsString(indent + "   "));    // Repository will add 'NewLine'.
 
-				sb.AppendLine(indent + "> BidirRepository: ");
-				sb.Append(this.bidirRepository.ToExtendedDiagnosticsString(indent + "   ")); // Repository will add 'NewLine'.
+					sb.AppendLine(indent + "> BidirRepository: ");
+					sb.Append(this.bidirRepository.ToExtendedDiagnosticsString(indent + "   ")); // Repository will add 'NewLine'.
 
-				sb.AppendLine(indent + "> RxRepository: ");
-				sb.Append(this.rxRepository.ToExtendedDiagnosticsString(indent + "   "));    // Repository will add 'NewLine'.
+					sb.AppendLine(indent + "> RxRepository: ");
+					sb.Append(this.rxRepository.ToExtendedDiagnosticsString(indent + "   "));    // Repository will add 'NewLine'.
 
-				sb.Append(indent + "> I/O: " + this.io.ToString());
+					sb.Append(indent + "> I/O: " + this.io.ToString());
+				}
+				return (sb.ToString());
 			}
-			return (sb.ToString());
+
+			return (base.ToString());
 		}
 
 		/// <summary>
@@ -935,15 +892,15 @@ namespace YAT.Domain
 		/// </remarks>
 		public virtual string ToShortIOString()
 		{
-			if (IsDisposed)
-				return (typeof(IIOProvider).ToString()); // Do not call AssertNotDisposed() on such basic method!
+			if (IsUndisposed) // AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging.
+			{
+				if      (this.io != null)
+					return (this.io.ToString());
+				else if (this.ioSettings != null)
+					return (this.ioSettings.ToShortIOString());
+			}
 
-			if      (this.io != null)
-				return (this.io.ToString());
-			else if (this.ioSettings != null)
-				return (this.ioSettings.ToShortIOString());
-			else
-				return (typeof(IIOProvider).ToString());
+			return (base.ToString());
 		}
 
 		#endregion

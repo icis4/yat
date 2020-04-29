@@ -30,7 +30,7 @@ namespace MKY
 	public interface IDisposableEx
 	{
 		/// <summary></summary>
-		bool IsDisposed { get; }
+		bool IsUndisposed { get; }
 	}
 }
 

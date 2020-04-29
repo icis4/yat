@@ -81,7 +81,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendCommand(Command command)
 		{
-			// AssertNotDisposed() is called by 'Send...' below.
+		////AssertUndisposed() is called by 'Send...' below.
 
 			lock (SendSyncObj)
 			{
@@ -108,7 +108,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendRaw(byte[] data)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (SendSyncObj)
 			{
@@ -191,7 +191,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendText()
 		{
-			// AssertNotDisposed() is called by 'Send...' below.
+		////AssertUndisposed() is called by 'Send...' below.
 
 			lock (SendSyncObj)
 			{
@@ -208,7 +208,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendTextWithoutEol()
 		{
-			// AssertNotDisposed() is called by 'Send...' below.
+		////AssertUndisposed() is called by 'Send...' below.
 
 			lock (SendSyncObj)
 			{
@@ -225,7 +225,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendPartialTextEol()
 		{
-			// AssertNotDisposed() is called by 'Send...' below.
+		////AssertUndisposed() is called by 'Send...' below.
 
 			lock (SendSyncObj)
 			{
@@ -239,7 +239,7 @@ namespace YAT.Model
 		/// <param name="text">Text to be sent.</param>
 		public virtual void SendText(string text)
 		{
-			// AssertNotDisposed() is called by 'Send...' below.
+		////AssertUndisposed() is called by 'Send...' below.
 
 			lock (SendSyncObj)
 			{
@@ -253,7 +253,7 @@ namespace YAT.Model
 		/// <param name="command">Text command to be sent.</param>
 		public virtual void SendText(Command command)
 		{
-			// AssertNotDisposed() is called by 'DoSend...' below.
+		////AssertUndisposed() is called by 'DoSend...' below.
 
 			lock (SendSyncObj)
 			{
@@ -270,7 +270,7 @@ namespace YAT.Model
 		/// <param name="command">Text command to be sent.</param>
 		public virtual void SendTextWithoutEol(Command command)
 		{
-			// AssertNotDisposed() is called by 'DoSend...' below.
+		////AssertUndisposed() is called by 'DoSend...' below.
 
 			lock (SendSyncObj)
 			{
@@ -289,7 +289,7 @@ namespace YAT.Model
 		/// </remarks>
 		protected virtual void DoSendText(Command c)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (c.IsValidText(this.settingsRoot.Terminal.Send.Text.ToParseMode()))
 			{
@@ -348,7 +348,7 @@ namespace YAT.Model
 		/// </remarks>
 		protected virtual void DoSendTextWithoutEol(Command c)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (c.IsValidText(this.settingsRoot.Terminal.Send.Text.ToParseMode()))
 			{
@@ -435,7 +435,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendFile()
 		{
-			// AssertNotDisposed() is called by 'Send...' below.
+		////AssertUndisposed() is called by 'Send...' below.
 
 			lock (SendSyncObj)
 			{
@@ -449,7 +449,7 @@ namespace YAT.Model
 		/// <param name="command">File to be sent.</param>
 		public virtual void SendFile(Command command)
 		{
-			// AssertNotDisposed() is called by 'DoSend...' below.
+		////AssertUndisposed() is called by 'DoSend...' below.
 
 			lock (SendSyncObj)
 			{
@@ -469,7 +469,7 @@ namespace YAT.Model
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'symmetricity' is a correct English term.")]
 		protected virtual void DoSendFile(Command c)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (c.IsValidFilePath(Path.GetDirectoryName(SettingsFilePath)))
 			{
@@ -516,7 +516,7 @@ namespace YAT.Model
 		/// <param name="commandId">Command 1..max.</param>
 		public virtual bool SendPredefined(int pageId, int commandId)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (SendSyncObj)
 			{
@@ -559,7 +559,7 @@ namespace YAT.Model
 		/// <param name="commandId">Command 1..max.</param>
 		public virtual bool CopyPredefined(int pageId, int commandId)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (SendSyncObj)
 			{
@@ -598,7 +598,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void Break()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.terminal.Break();
 		}
@@ -608,7 +608,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void ResumeBreak()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.terminal.ResumeBreak();
 		}

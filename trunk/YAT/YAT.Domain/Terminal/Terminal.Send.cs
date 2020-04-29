@@ -134,7 +134,7 @@ namespace YAT.Domain
 	/// > Only approach 3. fulfills the requirements.
 	///
 	/// </remarks>
-	public abstract partial class Terminal : IDisposable, IDisposableEx
+	public abstract partial class Terminal
 	{
 		#region Constants
 		//==========================================================================================
@@ -204,7 +204,7 @@ namespace YAT.Domain
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (IsTransmissive);
 
@@ -223,7 +223,7 @@ namespace YAT.Domain
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (IsTransmissive && (this.sendingIsOngoingCount > 0)); // No need to lock (this.sendingIsOngoingSyncObj), retrieving only.
 			}
@@ -238,7 +238,7 @@ namespace YAT.Domain
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (SendingIsOngoing && (this.sendingIsBusyCount > 0)); // No need to lock (this.sendingIsBusyCount), retrieving only.
 			}
@@ -251,7 +251,7 @@ namespace YAT.Domain
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				lock (this.breakStateSyncObj)
 					return (this.breakState);
@@ -265,7 +265,10 @@ namespace YAT.Domain
 		{
 			get
 			{
-				return (BreakState || !(!IsDisposed && this.sendThreadsArePermitted && IsTransmissive)); // Check 'IsDisposed' first!
+				if (IsUndisposed && this.sendThreadsArePermitted && IsTransmissive) // Check disposal state first!
+					return (BreakState);
+				else
+					return (true); // Indicate to break in any case.
 			}
 		}
 
@@ -279,7 +282,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual void Send(byte[] data)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber);
 			var asyncInvoker = new Action<byte[], long>(DoSend);
@@ -315,7 +318,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendText(string data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			var parseMode = TerminalSettings.Send.Text.ToParseMode(); // Get setting at request/invocation.
 			var item = new TextSendItem(data, defaultRadix, parseMode, SendMode.Text, false);
@@ -354,7 +357,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendTextLine(string dataLine, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			var parseMode = TerminalSettings.Send.Text.ToParseMode(); // Get setting at request/invocation.
 			var item = new TextSendItem(dataLine, defaultRadix, parseMode, SendMode.Text, true);
@@ -395,7 +398,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendTextLines(string[] dataLines, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			var parseMode = TerminalSettings.Send.Text.ToParseMode(); // Get setting at request/invocation.
 			var items = new List<TextSendItem>(dataLines.Length); // Preset the required capacity to improve memory management.
@@ -439,7 +442,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendFile(string filePath, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			var item = new FileSendItem(filePath, defaultRadix);
 
@@ -1185,7 +1188,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		protected virtual bool TryEnterRequestGate(long sequenceNumber)
 		{
-			while (!IsDisposed && this.sendThreadsArePermitted) // Check 'IsDisposed' first!
+			while (IsUndisposed && this.sendThreadsArePermitted) // Check disposal state first!
 			{
 				if (TerminalSettings.Send.AllowConcurrency)
 				{
@@ -1217,14 +1220,14 @@ namespace YAT.Domain
 				}
 			}
 
-			DebugSend(string.Format("TryEnterRequestGate() has determined to break because 'IsDisposed' = {0} / 'this.sendThreadsRunFlag' = {1}", IsDisposed, this.sendThreadsArePermitted));
+			DebugSend(string.Format("TryEnterRequestGate() has determined to break because 'IsInDisposal' = {0} / 'this.sendThreadsRunFlag' = {1}", IsInDisposal, this.sendThreadsArePermitted));
 			return (false);
 		}
 
 		/// <summary></summary>
 		protected virtual void LeaveRequestGate()
 		{
-			if (!IsDisposed && this.sendThreadsArePermitted) // Check 'IsDisposed' first!
+			if (IsUndisposed && this.sendThreadsArePermitted) // Check disposal state first!
 			{
 				if (TerminalSettings.Send.AllowConcurrency)
 				{
@@ -1243,7 +1246,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		protected virtual bool TryEnterPacketGate()
 		{
-			while (!IsDisposed && this.sendThreadsArePermitted) // Check 'IsDisposed' first!
+			while (IsUndisposed && this.sendThreadsArePermitted) // Check disposal state first!
 			{
 				if (Monitor.TryEnter(this.packetGateSyncObj))
 				{
@@ -1268,7 +1271,7 @@ namespace YAT.Domain
 				}
 			}
 
-			DebugSend(string.Format("TryEnterPacketGate() has determined to break because 'IsDisposed' = {0} / 'this.sendThreadsRunFlag' = {1}", IsDisposed, this.sendThreadsArePermitted));
+			DebugSend(string.Format("TryEnterPacketGate() has determined to break because 'IsInDisposal' = {0} / 'this.sendThreadsRunFlag' = {1}", IsInDisposal, this.sendThreadsArePermitted));
 			return (false);
 		}
 
@@ -1277,7 +1280,7 @@ namespace YAT.Domain
 		{
 			Monitor.Exit(this.packetGateSyncObj);
 
-			if (!IsDisposed && this.sendThreadsArePermitted) // Check 'IsDisposed' first!
+			if (IsUndisposed && this.sendThreadsArePermitted) // Check disposal state first!
 				this.packetGateEvent.Set();
 		}
 

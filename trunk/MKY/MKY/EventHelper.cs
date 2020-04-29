@@ -177,9 +177,9 @@ namespace MKY
 			DiscardNonMainThread = 2,
 
 			/// <summary>
-			/// Events that got raised on targets even if <see cref="IDisposableEx.IsDisposed"/> is
-			/// indicated likely result in an <see cref="ObjectDisposedException"/> or even in a
-			/// <see cref="TargetInvocationException"/>. It is not possible to discard such events
+			/// Events that got raised on targets even if <see cref="IDisposableEx.IsUndisposed"/>
+			/// is not indicated likely result in an <see cref="ObjectDisposedException"/> or even
+			/// a <see cref="TargetInvocationException"/>. It is not possible to discard such events
 			/// upfront, i.e. not raising them at all, since the target could get disposed AFTER the
 			/// check has been done. Therefore this additional option tell the helper whether or not
 			/// to discard such exceptions.
@@ -659,7 +659,7 @@ namespace MKY
 				if (DisposedTargetExceptionHasToBeDiscarded())
 				{
 					var sinkTarget = (sink.Target as IDisposableEx);
-					if (((sinkTarget != null) && (sinkTarget.IsDisposed)) || (ex is ObjectDisposedException))
+					if (((sinkTarget != null) && (!sinkTarget.IsUndisposed)) || (ex is ObjectDisposedException))
 					{
 						DebugWriteDisposedTargetAndEventToDebugOutput(sink);
 					#if (BREAK_ON_DISPOSED_TARGET)

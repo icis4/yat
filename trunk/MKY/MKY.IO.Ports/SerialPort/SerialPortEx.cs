@@ -73,7 +73,7 @@ namespace MKY.IO.Ports
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	[ToolboxBitmap(typeof(System.IO.Ports.SerialPort))]
 	[DefaultProperty("PortName")]
-	public partial class SerialPortEx : System.IO.Ports.SerialPort, ISerialPort
+	public partial class SerialPortEx : System.IO.Ports.SerialPort, ISerialPort, IDisposableEx
 	{
 		#region Static Fields
 		//==========================================================================================
@@ -124,6 +124,18 @@ namespace MKY.IO.Ports
 
 		private int inputBreakCount;  // = 0
 		private int outputBreakCount; // = 0
+
+		/// <summary>
+		/// A value which indicates the disposable state.
+		/// <list type="bullet">
+		/// <item><description>0 indicates undisposed.</description></item>
+		/// <item><description>1 indicates disposal is ongoing or completely disposed.</description></item>
+		/// </list>
+		/// </summary>
+		/// <remarks>
+		/// <c>int</c> rather than <c>bool</c> is required for thread-safe operations.
+		/// </remarks>
+		private int disposableState;
 
 		#endregion
 
@@ -244,10 +256,30 @@ namespace MKY.IO.Ports
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
+		/// <summary>
+		/// Gets a value indicating whether disposal of object is neither ongoing nor has completed.
+		/// </summary>
+		public bool IsUndisposed
+		{
+			get { return (Thread.VolatileRead(ref this.disposableState) == 0); }
+		}
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing or releasing resources.
+		/// </summary>
+		public new void Dispose()
+		{
+			// Attempt to move the disposable state from 0 to 1. If successful, we can be assured
+			// that this thread is the first thread to do so, and can safely dispose of the object.
+			if (Interlocked.CompareExchange(ref this.disposableState, 1, 0) == 0)
+			{
+				Dispose(true);
+				GC.SuppressFinalize(this);
+			}
+		}
 
 	#if (DEBUG)
+
 		/// <remarks>
 		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 		/// "Types that declare disposable members should also implement IDisposable. If the type
@@ -268,13 +300,19 @@ namespace MKY.IO.Ports
 
 			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}
+
 	#endif // DEBUG
 
-		/// <summary></summary>
-		protected void AssertNotDisposed()
+		/// <summary>
+		/// Asserts that disposal of object is neither ongoing nor has already completed.
+		/// </summary>
+		/// <remarks>
+		/// Not named "AssertIsUndisposed" as that sounds more like "check whether assert is undisposed".
+		/// </remarks>
+		protected virtual void AssertUndisposed()
 		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
+			if (!IsUndisposed)
+				throw (new ObjectDisposedException(GetType().ToString(), "Object is being or has already been disposed!"));
 		}
 
 		#endregion
@@ -296,13 +334,13 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (base.PortName);
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (base.PortName != value)
 				{
@@ -324,13 +362,13 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (new SerialPortId(base.PortName));
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (base.PortName != value.Name)
 				{
@@ -354,13 +392,13 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (base.BaudRate);
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (base.BaudRate != value)
 				{
@@ -380,13 +418,13 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (base.DataBits);
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (base.DataBits != value)
 				{
@@ -406,13 +444,13 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (base.Parity);
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (base.Parity != value)
 				{
@@ -432,13 +470,13 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (base.StopBits);
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (base.StopBits != value)
 				{
@@ -458,13 +496,13 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (base.Handshake);
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (base.Handshake != value)
 				{
@@ -496,7 +534,7 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				var settings = new SerialPortSettings();
 				settings.BaudRate  =  (BaudRateEx)base.BaudRate;
@@ -509,7 +547,7 @@ namespace MKY.IO.Ports
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				base.BaudRate  =  (BaudRateEx)value.BaudRate;
 				base.DataBits  =  (DataBitsEx)value.DataBits;
@@ -539,7 +577,7 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				// Needed to prevent System.InvalidOperationException in case RTS is in use.
 				if (HandshakeIsNotUsingRts)
@@ -549,7 +587,7 @@ namespace MKY.IO.Ports
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				// Needed to prevent System.InvalidOperationException in case RTS is in use.
 				if (HandshakeIsNotUsingRts)
@@ -578,7 +616,7 @@ namespace MKY.IO.Ports
 		/// </returns>
 		public virtual bool ToggleRts()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			return (RtsEnable = !RtsEnable);
 		}
@@ -595,13 +633,13 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (base.DtrEnable);
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (base.DtrEnable != value)
 				{
@@ -623,7 +661,7 @@ namespace MKY.IO.Ports
 		/// </returns>
 		public virtual bool ToggleDtr()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			return (DtrEnable = !DtrEnable);
 		}
@@ -636,7 +674,7 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				var pins = new SerialPortControlPins();
 
@@ -672,7 +710,7 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.controlPinCount);
 			}
@@ -683,7 +721,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public virtual void ResetControlPinCount()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.controlPinCount.Reset();
 
@@ -702,13 +740,13 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.ignoreFramingErrors);
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				this.ignoreFramingErrors = value;
 			}
@@ -721,7 +759,7 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				lock (this.inputBreakSyncObj)
 					return (this.inputBreak);
@@ -735,13 +773,13 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (BreakState);
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (BreakState != value)
 				{
@@ -760,7 +798,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public virtual void ToggleOutputBreak()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			OutputBreak = !OutputBreak;
 		}
@@ -772,7 +810,7 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.inputBreakCount);
 			}
@@ -785,7 +823,7 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.outputBreakCount);
 			}
@@ -796,7 +834,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public virtual void ResetBreakCount()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			Interlocked.Exchange(ref this.inputBreakCount, 0);
 			Interlocked.Exchange(ref this.outputBreakCount, 0);
@@ -844,7 +882,7 @@ namespace MKY.IO.Ports
 		[SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly", Justification = "See comments...")]
 		public new void Open()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (!IsOpen)
 			{
@@ -925,7 +963,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public virtual void Flush()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (IsOpen)
 			{
@@ -967,7 +1005,7 @@ namespace MKY.IO.Ports
 		[Obsolete("This standard variant of Close() doesn't know the cirumstances. Use CloseNormally() or CloseAfterException() instead.")]
 		public new void Close()
 		{
-			// AssertNotDisposed() is called by 'CloseAfterException()' below.
+		////AssertUndisposed() is called by 'CloseAfterException()' below.
 
 			CloseAfterException();
 		}
@@ -983,7 +1021,7 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public void CloseAfterException()
 		{
-			// AssertNotDisposed() is called by 'DoClose()' below.
+		////AssertUndisposed() is called by 'DoClose()' below.
 
 			DoClose(true);
 		}
@@ -999,7 +1037,7 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public void CloseNormally()
 		{
-			// AssertNotDisposed() is called by 'DoClose()' below.
+		////AssertUndisposed() is called by 'DoClose()' below.
 
 			DoClose(false);
 		}
@@ -1007,7 +1045,7 @@ namespace MKY.IO.Ports
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		private void DoClose(bool isAfterException)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (isAfterException || IsOpen) // Check 'isAfterException' first because the underlying port may have crashed and thus can no longer be accessed with 'IsOpen'.
 			{
@@ -1335,7 +1373,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnPortChanged(EventArgs e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseSync(PortChanged, this, e);
 		}
 
@@ -1344,7 +1382,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnPortSettingsChanged(EventArgs e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseSync(PortSettingsChanged, this, e);
 		}
 
@@ -1353,7 +1391,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnOpening(EventArgs e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseSync(Opening, this, e);
 		}
 
@@ -1362,7 +1400,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnOpened(EventArgs e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseSync(Opened, this, e);
 		}
 
@@ -1371,7 +1409,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnClosing(EventArgs e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseSync(Closing, this, e);
 		}
 
@@ -1380,7 +1418,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnClosed(EventArgs e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseSync(Closed, this, e);
 		}
 
@@ -1389,7 +1427,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnDataReceived(SerialDataReceivedEventArgs e)
 		{
-			if (IsOpen) // Make sure to propagate event only if active!
+			if (IsUndisposed && IsOpen) // Make sure to propagate event only if active.
 				this.eventHelper.RaiseSync<SerialDataReceivedEventArgs, SerialDataReceivedEventHandler>(DataReceived, this, e);
 		}
 
@@ -1398,7 +1436,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnErrorReceived(SerialErrorReceivedEventArgs e)
 		{
-			if (IsOpen) // Make sure to propagate event only if active!
+			if (IsUndisposed && IsOpen) // Make sure to propagate event only if active.
 			{
 				if ((e.EventType == System.IO.Ports.SerialError.Frame) && IgnoreFramingErrors)
 				{
@@ -1416,7 +1454,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnPinChanged(SerialPinChangedEventArgs e)
 		{
-			if (IsOpen) // Make sure to propagate event only if active!
+			if (IsUndisposed && IsOpen) // Make sure to propagate event only if active.
 				this.eventHelper.RaiseSync<SerialPinChangedEventArgs, SerialPinChangedEventHandler>(PinChanged, this, e);
 		}
 
@@ -1432,7 +1470,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public override string ToString()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (ToPortName());
 		}
@@ -1440,7 +1478,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public virtual string ToPortName()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value is needed for debugging! All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value is needed for debugging! All underlying fields are still valid after disposal.
 
 			var id = PortId;
 			if (id != null)
