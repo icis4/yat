@@ -60,7 +60,7 @@ namespace MKY.IO.Serial.Socket
 	/// <remarks>
 	/// This class is implemented using partial classes separating sending/receiving functionality.
 	/// </remarks>
-	public partial class UdpSocket : IIOProvider, IDisposable, IDisposableEx
+	public partial class UdpSocket : DisposableBase, IIOProvider
 	{
 		#region Types
 		//==========================================================================================
@@ -482,65 +482,24 @@ namespace MKY.IO.Serial.Socket
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+			this.eventHelper.DiscardAllEventsAndExceptions();
 
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			DebugMessage("Disposing...");
+
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				DebugEventManagement.DebugWriteAllEventRemains(this);
-				this.eventHelper.DiscardAllEventsAndExceptions();
-
-				DebugMessage("Disposing...");
-
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
-					DisposeSocketAndThreads();
-				}
-
-				// Set state to disposed:
-				IsDisposed = true;
-
-				DebugMessage("...successfully disposed.");
+				// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
+				DisposeSocketAndThreads();
 			}
-		}
 
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~UdpSocket()
-		{
-			Dispose(false);
-
-			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
+			DebugMessage("...successfully disposed.");
 		}
 
 		#endregion
@@ -557,7 +516,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.socketType);
 			}
@@ -568,7 +527,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				lock (this.socketSyncObj)
 					return (this.remoteHost);
@@ -580,7 +539,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				lock (this.socketSyncObj)
 					return (IPAddressEx.NotEqualsNone(this.remoteHost.Address));
@@ -592,7 +551,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				lock (this.socketSyncObj)
 					return (this.remotePort);
@@ -604,7 +563,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				lock (this.socketSyncObj)
 					return (new System.Net.IPEndPoint(this.remoteHost, this.remotePort));
@@ -616,7 +575,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.localInterface);
 			}
@@ -627,7 +586,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				lock (this.socketSyncObj)
 					return (this.localPort);
@@ -639,7 +598,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				lock (this.socketSyncObj)
 					return (this.localFilter);
@@ -651,7 +610,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				lock (this.socketSyncObj)
 					return (this.serverSendMode);
@@ -663,7 +622,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				switch (GetStateSynchronized())
 				{
@@ -685,7 +644,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				switch (GetStateSynchronized())
 				{
@@ -707,7 +666,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				switch (GetStateSynchronized())
 				{
@@ -728,7 +687,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'IsOpen' below.
+			////AssertUndisposed() is called by 'IsOpen' below.
 
 				return (IsOpen);
 			}
@@ -739,7 +698,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'IsOpen' below.
+			////AssertUndisposed() is called by 'IsOpen' below.
 
 				if ((this.socketType == UdpSocketType.Client) ||
 					(this.socketType == UdpSocketType.PairSocket)) // Remote endpoint has been defaulted on Create().
@@ -758,7 +717,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.socket);
 			}
@@ -774,7 +733,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		public virtual bool Start()
 		{
-			// AssertNotDisposed() is called by 'IsStopped' below.
+		////AssertUndisposed() is called by 'IsStopped' below.
 
 			if (IsStopped)
 			{
@@ -854,7 +813,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "'Stop' is a common term to start/stop something.")]
 		public virtual void Stop()
 		{
-			// AssertNotDisposed() is called by 'IsStarted' below.
+		////AssertUndisposed() is called by 'IsStarted' below.
 
 			if (IsStarted)
 			{
@@ -1212,7 +1171,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs<DateTime> e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed && IsOpen) // Make sure to propagate event only if active. // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseSync(IOChanged, this, e);
 		}
 
@@ -1226,7 +1185,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed && IsOpen) // Make sure to propagate event only if active. // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
@@ -1234,7 +1193,7 @@ namespace MKY.IO.Serial.Socket
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		protected virtual void OnDataReceived(DataReceivedEventArgs e)
 		{
-			if (IsOpen) // Make sure to propagate event only if active.
+			if (IsUndisposed && IsOpen) // Make sure to propagate event only if active.
 				this.eventHelper.RaiseSync<DataReceivedEventArgs>(DataReceived, this, e);
 		}
 
@@ -1242,7 +1201,7 @@ namespace MKY.IO.Serial.Socket
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		protected virtual void OnDataSent(DataSentEventArgs e)
 		{
-			if (IsOpen) // Make sure to propagate event only if active.
+			if (IsUndisposed && IsOpen) // Make sure to propagate event only if active.
 				this.eventHelper.RaiseSync<DataSentEventArgs>(DataSent, this, e);
 		}
 
@@ -1258,7 +1217,7 @@ namespace MKY.IO.Serial.Socket
 		/// </summary>
 		public override string ToString()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (ToShortEndPointString());
 		}
@@ -1270,7 +1229,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value is needed for debugging! All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value is needed for debugging! All underlying fields are still valid after disposal.
 
 			switch (SocketType)
 			{

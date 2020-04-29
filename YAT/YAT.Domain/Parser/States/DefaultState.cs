@@ -56,20 +56,19 @@ namespace YAT.Domain.Parser
 		// Disposal
 		//--------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			if (!IsDisposed)
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					if (this.contiguousWriter != null)
-						this.contiguousWriter.Dispose();
+				if (this.contiguousWriter != null) {
+					this.contiguousWriter.Dispose();
+					this.contiguousWriter = null;
 				}
-
-				// Set state to disposed:
-				this.contiguousWriter = null;
 			}
 
 			base.Dispose(disposing);
@@ -80,7 +79,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public override bool TryParse(Parser parser, int parseChar, ref FormatException formatException)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (parseChar < 0)     // End of string to parse.
 			{

@@ -164,16 +164,18 @@ namespace YAT.Domain
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			if (!IsDisposed)
+			DetachTextTerminalSettings();
+
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					DetachTextTerminalSettings();
-				}
+				// Nothing else to do (yet).
 			}
 
 			base.Dispose(disposing);
@@ -208,7 +210,7 @@ namespace YAT.Domain
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (this.txUnidirTextLineState != null)
 					return (this.txUnidirTextLineState.EolSequence);
@@ -225,7 +227,7 @@ namespace YAT.Domain
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (this.rxUnidirTextLineState != null)
 					return (this.rxUnidirTextLineState.EolSequence);
@@ -331,7 +333,7 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (ToExtendedDiagnosticsString()); // No 'real' ToString() method required yet.
 		}
@@ -345,7 +347,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public override string ToExtendedDiagnosticsString(string indent = "")
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (indent + "> Type: TextTerminal" + Environment.NewLine + base.ToExtendedDiagnosticsString(indent));
 		}

@@ -59,7 +59,7 @@ namespace YAT.Model
 	/// <summary>
 	/// Provides the YAT application model which can handle workspaces (.yaw) and terminals (.yat).
 	/// </summary>
-	public class Main : IGuidProvider, IDisposable, IDisposableEx
+	public class Main : DisposableBase, IGuidProvider
 	{
 		#region Fields
 		//==========================================================================================
@@ -151,77 +151,37 @@ namespace YAT.Model
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+			this.eventHelper.DiscardAllEventsAndExceptions();
 
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			DebugMessage("Disposing...");
+
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				DebugEventManagement.DebugWriteAllEventRemains(this);
-				this.eventHelper.DiscardAllEventsAndExceptions();
+				StopAndDisposeOperationTimer();
+				StopAndDisposeExitTimer();
 
-				DebugMessage("Disposing...");
+				// In the 'normal' case, the workspace has already been closed, otherwise...
 
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					StopAndDisposeOperationTimer();
-					StopAndDisposeExitTimer();
+				// ...detach event handlers to ensure that no more events are received...
+				DetachWorkspaceEventHandlers();
 
-					// In the 'normal' case, the workspace has already been closed, otherwise...
-
-					// ...detach event handlers to ensure that no more events are received...
-					DetachWorkspaceEventHandlers();
-
-					// ...dispose of workspace (normally it disposes of itself)...
-					if (this.workspace != null)
-						this.workspace.Dispose();
-
-					DetachStaticSerialPortCollectionEventHandlers();
+				// ...dispose of workspace (normally it disposes of itself)...
+				if (this.workspace != null) {
+					this.workspace.Dispose();
+					this.workspace = null;
 				}
 
-				// Set state to disposed:
-				this.workspace = null;
-				IsDisposed = true;
-
-				DebugMessage("...successfully disposed.");
+				DetachStaticSerialPortCollectionEventHandlers();
 			}
-		}
 
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~Main()
-		{
-			Dispose(false);
-
-			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
+			DebugMessage("...successfully disposed.");
 		}
 
 		#endregion
@@ -238,7 +198,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.guid);
 			}
@@ -249,7 +209,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.startArgs);
 			}
@@ -264,7 +224,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.workspace != null)
 					return (this.workspace.IndicatedName);
@@ -280,7 +240,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.workspace);
 			}
@@ -295,7 +255,7 @@ namespace YAT.Model
 		{
 			get
 			{
-			////AssertNotDisposed(); \todo !!! (2017-11-14 / MKY) accessed after call to Exit() !!!
+			////AssertUndisposed(); \todo !!! (2017-11-14 / MKY) accessed after call to Exit() !!!
 
 				return (this.scriptBridge);
 			}
@@ -325,7 +285,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual MainResult PrepareStart()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			// Process command line args into start requests:
 			if (ProcessCommandLineArgsIntoStartRequests())
@@ -345,7 +305,7 @@ namespace YAT.Model
 		/// </returns>
 		public virtual MainResult Start()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			// Process command line args into start requests:
 			if (!ProcessCommandLineArgsIntoStartRequests())
@@ -1197,7 +1157,7 @@ namespace YAT.Model
 		/// <returns><c>true</c> if successfully opened the workspace or terminal; otherwise, <c>false</c>.</returns>
 		public virtual bool OpenFromFile(string filePath)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			string extension = Path.GetExtension(filePath);
 			if (ExtensionHelper.IsWorkspaceFile(extension))
@@ -1264,7 +1224,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool OpenRecent(int userIndex)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			return (OpenFromFile(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[userIndex - 1].Item));
 		}
@@ -1521,7 +1481,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool OpenWorkspaceFromFile(string filePath)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			string fileName = Path.GetFileName(filePath);
 			OnFixedStatusTextRequest("Opening workspace " + fileName + "...");
@@ -1598,7 +1558,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings, Guid guid, int dynamicTerminalIdToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace, out Exception exception)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			// Ensure that the workspace file is not already open:
 			if (!CheckWorkspaceFile(settings.SettingsFilePath))

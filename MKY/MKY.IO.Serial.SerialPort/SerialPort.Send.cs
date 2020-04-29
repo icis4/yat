@@ -73,7 +73,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		protected virtual bool Send(byte data)
 		{
-			// AssertNotDisposed() is called by 'Send()' below.
+		////AssertUndisposed() is called by 'Send()' below.
 
 			return (Send(new byte[] { data }));
 		}
@@ -85,7 +85,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		public virtual bool Send(byte[] data)
 		{
-			// AssertNotDisposed() is called by 'IsStarted' below.
+		////AssertUndisposed() is called by 'IsStarted' below.
 
 			if (IsTransmissive)
 			{
@@ -103,7 +103,7 @@ namespace MKY.IO.Serial.SerialPort
 					// Wait until there is space in the send queue:
 					while (this.sendQueue.Count >= sendBufferSize) // No lock required, just checking for full.
 					{
-						if (IsDisposed || !IsTransmissive) // Check 'IsDisposed' first!
+						if (IsInDisposal || !IsTransmissive) // Check disposal state first!
 							return (false);
 
 						// Actively yield to other threads to allow dequeuing:
@@ -150,7 +150,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		public virtual void SignalInputXOn()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			Send(XOnXOff.XOnByte);
 		}
@@ -160,7 +160,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		public virtual void SignalInputXOff()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			Send(XOnXOff.XOffByte);
 		}
@@ -170,13 +170,15 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		public virtual void ToggleInputXOnXOff()
 		{
-			// AssertNotDisposed() and FlowControlManagesXOnXOffManually { get; } are called by the
-			// 'InputIsXOn' property.
+			AssertUndisposed();
 
-			if (InputIsXOn)
-				SignalInputXOff();
-			else
-				SignalInputXOn();
+			if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
+			{
+				if (InputIsXOn)
+					SignalInputXOff();
+				else
+					SignalInputXOn();
+			}
 		}
 
 		#endregion
@@ -229,7 +231,7 @@ namespace MKY.IO.Serial.SerialPort
 			try
 			{
 				// Outer loop, requires another signal.
-				while (!IsDisposed && this.sendThreadRunFlag) // Check 'IsDisposed' first!
+				while (IsUndisposed && this.sendThreadRunFlag) // Check disposal state first!
 				{
 					try
 					{
@@ -249,10 +251,10 @@ namespace MKY.IO.Serial.SerialPort
 					}
 
 					// Inner loop, runs as long as there is data in the send queue.
-					// Ensure not send and forward events during closing anymore. Check 'IsDisposed' first!
+					// Ensure not send and forward events during closing anymore. Check disposal state first!
 					// Note that 'IsOpen' is used instead of 'IsTransmissive' to allow handling break further below.
-					while (!IsDisposed && this.sendThreadRunFlag && IsOpen && (this.sendQueue.Count > 0))
-					{                                                      // No lock required, just checking for empty.
+					while (IsUndisposed && this.sendThreadRunFlag && IsOpen && (this.sendQueue.Count > 0))
+					{                                                       // No lock required, just checking for empty.
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.

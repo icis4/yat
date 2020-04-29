@@ -51,7 +51,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		public virtual bool Send(byte[] data)
 		{
-			// AssertNotDisposed() is called by 'IsStarted' below.
+		////AssertUndisposed() is called by 'IsStarted' below.
 
 			if (IsStarted)
 			{
@@ -197,7 +197,7 @@ namespace MKY.IO.Serial.Socket
 			try
 			{
 				// Outer loop, processes data after a signal has been received:
-				while (!IsDisposed && this.dataSentThreadRunFlag) // Check 'IsDisposed' first!
+				while (IsUndisposed && this.dataSentThreadRunFlag) // Check disposal state first!
 				{
 					try
 					{
@@ -217,9 +217,9 @@ namespace MKY.IO.Serial.Socket
 					}
 
 					// Inner loop, runs as long as there is data to be handled.
-					// Ensure not to forward events during disposing anymore. Check 'IsDisposed' first!
-					while (!IsDisposed && this.dataSentThreadRunFlag && (this.dataSentQueue.Count > 0))
-					{                                                // No lock required, just checking for empty.
+					// Ensure not to forward events during disposing anymore. Check disposal state first!
+					while (IsUndisposed && this.dataSentThreadRunFlag && (this.dataSentQueue.Count > 0))
+					{                                                 // No lock required, just checking for empty.
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.

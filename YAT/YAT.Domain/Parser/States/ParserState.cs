@@ -41,7 +41,7 @@ using MKY.Diagnostics;
 namespace YAT.Domain.Parser
 {
 	/// <summary></summary>
-	internal abstract class ParserState : IDisposable, IDisposableEx
+	internal abstract class ParserState : DisposableBase
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for recursion.")]
@@ -58,56 +58,17 @@ namespace YAT.Domain.Parser
 		// Disposal
 		//--------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-				}
-
-				// Set state to disposed:
-				IsDisposed = true;
+				// Nothing to do in state base (yet).
 			}
-		}
-
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~ParserState()
-		{
-			Dispose(false);
-
-			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion

@@ -70,7 +70,7 @@ namespace MKY.IO.Serial.Socket
 			lock (this.socketSyncObj)
 			{
 				// Ensure that async receive is no longer initiated after close/dispose:
-				if (!IsDisposed && (GetStateSynchronized() == SocketState.Opened)) // Check 'IsDisposed' first!
+				if (IsUndisposed && (GetStateSynchronized() == SocketState.Opened)) // Check disposal state first!
 				{
 				////var state = new AsyncReceiveState(this.socket, this.localPort, this.localFilter, this.localFilter.IPv4MaskBytes); <= Commented-out to prevent FxCopy message CA1811 "AvoidUncalledPrivateCode" (Microsoft.Performance).
 					var state = new AsyncReceiveState(this.socket, this.localFilter.IPv4MaskBytes);
@@ -89,7 +89,7 @@ namespace MKY.IO.Serial.Socket
 			var asyncState = (AsyncReceiveState)(ar.AsyncState);
 
 			// Ensure that async receive is discarded after close/dispose:
-			if (!IsDisposed && (asyncState.Socket != null) && (GetStateSynchronized() == SocketState.Opened)) // Check 'IsDisposed' first!
+			if (IsUndisposed && (asyncState.Socket != null) && (GetStateSynchronized() == SocketState.Opened)) // Check disposal state first!
 			{
 				var remoteEndPoint = new System.Net.IPEndPoint(System.Net.IPAddress.None, System.Net.IPEndPoint.MinPort);
 				byte[] data;                // EndReceive() will populate the object with address and port of the sender.
@@ -210,7 +210,7 @@ namespace MKY.IO.Serial.Socket
 
 				BeginReceiveIfEnabled(); // Continue receiving in case the socket is still ready or ready again.
 
-			} // if (!IsDisposed && ...)
+			} // if (IsUndisposed && ...)
 			else
 			{
 				DebugReceive("...discarded.");
@@ -238,7 +238,7 @@ namespace MKY.IO.Serial.Socket
 			try
 			{
 				// Outer loop, processes data after a signal has been received:
-				while (!IsDisposed && this.receiveThreadRunFlag) // Check 'IsDisposed' first!
+				while (IsUndisposed && this.receiveThreadRunFlag) // Check disposal state first!
 				{
 					try
 					{
@@ -258,9 +258,9 @@ namespace MKY.IO.Serial.Socket
 					}
 
 					// Inner loop, runs as long as there is data in the receive queue.
-					// Ensure not to forward events during disposing anymore. Check 'IsDisposed' first!
-					while (!IsDisposed && this.receiveThreadRunFlag && (this.receiveQueue.Count > 0))
-					{                                               // No lock required, just checking for empty.
+					// Ensure not to forward events during disposing anymore. Check disposal state first!
+					while (IsUndisposed && this.receiveThreadRunFlag && (this.receiveQueue.Count > 0))
+					{                                                // No lock required, just checking for empty.
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.

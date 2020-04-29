@@ -2,7 +2,7 @@
 
 namespace YAT.View.Forms
 {
-	partial class Main : IDisposableEx // Implemented based on Control.IsDisposed :-)
+	partial class Main
 	{
 		/// <summary>
 		/// Required designer variable.

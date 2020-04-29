@@ -6934,7 +6934,7 @@ namespace YAT.View.Forms
 
 		private bool TerminalIsAvailable
 		{
-			get { return ((this.terminal != null) && (!this.terminal.IsDisposed)); }
+			get { return ((this.terminal != null) && (this.terminal.IsUndisposed)); }
 		}
 
 		#endregion
@@ -6947,9 +6947,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_IOChanged(object sender, EventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			SetTerminalControls();
 
 			OnTerminalChanged(EventArgs.Empty);
@@ -6958,18 +6955,12 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_IOControlChanged(object sender, Domain.IOControlEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			SetIOControlControls();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_IOConnectTimeChanged(object sender, TimeSpanEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (TerminalIsAvailable)
 			{
 				TimeSpan activeConnectTime;
@@ -6993,9 +6984,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_IORateChanged_Decimated(object sender, EventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (TerminalIsAvailable)
 			{
 				var status = this.terminal.DataStatus;
@@ -7010,9 +6998,6 @@ namespace YAT.View.Forms
 		[ModalBehaviorContract(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
 		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			SetTerminalControls();
 			OnTerminalChanged(EventArgs.Empty);
 
@@ -7058,9 +7043,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_SendingIsBusyChanged(object sender, EventArgs<bool> e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			SetIOStatus();
 		}
 
@@ -7077,8 +7059,8 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]
 		private void SetDataStatusSent()
 		{
-			if (!TerminalIsAvailable)
-				return; // Ensure not to handle events during closing anymore.
+			if (!TerminalIsAvailable) // Ensure to not handle event during closing anymore.
+				return;
 
 			var status = this.terminal.DataStatus;
 			if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)    { monitor_Tx   .SetDataStatus(status); }
@@ -7091,8 +7073,8 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]
 		private void SetDataStatusReceived()
 		{
-			if (!TerminalIsAvailable)
-				return; // Ensure not to handle events during closing anymore.
+			if (!TerminalIsAvailable) // Ensure to not handle event during closing anymore.
+				return;
 
 			var status = this.terminal.DataStatus;
 			if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible) { monitor_Bidir.SetDataStatus(status); }
@@ -7130,9 +7112,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsTxAdded(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (UseDisplayElementsAdded) // See propery for background.
 			{
 				if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)
@@ -7147,9 +7126,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsBidirAdded(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (UseDisplayElementsAdded) // See propery for background.
 			{
 				if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
@@ -7162,9 +7138,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsRxAdded(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (UseDisplayElementsAdded) // See propery for background.
 			{
 				if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
@@ -7179,9 +7152,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineTxReplaced(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)
 				monitor_Tx.ReplaceCurrentLine(e.Elements);
 
@@ -7193,9 +7163,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineBidirReplaced(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
 				monitor_Bidir.ReplaceCurrentLine(e.Elements);
 		}
@@ -7205,9 +7172,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineRxReplaced(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
 				monitor_Rx.ReplaceCurrentLine(e.Elements);
 
@@ -7219,9 +7183,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineTxCleared(object sender, EventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)
 				monitor_Tx.ClearCurrentLine();
 
@@ -7233,9 +7194,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineBidirCleared(object sender, EventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
 				monitor_Bidir.ClearCurrentLine();
 		}
@@ -7245,9 +7203,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineRxCleared(object sender, EventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
 				monitor_Rx.ClearCurrentLine();
 
@@ -7259,9 +7214,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesTxAdded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (!UseDisplayElementsAdded) // See propery for background.
 			{
 				if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)
@@ -7276,9 +7228,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesBidirAdded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (!UseDisplayElementsAdded) // See propery for background.
 			{
 				if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
@@ -7291,9 +7240,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesRxAdded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (!UseDisplayElementsAdded) // See propery for background.
 			{
 				if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
@@ -7308,9 +7254,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryTxCleared(object sender, EventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)
 				monitor_Tx.Clear();
 		}
@@ -7320,9 +7263,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryBidirCleared(object sender, EventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
 				monitor_Bidir.Clear();
 		}
@@ -7332,9 +7272,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryRxCleared(object sender, EventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
 				monitor_Rx.Clear();
 		}
@@ -7344,9 +7281,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryRxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryTxReloaded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)
 				monitor_Tx.AddLines(e.Lines);
 		}
@@ -7356,9 +7290,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryRxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryBidirReloaded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
 				monitor_Bidir.AddLines(e.Lines);
 		}
@@ -7368,9 +7299,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryBidirReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryRxReloaded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
 				monitor_Rx.AddLines(e.Lines);
 		}
@@ -7378,9 +7306,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_AutoActionPlotRequest_Promptly(object sender, EventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			AutoActionPlot();
 		}
 
@@ -7399,9 +7324,6 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void timer_AutoActionCountUpdate_Tick(object sender, EventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (this.terminal != null)
 			{
 				var count = this.terminal.AutoActionCount;
@@ -7423,9 +7345,6 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void timer_AutoResponseCountUpdate_Tick(object sender, EventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			if (this.terminal != null)
 			{
 				var count = this.terminal.AutoResponseCount;
@@ -7441,27 +7360,18 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_FixedStatusTextRequest(object sender, EventArgs<string> e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			SetFixedStatusText(e.Value);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_TimedStatusTextRequest(object sender, EventArgs<string> e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			SetTimedStatusText(e.Value);
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_ResetStatusTextRequest(object sender, EventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			ResetStatusText();
 		}
 
@@ -7469,9 +7379,6 @@ namespace YAT.View.Forms
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void terminal_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			Refresh(); // Ensure that form has been refreshed before showing the message box.
 			e.Result = MessageBoxEx.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
 		}
@@ -7479,18 +7386,12 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_SaveAsFileDialogRequest(object sender, Model.DialogEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			e.Result = ShowSaveTerminalAsFileDialog();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_SaveCommandPageAsFileDialogRequest(object sender, Model.FilePathDialogEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			string filePathNew;
 			e.Result = CommandPagesSettingsFileLinkHelper.ShowSaveAsFileDialog(this, e.FilePathOld, out filePathNew);
 			e.FilePathNew = filePathNew;
@@ -7499,9 +7400,6 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_OpenCommandPageFileDialogRequest(object sender, Model.FilePathDialogEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			string filePathNew;
 			e.Result = CommandPagesSettingsFileLinkHelper.ShowOpenFileDialog(this, e.FilePathOld, out filePathNew);
 			e.FilePathNew = filePathNew;
@@ -7510,27 +7408,18 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_CursorRequest(object sender, EventArgs<Cursor> e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			Cursor = e.Value;
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_Saved(object sender, Model.SavedEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			SetTerminalControls();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_Closed(object sender, Model.ClosedEventArgs e)
 		{
-			if (IsDisposed)
-				return; // Ensure not to handle events during closing anymore.
-
 			DetachTerminalEventHandlers();
 			this.terminal = null;
 

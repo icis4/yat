@@ -19,26 +19,21 @@ namespace MKY.IO.Ports
 		protected override void Dispose(bool disposing)
 		{
 			// Modified version of the designer generated Dispose() method:
-			if (!IsDisposed)
+
+			this.eventHelper.DiscardAllEventsAndExceptions();
+
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				this.eventHelper.DiscardAllEventsAndExceptions();
+				// Try to patch some of the issues described in the ".\!-Doc\*.txt" files:
+				TryToApplyEventLoopHandlerPatchAndCloseBaseStreamSafely(this.baseStreamReferenceForCloseSafely);
+				this.baseStreamReferenceForCloseSafely = null;
+			}
 
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					// Try to patch some of the issues described in the ".\!-Doc\*.txt" files:
-					TryToApplyEventLoopHandlerPatchAndCloseBaseStreamSafely(this.baseStreamReferenceForCloseSafely);
-					this.baseStreamReferenceForCloseSafely = null;
-				}
-
-				// Dispose designer generated managed resources if requested:
-				if (disposing && (components != null))
-				{
-					components.Dispose();
-				}
-
-				// Set state to disposed:
-				IsDisposed = true;
+			// Dispose of designer generated managed resources:
+			if (disposing && (components != null))
+			{
+				components.Dispose();
 			}
 
 			try

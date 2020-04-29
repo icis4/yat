@@ -29,7 +29,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 using MKY.Xml;
 
@@ -41,7 +40,7 @@ namespace MKY.Settings
 	/// Generic class to handle any kind of document settings, e.g. MDI application settings.
 	/// </summary>
 	/// <typeparam name="TSettings">The type of the settings.</typeparam>
-	public class DocumentSettingsHandler<TSettings> : IDisposable, IDisposableEx
+	public class DocumentSettingsHandler<TSettings>
 		where TSettings : SettingsItem, new()
 	{
 		#region Fields
@@ -88,65 +87,6 @@ namespace MKY.Settings
 				this.alternateXmlElements = aep.AlternateXmlElements;
 		}
 
-		#region Disposal
-		//------------------------------------------------------------------------------------------
-		// Disposal
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
-			{
-				// Dispose of managed resources:
-				if (disposing)
-				{
-				}
-
-				// Set state to disposed:
-				IsDisposed = true;
-			}
-		}
-
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~DocumentSettingsHandler()
-		{
-			Dispose(false);
-
-			Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
-		}
-
-		#endregion
-
 		#endregion
 
 		#region Properties
@@ -159,15 +99,13 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual string SettingsFilePath
 		{
-			get { AssertNotDisposed(); return (this.fileHandler.FilePath);        }
-			set { AssertNotDisposed();         this.fileHandler.FilePath = value; }
+			get { return (this.fileHandler.FilePath);        }
+			set {         this.fileHandler.FilePath = value; }
 		}
 
 		/// <summary></summary>
 		public virtual void ResetSettingsFilePath()
 		{
-			AssertNotDisposed();
-
 			SettingsFilePath = null;
 		}
 
@@ -176,12 +114,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFilePathIsDefined
 		{
-			get
-			{
-				AssertNotDisposed();
-
-				return (this.fileHandler.FilePathIsDefined);
-			}
+			get { return (this.fileHandler.FilePathIsDefined); }
 		}
 
 		/// <summary>
@@ -189,12 +122,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFilePathIsValid
 		{
-			get
-			{
-				AssertNotDisposed();
-
-				return (this.fileHandler.FilePathIsValid);
-			}
+			get { return (this.fileHandler.FilePathIsValid); }
 		}
 
 		/// <summary>
@@ -202,12 +130,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileExists
 		{
-			get
-			{
-				AssertNotDisposed();
-
-				return (this.fileHandler.FileExists);
-			}
+			get { return (this.fileHandler.FileExists); }
 		}
 
 		/// <summary>
@@ -215,12 +138,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileExistsNoMore
 		{
-			get
-			{
-				AssertNotDisposed();
-
-				return (this.fileHandler.FileExistsNoMore);
-			}
+			get { return (this.fileHandler.FileExistsNoMore); }
 		}
 
 		/// <summary>
@@ -228,12 +146,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileIsUpToDate
 		{
-			get
-			{
-				AssertNotDisposed();
-
-				return (this.fileHandler.FileIsUpToDate);
-			}
+			get { return (this.fileHandler.FileIsUpToDate); }
 		}
 
 		/// <summary>
@@ -241,12 +154,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileIsReadable
 		{
-			get
-			{
-				AssertNotDisposed();
-
-				return (this.fileHandler.FileIsReadable);
-			}
+			get { return (this.fileHandler.FileIsReadable); }
 		}
 
 		/// <summary>
@@ -254,12 +162,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileIsReadOnly
 		{
-			get
-			{
-				AssertNotDisposed();
-
-				return (this.fileHandler.FileIsReadOnly);
-			}
+			get { return (this.fileHandler.FileIsReadOnly); }
 		}
 
 		/// <summary>
@@ -267,12 +170,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileIsWritable
 		{
-			get
-			{
-				AssertNotDisposed();
-
-				return (this.fileHandler.FileIsWritable);
-			}
+			get { return (this.fileHandler.FileIsWritable); }
 		}
 
 		/// <summary>
@@ -281,12 +179,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual bool SettingsFileSuccessfullyLoaded
 		{
-			get
-			{
-				AssertNotDisposed();
-
-				return (this.fileHandler.FileSuccessfullyLoaded);
-			}
+			get { return (this.fileHandler.FileSuccessfullyLoaded); }
 		}
 
 		/// <summary>
@@ -297,12 +190,7 @@ namespace MKY.Settings
 		/// </remarks>
 		public virtual TSettings Settings
 		{
-			get
-			{
-				AssertNotDisposed();
-
-				return (this.settings);
-			}
+			get { return (this.settings); }
 		}
 
 		#endregion
@@ -325,8 +213,6 @@ namespace MKY.Settings
 		/// </exception>
 		public virtual bool Load()
 		{
-			AssertNotDisposed();
-
 			// Try to open existing file of current version.
 			var settings = this.fileHandler.LoadFromFile<TSettings>(this.alternateXmlElements);
 			if (settings != null)
@@ -355,8 +241,6 @@ namespace MKY.Settings
 		/// </exception>
 		public virtual void Save()
 		{
-			AssertNotDisposed();
-
 			this.fileHandler.SaveToFile<TSettings>(this.settings);
 			this.settings.ClearChanged();
 		}
@@ -369,8 +253,6 @@ namespace MKY.Settings
 		/// </returns>
 		public virtual bool TryDelete()
 		{
-			AssertNotDisposed();
-
 			return (this.fileHandler.TryDelete());
 		}
 

@@ -68,7 +68,7 @@ namespace MKY.IO.Serial.Usb
 			try
 			{
 				// Outer loop, processes data after a signal has been received:
-				while (!IsDisposed && this.receiveThreadRunFlag) // Check 'IsDisposed' first!
+				while (IsUndisposed && this.receiveThreadRunFlag) // Check disposal state first!
 				{
 					try
 					{
@@ -88,9 +88,9 @@ namespace MKY.IO.Serial.Usb
 					}
 
 					// Inner loop, runs as long as there is data in the receive queue.
-					// Ensure not to forward events during disposing anymore. Check 'IsDisposed' first!
-					while (!IsDisposed && this.receiveThreadRunFlag && (this.receiveQueue.Count > 0))
-					{                                               // No lock required, just checking for empty.
+					// Ensure not to forward events during disposing anymore. Check disposal state first!
+					while (IsUndisposed && this.receiveThreadRunFlag && (this.receiveQueue.Count > 0))
+					{                                                // No lock required, just checking for empty.
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.
@@ -120,8 +120,8 @@ namespace MKY.IO.Serial.Usb
 						{
 							DebugMessage("ReceiveThread() monitor has timed out!");
 						}
-					} // while (!IsDisposed && ...)
-				}
+					} // Inner loop
+				} // Outer loop
 			}
 			catch (ThreadAbortException ex)
 			{

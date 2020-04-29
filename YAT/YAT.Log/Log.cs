@@ -41,7 +41,7 @@ namespace YAT.Log
 {
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
-	internal abstract class Log : IDisposable, IDisposableEx
+	internal abstract class Log : DisposableBase
 	{
 		#region Constants
 		//==========================================================================================
@@ -98,60 +98,20 @@ namespace YAT.Log
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					StopFlushTimer();
+				StopFlushTimer();
 
-					// In the 'normal' case, Close() has already been called.
-					Close();
-				}
-
-				// Set state to disposed:
-				IsDisposed = true;
+				// In the 'normal' case, Close() has already been called.
+				Close();
 			}
-		}
-
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~Log()
-		{
-			Dispose(false);
-
-			MKY.Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -323,16 +283,16 @@ namespace YAT.Log
 		/// <summary></summary>
 		public virtual void Close()
 		{
-			if (IsDisposed)
-				return; // Close() shall be callable on a disposed object.
-
-			if (this.isEnabled && this.isOn)
+			if (IsUndisposed) // Close() shall be callable on a disposed object.
 			{
-				CloseWriter();
-				this.fileStream.Close();
-			}
+				if (this.isEnabled && this.isOn)
+				{
+					CloseWriter();
+					this.fileStream.Close();
+				}
 
-			this.isOn = false;
+				this.isOn = false;
+			}
 		}
 
 		/// <summary></summary>

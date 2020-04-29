@@ -70,7 +70,7 @@ namespace MKY.Settings
 	/// Pass <see cref="EmptySettingsItem"/> for those settings that shall not be used.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes", Justification = "Three type parameters are given by the nature of application settings.")]
-	public class ApplicationSettingsHandler<TCommonSettings, TLocalUserSettings, TRoamingUserSettings> : IDisposable, IDisposableEx
+	public class ApplicationSettingsHandler<TCommonSettings, TLocalUserSettings, TRoamingUserSettings> : DisposableBase
 		where TCommonSettings : SettingsItem, new()
 		where TLocalUserSettings : SettingsItem, new()
 		where TRoamingUserSettings : SettingsItem, new()
@@ -105,6 +105,18 @@ namespace MKY.Settings
 			private FileAccessFlags effectiveFileAccess;
 			private Mutex mutex;
 			private bool mutexCreatedNew;
+
+			/// <summary>
+			/// A value which indicates the disposable state.
+			/// <list type="bullet">
+			/// <item><description>0 indicates undisposed.</description></item>
+			/// <item><description>1 indicates disposal is ongoing or completely disposed.</description></item>
+			/// </list>
+			/// </summary>
+			/// <remarks>
+			/// <c>int</c> rather than <c>bool</c> is required for thread-safe operations.
+			/// </remarks>
+			private int disposableState;
 
 			#endregion
 
@@ -192,38 +204,49 @@ namespace MKY.Settings
 			// Disposal
 			//------------------------------------------------------------------------------------------
 
-			/// <summary></summary>
-			public bool IsDisposed { get; protected set; }
-
-			/// <summary></summary>
-			public void Dispose()
+			/// <summary>
+			/// Gets a value indicating whether disposal of object is neither ongoing nor has completed.
+			/// </summary>
+			public bool IsUndisposed
 			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
+				get { return (Thread.VolatileRead(ref this.disposableState) == 0); }
 			}
 
-			/// <summary></summary>
+			/// <summary>
+			/// Performs application-defined tasks associated with freeing or releasing resources.
+			/// </summary>
+			public void Dispose()
+			{
+				// Attempt to move the disposable state from 0 to 1. If successful, we can be assured
+				// that this thread is the first thread to do so, and can safely dispose of the object.
+				if (Interlocked.CompareExchange(ref this.disposableState, 1, 0) == 0)
+				{
+					Dispose(true);
+					GC.SuppressFinalize(this);
+				}
+			}
+
+			/// <param name="disposing">
+			/// <c>true</c> when called from <see cref="Dispose()"/>,
+			/// <c>false</c> when called from finalizer.
+			/// </param>
 			protected virtual void Dispose(bool disposing)
 			{
-				if (!IsDisposed)
+				// The mutex must be closed and released by the application because it would
+				// be called from the wrong process if it was closed by the garbage collector.
+
+				// Dispose of managed resources:
+				if (disposing)
 				{
-					// The mutex must be closed and released by the application because it would
-					// be called from the wrong process if it was closed by the garbage collector.
-
-					// Dispose of managed resources if requested:
-					if (disposing)
-					{
-						if (this.mutex != null)
-							this.mutex.Close();
+					if (this.mutex != null) {
+						this.mutex.Close();
+						this.mutex = null;
 					}
-
-					// Set state to disposed:
-					this.mutex = null;
-					IsDisposed = true;
 				}
 			}
 
 		#if (DEBUG)
+
 			/// <remarks>
 			/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
 			/// "Types that declare disposable members should also implement IDisposable. If the type
@@ -237,17 +260,22 @@ namespace MKY.Settings
 			/// </remarks>
 			~Handler()
 			{
+				DebugEventManagement.DebugWriteAllEventRemains(this);
+
 				Dispose(false);
 
 				DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 			}
+
 		#endif // DEBUG
 
-			/// <summary></summary>
-			protected void AssertNotDisposed()
+			/// <summary>
+			/// Asserts that disposal of object is neither ongoing nor has already completed.
+			/// </summary>
+			protected virtual void AssertUndisposed()
 			{
-				if (IsDisposed)
-					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
+				if (!IsUndisposed)
+					throw (new ObjectDisposedException(GetType().ToString(), "Object is being or has already been disposed!"));
 			}
 
 			#endregion
@@ -269,7 +297,7 @@ namespace MKY.Settings
 			{
 				get
 				{
-					AssertNotDisposed();
+					AssertUndisposed();
 
 					return (this.settings);
 				}
@@ -288,7 +316,7 @@ namespace MKY.Settings
 			{
 				get
 				{
-					// Do not call AssertNotDisposed() in a simple get-property.
+				////AssertUndisposed() shall not be called from this simple get-property.
 
 					return ((this.effectiveFileAccess & FileAccessFlags.Write) != 0);
 				}
@@ -311,7 +339,7 @@ namespace MKY.Settings
 			[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 			public virtual bool Load()
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if ((this.effectiveFileAccess & FileAccessFlags.Read) != 0)
 				{
@@ -395,7 +423,7 @@ namespace MKY.Settings
 			/// </exception>
 			public virtual void Save()
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if ((this.effectiveFileAccess & FileAccessFlags.Write) != 0)
 				{
@@ -409,9 +437,6 @@ namespace MKY.Settings
 			/// </summary>
 			public virtual void Close()
 			{
-				if (IsDisposed)
-					return; // Close() shall be callable on a disposed object.
-
 				if (this.mutex != null)
 				{
 					if (this.mutexCreatedNew)
@@ -504,68 +529,31 @@ namespace MKY.Settings
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					// In the 'normal' case, all settings have already been closed in Close().
-					if (this.commonSettings != null)
-						this.commonSettings.Dispose();
-
-					if (this.localUserSettings != null)
-						this.localUserSettings.Dispose();
-
-					if (this.roamingUserSettings != null)
-						this.roamingUserSettings.Dispose();
+				// In the 'normal' case, all settings have already been closed in Close().
+				if (this.commonSettings != null) {
+					this.commonSettings.Dispose();
+					this.commonSettings = null;
 				}
 
-				// Set state to disposed:
-				this.commonSettings = null;
-				this.localUserSettings = null;
-				this.roamingUserSettings = null;
-				IsDisposed = true;
+				if (this.localUserSettings != null) {
+					this.localUserSettings.Dispose();
+					this.localUserSettings = null;
+				}
+
+				if (this.roamingUserSettings != null) {
+					this.roamingUserSettings.Dispose();
+					this.roamingUserSettings = null;
+				}
 			}
-		}
-
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~ApplicationSettingsHandler()
-		{
-			Dispose(false);
-
-			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -584,7 +572,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.commonSettings != null);
 			}
@@ -597,7 +585,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.localUserSettings != null);
 			}
@@ -610,7 +598,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.roamingUserSettings != null);
 			}
@@ -624,7 +612,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'Has...' below.
+			////AssertUndisposed() is called by 'Has...' below.
 
 				if (HasCommonSettings)
 					return (new TCommonSettings());
@@ -641,7 +629,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'Has...' below.
+			////AssertUndisposed() is called by 'Has...' below.
 
 				if (HasLocalUserSettings)
 					return (new TLocalUserSettings());
@@ -658,7 +646,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'Has...' below.
+			////AssertUndisposed() is called by 'Has...' below.
 
 				if (HasRoamingUserSettings)
 					return (new TRoamingUserSettings());
@@ -678,7 +666,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'Has...' below.
+			////AssertUndisposed() is called by 'Has...' below.
 
 				if (HasCommonSettings)
 					return (this.commonSettings.FilePath);
@@ -687,7 +675,7 @@ namespace MKY.Settings
 			}
 			set
 			{
-				// AssertNotDisposed() is called by 'Has...' below.
+			////AssertUndisposed() is called by 'Has...' below.
 
 				if (HasCommonSettings)
 					this.commonSettings.FilePath = value;
@@ -707,7 +695,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'Has...' below.
+			////AssertUndisposed() is called by 'Has...' below.
 
 				if (HasLocalUserSettings)
 					return (this.localUserSettings.FilePath);
@@ -716,7 +704,7 @@ namespace MKY.Settings
 			}
 			set
 			{
-				// AssertNotDisposed() is called by 'Has...' below.
+			////AssertUndisposed() is called by 'Has...' below.
 
 				if (HasLocalUserSettings)
 					this.localUserSettings.FilePath = value;
@@ -736,7 +724,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'Has...' below.
+			////AssertUndisposed() is called by 'Has...' below.
 
 				if (HasRoamingUserSettings)
 					return (this.roamingUserSettings.FilePath);
@@ -745,7 +733,7 @@ namespace MKY.Settings
 			}
 			set
 			{
-				// AssertNotDisposed() is called by 'Has...' below.
+			////AssertUndisposed() is called by 'Has...' below.
 
 				if (HasRoamingUserSettings)
 					this.roamingUserSettings.FilePath = value;
@@ -761,7 +749,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'Has...' below.
+			////AssertUndisposed() is called by 'Has...' below.
 
 				if (HasCommonSettings)
 					return (this.commonSettings.Settings);
@@ -777,7 +765,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'Has...' below.
+			////AssertUndisposed() is called by 'Has...' below.
 
 				if (HasLocalUserSettings)
 					return (this.localUserSettings.Settings);
@@ -793,7 +781,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'Has...' below.
+			////AssertUndisposed() is called by 'Has...' below.
 
 				if (HasRoamingUserSettings)
 					return (this.roamingUserSettings.Settings);
@@ -810,7 +798,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'Has...' below.
+			////AssertUndisposed() is called by 'Has...' below.
 
 				if (HasCommonSettings)
 					return (this.commonSettings.FileSuccessfullyLoaded);
@@ -827,7 +815,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'Has...' below.
+			////AssertUndisposed() is called by 'Has...' below.
 
 				if (HasLocalUserSettings)
 					return (this.localUserSettings.FileSuccessfullyLoaded);
@@ -844,7 +832,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'Has...' below.
+			////AssertUndisposed() is called by 'Has...' below.
 
 				if (HasRoamingUserSettings)
 					return (this.roamingUserSettings.FileSuccessfullyLoaded);
@@ -866,7 +854,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'Has...' below.
+			////AssertUndisposed() is called by 'Has...' below.
 
 				if (HasCommonSettings)
 					return (this.commonSettings.AreCurrentlyOwnedByThisInstance);
@@ -888,7 +876,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'Has...' below.
+			////AssertUndisposed() is called by 'Has...' below.
 
 				if (HasLocalUserSettings)
 					return (this.localUserSettings.AreCurrentlyOwnedByThisInstance);
@@ -910,7 +898,7 @@ namespace MKY.Settings
 		{
 			get
 			{
-				// AssertNotDisposed() is called by 'Has...' below.
+			////AssertUndisposed() is called by 'Has...' below.
 
 				if (HasRoamingUserSettings)
 					return (this.roamingUserSettings.AreCurrentlyOwnedByThisInstance);
@@ -938,7 +926,7 @@ namespace MKY.Settings
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public virtual bool Load()
 		{
-			// AssertNotDisposed() is called by 'Load()' below.
+		////AssertUndisposed() is called by 'Load()' below.
 
 			bool success = true;
 
@@ -974,7 +962,7 @@ namespace MKY.Settings
 		/// </returns>
 		public virtual bool LoadCommonSettings()
 		{
-			// AssertNotDisposed() is called by 'Has...' below.
+		////AssertUndisposed() is called by 'Has...' below.
 
 			if (HasCommonSettings)
 				return (this.commonSettings.Load());
@@ -991,7 +979,7 @@ namespace MKY.Settings
 		/// </returns>
 		public virtual bool LoadLocalUserSettings()
 		{
-			// AssertNotDisposed() is called by 'Has...' below.
+		////AssertUndisposed() is called by 'Has...' below.
 
 			if (HasLocalUserSettings)
 				return (this.localUserSettings.Load());
@@ -1008,7 +996,7 @@ namespace MKY.Settings
 		/// </returns>
 		public virtual bool LoadRoamingUserSettings()
 		{
-			// AssertNotDisposed() is called by 'Has...' below.
+		////AssertUndisposed() is called by 'Has...' below.
 
 			if (HasRoamingUserSettings)
 				return (this.roamingUserSettings.Load());
@@ -1033,7 +1021,7 @@ namespace MKY.Settings
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public virtual void Save()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			Exception result = null;
 
@@ -1090,7 +1078,7 @@ namespace MKY.Settings
 		/// </exception>
 		public virtual void SaveCommonSettings()
 		{
-			// AssertNotDisposed() is called by 'Has...' below.
+		////AssertUndisposed() is called by 'Has...' below.
 
 			if (HasCommonSettings && CommonSettingsAreCurrentlyOwnedByThisInstance)
 				this.commonSettings.Save();
@@ -1111,7 +1099,7 @@ namespace MKY.Settings
 		/// </exception>
 		public virtual void SaveLocalUserSettings()
 		{
-			// AssertNotDisposed() is called by 'Has...' below.
+		////AssertUndisposed() is called by 'Has...' below.
 
 			if (HasLocalUserSettings && LocalUserSettingsAreCurrentlyOwnedByThisInstance)
 				this.localUserSettings.Save();
@@ -1132,7 +1120,7 @@ namespace MKY.Settings
 		/// </exception>
 		public virtual void SaveRoamingUserSettings()
 		{
-			// AssertNotDisposed() is called by 'Has...' below.
+		////AssertUndisposed() is called by 'Has...' below.
 
 			if (HasRoamingUserSettings && RoamingUserSettingsAreCurrentlyOwnedByThisInstance)
 				this.roamingUserSettings.Save();
@@ -1143,17 +1131,17 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual void Close()
 		{
-			if (IsDisposed)
-				return; // Close() shall be callable on a disposed object.
+			if (IsUndisposed) // Close() shall be callable on a disposed object.
+			{
+				if (HasCommonSettings)
+					this.commonSettings.Close();
 
-			if (HasCommonSettings)
-				this.commonSettings.Close();
+				if (HasLocalUserSettings)
+					this.localUserSettings.Close();
 
-			if (HasLocalUserSettings)
-				this.localUserSettings.Close();
-
-			if (HasRoamingUserSettings)
-				this.roamingUserSettings.Close();
+				if (HasRoamingUserSettings)
+					this.roamingUserSettings.Close();
+			}
 		}
 
 		#endregion

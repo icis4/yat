@@ -1248,8 +1248,8 @@ namespace YAT.Domain
 
 			lock (this.chunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
 			{
-				if (IsDisposed)
-					return; // Ensure not to handle async timer callbacks during closing anymore.
+				if (IsInDisposal) // Ensure to not handle async timer callback during closing anymore.
+					return;
 
 			////if (TerminalSettings.TxDisplayTimedLineBreak.Enabled) is implicitly given.
 				{
@@ -1270,8 +1270,8 @@ namespace YAT.Domain
 
 			lock (this.chunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
 			{
-				if (IsDisposed)
-					return; // Ensure not to handle async timer callbacks during closing anymore.
+				if (IsInDisposal) // Ensure to not handle async timer callback during closing anymore.
+					return;
 
 			////if (TerminalSettings.RxDisplayTimedLineBreak.Enabled) is implicitly given.
 				{

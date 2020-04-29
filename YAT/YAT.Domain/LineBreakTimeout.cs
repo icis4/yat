@@ -40,7 +40,7 @@ using MKY.Diagnostics;
 namespace YAT.Domain
 {
 	/// <summary></summary>
-	public class LineBreakTimeout : IDisposable, IDisposableEx
+	public class LineBreakTimeout : DisposableBase
 	{
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
@@ -65,62 +65,22 @@ namespace YAT.Domain
 		// Disposal
 		//--------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+		////Debug.WriteLine("Remind (2016-09-08 / MKY) 'Elapsed' event handler not yet free'd, whole timer handling should be encapsulated into the 'LineState' class.");
+		////DebugEventManagement.DebugWriteAllEventRemains(this); => Intended implementation commented out to prevent 100+ lines of debug output (Terminal.ToString()).
+			this.eventHelper.DiscardAllEventsAndExceptions();  // => Remind output also commented out to prevent 75 lines of debug output at startup.
 
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			// Dispose of managed resources:
+			if (disposing)
 			{
-			////Debug.WriteLine("Remind (2016-09-08 / MKY) 'Elapsed' event handler not yet free'd, whole timer handling should be encapsulated into the 'LineState' class.");
-			////DebugEventManagement.DebugWriteAllEventRemains(this); => Intended implementation commented out to prevent 100+ lines of debug output (Terminal.ToString()).
-				this.eventHelper.DiscardAllEventsAndExceptions();  // => Remind output also commented out to prevent 75 lines of debug output at startup.
-
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					// In the 'normal' case, the timer is stopped in Stop().
-					StopAndDisposeTimer();
-				}
-
-				// Set state to disposed:
-				IsDisposed = true;
+				// In the 'normal' case, the timer is stopped in Stop().
+				StopAndDisposeTimer();
 			}
-		}
-
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~LineBreakTimeout()
-		{
-			Dispose(false);
-
-			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -128,7 +88,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual void Start()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			CreateAndStartTimer();
 		}
@@ -136,7 +96,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual void Restart()
 		{
-			// AssertNotDisposed() is called by methods below.
+		////AssertUndisposed() is called by methods below.
 
 			Stop();
 			Start();
@@ -146,7 +106,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "'Stop' is a common term to start/stop something.")]
 		public virtual void Stop()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			StopAndDisposeTimer();
 		}
@@ -181,8 +141,8 @@ namespace YAT.Domain
 
 			lock (this.timerSyncObj)
 			{
-				if ((this.timer == null) || (IsDisposed))
-					return; // Handle overdue event callbacks.
+				if ((this.timer == null) || (IsInDisposal)) // Ensure to not handle async timer callback during closing anymore.
+					return;
 			}
 
 			Stop();

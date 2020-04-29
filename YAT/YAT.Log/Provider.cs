@@ -42,7 +42,7 @@ using YAT.Format.Settings;
 namespace YAT.Log
 {
 	/// <summary></summary>
-	public class Provider : IDisposable, IDisposableEx
+	public class Provider : DisposableBase
 	{
 		#region Fields
 		//==========================================================================================
@@ -108,64 +108,24 @@ namespace YAT.Log
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary></summary>
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
 		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "controlLog", Justification = "Log is actually disposed via 'this.logs' in the below loop.")]
 		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "portLog", Justification = "Log is actually disposed via 'this.logs' in the below loop.")]
-		protected virtual void Dispose(bool disposing)
+		protected override void Dispose(bool disposing)
 		{
-			if (!IsDisposed)
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				// Dispose of managed resources if requested:
-				if (disposing)
+				// In the 'normal' case, SwitchOff() has already been called.
+				if (this.logs != null)
 				{
-					// In the 'normal' case, SwitchOff() has already been called.
-					if (this.logs != null)
-					{
-						foreach (var l in this.logs)
-							l.Dispose();
-					}
+					foreach (var l in this.logs)
+						l.Dispose();
 				}
-
-				// Set state to disposed:
-				IsDisposed = true;
 			}
-		}
-
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~Provider()
-		{
-			Dispose(false);
-
-			MKY.Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion

@@ -454,23 +454,22 @@ namespace MKY.IO.Usb
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			if (!IsDisposed)
+			this.eventHelper.DiscardAllEventsAndExceptions();
+
+			UnregisterAndDetachStaticDeviceEventHandlers();
+
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				DebugEventManagement.DebugWriteAllEventRemains(this);
-				this.eventHelper.DiscardAllEventsAndExceptions();
-
-				UnregisterAndDetachStaticDeviceEventHandlers();
-
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					// In the 'normal' case, the items have already been disposed of in Close().
-					StopReceiveThread();
-					CloseStream();
-				}
+				// In the 'normal' case, the items have already been disposed of in Close().
+				StopReceiveThread();
+				CloseStream();
 			}
 
 			base.Dispose(disposing);
@@ -492,13 +491,13 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.matchSerial);
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				this.matchSerial = value;
 			}
@@ -511,13 +510,13 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.reportFormat);
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				this.reportFormat = value;
 			}
@@ -528,13 +527,13 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.reportFormat.Id);
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				this.reportFormat.Id = value;
 			}
@@ -547,13 +546,13 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.rxFilterUsage);
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				this.rxFilterUsage = value;
 			}
@@ -569,13 +568,13 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.autoOpen);
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				this.autoOpen = value;
 			}
@@ -591,13 +590,13 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.includeNonPayloadData);
 			}
 			set
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				this.includeNonPayloadData = value;
 			}
@@ -614,7 +613,7 @@ namespace MKY.IO.Usb
 			get
 			{
 				// Attention:
-				// Do not call AssertNotDisposed() since IsOpen is used by AsyncReadCompleted()
+				// AssertUndisposed() must not be called since IsOpen is used by AsyncReadCompleted()
 				// to detect devices that are just being closed or have already been closed.
 
 				switch (this.state)
@@ -641,7 +640,7 @@ namespace MKY.IO.Usb
 			get
 			{
 				// Attention:
-				// Do not call AssertNotDisposed() since IsOpen is used by AsyncReadCompleted()
+				// AssertUndisposed() must not be called since IsOpen is used by AsyncReadCompleted()
 				// to detect devices that are just being closed or have already been closed.
 
 				// Attention:
@@ -665,7 +664,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				int bytesAvailable = 0;
 				lock (this.receiveQueue)
@@ -693,7 +692,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public virtual bool Start()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			DebugMessage("Starting...");
 			SetStateSynchronized(State.Starting);
@@ -706,7 +705,7 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "'Stop' is a common term to start/stop something.")]
 		public virtual void Stop()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			DebugMessage("Stopping...");
 			SetStateSynchronized(State.Stopping);
@@ -718,7 +717,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public virtual bool Open()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			// The stream may already exist and be ready.
 			if (IsOpen)
@@ -754,7 +753,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public virtual void Close()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			// The stream may already be closed.
 			if (!IsOpen)
@@ -783,7 +782,7 @@ namespace MKY.IO.Usb
 		/// <returns>The number of bytes received.</returns>
 		public virtual int Receive(out byte[] data)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			// OnDataReceived has been called before.
 
@@ -824,7 +823,7 @@ namespace MKY.IO.Usb
 		/// </param>
 		public virtual void Send(byte[] data)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			// OnDataSent is called by 'Write()' below.
 
@@ -979,7 +978,7 @@ namespace MKY.IO.Usb
 		{
 			try
 			{
-				if (!IsDisposed && IsOpen) // Ensure not to perform any operations during closing anymore. Check 'IsDisposed' first!
+				if (IsUndisposed && IsOpen) // Ensure not to perform any operations during closing anymore. Check disposal state first!
 				{
 					// Immediately read data on this thread:
 
@@ -1088,7 +1087,7 @@ namespace MKY.IO.Usb
 			try
 			{
 				// Outer loop, processes data after a signal has been received:
-				while (this.receiveThreadRunFlag && !IsDisposed) // Check 'IsDisposed' first!
+				while (IsUndisposed && this.receiveThreadRunFlag) // Check disposal state first!
 				{
 					try
 					{
@@ -1108,8 +1107,8 @@ namespace MKY.IO.Usb
 					}
 
 					// Inner loop, runs as long as there is data in the receive queue.
-					// Ensure not to forward events during disposing anymore. Check 'IsDisposed' first!
-					while (!IsDisposed && this.receiveThreadRunFlag && (BytesAvailable > 0))
+					// Ensure not to forward events during disposing anymore. Check disposal state first!
+					while (IsUndisposed && this.receiveThreadRunFlag && (BytesAvailable > 0))
 					{
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
@@ -1355,14 +1354,14 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected virtual void OnDataReceived(EventArgs e)
 		{
-			if (IsOpen) // Make sure to propagate event only if active.
+			if (IsUndisposed && IsOpen) // Make sure to propagate event only if active.
 				this.eventHelper.RaiseSync(DataReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDataSent(DataEventArgs e)
 		{
-			if (IsOpen) // Make sure to propagate event only if active.
+			if (IsUndisposed && IsOpen) // Make sure to propagate event only if active.
 				this.eventHelper.RaiseSync(DataSent, this, e);
 		}
 

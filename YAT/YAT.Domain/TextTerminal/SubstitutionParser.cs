@@ -82,27 +82,6 @@ namespace YAT.Domain.Parser
 			this.substitution = parent.substitution;
 		}
 
-		#region Disposal
-		//------------------------------------------------------------------------------------------
-		// Disposal
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		protected override void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
-			{
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-				}
-			}
-
-			base.Dispose(disposing);
-		}
-
-		#endregion
-
 		#endregion
 
 		#region Factory
@@ -113,7 +92,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		internal override Parser GetNestedParser(ParserState parserState)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			return (new SubstitutionParser(this, parserState));
 		}
@@ -128,7 +107,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		internal override bool TryParseContiguousRadixItem(string item, Radix radix, out byte[] result, ref FormatException formatException)
 		{
-			// AssertNotDisposed() is called by 'base.TryParseContiguousRadixItem()' below.
+		////AssertUndisposed() is called by 'base.TryParseContiguousRadixItem()' below.
 
 			return (base.TryParseContiguousRadixItem(Substitute(item), radix, out result, ref formatException));
 		}

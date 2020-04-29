@@ -41,7 +41,7 @@ using MKY.Diagnostics;
 namespace MKY.Time
 {
 	/// <summary></summary>
-	public class Chronometer : IDisposable, IDisposableEx
+	public class Chronometer : DisposableBase
 	{
 		#region Fields
 		//==========================================================================================
@@ -129,69 +129,27 @@ namespace MKY.Time
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+			this.eventHelper.DiscardAllEventsAndExceptions();
 
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			DebugMessage("Disposing...");
+
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				DebugEventManagement.DebugWriteAllEventRemains(this);
-				this.eventHelper.DiscardAllEventsAndExceptions();
-
-				DebugMessage("Disposing...");
-
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					if (this.secondTicker != null)
-					{
-						EventHandlerHelper.RemoveAllEventHandlers(this.secondTicker);
-						this.secondTicker.Dispose();
-					}
+				if (this.secondTicker != null) {
+					EventHandlerHelper.RemoveAllEventHandlers(this.secondTicker);
+					this.secondTicker.Dispose();
+					this.secondTicker = null;
 				}
-
-				// Set state to disposed:
-				this.secondTicker = null;
-				IsDisposed = true;
-
-				DebugMessage("...successfully disposed.");
 			}
-		}
 
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~Chronometer()
-		{
-			Dispose(false);
-
-			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
+			DebugMessage("...successfully disposed.");
 		}
 
 		#endregion
@@ -206,8 +164,8 @@ namespace MKY.Time
 		/// <summary></summary>
 		public double Interval
 		{
-			get { AssertNotDisposed(); return (this.secondTicker.Interval);        }
-			set { AssertNotDisposed();         this.secondTicker.Interval = value; }
+			get { AssertUndisposed(); return (this.secondTicker.Interval);        }
+			set { AssertUndisposed();         this.secondTicker.Interval = value; }
 		}
 
 		/// <summary></summary>
@@ -215,7 +173,7 @@ namespace MKY.Time
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (!this.secondTicker.Enabled)
 					return (this.accumulatedTimeSpan);
@@ -248,7 +206,7 @@ namespace MKY.Time
 		/// </remarks>
 		public virtual void Start(DateTime now)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (!this.secondTicker.Enabled)
 			{
@@ -263,7 +221,7 @@ namespace MKY.Time
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "'Stop' is a common term to start/stop something.")]
 		public virtual void Stop()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (this.secondTicker.Enabled)
 			{
@@ -294,7 +252,7 @@ namespace MKY.Time
 		/// </remarks>
 		public virtual void Reset(DateTime now)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.startTimeStamp = now;
 			this.accumulatedTimeSpan = TimeSpan.Zero;
@@ -313,7 +271,7 @@ namespace MKY.Time
 		/// </remarks>
 		public virtual void Restart(DateTime now)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			Stop();
 			Reset(now);
@@ -336,10 +294,10 @@ namespace MKY.Time
 		/// </remarks>
 		public override string ToString()
 		{
-			if (IsDisposed)
-				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
-
-			return (TimeSpanEx.FormatInvariantThousandthsEnforceMinutes(TimeSpan));
+			if (IsUndisposed) // AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging.
+				return (TimeSpanEx.FormatInvariantThousandthsEnforceMinutes(TimeSpan));
+			else
+				return (base.ToString());
 		}
 
 		#endregion
@@ -363,7 +321,7 @@ namespace MKY.Time
 				try
 				{
 					// Ensure not to forward events during closing anymore:
-					if (!IsDisposed && (this.secondTicker != null) && this.secondTicker.Enabled)
+					if (IsUndisposed && (this.secondTicker != null) && this.secondTicker.Enabled)
 					{
 						OnTimeSpanChanged(new TimeSpanEventArgs(CalculateTimeSpan(e.SignalTime)));
 					}

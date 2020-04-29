@@ -142,13 +142,12 @@ namespace YAT.Application.Test
 		[Test]
 		public virtual void TestEmptyCommandLine()
 		{
-			using (var m = new Main(EmptyArgs))
-			{
-				PrepareMainAndVerifyResult(m, MainResult.Success);
+			var main = new Main(EmptyArgs);
 
-				Assert.That(m.CommandLineIsValid,         Is.True);
-				Assert.That(m.CommandLineHelpIsRequested, Is.False);
-			}
+			PrepareMainAndVerifyResult(main, MainResult.Success);
+
+			Assert.That(main.CommandLineIsValid,         Is.True);
+			Assert.That(main.CommandLineHelpIsRequested, Is.False);
 		}
 
 		#endregion
@@ -163,13 +162,12 @@ namespace YAT.Application.Test
 		public virtual void TestTerminalCommandLineArg()
 		{
 			var terminalFilePathForTest = CloneForTest(TerminalFilePath_TestCase03, "03 - *.*");
-			using (var m = new Main(new string[] { terminalFilePathForTest }))
-			{
-				PrepareMainAndVerifyResult(m, MainResult.Success);
+			var main = new Main(new string[] { terminalFilePathForTest });
 
-				Assert.That(m.CommandLineIsValid,         Is.True);
-				Assert.That(m.CommandLineHelpIsRequested, Is.False);
-			}
+			PrepareMainAndVerifyResult(main, MainResult.Success);
+
+			Assert.That(main.CommandLineIsValid,         Is.True);
+			Assert.That(main.CommandLineHelpIsRequested, Is.False);
 		}
 
 		#endregion
@@ -184,13 +182,12 @@ namespace YAT.Application.Test
 		public virtual void TestWorkspaceCommandLineArg()
 		{
 			var workspaceFilePathForTest = CloneForTest(WorkspaceFilePath_TestCase04, "04 - *.*");
-			using (var m = new Main(new string[] { workspaceFilePathForTest }))
-			{
-				PrepareMainAndVerifyResult(m, MainResult.Success);
+			var main = new Main(new string[] { workspaceFilePathForTest });
 
-				Assert.That(m.CommandLineIsValid,         Is.True);
-				Assert.That(m.CommandLineHelpIsRequested, Is.False);
-			}
+			PrepareMainAndVerifyResult(main, MainResult.Success);
+
+			Assert.That(main.CommandLineIsValid,         Is.True);
+			Assert.That(main.CommandLineHelpIsRequested, Is.False);
 		}
 
 		#endregion
@@ -204,13 +201,12 @@ namespace YAT.Application.Test
 		[Test]
 		public virtual void TestSerialPortCommandLineArg()
 		{
-			using (var m = new Main(SerialPortArgs))
-			{
-				PrepareMainAndVerifyResult(m, MainResult.Success);
+			var main = new Main(SerialPortArgs);
 
-				Assert.That(m.CommandLineIsValid,         Is.True);
-				Assert.That(m.CommandLineHelpIsRequested, Is.False);
-			}
+			PrepareMainAndVerifyResult(main, MainResult.Success);
+
+			Assert.That(main.CommandLineIsValid,         Is.True);
+			Assert.That(main.CommandLineHelpIsRequested, Is.False);
 		}
 
 		#endregion
@@ -224,10 +220,9 @@ namespace YAT.Application.Test
 		[Test]
 		public virtual void TestEmptyCommandLineRun()
 		{
-			using (var m = new Main(EmptyArgs))
-			{
-				RunAndVerifyApplicationWithoutView(m);
-			}
+			var main = new Main(EmptyArgs);
+
+			RunAndVerifyApplicationWithoutView(main);
 		}
 
 		#endregion
@@ -242,10 +237,9 @@ namespace YAT.Application.Test
 		public virtual void TestTerminalCommandLineArgRun()
 		{
 			var terminalFilePathForTest = CloneForTest(TerminalFilePath_TestCase03, "03 - *.*");
-			using (var m = new Main(new string[] { terminalFilePathForTest }))
-			{
-				RunAndVerifyApplicationWithoutView(m);
-			}
+			var main = new Main(new string[] { terminalFilePathForTest });
+
+			RunAndVerifyApplicationWithoutView(main);
 		}
 
 		#endregion
@@ -265,10 +259,9 @@ namespace YAT.Application.Test
 			AssertWorkspaceCommandLineArgRunPreconditions();
 
 			var workspaceFilePathForTest = CloneForTest(WorkspaceFilePath_TestCase04, "04 - *.*");
-			using (var m = new Main(new string[] { workspaceFilePathForTest }))
-			{
-				RunAndVerifyApplicationWithoutView(m);
-			}
+			var main = new Main(new string[] { workspaceFilePathForTest });
+
+			RunAndVerifyApplicationWithoutView(main);
 		}
 
 		#endregion
@@ -282,10 +275,9 @@ namespace YAT.Application.Test
 		[Test]
 		public virtual void TestSerialPortCommandLineArgRun()
 		{
-			using (var m = new Main(SerialPortArgs))
-			{
-				RunAndVerifyApplicationWithoutView(m);
-			}
+			var main = new Main(SerialPortArgs);
+
+			RunAndVerifyApplicationWithoutView(main);
 		}
 
 		#endregion
@@ -313,10 +305,9 @@ namespace YAT.Application.Test
 			if (dr != DialogResult.OK)
 				Assert.Ignore("Tester has canceled");
 
-			using (var m = new Main(EmptyArgs))
-			{
-				RunAndVerifyApplicationWithView(m);
-			}
+			var main = new Main(EmptyArgs);
+
+			RunAndVerifyApplicationWithView(main);
 
 			dr = MessageBoxEx.Show
 			(
@@ -357,10 +348,9 @@ namespace YAT.Application.Test
 				Assert.Ignore("Tester has canceled");
 
 			var terminalFilePathForTest = CloneForTest(TerminalFilePath_TestCase03, "03 - *.*");
-			using (var m = new Main(new string[] { terminalFilePathForTest }))
-			{
-				RunAndVerifyApplicationWithView(m);
-			}
+			var main = new Main(new string[] { terminalFilePathForTest });
+
+			RunAndVerifyApplicationWithView(main);
 
 			dr = MessageBoxEx.Show
 			(
@@ -406,10 +396,9 @@ namespace YAT.Application.Test
 				Assert.Ignore("Tester has canceled");
 
 			var workspaceFilePathForTest = CloneForTest(WorkspaceFilePath_TestCase04, "04 - *.*");
-			using (var m = new Main(new string[] { workspaceFilePathForTest }))
-			{
-				RunAndVerifyApplicationWithView(m);
-			}
+			var main = new Main(new string[] { workspaceFilePathForTest });
+
+			RunAndVerifyApplicationWithView(main);
 
 			dr = MessageBoxEx.Show
 			(
@@ -449,10 +438,9 @@ namespace YAT.Application.Test
 			if (dr != DialogResult.OK)
 				Assert.Ignore("Tester has canceled");
 
-			using (var m = new Main(SerialPortArgs))
-			{
-				RunAndVerifyApplicationWithView(m);
-			}
+			var main = new Main(SerialPortArgs);
+
+			RunAndVerifyApplicationWithView(main);
 
 			dr = MessageBoxEx.Show
 			(
@@ -478,14 +466,13 @@ namespace YAT.Application.Test
 		[Test]
 		public virtual void TestClearedOptions()
 		{
-			using (var m = new Main(null))
-			{
-				PrepareMainAndVerifyResult(m, MainResult.Success);
+			var main = new Main(null);
 
-				Assert.That(m.CommandLineIsValid,         Is.True);
-				Assert.That(m.CommandLineHelpIsRequested, Is.False);
-				Assert.That(m.CommandLineLogoIsRequested, Is.True);
-			}
+			PrepareMainAndVerifyResult(main, MainResult.Success);
+
+			Assert.That(main.CommandLineIsValid,         Is.True);
+			Assert.That(main.CommandLineHelpIsRequested, Is.False);
+			Assert.That(main.CommandLineLogoIsRequested, Is.True);
 		}
 
 		#endregion
@@ -499,13 +486,12 @@ namespace YAT.Application.Test
 		[Test]
 		public virtual void TestSetOptions()
 		{
-			using (var m = new Main(new string[] { "--NoLogo" }))
-			{
-				PrepareMainAndVerifyResult(m, MainResult.Success);
+			var main = new Main(new string[] { "--NoLogo" });
 
-				Assert.That(m.CommandLineIsValid,         Is.True);
-				Assert.That(m.CommandLineLogoIsRequested, Is.False);
-			}
+			PrepareMainAndVerifyResult(main, MainResult.Success);
+
+			Assert.That(main.CommandLineIsValid,         Is.True);
+			Assert.That(main.CommandLineLogoIsRequested, Is.False);
 		}
 
 		#endregion

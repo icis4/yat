@@ -60,7 +60,7 @@ namespace YAT.Model
 	/// Workspaces (.yaw) of the YAT application model.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
-	public class Workspace : IGuidProvider, IDisposable, IDisposableEx
+	public class Workspace : DisposableBase, IGuidProvider
 	{
 		#region Constants
 		//==========================================================================================
@@ -217,84 +217,43 @@ namespace YAT.Model
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+			this.eventHelper.DiscardAllEventsAndExceptions();
 
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			DebugMessage("Disposing...");
+
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				DebugEventManagement.DebugWriteAllEventRemains(this);
-				this.eventHelper.DiscardAllEventsAndExceptions();
+				// In the 'normal' case, the terminals have already been closed, otherwise...
 
-				DebugMessage("Disposing...");
+				// ...detach event handlers to ensure that no more events are received...
+				DetachAllTerminalEventHandlers();
 
-				// Dispose of managed resources if requested:
-				if (disposing)
+				// ...dispose of terminals (normally they dispose of themselves)...
+				if (this.terminals != null)
 				{
-					// In the 'normal' case, the terminals have already been closed, otherwise...
+					foreach (var t in this.terminals)
+						t.Dispose();
 
-					// ...detach event handlers to ensure that no more events are received...
-					DetachAllTerminalEventHandlers();
-
-					// ...dispose of terminals (normally they dispose of themselves)...
-					if (this.terminals != null)
-					{
-						foreach (var t in this.terminals)
-							t.Dispose();
-
-						this.terminals.Clear();
-					}
-
-					// ...and finally the settings:
-					if (!DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification)
-					{
-						DetachSettingsEventHandlers();
-						DisposeSettingsHandler();
-					}
+					this.terminals.Clear();
+					this.terminals = null;
 				}
 
-				// Set state to disposed:
-				this.terminals = null;
-				IsDisposed = true;
-
-				DebugMessage("...successfully disposed.");
+				// ...and finally the settings:
+				if (!DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification)
+				{
+					DetachSettingsEventHandlers();
+					DisposeSettingsHandler();
+				}
 			}
-		}
 
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~Workspace()
-		{
-			Dispose(false);
-
-			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
+			DebugMessage("...successfully disposed.");
 		}
 
 		#endregion
@@ -311,7 +270,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.guid);
 			}
@@ -325,7 +284,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.activeTerminal != null)
 					return (this.activeTerminal.IndicatedName);
@@ -339,7 +298,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.startArgs);
 			}
@@ -350,7 +309,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.settingsHandler != null)
 					return (this.settingsHandler.SettingsFilePath);
@@ -364,7 +323,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.settingsHandler != null)
 					return (this.settingsHandler.SettingsFileExists);
@@ -378,7 +337,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.settingsHandler != null)
 					return (this.settingsHandler.SettingsFileIsReadOnly);
@@ -392,7 +351,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.settingsHandler != null)
 					return (this.settingsHandler.SettingsFileIsWritable);
@@ -406,7 +365,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if ((this.settingsHandler != null) && (this.settingsRoot != null))
 					return (this.settingsHandler.SettingsFileSuccessfullyLoaded && !this.settingsRoot.AutoSaved);
@@ -431,7 +390,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.terminals != null)
 					return (this.terminals.Count);
@@ -448,7 +407,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.terminals != null)
 					return (this.terminals.ToArray());
@@ -464,7 +423,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.activeTerminal);
 			}
@@ -477,7 +436,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.activeTerminal != null)
 					return (this.activeTerminal.SequentialId);
@@ -493,7 +452,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.activeTerminal != null)
 					return (GetDynamicIdByTerminal(this.activeTerminal));
@@ -509,7 +468,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.activeTerminal != null)
 					return (GetFixedIdByTerminal(this.activeTerminal));
@@ -528,7 +487,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (ActiveTerminal != null)
 				{
@@ -593,7 +552,7 @@ namespace YAT.Model
 		{
 			if (this.settingsHandler != null)
 			{
-				this.settingsHandler.Dispose();
+				//this.settingsHandler.Dispose();
 				this.settingsHandler = null;
 			}
 		}
@@ -641,7 +600,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.settingsHandler != null)
 					return (this.settingsRoot.HaveChanged);
@@ -655,8 +614,9 @@ namespace YAT.Model
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() to still allow reading the settings after the
-				// workspace has been disposed. This is required for certain test cases.
+				// Attention:
+				// AssertUndisposed() must not be called to still allow reading the settings after
+				// the workspace has been disposed. This is required for certain test cases.
 
 				return (this.settingsRoot);
 			}
@@ -689,7 +649,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual bool Save()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			// First, save all contained terminals:
 			if (!SaveAllTerminalsNormally(true))
@@ -724,7 +684,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool SaveConsiderately(bool autoSaveIsAllowed, bool userInteractionIsAllowed, bool saveEvenIfNotChanged, bool canBeCanceled, out bool isCanceled)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			isCanceled = false;
 
@@ -913,7 +873,7 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual bool SaveAs(string filePath)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			// First, save all contained terminals:
 			if (!SaveAllTerminalsNormally(false))
@@ -1045,7 +1005,7 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual bool CloseConsiderately(bool isMainExit)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			OnFixedStatusTextRequest("Closing workspace...");
 
@@ -1428,7 +1388,7 @@ namespace YAT.Model
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (this.terminals != null)
 				{
@@ -1457,7 +1417,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public virtual bool CreateNewTerminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			OnFixedStatusTextRequest("Creating new terminal...");
 			OnCursorRequest(Cursors.WaitCursor);
@@ -1517,7 +1477,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual int OpenTerminals(int dynamicTerminalIdToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			int requestedTerminalCount = this.settingsRoot.TerminalSettings.Count;
 			if (requestedTerminalCount == 1)
@@ -1650,7 +1610,7 @@ namespace YAT.Model
 		/// <returns><c>true</c> if successfully opened the terminal; otherwise, <c>false</c>.</returns>
 		public virtual bool OpenTerminalFromFile(string filePath)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			string fileName = Path.GetFileName(filePath);
 			OnFixedStatusTextRequest("Opening terminal " + fileName + "...");
@@ -1714,7 +1674,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid, int fixedId, WindowSettings windowSettings, out Exception exception)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			// Ensure that the terminal file is not already open:
 			if (!CheckTerminalFiles(settingsHandler.SettingsFilePath))
@@ -2020,7 +1980,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual int GetDynamicIdByTerminal(Terminal terminal)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			int index = this.terminals.IndexOf(this.activeTerminal);
 			return (TerminalIds.IndexToDynamicId(index));
@@ -2032,7 +1992,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		public virtual bool TryGetTerminalByGuid(Guid guid, out Terminal terminal)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (this.terminals != null)
 			{
@@ -2057,7 +2017,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual bool TryGetTerminalBySequentialId(int sequentialId, out Terminal terminal)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (this.terminals != null)
 			{
@@ -2086,7 +2046,7 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual bool TryGetTerminalByDynamicId(int dynamicId, out Terminal terminal)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (dynamicId == TerminalIds.ActiveDynamicId)
 			{
@@ -2118,7 +2078,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual bool TryGetTerminalByFixedId(int index, out Terminal terminal)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (this.fixedIds.TryGetValue(index, out terminal))
 			{
@@ -2141,7 +2101,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool SaveAllTerminals()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			return (SaveAllTerminalsEvenIfNotChanged(true)); // Save even if not changed since explicitly requesting saving all.
 		}
@@ -2226,7 +2186,7 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual bool CloseAllTerminals()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			return (CloseAllTerminals(false, true, false, true)); // See remarks above.
 		}
@@ -2258,7 +2218,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual void AllClear()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (this.terminals != null)
 			{
@@ -2270,7 +2230,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual void AllRefresh()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (this.terminals != null)
 			{
@@ -2282,7 +2242,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool AllLogOn()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			bool success = true;
 
@@ -2301,7 +2261,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool AllLogOff()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			bool success = true;
 
@@ -2320,7 +2280,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool AllLogClear()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			bool success = true;
 
@@ -2346,7 +2306,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual void ActivateTerminal(Terminal terminal)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.activeTerminal = terminal;
 		}
@@ -2362,7 +2322,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual void DeactivateTerminal(Terminal terminal)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (this.activeTerminal == terminal)
 				this.activeTerminal = null;
@@ -2371,7 +2331,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool SaveActiveTerminal()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (this.activeTerminal != null)
 				return (this.activeTerminal.Save());
@@ -2382,7 +2342,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool CloseActiveTerminal()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (this.activeTerminal != null)
 				return (this.activeTerminal.Close());
@@ -2393,7 +2353,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool OpenActiveTerminalIO()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (this.activeTerminal != null)
 				return (this.activeTerminal.StartIO());
@@ -2404,7 +2364,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool CloseActiveTerminalIO()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			if (this.activeTerminal != null)
 				return (this.activeTerminal.StopIO());

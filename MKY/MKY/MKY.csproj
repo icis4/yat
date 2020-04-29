@@ -135,6 +135,7 @@
     <Compile Include="Guid\GuidEx.cs" />
     <Compile Include="Guid\GuidList.cs" />
     <Compile Include="Guid\IGuidProvider.cs" />
+    <Compile Include="DisposableBase.cs" />
     <Compile Include="IO\DirectoryEx.cs" />
     <Compile Include="IO\FileEx.cs" />
     <Compile Include="IO\LogFile.cs" />

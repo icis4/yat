@@ -164,13 +164,13 @@ namespace MKY.IO.Serial.Socket
 
 		private void client_DataReceived(object sender, DataReceivedEventArgs e)
 		{
-			if (!IsDisposed && IsClient) // Check 'IsDisposed' first!
+			if (IsUndisposed && IsClient) // Check disposal state first!
 				OnDataReceived(e);
 		}
 
 		private void client_DataSent(object sender, DataSentEventArgs e)
 		{
-			if (!IsDisposed && IsClient) // Check 'IsDisposed' first!
+			if (IsUndisposed && IsClient) // Check disposal state first!
 				OnDataSent(e);
 		}
 

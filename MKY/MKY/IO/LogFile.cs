@@ -35,7 +35,7 @@ namespace MKY.IO
 	/// <summary>
 	/// Thread-safe log file.
 	/// </summary>
-	public class LogFile : IDisposable, IDisposableEx
+	public class LogFile : DisposableBase
 	{
 		private string filePath;
 		private StreamWriter writer;
@@ -77,59 +77,20 @@ namespace MKY.IO
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					if (this.writer != null)
-						this.writer.Dispose();
+				if (this.writer != null) {
+					this.writer.Dispose();
+					this.writer = null;
 				}
-
-				// Set state to disposed:
-				this.writer = null;
-				IsDisposed = true;
 			}
-		}
-
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~LogFile()
-		{
-			Dispose(false);
-
-			Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -143,7 +104,7 @@ namespace MKY.IO
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.filePath);
 			}
@@ -156,7 +117,7 @@ namespace MKY.IO
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.writer.BaseStream);
 			}
@@ -169,7 +130,7 @@ namespace MKY.IO
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public virtual void WriteLine(string line, string timeStampFormat = "yyyy-MM-dd HH:mm:ss.fff")
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			var now = DateTime.Now;
 			try
@@ -189,17 +150,17 @@ namespace MKY.IO
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public virtual void Close()
 		{
-			if (IsDisposed)
-				return; // Close() shall be callable on a disposed object.
-
-			try
+			if (IsUndisposed) // Close() shall be callable on a disposed object.
 			{
-				lock (this.writer)
+				try
 				{
-					this.writer.Close();
+					lock (this.writer)
+					{
+						this.writer.Close();
+					}
 				}
+				catch { }
 			}
-			catch { }
 		}
 	}
 }

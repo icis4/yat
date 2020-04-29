@@ -76,7 +76,7 @@ namespace MKY.IO.Serial.SerialPort
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Different root namespace.")]
-	public partial class SerialPort : IIOProvider, IXOnXOffHandler, IDisposable, IDisposableEx
+	public partial class SerialPort : DisposableBase, IIOProvider, IXOnXOffHandler
 	{
 		#region Types
 		//==========================================================================================
@@ -239,63 +239,21 @@ namespace MKY.IO.Serial.SerialPort
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary></summary>
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
 		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "port", Justification = "Is actually disposed of asynchronously in ResetPortAndThreadsAndNotify().")]
-		protected virtual void Dispose(bool disposing)
+		protected override void Dispose(bool disposing)
 		{
-			if (!IsDisposed)
+			this.eventHelper.DiscardAllEventsAndExceptions();
+
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				DebugEventManagement.DebugWriteAllEventRemains(this);
-
-				this.eventHelper.DiscardAllEventsAndExceptions();
-
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					// In the 'normal' case, the items have already been disposed of in e.g. Stop().
-					ResetPortAndThreadsWithoutNotify(false); // Suppress notifications during disposal!
-				}
-
-				// Set state to disposed:
-				IsDisposed = true;
+				// In the 'normal' case, the items have already been disposed of in e.g. Stop().
+				ResetPortAndThreadsWithoutNotify(false); // Suppress notifications during disposal!
 			}
-		}
-
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~SerialPort()
-		{
-			Dispose(false);
-
-			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
 		}
 
 		#endregion
@@ -312,13 +270,13 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.settings);
 			}
 			set
 			{
-				// AssertNotDisposed() is called by 'IsStopped' below.
+			////AssertUndisposed() is called by 'IsStopped' below.
 
 				if (IsStopped)
 				{
@@ -339,7 +297,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.port != null)
 					return (this.port.PortId);
@@ -355,7 +313,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				switch (GetStateSynchronized())
 				{
@@ -377,7 +335,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				switch (GetStateSynchronized())
 				{
@@ -400,7 +358,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				// Do not lock() infinitly in a simple get-property.
 
@@ -432,7 +390,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				// Do not lock() infinitly in a simple get-property.
 
@@ -464,7 +422,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				// Do not call AssertNotDisposed() in a simple get-property.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				// Do not lock() infinitly in a simple get-property.
 
@@ -504,7 +462,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				lock (this.portSyncObj)
 				{
@@ -523,7 +481,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				lock (this.portSyncObj)
 				{
@@ -543,7 +501,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.settings.Communication.FlowControlUsesXOnXOff);
 			}
@@ -556,7 +514,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
 					return (this.iXOnXOffHelper.InputIsXOn);
@@ -572,7 +530,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
 					return (this.iXOnXOffHelper.OutputIsXOn);
@@ -588,7 +546,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
 					return (this.iXOnXOffHelper.SentXOnCount);
@@ -604,7 +562,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
 					return (this.iXOnXOffHelper.SentXOffCount);
@@ -620,7 +578,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
 					return (this.iXOnXOffHelper.ReceivedXOnCount);
@@ -636,7 +594,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
 					return (this.iXOnXOffHelper.ReceivedXOffCount);
@@ -650,7 +608,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				lock (this.portSyncObj)
 				{
@@ -667,7 +625,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				lock (this.portSyncObj)
 				{
@@ -684,7 +642,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			get
 			{
-				AssertNotDisposed();
+				AssertUndisposed();
 
 				return (this.port);
 			}
@@ -700,7 +658,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary></summary>
 		public virtual bool Start()
 		{
-			// AssertNotDisposed() is called by 'IsStopped' below.
+		////AssertUndisposed() is called by 'IsStopped' below.
 
 			if (IsStopped)
 			{
@@ -726,7 +684,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary></summary>
 		public virtual void Stop()
 		{
-			// AssertNotDisposed() is called by 'IsStarted' below.
+		////AssertUndisposed() is called by 'IsStarted' below.
 
 			if (IsStarted)
 			{
@@ -744,7 +702,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		public virtual void ResetXOnXOffCount()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.iXOnXOffHelper.ResetCounts();
 
@@ -756,7 +714,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		public virtual void ResetFlowControlCount()
 		{
-			// AssertNotDisposed() is called by 'ResetXOnXOffCount()' below.
+		////AssertUndisposed() is called by 'ResetXOnXOffCount()' below.
 
 			lock (this.portSyncObj)
 			{
@@ -772,7 +730,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		public virtual void ResetBreakCount()
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			lock (this.portSyncObj)
 			{
@@ -1353,7 +1311,7 @@ namespace MKY.IO.Serial.SerialPort
 			// down, e.g. a USB to serial converter was disconnected.
 			try
 			{
-				if (!IsDisposed && IsOpen) // Ensure not to perform any operations during closing anymore. Check 'IsDisposed' first!
+				if (IsUndisposed && IsOpen) // Ensure not to perform any operations during closing anymore. Check disposal state first!
 				{
 					// Immediately read data on this thread:
 					int bytesToRead;
@@ -1411,7 +1369,7 @@ namespace MKY.IO.Serial.SerialPort
 					// Immediately invoke the event, but invoke it asynchronously and NOT on this thread!
 					if (signalXOnXOff || signalXOnXOffCount)
 						OnIOControlChangedAsync(new EventArgs<DateTime>(DateTime.Now)); // Async! See remarks above.
-				} // if (!IsDisposed && ...)
+				} // if (IsUndisposed && ...)
 			}
 			catch (IOException ex) // The best way to detect a disconnected device is handling this exception...
 			{
@@ -1439,7 +1397,7 @@ namespace MKY.IO.Serial.SerialPort
 			// e.g. USB to serial converter was disconnected.
 			try
 			{
-				if (!IsDisposed && IsOpen) // Ensure not to forward events during closing anymore.
+				if (IsUndisposed && IsOpen) // Ensure not to forward events during closing anymore.
 				{
 					// Signal pin change to threads:
 					SignalThreadsSafely();
@@ -1537,7 +1495,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				try
 				{
-					if (!IsDisposed && IsStarted) // Check 'IsDisposed' first!
+					if (IsUndisposed && IsStarted) // Check disposal state first!
 					{
 						try
 						{
@@ -1567,7 +1525,7 @@ namespace MKY.IO.Serial.SerialPort
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "SerialPort.ErrorReceived: Only one event handler can execute at a time.")]
 		private void port_ErrorReceived(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
 		{
-			if (!IsDisposed && IsOpen) // Ensure not to forward events during closing anymore.
+			if (IsUndisposed && IsOpen) // Ensure not to forward events during closing anymore.
 			{
 				ErrorSeverity severity = ErrorSeverity.Severe;
 				Direction direction;
@@ -1644,7 +1602,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				try
 				{
-					if (!IsDisposed && IsStarted) // Check 'IsDisposed' first!
+					if (IsUndisposed && IsStarted) // Check disposal state first!
 					{
 						if (!Ports.SerialPortCollection.IsAvailable(PortId))
 						{
@@ -1723,7 +1681,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				try
 				{
-					if (!IsDisposed && IsStarted && !IsOpen && this.settings.AutoReopen.Enabled) // Check 'IsDisposed' first!
+					if (IsUndisposed && IsStarted && !IsOpen && this.settings.AutoReopen.Enabled) // Check disposal state first!
 					{
 						if (Ports.SerialPortCollection.IsAvailable(PortId))
 						{
@@ -1772,7 +1730,7 @@ namespace MKY.IO.Serial.SerialPort
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOChanged(EventArgs<DateTime> e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseSync(IOChanged, this, e);
 		}
 
@@ -1780,7 +1738,7 @@ namespace MKY.IO.Serial.SerialPort
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOChangedAsync(EventArgs<DateTime> e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseAsync(IOChanged, this, e);
 		}
 
@@ -1788,7 +1746,7 @@ namespace MKY.IO.Serial.SerialPort
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOControlChanged(EventArgs<DateTime> e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 			{
 				this.eventHelper.RaiseSync(IOControlChanged, this, e);
 
@@ -1800,7 +1758,7 @@ namespace MKY.IO.Serial.SerialPort
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOControlChangedAsync(EventArgs<DateTime> e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 			{
 				this.eventHelper.RaiseAsync(IOControlChanged, this, e);
 
@@ -1823,7 +1781,7 @@ namespace MKY.IO.Serial.SerialPort
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
@@ -1831,7 +1789,7 @@ namespace MKY.IO.Serial.SerialPort
 		[CallingContract(IsNeverMainThread = true)]
 		protected virtual void OnIOErrorAsync(IOErrorEventArgs e)
 		{
-			if (!IsDisposed) // Make sure to propagate event only if not already disposed.
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseAsync<IOErrorEventArgs>(IOError, this, e);
 		}
 
@@ -1839,7 +1797,7 @@ namespace MKY.IO.Serial.SerialPort
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		protected virtual void OnDataReceived(DataReceivedEventArgs e)
 		{
-			if (IsOpen) // Make sure to propagate event only if active.
+			if (IsUndisposed && IsOpen) // Make sure to propagate event only if active.
 				this.eventHelper.RaiseSync<DataReceivedEventArgs>(DataReceived, this, e);
 		}
 
@@ -1847,7 +1805,7 @@ namespace MKY.IO.Serial.SerialPort
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
 		protected virtual void OnDataSent(DataSentEventArgs e)
 		{
-			if (IsOpen) // Make sure to propagate event only if active.
+			if (IsUndisposed && IsOpen) // Make sure to propagate event only if active.
 				this.eventHelper.RaiseSync<DataSentEventArgs>(DataSent, this, e);
 		}
 
@@ -1863,7 +1821,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		public override string ToString()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging. All underlying fields are still valid after disposal.
 
 			return (ToPortName());
 		}
@@ -1871,7 +1829,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary></summary>
 		public virtual string ToPortName()
 		{
-			// Do not call AssertNotDisposed() on such basic method! Its return value is needed for debugging! All underlying fields are still valid after disposal.
+			// AssertUndisposed() shall not be called from such basic method! Its return value is needed for debugging! All underlying fields are still valid after disposal.
 
 			var id = PortId;
 			if (id != null)

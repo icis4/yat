@@ -76,17 +76,15 @@ namespace YAT
 		[STAThread]
 		private static int Main(string[] commandLineArgs)
 		{
-			Application.MainResult result;
+			var main = new Application.Main(commandLineArgs);
+			var result = main.RunFromConsole();
 
-			using (Application.Main main = new Application.Main(commandLineArgs))
-			{
-				result = main.RunFromConsole();
-			}
 		#if (DEBUG)
 			GC.Collect(); // Force garbage collection to allow detecting memory leaks upon exit.
 			Application.Diagnostics.DebugFinalization.DebugNotifyAllowedStaticObjects();
 		////MKY.Diagnostics.DebugFinalization.FinalizationShouldHaveCompleted = true; has been disabled until fix of bugs #243, #263 and #336 continues.
 		#endif
+
 			return ((int)result);
 		}
 	}

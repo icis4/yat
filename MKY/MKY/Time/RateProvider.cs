@@ -61,7 +61,7 @@ namespace MKY.Time
 	#endregion
 
 	/// <summary></summary>
-	public class RateProvider : IDisposable, IDisposableEx
+	public class RateProvider : DisposableBase
 	{
 		#region Fields
 		//==========================================================================================
@@ -136,69 +136,27 @@ namespace MKY.Time
 		// Disposal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
+		/// <param name="disposing">
+		/// <c>true</c> when called from <see cref="Dispose"/>,
+		/// <c>false</c> when called from finalizer.
+		/// </param>
+		protected override void Dispose(bool disposing)
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+			this.eventHelper.DiscardAllEventsAndExceptions();
 
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
+			DebugMessage("Disposing...");
+
+			// Dispose of managed resources:
+			if (disposing)
 			{
-				DebugEventManagement.DebugWriteAllEventRemains(this);
-				this.eventHelper.DiscardAllEventsAndExceptions();
-
-				DebugMessage("Disposing...");
-
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					if (this.updateTicker != null)
-					{
-						EventHandlerHelper.RemoveAllEventHandlers(this.updateTicker);
-						this.updateTicker.Dispose();
-					}
+				if (this.updateTicker != null) {
+					EventHandlerHelper.RemoveAllEventHandlers(this.updateTicker);
+					this.updateTicker.Dispose();
+					this.updateTicker = null;
 				}
-
-				// Set state to disposed:
-				this.updateTicker = null;
-				IsDisposed = true;
-
-				DebugMessage("...successfully disposed.");
 			}
-		}
 
-	#if (DEBUG)
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~RateProvider()
-		{
-			Dispose(false);
-
-			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-	#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
+			DebugMessage("...successfully disposed.");
 		}
 
 		#endregion
@@ -213,29 +171,29 @@ namespace MKY.Time
 		/// <summary></summary>
 		public double UpdateInterval
 		{
-			get { AssertNotDisposed(); return (this.updateInterval);        }
-			set { AssertNotDisposed();         this.updateInterval = value; }
+			get { AssertUndisposed(); return (this.updateInterval);        }
+			set { AssertUndisposed();         this.updateInterval = value; }
 		}
 
 		/// <summary></summary>
 		public double RateInterval
 		{
-			get { AssertNotDisposed(); return (this.rate.Interval);        }
-			set { AssertNotDisposed();         this.rate.Interval = value; }
+			get { AssertUndisposed(); return (this.rate.Interval);        }
+			set { AssertUndisposed();         this.rate.Interval = value; }
 		}
 
 		/// <summary></summary>
 		public double RateWindow
 		{
-			get { AssertNotDisposed(); return (this.rate.Window);        }
-			set { AssertNotDisposed();         this.rate.Window = value; }
+			get { AssertUndisposed(); return (this.rate.Window);        }
+			set { AssertUndisposed();         this.rate.Window = value; }
 		}
 
 		/// <summary></summary>
 		public int RateValue
 		{
-			get { AssertNotDisposed(); return (this.rate.Value);        }
-			set { AssertNotDisposed();         this.rate.Value = value; }
+			get { AssertUndisposed(); return (this.rate.Value);        }
+			set { AssertUndisposed();         this.rate.Value = value; }
 		}
 
 		#endregion
@@ -249,7 +207,7 @@ namespace MKY.Time
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual bool Update(int value, bool allowChangedEvent = true)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			bool hasChanged = this.rate.Update(value);
 
@@ -263,7 +221,7 @@ namespace MKY.Time
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual bool Update(DateTime endOfWindow, bool allowChangedEvent = true)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			int value;
 			bool hasChanged = this.rate.Update(endOfWindow, out value);
@@ -278,7 +236,7 @@ namespace MKY.Time
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void Reset(bool allowChangedEvent = true)
 		{
-			AssertNotDisposed();
+			AssertUndisposed();
 
 			this.rate.Reset();
 
@@ -302,10 +260,10 @@ namespace MKY.Time
 		/// </remarks>
 		public override string ToString()
 		{
-			if (IsDisposed)
-				return (base.ToString()); // Do not call AssertNotDisposed() on such basic method! Its return value may be needed for debugging.
-
-			return (UpdateInterval.ToString(CultureInfo.CurrentCulture));
+			if (IsUndisposed) // AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging.
+				return (UpdateInterval.ToString(CultureInfo.CurrentCulture));
+			else
+				return (base.ToString());
 		}
 
 		#endregion
@@ -329,7 +287,7 @@ namespace MKY.Time
 				try
 				{
 					// Ensure not to forward events during closing anymore:
-					if (!IsDisposed && (this.updateTicker != null) && this.updateTicker.Enabled)
+					if (IsUndisposed && (this.updateTicker != null) && this.updateTicker.Enabled)
 					{
 						Update(e.SignalTime);
 					}

@@ -123,17 +123,20 @@ namespace MKY.Collections.Generic
 					GC.SuppressFinalize(this);
 				}
 
+				/// <param name="disposing">
+				/// <c>true</c> when called from <see cref="Dispose()"/>,
+				/// <c>false</c> when called from finalizer.
+				/// </param>
 				protected virtual void Dispose(bool disposing)
 				{
-					// Dispose of managed resources if requested:
+					// Dispose of managed resources:
 					if (disposing)
 					{
-						if (this.source != null)
+						if (this.source != null) {
 							this.source.Dispose();
+							this.source = null;
+						}
 					}
-
-					// Set state to disposed:
-					this.source = null;
 				}
 
 			#if (DEBUG)
