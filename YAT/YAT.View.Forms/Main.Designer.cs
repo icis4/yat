@@ -1005,7 +1005,7 @@ namespace YAT.View.Forms
 			this.toolStripStatusLabel_MainStatus_Chrono.Name = "toolStripStatusLabel_MainStatus_Chrono";
 			this.toolStripStatusLabel_MainStatus_Chrono.Size = new System.Drawing.Size(53, 19);
 			this.toolStripStatusLabel_MainStatus_Chrono.Text = "0:00.000";
-			this.toolStripStatusLabel_MainStatus_Chrono.ToolTipText = "Chronometer (m:ss.ths),\r\nclick to Start/Stop,\r\ndouble-click to Reset";
+			this.toolStripStatusLabel_MainStatus_Chrono.ToolTipText = "Chronometer (m:ss.ths),\r\nClick to Start/Stop,\r\nDouble-Click to Reset";
 			this.toolStripStatusLabel_MainStatus_Chrono.Click += new System.EventHandler(this.toolStripStatusLabel_MainStatus_Chrono_Click);
 			this.toolStripStatusLabel_MainStatus_Chrono.DoubleClick += new System.EventHandler(this.toolStripStatusLabel_MainStatus_Chrono_DoubleClick);
 			// 

@@ -1079,6 +1079,31 @@ namespace YAT.View.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
+		private void label_TimeStatus_Active_DoubleClick(object sender, EventArgs e)
+		{
+			ResetTimeStatus();
+		}
+
+		private void label_TimeStatus_Total_DoubleClick(object sender, EventArgs e)
+		{
+			ResetTimeStatus();
+		}
+
+		private void label_DataStatus_BidirTx_DoubleClick(object sender, EventArgs e)
+		{
+			ResetDataStatus();
+		}
+
+		private void label_DataStatus_Unidir_DoubleClick(object sender, EventArgs e)
+		{
+			ResetDataStatus();
+		}
+
+		private void label_DataStatus_BidirRx_DoubleClick(object sender, EventArgs e)
+		{
+			ResetDataStatus();
+		}
+
 		private void fastListBox_Monitor_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			var lb = fastListBox_Monitor;
