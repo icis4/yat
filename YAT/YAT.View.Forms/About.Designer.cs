@@ -14,19 +14,17 @@
 		protected override void Dispose(bool disposing)
 		{
 			// Modified version of the designer generated Dispose() method:
-			if (!IsDisposed)
-			{
-				// Dispose of managed resources if requested:
-				if (disposing)
-				{
-					timer_ExecuteManualTest3_Dispose();
-				}
 
-				// Dispose designer generated managed resources if requested:
-				if (disposing && (components != null))
-				{
-					components.Dispose();
-				}
+			// Dispose of managed resources:
+			if (disposing)
+			{
+				timer_ExecuteManualTest3_Dispose();
+			}
+
+			// Dispose of designer generated managed resources:
+			if (disposing && (components != null))
+			{
+				components.Dispose();
 			}
 
 			base.Dispose(disposing);
