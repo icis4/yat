@@ -218,7 +218,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public void ReplaceCurrentLine(DisplayElementCollection currentLineElements)
 		{
-			if ((this.currentLine != null) && (this.currentLine.Count > 0)) // Only something to do if there is something in current line indeed.
+			if (this.currentLine.Count > 0) // Only something to do if there is something in current line indeed.
 			{
 				ClearCurrentLine();
 				Enqueue(currentLineElements);
@@ -228,7 +228,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public void ClearCurrentLine()
 		{
-			if ((this.currentLine != null) && (this.currentLine.Count > 0)) // Only something to do if there is something in current line indeed.
+			if (this.currentLine.Count > 0) // Only something to do if there is something in current line indeed.
 			{
 				this.byteCount -= this.currentLine.ByteCount;
 
@@ -259,7 +259,7 @@ namespace YAT.Domain
 			var lines = new DisplayLineCollection(base.ToArray()); // Using this.ToArray() would result in recursion => stack overflow!
 
 			// Add current line:
-			if (this.currentLine != null)
+			if (this.currentLine.Count > 0) // Only something to do if there is something in current line indeed.
 				lines.Add(this.currentLine.Clone()); // Clone to ensure decoupling.
 
 			return (lines);
