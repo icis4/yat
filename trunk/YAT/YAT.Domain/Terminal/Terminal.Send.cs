@@ -316,12 +316,12 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public virtual void SendText(string data, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
+		public virtual void SendText(string text, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
 			AssertUndisposed();
 
 			var parseMode = TerminalSettings.Send.Text.ToParseMode(); // Get setting at request/invocation.
-			var item = new TextSendItem(data, defaultRadix, parseMode, SendMode.Text, false);
+			var item = new TextSendItem(text, defaultRadix, parseMode, SendMode.Text, false);
 
 			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber);
 			var asyncInvoker = new Action<TextSendItem, long>(DoSendText);
@@ -331,20 +331,20 @@ namespace YAT.Domain
 		/// <remarks>This method will be called asynchronously.</remarks>
 		protected virtual void DoSendText(TextSendItem item, long sequenceNumber)
 		{
-			DebugSend(string.Format(@"Sending of text ""{0}"" has been invoked (sequence number = {1}).", item.Data, sequenceNumber));
+			DebugSend(string.Format(@"Sending of text ""{0}"" has been invoked (sequence number = {1}).", item.Text, sequenceNumber));
 
 			if (TryEnterRequestGate(sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
-					DebugSend(string.Format(@"Sending of text ""{0}"" has been permitted (sequence number = {1}).", item.Data, sequenceNumber));
+					DebugSend(string.Format(@"Sending of text ""{0}"" has been permitted (sequence number = {1}).", item.Text, sequenceNumber));
 
 					var sendingIsBusyChangedEvent = new SendingIsBusyChangedEventHelper(DateTime.Now);
 					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised); // Always false for text items. If needed,
 					DoSendTextItem(sendingIsBusyChangedEvent, item);        // event will be raised by DoSendTextItem().
 					DoSendPost(sendingIsBusyChangedEvent.EventMustBeRaised);
 
-					DebugSend(string.Format(@"Sending of text ""{0}"" has been completed (sequence number = {1}).", item.Data, sequenceNumber));
+					DebugSend(string.Format(@"Sending of text ""{0}"" has been completed (sequence number = {1}).", item.Text, sequenceNumber));
 				}
 				finally
 				{
@@ -355,12 +355,12 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public virtual void SendTextLine(string dataLine, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
+		public virtual void SendTextLine(string line, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
 			AssertUndisposed();
 
 			var parseMode = TerminalSettings.Send.Text.ToParseMode(); // Get setting at request/invocation.
-			var item = new TextSendItem(dataLine, defaultRadix, parseMode, SendMode.Text, true);
+			var item = new TextSendItem(line, defaultRadix, parseMode, SendMode.Text, true);
 
 			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber);
 			var asyncInvoker = new Action<TextSendItem, long>(DoSendTextLine);
@@ -370,20 +370,20 @@ namespace YAT.Domain
 		/// <remarks>This method will be called asynchronously.</remarks>
 		protected virtual void DoSendTextLine(TextSendItem item, long sequenceNumber)
 		{
-			DebugSend(string.Format(@"Sending of text line ""{0}"" has been invoked (sequence number = {1}).", item.Data, sequenceNumber));
+			DebugSend(string.Format(@"Sending of text line ""{0}"" has been invoked (sequence number = {1}).", item.Text, sequenceNumber));
 
 			if (TryEnterRequestGate(sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
-					DebugSend(string.Format(@"Sending of text line ""{0}"" has been permitted (sequence number = {1}).", item.Data, sequenceNumber));
+					DebugSend(string.Format(@"Sending of text line ""{0}"" has been permitted (sequence number = {1}).", item.Text, sequenceNumber));
 
 					var sendingIsBusyChangedEvent = new SendingIsBusyChangedEventHelper(DateTime.Now);
 					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised); // Always false for text items. If needed,
 					DoSendTextItem(sendingIsBusyChangedEvent, item);        // event will be raised by DoSendTextItem().
 					DoSendPost(sendingIsBusyChangedEvent.EventMustBeRaised);
 
-					DebugSend(string.Format(@"Sending of text line ""{0}"" has been completed (sequence number = {1}).", item.Data, sequenceNumber));
+					DebugSend(string.Format(@"Sending of text line ""{0}"" has been completed (sequence number = {1}).", item.Text, sequenceNumber));
 				}
 				finally
 				{
@@ -396,14 +396,14 @@ namespace YAT.Domain
 		/// Required to allow sending multi-line commands "kept together".
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public virtual void SendTextLines(string[] dataLines, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
+		public virtual void SendTextLines(string[] lines, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
 			AssertUndisposed();
 
 			var parseMode = TerminalSettings.Send.Text.ToParseMode(); // Get setting at request/invocation.
-			var items = new List<TextSendItem>(dataLines.Length); // Preset the required capacity to improve memory management.
-			foreach (string dataLine in dataLines)
-				items.Add(new TextSendItem(dataLine, defaultRadix, parseMode, SendMode.Text, true));
+			var items = new List<TextSendItem>(lines.Length); // Preset the required capacity to improve memory management.
+			foreach (string line in lines)
+				items.Add(new TextSendItem(line, defaultRadix, parseMode, SendMode.Text, true));
 
 			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber);
 			var asyncInvoker = new Action<List<TextSendItem>, long>(DoSendTextLines);
@@ -569,10 +569,10 @@ namespace YAT.Domain
 		{
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
-			if (DoTryParse(item.Data, item.DefaultRadix, item.ParseMode, out parseResult, out textSuccessfullyParsed))
+			if (DoTryParse(item.Text, item.DefaultRadix, item.ParseMode, out parseResult, out textSuccessfullyParsed))
 				DoSendText(sendingIsBusyChangedEventHelper, parseResult, item.IsLine);
 			else
-				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(item.Data, textSuccessfullyParsed)));
+				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(item.Text, textSuccessfullyParsed)));
 		}
 
 		/// <summary></summary>
