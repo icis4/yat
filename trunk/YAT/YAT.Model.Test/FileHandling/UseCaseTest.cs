@@ -177,14 +177,14 @@ namespace YAT.Model.Test.FileHandling
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, uc + "Workspace not created!");
 				Assert.That(w.TerminalCount, Is.EqualTo(0), uc + "Workspace doesn't contain 0 terminals!");
-				w.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				w.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				success = w.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal could not be created!");
 
 				var t = w.ActiveTerminal;
 				Assert.That(t, Is.Not.Null, uc + "Terminal could not be created!");
-				t.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
@@ -207,11 +207,11 @@ namespace YAT.Model.Test.FileHandling
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, uc + "Workspace not opened from file!");
 				Assert.That(w.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
-				w.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				w.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				var t = w.ActiveTerminal;
 				Assert.That(t, Is.Not.Null, uc + "Terminal not opened from file!");
-				t.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				Utilities.VerifyFiles(uc, w, true, t, true);
 
@@ -240,11 +240,11 @@ namespace YAT.Model.Test.FileHandling
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, uc + "Workspace not opened from file!");
 				Assert.That(w.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
-				w.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				w.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				var t = w.ActiveTerminal;
 				Assert.That(t, Is.Not.Null, uc + "Terminal not opened from file!");
-				t.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				Utilities.VerifyFiles(uc, w, true, t, true);
 
@@ -275,11 +275,11 @@ namespace YAT.Model.Test.FileHandling
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, uc + "Workspace not opened from file!");
 				Assert.That(w.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
-				w.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				w.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				var t1 = w.ActiveTerminal;
 				Assert.That(t1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
-				t1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t1.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				Utilities.VerifyFiles(uc, w, true, t1, true, false);
 				Assert.That(PathEx.Equals(t1.SettingsFilePath, this.normalTerminal1FilePath), uc + "Terminal 1 is not stored at user terminal 1 location!");
@@ -291,14 +291,14 @@ namespace YAT.Model.Test.FileHandling
 
 				var t2 = w.ActiveTerminal;
 				Assert.That(t2, Is.Not.Null, uc + "Terminal 2 could not be created!");
-				t2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t2.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				Assert.That(w.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler()), Is.True, "Terminal 3 could not be created!");
 				Assert.That(w.TerminalCount, Is.EqualTo(3), uc + "Workspace doesn't contain 3 terminals!");
 
 				var t3 = w.ActiveTerminal;
 				Assert.That(t3, Is.Not.Null, uc + "Terminal 3 could not be created!");
-				t3.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t3.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
@@ -332,17 +332,17 @@ namespace YAT.Model.Test.FileHandling
 				var workspace = m.Workspace;
 				Assert.That(workspace, Is.Not.Null, uc + "Workspace not opened from file!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(3), uc + "Workspace doesn't contain 3 terminals!");
-				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				workspace.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				var t1 = workspace.Terminals[0];
 				Assert.That(t1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
-				t1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t1.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 				var t2 = workspace.Terminals[1];
 				Assert.That(t2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
-				t2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t2.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 				var t3 = workspace.Terminals[2];
 				Assert.That(t3, Is.Not.Null, uc + "Terminal 3 not opened from file!");
-				t3.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t3.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				Utilities.VerifyFiles
 				(
@@ -394,14 +394,14 @@ namespace YAT.Model.Test.FileHandling
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, uc + "Workspace not opened from file!");
 				Assert.That(w.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
-				w.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				w.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				var t1 = w.Terminals[0];
 				Assert.That(t1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
-				t1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t1.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 				var t2 = w.Terminals[1];
 				Assert.That(t2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
-				t2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t2.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				Utilities.VerifyFiles
 				(
@@ -455,14 +455,14 @@ namespace YAT.Model.Test.FileHandling
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, uc + "Workspace not opened from file!");
 				Assert.That(w.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
-				w.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				w.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				var t1 = w.Terminals[0];
 				Assert.That(t1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
-				t1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t1.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 				var t2 = w.Terminals[1];
 				Assert.That(t2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
-				t2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t2.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				Utilities.VerifyFiles
 				(
@@ -535,14 +535,14 @@ namespace YAT.Model.Test.FileHandling
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, uc + "Workspace not opened from file!");
 				Assert.That(w.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
-				w.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				w.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				var t1 = w.Terminals[0];
 				Assert.That(t1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
-				t1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t1.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 				var t2 = w.Terminals[1];
 				Assert.That(t2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
-				t2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t2.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				Utilities.VerifyFiles
 				(
@@ -561,7 +561,7 @@ namespace YAT.Model.Test.FileHandling
 
 				var t3 = w.ActiveTerminal;
 				Assert.That(t3, Is.Not.Null, uc + "Terminal 3 could not be created!");
-				t3.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t3.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				t3.MessageInputRequest     += terminal3_MessageInputRequest_Yes;          // Ignore the "remaining event sink" message that will be output during Exit() below.
 				t3.SaveAsFileDialogRequest += terminal3_SaveAsFileDialogRequest_SaveAsOK; // Ignore the "remaining event sink" message that will be output during Exit() below.
@@ -595,17 +595,17 @@ namespace YAT.Model.Test.FileHandling
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, uc + "Workspace not opened from file!");
 				Assert.That(w.TerminalCount, Is.EqualTo(3), uc + "Workspace doesn't contain 3 terminals!");
-				w.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				w.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				var t1 = w.Terminals[0];
 				Assert.That(t1, Is.Not.Null, uc + "Terminal 1 not opened from file!");
-				t1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t1.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 				var t2 = w.Terminals[1];
 				Assert.That(t2, Is.Not.Null, uc + "Terminal 2 not opened from file!");
-				t2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t2.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 				var t3 = w.Terminals[2];
 				Assert.That(t3, Is.Not.Null, uc + "Terminal 3 not opened from file!");
-				t3.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t3.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				Utilities.VerifyFiles
 				(
@@ -678,13 +678,13 @@ namespace YAT.Model.Test.FileHandling
 				var workspace = m.Workspace;
 				Assert.That(workspace, Is.Not.Null, uc + "Workspace not created!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(0), uc + "Workspace doesn't contain 0 terminals!");
-				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				workspace.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True, uc + "Terminal 1 could not be created!");
 				var t1 = workspace.ActiveTerminal;
 				Assert.That(t1, Is.Not.Null, uc + "Terminal 1 could not be created!");
-				t1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t1.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				success = t1.SaveAs(this.normalTerminal1FilePath);
 				Assert.That(success, Is.True, uc + "Terminal 1 could not be saved as!");
@@ -693,7 +693,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(success, Is.True, uc + "Terminal 2 could not be created!");
 				var t2 = workspace.ActiveTerminal;
 				Assert.That(t2, Is.Not.Null, uc + "Terminal 2 could not be created!");
-				t2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t2.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				success = t2.SaveAs(this.normalTerminal2FilePath);
 				Assert.That(success, Is.True, uc + "Terminal 2 could not be saved as!");
@@ -746,11 +746,11 @@ namespace YAT.Model.Test.FileHandling
 				var workspace = m.Workspace;
 				Assert.That(workspace, Is.Not.Null, uc + "Workspace not created!");
 				Assert.That(workspace.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
-				workspace.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				workspace.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				var t1 = workspace.ActiveTerminal;
 				Assert.That(t1, Is.Not.Null, uc + "Terminal 1 could not be opened!");
-				t1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t1.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				Utilities.VerifyFiles(uc, workspace, false, t1, true, false);
 
@@ -760,7 +760,7 @@ namespace YAT.Model.Test.FileHandling
 
 				var t2 = workspace.ActiveTerminal;
 				Assert.That(t2, Is.Not.Null, uc + "Terminal 2 could not be created!");
-				t2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t2.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
@@ -801,12 +801,12 @@ namespace YAT.Model.Test.FileHandling
 
 					workspace1 = main1.Workspace;
 					Assert.That(workspace1, Is.Not.Null, uc + "Workspace 1 not created!");
-					workspace1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+					workspace1.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 					Assert.That(workspace1.TerminalCount, Is.EqualTo(1), uc + "Workspace 1 doesn't contain 1 terminal!");
 
 					terminal1 = workspace1.ActiveTerminal;
 					Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 could not be opened!");
-					terminal1.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+					terminal1.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 					Utilities.VerifyFiles(uc, workspace1, false, terminal1, true, false);
 				}
@@ -818,12 +818,12 @@ namespace YAT.Model.Test.FileHandling
 
 					workspace2 = main2.Workspace;
 					Assert.That(workspace2, Is.Not.Null, uc + "Workspace 2 not created!");
-					workspace2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+					workspace2.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 					Assert.That(workspace2.TerminalCount, Is.EqualTo(1), uc + "Workspace 2 doesn't contain 1 terminal!");
 
 					terminal2 = workspace2.ActiveTerminal;
 					Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 could not be opened!");
-					terminal2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+					terminal2.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 					Utilities.VerifyFiles(uc, workspace2, false, terminal2, true, false);
 				}
@@ -865,12 +865,12 @@ namespace YAT.Model.Test.FileHandling
 
 					workspace2 = main2.Workspace;
 					Assert.That(workspace2, Is.Not.Null, uc + "Workspace 2 not created!");
-					workspace2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+					workspace2.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 					Assert.That(workspace2.TerminalCount, Is.EqualTo(1), uc + "Workspace 2 doesn't contain 1 terminal!");
 
 					terminal2 = workspace2.ActiveTerminal;
 					Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 could not be opened!");
-					terminal2.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+					terminal2.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 					Utilities.VerifyFiles(uc, workspace2, true, terminal2, true, false);
 				}
@@ -900,11 +900,11 @@ namespace YAT.Model.Test.FileHandling
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, uc + "Workspace not created!");
 				Assert.That(w.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
-				w.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				w.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				var t = w.ActiveTerminal;
 				Assert.That(t, Is.Not.Null, uc + "Terminal could not be opened!");
-				t.DoNotDisposeOfSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 
 				// The auto workspace may still be set to some other workspace. Keep it to compare below.
 				string formerLocalUserAutoWorkspaceFilePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
