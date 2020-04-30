@@ -26,10 +26,12 @@
 // Using
 //==================================================================================================
 
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
 
+using MKY;
 using MKY.Net.Test;
 
 using NUnit.Framework;
@@ -42,14 +44,48 @@ namespace YAT.Domain.Test.Terminal
 	[TestFixture]
 	public class AllowConcurrencyTest
 	{
-		#region TestNonConcurrentSendRepeating
+		#region Enums
 		//==========================================================================================
-		// TestNonConcurrentSendRepeating
+		// Enums
+		//==========================================================================================
+
+		#pragma warning disable 1591
+
+		public enum Stimulus
+		{
+			SendTextRepeating,
+			SendFile
+		}
+
+		public enum Subsequency
+		{
+			One,
+			Random
+		}
+
+		#pragma warning restore 1591
+
+		#endregion
+
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		const int SendLineCount = 300; // Must correspond to 300 lines of [Stress-1-Normal.txt].
+
+		#endregion
+
+		#region TestCombinatorial
+		//==========================================================================================
+		// TestCombinatorial
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Test] // Test is mandatory, it shall not be excludable. 'IPv4LoopbackIsAvailable' is probed below.
-		public virtual void TestNonConcurrentSendRepeating()
+		[Test, Combinatorial] // Test is mandatory, it shall not be excludable. 'IPv4LoopbackIsAvailable' is probed below.
+		public virtual void TestCombinatorial([Values(false, true)]bool allowConcurrency,
+		                                      [Values(Stimulus.SendTextRepeating, Stimulus.SendFile)]Stimulus stimulus,
+		                                      [Values(Subsequency.One, Subsequency.Random)]Subsequency subsequency)
 		{
 			if (!ConfigurationProvider.Configuration.IPv4LoopbackIsAvailable)
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
@@ -58,7 +94,7 @@ namespace YAT.Domain.Test.Terminal
 			const int WaitForDisposal = 100;
 
 			var settingsTx = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
-		////settingsTx.Send.AllowConcurrency is false by default.
+			settingsTx.Send.AllowConcurrency = allowConcurrency;
 			settingsTx.TextTerminal.LineSendDelay = new TextLineSendDelaySettingTuple(true, 1, 1); // Delay of 1 ms per line, sending over
 			using (var terminalTx = new Domain.TextTerminal(settingsTx))                           // localhost is way too fast otherwise.
 			{                                                                                      //  => 300 lines take 300..600 ms, perfect.
@@ -70,26 +106,38 @@ namespace YAT.Domain.Test.Terminal
 					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started");
 					Utilities.WaitForConnection(terminalTx, terminalRx);
 
-					var repeatingCount = 300;
-					var repeating = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-					var repeatingLine = string.Format(CultureInfo.InvariantCulture, @"{0}\!(LineRepeat({1}))", repeating, repeatingCount);
-					var repeatingTextExpected = repeating + "<CR><LF>"; // Text settings for testing have 'ShowEOL' = true in order to include EOL in char count.
-					var repeatingLengthExpected = (repeating.Length + 2); // Adjust for EOL.
-					terminalTx.SendTextLine(repeatingLine);
+					int subsequentLineCount;
+					switch (subsequency)
+					{
+						case Subsequency.One:
+							subsequentLineCount = 1; // Ensures that single line = most likely use case works.
+							break;
 
-					var subsequentLine = "0123456789"; // Repeating lines only contain characters.
-					var subsequentTextExpected = (subsequentLine + "<CR><LF>"); // Text settings for testing have 'ShowEOL' = true in order to include EOL in char count.
-					var subsequentLengthExpected = (subsequentLine.Length + 2); // Adjust EOL.
-					terminalTx.SendTextLine(subsequentLine); // Immediately invoke sending of subsequent data.
+						case Subsequency.Random:
+							var random = new Random(RandomEx.NextPseudoRandomSeed());
+							var minValue = (SendLineCount / 100); // 1%
+							var maxValue = (SendLineCount / 10); // 10%
+							subsequentLineCount = random.Next(minValue, maxValue);
+							break;
 
-					var expectedTotalByteCount = ((repeatingLengthExpected * repeatingCount) + subsequentLengthExpected);
-					var expectedTotalLineCount = (                           repeatingCount  + 1);                                       // See above, sending takes 300..600 ms.
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1000);
+						default:
+							throw (new ArgumentOutOfRangeException("stimulus", stimulus, "'" + stimulus + "' is a stimulus that is not (yet) supported by this test implementation!"));
+					}
 
-					// Verify that last line matches subsequently sent line:
-					var displayLines = terminalRx.RepositoryToDisplayLines(RepositoryType.Rx);
-					var lastLine = displayLines.Last();
-					Assert.That(lastLine.Text, Is.EqualTo(subsequentTextExpected));
+					var subsequentLineText = "0123456789"; // Repeating lines only contain characters.
+					var subsequentLineTextExpected = (subsequentLineText + "<CR><LF>"); // Text settings for testing have 'ShowEOL' = true in order to include EOL in char count.
+					switch (stimulus)
+					{
+						case Stimulus.SendTextRepeating: SendTextRepeating(terminalTx, terminalRx, subsequentLineCount, subsequentLineText); break;
+						case Stimulus.SendFile:          SendFile(         terminalTx, terminalRx, subsequentLineCount, subsequentLineText); break;
+
+						default: throw (new ArgumentOutOfRangeException("stimulus", stimulus, "'" + stimulus + "' is a stimulus that is not (yet) supported by this test implementation!"));
+					}
+
+					if (allowConcurrency)
+						VerifyConcurrent(terminalRx, subsequentLineCount, subsequentLineTextExpected);
+					else
+						VerifyNonConcurrent(terminalRx, subsequentLineCount, subsequentLineTextExpected);
 
 					terminalRx.Stop();
 					Utilities.WaitForDisconnection(terminalRx);
@@ -102,62 +150,68 @@ namespace YAT.Domain.Test.Terminal
 			Thread.Sleep(WaitForDisposal);
 		}
 
-		#endregion
+		/// <summary></summary>
+		protected virtual void SendTextRepeating(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, int subsequentLineCount, string subsequentLineText)
+		{
+			var repeating = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			var repeatingLine = string.Format(CultureInfo.InvariantCulture, @"{0}\!(LineRepeat({1}))", repeating, SendLineCount);
+			var repeatingTextExpected = repeating + "<CR><LF>"; // Text settings for testing have 'ShowEOL' = true in order to include EOL in char count.
+			var repeatingLengthExpected = (repeating.Length + 2); // Adjust for EOL.
+			terminalTx.SendTextLine(repeatingLine);
 
-		#region TestNonConcurrentSendFile
-		//==========================================================================================
-		// TestNonConcurrentSendFile
-		//==========================================================================================
+			var subsequentLengthExpected = (subsequentLineText.Length + 2); // Adjust EOL.
+			for (int i = 0; i < subsequentLineCount; i++)
+				terminalTx.SendTextLine(subsequentLineText); // Immediately invoke sending of subsequent data.
+
+			var expectedTotalByteCount = ((repeatingLengthExpected * SendLineCount) + (subsequentLengthExpected * subsequentLineCount));
+			var expectedTotalLineCount = (                           SendLineCount  +                             subsequentLineCount);
+			Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1000); // See further above, sending takes 300..600 ms.
+		}
 
 		/// <summary></summary>
-		[Test] // Test is mandatory, it shall not be excludable. 'IPv4LoopbackIsAvailable' is probed below.
-		public virtual void TestNonConcurrentSendFile()
+		protected virtual void SendFile(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, int subsequentLineCount, string subsequentLineText)
 		{
-			if (!ConfigurationProvider.Configuration.IPv4LoopbackIsAvailable)
-				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
-			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+			var file = SendFilesProvider.FilePaths_StressText.StressFiles[StressTestCase.Normal];
+			var message = string.Format(CultureInfo.InvariantCulture, "Precondition: File line count must equal {0} but is {1}!", SendLineCount, file.Item3);
+			Assert.That(file.Item3, Is.EqualTo(SendLineCount), message);
+			terminalTx.SendFile(file.Item1);
 
-			const int WaitForDisposal = 100;
+			var subsequentLengthExpected = (subsequentLineText.Length + 2); // Adjust EOL.
+			for (int i = 0; i < subsequentLineCount; i++)
+				terminalTx.SendTextLine(subsequentLineText); // Immediately invoke sending of subsequent data.
+			                                     // Includes EOL.
+			var expectedTotalByteCount = (file.Item2 + (subsequentLengthExpected * subsequentLineCount));
+			var expectedTotalLineCount = (file.Item3 +                             subsequentLineCount);
+			Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1000); // See further above, sending takes 300..600 ms.
+		}
 
-			var settingsTx = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
-		////settingsTx.Send.AllowConcurrency is false by default.
-			settingsTx.TextTerminal.LineSendDelay = new TextLineSendDelaySettingTuple(true, 1, 1); // Delay of 1 ms per line, sending over
-			using (var terminalTx = new Domain.TextTerminal(settingsTx))                           // localhost is way too fast otherwise.
-			{                                                                                      //  => 300 lines of [Stress-1-Normal.txt]
-				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");       //     take 300..600 ms, perfect.
+		/// <summary>Verify that number of lines matches subsequently sent lines and they are found inbetween.</summary>
+		protected virtual void VerifyConcurrent(Domain.TextTerminal terminalRx, int subsequentLineCountExpected, string subsequentLineTextExpected)
+		{
+			var displayLines = terminalRx.RepositoryToDisplayLines(RepositoryType.Rx);
 
-				var settingsRx = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
-				using (var terminalRx = new Domain.TextTerminal(settingsRx))
-				{
-					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started");
-					Utilities.WaitForConnection(terminalTx, terminalRx);
+			Assert.That(displayLines.Last().Text, Is.Not.EqualTo(subsequentLineTextExpected), "All subsequently sent lines must be found inbetween!");
 
-					var file = SendFilesProvider.FilePaths_StressText.StressFiles[StressTestCase.Normal];
-					terminalTx.SendFile(file.Item1);
+			int foundCount = 0;
+			foreach (var line in displayLines)
+			{
+				if (line.Text.Equals(subsequentLineTextExpected))
+					foundCount++;
+			}
+			Assert.That(foundCount, Is.EqualTo(subsequentLineCountExpected));
+		}
 
-					var subsequentLine = "0123456789"; // Stress files only contain characters.
-					var subsequentTextExpected = (subsequentLine + "<CR><LF>"); // Text settings for testing have 'ShowEOL' = true in order to include EOL in char count.
-					var subsequentLengthExpected = (subsequentLine.Length + 2); // Adjust EOL.
-					terminalTx.SendTextLine(subsequentLine); // Immediately invoke sending of subsequent data.
-					                                      // Includes EOL.
-					var expectedTotalByteCount = (file.Item2 + subsequentLengthExpected);
-					var expectedTotalLineCount = (file.Item3 + 1);                                                                       // See above, sending takes 300..600 ms.
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1000);
+		/// <summary>Verify that last lines match subsequently sent lines.</summary>
+		protected virtual void VerifyNonConcurrent(Domain.TextTerminal terminalRx, int subsequentLineCountExpected, string subsequentLineTextExpected)
+		{
+			var displayLines = terminalRx.RepositoryToDisplayLines(RepositoryType.Rx);
 
-					// Verify that last line matches subsequently sent line:
-					var displayLines = terminalRx.RepositoryToDisplayLines(RepositoryType.Rx);
-					var lastLine = displayLines.Last();
-					Assert.That(lastLine.Text, Is.EqualTo(subsequentTextExpected));
-
-					terminalRx.Stop();
-					Utilities.WaitForDisconnection(terminalRx);
-				} // using (terminalB)
-
-				terminalTx.Stop();
-				Utilities.WaitForDisconnection(terminalTx);
-			} // using (terminalA)
-
-			Thread.Sleep(WaitForDisposal);
+			for (int i = 0; i < subsequentLineCountExpected; i++)
+			{
+				var j = (displayLines.Count - 1 - i);
+				var line = displayLines[j];
+				Assert.That(line.Text, Is.EqualTo(subsequentLineTextExpected));
+			}
 		}
 
 		#endregion
