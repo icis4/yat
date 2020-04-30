@@ -364,8 +364,8 @@ namespace YAT.Model.Test.Transmission
 			}
 			else // Random count:
 			{
-				var r = new Random(RandomEx.NextPseudoRandomSeed());
-				Thread.Sleep(r.Next(100, 10000)); // Something between 0.1..10 seconds to keep test execution fast.
+				var random = new Random(RandomEx.NextPseudoRandomSeed());
+				Thread.Sleep(random.Next(100, 10000)); // Something between 0.1..10 seconds to keep test execution fast.
 
 				// Break or stop:
 				if (executeBreak)

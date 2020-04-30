@@ -517,7 +517,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 
 		private void thread_DoSomething()
 		{
-			Random r = new Random(RandomEx.NextPseudoRandomSeed());
+			var random = new Random(RandomEx.NextPseudoRandomSeed());
 
 			bool isOngoing = false;
 			do
@@ -525,7 +525,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 				for (int i = 0, j = 0; i < 2000; i++, j += 2)
 					j = j - i;
 
-				Thread.Sleep(r.Next(10, 100));
+				Thread.Sleep(random.Next(10, 100));
 
 				this.receivedDataLock.EnterReadLock();
 				isOngoing = this.isOngoing;
