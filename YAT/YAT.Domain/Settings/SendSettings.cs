@@ -36,7 +36,12 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const bool UseExplicitDefaultRadixDefault = false;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>false</c> because user could e.g. define a set of predefined multi-line or (small)
+		/// file commands which are invoked quickly after each other. In such case, each command
+		/// shall be kept as a single request/transaction. User shall explicitly have to activate
+		/// concurrency if that is needed/intended.
+		/// </remarks>
 		public const bool AllowConcurrencyDefault = false;
 
 		/// <summary></summary>
