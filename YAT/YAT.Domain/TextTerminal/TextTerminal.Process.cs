@@ -22,6 +22,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of 'WaitForResponse':
+////#define DEBUG_WAIT_FOR_RESPONSE
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -29,12 +43,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Media;
 using System.Text;
+using System.Threading;
 
 using MKY;
+using MKY.Diagnostics;
 using MKY.Text;
 
 using YAT.Domain.Utilities;
@@ -63,6 +80,11 @@ namespace YAT.Domain
 		private TextLineState txBidirTextLineState;
 		private TextLineState rxBidirTextLineState;
 		private TextLineState rxUnidirTextLineState;
+
+		private object waitForResponseClearanceSyncObj = new object();
+		private int waitForResponseResponseCounter; // = 0 and will again be initialized to 0.
+		private int waitForResponseClearanceCounter; // = 0 but will be initialized to settings.
+		private ManualResetEvent waitForResponseEvent = new ManualResetEvent(false);
 
 		#endregion
 
@@ -576,6 +598,26 @@ namespace YAT.Domain
 					this.rxBidirTextLineState  = new TextLineState(rxEol);
 				}
 			}
+
+			if (TextTerminalSettings.WaitForResponse.Enabled)
+			{
+				lock (this.waitForResponseClearanceSyncObj)
+				{
+					this.waitForResponseResponseCounter = 0;
+					this.waitForResponseClearanceCounter = TextTerminalSettings.WaitForResponse.ClearanceLineCount;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Disposes the processing state.
+		/// </summary>
+		protected override void DisposeProcess()
+		{
+			if (this.waitForResponseEvent != null) {
+				this.waitForResponseEvent.Dispose();
+				this.waitForResponseEvent = null;
+			}
 		}
 
 		/// <summary>
@@ -737,6 +779,15 @@ namespace YAT.Domain
 					}
 
 					lineState.Position = LinePosition.End;
+
+					// This is the only location where the true EOL of a sent or received line is detected.
+					// Other locations where 'Position.End' is involved more deal with YAT's display/monitor
+					// line breaks, i.e. the other ways to trigger a line break (chunk, length, timed).
+
+					if ((TextTerminalSettings.WaitForResponse.Enabled) && (repositoryType == RepositoryType.Rx))
+					{                                                 // Rather than (dir == IODirection.Rx) which
+						NotifyResponse();                             // would cover two repositories (Rx and Bidir).
+					}
 				}
 				else
 				{
@@ -868,7 +919,7 @@ namespace YAT.Domain
 					lineState.Position = LinePosition.End;
 
 				// Note that length line break shall be applied even when EOL has just started or is already ongoing,
-				// since remaining hidden EOL elements will not result in additional lines.
+				// remaining hidden EOL elements will not result in additional lines.
 			}
 
 			if (lineState.Position != LinePosition.End)
@@ -1039,6 +1090,97 @@ namespace YAT.Domain
 		}
 
 		#endregion
+
+		#region WaitForResponse
+		//------------------------------------------------------------------------------------------
+		// WaitForResponse
+		//------------------------------------------------------------------------------------------
+
+		/// <remarks>
+		/// Could be extracted into a separate class or struct.
+		/// </remarks>
+		protected virtual void NotifyResponse()
+		{
+			lock (this.waitForResponseClearanceSyncObj)
+			{
+				this.waitForResponseResponseCounter++;
+				if (this.waitForResponseResponseCounter >= TextTerminalSettings.WaitForResponse.ResponseLineCount)
+				{
+					this.waitForResponseResponseCounter = 0;
+					this.waitForResponseClearanceCounter += TextTerminalSettings.WaitForResponse.ClearanceLineCount;
+
+					DebugWaitForResponse(string.Format("Line clearance increased to {0}", this.waitForResponseClearanceCounter));
+
+					this.waitForResponseEvent.Set();
+				}
+			}
+		}
+
+		/// <remarks>
+		/// Could be extracted into a separate class or struct.
+		/// </remarks>
+		protected virtual void PendForClearance()
+		{
+			DebugWaitForResponse("Pending for line clearance...");
+
+			while (IsUndisposed && SendThreadsArePermitted) // Check disposal state first!
+			{
+				lock (this.waitForResponseClearanceSyncObj)
+				{
+					if (this.waitForResponseClearanceCounter > 0)
+					{
+						// Handle supernumerous responses, e.g. additional responses received without sending anything:
+						if (this.waitForResponseClearanceCounter > TextTerminalSettings.WaitForResponse.ClearanceLineCount) {
+							this.waitForResponseClearanceCounter = TextTerminalSettings.WaitForResponse.ClearanceLineCount;
+
+							DebugWaitForResponse(string.Format("...clearance adjusted and...", this.waitForResponseClearanceCounter));
+						}
+
+						this.waitForResponseClearanceCounter--;
+
+						DebugWaitForResponse(string.Format("...clearance granted, {0} lines left.", this.waitForResponseClearanceCounter));
+
+						this.waitForResponseEvent.Reset();
+
+						return;
+					}
+				}
+
+				try
+				{
+					// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+					// if the overlying client isn't able or forgets to call Stop() or Dispose().
+					// Therefore, only wait for a certain period and then poll the run flag again.
+					// The period can be quite long, as an event trigger will immediately resume.
+					this.waitForResponseEvent.WaitOne(StaticRandom.Next(50, 200));
+				}
+				catch (AbandonedMutexException ex)
+				{
+					// The mutex should never be abandoned, but in case it nevertheless happens,
+					// at least output a debug message and gracefully exit the thread.
+					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in PendForClearance()!");
+					break;
+				}
+			}
+
+			DebugWaitForResponse(string.Format("PendForClearance() has determined to break because 'IsInDisposal' = {0} / 'SendThreadsArePermitted' = {1}", IsInDisposal, SendThreadsArePermitted));
+		}
+
+		#endregion
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG_WAIT_FOR_RESPONSE")]
+		protected void DebugWaitForResponse(string message)
+		{
+			DebugMessage(message);
+		}
 
 		#endregion
 	}

@@ -32,7 +32,7 @@
 	// Enable debugging of send:
 ////#define DEBUG_SEND
 
-	// Enable debugging of send:
+	// Enable debugging of break:
 ////#define DEBUG_BREAK
 
 #endif // DEBUG
@@ -177,7 +177,7 @@ namespace YAT.Domain
 		private long nextPermittedSequenceNumber; // = 0;
 		private ManualResetEvent nextPermittedSequenceNumberEvent = new ManualResetEvent(false);
 
-		private bool sendThreadsArePermitted;
+		protected bool SendThreadsArePermitted { get; private set;}
 
 		private int sendingIsOngoingCount; // = 0;
 		private object sendingIsOngoingCountSyncObj = new object();
@@ -265,7 +265,7 @@ namespace YAT.Domain
 		{
 			get
 			{
-				if (IsUndisposed && this.sendThreadsArePermitted && IsTransmissive) // Check disposal state first!
+				if (IsUndisposed && SendThreadsArePermitted && IsTransmissive) // Check disposal state first!
 					return (BreakState);
 				else
 					return (true); // Indicate to break in any case.
@@ -488,24 +488,28 @@ namespace YAT.Domain
 		/// </summary>
 		protected virtual void DisposeSend()
 		{
-			this.nextPermittedSequenceNumberEvent?.Dispose();
-			this.nextPermittedSequenceNumberEvent = null;
+			if (this.nextPermittedSequenceNumberEvent != null) {
+				this.nextPermittedSequenceNumberEvent.Dispose();
+				this.nextPermittedSequenceNumberEvent = null;
+			}
 
-			this.packetGateEvent?.Dispose();
-			this.packetGateEvent = null;
+			if (this.packetGateEvent != null) {
+				this.packetGateEvent.Dispose();
+				this.packetGateEvent = null;
+			}
 		}
 
 		/// <summary></summary>
 		protected virtual void PermitSendThreads()
 		{
-			this.sendThreadsArePermitted = true;
+			SendThreadsArePermitted = true;
 		}
 
 		/// <summary></summary>
 		protected virtual void BreakSendThreads()
 		{
 			// Clear flag telling threads to stop...
-			this.sendThreadsArePermitted = false;
+			SendThreadsArePermitted = false;
 
 			// ...then signal threads:
 			this.nextPermittedSequenceNumberEvent?.Set(); // Handle 'null' because this method is called during
@@ -1188,7 +1192,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		protected virtual bool TryEnterRequestGate(long sequenceNumber)
 		{
-			while (IsUndisposed && this.sendThreadsArePermitted) // Check disposal state first!
+			while (IsUndisposed && SendThreadsArePermitted) // Check disposal state first!
 			{
 				if (TerminalSettings.Send.AllowConcurrency)
 				{
@@ -1208,7 +1212,7 @@ namespace YAT.Domain
 						// if the overlying client isn't able or forgets to call Stop() or Dispose().
 						// Therefore, only wait for a certain period and then poll the run flag again.
 						// The period can be quite long, as an event trigger will immediately resume.
-						this.nextPermittedSequenceNumberEvent.WaitOne(staticRandom.Next(50, 200));
+						this.nextPermittedSequenceNumberEvent.WaitOne(StaticRandom.Next(50, 200));
 					}
 					catch (AbandonedMutexException ex)
 					{
@@ -1220,14 +1224,14 @@ namespace YAT.Domain
 				}
 			}
 
-			DebugSend(string.Format("TryEnterRequestGate() has determined to break because 'IsInDisposal' = {0} / 'this.sendThreadsRunFlag' = {1}", IsInDisposal, this.sendThreadsArePermitted));
+			DebugSend(string.Format("TryEnterRequestGate() has determined to break because 'IsInDisposal' = {0} / 'SendThreadsArePermitted' = {1}", IsInDisposal, SendThreadsArePermitted));
 			return (false);
 		}
 
 		/// <summary></summary>
 		protected virtual void LeaveRequestGate()
 		{
-			if (IsUndisposed && this.sendThreadsArePermitted) // Check disposal state first!
+			if (IsUndisposed && SendThreadsArePermitted) // Check disposal state first!
 			{
 				if (TerminalSettings.Send.AllowConcurrency)
 				{
@@ -1246,7 +1250,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		protected virtual bool TryEnterPacketGate()
 		{
-			while (IsUndisposed && this.sendThreadsArePermitted) // Check disposal state first!
+			while (IsUndisposed && SendThreadsArePermitted) // Check disposal state first!
 			{
 				if (Monitor.TryEnter(this.packetGateSyncObj))
 				{
@@ -1260,7 +1264,7 @@ namespace YAT.Domain
 					// if the overlying client isn't able or forgets to call Stop() or Dispose().
 					// Therefore, only wait for a certain period and then poll the run flag again.
 					// The period can be quite long, as an event trigger will immediately resume.
-					this.packetGateEvent.WaitOne(staticRandom.Next(50, 200));
+					this.packetGateEvent.WaitOne(StaticRandom.Next(50, 200));
 				}
 				catch (AbandonedMutexException ex)
 				{
@@ -1271,7 +1275,7 @@ namespace YAT.Domain
 				}
 			}
 
-			DebugSend(string.Format("TryEnterPacketGate() has determined to break because 'IsInDisposal' = {0} / 'this.sendThreadsRunFlag' = {1}", IsInDisposal, this.sendThreadsArePermitted));
+			DebugSend(string.Format("TryEnterPacketGate() has determined to break because 'IsInDisposal' = {0} / 'SendThreadsArePermitted' = {1}", IsInDisposal, SendThreadsArePermitted));
 			return (false);
 		}
 
@@ -1280,7 +1284,7 @@ namespace YAT.Domain
 		{
 			Monitor.Exit(this.packetGateSyncObj);
 
-			if (IsUndisposed && this.sendThreadsArePermitted) // Check disposal state first!
+			if (IsUndisposed && SendThreadsArePermitted) // Check disposal state first!
 				this.packetGateEvent.Set();
 		}
 

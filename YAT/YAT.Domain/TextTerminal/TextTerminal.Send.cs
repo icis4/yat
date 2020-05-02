@@ -101,7 +101,7 @@ namespace YAT.Domain
 			{
 				case Parser.Keyword.Eol:
 				{                   // Complete and immediately forward the pending packets.
-					ProcessLineEnd(true, conflateDataQueue); // Would also result in completing and immediately forwarding, but not handle 'Wait for Response(s)'.
+					ProcessLineEnd(true, conflateDataQueue); // Would also result in completing and immediately forwarding, but not handle 'WaitForResponse'.
 				////AppendToPendingPacketAndForwardToRawTerminal(this.txUnidirTextLineState.EolSequence, conflateDataQueue);
 				////base.ProcessInLineKeywords(sendingIsBusyChangedEventHelper, result, conflateDataQueue) must not be called as keyword has fully been processed. Calling it would result in an error message!
 					break;
@@ -121,10 +121,11 @@ namespace YAT.Domain
 			if (sendEol)             // Just append the EOL, the base method will forward the completed line.
 				AppendToPendingPacketWithoutForwardingToRawTerminalYet(TxEolSequence, conflateDataQueue);
 
-			base.ProcessLineEnd(sendEol, conflateDataQueue);
+			if (TextTerminalSettings.WaitForResponse.Enabled)
+				PendForClearance();
 
-		//	PENDING: Block if currently no line allowance
-		}
+			base.ProcessLineEnd(sendEol, conflateDataQueue); // Call base method in any case. Minor limitation:
+		}                                                    // Some overhead if no clearance and terminal got closed.
 
 		/// <summary></summary>
 		protected override int ProcessLineDelayOrInterval(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, bool performLineDelay, int lineDelay, bool performLineInterval, int lineInterval, DateTime lineBeginTimeStamp, DateTime lineEndTimeStamp)

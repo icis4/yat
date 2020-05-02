@@ -308,7 +308,7 @@ namespace YAT.View.Forms
 			// label_WaitForResponseTimeout
 			// 
 			this.label_WaitForResponseTimeout.AutoSize = true;
-			this.label_WaitForResponseTimeout.Location = new System.Drawing.Point(130, 65);
+			this.label_WaitForResponseTimeout.Location = new System.Drawing.Point(127, 65);
 			this.label_WaitForResponseTimeout.Name = "label_WaitForResponseTimeout";
 			this.label_WaitForResponseTimeout.Size = new System.Drawing.Size(65, 13);
 			this.label_WaitForResponseTimeout.TabIndex = 11;
@@ -460,6 +460,7 @@ namespace YAT.View.Forms
 			this.checkBox_WaitForResponse.Size = new System.Drawing.Size(121, 17);
 			this.checkBox_WaitForResponse.TabIndex = 5;
 			this.checkBox_WaitForResponse.Text = "&Wait for response of";
+			this.toolTip.SetToolTip(this.checkBox_WaitForResponse, resources.GetString("checkBox_WaitForResponse.ToolTip"));
 			this.checkBox_WaitForResponse.UseVisualStyleBackColor = true;
 			this.checkBox_WaitForResponse.CheckedChanged += new System.EventHandler(this.checkBox_WaitForResponse_CheckedChanged);
 			// 
@@ -486,7 +487,7 @@ namespace YAT.View.Forms
 			// label_WaitForResponseTimeoutUnit
 			// 
 			this.label_WaitForResponseTimeoutUnit.AutoSize = true;
-			this.label_WaitForResponseTimeoutUnit.Location = new System.Drawing.Point(249, 65);
+			this.label_WaitForResponseTimeoutUnit.Location = new System.Drawing.Point(246, 65);
 			this.label_WaitForResponseTimeoutUnit.Name = "label_WaitForResponseTimeoutUnit";
 			this.label_WaitForResponseTimeoutUnit.Size = new System.Drawing.Size(20, 13);
 			this.label_WaitForResponseTimeoutUnit.TabIndex = 13;
@@ -505,11 +506,13 @@ namespace YAT.View.Forms
 			// 
 			// textBox_WaitForResponseTimeout
 			// 
-			this.textBox_WaitForResponseTimeout.Location = new System.Drawing.Point(197, 62);
+			this.textBox_WaitForResponseTimeout.Location = new System.Drawing.Point(194, 62);
 			this.textBox_WaitForResponseTimeout.Name = "textBox_WaitForResponseTimeout";
 			this.textBox_WaitForResponseTimeout.Size = new System.Drawing.Size(51, 20);
 			this.textBox_WaitForResponseTimeout.TabIndex = 12;
 			this.textBox_WaitForResponseTimeout.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.toolTip.SetToolTip(this.textBox_WaitForResponseTimeout, "When too few lines are received within this timeout,\r\nongoing send requests will " +
+        "break and new requests\r\nwill be allowed again.");
 			this.textBox_WaitForResponseTimeout.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_WaitForResponseTimeout_Validating);
 			// 
 			// textBox_Delay
