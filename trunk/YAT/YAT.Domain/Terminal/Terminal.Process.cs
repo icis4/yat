@@ -984,8 +984,8 @@ namespace YAT.Domain
 					{
 						DebugLineBreak(repositoryType, "EvaluateDeviceLineBreak => DoLineEnd()");
 
-						DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
-					}
+						DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd); // Line end = line break is directly invoked,
+					}                                                                                // not indirectly by setting 'Position' to 'End'.
 				}
 			}
 			                     //// See above!
@@ -1013,8 +1013,8 @@ namespace YAT.Domain
 					{
 						DebugLineBreak(repositoryType, "EvaluateDirectionLineBreak => DoLineEnd()");
 
-						DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
-					}
+						DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd); // Line end = line break is directly invoked,
+					}                                                                                // not indirectly by setting 'Position' to 'End'.
 				}
 			}
 			                     //// See above!
@@ -1033,8 +1033,8 @@ namespace YAT.Domain
 			{
 				DebugLineBreak(repositoryType, "EvaluateChunkLineBreak => DoLineEnd()");
 
-				DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
-			}
+				DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd); // Line end = line break is directly invoked,
+			}                                                                                // not indirectly by setting 'Position' to 'End'.
 		}
 
 		/// <summary></summary>
@@ -1049,8 +1049,8 @@ namespace YAT.Domain
 			{
 				DebugLineBreak(repositoryType, "EvaluateTimedLineBreak => DoLineEnd()");
 
-				DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
-			}
+				DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd); // Line end = line break is directly invoked,
+			}                                                                                // not indirectly by setting 'Position' to 'End'.
 		}
 
 		/// <summary></summary>
@@ -1068,8 +1068,8 @@ namespace YAT.Domain
 				{
 					DebugLineBreak(repositoryType, "EvaluateTimedLineBreakOnReload => DoLineEnd()");
 
-					DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
-				}
+					DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd); // Line end = line break is directly invoked,
+				}                                                                                // not indirectly by setting 'Position' to 'End'.
 			}
 		}
 

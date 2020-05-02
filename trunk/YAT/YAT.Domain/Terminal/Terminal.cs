@@ -137,8 +137,11 @@ namespace YAT.Domain
 		// Static Fields
 		//==========================================================================================
 
+		/// <remarks>Must be a field for <see cref="Interlocked.Increment(ref int)"/>.</remarks>
 		private static int staticInstanceCounter;
-		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
+
+		/// <summary></summary>
+		protected static Random StaticRandom { get; private set; } = new Random(RandomEx.NextPseudoRandomSeed());
 
 		#endregion
 

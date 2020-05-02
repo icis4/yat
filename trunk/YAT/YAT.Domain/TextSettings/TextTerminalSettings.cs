@@ -352,11 +352,11 @@ namespace YAT.Domain.Settings
 		/// This option is one of two ways to delay while sending.
 		/// It supports adding a fixed delay each N lines.
 		///
-		/// Alternatively, the \!(LineDelay) or \!(LineInterval) keyword can be used.
+		/// Alternatively, the \!(LineDelay()) or \!(LineInterval()) keyword can be used.
 		/// The first is equal to setting "each 1 line".
 		/// The latter allows a more precise timing.
 		///
-		/// The text above is copy-pasted into the tool tip text of the text settings dialog.
+		/// The above text is copy-pasted to/from the tool tip text of the text settings dialog.
 		/// </remarks>
 		[XmlElement("LineSendDelay")]
 		public virtual TextLineSendDelaySettingTuple LineSendDelay
@@ -372,7 +372,11 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Technically, a "wait for N characters or bytes before" option could also be implemented.
+		/// Such option could also be provided by binary terminals. However, usefulness of such
+		/// option is questionable, thus not (yet) implemented until somebody requests this.
+		/// </remarks>
 		[XmlElement("WaitForResponse")]
 		public virtual TextWaitForResponseSettingTuple WaitForResponse
 		{
