@@ -283,6 +283,44 @@ namespace YAT.View.Forms
 			this.settingsInEdit.RxDisplay = textTerminalSettingsSet_Rx.Settings;
 		}
 
+		private void checkBox_GlueCharsOfLine_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			var gcol = this.settingsInEdit.GlueCharsOfLine;
+			gcol.Enabled = checkBox_GlueCharsOfLine.Checked;
+			this.settingsInEdit.GlueCharsOfLine = gcol; // Settings member must be changed to let the changed event be raised!
+		}
+
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		private void textBox_GlueCharsOfLineTimeout_Validating(object sender, CancelEventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			int timeout;
+			if (int.TryParse(textBox_GlueCharsOfLineTimeout.Text, out timeout) && (timeout >= 1))
+			{
+				var gcol = this.settingsInEdit.GlueCharsOfLine;
+				gcol.Timeout = timeout;
+				this.settingsInEdit.GlueCharsOfLine = gcol; // Settings member must be changed to let the changed event be raised!
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Timeout must be at least 1 ms!",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
+			}
+		}
+
 		private void checkBox_Delay_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -649,6 +687,11 @@ namespace YAT.View.Forms
 				checkBox_SeparateTxRxDisplay.Checked = this.settingsInEdit.SeparateTxRxDisplay;
 				groupBox_RxDisplay.Enabled           = this.settingsInEdit.SeparateTxRxDisplay;
 				textTerminalSettingsSet_Rx.Settings  = this.settingsInEdit.RxDisplay;
+
+				bool glueEnabled                       = this.settingsInEdit.GlueCharsOfLine.Enabled;
+				checkBox_GlueCharsOfLine.Checked       = glueEnabled;
+				textBox_GlueCharsOfLineTimeout.Enabled = glueEnabled;
+				textBox_GlueCharsOfLineTimeout.Text    = this.settingsInEdit.GlueCharsOfLine.Timeout.ToString(CultureInfo.CurrentCulture);
 
 				// Send:
 				bool delayEnabled             = this.settingsInEdit.LineSendDelay.Enabled;

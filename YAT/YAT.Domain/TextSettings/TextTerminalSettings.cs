@@ -67,7 +67,7 @@ namespace YAT.Domain.Settings
 		public const bool SeparateTxRxDisplayDefault = false;
 
 		/// <summary></summary>
-		public static readonly TimeoutSettingTuple TimedLineBreakDefault = new TimeoutSettingTuple(false, 500);
+		public static readonly TimeoutSettingTuple GlueCharsOfLineDefault = new TimeoutSettingTuple(true, 50); // At e.g. 9600 baud, the frame time is ~1 ms.
 
 		/// <summary></summary>
 		public static readonly TextLineSendDelaySettingTuple LineSendDelayDefault = new TextLineSendDelaySettingTuple(false, 500, 1);
@@ -94,6 +94,7 @@ namespace YAT.Domain.Settings
 		private bool separateTxRxDisplay;
 		private TextDisplaySettings txDisplay;
 		private TextDisplaySettings rxDisplay;
+		private TimeoutSettingTuple glueCharsOfLine;
 
 		private TextLineSendDelaySettingTuple   lineSendDelay;
 		private TextWaitForResponseSettingTuple waitForResponse;
@@ -140,9 +141,10 @@ namespace YAT.Domain.Settings
 			Encoding         = rhs.Encoding;
 			ShowEol          = rhs.ShowEol;
 
-			SeparateTxRxDisplay = rhs.SeparateTxRxDisplay;
+			SeparateTxRxDisplay =               rhs.SeparateTxRxDisplay;
 			TxDisplay = new TextDisplaySettings(rhs.TxDisplay);
 			RxDisplay = new TextDisplaySettings(rhs.RxDisplay);
+			GlueCharsOfLine =                   rhs.GlueCharsOfLine;
 
 			LineSendDelay    = rhs.LineSendDelay;
 			WaitForResponse  = rhs.WaitForResponse;
@@ -167,6 +169,7 @@ namespace YAT.Domain.Settings
 			ShowEol          = ShowEolDefault;
 
 			SeparateTxRxDisplay = SeparateTxRxDisplayDefault;
+			GlueCharsOfLine     = GlueCharsOfLineDefault;
 
 			LineSendDelay    = LineSendDelayDefault;
 			WaitForResponse  = WaitForResponseDefault;
@@ -348,6 +351,21 @@ namespace YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("GlueCharsOfLine")]
+		public virtual TimeoutSettingTuple GlueCharsOfLine
+		{
+			get { return (this.glueCharsOfLine); }
+			set
+			{
+				if (this.glueCharsOfLine != value)
+				{
+					this.glueCharsOfLine = value;
+					SetMyChanged();
+				}
+			}
+		}
+
 		/// <remarks>
 		/// This option is one of two ways to delay while sending.
 		/// It supports adding a fixed delay each N lines.
@@ -450,6 +468,7 @@ namespace YAT.Domain.Settings
 				hashCode = (hashCode * 397) ^  ShowEol              .GetHashCode();
 
 				hashCode = (hashCode * 397) ^  SeparateTxRxDisplay.GetHashCode();
+				hashCode = (hashCode * 397) ^  GlueCharsOfLine    .GetHashCode();
 
 				hashCode = (hashCode * 397) ^  LineSendDelay   .GetHashCode();
 				hashCode = (hashCode * 397) ^  WaitForResponse .GetHashCode();
@@ -491,6 +510,7 @@ namespace YAT.Domain.Settings
 				ShowEol               .Equals(other.ShowEol)         &&
 
 				SeparateTxRxDisplay.Equals(other.SeparateTxRxDisplay) &&
+				GlueCharsOfLine    .Equals(other.GlueCharsOfLine)     &&
 
 				LineSendDelay   .Equals(other.LineSendDelay)   &&
 				WaitForResponse .Equals(other.WaitForResponse) &&
