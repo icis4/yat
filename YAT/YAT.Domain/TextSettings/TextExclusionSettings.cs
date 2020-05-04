@@ -22,6 +22,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -32,6 +37,8 @@ using System.Xml.Serialization;
 
 using MKY.Collections;
 using MKY.Diagnostics;
+
+#endregion
 
 // The YAT.Domain.Settings namespace contains all raw/neutral/binary/text terminal infrastructure.
 // This code is intentionally placed into the YAT.Domain.Settings namespace even though the file is

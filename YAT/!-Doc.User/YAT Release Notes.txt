@@ -93,12 +93,13 @@ New:
 - Support for concurrent sending, i.e. multiple commands can be active simultaneously (feat. #387).
   Useful e.g. for sending a text command while a repeating text command is already ongoing.
   Can be enabled at [Settings... > Advanced... > Send > Allow concurrent sending].
-- Text terminals: Wait for response implemented. Useful for sending multi-line commands and files
-  with ping-pong-style command sets (feature request #19 and bugs #176, #487).
-  Note for serial COM ports: This feature not necessarily needs to be activated, as YAT typically
-  limits the send rate [Settings... > Advanced... > Send > Buffer not more than baud rate permits].
-  That setting limits the send rate enough in most cases, and lets an active hardware or software
-  flow control do its job even with large amount of data.
+- Text terminals: Option to wait for response, resulting in request and response to be displayed
+  adjacently. Useful for sending multi-line commands and files with ping-pong-style command sets
+  (feature request #19 and bug #176).
+  Note for serial COM ports: In order to only limit the send rate, YAT offers other settings, e.g.
+  [Settings... > Advanced... > Send > Buffer not more than baud rate permits]. That setting limits
+  the send rate enough in most cases, and lets an active hardware or software flow control do its
+  job even with large amount of data.
 - Content separator can now be configured. Useful for e.g. displaying or logging hex data without
   separating spaces, e.g. "414243", using [None]. Separator format can now also be configured.
 - Additional keyword \!(TimeStamp()) allowing injection of current date/time (feature request #400).
