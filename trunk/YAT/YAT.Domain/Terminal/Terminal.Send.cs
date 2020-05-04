@@ -177,6 +177,7 @@ namespace YAT.Domain
 		private long nextPermittedSequenceNumber; // = 0;
 		private ManualResetEvent nextPermittedSequenceNumberEvent = new ManualResetEvent(false);
 
+		/// <summary></summary>
 		protected bool SendThreadsArePermitted { get; private set;}
 
 		private int sendingIsOngoingCount; // = 0;
