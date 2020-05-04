@@ -120,6 +120,17 @@
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="checkBox_GlueCharsOfLine.ToolTip" xml:space="preserve">
+    <value>This option results in request and response to be displayed
+adjacently and is useful for sending multi-line commands
+and files with ping-pong-style command sets.
+
+Note that enabling this option will reduce throughput, as
+commands and responses will no longer be full-duplexed.
+
+Also note that [Terminal &gt; Settings... &gt; Advanced...] offers
+other means to limit sending for e.g. serial COM ports.</value>
+  </data>
   <data name="groupBox_Exclude.ToolTip" xml:space="preserve">
     <value>By default, some common patters are prepared:
  &gt; //... and /*...*/ (C/C++/C#/Java/...-style comments)
@@ -133,10 +144,14 @@ To request additional default patters or suggestions on how to improve the patte
 Visit the given link to find detailed information about the .NET regex syntax.</value>
   </data>
   <data name="checkBox_WaitForResponse.ToolTip" xml:space="preserve">
-    <value>This option is useful for sending multi-line commands
+    <value>This option results in request and response to be displayed
+adjacently and is useful for sending multi-line commands
 and files with ping-pong-style command sets.
 
-Note that [Terminal &gt; Settings... &gt; Advanced...] offers
+Note that enabling this option will reduce throughput, as
+commands and responses will no longer be full-duplexed.
+
+Also note that [Terminal &gt; Settings... &gt; Advanced...] offers
 other means to limit sending for e.g. serial COM ports.</value>
   </data>
   <data name="checkBox_Delay.ToolTip" xml:space="preserve">
