@@ -36,6 +36,8 @@ using MKY.Net.Test;
 
 using NUnit.Framework;
 
+using YAT.Domain.Settings;
+
 #endregion
 
 namespace YAT.Domain.Test.Terminal

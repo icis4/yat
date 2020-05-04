@@ -49,6 +49,8 @@ using System.Globalization;
 using MKY;
 using MKY.Text;
 
+using YAT.Domain.Settings;
+
 #endregion
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
