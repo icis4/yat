@@ -66,7 +66,13 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const bool SeparateTxRxDisplayDefault = false;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Default is <see cref="TimeoutSettingTuple.Enabled"/> = <c>true</c> for two reasons:
+		/// <list type="bullet">
+		/// <item><description>Most users don't like unnecessarily broken additional lines.</description></item>
+		/// <item><description>Dealing with partial lines is still possible with the very short timeout default.</description></item>
+		/// </list>
+		/// </remarks>
 		public static readonly TimeoutSettingTuple GlueCharsOfLineDefault = new TimeoutSettingTuple(true, 50); // At e.g. 9600 baud, the frame time is ~1 ms.
 
 		/// <summary></summary>
@@ -351,7 +357,17 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Instead of glueing characters of a line and waiting with displaying the next line in the
+		/// opposite direction (or other I/O device), characters could also be appended to two lines
+		/// simultanously. Technically this would be possible by adding a ReplacePreviousLine() in
+		/// next to <see cref="DisplayRepository.ReplaceCurrentLine(DisplayElementCollection)"/>.
+		/// However:
+		/// <list type="bullet">
+		/// <item><description>Resulting behavior is very uncommon = incomprehensible.</description></item>
+		/// <item><description>Implementation becomes a nightmare (filter, suppress,...).</description></item>
+		/// </list>
+		/// </remarks>
 		[XmlElement("GlueCharsOfLine")]
 		public virtual TimeoutSettingTuple GlueCharsOfLine
 		{

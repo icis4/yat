@@ -740,6 +740,7 @@ namespace YAT.View.Forms
 
 				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = f.SettingsResult.Terminal.Display.DirectionLineBreakEnabled;
 				this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled    = f.SettingsResult.Terminal.Display.DeviceLineBreakEnabled;
+				this.settingsInEdit.Terminal.TextTerminal.GlueCharsOfLine      = f.SettingsResult.Terminal.TextTerminal.GlueCharsOfLine; // Tightly coupled to settings above, thus located in advanced dialog.
 
 				this.settingsInEdit.Terminal.Display.MaxLineCount         = f.SettingsResult.Terminal.Display.MaxLineCount;
 				this.settingsInEdit.Terminal.Display.MaxLineLength        = f.SettingsResult.Terminal.Display.MaxLineLength;
