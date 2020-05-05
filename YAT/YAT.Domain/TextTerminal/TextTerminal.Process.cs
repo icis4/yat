@@ -1125,7 +1125,7 @@ namespace YAT.Domain
 		{
 			DebugWaitForResponse("Pending for line clearance...");
 
-			while (IsUndisposed && SendThreadsArePermitted) // Check disposal state first!
+			while (!DoBreak)
 			{
 				lock (this.waitForResponseClearanceSyncObj)
 				{
@@ -1173,11 +1173,14 @@ namespace YAT.Domain
 				}
 			}
 
-			DebugWaitForResponse(string.Format("PendForClearance() has determined to break because 'IsInDisposal' = {0} / 'SendThreadsArePermitted' = {1}", IsInDisposal, SendThreadsArePermitted));
+			DebugWaitForResponse("PendForClearance() has determined to break");
 		}
 
 		/// <remarks>
 		/// Separation into method instead of complicated <c>if</c>-condition.
+		/// </remarks>
+		/// <remarks>
+		/// Must only be called from within a <see cref="waitForResponseClearanceSyncObj"/> lock.
 		/// </remarks>
 		private bool ClearanceTimeoutHasElapsed(DateTime now)
 		{

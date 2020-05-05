@@ -1193,7 +1193,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		protected virtual bool TryEnterRequestGate(long sequenceNumber)
 		{
-			while (IsUndisposed && SendThreadsArePermitted) // Check disposal state first!
+			while (!DoBreak)
 			{
 				if (TerminalSettings.Send.AllowConcurrency)
 				{
@@ -1225,14 +1225,14 @@ namespace YAT.Domain
 				}
 			}
 
-			DebugSend(string.Format("TryEnterRequestGate() has determined to break because 'IsInDisposal' = {0} / 'SendThreadsArePermitted' = {1}", IsInDisposal, SendThreadsArePermitted));
+			DebugSend("TryEnterRequestGate() has determined to break");
 			return (false);
 		}
 
 		/// <summary></summary>
 		protected virtual void LeaveRequestGate()
 		{
-			if (IsUndisposed && SendThreadsArePermitted) // Check disposal state first!
+			if (IsUndisposed)
 			{
 				if (TerminalSettings.Send.AllowConcurrency)
 				{
@@ -1251,7 +1251,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		protected virtual bool TryEnterPacketGate()
 		{
-			while (IsUndisposed && SendThreadsArePermitted) // Check disposal state first!
+			while (!DoBreak)
 			{
 				if (Monitor.TryEnter(this.packetGateSyncObj))
 				{
@@ -1276,17 +1276,19 @@ namespace YAT.Domain
 				}
 			}
 
-			DebugSend(string.Format("TryEnterPacketGate() has determined to break because 'IsInDisposal' = {0} / 'SendThreadsArePermitted' = {1}", IsInDisposal, SendThreadsArePermitted));
+			DebugSend("TryEnterPacketGate() has determined to break");
 			return (false);
 		}
 
 		/// <summary></summary>
 		protected virtual void LeavePacketGate()
 		{
-			Monitor.Exit(this.packetGateSyncObj);
+			if (IsUndisposed)
+			{
+				Monitor.Exit(this.packetGateSyncObj);
 
-			if (IsUndisposed && SendThreadsArePermitted) // Check disposal state first!
 				this.packetGateEvent.Set();
+			}
 		}
 
 		/// <remarks>For binary terminals, this is rather a 'ProcessPacketDelayOrInterval'.</remarks>
