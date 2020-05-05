@@ -82,8 +82,9 @@ namespace YAT.Domain
 		private TextLineState rxUnidirTextLineState;
 
 		private object waitForResponseClearanceSyncObj = new object();
-		private int waitForResponseResponseCounter; // = 0 and will again be initialized to 0.
+		private int waitForResponseResponseCounter; // = 0 and will again be initialized to that.
 		private int waitForResponseClearanceCounter; // = 0 but will be initialized to settings.
+		private DateTime waitForResponseClearanceTimeStamp; // = MinValue and will again be initialized to that.
 		private ManualResetEvent waitForResponseEvent = new ManualResetEvent(false);
 
 		#endregion
@@ -605,6 +606,7 @@ namespace YAT.Domain
 				{
 					this.waitForResponseResponseCounter = 0;
 					this.waitForResponseClearanceCounter = TextTerminalSettings.WaitForResponse.ClearanceLineCount;
+					this.waitForResponseClearanceTimeStamp = DateTime.MinValue;
 				}
 			}
 		}
@@ -1127,7 +1129,8 @@ namespace YAT.Domain
 			{
 				lock (this.waitForResponseClearanceSyncObj)
 				{
-					if (this.waitForResponseClearanceCounter > 0)
+					var now = DateTime.Now;
+					if ((this.waitForResponseClearanceCounter > 0) || ClearanceTimeoutHasElapsed(now)) // Involved calculations only needed if counter is 0.
 					{
 						// Handle supernumerous responses, e.g. additional responses received without sending anything:
 						if (this.waitForResponseClearanceCounter > TextTerminalSettings.WaitForResponse.ClearanceLineCount) {
@@ -1136,10 +1139,17 @@ namespace YAT.Domain
 							DebugWaitForResponse(string.Format("...clearance adjusted and...", this.waitForResponseClearanceCounter));
 						}
 
-						this.waitForResponseClearanceCounter--;
+						if (this.waitForResponseClearanceCounter > 0) {
+							this.waitForResponseClearanceCounter--;
 
-						DebugWaitForResponse(string.Format("...clearance granted, {0} lines left.", this.waitForResponseClearanceCounter));
+							DebugWaitForResponse(string.Format("...granted, {0} lines left.", this.waitForResponseClearanceCounter));
+						}
+						else { // timeoutElapsed
 
+							DebugWaitForResponse(              "...granted due to timeout.");
+						}
+
+						this.waitForResponseClearanceTimeStamp = now;
 						this.waitForResponseEvent.Reset();
 
 						return;
@@ -1164,6 +1174,27 @@ namespace YAT.Domain
 			}
 
 			DebugWaitForResponse(string.Format("PendForClearance() has determined to break because 'IsInDisposal' = {0} / 'SendThreadsArePermitted' = {1}", IsInDisposal, SendThreadsArePermitted));
+		}
+
+		/// <remarks>
+		/// Separation into method instead of complicated <c>if</c>-condition.
+		/// </remarks>
+		private bool ClearanceTimeoutHasElapsed(DateTime now)
+		{
+			if (TextTerminalSettings.WaitForResponse.Timeout != Timeout.Infinite)
+			{
+				var duration = (now - this.waitForResponseClearanceTimeStamp).TotalMilliseconds;
+				if (duration > TextTerminalSettings.WaitForResponse.Timeout)
+					return (true);
+
+				DebugWaitForResponse("...waiting for counter to increase or timeout.");
+			}
+			else
+			{
+				DebugWaitForResponse("...waiting for counter to increase infinitely.");
+			}
+
+			return (false);
 		}
 
 		#endregion
