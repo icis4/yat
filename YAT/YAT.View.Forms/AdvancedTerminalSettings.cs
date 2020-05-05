@@ -30,6 +30,7 @@
 using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
@@ -353,6 +354,53 @@ namespace YAT.View.Forms
 			else
 			{
 				this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled = checkBox_DeviceLineBreak.Checked;
+			}
+		}
+
+		private void checkBox_GlueCharsOfLine_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			var gcol = this.settingsInEdit.Terminal.TextTerminal.GlueCharsOfLine;
+			gcol.Enabled = checkBox_GlueCharsOfLine.Checked;
+			this.settingsInEdit.Terminal.TextTerminal.GlueCharsOfLine = gcol; // Settings member must be changed to let the changed event be raised!
+		}
+
+		private void textBox_GlueCharsOfLineTimeout_TextChanged(object sender, EventArgs e)
+		{
+			int timeout;
+			if (int.TryParse(textBox_GlueCharsOfLineTimeout.Text, out timeout) && (timeout < 0))
+				label_GlueCharsOfLineTimeoutUnit.Text = "= infinite";
+			else
+				label_GlueCharsOfLineTimeoutUnit.Text = "ms";
+		}
+
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
+		private void textBox_GlueCharsOfLineTimeout_Validating(object sender, CancelEventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			int timeout;
+			if (int.TryParse(textBox_GlueCharsOfLineTimeout.Text, out timeout) && ((timeout >= 1) || (timeout == Timeout.Infinite)))
+			{
+				var gcol = this.settingsInEdit.Terminal.TextTerminal.GlueCharsOfLine;
+				gcol.Timeout = timeout;
+				this.settingsInEdit.Terminal.TextTerminal.GlueCharsOfLine = gcol; // Settings member must be changed to let the changed event be raised!
+			}
+			else
+			{
+				MessageBoxEx.Show
+				(
+					this,
+					"Timeout must be at least 1 ms! Or " + Timeout.Infinite + " for infinite waiting.",
+					"Invalid Input",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				e.Cancel = true;
 			}
 		}
 
@@ -1144,6 +1192,14 @@ namespace YAT.View.Forms
 				checkBox_DeviceLineBreak.Checked    = (isServerSocket && this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled);
 				label_LineBreakRemark.Text          = "Also see" + Environment.NewLine + "[" + (!isBinary ? "Text" : "Binary") + " Settings...]";
 
+				bool glueCharsOfLine                     = (isText && this.settingsInEdit.Terminal.TextTerminal.GlueCharsOfLine.Enabled); // Tightly coupled to settings above, thus located in advanced dialog.
+				checkBox_GlueCharsOfLine.Enabled         =  isText;
+				checkBox_GlueCharsOfLine.Checked         =  glueCharsOfLine;
+				textBox_GlueCharsOfLineTimeout.Enabled   =  glueCharsOfLine;
+				textBox_GlueCharsOfLineTimeout.Text      =  this.settingsInEdit.Terminal.TextTerminal.GlueCharsOfLine.Timeout.ToString(CultureInfo.CurrentCulture);
+				label_GlueCharsOfLine.Enabled            =  isText;
+				label_GlueCharsOfLineTimeoutUnit.Enabled =  isText;
+
 				textBox_MaxLineCount.Text             = this.settingsInEdit.Terminal.Display.MaxLineCount .ToString(CultureInfo.CurrentCulture);
 				textBox_MaxLineLength.Text            = this.settingsInEdit.Terminal.Display.MaxLineLength.ToString(CultureInfo.CurrentCulture);
 				checkBox_ShowCopyOfActiveLine.Checked = this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine;
@@ -1285,8 +1341,11 @@ namespace YAT.View.Forms
 
 				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled = Domain.Settings.DisplaySettings.DirectionLineBreakEnabledDefault;
 				this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled    = Domain.Settings.DisplaySettings.DeviceLineBreakEnabledDefault;
-				this.settingsInEdit.Terminal.Display.MaxLineCount              = Domain.Settings.DisplaySettings.MaxLineCountDefault;
-				this.settingsInEdit.Terminal.Display.MaxLineLength             = Domain.Settings.DisplaySettings.MaxLineLengthDefault;
+				this.settingsInEdit.Terminal.TextTerminal.GlueCharsOfLine      = Domain.Settings.TextTerminalSettings.GlueCharsOfLineDefault; // Tightly coupled to settings above, thus located in advanced dialog.
+
+				this.settingsInEdit.Terminal.Display.MaxLineCount         = Domain.Settings.DisplaySettings.MaxLineCountDefault;
+				this.settingsInEdit.Terminal.Display.MaxLineLength        = Domain.Settings.DisplaySettings.MaxLineLengthDefault;
+				this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine = Domain.Settings.DisplaySettings.ShowCopyOfActiveLineDefault;
 
 				// Char replace/hide:
 				this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsDefault;

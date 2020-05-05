@@ -32,10 +32,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 
-using MKY;
 using MKY.ComponentModel;
 using MKY.Text;
 using MKY.Text.RegularExpressions;
@@ -283,44 +282,6 @@ namespace YAT.View.Forms
 			this.settingsInEdit.RxDisplay = textTerminalSettingsSet_Rx.Settings;
 		}
 
-		private void checkBox_GlueCharsOfLine_CheckedChanged(object sender, EventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			var gcol = this.settingsInEdit.GlueCharsOfLine;
-			gcol.Enabled = checkBox_GlueCharsOfLine.Checked;
-			this.settingsInEdit.GlueCharsOfLine = gcol; // Settings member must be changed to let the changed event be raised!
-		}
-
-		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
-		private void textBox_GlueCharsOfLineTimeout_Validating(object sender, CancelEventArgs e)
-		{
-			if (this.isSettingControls)
-				return;
-
-			int timeout;
-			if (int.TryParse(textBox_GlueCharsOfLineTimeout.Text, out timeout) && (timeout >= 1))
-			{
-				var gcol = this.settingsInEdit.GlueCharsOfLine;
-				gcol.Timeout = timeout;
-				this.settingsInEdit.GlueCharsOfLine = gcol; // Settings member must be changed to let the changed event be raised!
-			}
-			else
-			{
-				MessageBoxEx.Show
-				(
-					this,
-					"Timeout must be at least 1 ms!",
-					"Invalid Input",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
-
-				e.Cancel = true;
-			}
-		}
-
 		private void checkBox_Delay_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -480,6 +441,15 @@ namespace YAT.View.Forms
 			}
 		}
 
+		private void textBox_WaitForResponseTimeout_TextChanged(object sender, EventArgs e)
+		{
+			int timeout;
+			if (int.TryParse(textBox_WaitForResponseTimeout.Text, out timeout) && (timeout < 0))
+				label_WaitForResponseTimeoutUnit.Text = "= infinite";
+			else
+				label_WaitForResponseTimeoutUnit.Text = "ms";
+		}
+
 		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void textBox_WaitForResponseTimeout_Validating(object sender, CancelEventArgs e)
 		{
@@ -487,7 +457,7 @@ namespace YAT.View.Forms
 				return;
 
 			int timeout;
-			if (int.TryParse(textBox_WaitForResponseTimeout.Text, out timeout) && (timeout >= 1))
+			if (int.TryParse(textBox_WaitForResponseTimeout.Text, out timeout) && ((timeout >= 1) || (timeout == Timeout.Infinite)))
 			{
 				var wfr = this.settingsInEdit.WaitForResponse;
 				wfr.Timeout = timeout;
@@ -498,7 +468,7 @@ namespace YAT.View.Forms
 				MessageBoxEx.Show
 				(
 					this,
-					"Timeout must be at least 1 ms!",
+					"Timeout must be at least 1 ms! Or " + Timeout.Infinite + " for infinite waiting.",
 					"Invalid Input",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -687,11 +657,6 @@ namespace YAT.View.Forms
 				checkBox_SeparateTxRxDisplay.Checked = this.settingsInEdit.SeparateTxRxDisplay;
 				groupBox_RxDisplay.Enabled           = this.settingsInEdit.SeparateTxRxDisplay;
 				textTerminalSettingsSet_Rx.Settings  = this.settingsInEdit.RxDisplay;
-
-				bool glueEnabled                       = this.settingsInEdit.GlueCharsOfLine.Enabled;
-				checkBox_GlueCharsOfLine.Checked       = glueEnabled;
-				textBox_GlueCharsOfLineTimeout.Enabled = glueEnabled;
-				textBox_GlueCharsOfLineTimeout.Text    = this.settingsInEdit.GlueCharsOfLine.Timeout.ToString(CultureInfo.CurrentCulture);
 
 				// Send:
 				bool delayEnabled             = this.settingsInEdit.LineSendDelay.Enabled;
