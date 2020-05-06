@@ -95,6 +95,14 @@ namespace YAT.Domain.Test
 		/// </remarks>
 		public const int WaitIntervalForStateChange = 100;
 
+		/// <summary></summary>
+		public const int WaitTimeoutForIsSendingAndBusy = (int)(1.25 * Domain.Utilities.IsBusyEventHelper.Threshold);
+
+		/// <remarks>
+		/// Note that a shorter interval would increase debug output, spoiling the debug console.
+		/// </remarks>
+		public const int WaitIntervalForIsSendingAndBusy = 100;
+
 		/// <remarks>
 		/// Timeout of 200 ms is too short for serial COM ports at 9600 baud, especially when
 		/// debugger is connected. Measurements:
@@ -201,6 +209,24 @@ namespace YAT.Domain.Test
 			}
 
 			Trace.WriteLine("...done, disconnected");
+		}
+
+		internal static void WaitForIsSendingAndBusy(Domain.Terminal terminal, int timeout = WaitTimeoutForIsSendingAndBusy)
+		{
+			int waitTime = 0;
+			while (!terminal.IsSendingAndBusy)
+			{
+				Thread.Sleep(WaitIntervalForIsSendingAndBusy);
+				waitTime += WaitIntervalForIsSendingAndBusy;
+
+				Trace.WriteLine("Waiting for 'IsSendingAndBusy', " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+
+				if (waitTime >= timeout) {
+					Assert.Fail("'IsSendingAndBusy' timeout!");
+				}
+			}
+
+			Trace.WriteLine("...done, 'IsSendingAndBusy'");
 		}
 
 		/// <remarks>

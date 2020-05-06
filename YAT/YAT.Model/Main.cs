@@ -2033,7 +2033,7 @@ namespace YAT.Model
 						int id = this.startArgs.RequestedDynamicTerminalId;
 
 						Terminal t;
-						if (this.workspace.TryGetTerminalByDynamicId(id, out t) && (t.SendingIsOngoing))
+						if (this.workspace.TryGetTerminalByDynamicId(id, out t) && (t.IsSending))
 						{
 							OnTimedStatusTextRequest("Exit triggered, pending while terminal is sending...");
 							return; // Pend!
