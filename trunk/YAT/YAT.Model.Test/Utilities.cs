@@ -540,7 +540,7 @@ namespace YAT.Model.Test
 			var settings = new TerminalSettingsRoot();
 			settings.TerminalType = Domain.TerminalType.Text;
 			settings.Terminal.TextTerminal.ShowEol = true; // Required for easier test verification (char/byte count).
-			settings.Terminal.UpdateTerminalTypeDependentSettings();
+			settings.Terminal.UpdateTerminalTypeDependentSettings(); // Consider moving to each test instead.
 			return (settings);
 		}
 
@@ -1215,7 +1215,7 @@ namespace YAT.Model.Test
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Console.Out.WriteLine("Waiting for start, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for start, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange) {
 					Assert.Fail("Start timeout!");
@@ -1223,7 +1223,7 @@ namespace YAT.Model.Test
 			}
 			while (!terminal.IsStarted);
 
-			Console.Out.WriteLine("...done");
+			Trace.WriteLine("...done, started");
 		}
 
 		/// <remarks>
@@ -1238,7 +1238,7 @@ namespace YAT.Model.Test
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Console.Out.WriteLine("Waiting for open, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for open, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange) {
 					Assert.Fail("Open timeout!");
@@ -1246,7 +1246,7 @@ namespace YAT.Model.Test
 			}
 			while (!terminal.IsOpen);
 
-			Console.Out.WriteLine("...done");
+			Trace.WriteLine("...done, opened");
 		}
 
 		/// <remarks>
@@ -1262,7 +1262,7 @@ namespace YAT.Model.Test
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Console.Out.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange) {
 					Assert.Fail("Connect timeout!");
@@ -1270,7 +1270,7 @@ namespace YAT.Model.Test
 			}
 			while (!terminal.IsConnected);
 
-			Console.Out.WriteLine("...done");
+			Trace.WriteLine("...done, connected");
 		}
 
 		/// <remarks>
@@ -1285,7 +1285,7 @@ namespace YAT.Model.Test
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Console.Out.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange) {
 					Assert.Fail("Connect timeout!");
@@ -1293,7 +1293,7 @@ namespace YAT.Model.Test
 			}
 			while (!terminalA.IsConnected && !terminalB.IsConnected);
 
-			Console.Out.WriteLine("...done");
+			Trace.WriteLine("...done, connected");
 		}
 
 		/// <remarks>
@@ -1308,14 +1308,14 @@ namespace YAT.Model.Test
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Console.Out.WriteLine("Waiting for close, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for close, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange) {
 					Assert.Fail("Close timeout!");
 				}
 			}
 
-			Console.Out.WriteLine("...done");
+			Trace.WriteLine("...done, closed");
 		}
 
 		/// <remarks>
@@ -1331,14 +1331,14 @@ namespace YAT.Model.Test
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Console.Out.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange) {
 					Assert.Fail("Disconnect timeout!");
 				}
 			}
 
-			Console.Out.WriteLine("...done");
+			Trace.WriteLine("...done, disconnected");
 		}
 
 		/// <remarks>
@@ -1368,7 +1368,7 @@ namespace YAT.Model.Test
 				Thread.Sleep(WaitIntervalForLineTransmission);
 				waitTime += WaitIntervalForLineTransmission;
 
-				Console.Out.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+				Trace.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 
 				if (waitTime >= timeout) {
 					Assert.Fail("Transmission timeout! Not enough data received within expected interval.");
@@ -1396,7 +1396,7 @@ namespace YAT.Model.Test
 			Assert.That(terminalRx.RxByteCount, Is.EqualTo(expectedTotalByteCount));
 			Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
 
-			Console.Out.WriteLine("...done");
+			Trace.WriteLine("...done, received and verified");
 		}
 
 		/// <remarks>
@@ -1464,7 +1464,7 @@ namespace YAT.Model.Test
 				Thread.Sleep(WaitIntervalForLineTransmission);
 				waitTime += WaitIntervalForLineTransmission;
 
-				Console.Out.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+				Trace.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 
 				if (waitTime >= timeout) {
 					Assert.Fail("Transmission timeout! Not enough data received within expected interval.");
@@ -1510,7 +1510,7 @@ namespace YAT.Model.Test
 			Assert.That(terminalRx.RxByteCount, Is.EqualTo(expectedTotalByteCount));
 			Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
 
-			Console.Out.WriteLine("...done");
+			Trace.WriteLine("...done, transmitted and verified");
 		}
 
 		/// <remarks>
