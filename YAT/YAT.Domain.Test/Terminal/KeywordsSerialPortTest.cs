@@ -77,7 +77,7 @@ namespace YAT.Domain.Test.Terminal
 					int expectedTotalLineCountAB = 0;
 					int expectedTotalLineCountBA = 0;
 
-					// Initial pingpong:
+					// Initial ping-pong:
 
 					var settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
 					var standardPortNumberInitiallyB = settingsB.IO.SerialPort.PortId.StandardPortNumber;
