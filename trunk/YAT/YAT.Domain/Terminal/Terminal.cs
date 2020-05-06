@@ -227,10 +227,10 @@ namespace YAT.Domain
 	#endif
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<bool>> SendingIsOngoingChanged;
+		public event EventHandler<EventArgs<bool>> IsSendingChanged;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<bool>> SendingIsBusyChanged;
+		public event EventHandler<EventArgs<bool>> IsSendingAndBusyChanged;
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<RawChunk>> RawChunkSent;

@@ -305,10 +305,10 @@ namespace YAT.Model
 	#endif // WITH_SCRIPTING
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<bool>> SendingIsOngoingChanged;
+		public event EventHandler<EventArgs<bool>> IsSendingChanged;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<bool>> SendingIsBusyChanged;
+		public event EventHandler<EventArgs<bool>> IsSendingAndBusyChanged;
 
 	#if (WITH_SCRIPTING)
 
@@ -752,32 +752,32 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual bool SendingIsOngoing
+		public virtual bool IsSending
 		{
 			get
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.terminal != null)
-					return (this.terminal.SendingIsOngoing);
+					return (this.terminal.IsSending);
 				else
 					return (false);
 			}
 		}
 
 		/// <remarks>
-		/// Opposed to <see cref="SendingIsOngoing"/>, this property only becomes <c>true</c> when
-		/// sending has been ongoing for more than <see cref="Domain.Utilities.SendingIsBusyChangedEventHelper.Threshold"/>,
-		/// or is about to be ongoing for more than <see cref="Domain.Utilities.SendingIsBusyChangedEventHelper.Threshold"/>.
+		/// Opposed to <see cref="IsSending"/>, this property only becomes <c>true</c> when
+		/// sending has been ongoing for more than <see cref="Domain.Utilities.IsBusyEventHelper.Threshold"/>,
+		/// or is about to be ongoing for more than <see cref="Domain.Utilities.IsBusyEventHelper.Threshold"/>.
 		/// </remarks>
-		public virtual bool SendingIsBusy
+		public virtual bool IsSendingAndBusy
 		{
 			get
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.terminal != null)
-					return (this.terminal.SendingIsBusy);
+					return (this.terminal.IsSendingAndBusy);
 				else
 					return (false);
 			}
@@ -2618,8 +2618,8 @@ namespace YAT.Model
 				this.terminal.SendingPacket    += terminal_SendingPacket;
 			#endif
 
-				this.terminal.SendingIsOngoingChanged += terminal_SendingIsOngoingChanged;
-				this.terminal.SendingIsBusyChanged    += terminal_SendingIsBusyChanged;
+				this.terminal.IsSendingChanged        += terminal_IsSendingChanged;
+				this.terminal.IsSendingAndBusyChanged += terminal_IsSendingAndBusyChanged;
 
 				this.terminal.RawChunkSent     += terminal_RawChunkSent;
 				this.terminal.RawChunkReceived += terminal_RawChunkReceived;
@@ -2659,8 +2659,8 @@ namespace YAT.Model
 				this.terminal.SendingPacket    -= terminal_SendingPacket;
 			#endif
 
-				this.terminal.SendingIsOngoingChanged -= terminal_SendingIsOngoingChanged;
-				this.terminal.SendingIsBusyChanged    -= terminal_SendingIsBusyChanged;
+				this.terminal.IsSendingChanged        -= terminal_IsSendingChanged;
+				this.terminal.IsSendingAndBusyChanged -= terminal_IsSendingAndBusyChanged;
 
 				this.terminal.RawChunkSent     -= terminal_RawChunkSent;
 				this.terminal.RawChunkReceived -= terminal_RawChunkReceived;
@@ -2894,14 +2894,14 @@ namespace YAT.Model
 		}
 	#endif
 
-		private void terminal_SendingIsOngoingChanged(object sender, EventArgs<bool> e)
+		private void terminal_IsSendingChanged(object sender, EventArgs<bool> e)
 		{
-			OnSendingIsOngoingChanged(e);
+			OnIsSendingChanged(e);
 		}
 
-		private void terminal_SendingIsBusyChanged(object sender, EventArgs<bool> e)
+		private void terminal_IsSendingAndBusyChanged(object sender, EventArgs<bool> e)
 		{
-			OnSendingIsBusyChanged(e);
+			OnIsSendingAndBusyChanged(e);
 		}
 
 		/// <remarks>
@@ -5402,15 +5402,15 @@ namespace YAT.Model
 	#endif // WITH_SCRIPTING
 
 		/// <summary></summary>
-		protected virtual void OnSendingIsOngoingChanged(EventArgs<bool> e)
+		protected virtual void OnIsSendingChanged(EventArgs<bool> e)
 		{
-			this.eventHelper.RaiseSync<EventArgs<bool>>(SendingIsOngoingChanged, this, e);
+			this.eventHelper.RaiseSync<EventArgs<bool>>(IsSendingChanged, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnSendingIsBusyChanged(EventArgs<bool> e)
+		protected virtual void OnIsSendingAndBusyChanged(EventArgs<bool> e)
 		{
-			this.eventHelper.RaiseSync<EventArgs<bool>>(SendingIsBusyChanged, this, e);
+			this.eventHelper.RaiseSync<EventArgs<bool>>(IsSendingAndBusyChanged, this, e);
 		}
 
 	#if (WITH_SCRIPTING)

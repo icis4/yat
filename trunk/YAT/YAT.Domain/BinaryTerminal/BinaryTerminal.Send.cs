@@ -54,7 +54,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
-		protected override void ProcessInLineKeywords(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, Parser.KeywordResult result, Queue<byte> conflateDataQueue, ref bool doBreakSend)
+		protected override void ProcessInLineKeywords(IsBusyEventHelper isBusyEventHelper, Parser.KeywordResult result, Queue<byte> conflateDataQueue, ref bool doBreakSend)
 		{
 			switch (result.Keyword)
 			{
@@ -68,31 +68,31 @@ namespace YAT.Domain
 
 				default:
 				{
-					base.ProcessInLineKeywords(sendingIsBusyChangedEventHelper, result, conflateDataQueue, ref doBreakSend);
+					base.ProcessInLineKeywords(isBusyEventHelper, result, conflateDataQueue, ref doBreakSend);
 					break;
 				}
 			}
 		}
 
 		/// <remarks>
-		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// <paramref name="isBusyEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		protected override void DoSendFileItem(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, FileSendItem item)
+		protected override void DoSendFileItem(IsBusyEventHelper isBusyEventHelper, FileSendItem item)
 		{
 			try
 			{
 				if (ExtensionHelper.IsXmlFile(item.FilePath))
 				{
-					DoSendXmlFileItem(sendingIsBusyChangedEventHelper, item);
+					DoSendXmlFileItem(isBusyEventHelper, item);
 				}
 				else if (ExtensionHelper.IsTextFile(item.FilePath))
 				{
-					DoSendTextFileItem(sendingIsBusyChangedEventHelper, item);
+					DoSendTextFileItem(isBusyEventHelper, item);
 				}
 				else // By default treat as binary file:
 				{
-					DoSendBinaryFileItem(sendingIsBusyChangedEventHelper, item);
+					DoSendBinaryFileItem(isBusyEventHelper, item);
 				}
 			}
 			catch (Exception ex)
@@ -102,9 +102,9 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// <paramref name="isBusyEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
-		protected virtual void DoSendBinaryFileItem(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, FileSendItem item)
+		protected virtual void DoSendBinaryFileItem(IsBusyEventHelper isBusyEventHelper, FileSendItem item)
 		{
 			using (FileStream fs = File.OpenRead(item.FilePath))
 			{
@@ -115,7 +115,7 @@ namespace YAT.Domain
 					int n = fs.Read(chunk, 0, chunk.Length);
 					Array.Resize<byte>(ref chunk, n);
 
-					DoSendFileChunk(sendingIsBusyChangedEventHelper, chunk);
+					DoSendFileChunk(isBusyEventHelper, chunk);
 
 					remaining -= n;
 

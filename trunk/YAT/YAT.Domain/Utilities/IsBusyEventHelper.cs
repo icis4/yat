@@ -28,7 +28,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace YAT.Domain.Utilities
 {
 	/// <summary>
-	/// While sending, the 'SendingIsBusyChanged' event must be raised if intensive processing is
+	/// While sending, the 'IsSendingAndBusyChanged' event must be raised if intensive processing is
 	/// done. This is required because a client may want to indicate that time intensive sending is
 	/// currently ongoing and no further data shall be sent.
 	/// The event shall be raised if the time lag will significantly be noticeable by the user
@@ -36,7 +36,7 @@ namespace YAT.Domain.Utilities
 	/// struct manages the state and the various criteria.
 	/// </summary>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
-	public struct SendingIsBusyChangedEventHelper : IEquatable<SendingIsBusyChangedEventHelper>
+	public struct IsBusyEventHelper : IEquatable<IsBusyEventHelper>
 	{
 		/// <remarks>In milliseconds.</remarks>
 		public const int Threshold = 400;
@@ -45,7 +45,7 @@ namespace YAT.Domain.Utilities
 		private DateTime initialTimeStamp;
 
 		/// <summary></summary>
-		public SendingIsBusyChangedEventHelper(DateTime initialTimeStamp)
+		public IsBusyEventHelper(DateTime initialTimeStamp)
 		{
 			this.eventMustBeRaised = false;
 			this.initialTimeStamp = initialTimeStamp;
@@ -148,8 +148,8 @@ namespace YAT.Domain.Utilities
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is SendingIsBusyChangedEventHelper)
-				return (Equals((SendingIsBusyChangedEventHelper)obj));
+			if (obj is IsBusyEventHelper)
+				return (Equals((IsBusyEventHelper)obj));
 			else
 				return (false);
 		}
@@ -161,7 +161,7 @@ namespace YAT.Domain.Utilities
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(SendingIsBusyChangedEventHelper other)
+		public bool Equals(IsBusyEventHelper other)
 		{
 			return
 			(
@@ -173,7 +173,7 @@ namespace YAT.Domain.Utilities
 		/// <summary>
 		/// Determines whether the two specified objects have value equality.
 		/// </summary>
-		public static bool operator ==(SendingIsBusyChangedEventHelper lhs, SendingIsBusyChangedEventHelper rhs)
+		public static bool operator ==(IsBusyEventHelper lhs, IsBusyEventHelper rhs)
 		{
 			return (lhs.Equals(rhs));
 		}
@@ -181,7 +181,7 @@ namespace YAT.Domain.Utilities
 		/// <summary>
 		/// Determines whether the two specified objects have value inequality.
 		/// </summary>
-		public static bool operator !=(SendingIsBusyChangedEventHelper lhs, SendingIsBusyChangedEventHelper rhs)
+		public static bool operator !=(IsBusyEventHelper lhs, IsBusyEventHelper rhs)
 		{
 			return (!(lhs == rhs));
 		}
