@@ -9,7 +9,8 @@ Test Naming:
 Text Output:
  > If according 'Content' is active in 'Settings > Gui > Text Output',
    'Standard (incl. Debug)|Error|Trace|Log' output is written to the 'Text Output' window.
-   (i.e. Console|Debug|Trace.Write...() all work)
+   i.e. Console|Debug|Trace.Write...() all work.
+   But attention, "DEBUG_<CONTEXT>" conditional methods like will not work!
  > To output test relevant tracing information, Trace.Write...() shall be used.
 
 Test Configuration:

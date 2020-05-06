@@ -123,7 +123,7 @@ namespace YAT.Domain.Test
 			settings.TerminalType = TerminalType.Text;
 			settings.UpdateTerminalTypeDependentSettings();
 			settings.TextTerminal.ShowEol = true; // Required for easier test verification (char/byte count).
-			return (settings);
+			return (settings);                    // Consider moving to each test instead.
 		}
 
 		internal static TerminalSettings GetSerialPortTextSettings(string portId)
@@ -170,7 +170,7 @@ namespace YAT.Domain.Test
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Console.Out.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange) {
 					Assert.Fail("Connect timeout!");
@@ -178,7 +178,7 @@ namespace YAT.Domain.Test
 			}
 			while (!terminalA.IsConnected && !terminalB.IsConnected);
 
-			Console.Out.WriteLine("...done");
+			Trace.WriteLine("...done, connected");
 		}
 
 		/// <remarks>
@@ -193,14 +193,14 @@ namespace YAT.Domain.Test
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Console.Out.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange) {
 					Assert.Fail("Disconnect timeout!");
 				}
 			}
 
-			Console.Out.WriteLine("...done");
+			Trace.WriteLine("...done, disconnected");
 		}
 
 		/// <remarks>
@@ -228,7 +228,7 @@ namespace YAT.Domain.Test
 				Thread.Sleep(WaitIntervalForLineTransmission);
 				waitTime += WaitIntervalForLineTransmission;
 
-				Console.Out.WriteLine("Waiting for sending, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+				Trace.WriteLine("Waiting for sending, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 
 				if (waitTime >= timeout) {
 					Assert.Fail("Transmission timeout! Not enough data sent within expected interval.");
@@ -252,7 +252,7 @@ namespace YAT.Domain.Test
 
 			Debug.WriteLine("Tx of " + txByteCount + " bytes / " + txLineCount + " lines completed");
 
-			Console.Out.WriteLine("...done");
+			Trace.WriteLine("...done, sent and verified");
 		}
 
 		/// <remarks>
@@ -280,7 +280,7 @@ namespace YAT.Domain.Test
 				Thread.Sleep(WaitIntervalForLineTransmission);
 				waitTime += WaitIntervalForLineTransmission;
 
-				Console.Out.WriteLine("Waiting for receiving, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+				Trace.WriteLine("Waiting for receiving, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 
 				if (waitTime >= timeout) {
 					Assert.Fail("Transmission timeout! Not enough data received within expected interval.");
@@ -304,7 +304,7 @@ namespace YAT.Domain.Test
 
 			Debug.WriteLine("Rx of " + rxByteCount + " bytes / " + rxLineCount + " lines completed");
 
-			Console.Out.WriteLine("...done");
+			Trace.WriteLine("...done, received and verified");
 		}
 
 		/// <remarks>
@@ -338,7 +338,7 @@ namespace YAT.Domain.Test
 				Thread.Sleep(WaitIntervalForLineTransmission);
 				waitTime += WaitIntervalForLineTransmission;
 
-				Console.Out.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+				Trace.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 
 				if (waitTime >= timeout) {
 					Assert.Fail("Transmission timeout! Not enough data transmitted within expected interval.");
@@ -378,7 +378,7 @@ namespace YAT.Domain.Test
 			Debug.WriteLine("Tx of " + txByteCount + " bytes / " + txLineCount + " lines completed");
 			Debug.WriteLine("Rx of " + rxByteCount + " bytes / " + rxLineCount + " lines completed");
 
-			Console.Out.WriteLine("...done");
+			Trace.WriteLine("...done, transmitted and verified");
 		}
 
 		#endregion
