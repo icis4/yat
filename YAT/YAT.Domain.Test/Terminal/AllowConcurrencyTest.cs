@@ -93,8 +93,6 @@ namespace YAT.Domain.Test.Terminal
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			const int WaitForDisposal = 100;
-
 			var settingsTx = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
 			settingsTx.Send.AllowConcurrency = allowConcurrency;
 			settingsTx.TextTerminal.LineSendDelay = new TextLineSendDelaySettingTuple(true, 1, 1); // Delay of 1 ms per line, sending over
@@ -148,8 +146,6 @@ namespace YAT.Domain.Test.Terminal
 				terminalTx.Stop();
 				Utilities.WaitForDisconnection(terminalTx);
 			} // using (terminalA)
-
-			Thread.Sleep(WaitForDisposal);
 		}
 
 		/// <summary></summary>
