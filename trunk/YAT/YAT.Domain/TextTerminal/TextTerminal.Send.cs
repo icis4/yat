@@ -30,8 +30,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Text;
 using System.Threading;
 
 using MKY.Text;
@@ -64,9 +62,9 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// <paramref name="isBusyEventHelper"/> is located first as needed down the call chain.
+		/// <paramref name="forSomeTimeEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
-		protected override void DoSendTextItem(IsBusyEventHelper isBusyEventHelper, TextSendItem item)
+		protected override void DoSendTextItem(ForSomeTimeEventHelper forSomeTimeEventHelper, TextSendItem item)
 		{
 			string textToParse = item.Text;
 
@@ -89,48 +87,48 @@ namespace YAT.Domain
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
 			if (DoTryParse(textToParse, item.DefaultRadix, item.ParseMode, out parseResult, out textSuccessfullyParsed))
-				DoSendText(isBusyEventHelper, parseResult, item.IsLine);
+				DoSendText(forSomeTimeEventHelper, parseResult, item.IsLine);
 			else
 				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));
 		}
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
-		protected override void ProcessInLineKeywords(IsBusyEventHelper isBusyEventHelper, Parser.KeywordResult result, Queue<byte> conflateDataQueue, ref bool doBreakSend)
+		protected override void ProcessInLineKeywords(ForSomeTimeEventHelper forSomeTimeEventHelper, Parser.KeywordResult result, Queue<byte> conflateDataQueue, ref bool doBreakSend)
 		{
 			switch (result.Keyword)
 			{
 				case Parser.Keyword.Eol:
-				{                                                    // Complete and forward the pending packets.
-					ProcessLineEnd(isBusyEventHelper, true, conflateDataQueue); // Would also result in completing and immediately forwarding, but not handle 'WaitForResponse'.
+				{                                           // Complete and forward the pending packets.
+					ProcessLineEnd(forSomeTimeEventHelper, true, conflateDataQueue, ref doBreakSend); // Would also result in completing and immediately forwarding, but not handle 'WaitForResponse'.
 				////AppendToPendingPacketAndForwardToRawTerminal(this.txUnidirTextLineState.EolSequence, conflateDataQueue);
-				////base.ProcessInLineKeywords(isBusyEventHelper, result, conflateDataQueue) must not be called as keyword has fully been processed. Calling it would result in an error message!
+				////base.ProcessInLineKeywords(forSomeTimeEventHelper, result, conflateDataQueue) must not be called as keyword has fully been processed. Calling it would result in an error message!
 					break;
 				}
 
 				default:
 				{
-					base.ProcessInLineKeywords(isBusyEventHelper, result, conflateDataQueue, ref doBreakSend);
+					base.ProcessInLineKeywords(forSomeTimeEventHelper, result, conflateDataQueue, ref doBreakSend);
 					break;
 				}
 			}
 		}
 
 		/// <summary></summary>
-		protected override void ProcessLineEnd(IsBusyEventHelper isBusyEventHelper, bool sendEol, Queue<byte> conflateDataQueue)
+		protected override void ProcessLineEnd(ForSomeTimeEventHelper forSomeTimeEventHelper, bool appendEol, Queue<byte> conflateDataQueue, ref bool doBreakSend)
 		{
-			if (sendEol)             // Just append the EOL, the base method will forward the completed line.
+			if (appendEol)           // Just append the EOL, the base method will forward the completed line.
 				AppendToPendingPacketWithoutForwardingToRawTerminalYet(TxEolSequence, conflateDataQueue);
 
 			if (TextTerminalSettings.WaitForResponse.Enabled)
-				GetLineClearance(isBusyEventHelper);
+				doBreakSend = !GetLineClearance(forSomeTimeEventHelper); // See below why there is no need to handle result.
 
-			base.ProcessLineEnd(isBusyEventHelper, sendEol, conflateDataQueue); // Call base method in any case. Minor limitation:
-		}                                                                                     // Some overhead if no clearance and terminal got closed.
+			base.ProcessLineEnd(forSomeTimeEventHelper, appendEol, conflateDataQueue, ref doBreakSend); // Call base method in any case. Minor limitation:
+		}                                                                                               // Some overhead if no clearance and terminal got closed.
 
 		/// <summary></summary>
-		protected override int ProcessLineDelayOrInterval(IsBusyEventHelper isBusyEventHelper, bool performLineDelay, int lineDelay, bool performLineInterval, int lineInterval, DateTime lineBeginTimeStamp, DateTime lineEndTimeStamp)
+		protected override int ProcessLineDelayOrInterval(ForSomeTimeEventHelper forSomeTimeEventHelper, bool performLineDelay, int lineDelay, bool performLineInterval, int lineInterval, DateTime lineBeginTimeStamp, DateTime lineEndTimeStamp)
 		{
-			int accumulatedLineDelay = base.ProcessLineDelayOrInterval(isBusyEventHelper, performLineDelay, lineDelay, performLineInterval, lineInterval, lineBeginTimeStamp, lineEndTimeStamp);
+			int accumulatedLineDelay = base.ProcessLineDelayOrInterval(forSomeTimeEventHelper, performLineDelay, lineDelay, performLineInterval, lineInterval, lineBeginTimeStamp, lineEndTimeStamp);
 
 			if (TerminalSettings.TextTerminal.LineSendDelay.Enabled)
 			{
@@ -153,24 +151,24 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// <paramref name="isBusyEventHelper"/> is located first as needed down the call chain.
+		/// <paramref name="forSomeTimeEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		protected override void DoSendFileItem(IsBusyEventHelper isBusyEventHelper, FileSendItem item)
+		protected override void DoSendFileItem(ForSomeTimeEventHelper forSomeTimeEventHelper, FileSendItem item)
 		{
 			try
 			{
 				if (ExtensionHelper.IsXmlFile(item.FilePath))
 				{
-					DoSendXmlFileItem(isBusyEventHelper, item);
+					DoSendXmlFileItem(forSomeTimeEventHelper, item);
 				}
 				else if (ExtensionHelper.IsRtfFile(item.FilePath))
 				{
-					DoSendRtfFileItem(isBusyEventHelper, item);
+					DoSendRtfFileItem(forSomeTimeEventHelper, item);
 				}
 				else // By default treat as text file:
 				{
-					DoSendTextFileItem(isBusyEventHelper, item, (EncodingEx)TextTerminalSettings.Encoding);
+					DoSendTextFileItem(forSomeTimeEventHelper, item, (EncodingEx)TextTerminalSettings.Encoding);
 				}
 			}
 			catch (Exception ex)
@@ -180,18 +178,18 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// <paramref name="isBusyEventHelper"/> is located first as needed down the call chain.
+		/// <paramref name="forSomeTimeEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
-		protected virtual void DoSendRtfFileItem(IsBusyEventHelper isBusyEventHelper, FileSendItem item)
+		protected virtual void DoSendRtfFileItem(ForSomeTimeEventHelper forSomeTimeEventHelper, FileSendItem item)
 		{
 			string[] lines;
 			RtfReaderHelper.LinesFromRtfFile(item.FilePath, out lines); // Read file at once for simplicity. Minor limitation:
-			foreach (string line in lines)                              // 'isBusyEventHelper.RaiseEventIf...' will
+			foreach (string line in lines)                              // 'forSomeTimeEventHelper.RaiseEventIf...' will
 			{                                                           // only be evaluated at DoSendFileLine() below.
 				if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
 					continue;
 
-				DoSendFileLine(isBusyEventHelper, line, item.DefaultRadix);
+				DoSendFileLine(forSomeTimeEventHelper, line, item.DefaultRadix);
 
 				if (DoBreak)
 					break;

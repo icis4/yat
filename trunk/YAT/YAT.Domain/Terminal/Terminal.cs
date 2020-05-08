@@ -230,7 +230,7 @@ namespace YAT.Domain
 		public event EventHandler<EventArgs<bool>> IsSendingChanged;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<bool>> IsSendingAndBusyChanged;
+		public event EventHandler<EventArgs<bool>> IsSendingForSomeTimeChanged;
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<RawChunk>> RawChunkSent;
@@ -1300,6 +1300,10 @@ namespace YAT.Domain
 		/// <summary>
 		/// Inlines an error message.
 		/// </summary>
+		/// <remarks>
+		/// Intended to be used from "outside" of this <see cref="Terminal"/>.
+		/// Otherwise, InlineDisplayElement*() shall be used.
+		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Inline' is a correct English term in programming.")]
 		public virtual void InlineErrorMessage(Direction direction, string message, bool isWarningOnly)
 		{

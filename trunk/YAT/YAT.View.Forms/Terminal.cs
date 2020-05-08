@@ -578,7 +578,7 @@ namespace YAT.View.Forms
 					toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = !this.terminal.IsStarted;
 					toolStripMenuItem_TerminalMenu_Terminal_Stop .Enabled =  this.terminal.IsStarted;
 
-					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled =  this.terminal.IsSendingAndBusy;
+					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled =  this.terminal.IsSendingForSomeTime;
 					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled =  monitorIsDefined;
 
 					if (this.settingsRoot.Layout.VisibleMonitorPanelCount <= 1)
@@ -6838,8 +6838,8 @@ namespace YAT.View.Forms
 				this.terminal.IORateChanged_Decimated += terminal_IORateChanged_Decimated;
 				this.terminal.IOError                 += terminal_IOError;
 
-			////this.terminal.IsSendingChanged        += terminal_IsSendingChanged is not needed yet.
-				this.terminal.IsSendingAndBusyChanged += terminal_IsSendingAndBusyChanged;
+			////this.terminal.IsSendingChanged            += terminal_IsSendingChanged is not needed yet.
+				this.terminal.IsSendingForSomeTimeChanged += terminal_IsSendingForSomeTimeChanged;
 
 				this.terminal.DisplayElementsTxAdded          += terminal_DisplayElementsTxAdded;
 				this.terminal.DisplayElementsBidirAdded       += terminal_DisplayElementsBidirAdded;
@@ -6891,8 +6891,8 @@ namespace YAT.View.Forms
 				this.terminal.IORateChanged_Decimated -= terminal_IORateChanged_Decimated;
 				this.terminal.IOError                 -= terminal_IOError;
 
-			////this.terminal.IsSendingChanged        -= terminal_IsSendingChanged is not needed yet.
-				this.terminal.IsSendingAndBusyChanged -= terminal_IsSendingAndBusyChanged;
+			////this.terminal.IsSendingChanged            -= terminal_IsSendingChanged is not needed yet.
+				this.terminal.IsSendingForSomeTimeChanged -= terminal_IsSendingForSomeTimeChanged;
 
 				this.terminal.DisplayElementsTxAdded          -= terminal_DisplayElementsTxAdded;
 				this.terminal.DisplayElementsBidirAdded       -= terminal_DisplayElementsBidirAdded;
@@ -7041,7 +7041,7 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		private void terminal_IsSendingAndBusyChanged(object sender, EventArgs<bool> e)
+		private void terminal_IsSendingForSomeTimeChanged(object sender, EventArgs<bool> e)
 		{
 			SetIOStatus();
 		}
@@ -7572,7 +7572,7 @@ namespace YAT.View.Forms
 				{
 					if (this.terminal.IsTransmissive)
 					{
-						if (!this.terminal.IsSendingAndBusy) // Not checking for 'IsSending' as that a) might distract user
+						if (!this.terminal.IsSendingForSomeTime) // Not checking for 'IsSending' as that a) might distract user
 						{                                    // and b) consume unncessary CPU time (draw LED quickly twice).
 							ResetIOStatusFlashing();
 							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;

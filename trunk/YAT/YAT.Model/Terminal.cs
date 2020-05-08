@@ -308,7 +308,7 @@ namespace YAT.Model
 		public event EventHandler<EventArgs<bool>> IsSendingChanged;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<bool>> IsSendingAndBusyChanged;
+		public event EventHandler<EventArgs<bool>> IsSendingForSomeTimeChanged;
 
 	#if (WITH_SCRIPTING)
 
@@ -767,17 +767,17 @@ namespace YAT.Model
 
 		/// <remarks>
 		/// Opposed to <see cref="IsSending"/>, this property only becomes <c>true</c> when
-		/// sending has been ongoing for more than <see cref="Domain.Utilities.IsBusyEventHelper.Threshold"/>,
-		/// or is about to be ongoing for more than <see cref="Domain.Utilities.IsBusyEventHelper.Threshold"/>.
+		/// sending has been ongoing for more than <see cref="Domain.Utilities.ForSomeTimeEventHelper.Threshold"/>,
+		/// or is about to be ongoing for more than <see cref="Domain.Utilities.ForSomeTimeEventHelper.Threshold"/>.
 		/// </remarks>
-		public virtual bool IsSendingAndBusy
+		public virtual bool IsSendingForSomeTime
 		{
 			get
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.terminal != null)
-					return (this.terminal.IsSendingAndBusy);
+					return (this.terminal.IsSendingForSomeTime);
 				else
 					return (false);
 			}
@@ -2618,8 +2618,8 @@ namespace YAT.Model
 				this.terminal.SendingPacket    += terminal_SendingPacket;
 			#endif
 
-				this.terminal.IsSendingChanged        += terminal_IsSendingChanged;
-				this.terminal.IsSendingAndBusyChanged += terminal_IsSendingAndBusyChanged;
+				this.terminal.IsSendingChanged            += terminal_IsSendingChanged;
+				this.terminal.IsSendingForSomeTimeChanged += terminal_IsSendingForSomeTimeChanged;
 
 				this.terminal.RawChunkSent     += terminal_RawChunkSent;
 				this.terminal.RawChunkReceived += terminal_RawChunkReceived;
@@ -2659,8 +2659,8 @@ namespace YAT.Model
 				this.terminal.SendingPacket    -= terminal_SendingPacket;
 			#endif
 
-				this.terminal.IsSendingChanged        -= terminal_IsSendingChanged;
-				this.terminal.IsSendingAndBusyChanged -= terminal_IsSendingAndBusyChanged;
+				this.terminal.IsSendingChanged            -= terminal_IsSendingChanged;
+				this.terminal.IsSendingForSomeTimeChanged -= terminal_IsSendingForSomeTimeChanged;
 
 				this.terminal.RawChunkSent     -= terminal_RawChunkSent;
 				this.terminal.RawChunkReceived -= terminal_RawChunkReceived;
@@ -2899,9 +2899,9 @@ namespace YAT.Model
 			OnIsSendingChanged(e);
 		}
 
-		private void terminal_IsSendingAndBusyChanged(object sender, EventArgs<bool> e)
+		private void terminal_IsSendingForSomeTimeChanged(object sender, EventArgs<bool> e)
 		{
-			OnIsSendingAndBusyChanged(e);
+			OnIsSendingForSomeTimeChanged(e);
 		}
 
 		/// <remarks>
@@ -5408,9 +5408,9 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnIsSendingAndBusyChanged(EventArgs<bool> e)
+		protected virtual void OnIsSendingForSomeTimeChanged(EventArgs<bool> e)
 		{
-			this.eventHelper.RaiseSync<EventArgs<bool>>(IsSendingAndBusyChanged, this, e);
+			this.eventHelper.RaiseSync<EventArgs<bool>>(IsSendingForSomeTimeChanged, this, e);
 		}
 
 	#if (WITH_SCRIPTING)
