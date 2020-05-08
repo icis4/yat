@@ -569,45 +569,40 @@ namespace YAT.Domain
 			{
 				// Tx:
 				{
-					byte[] txEol;
-					if (!p.TryParse(TextTerminalSettings.TxEol, out txEol))
+					byte[] eol;
+					if (!p.TryParse(TextTerminalSettings.TxEol, out eol))
 					{
 						// In case of an invalid EOL sequence, default it. This should never happen,
 						// YAT verifies the EOL sequence when the user enters it. However, the user might
 						// manually edit the EOL sequence in a settings file.
 						TextTerminalSettings.TxEol = Settings.TextTerminalSettings.EolDefault;
-						txEol = p.Parse(TextTerminalSettings.TxEol);
+						eol = p.Parse(TextTerminalSettings.TxEol);
 					}
 
-					this.txUnidirTextLineState = new TextLineState(txEol);
-					this.txBidirTextLineState  = new TextLineState(txEol);
+					this.txUnidirTextLineState = new TextLineState(eol);
+					this.txBidirTextLineState  = new TextLineState(eol);
 				}
 
 				// Rx:
 				{
-					byte[] rxEol;
-					if (!p.TryParse(TextTerminalSettings.RxEol, out rxEol))
+					byte[] eol;
+					if (!p.TryParse(TextTerminalSettings.RxEol, out eol))
 					{
 						// In case of an invalid EOL sequence, default it. This should never happen,
 						// YAT verifies the EOL sequence when the user enters it. However, the user might
 						// manually edit the EOL sequence in a settings file.
 						TextTerminalSettings.RxEol = Settings.TextTerminalSettings.EolDefault;
-						rxEol = p.Parse(TextTerminalSettings.RxEol);
+						eol = p.Parse(TextTerminalSettings.RxEol);
 					}
 
-					this.rxUnidirTextLineState = new TextLineState(rxEol);
-					this.rxBidirTextLineState  = new TextLineState(rxEol);
+					this.rxUnidirTextLineState = new TextLineState(eol);
+					this.rxBidirTextLineState  = new TextLineState(eol);
 				}
 			}
 
 			if (TextTerminalSettings.WaitForResponse.Enabled)
 			{
-				lock (this.waitForResponseClearanceSyncObj)
-				{
-					this.waitForResponseResponseCounter = 0;
-					this.waitForResponseClearanceCounter = TextTerminalSettings.WaitForResponse.ClearanceLineCount;
-					this.waitForResponseClearanceTimeStamp = DateTime.MinValue;
-				}
+				ResetWaitForResponse();
 			}
 		}
 
@@ -788,7 +783,7 @@ namespace YAT.Domain
 
 					if ((TextTerminalSettings.WaitForResponse.Enabled) && (repositoryType == RepositoryType.Rx))
 					{                                                 // Rather than (dir == IODirection.Rx) which
-						NotifyResponse();                             // would cover two repositories (Rx and Bidir).
+						NotifyLineResponse();                         // would cover two repositories (Rx and Bidir).
 					}
 				}
 				else
@@ -1101,7 +1096,20 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Could be extracted into a separate class or struct.
 		/// </remarks>
-		protected virtual void NotifyResponse()
+		protected virtual void ResetWaitForResponse()
+		{
+			lock (this.waitForResponseClearanceSyncObj)
+			{
+				this.waitForResponseResponseCounter = 0;
+				this.waitForResponseClearanceCounter = TextTerminalSettings.WaitForResponse.ClearanceLineCount;
+				this.waitForResponseClearanceTimeStamp = DateTime.MinValue;
+			}
+		}
+
+		/// <remarks>
+		/// Could be extracted into a separate class or struct.
+		/// </remarks>
+		protected virtual void NotifyLineResponse()
 		{
 			lock (this.waitForResponseClearanceSyncObj)
 			{
@@ -1121,39 +1129,26 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Could be extracted into a separate class or struct.
 		/// </remarks>
-		protected virtual void PendForClearance()
+		protected virtual bool GetLineClearance(ForSomeTimeEventHelper forSomeTimeEventHelper)
 		{
-			DebugWaitForResponse("Pending for line clearance...");
+			DebugWaitForResponse("Getting line clearance..."); //da mues doch IsSending scho aktiv si !!!
+
+			var decrementIsRequired = false;
 
 			while (!DoBreak)
 			{
-				lock (this.waitForResponseClearanceSyncObj)
+				if (ClearanceHasBeenGranted())
 				{
-					var now = DateTime.Now;
-					if ((this.waitForResponseClearanceCounter > 0) || ClearanceTimeoutHasElapsed(now)) // Involved calculations only needed if counter is 0.
-					{
-						// Handle supernumerous responses, e.g. additional responses received without sending anything:
-						if (this.waitForResponseClearanceCounter > TextTerminalSettings.WaitForResponse.ClearanceLineCount) {
-							this.waitForResponseClearanceCounter = TextTerminalSettings.WaitForResponse.ClearanceLineCount;
+					if (decrementIsRequired)
+						DecrementIsSendingForSomeTimeChanged();
 
-							DebugWaitForResponse(string.Format("...clearance adjusted and...", this.waitForResponseClearanceCounter));
-						}
+					return (true);
+				}
 
-						if (this.waitForResponseClearanceCounter > 0) {
-							this.waitForResponseClearanceCounter--;
-
-							DebugWaitForResponse(string.Format("...granted, {0} lines left.", this.waitForResponseClearanceCounter));
-						}
-						else { // timeoutElapsed
-
-							DebugWaitForResponse(              "...granted due to timeout.");
-						}
-
-						this.waitForResponseClearanceTimeStamp = now;
-						this.waitForResponseEvent.Reset();
-
-						return;
-					}
+				if (forSomeTimeEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold()) // Signal wait operation if needed.
+				{
+					IncrementIsSendingForSomeTimeChanged();
+					decrementIsRequired = true;
 				}
 
 				try
@@ -1168,12 +1163,55 @@ namespace YAT.Domain
 				{
 					// The mutex should never be abandoned, but in case it nevertheless happens,
 					// at least output a debug message and gracefully exit the thread.
-					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in PendForClearance()!");
+					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in GetLineClearance()!");
 					break;
 				}
 			}
 
-			DebugWaitForResponse("PendForClearance() has determined to break");
+			DebugWaitForResponse("GetLineClearance() has determined to break");
+
+			ResetWaitForResponse(); // Required to reset clearance counter.
+
+			if (decrementIsRequired)
+				DecrementIsSendingForSomeTimeChanged();
+
+			return (false);
+		}
+
+		private bool ClearanceHasBeenGranted()
+		{
+			lock (this.waitForResponseClearanceSyncObj)
+			{
+				var now = DateTime.Now;
+				if ((this.waitForResponseClearanceCounter > 0) || ClearanceTimeoutHasElapsed(now)) // Involved calculations only needed if counter is 0.
+				{
+					// Handle supernumerous responses, e.g. additional responses received without sending anything:
+					if (this.waitForResponseClearanceCounter > TextTerminalSettings.WaitForResponse.ClearanceLineCount) {
+						this.waitForResponseClearanceCounter = TextTerminalSettings.WaitForResponse.ClearanceLineCount;
+
+						DebugWaitForResponse(string.Format("...adjusted and...", this.waitForResponseClearanceCounter));
+					}
+
+					if (this.waitForResponseClearanceCounter > 0) {
+						this.waitForResponseClearanceCounter--;
+
+						DebugWaitForResponse(string.Format("...granted, {0} lines left.", this.waitForResponseClearanceCounter));
+					}
+					else { // timeoutElapsed
+
+						DebugWaitForResponse(              "...granted due to timeout.");
+					}
+
+					this.waitForResponseClearanceTimeStamp = now;
+					this.waitForResponseEvent.Reset();
+
+					return (true);
+				}
+				else
+				{
+					return (false);
+				}
+			}
 		}
 
 		/// <remarks>
@@ -1190,11 +1228,11 @@ namespace YAT.Domain
 				if (duration > TextTerminalSettings.WaitForResponse.Timeout)
 					return (true);
 
-				DebugWaitForResponse("...waiting for counter to increase or timeout.");
+				DebugWaitForResponse("...pending for counter to increase, or timeout to elapse.");
 			}
 			else
 			{
-				DebugWaitForResponse("...waiting for counter to increase infinitely.");
+				DebugWaitForResponse("...pending for counter to increase infinitely.");
 			}
 
 			return (false);
@@ -1209,9 +1247,11 @@ namespace YAT.Domain
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_WAIT_FOR_RESPONSE")]
-		protected void DebugWaitForResponse(string message)
+		private void DebugWaitForResponse(string message)
 		{
 			DebugMessage(message);
 		}

@@ -32,6 +32,9 @@
 	// Enable debugging of send:
 ////#define DEBUG_SEND
 
+	// Enable debugging of send related events:
+////#define DEBUG_SEND_EVENTS
+
 	// Enable debugging of break:
 ////#define DEBUG_BREAK
 
@@ -180,10 +183,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected bool SendThreadsArePermitted { get; private set;}
 
-		private int sendingIsOngoingCount; // = 0;
-		private object sendingIsOngoingCountSyncObj = new object();
-		private int sendingIsBusyCount; // = 0;
-		private object sendingIsBusyCountSyncObj = new object();
+		private int isSendingCount; // = 0;
+		private object isSendingCountSyncObj = new object();
+		private int isSendingForSomeTimeCount; // = 0;
+		private object isSendingForSomeTimeCountSyncObj = new object();
 
 		private ManualResetEvent packetGateEvent = new ManualResetEvent(false);
 		private object packetGateSyncObj = new object();
@@ -210,7 +213,7 @@ namespace YAT.Domain
 				return (IsTransmissive);
 
 				// Until YAT 2.1.0, this property was implemented as 'IsReadyToSend_Internal'
-				// as (IsTransmissive && !this.sendingIsOngoing) and it also signalled
+				// as (IsTransmissive && !IsSending) and it also signalled
 				// 'EventMustBeRaisedBecauseStatusHasBeenAccessed()'. This was necessary as
 				// until YAT 2.1.0 it was not possible to run multiple commands concurrently.
 				// With YAT 2.1.1 this became possible, but keeping this property because its
@@ -220,28 +223,28 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual bool SendingIsOngoing
+		public virtual bool IsSending
 		{
 			get
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				return (IsTransmissive && (this.sendingIsOngoingCount > 0)); // No need to lock (this.sendingIsOngoingSyncObj), retrieving only.
+				return (IsTransmissive && (this.isSendingCount > 0)); // No need to lock (this.isSendingCountSyncObj), retrieving only.
 			}
 		}
 
 		/// <remarks>
-		/// Opposed to <see cref="SendingIsOngoing"/>, this property only becomes <c>true</c> when
-		/// sending has been ongoing for more than <see cref="SendingIsBusyChangedEventHelper.Threshold"/>,
-		/// or is about to be ongoing for more than <see cref="SendingIsBusyChangedEventHelper.Threshold"/>.
+		/// Opposed to <see cref="IsSending"/>, this property only becomes <c>true</c> when
+		/// sending has been ongoing for more than <see cref="ForSomeTimeEventHelper.Threshold"/>,
+		/// or is about to be ongoing for more than <see cref="ForSomeTimeEventHelper.Threshold"/>.
 		/// </remarks>
-		public virtual bool SendingIsBusy
+		public virtual bool IsSendingForSomeTime
 		{
 			get
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				return (SendingIsOngoing && (this.sendingIsBusyCount > 0)); // No need to lock (this.sendingIsBusyCount), retrieving only.
+				return (IsSending && (this.isSendingForSomeTimeCount > 0)); // No need to lock (this.isSendingForSomeTimeCountSyncObj), retrieving only.
 			}
 		}
 
@@ -295,16 +298,18 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format("Sending of {0} bytes of raw data has been invoked with sequence number {1}.", data.Length, sequenceNumber));
 
-			if (TryEnterRequestGate(sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
+			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
+			EnterRequestPre(false); // RaiseEventIfTotalTimeLagIsAboveThreshold() is always false right after creating helper.
+
+			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
 					DebugSend(string.Format("Sending of {0} bytes of raw data has been permitted (sequence number = {1}).", data.Length, sequenceNumber));
 
-					var sendingIsBusyChangedEvent = new SendingIsBusyChangedEventHelper(DateTime.Now);
-					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised); // Always false for raw data. If needed,
-					DoSendRawData(sendingIsBusyChangedEvent, data);         // event will be raised by DoSendRawData().
-					DoSendPost(sendingIsBusyChangedEvent.EventMustBeRaised);
+					DoSendPre();
+					DoSendRawData(forSomeTimeEventHelper, data);
+					DoSendPost();
 
 					DebugSend(string.Format("Sending of {0} bytes of raw data has been completed (sequence number = {1}).", data.Length, sequenceNumber));
 				}
@@ -313,6 +318,8 @@ namespace YAT.Domain
 					LeaveRequestGate();
 				}
 			}
+
+			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised);
 		}
 
 		/// <summary></summary>
@@ -334,16 +341,18 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format(@"Sending of text ""{0}"" has been invoked (sequence number = {1}).", item.Text, sequenceNumber));
 
-			if (TryEnterRequestGate(sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
+			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
+			EnterRequestPre(false); // RaiseEventIfTotalTimeLagIsAboveThreshold() is always false right after creating helper.
+
+			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
 					DebugSend(string.Format(@"Sending of text ""{0}"" has been permitted (sequence number = {1}).", item.Text, sequenceNumber));
 
-					var sendingIsBusyChangedEvent = new SendingIsBusyChangedEventHelper(DateTime.Now);
-					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised); // Always false for text items. If needed,
-					DoSendTextItem(sendingIsBusyChangedEvent, item);        // event will be raised by DoSendTextItem().
-					DoSendPost(sendingIsBusyChangedEvent.EventMustBeRaised);
+					DoSendPre();
+					DoSendTextItem(forSomeTimeEventHelper, item);
+					DoSendPost();
 
 					DebugSend(string.Format(@"Sending of text ""{0}"" has been completed (sequence number = {1}).", item.Text, sequenceNumber));
 				}
@@ -352,6 +361,8 @@ namespace YAT.Domain
 					LeaveRequestGate();
 				}
 			}
+
+			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised);
 		}
 
 		/// <summary></summary>
@@ -373,16 +384,18 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format(@"Sending of text line ""{0}"" has been invoked (sequence number = {1}).", item.Text, sequenceNumber));
 
-			if (TryEnterRequestGate(sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
+			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
+			EnterRequestPre(false); // RaiseEventIfTotalTimeLagIsAboveThreshold() is always false right after creating helper.
+
+			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
 					DebugSend(string.Format(@"Sending of text line ""{0}"" has been permitted (sequence number = {1}).", item.Text, sequenceNumber));
 
-					var sendingIsBusyChangedEvent = new SendingIsBusyChangedEventHelper(DateTime.Now);
-					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised); // Always false for text items. If needed,
-					DoSendTextItem(sendingIsBusyChangedEvent, item);        // event will be raised by DoSendTextItem().
-					DoSendPost(sendingIsBusyChangedEvent.EventMustBeRaised);
+					DoSendPre();
+					DoSendTextItem(forSomeTimeEventHelper, item);
+					DoSendPost();
 
 					DebugSend(string.Format(@"Sending of text line ""{0}"" has been completed (sequence number = {1}).", item.Text, sequenceNumber));
 				}
@@ -391,6 +404,8 @@ namespace YAT.Domain
 					LeaveRequestGate();
 				}
 			}
+
+			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised);
 		}
 
 		/// <remarks>
@@ -416,19 +431,21 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format("Sending of {0} text lines has been invoked (sequence number = {1}).", items.Count, sequenceNumber));
 
-			if (TryEnterRequestGate(sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
+			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
+			EnterRequestPre(false); // RaiseEventIfTotalTimeLagIsAboveThreshold() is always false right after creating helper.
+
+			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
 					DebugSend(string.Format("Sending of {0} text lines has been permitted (sequence number = {1}).", items.Count, sequenceNumber));
 
-					var sendingIsBusyChangedEvent = new SendingIsBusyChangedEventHelper(DateTime.Now);
-					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised); // Always false for text items. If needed,
-					                                                      //// event will be raised by DoSendTextItem().
-					foreach (var item in items)
-						DoSendTextItem(sendingIsBusyChangedEvent, item);
+					DoSendPre();
 
-					DoSendPost(sendingIsBusyChangedEvent.EventMustBeRaised);
+					foreach (var item in items)
+						DoSendTextItem(forSomeTimeEventHelper, item);
+
+					DoSendPost();
 
 					DebugSend(string.Format("Sending of {0} text lines has been completed (sequence number = {1}).", items.Count, sequenceNumber));
 				}
@@ -437,6 +454,8 @@ namespace YAT.Domain
 					LeaveRequestGate();
 				}
 			}
+
+			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised);
 		}
 
 		/// <summary></summary>
@@ -457,16 +476,18 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format(@"Sending of ""{0}"" has been invoked (sequence number = {1}).", item.FilePath, sequenceNumber));
 
-			if (TryEnterRequestGate(sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
+			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
+			EnterRequestPre(false); // RaiseEventIfTotalTimeLagIsAboveThreshold() is always false right after creating helper.
+
+			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
 					DebugSend(string.Format(@"Sending of ""{0}"" has been permitted (sequence number = {1}).", item.FilePath, sequenceNumber));
 
-					var sendingIsBusyChangedEvent = new SendingIsBusyChangedEventHelper(DateTime.Now);
-					DoSendPre(sendingIsBusyChangedEvent.EventMustBeRaised); // Always false for file items. If needed,
-					DoSendFileItem(sendingIsBusyChangedEvent, item);        // event will be raised by DoSendFileItem().
-					DoSendPost(sendingIsBusyChangedEvent.EventMustBeRaised);
+					DoSendPre();
+					DoSendFileItem(forSomeTimeEventHelper, item);
+					DoSendPost();
 
 					DebugSend(string.Format(@"Sending of ""{0}"" has been completed (sequence number = {1}).", item.FilePath, sequenceNumber));
 				}
@@ -475,6 +496,8 @@ namespace YAT.Domain
 					LeaveRequestGate();
 				}
 			}
+
+			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised);
 		}
 
 		#endregion
@@ -518,27 +541,169 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void DoSendPre(bool raiseSendingIsBusyChangedEvent)
+		protected virtual void EnterRequestPre(bool raiseIsSendingForSomeTimeChangedEvent)
 		{
-			// Each send request shall resume a pending break condition:
-			ResumeBreak();
+			ResumeBreak(); // Each send request shall resume a pending break condition.
 
-			if (TerminalSettings.Send.SignalXOnBeforeEachTransmission)
-				RequestSignalInputXOn();
+			if (raiseIsSendingForSomeTimeChangedEvent)
+				IncrementIsSendingForSomeTimeChanged();
 
-			if (raiseSendingIsBusyChangedEvent)
-				OnThisRequestSendingIsBusyChanged(true);
-
-			OnThisRequestSendingIsOngoingChanged(true);
+			IncrementIsSendingChanged();
 		}
 
 		/// <summary></summary>
-		protected virtual void DoSendPost(bool raiseSendingIsBusyChangedEvent)
+		protected virtual void LeaveRequestPost(bool raiseIsSendingForSomeTimeChangedEvent)
 		{
-			OnThisRequestSendingIsOngoingChanged(false);
+			DecrementIsSendingChanged();
 
-			if (raiseSendingIsBusyChangedEvent)
-				OnThisRequestSendingIsBusyChanged(false);
+			if (raiseIsSendingForSomeTimeChangedEvent)
+				DecrementIsSendingForSomeTimeChanged();
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
+		protected virtual bool TryEnterRequestGate(ForSomeTimeEventHelper forSomeTimeEventHelper, long sequenceNumber)
+		{
+			var decrementIsRequired = false;
+
+			while (!DoBreak)
+			{
+				if (TerminalSettings.Send.AllowConcurrency)
+				{
+					return (true);
+				}
+				else
+				{
+					if (sequenceNumber == Interlocked.Read(ref this.nextPermittedSequenceNumber))
+					{
+						if (decrementIsRequired)
+							DecrementIsSendingForSomeTimeChanged();
+
+						this.nextPermittedSequenceNumberEvent.Reset();
+						return (true);
+					}
+
+					if (forSomeTimeEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold()) // Signal wait operation if needed.
+					{
+						IncrementIsSendingForSomeTimeChanged();
+						decrementIsRequired = true;
+					}
+
+					try
+					{
+						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+						// if the overlying client isn't able or forgets to call Stop() or Dispose().
+						// Therefore, only wait for a certain period and then poll the run flag again.
+						// The period can be quite long, as an event trigger will immediately resume.
+						this.nextPermittedSequenceNumberEvent.WaitOne(StaticRandom.Next(50, 200));
+					}
+					catch (AbandonedMutexException ex)
+					{
+						// The mutex should never be abandoned, but in case it nevertheless happens,
+						// at least output a debug message and gracefully exit the thread.
+						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in TryEnterSequenceGateAsRequired()!");
+						break;
+					}
+				}
+			}
+
+			DebugSend("TryEnterRequestGate() has determined to break");
+
+			if (decrementIsRequired)
+				DecrementIsSendingForSomeTimeChanged();
+
+			return (false);
+		}
+
+		/// <summary></summary>
+		protected virtual void LeaveRequestGate()
+		{
+			if (IsUndisposed)
+			{
+				if (TerminalSettings.Send.AllowConcurrency)
+				{
+					// Nothing to do, no need to handle 'nextPermittedSequenceNumber', as changing
+					// the 'AllowConcurrency' setting will lead to TerminalFactory.RecreateTerminal().
+				}
+				else
+				{
+					Interlocked.Increment(ref this.nextPermittedSequenceNumber);
+					this.nextPermittedSequenceNumberEvent.Set();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
+		protected virtual bool TryEnterPacketGate(ForSomeTimeEventHelper forSomeTimeEventHelper)
+		{
+			var decrementIsRequired = false;
+
+			while (!DoBreak)
+			{
+				if (Monitor.TryEnter(this.packetGateSyncObj))
+				{
+					this.packetGateEvent.Reset();
+
+					if (decrementIsRequired)
+						DecrementIsSendingForSomeTimeChanged();
+
+					return (true);
+				}
+
+				if (forSomeTimeEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold()) // Signal wait operation if needed.
+				{
+					IncrementIsSendingForSomeTimeChanged();
+					decrementIsRequired = true;
+				}
+
+				try
+				{
+					// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+					// if the overlying client isn't able or forgets to call Stop() or Dispose().
+					// Therefore, only wait for a certain period and then poll the run flag again.
+					// The period can be quite long, as an event trigger will immediately resume.
+					this.packetGateEvent.WaitOne(StaticRandom.Next(50, 200));
+				}
+				catch (AbandonedMutexException ex)
+				{
+					// The mutex should never be abandoned, but in case it nevertheless happens,
+					// at least output a debug message and gracefully exit the thread.
+					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in TryEnterSequenceGateAsRequired()!");
+					break;
+				}
+			}
+
+			DebugSend("TryEnterPacketGate() has determined to break");
+
+			if (decrementIsRequired)
+				DecrementIsSendingForSomeTimeChanged();
+
+			return (false);
+		}
+
+		/// <summary></summary>
+		protected virtual void LeavePacketGate()
+		{
+			if (IsUndisposed)
+			{
+				Monitor.Exit(this.packetGateSyncObj);
+
+				this.packetGateEvent.Set();
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void DoSendPre()
+		{
+			if (TerminalSettings.Send.SignalXOnBeforeEachTransmission)
+				RequestSignalInputXOn();
+		}
+
+		/// <summary></summary>
+		protected virtual void DoSendPost()
+		{
+			// Nothing to do so far.
 		}
 
 		/// <remarks>
@@ -549,13 +714,13 @@ namespace YAT.Domain
 		/// </list>
 		/// </remarks>
 		/// <remarks>
-		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// <paramref name="forSomeTimeEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
-		protected virtual void DoSendRawData(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, byte[] data)
+		protected virtual void DoSendRawData(ForSomeTimeEventHelper forSomeTimeEventHelper, byte[] data)
 		{
 			// Raise the 'IOIsBusyChanged' event if a large chunk is about to be sent:
-			if (sendingIsBusyChangedEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(data.Length, this.terminalSettings.IO.RoughlyEstimatedMaxBytesPerMillisecond))
-				OnThisRequestSendingIsBusyChanged(true);
+			if (forSomeTimeEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(data.Length, this.terminalSettings.IO.RoughlyEstimatedMaxBytesPerMillisecond))
+				IncrementIsSendingForSomeTimeChanged();
 
 			ForwardPacketToRawTerminal(data); // Nothing for further processing, simply forward.
 		}
@@ -568,21 +733,21 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// <paramref name="forSomeTimeEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
-		protected virtual void DoSendTextItem(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, TextSendItem item)
+		protected virtual void DoSendTextItem(ForSomeTimeEventHelper forSomeTimeEventHelper, TextSendItem item)
 		{
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
 			if (DoTryParse(item.Text, item.DefaultRadix, item.ParseMode, out parseResult, out textSuccessfullyParsed))
-				DoSendText(sendingIsBusyChangedEventHelper, parseResult, item.IsLine);
+				DoSendText(forSomeTimeEventHelper, parseResult, item.IsLine);
 			else
 				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(item.Text, textSuccessfullyParsed)));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		protected virtual void DoSendText(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, Parser.Result[] parseResult, bool isLine = false)
+		protected virtual void DoSendText(ForSomeTimeEventHelper forSomeTimeEventHelper, Parser.Result[] parseResult, bool isLine = false)
 		{
 			var performLineRepeat    = false; // \remind For binary terminals, this is rather a 'PacketRepeat'.
 			var lineRepeatIsInfinite = (TerminalSettings.Send.DefaultLineRepeat == Settings.SendSettings.LineRepeatInfinite);
@@ -593,7 +758,7 @@ namespace YAT.Domain
 			{
 				// --- Initialize the line/packet ---
 
-				if (TryEnterPacketGate())
+				if (TryEnterPacketGate(forSomeTimeEventHelper))
 				{
 					var lineBeginTimeStamp  = DateTime.Now;      // \remind For binary terminals, this is rather a 'PacketBegin'.
 					var lineEndTimeStamp    = DateTime.MinValue; // \remind For binary terminals, this is rather a 'PacketBegin'.
@@ -605,18 +770,18 @@ namespace YAT.Domain
 
 					try
 					{
+						var doBreak = false;
+
 						// --- Process the line/packet ---
 
 						foreach (var result in parseResult)
 						{
-							var doBreak = false;
-
 							var bytesResult = (result as Parser.BytesResult);
 							if (bytesResult != null)
 							{
 								// Raise the 'IOIsBusyChanged' event if a large chunk is about to be sent:
-								if (sendingIsBusyChangedEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(bytesResult.Bytes.Length, this.terminalSettings.IO.RoughlyEstimatedMaxBytesPerMillisecond))
-									OnThisRequestSendingIsBusyChanged(true);
+								if (forSomeTimeEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(bytesResult.Bytes.Length, this.terminalSettings.IO.RoughlyEstimatedMaxBytesPerMillisecond))
+									IncrementIsSendingForSomeTimeChanged();
 
 								// For performance reasons, as well as joining text terminal EOL with line content,
 								// collect as many chunks as possible into a larger chunk:
@@ -684,7 +849,7 @@ namespace YAT.Domain
 										// Process in-line keywords:
 										default:
 										{
-											ProcessInLineKeywords(sendingIsBusyChangedEventHelper, keywordResult, conflateDataQueue, ref doBreak);
+											ProcessInLineKeywords(forSomeTimeEventHelper, keywordResult, conflateDataQueue, ref doBreak);
 
 											break;
 										}
@@ -696,15 +861,19 @@ namespace YAT.Domain
 								break;
 
 							// Raise the 'IOIsBusyChanged' event if sending already takes quite long:
-							if (sendingIsBusyChangedEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
-								OnThisRequestSendingIsBusyChanged(true);
+							if (forSomeTimeEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
+								IncrementIsSendingForSomeTimeChanged();
 						}
 
 						// --- Finalize the line/packet ---
 
-						ProcessLineEnd(isLine, conflateDataQueue);
+						ProcessLineEnd(forSomeTimeEventHelper, isLine, conflateDataQueue, ref doBreak);
 
 						lineEndTimeStamp = DateTime.Now; // \remind For binary terminals, this is rather a 'packetEndTimeStamp'.
+
+						// Break if requested or terminal has stopped or closed! Must be done prior to a potential Sleep() or repeat below!
+						if (DoBreak || doBreak) // (overall || local)
+							break;
 					}
 					finally
 					{
@@ -713,11 +882,7 @@ namespace YAT.Domain
 
 					// --- Perform line/packet related post-processing ---
 
-					// Break if requested or terminal has stopped or closed! Must be done prior to a potential Sleep() or repeat!
-					if (DoBreak)
-						break;
-
-					ProcessLineDelayOrInterval(sendingIsBusyChangedEventHelper, performLineDelay, lineDelay, performLineInterval, lineInterval, lineBeginTimeStamp, lineEndTimeStamp);
+					ProcessLineDelayOrInterval(forSomeTimeEventHelper, performLineDelay, lineDelay, performLineInterval, lineInterval, lineBeginTimeStamp, lineEndTimeStamp);
 
 					// Process repeat:
 					if (!lineRepeatIsInfinite)
@@ -736,9 +901,9 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Directly referring to given object for performance reasons.")]
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "InLine", Justification = "It's 'in line' and not inline!")]
 		[SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals", Justification = "Agree, could be refactored. Could be.")]
-		protected virtual void ProcessInLineKeywords(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, Parser.KeywordResult result, Queue<byte> conflateDataQueue, ref bool doBreakSend)
+		protected virtual void ProcessInLineKeywords(ForSomeTimeEventHelper forSomeTimeEventHelper, Parser.KeywordResult result, Queue<byte> conflateDataQueue, ref bool doBreak)
 		{
-			doBreakSend = false;
+			doBreak = false;
 
 			switch (result.Keyword)
 			{
@@ -754,7 +919,7 @@ namespace YAT.Domain
 
 						this.ClearRepositories();
 					}
-				////doBreakSend = !TryEnterPacketGate() must not be called, see above.
+				////doBreak = !TryEnterPacketGate() must not be called, see above.
 
 					break;
 				}
@@ -769,12 +934,12 @@ namespace YAT.Domain
 							delay = result.Args[0];
 
 						// Raise the 'IOIsBusyChanged' event if sending is about to be delayed:
-						if (sendingIsBusyChangedEventHelper.RaiseEventIfDelayIsAboveThreshold(delay))
-							OnThisRequestSendingIsBusyChanged(true);
+						if (forSomeTimeEventHelper.RaiseEventIfDelayIsAboveThreshold(delay))
+							IncrementIsSendingForSomeTimeChanged();
 
 						Thread.Sleep(delay);
 					}
-					doBreakSend = !TryEnterPacketGate();
+					doBreak = !TryEnterPacketGate(forSomeTimeEventHelper);
 
 					break;
 				}
@@ -1182,117 +1347,20 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>For binary terminals, this is rather a 'ProcessPacketEnd'.</remarks>
-		protected virtual void ProcessLineEnd(bool sendEol, Queue<byte> conflateDataQueue)
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Directly referring to given object for performance reasons.")]
+		protected virtual void ProcessLineEnd(ForSomeTimeEventHelper forSomeTimeEventHelper, bool appendEol, Queue<byte> conflateDataQueue, ref bool doBreak)
 		{
-			UnusedArg.PreventAnalysisWarning(sendEol); // Doesn't need to be handled for the 'neutral' terminal base.
+			UnusedArg.PreventAnalysisWarning(forSomeTimeEventHelper); // Doesn't need to be handled for the 'neutral' terminal base.
+			UnusedArg.PreventAnalysisWarning(appendEol);         // Doesn't need to be handled for the 'neutral' terminal base.
 
-			ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
-		protected virtual bool TryEnterRequestGate(long sequenceNumber)
-		{
-			while (!DoBreak)
-			{
-				if (TerminalSettings.Send.AllowConcurrency)
-				{
-					return (true);
-				}
-				else
-				{
-					if (sequenceNumber == Interlocked.Read(ref this.nextPermittedSequenceNumber))
-					{
-						this.nextPermittedSequenceNumberEvent.Reset();
-						return (true);
-					}
-
-					try
-					{
-						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
-						// if the overlying client isn't able or forgets to call Stop() or Dispose().
-						// Therefore, only wait for a certain period and then poll the run flag again.
-						// The period can be quite long, as an event trigger will immediately resume.
-						this.nextPermittedSequenceNumberEvent.WaitOne(StaticRandom.Next(50, 200));
-					}
-					catch (AbandonedMutexException ex)
-					{
-						// The mutex should never be abandoned, but in case it nevertheless happens,
-						// at least output a debug message and gracefully exit the thread.
-						DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in TryEnterSequenceGateAsRequired()!");
-						break;
-					}
-				}
-			}
-
-			DebugSend("TryEnterRequestGate() has determined to break");
-			return (false);
-		}
-
-		/// <summary></summary>
-		protected virtual void LeaveRequestGate()
-		{
-			if (IsUndisposed)
-			{
-				if (TerminalSettings.Send.AllowConcurrency)
-				{
-					// Nothing to do, no need to handle 'nextPermittedSequenceNumber', as changing
-					// the 'AllowConcurrency' setting will lead to TerminalFactory.RecreateTerminal().
-				}
-				else
-				{
-					Interlocked.Increment(ref this.nextPermittedSequenceNumber);
-					this.nextPermittedSequenceNumberEvent.Set();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
-		protected virtual bool TryEnterPacketGate()
-		{
-			while (!DoBreak)
-			{
-				if (Monitor.TryEnter(this.packetGateSyncObj))
-				{
-					this.packetGateEvent.Reset();
-					return (true);
-				}
-
-				try
-				{
-					// WaitOne() will wait forever if the underlying I/O provider has crashed, or
-					// if the overlying client isn't able or forgets to call Stop() or Dispose().
-					// Therefore, only wait for a certain period and then poll the run flag again.
-					// The period can be quite long, as an event trigger will immediately resume.
-					this.packetGateEvent.WaitOne(StaticRandom.Next(50, 200));
-				}
-				catch (AbandonedMutexException ex)
-				{
-					// The mutex should never be abandoned, but in case it nevertheless happens,
-					// at least output a debug message and gracefully exit the thread.
-					DebugEx.WriteException(GetType(), ex, "An 'AbandonedMutexException' occurred in TryEnterSequenceGateAsRequired()!");
-					break;
-				}
-			}
-
-			DebugSend("TryEnterPacketGate() has determined to break");
-			return (false);
-		}
-
-		/// <summary></summary>
-		protected virtual void LeavePacketGate()
-		{
-			if (IsUndisposed)
-			{
-				Monitor.Exit(this.packetGateSyncObj);
-
-				this.packetGateEvent.Set();
-			}
+			if (!doBreak)
+				ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+			else
+				BreakPendingPacket(conflateDataQueue);
 		}
 
 		/// <remarks>For binary terminals, this is rather a 'ProcessPacketDelayOrInterval'.</remarks>
-		protected virtual int ProcessLineDelayOrInterval(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, bool performLineDelay, int lineDelay, bool performLineInterval, int lineInterval, DateTime lineBeginTimeStamp, DateTime lineEndTimeStamp)
+		protected virtual int ProcessLineDelayOrInterval(ForSomeTimeEventHelper forSomeTimeEventHelper, bool performLineDelay, int lineDelay, bool performLineInterval, int lineInterval, DateTime lineBeginTimeStamp, DateTime lineEndTimeStamp)
 		{
 			int effectiveDelay = 0;
 
@@ -1309,8 +1377,8 @@ namespace YAT.Domain
 			if (effectiveDelay > 0)
 			{
 				// Raise the 'IOIsBusyChanged' event if sending is about to be delayed for too long:
-				if (sendingIsBusyChangedEventHelper.RaiseEventIfDelayIsAboveThreshold(effectiveDelay))
-					OnThisRequestSendingIsBusyChanged(true);
+				if (forSomeTimeEventHelper.RaiseEventIfDelayIsAboveThreshold(effectiveDelay))
+					IncrementIsSendingForSomeTimeChanged();
 
 				Thread.Sleep(effectiveDelay);
 				return (effectiveDelay);
@@ -1392,6 +1460,36 @@ namespace YAT.Domain
 	////
 	////	ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 	////}
+
+		/// <remarks>
+		/// Not the best approach to require to call this method at so many locations...
+		/// </remarks>
+		/// <remarks>
+		/// Named 'packet' rather than 'chunk' to emphasize difference to <see cref="RawChunkSent"/>
+		/// which corresponds to the chunks effectively sent by the underlying I/O instance.
+		/// </remarks>
+		protected virtual void BreakPendingPacket(Queue<byte> conflateDataQueue)
+		{
+			// Retrieve pending data:
+			byte[] data;
+			lock (conflateDataQueue)
+			{
+				data = conflateDataQueue.ToArray();
+				conflateDataQueue.Clear();
+			}
+
+			string message;
+			if (data.Length <= 1)
+				message = data.Length + " byte not sent anymore due to break."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+			else
+				message = data.Length + " bytes not sent anymore due to break."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+
+			InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, message, true));
+
+			// Note a suboptimality (bug #352) described in Terminal.InlineDisplayElement():
+			// The above warning message may be appended at a suboptiomal location, e.g.
+			// at the end of an already EOL'd line. Currently accepting this suboptimality.
+		}
 
 		/// <remarks>
 		/// Not the best approach to require to call this method at so many locations...
@@ -1504,28 +1602,28 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// <paramref name="forSomeTimeEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
-		protected abstract void DoSendFileItem(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, FileSendItem item);
+		protected abstract void DoSendFileItem(ForSomeTimeEventHelper forSomeTimeEventHelper, FileSendItem item);
 
 		/// <remarks>
 		/// Text terminals are <see cref="Encoding"/> aware, binary terminals are not.
 		/// </remarks>
 		/// <remarks>
-		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// <paramref name="forSomeTimeEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
-		protected virtual void DoSendTextFileItem(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, FileSendItem item)
+		protected virtual void DoSendTextFileItem(ForSomeTimeEventHelper forSomeTimeEventHelper, FileSendItem item)
 		{
-			DoSendTextFileItem(sendingIsBusyChangedEventHelper, item, Encoding.Default);
+			DoSendTextFileItem(forSomeTimeEventHelper, item, Encoding.Default);
 		}
 
 		/// <remarks>
 		/// Text terminals are <see cref="Encoding"/> aware, binary terminals are not.
 		/// </remarks>
 		/// <remarks>
-		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// <paramref name="forSomeTimeEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
-		protected virtual void DoSendTextFileItem(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, FileSendItem item, Encoding encodingFallback)
+		protected virtual void DoSendTextFileItem(ForSomeTimeEventHelper forSomeTimeEventHelper, FileSendItem item, Encoding encodingFallback)
 		{
 			using (var sr = new StreamReader(item.FilePath, encodingFallback, true))
 			{                             // Automatically detect encoding from BOM, otherwise use fallback.
@@ -1535,7 +1633,7 @@ namespace YAT.Domain
 					if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
 						continue;
 
-					DoSendFileLine(sendingIsBusyChangedEventHelper, line, item.DefaultRadix);
+					DoSendFileLine(forSomeTimeEventHelper, line, item.DefaultRadix);
 
 					if (DoBreak)
 						break;
@@ -1547,18 +1645,18 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// <paramref name="forSomeTimeEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
-		protected virtual void DoSendXmlFileItem(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, FileSendItem item)
+		protected virtual void DoSendXmlFileItem(ForSomeTimeEventHelper forSomeTimeEventHelper, FileSendItem item)
 		{
 			string[] lines;
 			XmlReaderHelper.LinesFromFile(item.FilePath, out lines); // Read file at once for simplicity. Minor limitation:
-			foreach (string line in lines)                           // 'sendingIsBusyChangedEventHelper.RaiseEventIf...' will
+			foreach (string line in lines)                           // 'forSomeTimeEventHelper.RaiseEventIf...' will
 			{                                                        // only be evaluated at DoSendFileLine() below.
 				if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
 					continue;
 
-				DoSendFileLine(sendingIsBusyChangedEventHelper, line, item.DefaultRadix);
+				DoSendFileLine(forSomeTimeEventHelper, line, item.DefaultRadix);
 
 				if (DoBreak)
 					break;
@@ -1569,18 +1667,18 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// <paramref name="forSomeTimeEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
-		protected virtual void DoSendFileLine(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, string line, Radix defaultRadix)
+		protected virtual void DoSendFileLine(ForSomeTimeEventHelper forSomeTimeEventHelper, string line, Radix defaultRadix)
 		{
 			// Raise the 'IOIsBusyChanged' event if sending already takes quite long, i.e. file cannot be sent within threshold:
-			if (sendingIsBusyChangedEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
-				OnThisRequestSendingIsBusyChanged(true);
+			if (forSomeTimeEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
+				IncrementIsSendingForSomeTimeChanged();
 
 			// Send the file line:
 			var parseMode = TerminalSettings.Send.File.ToParseMode();
 			var item = new TextSendItem(line, defaultRadix, parseMode, SendMode.File, true);
-			DoSendTextItem(sendingIsBusyChangedEventHelper, item);
+			DoSendTextItem(forSomeTimeEventHelper, item);
 		}
 
 		/// <remarks>
@@ -1589,16 +1687,16 @@ namespace YAT.Domain
 		/// Changes in behavior here will have to be adapted in that control method as well.
 		/// </remarks>
 		/// <remarks>
-		/// <paramref name="sendingIsBusyChangedEventHelper"/> is located first as needed down the call chain.
+		/// <paramref name="forSomeTimeEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
-		protected virtual void DoSendFileChunk(SendingIsBusyChangedEventHelper sendingIsBusyChangedEventHelper, byte[] chunk)
+		protected virtual void DoSendFileChunk(ForSomeTimeEventHelper forSomeTimeEventHelper, byte[] chunk)
 		{
 			// Raise the 'IOIsBusyChanged' event if sending already takes quite long, i.e. file cannot be sent within threshold:
-			if (sendingIsBusyChangedEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
-				OnThisRequestSendingIsBusyChanged(true);
+			if (forSomeTimeEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
+				IncrementIsSendingForSomeTimeChanged();
 
 			// Send the file chunk:
-			DoSendRawData(sendingIsBusyChangedEventHelper, chunk);
+			DoSendRawData(forSomeTimeEventHelper, chunk);
 		}
 
 		#endregion
@@ -1613,12 +1711,12 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void Break()
 		{
-			DebugBreakLead("Break has been requested...");
+			DebugBreakLead("Break has been requested");
 
 			lock (this.breakStateSyncObj)
 				this.breakState = true;
 
-			DebugBreakTail("and is active now");
+			DebugBreakTail(" and is active now");
 		}
 
 		/// <summary>
@@ -1626,12 +1724,12 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void ResumeBreak()
 		{
-			DebugBreakLead("Resume from break has been requested...");
+			DebugBreakLead("Resume from break has been requested");
 
 			lock (this.breakStateSyncObj)
 				this.breakState = false;
 
-			DebugBreakTail("and break is inactive now");
+			DebugBreakTail(" and break is inactive now");
 		}
 
 		#endregion
@@ -1642,55 +1740,97 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		protected virtual void OnThisRequestSendingIsOngoingChanged(bool value)
+		protected virtual void IncrementIsSendingChanged()
+		{
+			OnIsSendingChanged(true);
+		}
+
+		/// <summary></summary>
+		protected virtual void DecrementIsSendingChanged()
+		{
+			OnIsSendingChanged(false);
+		}
+
+		/// <summary></summary>
+		private void OnIsSendingChanged(bool value)
 		{
 			bool raiseEvent = false;
 
-			lock (this.sendingIsOngoingCountSyncObj)
+			lock (this.isSendingCountSyncObj)
 			{
 				if (value)
-					this.sendingIsOngoingCount++;
+				{
+					this.isSendingCount++; // No need to handle overflow, almost impossible to happen with YAT.
+					                            //// And if it happens nevertheless, an OverflowException is OK.
+					raiseEvent = true; // Always raise, because another send request might already have resumed a
+				}                      // signalled break condition, thus the break condition must be signalled again!
 				else
-					this.sendingIsOngoingCount--;
+				{
+					if (this.isSendingCount > 0) // Allow unsymmetrical decrement but
+						this.isSendingCount--;   // counter must not become negative.
 
-				if (this.sendingIsOngoingCount <= 0)
-					raiseEvent = true;
+					if (this.isSendingCount == 0)
+						raiseEvent = true;
+				}
 			}
 
+			DebugSendEvents(string.Format(CultureInfo.InvariantCulture, "OnIsSendingChanged({0}) resulting in count = {1} and raise = {2}", value, this.isSendingCount, raiseEvent));
+
 			if (raiseEvent)
-				OnSendingIsOngoingChanged(new EventArgs<bool>(value));
+				OnIsSendingChanged(new EventArgs<bool>(value));
 		}
 
 		/// <summary></summary>
-		protected virtual void OnSendingIsOngoingChanged(EventArgs<bool> e)
+		protected virtual void OnIsSendingChanged(EventArgs<bool> e)
 		{
-			this.eventHelper.RaiseSync<EventArgs<bool>>(SendingIsOngoingChanged, this, e);
+			this.eventHelper.RaiseSync<EventArgs<bool>>(IsSendingChanged, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnThisRequestSendingIsBusyChanged(bool value)
+		protected virtual void IncrementIsSendingForSomeTimeChanged()
+		{
+			OnIsSendingForSomeTimeChanged(true);
+		}
+
+		/// <summary></summary>
+		protected virtual void DecrementIsSendingForSomeTimeChanged()
+		{
+			OnIsSendingForSomeTimeChanged(false);
+		}
+
+		/// <summary></summary>
+		private void OnIsSendingForSomeTimeChanged(bool value)
 		{
 			bool raiseEvent = false;
 
-			lock (this.sendingIsBusyCountSyncObj)
+			lock (this.isSendingForSomeTimeCountSyncObj)
 			{
 				if (value)
-					this.sendingIsBusyCount++;
+				{
+					this.isSendingForSomeTimeCount++; // No need to handle overflow, almost impossible to happen with YAT.
+					                                //// And if it happens nevertheless, an OverflowException is OK.
+					raiseEvent = true; // Always raise, because another send request might already have resumed a
+				}                      // signalled break condition, thus the break condition must be signalled again!
 				else
-					this.sendingIsBusyCount--;
+				{
+					if (this.isSendingForSomeTimeCount > 0) // Allow unsymmetrical decrement but
+						this.isSendingForSomeTimeCount--;   // counter must not become negative.
 
-				if (this.sendingIsBusyCount <= 0)
-					raiseEvent = true;
+					if (this.isSendingForSomeTimeCount == 0)
+						raiseEvent = true;
+				}
 			}
 
+			DebugSendEvents(string.Format(CultureInfo.InvariantCulture, "OnIsSendingForSomeTimeChanged({0}) resulting in count = {1} and raise = {2}", value, this.isSendingForSomeTimeCount, raiseEvent));
+
 			if (raiseEvent)
-				OnSendingIsBusyChanged(new EventArgs<bool>(value));
+				OnIsSendingForSomeTimeChanged(new EventArgs<bool>(value));
 		}
 
 		/// <summary></summary>
-		protected virtual void OnSendingIsBusyChanged(EventArgs<bool> e)
+		protected virtual void OnIsSendingForSomeTimeChanged(EventArgs<bool> e)
 		{
-			this.eventHelper.RaiseSync<EventArgs<bool>>(SendingIsBusyChanged, this, e);
+			this.eventHelper.RaiseSync<EventArgs<bool>>(IsSendingForSomeTimeChanged, this, e);
 		}
 
 		#endregion
@@ -1700,18 +1840,36 @@ namespace YAT.Domain
 		// Debug
 		//==========================================================================================
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_SEND")]
 		private void DebugSend(string message)
 		{
 			DebugMessage(message);
 		}
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
+		[Conditional("DEBUG_SEND_EVENTS")]
+		private void DebugSendEvents(string message)
+		{
+			DebugMessage(message);
+		}
+
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_BREAK")]
 		private void DebugBreakLead(string message)
 		{
 			DebugMessageLead(message);
 		}
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_BREAK")]
 		private void DebugBreakTail(string message)
 		{
