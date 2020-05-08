@@ -93,6 +93,8 @@
     <Compile Include="Terminal\AllowConcurrencyTest.cs" />
     <Compile Include="Terminal\KeywordsSerialPortTest.cs" />
     <Compile Include="Terminal\KeywordTimeStampTest.cs" />
+    <Compile Include="Terminal\BreakTest.cs" />
+    <Compile Include="TextTerminal\LineSendDelayTest.cs" />
     <Compile Include="TextTerminal\WaitForResponseTest.cs" />
     <Compile Include="TextTerminal\EolTest.cs" />
     <Compile Include="TextTerminal\SubstitutionParserTest.cs" />

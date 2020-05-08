@@ -767,11 +767,10 @@ namespace YAT.Domain
 					var performLineInterval = false;             // \remind For binary terminals, this is rather a 'PacketInterval'.
 					var lineInterval        = TerminalSettings.Send.DefaultLineInterval;
 					var conflateDataQueue   = new Queue<byte>();
+					var doBreak             = false;
 
 					try
 					{
-						var doBreak = false;
-
 						// --- Process the line/packet ---
 
 						foreach (var result in parseResult)
@@ -858,27 +857,29 @@ namespace YAT.Domain
 							}
 
 							if (DoBreak || doBreak) // (overall || local)
-								break;
+								break; // foreach (result)
 
 							// Raise the 'IOIsBusyChanged' event if sending already takes quite long:
 							if (forSomeTimeEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
 								IncrementIsSendingForSomeTimeChanged();
-						}
+
+						} // foreach (result)
 
 						// --- Finalize the line/packet ---
 
 						ProcessLineEnd(forSomeTimeEventHelper, isLine, conflateDataQueue, ref doBreak);
 
 						lineEndTimeStamp = DateTime.Now; // \remind For binary terminals, this is rather a 'packetEndTimeStamp'.
-
-						// Break if requested or terminal has stopped or closed! Must be done prior to a potential Sleep() or repeat below!
-						if (DoBreak || doBreak) // (overall || local)
-							break;
 					}
 					finally
 					{
-						LeavePacketGate(); // Not the best approach to require this call at so many locations...
+						if (!doBreak) // Break means that packet gate already got left and was not entered again!
+							LeavePacketGate(); // Not the best approach to require this call at so many locations...
 					}
+
+					// Break if requested or terminal has stopped or closed! Must be done prior to a potential Sleep() below!
+					if (DoBreak || doBreak) // (overall || local)
+						break; // do/while (repeat)
 
 					// --- Perform line/packet related post-processing ---
 
@@ -892,6 +893,10 @@ namespace YAT.Domain
 					}
 
 					isFirstRepetition = false;
+
+					// Break if requested or terminal has stopped or closed! Must be done prior to a potential repeat below!
+					if (DoBreak)
+						break; // do/while (repeat)
 				}
 			}
 			while (performLineRepeat && (lineRepeatIsInfinite || (lineRepeatRemaining > 0)));
