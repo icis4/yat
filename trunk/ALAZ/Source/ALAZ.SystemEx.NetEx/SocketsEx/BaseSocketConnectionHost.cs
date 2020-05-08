@@ -2751,12 +2751,18 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 		// Debug
 		//==========================================================================================
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_EXCEPTIONS")]
 		private void DebugExceptions(Exception ex)
 		{
 			MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes. It indicates an issue in ALAZ.");
 		}
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_SHUTDOWN")]
 		private void DebugShutdown(string message)
 		{

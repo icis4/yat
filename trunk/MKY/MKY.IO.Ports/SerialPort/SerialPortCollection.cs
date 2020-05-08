@@ -450,6 +450,9 @@ namespace MKY.IO.Ports
 		// Debug
 		//==========================================================================================
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_VERBOSE")]
 		private static void DebugVerbose(string message = null)
 		{
@@ -457,6 +460,9 @@ namespace MKY.IO.Ports
 				Debug.WriteLine(message);
 		}
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_VERBOSE")]
 		private static void DebugVerboseIndent(string message = null)
 		{
@@ -464,6 +470,9 @@ namespace MKY.IO.Ports
 			Debug.Indent();
 		}
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_VERBOSE")]
 		private static void DebugVerboseUnindent(string message = null)
 		{

@@ -2137,9 +2137,11 @@ namespace YAT.View.Controls
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_CONTENT")]
-		protected virtual void DebugContent(string message)
+		private void DebugContent(string message)
 		{
 			if (DebugEnabled)
 			{
@@ -2147,9 +2149,14 @@ namespace YAT.View.Controls
 			}
 		}
 
-		/// <remarks>Using <see cref="Debug.Write(string)"/> for manually composing line.</remarks>
+		/// <remarks>
+		/// Using <see cref="Debug.Write(string)"/> for manually composing line.
+		/// </remarks>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_UPDATE")]
-		protected virtual void DebugUpdate(string message)
+		private void DebugUpdate(string message)
 		{
 			if (DebugEnabled)
 			{
@@ -2157,9 +2164,11 @@ namespace YAT.View.Controls
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_VERTICAL_AUTO_SCROLL")]
-		protected virtual void DebugVerticalAutoScroll(string leadMessage)
+		private void DebugVerticalAutoScroll(string leadMessage)
 		{
 			if (DebugEnabled)
 			{

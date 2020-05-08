@@ -268,6 +268,9 @@ namespace MKY.IO.Usb
 		// Debug
 		//==========================================================================================
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_VERBOSE")]
 		private static void DebugVerboseIndent(string message = null)
 		{
@@ -277,6 +280,9 @@ namespace MKY.IO.Usb
 			Debug.Indent();
 		}
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_VERBOSE")]
 		private static void DebugVerboseUnindent(string message = null)
 		{

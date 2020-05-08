@@ -717,8 +717,9 @@ namespace MKY
 			// Debug Output
 			//======================================================================================
 
+			/// <summary></summary>
 			[Conditional("DEBUG")]
-			private void DebugWriteDisposedTargetAndEventToDebugOutput(Delegate sink)
+			protected virtual void DebugWriteDisposedTargetAndEventToDebugOutput(Delegate sink)
 			{
 				if (!string.IsNullOrEmpty(Owner))
 				{
@@ -762,8 +763,9 @@ namespace MKY
 			#endif
 			}
 
+			/// <summary></summary>
 			[Conditional("DEBUG")]
-			private void DebugWriteExceptionAndEventToDebugOutput(Exception ex, Delegate sink, bool wasSyncInvoke, bool isMainThread, bool discard)
+			protected virtual void DebugWriteExceptionAndEventToDebugOutput(Exception ex, Delegate sink, bool wasSyncInvoke, bool isMainThread, bool discard)
 			{
 				var leadMessage = new StringBuilder();
 

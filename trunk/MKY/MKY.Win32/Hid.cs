@@ -1130,18 +1130,27 @@ namespace MKY.Win32
 		// Debug
 		//==========================================================================================
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_STRING_ACCESS")]
 		private static void DebugStringAccess(string message)
 		{
 			Debug.WriteLine(message);
 		}
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_STRING_ACCESS_MESSAGEBOXES")]
 		private static void DebugStringAccessMessageBoxes(string message)
 		{
 			MessageBoxEx.Show(message, "Debug Message");
 		}
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_STRING_ACCESS_MESSAGEBOXES")]
 		private static void DebugStringAccessMessageBoxes(bool condition, string messageIf, string messageElse)
 		{

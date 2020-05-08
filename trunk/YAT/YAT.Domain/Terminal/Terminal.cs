@@ -2356,6 +2356,9 @@ namespace YAT.Domain
 			);
 		}
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_CONTENT_EVENTS")]
 		private void DebugContentEvents(string message)
 		{
@@ -2364,38 +2367,48 @@ namespace YAT.Domain
 
 	#if (WITH_SCRIPTING)
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_SCRIPTING")]
-		protected virtual void DebugScripting(string message)
+		private void DebugScripting(string message)
 		{
 			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + ToShortIOString() + "': " + message);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_SCRIPTING")]
-		protected virtual void DebugScriptingPrefixedQuoted(string prefix, string quoted)
+		private void DebugScriptingPrefixedQuoted(string prefix, string quoted)
 		{
 			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + ToShortIOString() + "': " + prefix + @" """ + quoted + @""".");
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_SCRIPTING")]
-		protected virtual void DebugScriptingPostfixedQuoted(string quoted, string postfix)
+		private void DebugScriptingPostfixedQuoted(string quoted, string postfix)
 		{
 			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + ToShortIOString() + @"': """ + quoted + @""" " + postfix);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_SCRIPTING")]
-		protected virtual void DebugScriptingQueueCount(int count)
+		private void DebugScriptingQueueCount(int count)
 		{
 			if (count > 0) // Otherwise, debug output gets spoilt...
 				DebugScripting(string.Format("{0} received messages available for scripting.", count));
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_SCRIPTING")]
-		protected virtual void DebugScriptingQueueCleared(string[] cleared)
+		private void DebugScriptingQueueCleared(string[] cleared)
 		{
 			if (ArrayEx.IsNullOrEmpty(cleared))
 				DebugScripting("Message queue for scripting cleared, contained [nothing].");

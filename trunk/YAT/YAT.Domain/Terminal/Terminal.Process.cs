@@ -1292,16 +1292,20 @@ namespace YAT.Domain
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_LINE_BREAK")]
-		protected virtual void DebugLineBreak(string message)
+		private void DebugLineBreak(string message)
 		{
 			DebugMessage(message);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_LINE_BREAK")]
-		protected virtual void DebugLineBreak(RepositoryType repositoryType, string message)
+		private void DebugLineBreak(RepositoryType repositoryType, string message)
 		{
 			if (repositoryType == RepositoryType.Bidir) // Limited to tricky case.
 				DebugLineBreak(message);

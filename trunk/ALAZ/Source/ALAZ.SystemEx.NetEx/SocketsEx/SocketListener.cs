@@ -305,6 +305,9 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 		// Debug
 		//==========================================================================================
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_EXCEPTIONS")]
 		private void DebugException(Exception ex)
 		{
