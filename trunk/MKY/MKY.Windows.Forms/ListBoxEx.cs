@@ -48,6 +48,8 @@
 
 	// Enable debugging of general stuff:
 ////#define DEBUG_CLIENT_AREA               // The 'DebugEnabled' property must also be set!
+
+	// Attention, requires to be enabled in multiple files!
 ////#define DEBUG_COUNT_AND_INDICES         // The 'DebugEnabled' property must also be set!
 
 	// Enable debugging of vertical semi-auto scrolling:
@@ -1201,21 +1203,21 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <remarks>
-		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// Attention, requires that <see cref="ConditionalAttribute"/> in multiple files!
 		/// </remarks>
 		[Conditional("DEBUG_COUNT_AND_INDICES")]
 		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
-		private void DebugCountAndIndices(string leadMessage)
+		protected virtual void DebugCountAndIndices(string leadMessage)
 		{
 			DebugCountAndIndices(leadMessage, BottomIndex);
 		}
 
 		/// <remarks>
-		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// Attention, requires that <see cref="ConditionalAttribute"/> in multiple files!
 		/// </remarks>
 		[Conditional("DEBUG_COUNT_AND_INDICES")]
 		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
-		private void DebugCountAndIndices(string leadMessage, int bottomIndex)
+		protected virtual void DebugCountAndIndices(string leadMessage, int bottomIndex)
 		{
 			if (DebugEnabled)
 			{
