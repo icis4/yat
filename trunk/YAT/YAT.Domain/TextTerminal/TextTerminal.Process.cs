@@ -611,6 +611,10 @@ namespace YAT.Domain
 		/// </summary>
 		protected override void DisposeProcess()
 		{
+			// Text unspecifics:
+			base.DisposeProcess();
+
+			// Text specifics:
 			if (this.waitForResponseEvent != null) {
 				this.waitForResponseEvent.Dispose();
 				this.waitForResponseEvent = null;
