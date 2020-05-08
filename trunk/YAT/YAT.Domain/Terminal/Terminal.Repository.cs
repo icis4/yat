@@ -537,12 +537,14 @@ namespace YAT.Domain
 
 			// Note that simply adding leads to a suboptimality (bug #352):
 			//
-			// ABCD<CR><LF>
-			// ABCD<CR><LF><Warning: CTS="" inactive,="" retaining="" data...=""> <= Warning appears on already completed line
+			// ABC<CR><LF>[Warning: 5 bytes not sent anymore due to break.]
 			//
-			// [Error: EOL keyword is not supported for binary terminals]
+			// ABCD<CR><LF>
+			// ABCD<CR><LF>[Warning: CTS inactive, retaining data...] <= Warning appears on already completed line
+			//
+			// [Error: EOL keyword is not supported for binary terminals!]
 			// 41h 41h 42h
-			// 41h 42h 43h[Error: EOL keyword is not supported for binary terminals]
+			// 41h 42h 43h[Error: EOL keyword is not supported for binary terminals!]
 			//
 			// => Simply adding may result in inlining at suboptimal locations.
 			//
