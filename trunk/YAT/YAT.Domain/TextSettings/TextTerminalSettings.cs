@@ -66,6 +66,9 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const bool SeparateTxRxDisplayDefault = false;
 
+		/// <summary></summary>
+		public const int GlueCharsOfLineTimeoutDefault = 50; // At e.g. 9600 baud, the frame time is ~1 ms.
+
 		/// <remarks>
 		/// Default is <see cref="TimeoutSettingTuple.Enabled"/> = <c>true</c> for two reasons:
 		/// <list type="bullet">
@@ -73,13 +76,19 @@ namespace YAT.Domain.Settings
 		/// <item><description>Dealing with partial lines is still possible with the very short timeout default.</description></item>
 		/// </list>
 		/// </remarks>
-		public static readonly TimeoutSettingTuple GlueCharsOfLineDefault = new TimeoutSettingTuple(true, 50); // At e.g. 9600 baud, the frame time is ~1 ms.
+		public static readonly TimeoutSettingTuple GlueCharsOfLineDefault = new TimeoutSettingTuple(true, GlueCharsOfLineTimeoutDefault);
 
 		/// <summary></summary>
-		public static readonly TextLineSendDelaySettingTuple LineSendDelayDefault = new TextLineSendDelaySettingTuple(false, 500, 1);
+		public const int LineSendDelayTimeoutDefault = 500;
 
 		/// <summary></summary>
-		public static readonly TextWaitForResponseSettingTuple WaitForResponseDefault = new TextWaitForResponseSettingTuple(false, 1, 1, 500);
+		public static readonly TextLineSendDelaySettingTuple LineSendDelayDefault = new TextLineSendDelaySettingTuple(false, LineSendDelayTimeoutDefault, 1);
+
+		/// <summary></summary>
+		public const int WaitForResponseTimeoutDefault = 500;
+
+		/// <summary></summary>
+		public static readonly TextWaitForResponseSettingTuple WaitForResponseDefault = new TextWaitForResponseSettingTuple(false, 1, 1, WaitForResponseTimeoutDefault);
 
 		/// <summary></summary>
 		public const CharSubstitution CharSubstitutionDefault = CharSubstitution.None;

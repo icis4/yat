@@ -37,7 +37,10 @@ namespace YAT.Domain.Settings
 		public static readonly bool ChunkLineBreakEnabledDefault = true;
 
 		/// <summary></summary>
-		public static readonly LengthSettingTuple LengthLineBreakDefault = new LengthSettingTuple(false, 16);
+		public const int LengthLineBreakLengthDefault = 16;
+
+		/// <summary></summary>
+		public static readonly LengthSettingTuple LengthLineBreakDefault = new LengthSettingTuple(false, LengthLineBreakLengthDefault);
 
 		/// <summary></summary>
 		public static readonly BinarySequenceSettingTuple SequenceLineBreakBeforeDefault = new BinarySequenceSettingTuple(false, @"ABC");
@@ -46,7 +49,10 @@ namespace YAT.Domain.Settings
 		public static readonly BinarySequenceSettingTuple SequenceLineBreakAfterDefault = new BinarySequenceSettingTuple(false, @"\h(00)");
 
 		/// <summary></summary>
-		public static readonly TimeoutSettingTuple TimedLineBreakDefault = new TimeoutSettingTuple(false, 500);
+		public const int TimedLineBreakTimeoutDefault = 500;
+
+		/// <summary></summary>
+		public static readonly TimeoutSettingTuple TimedLineBreakDefault = new TimeoutSettingTuple(false, TimedLineBreakTimeoutDefault);
 
 		private bool                       chunkLineBreakEnabled;
 		private LengthSettingTuple         lengthLineBreak;
