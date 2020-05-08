@@ -2138,7 +2138,7 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_CONTENT")]
 		private void DebugContent(string message)
@@ -2153,7 +2153,7 @@ namespace YAT.View.Controls
 		/// Using <see cref="Debug.Write(string)"/> for manually composing line.
 		/// </remarks>
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_UPDATE")]
 		private void DebugUpdate(string message)
@@ -2165,7 +2165,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_VERTICAL_AUTO_SCROLL")]
 		private void DebugVerticalAutoScroll(string leadMessage)

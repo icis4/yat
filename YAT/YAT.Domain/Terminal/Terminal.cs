@@ -2357,7 +2357,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_CONTENT_EVENTS")]
 		private void DebugContentEvents(string message)
@@ -2368,7 +2368,7 @@ namespace YAT.Domain
 	#if (WITH_SCRIPTING)
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_SCRIPTING")]
 		private void DebugScripting(string message)
@@ -2377,7 +2377,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_SCRIPTING")]
 		private void DebugScriptingPrefixedQuoted(string prefix, string quoted)
@@ -2386,7 +2386,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_SCRIPTING")]
 		private void DebugScriptingPostfixedQuoted(string quoted, string postfix)
@@ -2395,7 +2395,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_SCRIPTING")]
 		private void DebugScriptingQueueCount(int count)
@@ -2405,7 +2405,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_SCRIPTING")]
 		private void DebugScriptingQueueCleared(string[] cleared)

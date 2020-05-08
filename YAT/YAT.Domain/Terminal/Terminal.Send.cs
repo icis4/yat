@@ -1841,7 +1841,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_SEND")]
 		private void DebugSend(string message)
@@ -1850,7 +1850,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_SEND_EVENTS")]
 		private void DebugSendEvents(string message)
@@ -1859,7 +1859,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_BREAK")]
 		private void DebugBreakLead(string message)
@@ -1868,7 +1868,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_BREAK")]
 		private void DebugBreakTail(string message)

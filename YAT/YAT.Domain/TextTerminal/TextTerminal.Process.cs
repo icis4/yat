@@ -1248,7 +1248,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_WAIT_FOR_RESPONSE")]
 		private void DebugWaitForResponse(string message)

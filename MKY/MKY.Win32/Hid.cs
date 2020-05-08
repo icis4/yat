@@ -1131,7 +1131,7 @@ namespace MKY.Win32
 		//==========================================================================================
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_STRING_ACCESS")]
 		private static void DebugStringAccess(string message)
@@ -1140,7 +1140,7 @@ namespace MKY.Win32
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_STRING_ACCESS_MESSAGEBOXES")]
 		private static void DebugStringAccessMessageBoxes(string message)
@@ -1149,7 +1149,7 @@ namespace MKY.Win32
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_STRING_ACCESS_MESSAGEBOXES")]
 		private static void DebugStringAccessMessageBoxes(bool condition, string messageIf, string messageElse)

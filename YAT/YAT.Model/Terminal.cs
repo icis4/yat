@@ -5775,7 +5775,7 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_THREAD_STATE")]
 		private void DebugThreadState(string message)

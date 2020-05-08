@@ -340,7 +340,7 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_RECEIVE")]
 		private void DebugReceive(string message)

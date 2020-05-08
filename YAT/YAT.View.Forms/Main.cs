@@ -4750,7 +4750,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_MDI")]
 		private void DebugMdi(string message)
@@ -4759,7 +4759,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_FIND")]
 		private void DebugFindEnter(string methodName)
@@ -4771,7 +4771,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_FIND")]
 		private void DebugFindLeave()
@@ -4782,7 +4782,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_FIND")]
 		private void DebugFindState()
