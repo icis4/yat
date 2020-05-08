@@ -42,7 +42,7 @@ namespace YAT.Domain.Settings
 		[XmlElement("Delay")]
 		public int Delay { get; set; }
 
-		/// <summary></summary>
+		/// <remarks>Interval here means "each n lines".</remarks>
 		[XmlElement("LineInterval")]
 		public int LineInterval { get; set; }
 

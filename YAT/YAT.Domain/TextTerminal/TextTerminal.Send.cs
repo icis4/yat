@@ -132,7 +132,7 @@ namespace YAT.Domain
 
 			if (TerminalSettings.TextTerminal.LineSendDelay.Enabled)
 			{
-				this.lineSendDelayState.LineCount++;
+				this.lineSendDelayState.LineCount++;                                                     // Interval here means "each n lines".
 				if (this.lineSendDelayState.LineCount >= TerminalSettings.TextTerminal.LineSendDelay.LineInterval)
 				{
 					this.lineSendDelayState.Reset();
