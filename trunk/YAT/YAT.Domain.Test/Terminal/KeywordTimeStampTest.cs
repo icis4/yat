@@ -93,8 +93,6 @@ namespace YAT.Domain.Test.Terminal
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			const int WaitForDisposal = 100;
-
 			using (var parser = new Domain.Parser.Parser(Domain.Parser.Mode.NoEscapes))
 			{
 				byte[] parseResult;
@@ -179,8 +177,6 @@ namespace YAT.Domain.Test.Terminal
 				} // using (terminalA)
 
 			} // using (parser)
-
-			Thread.Sleep(WaitForDisposal);
 		}
 
 		#endregion
