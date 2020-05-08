@@ -1308,7 +1308,7 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_USER_INPUT")]
 		private void DebugUserInputEnter(string methodName)
@@ -1320,7 +1320,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_USER_INPUT")]
 		private void DebugUserInputLeave()
@@ -1331,7 +1331,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_USER_INPUT")]
 		private void DebugUserInputState()

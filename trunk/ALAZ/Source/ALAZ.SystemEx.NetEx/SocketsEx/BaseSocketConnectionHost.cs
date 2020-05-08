@@ -2752,7 +2752,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 		//==========================================================================================
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_EXCEPTIONS")]
 		private void DebugExceptions(Exception ex)
@@ -2761,7 +2761,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_SHUTDOWN")]
 		private void DebugShutdown(string message)

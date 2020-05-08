@@ -358,7 +358,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_CURSOR_AND_SELECTION")]
 		private static void DebugCursorAndSelection(string message)

@@ -261,7 +261,7 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_VERBOSE")]
 		private static void DebugVerboseIndent(string message = null)
@@ -273,7 +273,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_VERBOSE")]
 		private static void DebugVerboseUnindent(string message = null)
