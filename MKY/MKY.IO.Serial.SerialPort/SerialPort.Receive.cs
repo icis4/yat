@@ -154,6 +154,9 @@ namespace MKY.IO.Serial.SerialPort
 		// Debug
 		//==========================================================================================
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_RECEIVE_REQUEST")]
 		private void DebugReceiveRequest(string message)
 		{

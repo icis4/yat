@@ -452,14 +452,24 @@ namespace MKY.Test.Devices
 			}
 		}
 
+		/// <remarks>
+		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named "Message" for compactness and more clarity that somthing will happen
+		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// </remarks>
 		[Conditional("DEBUG")]
-		private static void DebugMessage(UsbHubDevices device, string message)
+		internal static void DebugMessage(UsbHubDevices device, string message)
 		{
 			DebugMessage(device.ToString(), message);
 		}
 
+		/// <remarks>
+		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named "Message" for compactness and more clarity that somthing will happen
+		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// </remarks>
 		[Conditional("DEBUG")]
-		private static void DebugMessage(string device, string message)
+		internal static void DebugMessage(string device, string message)
 		{
 			Debug.WriteLine
 			(

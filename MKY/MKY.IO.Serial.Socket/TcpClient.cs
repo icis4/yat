@@ -978,7 +978,7 @@ namespace MKY.IO.Serial.Socket
 		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
-		private void DebugMessage(string message)
+		protected virtual void DebugMessage(string message)
 		{
 			Debug.WriteLine
 			(
@@ -996,12 +996,18 @@ namespace MKY.IO.Serial.Socket
 			);
 		}
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_THREAD_STATE")]
 		private void DebugThreadState(string message)
 		{
 			DebugMessage(message);
 		}
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_SOCKET_SHUTDOWN")]
 		private void DebugSocketShutdown(string message)
 		{

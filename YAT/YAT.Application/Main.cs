@@ -1346,7 +1346,7 @@ namespace YAT.Application
 		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
-		private void DebugMessage(string message)
+		protected virtual void DebugMessage(string message)
 		{
 			Debug.WriteLine
 			(
@@ -1364,6 +1364,9 @@ namespace YAT.Application
 			);
 		}
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_WELCOME_SCREEN_SHOW")]
 		private void DebugWelcomeScreenShow(string message)
 		{

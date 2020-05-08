@@ -1176,9 +1176,11 @@ namespace MKY.Windows.Forms
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_CLIENT_AREA")]
-		protected virtual void DebugClientArea(string leadMessage)
+		private void DebugClientArea(string leadMessage)
 		{
 			if (DebugEnabled)
 			{
@@ -1198,18 +1200,22 @@ namespace MKY.Windows.Forms
 			}
 		}
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_COUNT_AND_INDICES")]
-		protected virtual void DebugCountAndIndices(string leadMessage)
+		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
+		private void DebugCountAndIndices(string leadMessage)
 		{
 			DebugCountAndIndices(leadMessage, BottomIndex);
 		}
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_COUNT_AND_INDICES")]
-		protected virtual void DebugCountAndIndices(string leadMessage, int bottomIndex)
+		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
+		private void DebugCountAndIndices(string leadMessage, int bottomIndex)
 		{
 			if (DebugEnabled)
 			{
@@ -1230,9 +1236,11 @@ namespace MKY.Windows.Forms
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_VERTICAL_SEMI_AUTO_SCROLL")]
-		protected virtual void DebugVerticalSemiAutoScroll(string message)
+		private void DebugVerticalSemiAutoScroll(string message)
 		{
 			if (DebugEnabled)
 			{

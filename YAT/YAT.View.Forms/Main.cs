@@ -4719,8 +4719,13 @@ namespace YAT.View.Forms
 		// Debug
 		//==========================================================================================
 
+		/// <remarks>
+		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named "Message" for compactness and more clarity that somthing will happen
+		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// </remarks>
 		[Conditional("DEBUG")]
-		private void DebugMessage(string message)
+		protected virtual void DebugMessage(string message)
 		{
 			string guid;
 			if (this.main != null)
@@ -4744,15 +4749,20 @@ namespace YAT.View.Forms
 			);
 		}
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_MDI")]
 		private void DebugMdi(string message)
 		{
 			DebugMessage(message);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_FIND")]
-		protected virtual void DebugFindEnter(string methodName)
+		private void DebugFindEnter(string methodName)
 		{
 			Debug.WriteLine(methodName);
 			Debug.Indent();
@@ -4760,18 +4770,22 @@ namespace YAT.View.Forms
 			DebugFindState();
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_FIND")]
-		protected virtual void DebugFindLeave()
+		private void DebugFindLeave()
 		{
 			DebugFindState();
 
 			Debug.Unindent();
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_FIND")]
-		protected virtual void DebugFindState()
+		private void DebugFindState()
 		{
 			Debug.Write    (@"Text   = """         + toolStripComboBox_MainTool_Find_Pattern.Text);
 			Debug.Write    (@""" / Cursor @ "      + toolStripComboBox_MainTool_Find_Pattern.SelectionStart);

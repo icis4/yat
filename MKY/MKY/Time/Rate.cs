@@ -336,6 +336,9 @@ namespace MKY.Time
 		// Debug
 		//==========================================================================================
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_UPDATE")]
 		private static void DebugUpdate(string message)
 		{

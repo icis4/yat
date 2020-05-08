@@ -186,7 +186,7 @@ namespace YAT.View.Forms
 		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
-		private void DebugMessage(string message)
+		protected virtual void DebugMessage(string message)
 		{
 			Debug.WriteLine
 			(
@@ -204,6 +204,9 @@ namespace YAT.View.Forms
 			);
 		}
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_SHOW")]
 		private void DebugShow(string message)
 		{

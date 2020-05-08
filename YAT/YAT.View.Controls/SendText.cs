@@ -1307,9 +1307,11 @@ namespace YAT.View.Controls
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_USER_INPUT")]
-		protected virtual void DebugUserInputEnter(string methodName)
+		private void DebugUserInputEnter(string methodName)
 		{
 			Debug.WriteLine(methodName);
 			Debug.Indent();
@@ -1317,18 +1319,22 @@ namespace YAT.View.Controls
 			DebugUserInputState();
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_USER_INPUT")]
-		protected virtual void DebugUserInputLeave()
+		private void DebugUserInputLeave()
 		{
 			DebugUserInputState();
 
 			Debug.Unindent();
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_USER_INPUT")]
-		protected virtual void DebugUserInputState()
+		private void DebugUserInputState()
 		{
 			Debug.Write    (@"Text   = """         + comboBox_SingleLineText.Text);
 			Debug.Write    (@""" / Cursor @ "      + comboBox_SingleLineText.SelectionStart);

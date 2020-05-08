@@ -779,9 +779,11 @@ namespace YAT.View.Controls
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_COMMAND")]
-		protected virtual void DebugCommandEnter(string methodName)
+		private void DebugCommandEnter(string methodName)
 		{
 			Debug.WriteLine(methodName);
 			Debug.Indent();
@@ -789,18 +791,22 @@ namespace YAT.View.Controls
 			DebugCommandState();
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_COMMAND")]
-		protected virtual void DebugCommandLeave()
+		private void DebugCommandLeave()
 		{
 			DebugCommandState();
 
 			Debug.Unindent();
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <c>private</c> because <see cref="ConditionalAttribute"/> only works locally.
+		/// </remarks>
 		[Conditional("DEBUG_COMMAND")]
-		protected virtual void DebugCommandState()
+		private void DebugCommandState()
 		{
 			Debug.WriteLine("Text    = " + pathComboBox_FilePath.Text);
 

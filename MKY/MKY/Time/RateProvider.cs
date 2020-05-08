@@ -329,7 +329,7 @@ namespace MKY.Time
 		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
-		private void DebugMessage(string message)
+		protected virtual void DebugMessage(string message)
 		{
 			Debug.WriteLine
 			(
