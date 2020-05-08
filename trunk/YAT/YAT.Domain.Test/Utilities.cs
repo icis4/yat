@@ -96,7 +96,7 @@ namespace YAT.Domain.Test
 		public const int WaitIntervalForStateChange = 100;
 
 		/// <summary></summary>
-		public const int WaitTimeoutForIsSendingForSomeTime = (2 * Domain.Utilities.ForSomeTimeEventHelper.Threshold);
+		public const int WaitTimeoutForIsSendingForSomeTime = (3 * Domain.Utilities.ForSomeTimeEventHelper.Threshold);
 
 		/// <remarks>
 		/// Note that a shorter interval would increase debug output, spoiling the debug console.
@@ -104,7 +104,7 @@ namespace YAT.Domain.Test
 		public const int WaitIntervalForIsSendingForSomeTime = WaitIntervalForStateChange;
 
 		/// <summary></summary>
-		public const int WaitTimeoutForIsNoLongerSending = (2 * Domain.Utilities.ForSomeTimeEventHelper.Threshold);
+		public const int WaitTimeoutForIsNoLongerSending = (3 * Domain.Utilities.ForSomeTimeEventHelper.Threshold);
 
 		/// <remarks>
 		/// Note that a shorter interval would increase debug output, spoiling the debug console.
