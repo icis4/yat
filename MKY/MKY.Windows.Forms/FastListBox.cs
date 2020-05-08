@@ -22,6 +22,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Attention, requires to be enabled in multiple files!
+////#define DEBUG_COUNT_AND_INDICES // The 'DebugEnabled' property must also be set!
+
+#endif // DEBUG
+
+#endregion
+
 using System.Drawing;
 using System.Windows.Forms;
 
