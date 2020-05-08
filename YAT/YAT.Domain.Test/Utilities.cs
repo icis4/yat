@@ -96,12 +96,20 @@ namespace YAT.Domain.Test
 		public const int WaitIntervalForStateChange = 100;
 
 		/// <summary></summary>
-		public const int WaitTimeoutForIsSendingAndBusy = (int)(1.25 * Domain.Utilities.IsBusyEventHelper.Threshold);
+		public const int WaitTimeoutForIsSendingForSomeTime = (2 * Domain.Utilities.ForSomeTimeEventHelper.Threshold);
 
 		/// <remarks>
 		/// Note that a shorter interval would increase debug output, spoiling the debug console.
 		/// </remarks>
-		public const int WaitIntervalForIsSendingAndBusy = 100;
+		public const int WaitIntervalForIsSendingForSomeTime = WaitIntervalForStateChange;
+
+		/// <summary></summary>
+		public const int WaitTimeoutForIsNoLongerSending = (2 * Domain.Utilities.ForSomeTimeEventHelper.Threshold);
+
+		/// <remarks>
+		/// Note that a shorter interval would increase debug output, spoiling the debug console.
+		/// </remarks>
+		public const int WaitIntervalForIsNoLongerSending = WaitIntervalForStateChange;
 
 		/// <remarks>
 		/// Timeout of 200 ms is too short for serial COM ports at 9600 baud, especially when
@@ -211,22 +219,40 @@ namespace YAT.Domain.Test
 			Trace.WriteLine("...done, disconnected");
 		}
 
-		internal static void WaitForIsSendingAndBusy(Domain.Terminal terminal, int timeout = WaitTimeoutForIsSendingAndBusy)
+		internal static void WaitForIsSendingForSomeTime(Domain.Terminal terminal, int timeout = WaitTimeoutForIsSendingForSomeTime)
 		{
 			int waitTime = 0;
-			while (!terminal.IsSendingAndBusy)
+			while (!terminal.IsSendingForSomeTime)
 			{
-				Thread.Sleep(WaitIntervalForIsSendingAndBusy);
-				waitTime += WaitIntervalForIsSendingAndBusy;
+				Thread.Sleep(WaitIntervalForIsSendingForSomeTime);
+				waitTime += WaitIntervalForIsSendingForSomeTime;
 
-				Trace.WriteLine("Waiting for 'IsSendingAndBusy', " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+				Trace.WriteLine("Waiting for 'IsSendingForSomeTime', " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 
 				if (waitTime >= timeout) {
-					Assert.Fail("'IsSendingAndBusy' timeout!");
+					Assert.Fail("'IsSendingForSomeTime' timeout!");
 				}
 			}
 
-			Trace.WriteLine("...done, 'IsSendingAndBusy'");
+			Trace.WriteLine("...done, 'IsSendingForSomeTime'");
+		}
+
+		internal static void WaitForIsNoLongerSending(Domain.Terminal terminal, int timeout = WaitTimeoutForIsNoLongerSending)
+		{
+			int waitTime = 0;
+			while (terminal.IsSending)
+			{
+				Thread.Sleep(WaitIntervalForIsNoLongerSending);
+				waitTime += WaitIntervalForIsNoLongerSending;
+
+				Trace.WriteLine("Waiting for 'IsNoLongerSending', " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+
+				if (waitTime >= timeout) {
+					Assert.Fail("'IsNoLongerSending' timeout!");
+				}
+			}
+
+			Trace.WriteLine("...done, 'IsNoLongerSending'");
 		}
 
 		/// <remarks>
