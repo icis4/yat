@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.2.0 :: 2020-02-xx
+YAT 2.2.0 :: 2020-0x-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -93,14 +93,20 @@ New:
 - Support for concurrent sending, i.e. multiple commands can be active simultaneously (feat. #387).
   Useful e.g. for sending a text command while a repeating text command is already ongoing.
   Can be enabled at [Settings... > Advanced... > Send > Allow concurrent sending].
-- Text terminals: Wait for response before sending the next line implemented (feat. #19, bug #176).
-  Useful for limiting the rate when sending a large amount of data with ping-pong style commands.
-  For serial COM ports with active hardware or software flow control, this feature not necessarily
-  needs to be activated, as YAT typically limits the send rate [Settings... > Advanced... > Send >
-  Buffer not more than baud rate permits]. This setting limits the send rate enough to let flow
-  control do its job even with large amount of data.
+- Text terminals: Option to wait for response, resulting in request and response being displayed
+  adjacently. Useful for sending multi-line commands and files with ping-pong-style command sets
+  (feature request #19 and bug #176).
+  Note for serial COM ports: In order to only limit the send rate, YAT offers other settings, e.g.
+  [Settings... > Advanced... > Send > Buffer not more than baud rate permits]. That setting limits
+  the send rate enough in most cases, and lets an active hardware or software flow control do its
+  job even with large amount of data.
 - Content separator can now be configured. Useful for e.g. displaying or logging hex data without
   separating spaces, e.g. "414243", using [None]. Separator format can now also be configured.
+- Additional keyword \!(TimeStamp()) allowing injection of current date/time (feature request #400).
+  Format according to [View > Format Settings... > Options > Time Stamp].
+  Useful for e.g. sending "AT+DATE=20 01 01 12 00 00".
+- Additional keyword \!(Port()) allowing to change the serial COM port on-the-fly (feat. req. #403).
+  Especially useful as predefined command e.g. "\!(Port(10))\!(NoEOL())" to change port by shortcut.
 - Automatic actions and responses now support multiple triggers within a line or chunk.
 - Automatic actions and responses now support text triggers, optionally incl. regular expression.
 - Automatic actions and responses now list recent used trigger and response texts.
@@ -111,8 +117,7 @@ New:
 Important changes:
 - Using term "I/O" instead of "Port" for terminal, settings,... for reducing mix-up of term in YAT
   with TCP and UDP "Port" terminology, where a "Port" only is a part of the overall "I/O" subsystem.
-  As a consequence, the \!(PortSettings()) keyword introduced in the previous version has been
-  renamed to \!(IOSettings()) (related to feature request #71).
+- High FTDI baud rates added to list of standard baud rates (feature request #398).
 - Sending refactored (precondition for feature requests #19, #333, #387 and fix of bug #176).
 - Line content and EOL is no longer sent in two separate chunks (feature request #333).
 - Element and line processing refactored (precondition for feature requests #19, #366, #367 and fix
@@ -125,7 +130,10 @@ Important changes:
   on every chunk (related to bug #477).
 - Consequently, chunk line break settings are now located in the text/binary specific dialog.
 - Adaptive monitor update rate further improved.
+- Calculation of byte/line rates improved.
 - Option to not send XOn when opending a serial COM port or USB Ser/HID terminal (feat. req. #393).
+- Changes on-the-fly by keywords like \!(Port()), \!(PortSettings()), \!(Baud()),... are now
+  reflected in the terminal settings, i.e. also indicated by '*' (related to reqs. #71 and #403).
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
 - Upgrade to .NET 4.0 runtime (precondition for new automatic actions [Chart/Plot/Histogram],
   preparing upcoming feature request #74, part of feature request #229).
@@ -133,6 +141,9 @@ Important changes:
 
 Fixed bugs:
 - Recent TCP/IP and UDP/IP ports, remote hosts and local filters are remembered again (req. #273).
+- Predefined command description gets updated when multi-line command gets changed (bug #481) and
+  default descriptions no longer get saved in settings file.
+- Issue with not shown predefined commands when defining more than 12 predefined commands fixed.
 - Layout of predefined commands can now also be changed on a new terminal that doesn't contain
   commands yet (related to previous feature requests #28, #257, #365).
 - Import/Paste of a .yacp command page file that contains more predefined commands than currently
@@ -148,6 +159,7 @@ Limitations and known issues:
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
    > System errors are output in local language, even though YAT is all-English (bug #66).
+   > Main window status bar tooltips may flicker in case window is maximized (bug #488).
    > Tool strip combo box slightly flickers when updating item list, e.g. 'Find Pattern' (bug #402).
    > Combo box cannot restore some corner-case cursor positions (bug #403).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
@@ -171,13 +183,16 @@ Limitations and known issues:
      applying several patches to try working around the issue (bugs #224, #254, #293, #316, #317,
      #345, #382, #385, #387, #401, #442). To prevent this issue, refrain from disconnecting a
      device while its port is open. Or, manually close the port after the device got disconnected.
-- The \!(IOSettings()) keyword is yet limited to serial COM ports (feature request #71).
+- The \!(PortSettings()) keyword is yet limited to serial COM ports (feature request #71).
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
   implementation and test environment would be needed to run it on unixoids (feature request #119).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
+- Automatic actions [Filter] and [Suppress] as well as automatic actions and responses based on a
+  text trigger are constrained to handle complete lines. Thus, individual characters incl. control
+  characters like <XOn> as well as incomplete lines will not be displayed until line is complete.
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
+  unknown, could even be a limitation of the memory management of the .NET runtime).
 
 
 YAT 2.1.0 :: 2019-10-04
@@ -685,7 +700,7 @@ public around the same time as YAT. And, 4.0 buzzes more anyway (industry 4.0 an
 ----------------------------------------------------------------------------------------------------
 
 
-YAT 4 with Scripting :: Expected in late 2020
+YAT 4 with Scripting :: Expected in late 2020 or early 2021
 ----------------------------------------------------------------------------------------------------
 YAT 4.0 will feature the integration of a scripting environment, based on the CSScript engine.
 Scripting will allow you to script YAT and automate repetitive tasks, use it for test automation,
