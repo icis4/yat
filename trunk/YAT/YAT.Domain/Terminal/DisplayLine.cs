@@ -44,7 +44,7 @@ using MKY.Collections.Generic;
 namespace YAT.Domain
 {
 	/// <summary>
-	/// Implements a collection of display elements.
+	/// Implements a collection of display elements representing a part of a line.
 	/// </summary>
 	/// <remarks>
 	/// This class inherits from <see cref="T:List`"/>. However, it only overrides functions
@@ -531,6 +531,58 @@ namespace YAT.Domain
 
 			this.charCount = 0;
 			this.byteCount = 0;
+		}
+
+		/// <summary>
+		/// Replaces all occurences of <see cref="DisplayElement.TimeStampInfo"/> with the given arguments.
+		/// </summary>
+		public virtual void ReplaceTimeStamp(DateTime timeStamp, string format, bool useUtc, string infoEnclosureLeft, string infoEnclosureRight)
+		{
+			foreach (var de in this)
+			{
+				var casted = (de as DisplayElement.TimeStampInfo);
+				if (casted != null)
+					casted.Change(timeStamp, format, useUtc, infoEnclosureLeft, infoEnclosureRight);
+			}
+		}
+
+		/// <summary>
+		/// Replaces all occurences of <see cref="DisplayElement.TimeSpanInfo"/> with the given arguments.
+		/// </summary>
+		public virtual void ReplaceTimeSpan(TimeSpan timeSpan, string format, string infoEnclosureLeft, string infoEnclosureRight)
+		{
+			foreach (var de in this)
+			{
+				var casted = (de as DisplayElement.TimeSpanInfo);
+				if (casted != null)
+					casted.Change(timeSpan, format, infoEnclosureLeft, infoEnclosureRight);
+			}
+		}
+
+		/// <summary>
+		/// Replaces all occurences of <see cref="DisplayElement.TimeDeltaInfo"/> with the given arguments.
+		/// </summary>
+		public virtual void ReplaceTimeDelta(TimeSpan timeSpan, string format, string infoEnclosureLeft, string infoEnclosureRight)
+		{
+			foreach (var de in this)
+			{
+				var casted = (de as DisplayElement.TimeDeltaInfo);
+				if (casted != null)
+					casted.Change(timeSpan, format, infoEnclosureLeft, infoEnclosureRight);
+			}
+		}
+
+		/// <summary>
+		/// Replaces all occurences of <see cref="DisplayElement.DirectionInfo"/> with the given arguments.
+		/// </summary>
+		public virtual void ReplaceDirection(Direction direction, string infoEnclosureLeft, string infoEnclosureRight)
+		{
+			foreach (var de in this)
+			{
+				var casted = (de as DisplayElement.DirectionInfo);
+				if (casted != null)
+					casted.Change(direction, infoEnclosureLeft, infoEnclosureRight);
+			}
 		}
 
 		/// <summary>
