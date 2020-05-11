@@ -693,19 +693,52 @@ namespace YAT.Domain
 			var textLineState       = GetTextLineState(repositoryType, dir);
 			var textDisplaySettings = GetTextDisplaySettings(dir);
 
+			// The first byte of a line will sequentially trigger the [Begin] as well as [Content]
+			// condition below. In the normal case, the line will then contain the first displayed
+			// element. However, when initially receiving a hidden e.g. <XOn>, the line will yet be
+			// empty. Then, when subsequent bytes are received, even when seconds later, the line's
+			// initial time stamp is kept. This is illogical, the time stamp of a hidden <XOn> shall
+			// not define the time stamp of the line, thus handle such case by rebeginning the line.
+			if (lineState.Position == LinePosition.Content)
+				DoLineContentCheck(repositoryType, processState, ts, dir);
+
 			if (lineState.Position == LinePosition.Begin)
-			{
 				DoLineBegin(repositoryType, processState, ts, dev, dir, elementsToAdd);
-			}
 
 			if (lineState.Position == LinePosition.Content)
-			{
 				DoLineContent(repositoryType, processState, textLineState, textDisplaySettings, b, ts, dev, dir, elementsToAdd);
-			}
 
 			if (lineState.Position == LinePosition.End)
-			{
 				DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
+		protected virtual void DoLineContentCheck(RepositoryType repositoryType, ProcessState processState,
+		                                          DateTime ts, IODirection dir)
+		{
+			var lineState     = processState.Line; // Convenience shortcut.
+			var textLineState = GetTextLineState(repositoryType, dir);
+
+			var isEmptyLine = (lineState.Elements.ByteCount == 0); // Using byte count includes non-complete non-SBCS characters.
+			if (isEmptyLine)
+			{
+				var left  = TerminalSettings.Display.InfoEnclosureLeftCache;
+				var right = TerminalSettings.Display.InfoEnclosureRightCache;
+
+				var doReplace = false;
+
+				if (TerminalSettings.Display.ShowTimeStamp) { lineState.Elements.ReplaceTimeStamp(ts,                                              TerminalSettings.Display.TimeStampFormat, TerminalSettings.Display.TimeStampUseUtc, left, right); doReplace = true; }
+				if (TerminalSettings.Display.ShowTimeSpan)  { lineState.Elements.ReplaceTimeSpan( ts - InitialTimeStamp,                           TerminalSettings.Display.TimeSpanFormat,                                            left, right); doReplace = true; }
+				if (TerminalSettings.Display.ShowTimeDelta) { lineState.Elements.ReplaceTimeDelta(ts - processState.Overall.PreviousLineTimeStamp, TerminalSettings.Display.TimeDeltaFormat,                                           left, right); doReplace = true; }
+
+				if (doReplace)
+				{
+				////elementsToAdd.Clear() is not needed as only replace happens above.
+					FlushReplaceAlreadyBeganLine(repositoryType, processState);
+				}
 			}
 		}
 
@@ -903,7 +936,7 @@ namespace YAT.Domain
 						else
 						{
 							elementsToAdd.Clear(); // Whole line will be replaced, pending elements can be discarded.
-							FlushReplaceAlreadyStartedLine(repositoryType, processState);
+							FlushReplaceAlreadyBeganLine(repositoryType, processState);
 						}
 
 						// Don't forget to adjust state:
@@ -1040,23 +1073,23 @@ namespace YAT.Domain
 
 			// Note that, in case of e.g. a timed line break, retained potential EOL elements will be handled by DoLineContent().
 			// This is needed because potential EOL elements are potentially hidden. Opposed to binary terminals, where all bytes are shown.
-			                                                                  // This count corresponds to the current line.
-			bool isEmptyLine                        = (lineState.Elements.CharCount == 0);
-			bool isEmptyLineWithHiddenNonEol        = (isEmptyLine && !textLineState.EolIsAnyMatch(dev));
-			bool isEmptyLineWithPendingEol          = (isEmptyLine &&  textLineState.EolIsAnyMatch(dev));                                        // No empty line formerly shown.
-			bool isEmptyLineWithPendingEolToBeShown = (isEmptyLine &&  textLineState.EolIsCompleteMatch(dev) && (textLineState.ShownCharCount == 0));
+			                                                              // This count corresponds to the current line. Non-SBCS characters are only counted if complete.
+			var isEmptyLine                        = (lineState.Elements.CharCount == 0);
+			var isEmptyLineWithHiddenNonEol        = (isEmptyLine && !textLineState.EolIsAnyMatch(dev));
+			var isEmptyLineWithPendingEol          = (isEmptyLine &&  textLineState.EolIsAnyMatch(dev));                                        // No empty line formerly shown.
+			var isEmptyLineWithPendingEolToBeShown = (isEmptyLine &&  textLineState.EolIsCompleteMatch(dev) && (textLineState.ShownCharCount == 0));
 
 			if (isEmptyLineWithHiddenNonEol) // While intended empty lines must be shown, potentially suppress
 			{                                // empty lines that only contain hidden non-EOL character(s) (e.g. hidden 0x00):
-				elementsToAdd.RemoveLastUntil(typeof(DisplayElement.LineStart));                       // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
-				                                                                                       //            All other elements must be removed as well!
-				FlushClearAlreadyStartedLine(repositoryType, processState, elementsToAdd, linesToAdd); //            This is ensured by flushing here.
+				elementsToAdd.RemoveLastUntil(typeof(DisplayElement.LineStart));                     // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
+				                                                                                     //            All other elements must be removed as well!
+				FlushClearAlreadyBeganLine(repositoryType, processState, elementsToAdd, linesToAdd); //            This is ensured by flushing here.
 			}
 			else if (isEmptyLineWithPendingEol && !isEmptyLineWithPendingEolToBeShown) // While intended empty lines must be shown, potentially suppress
 			{                                                                          // empty lines that only contain hidden pending EOL character(s):
-				elementsToAdd.RemoveLastUntil(typeof(DisplayElement.LineStart));                       // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
-				                                                                                       //            All other elements must be removed as well!
-				FlushClearAlreadyStartedLine(repositoryType, processState, elementsToAdd, linesToAdd); //            This is ensured by flushing here.
+				elementsToAdd.RemoveLastUntil(typeof(DisplayElement.LineStart));                     // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
+				                                                                                     //            All other elements must be removed as well!
+				FlushClearAlreadyBeganLine(repositoryType, processState, elementsToAdd, linesToAdd); //            This is ensured by flushing here.
 			}
 			else // Neither empty nor need to suppress:
 			{

@@ -282,13 +282,7 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public TimeStampInfo(DateTime timeStamp, string format, bool useUtc, string enclosureLeft, string enclosureRight)
-				: this(timeStamp, DirectionDefault, format, useUtc, enclosureLeft, enclosureRight)
-			{
-			}
-
-			/// <summary></summary>
-			public TimeStampInfo(DateTime timeStamp, Direction direction, string format, bool useUtc, string enclosureLeft, string enclosureRight)
-				: base(timeStamp, direction, ToText(timeStamp, format, useUtc, enclosureLeft, enclosureRight))
+				: base(timeStamp, DirectionDefault, ToText(timeStamp, format, useUtc, enclosureLeft, enclosureRight))
 			{
 			}
 
@@ -299,6 +293,16 @@ namespace YAT.Domain
 					return (enclosureLeft + timeStamp.ToUniversalTime().ToString(format, DateTimeFormatInfo.CurrentInfo) + enclosureRight);
 				else
 					return (enclosureLeft + timeStamp.ToString(format, DateTimeFormatInfo.CurrentInfo) + enclosureRight);
+			}
+
+			/// <summary>
+			/// Replaces <see cref="TimeStamp"/> and <see cref="Text"/> according to given arguments.
+			/// </summary>
+			public virtual void Change(DateTime timeStamp, string format, bool useUtc, string enclosureLeft, string enclosureRight)
+			{
+				TimeStamp = timeStamp;
+				Direction = direction;
+				Text = ToText(timeStamp, format, useUtc, enclosureLeft, enclosureRight);
 			}
 		}
 
@@ -328,6 +332,14 @@ namespace YAT.Domain
 			{
 				return (enclosureLeft + TimeSpanEx.FormatInvariantThousandthsEnforceMinutes(timeSpan, format) + enclosureRight);
 			}                                                                      // Attention, slightly different than time delta below!
+
+			/// <summary>
+			/// Replaces <see cref="Text"/> according to given arguments.
+			/// </summary>
+			public virtual void Change(TimeSpan timeSpan, string format, string enclosureLeft, string enclosureRight)
+			{
+				Text = ToText(timeSpan, format, enclosureLeft, enclosureRight);
+			}
 		}
 
 		/// <summary></summary>
@@ -356,6 +368,14 @@ namespace YAT.Domain
 			{
 				return (enclosureLeft + TimeSpanEx.FormatInvariantThousandths(timeDelta, format) + enclosureRight);
 			}                                                         // Attention, slightly different than time span above!
+
+			/// <summary>
+			/// Replaces <see cref="Text"/> according to given arguments.
+			/// </summary>
+			public virtual void Change(TimeSpan timeDelta, string format, string enclosureLeft, string enclosureRight)
+			{
+				Text = ToText(timeDelta, format, enclosureLeft, enclosureRight);
+			}
 		}
 
 		/// <summary></summary>
@@ -434,9 +454,9 @@ namespace YAT.Domain
 			}
 
 			/// <summary>
-			/// Replaces <see cref="Direction"/> and <see cref="Text"/> according to <paramref name="direction"/>.
+			/// Replaces <see cref="Direction"/> and <see cref="Text"/> according to given arguments.
 			/// </summary>
-			public void ReplaceDirection(Direction direction, string enclosureLeft, string enclosureRight)
+			public virtual void Change(Direction direction, string enclosureLeft, string enclosureRight)
 			{
 				Direction = direction;
 				Text = ToText(direction, enclosureLeft, enclosureRight);
