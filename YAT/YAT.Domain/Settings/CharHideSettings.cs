@@ -45,6 +45,7 @@ namespace YAT.Domain.Settings
 		public const bool Hide0xFFDefault = false;
 
 		private bool hideXOnXOff;
+
 		private bool hide0x00;
 		private bool hide0xFF;
 
@@ -70,8 +71,9 @@ namespace YAT.Domain.Settings
 			: base(rhs)
 		{
 			HideXOnXOff = rhs.HideXOnXOff;
-			Hide0x00    = rhs.Hide0x00;
-			Hide0xFF    = rhs.Hide0xFF;
+
+			Hide0x00 = rhs.Hide0x00;
+			Hide0xFF = rhs.Hide0xFF;
 
 			ClearChanged();
 		}
@@ -84,8 +86,9 @@ namespace YAT.Domain.Settings
 			base.SetMyDefaults();
 
 			HideXOnXOff = HideXOnXOffDefault;
-			Hide0x00    = Hide0x00Default;
-			Hide0xFF    = Hide0xFFDefault;
+
+			Hide0x00 = Hide0x00Default;
+			Hide0xFF = Hide0xFFDefault;
 		}
 
 		#region Properties
@@ -159,8 +162,9 @@ namespace YAT.Domain.Settings
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
 				hashCode = (hashCode * 397) ^ HideXOnXOff.GetHashCode();
-				hashCode = (hashCode * 397) ^ Hide0x00   .GetHashCode();
-				hashCode = (hashCode * 397) ^ Hide0xFF   .GetHashCode();
+
+				hashCode = (hashCode * 397) ^ Hide0x00.GetHashCode();
+				hashCode = (hashCode * 397) ^ Hide0xFF.GetHashCode();
 
 				return (hashCode);
 			}
@@ -192,8 +196,9 @@ namespace YAT.Domain.Settings
 				base.Equals(other) && // Compare all settings nodes.
 
 				HideXOnXOff.Equals(other.HideXOnXOff) &&
-				Hide0x00   .Equals(other.Hide0x00)    &&
-				Hide0xFF   .Equals(other.Hide0xFF)
+
+				Hide0x00.Equals(other.Hide0x00) &&
+				Hide0xFF.Equals(other.Hide0xFF)
 			);
 		}
 
