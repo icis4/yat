@@ -1000,7 +1000,7 @@
 			// 
 			// textBox_MaxLineLength
 			// 
-			this.textBox_MaxLineLength.Location = new System.Drawing.Point(90, 443);
+			this.textBox_MaxLineLength.Location = new System.Drawing.Point(90, 445);
 			this.textBox_MaxLineLength.Name = "textBox_MaxLineLength";
 			this.textBox_MaxLineLength.Size = new System.Drawing.Size(48, 20);
 			this.textBox_MaxLineLength.TabIndex = 31;
@@ -1012,7 +1012,7 @@
 			// label_MaxLineLengthUnit
 			// 
 			this.label_MaxLineLengthUnit.AutoSize = true;
-			this.label_MaxLineLengthUnit.Location = new System.Drawing.Point(139, 446);
+			this.label_MaxLineLengthUnit.Location = new System.Drawing.Point(139, 448);
 			this.label_MaxLineLengthUnit.Name = "label_MaxLineLengthUnit";
 			this.label_MaxLineLengthUnit.Size = new System.Drawing.Size(94, 13);
 			this.label_MaxLineLengthUnit.TabIndex = 32;
@@ -1021,7 +1021,7 @@
 			// label_MaxLineLength
 			// 
 			this.label_MaxLineLength.AutoSize = true;
-			this.label_MaxLineLength.Location = new System.Drawing.Point(9, 446);
+			this.label_MaxLineLength.Location = new System.Drawing.Point(9, 448);
 			this.label_MaxLineLength.Name = "label_MaxLineLength";
 			this.label_MaxLineLength.Size = new System.Drawing.Size(81, 13);
 			this.label_MaxLineLength.TabIndex = 30;
@@ -1051,7 +1051,7 @@
 			// 
 			// textBox_MaxLineCount
 			// 
-			this.textBox_MaxLineCount.Location = new System.Drawing.Point(90, 420);
+			this.textBox_MaxLineCount.Location = new System.Drawing.Point(90, 422);
 			this.textBox_MaxLineCount.Name = "textBox_MaxLineCount";
 			this.textBox_MaxLineCount.Size = new System.Drawing.Size(48, 20);
 			this.textBox_MaxLineCount.TabIndex = 28;
@@ -1413,7 +1413,7 @@
 			// label_MaxLineCountUnit
 			// 
 			this.label_MaxLineCountUnit.AutoSize = true;
-			this.label_MaxLineCountUnit.Location = new System.Drawing.Point(139, 423);
+			this.label_MaxLineCountUnit.Location = new System.Drawing.Point(139, 425);
 			this.label_MaxLineCountUnit.Name = "label_MaxLineCountUnit";
 			this.label_MaxLineCountUnit.Size = new System.Drawing.Size(28, 13);
 			this.label_MaxLineCountUnit.TabIndex = 29;
@@ -1423,7 +1423,7 @@
 			// label_MaxLineCount
 			// 
 			this.label_MaxLineCount.AutoSize = true;
-			this.label_MaxLineCount.Location = new System.Drawing.Point(9, 423);
+			this.label_MaxLineCount.Location = new System.Drawing.Point(9, 425);
 			this.label_MaxLineCount.Name = "label_MaxLineCount";
 			this.label_MaxLineCount.Size = new System.Drawing.Size(81, 13);
 			this.label_MaxLineCount.TabIndex = 27;
