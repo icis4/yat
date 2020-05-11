@@ -957,8 +957,8 @@ namespace YAT.Domain
 				////if (!ArrayEx.IsNullOrEmpty(result.Args)) // with argument is yet pending (FR #400) and requires parser support for strings (FR #404).
 				////	format = result.Args[0];
 
-					var now = DateTime.Now;                                                        // No enclosure!
-					var de = new DisplayElement.TimeStampInfo(now, Direction.Tx, format, useUtc, "", "");
+					var now = DateTime.Now;                                          // No enclosure!
+					var de = new DisplayElement.TimeStampInfo(now, format, useUtc, "", "");
 					var text = de.Text;
 
 					Parser.Result[] parseResult;
