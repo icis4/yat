@@ -150,18 +150,18 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
 		protected virtual string ByteToText(byte b, DateTime ts, IODirection d, Radix r, out bool isControl, out bool isByteToHide, out bool isError)
 		{
-			isByteToHide = false;
-			if      (b == 0x00)
-			{
-				if (TerminalSettings.CharHide.Hide0x00)
-					isByteToHide = true;
-			}
-			else if (b == 0xFF)
-			{
+			isByteToHide = false;                                         // Notes on hiding:
+			if      (b == 0x00)                                           //
+			{                                                             // Implementing hiding here has pros and cons:
+				if (TerminalSettings.CharHide.Hide0x00)                   //  + Obvious location
+					isByteToHide = true;                                  //  + Simple straight-forward
+			}                                                             //  - Lines only containing a hidden element yet, e.g. an initial <XOn>,
+			else if (b == 0xFF)                                           //    will a) show line start information when receiving the hidden element
+			{                                                             //    and b) initially use the time stamp of the hidden element. These facts
 				if (TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF)
-					isByteToHide = true;
-			}
-			else if (MKY.IO.Serial.XOnXOff.IsXOnOrXOffByte(b))
+					isByteToHide = true;                                  //    have to be accepted or handled elsewhere. However, this is consistent
+			}                                                             //    with other behavior, e.g. the "Receiving..." notification in the status
+			else if (MKY.IO.Serial.XOnXOff.IsXOnOrXOffByte(b))            //    bar. Also note that most users won't notice or care.
 			{
 				if (TerminalSettings.IO.FlowControlUsesXOnXOff && TerminalSettings.CharHide.HideXOnXOff)
 					isByteToHide = true;
@@ -480,7 +480,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		protected virtual void PrepareLineBeginInfo(DateTime ts, TimeSpan diff, TimeSpan delta, string dev, IODirection dir, out DisplayElementCollection lp)
+		protected virtual void PrepareLineBeginInfo(DateTime stamp, TimeSpan span, TimeSpan delta, string dev, IODirection dir, out DisplayElementCollection lp)
 		{
 			if (TerminalSettings.Display.ShowTimeStamp || TerminalSettings.Display.ShowTimeSpan || TerminalSettings.Display.ShowTimeDelta ||
 			    TerminalSettings.Display.ShowDevice    ||
@@ -490,13 +490,13 @@ namespace YAT.Domain
 
 				if (TerminalSettings.Display.ShowTimeStamp)
 				{
-					lp.Add(new DisplayElement.TimeStampInfo(ts, TerminalSettings.Display.TimeStampFormat, TerminalSettings.Display.TimeStampUseUtc, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
+					lp.Add(new DisplayElement.TimeStampInfo(stamp, TerminalSettings.Display.TimeStampFormat, TerminalSettings.Display.TimeStampUseUtc, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
 					AddInfoSeparatorIfNecessary(lp);
 				}
 
 				if (TerminalSettings.Display.ShowTimeSpan)
 				{
-					lp.Add(new DisplayElement.TimeSpanInfo(diff, TerminalSettings.Display.TimeSpanFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
+					lp.Add(new DisplayElement.TimeSpanInfo(span, TerminalSettings.Display.TimeSpanFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
 					AddInfoSeparatorIfNecessary(lp);
 				}
 
@@ -892,14 +892,9 @@ namespace YAT.Domain
 
 					if (showDirection) // Replace is only needed when containing a 'DisplayElement.DirectionInfo'.
 					{
-						foreach (var element in processState.Line.Elements)
-						{
-							var casted = (element as DisplayElement.DirectionInfo);
-							if (casted != null)
-								casted.ReplaceDirection(Direction.Bidir, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache);
-						}
-
-						FlushReplaceAlreadyStartedLine(repositoryType, processState);
+						processState.Line.Elements.ReplaceDirection(Direction.Bidir, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache);
+					////elementsToAdd.Clear() is not needed as only replace happens above.
+						FlushReplaceAlreadyBeganLine(repositoryType, processState);
 					}
 				}
 			}
@@ -1192,7 +1187,8 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>Named 'Flush' to emphasize pending elements and lines are signaled and cleared.</remarks>
-		protected virtual void FlushReplaceAlreadyStartedLine(RepositoryType repositoryType, ProcessState processState)
+		/// <remarks>Named 'Began' for consistency with <see cref="LinePosition.Begin"/>.</remarks>
+		protected virtual void FlushReplaceAlreadyBeganLine(RepositoryType repositoryType, ProcessState processState)
 		{
 		////if ((elementsToAdd != null) && (elementsToAdd.Count > 0)) is not needed (yet).
 		////{
@@ -1210,11 +1206,12 @@ namespace YAT.Domain
 		}                                                                                  // Elements will be used again!
 
 		/// <remarks>Named 'Flush' to emphasize pending elements and lines are signaled and cleared.</remarks>
+		/// <remarks>Named 'Began' for consistency with <see cref="LinePosition.Begin"/>.</remarks>
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
-		protected virtual void FlushClearAlreadyStartedLine(RepositoryType repositoryType, ProcessState processState,
-		                                                    DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
+		protected virtual void FlushClearAlreadyBeganLine(RepositoryType repositoryType, ProcessState processState,
+		                                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			if ((elementsToAdd != null) && (elementsToAdd.Count > 0))
 			{
