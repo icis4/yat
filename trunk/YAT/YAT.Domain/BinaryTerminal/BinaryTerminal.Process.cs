@@ -182,14 +182,10 @@ namespace YAT.Domain
 			var elementsForNextLine = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 
 			if (lineState.Position == LinePosition.Begin)
-			{
 				DoLineBegin(repositoryType, processState, ts, dev, dir, elementsToAdd);
-			}
 
 			if (lineState.Position == LinePosition.Content)
-			{
 				DoLineContent(processState, binaryLineState, binaryDisplaySettings, b, ts, dir, elementsToAdd, elementsForNextLine);
-			}
 
 			if (lineState.Position == LinePosition.End)
 			{
