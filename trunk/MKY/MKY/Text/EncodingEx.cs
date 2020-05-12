@@ -698,6 +698,18 @@ namespace MKY.Text
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public class EncodingEx : EnumEx, IEquatable<EncodingEx>
 	{
+		/// <summary>
+		/// Default is <see cref="Encoding.UTF8"/>.
+		/// </summary>
+		/// <remarks>
+		/// <see cref="Encoding.Default"/>:
+		/// "Because all <see cref="Encoding.Default"/> encodings based on ANSI code pages lose data,
+		/// consider using the <see cref="Encoding.UTF8"/> encoding instead."
+		/// and
+		/// "On .NET Core, the 'Default' property always returns the 'UTF8Encoding'."
+		/// </remarks>
+		public static readonly Encoding Default = Encoding.UTF8;
+
 		private struct EncodingInfoEx
 		{
 			public SupportedEncoding SupportedEncoding;
@@ -724,10 +736,10 @@ namespace MKY.Text
 		};
 
 		/// <summary>
-		/// Default is <see cref="System.Text.Encoding.Default"/>.
+		/// Default is <see cref="Default"/>.
 		/// </summary>
 		public EncodingEx()
-			: this((SupportedEncoding)Encoding.Default.CodePage)
+			: this((SupportedEncoding)Default.CodePage)
 		{
 		}
 
@@ -808,7 +820,7 @@ namespace MKY.Text
 			{
 				// Default encoding:
 				if (IsDefault)
-					return (Encoding.Default);
+					return (Default);
 
 				// Cached encodings:
 				foreach (EncodingInfoEx info in staticInfos)
@@ -850,7 +862,7 @@ namespace MKY.Text
 		{
 			get
 			{
-				return ((int)((SupportedEncoding)UnderlyingEnum) == Encoding.Default.CodePage);
+				return ((int)((SupportedEncoding)UnderlyingEnum) == Default.CodePage);
 			}
 		}
 
@@ -1046,8 +1058,6 @@ namespace MKY.Text
 		{
 			var a = new List<EncodingEx>(256); // Preset the required capacity to improve memory management; 256 is a large enough value.
 
-			a.Add(new EncodingEx((SupportedEncoding)Encoding.Default.CodePage));
-
 			// ASCII and Unicode
 			a.Add(new EncodingEx(SupportedEncoding.ASCII));				// US-ASCII
 			a.Add(new EncodingEx(SupportedEncoding.UTF7));				// Unicode (UTF-7)
@@ -1076,9 +1086,9 @@ namespace MKY.Text
 			a.Add(new EncodingEx(SupportedEncoding.ISO2022KR));			// Korean (ISO)
 
 			// Windows
-			a.Add(new EncodingEx(SupportedEncoding.Windows1252));		// Western European (Windows)
 			a.Add(new EncodingEx(SupportedEncoding.Windows1250));		// Central European (Windows)
 			a.Add(new EncodingEx(SupportedEncoding.Windows1251));		// Cyrillic (Windows)
+			a.Add(new EncodingEx(SupportedEncoding.Windows1252));		// Western European (Windows)
 			a.Add(new EncodingEx(SupportedEncoding.Windows1253));		// Greek (Windows)
 			a.Add(new EncodingEx(SupportedEncoding.Windows1254));		// Turkish (Windows)
 			a.Add(new EncodingEx(SupportedEncoding.Windows1255));		// Hebrew (Windows)

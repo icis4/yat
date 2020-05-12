@@ -118,16 +118,18 @@ Important changes:
 - Using term "I/O" instead of "Port" for terminal, settings,... for reducing mix-up of term in YAT
   with TCP and UDP "Port" terminology, where a "Port" only is a part of the overall "I/O" subsystem.
 - High FTDI baud rates added to list of standard baud rates (feature request #398).
+- Text terminals: Now by default using UTF-8 instead of .NET's [Encoding.Default] that is limited to
+  an ANSI code page, e.g. Windows-1252 in Western Europe (related to former bugs #427, #428, #429).
 - Sending refactored (precondition for feature requests #19, #333, #387 and fix of bug #176).
-- Line content and EOL is no longer sent in two separate chunks (feature request #333).
+- Text terminals: Line content and EOL is no longer sent in two separate chunks (feature req. #333).
 - Element and line processing refactored (precondition for feature requests #19, #366, #367 and fix
   of bugs #176, #371, #477, #478 as well as preparing upcoming feature request #74).
 - Unidirectional Tx and Rx monitors panels now use a separate line detection mechanism and no longer
   break lines at the same location as the bidirectional monitor panel (bugs #371 and #477).
 - [Monitor Context Menu > Clear] no longer clears all panels (Tx/Bidir/Rx), just the selected. Use
   [Main Menu > Terminal > Clear [All]] or [Ctrl+L] to clear all panels (related to change above).
-- Binary terminals by default no longer break lines each 16 bytes, they now by default break lines
-  on every chunk (related to bug #477).
+- Binary terminals: Lines are no longer broken each 16 bytes by default, they now by default are
+  broken on every chunk (related to bug #477).
 - Consequently, chunk line break settings are now located in the text/binary specific dialog.
 - Adaptive monitor update rate further improved.
 - Calculation of byte/line rates improved.
@@ -682,7 +684,7 @@ New:
 - Automatic response feature, YAT can automatically respond to a request (feature reqs. #176, #252).
 - Keyword \!(LineInterval) implemented in addition to the existing \!(LineDelay); useful together
   with \!(LineRepeat), line will be sent in more or less accurate interval (feature request #255).
-- Binary terminals now also support to break lines before a sequence (feat. reqs. #76, #140, #180).
+- Binary terminals: Break lines before a sequence is also supported (feat. reqs. #76, #140, #180).
 - Selectable default parse radix, e.g. useful when sending binary data (feat. reqs. #238, #270).
 - Options to define the enclosure and spacing of display elements added (related to bug #292).
 - Option to display the port as e.g. "COM1" or "127.0.0.1:10000" (feature request #14).
@@ -836,7 +838,7 @@ Important changes:
 - \!(...) keywords can optionally be disabled (feature request #183)
 - Retrieving serial COM port captions from the system can optionally be disabled in 'Preferences'
   Disabling can be useful on computers where discovery of serial COM ports takes too long
-- Binary terminals no longer by default replace control characters (feature request #204)
+- Binary terminals: No longer by default replace control characters (feature request #204)
 - Serial COM port XOn/XOff flow control chars can optionally be hidden for 'Manual Software' and
   'Manual Combined' (feature request #190)
 - Serial COM port XOn/XOff flow control state and count is only indicated for 'Manual Software' and

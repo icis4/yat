@@ -118,19 +118,22 @@ Important changes:
 - Using term "I/O" instead of "Port" for terminal, settings,... for reducing mix-up of term in YAT
   with TCP and UDP "Port" terminology, where a "Port" only is a part of the overall "I/O" subsystem.
 - High FTDI baud rates added to list of standard baud rates (feature request #398).
+- Text terminals: Now by default using UTF-8 instead of .NET's [Encoding.Default] that is limited to
+  an ANSI code page, e.g. Windows-1252 in Western Europe (related to former bugs #427, #428, #429).
 - Sending refactored (precondition for feature requests #19, #333, #387 and fix of bug #176).
-- Line content and EOL is no longer sent in two separate chunks (feature request #333).
+- Text terminals: Line content and EOL is no longer sent in two separate chunks (feature req. #333).
 - Element and line processing refactored (precondition for feature requests #19, #366, #367 and fix
   of bugs #176, #371, #477, #478 as well as preparing upcoming feature request #74).
 - Unidirectional Tx and Rx monitors panels now use a separate line detection mechanism and no longer
   break lines at the same location as the bidirectional monitor panel (bugs #371 and #477).
 - [Monitor Context Menu > Clear] no longer clears all panels (Tx/Bidir/Rx), just the selected. Use
   [Main Menu > Terminal > Clear [All]] or [Ctrl+L] to clear all panels (related to change above).
-- Binary terminals by default no longer break lines each 16 bytes, they now by default break lines
-  on every chunk (related to bug #477).
+- Binary terminals: Lines are no longer broken each 16 bytes by default, they now by default are
+  broken on every chunk (related to bug #477).
 - Consequently, chunk line break settings are now located in the text/binary specific dialog.
 - Adaptive monitor update rate further improved.
 - Calculation of byte/line rates improved.
+- The time information of a line is no longer defined by hidden bytes like e.g. an initial XOn.
 - Option to not send XOn when opending a serial COM port or USB Ser/HID terminal (feat. req. #393).
 - Changes on-the-fly by keywords like \!(Port()), \!(PortSettings()), \!(Baud()),... are now
   reflected in the terminal settings, i.e. also indicated by '*' (related to reqs. #71 and #403).
