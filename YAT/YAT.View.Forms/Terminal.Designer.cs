@@ -1019,7 +1019,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Name = "toolStripMenuItem_MonitorContextMenu_ShowTimeSpan";
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Size = new System.Drawing.Size(266, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Text = "Show Time Span";
-			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.ToolTipText = "The time that passed relative to [connect time].\r\n\r\nFormat can be configured in [View > Format...].";
+			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.ToolTipText = "The time that passed relative to [Connect Time].\r\n\r\nFormat can be configured in [View > Format...].";
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowTimeDelta
@@ -4339,7 +4339,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.Name = "toolStripMenuItem_TerminalMenu_View_ShowTimeSpan";
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.Size = new System.Drawing.Size(266, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.Text = "Show Ti&me Span";
-			this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.ToolTipText = "The time that passed relative to [connect time].\r\n\r\nFormat can be configured in [Format...] further below.";
+			this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.ToolTipText = "The time that passed relative to [Connect Time].\r\n\r\nFormat can be configured in [Format...] further below.";
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowTimeDelta
