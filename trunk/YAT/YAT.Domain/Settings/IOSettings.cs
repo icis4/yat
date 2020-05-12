@@ -38,7 +38,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Endianness", Justification = "'Endianness' is a correct English term.")]
-		public const Endianness EndiannessDefault = Endianness.BigEndian;
+		public const Endianness EndiannessDefault = EndiannessEx.Default;
 
 		/// <summary></summary>
 		public const bool IndicateSerialPortBreakStatesDefault = false;
