@@ -1619,7 +1619,7 @@ namespace YAT.Domain
 		/// </remarks>
 		protected virtual void DoSendTextFileItem(ForSomeTimeEventHelper forSomeTimeEventHelper, FileSendItem item)
 		{
-			DoSendTextFileItem(forSomeTimeEventHelper, item, Encoding.Default);
+			DoSendTextFileItem(forSomeTimeEventHelper, item, Encoding.Default); // The system's ANSI code page is good enough as fallback.
 		}
 
 		/// <remarks>
