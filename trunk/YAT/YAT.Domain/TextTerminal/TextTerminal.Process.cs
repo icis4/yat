@@ -722,8 +722,8 @@ namespace YAT.Domain
 			var lineState     = processState.Line; // Convenience shortcut.
 			var textLineState = GetTextLineState(repositoryType, dir);
 
-			var isEmptyLine = (lineState.Elements.ByteCount == 0); // Using byte count includes non-complete non-SBCS characters.
-			if (isEmptyLine)
+			var isYetEmpty = (lineState.IsYetEmpty && textLineState.IsYetEmpty);
+			if (isYetEmpty)
 			{
 				var left  = TerminalSettings.Display.InfoEnclosureLeftCache;
 				var right = TerminalSettings.Display.InfoEnclosureRightCache;

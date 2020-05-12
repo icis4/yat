@@ -227,6 +227,14 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
+		/// Indicates that line is yet empty.
+		/// </summary>
+		public virtual bool IsYetEmpty
+		{
+			get { return ((Elements.ByteCount == 0) && (Elements.CharCount == 0)); }
+		}
+
+		/// <summary>
 		/// Initializes the state.
 		/// </summary>
 		protected virtual void InitializeValues()

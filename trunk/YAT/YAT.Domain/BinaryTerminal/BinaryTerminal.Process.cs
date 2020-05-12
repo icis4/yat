@@ -181,6 +181,15 @@ namespace YAT.Domain
 
 			var elementsForNextLine = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 
+			// The first byte of a line will sequentially trigger the [Begin] as well as [Content]
+			// condition below. In the normal case, the line will then contain the first displayed
+			// element. However, when initially receiving a hidden e.g. <XOn>, the line will yet be
+			// empty. Then, when subsequent bytes are received, even when seconds later, the line's
+			// initial time stamp is kept. This is illogical, the time stamp of a hidden <XOn> shall
+			// not define the time stamp of the line, thus handle such case by rebeginning the line.
+			if (lineState.Position == LinePosition.Content)
+				DoLineContentCheck(repositoryType, processState, ts, dir);
+
 			if (lineState.Position == LinePosition.Begin)
 				DoLineBegin(repositoryType, processState, ts, dev, dir, elementsToAdd);
 
@@ -213,6 +222,33 @@ namespace YAT.Domain
 						}
 					} // foreach (elementForNextLine)
 				} // if (has elementsForNextLine)
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
+		protected virtual void DoLineContentCheck(RepositoryType repositoryType, ProcessState processState,
+		                                          DateTime ts, IODirection dir)
+		{
+			var lineState = processState.Line; // Convenience shortcut.
+			if (lineState.IsYetEmpty)
+			{
+				var left  = TerminalSettings.Display.InfoEnclosureLeftCache;
+				var right = TerminalSettings.Display.InfoEnclosureRightCache;
+
+				var doReplace = false;
+
+				if (TerminalSettings.Display.ShowTimeStamp) { lineState.Elements.ReplaceTimeStamp(ts,                                              TerminalSettings.Display.TimeStampFormat, TerminalSettings.Display.TimeStampUseUtc, left, right); doReplace = true; }
+				if (TerminalSettings.Display.ShowTimeSpan)  { lineState.Elements.ReplaceTimeSpan( ts - InitialTimeStamp,                           TerminalSettings.Display.TimeSpanFormat,                                            left, right); doReplace = true; }
+				if (TerminalSettings.Display.ShowTimeDelta) { lineState.Elements.ReplaceTimeDelta(ts - processState.Overall.PreviousLineTimeStamp, TerminalSettings.Display.TimeDeltaFormat,                                           left, right); doReplace = true; }
+
+				if (doReplace)
+				{
+				////elementsToAdd.Clear() is not needed as only replace happens above.
+					FlushReplaceAlreadyBeganLine(repositoryType, processState);
+				}
 			}
 		}
 
