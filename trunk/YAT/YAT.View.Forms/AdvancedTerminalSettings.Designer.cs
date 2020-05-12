@@ -962,6 +962,8 @@
 			this.checkBox_ShowDuration.Size = new System.Drawing.Size(119, 17);
 			this.checkBox_ShowDuration.TabIndex = 17;
 			this.checkBox_ShowDuration.Text = "Show duration (line)";
+			this.toolTip.SetToolTip(this.checkBox_ShowDuration, "The duration from first to last byte of the line.\r\n\r\nFormat can be configured in " +
+        "[View > Format...].");
 			this.checkBox_ShowDuration.UseVisualStyleBackColor = true;
 			this.checkBox_ShowDuration.CheckedChanged += new System.EventHandler(this.checkBox_ShowDuration_CheckedChanged);
 			// 
@@ -1338,6 +1340,7 @@
 			this.checkBox_ShowTimeStamp.Size = new System.Drawing.Size(106, 17);
 			this.checkBox_ShowTimeStamp.TabIndex = 10;
 			this.checkBox_ShowTimeStamp.Text = "Show &time stamp";
+			this.toolTip.SetToolTip(this.checkBox_ShowTimeStamp, "The absolute moment in time.\r\n\r\nFormat can be configured in [View > Format...].");
 			this.checkBox_ShowTimeStamp.CheckedChanged += new System.EventHandler(this.checkBox_ShowTimeStamp_CheckedChanged);
 			// 
 			// checkBox_ShowTimeSpan
@@ -1348,6 +1351,8 @@
 			this.checkBox_ShowTimeSpan.Size = new System.Drawing.Size(101, 17);
 			this.checkBox_ShowTimeSpan.TabIndex = 11;
 			this.checkBox_ShowTimeSpan.Text = "Show time span";
+			this.toolTip.SetToolTip(this.checkBox_ShowTimeSpan, "The time that passed relative to [connect time].\r\n\r\nFormat can be configured in [" +
+        "View > Format...].");
 			this.checkBox_ShowTimeSpan.CheckedChanged += new System.EventHandler(this.checkBox_ShowTimeSpan_CheckedChanged);
 			// 
 			// checkBox_ShowTimeDelta
@@ -1358,6 +1363,8 @@
 			this.checkBox_ShowTimeDelta.Size = new System.Drawing.Size(101, 17);
 			this.checkBox_ShowTimeDelta.TabIndex = 12;
 			this.checkBox_ShowTimeDelta.Text = "Show time delta";
+			this.toolTip.SetToolTip(this.checkBox_ShowTimeDelta, "The time that passed relative to the last line.\r\n\r\nFormat can be configured in [V" +
+        "iew > Format...].");
 			this.checkBox_ShowTimeDelta.CheckedChanged += new System.EventHandler(this.checkBox_ShowTimeDelta_CheckedChanged);
 			// 
 			// checkBox_ShowConnectTime
