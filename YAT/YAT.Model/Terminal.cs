@@ -2822,15 +2822,13 @@ namespace YAT.Model
 			{
 				if      ( isConnectedNow && !hasBeenConnected)
 				{
-					var now = DateTime.Now; // Ensure that all use exactly the same instant.
+					this.activeConnectChrono.Restart(e.Value); // Restart, i.e. reset and start from zero.
+					this.totalConnectChrono.Start(   e.Value); // Start again, i.e. continue at last time.
 
-					this.activeConnectChrono.Restart(now); // Restart, i.e. reset and start from zero.
-					this.totalConnectChrono.Start(now);    // Start again, i.e. continue at last time.
-
-					this.terminal.InitialTimeStamp = now;    // The initial time stamp is used for
-					                                         // time spans. Consequently, the spans
-					if (SettingsRoot.Display.ShowTimeSpan)   // will be based on the active connect
-						this.terminal.RefreshRepositories(); // time, not the total connect time.
+					this.terminal.InitialTimeStamp = e.Value;  // The initial time stamp is used for
+					                                           // time spans. Consequently, the spans
+					if (SettingsRoot.Display.ShowTimeSpan)     // will be based on the active connect
+						this.terminal.RefreshRepositories();   // time, not the total connect time.
 				}
 				else if (!isConnectedNow && hasBeenConnected)
 				{
