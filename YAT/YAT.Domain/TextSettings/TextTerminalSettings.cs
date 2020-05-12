@@ -29,6 +29,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using System.Xml.Serialization;
 
 using MKY;
@@ -57,8 +58,14 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public static readonly string EolDefault = EolEx.Parse(Environment.NewLine);
 
-		/// <summary></summary>
-		public static readonly int EncodingDefault = (EncodingEx)System.Text.Encoding.Default;
+		/// <summary>
+		/// Default is <see cref="EncodingEx.Default"/> which is <see cref="Encoding.UTF8"/>.
+		/// </summary>
+		/// <remarks>
+		/// <see cref="Parser.Parser.EncodingDefault"/> must not be used because that is
+		/// <see cref="Encoding.Default"/> that is limited to an ANSI code page.
+		/// </remarks>
+		public static readonly int EncodingDefault = (EncodingEx)EncodingEx.Default;
 
 		/// <summary></summary>
 		public const bool ShowEolDefault = false;
