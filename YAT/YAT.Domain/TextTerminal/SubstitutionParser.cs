@@ -57,19 +57,9 @@ namespace YAT.Domain.Parser
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <remarks>
-		/// Used for testing. Dedicated constructor required since <see cref="Encoding.Default"/>
-		/// cannot be used as default argument.
-		/// </remarks>
-		public SubstitutionParser(CharSubstitution substitution)
-			: this(substitution, Encoding.Default)
-		{
-		}
-
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
-		public SubstitutionParser(CharSubstitution substitution, Encoding encoding, Endianness endianness = Endianness.BigEndian, Mode modes = Mode.AllEscapes)
+		public SubstitutionParser(CharSubstitution substitution, Encoding encoding, Endianness endianness, Mode modes)
 			: base(encoding, endianness, modes)
 		{
 			this.substitution = substitution;

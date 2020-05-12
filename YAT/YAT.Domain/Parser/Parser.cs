@@ -150,6 +150,21 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public const Radix DefaultRadixDefault = Radix.String;
 
+		/// <summary>
+		/// Default is <see cref="Encoding.Default"/>.
+		/// </summary>
+		/// <remarks>
+		/// <see cref="EncodingEx.Default"/> which is <see cref="Encoding.UTF8"/> cannot be used as
+		/// default to properly parse text entered from [Send Text], e.g. "äöüÄÖÜ$£€čěř一二州". The
+		/// .NET's default of <see cref="Encoding.Default"/> is required therefore.
+		/// </remarks>
+		public static readonly Encoding EncodingDefault = Encoding.Default;
+
+		/// <summary>
+		/// Default is <see cref="EndiannessEx.Default"/>.
+		/// </summary>
+		public const Endianness EndiannessDefault = EndiannessEx.Default;
+
 		#endregion
 
 		#region Fields
@@ -184,26 +199,34 @@ namespace YAT.Domain.Parser
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <paramref name="mode"/> intentionally not defaulted.
+		/// </remarks>
 		public Parser(Mode mode)
-			: this(Encoding.Default, mode)
+			: this(EncodingDefault, mode)
 		{
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <paramref name="mode"/> intentionally not defaulted.
+		/// </remarks>
 		public Parser(Encoding encoding, Mode mode)
-			: this(encoding, Endianness.BigEndian, mode)
+			: this(encoding, EndiannessDefault, mode)
 		{
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <paramref name="mode"/> intentionally not defaulted.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
 		public Parser(Endianness endianness, Mode mode)
-			: this(Encoding.Default, endianness, mode)
+			: this(EncodingDefault, endianness, mode)
 		{
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <paramref name="mode"/> intentionally not defaulted.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
 		public Parser(Encoding encoding, Endianness endianness, Mode mode)
 		{
