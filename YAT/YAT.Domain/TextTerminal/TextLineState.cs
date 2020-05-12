@@ -66,6 +66,14 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
+		/// Indicates that line is yet empty.
+		/// </summary>
+		public virtual bool IsYetEmpty
+		{
+			get { return ((PendingMultiBytesToDecode.Count == 0) && (RetainedUnconfirmedHiddenEolElements.Count == 0)); }
+		}
+
+		/// <summary>
 		/// Resets the state, i.e. restarts processing with an empty repository.
 		/// </summary>
 		public virtual void Reset()
