@@ -440,8 +440,8 @@ namespace YAT.Domain.Test.Parser
 
 				// Big5 [950]:
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "äöü", new byte[] { 0x61, 0x6F, 0x75 })); // Umlaute not supported
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "ÄÖÜ", new byte[] { 0x41, 0x4F, 0x55 })); // Umlaute not supported
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "äöü", new byte[] { 0x61, 0x6F, 0x75 }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "ÄÖÜ", new byte[] { 0x41, 0x4F, 0x55 }));
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "$£€", new byte[] { 0x24, 0xA2, 0x47, 0xA3, 0xE1 })); // 1-2-2 bytes
 				                                                                          //// "čěř" is not supported
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Big5), "一二州", new byte[] { 0xA4, 0x40, 0xA4, 0x47, 0xA6, 0x7B }));
@@ -486,8 +486,8 @@ namespace YAT.Domain.Test.Parser
 
 				// KSC [949]:
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "äöü", new byte[] { 0x61, 0x6F, 0x75 })); // Umlaute not supported
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "ÄÖÜ", new byte[] { 0x41, 0x4F, 0x55 })); // Umlaute not supported
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "äöü", new byte[] { 0x61, 0x6F, 0x75 }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "ÄÖÜ", new byte[] { 0x41, 0x4F, 0x55 }));
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "$£€", new byte[] { 0x24, 0xA1, 0xCC, 0xA2, 0xE6 })); // 1-2-2 bytes
 				                                                                                    //// "čěř" is not supported
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "一二州", new byte[] { 0xEC, 0xE9, 0xEC, 0xA3, 0xF1, 0xB6 }));
@@ -497,8 +497,8 @@ namespace YAT.Domain.Test.Parser
 
 				// Shift-JIS [932]:
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "äöü", new byte[] { 0x61, 0x6F, 0x75 })); // Umlaute not supported
-				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "ÄÖÜ", new byte[] { 0x41, 0x4F, 0x55 })); // Umlaute not supported
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "äöü", new byte[] { 0x61, 0x6F, 0x75 }));
+				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "ÄÖÜ", new byte[] { 0x41, 0x4F, 0x55 }));
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "$£",  new byte[] { 0x24, 0x81, 0x92 })); // only $ and £ supported
 				                                                                               //// "čěř" is not supported
 				yield return (new TestCaseData(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "一二州", new byte[] { 0x88, 0xEA, 0x93, 0xF1, 0x8F, 0x42 }));
