@@ -1011,7 +1011,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Name = "toolStripMenuItem_MonitorContextMenu_ShowTimeStamp";
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Size = new System.Drawing.Size(266, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Text = "Show Time Stamp";
-			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.ToolTipText = "Format can be configured in [View > Format...].";
+			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.ToolTipText = "The absolute moment in time.\r\n\r\nFormat can be configured in [View > Format...].";
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowTimeSpan
@@ -1019,7 +1019,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Name = "toolStripMenuItem_MonitorContextMenu_ShowTimeSpan";
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Size = new System.Drawing.Size(266, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Text = "Show Time Span";
-			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.ToolTipText = "Format can be configured in [View > Format...].";
+			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.ToolTipText = "The time that passed relative to [connect time].\r\n\r\nFormat can be configured in [View > Format...].";
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowTimeDelta
@@ -1027,7 +1027,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.Name = "toolStripMenuItem_MonitorContextMenu_ShowTimeDelta";
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.Size = new System.Drawing.Size(266, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.Text = "Show Time Delta";
-			this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.ToolTipText = "Format can be configured in [View > Format...].";
+			this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.ToolTipText = "The time that passed relative to the last line.\r\n\r\nFormat can be configured in [View > Format...].";
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTimeDelta_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowDevice
@@ -1063,6 +1063,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ShowDuration.Name = "toolStripMenuItem_MonitorContextMenu_ShowDuration";
 			this.toolStripMenuItem_MonitorContextMenu_ShowDuration.Size = new System.Drawing.Size(266, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowDuration.Text = "Show Duration (Line)";
+			this.toolStripMenuItem_MonitorContextMenu_ShowDuration.ToolTipText = "The duration from first to last byte of the line.\r\n\r\nFormat can be configured in [Format...] further below.";
 			this.toolStripMenuItem_MonitorContextMenu_ShowDuration.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowDuration_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Separator_6
@@ -4330,7 +4331,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Name = "toolStripMenuItem_TerminalMenu_View_ShowTimeStamp";
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Size = new System.Drawing.Size(266, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Text = "Show T&ime Stamp";
-			this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.ToolTipText = "Format can be configured in [Format...] further below.";
+			this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.ToolTipText = "The absolute moment in time.\r\n\r\nFormat can be configured in [Format...] further below.";
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowTimeSpan
@@ -4338,7 +4339,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.Name = "toolStripMenuItem_TerminalMenu_View_ShowTimeSpan";
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.Size = new System.Drawing.Size(266, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.Text = "Show Ti&me Span";
-			this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.ToolTipText = "Format can be configured in [Format...] further below.";
+			this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.ToolTipText = "The time that passed relative to [connect time].\r\n\r\nFormat can be configured in [Format...] further below.";
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowTimeDelta
@@ -4346,7 +4347,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeDelta.Name = "toolStripMenuItem_TerminalMenu_View_ShowTimeDelta";
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeDelta.Size = new System.Drawing.Size(266, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeDelta.Text = "Show Tim&e Delta";
-			this.toolStripMenuItem_TerminalMenu_View_ShowTimeDelta.ToolTipText = "Format can be configured in [Format...] further below.";
+			this.toolStripMenuItem_TerminalMenu_View_ShowTimeDelta.ToolTipText = "The time that passed relative to the last line.\r\n\r\nFormat can be configured in [Format...] further below.";
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeDelta.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTimeDelta_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowDevice
@@ -4382,6 +4383,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_ShowDuration.Name = "toolStripMenuItem_TerminalMenu_View_ShowDuration";
 			this.toolStripMenuItem_TerminalMenu_View_ShowDuration.Size = new System.Drawing.Size(266, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ShowDuration.Text = "Show D&uration (Line)";
+			this.toolStripMenuItem_TerminalMenu_View_ShowDuration.ToolTipText = "The duration from first to last byte of the line.\r\n\r\nFormat can be configured in [Format...] further below.";
 			this.toolStripMenuItem_TerminalMenu_View_ShowDuration.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowDuration_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Separator_6
