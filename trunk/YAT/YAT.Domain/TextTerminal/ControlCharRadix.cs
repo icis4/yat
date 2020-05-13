@@ -53,6 +53,11 @@ namespace YAT.Domain
 		[Obsolete("String makes no sense for single byte/character replacement.")]
 		String = Radix.String,
 
+		/// <remarks>
+		/// Keep this item to ensure that items can 1:1 be mapped to <see cref="Radix"/>
+		/// and that additional items get distinct enum identifiers.
+		/// </remarks>
+		[Obsolete("Char makes no sense for control character replacement, as control characters are not printable.")]
 		Char = Radix.Char,
 
 		Bin = Radix.Bin,
@@ -64,7 +69,7 @@ namespace YAT.Domain
 		/// Keep this item to ensure that items can 1:1 be mapped to <see cref="Radix"/>
 		/// and that additional items get distinct enum identifiers.
 		/// </remarks>
-		[Obsolete("Unicode makes no sense for control character replacement.")]
+		[Obsolete("Unicode makes little sense for control character replacement, one of the above numeric radices shall be used.")]
 		Unicode = Radix.Unicode,
 
 		AsciiMnemonic

@@ -395,6 +395,27 @@ namespace YAT.Domain.Settings
 		// Property Combinations
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
+		[XmlIgnore]
+		public bool TxRadixIsCharOrString
+		{
+			get { return ((Display.TxRadix == Radix.Char) || (Display.TxRadix == Radix.String)); }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public bool RxRadixIsCharOrString
+		{
+			get { return ((Display.RxRadix == Radix.Char) || (Display.RxRadix == Radix.String)); }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public bool AnyRadixIsCharOrString
+		{
+			get { return (TxRadixIsCharOrString || RxRadixIsCharOrString); }
+		}
+
 		/// <summary>
 		/// For text terminals, hide 0xFF is only supported if encoding is single byte.
 		/// For binary terminals, hide 0xFF is always supported.
