@@ -40,7 +40,7 @@ namespace MKY
 		/// <summary>
 		/// The default support request message is <![CDATA["Support may be requested at the origin of this software."]]>.
 		/// </summary>
-		public const string RequestSupportDefault = "Support may be requested at the origin of this software. Describe what you want to achieve or what doesn't work as detailed as possible";
+		public const string RequestSupportDefault = "Support may be requested at the origin of this software. Describe what you want to achieve or what doesn't work as detailed as possible.";
 
 		/// <summary>
 		/// The default feature request message is <![CDATA["New features may be requested at the origin of this software. Describe your request as detailed as possible (use case or user story, preconditions, postconditions,...)."]]>.
@@ -55,7 +55,7 @@ namespace MKY
 		/// <summary>
 		/// The default bug submission message is <![CDATA["Please report this issue at the origin of this software."]]>.
 		/// </summary>
-		public const string SubmitBugDefault = "Please report this issue at the origin of this software. Include as much information as possible";
+		public const string SubmitBugDefault = "Please report this issue at the origin of this software. Describe the situation when the issue happened as detailed as possible (environment, preconditions, settings, actions,...).";
 
 		private static string staticInvalidExecutionPreamble = InvalidExecutionPreambleDefault;
 		private static string staticRequestSupport           = RequestSupportDefault;

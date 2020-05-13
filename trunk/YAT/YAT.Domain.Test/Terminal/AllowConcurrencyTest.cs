@@ -29,7 +29,6 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 
 using MKY;
 using MKY.Net.Test;
