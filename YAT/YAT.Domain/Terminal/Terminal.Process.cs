@@ -100,17 +100,16 @@ namespace YAT.Domain
 		/// called "multi-byte" in the signature of a method called "byte", this is the most approriate approach found so far.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement ByteToElement(byte b, DateTime ts, IODirection d, List<byte> pendingMultiBytesToDecode)
+		protected virtual DisplayElement ByteToElement(byte b, DateTime ts, IODirection dir, List<byte> pendingMultiBytesToDecode)
 		{
-			switch (d)
+			switch (dir)
 			{
-				case IODirection.Tx:    return (ByteToElement(b, ts, d, TerminalSettings.Display.TxRadix, pendingMultiBytesToDecode));
-				case IODirection.Rx:    return (ByteToElement(b, ts, d, TerminalSettings.Display.RxRadix, pendingMultiBytesToDecode));
+				case IODirection.Tx:    return (ByteToElement(b, ts, dir, TerminalSettings.Display.TxRadix, pendingMultiBytesToDecode));
+				case IODirection.Rx:    return (ByteToElement(b, ts, dir, TerminalSettings.Display.RxRadix, pendingMultiBytesToDecode));
 
 				case IODirection.Bidir:
-				case IODirection.None:  throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				case IODirection.None:  throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("d", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -120,9 +119,8 @@ namespace YAT.Domain
 		/// called "multi-byte" in the signature of a method called "byte", this is the most approriate approach found so far.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement ByteToElement(byte b, DateTime ts, IODirection d, Radix r, List<byte> pendingMultiBytesToDecode)
+		protected virtual DisplayElement ByteToElement(byte b, DateTime ts, IODirection dir, Radix r, List<byte> pendingMultiBytesToDecode)
 		{
 			bool isControl;
 			bool isByteToHide;
@@ -132,7 +130,7 @@ namespace YAT.Domain
 
 			if      (isError)
 			{
-				return (new DisplayElement.ErrorInfo(ts, (Direction)d, text));
+				return (new DisplayElement.ErrorInfo(ts, (Direction)dir, text));
 			}
 			else if (isByteToHide)
 			{
@@ -140,14 +138,14 @@ namespace YAT.Domain
 			}
 			else if (isControl)
 			{
-				if (TerminalSettings.CharReplace.ReplaceControlChars)
-					return (CreateControlElement(b, ts, d, text));
-				else                         // !ReplaceControlChars => Use normal data element:
-					return (CreateDataElement(b, ts, d, text));
+				if (RadixIsCharOrString(r) && TerminalSettings.CharReplace.ReplaceControlChars)
+					return (CreateControlElement(b, ts, dir, text));
+				else
+					return (CreateDataElement(b, ts, dir, text));
 			}
 			else // Neither 'isError' nor 'isByteToHide' nor 'isError' => Use normal data element:
 			{
-				return (CreateDataElement(b, ts, d, text));
+				return (CreateDataElement(b, ts, dir, text));
 			}
 		}
 
@@ -190,7 +188,7 @@ namespace YAT.Domain
 					}
 					else if (isControl)
 					{
-						if (TerminalSettings.CharReplace.ReplaceControlChars)
+						if (RadixIsCharOrString(r) && TerminalSettings.CharReplace.ReplaceControlChars)
 							return (ByteToControlCharReplacementString(b, TerminalSettings.CharReplace.ControlCharRadix));
 						else
 							return (ByteToCharacterString(b));
@@ -338,55 +336,71 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateDataElement(byte origin, DateTime ts, IODirection d, string text)
+		protected virtual DisplayElement CreateDataElement(byte origin, DateTime ts, IODirection dir, string text)
 		{
-			switch (d)
+			switch (dir)
 			{
 				case IODirection.Tx:    return (new DisplayElement.TxData(ts, origin, text));
 				case IODirection.Rx:    return (new DisplayElement.RxData(ts, origin, text));
 
 				case IODirection.Bidir:
-				case IODirection.None:  throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				case IODirection.None:  throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateDataElement(byte[] origin, DateTime ts, IODirection d, string text)
+		protected virtual DisplayElement CreateDataElement(byte[] origin, DateTime ts, IODirection dir, string text)
 		{
-			switch (d)
+			switch (dir)
 			{
 				case IODirection.Tx:    return (new DisplayElement.TxData(ts, origin, text));
 				case IODirection.Rx:    return (new DisplayElement.RxData(ts, origin, text));
 
 				case IODirection.Bidir:
-				case IODirection.None:  throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				case IODirection.None:  throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateControlElement(byte origin, DateTime ts, IODirection d, string text)
+		protected virtual DisplayElement CreateControlElement(byte origin, DateTime ts, IODirection dir, string text)
 		{
-			switch (d)
+			switch (dir)
 			{
 				case IODirection.Tx:    return (new DisplayElement.TxControl(ts, origin, text));
 				case IODirection.Rx:    return (new DisplayElement.RxControl(ts, origin, text));
 
 				case IODirection.Bidir:
-				case IODirection.None:  throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				case IODirection.None:  throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual bool ElementsAreSeparate(IODirection d)
+		protected static bool RadixIsCharOrString(Radix r)
 		{
-			switch (d)
+			return ((r == Radix.Char) || (r == Radix.String));
+		}
+
+		/// <summary></summary>
+		protected virtual bool RadixIsCharOrString(IODirection dir)
+		{
+			switch (dir)
+			{
+				case IODirection.Tx:    return (TerminalSettings.TxRadixIsCharOrString);
+				case IODirection.Rx:    return (TerminalSettings.RxRadixIsCharOrString);
+
+				case IODirection.Bidir:
+				case IODirection.None:  throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual bool ElementsAreSeparate(IODirection dir)
+		{
+			switch (dir)
 			{                                                                                         // Pragmatic best-effort approach.
 				case IODirection.None:  return (ElementsAreSeparate(TerminalSettings.Display.TxRadix) || ElementsAreSeparate(TerminalSettings.Display.RxRadix));
 				case IODirection.Bidir: return (ElementsAreSeparate(TerminalSettings.Display.TxRadix) || ElementsAreSeparate(TerminalSettings.Display.RxRadix));
@@ -394,7 +408,7 @@ namespace YAT.Domain
 				case IODirection.Tx:    return (ElementsAreSeparate(TerminalSettings.Display.TxRadix)                                                         );
 				case IODirection.Rx:    return (                                                         ElementsAreSeparate(TerminalSettings.Display.RxRadix));
 
-				default:                throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -424,15 +438,14 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Non-line-state dependent implementation for e.g. <see cref="Format(byte[], IODirection, Radix)"/>.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual void AddContentSeparatorIfNecessary(IODirection d, DisplayElementCollection lp, DisplayElement de)
+		protected virtual void AddContentSeparatorIfNecessary(IODirection dir, DisplayElementCollection lp, DisplayElement de)
 		{
-			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
+			if (ElementsAreSeparate(dir) && !string.IsNullOrEmpty(de.Text))
 			{
 				if (lp.ByteCount > 0)
 				{
 					if (!string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache))
-						lp.Add(new DisplayElement.ContentSeparator((Direction)d, TerminalSettings.Display.ContentSeparatorCache));
+						lp.Add(new DisplayElement.ContentSeparator((Direction)dir, TerminalSettings.Display.ContentSeparatorCache));
 				}
 			}
 		}
@@ -443,24 +456,22 @@ namespace YAT.Domain
 		/// <remarks>
 		/// This default implementation is based on <see cref="DisplayElementCollection.ByteCount"/>.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual void AddContentSeparatorIfNecessary(LineState lineState, IODirection d, DisplayElementCollection lp, DisplayElement de)
+		protected virtual void AddContentSeparatorIfNecessary(LineState lineState, IODirection dir, DisplayElementCollection lp, DisplayElement de)
 		{
-			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
+			if (ElementsAreSeparate(dir) && !string.IsNullOrEmpty(de.Text))
 			{
 				if ((lineState.Elements.ByteCount > 0) || (lp.ByteCount > 0))
 				{
 					if (!string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache))
-						lp.Add(new DisplayElement.ContentSeparator((Direction)d, TerminalSettings.Display.ContentSeparatorCache));
+						lp.Add(new DisplayElement.ContentSeparator((Direction)dir, TerminalSettings.Display.ContentSeparatorCache));
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual void RemoveContentSeparatorIfNecessary(IODirection d, DisplayElementCollection lp)
+		protected virtual void RemoveContentSeparatorIfNecessary(IODirection dir, DisplayElementCollection lp)
 		{
-			if (ElementsAreSeparate(d))
+			if (ElementsAreSeparate(dir))
 			{
 				int count = lp.Count;
 				if ((count > 0) && (lp[count - 1] is DisplayElement.ContentSeparator))

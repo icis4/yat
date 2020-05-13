@@ -970,7 +970,7 @@
 			// checkBox_ShowCopyOfActiveLine
 			// 
 			this.checkBox_ShowCopyOfActiveLine.AutoSize = true;
-			this.checkBox_ShowCopyOfActiveLine.Location = new System.Drawing.Point(12, 480);
+			this.checkBox_ShowCopyOfActiveLine.Location = new System.Drawing.Point(12, 481);
 			this.checkBox_ShowCopyOfActiveLine.Name = "checkBox_ShowCopyOfActiveLine";
 			this.checkBox_ShowCopyOfActiveLine.Size = new System.Drawing.Size(142, 17);
 			this.checkBox_ShowCopyOfActiveLine.TabIndex = 33;
@@ -1189,11 +1189,12 @@
 			// checkBox_BeepOnBell
 			// 
 			this.checkBox_BeepOnBell.AutoSize = true;
-			this.checkBox_BeepOnBell.Location = new System.Drawing.Point(6, 113);
+			this.checkBox_BeepOnBell.Location = new System.Drawing.Point(6, 90);
 			this.checkBox_BeepOnBell.Name = "checkBox_BeepOnBell";
 			this.checkBox_BeepOnBell.Size = new System.Drawing.Size(117, 17);
-			this.checkBox_BeepOnBell.TabIndex = 7;
+			this.checkBox_BeepOnBell.TabIndex = 6;
 			this.checkBox_BeepOnBell.Text = "Beep on bell (0x07)";
+			this.toolTip.SetToolTip(this.checkBox_BeepOnBell, "Applicable to text terminals.\r\nApplicable to [String] and [Character] radix.");
 			this.checkBox_BeepOnBell.UseVisualStyleBackColor = true;
 			this.checkBox_BeepOnBell.CheckedChanged += new System.EventHandler(this.checkBox_BeepOnBell_CheckedChanged);
 			// 
@@ -1217,8 +1218,8 @@
 			this.checkBox_ReplaceBackspace.TabIndex = 2;
 			this.checkBox_ReplaceBackspace.Text = "Also replace backspace (0x08) by";
 			this.toolTip.SetToolTip(this.checkBox_ReplaceBackspace, "Replaces backspace by <BS> instead of executing the backspace, i.e. removing the " +
-        "previous character.\r\n\r\nOnly available for text terminals.\r\nApplicable to any rad" +
-        "ix.");
+        "previous character.\r\n\r\nApplicable to text terminals.\r\nApplicable to [String] and" +
+        " [Character] radix.");
 			this.checkBox_ReplaceBackspace.UseVisualStyleBackColor = true;
 			this.checkBox_ReplaceBackspace.CheckedChanged += new System.EventHandler(this.checkBox_ReplaceBackspace_CheckedChanged);
 			// 
@@ -1236,10 +1237,10 @@
 			// checkBox_HideXOnXOff
 			// 
 			this.checkBox_HideXOnXOff.AutoSize = true;
-			this.checkBox_HideXOnXOff.Location = new System.Drawing.Point(6, 90);
+			this.checkBox_HideXOnXOff.Location = new System.Drawing.Point(6, 113);
 			this.checkBox_HideXOnXOff.Name = "checkBox_HideXOnXOff";
 			this.checkBox_HideXOnXOff.Size = new System.Drawing.Size(158, 17);
-			this.checkBox_HideXOnXOff.TabIndex = 6;
+			this.checkBox_HideXOnXOff.TabIndex = 7;
 			this.checkBox_HideXOnXOff.Text = "Hide XOn/XOff (0x11/0x13)";
 			this.checkBox_HideXOnXOff.UseVisualStyleBackColor = true;
 			this.checkBox_HideXOnXOff.CheckedChanged += new System.EventHandler(this.checkBox_HideXOnXOff_CheckedChanged);
@@ -1264,8 +1265,8 @@
 			this.checkBox_ReplaceTab.TabIndex = 4;
 			this.checkBox_ReplaceTab.Text = "Also replace horizontal tab (0x09) by";
 			this.toolTip.SetToolTip(this.checkBox_ReplaceTab, "Replaces tabulator characters by <TAB> instead of executing the tabulator, i.e. i" +
-        "nserting a horizontal whitespace.\r\n\r\nOnly available for text terminals.\r\nApplica" +
-        "ble to any radix.");
+        "nserting a horizontal whitespace.\r\n\r\nApplicable to text terminals.\r\nApplicable t" +
+        "o [String] and [Character] radix.");
 			this.checkBox_ReplaceTab.UseVisualStyleBackColor = true;
 			this.checkBox_ReplaceTab.CheckedChanged += new System.EventHandler(this.checkBox_ReplaceTab_CheckedChanged);
 			// 
@@ -1277,6 +1278,7 @@
 			this.checkBox_ReplaceControlCharacters.Size = new System.Drawing.Size(83, 17);
 			this.checkBox_ReplaceControlCharacters.TabIndex = 0;
 			this.checkBox_ReplaceControlCharacters.Text = "Replace by:";
+			this.toolTip.SetToolTip(this.checkBox_ReplaceControlCharacters, "Applicable to [String] and [Character] radix.");
 			this.checkBox_ReplaceControlCharacters.CheckedChanged += new System.EventHandler(this.checkBox_ReplaceControlCharacters_CheckedChanged);
 			// 
 			// checkBox_DirectionLineBreak

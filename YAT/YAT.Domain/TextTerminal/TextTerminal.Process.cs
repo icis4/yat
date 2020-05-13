@@ -97,7 +97,7 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		protected override DisplayElement ByteToElement(byte b, DateTime ts, IODirection d, Radix r, List<byte> pendingMultiBytesToDecode)
+		protected override DisplayElement ByteToElement(byte b, DateTime ts, IODirection dir, Radix r, List<byte> pendingMultiBytesToDecode)
 		{
 			switch (r)
 			{
@@ -106,7 +106,7 @@ namespace YAT.Domain
 				case Radix.Dec:
 				case Radix.Hex:
 				{
-					return (base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode));
+					return (base.ByteToElement(b, ts, dir, r, pendingMultiBytesToDecode));
 				}
 
 				case Radix.String:
@@ -121,11 +121,11 @@ namespace YAT.Domain
 
 						if      ((b < 0x20) || (b == 0x7F))              // ASCII control characters.
 						{
-							return (base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode));
+							return (base.ByteToElement(b, ts, dir, r, pendingMultiBytesToDecode));
 						}
 						else if  (b == 0x20)                             // ASCII space.
 						{
-							return (base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode));
+							return (base.ByteToElement(b, ts, dir, r, pendingMultiBytesToDecode));
 						}                                                // Special case.
 						else if ((b == 0xFF) && TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF)
 						{
@@ -133,7 +133,7 @@ namespace YAT.Domain
 						}
 						else                                             // ASCII and extended ASCII printable characters.
 						{
-							return (DecodeAndCreateElement(b, ts, d, r, e)); // 'IsSingleByte' always results in a single character per byte.
+							return (DecodeAndCreateElement(b, ts, dir, r, e)); // 'IsSingleByte' always results in a single character per byte.
 						}
 					}
 					else // 'IsMultiByte':
@@ -172,15 +172,15 @@ namespace YAT.Domain
 
 									if      ((code < 0x20) || (code == 0x7F))        // ASCII control characters.
 									{
-										return (base.ByteToElement((byte)code, ts, d, r, pendingMultiBytesToDecode));
+										return (base.ByteToElement((byte)code, ts, dir, r, pendingMultiBytesToDecode));
 									}
 									else if (code == 0x20)                           // ASCII space.
 									{
-										return (base.ByteToElement((byte)code, ts, d, r, pendingMultiBytesToDecode));
+										return (base.ByteToElement((byte)code, ts, dir, r, pendingMultiBytesToDecode));
 									}
 									else                                             // ASCII printable character.
 									{                                                            // 'effectiveCharCount' is 1 for sure.
-										return (CreateDataElement(decodingArray, ts, d, r, chars[0]));
+										return (CreateDataElement(decodingArray, ts, dir, r, chars[0]));
 									}
 								}
 								else // Single 'unknown' character 0xFFFD:
@@ -198,14 +198,14 @@ namespace YAT.Domain
 								{
 									pendingMultiBytesToDecode.Clear();               // Reset decoding stream.
 
-									return (CreateInvalidBytesWarning(decodingArray, ts, d, e));
+									return (CreateInvalidBytesWarning(decodingArray, ts, dir, e));
 								}
 							}
 							else // (effectiveCharCount > 1) => Code doesn't fit into a single u16 value, thus more than one character will be returned.
 							{
 								pendingMultiBytesToDecode.Clear();                   // Reset decoding stream.
 
-								return (CreateOutsideUnicodePlane0Warning(decodingArray, ts, d, e));
+								return (CreateOutsideUnicodePlane0Warning(decodingArray, ts, dir, e));
 							}
 						}
 						else if ((EncodingEx)e == SupportedEncoding.UTF7)
@@ -217,11 +217,11 @@ namespace YAT.Domain
 							{
 								if      ((b < 0x20) || (b == 0x7F))                  // ASCII control characters.
 								{
-									return (base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode));
+									return (base.ByteToElement(b, ts, dir, r, pendingMultiBytesToDecode));
 								}
 								else if (b == 0x20)                                  // ASCII space.
 								{
-									return (base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode));
+									return (base.ByteToElement(b, ts, dir, r, pendingMultiBytesToDecode));
 								}
 								else if (b == (byte)'+')                             // UTF-7 lead byte.
 								{
@@ -232,11 +232,11 @@ namespace YAT.Domain
 								}
 								else if (CharEx.IsValidForUTF7((char)b))
 								{
-									return (DecodeAndCreateElement(b, ts, d, r, e)); // 'IsMultiByte' but the current byte must result in a single character here.
+									return (DecodeAndCreateElement(b, ts, dir, r, e)); // 'IsMultiByte' but the current byte must result in a single character here.
 								}
 								else
 								{
-									return (CreateInvalidByteWarning(b, ts, d, e));
+									return (CreateInvalidByteWarning(b, ts, dir, e));
 								}
 							}
 							else // (pendingMultiBytesToDecode.Count > 0) => Not lead byte.
@@ -252,11 +252,11 @@ namespace YAT.Domain
 									int effectiveCharCount = e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true);
 									if (effectiveCharCount == expectedCharCount)
 									{
-										return (CreateDataElement(decodingArray, ts, d, r, chars));
+										return (CreateDataElement(decodingArray, ts, dir, r, chars));
 									}
 									else // Decoder has failed:
 									{
-										return (CreateInvalidBytesWarning(decodingArray, ts, d, e));
+										return (CreateInvalidBytesWarning(decodingArray, ts, dir, e));
 									}
 								}
 								else if (!CharEx.IsValidForBase64((char)b))          // Non-Base64 characters also terminates!
@@ -269,7 +269,7 @@ namespace YAT.Domain
 									int effectiveCharCount = e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true);
 									if (effectiveCharCount == expectedCharCount)
 									{                                                                         // 'effectiveCharCount' is 1 for sure.
-										DisplayElement encoded = CreateDataElement(decodingArray, ts, d, r, chars);
+										DisplayElement encoded = CreateDataElement(decodingArray, ts, dir, r, chars);
 
 										// Note that the following code is similar as above and below but with subtle differences
 										// such as treatment of a lead byte, no treatment of 0xFF, no treatment of 0xFFFD, comment,...
@@ -277,19 +277,19 @@ namespace YAT.Domain
 										DisplayElement direct;
 										if      ((b < 0x20) || (b == 0x7F)) // ASCII control characters.
 										{
-											direct = base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode);
+											direct = base.ByteToElement(b, ts, dir, r, pendingMultiBytesToDecode);
 										}
 										else if (b == 0x20)                 // ASCII space.
 										{
-											direct = base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode);
+											direct = base.ByteToElement(b, ts, dir, r, pendingMultiBytesToDecode);
 										}
 										else if (CharEx.IsValidForUTF7((char)b))
 										{
-											direct = DecodeAndCreateElement(b, ts, d, r, e); // 'IsMultiByte' but the current byte must result in a single character here.
+											direct = DecodeAndCreateElement(b, ts, dir, r, e); // 'IsMultiByte' but the current byte must result in a single character here.
 										}
 										else
 										{
-											return (CreateInvalidByteWarning(b, ts, d, e));
+											return (CreateInvalidByteWarning(b, ts, dir, e));
 										}
 
 										// Combine into single element, accepting two limitations:
@@ -303,19 +303,19 @@ namespace YAT.Domain
 
 										var text = (encoded.Text + direct.Text);
 
-										switch (d)
+										switch (dir)
 										{
 											case IODirection.Tx:    return (new DisplayElement.TxData(ts, origin.ToArray(), text));
 											case IODirection.Rx:    return (new DisplayElement.RxData(ts, origin.ToArray(), text));
 
 											case IODirection.Bidir:
-											case IODirection.None:  throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-											default:                throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+											case IODirection.None:  throw (new ArgumentOutOfRangeException("d", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+											default:                throw (new ArgumentOutOfRangeException("d", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 										}
 									}
 									else // Decoder has failed:
 									{
-										return (CreateInvalidBytesWarning(decodingArray, ts, d, e));
+										return (CreateInvalidBytesWarning(decodingArray, ts, dir, e));
 									}
 								}
 								else if (CharEx.IsValidForUTF7((char)b))     // UTF-7 trailing byte.
@@ -326,7 +326,7 @@ namespace YAT.Domain
 								}
 								else
 								{
-									return (CreateInvalidByteWarning(b, ts, d, e));
+									return (CreateInvalidByteWarning(b, ts, dir, e));
 								}
 							} // direct or lead or trailing byte.
 						}
@@ -345,15 +345,15 @@ namespace YAT.Domain
 								}
 								else if ((b < 0x20) || (b == 0x7F))          // ASCII control characters.
 								{
-									return (base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode));
+									return (base.ByteToElement(b, ts, dir, r, pendingMultiBytesToDecode));
 								}
 								else if (b == 0x20)                          // ASCII space.
 								{
-									return (base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode));
+									return (base.ByteToElement(b, ts, dir, r, pendingMultiBytesToDecode));
 								}
 								else                                         // ASCII printable character.
 								{
-									return (DecodeAndCreateElement(b, ts, d, r, e)); // 'IsMultiByte' but the current byte must result in a single character here.
+									return (DecodeAndCreateElement(b, ts, dir, r, e)); // 'IsMultiByte' but the current byte must result in a single character here.
 								}
 							}
 							else // (pendingMultiBytesToDecode.Count > 0) => Neither ASCII nor lead byte.
@@ -368,7 +368,7 @@ namespace YAT.Domain
 								{
 									pendingMultiBytesToDecode.Clear();
 									                                                    //// 'effectiveCharCount' is 1 for sure.
-									return (CreateDataElement(decodingArray, ts, d, r, chars[0]));
+									return (CreateDataElement(decodingArray, ts, dir, r, chars[0]));
 								}
 								else if (effectiveCharCount == 0)
 								{
@@ -380,14 +380,14 @@ namespace YAT.Domain
 									{
 										pendingMultiBytesToDecode.Clear(); // Reset decoding stream.
 
-										return (CreateInvalidBytesWarning(decodingArray, ts, d, e));
+										return (CreateInvalidBytesWarning(decodingArray, ts, dir, e));
 									}
 								}
 								else // (effectiveCharCount > 1)
 								{
 									pendingMultiBytesToDecode.Clear(); // Reset decoding stream.
 
-									return (CreateInvalidBytesWarning(decodingArray, ts, d, e));
+									return (CreateInvalidBytesWarning(decodingArray, ts, dir, e));
 								}
 							} // ASCII or lead or trailing byte
 						} // Unicode/Non-Unicode
@@ -403,80 +403,75 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement DecodeAndCreateElement(byte b, DateTime ts, IODirection d, Radix r, Encoding e)
+		protected virtual DisplayElement DecodeAndCreateElement(byte b, DateTime ts, IODirection dir, Radix r, Encoding e)
 		{
 			int expectedCharCount = 1;
 			char[] chars = new char[expectedCharCount];
 			int effectiveCharCount = e.GetDecoder().GetChars(new byte[] { b }, 0, 1, chars, 0, true);
 			if (effectiveCharCount == expectedCharCount)
 			{                                                // 'effectiveCharCount' is 1 for sure.
-				return (CreateDataElement(b, ts, d, r, chars[0]));
+				return (CreateDataElement(b, ts, dir, r, chars[0]));
 			}
 			else // Decoder has failed:
 			{
-				return (CreateInvalidByteWarning(b, ts, d, e));
+				return (CreateInvalidByteWarning(b, ts, dir, e));
 			}
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateDataElement(byte origin, DateTime ts, IODirection d, Radix r, char c)
-		{
-			if (r != Radix.Unicode)
-			{
-				string text = c.ToString(CultureInfo.InvariantCulture);
-				return (CreateDataElement(origin, ts, d, text));
-			}
-			else // Unicode:
-			{
-				string text = UnicodeValueToNumericString(c);
-				return (CreateDataElement(origin, ts, d, text));
-			}
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "c", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateDataElement(byte[] origin, DateTime ts, IODirection d, Radix r, char c)
+		protected virtual DisplayElement CreateDataElement(byte origin, DateTime ts, IODirection dir, Radix r, char c)
 		{
 			if (r != Radix.Unicode)
 			{
 				string text = c.ToString(CultureInfo.InvariantCulture);
-				return (CreateDataElement(origin, ts, d, text));
+				return (CreateDataElement(origin, ts, dir, text));
 			}
 			else // Unicode:
 			{
 				string text = UnicodeValueToNumericString(c);
-				return (CreateDataElement(origin, ts, d, text));
+				return (CreateDataElement(origin, ts, dir, text));
 			}
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateDataElement(byte[] origin, DateTime ts, IODirection d, Radix r, char[] text)
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "c", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateDataElement(byte[] origin, DateTime ts, IODirection dir, Radix r, char c)
 		{
 			if (r != Radix.Unicode)
 			{
-				return (CreateDataElement(origin, ts, d, new string(text)));
+				string text = c.ToString(CultureInfo.InvariantCulture);
+				return (CreateDataElement(origin, ts, dir, text));
 			}
 			else // Unicode:
 			{
-				return (CreateDataElement(origin, ts, d, new string(text)));
+				string text = UnicodeValueToNumericString(c);
+				return (CreateDataElement(origin, ts, dir, text));
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateDataElement(byte[] origin, DateTime ts, IODirection dir, Radix r, char[] text)
+		{
+			if (r != Radix.Unicode)
+			{
+				return (CreateDataElement(origin, ts, dir, new string(text)));
+			}
+			else // Unicode:
+			{
+				return (CreateDataElement(origin, ts, dir, new string(text)));
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateInvalidByteWarning(byte b, DateTime ts, IODirection d, Encoding e)
+		protected virtual DisplayElement CreateInvalidByteWarning(byte b, DateTime ts, IODirection dir, Encoding e)
 		{
 			var byteAsString = ByteHelper.FormatHexString(b, TerminalSettings.Display.ShowRadix);
 
@@ -487,14 +482,13 @@ namespace YAT.Domain
 			sb.Append(((EncodingEx)e).DisplayName);
 			sb.Append("' byte!");
 
-			return (new DisplayElement.ErrorInfo(ts, (Direction)d, sb.ToString(), true));
+			return (new DisplayElement.ErrorInfo(ts, (Direction)dir, sb.ToString(), true));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "a", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateInvalidBytesWarning(byte[] a, DateTime ts, IODirection d, Encoding e)
+		protected virtual DisplayElement CreateInvalidBytesWarning(byte[] a, DateTime ts, IODirection dir, Encoding e)
 		{
 			var bytesAsString = ByteHelper.FormatHexString(a, TerminalSettings.Display.ShowRadix);
 
@@ -505,14 +499,13 @@ namespace YAT.Domain
 			sb.Append(((EncodingEx)e).DisplayName);
 			sb.Append("' byte sequence!");
 
-			return (new DisplayElement.ErrorInfo(ts, (Direction)d, sb.ToString(), true));
+			return (new DisplayElement.ErrorInfo(ts, (Direction)dir, sb.ToString(), true));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "a", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateOutsideUnicodePlane0Warning(byte[] a, DateTime ts, IODirection d, Encoding e)
+		protected virtual DisplayElement CreateOutsideUnicodePlane0Warning(byte[] a, DateTime ts, IODirection dir, Encoding e)
 		{
 			var bytesAsString = ByteHelper.FormatHexString(a, TerminalSettings.Display.ShowRadix);
 
@@ -521,17 +514,16 @@ namespace YAT.Domain
 			sb.Append(bytesAsString);
 			sb.Append(@""" is outside the basic multilingual plane (plane 0) which is not yet supported but tracked as feature request #329.");
 
-			return (new DisplayElement.ErrorInfo(ts, (Direction)d, sb.ToString(), true));
+			return (new DisplayElement.ErrorInfo(ts, (Direction)dir, sb.ToString(), true));
 		}
 
 		/// <remarks>This text specific implementation is based on <see cref="DisplayElementCollection.CharCount"/>.</remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected override void AddContentSeparatorIfNecessary(LineState lineState, IODirection d, DisplayElementCollection lp, DisplayElement de)
+		protected override void AddContentSeparatorIfNecessary(LineState lineState, IODirection dir, DisplayElementCollection lp, DisplayElement de)
 		{
-			if (ElementsAreSeparate(d) && !string.IsNullOrEmpty(de.Text))
+			if (ElementsAreSeparate(dir) && !string.IsNullOrEmpty(de.Text))
 			{
 				if ((lineState.Elements.CharCount > 0) || (lp.CharCount > 0))
-					lp.Add(new DisplayElement.ContentSeparator((Direction)d, TerminalSettings.Display.ContentSeparatorCache));
+					lp.Add(new DisplayElement.ContentSeparator((Direction)dir, TerminalSettings.Display.ContentSeparatorCache));
 			}
 		}
 
@@ -982,12 +974,16 @@ namespace YAT.Domain
 
 				case 0x08: // <BS> (backspace)
 				{
-					if (!(TerminalSettings.CharReplace.ReplaceControlChars && TerminalSettings.CharReplace.ReplaceBackspace))
+					if (RadixIsCharOrString(dir))
 					{
-						isBackspace = true;
+						bool replace = (TerminalSettings.CharReplace.ReplaceControlChars && TerminalSettings.CharReplace.ReplaceBackspace);
+						if (!replace)
+						{
+							isBackspace = true;
 
-						de = new DisplayElement.Nonentity();
-						return (true);
+							de = new DisplayElement.Nonentity();
+							return (true);
+						}
 					}
 
 					break;
@@ -995,16 +991,20 @@ namespace YAT.Domain
 
 				case 0x09: // <TAB> (tabulator)
 				{
-					if (!(TerminalSettings.CharReplace.ReplaceControlChars && TerminalSettings.CharReplace.ReplaceTab))
+					if (RadixIsCharOrString(dir))
 					{
-						// Attention:
-						// In order to get well aligned tab stops, tab characters must be data elements.
-						// If they were control elements (i.e. sequence of data and control elements),
-						// tabs would only get aligned within the respective control element,
-						// thus resulting in misaligned tab stops.
+						bool replace = (TerminalSettings.CharReplace.ReplaceControlChars && TerminalSettings.CharReplace.ReplaceTab);
+						if (!replace)
+						{
+							// Attention:
+							// In order to get well aligned tab stops, tab characters must be data elements.
+							// If they were control elements (i.e. sequence of data and control elements),
+							// tabs would only get aligned within the respective control element,
+							// thus resulting in misaligned tab stops.
 
-						de = CreateDataElement(b, ts, dir, "\t");
-						return (true);
+							de = CreateDataElement(b, ts, dir, "\t");
+							return (true);
+						}
 					}
 
 					break;

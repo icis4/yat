@@ -1165,17 +1165,18 @@ namespace YAT.View.Forms
 				checkBox_ShowRadix.Checked = (isShowable && this.settingsInEdit.Terminal.Display.ShowRadix);
 
 				// Display:
-				checkBox_ShowLineNumbers.Checked    = this.settingsInEdit.Terminal.Display.ShowLineNumbers;
+				checkBox_ShowLineNumbers.Checked     = this.settingsInEdit.Terminal.Display.ShowLineNumbers;
+				comboBox_LineNumberSelection.Enabled = this.settingsInEdit.Terminal.Display.ShowLineNumbers;
 				ComboBoxHelper.Select(comboBox_LineNumberSelection, (Domain.Utilities.LineNumberSelectionEx)this.settingsInEdit.Terminal.Display.LineNumberSelection);
-				checkBox_ShowTimeStamp.Checked      = this.settingsInEdit.Terminal.Display.ShowTimeStamp;
-				checkBox_ShowTimeSpan.Checked       = this.settingsInEdit.Terminal.Display.ShowTimeSpan;
-				checkBox_ShowTimeDelta.Checked      = this.settingsInEdit.Terminal.Display.ShowTimeDelta;
-				checkBox_ShowDevice.Checked         = this.settingsInEdit.Terminal.Display.ShowDevice;
-				checkBox_ShowDirection.Checked      = this.settingsInEdit.Terminal.Display.ShowDirection;
-				checkBox_ShowLength.Checked         = this.settingsInEdit.Terminal.Display.ShowLength;
+				checkBox_ShowTimeStamp.Checked       = this.settingsInEdit.Terminal.Display.ShowTimeStamp;
+				checkBox_ShowTimeSpan.Checked        = this.settingsInEdit.Terminal.Display.ShowTimeSpan;
+				checkBox_ShowTimeDelta.Checked       = this.settingsInEdit.Terminal.Display.ShowTimeDelta;
+				checkBox_ShowDevice.Checked          = this.settingsInEdit.Terminal.Display.ShowDevice;
+				checkBox_ShowDirection.Checked       = this.settingsInEdit.Terminal.Display.ShowDirection;
+				checkBox_ShowLength.Checked          = this.settingsInEdit.Terminal.Display.ShowLength;
 
 				if (!isBinary) {
-					comboBox_LengthSelection.Enabled = true;
+					comboBox_LengthSelection.Enabled = this.settingsInEdit.Terminal.Display.ShowLength;
 					ComboBoxHelper.Select(comboBox_LengthSelection, (Domain.Utilities.LengthSelectionEx)this.settingsInEdit.Terminal.Display.LengthSelection);
 				}
 				else { // isBinary => preset and disable:
@@ -1205,20 +1206,26 @@ namespace YAT.View.Forms
 				checkBox_ShowCopyOfActiveLine.Checked = this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine;
 
 				// Char replace:
-				bool replaceControlChars                    = this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars;
-				checkBox_ReplaceControlCharacters.Checked   = replaceControlChars;
-				comboBox_ControlCharacterRadix.Enabled      = replaceControlChars;
-				comboBox_ControlCharacterRadix.SelectedItem = (Domain.ControlCharRadixEx)this.settingsInEdit.Terminal.CharReplace.ControlCharRadix;
+				bool isCharOrString                         = this.settingsInEdit.Terminal.AnyRadixIsCharOrString; // Convenience shortcut.
+				bool replaceControlChars                    = this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars; // Convenience shortcut.
+				checkBox_ReplaceControlCharacters.Enabled   =  isCharOrString;
+				checkBox_ReplaceControlCharacters.Checked   = (isCharOrString && replaceControlChars); // Attention: This logic is also implemented in the text terminal!
+				comboBox_ControlCharacterRadix.Enabled      = (isCharOrString && replaceControlChars);
+				comboBox_ControlCharacterRadix.SelectedItem = (Domain.ControlCharRadixEx)(this.settingsInEdit.Terminal.CharReplace.ControlCharRadix);
 
-				bool replaceBackspaceEnabled                = (isText && replaceControlChars);
+				bool replaceBackspaceEnabled                = (isText && isCharOrString && replaceControlChars); // Attention: This logic is also implemented in the text terminal!
 				checkBox_ReplaceBackspace.Enabled           =  replaceBackspaceEnabled;
 				checkBox_ReplaceBackspace.Checked           = (replaceBackspaceEnabled && this.settingsInEdit.Terminal.CharReplace.ReplaceBackspace);
 				label_ReplaceBackspace.Enabled              =  replaceBackspaceEnabled;
 
-				bool replaceTabEnabled                      = (isText && replaceControlChars);
+				bool replaceTabEnabled                      = (isText && isCharOrString && replaceControlChars); // Attention: This logic is also implemented in the text terminal!
 				checkBox_ReplaceTab.Enabled                 =  replaceTabEnabled;
 				checkBox_ReplaceTab.Checked                 = (replaceTabEnabled && this.settingsInEdit.Terminal.CharReplace.ReplaceTab);
 				label_ReplaceTab.Enabled                    =  replaceTabEnabled;
+
+				bool beepOnBellEnabled                      =  isText;
+				checkBox_BeepOnBell.Enabled                 =  beepOnBellEnabled;
+				checkBox_BeepOnBell.Checked                 = (beepOnBellEnabled && this.settingsInEdit.Terminal.CharAction.BeepOnBell);
 
 				checkBox_HideXOnXOff.Enabled                = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
 				checkBox_HideXOnXOff.Checked                = this.settingsInEdit.Terminal.CharHide.HideXOnXOff;
@@ -1226,10 +1233,6 @@ namespace YAT.View.Forms
 				checkBox_Hide0x00.Checked                   = this.settingsInEdit.Terminal.CharHide.Hide0x00;
 				checkBox_Hide0xFF.Enabled                   = this.settingsInEdit.Terminal.SupportsHide0xFF;
 				checkBox_Hide0xFF.Checked                   = this.settingsInEdit.Terminal.CharHide.Hide0xFF;
-
-				bool beepOnBellEnabled                      =  isText;
-				checkBox_BeepOnBell.Enabled                 =  beepOnBellEnabled;
-				checkBox_BeepOnBell.Checked                 = (beepOnBellEnabled && this.settingsInEdit.Terminal.CharAction.BeepOnBell);
 
 				groupBox_Display_UsbSerialHid.Enabled       = isUsbSerialHid;
 				checkBox_IncludeNonPayloadData.Checked      = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData;
