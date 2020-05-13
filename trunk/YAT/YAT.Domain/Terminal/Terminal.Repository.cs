@@ -59,9 +59,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Public Methods
+		#region Methods
 		//==========================================================================================
-		// Public Methods
+		// Methods
 		//==========================================================================================
 
 		/// <remarks>See remarks in <see cref="RefreshRepositories"/> below.</remarks>
