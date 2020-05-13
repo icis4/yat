@@ -31,6 +31,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY;
+using MKY.Text;
 
 #endregion
 
@@ -75,7 +76,7 @@ namespace YAT.Domain
 			base.InitializeProcess();
 
 			// Binary specifics:
-			using (var p = new Parser.Parser(TerminalSettings.IO.Endianness, Parser.Mode.RadixAndAsciiEscapes))
+			using (var p = new Parser.Parser((EncodingEx)BinaryTerminalSettings.EncodingFixed, TerminalSettings.IO.Endianness, Parser.Mode.RadixAndAsciiEscapes))
 			{
 				// Tx:
 				{
@@ -291,7 +292,7 @@ namespace YAT.Domain
 			var lineState = processState.Line; // Convenience shortcut.
 
 			// Convert content:
-			var de = ByteToElement(b, ts, dir);
+			var de = ByteToElement(b, ts, dir, null); // This binary terminal implementation does not implement multi-byte encodings (yet).
 
 			var lp = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 

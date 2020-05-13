@@ -151,14 +151,12 @@ namespace YAT.Domain.Parser
 		public const Radix DefaultRadixDefault = Radix.String;
 
 		/// <summary>
-		/// Default is <see cref="Encoding.Default"/>.
+		/// Default is <see cref="EncodingEx.Default"/> which is <see cref="Encoding.UTF8"/>.
 		/// </summary>
 		/// <remarks>
-		/// <see cref="EncodingEx.Default"/> which is <see cref="Encoding.UTF8"/> cannot be used as
-		/// default to properly parse text entered from [Send Text], e.g. "äöüÄÖÜ$£€čěř一二州". The
-		/// .NET's default of <see cref="Encoding.Default"/> is required therefore.
+		/// <see cref="Encoding.Default"/> must not be used because that is limited to an ANSI code page.
 		/// </remarks>
-		public static readonly Encoding EncodingDefault = Encoding.Default;
+		public static readonly Encoding EncodingDefault = EncodingEx.Default;
 
 		/// <summary>
 		/// Default is <see cref="EndiannessEx.Default"/>.

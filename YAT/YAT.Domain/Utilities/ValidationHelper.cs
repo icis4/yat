@@ -91,7 +91,7 @@ namespace YAT.Domain.Utilities
 			bool hasSucceeded;
 			var formatException = new Parser.FormatException("");
 
-			using (var p = new Parser.Parser(modes))
+			using (var p = new Parser.Parser(modes)) // Default encoding of UTF-8 is good enough for this test case.
 				hasSucceeded = p.TryParse(textToValidate, out successfullyParsed, ref formatException, defaultRadix);
 
 			if (hasSucceeded)

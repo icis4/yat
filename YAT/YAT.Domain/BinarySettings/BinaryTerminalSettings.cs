@@ -22,8 +22,18 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
+using System.Text;
 using System.Xml.Serialization;
+
+using MKY.Text;
+
+#endregion
 
 // The YAT.Domain.Settings namespace contains all raw/neutral/binary/text terminal infrastructure.
 // This code is intentionally placed into the YAT.Domain.Settings namespace even though the file is
@@ -40,6 +50,24 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		public const bool SeparateTxRxDisplayDefault = false;
+
+		/// <summary>
+		/// Binary terminals are (yet) fixed to <see cref="Encoding.Default"/> which is limited to
+		/// an ANSI code page, i.e. always a single byte character set (SBCS).
+		/// </summary>
+		/// <remarks>
+		/// Rationale:
+		/// <list type="bullet">
+		/// <item>
+		/// Binary terminals are intended to mainly be used with numeric radices and the encoding is
+		/// only needed for parsing and displaying char/string.
+		/// </item>
+		/// <item>
+		/// Non-SBCS are not implemented (yet).
+		/// </item>
+		/// </list>
+		/// </remarks>
+		public readonly int EncodingFixed = (EncodingEx)Encoding.Default;
 
 		#endregion
 

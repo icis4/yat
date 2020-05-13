@@ -73,9 +73,6 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private List<byte> txPendingMultiBytesToDecode;
-		private List<byte> rxPendingMultiBytesToDecode;
-
 		private TextLineState txUnidirTextLineState;
 		private TextLineState txBidirTextLineState;
 		private TextLineState rxBidirTextLineState;
@@ -100,7 +97,7 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		protected override DisplayElement ByteToElement(byte b, DateTime ts, IODirection d, Radix r)
+		protected override DisplayElement ByteToElement(byte b, DateTime ts, IODirection d, Radix r, List<byte> pendingMultiBytesToDecode)
 		{
 			switch (r)
 			{
@@ -109,7 +106,7 @@ namespace YAT.Domain
 				case Radix.Dec:
 				case Radix.Hex:
 				{
-					return (base.ByteToElement(b, ts, d, r));
+					return (base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode));
 				}
 
 				case Radix.String:
@@ -124,11 +121,11 @@ namespace YAT.Domain
 
 						if      ((b < 0x20) || (b == 0x7F))              // ASCII control characters.
 						{
-							return (base.ByteToElement(b, ts, d, r));
+							return (base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode));
 						}
 						else if  (b == 0x20)                             // ASCII space.
 						{
-							return (base.ByteToElement(b, ts, d, r));
+							return (base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode));
 						}                                                // Special case.
 						else if ((b == 0xFF) && TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF)
 						{
@@ -149,18 +146,7 @@ namespace YAT.Domain
 						// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
 						// not. Thus, it was decided to again remove the character encoding endianness awareness.
 
-						List<byte> pendingMultiBytesToDecode;
-						switch (d)
-						{
-							case IODirection.Tx:    pendingMultiBytesToDecode = this.txPendingMultiBytesToDecode; break;
-							case IODirection.Rx:    pendingMultiBytesToDecode = this.rxPendingMultiBytesToDecode; break;
-
-							case IODirection.Bidir:
-							case IODirection.None:  throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-							default:                throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-						}
-
-						if (((EncodingEx)e).IsUnicode)
+						if (((EncodingEx)e).IsUnicode) // Note that UTF-7 is not a Unicode encoding.
 						{
 							// Note that the following code is similar as above and below but with subtle differences
 							// such as no treatment of a lead byte, no treatment of 0xFF, treatment of 0xFFFD, comment,...
@@ -186,11 +172,11 @@ namespace YAT.Domain
 
 									if      ((code < 0x20) || (code == 0x7F))        // ASCII control characters.
 									{
-										return (base.ByteToElement((byte)code, ts, d, r));
+										return (base.ByteToElement((byte)code, ts, d, r, pendingMultiBytesToDecode));
 									}
 									else if (code == 0x20)                           // ASCII space.
 									{
-										return (base.ByteToElement((byte)code, ts, d, r));
+										return (base.ByteToElement((byte)code, ts, d, r, pendingMultiBytesToDecode));
 									}
 									else                                             // ASCII printable character.
 									{                                                            // 'effectiveCharCount' is 1 for sure.
@@ -231,11 +217,11 @@ namespace YAT.Domain
 							{
 								if      ((b < 0x20) || (b == 0x7F))                  // ASCII control characters.
 								{
-									return (base.ByteToElement(b, ts, d, r));
+									return (base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode));
 								}
 								else if (b == 0x20)                                  // ASCII space.
 								{
-									return (base.ByteToElement(b, ts, d, r));
+									return (base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode));
 								}
 								else if (CharEx.IsValidForUTF7((char)b))
 								{
@@ -291,11 +277,11 @@ namespace YAT.Domain
 										DisplayElement direct;
 										if      ((b < 0x20) || (b == 0x7F)) // ASCII control characters.
 										{
-											direct = base.ByteToElement(b, ts, d, r);
+											direct = base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode);
 										}
 										else if (b == 0x20)                 // ASCII space.
 										{
-											direct = base.ByteToElement(b, ts, d, r);
+											direct = base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode);
 										}
 										else if (CharEx.IsValidForUTF7((char)b))
 										{
@@ -356,11 +342,11 @@ namespace YAT.Domain
 								}
 								else if ((b < 0x20) || (b == 0x7F))          // ASCII control characters.
 								{
-									return (base.ByteToElement(b, ts, d, r));
+									return (base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode));
 								}
 								else if (b == 0x20)                          // ASCII space.
 								{
-									return (base.ByteToElement(b, ts, d, r));
+									return (base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode));
 								}
 								else                                         // ASCII printable character.
 								{
@@ -562,9 +548,6 @@ namespace YAT.Domain
 			base.InitializeProcess();
 
 			// Text specifics:
-			txPendingMultiBytesToDecode = new List<byte>(4); // Preset the required capacity to improve memory management; 4 is the maximum value for multi-byte characters.
-			rxPendingMultiBytesToDecode = new List<byte>(4); // Preset the required capacity to improve memory management; 4 is the maximum value for multi-byte characters.
-
 			using (var p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, Parser.Mode.RadixAndAsciiEscapes))
 			{
 				// Tx:
@@ -784,7 +767,7 @@ namespace YAT.Domain
 			DisplayElement de;
 			bool isBackspace;
 			if (!ControlCharacterHasBeenProcessed(b, ts, dir, out de, out isBackspace))
-				de = ByteToElement(b, ts, dir); // Default conversion to value or ASCII mnemonic.
+				de = ByteToElement(b, ts, dir, textLineState.PendingMultiBytesToDecode); // Default conversion to value or ASCII mnemonic.
 
 			var lp = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 

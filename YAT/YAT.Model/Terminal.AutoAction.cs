@@ -134,7 +134,7 @@ namespace YAT.Model
 						if (SettingsRoot.AutoAction.IsByteSequenceTriggered)
 						{
 							byte[] triggerSequence;
-							if (TryParseCommandToSequence(triggerCommand, out triggerSequence))
+							if (TryParseCommand(triggerCommand, out triggerSequence))
 							{
 								lock (this.autoActionTriggerHelperSyncObj)
 									this.autoActionTriggerHelper = new AutoTriggerHelper(triggerSequence);

@@ -42,9 +42,11 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Text;
 
 using MKY;
 using MKY.Text;
@@ -92,15 +94,19 @@ namespace YAT.Domain
 		// ByteTo.../...Element
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Terminals supporting other than <see cref="Encoding.IsSingleByte"/> require a state to accumulate multi-byte sequences.
+		/// This is provided by <paramref name="pendingMultiBytesToDecode"/>. Knowing that it seems a bit weird to find something
+		/// called "multi-byte" in the signature of a method called "byte", this is the most approriate approach found so far.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement ByteToElement(byte b, DateTime ts, IODirection d)
+		protected virtual DisplayElement ByteToElement(byte b, DateTime ts, IODirection d, List<byte> pendingMultiBytesToDecode)
 		{
 			switch (d)
 			{
-				case IODirection.Tx:   return (ByteToElement(b, ts, d, TerminalSettings.Display.TxRadix));
-				case IODirection.Rx:   return (ByteToElement(b, ts, d, TerminalSettings.Display.RxRadix));
+				case IODirection.Tx:    return (ByteToElement(b, ts, d, TerminalSettings.Display.TxRadix, pendingMultiBytesToDecode));
+				case IODirection.Rx:    return (ByteToElement(b, ts, d, TerminalSettings.Display.RxRadix, pendingMultiBytesToDecode));
 
 				case IODirection.Bidir:
 				case IODirection.None:  throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -108,11 +114,15 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Terminals supporting other than <see cref="Encoding.IsSingleByte"/> require a state to accumulate multi-byte sequences.
+		/// This is provided by <paramref name="pendingMultiBytesToDecode"/>. Knowing that it seems a bit weird to find something
+		/// called "multi-byte" in the signature of a method called "byte", this is the most approriate approach found so far.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement ByteToElement(byte b, DateTime ts, IODirection d, Radix r)
+		protected virtual DisplayElement ByteToElement(byte b, DateTime ts, IODirection d, Radix r, List<byte> pendingMultiBytesToDecode)
 		{
 			bool isControl;
 			bool isByteToHide;
@@ -189,7 +199,7 @@ namespace YAT.Domain
 					else if (b == ' ') // Space.
 					{
 						if (TerminalSettings.CharReplace.ReplaceSpace)
-							return (Settings.CharReplaceSettings.SpaceReplaceChar);
+							return (CharReplaceSettings.SpaceReplaceChar);
 						else
 							return (" ");
 					}

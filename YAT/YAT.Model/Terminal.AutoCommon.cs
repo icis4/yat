@@ -51,14 +51,14 @@ namespace YAT.Model
 		/// <summary>
 		/// Tries to parse the given command into the corresponding byte sequence, taking the current settings into account.
 		/// </summary>
-		protected virtual bool TryParseCommandToSequence(Command c, out byte[] sequence)
+		protected virtual bool TryParseCommand(Command c, out byte[] sequence)
 		{
 			if ((c != null) && (this.terminal != null))
 			{
 				if (c.IsSingleLineText)
 				{
 					byte[] lineResult;
-					if (this.terminal.TryParseText(c.SingleLineText, out lineResult, c.DefaultRadix))
+					if (this.terminal.TryParse(c.SingleLineText, c.DefaultRadix, out lineResult))
 					{
 						sequence = lineResult;
 						return (true);
@@ -71,7 +71,7 @@ namespace YAT.Model
 					foreach (string line in c.MultiLineText)
 					{
 						byte[] lineResult;
-						if (this.terminal.TryParseText(line, out lineResult, c.DefaultRadix))
+						if (this.terminal.TryParse(line, c.DefaultRadix, out lineResult))
 							commandResult.AddRange(lineResult);
 					}
 
