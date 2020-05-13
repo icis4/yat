@@ -54,13 +54,6 @@ namespace YAT.Domain
 		// Non-Public Methods
 		//==========================================================================================
 
-		/// <summary></summary>
-		protected override bool DoTryParse(string textToParse, Radix radix, Parser.Mode parseMode, out Parser.Result[] parseResult, out string textSuccessfullyParsed)
-		{
-			using (var p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, parseMode))
-				return (p.TryParse(textToParse, out parseResult, out textSuccessfullyParsed, radix));
-		}
-
 		/// <remarks>
 		/// <paramref name="forSomeTimeEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
@@ -86,7 +79,7 @@ namespace YAT.Domain
 			// Parse the item data:
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
-			if (DoTryParse(textToParse, item.DefaultRadix, item.ParseMode, out parseResult, out textSuccessfullyParsed))
+			if (TryParse(textToParse, item.DefaultRadix, item.ParseMode, out parseResult, out textSuccessfullyParsed))
 				DoSendText(forSomeTimeEventHelper, parseResult, item.IsLine);
 			else
 				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(textToParse, textSuccessfullyParsed)));

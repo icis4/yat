@@ -62,8 +62,7 @@ namespace YAT.Domain.Settings
 		/// Default is <see cref="EncodingEx.Default"/> which is <see cref="Encoding.UTF8"/>.
 		/// </summary>
 		/// <remarks>
-		/// <see cref="Parser.Parser.EncodingDefault"/> must not be used because that is
-		/// <see cref="Encoding.Default"/> that is limited to an ANSI code page.
+		/// <see cref="Encoding.Default"/> must not be used because that is limited to an ANSI code page.
 		/// </remarks>
 		public static readonly int EncodingDefault = (EncodingEx)EncodingEx.Default;
 

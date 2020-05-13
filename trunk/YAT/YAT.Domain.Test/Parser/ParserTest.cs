@@ -804,7 +804,7 @@ namespace YAT.Domain.Test.Parser
 		[Test, TestCaseSource(typeof(ParserTestData), "TestCases")]
 		public virtual void TestParser(string s, byte[] expectedBytes)
 		{
-			using (var p = new Domain.Parser.Parser(Domain.Parser.Mode.AllEscapes))
+			using (var p = new Domain.Parser.Parser(Domain.Parser.Mode.AllEscapes)) // Default encoding of UTF-8 is good enough for this test case.
 			{
 				byte[] actualBytes;
 				string successfullyParsed;
@@ -851,7 +851,7 @@ namespace YAT.Domain.Test.Parser
 		[Test, TestCaseSource(typeof(KeywordTestData), "TestCases")]
 		public virtual void TestParserKeyword(string s, Domain.Parser.Keyword expectedKeyword, int[] expectedArgs)
 		{
-			using (var p = new Domain.Parser.Parser(Domain.Parser.Mode.AllEscapes))
+			using (var p = new Domain.Parser.Parser(Domain.Parser.Mode.AllEscapes)) // Default encoding of UTF-8 is good enough for this test case.
 			{
 				Domain.Parser.Result[] results;
 				string successfullyParsed;
@@ -869,7 +869,7 @@ namespace YAT.Domain.Test.Parser
 		[Test, TestCaseSource(typeof(ErrorTestData), "TestCases")]
 		public virtual void TestParserError(string s, string expectedParsed, string expectedMessage)
 		{
-			using (var p = new Domain.Parser.Parser(Domain.Parser.Mode.AllEscapes))
+			using (var p = new Domain.Parser.Parser(Domain.Parser.Mode.AllEscapes)) // Default encoding of UTF-8 is good enough for this test case.
 			{
 				byte[] actualBytes;
 				string actualParsed;

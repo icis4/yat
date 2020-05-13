@@ -58,7 +58,7 @@ namespace YAT.Domain.Test.Terminal
 			const int WaitForChange   = 1500; // 1000 ms is not sufficient.
 			const int WaitForDisposal =  100;
 
-			using (var parser = new Domain.Parser.Parser(Domain.Parser.Mode.NoEscapes))
+			using (var parser = new Domain.Parser.Parser(Domain.Parser.Mode.NoEscapes)) // Default encoding of UTF-8 is good enough for this test case.
 			{
 				byte[] parseResult;
 

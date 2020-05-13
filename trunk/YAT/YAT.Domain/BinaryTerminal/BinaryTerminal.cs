@@ -30,6 +30,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
+using MKY.Text;
+
 #endregion
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure.
@@ -128,6 +130,42 @@ namespace YAT.Domain
 					return (null);
 			}
 		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		#region Parse
+		//------------------------------------------------------------------------------------------
+		// Parse
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Tries to parse <paramref name="s"/>, taking the current settings into account.
+		/// </summary>
+		protected override bool TryParse(string s, Radix defaultRadix, Parser.Mode parseMode, out Parser.Result[] result, out string textSuccessfullyParsed)
+		{
+			AssertUndisposed();
+
+			using (var p = new Parser.Parser((EncodingEx)BinaryTerminalSettings.EncodingFixed, TerminalSettings.IO.Endianness, parseMode))
+				return (p.TryParse(s, out result, out textSuccessfullyParsed, defaultRadix));
+		}
+
+		/// <summary>
+		/// Tries to parse <paramref name="s"/>, taking the current settings into account.
+		/// </summary>
+		public override bool TryParse(string s, Radix defaultRadix, out byte[] result)
+		{
+			AssertUndisposed();
+
+			using (var p = new Parser.Parser((EncodingEx)BinaryTerminalSettings.EncodingFixed, TerminalSettings.IO.Endianness, TerminalSettings.Send.Text.ToParseMode()))
+				return (p.TryParse(s, out result, defaultRadix));
+		}
+
+		#endregion
 
 		#endregion
 

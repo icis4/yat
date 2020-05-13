@@ -109,7 +109,7 @@ namespace YAT.Model
 						if (SettingsRoot.AutoResponse.IsByteSequenceTriggered)
 						{
 							byte[] triggerSequence;
-							if (TryParseCommandToSequence(triggerCommand, out triggerSequence))
+							if (TryParseCommand(triggerCommand, out triggerSequence))
 							{
 								lock (this.autoResponseTriggerHelperSyncObj)
 									this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerSequence);

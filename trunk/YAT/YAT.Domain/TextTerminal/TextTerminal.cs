@@ -269,9 +269,21 @@ namespace YAT.Domain
 		/// <summary>
 		/// Tries to parse <paramref name="s"/>, taking the current settings into account.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public override bool TryParseText(string s, out byte[] result, Radix defaultRadix = Radix.String)
+		protected override bool TryParse(string s, Radix defaultRadix, Parser.Mode parseMode, out Parser.Result[] result, out string textSuccessfullyParsed)
 		{
+			AssertUndisposed();
+
+			using (var p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, parseMode))
+				return (p.TryParse(s, out result, out textSuccessfullyParsed, defaultRadix));
+		}
+
+		/// <summary>
+		/// Tries to parse <paramref name="s"/>, taking the current settings into account.
+		/// </summary>
+		public override bool TryParse(string s, Radix defaultRadix, out byte[] result)
+		{
+			AssertUndisposed();
+
 			using (var p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, TerminalSettings.Send.Text.ToParseMode()))
 				return (p.TryParse(s, out result, defaultRadix));
 		}

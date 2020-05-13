@@ -725,13 +725,6 @@ namespace YAT.Domain
 			ForwardPacketToRawTerminal(data); // Nothing for further processing, simply forward.
 		}
 
-		/// <summary></summary>
-		protected virtual bool DoTryParse(string textToParse, Radix radix, Parser.Mode parseMode, out Parser.Result[] parseResult, out string textSuccessfullyParsed)
-		{
-			using (var p = new Parser.Parser(TerminalSettings.IO.Endianness, parseMode))
-				return (p.TryParse(textToParse, out parseResult, out textSuccessfullyParsed, radix));
-		}
-
 		/// <remarks>
 		/// <paramref name="forSomeTimeEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
@@ -739,7 +732,7 @@ namespace YAT.Domain
 		{
 			Parser.Result[] parseResult;
 			string textSuccessfullyParsed;
-			if (DoTryParse(item.Text, item.DefaultRadix, item.ParseMode, out parseResult, out textSuccessfullyParsed))
+			if (TryParse(item.Text, item.DefaultRadix, item.ParseMode, out parseResult, out textSuccessfullyParsed))
 				DoSendText(forSomeTimeEventHelper, parseResult, item.IsLine);
 			else
 				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(item.Text, textSuccessfullyParsed)));
@@ -962,8 +955,8 @@ namespace YAT.Domain
 					var text = de.Text;
 
 					Parser.Result[] parseResult;
-					string textSuccessfullyParsed;                 // A date/time format may conflict with YAT syntax.
-					if (DoTryParse(text, Radix.String, Parser.Mode.NoEscapes, out parseResult, out textSuccessfullyParsed))
+					string textSuccessfullyParsed;               // A date/time format may conflict with YAT syntax.
+					if (TryParse(text, Radix.String, Parser.Mode.NoEscapes, out parseResult, out textSuccessfullyParsed))
 						AppendTimeStampToPendingPacketWithoutForwardingToRawTerminalYet(parseResult, conflateDataQueue);
 					else
 						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, CreateParserErrorMessage(text, textSuccessfullyParsed)));
