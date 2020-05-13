@@ -223,10 +223,6 @@ namespace YAT.Domain
 								{
 									return (base.ByteToElement(b, ts, d, r, pendingMultiBytesToDecode));
 								}
-								else if (CharEx.IsValidForUTF7((char)b))
-								{
-									return (DecodeAndCreateElement(b, ts, d, r, e)); // 'IsMultiByte' but the current byte must result in a single character here.
-								}
 								else if (b == (byte)'+')                             // UTF-7 lead byte.
 								{
 									pendingMultiBytesToDecode.Clear();
@@ -234,12 +230,16 @@ namespace YAT.Domain
 
 									return (new DisplayElement.Nonentity());         // Nothing to decode (yet).
 								}
+								else if (CharEx.IsValidForUTF7((char)b))
+								{
+									return (DecodeAndCreateElement(b, ts, d, r, e)); // 'IsMultiByte' but the current byte must result in a single character here.
+								}
 								else
 								{
 									return (CreateInvalidByteWarning(b, ts, d, e));
 								}
 							}
-							else // (rxMultiByteDecodingStream.Count > 0) => Not lead byte.
+							else // (pendingMultiBytesToDecode.Count > 0) => Not lead byte.
 							{
 								if (b == (byte)'-')                                  // UTF-7 terminating byte.
 								{
@@ -292,7 +292,10 @@ namespace YAT.Domain
 											return (CreateInvalidByteWarning(b, ts, d, e));
 										}
 
-										// Combine into single element, accepting the limitation that a potential control character will be contained in a data element:
+										// Combine into single element, accepting two limitations:
+										//  a) Potential control characters will be contained in a data element.
+										//  b) Multiple characters will be contained in a data element and no space will be added for [Char] radix.
+										//      => FR #407 "Support for Base64 and Quoted-Printable" will also deal with UTF-7.
 
 										var origin = new List<byte>(decodingArray.Length + 1); // Preset the required capacity to improve memory management.
 										origin.AddRange(decodingArray);
@@ -353,7 +356,7 @@ namespace YAT.Domain
 									return (DecodeAndCreateElement(b, ts, d, r, e)); // 'IsMultiByte' but the current byte must result in a single character here.
 								}
 							}
-							else // (rxMultiByteDecodingStream.Count > 0) => Neither ASCII nor lead byte.
+							else // (pendingMultiBytesToDecode.Count > 0) => Neither ASCII nor lead byte.
 							{
 								pendingMultiBytesToDecode.Add(b);
 

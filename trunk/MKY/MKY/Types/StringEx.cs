@@ -900,6 +900,56 @@ namespace MKY
 
 		#endregion
 
+		#region Space
+		//------------------------------------------------------------------------------------------
+		// Space
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Spaces all characters of a <see cref="string"/> object.
+		/// </summary>
+		/// <param name="str">The string to space.</param>
+		/// <returns>
+		/// A new string that contains the spaced version of <paramref name="str"/>.
+		/// </returns>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		public static string Space(string str)
+		{
+			return (Space(str, ' '));
+		}
+
+		/// <summary>
+		/// Spaces all characters of a <see cref="string"/> object.
+		/// </summary>
+		/// <param name="str">The string to space.</param>
+		/// <param name="space">The character to use as space.</param>
+		/// <returns>
+		/// A new string that contains the spaced version of <paramref name="str"/>.
+		/// </returns>
+		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		public static string Space(string str, char space)
+		{
+			if (str == null)
+				throw (new ArgumentNullException("str"));
+
+			var sb = new StringBuilder((str.Length * 2) - 1);
+
+			bool isFirst = true;
+			foreach (char c in str)
+			{
+				if (isFirst)
+					isFirst = false;
+				else
+					sb.Append(space);
+
+				sb.Append(c);
+			}
+
+			return (sb.ToString());
+		}
+
+		#endregion
+
 		#region Index
 		//------------------------------------------------------------------------------------------
 		// Index
