@@ -224,8 +224,8 @@ namespace MKY.Text
 		/// <summary>US-ASCII.</summary>
 		ASCII = 20127,
 
-		/// <summary>Unicode (UTF-7).</summary>
-		UTF7 = 65000,
+	/////// <summary>Unicode (UTF-7).</summary>
+	////UTF7 = 65000 removed as that encoding belongs to the class of Base64 and Quoted-Printable (FR #407).
 
 		/// <summary>Unicode (UTF-8).</summary>
 		UTF8 = 65001,
@@ -727,7 +727,7 @@ namespace MKY.Text
 		private static EncodingInfoEx[] staticInfos =
 		{
 			new EncodingInfoEx(SupportedEncoding.ASCII,   "ASCII (ISO646-US)",         Encoding.ASCII),
-			new EncodingInfoEx(SupportedEncoding.UTF7,    "Unicode UTF-7",             Encoding.UTF7),
+		////new EncodingInfoEx(SupportedEncoding.UTF7,    "Unicode UTF-7",             Encoding.UTF7) removed as that encoding belongs to the class of Base64 and Quoted-Printable (FR #407).
 			new EncodingInfoEx(SupportedEncoding.UTF8,    "Unicode UTF-8",             Encoding.UTF8),
 			new EncodingInfoEx(SupportedEncoding.UTF16,   "Unicode UTF-16",            Encoding.Unicode),
 			new EncodingInfoEx(SupportedEncoding.UTF16BE, "Unicode UTF-16 Big Endian", Encoding.BigEndianUnicode),
@@ -943,7 +943,7 @@ namespace MKY.Text
 				}
 
 				case SupportedEncoding.UTF8:
-				default: // covers all SBCS as well as UTF-7 and all non-Unicode DBCS/MBCS (they are all ASCII compatible).
+				default: // Covers all SBCS as well as UTF-7 and all non-Unicode DBCS/MBCS (they are all ASCII compatible).
 				{
 					return (1);
 				}
@@ -1060,7 +1060,7 @@ namespace MKY.Text
 
 			// ASCII and Unicode
 			a.Add(new EncodingEx(SupportedEncoding.ASCII));				// US-ASCII
-			a.Add(new EncodingEx(SupportedEncoding.UTF7));				// Unicode (UTF-7)
+		////a.Add(new EncodingEx(SupportedEncoding.UTF7));				// Unicode (UTF-7) removed as that encoding belongs to the class of Base64 and Quoted-Printable (FR #407).
 			a.Add(new EncodingEx(SupportedEncoding.UTF8));				// Unicode (UTF-8)
 			a.Add(new EncodingEx(SupportedEncoding.UTF16));				// Unicode
 			a.Add(new EncodingEx(SupportedEncoding.UTF16BE));			// Unicode (Big-Endian)
