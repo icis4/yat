@@ -1035,7 +1035,7 @@ namespace YAT.Domain
 		/// </summary>
 		/// <remarks>
 		/// Useful to improve performance. Appending keeps number of display elements as low as
-		/// possible, thus iteration through display element gets faster.
+		/// possible, thus iteration through display elements gets faster.
 		/// </remarks>
 		public virtual void Append(DisplayElement other)
 		{

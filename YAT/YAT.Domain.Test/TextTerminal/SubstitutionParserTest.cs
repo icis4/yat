@@ -53,20 +53,15 @@ namespace YAT.Domain.Test.TextTerminal
 	[TestFixture]
 	public class SubstitutionParserTest
 	{
-		#region Tests
+		#region Test
 		//==========================================================================================
 		// Test
 		//==========================================================================================
 
-		#region Test SubstitutionParser
-		//------------------------------------------------------------------------------------------
-		// Test SubstitutionParser
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "bytes", Justification = "The naming emphasizes the difference between bytes and other parameters.")]
 		[Test, TestCaseSource(typeof(SubstitutionParserTestData), "TestCases")]
-		public virtual void TestSubstitutionParser(CharSubstitution substitution, string s, byte[] expectedBytes)
+		public virtual void Test(CharSubstitution substitution, string s, byte[] expectedBytes)
 		{
 			using (var p = new Domain.Parser.SubstitutionParser(substitution, Domain.Parser.Parser.EncodingDefault, Domain.Parser.Parser.EndiannessDefault, Domain.Parser.Mode.Default))
 			{
@@ -74,8 +69,6 @@ namespace YAT.Domain.Test.TextTerminal
 				Assert.That(actualBytes, Is.EqualTo(expectedBytes));
 			}
 		}
-
-		#endregion
 
 		#endregion
 	}
