@@ -128,7 +128,7 @@ namespace YAT.Domain
 			bool isByteToHide;
 			bool isError;
 
-			string text = ByteToText(b, ts, d, r, out isControl, out isByteToHide, out isError);
+			string text = ByteToText(b, ts, r, out isControl, out isByteToHide, out isError);
 
 			if      (isError)
 			{
@@ -152,13 +152,12 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		protected virtual string ByteToText(byte b, DateTime ts, IODirection d, Radix r, out bool isControl, out bool isByteToHide, out bool isError)
+		protected virtual string ByteToText(byte b, DateTime ts, Radix r, out bool isControl, out bool isByteToHide, out bool isError)
 		{
 			isByteToHide = false;                                         // Notes on hiding:
 			if      (b == 0x00)                                           //
@@ -218,13 +217,6 @@ namespace YAT.Domain
 					if (isByteToHide)
 					{
 						return (null); // Return nothing, ignore the character, this results in hiding.
-					}
-					else if (isControl)
-					{
-						if (TerminalSettings.CharReplace.ReplaceControlChars)
-							return (ByteToControlCharReplacementString(b, TerminalSettings.CharReplace.ControlCharRadix));
-						else
-							return (ByteToNumericRadixString(b, r)); // Current display radix.
 					}
 					else
 					{
@@ -331,9 +323,6 @@ namespace YAT.Domain
 		{
 			switch (r)
 			{
-				case ControlCharRadix.Char:
-					return (ByteToCharacterString(b));
-
 				case ControlCharRadix.Bin:
 				case ControlCharRadix.Oct:
 				case ControlCharRadix.Dec:
@@ -343,7 +332,7 @@ namespace YAT.Domain
 				case ControlCharRadix.AsciiMnemonic:
 					return (ByteToAsciiString(b));
 
-				default: // Includes 'String' and 'Unicode' which are not supported for control character replacement.
+				default: // Includes 'String', 'Char' and 'Unicode' which are not supported for control character replacement.
 					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' is an ASCII control character radix that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
@@ -384,8 +373,8 @@ namespace YAT.Domain
 		{
 			switch (d)
 			{
-				case IODirection.Tx:   return (new DisplayElement.TxControl(ts, origin, text));
-				case IODirection.Rx:   return (new DisplayElement.RxControl(ts, origin, text));
+				case IODirection.Tx:    return (new DisplayElement.TxControl(ts, origin, text));
+				case IODirection.Rx:    return (new DisplayElement.RxControl(ts, origin, text));
 
 				case IODirection.Bidir:
 				case IODirection.None:  throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));

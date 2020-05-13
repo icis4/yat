@@ -133,6 +133,11 @@ namespace YAT.Domain.Test
 		// Settings
 		//==========================================================================================
 
+		#region Settings > Text
+		//------------------------------------------------------------------------------------------
+		// Settings > Text
+		//------------------------------------------------------------------------------------------
+
 		internal static TerminalSettings GetTextSettings()
 		{
 			var settings = new TerminalSettings();
@@ -166,6 +171,48 @@ namespace YAT.Domain.Test
 		{
 			return (GetTcpAutoSocketTextSettings((IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
+
+		#endregion
+
+		#region Settings > Binary
+		//------------------------------------------------------------------------------------------
+		// Settings > Binary
+		//------------------------------------------------------------------------------------------
+
+		internal static TerminalSettings GetBinarySettings()
+		{
+			var settings = new TerminalSettings();
+			settings.TerminalType = TerminalType.Binary;
+			settings.UpdateTerminalTypeDependentSettings();
+			return (settings);
+		}
+
+		internal static TerminalSettings GetSerialPortBinarySettings(string portId)
+		{
+			var settings = GetBinarySettings();
+			settings.IO.IOType = IOType.SerialPort;
+			settings.IO.SerialPort.PortId = portId;
+			settings.UpdateIOTypeDependentSettings();
+			settings.UpdateIOSettingsDependentSettings();
+			return (settings);
+		}
+
+		internal static TerminalSettings GetTcpAutoSocketBinarySettings(IPNetworkInterfaceEx networkInterface)
+		{
+			var settings = GetBinarySettings();
+			settings.IO.IOType = IOType.TcpAutoSocket;
+			settings.UpdateIOTypeDependentSettings();
+			settings.IO.Socket.LocalInterface = networkInterface;
+			settings.UpdateIOSettingsDependentSettings();
+			return (settings);
+		}
+
+		internal static TerminalSettings GetTcpAutoSocketOnIPv4LoopbackBinarySettings()
+		{
+			return (GetTcpAutoSocketBinarySettings((IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
+		}
+
+		#endregion
 
 		#endregion
 

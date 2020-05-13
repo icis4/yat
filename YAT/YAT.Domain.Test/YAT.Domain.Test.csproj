@@ -86,6 +86,7 @@
     <Compile Include="..\YAT.Version.cs">
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
+    <Compile Include="BinaryTerminal\FormatTest.cs" />
     <Compile Include="GenericTestData.cs" />
     <Compile Include="Parser\ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Terminal\KeywordTimeStampTest.cs" />
     <Compile Include="Terminal\BreakTest.cs" />
     <Compile Include="TextTerminal\LineSendDelayTest.cs" />
+    <Compile Include="TextTerminal\FormatTest.cs" />
     <Compile Include="TextTerminal\WaitForResponseTest.cs" />
     <Compile Include="TextTerminal\EolTest.cs" />
     <Compile Include="TextTerminal\SubstitutionParserTest.cs" />

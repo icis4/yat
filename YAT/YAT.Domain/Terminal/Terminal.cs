@@ -1359,17 +1359,16 @@ namespace YAT.Domain
 		/// Currently limited to data of a single line. Refactoring would be required to format multiple lines
 		/// (<see cref="ProcessRawChunk(RawChunk)"/> instead of <see cref="ByteToElement(byte, DateTime, IODirection, Radix, List{byte})"/>).
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		public virtual string Format(byte[] data, IODirection d)
+		public virtual string Format(byte[] data, IODirection direction)
 		{
-			switch (d)
+			switch (direction)
 			{
-				case IODirection.Tx:    return (Format(data, d, TerminalSettings.Display.TxRadix));
-				case IODirection.Rx:    return (Format(data, d, TerminalSettings.Display.RxRadix));
+				case IODirection.Tx:    return (Format(data, direction, TerminalSettings.Display.TxRadix));
+				case IODirection.Rx:    return (Format(data, direction, TerminalSettings.Display.RxRadix));
 
 				case IODirection.Bidir:
-				case IODirection.None:  throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                throw (new ArgumentOutOfRangeException("d", d, MessageHelper.InvalidExecutionPreamble + "'" + d + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				case IODirection.None:  throw (new ArgumentOutOfRangeException("d", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("d", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -1381,18 +1380,29 @@ namespace YAT.Domain
 		/// Currently limited to data of a single line. Refactoring would be required to format multiple lines
 		/// (<see cref="ProcessRawChunk(RawChunk)"/> instead of <see cref="ByteToElement(byte, DateTime, IODirection, Radix, List{byte})"/>).
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "d", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		public virtual string Format(byte[] data, IODirection d, Radix r)
+		public virtual string Format(byte[] data, Radix radix)
+		{                                    // Direction is irrelevant for formatting string, would only be for coloring,...
+			return (Format(data, IODirection.Tx, radix));
+		}
+
+		/// <summary>
+		/// Formats the specified data sequence.
+		/// </summary>
+		/// <remarks>
+		/// \remind (2017-12-11 / MKY)
+		/// Currently limited to data of a single line. Refactoring would be required to format multiple lines
+		/// (<see cref="ProcessRawChunk(RawChunk)"/> instead of <see cref="ByteToElement(byte, DateTime, IODirection, Radix, List{byte})"/>).
+		/// </remarks>
+		protected virtual string Format(byte[] data, IODirection direction, Radix radix)
 		{
 			var lp = new DisplayElementCollection();
 
 			var pendingMultiBytesToDecode = new List<byte>(4); // Preset the required capacity to improve memory management; 4 is the maximum value for multi-byte characters.
 			foreach (byte b in data)
 			{                                                     // Time stamp is irrelevant for formatting.
-				var de = ByteToElement(b, DisplayElement.TimeStampDefault, d, r, pendingMultiBytesToDecode); // Binary terminals will ignore this,
-				lp.Add(de);                                                                                  // good enough for the moment, no need
-				AddContentSeparatorIfNecessary(d, lp, de);                                                   // implement this method abstract.
+				var de = ByteToElement(b, DisplayElement.TimeStampDefault, direction, radix, pendingMultiBytesToDecode); // Binary terminals will ignore this,
+				AddContentSeparatorIfNecessary(direction, lp, de);                                                       // good enough for the moment, no need
+				lp.Add(de);                                                                                              // implement this method abstract.
 			}
 
 			return (lp.ElementsToString());

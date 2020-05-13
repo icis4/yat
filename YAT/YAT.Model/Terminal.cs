@@ -4397,10 +4397,10 @@ namespace YAT.Model
 		/// <summary>
 		/// Formats the given data into a string, same as done by the monitor view.
 		/// </summary>
-		public virtual string Format(byte[] data, Domain.IODirection direction, Domain.Radix radix)
+		public virtual string Format(byte[] data, Domain.Radix radix)
 		{
 			AssertUndisposed();
-			return (this.terminal.Format(data, direction, radix));
+			return (this.terminal.Format(data, radix));
 		}
 
 		#endregion
