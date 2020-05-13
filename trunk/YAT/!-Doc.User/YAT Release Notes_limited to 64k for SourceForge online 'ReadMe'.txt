@@ -133,6 +133,7 @@ Important changes:
 - Consequently, chunk line break settings are now located in the text/binary specific dialog.
 - Adaptive monitor update rate further improved.
 - Calculation of byte/line rates improved.
+- For Bin/Oct/Dec/Hex/Unicode radix, ASCII control characters are no longer converted to mnemonics.
 - The time information of a line is no longer defined by hidden bytes like e.g. an initial XOn.
 - Option to not send XOn when opending a serial COM port or USB Ser/HID terminal (feat. req. #393).
 - Changes on-the-fly by keywords like \!(Port()), \!(PortSettings()), \!(Baud()),... are now
@@ -571,7 +572,7 @@ New:
 - [Send Text] without EOL by [Ctrl+Enter] or [Ctrl+F3] (feature requests #281, #283, #285).
 - Option to send data in Unicode notation as "\U+...." or C-style "\u...." or YAT-style "\U(....)
   as well as option to show data in Unicode notation "U+...." added (feature request #271).
-- Option to disable BOM (Unicode encoding preamble) when logging in UTF8 added (bug #363).
+- Option to disable BOM (Unicode encoding preamble) when logging in UTF-8 added (bug #363).
 - Option to disable formatting; useful when highest data throughput slows down the view (feat. #39).
 - Keywords with arguments \!(Delay(<ms>)), \!(LineDelay(<ms>)), \!(LineInterval(<ms>)) and
   \!(LineRepeat(<n>)) added (feature requests #13, #139).

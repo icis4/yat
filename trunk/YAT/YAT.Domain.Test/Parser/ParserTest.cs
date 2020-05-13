@@ -354,20 +354,20 @@ namespace YAT.Domain.Test.Parser
 				                                                                                                    //// "𝄞" not supported
 				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Windows1252), @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 }));
 
-				// UTF-7 [65000]:
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "abc", new byte[] { 0x61, 0x62, 0x63 }));
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "äöü", new byte[] { 0x2B, 0x41, 0x4F, 0x51, 0x41, 0x39, 0x67, 0x44, 0x38, 0x2D })); // +AOQA9gD8-
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "ÄÖÜ", new byte[] { 0x2B, 0x41, 0x4D, 0x51, 0x41, 0x31, 0x67, 0x44, 0x63, 0x2D })); // +AMQA1gDc-
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "$£€", new byte[] { 0x2B, 0x41, 0x43, 0x51, 0x41, 0x6F, 0x79, 0x43, 0x73, 0x2D })); // +ACQAoyCs-
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "čěř", new byte[] { 0x2B, 0x41, 0x51, 0x30, 0x42, 0x47, 0x77, 0x46, 0x5A, 0x2D })); // +AQ0BGwFZ-
-				                                                                 //// yi er zhou is U+4E00 U+4E8C U+5DDE
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "一二州", new byte[] { 0x2B, 0x54, 0x67, 0x42, 0x4F, 0x6A, 0x46, 0x33, 0x65, 0x2D })); // +TgBOjF3e-
-				                                                                 //// 'Vertical Horizontal Ellipsis' is U+FE19
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "︙", new byte[] { 0x2B, 0x2F, 0x68, 0x6B, 0x2D })); // +/hk-
-				                                                                 //// 'Notenschlüssel' is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "𝄞", new byte[] { 0x2B, 0x32, 0x44, 0x54, 0x64, 0x48, 0x67, 0x2D })); // +2DTdHg-
-
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, @"0\0<CR>1\n2", new byte[] { 0x30, 0x2B, 0x41, 0x41, 0x41, 0x2D, 0x0D, 0x31, 0x0A, 0x32 })); // 0+AAA-\r1\n2
+			////// UTF-7 [65000] removed as that encoding belongs to the class of Base64 and Quoted-Printable (FR #407).
+			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "abc", new byte[] { 0x61, 0x62, 0x63 }));
+			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "äöü", new byte[] { 0x2B, 0x41, 0x4F, 0x51, 0x41, 0x39, 0x67, 0x44, 0x38, 0x2D })); // +AOQA9gD8-
+			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "ÄÖÜ", new byte[] { 0x2B, 0x41, 0x4D, 0x51, 0x41, 0x31, 0x67, 0x44, 0x63, 0x2D })); // +AMQA1gDc-
+			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "$£€", new byte[] { 0x2B, 0x41, 0x43, 0x51, 0x41, 0x6F, 0x79, 0x43, 0x73, 0x2D })); // +ACQAoyCs-
+			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "čěř", new byte[] { 0x2B, 0x41, 0x51, 0x30, 0x42, 0x47, 0x77, 0x46, 0x5A, 0x2D })); // +AQ0BGwFZ-
+			////                                                                 //// yi er zhou is U+4E00 U+4E8C U+5DDE
+			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "一二州", new byte[] { 0x2B, 0x54, 0x67, 0x42, 0x4F, 0x6A, 0x46, 0x33, 0x65, 0x2D })); // +TgBOjF3e-
+			////                                                                 //// 'Vertical Horizontal Ellipsis' is U+FE19
+			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "︙", new byte[] { 0x2B, 0x2F, 0x68, 0x6B, 0x2D })); // +/hk-
+			////                                                                 //// 'Notenschlüssel' is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
+			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "𝄞", new byte[] { 0x2B, 0x32, 0x44, 0x54, 0x64, 0x48, 0x67, 0x2D })); // +2DTdHg-
+			////
+			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, @"0\0<CR>1\n2", new byte[] { 0x30, 0x2B, 0x41, 0x41, 0x41, 0x2D, 0x0D, 0x31, 0x0A, 0x32 })); // 0+AAA-\r1\n2
 
 				// UTF-8 [65001]:
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "abc", new byte[] { 0x61, 0x62, 0x63 }));

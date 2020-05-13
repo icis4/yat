@@ -128,10 +128,7 @@ namespace YAT.Domain.Test.TextTerminal
 					var data     = tuple.Item3;
 
 					foreach (Radix radix in RadixEx.GetItems())
-					{                                                        // TextTerminal.ByteToElement() has two severe limitations for UTF-7, see comments and FR #407 "Support for Base64 and Quoted-Printable" for details.
-						if ((encoding == Encoding.UTF7) && ((radix == Radix.Char) || (radix == Radix.String)))
-							continue;                                                                  // The text given by 'TestCaseTuples' does not work for UTF-7, thus ignored (yet).
-						             //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET Framework 4.x (see FR #329 for more information)
+					{                //// 'Notenschlüssel' is U+1D11E but U+10000 and above is not supported by .NET Framework 4.x (see FR #329 for more information)
 						if ((text == "𝄞") && ((radix == Radix.Char) || (radix == Radix.String)))
 							continue;
 
