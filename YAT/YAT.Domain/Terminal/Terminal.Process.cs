@@ -138,7 +138,7 @@ namespace YAT.Domain
 			}
 			else if (isControl)
 			{
-				if (RadixIsCharOrString(r) && TerminalSettings.CharReplace.ReplaceControlChars)
+				if (RadixIsStringOrChar(r) && TerminalSettings.CharReplace.ReplaceControlChars)
 					return (CreateControlElement(b, ts, dir, text));
 				else
 					return (CreateDataElement(b, ts, dir, text));
@@ -188,7 +188,7 @@ namespace YAT.Domain
 					}
 					else if (isControl)
 					{
-						if (RadixIsCharOrString(r) && TerminalSettings.CharReplace.ReplaceControlChars)
+						if (RadixIsStringOrChar(r) && TerminalSettings.CharReplace.ReplaceControlChars)
 							return (ByteToControlCharReplacementString(b, TerminalSettings.CharReplace.ControlCharRadix));
 						else
 							return (ByteToCharacterString(b));
@@ -378,18 +378,18 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected static bool RadixIsCharOrString(Radix r)
+		protected static bool RadixIsStringOrChar(Radix r)
 		{
-			return ((r == Radix.Char) || (r == Radix.String));
+			return ((r == Radix.String) || (r == Radix.Char));
 		}
 
 		/// <summary></summary>
-		protected virtual bool RadixIsCharOrString(IODirection dir)
+		protected virtual bool RadixIsStringOrChar(IODirection dir)
 		{
 			switch (dir)
 			{
-				case IODirection.Tx:    return (TerminalSettings.TxRadixIsCharOrString);
-				case IODirection.Rx:    return (TerminalSettings.RxRadixIsCharOrString);
+				case IODirection.Tx:    return (TerminalSettings.TxRadixIsStringOrChar);
+				case IODirection.Rx:    return (TerminalSettings.RxRadixIsStringOrChar);
 
 				case IODirection.Bidir:
 				case IODirection.None:  throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));

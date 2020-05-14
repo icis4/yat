@@ -397,23 +397,23 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool TxRadixIsCharOrString
+		public bool TxRadixIsStringOrChar
 		{
-			get { return ((Display.TxRadix == Radix.Char) || (Display.TxRadix == Radix.String)); }
+			get { return ((Display.TxRadix == Radix.String) || (Display.TxRadix == Radix.Char)); }
 		}
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool RxRadixIsCharOrString
+		public bool RxRadixIsStringOrChar
 		{
-			get { return ((Display.RxRadix == Radix.Char) || (Display.RxRadix == Radix.String)); }
+			get { return ((Display.RxRadix == Radix.String) || (Display.RxRadix == Radix.Char)); }
 		}
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool AnyRadixIsCharOrString
+		public bool AnyRadixIsStringOrChar
 		{
-			get { return (TxRadixIsCharOrString || RxRadixIsCharOrString); }
+			get { return (TxRadixIsStringOrChar || RxRadixIsStringOrChar); }
 		}
 
 		/// <summary>
