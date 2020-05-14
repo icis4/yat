@@ -852,7 +852,7 @@ namespace YAT.Domain
 
 				case 0x08: // <BS> (backspace)
 				{
-					if (RadixIsCharOrString(dir))
+					if (RadixIsStringOrChar(dir)) // Attention: This logic is also implemented in the text settings!
 					{
 						bool replace = (TerminalSettings.CharReplace.ReplaceControlChars && TerminalSettings.CharReplace.ReplaceBackspace);
 						if (!replace)
@@ -869,7 +869,7 @@ namespace YAT.Domain
 
 				case 0x09: // <TAB> (tabulator)
 				{
-					if (RadixIsCharOrString(dir))
+					if (RadixIsStringOrChar(dir)) // Attention: This logic is also implemented in the text settings!
 					{
 						bool replace = (TerminalSettings.CharReplace.ReplaceControlChars && TerminalSettings.CharReplace.ReplaceTab);
 						if (!replace)

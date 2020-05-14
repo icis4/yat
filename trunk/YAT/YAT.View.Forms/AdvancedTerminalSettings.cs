@@ -1206,19 +1206,19 @@ namespace YAT.View.Forms
 				checkBox_ShowCopyOfActiveLine.Checked = this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine;
 
 				// Char replace:
-				bool isCharOrString                         = this.settingsInEdit.Terminal.AnyRadixIsCharOrString; // Convenience shortcut.
+				bool isStringOrChar                         = this.settingsInEdit.Terminal.AnyRadixIsStringOrChar; // Convenience shortcut.
 				bool replaceControlChars                    = this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars; // Convenience shortcut.
-				checkBox_ReplaceControlCharacters.Enabled   =  isCharOrString;
-				checkBox_ReplaceControlCharacters.Checked   = (isCharOrString && replaceControlChars); // Attention: This logic is also implemented in the text terminal!
-				comboBox_ControlCharacterRadix.Enabled      = (isCharOrString && replaceControlChars);
+				checkBox_ReplaceControlCharacters.Enabled   =  isStringOrChar;
+				checkBox_ReplaceControlCharacters.Checked   = (isStringOrChar && replaceControlChars); // Attention: This logic is also implemented in the text terminal!
+				comboBox_ControlCharacterRadix.Enabled      = (isStringOrChar && replaceControlChars);
 				comboBox_ControlCharacterRadix.SelectedItem = (Domain.ControlCharRadixEx)(this.settingsInEdit.Terminal.CharReplace.ControlCharRadix);
 
-				bool replaceBackspaceEnabled                = (isText && isCharOrString && replaceControlChars); // Attention: This logic is also implemented in the text terminal!
+				bool replaceBackspaceEnabled                = (isText && isStringOrChar && replaceControlChars); // Attention: This logic is also implemented in the text terminal!
 				checkBox_ReplaceBackspace.Enabled           =  replaceBackspaceEnabled;
 				checkBox_ReplaceBackspace.Checked           = (replaceBackspaceEnabled && this.settingsInEdit.Terminal.CharReplace.ReplaceBackspace);
 				label_ReplaceBackspace.Enabled              =  replaceBackspaceEnabled;
 
-				bool replaceTabEnabled                      = (isText && isCharOrString && replaceControlChars); // Attention: This logic is also implemented in the text terminal!
+				bool replaceTabEnabled                      = (isText && isStringOrChar && replaceControlChars); // Attention: This logic is also implemented in the text terminal!
 				checkBox_ReplaceTab.Enabled                 =  replaceTabEnabled;
 				checkBox_ReplaceTab.Checked                 = (replaceTabEnabled && this.settingsInEdit.Terminal.CharReplace.ReplaceTab);
 				label_ReplaceTab.Enabled                    =  replaceTabEnabled;
