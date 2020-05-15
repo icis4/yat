@@ -124,8 +124,8 @@ Important changes:
 - Text terminals: Line content and EOL is no longer sent in two separate chunks (feature req. #333).
 - Element and line processing refactored (precondition for feature requests #19, #366, #367 and fix
   of bugs #176, #371, #477, #478 as well as preparing upcoming feature request #74).
-- Unidirectional Tx and Rx monitors panels now use a separate line detection mechanism and no longer
-  break lines at the same location as the bidirectional monitor panel (bugs #371 and #477).
+- Unidirectional Tx and Rx panels now use a separate line detection mechanism and no longer break
+  lines at the same location as the bidirectional panel (bugs #371 and #477).
 - [Monitor Context Menu > Clear] no longer clears all panels (Tx/Bidir/Rx), just the selected. Use
   [Main Menu > Terminal > Clear [All]] or [Ctrl+L] to clear all panels (related to change above).
 - Binary terminals: Lines are no longer broken each 16 bytes by default, they now by default are

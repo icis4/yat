@@ -168,7 +168,7 @@ of the other settings.</value>
   </data>
   <data name="checkBox_GlueCharsOfLine.ToolTip" xml:space="preserve">
     <value>This option reduces the number of line breaks in the
-bidirectional monitor when direction (or I/O device)
+[Bidirectional Panel] when direction (or I/O device)
 changes.
 
 Disabling this option increases the accuracy in terms of
