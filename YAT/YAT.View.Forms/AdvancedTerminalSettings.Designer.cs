@@ -1290,7 +1290,8 @@
 			this.checkBox_DirectionLineBreak.TabIndex = 21;
 			this.checkBox_DirectionLineBreak.Text = "...when direction changes";
 			this.toolTip.SetToolTip(this.checkBox_DirectionLineBreak, "When the reduce/glue option is enabled below, this\r\noption is only relevant after" +
-        " the timeout has elapsed.");
+        " the timeout has elapsed.\r\n\r\nThis option solely applies to the [Bidirectional Pa" +
+        "nel].");
 			this.checkBox_DirectionLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_DirectionLineBreak_CheckedChanged);
 			// 
 			// comboBox_RxRadix
