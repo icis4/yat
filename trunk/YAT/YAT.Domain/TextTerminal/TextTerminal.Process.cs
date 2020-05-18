@@ -73,10 +73,11 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private TextLineState txUnidirTextLineState;
-		private TextLineState txBidirTextLineState;
-		private TextLineState rxBidirTextLineState;
-		private TextLineState rxUnidirTextLineState;
+		private TextUnidirState textTxState;
+		private TextUnidirState textBidirTxState;
+		private TextBidirState  textBidirState;
+		private TextUnidirState textBidirRxState;
+		private TextUnidirState textRxState;
 
 		private object waitForResponseClearanceSyncObj = new object();
 		private int waitForResponseResponseCounter; // = 0 and will again be initialized to that.
@@ -435,8 +436,8 @@ namespace YAT.Domain
 						eol = p.Parse(TextTerminalSettings.TxEol);
 					}
 
-					this.txUnidirTextLineState = new TextLineState(eol);
-					this.txBidirTextLineState  = new TextLineState(eol);
+					this.textTxState      = new TextUnidirState(eol);
+					this.textBidirTxState = new TextUnidirState(eol);
 				}
 
 				// Rx:
@@ -451,8 +452,13 @@ namespace YAT.Domain
 						eol = p.Parse(TextTerminalSettings.RxEol);
 					}
 
-					this.rxUnidirTextLineState = new TextLineState(eol);
-					this.rxBidirTextLineState  = new TextLineState(eol);
+					this.textBidirRxState = new TextUnidirState(eol);
+					this.textRxState      = new TextUnidirState(eol);
+				}
+
+				// Bidir:
+				{
+					this.textBidirState = new TextBidirState();
 				}
 			}
 
@@ -488,50 +494,155 @@ namespace YAT.Domain
 			// Text specifics:
 			switch (repositoryType)
 			{
-				case RepositoryType.Tx:    this.txUnidirTextLineState.Reset();                                     break;
-				case RepositoryType.Bidir: this.txBidirTextLineState .Reset(); this.rxBidirTextLineState .Reset(); break;
-				case RepositoryType.Rx:                                        this.rxUnidirTextLineState.Reset(); break;
+				case RepositoryType.Tx:    this.textTxState     .Reset();                                                             break;
+				case RepositoryType.Bidir: this.textBidirTxState.Reset(); this.textBidirState.Reset(); this.textBidirRxState.Reset(); break;
+				case RepositoryType.Rx:                                                                this.textRxState     .Reset(); break;
 
 				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
-		}
-
-		/// <remarks>
-		/// This method shall not be overridden as it accesses the quasi-private member
-		/// <see cref="TextTerminalSettings"/>.
-		/// </remarks>
-		protected Settings.TextDisplaySettings GetTextDisplaySettings(IODirection dir)
-		{
-			switch (dir)
-			{
-				case IODirection.Tx:    return (TextTerminalSettings.TxDisplay);
-				case IODirection.Rx:    return (TextTerminalSettings.RxDisplay);
-
-				case IODirection.Bidir:
-				case IODirection.None:  throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
 		/// <remarks>
 		/// This method shall not be overridden as it accesses the private members
-		/// <see cref="txUnidirTextLineState"/>, <see cref="rxUnidirTextLineState"/>,
-		/// <see cref="txBidirTextLineState"/>, <see cref="rxBidirTextLineState"/>.
+		/// <see cref="textTxState"/>, <see cref="textRxState"/>,
+		/// <see cref="textBidirTxState"/>, <see cref="textBidirRxState"/>.
 		/// </remarks>
-		protected TextLineState GetTextLineState(RepositoryType repositoryType, IODirection dir)
+		protected TextUnidirState GetTextUnidirState(RepositoryType repositoryType, IODirection dir)
 		{
 			switch (repositoryType)
 			{
-				case RepositoryType.Tx:    return (this.txUnidirTextLineState);
-				case RepositoryType.Rx:    return (this.rxUnidirTextLineState);
+				case RepositoryType.Tx:    return (this.textTxState);
+				case RepositoryType.Rx:    return (this.textRxState);
 
-				case RepositoryType.Bidir: if (dir == IODirection.Tx) { return (this.txBidirTextLineState); }
-				                           else                       { return (this.rxBidirTextLineState); }
+				case RepositoryType.Bidir: if (dir == IODirection.Tx) { return (this.textBidirTxState); }
+				                           else                       { return (this.textBidirRxState); }
 				                           //// Invalid directions are asserted elsewhere.
 
 				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <remarks>
+		/// This method shall not be overridden, same as <see cref="GetTextUnidirState"/>.
+		/// </remarks>
+		protected TextBidirState GetTextBidirState(RepositoryType repositoryType)
+		{
+			switch (repositoryType)
+			{
+				case RepositoryType.Bidir: { return (this.textBidirState); }
+
+				case RepositoryType.Tx:
+				case RepositoryType.Rx:
+				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary>
+		/// Implements the text terminal specific <see cref="Settings.TextTerminalSettings.GlueCharsOfLine"/> functionality.
+		/// </summary>
+		/// <remarks>
+		/// On main processing, the two affected repositories will be processed simultaneously.
+		/// On alternative processing, i.e. on reload, only one repository will be affected.
+		/// </remarks>
+		/// <remarks>
+		/// This method must synchronize against <see cref="Terminal.ChunkVsTimeoutSyncObj"/>!
+		///
+		/// Saying hello to StyleCop ;-.
+		/// </remarks>
+		protected override void ProcessRawChunk(RawChunk chunk, bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
+		{
+			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
+			{
+				if (TextTerminalSettings.GlueCharsOfLine.Enabled)
+				{
+					if (bidirIsAffected) // Glueing only applies to bidirectional processing.
+					{
+						var textBidirState = GetTextBidirState(RepositoryType.Bidir);
+
+						// 1. Process previously postponed chunks/bytes:
+
+						while ((textBidirState.PostponedChunks.Count > 0) || (textBidirState.PostponedChunkBytes != null))
+						{
+							if (textBidirState.PostponedChunks.Count > 0)
+							{
+								foreach (var postponedChunk in textBidirState.PostponedChunks)
+									base.ProcessRawChunk(postponedChunk, false, true, false);
+
+								textBidirState.PostponedChunks.Clear();
+							}
+
+							if (textBidirState.PostponedChunkBytes != null)
+							{
+								var tuple = textBidirState.PostponedChunkBytes;
+								var raw = new RawChunk
+								              (
+								                  tuple.Item1.ToArray(),
+								                  tuple.Item2,
+								                  tuple.Item3,
+								                  tuple.Item4
+								              );
+								base.ProcessRawChunk(raw, false, true, false);
+							}
+						}
+
+						// 2. Process the current chunk:
+
+						var lineState = GetLineState(RepositoryType.Bidir);
+						if (lineState.Position != LinePosition.Begin) // Glueing is only needed when already within a line.
+						{
+							var overallState = GetOverallState(RepositoryType.Bidir);
+							var deviceOrDirectionHasChanged = false;
+
+							var isServerSocket = TerminalSettings.IO.IOTypeIsServerSocket;
+							if (isServerSocket && TerminalSettings.Display.DeviceLineBreakEnabled) // Attention: This 'isServerSocket' restriction is also implemented at other locations!
+							{
+								if (!overallState.DeviceLineBreak.IsFirstChunk)
+								{
+									if (DeviceHasChanged(chunk.Device, overallState.DeviceLineBreak.Device))
+										deviceOrDirectionHasChanged = true;
+								}
+							}
+
+							if (TerminalSettings.Display.DirectionLineBreakEnabled)
+							{
+								if (!overallState.DirectionLineBreak.IsFirstChunk)
+								{
+									if (DirectionHasChanged(chunk.Direction, overallState.DirectionLineBreak.Direction))
+										deviceOrDirectionHasChanged = true;
+								}
+							}
+
+							if (deviceOrDirectionHasChanged)
+							{
+								var postponeLineBreak = !GlueCharsOfLineTimeoutHasElapsed(chunk.TimeStamp, lineState.TimeStamp);
+								if (postponeLineBreak)
+								{
+									textBidirState.PostponedChunks.Add(chunk); // Chunk will be processed later,
+									bidirIsAffected = false;                   // skip it for this processing run.
+								}
+							}
+						} // if (position != Begin)
+					} // if (bidirIsAffected)
+				} // if (GlueCharsOfLine.Enabled)
+
+				base.ProcessRawChunk(chunk, txIsAffected, bidirIsAffected, rxIsAffected);
+			} // lock (ChunkVsTimeoutSyncObj)
+		}
+
+		/// <summary></summary>
+		protected virtual bool GlueCharsOfLineTimeoutHasElapsed(DateTime instantInQuestion, DateTime lineTimeStamp)
+		{
+			if (TextTerminalSettings.GlueCharsOfLine.Timeout != Timeout.Infinite)
+			{
+				var duration = (instantInQuestion - lineTimeStamp).TotalMilliseconds;
+				return (duration >= TextTerminalSettings.GlueCharsOfLine.Timeout);
+			}
+			else // Infinite:
+			{
+				return (false);
 			}
 		}
 
@@ -544,10 +655,38 @@ namespace YAT.Domain
 		                                  byte b, DateTime ts, string dev, IODirection dir,
 		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
-			var processState        = GetProcessState(repositoryType);
-			var lineState           = processState.Line; // Convenience shortcut.
-			var textLineState       = GetTextLineState(repositoryType, dir);
-			var textDisplaySettings = GetTextDisplaySettings(dir);
+			var processState = GetProcessState(repositoryType);
+			var lineState = processState.Line; // Convenience shortcut.
+
+			// The first byte of a line will sequentially trigger the [Begin] as well as [Content]
+			// condition below. In the normal case, the line will then contain the first displayed
+			// element. However, when initially receiving a hidden e.g. <XOn>, the line will yet be
+			// empty. Then, when subsequent bytes are received, even when seconds later, the line's
+			// initial time stamp is kept. This is illogical, the time stamp of a hidden <XOn> shall
+			// not define the time stamp of the line, thus handle such case by rebeginning the line.
+			if (lineState.Position == LinePosition.End)
+			{
+				if (TextTerminalSettings.GlueCharsOfLine.Enabled) // Potentially postpone remaining byte(s) of chunk
+				{                                                 // until previously postponed chunk(s) has been processed.
+					if (repositoryType == RepositoryType.Bidir) // Glueing only applies to bidirectional processing.
+					{
+						var textBidirState = GetTextBidirState(repositoryType);
+						if (textBidirState.PostponedChunks.Count > 0)
+						{
+							var postponedChunkTimeStamp = textBidirState.PostponedChunks[0].TimeStamp;
+							if ((postponedChunkTimeStamp < ts) || GlueCharsOfLineTimeoutHasElapsed(postponedChunkTimeStamp, lineState.TimeStamp))
+							{
+								if (textBidirState.PostponedChunkBytes == null)
+									textBidirState.PostponedChunkBytes = new Tuple<List<byte>, DateTime, string, IODirection>(new List<byte>(new byte[] { b }), ts, dev, dir); // Create mini-chunks instead of grouping again.
+								else
+									textBidirState.PostponedChunkBytes.Item1.Add(b);
+
+								return; // Byte will be processed later, skip it and the subsequent ones of the chunk.
+							}
+						}
+					}
+				}
+			}
 
 			// The first byte of a line will sequentially trigger the [Begin] as well as [Content]
 			// condition below. In the normal case, the line will then contain the first displayed
@@ -562,7 +701,7 @@ namespace YAT.Domain
 				DoLineBegin(repositoryType, processState, ts, dev, dir, elementsToAdd);
 
 			if (lineState.Position == LinePosition.Content)
-				DoLineContent(repositoryType, processState, textLineState, textDisplaySettings, b, ts, dev, dir, elementsToAdd);
+				DoLineContent(repositoryType, processState, b, ts, dev, dir, elementsToAdd);
 
 			if (lineState.Position == LinePosition.End)
 				DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
@@ -575,10 +714,11 @@ namespace YAT.Domain
 		protected virtual void DoLineContentCheck(RepositoryType repositoryType, ProcessState processState,
 		                                          DateTime ts, IODirection dir)
 		{
-			var lineState     = processState.Line; // Convenience shortcut.
-			var textLineState = GetTextLineState(repositoryType, dir);
+			var lineState = processState.Line; // Convenience shortcut.
 
-			var isYetEmpty = (lineState.IsYetEmpty && textLineState.IsYetEmpty);
+			var textUnidirState = GetTextUnidirState(repositoryType, dir);
+
+			var isYetEmpty = (lineState.IsYetEmpty && textUnidirState.IsYetEmpty);
 			if (isYetEmpty)
 			{
 				var left  = TerminalSettings.Display.InfoEnclosureLeftCache;
@@ -630,29 +770,32 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private void DoLineContent(RepositoryType repositoryType, ProcessState processState, TextLineState textLineState, Settings.TextDisplaySettings textDisplaySettings,
+		private void DoLineContent(RepositoryType repositoryType, ProcessState processState,
 		                           byte b, DateTime ts, string dev, IODirection dir,
 		                           DisplayElementCollection elementsToAdd)
 		{
 			var lineState = processState.Line; // Convenience shortcut.
 
+			var textUnidirState     = GetTextUnidirState(repositoryType, dir);
+			var textDisplaySettings = GetTextDisplaySettings(dir);
+
 			// Convert content:
 			DisplayElement de;
 			bool isBackspace;
 			if (!ControlCharacterHasBeenProcessed(b, ts, dir, out de, out isBackspace))
-				de = ByteToElement(b, ts, dir, textLineState.PendingMultiBytesToDecode); // Default conversion to value or ASCII mnemonic.
+				de = ByteToElement(b, ts, dir, textUnidirState.PendingMultiBytesToDecode); // Default conversion to value or ASCII mnemonic.
 
 			var lp = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 
 			// Prepare EOL:
-			if (!textLineState.EolOfGivenDevice.ContainsKey(dev))                                      // It is OK to only access or add to the collection,
-				textLineState.EolOfGivenDevice.Add(dev, new SequenceQueue(textLineState.EolSequence)); // this will not lead to excessive use of memory,
+			if (!textUnidirState.EolOfGivenDevice.ContainsKey(dev))                                      // It is OK to only access or add to the collection,
+				textUnidirState.EolOfGivenDevice.Add(dev, new SequenceQueue(textUnidirState.EolSequence)); // this will not lead to excessive use of memory,
 			                                                                                           // since there is only a given number of devices.
-			// Add byte to EOL:                                                                        // Applies to TCP and UDP terminals only.
-			textLineState.EolOfGivenDevice[dev].Enqueue(b);
+			// Add byte to EOL:                                                                        // Applies to TCP and UDP server terminals only.
+			textUnidirState.EolOfGivenDevice[dev].Enqueue(b);
 
 			// Evaluate EOL, i.e. check whether EOL is about to start or has already started:
-			if (textLineState.EolOfGivenDevice[dev].IsCompleteMatch)
+			if (textUnidirState.EolOfGivenDevice[dev].IsCompleteMatch)
 			{
 				if (de.IsContent)
 				{
@@ -665,7 +808,7 @@ namespace YAT.Domain
 					{
 					////lineState.RetainedPotentialEolElements.Add(de); // Adding is useless, Confirm...() below will clear the elements anyway.
 
-						ConfirmRetainedUnconfirmedHiddenEolElements(textLineState);
+						ConfirmRetainedUnconfirmedHiddenEolElements(textUnidirState);
 					}
 
 					lineState.Position = LinePosition.End;
@@ -675,19 +818,19 @@ namespace YAT.Domain
 					// line breaks, i.e. the other ways to trigger a line break (chunk, length, timed).
 
 					if ((TextTerminalSettings.WaitForResponse.Enabled) && (repositoryType == RepositoryType.Rx))
-					{                                                 // Rather than (dir == IODirection.Rx) which
-						NotifyLineResponse();                         // would cover two repositories (Rx and Bidir).
+					{                                                  // Rather than (dir == IODirection.Rx) which
+						NotifyLineResponse();                          // would cover two repositories (Rx and Bidir).
 					}
 				}
 				else
 				{
 					lp.Add(de); // Still add non-content element, could e.g. be a multi-byte error message.
 				}
-			}                                                                    // Note the inverted implementation sequence:
-			else if (textLineState.EolOfGivenDevice[dev].IsPartlyMatchContinued) //  1. CompleteMatch        (last trigger, above)
-			{                                                                    //  2. PartlyMatchContinued (intermediate, here)
-				if (de.IsContent)                                                //  3. PartlyMatchBeginning (first trigger, below)
-				{                                                                //  4. Unrelatd to EOL      (any time, further below)
+			}                                                                      // Note the inverted implementation sequence:
+			else if (textUnidirState.EolOfGivenDevice[dev].IsPartlyMatchContinued) //  1. CompleteMatch        (last trigger, above)
+			{                                                                      //  2. PartlyMatchContinued (intermediate, here)
+				if (de.IsContent)                                                  //  3. PartlyMatchBeginning (first trigger, below)
+				{                                                                  //  4. Unrelatd to EOL      (any time, further below)
 					if (TextTerminalSettings.ShowEol)
 					{
 						AddContentSeparatorIfNecessary(lineState, dir, lp, de);
@@ -695,7 +838,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						textLineState.RetainedUnconfirmedHiddenEolElements.Add(de); // No clone needed as element is no more used below.
+						textUnidirState.RetainedUnconfirmedHiddenEolElements.Add(de); // No clone needed as element is no more used below.
 					}
 				}
 				else
@@ -703,10 +846,10 @@ namespace YAT.Domain
 					lp.Add(de); // Still add non-content element, could e.g. be a multi-byte error message.
 				}
 			}
-			else if (textLineState.EolOfGivenDevice[dev].IsPartlyMatchBeginning)
+			else if (textUnidirState.EolOfGivenDevice[dev].IsPartlyMatchBeginning)
 			{
 				// Previous was no match, retained potential EOL elements can be treated as non-EOL:
-				ReleaseRetainedUnconfirmedHiddenEolElements(lineState, textLineState, dir, lp);
+				ReleaseRetainedUnconfirmedHiddenEolElements(lineState, textUnidirState, dir, lp);
 
 				if (de.IsContent)
 				{
@@ -717,7 +860,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						textLineState.RetainedUnconfirmedHiddenEolElements.Add(de); // No clone needed as element is no more used below.
+						textUnidirState.RetainedUnconfirmedHiddenEolElements.Add(de); // No clone needed as element is no more used below.
 
 						// Potential but not yet confirmed EOL elements shall be retained until EOL
 						// is either confirmed or dismissed, in order to...
@@ -743,7 +886,7 @@ namespace YAT.Domain
 			else
 			{
 				// No match at all, retained potential EOL elements can be treated as non-EOL:
-				ReleaseRetainedUnconfirmedHiddenEolElements(lineState, textLineState, dir, lp);
+				ReleaseRetainedUnconfirmedHiddenEolElements(lineState, textUnidirState, dir, lp);
 
 				// Add the current element, which for sure is not related to EOL:
 				AddContentSeparatorIfNecessary(lineState, dir, lp, de);
@@ -767,7 +910,7 @@ namespace YAT.Domain
 					}
 				}
 
-				textLineState.NotifyShownCharCount(lp.CharCount);
+				textUnidirState.NotifyShownCharCount(lp.CharCount);
 				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
 				elementsToAdd.AddRange(lp);
 
@@ -796,14 +939,13 @@ namespace YAT.Domain
 						}
 
 						// Don't forget to adjust state:
-						textLineState.NotifyShownCharCount(-1);
+						textUnidirState.NotifyShownCharCount(-1);
 					}
 				}
 			}
 
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
-			if ((textDisplaySettings.LengthLineBreak.Enabled) &&
-			    (lineState.Position != LinePosition.End))
+			if ((lineState.Position != LinePosition.End) && (textDisplaySettings.LengthLineBreak.Enabled))
 			{
 				if (lineState.Elements.CharCount >= textDisplaySettings.LengthLineBreak.Length)
 					lineState.Position = LinePosition.End;
@@ -814,8 +956,7 @@ namespace YAT.Domain
 
 			if (lineState.Position != LinePosition.End)
 			{
-				if ((lineState.Elements.CharCount > TerminalSettings.Display.MaxLineLength) &&
-				    (lineState.Position != LinePosition.ContentExceeded))
+				if ((lineState.Position != LinePosition.ContentExceeded) && (lineState.Elements.CharCount > TerminalSettings.Display.MaxLineLength))
 				{
 					lineState.Position = LinePosition.ContentExceeded;
 
@@ -896,28 +1037,28 @@ namespace YAT.Domain
 		/// <summary>
 		/// Confirms the retained unconfirmed hidden EOL elements by discarding them.
 		/// </summary>
-		private static void ConfirmRetainedUnconfirmedHiddenEolElements(TextLineState textLineState)
+		private static void ConfirmRetainedUnconfirmedHiddenEolElements(TextUnidirState textUnidirState)
 		{
-			if (textLineState.RetainedUnconfirmedHiddenEolElements.Count > 0)
+			if (textUnidirState.RetainedUnconfirmedHiddenEolElements.Count > 0)
 			{
-				textLineState.RetainedUnconfirmedHiddenEolElements.Clear();
+				textUnidirState.RetainedUnconfirmedHiddenEolElements.Clear();
 			}
 		}
 
 		/// <summary>
 		/// Releases the retained unconfirmed hidden EOL elements by adding them to <paramref name="lp"/>.
 		/// </summary>
-		private void ReleaseRetainedUnconfirmedHiddenEolElements(LineState lineState, TextLineState textLineState, IODirection dir, DisplayElementCollection lp)
+		private void ReleaseRetainedUnconfirmedHiddenEolElements(LineState lineState, TextUnidirState textUnidirState, IODirection dir, DisplayElementCollection lp)
 		{
-			if (textLineState.RetainedUnconfirmedHiddenEolElements.Count > 0)
+			if (textUnidirState.RetainedUnconfirmedHiddenEolElements.Count > 0)
 			{
-				foreach (var de in textLineState.RetainedUnconfirmedHiddenEolElements)
+				foreach (var de in textUnidirState.RetainedUnconfirmedHiddenEolElements)
 				{
 					AddContentSeparatorIfNecessary(lineState, dir, lp, de);
 					lp.Add(de); // No clone needed as element is no more used below.
 				}
 
-				textLineState.RetainedUnconfirmedHiddenEolElements.Clear();
+				textUnidirState.RetainedUnconfirmedHiddenEolElements.Clear();
 			}
 		}
 
@@ -932,16 +1073,17 @@ namespace YAT.Domain
 			// Note: The test cases of [YAT - Test.ods]::[YAT.Domain.Terminal] cover the empty line cases.
 
 			var lineState = processState.Line; // Convenience shortcut.
-			var textLineState = GetTextLineState(repositoryType, lineState.Direction);
+
+			var textUnidirState = GetTextUnidirState(repositoryType, lineState.Direction);
 			var dev = lineState.Device;
 
 			// Note that, in case of e.g. a timed line break, retained potential EOL elements will be handled by DoLineContent().
 			// This is needed because potential EOL elements are potentially hidden. Opposed to binary terminals, where all bytes are shown.
 			                                                              // This count corresponds to the current line. Non-SBCS characters are only counted if complete.
 			var isEmptyLine                        = (lineState.Elements.CharCount == 0);
-			var isEmptyLineWithHiddenNonEol        = (isEmptyLine && !textLineState.EolIsAnyMatch(dev));
-			var isEmptyLineWithPendingEol          = (isEmptyLine &&  textLineState.EolIsAnyMatch(dev));                                        // No empty line formerly shown.
-			var isEmptyLineWithPendingEolToBeShown = (isEmptyLine &&  textLineState.EolIsCompleteMatch(dev) && (textLineState.ShownCharCount == 0));
+			var isEmptyLineWithHiddenNonEol        = (isEmptyLine && !textUnidirState.EolIsAnyMatch(dev));
+			var isEmptyLineWithPendingEol          = (isEmptyLine &&  textUnidirState.EolIsAnyMatch(dev));                                       // No empty line formerly shown.
+			var isEmptyLineWithPendingEolToBeShown = (isEmptyLine &&  textUnidirState.EolIsCompleteMatch(dev) && (textUnidirState.ShownCharCount == 0));
 
 			if (isEmptyLineWithHiddenNonEol) // While intended empty lines must be shown, potentially suppress
 			{                                // empty lines that only contain hidden non-EOL character(s) (e.g. hidden 0x00):
@@ -983,7 +1125,7 @@ namespace YAT.Domain
 			}
 
 			// Finalize the line:
-			textLineState.NotifyLineEnd(dev);
+			textUnidirState.NotifyLineEnd(dev);
 			base.DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
 		}
 
@@ -1121,17 +1263,17 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Must only be called from within a <see cref="waitForResponseClearanceSyncObj"/> lock.
 		/// </remarks>
-		private bool ClearanceTimeoutHasElapsed(DateTime now)
+		private bool ClearanceTimeoutHasElapsed(DateTime instantInQuestion)
 		{
 			if (TextTerminalSettings.WaitForResponse.Timeout != Timeout.Infinite)
 			{
-				var duration = (now - this.waitForResponseClearanceTimeStamp).TotalMilliseconds;
+				var duration = (instantInQuestion - this.waitForResponseClearanceTimeStamp).TotalMilliseconds;
 				if (duration > TextTerminalSettings.WaitForResponse.Timeout)
 					return (true);
 
 				DebugWaitForResponse("...pending for counter to increase, or timeout to elapse.");
 			}
-			else
+			else // Infinite:
 			{
 				DebugWaitForResponse("...pending for counter to increase infinitely.");
 			}

@@ -139,10 +139,10 @@ namespace YAT.Domain
 	public class DeviceState
 	{
 		/// <summary></summary>
-		public bool        IsFirstChunk          { get; set; } // Not 'protected set' as commented at 'IsFirstChunk = false'.
+		public bool   IsFirstChunk { get; set; } // Not 'protected set' as commented at 'IsFirstChunk = false'.
 
 		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
-		public string      Device                { get; set; }
+		public string Device       { get; set; } // Not 'protected set' as commented at 'Device = dev'.
 
 		/// <summary></summary>
 		public DeviceState()
@@ -172,10 +172,10 @@ namespace YAT.Domain
 	public class DirectionState
 	{
 		/// <summary></summary>
-		public bool        IsFirstChunk          { get; set; } // Not 'protected set' as commented at 'IsFirstChunk = false'.
+		public bool        IsFirstChunk { get; set; } // Not 'protected set' as commented at 'IsFirstChunk = false'.
 
 		/// <summary></summary>
-		public IODirection Direction             { get; set; }
+		public IODirection Direction    { get; set; } // Not 'protected set' as commented at 'Direction = dir'.
 
 		/// <summary></summary>
 		public DirectionState()
@@ -205,19 +205,19 @@ namespace YAT.Domain
 	public class LineState
 	{
 		/// <summary></summary>
-		public LinePosition             Position     { get; set; }
+		public LinePosition             Position  { get; set; }
 
 		/// <remarks>"Time Stamp" implicitly means "of Beginning of Line".</remarks>
-		public DateTime                 TimeStamp    { get; set; }
+		public DateTime                 TimeStamp { get; set; }
 
 		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
-		public string                   Device       { get; set; }
+		public string                   Device    { get; set; }
 
 		/// <summary></summary>
-		public IODirection              Direction    { get; set; }
+		public IODirection              Direction { get; set; }
 
 		/// <summary></summary>
-		public DisplayElementCollection Elements     { get; }
+		public DisplayElementCollection Elements  { get; }
 
 		/// <summary></summary>
 		public LineState()

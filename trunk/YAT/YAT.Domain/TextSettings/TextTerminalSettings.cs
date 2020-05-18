@@ -72,8 +72,21 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const bool SeparateTxRxDisplayDefault = false;
 
-		/// <summary></summary>
-		public const int GlueCharsOfLineTimeoutDefault = 50; // At e.g. 9600 baud, the frame time is ~1 ms.
+		/// <remarks>
+		/// At e.g. 9600 baud, the frame time is ~1 ms, thus initially tried 50 ms. But tests on
+		/// serial loopback port at 9600 baud revealed chunks of a 26 byte long line at e.g.:
+		/// <list type="bullet">
+		/// <item><description>x.024 and x.067 seconds =>  ~50 ms</description></item>
+		/// <item><description>x.055 and x.131 seconds =>  ~80 ms</description></item>
+		/// <item><description>x.102 and x.143 seconds =>  ~40 ms</description></item>
+		/// <item><description>x.131 and x.212 seconds =>  ~80 ms</description></item>
+		/// <item><description>...</description></item>
+		/// <item><description>x.835 and x.984 seconds => ~150 ms</description></item>
+		/// <item><description>x.907 and x.996 seconds => ~100 ms</description></item>
+		/// </list>
+		/// Concluding to use 250 ms, taking a safety margin and longer lines into account.
+		/// </remarks>
+		public const int GlueCharsOfLineTimeoutDefault = 250;
 
 		/// <remarks>
 		/// Default is <see cref="TimeoutSettingTuple.Enabled"/> = <c>true</c> for two reasons:

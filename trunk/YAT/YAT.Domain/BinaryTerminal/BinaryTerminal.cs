@@ -30,6 +30,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
+using MKY;
 using MKY.Text;
 
 #endregion
@@ -76,14 +77,14 @@ namespace YAT.Domain
 			{
 				// Tx:
 				{
-					this.txUnidirBinaryLineState = new BinaryLineState(casted.txUnidirBinaryLineState);
-					this.txBidirBinaryLineState  = new BinaryLineState(casted.txBidirBinaryLineState);
+					this.binaryTxState      = new BinaryUnidirState(casted.binaryTxState);
+					this.binaryBidirTxState = new BinaryUnidirState(casted.binaryBidirTxState);
 				}
 
 				// Rx:
 				{
-					this.rxUnidirBinaryLineState = new BinaryLineState(casted.rxUnidirBinaryLineState);
-					this.rxBidirBinaryLineState  = new BinaryLineState(casted.rxBidirBinaryLineState);
+					this.binaryBidirRxState = new BinaryUnidirState(casted.binaryBidirRxState);
+					this.binaryRxState      = new BinaryUnidirState(casted.binaryRxState);
 				}
 			}
 		}
@@ -194,6 +195,23 @@ namespace YAT.Domain
 		private void ApplyBinaryTerminalSettings()
 		{
 			RefreshRepositories();
+		}
+
+		/// <remarks>
+		/// This method shall not be overridden as it accesses the quasi-private member
+		/// <see cref="BinaryTerminalSettings"/>.
+		/// </remarks>
+		protected Settings.BinaryDisplaySettings GetBinaryDisplaySettings(IODirection dir)
+		{
+			switch (dir)
+			{
+				case IODirection.Tx:    return (BinaryTerminalSettings.TxDisplay);
+				case IODirection.Rx:    return (BinaryTerminalSettings.RxDisplay);
+
+				case IODirection.Bidir:
+				case IODirection.None:  throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		#endregion

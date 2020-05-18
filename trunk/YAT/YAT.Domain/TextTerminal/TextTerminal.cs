@@ -138,18 +138,19 @@ namespace YAT.Domain
 			{
 				// Tx:
 				{
-					this.txUnidirTextLineState = new TextLineState(casted.txUnidirTextLineState);
-					this.txBidirTextLineState  = new TextLineState(casted.txBidirTextLineState);
+					this.textTxState      = new TextUnidirState(casted.textTxState);
+					this.textBidirTxState = new TextUnidirState(casted.textBidirTxState);
 				}
 
 				// Rx:
 				{
-					this.rxUnidirTextLineState = new TextLineState(casted.rxUnidirTextLineState);
-					this.rxBidirTextLineState  = new TextLineState(casted.rxBidirTextLineState);
+					this.textBidirRxState = new TextUnidirState(casted.textBidirRxState);
+					this.textRxState      = new TextUnidirState(casted.textRxState);
 				}
 
 				// Bidir:
 				{
+					this.textBidirState     = new TextBidirState(    casted.textBidirState);
 					this.lineSendDelayState = new LineSendDelayState(casted.lineSendDelayState);
 				}
 			}
@@ -212,8 +213,8 @@ namespace YAT.Domain
 			{
 				AssertUndisposed();
 
-				if (this.txUnidirTextLineState != null)
-					return (this.txUnidirTextLineState.EolSequence);
+				if (this.textTxState != null)
+					return (this.textTxState.EolSequence);
 				else
 					return (null);
 			}
@@ -229,8 +230,8 @@ namespace YAT.Domain
 			{
 				AssertUndisposed();
 
-				if (this.rxUnidirTextLineState != null)
-					return (this.rxUnidirTextLineState.EolSequence);
+				if (this.textRxState != null)
+					return (this.textRxState.EolSequence);
 				else
 					return (null);
 			}
@@ -317,6 +318,23 @@ namespace YAT.Domain
 		private void ApplyTextTerminalSettings()
 		{
 			RefreshRepositories();
+		}
+
+		/// <remarks>
+		/// This method shall not be overridden as it accesses the quasi-private member
+		/// <see cref="TextTerminalSettings"/>.
+		/// </remarks>
+		protected Settings.TextDisplaySettings GetTextDisplaySettings(IODirection dir)
+		{
+			switch (dir)
+			{
+				case IODirection.Tx:    return (TextTerminalSettings.TxDisplay);
+				case IODirection.Rx:    return (TextTerminalSettings.RxDisplay);
+
+				case IODirection.Bidir:
+				case IODirection.None:  throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		#endregion
