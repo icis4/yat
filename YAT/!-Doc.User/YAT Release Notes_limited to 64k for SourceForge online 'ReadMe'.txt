@@ -93,6 +93,8 @@ New:
 - Support for concurrent sending, i.e. multiple commands can be active simultaneously (feat. #387).
   Useful e.g. for sending a text command while a repeating text command is already ongoing.
   Can be enabled at [Settings... > Advanced... > Send > Allow concurrent sending].
+- Text terminals: Option to glue characters of a line together, enabled by default, resulting in
+  fewer line breaks when simultaneously sending and receiving (rel. to feat. #19 and bug #176).
 - Text terminals: Option to wait for response, resulting in request and response being displayed
   adjacently. Useful for sending multi-line commands and files with ping-pong-style command sets
   (feature request #19 and bug #176).
