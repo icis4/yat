@@ -50,10 +50,10 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private BinaryLineState txUnidirBinaryLineState;
-		private BinaryLineState txBidirBinaryLineState;
-		private BinaryLineState rxBidirBinaryLineState;
-		private BinaryLineState rxUnidirBinaryLineState;
+		private BinaryUnidirState binaryTxState;
+		private BinaryUnidirState binaryBidirTxState;
+		private BinaryUnidirState binaryBidirRxState;
+		private BinaryUnidirState binaryRxState;
 
 		#endregion
 
@@ -88,8 +88,8 @@ namespace YAT.Domain
 					if (!p.TryParse(BinaryTerminalSettings.TxDisplay.SequenceLineBreakBefore.Sequence, out txSequenceBreakBefore))
 						txSequenceBreakBefore = null;
 
-					this.txUnidirBinaryLineState = new BinaryLineState(new SequenceQueue(txSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore));
-					this.txBidirBinaryLineState  = new BinaryLineState(new SequenceQueue(txSequenceBreakAfter), new SequenceQueue(txSequenceBreakBefore));
+					this.binaryTxState      = new BinaryUnidirState(txSequenceBreakAfter, txSequenceBreakBefore);
+					this.binaryBidirTxState = new BinaryUnidirState(txSequenceBreakAfter, txSequenceBreakBefore);
 				}
 
 				// Rx:
@@ -102,8 +102,8 @@ namespace YAT.Domain
 					if (!p.TryParse(BinaryTerminalSettings.RxDisplay.SequenceLineBreakBefore.Sequence, out rxSequenceBreakBefore))
 						rxSequenceBreakBefore = null;
 
-					this.rxUnidirBinaryLineState = new BinaryLineState(new SequenceQueue(rxSequenceBreakAfter), new SequenceQueue(rxSequenceBreakBefore));
-					this.rxBidirBinaryLineState  = new BinaryLineState(new SequenceQueue(rxSequenceBreakAfter), new SequenceQueue(rxSequenceBreakBefore));
+					this.binaryBidirRxState = new BinaryUnidirState(rxSequenceBreakAfter, rxSequenceBreakBefore);
+					this.binaryRxState      = new BinaryUnidirState(rxSequenceBreakAfter, rxSequenceBreakBefore);
 				}
 			}
 		}
@@ -119,9 +119,9 @@ namespace YAT.Domain
 			// Binary specifics:
 			switch (repositoryType)
 			{
-				case RepositoryType.Tx:    this.txUnidirBinaryLineState.Reset();                                       break;
-				case RepositoryType.Bidir: this.txBidirBinaryLineState .Reset(); this.rxBidirBinaryLineState .Reset(); break;
-				case RepositoryType.Rx:                                          this.rxUnidirBinaryLineState.Reset(); break;
+				case RepositoryType.Tx:    this.binaryTxState     .Reset();                                  break;
+				case RepositoryType.Bidir: this.binaryBidirTxState.Reset(); this.binaryBidirRxState.Reset(); break;
+				case RepositoryType.Rx:                                     this.binaryRxState     .Reset(); break;
 
 				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -129,36 +129,19 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// This method shall not be overridden as it accesses the quasi-private member
-		/// <see cref="BinaryTerminalSettings"/>.
-		/// </remarks>
-		protected Settings.BinaryDisplaySettings GetBinaryDisplaySettings(IODirection dir)
-		{
-			switch (dir)
-			{
-				case IODirection.Tx:    return (BinaryTerminalSettings.TxDisplay);
-				case IODirection.Rx:    return (BinaryTerminalSettings.RxDisplay);
-
-				case IODirection.Bidir:
-				case IODirection.None:  throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
-		}
-
-		/// <remarks>
 		/// This method shall not be overridden as it accesses the private members
-		/// <see cref="txUnidirBinaryLineState"/>, <see cref="rxUnidirBinaryLineState"/>,
-		/// <see cref="txBidirBinaryLineState"/>, <see cref="rxBidirBinaryLineState"/>.
+		/// <see cref="binaryTxState"/>, <see cref="binaryRxState"/>,
+		/// <see cref="binaryBidirTxState"/>, <see cref="binaryBidirRxState"/>.
 		/// </remarks>
-		protected BinaryLineState GetBinaryLineState(RepositoryType repositoryType, IODirection dir)
+		protected BinaryUnidirState GetBinaryUnidirState(RepositoryType repositoryType, IODirection dir)
 		{
 			switch (repositoryType)
 			{
-				case RepositoryType.Tx:    return (this.txUnidirBinaryLineState);
-				case RepositoryType.Rx:    return (this.rxUnidirBinaryLineState);
+				case RepositoryType.Tx:    return (this.binaryTxState);
+				case RepositoryType.Rx:    return (this.binaryRxState);
 
-				case RepositoryType.Bidir: if (dir == IODirection.Tx) { return (this.txBidirBinaryLineState); }
-				                           else                       { return (this.rxBidirBinaryLineState); }
+				case RepositoryType.Bidir: if (dir == IODirection.Tx) { return (this.binaryBidirTxState); }
+				                           else                       { return (this.binaryBidirRxState); }
 				                           //// Invalid directions are asserted elsewhere.
 
 				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -175,10 +158,8 @@ namespace YAT.Domain
 		                                  byte b, DateTime ts, string dev, IODirection dir,
 		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
-			var processState          = GetProcessState(repositoryType);
-			var lineState             = processState.Line; // Convenience shortcut.
-			var binaryLineState       = GetBinaryLineState(repositoryType, dir);
-			var binaryDisplaySettings = GetBinaryDisplaySettings(dir);
+			var processState = GetProcessState(repositoryType);
+			var lineState = processState.Line; // Convenience shortcut.
 
 			var elementsForNextLine = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 
@@ -189,13 +170,19 @@ namespace YAT.Domain
 			// initial time stamp is kept. This is illogical, the time stamp of a hidden <XOn> shall
 			// not define the time stamp of the line, thus handle such case by rebeginning the line.
 			if (lineState.Position == LinePosition.Content)
+			{
 				DoLineContentCheck(repositoryType, processState, ts, dir);
+			}
 
 			if (lineState.Position == LinePosition.Begin)
+			{
 				DoLineBegin(repositoryType, processState, ts, dev, dir, elementsToAdd);
+			}
 
 			if (lineState.Position == LinePosition.Content)
-				DoLineContent(processState, binaryLineState, binaryDisplaySettings, b, ts, dir, elementsToAdd, elementsForNextLine);
+			{
+				DoLineContent(repositoryType, processState, b, ts, dev, dir, elementsToAdd, elementsForNextLine);
+			}
 
 			if (lineState.Position == LinePosition.End)
 			{
@@ -217,7 +204,7 @@ namespace YAT.Domain
 								foreach (var originByte in origin.Value1)
 								{
 									DisplayElementCollection elementsForNextLineDummy = null;
-									DoLineContent(processState, binaryLineState, binaryDisplaySettings, originByte, ts, dir, elementsToAdd, elementsForNextLineDummy);
+									DoLineContent(repositoryType, processState, originByte, ts, dev, dir, elementsToAdd, elementsForNextLineDummy);
 								}
 							}
 						}
@@ -285,11 +272,14 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		private void DoLineContent(ProcessState processState, BinaryLineState binaryLineState, Settings.BinaryDisplaySettings binaryDisplaySettings,
-		                           byte b, DateTime ts, IODirection dir,
+		private void DoLineContent(RepositoryType repositoryType, ProcessState processState,
+		                           byte b, DateTime ts, string dev, IODirection dir,
 		                           DisplayElementCollection elementsToAdd, DisplayElementCollection elementsForNextLine)
 		{
 			var lineState = processState.Line; // Convenience shortcut.
+
+			var binaryUnidirState     = GetBinaryUnidirState(repositoryType, dir);
+			var binaryDisplaySettings = GetBinaryDisplaySettings(dir);
 
 			// Convert content:
 			var de = ByteToElement(b, ts, dir, null); // This binary terminal implementation does not implement multi-byte encodings (yet).
@@ -305,39 +295,42 @@ namespace YAT.Domain
 			if ((binaryDisplaySettings.SequenceLineBreakBefore.Enabled && (lineState.Elements.ByteCount > 0) &&
 				(lineState.Position != LinePosition.End)))             // Also skip if line has just been broken.
 			{
-				binaryLineState.SequenceBefore.Enqueue(b);
-				if (binaryLineState.SequenceBefore.IsCompleteMatch)
+				if (!binaryUnidirState.SequenceBeforeOfGivenDevice.ContainsKey(dev))                                             // It is OK to only access or add to the collection,
+					binaryUnidirState.SequenceBeforeOfGivenDevice.Add(dev, new SequenceQueue(binaryUnidirState.SequenceBefore)); // this will not lead to excessive use of memory,
+				                                                                                                                 // since there is only a given number of devices.
+				binaryUnidirState.SequenceBeforeOfGivenDevice[dev].Enqueue(b);                                                   // Applies to TCP and UDP server terminals only.
+				if (binaryUnidirState.SequenceBeforeOfGivenDevice[dev].IsCompleteMatch)
 				{
 					// Sequence is complete, move them to the next line:
-					binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
+					binaryUnidirState.RetainedUnconfirmedHiddenSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
 
 					de = null; // Indicate that element has been consumed.
 
-					ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, binaryLineState, dir, elementsForNextLine);
+					ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, binaryUnidirState, dir, elementsForNextLine);
 
 					lineState.Position = LinePosition.End;
 				}
-				else if (binaryLineState.SequenceBefore.IsPartlyMatchContinued)
+				else if (binaryUnidirState.SequenceBeforeOfGivenDevice[dev].IsPartlyMatchContinued)
 				{
 					// Keep sequence elements and delay them until sequence is either complete or refused:
-					binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
+					binaryUnidirState.RetainedUnconfirmedHiddenSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
 
 					de = null; // Indicate that element has been consumed.
 				}
-				else if (binaryLineState.SequenceBefore.IsPartlyMatchBeginning)
+				else if (binaryUnidirState.SequenceBeforeOfGivenDevice[dev].IsPartlyMatchBeginning)
 				{
 					// Previous was no match, retained potential sequence elements can be treated as non-sequence:
-					ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, binaryLineState, dir, lp);
+					ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, binaryUnidirState, dir, lp);
 
 					// Keep sequence elements and delay them until sequence is either complete or refused:
-					binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
+					binaryUnidirState.RetainedUnconfirmedHiddenSequenceBeforeElements.Add(de); // No clone needed as element has just been created further above.
 
 					de = null; // Indicate that element has been consumed.
 				}
 				else
 				{
 					// No match at all, retained potential sequence elements can be treated as non-sequence:
-					ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, binaryLineState, dir, lp);
+					ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, binaryUnidirState, dir, lp);
 				}
 			}
 
@@ -360,16 +353,17 @@ namespace YAT.Domain
 			//  3. Evaluate the easiest case: Length line break.
 			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
 
-			if ((binaryDisplaySettings.SequenceLineBreakAfter.Enabled) &&
-			    (lineState.Position != LinePosition.End))
+			if ((lineState.Position != LinePosition.End) && (binaryDisplaySettings.SequenceLineBreakAfter.Enabled))
 			{
-				binaryLineState.SequenceAfter.Enqueue(b);
-				if (binaryLineState.SequenceAfter.IsCompleteMatch) // No need to check for partly matches.
+				if (!binaryUnidirState.SequenceAfterOfGivenDevice.ContainsKey(dev))                                            // It is OK to only access or add to the collection,
+					binaryUnidirState.SequenceAfterOfGivenDevice.Add(dev, new SequenceQueue(binaryUnidirState.SequenceAfter)); // this will not lead to excessive use of memory,
+				                                                                                                               // since there is only a given number of devices.
+				binaryUnidirState.SequenceAfterOfGivenDevice[dev].Enqueue(b);                                                  // Applies to TCP and UDP server terminals only.
+				if (binaryUnidirState.SequenceAfterOfGivenDevice[dev].IsCompleteMatch) // No need to check for partly matches.
 					lineState.Position = LinePosition.End;
 			}
 
-			if ((binaryDisplaySettings.LengthLineBreak.Enabled) &&
-			    (lineState.Position != LinePosition.End))
+			if ((lineState.Position != LinePosition.End) && (binaryDisplaySettings.LengthLineBreak.Enabled))
 			{
 				if (lineState.Elements.ByteCount >= binaryDisplaySettings.LengthLineBreak.Length)
 					lineState.Position = LinePosition.End;
@@ -389,17 +383,17 @@ namespace YAT.Domain
 			}
 		}
 
-		private void ReleaseRetainedUnconfirmedHiddenSequenceBefore(LineState lineState, BinaryLineState binaryLineState, IODirection dir, DisplayElementCollection lp)
+		private void ReleaseRetainedUnconfirmedHiddenSequenceBefore(LineState lineState, BinaryUnidirState binaryUnidirState, IODirection dir, DisplayElementCollection lp)
 		{
-			if (binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Count > 0)
+			if (binaryUnidirState.RetainedUnconfirmedHiddenSequenceBeforeElements.Count > 0)
 			{
-				foreach (var de in binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements)
+				foreach (var de in binaryUnidirState.RetainedUnconfirmedHiddenSequenceBeforeElements)
 				{
 					AddContentSeparatorIfNecessary(lineState, dir, lp, de);
 					lp.Add(de); // No clone needed as element is no more used below.
 				}
 
-				binaryLineState.RetainedUnconfirmedHiddenSequenceBeforeElements.Clear();
+				binaryUnidirState.RetainedUnconfirmedHiddenSequenceBeforeElements.Clear();
 			}
 		}
 
@@ -412,10 +406,11 @@ namespace YAT.Domain
 		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			var lineState = processState.Line; // Convenience shortcut.
-			BinaryLineState binaryLineState = GetBinaryLineState(repositoryType, lineState.Direction);
+
+			var binaryUnidirState = GetBinaryUnidirState(repositoryType, lineState.Direction);
 
 			// In case of e.g. a timed line break, retained potential sequence elements can be treated as non-sequence:
-			ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, binaryLineState, dir, lineState.Elements);
+			ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, binaryUnidirState, dir, lineState.Elements);
 
 			// Note that it is OK to release the elements above, as binary terminals always show all bytes.
 			// This is opposed to text terminals where potential EOL elements are potentially hidden.
@@ -441,7 +436,6 @@ namespace YAT.Domain
 			linesToAdd.Add(l);
 
 			// Finalize the line:
-			binaryLineState.NotifyLineEnd();
 			base.DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
 		}
 

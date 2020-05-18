@@ -87,7 +87,7 @@
     </Compile>
     <Compile Include="BinaryTerminal\BinaryTerminal.Process.cs" />
     <Compile Include="BinaryTerminal\BinaryTerminal.Send.cs" />
-    <Compile Include="BinaryTerminal\BinaryLineState.cs" />
+    <Compile Include="BinaryTerminal\BinaryProcessState.cs" />
     <Compile Include="LineBreakTimeout.cs" />
     <Compile Include="BinaryTerminal\BinaryTerminal.cs" />
     <Compile Include="BinarySettings\BinaryDisplaySettings.cs" />
@@ -149,7 +149,7 @@
     <Compile Include="Settings\TerminalSettings.cs" />
     <Compile Include="Settings\DisplaySettings.cs" />
     <Compile Include="Settings\SendSettings.cs" />
-    <Compile Include="TextTerminal\TextLineState.cs" />
+    <Compile Include="TextTerminal\TextProcessState.cs" />
     <Compile Include="TextTerminal\CharSubstitution.cs" />
     <Compile Include="TextSettings\TextTerminalSettings.cs" />
     <Compile Include="TextTerminal\SubstitutionParser.cs" />
