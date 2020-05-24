@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in
@@ -79,13 +80,17 @@ namespace YAT.Domain
 		public DeviceState    DeviceLineBreak       { get; protected set; }
 
 		/// <remarks>Dedicated sub-item to make scope obvious.</remarks>
+		/// <remarks>Only applies to <see cref="RepositoryType.Bidir"/>, still here for simplicity.</remarks>
 		public DirectionState DirectionLineBreak    { get; protected set; }
 
 		/// <summary></summary>
-		public bool           IsFirstLine           { get; protected set; }
+		public bool           IsFirstLine           { get; private set; }
 
 		/// <remarks>"Time Stamp" implicitly means "of Beginning of Line" of the previous line.</remarks>
-		public DateTime       PreviousLineTimeStamp { get; protected set; }
+		public DateTime       PreviousLineTimeStamp { get; private set; }
+
+		/// <remarks>Only applies to <see cref="RepositoryType.Bidir"/>, still here for simplicity.</remarks>
+		public List<RawChunk> PostponedChunks       { get; private set; }
 
 		/// <summary></summary>
 		public OverallState()
@@ -103,6 +108,7 @@ namespace YAT.Domain
 		{
 			IsFirstLine           = true;
 			PreviousLineTimeStamp = DisplayElement.TimeStampDefault;
+			PostponedChunks       = new List<RawChunk>(); // No preset needed, the default behavior is good enough.
 		}
 
 		/// <summary>
@@ -132,6 +138,20 @@ namespace YAT.Domain
 		{
 			IsFirstLine = false;
 			PreviousLineTimeStamp = lineTimeStamp;
+		}
+
+		/// <summary></summary>
+		public virtual void AddPostponedChunk(RawChunk chunk)
+		{
+			PostponedChunks.Add(chunk);
+		}
+
+		/// <summary></summary>
+		public virtual RawChunk[] RemovePostponedChunks()
+		{
+			var chunks = PostponedChunks.ToArray();
+			PostponedChunks.Clear();
+			return (chunks);
 		}
 	}
 

@@ -21,7 +21,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -151,63 +150,6 @@ namespace YAT.Domain
 				return (EolOfGivenDevice[dev].IsCompleteMatch);
 			else
 				return (false);
-		}
-	}
-
-	/// <remarks>
-	/// Text processing requires uni-directional as well as bi-directional state. This is the
-	/// bi-directional state.
-	/// </remarks>
-	public class TextBidirState
-	{
-		/// <summary></summary>
-		public List<RawChunk>                                   PostponedChunks     { get; private set; }
-
-		/// <summary></summary>
-		public Tuple<List<byte>, DateTime, string, IODirection> PostponedChunkBytes { get; set; }
-
-		/// <summary></summary>
-		public TextBidirState()
-		{
-			InitializeValues();
-		}
-
-		/// <summary></summary>
-		public TextBidirState(TextBidirState rhs)
-		{
-			PostponedChunks = new List<RawChunk>(rhs.PostponedChunks);
-
-			if (rhs.PostponedChunkBytes == null)
-			{
-				PostponedChunkBytes = null;
-			}
-			else
-			{
-				PostponedChunkBytes = new Tuple<List<byte>, DateTime, string, IODirection>
-				                      (
-				                          new List<byte>(rhs.PostponedChunkBytes.Item1),
-				                                         rhs.PostponedChunkBytes.Item2,
-				                                         rhs.PostponedChunkBytes.Item3,
-				                                         rhs.PostponedChunkBytes.Item4
-				                      );
-			}
-		}
-
-		/// <summary>
-		/// Initializes the state.
-		/// </summary>
-		protected virtual void InitializeValues()
-		{
-			PostponedChunks     = new List<RawChunk>(); // No preset needed, the default behavior is good enough.
-			PostponedChunkBytes = null;
-		}
-
-		/// <summary>
-		/// Resets the state, i.e. restarts processing with an empty repository.
-		/// </summary>
-		public virtual void Reset()
-		{
-			InitializeValues();
 		}
 	}
 }

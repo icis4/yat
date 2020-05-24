@@ -77,10 +77,10 @@ namespace YAT.Domain
 		/// <summary>
 		/// Synchronize processing (raw chunk | timed line break).
 		/// </summary>
-		protected object ChunkVsTimeoutSyncObj { get; private set; } = new object();
+		protected object ChunkVsTimedSyncObj { get; private set; } = new object();
 
-		private LineBreakTimeout txLineBreakTimeout;
-		private LineBreakTimeout rxLineBreakTimeout;
+		private LineBreakTimeout txTimedLineBreak;
+		private LineBreakTimeout rxTimedLineBreak;
 
 		#endregion
 
@@ -581,23 +581,7 @@ namespace YAT.Domain
 			this.bidirProcessState = new ProcessState();
 			this.rxProcessState    = new ProcessState();
 
-			if (this.txLineBreakTimeout != null)
-			{	// Ensure to free referenced resources such as the 'Elapsed' event handler.
-				this.txLineBreakTimeout.Elapsed -= txLineBreakTimeout_Elapsed;
-				this.txLineBreakTimeout.Dispose();
-			}
-
-			this.txLineBreakTimeout = new LineBreakTimeout(TerminalSettings.TxDisplayTimedLineBreak.Timeout);
-			this.txLineBreakTimeout.Elapsed += txLineBreakTimeout_Elapsed;
-
-			if (this.rxLineBreakTimeout != null)
-			{	// Ensure to free referenced resources such as the 'Elapsed' event handler.
-				this.rxLineBreakTimeout.Elapsed -= rxLineBreakTimeout_Elapsed;
-				this.rxLineBreakTimeout.Dispose();
-			}
-
-			this.rxLineBreakTimeout = new LineBreakTimeout(TerminalSettings.RxDisplayTimedLineBreak.Timeout);
-			this.rxLineBreakTimeout.Elapsed += rxLineBreakTimeout_Elapsed;
+			InitializeTimedLineBreaksIfNeeded();
 		}
 
 		/// <summary>
@@ -606,22 +590,7 @@ namespace YAT.Domain
 		protected virtual void DisposeProcess()
 		{
 			// In the 'normal' case, timers are stopped in ExecuteLineEnd().
-
-			if (this.txLineBreakTimeout != null)
-			{	// Ensure to free referenced resources such as event handlers.
-				EventHandlerHelper.RemoveAllEventHandlers(this.txLineBreakTimeout);
-				this.txLineBreakTimeout.Dispose();
-			}
-
-			this.txLineBreakTimeout = null;
-
-			if (this.rxLineBreakTimeout != null)
-			{	// Ensure to free referenced resources such as event handlers.
-				EventHandlerHelper.RemoveAllEventHandlers(this.rxLineBreakTimeout);
-				this.rxLineBreakTimeout.Dispose();
-			}
-
-			this.rxLineBreakTimeout = null;
+			DisposeTimedLineBreaksIfNeeded();
 		}
 
 		/// <summary>
@@ -638,6 +607,8 @@ namespace YAT.Domain
 				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
+
+			ResetTimedLineBreaksIfNeeded(repositoryType);
 		}
 
 		/// <remarks>
@@ -692,210 +663,230 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// This is the main processing method. It is called by the <see cref="RawTerminal.ChunkSent"/>
-		/// and <see cref="RawTerminal.ChunkReceived"/> event handlers. It updates the affected repositories.
+		/// This processing method is called by the <see cref="RawTerminal.ChunkSent"/> and
+		/// <see cref="RawTerminal.ChunkReceived"/> event handlers. It sequentially updates the
+		/// two affected repositories.
 		/// </summary>
-		protected virtual void ProcessRawChunk(RawChunk chunk)
+		/// <remarks>
+		/// Before introduction of <see cref="TextTerminalSettings.GlueCharsOfLine"/>, processing
+		/// happend simultaneously byte-by-byte for both affected repositories, rather than whole
+		/// chunk for first and then second affected repository. However, glueing requires that the
+		/// part of a chunk after a line break may by postponed, and glueing only applies to bidir.
+		/// Thus, with YAT 2.2.0, processing changed to the current strategy.
+		/// </remarks>
+		/// <remarks>
+		/// This method must synchronize against <see cref="ChunkVsTimedSyncObj"/>!
+		///
+		/// Saying hello to StyleCop ;-.
+		/// </remarks>
+		protected virtual void ProcessChunk(RawChunk chunk)
 		{
-			bool txIsAffected    =  (chunk.Direction == IODirection.Tx);
-			bool bidirIsAffected = ((chunk.Direction == IODirection.Tx) || (chunk.Direction == IODirection.Rx));
-			bool rxIsAffected    =                                         (chunk.Direction == IODirection.Rx);
+			lock (ChunkVsTimedSyncObj) // Synchronize processing (raw chunk | timed line break).
+			{
+				switch (chunk.Direction)
+				{
+					case IODirection.Tx: ProcessChunk(RepositoryType.Tx,    chunk);
+					                     ProcessChunk(RepositoryType.Bidir, chunk);
+					                     break;
 
-			ProcessRawChunk(chunk, txIsAffected, bidirIsAffected, rxIsAffected);
+					case IODirection.Rx: ProcessChunk(RepositoryType.Bidir, chunk);
+					                     ProcessChunk(RepositoryType.Rx,    chunk);
+					                     break;
+
+					default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A raw chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
 		}
 
 		/// <summary>
-		/// This is the alternative processing method. It is called by the <see cref="RefreshRepository"/>
-		/// and <see cref="RefreshRepositories"/> methods on reloading. It only affects one of the repositories.
+		/// This processing method is called by the <see cref="ProcessChunk(RawChunk)"/> above
+		/// as well as the <see cref="RefreshRepository"/> and <see cref="RefreshRepositories"/>
+		/// methods on reloading. It only affects one of the repositories.
 		/// </summary>
-		protected virtual void ProcessRawChunk(RepositoryType repositoryType, RawChunk chunk)
+		/// <remarks>
+		/// This method must synchronize against <see cref="Terminal.ChunkVsTimedSyncObj"/>!
+		///
+		/// Saying hello to StyleCop ;-.
+		/// </remarks>
+		protected virtual void ProcessChunk(RepositoryType repositoryType, RawChunk chunk)
+		{
+			lock (ChunkVsTimedSyncObj) // Synchronize processing (raw chunk | timed line break).
+			{
+				var dir = chunk.Direction;
+
+				if (!IsReloading)
+					SuspendTimedLineBreak(dir);
+
+				var overallState = GetOverallState(repositoryType);
+				var postponedChunks = overallState.RemovePostponedChunks();
+				if (postponedChunks.Length > 0)
+				{
+					var chunksToProcess = new List<RawChunk>(postponedChunks.Length + 1); // Preset the required capacity to improve memory management.
+					chunksToProcess.AddRange(postponedChunks);
+					chunksToProcess.Add(chunk);
+					ProcessChunksOfSameDirection(repositoryType, chunksToProcess, dir);
+				}
+				else
+				{
+					bool partlyOrCompletelyPostponed; // Don't care, remaining bytes will be processed later.
+					ProcessChunk(repositoryType, chunk, out partlyOrCompletelyPostponed);
+				}
+
+				if (!IsReloading)
+					ResumeTimedLineBreak(dir);
+			}
+		}
+
+		/// <remarks>
+		/// The caller of this method must synchronize against <see cref="ChunkVsTimedSyncObj"/>!
+		///
+		/// Saying hello to StyleCop ;-.
+		/// </remarks>
+		protected virtual void ProcessChunksOfSameDirection(RepositoryType repositoryType, List<RawChunk> chunks, IODirection dir)
+		{
+			for (int i = 0; i < chunks.Count; i++)
+			{
+				var chunk = chunks[i];
+
+				if (chunk.Direction != dir)
+					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "This method requires that chunks all share the same 'Direction'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+				bool partlyOrCompletelyPostponed;
+				ProcessChunk(repositoryType, chunk, out partlyOrCompletelyPostponed);
+				if (partlyOrCompletelyPostponed)
+				{
+					int chunkCountTotal = chunks.Count;
+					int chunkCountProcessed = (i + 1);
+					PostponeRemainingChunks(repositoryType, chunks, chunkCountTotal, chunkCountProcessed);
+					break;
+				}
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void PostponeRemainingChunks(RepositoryType repositoryType, List<RawChunk> chunks, int chunkCountTotal, int chunkCountProcessed)
+		{
+			var overallState = GetOverallState(repositoryType);
+			for (int i = (chunkCountProcessed - 1); i < chunkCountTotal; i++)
+				overallState.AddPostponedChunk(chunks[i]);
+		}
+
+		/// <remarks>
+		/// The caller of this method must synchronize against <see cref="ChunkVsTimedSyncObj"/>!
+		///
+		/// Saying hello to StyleCop ;-.
+		/// </remarks>
+		protected virtual void ProcessChunk(RepositoryType repositoryType, RawChunk chunk, out bool partlyOrCompletelyPostponed)
+		{
+			// Timed line breaks are processed asynchronously, as they are only triggered
+			// after a timeout. Except on reload, then timed line breaks are calculated.
+			// Note that all bytes of a chunk have the same time stamp, thus no need to
+			// check for timeout on each byte.
+
+			if (IsReloading)
+				ProcessAndSignalTimedLineBreakOnReloadIfNeeded(repositoryType, chunk);
+
+			ProcessAndSignalDeviceOrDirectionLineBreakIfNeeded(repositoryType, chunk);
+			ProcessAndSignalDirection(                         repositoryType, chunk); // Needed in case direction changes within a line.
+
+			int byteCountProcessed;
+			ProcessAndSignalChunk(                             repositoryType, chunk, out byteCountProcessed);
+
+			int byteCountTotal = chunk.Content.Count;
+			partlyOrCompletelyPostponed = (byteCountProcessed < byteCountTotal);
+			if (partlyOrCompletelyPostponed)
+				PostponeRemainingBytes(                        repositoryType, chunk, byteCountTotal, byteCountProcessed);
+			else
+				ProcessAndSignalChunkLineBreakIfNeeded(        repositoryType, chunk);
+		}
+
+		/// <summary></summary>
+		protected virtual void PostponeRemainingBytes(RepositoryType repositoryType, RawChunk chunk, int byteCountTotal, int byteCountProcessed)
+		{
+			var contentPostponed = new List<byte>(byteCountTotal - byteCountProcessed);
+			for (int i = (byteCountProcessed - 1); i < byteCountTotal; i++)
+				contentPostponed.Add(chunk.Content[i]);
+
+			var chunkPostponed = new RawChunk
+			                     (
+			                         contentPostponed.ToArray(),
+			                         chunk.TimeStamp,
+			                         chunk.Device,
+			                         chunk.Direction
+			                     );
+
+			var overallState = GetOverallState(repositoryType);
+			overallState.AddPostponedChunk(chunkPostponed);
+		}
+
+		/// <summary></summary>
+		protected virtual bool RepositoryIsAffected(RepositoryType repositoryType, IODirection dir)
 		{
 			switch (repositoryType)
 			{
-				case RepositoryType.Tx:    ProcessRawChunk(chunk, true,  false, false); break;
-				case RepositoryType.Bidir: ProcessRawChunk(chunk, false, true,  false); break;
-				case RepositoryType.Rx:    ProcessRawChunk(chunk, false, false, true ); break;
+				case RepositoryType.Tx:    return (dir == IODirection.Tx);
+				case RepositoryType.Bidir: return (true);
+				case RepositoryType.Rx:    return (dir == IODirection.Rx);
 
 				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
-		/// <remarks>
-		/// On main processing, the two affected repositories will be processed simultaneously.
-		/// On alternative processing, i.e. on reload or glue, only one repository will be affected.
-		/// </remarks>
-		/// <remarks>
-		/// This method must synchronize against <see cref="ChunkVsTimeoutSyncObj"/>!
-		///
-		/// Saying hello to StyleCop ;-.
-		/// </remarks>
-		protected virtual void ProcessRawChunk(RawChunk chunk, bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
+		/// <summary></summary>
+		protected virtual void ProcessAndSignalTimedLineBreakOnReloadIfNeeded(RepositoryType repositoryType, RawChunk chunk)
 		{
-			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
+			if (RepositoryIsAffected(repositoryType, chunk.Direction))
 			{
-				ProcessAndSignalDeviceOrDirectionLineBreak(chunk, txIsAffected, bidirIsAffected, rxIsAffected);
-				ProcessAndSignalDirection(                 chunk, txIsAffected, bidirIsAffected, rxIsAffected);
-				ProcessAndSignalRawChunk(                  chunk, txIsAffected, bidirIsAffected, rxIsAffected);
-				ProcessAndSignalChunkLineBreak(            chunk, txIsAffected, bidirIsAffected, rxIsAffected);
+				TimeoutSettingTuple settings;
+				switch (chunk.Direction)
+				{
+					case IODirection.Tx: settings = TerminalSettings.TxDisplayTimedLineBreak; break;
+					case IODirection.Rx: settings = TerminalSettings.RxDisplayTimedLineBreak; break;
 
-				if (IsReloading)
-					ProcessAndSignalTimedLineBreakOnReload(chunk, txIsAffected, bidirIsAffected, rxIsAffected);
+					default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A raw chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 
-				// Timed line breaks are processed asynchronously, except on reload. Alternatively, the
-				// chunk loop could check for timeout on each byte. However, this is inefficient as well
-				// as useless, since the same time stamp applies to the whole chunk.
+				if (settings.Enabled)
+					ProcessAndSignalTimedLineBreakOnReload(repositoryType, chunk.TimeStamp, chunk.Direction, settings.Timeout);
 			}
 		}
 
 		/// <summary>Check whether device or direction has changed.</summary>
 		/// <remarks>A chunk is always tied to device and direction.</remarks>
-		protected virtual void ProcessAndSignalDeviceOrDirectionLineBreak(RawChunk chunk, bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
+		protected virtual void ProcessAndSignalDeviceOrDirectionLineBreakIfNeeded(RepositoryType repositoryType, RawChunk chunk)
 		{
 			var isServerSocket = TerminalSettings.IO.IOTypeIsServerSocket;
 			if (isServerSocket && TerminalSettings.Display.DeviceLineBreakEnabled) // Attention: This 'isServerSocket' restriction is also implemented at other locations!
-			{
-				if (txIsAffected)    { ProcessAndSignalDeviceLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
-				if (bidirIsAffected) { ProcessAndSignalDeviceLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Device, chunk.Direction); }
-				if (rxIsAffected)    { ProcessAndSignalDeviceLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Device, chunk.Direction); }
-			}
+				ProcessAndSignalDeviceLineBreak(repositoryType, chunk.TimeStamp, chunk.Device, chunk.Direction);
 
-			if (TerminalSettings.Display.DirectionLineBreakEnabled)
-			{ // Not needed for unidirectional repositories.
-			////if (txIsAffected)    { ProcessAndSignalDirectionLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Direction); }
-				if (bidirIsAffected) { ProcessAndSignalDirectionLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Direction); }
-			////if (rxIsAffected)    { ProcessAndSignalDirectionLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Direction); }
-			} // Not needed for unidirectional repositories.
+			if ((TerminalSettings.Display.DirectionLineBreakEnabled) && (repositoryType == RepositoryType.Bidir)) // Not needed for unidirectional repositories.
+				ProcessAndSignalDirectionLineBreak(repositoryType, chunk.TimeStamp, chunk.Direction);
+		}
+
+		/// <remarks>Always to be done, no "IfNeeded" required yet.</remarks>
+		protected virtual void ProcessAndSignalDirection(RepositoryType repositoryType, RawChunk chunk)
+		{
+			ProcessDirection(repositoryType, chunk.Direction);
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessAndSignalDirection(RawChunk chunk, bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
+		protected virtual void ProcessAndSignalChunkLineBreakIfNeeded(RepositoryType repositoryType, RawChunk chunk)
 		{
-			if (txIsAffected)    { ProcessAndSignalDirection(RepositoryType.Tx,    chunk.Direction, TerminalSettings.Display.ShowDirection); }
-			if (bidirIsAffected) { ProcessAndSignalDirection(RepositoryType.Bidir, chunk.Direction, TerminalSettings.Display.ShowDirection); }
-			if (rxIsAffected)    { ProcessAndSignalDirection(RepositoryType.Rx,    chunk.Direction, TerminalSettings.Display.ShowDirection); }
-		}
-
-		/// <summary></summary>
-		protected virtual void ProcessAndSignalRawChunk(RawChunk chunk, bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
-		{
-			TimeoutSettingTuple timedLineBreak;
-			LineBreakTimeout lineBreakTimeout;
-			switch (chunk.Direction)
+			if (RepositoryIsAffected(repositoryType, chunk.Direction))
 			{
-				case IODirection.Tx: timedLineBreak = TerminalSettings.TxDisplayTimedLineBreak; lineBreakTimeout = this.txLineBreakTimeout; break;
-				case IODirection.Rx: timedLineBreak = TerminalSettings.RxDisplayTimedLineBreak; lineBreakTimeout = this.rxLineBreakTimeout; break;
+				bool enabled;
+				switch (chunk.Direction)
+				{
+					case IODirection.Tx: enabled = TerminalSettings.TxDisplayChunkLineBreakEnabled; break;
+					case IODirection.Rx: enabled = TerminalSettings.RxDisplayChunkLineBreakEnabled; break;
 
-				default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A raw chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A raw chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+
+				if (enabled)
+					ProcessAndSignalChunkLineBreak(repositoryType, chunk.TimeStamp, chunk.Direction);
 			}
-
-			// Notes:
-			//  > Processing is done sequentially for all repositories, in order to get synchronized
-			//    content for Tx/Bidir and Bidir/Rx.
-			//  > Signaling is only done once per chunk (unless flushing is involved), in order to
-			//    improve performance (by reducing the number of events and repository updates).
-
-			DisplayElementCollection txElementsToAdd    = null;
-			DisplayElementCollection bidirElementsToAdd = null;
-			DisplayElementCollection rxElementsToAdd    = null;
-
-			DisplayLineCollection txLinesToAdd    = null;
-			DisplayLineCollection bidirLinesToAdd = null;
-			DisplayLineCollection rxLinesToAdd    = null;
-
-			if (txIsAffected)
-			{
-				txElementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
-				txLinesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
-			}
-
-			if (bidirIsAffected)
-			{
-				bidirElementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
-				bidirLinesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
-			}
-
-			if (rxIsAffected)
-			{
-				rxElementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
-				rxLinesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
-			}
-
-			foreach (byte b in chunk.Content)
-			{
-				DoRawBytePre(chunk.TimeStamp, chunk.Device, chunk.Direction, timedLineBreak, lineBreakTimeout);
-
-				if (txIsAffected)    { DoRawByte(RepositoryType.Tx,    b, chunk.TimeStamp, chunk.Device, chunk.Direction, txElementsToAdd,    txLinesToAdd);    }
-				if (bidirIsAffected) { DoRawByte(RepositoryType.Bidir, b, chunk.TimeStamp, chunk.Device, chunk.Direction, bidirElementsToAdd, bidirLinesToAdd); }
-				if (rxIsAffected)    { DoRawByte(RepositoryType.Rx,    b, chunk.TimeStamp, chunk.Device, chunk.Direction, rxElementsToAdd,    rxLinesToAdd);    }
-
-				DoRawBytePost(chunk.TimeStamp, chunk.Device, chunk.Direction, timedLineBreak, lineBreakTimeout);
-			}
-
-			if (txIsAffected)
-			{
-				if ((txElementsToAdd != null) && (txElementsToAdd.Count > 0))
-					AddDisplayElements(RepositoryType.Tx, txElementsToAdd);
-
-				if ((txLinesToAdd != null) && (txLinesToAdd.Count > 0))
-					AddDisplayLines(RepositoryType.Tx, txLinesToAdd);
-			}
-
-			if (bidirIsAffected)
-			{
-				if ((bidirElementsToAdd != null) && (bidirElementsToAdd.Count > 0))
-					AddDisplayElements(RepositoryType.Bidir, bidirElementsToAdd);
-
-				if ((bidirLinesToAdd != null) && (bidirLinesToAdd.Count > 0))
-					AddDisplayLines(RepositoryType.Bidir, bidirLinesToAdd);
-			}
-
-			if (rxIsAffected)
-			{
-				if ((rxElementsToAdd != null) && (rxElementsToAdd.Count > 0))
-					AddDisplayElements(RepositoryType.Rx, rxElementsToAdd);
-
-				if ((rxLinesToAdd != null) && (rxLinesToAdd.Count > 0))
-					AddDisplayLines(RepositoryType.Rx, rxLinesToAdd);
-			}
-		}
-
-		/// <summary>Enforce line break if requested.</summary>
-		protected virtual void ProcessAndSignalChunkLineBreak(RawChunk chunk, bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
-		{
-			if (TerminalSettings.TxDisplayChunkLineBreakEnabled)
-			{
-				if (txIsAffected)                                           { ProcessAndSignalChunkLineBreak(RepositoryType.Tx,    chunk.TimeStamp, chunk.Direction); }
-				if (bidirIsAffected && (chunk.Direction == IODirection.Tx)) { ProcessAndSignalChunkLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Direction); }
-			}
-
-			if (TerminalSettings.RxDisplayChunkLineBreakEnabled)
-			{
-				if (bidirIsAffected && (chunk.Direction == IODirection.Rx)) { ProcessAndSignalChunkLineBreak(RepositoryType.Bidir, chunk.TimeStamp, chunk.Direction); }
-				if (rxIsAffected)                                           { ProcessAndSignalChunkLineBreak(RepositoryType.Rx,    chunk.TimeStamp, chunk.Direction); }
-			}
-		}
-
-		/// <summary></summary>
-		protected virtual void ProcessAndSignalTimedLineBreakOnReload(RawChunk chunk, bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
-		{
-			if (TerminalSettings.TxDisplayTimedLineBreak.Enabled)
-			{
-				if (txIsAffected)                                           { ProcessAndSignalTimedLineBreakOnReload(RepositoryType.Tx,    chunk.TimeStamp, chunk.Direction, TerminalSettings.TxDisplayTimedLineBreak.Timeout); }
-				if (bidirIsAffected && (chunk.Direction == IODirection.Tx)) { ProcessAndSignalTimedLineBreakOnReload(RepositoryType.Bidir, chunk.TimeStamp, chunk.Direction, TerminalSettings.TxDisplayTimedLineBreak.Timeout); }
-			}
-
-			if (TerminalSettings.RxDisplayTimedLineBreak.Enabled)
-			{
-				if (bidirIsAffected && (chunk.Direction == IODirection.Rx)) { ProcessAndSignalTimedLineBreakOnReload(RepositoryType.Bidir, chunk.TimeStamp, chunk.Direction, TerminalSettings.RxDisplayTimedLineBreak.Timeout); }
-				if (rxIsAffected)                                           { ProcessAndSignalTimedLineBreakOnReload(RepositoryType.Rx,    chunk.TimeStamp, chunk.Direction, TerminalSettings.RxDisplayTimedLineBreak.Timeout); }
-			}
-		}
-
-		/// <summary></summary>
-		protected virtual void ProcessAndSignalDirection(RepositoryType repositoryType, IODirection dir, bool showDirection)
-		{
-			ProcessDirection(repositoryType, dir, showDirection); // Nothing to signal (yet).
 		}
 
 		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
@@ -920,6 +911,47 @@ namespace YAT.Domain
 			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
 
 			ProcessDirectionLineBreak(repositoryType, ts, dir, elementsToAdd, linesToAdd);
+
+			if (elementsToAdd.Count > 0)
+				AddDisplayElements(repositoryType, elementsToAdd);
+
+			if (linesToAdd.Count > 0)
+				AddDisplayLines(repositoryType, linesToAdd);
+		}
+
+		/// <summary></summary>
+		protected virtual void ProcessAndSignalDirection(RepositoryType repositoryType, IODirection dir)
+		{
+			ProcessDirection(repositoryType, dir); // Nothing to signal (yet).
+		}
+
+		/// <remarks>
+		/// Before introduction of <see cref="TextTerminalSettings.GlueCharsOfLine"/>, processing
+		/// happend simultaneously byte-by-byte for both affected repositories, rather than whole
+		/// chunk for first and then second affected repository. However, glueing requires that the
+		/// part of a chunk after a line break may by postponed, and glueing only applies to bidir.
+		/// Thus, with YAT 2.2.0, processing changed to the current strategy.
+		/// </remarks>
+		/// <remarks>
+		/// Signaling is only done once per chunk (unless flushing is involved), in order to improve
+		/// performance (by reducing the number of events and repository updates).
+		/// </remarks>
+		protected virtual void ProcessAndSignalChunk(RepositoryType repositoryType, RawChunk chunk, out int byteCountProcessed)
+		{
+			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
+
+			byteCountProcessed = chunk.Content.Count;
+			for (int i = 0; i < chunk.Content.Count; i++)
+			{
+				bool breakChunk;
+				ProcessByteOfChunk(repositoryType, chunk.Content[i], chunk.TimeStamp, chunk.Device, chunk.Direction, elementsToAdd, linesToAdd, out breakChunk);
+				if (breakChunk)
+				{
+					byteCountProcessed = (i + 1); // Byte will be processed below in any case, even in case of break.
+					break;
+				}
+			}
 
 			if (elementsToAdd.Count > 0)
 				AddDisplayElements(repositoryType, elementsToAdd);
@@ -974,7 +1006,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>Nothing to signal (yet).</remarks>
-		protected virtual void ProcessDirection(RepositoryType repositoryType, IODirection dir, bool showDirection)
+		protected virtual void ProcessDirection(RepositoryType repositoryType, IODirection dir)
 		{
 			var processState = GetProcessState(repositoryType);
 			if (processState.Line.Direction != IODirection.None) // IODirection.None means that line processing has not started yet.
@@ -983,7 +1015,7 @@ namespace YAT.Domain
 				{
 					processState.Line.Direction = IODirection.Bidir;
 
-					if (showDirection) // Replace is only needed when containing a 'DisplayElement.DirectionInfo'.
+					if (TerminalSettings.Display.ShowDirection) // Replace is only needed when containing a 'DisplayElement.DirectionInfo'.
 					{
 						processState.Line.Elements.ReplaceDirection(Direction.Bidir, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache);
 					////elementsToAdd.Clear() is not needed as only replace happens above.
@@ -1010,7 +1042,7 @@ namespace YAT.Domain
 			{                                                  // See above!
 				if (DeviceHasChanged(dev, processState.Overall.DeviceLineBreak.Device))
 				{
-					if (processState.Line.Elements.Count > 0)
+					if (processState.Line.Position != LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
 					{
 						DebugLineBreak(repositoryType, "ProcessDeviceLineBreak => DoLineEnd()");
 
@@ -1045,7 +1077,7 @@ namespace YAT.Domain
 			{                                                     // See above!
 				if (DirectionHasChanged(dir, processState.Overall.DirectionLineBreak.Direction))
 				{
-					if (processState.Line.Elements.Count > 0)
+					if (processState.Line.Position != LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
 					{
 						DebugLineBreak(repositoryType, "ProcessDirectionLineBreak => DoLineEnd()");
 
@@ -1071,7 +1103,7 @@ namespace YAT.Domain
 		                                             DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			var processState = GetProcessState(repositoryType);
-			if (processState.Line.Elements.Count > 0)
+			if (processState.Line.Position != LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
 			{
 				DebugLineBreak(repositoryType, "ProcessChunkLineBreak => DoLineEnd()");
 
@@ -1087,7 +1119,7 @@ namespace YAT.Domain
 		                                             DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			var processState = GetProcessState(repositoryType);
-			if (processState.Line.Elements.Count > 0)
+			if (processState.Line.Position != LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
 			{
 				DebugLineBreak(repositoryType, "ProcessTimedLineBreak => DoLineEnd()");
 
@@ -1103,7 +1135,7 @@ namespace YAT.Domain
 		                                                     DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
 			var processState = GetProcessState(repositoryType);
-			if (processState.Line.Elements.Count > 0)
+			if (processState.Line.Position != LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
 			{
 				var span = (ts - processState.Line.TimeStamp);
 				if (span.TotalMilliseconds >= timeout)
@@ -1122,61 +1154,10 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		protected abstract void DoRawByte(RepositoryType repositoryType,
-		                                  byte b, DateTime ts, string dev, IODirection dir,
-		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd);
-
-		/// <summary>
-		/// Optional pre-processing before call of <see cref="DoRawByte"/>.
-		/// </summary>
-		/// <remarks>
-		/// <paramref name="ts"/> and <paramref name="dev"/> are prepared for specialization
-		/// by <see cref="BinaryTerminal"/> and <see cref="TextTerminal"/>.
-		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
-		protected virtual void DoRawBytePre(DateTime ts, string dev, IODirection dir,
-		                                    TimeoutSettingTuple timedLineBreak, LineBreakTimeout lineBreakTimeout)
-		{
-			// Handle start/restart of timed line breaks:
-			if (timedLineBreak.Enabled)
-			{
-				if (!IsReloading)
-				{
-					var lineState = GetUnidirLineState(dir); // Just checking for Tx or Rx is sufficient.
-					if (lineState.Position == LinePosition.Begin)
-						lineBreakTimeout.Start();
-					else
-						lineBreakTimeout.Restart(); // Restart as timeout refers to time after last received byte.
-				}
-			}
-		}
-
-		/// <summary>
-		/// Optional pre-processing before call of <see cref="DoRawByte"/>.
-		/// </summary>
-		/// <remarks>
-		/// <paramref name="ts"/> and <paramref name="dev"/> are prepared for specialization
-		/// by <see cref="BinaryTerminal"/> and <see cref="TextTerminal"/>.
-		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
-		protected virtual void DoRawBytePost(DateTime ts, string dev, IODirection dir,
-		                                     TimeoutSettingTuple timedLineBreak, LineBreakTimeout lineBreakTimeout)
-		{
-			// Handle stop of timed line breaks:
-			if (timedLineBreak.Enabled)
-			{
-				if (!IsReloading)
-				{
-					var lineState = GetUnidirLineState(dir); // Just checking for Tx or Rx is sufficient.
-					if (lineState.Position == LinePosition.End)
-						lineBreakTimeout.Stop();
-				}
-			}
-		}
+		protected abstract void ProcessByteOfChunk(RepositoryType repositoryType,
+		                                           byte b, DateTime ts, string dev, IODirection dir,
+		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd,
+		                                           out bool breakChunk);
 
 		/// <remarks>
 		/// <paramref name="repositoryType"/> and <paramref name="elementsToAdd"/> are required
@@ -1276,21 +1257,143 @@ namespace YAT.Domain
 
 		#endregion
 
-		#region Timer Events
+		#region TimedLineBreak
 		//------------------------------------------------------------------------------------------
-		// Timer Events
+		// TimedLineBreak
 		//------------------------------------------------------------------------------------------
 
+		private void InitializeTimedLineBreaksIfNeeded()
+		{
+			if (TerminalSettings.TxDisplayTimedLineBreak.Enabled)
+			{
+				if (this.txTimedLineBreak != null) // Must be given by this terminal.
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'DisposeTimeoutsIfNeeded()' must be called first!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+				this.txTimedLineBreak = new LineBreakTimeout(TerminalSettings.TxDisplayTimedLineBreak.Timeout);
+				this.txTimedLineBreak.Elapsed += txTimedLineBreak_Elapsed;
+			}
+
+			if (TerminalSettings.RxDisplayTimedLineBreak.Enabled)
+			{
+				if (this.rxTimedLineBreak != null) // Must be given by this terminal.
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'DisposeTimeoutsIfNeeded()' must be called first!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+				this.rxTimedLineBreak = new LineBreakTimeout(TerminalSettings.RxDisplayTimedLineBreak.Timeout);
+				this.rxTimedLineBreak.Elapsed += rxTimedLineBreak_Elapsed;
+			}
+		}
+
+		private void DisposeTimedLineBreaksIfNeeded()
+		{
+			if (this.txTimedLineBreak != null)
+			{
+				this.txTimedLineBreak.Elapsed -= txTimedLineBreak_Elapsed;
+				this.txTimedLineBreak.Dispose();
+			}
+
+			this.txTimedLineBreak = null;
+
+			if (this.rxTimedLineBreak != null)
+			{
+				this.rxTimedLineBreak.Elapsed -= rxTimedLineBreak_Elapsed;
+				this.rxTimedLineBreak.Dispose();
+			}
+
+			this.rxTimedLineBreak = null;
+		}
+
+		private void ResetTimedLineBreaksIfNeeded(RepositoryType repositoryType)
+		{
+			bool txIsAffected;
+			bool rxIsAffected;
+
+			switch (repositoryType)
+			{
+				case RepositoryType.Tx:    txIsAffected = true;  rxIsAffected = false; break;
+				case RepositoryType.Bidir: txIsAffected = true;  rxIsAffected = true;  break;
+				case RepositoryType.Rx:    txIsAffected = false; rxIsAffected = false; break;
+
+				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+
+			if (txIsAffected && TerminalSettings.TxDisplayTimedLineBreak.Enabled)
+				this.txTimedLineBreak.Stop();
+
+			if (rxIsAffected && TerminalSettings.RxDisplayTimedLineBreak.Enabled)
+				this.rxTimedLineBreak.Stop();
+		}
+
+		private void GetTimedLineBreak(IODirection dir, out TimeoutSettingTuple settings, out LineBreakTimeout timeout)
+		{
+			switch (dir)
+			{
+				case IODirection.Tx: settings = TerminalSettings.TxDisplayTimedLineBreak; timeout = this.txTimedLineBreak; break;
+				case IODirection.Rx: settings = TerminalSettings.RxDisplayTimedLineBreak; timeout = this.rxTimedLineBreak; break;
+
+				case IODirection.Bidir:
+				case IODirection.None:  throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
 		/// <remarks>
-		/// This event handler must synchronize against <see cref="ChunkVsTimeoutSyncObj"/>!
+		/// Chunk and timed processing is synchronized against <see cref="ChunkVsTimedSyncObj"/>.
+		/// Thus, time line breaks can be suspended during chunk processing.
+		/// </remarks>
+		protected virtual void SuspendTimedLineBreak(IODirection dir)
+		{
+			TimeoutSettingTuple settings;
+			LineBreakTimeout timeout;
+			GetTimedLineBreak(dir, out settings, out timeout);
+
+			if (settings.Enabled)
+			{
+				timeout.Stop();
+			}
+		}
+
+		/// <remarks>
+		/// Chunk and timed processing is synchronized against <see cref="ChunkVsTimedSyncObj"/>.
+		/// Thus, time line breaks can be suspended during chunk processing.
+		/// </remarks>
+		protected virtual void ResumeTimedLineBreak(IODirection dir)
+		{
+			TimeoutSettingTuple settings;
+			LineBreakTimeout timeout;
+			GetTimedLineBreak(dir, out settings, out timeout);
+
+			if (settings.Enabled)
+			{
+				var lineState = GetUnidirLineState(dir);
+				switch (lineState.Position)
+				{
+					case LinePosition.Begin:
+					case LinePosition.End:
+						// Nothing to do, keep timeout stopped.
+						break;
+
+					case LinePosition.Content:
+					case LinePosition.ContentExceeded:
+						timeout.Start();
+						break;
+
+					default:
+						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + lineState.Position + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+		}
+
+		/// <remarks>
+		/// This event handler must synchronize against <see cref="ChunkVsTimedSyncObj"/>!
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		private void txLineBreakTimeout_Elapsed(object sender, EventArgs e)
+		private void txTimedLineBreak_Elapsed(object sender, EventArgs e)
 		{
-			DebugLineBreak("txLineBreakTimeout_Elapsed");
+			DebugLineBreak("txTimedLineBreak_Elapsed");
 
-			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
+			lock (ChunkVsTimedSyncObj) // Synchronize processing (raw chunk | timed line break).
 			{
 				if (IsInDisposal) // Ensure to not handle async timer callback during closing anymore.
 					return;
@@ -1304,15 +1407,15 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// This event handler must synchronize against <see cref="ChunkVsTimeoutSyncObj"/>!
+		/// This event handler must synchronize against <see cref="ChunkVsTimedSyncObj"/>!
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		private void rxLineBreakTimeout_Elapsed(object sender, EventArgs e)
+		private void rxTimedLineBreak_Elapsed(object sender, EventArgs e)
 		{
-			DebugLineBreak("rxLineBreakTimeout_Elapsed");
+			DebugLineBreak("rxTimedLineBreak_Elapsed");
 
-			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
+			lock (ChunkVsTimedSyncObj) // Synchronize processing (raw chunk | timed line break).
 			{
 				if (IsInDisposal) // Ensure to not handle async timer callback during closing anymore.
 					return;

@@ -29,6 +29,9 @@
 
 #if (DEBUG)
 
+	// Enable debugging of 'GlueCharsOfLine':
+////#define DEBUG_GLUE_CHARS_OF_LINE
+
 	// Enable debugging of 'WaitForResponse':
 ////#define DEBUG_WAIT_FOR_RESPONSE
 
@@ -75,9 +78,10 @@ namespace YAT.Domain
 
 		private TextUnidirState textTxState;
 		private TextUnidirState textBidirTxState;
-		private TextBidirState  textBidirState;
 		private TextUnidirState textBidirRxState;
 		private TextUnidirState textRxState;
+
+		private LineBreakTimeout glueCharsOfLineTimeout;
 
 		private object waitForResponseClearanceSyncObj = new object();
 		private int waitForResponseResponseCounter; // = 0 and will again be initialized to that.
@@ -455,11 +459,6 @@ namespace YAT.Domain
 					this.textBidirRxState = new TextUnidirState(eol);
 					this.textRxState      = new TextUnidirState(eol);
 				}
-
-				// Bidir:
-				{
-					this.textBidirState = new TextBidirState();
-				}
 			}
 
 			if (TextTerminalSettings.WaitForResponse.Enabled)
@@ -494,9 +493,9 @@ namespace YAT.Domain
 			// Text specifics:
 			switch (repositoryType)
 			{
-				case RepositoryType.Tx:    this.textTxState     .Reset();                                                             break;
-				case RepositoryType.Bidir: this.textBidirTxState.Reset(); this.textBidirState.Reset(); this.textBidirRxState.Reset(); break;
-				case RepositoryType.Rx:                                                                this.textRxState     .Reset(); break;
+				case RepositoryType.Tx:    this.textTxState     .Reset();                                break;
+				case RepositoryType.Bidir: this.textBidirTxState.Reset(); this.textBidirRxState.Reset(); break;
+				case RepositoryType.Rx:                                   this.textRxState     .Reset(); break;
 
 				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -524,112 +523,67 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <remarks>
-		/// This method shall not be overridden, same as <see cref="GetTextUnidirState"/>.
-		/// </remarks>
-		protected TextBidirState GetTextBidirState(RepositoryType repositoryType)
-		{
-			switch (repositoryType)
-			{
-				case RepositoryType.Bidir: { return (this.textBidirState); }
-
-				case RepositoryType.Tx:
-				case RepositoryType.Rx:
-				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
-		}
-
 		/// <summary>
 		/// Implements the text terminal specific <see cref="Settings.TextTerminalSettings.GlueCharsOfLine"/> functionality.
 		/// </summary>
-		/// <remarks>
-		/// On main processing, the two affected repositories will be processed simultaneously.
-		/// On alternative processing, i.e. on reload, only one repository will be affected.
-		/// </remarks>
-		/// <remarks>
-		/// This method must synchronize against <see cref="Terminal.ChunkVsTimeoutSyncObj"/>!
-		///
-		/// Saying hello to StyleCop ;-.
-		/// </remarks>
-		protected override void ProcessRawChunk(RawChunk chunk, bool txIsAffected, bool bidirIsAffected, bool rxIsAffected)
+		protected override void ProcessChunk(RepositoryType repositoryType, RawChunk chunk, out bool partlyOrCompletelyPostponed)
 		{
-			lock (ChunkVsTimeoutSyncObj) // Synchronize processing (raw chunk | timed line break).
+			ProcessGlueCharsOfLineIfNeeded(repositoryType, chunk, out partlyOrCompletelyPostponed);
+			if (partlyOrCompletelyPostponed)
+				return;
+			else
+				base.ProcessChunk(repositoryType, chunk);
+		}
+
+		/// <summary></summary>
+		protected virtual void ProcessGlueCharsOfLineIfNeeded(RepositoryType repositoryType, RawChunk chunk, out bool partlyOrCompletelyPostponed)
+		{
+			if (TextTerminalSettings.GlueCharsOfLine.Enabled)
 			{
-				if (TextTerminalSettings.GlueCharsOfLine.Enabled)
+				if (repositoryType == RepositoryType.Bidir) // Glueing only applies to bidirectional processing.
 				{
-					if (bidirIsAffected) // Glueing only applies to bidirectional processing.
+					var lineState = GetLineState(RepositoryType.Bidir);
+
+					if (lineState.Position != LinePosition.Begin) // Postponing is only needed when already within a line.
 					{
-						var textBidirState = GetTextBidirState(RepositoryType.Bidir);
+						var overallState = GetOverallState(RepositoryType.Bidir);
+						var deviceOrDirectionHasChanged = false;
 
-						// 1. Process previously postponed chunks/bytes:
-
-						while ((textBidirState.PostponedChunks.Count > 0) || (textBidirState.PostponedChunkBytes != null))
+						var isServerSocket = TerminalSettings.IO.IOTypeIsServerSocket;
+						if (isServerSocket && TerminalSettings.Display.DeviceLineBreakEnabled) // Attention: This 'isServerSocket' restriction is also implemented at other locations!
 						{
-							if (textBidirState.PostponedChunks.Count > 0)
+							if (!overallState.DeviceLineBreak.IsFirstChunk)
 							{
-								foreach (var postponedChunk in textBidirState.PostponedChunks)
-									base.ProcessRawChunk(postponedChunk, false, true, false);
-
-								textBidirState.PostponedChunks.Clear();
-							}
-
-							if (textBidirState.PostponedChunkBytes != null)
-							{
-								var tuple = textBidirState.PostponedChunkBytes;
-								var raw = new RawChunk
-								              (
-								                  tuple.Item1.ToArray(),
-								                  tuple.Item2,
-								                  tuple.Item3,
-								                  tuple.Item4
-								              );
-								base.ProcessRawChunk(raw, false, true, false);
+								if (DeviceHasChanged(chunk.Device, overallState.DeviceLineBreak.Device))
+									deviceOrDirectionHasChanged = true;
 							}
 						}
 
-						// 2. Process the current chunk:
-
-						var lineState = GetLineState(RepositoryType.Bidir);
-						if (lineState.Position != LinePosition.Begin) // Glueing is only needed when already within a line.
+						if (TerminalSettings.Display.DirectionLineBreakEnabled)
 						{
-							var overallState = GetOverallState(RepositoryType.Bidir);
-							var deviceOrDirectionHasChanged = false;
-
-							var isServerSocket = TerminalSettings.IO.IOTypeIsServerSocket;
-							if (isServerSocket && TerminalSettings.Display.DeviceLineBreakEnabled) // Attention: This 'isServerSocket' restriction is also implemented at other locations!
+							if (!overallState.DirectionLineBreak.IsFirstChunk)
 							{
-								if (!overallState.DeviceLineBreak.IsFirstChunk)
-								{
-									if (DeviceHasChanged(chunk.Device, overallState.DeviceLineBreak.Device))
-										deviceOrDirectionHasChanged = true;
-								}
+								if (DirectionHasChanged(chunk.Direction, overallState.DirectionLineBreak.Direction))
+									deviceOrDirectionHasChanged = true;
 							}
+						}
 
-							if (TerminalSettings.Display.DirectionLineBreakEnabled)
+						if (deviceOrDirectionHasChanged)
+						{
+							var postponeLineBreak = !GlueCharsOfLineTimeoutHasElapsed(chunk.TimeStamp, lineState.TimeStamp);
+							if (postponeLineBreak)
 							{
-								if (!overallState.DirectionLineBreak.IsFirstChunk)
-								{
-									if (DirectionHasChanged(chunk.Direction, overallState.DirectionLineBreak.Direction))
-										deviceOrDirectionHasChanged = true;
-								}
-							}
+								DebugGlueCharsOfLine("Glueing determined to postpone device or direction line break.");
 
-							if (deviceOrDirectionHasChanged)
-							{
-								var postponeLineBreak = !GlueCharsOfLineTimeoutHasElapsed(chunk.TimeStamp, lineState.TimeStamp);
-								if (postponeLineBreak)
-								{
-									textBidirState.PostponedChunks.Add(chunk); // Chunk will be processed later,
-									bidirIsAffected = false;                   // skip it for this processing run.
-								}
+								partlyOrCompletelyPostponed = true;
+								return;
 							}
-						} // if (position != Begin)
-					} // if (bidirIsAffected)
-				} // if (GlueCharsOfLine.Enabled)
+						}
+					} // if (position != Begin)
+				} // if (bidirIsAffected)
+			} // if (GlueCharsOfLine.Enabled)
 
-				base.ProcessRawChunk(chunk, txIsAffected, bidirIsAffected, rxIsAffected);
-			} // lock (ChunkVsTimeoutSyncObj)
+			partlyOrCompletelyPostponed = false;
 		}
 
 		/// <summary></summary>
@@ -651,41 +605,21 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		protected override void DoRawByte(RepositoryType repositoryType,
-		                                  byte b, DateTime ts, string dev, IODirection dir,
-		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
+		protected override void ProcessByteOfChunk(RepositoryType repositoryType,
+		                                           byte b, DateTime ts, string dev, IODirection dir,
+		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd,
+		                                           out bool breakChunk)
 		{
 			var processState = GetProcessState(repositoryType);
 			var lineState = processState.Line; // Convenience shortcut.
 
-			// The first byte of a line will sequentially trigger the [Begin] as well as [Content]
-			// condition below. In the normal case, the line will then contain the first displayed
-			// element. However, when initially receiving a hidden e.g. <XOn>, the line will yet be
-			// empty. Then, when subsequent bytes are received, even when seconds later, the line's
-			// initial time stamp is kept. This is illogical, the time stamp of a hidden <XOn> shall
-			// not define the time stamp of the line, thus handle such case by rebeginning the line.
+			// When glueing is enabled, potentially postpone remaining byte(s) of chunk until
+			// previously postponed chunk(s) has been processed.
 			if (lineState.Position == LinePosition.End)
 			{
-				if (TextTerminalSettings.GlueCharsOfLine.Enabled) // Potentially postpone remaining byte(s) of chunk
-				{                                                 // until previously postponed chunk(s) has been processed.
-					if (repositoryType == RepositoryType.Bidir) // Glueing only applies to bidirectional processing.
-					{
-						var textBidirState = GetTextBidirState(repositoryType);
-						if (textBidirState.PostponedChunks.Count > 0)
-						{
-							var postponedChunkTimeStamp = textBidirState.PostponedChunks[0].TimeStamp;
-							if ((postponedChunkTimeStamp < ts) || GlueCharsOfLineTimeoutHasElapsed(postponedChunkTimeStamp, lineState.TimeStamp))
-							{
-								if (textBidirState.PostponedChunkBytes == null)
-									textBidirState.PostponedChunkBytes = new Tuple<List<byte>, DateTime, string, IODirection>(new List<byte>(new byte[] { b }), ts, dev, dir); // Create mini-chunks instead of grouping again.
-								else
-									textBidirState.PostponedChunkBytes.Item1.Add(b);
-
-								return; // Byte will be processed later, skip it and the subsequent ones of the chunk.
-							}
-						}
-					}
-				}
+				ProcessGlueCharsOfLineIfNeeded(repositoryType, processState, lineState, ts, out breakChunk);
+				if (breakChunk)
+					return;
 			}
 
 			// The first byte of a line will sequentially trigger the [Begin] as well as [Content]
@@ -705,6 +639,33 @@ namespace YAT.Domain
 
 			if (lineState.Position == LinePosition.End)
 				DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
+
+			breakChunk = false;
+		}
+
+		/// <summary></summary>
+		protected virtual void ProcessGlueCharsOfLineIfNeeded(RepositoryType repositoryType, ProcessState processState, LineState lineState, DateTime ts, out bool breakChunk)
+		{
+			if (TextTerminalSettings.GlueCharsOfLine.Enabled)
+			{
+				if (repositoryType == RepositoryType.Bidir) // Glueing only applies to bidirectional processing.
+				{
+					var overallState = processState.Overall; // Convenience shortcut.
+					if (overallState.PostponedChunks.Count > 0)
+					{
+						var postponedChunkTimeStamp = overallState.PostponedChunks[0].TimeStamp;
+						if ((postponedChunkTimeStamp < ts) || GlueCharsOfLineTimeoutHasElapsed(postponedChunkTimeStamp, lineState.TimeStamp))
+						{
+							DebugGlueCharsOfLine("Glueing determined to break chunk.");
+
+							breakChunk = true;
+							return;
+						}
+					}
+				}
+			}
+
+			breakChunk = false;
 		}
 
 		/// <summary></summary>
@@ -1131,6 +1092,70 @@ namespace YAT.Domain
 
 		#endregion
 
+		#region GlueCharsOfLine
+		//------------------------------------------------------------------------------------------
+		// GlueCharsOfLine
+		//------------------------------------------------------------------------------------------
+
+		private void InitializeGlueCharsOfLineTimeoutIfNeeded()
+		{
+			if (TextTerminalSettings.GlueCharsOfLine.Enabled)
+			{
+				if (this.glueCharsOfLineTimeout != null) // Must be given by this terminal.
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'DisposeGlueCharsOfLineTimeoutIfNeeded()' must be called first!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+				this.glueCharsOfLineTimeout = new LineBreakTimeout(TextTerminalSettings.GlueCharsOfLine.Timeout);
+				this.glueCharsOfLineTimeout.Elapsed += glueCharsOfLineTimeout_Elapsed;
+			}
+		}
+
+		private void DisposeGlueCharsOfLineTimeoutIfNeeded()
+		{
+			if (this.glueCharsOfLineTimeout != null)
+			{
+				this.glueCharsOfLineTimeout.Elapsed -= glueCharsOfLineTimeout_Elapsed;
+				this.glueCharsOfLineTimeout.Dispose();
+			}
+
+			this.glueCharsOfLineTimeout = null;
+		}
+
+		private void ResetGlueCharsOfLineTimeoutIfNeeded(RepositoryType repositoryType)
+		{                                         // Glueing only applies to bidirectional processing.
+			if ((repositoryType == RepositoryType.Bidir) && TextTerminalSettings.GlueCharsOfLine.Enabled)
+				this.glueCharsOfLineTimeout.Stop();
+		}
+
+		/// <remarks>
+		/// This event handler must synchronize against <see cref="Terminal.ChunkVsTimedSyncObj"/>!
+		///
+		/// Saying hello to StyleCop ;-.
+		/// </remarks>
+		private void glueCharsOfLineTimeout_Elapsed(object sender, EventArgs e)
+		{
+			DebugGlueCharsOfLine("glueCharsOfLineTimeout_Elapsed");
+
+			lock (ChunkVsTimedSyncObj) // Synchronize processing (raw chunk | timed line break).
+			{
+				if (IsInDisposal) // Ensure to not handle async timer callback during closing anymore.
+					return;
+
+			////if (TextTerminalSettings.GlueCharsOfLine.Enabled) is implicitly given.
+				{
+					var overallState = GetOverallState(RepositoryType.Bidir); // Glueing only applies to bidirectional processing.
+					var postponedChunks = overallState.RemovePostponedChunks();
+					if (postponedChunks.Length > 0)
+					{
+						var chunksToProcess = new List<RawChunk>(postponedChunks.Length); // Preset the required capacity to improve memory management.
+						chunksToProcess.AddRange(postponedChunks);
+						ProcessChunksOfSameDirection(RepositoryType.Bidir, chunksToProcess, chunksToProcess[0].Direction); // Glueing only applies to bidirectional processing.
+					}
+				}
+			}
+		}
+
+		#endregion
+
 		#region WaitForResponse
 		//------------------------------------------------------------------------------------------
 		// WaitForResponse
@@ -1289,6 +1314,15 @@ namespace YAT.Domain
 		//==========================================================================================
 		// Debug
 		//==========================================================================================
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_GLUE_CHARS_OF_LINE")]
+		private void DebugGlueCharsOfLine(string message)
+		{
+			DebugMessage(message);
+		}
 
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.

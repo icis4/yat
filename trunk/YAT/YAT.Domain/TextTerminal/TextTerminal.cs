@@ -150,7 +150,6 @@ namespace YAT.Domain
 
 				// Bidir:
 				{
-					this.textBidirState     = new TextBidirState(    casted.textBidirState);
 					this.lineSendDelayState = new LineSendDelayState(casted.lineSendDelayState);
 				}
 			}

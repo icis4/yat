@@ -135,7 +135,7 @@ namespace YAT.Domain
 					this.isReloading = true;
 					foreach (var raw in this.rawTerminal.RepositoryToChunks(repositoryType))
 					{
-						ProcessRawChunk(repositoryType, raw);
+						ProcessChunk(repositoryType, raw);
 					}
 					this.isReloading = false;
 					ReloadMyRepository(repositoryType);
@@ -185,19 +185,19 @@ namespace YAT.Domain
 
 					// Reload repositories:
 					this.isReloading = true;
-					foreach (var raw in this.rawTerminal.RepositoryToChunks(RepositoryType.Tx))
-					{                                            // Separate Tx/Bidir/Rx processing is required...
-						ProcessRawChunk(RepositoryType.Tx, raw); // ...for selectively clearing repositories...
-					}                                            // ...with ClearRepository(repository).
-					foreach (var raw in this.rawTerminal.RepositoryToChunks(RepositoryType.Bidir))
+					foreach (var chunk in this.rawTerminal.RepositoryToChunks(RepositoryType.Tx))
+					{                                           // Separate Tx/Bidir/Rx processing is required...
+						ProcessChunk(RepositoryType.Tx, chunk); // ...for selectively clearing repositories...
+					}                                           // ...with ClearRepository(repository).
+					foreach (var chunk in this.rawTerminal.RepositoryToChunks(RepositoryType.Bidir))
 					{
-						ProcessRawChunk(RepositoryType.Bidir, raw);
+						ProcessChunk(RepositoryType.Bidir, chunk);
 					}
-					foreach (var raw in this.rawTerminal.RepositoryToChunks(RepositoryType.Rx))
-					{                                            // Synchronized Tx/Bidir/Rx processing is not...
-						ProcessRawChunk(RepositoryType.Rx, raw); // ...useful for synchronized incremental monitor...
-					}                                            // ...refresh because monitors are only refreshed...
-					this.isReloading = false;                    // ...by the subsequent 'ReloadMyRepository' calls.
+					foreach (var chunk in this.rawTerminal.RepositoryToChunks(RepositoryType.Rx))
+					{                                           // Synchronized Tx/Bidir/Rx processing is not...
+						ProcessChunk(RepositoryType.Rx, chunk); // ...useful for synchronized incremental monitor...
+					}                                           // ...refresh because monitors are only refreshed...
+					this.isReloading = false;                   // ...by the subsequent 'ReloadMyRepository' calls.
 					ReloadMyRepository(RepositoryType.Tx);
 					ReloadMyRepository(RepositoryType.Bidir);
 					ReloadMyRepository(RepositoryType.Rx);
