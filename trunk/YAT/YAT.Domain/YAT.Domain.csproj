@@ -156,6 +156,7 @@
     <Compile Include="Terminal\Terminal.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="Terminal\Enums.cs" />
+    <Compile Include="TextTerminal\TextTerminal.Repository.cs" />
     <Compile Include="TextTerminal\TextTerminal.Process.cs" />
     <Compile Include="TextTerminal\TextTerminal.Send.cs" />
     <Compile Include="TextTerminal\TextTerminal.cs" />

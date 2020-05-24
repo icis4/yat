@@ -836,10 +836,16 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void ProcessAndSignalTimedLineBreakOnReloadIfNeeded(RepositoryType repositoryType, RawChunk chunk)
 		{
-			if (RepositoryIsAffected(repositoryType, chunk.Direction))
+			ProcessAndSignalTimedLineBreakOnReloadIfNeeded(repositoryType, chunk.TimeStamp, chunk.Direction);
+		}
+
+		/// <summary></summary>
+		protected virtual void ProcessAndSignalTimedLineBreakOnReloadIfNeeded(RepositoryType repositoryType, DateTime ts, IODirection dir)
+		{
+			if (RepositoryIsAffected(repositoryType, dir))
 			{
 				TimeoutSettingTuple settings;
-				switch (chunk.Direction)
+				switch (dir)
 				{
 					case IODirection.Tx: settings = TerminalSettings.TxDisplayTimedLineBreak; break;
 					case IODirection.Rx: settings = TerminalSettings.RxDisplayTimedLineBreak; break;
@@ -848,7 +854,7 @@ namespace YAT.Domain
 				}
 
 				if (settings.Enabled)
-					ProcessAndSignalTimedLineBreakOnReload(repositoryType, chunk.TimeStamp, chunk.Direction, settings.Timeout);
+					ProcessAndSignalTimedLineBreakOnReload(repositoryType, ts, dir, settings.Timeout);
 			}
 		}
 
@@ -1400,8 +1406,9 @@ namespace YAT.Domain
 
 			////if (TerminalSettings.TxDisplayTimedLineBreak.Enabled) is implicitly given.
 				{
-					ProcessAndSignalTimedLineBreak(RepositoryType.Tx,    DateTime.Now, IODirection.Tx);
-					ProcessAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Tx);
+					var now = DateTime.Now;
+					ProcessAndSignalTimedLineBreak(RepositoryType.Tx,    now, IODirection.Tx);
+					ProcessAndSignalTimedLineBreak(RepositoryType.Bidir, now, IODirection.Tx);
 				}
 			}
 		}
@@ -1422,8 +1429,9 @@ namespace YAT.Domain
 
 			////if (TerminalSettings.RxDisplayTimedLineBreak.Enabled) is implicitly given.
 				{
-					ProcessAndSignalTimedLineBreak(RepositoryType.Bidir, DateTime.Now, IODirection.Rx);
-					ProcessAndSignalTimedLineBreak(RepositoryType.Rx,    DateTime.Now, IODirection.Rx);
+					var now = DateTime.Now;
+					ProcessAndSignalTimedLineBreak(RepositoryType.Bidir, now, IODirection.Rx);
+					ProcessAndSignalTimedLineBreak(RepositoryType.Rx,    now, IODirection.Rx);
 				}
 			}
 		}

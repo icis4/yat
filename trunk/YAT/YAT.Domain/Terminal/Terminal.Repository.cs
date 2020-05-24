@@ -138,7 +138,7 @@ namespace YAT.Domain
 						ProcessChunk(repositoryType, raw);
 					}
 					this.isReloading = false;
-					ReloadMyRepository(repositoryType);
+					FinishReload(repositoryType);
 				}
 				finally
 				{
@@ -198,9 +198,9 @@ namespace YAT.Domain
 						ProcessChunk(RepositoryType.Rx, chunk); // ...useful for synchronized incremental monitor...
 					}                                           // ...refresh because monitors are only refreshed...
 					this.isReloading = false;                   // ...by the subsequent 'ReloadMyRepository' calls.
-					ReloadMyRepository(RepositoryType.Tx);
-					ReloadMyRepository(RepositoryType.Bidir);
-					ReloadMyRepository(RepositoryType.Rx);
+					FinishReload(RepositoryType.Tx);
+					FinishReload(RepositoryType.Bidir);
+					FinishReload(RepositoryType.Rx);
 				}
 				finally
 				{
@@ -670,23 +670,38 @@ namespace YAT.Domain
 			OnRepositoryCleared(repositoryType, EventArgs.Empty); // Raise event outside the lock.
 		}
 
-		/// <remarks>Named 'My' for consistency with <see cref="ClearMyRepository(RepositoryType)"/>.</remarks>
-		protected virtual void ReloadMyRepository(RepositoryType repositoryType)
+		/// <summary></summary>
+		protected virtual void FinishReload(RepositoryType repositoryType)
 		{
-		////lock (this.repositorySyncObj)
-		////{
-		////	switch (repositoryType)
-		////	{
-		////		case RepositoryType.Tx:    /* Nothing to do */ break;
-		////		case RepositoryType.Bidir: /* Nothing to do */ break;
-		////		case RepositoryType.Rx:    /* Nothing to do */ break;
-		////
-		////		case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-		////		default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-		////	}
-		////}
+			lock (this.repositorySyncObj)
+			{
+				switch (repositoryType)
+				{
+					case RepositoryType.Tx:    DoFinishReload(repositoryType); break;
+					case RepositoryType.Bidir: DoFinishReload(repositoryType); break;
+					case RepositoryType.Rx:    DoFinishReload(repositoryType); break;
+
+					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
 
 			OnRepositoryReloaded(repositoryType, new DisplayLinesEventArgs(RepositoryToDisplayLines(repositoryType))); // Raise event outside the lock.
+		}
+
+		/// <summary></summary>
+		protected virtual void DoFinishReload(RepositoryType repositoryType)
+		{
+			switch (repositoryType)
+			{
+				case RepositoryType.Tx:    ProcessAndSignalTimedLineBreakOnReloadIfNeeded(repositoryType, DateTime.MaxValue, IODirection.Tx); break;
+				case RepositoryType.Bidir: ProcessAndSignalTimedLineBreakOnReloadIfNeeded(repositoryType, DateTime.MaxValue, IODirection.Tx);
+				                           ProcessAndSignalTimedLineBreakOnReloadIfNeeded(repositoryType, DateTime.MaxValue, IODirection.Rx); break;
+				case RepositoryType.Rx:    ProcessAndSignalTimedLineBreakOnReloadIfNeeded(repositoryType, DateTime.MaxValue, IODirection.Rx); break;
+
+				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		#endregion
