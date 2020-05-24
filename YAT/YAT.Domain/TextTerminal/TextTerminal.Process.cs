@@ -532,7 +532,7 @@ namespace YAT.Domain
 			if (partlyOrCompletelyPostponed)
 				return;
 			else
-				base.ProcessChunk(repositoryType, chunk);
+				base.ProcessChunk(repositoryType, chunk, out partlyOrCompletelyPostponed);
 		}
 
 		/// <summary></summary>
@@ -1142,15 +1142,21 @@ namespace YAT.Domain
 
 			////if (TextTerminalSettings.GlueCharsOfLine.Enabled) is implicitly given.
 				{
-					var overallState = GetOverallState(RepositoryType.Bidir); // Glueing only applies to bidirectional processing.
-					var postponedChunks = overallState.RemovePostponedChunks();
-					if (postponedChunks.Length > 0)
-					{
-						var chunksToProcess = new List<RawChunk>(postponedChunks.Length); // Preset the required capacity to improve memory management.
-						chunksToProcess.AddRange(postponedChunks);
-						ProcessChunksOfSameDirection(RepositoryType.Bidir, chunksToProcess, chunksToProcess[0].Direction); // Glueing only applies to bidirectional processing.
-					}
+					ProcessAndSignalGlueCharsOfLineTimeout();
 				}
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void ProcessAndSignalGlueCharsOfLineTimeout()
+		{
+			var overallState = GetOverallState(RepositoryType.Bidir); // Glueing only applies to bidirectional processing.
+			var postponedChunks = overallState.RemovePostponedChunks();
+			if (postponedChunks.Length > 0)
+			{
+				var chunksToProcess = new List<RawChunk>(postponedChunks.Length); // Preset the required capacity to improve memory management.
+				chunksToProcess.AddRange(postponedChunks);
+				ProcessChunksOfSameDirection(RepositoryType.Bidir, chunksToProcess, chunksToProcess[0].Direction); // Glueing only applies to bidirectional processing.
 			}
 		}
 
