@@ -232,10 +232,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public event EventHandler<EventArgs<bool>> IsSendingForSomeTimeChanged;
 
-		/// <summary></summary>
+		/// <remarks>Intentionally named "Raw" to emphasize difference to "Display".</remarks>
 		public event EventHandler<EventArgs<RawChunk>> RawChunkSent;
 
-		/// <summary></summary>
+		/// <remarks>Intentionally named "Raw" to emphasize difference to "Display".</remarks>
 		public event EventHandler<EventArgs<RawChunk>> RawChunkReceived;
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
@@ -1357,7 +1357,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// \remind (2017-12-11 / MKY)
 		/// Currently limited to data of a single line. Refactoring would be required to format multiple lines
-		/// (<see cref="ProcessRawChunk(RawChunk)"/> instead of <see cref="ByteToElement(byte, DateTime, IODirection, Radix, List{byte})"/>).
+		/// (<see cref="ProcessChunk(RawChunk)"/> instead of <see cref="ByteToElement(byte, DateTime, IODirection, Radix, List{byte})"/>).
 		/// </remarks>
 		public virtual string Format(byte[] data, IODirection direction)
 		{
@@ -1378,7 +1378,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// \remind (2017-12-11 / MKY)
 		/// Currently limited to data of a single line. Refactoring would be required to format multiple lines
-		/// (<see cref="ProcessRawChunk(RawChunk)"/> instead of <see cref="ByteToElement(byte, DateTime, IODirection, Radix, List{byte})"/>).
+		/// (<see cref="ProcessChunk(RawChunk)"/> instead of <see cref="ByteToElement(byte, DateTime, IODirection, Radix, List{byte})"/>).
 		/// </remarks>
 		public virtual string Format(byte[] data, Radix radix)
 		{                                    // Direction is irrelevant for formatting string, would only be for coloring,...
@@ -1391,7 +1391,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// \remind (2017-12-11 / MKY)
 		/// Currently limited to data of a single line. Refactoring would be required to format multiple lines
-		/// (<see cref="ProcessRawChunk(RawChunk)"/> instead of <see cref="ByteToElement(byte, DateTime, IODirection, Radix, List{byte})"/>).
+		/// (<see cref="ProcessChunk(RawChunk)"/> instead of <see cref="ByteToElement(byte, DateTime, IODirection, Radix, List{byte})"/>).
 		/// </remarks>
 		protected virtual string Format(byte[] data, IODirection direction, Radix radix)
 		{
@@ -1863,8 +1863,8 @@ namespace YAT.Domain
 
 			lock (ClearAndRefreshSyncObj) // Delay processing new raw data until clearing or refreshing has completed.
 			{
-				OnRawChunkSent(e);        // 'RawChunk' objects are immutable, subsequent use is OK.
-				ProcessRawChunk(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
+				OnRawChunkSent(e);     // 'RawChunk' objects are immutable, subsequent use is OK.
+				ProcessChunk(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
 			}
 		}
 
@@ -1880,8 +1880,8 @@ namespace YAT.Domain
 
 			lock (ClearAndRefreshSyncObj) // Delay processing new raw data until clearing or refreshing has completed.
 			{
-				OnRawChunkReceived(e);    // 'RawChunk' objects are immutable, subsequent use is OK.
-				ProcessRawChunk(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
+				OnRawChunkReceived(e); // 'RawChunk' objects are immutable, subsequent use is OK.
+				ProcessChunk(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
 			}
 		}
 

@@ -154,10 +154,13 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		protected override void DoRawByte(RepositoryType repositoryType,
-		                                  byte b, DateTime ts, string dev, IODirection dir,
-		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
+		protected override void ProcessByteOfChunk(RepositoryType repositoryType,
+		                                           byte b, DateTime ts, string dev, IODirection dir,
+		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd,
+		                                           out bool breakChunk)
 		{
+			breakChunk = false; // \Remind (2020-05-16 / MKK): Does 'elementsForNextLine' really work in every case?
+
 			var processState = GetProcessState(repositoryType);
 			var lineState = processState.Line; // Convenience shortcut.
 
