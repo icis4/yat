@@ -699,12 +699,12 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// This processing method is called by the <see cref="ProcessChunk(RawChunk)"/> above
+		/// This processing method is called by the <see cref="ProcessChunk(RawChunk)"/> method
 		/// as well as the <see cref="RefreshRepository"/> and <see cref="RefreshRepositories"/>
 		/// methods on reloading. It only affects one of the repositories.
 		/// </summary>
 		/// <remarks>
-		/// This method must synchronize against <see cref="Terminal.ChunkVsTimedSyncObj"/>!
+		/// This method must synchronize against <see cref="ChunkVsTimedSyncObj"/>!
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
