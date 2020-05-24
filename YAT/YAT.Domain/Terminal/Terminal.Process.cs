@@ -718,7 +718,7 @@ namespace YAT.Domain
 					SuspendTimedLineBreak(dir);
 
 				var overallState = GetOverallState(repositoryType);
-				var postponedChunks = overallState.RemovePostponedChunks();
+				var postponedChunks = overallState.RemovePostponedChunks(dir);
 				if (postponedChunks.Length > 0)
 				{
 					var chunksToProcess = new List<RawChunk>(postponedChunks.Length + 1); // Preset the required capacity to improve memory management.
@@ -807,16 +807,22 @@ namespace YAT.Domain
 			for (int i = (byteCountProcessed - 1); i < byteCountTotal; i++)
 				contentPostponed.Add(chunk.Content[i]);
 
-			var chunkPostponed = new RawChunk
-			                     (
-			                         contentPostponed.ToArray(),
-			                         chunk.TimeStamp,
-			                         chunk.Device,
-			                         chunk.Direction
-			                     );
+			var remainingPostponed = new RawChunk
+			                         (
+			                             contentPostponed.ToArray(),
+			                             chunk.TimeStamp,
+			                             chunk.Device,
+			                             chunk.Direction
+			                         );
 
+			PostponeChunk(repositoryType, remainingPostponed);
+		}
+
+		/// <summary></summary>
+		protected virtual void PostponeChunk(RepositoryType repositoryType, RawChunk chunk)
+		{
 			var overallState = GetOverallState(repositoryType);
-			overallState.AddPostponedChunk(chunkPostponed);
+			overallState.AddPostponedChunk(chunk);
 		}
 
 		/// <summary></summary>

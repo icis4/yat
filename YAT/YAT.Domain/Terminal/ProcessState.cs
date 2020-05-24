@@ -24,6 +24,8 @@
 using System;
 using System.Collections.Generic;
 
+using MKY;
+
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in
 // YAT.Domain\Terminal for better separation of the implementation files.
@@ -90,7 +92,10 @@ namespace YAT.Domain
 		public DateTime       PreviousLineTimeStamp { get; private set; }
 
 		/// <remarks>Only applies to <see cref="RepositoryType.Bidir"/>, still here for simplicity.</remarks>
-		public List<RawChunk> PostponedChunks       { get; private set; }
+		protected List<RawChunk> PostponedTxChunks  { get; private set; }
+
+		/// <remarks>Only applies to <see cref="RepositoryType.Bidir"/>, still here for simplicity.</remarks>
+		protected List<RawChunk> PostponedRxChunks  { get; private set; }
 
 		/// <summary></summary>
 		public OverallState()
@@ -108,7 +113,9 @@ namespace YAT.Domain
 		{
 			IsFirstLine           = true;
 			PreviousLineTimeStamp = DisplayElement.TimeStampDefault;
-			PostponedChunks       = new List<RawChunk>(); // No preset needed, the default behavior is good enough.
+
+			PostponedTxChunks = new List<RawChunk>(); // No preset needed, the default behavior is good enough.
+			PostponedRxChunks = new List<RawChunk>(); // No preset needed, the default behavior is good enough.
 		}
 
 		/// <summary>
@@ -143,14 +150,59 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual void AddPostponedChunk(RawChunk chunk)
 		{
-			PostponedChunks.Add(chunk);
+			switch (chunk.Direction)
+			{
+				case IODirection.Tx: PostponedTxChunks.Add(chunk); break;
+				case IODirection.Rx: PostponedRxChunks.Add(chunk); break;
+
+				default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A raw chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		/// <summary></summary>
-		public virtual RawChunk[] RemovePostponedChunks()
+		public virtual int GetPostponedChunkCount(IODirection dir)
 		{
-			var chunks = PostponedChunks.ToArray();
-			PostponedChunks.Clear();
+			switch (dir)
+			{
+				case IODirection.Tx: return (PostponedTxChunks.Count);
+				case IODirection.Rx: return (PostponedRxChunks.Count);
+
+				default: throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "Direction must be either Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		public virtual DateTime GetFirstPostponedChunkTimeStamp(IODirection dir)
+		{
+			List<RawChunk> chunks;
+
+			switch (dir)
+			{
+				case IODirection.Tx: chunks = PostponedTxChunks; break;
+				case IODirection.Rx: chunks = PostponedRxChunks; break;
+
+				default: throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "Direction must be either Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+
+			if (chunks.Count > 0)
+				return (chunks[0].TimeStamp);
+			else
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "This method requires existance of at least one postponed chunk!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		/// <summary></summary>
+		public virtual RawChunk[] RemovePostponedChunks(IODirection dir)
+		{
+			RawChunk[] chunks;
+
+			switch (dir)
+			{
+				case IODirection.Tx: chunks = PostponedTxChunks.ToArray(); PostponedTxChunks.Clear(); break;
+				case IODirection.Rx: chunks = PostponedRxChunks.ToArray(); PostponedRxChunks.Clear(); break;
+
+				default: throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "Direction must be either Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+
 			return (chunks);
 		}
 	}
