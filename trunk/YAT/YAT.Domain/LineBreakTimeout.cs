@@ -28,12 +28,10 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 using MKY;
-using MKY.Diagnostics;
 
 #endregion
 
@@ -57,7 +55,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public LineBreakTimeout(int timeout)
 		{
-			this.timeout = timeout;
+			this.timeout = timeout;                                                // Prevents the timer from starting.
+			this.timer = new Timer(new TimerCallback(timer_Timeout), null, Timeout.Infinite, Timeout.Infinite);
 		}
 
 		#region Disposal
@@ -79,7 +78,11 @@ namespace YAT.Domain
 			if (disposing)
 			{
 				// In the 'normal' case, the timer is stopped in Stop().
-				StopAndDisposeTimer();
+				if (this.timer != null)
+				{
+					this.timer.Dispose();
+					this.timer = null;
+				}
 			}
 		}
 
@@ -90,16 +93,8 @@ namespace YAT.Domain
 		{
 			AssertUndisposed();
 
-			CreateAndStartTimer();
-		}
-
-		/// <summary></summary>
-		public virtual void Restart()
-		{
-		////AssertUndisposed() is called by methods below.
-
-			Stop();
-			Start();
+			lock (this.timerSyncObj)
+				this.timer.Change(this.timeout, Timeout.Infinite);
 		}
 
 		/// <summary></summary>
@@ -108,30 +103,8 @@ namespace YAT.Domain
 		{
 			AssertUndisposed();
 
-			StopAndDisposeTimer();
-		}
-
-		private void CreateAndStartTimer()
-		{
-			lock (this.timerSyncObj)
-			{
-				if (this.timer == null)
-				{
-					this.timer = new Timer(new TimerCallback(timer_Timeout), null, this.timeout, Timeout.Infinite);
-				}
-			}
-		}
-
-		private void StopAndDisposeTimer()
-		{
-			lock (this.timerSyncObj)
-			{
-				if (this.timer != null)
-				{
-					this.timer.Dispose();
-					this.timer = null;
-				}
-			}
+			lock (this.timerSyncObj)      // Prevents the timer from starting.
+				this.timer.Change(Timeout.Infinite, Timeout.Infinite);
 		}
 
 		private void timer_Timeout(object obj)
@@ -144,8 +117,6 @@ namespace YAT.Domain
 				if ((this.timer == null) || (IsInDisposal)) // Ensure to not handle async timer callback during closing anymore.
 					return;
 			}
-
-			Stop();
 
 			OnElapsed(EventArgs.Empty);
 		}
