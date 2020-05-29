@@ -686,7 +686,7 @@ namespace YAT.Domain
 		{
 			lock (ChunkVsTimedSyncObj) // Synchronize processing (raw chunk | timed line break).
 			{
-				DebugChunks(string.Format(CultureInfo.InvariantCulture, "Processing {0} chunk of {1} byte(s).", chunk.Direction, chunk.Content.Count));
+				DebugChunks(string.Format(CultureInfo.InvariantCulture, "Processing {0} chunk of {1} byte(s) stamped {2}.", chunk.Direction, chunk.Content.Count, chunk.TimeStamp));
 
 				switch (chunk.Direction)
 				{
