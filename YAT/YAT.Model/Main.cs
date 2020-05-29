@@ -1975,7 +1975,7 @@ namespace YAT.Model
 			}
 			else // Monitor.TryEnter()
 			{
-				DebugMessage("operationTimer_Elapsed() monitor has timed out!");
+				DebugMessage("operationTimer_Elapsed() monitor has timed out, skipping this concurrent event.");
 			}
 		}
 
@@ -2079,7 +2079,7 @@ namespace YAT.Model
 			}
 			else // Monitor.TryEnter()
 			{
-				DebugMessage("exitTimer_Elapsed() monitor has timed out!");
+				DebugMessage("exitTimer_Elapsed() monitor has timed out, skipping this concurrent event.");
 			}
 		}
 

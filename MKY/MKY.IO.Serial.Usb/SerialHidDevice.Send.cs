@@ -303,7 +303,7 @@ namespace MKY.IO.Serial.Usb
 						}
 						else // Monitor.TryEnter()
 						{
-							DebugMessage("SendThread() monitor has timed out!");
+							DebugMessage("SendThread() monitor has timed out, trying again...");
 						}
 					} // Inner loop
 				} // Outer loop

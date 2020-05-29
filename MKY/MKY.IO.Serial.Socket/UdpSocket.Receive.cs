@@ -307,7 +307,7 @@ namespace MKY.IO.Serial.Socket
 						}
 						else // Monitor.TryEnter()
 						{
-							DebugMessage("ReceiveThread() monitor has timed out!");
+							DebugMessage("ReceiveThread() monitor has timed out, trying again...");
 						}
 
 						// Note the Thread.Sleep(TimeSpan.Zero) above.

@@ -583,7 +583,7 @@ namespace YAT.Model
 			}
 			else // Monitor.TryEnter()
 			{
-				DebugMessage("settingsRoot_Changed() monitor has timed out!");
+				DebugMessage("settingsRoot_Changed() monitor has timed out, skipping this recursive event.");
 			}
 		}
 
