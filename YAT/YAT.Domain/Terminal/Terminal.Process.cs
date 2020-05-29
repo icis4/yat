@@ -29,6 +29,9 @@
 
 #if (DEBUG)
 
+	// Enable postponing of whole chunks or parts of it (e.g. for glueing chars of a line):
+////#define DEBUG_CHUNKS
+
 	// Enable debugging of line break:
 ////#define DEBUG_LINE_BREAK
 
@@ -683,6 +686,8 @@ namespace YAT.Domain
 		{
 			lock (ChunkVsTimedSyncObj) // Synchronize processing (raw chunk | timed line break).
 			{
+				DebugChunks(string.Format(CultureInfo.InvariantCulture, "Processing {0} chunk of {1} byte(s).", chunk.Direction, chunk.Content.Count));
+
 				switch (chunk.Direction)
 				{
 					case IODirection.Tx: ProcessChunk(RepositoryType.Tx,    chunk);
@@ -721,10 +726,12 @@ namespace YAT.Domain
 				var postponedChunks = overallState.RemovePostponedChunks(dir);
 				if (postponedChunks.Length > 0)
 				{
+					DebugChunks(string.Format(CultureInfo.InvariantCulture, "Processing {0} postponed {1} chunk(s) before processing {2} chunk.", postponedChunks.Length, dir, dir));
+
 					var chunksToProcess = new List<RawChunk>(postponedChunks.Length + 1); // Preset the required capacity to improve memory management.
 					chunksToProcess.AddRange(postponedChunks);
 					chunksToProcess.Add(chunk);
-					ProcessChunksOfSameDirection(repositoryType, chunksToProcess, dir);
+					ProcessChunksOfSameDirection(repositoryType, chunksToProcess.ToArray(), dir);
 				}
 				else
 				{
@@ -742,9 +749,9 @@ namespace YAT.Domain
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		protected virtual void ProcessChunksOfSameDirection(RepositoryType repositoryType, List<RawChunk> chunks, IODirection dir)
+		protected virtual void ProcessChunksOfSameDirection(RepositoryType repositoryType, RawChunk[] chunks, IODirection dir)
 		{
-			for (int i = 0; i < chunks.Count; i++)
+			for (int i = 0; i < chunks.Length; i++)
 			{
 				var chunk = chunks[i];
 
@@ -755,8 +762,8 @@ namespace YAT.Domain
 				ProcessChunk(repositoryType, chunk, out partlyOrCompletelyPostponed);
 				if (partlyOrCompletelyPostponed)
 				{
-					int chunkCountTotal = chunks.Count;
-					int chunkCountProcessed = (i + 1);
+					int chunkCountTotal = chunks.Length;
+					int chunkCountProcessed = (i + 1); // Current chunk has been processed and/or already postponed in any case.
 					PostponeRemainingChunks(repositoryType, chunks, chunkCountTotal, chunkCountProcessed);
 					break;
 				}
@@ -764,10 +771,10 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void PostponeRemainingChunks(RepositoryType repositoryType, List<RawChunk> chunks, int chunkCountTotal, int chunkCountProcessed)
+		protected virtual void PostponeRemainingChunks(RepositoryType repositoryType, RawChunk[] chunks, int chunkCountTotal, int chunkCountProcessed)
 		{
 			var overallState = GetOverallState(repositoryType);
-			for (int i = (chunkCountProcessed - 1); i < chunkCountTotal; i++)
+			for (int i = chunkCountProcessed; i < chunkCountTotal; i++)
 				overallState.AddPostponedChunk(chunks[i]);
 		}
 
@@ -821,6 +828,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void PostponeChunk(RepositoryType repositoryType, RawChunk chunk)
 		{
+			DebugChunks(string.Format(CultureInfo.InvariantCulture, "Postponing whole or partial {0} chunk of {1} byte(s).", chunk.Direction, chunk.Content.Count));
+
 			var overallState = GetOverallState(repositoryType);
 			overallState.AddPostponedChunk(chunk);
 		}
@@ -1450,6 +1459,15 @@ namespace YAT.Domain
 		//==========================================================================================
 		// Debug
 		//==========================================================================================
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_CHUNKS")]
+		private void DebugChunks(string message)
+		{
+			DebugMessage(message);
+		}
 
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.

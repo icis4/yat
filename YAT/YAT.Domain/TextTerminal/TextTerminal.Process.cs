@@ -573,7 +573,7 @@ namespace YAT.Domain
 							var postponeLineBreak = !GlueCharsOfLineTimeoutHasElapsed(chunk.TimeStamp, lineState.TimeStamp);
 							if (postponeLineBreak)
 							{
-								DebugGlueCharsOfLine("Glueing determined to postpone device or direction line break.");
+								DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to postpone whole {0} chunk of {1} byte(s) instead of performing device or direction line break.", chunk.Direction, chunk.Content.Count));
 
 								PostponeChunk(repositoryType, chunk);
 								partlyOrCompletelyPostponed = true;
@@ -658,7 +658,7 @@ namespace YAT.Domain
 						var firstPostponedChunkTimeStamp = overallState.GetFirstPostponedChunkTimeStamp(dir);
 						if ((firstPostponedChunkTimeStamp < ts) || GlueCharsOfLineTimeoutHasElapsed(firstPostponedChunkTimeStamp, lineState.TimeStamp))
 						{
-							DebugGlueCharsOfLine("Glueing determined to break chunk.");
+							DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to break {0} chunk and postpone remaining bytes.", dir));
 
 							breakChunk = true;
 							return;
@@ -1163,9 +1163,9 @@ namespace YAT.Domain
 			var postponedChunks = overallState.RemovePostponedChunks(dir);
 			if (postponedChunks.Length > 0)
 			{
-				var chunksToProcess = new List<RawChunk>(postponedChunks.Length); // Preset the required capacity to improve memory management.
-				chunksToProcess.AddRange(postponedChunks);
-				ProcessChunksOfSameDirection(RepositoryType.Bidir, chunksToProcess, dir); // Glueing only applies to bidirectional processing.
+				DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to process {0} postponed and timed out chunk(s).", dir));
+
+				ProcessChunksOfSameDirection(RepositoryType.Bidir, postponedChunks , dir); // Glueing only applies to bidirectional processing.
 			}
 		}
 
