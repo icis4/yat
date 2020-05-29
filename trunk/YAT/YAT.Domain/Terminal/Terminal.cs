@@ -1091,7 +1091,7 @@ namespace YAT.Domain
 			}
 			else // Monitor.TryEnter()
 			{
-				DebugMessage("periodicXOnTimer_Elapsed() monitor has timed out!");
+				DebugMessage("periodicXOnTimer_Elapsed() monitor has timed out, skipping this concurrent event.");
 			}
 		}
 

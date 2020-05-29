@@ -299,7 +299,7 @@ namespace MKY.Time
 			}
 			else // Monitor.TryEnter()
 			{
-				DebugMessage("updateTicker_Elapsed() monitor has timed out!");
+				DebugMessage("updateTicker_Elapsed() monitor has timed out, skipping this concurrent event.");
 			}
 		}
 

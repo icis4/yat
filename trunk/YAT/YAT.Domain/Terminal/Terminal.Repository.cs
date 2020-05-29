@@ -84,7 +84,7 @@ namespace YAT.Domain
 			}
 			else // Monitor.TryEnter()
 			{
-				DebugMessage("ClearRepository() monitor has timed out!");
+				DebugMessage("ClearRepository() monitor has timed out, rejecting this request!");
 
 				return (false);
 			}
@@ -110,7 +110,7 @@ namespace YAT.Domain
 			}
 			else // Monitor.TryEnter()
 			{
-				DebugMessage("ClearRepositories() monitor has timed out!");
+				DebugMessage("ClearRepositories() monitor has timed out, rejecting this request!");
 
 				return (false);
 			}
@@ -149,7 +149,7 @@ namespace YAT.Domain
 			}
 			else // Monitor.TryEnter()
 			{
-				DebugMessage("RefreshRepository() monitor has timed out!");
+				DebugMessage("RefreshRepository() monitor has timed out, rejecting this request!");
 
 				return (false);
 			}
@@ -211,7 +211,7 @@ namespace YAT.Domain
 			}
 			else // Monitor.TryEnter()
 			{
-				DebugMessage("RefreshRepositories() monitor has timed out!");
+				DebugMessage("RefreshRepositories() monitor has timed out, rejecting this request!");
 
 				return (false);
 			}

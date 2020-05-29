@@ -744,7 +744,7 @@ namespace YAT.Domain
 				}
 				else // Monitor.TryEnter()
 				{
-					DebugMessage("io_DataReceived() monitor has timed out!");
+					DebugMessage("io_DataReceived() monitor has timed out, trying again...");
 				}
 			} // while (IsUndisposed)
 		}
@@ -782,7 +782,7 @@ namespace YAT.Domain
 				}
 				else // Monitor.TryEnter()
 				{
-					DebugMessage("io_DataSent() monitor has timed out!");
+					DebugMessage("io_DataSent() monitor has timed out, trying again...");
 				}
 			} // while (IsUndisposed)
 		}

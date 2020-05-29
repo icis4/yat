@@ -378,7 +378,7 @@ namespace MKY.IO.Serial.SerialPort
 				}
 				else // Monitor.TryEnter()
 				{
-					DebugMessage("IsOpen monitor has timed out!");
+					DebugMessage("IsOpen failed to synchronize access to the port object!");
 
 					return (false);
 				}
@@ -410,7 +410,7 @@ namespace MKY.IO.Serial.SerialPort
 				}
 				else // Monitor.TryEnter()
 				{
-					DebugMessage("IsConnected monitor has timed out!");
+					DebugMessage("IsConnected failed to synchronize access to the port object!");
 
 					return (false);
 				}
@@ -448,7 +448,7 @@ namespace MKY.IO.Serial.SerialPort
 				}
 				else // Monitor.TryEnter()
 				{
-					DebugMessage("IsTransmissive monitor has timed out!");
+					DebugMessage("IsTransmissive failed to synchronize access to the port object!");
 
 					return (false);
 				}
@@ -1514,7 +1514,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			else // Monitor.TryEnter()
 			{
-				DebugMessage("ioControlEventTimeout_Elapsed() monitor has timed out!");
+				DebugMessage("ioControlEventTimeout_Elapsed() monitor has timed out, skipping this concurrent event.");
 			}
 		}
 
@@ -1624,7 +1624,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			else // Monitor.TryEnter()
 			{
-				DebugMessage("aliveMonitorTimeout_Elapsed() monitor has timed out!");
+				DebugMessage("aliveMonitorTimeout_Elapsed() monitor has timed out, skipping this concurrent event.");
 			}
 		}
 
@@ -1715,7 +1715,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			else // Monitor.TryEnter()
 			{
-				DebugMessage("reopenTimeout_Elapsed() monitor has timed out!");
+				DebugMessage("reopenTimeout_Elapsed() monitor has timed out, skipping this concurrent event.");
 			}
 		}
 

@@ -452,7 +452,7 @@ namespace MKY.IO.Serial.SerialPort
 							}
 							else // Monitor.TryEnter()
 							{
-								DebugMessage("SendThread() monitor has timed out!");
+								DebugMessage("SendThread() monitor has timed out, trying again...");
 							}
 
 							if (yieldSomeMore)
