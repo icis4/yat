@@ -103,12 +103,12 @@ namespace MKY.IO.Serial.Socket
 				////DebugReceive(string.Format("...ending receive on local port {0}...", asyncState.LocalPort)); <= Commented-out to prevent FxCopy message CA1811 "AvoidUncalledPrivateCode" (Microsoft.Performance).
 					DebugReceive(string.Format("...ending receive on local port {0}...",       this.LocalPort)); // Consequently, using members for debug output.
 					data = asyncState.Socket.EndReceive(ar, ref remoteEndPoint);
-					DebugReceive(string.Format("...{0} bytes received from {1}.", ((data != null) ? data.Length : 0), remoteEndPoint));
+					DebugReceive(string.Format("...{0} byte(s) received from {1}.", ((data != null) ? data.Length : 0), remoteEndPoint));
 
 					if (IPFilterEx.IsIPv4Refused(asyncState.LocalFilterIPv4MaskBytes, remoteEndPoint.Address))
 					{
-					////DebugReceive(string.Format("Bytes are discarded since received data is filtered for {0}.", asyncState.LocalFilter)); <= Commented-out to prevent FxCopy message CA1811 "AvoidUncalledPrivateCode" (Microsoft.Performance).
-						DebugReceive(string.Format("Bytes are discarded since received data is filtered for {0}.",       this.LocalFilter)); // Consequently, using members for debug output.
+					////DebugReceive(string.Format("Byte(s) are discarded since received data is filtered for {0}.", asyncState.LocalFilter)); <= Commented-out to prevent FxCopy message CA1811 "AvoidUncalledPrivateCode" (Microsoft.Performance).
+						DebugReceive(string.Format("Byte(s) are discarded since received data is filtered for {0}.",       this.LocalFilter)); // Consequently, using members for debug output.
 						discard = true;
 					}
 				}
@@ -157,7 +157,7 @@ namespace MKY.IO.Serial.Socket
 				{
 					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 					{
-						DebugReceive(string.Format("Enqueuing {0} bytes...", data.Length));
+						DebugReceive(string.Format("Enqueuing {0} byte(s)...", data.Length));
 
 						foreach (byte b in data)
 							this.receiveQueue.Enqueue(new Pair<byte, System.Net.IPEndPoint>(b, remoteEndPoint));
@@ -297,7 +297,7 @@ namespace MKY.IO.Serial.Socket
 									}
 								}
 
-								DebugReceive(string.Format("...{0} bytes from {1} dequeued", data.Count, remoteEndPoint));
+								DebugReceive(string.Format("...{0} byte(s) from {1} dequeued", data.Count, remoteEndPoint));
 								OnDataReceived(new SocketDataReceivedEventArgs(data.ToArray(), remoteEndPoint));
 							}
 							finally
