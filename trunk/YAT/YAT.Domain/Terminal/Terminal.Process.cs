@@ -811,7 +811,7 @@ namespace YAT.Domain
 		protected virtual void PostponeRemainingBytes(RepositoryType repositoryType, RawChunk chunk, int byteCountTotal, int byteCountProcessed)
 		{
 			var contentPostponed = new List<byte>(byteCountTotal - byteCountProcessed);
-			for (int i = (byteCountProcessed - 1); i < byteCountTotal; i++)
+			for (int i = byteCountProcessed; i < byteCountTotal; i++)
 				contentPostponed.Add(chunk.Content[i]);
 
 			var remainingPostponed = new RawChunk
@@ -969,7 +969,7 @@ namespace YAT.Domain
 				ProcessByteOfChunk(repositoryType, chunk.Content[i], chunk.TimeStamp, chunk.Device, chunk.Direction, elementsToAdd, linesToAdd, out breakChunk);
 				if (breakChunk)
 				{
-					byteCountProcessed = (i + 1); // Byte will be processed below in any case, even in case of break.
+					byteCountProcessed = (i + 1); // Current byte has been processed and/or already postponed in any case.
 					break;
 				}
 			}
