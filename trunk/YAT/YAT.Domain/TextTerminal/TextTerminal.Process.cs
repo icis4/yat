@@ -573,7 +573,7 @@ namespace YAT.Domain
 							var postponeLineBreak = !GlueCharsOfLineTimeoutHasElapsed(chunk.TimeStamp, lineState.TimeStamp);
 							if (postponeLineBreak)
 							{
-								DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to postpone whole {0} chunk of {1} byte(s) instead of performing device or direction line break.", chunk.Direction, chunk.Content.Count));
+								DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to postpone whole {0} chunk of {1} byte(s) stamped {2} instead of performing device or direction line break.", chunk.Direction, chunk.Content.Count, chunk.TimeStamp));
 
 								PostponeChunk(repositoryType, chunk);
 								partlyOrCompletelyPostponed = true;
@@ -660,7 +660,7 @@ namespace YAT.Domain
 						var firstPostponedChunkTimeStampOfOtherDir = overallState.GetFirstPostponedChunkTimeStamp(otherDir);
 						if ((firstPostponedChunkTimeStampOfOtherDir < ts) || GlueCharsOfLineTimeoutHasElapsed(firstPostponedChunkTimeStampOfOtherDir, lineState.TimeStamp))
 						{
-							DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to break {0} chunk and postpone remaining bytes.", dir));
+							DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to break {0} chunk stamped {1} and postpone remaining bytes.", dir, ts));
 
 							breakChunk = true;
 							return;
