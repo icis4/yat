@@ -296,7 +296,7 @@ namespace YAT.Domain
 		/// <remarks>This method will be called asynchronously.</remarks>
 		protected virtual void DoSend(byte[] data, long sequenceNumber)
 		{
-			DebugSend(string.Format("Sending of {0} bytes of raw data has been invoked with sequence number {1}.", data.Length, sequenceNumber));
+			DebugSend(string.Format("Sending of {0} byte(s) of raw data has been invoked with sequence number {1}.", data.Length, sequenceNumber));
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
 			EnterRequestPre(false); // RaiseEventIfTotalTimeLagIsAboveThreshold() is always false right after creating helper.
@@ -305,13 +305,13 @@ namespace YAT.Domain
 			{
 				try
 				{
-					DebugSend(string.Format("Sending of {0} bytes of raw data has been permitted (sequence number = {1}).", data.Length, sequenceNumber));
+					DebugSend(string.Format("Sending of {0} byte(s) of raw data has been permitted (sequence number = {1}).", data.Length, sequenceNumber));
 
 					DoSendPre();
 					DoSendRawData(forSomeTimeEventHelper, data);
 					DoSendPost();
 
-					DebugSend(string.Format("Sending of {0} bytes of raw data has been completed (sequence number = {1}).", data.Length, sequenceNumber));
+					DebugSend(string.Format("Sending of {0} byte(s) of raw data has been completed (sequence number = {1}).", data.Length, sequenceNumber));
 				}
 				finally
 				{
