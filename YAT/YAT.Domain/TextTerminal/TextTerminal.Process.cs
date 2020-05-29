@@ -614,15 +614,6 @@ namespace YAT.Domain
 			var processState = GetProcessState(repositoryType);
 			var lineState = processState.Line; // Convenience shortcut.
 
-			// When glueing is enabled, potentially postpone remaining byte(s) of chunk until
-			// previously postponed chunk(s) has been processed.
-			if (lineState.Position == LinePosition.End)
-			{
-				ProcessGlueCharsOfLineIfNeeded(repositoryType, processState, lineState, ts, dir, out breakChunk);
-				if (breakChunk)
-					return;
-			}
-
 			// The first byte of a line will sequentially trigger the [Begin] as well as [Content]
 			// condition below. In the normal case, the line will then contain the first displayed
 			// element. However, when initially receiving a hidden e.g. <XOn>, the line will yet be
@@ -639,24 +630,35 @@ namespace YAT.Domain
 				DoLineContent(repositoryType, processState, b, ts, dev, dir, elementsToAdd);
 
 			if (lineState.Position == LinePosition.End)
+			{
 				DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
 
-			breakChunk = false;
+				DoLineEndPost(repositoryType, processState, lineState, ts, dir, out breakChunk);
+
+				// When glueing is enabled, potentially postpone remaining byte(s) of chunk until
+				// previously postponed chunk(s) of other direction has been processed.
+			}
+			else
+			{
+				breakChunk = false;
+			}
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessGlueCharsOfLineIfNeeded(RepositoryType repositoryType, ProcessState processState, LineState lineState, DateTime ts, IODirection dir, out bool breakChunk)
+		protected virtual void DoLineEndPost(RepositoryType repositoryType, ProcessState processState, LineState lineState, DateTime ts, IODirection dir, out bool breakChunk)
 		{
 			if (TextTerminalSettings.GlueCharsOfLine.Enabled)
 			{
 				if (repositoryType == RepositoryType.Bidir) // Glueing only applies to bidirectional processing.
 				{
 					var overallState = processState.Overall; // Convenience shortcut.
-					var postponedChunkCount = overallState.GetPostponedChunkCount(dir);
-					if (postponedChunkCount > 0)
+
+					var otherDir = ((dir != IODirection.Tx) ? (IODirection.Tx) : (IODirection.Rx));
+					var postponedChunkCountOfOtherDir = overallState.GetPostponedChunkCount(otherDir);
+					if (postponedChunkCountOfOtherDir > 0)
 					{
-						var firstPostponedChunkTimeStamp = overallState.GetFirstPostponedChunkTimeStamp(dir);
-						if ((firstPostponedChunkTimeStamp < ts) || GlueCharsOfLineTimeoutHasElapsed(firstPostponedChunkTimeStamp, lineState.TimeStamp))
+						var firstPostponedChunkTimeStampOfOtherDir = overallState.GetFirstPostponedChunkTimeStamp(otherDir);
+						if ((firstPostponedChunkTimeStampOfOtherDir < ts) || GlueCharsOfLineTimeoutHasElapsed(firstPostponedChunkTimeStampOfOtherDir, lineState.TimeStamp))
 						{
 							DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to break {0} chunk and postpone remaining bytes.", dir));
 
