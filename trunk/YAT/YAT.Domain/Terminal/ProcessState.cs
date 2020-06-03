@@ -86,6 +86,9 @@ namespace YAT.Domain
 		public DirectionState DirectionLineBreak    { get; protected set; }
 
 		/// <summary></summary>
+		public IODirection    LastChunkDirection    { get; private set; }
+
+		/// <summary></summary>
 		public bool           IsFirstLine           { get; private set; }
 
 		/// <remarks>"Time Stamp" implicitly means "of Beginning of Line" of the previous line.</remarks>
@@ -111,8 +114,9 @@ namespace YAT.Domain
 		/// </summary>
 		protected virtual void InitializeValues()
 		{
-			IsFirstLine           = true;
-			PreviousLineTimeStamp = DisplayElement.TimeStampDefault;
+			LastChunkDirection     = IODirection.None;
+			IsFirstLine            = true;
+			PreviousLineTimeStamp  = DisplayElement.TimeStampDefault;
 
 			PostponedTxChunks = new List<RawChunk>(); // No preset needed, the default behavior is good enough.
 			PostponedRxChunks = new List<RawChunk>(); // No preset needed, the default behavior is good enough.
@@ -127,6 +131,14 @@ namespace YAT.Domain
 			DirectionLineBreak.Reset();
 
 			InitializeValues();
+		}
+
+		/// <summary>
+		/// Notify the begin of a line, i.e. start processing of a line.
+		/// </summary>
+		public virtual void NotifyChunk(IODirection dir)
+		{
+			LastChunkDirection = dir;
 		}
 
 		/// <summary>
@@ -157,6 +169,26 @@ namespace YAT.Domain
 
 				default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A raw chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
+		}
+
+		/// <summary></summary>
+		public virtual int GetPostponedChunkCount()
+		{
+			return (PostponedTxChunks.Count + PostponedRxChunks.Count);
+		}
+
+		/// <summary></summary>
+		public virtual int GetPostponedByteCount()
+		{
+			int byteCount = 0;
+
+			foreach (var chunk in PostponedTxChunks)
+				byteCount += chunk.Content.Count;
+
+			foreach (var chunk in PostponedRxChunks)
+				byteCount += chunk.Content.Count;
+
+			return (byteCount);
 		}
 
 		/// <summary></summary>
