@@ -65,6 +65,14 @@ namespace YAT.Domain
 		End
 	}
 
+	/// <summary></summary>
+	public enum PostponeResult
+	{
+		Nothing,
+		PartOfChunk,
+		CompleteChunk
+	}
+
 	#pragma warning restore 1591
 }
 

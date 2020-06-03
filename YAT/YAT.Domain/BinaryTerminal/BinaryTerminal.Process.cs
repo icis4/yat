@@ -156,6 +156,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		protected override void ProcessByteOfChunk(RepositoryType repositoryType,
 		                                           byte b, DateTime ts, string dev, IODirection dir,
+		                                           bool isFirstByteOfChunk, bool isLastByteOfChunk,
 		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd,
 		                                           out bool breakChunk)
 		{

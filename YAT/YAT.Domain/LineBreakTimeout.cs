@@ -89,12 +89,23 @@ namespace YAT.Domain
 		#endregion
 
 		/// <summary></summary>
-		public virtual void Start()
+		public virtual void Start(DateTime at)
 		{
 			AssertUndisposed();
 
 			lock (this.timerSyncObj)
-				this.timer.Change(this.timeout, Timeout.Infinite);
+				this.timer.Change(ToDueTime(at), Timeout.Infinite);
+		}
+
+		/// <summary></summary>
+		protected virtual int ToDueTime(DateTime at)
+		{
+			var offset = (int)(((at - DateTime.Now).TotalMilliseconds) + 0.5); // Simple rounding is good enough.
+			var dueTime = (this.timeout - offset);
+			if (dueTime > 0)
+				return (dueTime);
+			else
+				return (0);
 		}
 
 		/// <summary></summary>

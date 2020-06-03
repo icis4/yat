@@ -526,24 +526,23 @@ namespace YAT.Domain
 		/// <summary>
 		/// Implements the text terminal specific <see cref="Settings.TextTerminalSettings.GlueCharsOfLine"/> functionality.
 		/// </summary>
-		protected override void ProcessChunk(RepositoryType repositoryType, RawChunk chunk, out bool partlyOrCompletelyPostponed)
+		protected override void ProcessChunk(RepositoryType repositoryType, RawChunk chunk, out PostponeResult postponeResult)
 		{
-			ProcessGlueCharsOfLineIfNeeded(repositoryType, chunk, out partlyOrCompletelyPostponed);
-			if (partlyOrCompletelyPostponed)
+			ProcessChunkPre(repositoryType, chunk, out postponeResult);
+			if (postponeResult != PostponeResult.Nothing)
 				return;
 			else
-				base.ProcessChunk(repositoryType, chunk, out partlyOrCompletelyPostponed);
+				base.ProcessChunk(repositoryType, chunk, out postponeResult);
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessGlueCharsOfLineIfNeeded(RepositoryType repositoryType, RawChunk chunk, out bool partlyOrCompletelyPostponed)
+		protected virtual void ProcessChunkPre(RepositoryType repositoryType, RawChunk chunk, out PostponeResult postponeResult)
 		{
 			if (TextTerminalSettings.GlueCharsOfLine.Enabled)
 			{
 				if (repositoryType == RepositoryType.Bidir) // Glueing only applies to bidirectional processing.
 				{
 					var lineState = GetLineState(repositoryType);
-
 					if (lineState.Position != LinePosition.Begin) // Postponing is only needed when already within a line.
 					{
 						var overallState = GetOverallState(repositoryType);
@@ -576,7 +575,7 @@ namespace YAT.Domain
 								DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to postpone whole {0} chunk of {1} byte(s) stamped {2} instead of performing device or direction line break.", chunk.Direction, chunk.Content.Count, chunk.TimeStamp));
 
 								PostponeChunk(repositoryType, chunk);
-								partlyOrCompletelyPostponed = true;
+								postponeResult = PostponeResult.CompleteChunk;
 								return;
 							}
 						}
@@ -584,7 +583,7 @@ namespace YAT.Domain
 				} // if (bidirIsAffected)
 			} // if (GlueCharsOfLine.Enabled)
 
-			partlyOrCompletelyPostponed = false;
+			postponeResult = PostponeResult.Nothing;
 		}
 
 		/// <summary></summary>
@@ -608,6 +607,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		protected override void ProcessByteOfChunk(RepositoryType repositoryType,
 		                                           byte b, DateTime ts, string dev, IODirection dir,
+		                                           bool isFirstByteOfChunk, bool isLastByteOfChunk,
 		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd,
 		                                           out bool breakChunk)
 		{
@@ -633,7 +633,7 @@ namespace YAT.Domain
 			{
 				DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
 
-				DoLineEndPost(repositoryType, processState, lineState, ts, dir, out breakChunk);
+				DoLineEndPost(repositoryType, processState, lineState, ts, dir, isLastByteOfChunk, out breakChunk);
 
 				// When glueing is enabled, potentially postpone remaining byte(s) of chunk until
 				// previously postponed chunk(s) of other direction has been processed.
@@ -645,25 +645,28 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void DoLineEndPost(RepositoryType repositoryType, ProcessState processState, LineState lineState, DateTime ts, IODirection dir, out bool breakChunk)
+		protected virtual void DoLineEndPost(RepositoryType repositoryType, ProcessState processState, LineState lineState, DateTime ts, IODirection dir, bool isLastByteOfChunk, out bool breakChunk)
 		{
 			if (TextTerminalSettings.GlueCharsOfLine.Enabled)
 			{
 				if (repositoryType == RepositoryType.Bidir) // Glueing only applies to bidirectional processing.
 				{
-					var overallState = processState.Overall; // Convenience shortcut.
-
-					var otherDir = ((dir != IODirection.Tx) ? (IODirection.Tx) : (IODirection.Rx));
-					var postponedChunkCountOfOtherDir = overallState.GetPostponedChunkCount(otherDir);
-					if (postponedChunkCountOfOtherDir > 0)
+					if (!isLastByteOfChunk) // No need to evaluate break for last byte (i.e. nothing to break).
 					{
-						var firstPostponedChunkTimeStampOfOtherDir = overallState.GetFirstPostponedChunkTimeStamp(otherDir);
-						if ((firstPostponedChunkTimeStampOfOtherDir < ts) || GlueCharsOfLineTimeoutHasElapsed(firstPostponedChunkTimeStampOfOtherDir, lineState.TimeStamp))
-						{
-							DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to break {0} chunk stamped {1} and postpone remaining bytes.", dir, ts));
+						var overallState = processState.Overall; // Convenience shortcut.
 
-							breakChunk = true;
-							return;
+						var otherDir = GetOtherDirection(dir);
+						var postponedChunkCountOfOtherDir = overallState.GetPostponedChunkCount(otherDir);
+						if (postponedChunkCountOfOtherDir > 0)
+						{
+							var firstPostponedChunkTimeStampOfOtherDir = overallState.GetFirstPostponedChunkTimeStamp(otherDir);
+							if ((firstPostponedChunkTimeStampOfOtherDir < ts) || GlueCharsOfLineTimeoutHasElapsed(firstPostponedChunkTimeStampOfOtherDir, lineState.TimeStamp))
+							{
+								DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to break {0} chunk stamped {1} and postpone remaining bytes.", dir, ts));
+
+								breakChunk = true;
+								return;
+							}
 						}
 					}
 				}
@@ -1146,29 +1149,19 @@ namespace YAT.Domain
 
 			////if (TextTerminalSettings.GlueCharsOfLine.Enabled) is implicitly given.
 				{
-					ProcessAndSignalGlueCharsOfLineTimeout();
+					ProcessAndSignalGlueOfCharsTimeout();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessAndSignalGlueCharsOfLineTimeout()
+		protected virtual void ProcessAndSignalGlueOfCharsTimeout()
 		{
-			ProcessAndSignalGlueCharsOfLineTimeout(IODirection.Tx);
-			ProcessAndSignalGlueCharsOfLineTimeout(IODirection.Rx);
-		}
-
-		/// <summary></summary>
-		protected virtual void ProcessAndSignalGlueCharsOfLineTimeout(IODirection dir)
-		{
-			var overallState = GetOverallState(RepositoryType.Bidir); // Glueing only applies to bidirectional processing.
-			var postponedChunks = overallState.RemovePostponedChunks(dir);
-			if (postponedChunks.Length > 0)
-			{
-				DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to process {0} postponed and timed out chunk(s).", dir));
-
-				ProcessChunksOfSameDirection(RepositoryType.Bidir, postponedChunks , dir); // Glueing only applies to bidirectional processing.
-			}
+			var repositoryType = RepositoryType.Bidir; // Glueing only applies to bidirectional processing.
+			var overallState = GetOverallState(repositoryType);
+			var initialDir = overallState.LastChunkDirection;
+			if (initialDir != IODirection.None) // IODirection.None means that line processing has not started yet.)
+				ProcessPostponedChunks(repositoryType, initialDir);
 		}
 
 		#endregion
