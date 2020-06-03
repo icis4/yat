@@ -1476,6 +1476,12 @@ namespace YAT.Model
 
 				if (StopIO(false))
 				{
+					OnFixedStatusTextRequest("Applying terminal settings...");
+
+					this.terminal.EmptyRepositories(); // ResumeChangeEvent() below will take long, emptying makes
+					                                 //// it more obvious to the user that something is ongoing,
+					System.Windows.Forms.Application.DoEvents(); // but requires yielding to let view be refreshed.
+
 					this.settingsRoot.SuspendChangeEvent();
 					try
 					{
@@ -1492,6 +1498,7 @@ namespace YAT.Model
 					{
 						this.settingsRoot.ResumeChangeEvent();
 					}
+
 					this.terminal.RefreshRepositories();
 
 					if (StartIO(false))

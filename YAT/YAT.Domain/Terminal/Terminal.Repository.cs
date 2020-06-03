@@ -69,7 +69,7 @@ namespace YAT.Domain
 		{
 			AssertUndisposed();
 			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(ClearAndRefreshSyncObj, ClearAndRefreshTimeout))
+			if (Monitor.TryEnter(ClearRefreshEmptySyncObj, ClearRefreshEmptyTimeout))
 			{
 				try
 				{
@@ -77,7 +77,7 @@ namespace YAT.Domain
 				}
 				finally
 				{
-					Monitor.Exit(ClearAndRefreshSyncObj);
+					Monitor.Exit(ClearRefreshEmptySyncObj);
 				}
 
 				return (true);
@@ -95,7 +95,7 @@ namespace YAT.Domain
 		{
 			AssertUndisposed();
 			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(ClearAndRefreshSyncObj, ClearAndRefreshTimeout))
+			if (Monitor.TryEnter(ClearRefreshEmptySyncObj, ClearRefreshEmptyTimeout))
 			{
 				try
 				{
@@ -103,7 +103,7 @@ namespace YAT.Domain
 				}
 				finally
 				{
-					Monitor.Exit(ClearAndRefreshSyncObj);
+					Monitor.Exit(ClearRefreshEmptySyncObj);
 				}
 
 				return (true);
@@ -121,7 +121,7 @@ namespace YAT.Domain
 		{
 			AssertUndisposed();
 			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(ClearAndRefreshSyncObj, ClearAndRefreshTimeout))
+			if (Monitor.TryEnter(ClearRefreshEmptySyncObj, ClearRefreshEmptyTimeout))
 			{
 				try
 				{
@@ -142,7 +142,7 @@ namespace YAT.Domain
 				}
 				finally
 				{
-					Monitor.Exit(ClearAndRefreshSyncObj);
+					Monitor.Exit(ClearRefreshEmptySyncObj);
 				}
 
 				return (true);
@@ -156,7 +156,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Alternatively, clear/refresh operations could be implemented asynchronously.
+		/// Alternatively, clear/refresh/empty operations could be implemented asynchronously.
 		/// Advantages:
 		///  > No deadlock possible below.
 		/// Disadvantages:
@@ -169,7 +169,7 @@ namespace YAT.Domain
 		{
 			AssertUndisposed();
 			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
-			if (Monitor.TryEnter(ClearAndRefreshSyncObj, ClearAndRefreshTimeout))
+			if (Monitor.TryEnter(ClearRefreshEmptySyncObj, ClearRefreshEmptyTimeout))
 			{
 				try
 				{
@@ -204,7 +204,7 @@ namespace YAT.Domain
 				}
 				finally
 				{
-					Monitor.Exit(ClearAndRefreshSyncObj);
+					Monitor.Exit(ClearRefreshEmptySyncObj);
 				}
 
 				return (true);
@@ -212,6 +212,40 @@ namespace YAT.Domain
 			else // Monitor.TryEnter()
 			{
 				DebugMessage("RefreshRepositories() monitor has timed out, rejecting this request!");
+
+				return (false);
+			}
+		}
+
+		/// <remarks>See remarks in <see cref="RefreshRepositories"/> above.</remarks>
+		public virtual bool EmptyRepositories()
+		{
+			AssertUndisposed();
+			            //// Only try for some time, otherwise ignore. Prevents deadlocks among main thread (view) and large amounts of incoming data.
+			if (Monitor.TryEnter(ClearRefreshEmptySyncObj, ClearRefreshEmptyTimeout))
+			{
+				try
+				{
+					// Reset processing:
+					ResetProcess(RepositoryType.Tx);
+					ResetProcess(RepositoryType.Bidir);
+					ResetProcess(RepositoryType.Rx);
+
+					// Clear repositories:
+					ClearMyRepository(RepositoryType.Tx);
+					ClearMyRepository(RepositoryType.Bidir);
+					ClearMyRepository(RepositoryType.Rx);
+				}
+				finally
+				{
+					Monitor.Exit(ClearRefreshEmptySyncObj);
+				}
+
+				return (true);
+			}
+			else // Monitor.TryEnter()
+			{
+				DebugMessage("EmptyRepositories() monitor has timed out, rejecting this request!");
 
 				return (false);
 			}
