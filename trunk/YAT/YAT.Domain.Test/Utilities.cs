@@ -70,11 +70,29 @@ namespace YAT.Domain.Test
 					foreach (MKY.IO.Ports.Test.SerialPortPairConfigurationElement ce in MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackPairs)
 					{
 						var tsm = new TerminalSettingsDelegate<string>(GetSerialPortTextSettings);
-						var pA = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortA);
-						var pB = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortB);
-						string name = "SerialPortLoopbackPairs_" + ce.PortA + "_" + ce.PortB;
+						var portA = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortA);
+						var portB = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortB);
+						string name = "SerialPortLoopbackPair_" + ce.PortA + "_" + ce.PortB;
 						string[] cats = { MKY.IO.Ports.Test.ConfigurationCategoryStrings.LoopbackPairsAreAvailable };
-						yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>(pA, pB, name, cats));
+						yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>(portA, portB, name, cats));
+					}
+				}
+			}
+
+			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
+			[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
+			public static IEnumerable<Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string[]>> SerialPortLoopbackSelfs
+			{
+				get
+				{
+					foreach (MKY.IO.Ports.Test.SerialPortConfigurationElement ce in MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackSelfs)
+					{
+						var tsm = new TerminalSettingsDelegate<string>(GetSerialPortTextSettings);
+						var port = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.Port);
+						string name = "SerialPortLoopbackSelf_" + ce.Port;
+						string[] cats = { MKY.IO.Ports.Test.ConfigurationCategoryStrings.LoopbackSelfsAreAvailable };
+						yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string[]>(port, name, cats));
 					}
 				}
 			}
@@ -314,11 +332,8 @@ namespace YAT.Domain.Test
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
-		internal static void WaitForSendingAndVerifyCounts(Domain.Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount)
+		internal static void WaitForSendingAndVerifyCounts(Domain.Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount, int timeout = WaitTimeoutForLineTransmission)
 		{
-			// Calculate timeout:
-			int timeout = WaitTimeoutForLineTransmission;
-
 			int txByteCount = 0;
 			int txLineCount = 0;
 			int waitTime = 0;
@@ -366,11 +381,8 @@ namespace YAT.Domain.Test
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
-		internal static void WaitForReceivingAndVerifyCounts(Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
+		internal static void WaitForReceivingAndVerifyCounts(Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount, int timeout = WaitTimeoutForLineTransmission)
 		{
-			// Calculate timeout:
-			int timeout = WaitTimeoutForLineTransmission;
-
 			int rxByteCount = 0;
 			int rxLineCount = 0;
 			int waitTime = 0;
