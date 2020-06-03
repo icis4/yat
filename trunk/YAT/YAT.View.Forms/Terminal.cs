@@ -7008,7 +7008,7 @@ namespace YAT.View.Forms
 
 			if (e.Severity == Domain.IOErrorSeverity.Acceptable) // Handle acceptable issues.
 			{
-				SetTimedStatusText("Terminal Warning");
+				SetTimedStatusText("Terminal Warning"); // Simply replicate message box caption, opposed to standard texts which are sentences or fragments.
 
 				if (showErrorModally)
 				{
@@ -7024,7 +7024,7 @@ namespace YAT.View.Forms
 			}
 			else
 			{
-				SetFixedStatusText("Terminal Error!");
+				SetFixedStatusText("Terminal Error"); // Simply replicate message box caption, opposed to standard texts which are sentences or fragments.
 
 				if (showErrorModally)
 				{
@@ -7485,7 +7485,7 @@ namespace YAT.View.Forms
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowTerminalSettings()
 		{
-			SetFixedStatusText("Terminal Settings...");
+			SetFixedStatusText("Terminal settings...");
 
 			var f = new TerminalSettings(this.settingsRoot.Explicit);
 
