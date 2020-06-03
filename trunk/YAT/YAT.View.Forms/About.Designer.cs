@@ -129,7 +129,7 @@
 			this.linkLabel_Description.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_Description.Location = new System.Drawing.Point(12, 86);
 			this.linkLabel_Description.Name = "linkLabel_Description";
-			this.linkLabel_Description.Size = new System.Drawing.Size(546, 26);
+			this.linkLabel_Description.Size = new System.Drawing.Size(564, 26);
 			this.linkLabel_Description.TabIndex = 5;
 			this.linkLabel_Description.Text = resources.GetString("linkLabel_Description.Text");
 			this.linkLabel_Description.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);

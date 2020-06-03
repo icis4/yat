@@ -131,7 +131,7 @@ namespace YAT.View.Forms
 
 			textBefore = "and ";
 			textLink   =     "Mettler-Toledo";
-			textAfter  =                   ". YAT was initially developed as XTerm232, a response to the lack of a good RS-232 terminal.";
+			textAfter  =                   ". YAT was initially developed as XTerm232, a response to the lack of a really good RS-232 terminal.";
 			linkLabel_Description.Text += textBefore;
 			linkStart = linkLabel_Description.Text.Length;
 			linkLabel_Description.Text += textLink;

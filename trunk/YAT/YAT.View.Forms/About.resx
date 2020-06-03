@@ -131,7 +131,7 @@ by e.g. Henrik Haftmann, Lammert Bies or CompuPhase (bidir or unidir, full or ha
   </data>
   <data name="linkLabel_Description.Text" xml:space="preserve">
     <value>YAT is a by-product of the Swiss federal KTI/CTI project 6542.1 FHS-ET "BBP - Balance Based Pipetting" of HSR
-and Mettler-Toledo. YAT was initially developed as XTerm232, a response to the lack of a good RS-232 terminal.</value>
+and Mettler-Toledo. YAT was initially developed as XTerm232, a response to the lack of a really good RS-232 terminal.</value>
   </data>
   <data name="label_Separator3.Text" xml:space="preserve">
     <value>                                                                                                                                                                                                                                               </value>

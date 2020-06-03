@@ -42,7 +42,7 @@ namespace MKY.Diagnostics
 		/// </remarks>
 		public static int TicksToTime(long ticks)
 		{
-			return ((int)((ticks * 1000 / Stopwatch.Frequency) + 0.5));
+			return ((int)((ticks * 1000 / Stopwatch.Frequency) + 0.5)); // Simple rounding is good enough.
 		}
 
 		/// <summary>
