@@ -75,11 +75,11 @@ namespace YAT.Model.Test
 					foreach (MKY.IO.Ports.Test.SerialPortPairConfigurationElement ce in MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackPairs)
 					{
 						var tsm = new TerminalSettingsDelegate<string>(GetStartedSerialPortTextSettings);
-						var pA = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortA);
-						var pB = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortB);
+						var portA = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortA);
+						var portB = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortB);
 						string name = "SerialPortLoopbackPairs_" + ce.PortA + "_" + ce.PortB;
 						string[] cats = { MKY.IO.Ports.Test.ConfigurationCategoryStrings.LoopbackPairsAreAvailable };
-						yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>(pA, pB, name, cats));
+						yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>(portA, portB, name, cats));
 					}
 				}
 			}
@@ -94,11 +94,11 @@ namespace YAT.Model.Test
 					foreach (MKY.IO.Ports.Test.SerialPortConfigurationElement ce in MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackSelfs)
 					{
 						var tsm = new TerminalSettingsDelegate<string>(GetStartedSerialPortTextSettings);
-						var pA = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.Port);
-						var pB = new Pair<TerminalSettingsDelegate<string>, string>(null, null);
+						var portA = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.Port);
+						var portB = new Pair<TerminalSettingsDelegate<string>, string>(null, null);
 						string name = "SerialPortLoopbackSelf_" + ce.Port;
 						string[] cats = { MKY.IO.Ports.Test.ConfigurationCategoryStrings.LoopbackSelfsAreAvailable };
-						yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>(pA, pB, name, cats));
+						yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>(portA, portB, name, cats));
 					}
 				}
 			}

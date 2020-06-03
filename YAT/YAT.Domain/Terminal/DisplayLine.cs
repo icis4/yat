@@ -227,7 +227,8 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// The number of characters of the data content elements contained in the collection.
+		/// The number of characters of the data content elements (i.e. without control
+		/// data like <code>CRLF</code>) contained in the collection.
 		/// </summary>
 		public virtual int DataContentCharCount
 		{
@@ -238,6 +239,26 @@ namespace YAT.Domain
 				foreach (var de in this)
 				{
 					if (de.IsDataContent)
+						count += de.CharCount;
+				}
+
+				return (count);
+			}
+		}
+
+		/// <summary>
+		/// The number of characters of the control content elements (e.g. control
+		/// data like <code>CRLF</code>) contained in the collection.
+		/// </summary>
+		public virtual int ControlContentCharCount
+		{
+			get
+			{
+				int count = 0;
+
+				foreach (var de in this)
+				{
+					if (de.IsControlContent)
 						count += de.CharCount;
 				}
 
