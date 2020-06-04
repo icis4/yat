@@ -192,14 +192,14 @@ namespace YAT.Domain.Test.TextTerminal
 
 		#endregion
 
-		#region TestInfinite
+		#region TestInfiniteTimeout
 		//==========================================================================================
-		// TestInfinite
+		// TestInfiniteTimeout
 		//==========================================================================================
 
 		/// <summary></summary>
 		[Test] // Test is mandatory, it shall not be excludable. 'IPv4LoopbackIsAvailable' is probed below.
-		public virtual void TestInfinite()
+		public virtual void TestInfiniteTimeout()
 		{
 			if (!ConfigurationProvider.Configuration.IPv4LoopbackIsAvailable)
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");

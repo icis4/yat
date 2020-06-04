@@ -81,10 +81,10 @@ namespace YAT.Model.Test.Connection
 		{
 			get
 			{
-				foreach (var loopbackSettings in Utilities.TransmissionSettings.IPLoopbackPairs)
+				foreach (var ls in Utilities.TransmissionSettings.IPLoopbackPairs)
 				{
-					foreach (var testCase in TestCases(loopbackSettings))
-						yield return (testCase);
+					foreach (var tc in TestCases(ls))
+						yield return (tc);
 				}
 			}
 		}
@@ -95,10 +95,10 @@ namespace YAT.Model.Test.Connection
 		{
 			get
 			{
-				foreach (var loopbackSettings in Utilities.TransmissionSettings.IPLoopbackSelfs)
+				foreach (var ls in Utilities.TransmissionSettings.IPLoopbackSelfs)
 				{
-					foreach (var testCase in TestCases(loopbackSettings))
-						yield return (testCase);
+					foreach (var tc in TestCases(ls))
+						yield return (tc);
 				}
 			}
 		}

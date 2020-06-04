@@ -78,10 +78,10 @@ namespace YAT.Domain.Test
 		{
 			get
 			{
-				foreach (var loopbackSettings in Utilities.TransmissionSettings.SerialPortLoopbackPairs)
+				foreach (var lp in Utilities.TransmissionSettings.SerialPortLoopbackPairs)
 				{
-					foreach (var testCase in TestCases(loopbackSettings))
-						yield return (testCase);
+					foreach (var tc in TestCases(lp))
+						yield return (tc);
 				}
 			}
 		}
