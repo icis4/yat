@@ -723,8 +723,6 @@ namespace YAT.Domain
 		{
 			lock (ChunkVsTimedSyncObj) // Synchronize processing (raw chunk | timed line break).
 			{
-				PostponeResult postponeResult;
-
 				// Process chunk(s) of given direction:
 				{
 					DateTime startTimeoutAt;
@@ -744,11 +742,14 @@ namespace YAT.Domain
 						chunksToProcess.AddRange(postponedChunks);
 						chunksToProcess.Add(chunk);
 
+						PostponeResult postponeResult; // Ignore, postponed chunks will be processed anyway.
 						ProcessChunksOfSameDirection(repositoryType, chunksToProcess.ToArray(), dir, out postponeResult, out startTimeoutAt);
 					}
 					else
 					{
+						PostponeResult postponeResult; // Ignore, postponed chunks will be processed anyway.
 						ProcessChunk(repositoryType, chunk, out postponeResult);
+
 						startTimeoutAt = chunk.TimeStamp;
 					}
 
@@ -757,7 +758,6 @@ namespace YAT.Domain
 				}
 
 				// Then process postponed chunk(s) starting with other direction:
-				if (postponeResult != PostponeResult.Nothing)
 				{
 					var initialDir = GetOtherDirection(chunk.Direction);
 					ProcessPostponedChunks(repositoryType, initialDir);
