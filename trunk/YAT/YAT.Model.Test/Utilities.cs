@@ -453,8 +453,8 @@ namespace YAT.Model.Test
 		                           /// <remarks><see cref="Domain.Test.Utilities.WaitTimeoutForLineTransmission"/>.</remarks>
 		public const int WaitTimeoutForLineTransmission  = Domain.Test.Utilities.WaitTimeoutForLineTransmission;
 
-		                           /// <remarks><see cref="Domain.Test.Utilities.WaitIntervalForLineTransmission"/>.</remarks>
-		public const int WaitIntervalForLineTransmission = Domain.Test.Utilities.WaitIntervalForLineTransmission;
+		                       /// <remarks><see cref="Domain.Test.Utilities.WaitIntervalForTransmission"/>.</remarks>
+		public const int WaitIntervalForTransmission = Domain.Test.Utilities.WaitIntervalForTransmission;
 
 		#endregion
 
@@ -1365,8 +1365,8 @@ namespace YAT.Model.Test
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
-				Thread.Sleep(WaitIntervalForLineTransmission);
-				waitTime += WaitIntervalForLineTransmission;
+				Thread.Sleep(WaitIntervalForTransmission);
+				waitTime += WaitIntervalForTransmission;
 
 				Trace.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 
@@ -1461,8 +1461,8 @@ namespace YAT.Model.Test
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
-				Thread.Sleep(WaitIntervalForLineTransmission);
-				waitTime += WaitIntervalForLineTransmission;
+				Thread.Sleep(WaitIntervalForTransmission);
+				waitTime += WaitIntervalForTransmission;
 
 				Trace.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 

@@ -252,8 +252,6 @@ namespace YAT.Domain.Test.TextTerminal
 		/// <remarks>
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines.
-		/// </remarks>
-		/// <remarks>
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
@@ -329,8 +327,6 @@ namespace YAT.Domain.Test.TextTerminal
 		/// <remarks>
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines.
-		/// </remarks>
-		/// <remarks>
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>

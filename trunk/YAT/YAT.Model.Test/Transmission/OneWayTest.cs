@@ -214,10 +214,10 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				foreach (var loopbackSettings in Utilities.TransmissionSettings.SerialPortLoopbackPairs)
+				foreach (var lp in Utilities.TransmissionSettings.SerialPortLoopbackPairs)
 				{
-					foreach (var testCase in TestCases(loopbackSettings))
-						yield return (testCase);
+					foreach (var tc in TestCases(lp))
+						yield return (tc);
 				}
 			}
 		}
@@ -228,10 +228,10 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				foreach (var loopbackSettings in Utilities.TransmissionSettings.SerialPortLoopbackSelfs)
+				foreach (var ls in Utilities.TransmissionSettings.SerialPortLoopbackSelfs)
 				{
-					foreach (var testCase in TestCases(loopbackSettings))
-						yield return (testCase);
+					foreach (var tc in TestCases(ls))
+						yield return (tc);
 				}
 			}
 		}
@@ -241,10 +241,10 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				foreach (var loopbackSettings in Utilities.TransmissionSettings.IPLoopbackPairs)
+				foreach (var lp in Utilities.TransmissionSettings.IPLoopbackPairs)
 				{
-					foreach (var testCase in TestCases(loopbackSettings))
-						yield return (testCase);
+					foreach (var tc in TestCases(lp))
+						yield return (tc);
 				}
 			}
 		}
@@ -255,10 +255,10 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				foreach (var loopbackSettings in Utilities.TransmissionSettings.IPLoopbackSelfs)
+				foreach (var ls in Utilities.TransmissionSettings.IPLoopbackSelfs)
 				{
-					foreach (var testCase in TestCases(loopbackSettings))
-						yield return (testCase);
+					foreach (var tc in TestCases(ls))
+						yield return (tc);
 				}
 			}
 		}
