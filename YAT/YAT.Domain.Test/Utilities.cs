@@ -106,6 +106,9 @@ namespace YAT.Domain.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		public const int IgnoreCount = -1;
+
+		/// <summary></summary>
 		public const int WaitTimeoutForStateChange = 3000;
 
 		/// <remarks>
@@ -142,7 +145,7 @@ namespace YAT.Domain.Test
 		/// <remarks>
 		/// Note that a longer interval would increase the wait time, thus increasing the test time.
 		/// </remarks>
-		public const int WaitIntervalForLineTransmission = 20;
+		public const int WaitIntervalForTransmission = 20;
 
 		#endregion
 
@@ -324,23 +327,30 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
+		internal static void WaitForSendingAndVerifyByteCount(Domain.Terminal terminalTx, int expectedTotalByteCount, int timeout = WaitTimeoutForLineTransmission)
+		{
+			WaitForSendingAndVerifyCounts(terminalTx, expectedTotalByteCount, IgnoreCount, timeout);
+		}
+
+		/// <remarks>
+		/// There are similar utility methods in 'Model.Test.Utilities'.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		/// <remarks>
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines.
-		/// </remarks>
-		/// <remarks>
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
-		internal static void WaitForSendingAndVerifyCounts(Domain.Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount, int timeout = WaitTimeoutForLineTransmission)
+		internal static void WaitForSendingAndVerifyCounts(Domain.Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)
 		{
 			int txByteCount = 0;
 			int txLineCount = 0;
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
-				Thread.Sleep(WaitIntervalForLineTransmission);
-				waitTime += WaitIntervalForLineTransmission;
+				Thread.Sleep(WaitIntervalForTransmission);
+				waitTime += WaitIntervalForTransmission;
 
 				Trace.WriteLine("Waiting for sending, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 
@@ -356,13 +366,15 @@ namespace YAT.Domain.Test
 				}
 
 				txLineCount = terminalTx.GetRepositoryLineCount(RepositoryType.Tx);
-				if (txLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
-					Assert.Fail("Transmission error!" +
-					            " Number of sent lines = " + txLineCount +
-					            " mismatches expected = " + expectedTotalLineCount + ".");
+				if (expectedTotalLineCount != IgnoreCount) {
+					if (txLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+						Assert.Fail("Transmission error!" +
+						            " Number of sent lines = " + txLineCount +
+						            " mismatches expected = " + expectedTotalLineCount + ".");
+					}
 				}
 			}
-			while ((txByteCount != expectedTotalByteCount) || (txLineCount != expectedTotalLineCount));
+			while ((txByteCount != expectedTotalByteCount) || ((txLineCount != expectedTotalLineCount) && (expectedTotalLineCount != IgnoreCount)));
 
 			Debug.WriteLine("Tx of " + txByteCount + " bytes / " + txLineCount + " lines completed");
 
@@ -373,23 +385,30 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
+		internal static void WaitForReceivingAndVerifyByteCount(Domain.Terminal terminalRx, int expectedTotalByteCount, int timeout = WaitTimeoutForLineTransmission)
+		{
+			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, IgnoreCount, timeout);
+		}
+
+		/// <remarks>
+		/// There are similar utility methods in 'Model.Test.Utilities'.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		/// <remarks>
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines.
-		/// </remarks>
-		/// <remarks>
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
-		internal static void WaitForReceivingAndVerifyCounts(Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount, int timeout = WaitTimeoutForLineTransmission)
+		internal static void WaitForReceivingAndVerifyCounts(Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)
 		{
 			int rxByteCount = 0;
 			int rxLineCount = 0;
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
-				Thread.Sleep(WaitIntervalForLineTransmission);
-				waitTime += WaitIntervalForLineTransmission;
+				Thread.Sleep(WaitIntervalForTransmission);
+				waitTime += WaitIntervalForTransmission;
 
 				Trace.WriteLine("Waiting for receiving, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 
@@ -405,17 +424,28 @@ namespace YAT.Domain.Test
 				}
 
 				rxLineCount = terminalRx.GetRepositoryLineCount(RepositoryType.Rx);
-				if (rxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
-					Assert.Fail("Transmission error!" +
-					            " Number of received lines = " + rxLineCount +
-					            " mismatches expected = " + expectedTotalLineCount + ".");
+				if (expectedTotalLineCount != IgnoreCount) {
+					if (rxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+						Assert.Fail("Transmission error!" +
+						            " Number of received lines = " + rxLineCount +
+						            " mismatches expected = " + expectedTotalLineCount + ".");
+					}
 				}
 			}
-			while ((rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCount));
+			while ((rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCount && (expectedTotalLineCount != IgnoreCount)));
 
 			Debug.WriteLine("Rx of " + rxByteCount + " bytes / " + rxLineCount + " lines completed");
 
 			Trace.WriteLine("...done, received and verified");
+		}
+
+		/// <remarks>
+		/// There are similar utility methods in 'Model.Test.Utilities'.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
+		internal static void WaitForTransmissionAndVerifyByteCount(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int timeout = WaitTimeoutForLineTransmission)
+		{
+			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, IgnoreCount, timeout);
 		}
 
 		/// <remarks>
@@ -428,12 +458,10 @@ namespace YAT.Domain.Test
 		/// <remarks>
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines.
-		/// </remarks>
-		/// <remarks>
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
-		internal static void WaitForTransmissionAndVerifyCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount, int timeout = WaitTimeoutForLineTransmission)
+		internal static void WaitForTransmissionAndVerifyCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)
 		{
 			// Attention:
 			// Similar code exists in Model.Test.Utilities.WaitForTransmissionAndVerifyCounts().
@@ -446,8 +474,8 @@ namespace YAT.Domain.Test
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while.
-				Thread.Sleep(WaitIntervalForLineTransmission);
-				waitTime += WaitIntervalForLineTransmission;
+				Thread.Sleep(WaitIntervalForTransmission);
+				waitTime += WaitIntervalForTransmission;
 
 				Trace.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 
@@ -463,10 +491,12 @@ namespace YAT.Domain.Test
 				}
 
 				txLineCount = terminalTx.GetRepositoryLineCount(RepositoryType.Tx);
-				if (txLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
-					Assert.Fail("Transmission error!" +
-					            " Number of sent lines = " + txLineCount +
-					            " mismatches expected = " + expectedTotalLineCount + ".");
+				if (expectedTotalLineCount != IgnoreCount) {
+					if (txLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+						Assert.Fail("Transmission error!" +
+						            " Number of sent lines = " + txLineCount +
+						            " mismatches expected = " + expectedTotalLineCount + ".");
+					}
 				}
 
 				rxByteCount = terminalRx.GetRepositoryByteCount(RepositoryType.Rx);
@@ -477,14 +507,16 @@ namespace YAT.Domain.Test
 				}
 
 				rxLineCount = terminalRx.GetRepositoryLineCount(RepositoryType.Rx);
-				if (rxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
-					Assert.Fail("Transmission error!" +
-					            " Number of received lines = " + rxLineCount +
-					            " mismatches expected = " + expectedTotalLineCount + ".");
+				if (expectedTotalLineCount != IgnoreCount) {
+					if (rxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+						Assert.Fail("Transmission error!" +
+						            " Number of received lines = " + rxLineCount +
+						            " mismatches expected = " + expectedTotalLineCount + ".");
+					}
 				}
 			}
-			while ((txByteCount != expectedTotalByteCount) || (txLineCount != expectedTotalLineCount) ||
-			       (rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCount));
+			while ((txByteCount != expectedTotalByteCount) || (txLineCount != expectedTotalLineCount && (expectedTotalLineCount != IgnoreCount)) ||
+			       (rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCount && (expectedTotalLineCount != IgnoreCount)));
 
 			Debug.WriteLine("Tx of " + txByteCount + " bytes / " + txLineCount + " lines completed");
 			Debug.WriteLine("Rx of " + rxByteCount + " bytes / " + rxLineCount + " lines completed");
