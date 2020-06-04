@@ -36,7 +36,7 @@ namespace YAT.Domain.Utilities
 	/// struct manages the state and the various criteria.
 	/// </summary>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
-	public struct ForSomeTimeEventHelper : IEquatable<ForSomeTimeEventHelper>
+	public class ForSomeTimeEventHelper
 	{
 		/// <remarks>In milliseconds.</remarks>
 		public const int Threshold = 400;
@@ -117,76 +117,6 @@ namespace YAT.Domain.Utilities
 
 			return (false);
 		}
-
-		#region Object Members
-		//==========================================================================================
-		// Object Members
-		//==========================================================================================
-
-		/// <summary>
-		/// Serves as a hash function for a particular type.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to calculate hash code. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				int hashCode;
-
-				hashCode =                    this.eventMustBeRaised.GetHashCode();
-				hashCode = (hashCode * 397) ^ this.initialTimeStamp .GetHashCode();
-
-				return (hashCode);
-			}
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public override bool Equals(object obj)
-		{
-			if (obj is ForSomeTimeEventHelper)
-				return (Equals((ForSomeTimeEventHelper)obj));
-			else
-				return (false);
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		/// <remarks>
-		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
-		/// properties, i.e. properties with some logic, are also properly handled.
-		/// </remarks>
-		public bool Equals(ForSomeTimeEventHelper other)
-		{
-			return
-			(
-				this.eventMustBeRaised.Equals(other.eventMustBeRaised) &&
-				this.initialTimeStamp .Equals(other.initialTimeStamp)
-			);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have value equality.
-		/// </summary>
-		public static bool operator ==(ForSomeTimeEventHelper lhs, ForSomeTimeEventHelper rhs)
-		{
-			return (lhs.Equals(rhs));
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have value inequality.
-		/// </summary>
-		public static bool operator !=(ForSomeTimeEventHelper lhs, ForSomeTimeEventHelper rhs)
-		{
-			return (!(lhs == rhs));
-		}
-
-		#endregion
 	}
 }
 

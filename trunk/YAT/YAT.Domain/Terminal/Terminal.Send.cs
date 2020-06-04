@@ -718,7 +718,7 @@ namespace YAT.Domain
 		/// </remarks>
 		protected virtual void DoSendRawData(ForSomeTimeEventHelper forSomeTimeEventHelper, byte[] data)
 		{
-			// Raise the 'IOIsBusyChanged' event if a large chunk is about to be sent:
+			// Raise the 'IsSendingForSomeTimeChanged' event if a large chunk is about to be sent:
 			if (forSomeTimeEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(data.Length, this.terminalSettings.IO.RoughlyEstimatedMaxBytesPerMillisecond))
 				IncrementIsSendingForSomeTimeChanged();
 
@@ -771,7 +771,7 @@ namespace YAT.Domain
 							var bytesResult = (result as Parser.BytesResult);
 							if (bytesResult != null)
 							{
-								// Raise the 'IOIsBusyChanged' event if a large chunk is about to be sent:
+								// Raise the 'IsSendingForSomeTimeChanged' event if a large chunk is about to be sent:
 								if (forSomeTimeEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(bytesResult.Bytes.Length, this.terminalSettings.IO.RoughlyEstimatedMaxBytesPerMillisecond))
 									IncrementIsSendingForSomeTimeChanged();
 
@@ -852,7 +852,7 @@ namespace YAT.Domain
 							if (DoBreak || doBreak) // (overall || local)
 								break; // foreach (result)
 
-							// Raise the 'IOIsBusyChanged' event if sending already takes quite long:
+							// Raise the 'IsSendingForSomeTimeChanged' event if sending already takes quite long:
 							if (forSomeTimeEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
 								IncrementIsSendingForSomeTimeChanged();
 
@@ -931,7 +931,7 @@ namespace YAT.Domain
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
 							delay = result.Args[0];
 
-						// Raise the 'IOIsBusyChanged' event if sending is about to be delayed:
+						// Raise the 'IsSendingForSomeTimeChanged' event if sending is about to be delayed:
 						if (forSomeTimeEventHelper.RaiseEventIfDelayIsAboveThreshold(delay))
 							IncrementIsSendingForSomeTimeChanged();
 
@@ -1374,7 +1374,7 @@ namespace YAT.Domain
 
 			if (effectiveDelay > 0)
 			{
-				// Raise the 'IOIsBusyChanged' event if sending is about to be delayed for too long:
+				// Raise the 'IsSendingForSomeTimeChanged' event if sending is about to be delayed for too long:
 				if (forSomeTimeEventHelper.RaiseEventIfDelayIsAboveThreshold(effectiveDelay))
 					IncrementIsSendingForSomeTimeChanged();
 
@@ -1669,7 +1669,7 @@ namespace YAT.Domain
 		/// </remarks>
 		protected virtual void DoSendFileLine(ForSomeTimeEventHelper forSomeTimeEventHelper, string line, Radix defaultRadix)
 		{
-			// Raise the 'IOIsBusyChanged' event if sending already takes quite long, i.e. file cannot be sent within threshold:
+			// Raise the 'IsSendingForSomeTimeChanged' event if sending already takes quite long, i.e. file cannot be sent within threshold:
 			if (forSomeTimeEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
 				IncrementIsSendingForSomeTimeChanged();
 
@@ -1689,7 +1689,7 @@ namespace YAT.Domain
 		/// </remarks>
 		protected virtual void DoSendFileChunk(ForSomeTimeEventHelper forSomeTimeEventHelper, byte[] chunk)
 		{
-			// Raise the 'IOIsBusyChanged' event if sending already takes quite long, i.e. file cannot be sent within threshold:
+			// Raise the 'IsSendingForSomeTimeChanged' event if sending already takes quite long, i.e. file cannot be sent within threshold:
 			if (forSomeTimeEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
 				IncrementIsSendingForSomeTimeChanged();
 

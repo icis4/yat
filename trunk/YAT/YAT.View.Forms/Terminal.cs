@@ -7573,7 +7573,7 @@ namespace YAT.View.Forms
 					if (this.terminal.IsTransmissive)
 					{
 						if (!this.terminal.IsSendingForSomeTime) // Not checking for 'IsSending' as that a) might distract user
-						{                                    // and b) consume unncessary CPU time (draw LED quickly twice).
+						{                                        // and b) consume unncessary CPU time (draw LED quickly twice).
 							ResetIOStatusFlashing();
 							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
 
@@ -7584,8 +7584,9 @@ namespace YAT.View.Forms
 						{
 							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Flashing;
 							StartIOStatusFlashing();
-							//// Do not directly access the image, it will be flashed by the timer below.
-							//// Directly accessing the image could result in irregular flashing.
+
+							// Do not directly access the image, it will be flashed by the timer below.
+							// Directly accessing the image could result in irregular flashing.
 						}
 					}
 					else // can only receive (so far)
