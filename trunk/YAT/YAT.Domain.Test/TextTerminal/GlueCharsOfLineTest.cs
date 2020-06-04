@@ -29,6 +29,7 @@
 using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading;
 
 using MKY.Collections.Generic;
@@ -54,19 +55,24 @@ namespace YAT.Domain.Test.TextTerminal
 		{
 			get
 			{
-				foreach (var loopbackSettings in Utilities.TransmissionSettings.SerialPortLoopbackSelfs)
+				var loopbackSelfs = Utilities.TransmissionSettings.SerialPortLoopbackSelfs;
+				if (loopbackSelfs.Count() > 0)
 				{
-					// Arguments:
-					var tcd = new TestCaseData(loopbackSettings.Value1); // TestCaseData(Pair settingsDescriptorA, Pair settingsDescriptorB, Utilities.TestSet command, int transmissionCount).
+					foreach (var ls in loopbackSelfs) // Running test on all available ports since driver may have impact on chunking.
+					{
+						var tcd = new TestCaseData(ls.Value1); // TestCaseData(Pair settingsDescriptorA, Pair settingsDescriptorB, Utilities.TestSet command, int transmissionCount).
+						tcd.SetName(ls.Value2);
+						foreach (string cat in ls.Value3)
+							tcd.SetCategory(cat);
 
-					// Name:
-					tcd.SetName(loopbackSettings.Value2);
-
-					// Category(ies):
-					foreach (string cat in loopbackSettings.Value3)
-						tcd.SetCategory(cat);
-
-					yield return (tcd);
+						yield return (tcd);
+					}
+				}
+				else
+				{
+					var tcd = new TestCaseData(null);
+					tcd.SetName("*NO* serial COM port loopback selfs are available => FIX OR ACCEPT YELLOW BAR");
+					yield return (tcd); // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed in tests.
 				}
 			}
 		}
@@ -78,9 +84,9 @@ namespace YAT.Domain.Test.TextTerminal
 	[TestFixture]
 	public class GlueCharsOfLineTest
 	{
-		#region TestDefault
+		#region TestDefault/TestInfiniteTimeout
 		//==========================================================================================
-		// TestDefault
+		// TestDefault/TestInfiniteTimeout
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -92,6 +98,30 @@ namespace YAT.Domain.Test.TextTerminal
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			var settings = settingsDescriptor.Value1(settingsDescriptor.Value2);
+
+			VerifyDefaultOrInfiniteTimeout(settings);
+		}
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(GlueCharsOfLineTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
+		public virtual void TestInfiniteTimeout(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
+		{
+			if (!ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
+				Assert.Ignore("No serial COM port loopback selfs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback self is properly configured and available if passing this test is required.");
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			var settings = settingsDescriptor.Value1(settingsDescriptor.Value2);
+			var gcol = settings.TextTerminal.GlueCharsOfLine;
+			gcol.Enabled = true;
+			gcol.Timeout = Timeout.Infinite;
+			settings.TextTerminal.GlueCharsOfLine = gcol;
+
+			VerifyDefaultOrInfiniteTimeout(settings);
+		}
+
+		/// <summary></summary>
+		protected virtual void VerifyDefaultOrInfiniteTimeout(Settings.TerminalSettings settings)
+		{
 			using (var terminal = new Domain.TextTerminal(settings)) // Glueing is enabled by default.
 			{
 				Assert.That(terminal.Start(), Is.True, "Terminal could not be started");
@@ -99,7 +129,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 				// Send:
 				var beganAt = DateTime.Now;
-				var file = SendFilesProvider.FilePaths_StressText.StressFiles[StressTestCase.Normal]; // 300 lines will take about 10..15 seconds.
+				var file = SendFilesProvider.FilePaths_StressText.StressFiles[StressTestCase.Normal]; // 300 lines will take about 9..12 seconds.
 				var fileTimeout = 15000;
 				var fileByteCount = file.Item2;
 				var fileLineCount = file.Item3;
@@ -112,15 +142,17 @@ namespace YAT.Domain.Test.TextTerminal
 				Assert.That(duration.TotalMilliseconds, Is.LessThan(fileTimeout));
 
 				// Verify:
-				var lines = terminal.RepositoryToDisplayLines(RepositoryType.Bidir);
-				var previousLineTimeStamp = DateTime.MinValue;
-				foreach (var line in lines)
-				{
-					Assert.That(line.ByteCount, Is.EqualTo(fileLineByteCount));
-					Assert.That(line.CharCount, Is.EqualTo(fileLineByteCount));
+				var displayLines = terminal.RepositoryToDisplayLines(RepositoryType.Bidir);
+				Assert.That(displayLines.Count, Is.EqualTo(fileLineCount * 2));
 
-					Assert.That(line.TimeStamp, Is.GreaterThanOrEqualTo(previousLineTimeStamp));
-					previousLineTimeStamp = line.TimeStamp;
+				var previousLineTimeStamp = DateTime.MinValue;
+				foreach (var dl in displayLines)
+				{
+					Assert.That(dl.ByteCount, Is.EqualTo(fileLineByteCount));
+					Assert.That(dl.CharCount, Is.EqualTo(fileLineByteCount));
+
+					Assert.That(dl.TimeStamp, Is.GreaterThanOrEqualTo(previousLineTimeStamp));
+					previousLineTimeStamp = dl.TimeStamp;
 				}
 
 				terminal.Stop();
@@ -130,14 +162,14 @@ namespace YAT.Domain.Test.TextTerminal
 
 		#endregion
 
-		#region TestInfinite
+		#region TestMinimumTimout/TestDisabled
 		//==========================================================================================
-		// TestInfinite
+		// TestMinimumTimout/TestDisabled
 		//==========================================================================================
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(GlueCharsOfLineTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
-		public virtual void TestInfinite(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
+		public virtual void TestMinimumTimout(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
 		{
 			if (!ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
 				Assert.Ignore("No serial COM port loopback selfs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback self is properly configured and available if passing this test is required.");
@@ -145,15 +177,63 @@ namespace YAT.Domain.Test.TextTerminal
 
 			var settings = settingsDescriptor.Value1(settingsDescriptor.Value2);
 			var gcol = settings.TextTerminal.GlueCharsOfLine;
-			gcol.Enabled = true;
-			gcol.Timeout = Timeout.Infinite;
+			gcol.Timeout = 1;
 			settings.TextTerminal.GlueCharsOfLine = gcol;
+
+			VerifyMinimumTimoutOrTestDisabled(settings);
+		}
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(GlueCharsOfLineTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
+		public virtual void TestDisabled(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
+		{
+			if (!ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
+				Assert.Ignore("No serial COM port loopback selfs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback self is properly configured and available if passing this test is required.");
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			var settings = settingsDescriptor.Value1(settingsDescriptor.Value2);
+			var gcol = settings.TextTerminal.GlueCharsOfLine;
+			gcol.Enabled = false;
+			settings.TextTerminal.GlueCharsOfLine = gcol;
+
+			VerifyMinimumTimoutOrTestDisabled(settings);
+		}
+
+		/// <summary></summary>
+		protected virtual void VerifyMinimumTimoutOrTestDisabled(Settings.TerminalSettings settings)
+		{
 			using (var terminal = new Domain.TextTerminal(settings)) // Glueing is enabled by default.
 			{
 				Assert.That(terminal.Start(), Is.True, "Terminal could not be started");
 				Utilities.WaitForConnection(terminal, terminal);
 
-				// PENDING
+				// Send:
+				var beganAt = DateTime.Now;
+				var file = SendFilesProvider.FilePaths_StressText.StressFiles[StressTestCase.Normal]; // 300 lines will take about 9..12 seconds.
+				var fileTimeout = 15000;
+				var fileByteCount = file.Item2;
+				var fileLineCount = file.Item3;
+				var fileLineByteCount = (fileByteCount / fileLineCount); // Fixed to default of <CR><LF>.
+				terminal.SendFile(file.Item1);
+				Utilities.WaitForSendingAndVerifyByteCount(terminal, fileByteCount, fileTimeout);
+				Utilities.WaitForReceivingAndVerifyByteCount(terminal, fileByteCount);
+				var endedAt = DateTime.Now;
+				var duration = (endedAt - beganAt);
+				Assert.That(duration.TotalMilliseconds, Is.LessThan(fileTimeout));
+
+				// Verify:
+				var displayLines = terminal.RepositoryToDisplayLines(RepositoryType.Bidir);   // At least 2 * 300 lines, but rather * 1.5 = 900 lines.
+				Assert.That(displayLines.Count, Is.GreaterThan((int)Math.Round(fileLineCount * 2 * 1.25))); // However, often just around 900 lines.
+				                                                                                   // Thus using 2 * 300 * 1.25 = 750 lines.
+				var previousLineTimeStamp = DateTime.MinValue;
+				foreach (var dl in displayLines)
+				{
+					Assert.That(dl.ByteCount, Is.LessThanOrEqualTo(fileLineByteCount));
+					Assert.That(dl.CharCount, Is.LessThanOrEqualTo(fileLineByteCount));
+
+					Assert.That(dl.TimeStamp, Is.GreaterThanOrEqualTo(previousLineTimeStamp));
+					previousLineTimeStamp = dl.TimeStamp;
+				}
 
 				terminal.Stop();
 				Utilities.WaitForDisconnection(terminal);
