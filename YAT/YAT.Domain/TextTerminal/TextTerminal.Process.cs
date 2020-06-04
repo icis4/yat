@@ -587,11 +587,11 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual bool GlueCharsOfLineTimeoutHasElapsed(DateTime instantInQuestion, DateTime lineTimeStamp)
+		protected virtual bool GlueCharsOfLineTimeoutHasElapsed(DateTime instantInQuestion, DateTime startOfTimeout)
 		{
 			if (TextTerminalSettings.GlueCharsOfLine.Timeout != Timeout.Infinite)
 			{
-				var duration = (instantInQuestion - lineTimeStamp).TotalMilliseconds;
+				var duration = (instantInQuestion - startOfTimeout).TotalMilliseconds;
 				return (duration >= TextTerminalSettings.GlueCharsOfLine.Timeout);
 			}
 			else // Infinite:
@@ -633,7 +633,7 @@ namespace YAT.Domain
 			{
 				DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
 
-				DoLineEndPost(repositoryType, processState, lineState, ts, dir, isLastByteOfChunk, out breakChunk);
+				DoLineEndPost(repositoryType, processState, ts, dir, isLastByteOfChunk, out breakChunk);
 
 				// When glueing is enabled, potentially postpone remaining byte(s) of chunk until
 				// previously postponed chunk(s) of other direction has been processed.
@@ -645,7 +645,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void DoLineEndPost(RepositoryType repositoryType, ProcessState processState, LineState lineState, DateTime ts, IODirection dir, bool isLastByteOfChunk, out bool breakChunk)
+		protected virtual void DoLineEndPost(RepositoryType repositoryType, ProcessState processState, DateTime ts, IODirection dir, bool isLastByteOfChunk, out bool breakChunk)
 		{
 			if (TextTerminalSettings.GlueCharsOfLine.Enabled)
 			{
@@ -660,7 +660,7 @@ namespace YAT.Domain
 						if (postponedChunkCountOfOtherDir > 0)
 						{
 							var firstPostponedChunkTimeStampOfOtherDir = overallState.GetFirstPostponedChunkTimeStamp(otherDir);
-							if ((firstPostponedChunkTimeStampOfOtherDir < ts) || GlueCharsOfLineTimeoutHasElapsed(firstPostponedChunkTimeStampOfOtherDir, lineState.TimeStamp))
+							if (firstPostponedChunkTimeStampOfOtherDir < ts)
 							{
 								DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to break {0} chunk stamped {1} and postpone remaining bytes.", dir, ts));
 
