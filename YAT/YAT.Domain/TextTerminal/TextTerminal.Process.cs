@@ -1234,7 +1234,7 @@ namespace YAT.Domain
 							ProcessPostponedChunks(repositoryType, lineDir);
 						}
 					}
-					else if (overallState.LastChunkDirection != IODirection.None) // IODirection.None means that line processing has not started at all yet.
+					else
 					{
 						var initialDir = overallState.LastChunkDirection;
 
