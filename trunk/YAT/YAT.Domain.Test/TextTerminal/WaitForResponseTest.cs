@@ -181,6 +181,12 @@ namespace YAT.Domain.Test.TextTerminal
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Assert.That(terminalA.IsSendingForSomeTime, Is.False); // No need to WaitForIsNoLongerSending() as already waited for completion above.
 
+					// Refresh and verify again:
+					terminalA.RefreshRepositories();
+					terminalB.RefreshRepositories();
+					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+
 					terminalB.Stop();
 					Utilities.WaitForDisconnection(terminalB);
 				} // using (terminalB)
@@ -351,6 +357,12 @@ namespace YAT.Domain.Test.TextTerminal
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Assert.That(terminalA.IsSendingForSomeTime, Is.False); // No need to WaitForIsNoLongerSending() as already waited for completion above.
+
+					// Refresh and verify again:
+					terminalA.RefreshRepositories();
+					terminalB.RefreshRepositories();
+					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
 					terminalB.Stop();
 					Utilities.WaitForDisconnection(terminalB);

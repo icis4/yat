@@ -30,6 +30,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 using MKY.Collections.Generic;
+using MKY.IO.Ports.Test;
 
 using NUnit.Framework;
 
@@ -51,10 +52,14 @@ namespace YAT.Domain.Test.Terminal
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
-		[Test, TestCaseSource(typeof(GenericTestData), "TestCasesSerialPortLoopbackPairs")]
+		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackPairs")]
 		public virtual void TestApplyToSerialPortLoopbackPairs(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
 		                                                       Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB)
 		{
+			if (!ConfigurationProvider.Configuration.LoopbackPairsAreAvailable)
+				Assert.Ignore("No serial COM port loopback pairs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback pairs is properly configured and available if passing this test is required.");
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
 			const int WaitForChange   = 1500; // 1000 ms is not sufficient.
 			const int WaitForDisposal =  100;
 
@@ -102,6 +107,11 @@ namespace YAT.Domain.Test.Terminal
 						expectedTotalLineCountBA++;
 						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
+						// Refresh and verify again:
+						terminalA.RefreshRepositories();
+						terminalB.RefreshRepositories();
+						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+
 						terminalB.Stop();
 						Utilities.WaitForDisconnection(terminalB);
 					} // using (terminalB)
@@ -133,6 +143,10 @@ namespace YAT.Domain.Test.Terminal
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountBA += (textByteCount + eolByteCount);
 						expectedTotalLineCountBA++;
+						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+
+						// Refresh and verify again:
+						terminalA.RefreshRepositories();
 						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						terminalB.Stop();
@@ -174,6 +188,10 @@ namespace YAT.Domain.Test.Terminal
 						expectedTotalLineCountBA++;
 						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
+						// Refresh and verify again:
+						terminalA.RefreshRepositories();
+						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+
 						terminalB.Stop();
 						Utilities.WaitForDisconnection(terminalB);
 					} // using (terminalB)
@@ -211,6 +229,10 @@ namespace YAT.Domain.Test.Terminal
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountBA += (textByteCount + eolByteCount);
 						expectedTotalLineCountBA++;
+						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+
+						// Refresh and verify again:
+						terminalA.RefreshRepositories();
 						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						terminalB.Stop();

@@ -138,6 +138,14 @@ namespace YAT.Domain.Test.Terminal
 					else
 						VerifyNonConcurrent(terminalRx, subsequentLineCount, subsequentLineTextExpected);
 
+					// Refresh and verify again:
+					terminalRx.RefreshRepositories();
+
+					if (allowConcurrency)
+						VerifyConcurrent(terminalRx, subsequentLineCount, subsequentLineTextExpected);
+					else
+						VerifyNonConcurrent(terminalRx, subsequentLineCount, subsequentLineTextExpected);
+
 					terminalRx.Stop();
 					Utilities.WaitForDisconnection(terminalRx);
 				} // using (terminalB)

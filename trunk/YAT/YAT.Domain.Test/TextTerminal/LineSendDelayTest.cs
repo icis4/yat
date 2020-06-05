@@ -99,6 +99,11 @@ namespace YAT.Domain.Test.TextTerminal
 					expectedTotalLineCount++;
 					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
+					// Refresh and verify again:
+					terminalTx.RefreshRepositories();
+					terminalRx.RefreshRepositories();
+					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+
 					terminalRx.Stop();
 					Utilities.WaitForDisconnection(terminalRx);
 				} // using (terminalB)
