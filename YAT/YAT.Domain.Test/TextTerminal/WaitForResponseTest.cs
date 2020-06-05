@@ -56,9 +56,11 @@ namespace YAT.Domain.Test.TextTerminal
 			const int WaitTimeUntilTimeout = (int)(1.5 * Settings.TextTerminalSettings.WaitForResponseTimeoutDefault);
 
 			var settingsA = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+
 			var wfr = settingsA.TextTerminal.WaitForResponse;
 			wfr.Enabled = true;
 			settingsA.TextTerminal.WaitForResponse = wfr;
+
 			using (var terminalA = new Domain.TextTerminal(settingsA))
 			{
 				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
@@ -212,10 +214,12 @@ namespace YAT.Domain.Test.TextTerminal
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			var settingsA = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+
 			var wfr = settingsA.TextTerminal.WaitForResponse;
 			wfr.Enabled = true;
 			wfr.Timeout = Timeout.Infinite;
 			settingsA.TextTerminal.WaitForResponse = wfr;
+
 			using (var terminalA = new Domain.TextTerminal(settingsA))
 			{
 				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");

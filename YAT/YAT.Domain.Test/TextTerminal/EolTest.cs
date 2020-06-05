@@ -151,6 +151,7 @@ namespace YAT.Domain.Test.TextTerminal
 				settingsA.TextTerminal.Encoding = (EncodingEx)encoding;
 				settingsA.TextTerminal.TxEol = eolAB;
 				settingsA.TextTerminal.RxEol = eolBA;
+
 				using (var terminalA = new Domain.TextTerminal(settingsA))
 				{
 					Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
@@ -282,6 +283,7 @@ namespace YAT.Domain.Test.TextTerminal
 			var settingsA = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
 			settingsA.TextTerminal.TxEol = "";
 			settingsA.TextTerminal.RxEol = "";
+
 			using (var terminalA = new Domain.TextTerminal(settingsA))
 			{
 				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
