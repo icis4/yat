@@ -89,7 +89,7 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (IsTransmissive)
 			{
-				var initial = DateTime.Now;
+				var initialTimeStamp = DateTime.Now;
 
 				int sendBufferSize;
 				if (this.settings.OutputBufferSize.Enabled)
@@ -107,7 +107,7 @@ namespace MKY.IO.Serial.SerialPort
 							return (false);
 
 						// Actively yield to other threads to allow dequeuing:
-						var span = (initial - DateTime.Now);
+						var span = (DateTime.Now - initialTimeStamp);
 						if (span.TotalMilliseconds < 4)
 							Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as send
 						else                             // a) is expected to potentially be blocking and
