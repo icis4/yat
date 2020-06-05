@@ -97,6 +97,11 @@ namespace YAT.Domain.Test.Terminal
 				////expectedTotalLineCount++ does not apply, only already started line gets completed.
 					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
+					// Refresh and verify again:
+					terminalTx.RefreshRepositories();
+					terminalRx.RefreshRepositories();
+					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+
 					terminalRx.Stop();
 					Utilities.WaitForDisconnection(terminalRx);
 				} // using (terminalB)
@@ -157,6 +162,11 @@ namespace YAT.Domain.Test.Terminal
 					terminalTx.SendTextLine(textNormal);
 					expectedTotalByteCount += textLineByteCount;
 					expectedTotalLineCount++;
+					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+
+					// Refresh and verify again:
+					terminalTx.RefreshRepositories();
+					terminalRx.RefreshRepositories();
 					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					terminalRx.Stop();
@@ -224,6 +234,11 @@ namespace YAT.Domain.Test.Terminal
 					terminalTx.SendTextLine(textNormal);
 					var expectedTotalByteCount = (txByteCount + textLineByteCount);
 					var expectedTotalLineCount = (txLineCount + 1);
+					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+
+					// Refresh and verify again:
+					terminalTx.RefreshRepositories();
+					terminalRx.RefreshRepositories();
 					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					terminalRx.Stop();
@@ -294,6 +309,11 @@ namespace YAT.Domain.Test.Terminal
 					terminalTx.SendTextLine(textNormal);
 					var expectedTotalByteCount = (txByteCount + textLineByteCount);
 					var expectedTotalLineCount = (txLineCount + 1);
+					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+
+					// Refresh and verify again:
+					terminalTx.RefreshRepositories();
+					terminalRx.RefreshRepositories();
 					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					terminalRx.Stop();

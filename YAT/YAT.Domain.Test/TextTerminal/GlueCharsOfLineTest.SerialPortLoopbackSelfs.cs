@@ -42,45 +42,6 @@ using NUnit.Framework;
 namespace YAT.Domain.Test.TextTerminal
 {
 	/// <summary></summary>
-	public static class GlueCharsOfLineTestData_SerialPortLoopbackSelfs
-	{
-		#region Test Environment
-		//==========================================================================================
-		// Test Environment
-		//==========================================================================================
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
-		public static IEnumerable TestEnvironmentSerialPortLoopbackSelfs
-		{
-			get
-			{
-				var loopbackSelfs = Utilities.TransmissionSettings.SerialPortLoopbackSelfs;
-				if (loopbackSelfs.Count() > 0)
-				{
-					foreach (var ls in loopbackSelfs) // Running test on all available ports since driver may have impact on chunking.
-					{
-						var tcd = new TestCaseData(ls.Value1); // TestCaseData(Pair settingsDescriptorA, Pair settingsDescriptorB, Utilities.TestSet command, int transmissionCount).
-						tcd.SetName(ls.Value2);
-						foreach (string cat in ls.Value3)
-							tcd.SetCategory(cat);
-
-						yield return (tcd);
-					}
-				}
-				else
-				{
-					var tcd = new TestCaseData(null);
-					tcd.SetName("*NO* serial COM port loopback selfs are available => FIX OR ACCEPT YELLOW BAR");
-					yield return (tcd); // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed in tests.
-				}
-			}
-		}
-
-		#endregion
-	}
-
-	/// <summary></summary>
 	[TestFixture]
 	public class GlueCharsOfLineTest_SerialPortLoopbackSelfs
 	{
@@ -90,7 +51,7 @@ namespace YAT.Domain.Test.TextTerminal
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(GlueCharsOfLineTestData_SerialPortLoopbackSelfs), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
+		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
 		public virtual void TestDefault(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
 		{
 			if (!ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
@@ -99,11 +60,11 @@ namespace YAT.Domain.Test.TextTerminal
 
 			var settings = settingsDescriptor.Value1(settingsDescriptor.Value2);
 
-			VerifyDefaultOrInfiniteTimeout(settings);
+			TestDefaultOrInfiniteTimeout(settings);
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(GlueCharsOfLineTestData_SerialPortLoopbackSelfs), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
+		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
 		public virtual void TestInfiniteTimeout(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
 		{
 			if (!ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
@@ -116,11 +77,11 @@ namespace YAT.Domain.Test.TextTerminal
 			gcol.Timeout = Timeout.Infinite;
 			settings.TextTerminal.GlueCharsOfLine = gcol;
 
-			VerifyDefaultOrInfiniteTimeout(settings);
+			TestDefaultOrInfiniteTimeout(settings);
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(GlueCharsOfLineTestData_SerialPortLoopbackSelfs), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
+		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
 		public virtual void TestMinimumTimout(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
 		{
 			if (!ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
@@ -132,11 +93,11 @@ namespace YAT.Domain.Test.TextTerminal
 			gcol.Timeout = 1;
 			settings.TextTerminal.GlueCharsOfLine = gcol;
 
-			VerifyMinimumTimoutOrTestDisabled(settings);
+			TestMinimumTimoutOrTestDisabled(settings);
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(GlueCharsOfLineTestData_SerialPortLoopbackSelfs), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
+		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
 		public virtual void TestDisabled(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
 		{
 			if (!ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
@@ -148,7 +109,7 @@ namespace YAT.Domain.Test.TextTerminal
 			gcol.Enabled = false;
 			settings.TextTerminal.GlueCharsOfLine = gcol;
 
-			VerifyMinimumTimoutOrTestDisabled(settings);
+			TestMinimumTimoutOrTestDisabled(settings);
 		}
 
 		#endregion
@@ -159,7 +120,7 @@ namespace YAT.Domain.Test.TextTerminal
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void VerifyDefaultOrInfiniteTimeout(Settings.TerminalSettings settings)
+		protected virtual void TestDefaultOrInfiniteTimeout(Settings.TerminalSettings settings)
 		{
 			using (var terminal = new Domain.TextTerminal(settings)) // Glueing is enabled by default.
 			{
@@ -181,18 +142,11 @@ namespace YAT.Domain.Test.TextTerminal
 				Assert.That(duration.TotalMilliseconds, Is.LessThan(fileTimeout));
 
 				// Verify:
-				var displayLines = terminal.RepositoryToDisplayLines(RepositoryType.Bidir);
-				Assert.That(displayLines.Count, Is.EqualTo(fileLineCount * 2));
+				VerifyDefaultOrInfiniteTimeout(terminal, fileLineCount, fileLineByteCount);
 
-				var previousLineTimeStamp = DateTime.MinValue;
-				foreach (var dl in displayLines)
-				{
-					Assert.That(dl.ByteCount, Is.EqualTo(fileLineByteCount));
-					Assert.That(dl.CharCount, Is.EqualTo(fileLineByteCount));
-
-					Assert.That(dl.TimeStamp, Is.GreaterThanOrEqualTo(previousLineTimeStamp));
-					previousLineTimeStamp = dl.TimeStamp;
-				}
+				// Refresh and verify again:
+				terminal.RefreshRepositories();
+				VerifyDefaultOrInfiniteTimeout(terminal, fileLineCount, fileLineByteCount);
 
 				terminal.Stop();
 				Utilities.WaitForDisconnection(terminal);
@@ -200,7 +154,24 @@ namespace YAT.Domain.Test.TextTerminal
 		}
 
 		/// <summary></summary>
-		protected virtual void VerifyMinimumTimoutOrTestDisabled(Settings.TerminalSettings settings)
+		protected virtual void VerifyDefaultOrInfiniteTimeout(Domain.TextTerminal terminal, int fileLineCount, int fileLineByteCount)
+		{
+			var displayLines = terminal.RepositoryToDisplayLines(RepositoryType.Bidir);
+			Assert.That(displayLines.Count, Is.EqualTo(fileLineCount * 2));
+
+			var previousLineTimeStamp = DateTime.MinValue;
+			foreach (var dl in displayLines)
+			{
+				Assert.That(dl.ByteCount, Is.EqualTo(fileLineByteCount));
+				Assert.That(dl.CharCount, Is.EqualTo(fileLineByteCount));
+
+				Assert.That(dl.TimeStamp, Is.GreaterThanOrEqualTo(previousLineTimeStamp));
+				previousLineTimeStamp = dl.TimeStamp;
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void TestMinimumTimoutOrTestDisabled(Settings.TerminalSettings settings)
 		{
 			using (var terminal = new Domain.TextTerminal(settings)) // Glueing is enabled by default.
 			{
@@ -222,22 +193,32 @@ namespace YAT.Domain.Test.TextTerminal
 				Assert.That(duration.TotalMilliseconds, Is.LessThan(fileTimeout));
 
 				// Verify:
-				var displayLines = terminal.RepositoryToDisplayLines(RepositoryType.Bidir);   // At least 2 * 300 lines, but rather * 1.5 = 900 lines.
-				Assert.That(displayLines.Count, Is.GreaterThan((int)Math.Round(fileLineCount * 2 * 1.25)));
-				                                                                                   //// Using 2 * 300 * 1.25 = 750 lines, i.e. something inbetween.
-				var previousLineTimeStamp = DateTime.MinValue;
-				foreach (var dl in displayLines)
-				{
-					Assert.That(dl.ByteCount, Is.LessThanOrEqualTo(fileLineByteCount));
-					Assert.That(dl.CharCount, Is.LessThanOrEqualTo(fileLineByteCount));
+				VerifyMinimumTimoutOrTestDisabled(terminal, fileLineCount, fileLineByteCount);
 
-					Assert.That(dl.TimeStamp, Is.GreaterThanOrEqualTo(previousLineTimeStamp));
-					previousLineTimeStamp = dl.TimeStamp;
-				}
+				// Refresh and verify again:
+				terminal.RefreshRepositories();
+				VerifyMinimumTimoutOrTestDisabled(terminal, fileLineCount, fileLineByteCount);
 
 				terminal.Stop();
 				Utilities.WaitForDisconnection(terminal);
 			} // using (terminal)
+		}
+
+		/// <summary></summary>
+		protected virtual void VerifyMinimumTimoutOrTestDisabled(Domain.TextTerminal terminal, int fileLineCount, int fileLineByteCount)
+		{
+			var displayLines = terminal.RepositoryToDisplayLines(RepositoryType.Bidir);   // At least 2 * 300 lines, but rather * 1.5 = 900 lines.
+			Assert.That(displayLines.Count, Is.GreaterThan((int)Math.Round(fileLineCount * 2 * 1.25)));
+				                                                                                //// Using 2 * 300 * 1.25 = 750 lines, i.e. something inbetween.
+			var previousLineTimeStamp = DateTime.MinValue;
+			foreach (var dl in displayLines)
+			{
+				Assert.That(dl.ByteCount, Is.LessThanOrEqualTo(fileLineByteCount));
+				Assert.That(dl.CharCount, Is.LessThanOrEqualTo(fileLineByteCount));
+
+				Assert.That(dl.TimeStamp, Is.GreaterThanOrEqualTo(previousLineTimeStamp));
+				previousLineTimeStamp = dl.TimeStamp;
+			}
 		}
 
 		#endregion
