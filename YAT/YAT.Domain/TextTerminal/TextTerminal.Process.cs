@@ -81,7 +81,7 @@ namespace YAT.Domain
 		private TextUnidirState textBidirRxState;
 		private TextUnidirState textRxState;
 
-		private LineBreakTimeout glueCharsOfLineTimeout;
+		private ProcessTimeout glueCharsOfLineTimeout;
 
 		private object waitForResponseClearanceSyncObj = new object();
 		private int waitForResponseResponseCounter; // = 0 and will again be initialized to that.
@@ -461,10 +461,8 @@ namespace YAT.Domain
 				}
 			}
 
-			if (TextTerminalSettings.WaitForResponse.Enabled)
-			{
-				ResetWaitForResponse();
-			}
+			InitializeGlueCharsOfLineTimeoutIfNeeded();
+			InitializeWaitForResponseIfNeeded();
 		}
 
 		/// <summary>
@@ -480,6 +478,9 @@ namespace YAT.Domain
 				this.waitForResponseEvent.Dispose();
 				this.waitForResponseEvent = null;
 			}
+
+			DisposeGlueCharsOfLineTimeoutIfNeeded();
+		////DisposeWaitForResponseIfNeeded() is not needed yet.
 		}
 
 		/// <summary>
@@ -500,6 +501,9 @@ namespace YAT.Domain
 				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
+
+			ResetGlueCharsOfLineTimeoutIfNeeded(repositoryType);
+		////ResetWaitForResponse() must not be called when resetting processing, as WaitForResponse also applies to sending.
 		}
 
 		/// <remarks>
@@ -521,6 +525,22 @@ namespace YAT.Domain
 				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
+		}
+
+		/// <summary></summary>
+		protected override void SuspendChunkTimeouts(RepositoryType repositoryType, IODirection dir)
+		{
+			base.SuspendChunkTimeouts(repositoryType, dir);
+
+			SuspendGlueCharsOfLineTimeoutIfNeeded(repositoryType, dir);
+		}
+
+		/// <summary></summary>
+		protected override void ResumeChunkTimeouts(RepositoryType repositoryType, IODirection dir, DateTime startTimeoutAt)
+		{
+			base.ResumeChunkTimeouts(repositoryType, dir, startTimeoutAt);
+
+			ResumeGlueCharsOfLineTimeoutIfNeeded(repositoryType, dir, startTimeoutAt);
 		}
 
 		/// <summary>
@@ -1111,7 +1131,7 @@ namespace YAT.Domain
 				if (this.glueCharsOfLineTimeout != null) // Must be given by this terminal.
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'DisposeGlueCharsOfLineTimeoutIfNeeded()' must be called first!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
-				this.glueCharsOfLineTimeout = new LineBreakTimeout(TextTerminalSettings.GlueCharsOfLine.Timeout);
+				this.glueCharsOfLineTimeout = new ProcessTimeout(TextTerminalSettings.GlueCharsOfLine.Timeout);
 				this.glueCharsOfLineTimeout.Elapsed += glueCharsOfLineTimeout_Elapsed;
 			}
 		}
@@ -1130,7 +1150,33 @@ namespace YAT.Domain
 		private void ResetGlueCharsOfLineTimeoutIfNeeded(RepositoryType repositoryType)
 		{                                         // Glueing only applies to bidirectional processing.
 			if ((repositoryType == RepositoryType.Bidir) && TextTerminalSettings.GlueCharsOfLine.Enabled)
-				this.glueCharsOfLineTimeout.Stop();
+			{
+				this.glueCharsOfLineTimeout.Stop(); // Same as Suspend() below.
+			}
+		}
+
+		/// <remarks>
+		/// Chunk and timed processing is synchronized against <see cref="Terminal.ChunkVsTimedSyncObj"/>.
+		/// Thus, timeouts can be suspended during chunk processing.
+		/// </remarks>
+		protected virtual void SuspendGlueCharsOfLineTimeoutIfNeeded(RepositoryType repositoryType, IODirection dir)
+		{                                         // Glueing only applies to bidirectional processing.
+			if ((repositoryType == RepositoryType.Bidir) && TextTerminalSettings.GlueCharsOfLine.Enabled)
+			{
+				this.glueCharsOfLineTimeout.Stop(); // Same as Reset() above.
+			}
+		}
+
+		/// <remarks>
+		/// Chunk and timed processing is synchronized against <see cref="Terminal.ChunkVsTimedSyncObj"/>.
+		/// Thus, timeouts can be suspended during chunk processing.
+		/// </remarks>
+		protected virtual void ResumeGlueCharsOfLineTimeoutIfNeeded(RepositoryType repositoryType, IODirection dir, DateTime startTimeoutAt)
+		{                                         // Glueing only applies to bidirectional processing.
+			if ((repositoryType == RepositoryType.Bidir) && TextTerminalSettings.GlueCharsOfLine.Enabled)
+			{                                                      // Single timeout for both directions.
+				this.glueCharsOfLineTimeout.Start(startTimeoutAt); // Timeout is not dependent on line position,
+			}                                                      // rather on number of postponed chunks.
 		}
 
 		/// <remarks>
@@ -1138,7 +1184,7 @@ namespace YAT.Domain
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		private void glueCharsOfLineTimeout_Elapsed(object sender, EventArgs e)
+		private void glueCharsOfLineTimeout_Elapsed(object sender, EventArgs<DateTime> e)
 		{
 			DebugGlueCharsOfLine("glueCharsOfLineTimeout_Elapsed");
 
@@ -1157,11 +1203,53 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void ProcessAndSignalGlueOfCharsTimeout()
 		{
-			var repositoryType = RepositoryType.Bidir; // Glueing only applies to bidirectional processing.
-			var overallState = GetOverallState(repositoryType);
-			var initialDir = overallState.LastChunkDirection;
-			if (initialDir != IODirection.None) // IODirection.None means that line processing has not started yet.)
-				ProcessPostponedChunks(repositoryType, initialDir);
+		////if (repositoryType == RepositoryType.Bidir) is implicitly given.
+			{
+				var repositoryType = RepositoryType.Bidir;
+				var processState = GetProcessState(repositoryType);
+				var overallState = processState.Overall; // Convenience shortcut.
+				if (overallState.GetPostponedChunkCount() > 0)
+				{
+					var lineState = processState.Line; // Convenience shortcut.
+					if (lineState.Position != LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
+					{
+						var lineDir = lineState.Direction;
+						var otherDir = GetOtherDirection(lineDir);
+
+						if (overallState.GetPostponedChunkCount(otherDir) > 0)
+						{
+							// Using accurate chunk time stamp rather than inaccurate time stamp of elapsed event:
+							var firstPostponedChunkTimeStampOfInitialDir = overallState.GetFirstPostponedChunkTimeStamp(otherDir);
+
+							DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to perform timed {0} line break at {1} and process postponed chunk(s) starting with {2}.", lineDir, firstPostponedChunkTimeStampOfInitialDir, otherDir));
+
+							// Line break must be enforced, without ProcessPostponedChunks() would again determine to postpone direction or device line break.
+							ProcessAndSignalTimedLineBreak(repositoryType, firstPostponedChunkTimeStampOfInitialDir, lineDir);
+							ProcessPostponedChunks(repositoryType, otherDir);
+						}
+						else //          GetPostponedChunkCount(lineDir) > 0)
+						{
+							DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to not perform timed {0} line break and process postponed chunk(s) starting with {1} instead.", lineDir, lineDir));
+
+							ProcessPostponedChunks(repositoryType, lineDir);
+						}
+					}
+					else if (overallState.LastChunkDirection != IODirection.None) // IODirection.None means that line processing has not started at all yet.
+					{
+						var initialDir = overallState.LastChunkDirection;
+
+						DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to not perform timed line break and process postponed chunk(s) starting with {0} instead.", initialDir));
+
+						ProcessPostponedChunks(repositoryType, initialDir);
+					}
+				}
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void ProcessAndSignalGlueOfCharsTimeoutOnReload()
+		{
+			ProcessAndSignalGlueOfCharsTimeout(); // Simply forward (yet).
 		}
 
 		#endregion
@@ -1170,6 +1258,14 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 		// WaitForResponse
 		//------------------------------------------------------------------------------------------
+
+		private void InitializeWaitForResponseIfNeeded()
+		{
+			if (TextTerminalSettings.WaitForResponse.Enabled)
+			{
+				ResetWaitForResponse();
+			}
+		}
 
 		/// <remarks>
 		/// Could be extracted into a separate class or struct.

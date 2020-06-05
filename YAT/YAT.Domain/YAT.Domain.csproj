@@ -88,7 +88,7 @@
     <Compile Include="BinaryTerminal\BinaryTerminal.Process.cs" />
     <Compile Include="BinaryTerminal\BinaryTerminal.Send.cs" />
     <Compile Include="BinaryTerminal\BinaryProcessState.cs" />
-    <Compile Include="LineBreakTimeout.cs" />
+    <Compile Include="Terminal\ProcessTimeout.cs" />
     <Compile Include="BinaryTerminal\BinaryTerminal.cs" />
     <Compile Include="BinarySettings\BinaryDisplaySettings.cs" />
     <Compile Include="BinarySettings\Structs.cs" />

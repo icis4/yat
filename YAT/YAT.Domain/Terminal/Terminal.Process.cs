@@ -82,8 +82,8 @@ namespace YAT.Domain
 		/// </summary>
 		protected object ChunkVsTimedSyncObj { get; private set; } = new object();
 
-		private LineBreakTimeout txTimedLineBreak;
-		private LineBreakTimeout rxTimedLineBreak;
+		private ProcessTimeout txTimedLineBreak;
+		private ProcessTimeout rxTimedLineBreak;
 
 		#endregion
 
@@ -704,7 +704,7 @@ namespace YAT.Domain
 					                     ProcessChunk(RepositoryType.Rx,    chunk);
 					                     break;
 
-					default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A raw chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -725,36 +725,35 @@ namespace YAT.Domain
 			{
 				// Process chunk(s) of given direction:
 				{
-					DateTime startTimeoutAt;
-
-					var dir = chunk.Direction;
-
-					if (!IsReloading)
-						SuspendTimedLineBreak(dir);
-
-					var overallState = GetOverallState(repositoryType);
-					var postponedChunks = overallState.RemovePostponedChunks(dir);
-					if (postponedChunks.Length > 0)
+					DateTime lastChunkTimeStamp;
+					SuspendChunkTimeouts(repositoryType, chunk.Direction);
 					{
-						DebugChunks(string.Format(CultureInfo.InvariantCulture, "Processing {0} postponed {1} chunk(s) before processing {2} chunk stamped {3}.", postponedChunks.Length, dir, chunk.Direction, chunk.TimeStamp));
+						var overallState = GetOverallState(repositoryType);
+						var postponedChunks = overallState.RemovePostponedChunks(chunk.Direction);
+						if (postponedChunks.Length > 0)
+						{
+							DebugChunks(string.Format(CultureInfo.InvariantCulture, "Processing {0} postponed {1} chunk(s) before processing {2} chunk stamped {3}.", postponedChunks.Length, chunk.Direction, chunk.Direction, chunk.TimeStamp));
 
-						var chunksToProcess = new List<RawChunk>(postponedChunks.Length + 1); // Preset the required capacity to improve memory management.
-						chunksToProcess.AddRange(postponedChunks);
-						chunksToProcess.Add(chunk);
+							var chunksToProcess = new List<RawChunk>(postponedChunks.Length + 1); // Preset the required capacity to improve memory management.
+							chunksToProcess.AddRange(postponedChunks);
+							chunksToProcess.Add(chunk);
 
-						PostponeResult postponeResult; // Ignore, postponed chunks will be processed anyway.
-						ProcessChunksOfSameDirection(repositoryType, chunksToProcess.ToArray(), dir, out postponeResult, out startTimeoutAt);
+							PostponeResult postponeResult; // Ignore, postponed chunks will be processed anyway.
+							lastChunkTimeStamp = overallState.GetLastChunkTimeStamp(chunk.Direction);
+							ProcessChunksOfSameDirection(repositoryType, chunksToProcess.ToArray(), chunk.Direction, out postponeResult, ref lastChunkTimeStamp);
+
+							if (lastChunkTimeStamp == DateTime.MinValue) // This condition may apply at the very beginning when no chunk
+								lastChunkTimeStamp = DateTime.Now;       // of the given direction has been processed yet, fallback to now.
+						}
+						else
+						{
+							PostponeResult postponeResult; // Ignore, postponed chunks will be processed anyway.
+							ProcessChunk(repositoryType, chunk, out postponeResult);
+
+							lastChunkTimeStamp = chunk.TimeStamp;
+						}
 					}
-					else
-					{
-						PostponeResult postponeResult; // Ignore, postponed chunks will be processed anyway.
-						ProcessChunk(repositoryType, chunk, out postponeResult);
-
-						startTimeoutAt = chunk.TimeStamp;
-					}
-
-					if (!IsReloading)
-						ResumeTimedLineBreak(dir, startTimeoutAt);
+					ResumeChunkTimeouts(repositoryType, chunk.Direction, lastChunkTimeStamp);
 				}
 
 				// Then process postponed chunk(s) starting with other direction:
@@ -770,10 +769,9 @@ namespace YAT.Domain
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		protected virtual void ProcessChunksOfSameDirection(RepositoryType repositoryType, RawChunk[] chunks, IODirection dir, out PostponeResult postponeResult, out DateTime lastProcessedTimeStamp)
+		protected virtual void ProcessChunksOfSameDirection(RepositoryType repositoryType, RawChunk[] chunks, IODirection dir, out PostponeResult postponeResult, ref DateTime lastChunkTimeStamp)
 		{
 			postponeResult = PostponeResult.Nothing;
-			lastProcessedTimeStamp = DateTime.MinValue;
 
 			for (int i = 0; i < chunks.Length; i++)
 			{
@@ -785,7 +783,7 @@ namespace YAT.Domain
 				ProcessChunk(repositoryType, chunk, out postponeResult);
 
 				if (postponeResult != PostponeResult.CompleteChunk)
-					lastProcessedTimeStamp = chunk.TimeStamp; // Continuously update the last processed time stamp.
+					lastChunkTimeStamp = chunk.TimeStamp; // Continuously update the last chunk time stamp.
 
 				if (postponeResult != PostponeResult.Nothing)
 				{
@@ -809,39 +807,75 @@ namespace YAT.Domain
 		protected virtual void ProcessPostponedChunks(RepositoryType repositoryType, IODirection initialDir)
 		{
 			var overallState = GetOverallState(repositoryType);
+			var otherDir = GetOtherDirection(initialDir);
 
 			// Process chunk(s) starting with given initial direction then toggle direction and continue as long as needed:
-			var toggleDir = initialDir;
 			var previousByteCount = overallState.GetPostponedByteCount();
 			while (overallState.GetPostponedChunkCount() > 0)
 			{
-				var postponedChunks = overallState.RemovePostponedChunks(toggleDir);
+				// Initially implemented as single loop toggling direction, but then switched to
+				// two direction dedicated sections for more more comprehensive implemenation.
+
+				// Initial direction:
+				var dir = initialDir;
+				var postponedChunks = overallState.RemovePostponedChunks(dir);
 				if (postponedChunks.Length > 0)
 				{
-					DebugChunks(string.Format(CultureInfo.InvariantCulture, "Processing {0} postponed {1} chunk(s).", postponedChunks.Length, toggleDir));
+					DebugChunks(string.Format(CultureInfo.InvariantCulture, "Processing {0} postponed {1} chunk(s).", postponedChunks.Length, dir));
 
-					if (!IsReloading)
-						SuspendTimedLineBreak(toggleDir);
+					var lastChunkTimeStamp = overallState.GetLastChunkTimeStamp(dir);
+					SuspendChunkTimeouts(repositoryType, dir);
+					{
+						PostponeResult postponeResult; // Ignore, other direction shall be processed at least once.
+						ProcessChunksOfSameDirection(repositoryType, postponedChunks, dir, out postponeResult, ref lastChunkTimeStamp);
 
-					PostponeResult postponeResult;
-					DateTime lastProcessedTimeStamp;
-					ProcessChunksOfSameDirection(repositoryType, postponedChunks, toggleDir, out postponeResult, out lastProcessedTimeStamp);
-
-					if (!IsReloading)
-						ResumeTimedLineBreak(toggleDir, lastProcessedTimeStamp);
-
-					var currentByteCount = overallState.GetPostponedByteCount();
-					var nothingProcessed = (currentByteCount == previousByteCount);
-					if (nothingProcessed && (postponeResult == PostponeResult.Nothing))
-						break; // Nothing to process or postpone, e.g. due to infinite timeout.
+						if (lastChunkTimeStamp == DateTime.MinValue) // This condition may apply at the very beginning when no chunk
+							lastChunkTimeStamp = DateTime.Now;       // of the given direction has been processed yet, fallback to now.
+					}
+					ResumeChunkTimeouts(repositoryType, dir, lastChunkTimeStamp);
 				}
-				else
+
+				// Other direction:
+				dir = otherDir;
+				postponedChunks = overallState.RemovePostponedChunks(dir);
+				if (postponedChunks.Length > 0)
 				{
-					break; // Nothing to process anymore.
+					DebugChunks(string.Format(CultureInfo.InvariantCulture, "Processing {0} postponed {1} chunk(s).", postponedChunks.Length, dir));
+
+					var lastChunkTimeStamp = overallState.GetLastChunkTimeStamp(dir);
+					SuspendChunkTimeouts(repositoryType, dir);
+					{
+						PostponeResult postponeResult; // Ignore, break condition is based on processed byte count.
+						ProcessChunksOfSameDirection(repositoryType, postponedChunks, dir, out postponeResult, ref lastChunkTimeStamp);
+
+						if (lastChunkTimeStamp == DateTime.MinValue) // This condition may apply at the very beginning when no chunk
+							lastChunkTimeStamp = DateTime.Now;       // of the given direction has been processed yet, fallback to now.
+					}
+					ResumeChunkTimeouts(repositoryType, dir, lastChunkTimeStamp);
 				}
 
-				toggleDir = GetOtherDirection(toggleDir);
+				// Break condition:
+				var currentByteCount = overallState.GetPostponedByteCount();
+				var nothingProcessed = (currentByteCount == previousByteCount);
+				if (nothingProcessed)
+					break; // Nothing to process or postpone, e.g. due to infinite timeout.
+
+				previousByteCount = overallState.GetPostponedByteCount();
 			}
+		}
+
+		/// <summary></summary>
+		protected virtual void SuspendChunkTimeouts(RepositoryType repositoryType, IODirection dir)
+		{        // See comments further below.
+			if (!IsReloading)
+				SuspendTimedLineBreakIfNeeded(dir);
+		}
+
+		/// <summary></summary>
+		protected virtual void ResumeChunkTimeouts(RepositoryType repositoryType, IODirection dir, DateTime startTimeoutAt)
+		{        // See comments further below.
+			if (!IsReloading)
+				ResumeTimedLineBreakIfNeeded(dir, startTimeoutAt);
 		}
 
 		/// <remarks>
@@ -860,10 +894,10 @@ namespace YAT.Domain
 				ProcessAndSignalTimedLineBreakOnReloadIfNeeded(repositoryType, chunk);
 
 			ProcessAndSignalDeviceOrDirectionLineBreakIfNeeded(repositoryType, chunk);
-			ProcessAndSignalDirection(                         repositoryType, chunk); // Needed in case direction changes within a line.
+			ProcessAndSignalChunkAttributes(                   repositoryType, chunk); // Needed e.g. in case direction changes within a line.
 
 			int byteCountProcessed;
-			ProcessAndSignalChunk(                             repositoryType, chunk, out byteCountProcessed);
+			ProcessAndSignalChunkContent(                      repositoryType, chunk, out byteCountProcessed);
 
 			int byteCountTotal = chunk.Content.Count;
 			if (byteCountProcessed == 0)
@@ -937,7 +971,7 @@ namespace YAT.Domain
 					case IODirection.Tx: settings = TerminalSettings.TxDisplayTimedLineBreak; break;
 					case IODirection.Rx: settings = TerminalSettings.RxDisplayTimedLineBreak; break;
 
-					default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A raw chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				if (settings.Enabled)
@@ -957,9 +991,12 @@ namespace YAT.Domain
 				ProcessAndSignalDirectionLineBreak(repositoryType, chunk.TimeStamp, chunk.Direction);
 		}
 
-		/// <remarks>Always to be done, no "IfNeeded" required yet.</remarks>
-		protected virtual void ProcessAndSignalDirection(RepositoryType repositoryType, RawChunk chunk)
+		/// <summary></summary>
+		protected virtual void ProcessAndSignalChunkAttributes(RepositoryType repositoryType, RawChunk chunk)
 		{
+			var processState = GetProcessState(repositoryType);
+			processState.Overall.NotifyChunk(chunk);
+
 			ProcessAndSignalDirection(repositoryType, chunk.Direction);
 		}
 
@@ -974,7 +1011,7 @@ namespace YAT.Domain
 					case IODirection.Tx: enabled = TerminalSettings.TxDisplayChunkLineBreakEnabled; break;
 					case IODirection.Rx: enabled = TerminalSettings.RxDisplayChunkLineBreakEnabled; break;
 
-					default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A raw chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				if (enabled)
@@ -1029,7 +1066,7 @@ namespace YAT.Domain
 		/// Signaling is only done once per chunk (unless flushing is involved), in order to improve
 		/// performance (by reducing the number of events and repository updates).
 		/// </remarks>
-		protected virtual void ProcessAndSignalChunk(RepositoryType repositoryType, RawChunk chunk, out int byteCountProcessed)
+		protected virtual void ProcessAndSignalChunkContent(RepositoryType repositoryType, RawChunk chunk, out int byteCountProcessed)
 		{
 			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
@@ -1105,9 +1142,6 @@ namespace YAT.Domain
 		protected virtual void ProcessDirection(RepositoryType repositoryType, IODirection dir)
 		{
 			var processState = GetProcessState(repositoryType);
-
-			processState.Overall.NotifyChunk(dir);
-
 			if (processState.Line.Direction != IODirection.None) // IODirection.None means that line processing has not started yet.
 			{
 				if (processState.Line.Direction != dir)
@@ -1369,7 +1403,7 @@ namespace YAT.Domain
 				if (this.txTimedLineBreak != null) // Must be given by this terminal.
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'DisposeTimeoutsIfNeeded()' must be called first!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
-				this.txTimedLineBreak = new LineBreakTimeout(TerminalSettings.TxDisplayTimedLineBreak.Timeout);
+				this.txTimedLineBreak = new ProcessTimeout(TerminalSettings.TxDisplayTimedLineBreak.Timeout);
 				this.txTimedLineBreak.Elapsed += txTimedLineBreak_Elapsed;
 			}
 
@@ -1378,7 +1412,7 @@ namespace YAT.Domain
 				if (this.rxTimedLineBreak != null) // Must be given by this terminal.
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'DisposeTimeoutsIfNeeded()' must be called first!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
-				this.rxTimedLineBreak = new LineBreakTimeout(TerminalSettings.RxDisplayTimedLineBreak.Timeout);
+				this.rxTimedLineBreak = new ProcessTimeout(TerminalSettings.RxDisplayTimedLineBreak.Timeout);
 				this.rxTimedLineBreak.Elapsed += rxTimedLineBreak_Elapsed;
 			}
 		}
@@ -1424,7 +1458,7 @@ namespace YAT.Domain
 				this.rxTimedLineBreak.Stop();
 		}
 
-		private void GetTimedLineBreak(IODirection dir, out TimeoutSettingTuple settings, out LineBreakTimeout timeout)
+		private void GetTimedLineBreak(IODirection dir, out TimeoutSettingTuple settings, out ProcessTimeout timeout)
 		{
 			switch (dir)
 			{
@@ -1441,10 +1475,10 @@ namespace YAT.Domain
 		/// Chunk and timed processing is synchronized against <see cref="ChunkVsTimedSyncObj"/>.
 		/// Thus, time line breaks can be suspended during chunk processing.
 		/// </remarks>
-		protected virtual void SuspendTimedLineBreak(IODirection dir)
+		protected virtual void SuspendTimedLineBreakIfNeeded(IODirection dir)
 		{
 			TimeoutSettingTuple settings;
-			LineBreakTimeout timeout;
+			ProcessTimeout timeout;
 			GetTimedLineBreak(dir, out settings, out timeout);
 
 			if (settings.Enabled)
@@ -1457,10 +1491,10 @@ namespace YAT.Domain
 		/// Chunk and timed processing is synchronized against <see cref="ChunkVsTimedSyncObj"/>.
 		/// Thus, time line breaks can be suspended during chunk processing.
 		/// </remarks>
-		protected virtual void ResumeTimedLineBreak(IODirection dir, DateTime startTimeoutAt)
+		protected virtual void ResumeTimedLineBreakIfNeeded(IODirection dir, DateTime startTimeoutAt)
 		{
 			TimeoutSettingTuple settings;
-			LineBreakTimeout timeout;
+			ProcessTimeout timeout;
 			GetTimedLineBreak(dir, out settings, out timeout);
 
 			if (settings.Enabled)
@@ -1489,7 +1523,7 @@ namespace YAT.Domain
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		private void txTimedLineBreak_Elapsed(object sender, EventArgs e)
+		private void txTimedLineBreak_Elapsed(object sender, EventArgs<DateTime> e)
 		{
 			DebugLineBreak("txTimedLineBreak_Elapsed");
 
@@ -1500,9 +1534,8 @@ namespace YAT.Domain
 
 			////if (TerminalSettings.TxDisplayTimedLineBreak.Enabled) is implicitly given.
 				{
-					var now = DateTime.Now;
-					ProcessAndSignalTimedLineBreak(RepositoryType.Tx,    now, IODirection.Tx);
-					ProcessAndSignalTimedLineBreak(RepositoryType.Bidir, now, IODirection.Tx);
+					ProcessAndSignalTimedLineBreak(RepositoryType.Tx,    e.Value, IODirection.Tx);
+					ProcessAndSignalTimedLineBreak(RepositoryType.Bidir, e.Value, IODirection.Tx);
 				}
 			}
 		}
@@ -1512,7 +1545,7 @@ namespace YAT.Domain
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		private void rxTimedLineBreak_Elapsed(object sender, EventArgs e)
+		private void rxTimedLineBreak_Elapsed(object sender, EventArgs<DateTime> e)
 		{
 			DebugLineBreak("rxTimedLineBreak_Elapsed");
 
@@ -1523,9 +1556,8 @@ namespace YAT.Domain
 
 			////if (TerminalSettings.RxDisplayTimedLineBreak.Enabled) is implicitly given.
 				{
-					var now = DateTime.Now;
-					ProcessAndSignalTimedLineBreak(RepositoryType.Bidir, now, IODirection.Rx);
-					ProcessAndSignalTimedLineBreak(RepositoryType.Rx,    now, IODirection.Rx);
+					ProcessAndSignalTimedLineBreak(RepositoryType.Bidir, e.Value, IODirection.Rx);
+					ProcessAndSignalTimedLineBreak(RepositoryType.Rx,    e.Value, IODirection.Rx);
 				}
 			}
 		}
