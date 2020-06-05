@@ -70,7 +70,7 @@ namespace MKY.IO.Serial.Usb
 
 			if (IsTransmissive)
 			{
-				var initial = DateTime.Now;
+				var initialTimeStamp = DateTime.Now;
 
 				foreach (byte b in data)
 				{
@@ -81,7 +81,7 @@ namespace MKY.IO.Serial.Usb
 							return (false);
 
 						// Actively yield to other threads to allow dequeuing:
-						var span = (initial - DateTime.Now);
+						var span = (DateTime.Now - initialTimeStamp);
 						if (span.TotalMilliseconds < 4)
 							Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as send
 						else                             // a) is expected to potentially be blocking and

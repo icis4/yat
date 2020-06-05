@@ -969,11 +969,11 @@ namespace MKY.IO.Ports
 			{
 				try
 				{
-					var initial = DateTime.Now;
+					var initialTimeStamp = DateTime.Now;
 					while (BytesToWrite > 0)
 					{
 						// Actively yield to other threads to allow processing:
-						var span = (initial - DateTime.Now);
+						var span = (DateTime.Now - initialTimeStamp);
 						if (span.TotalMilliseconds < 4)
 							Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as flush
 						else                             // a) is expected to be blocking and
