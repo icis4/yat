@@ -42,7 +42,7 @@ using NUnit.Framework;
 namespace YAT.Domain.Test.TextTerminal
 {
 	/// <summary></summary>
-	public static class GlueCharsOfLineTestData
+	public static class GlueCharsOfLineTestData_SerialPortLoopbackSelfs
 	{
 		#region Test Environment
 		//==========================================================================================
@@ -82,7 +82,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 	/// <summary></summary>
 	[TestFixture]
-	public class GlueCharsOfLineTest
+	public class GlueCharsOfLineTest_SerialPortLoopbackSelfs
 	{
 		#region Tests
 		//==========================================================================================
@@ -90,7 +90,7 @@ namespace YAT.Domain.Test.TextTerminal
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(GlueCharsOfLineTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
+		[Test, TestCaseSource(typeof(GlueCharsOfLineTestData_SerialPortLoopbackSelfs), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
 		public virtual void TestDefault(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
 		{
 			if (!ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
@@ -103,7 +103,7 @@ namespace YAT.Domain.Test.TextTerminal
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(GlueCharsOfLineTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
+		[Test, TestCaseSource(typeof(GlueCharsOfLineTestData_SerialPortLoopbackSelfs), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
 		public virtual void TestInfiniteTimeout(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
 		{
 			if (!ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
@@ -120,7 +120,7 @@ namespace YAT.Domain.Test.TextTerminal
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(GlueCharsOfLineTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
+		[Test, TestCaseSource(typeof(GlueCharsOfLineTestData_SerialPortLoopbackSelfs), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
 		public virtual void TestMinimumTimout(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
 		{
 			if (!ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
@@ -136,7 +136,7 @@ namespace YAT.Domain.Test.TextTerminal
 		}
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(GlueCharsOfLineTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
+		[Test, TestCaseSource(typeof(GlueCharsOfLineTestData_SerialPortLoopbackSelfs), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
 		public virtual void TestDisabled(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
 		{
 			if (!ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)

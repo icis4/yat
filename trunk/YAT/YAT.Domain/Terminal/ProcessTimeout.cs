@@ -38,22 +38,22 @@ using MKY;
 namespace YAT.Domain
 {
 	/// <summary></summary>
-	public class LineBreakTimeout : DisposableBase
+	public class ProcessTimeout : DisposableBase
 	{
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(LineBreakTimeout).FullName);
+		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(ProcessTimeout).FullName);
 
 		private int timeout;
 		private Timer timer;
 		private object timerSyncObj = new object();
 
 		/// <summary></summary>
-		public event EventHandler Elapsed;
+		public event EventHandler<EventArgs<DateTime>> Elapsed;
 
 		/// <summary></summary>
-		public LineBreakTimeout(int timeout)
+		public ProcessTimeout(int timeout)
 		{
 			this.timeout = timeout;                                                // Prevents the timer from starting.
 			this.timer = new Timer(new TimerCallback(timer_Timeout), null, Timeout.Infinite, Timeout.Infinite);
@@ -88,7 +88,9 @@ namespace YAT.Domain
 
 		#endregion
 
-		/// <summary></summary>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// <paramref name="at"/> is <see cref="DateTime.MinValue"/> or <see cref="DateTime.MaxValue"/>.
+		/// </exception>
 		public virtual void Start(DateTime at)
 		{
 			AssertUndisposed();
@@ -97,11 +99,19 @@ namespace YAT.Domain
 				this.timer.Change(ToDueTime(at), Timeout.Infinite);
 		}
 
-		/// <summary></summary>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// <paramref name="at"/> is <see cref="DateTime.MinValue"/> or <see cref="DateTime.MaxValue"/>.
+		/// </exception>
 		protected virtual int ToDueTime(DateTime at)
 		{
+			if (at == DateTime.MinValue)
+				throw (new ArgumentOutOfRangeException("at", at, MessageHelper.InvalidExecutionPreamble + "'" + at + "' must not be 'DateTime.MinValue'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+			if (at == DateTime.MaxValue)
+				throw (new ArgumentOutOfRangeException("at", at, MessageHelper.InvalidExecutionPreamble + "'" + at + "' must not be 'DateTime.MaxValue'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
 			var offset = (int)(((at - DateTime.Now).TotalMilliseconds) + 0.5); // Simple rounding is good enough.
-			var dueTime = (this.timeout - offset);
+			var dueTime = (this.timeout + offset);
 			if (dueTime > 0)
 				return (dueTime);
 			else
@@ -123,17 +133,19 @@ namespace YAT.Domain
 			// Non-periodic timer, only a single timeout event thread can be active at a time.
 			// There is no need to synchronize callbacks to this event handler.
 
+			var now = DateTime.Now; // Capture instant in time as soon as possible.
+
 			lock (this.timerSyncObj)
 			{
 				if ((this.timer == null) || (IsInDisposal)) // Ensure to not handle async timer callback during closing anymore.
 					return;
 			}
 
-			OnElapsed(EventArgs.Empty);
+			OnElapsed(new EventArgs<DateTime>(now));
 		}
 
 		/// <summary></summary>
-		protected virtual void OnElapsed(EventArgs e)
+		protected virtual void OnElapsed(EventArgs<DateTime> e)
 		{
 			this.eventHelper.RaiseSync(Elapsed, this, e);
 		}

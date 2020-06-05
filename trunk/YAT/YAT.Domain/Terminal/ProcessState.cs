@@ -79,14 +79,20 @@ namespace YAT.Domain
 	public class OverallState
 	{
 		/// <remarks>Dedicated sub-item to make scope obvious.</remarks>
-		public DeviceState    DeviceLineBreak       { get; protected set; }
+		public DeviceState    DeviceLineBreak       { get; private set; }
 
 		/// <remarks>Dedicated sub-item to make scope obvious.</remarks>
 		/// <remarks>Only applies to <see cref="RepositoryType.Bidir"/>, still here for simplicity.</remarks>
-		public DirectionState DirectionLineBreak    { get; protected set; }
+		public DirectionState DirectionLineBreak    { get; private set; }
 
 		/// <summary></summary>
 		public IODirection    LastChunkDirection    { get; private set; }
+
+		/// <summary></summary>
+		public DateTime       LastTxChunkTimeStamp  { get; private set; }
+
+		/// <summary></summary>
+		public DateTime       LastRxChunkTimeStamp  { get; private set; }
 
 		/// <summary></summary>
 		public bool           IsFirstLine           { get; private set; }
@@ -115,6 +121,8 @@ namespace YAT.Domain
 		protected virtual void InitializeValues()
 		{
 			LastChunkDirection     = IODirection.None;
+			LastTxChunkTimeStamp   = DateTime.MinValue;
+			LastRxChunkTimeStamp   = DateTime.MinValue;
 			IsFirstLine            = true;
 			PreviousLineTimeStamp  = DisplayElement.TimeStampDefault;
 
@@ -136,9 +144,29 @@ namespace YAT.Domain
 		/// <summary>
 		/// Notify the begin of a line, i.e. start processing of a line.
 		/// </summary>
-		public virtual void NotifyChunk(IODirection dir)
+		public virtual void NotifyChunk(RawChunk chunk)
 		{
-			LastChunkDirection = dir;
+			LastChunkDirection = chunk.Direction;
+
+			switch (chunk.Direction)
+			{
+				case IODirection.Tx: LastTxChunkTimeStamp = chunk.TimeStamp; break;
+				case IODirection.Rx: LastRxChunkTimeStamp = chunk.TimeStamp; break;
+
+				default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		public virtual DateTime GetLastChunkTimeStamp(IODirection dir)
+		{
+			switch (dir)
+			{
+				case IODirection.Tx: return (LastTxChunkTimeStamp);
+				case IODirection.Rx: return (LastRxChunkTimeStamp);
+
+				default: throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "Direction must be either Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		/// <summary>
@@ -167,7 +195,7 @@ namespace YAT.Domain
 				case IODirection.Tx: PostponedTxChunks.Add(chunk); break;
 				case IODirection.Rx: PostponedRxChunks.Add(chunk); break;
 
-				default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A raw chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -175,6 +203,18 @@ namespace YAT.Domain
 		public virtual int GetPostponedChunkCount()
 		{
 			return (PostponedTxChunks.Count + PostponedRxChunks.Count);
+		}
+
+		/// <summary></summary>
+		public virtual int GetPostponedChunkCount(IODirection dir)
+		{
+			switch (dir)
+			{
+				case IODirection.Tx: return (PostponedTxChunks.Count);
+				case IODirection.Rx: return (PostponedRxChunks.Count);
+
+				default: throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "Direction must be either Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		/// <summary></summary>
@@ -189,18 +229,6 @@ namespace YAT.Domain
 				byteCount += chunk.Content.Count;
 
 			return (byteCount);
-		}
-
-		/// <summary></summary>
-		public virtual int GetPostponedChunkCount(IODirection dir)
-		{
-			switch (dir)
-			{
-				case IODirection.Tx: return (PostponedTxChunks.Count);
-				case IODirection.Rx: return (PostponedRxChunks.Count);
-
-				default: throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "Direction must be either Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
 		}
 
 		/// <summary></summary>
