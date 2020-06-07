@@ -866,15 +866,15 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		protected virtual void SuspendChunkTimeouts(RepositoryType repositoryType, IODirection dir)
-		{        // See comments further below.
-			if (!IsReloading)
+		{
+			if (!IsReloading) // See comments further below.
 				SuspendTimedLineBreakIfNeeded(dir);
 		}
 
 		/// <summary></summary>
 		protected virtual void ResumeChunkTimeouts(RepositoryType repositoryType, IODirection dir, DateTime startTimeoutAt)
-		{        // See comments further below.
-			if (!IsReloading)
+		{
+			if (!IsReloading) // See comments further below.
 				ResumeTimedLineBreakIfNeeded(dir, startTimeoutAt);
 		}
 
@@ -1525,6 +1525,14 @@ namespace YAT.Domain
 		/// </remarks>
 		private void txTimedLineBreak_Elapsed(object sender, EventArgs<DateTime> e)
 		{
+			// No need to synchronize this event, the 'ProcessTimeout' always is single-shot.
+
+			if (IsReloading) // See remarks at Terminal.RefreshRepositories() for reason.
+			{
+				DebugLineBreak("txTimedLineBreak_Elapsed is being ignored while reloading");
+				return;
+			}
+
 			DebugLineBreak("txTimedLineBreak_Elapsed");
 
 			lock (ChunkVsTimedSyncObj) // Synchronize processing (raw chunk | timed line break).
@@ -1547,6 +1555,14 @@ namespace YAT.Domain
 		/// </remarks>
 		private void rxTimedLineBreak_Elapsed(object sender, EventArgs<DateTime> e)
 		{
+			// No need to synchronize this event, the 'ProcessTimeout' always is single-shot.
+
+			if (IsReloading) // See remarks at Terminal.RefreshRepositories() for reason.
+			{
+				DebugLineBreak("rxTimedLineBreak_Elapsed is being ignored while reloading");
+				return;
+			}
+
 			DebugLineBreak("rxTimedLineBreak_Elapsed");
 
 			lock (ChunkVsTimedSyncObj) // Synchronize processing (raw chunk | timed line break).

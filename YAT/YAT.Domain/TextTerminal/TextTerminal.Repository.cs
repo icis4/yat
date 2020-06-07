@@ -43,9 +43,9 @@ namespace YAT.Domain
 		{
 			switch (repositoryType)
 			{
-				case RepositoryType.Tx:                                                                  /* Nothing to do. */                  break;
-				case RepositoryType.Bidir: if (TextTerminalSettings.GlueCharsOfLine.Enabled) { ProcessAndSignalGlueOfCharsTimeoutOnReload(); } break;
-				case RepositoryType.Rx:                                                                  /* Nothing to do. */                  break;
+				case RepositoryType.Tx:                    /* Nothing to do. */                  break;
+				case RepositoryType.Bidir: ProcessAndSignalGlueOfCharsTimeoutOnReloadIfNeeded(); break;
+				case RepositoryType.Rx:                    /* Nothing to do. */                  break;
 
 				case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
