@@ -657,7 +657,7 @@ namespace MKY.Settings
 
 		/// <summary>
 		/// Absolute path to common settings file, if has common settings,
-		/// <see cref="String.Empty"/> otherwise.
+		/// <see cref="string.Empty"/> otherwise.
 		/// </summary>
 		/// <exception cref="NullReferenceException">
 		/// Thrown if attempted to set file if this handler has no common settings.
@@ -686,7 +686,7 @@ namespace MKY.Settings
 
 		/// <summary>
 		/// Absolute path to local user settings file, if has local user settings,
-		/// <see cref="String.Empty"/> otherwise.
+		/// <see cref="string.Empty"/> otherwise.
 		/// </summary>
 		/// <exception cref="NullReferenceException">
 		/// Thrown if attempted to set file if this handler has no local user settings.
@@ -715,7 +715,7 @@ namespace MKY.Settings
 
 		/// <summary>
 		/// Absolute path to roaming user settings file, if has roaming user settings,
-		/// <see cref="String.Empty"/> otherwise.
+		/// <see cref="string.Empty"/> otherwise.
 		/// </summary>
 		/// <exception cref="NullReferenceException">
 		/// Thrown if attempted to set file if this handler has no roaming user settings.
