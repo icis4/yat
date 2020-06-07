@@ -549,7 +549,7 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void VerifyContent(Domain.Terminal terminal, string[] contentPattern)
+		internal static void VerifyContent(Domain.Terminal terminal, IList<string> contentPattern)
 		{
 			VerifyContent(terminal, RepositoryType.Bidir, contentPattern);
 		}
@@ -558,10 +558,10 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void VerifyContent(Domain.Terminal terminal, RepositoryType repositoryType, string[] contentPattern)
+		internal static void VerifyContent(Domain.Terminal terminal, RepositoryType repositoryType, IList<string> contentPattern)
 		{
 			var displayLines = terminal.RepositoryToDisplayLines(repositoryType);
-			Assert.That(displayLines.Count, Is.EqualTo(contentPattern.Length));
+			Assert.That(displayLines.Count, Is.EqualTo(contentPattern.Count));
 
 			var previousLineTimeStamp = DateTime.MinValue;
 			for (int i = 0; i < displayLines.Count; i++)
