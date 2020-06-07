@@ -26,6 +26,7 @@
 // Using
 //==================================================================================================
 
+using System.Collections.Generic;
 using System.Threading;
 
 using MKY.Net.Test;
@@ -59,6 +60,10 @@ namespace YAT.Domain.Test.TextTerminal
 			settingsA.Display.ShowLength    = true;
 			settingsA.Display.ShowDuration  = true;
 
+			var gcol = settingsA.TextTerminal.GlueCharsOfLine;
+			gcol.Timeout = 500; // 250 ms is too short.
+			settingsA.TextTerminal.GlueCharsOfLine = gcol;
+
 			using (var terminalA = new Domain.TextTerminal(settingsA))
 			{
 				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
@@ -66,7 +71,7 @@ namespace YAT.Domain.Test.TextTerminal
 				var settingsB = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
 				settingsB.Display.ShowDirection = true;
 
-				var gcol = settingsB.TextTerminal.GlueCharsOfLine;
+				gcol = settingsB.TextTerminal.GlueCharsOfLine;
 				gcol.Enabled = false;
 				settingsB.TextTerminal.GlueCharsOfLine = gcol;
 
@@ -99,18 +104,14 @@ namespace YAT.Domain.Test.TextTerminal
 					Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-					var contentPatternA = new string[]
-					{
-						"(" + Utilities.TimeStampRegexPattern + ") (<<) ABC<CR><LF> (5) (0.000)",
-						"(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)"
-					};
+					var contentPatternA = new List<string>();
+					contentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC<CR><LF> (5) (0.000)");
+					contentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)");
 					Utilities.VerifyContent(terminalA, contentPatternA);
 
-					var contentPatternB = new string[]
-					{
-						"(>>) ABC<CR><LF>",
-						"(<<) ABC<CR><LF>"
-					};
+					var contentPatternB = new List<string>();
+					contentPatternB.Add("(>>) ABC<CR><LF>");
+					contentPatternB.Add("(<<) ABC<CR><LF>");
 					Utilities.VerifyContent(terminalB, contentPatternB);
 
 					// Subsequent ping without EOL...
@@ -121,20 +122,10 @@ namespace YAT.Domain.Test.TextTerminal
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					contentPatternA = new string[]
-					{
-						"(" + Utilities.TimeStampRegexPattern + ") (<<) ABC<CR><LF> (5) (0.000)",
-						"(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)",
-						"(" + Utilities.TimeStampRegexPattern + ") (<<) ABC"
-					};
+					contentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC");
 					Utilities.VerifyContent(terminalA, contentPatternA);
 
-					contentPatternB = new string[]
-					{
-						"(>>) ABC<CR><LF>",
-						"(<<) ABC<CR><LF>",
-						"(>>) ABC"
-					};
+					contentPatternB.Add("(>>) ABC");
 					Utilities.VerifyContent(terminalB, contentPatternB);
 
 					// ...pong...
@@ -146,21 +137,10 @@ namespace YAT.Domain.Test.TextTerminal
 					Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-					contentPatternA = new string[]
-					{
-						"(" + Utilities.TimeStampRegexPattern + ") (<<) ABC<CR><LF> (5) (0.000)",
-						"(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)",
-						"(" + Utilities.TimeStampRegexPattern + ") (<<) ABC" // Line from B must be postponed until ping completes with EOL.
-					};
+				////contentPatternA = same as before as line from B must be postponed until timeout.
 					Utilities.VerifyContent(terminalA, contentPatternA);
 
-					contentPatternB = new string[]
-					{
-						"(>>) ABC<CR><LF>",
-						"(<<) ABC<CR><LF>",
-						"(>>) ABC",
-						"(<<) ABC<CR><LF>"
-					};
+					contentPatternB.Add("(<<) ABC<CR><LF>");
 					Utilities.VerifyContent(terminalB, contentPatternB);
 
 					// ...and complete ping with EOL:
@@ -173,23 +153,12 @@ namespace YAT.Domain.Test.TextTerminal
 					Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-					contentPatternA = new string[]
-					{
-						"(" + Utilities.TimeStampRegexPattern + ") (<<) ABC<CR><LF> (5) (0.000)",
-						"(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)",
-						"(" + Utilities.TimeStampRegexPattern + ") (<<) ABC<CR><LF> (5) (" + Utilities.DurationRegexPattern + ")",
-						"(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)"
-					};
+					var previousIndex = (contentPatternA.Count - 1); // Complete the previous line.
+					contentPatternA[previousIndex] +=                                     "<CR><LF> (5) (" + Utilities.DurationRegexPattern + ")";
+					contentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)");
 					Utilities.VerifyContent(terminalA, contentPatternA);
 
-					contentPatternB = new string[]
-					{
-						"(>>) ABC<CR><LF>",
-						"(<<) ABC<CR><LF>",
-						"(>>) ABC",
-						"(<<) ABC<CR><LF>",
-						"(>>) <CR><LF>"
-					};
+					contentPatternB.Add("(>>) <CR><LF>");
 					Utilities.VerifyContent(terminalB, contentPatternB);
 
 					// Subsequent ping without EOL...
@@ -200,25 +169,10 @@ namespace YAT.Domain.Test.TextTerminal
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					contentPatternA = new string[]
-					{
-						"(" + Utilities.TimeStampRegexPattern + ") (<<) ABC<CR><LF> (5) (0.000)",
-						"(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)",
-						"(" + Utilities.TimeStampRegexPattern + ") (<<) ABC<CR><LF> (5) (" + Utilities.DurationRegexPattern + ")",
-						"(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)",
-						"(" + Utilities.TimeStampRegexPattern + ") (<<) ABC"
-					};
+					contentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC");
 					Utilities.VerifyContent(terminalA, contentPatternA);
 
-					contentPatternB = new string[]
-					{
-						"(>>) ABC<CR><LF>",
-						"(<<) ABC<CR><LF>",
-						"(>>) ABC",
-						"(<<) ABC<CR><LF>",
-						"(>>) <CR><LF>",
-						"(>>) ABC"
-					};
+					contentPatternB.Add("(>>) ABC");
 					Utilities.VerifyContent(terminalB, contentPatternB);
 
 					// ...pong...
@@ -230,52 +184,21 @@ namespace YAT.Domain.Test.TextTerminal
 					Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-					contentPatternA = new string[]
-					{
-						"(" + Utilities.TimeStampRegexPattern + ") (<<) ABC<CR><LF> (5) (0.000)",
-						"(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)",
-						"(" + Utilities.TimeStampRegexPattern + ") (<<) ABC<CR><LF> (5) (" + Utilities.DurationRegexPattern + ")",
-						"(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)",
-						"(" + Utilities.TimeStampRegexPattern + ") (<<) ABC" // Line from B must be postponed until timeout.
-					};
+				////contentPatternA = same as before as line from B must be postponed until timeout.
 					Utilities.VerifyContent(terminalA, contentPatternA);
 
-					contentPatternB = new string[]
-					{
-						"(>>) ABC<CR><LF>",
-						"(<<) ABC<CR><LF>",
-						"(>>) ABC",
-						"(<<) ABC<CR><LF>",
-						"(>>) <CR><LF>",
-						"(>>) ABC",
-						"(<<) ABC<CR><LF>"
-					};
+					contentPatternB.Add("(<<) ABC<CR><LF>");
 					Utilities.VerifyContent(terminalB, contentPatternB);
 
 					// ...and wait for timeout:
 					Thread.Sleep(settingsA.TextTerminal.GlueCharsOfLine.Timeout); // No margin needed.
 
-					contentPatternA = new string[]
-					{
-						"(" + Utilities.TimeStampRegexPattern + ") (<<) ABC<CR><LF> (5) (0.000)",
-						"(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)",
-						"(" + Utilities.TimeStampRegexPattern + ") (<<) ABC<CR><LF> (5) (" + Utilities.DurationRegexPattern + ")",
-						"(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)",
-						"(" + Utilities.TimeStampRegexPattern + ") (<<) ABC (3) (" + Utilities.DurationRegexPattern + ")",
-						"(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)",
-					};
+					previousIndex = (contentPatternA.Count - 1); // Complete the previous line.
+					contentPatternA[previousIndex] +=                                             " (3) (" + Utilities.DurationRegexPattern + ")";
+					contentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)");
 					Utilities.VerifyContent(terminalA, contentPatternA);
 
-					contentPatternB = new string[]
-					{
-						"(>>) ABC<CR><LF>",
-						"(<<) ABC<CR><LF>",
-						"(>>) ABC",
-						"(<<) ABC<CR><LF>",
-						"(>>) <CR><LF>",
-						"(>>) ABC",
-						"(<<) ABC<CR><LF>"
-					};
+				////contentPatternB = same as before.
 					Utilities.VerifyContent(terminalB, contentPatternB);
 
 					// Refresh and verify again:
