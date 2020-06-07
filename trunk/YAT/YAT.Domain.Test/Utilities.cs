@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 using MKY.Collections.Generic;
@@ -146,6 +147,19 @@ namespace YAT.Domain.Test
 		/// Note that a longer interval would increase the wait time, thus increasing the test time.
 		/// </remarks>
 		public const int WaitIntervalForTransmission = 20;
+
+		#endregion
+
+		#region Regex'es
+		//==========================================================================================
+		// Regex'es
+		//==========================================================================================
+
+		/// <summary>Simple regex pattern matching the default format of "HH:mm:ss.fff" without any value range checks.</summary>
+		public static readonly string TimeStampRegexPattern = @"\d{2}:\d{2}:\d{2}.\d{3}";
+
+		/// <summary>Simple regex pattern matching the default format of "[d days ][h][h:][m][m:][s]s.fff" reduced to "[s]s.fff" without any value range checks.</summary>
+		public static readonly string DurationRegexPattern = @"\d{1,2}.\d{3}";
 
 		#endregion
 
@@ -522,6 +536,57 @@ namespace YAT.Domain.Test
 			Debug.WriteLine("Rx of " + rxByteCount + " bytes / " + rxLineCount + " lines completed");
 
 			Trace.WriteLine("...done, transmitted and verified");
+		}
+
+		#endregion
+
+		#region Verify
+		//==========================================================================================
+		// Verify
+		//==========================================================================================
+
+		/// <remarks>
+		/// There are similar utility methods in 'Model.Test.Utilities'.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
+		internal static void VerifyContent(Domain.Terminal terminal, string[] contentPattern)
+		{
+			VerifyContent(terminal, RepositoryType.Bidir, contentPattern);
+		}
+
+		/// <remarks>
+		/// There are similar utility methods in 'Model.Test.Utilities'.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
+		internal static void VerifyContent(Domain.Terminal terminal, RepositoryType repositoryType, string[] contentPattern)
+		{
+			var displayLines = terminal.RepositoryToDisplayLines(repositoryType);
+			Assert.That(displayLines.Count, Is.EqualTo(contentPattern.Length));
+
+			var previousLineTimeStamp = DateTime.MinValue;
+			for (int i = 0; i < displayLines.Count; i++)
+			{
+				var dl = displayLines[i];
+
+				var input = dl.ToString();
+				var pattern = DecoratePattern(contentPattern[i]);
+				Assert.That(Regex.IsMatch(input, pattern), Is.True, @"Line {0} is ""{1}"" mismatching expected ""{2}""", i, input, pattern);
+
+				Assert.That(dl.TimeStamp, Is.GreaterThanOrEqualTo(previousLineTimeStamp));
+				previousLineTimeStamp = dl.TimeStamp;
+			}
+		}
+
+		/// <remarks>
+		/// There are similar utility methods in 'Model.Test.Utilities'.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
+		internal static string DecoratePattern(string contentPattern)
+		{
+			contentPattern = contentPattern.Replace("(", @"\(");
+			contentPattern = contentPattern.Replace(")", @"\)");
+
+			return ("^" + contentPattern + "$");
 		}
 
 		#endregion

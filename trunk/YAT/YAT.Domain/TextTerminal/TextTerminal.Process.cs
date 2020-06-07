@@ -532,7 +532,8 @@ namespace YAT.Domain
 		{
 			base.SuspendChunkTimeouts(repositoryType, dir);
 
-			SuspendGlueCharsOfLineTimeoutIfNeeded(repositoryType, dir);
+			if (!IsReloading) // See comments at Terminal.ProcessChunk(RepositoryType, RawChunk, out PostponeResult).
+				SuspendGlueCharsOfLineTimeoutIfNeeded(repositoryType, dir);
 		}
 
 		/// <summary></summary>
@@ -540,7 +541,8 @@ namespace YAT.Domain
 		{
 			base.ResumeChunkTimeouts(repositoryType, dir, startTimeoutAt);
 
-			ResumeGlueCharsOfLineTimeoutIfNeeded(repositoryType, dir, startTimeoutAt);
+			if (!IsReloading) // See comments at Terminal.ProcessChunk(RepositoryType, RawChunk, out PostponeResult).
+				ResumeGlueCharsOfLineTimeoutIfNeeded(repositoryType, dir, startTimeoutAt);
 		}
 
 		/// <summary>
@@ -1186,6 +1188,14 @@ namespace YAT.Domain
 		/// </remarks>
 		private void glueCharsOfLineTimeout_Elapsed(object sender, EventArgs<DateTime> e)
 		{
+			// No need to synchronize this event, the 'ProcessTimeout' always is single-shot.
+
+			if (IsReloading) // See remarks at Terminal.RefreshRepositories() for reason.
+			{
+				DebugGlueCharsOfLine("glueCharsOfLineTimeout_Elapsed is being ignored while reloading");
+				return;
+			}
+
 			DebugGlueCharsOfLine("glueCharsOfLineTimeout_Elapsed");
 
 			lock (ChunkVsTimedSyncObj) // Synchronize processing (raw chunk | timed line break).
@@ -1194,9 +1204,7 @@ namespace YAT.Domain
 					return;
 
 			////if (TextTerminalSettings.GlueCharsOfLine.Enabled) is implicitly given.
-				{
 					ProcessAndSignalGlueOfCharsTimeout();
-				}
 			}
 		}
 
@@ -1247,9 +1255,10 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessAndSignalGlueOfCharsTimeoutOnReload()
+		protected virtual void ProcessAndSignalGlueOfCharsTimeoutOnReloadIfNeeded()
 		{
-			ProcessAndSignalGlueOfCharsTimeout(); // Simply forward (yet).
+			if (TextTerminalSettings.GlueCharsOfLine.Enabled)
+				ProcessAndSignalGlueOfCharsTimeout();
 		}
 
 		#endregion
@@ -1262,9 +1271,7 @@ namespace YAT.Domain
 		private void InitializeWaitForResponseIfNeeded()
 		{
 			if (TextTerminalSettings.WaitForResponse.Enabled)
-			{
 				ResetWaitForResponse();
-			}
 		}
 
 		/// <remarks>

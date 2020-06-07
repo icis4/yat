@@ -158,7 +158,10 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Alternatively, clear/refresh/empty operations could be implemented asynchronously.
 		/// Advantages:
+		///  > Already synchronized onto main thread.
 		///  > No deadlock possible below.
+		///  > No deadlock possible with async process such as e.g. timed line breaks or glue timeout.
+		///    (Currently mitigated by doing separate handling 'OnReload'.)
 		/// Disadvantages:
 		///  > User does not get immediate feedback that a time consuming operation is taking place.
 		///  > User actually cannot trigger any other operation.
@@ -491,7 +494,7 @@ namespace YAT.Domain
 				}
 			}
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+			if (!IsReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				OnDisplayElementsAdded(repositoryType, new DisplayElementsEventArgs(elements));
 		}
 
@@ -644,7 +647,7 @@ namespace YAT.Domain
 				}
 			}
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+			if (!IsReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				OnCurrentDisplayLineReplaced(repositoryType, new DisplayElementsEventArgs(currentLineElements));
 		}
 
@@ -664,7 +667,7 @@ namespace YAT.Domain
 				}
 			}
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+			if (!IsReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				OnCurrentDisplayLineCleared(repositoryType, EventArgs.Empty);
 		}
 
@@ -681,7 +684,7 @@ namespace YAT.Domain
 		{
 			// Nothing to add/enqueue to the repositories, lines are created by enqueuing elements.
 
-			if (!this.isReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
+			if (!IsReloading) // For performance reasons, skip 'normal' events during reloading, a 'RepositoryReloaded' event will be raised after completion.
 				OnDisplayLinesAdded(repositoryType, new DisplayLinesEventArgs(lines));
 		}
 
