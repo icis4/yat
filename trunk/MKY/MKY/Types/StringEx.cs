@@ -1088,7 +1088,7 @@ namespace MKY
 		/// <param name="comparisonType">One of the <see cref="StringComparison"/> values.</param>
 		/// <returns>
 		/// The zero-based index position of the value parameter if that string is found,
-		/// or <see cref="InvalidIndex"/> if it is not. If value is <see cref="String.Empty"/>,
+		/// or <see cref="InvalidIndex"/> if it is not. If value is <see cref="string.Empty"/>,
 		/// the return value is <paramref name="startIndex"/>.
 		/// </returns>
 		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
