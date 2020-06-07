@@ -22,13 +22,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Net.NetworkInformation;
 using System.Text;
 
-using MKY;
 using MKY.IO;
+
+#endregion
 
 namespace YAT.Model.Utilities
 {
@@ -135,99 +142,135 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "yat", Justification = "YAT is YAT, man!")]
-		public static void MakeStartHint(Domain.IOType ioType, out string yatLead, out string yatText)
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "yat", Justification = "YAT is YAT, guys!")]
+		public static void MakeSerialPortStartHint(out string yatLead, out string yatText)
 		{
-			switch (ioType)
+			yatLead = ApplicationEx.CommonName + " hint:";
+			yatText = "Check the communication settings and keep in mind that hardware and driver may limit the allowed settings.";
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "yat", Justification = "YAT is YAT, guys!")]
+		public static void MakeSerialPortExceptionHint(out string yatLead, out string yatText)
+		{
+			yatLead = ApplicationEx.CommonName + " hints:";
+			yatText = "Make sure the selected serial COM port is available and not already in use. " +
+			          "Also, check the communication settings and keep in mind that hardware and driver may limit the allowed settings.";
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "yat", Justification = "YAT is YAT, guys!")]
+		public static void MakeIPClientStartHint(out string yatLead, out string yatText)
+		{
+			yatLead = ApplicationEx.CommonName + " hint:";
+			yatText = "Make sure the selected remote host is available.";
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "yat", Justification = "YAT is YAT, guys!")]
+		public static void MakeIPClientExceptionHint(out string yatLead, out string yatText)
+		{
+			yatLead = ApplicationEx.CommonName + " hint:";
+			yatText = "Check the network settings and state.";
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "yat", Justification = "YAT is YAT, guys!")]
+		public static void MakeTcpListenerHint(int port, out string yatLead, out string yatText)
+		{
+			var portIsInUse = false;
+			var globalProperties = IPGlobalProperties.GetIPGlobalProperties();
+			var listenerInfos = globalProperties.GetActiveTcpListeners();
+			foreach (var li in listenerInfos)
 			{
-				case Domain.IOType.SerialPort:
+				if (li.Port == port)
 				{
-					yatLead = ApplicationEx.CommonName + " hint:";
-					yatText = "Check the communication settings and keep in mind that hardware and driver may limit the allowed settings.";
+					portIsInUse = true;
 					break;
 				}
+			}
 
-				case Domain.IOType.TcpClient:
-				case Domain.IOType.UdpClient:
-				{
-					yatLead = ApplicationEx.CommonName + " hint:";
-					yatText = "Make sure the selected remote host is available.";
-					break;
-				}
-
-				case Domain.IOType.TcpServer:
-				case Domain.IOType.TcpAutoSocket:
-				case Domain.IOType.UdpServer:
-				case Domain.IOType.UdpPairSocket:
-				{
-					yatLead = ApplicationEx.CommonName + " hint:";
-					yatText = "Make sure the selected socket is not already in use.";
-					break;
-				}
-
-				case Domain.IOType.UsbSerialHid:
-				{
-					yatLead = ApplicationEx.CommonName + " hint:";
-					yatText = "Make sure the selected USB device is ready.";
-					break;
-				}
-
-				default:
-				{
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + ioType + "' is an I/O type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
+			if (portIsInUse)
+			{
+				yatLead = ApplicationEx.CommonName + " hint:";
+				yatText = "The selected TCP port " + port + " is already in use. " +
+				          "Either select a different port or close the process that currently uses it. " +
+				          "Use e.g. https://www.nirsoft.net/utils/cports.html to identify the process that uses the port.";
+			}
+			else
+			{
+				yatLead = ApplicationEx.CommonName + " hint:";
+				yatText = "Make sure the selected TCP/IP endpoint is not already in use.";
 			}
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "yat", Justification = "YAT is YAT, man!")]
-		public static void MakeExceptionHint(Domain.IOType ioType, out string yatLead, out string yatText)
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "yat", Justification = "YAT is YAT, guys!")]
+		public static void MakeUdpListenerHint(int port, out string yatLead, out string yatText)
 		{
-			switch (ioType)
+			var portIsInUse = false;
+			var globalProperties = IPGlobalProperties.GetIPGlobalProperties();
+			var listenerInfos = globalProperties.GetActiveUdpListeners();
+			foreach (var li in listenerInfos)
 			{
-				case Domain.IOType.SerialPort:
+				if (li.Port == port)
 				{
-					yatLead = ApplicationEx.CommonName + " hints:";
-					yatText = "Make sure the selected serial COM port is available and not already in use. " +
-					          "Also, check the communication settings and keep in mind that hardware and driver may limit the allowed settings.";
+					portIsInUse = true;
 					break;
-				}
-
-				case Domain.IOType.TcpClient:
-				case Domain.IOType.TcpServer:
-				case Domain.IOType.TcpAutoSocket:
-				case Domain.IOType.UdpClient:
-				case Domain.IOType.UdpServer:
-				case Domain.IOType.UdpPairSocket:
-				{
-					yatLead = ApplicationEx.CommonName + " hint:";
-					yatText = "Make sure the selected socket is not already in use.";
-					break;
-				}
-
-				case Domain.IOType.UsbSerialHid:
-				{
-					yatLead = ApplicationEx.CommonName + " hint:";
-					yatText = "Make sure the selected USB device is connected and not already in use.";
-					break;
-				}
-
-				default:
-				{
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + ioType + "' is an I/O type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
+
+			if (portIsInUse)
+			{
+				yatLead = ApplicationEx.CommonName + " hint:";
+				yatText = "The selected UDP port " + port + " is already in use. " +
+				          "Either select a different port or close the process that currently uses it. " +
+				          "Use e.g. https://www.nirsoft.net/utils/cports.html to identify the process that uses the port.";
+			}
+			else
+			{
+				yatLead = ApplicationEx.CommonName + " hint:";
+				yatText = "Make sure the selected UDP/IP endpoint is not already in use.";
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "yat", Justification = "YAT is YAT, guys!")]
+		public static void MakeUsbSerialHidStartHint(out string yatLead, out string yatText)
+		{
+			yatLead = ApplicationEx.CommonName + " hint:";
+			yatText = "Make sure the selected USB device is ready and the corresponding driver is installed.";
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "yat", Justification = "YAT is YAT, guys!")]
+		public static void MakeUsbSerialHidExceptionHint(out string yatLead, out string yatText)
+		{
+			yatLead = ApplicationEx.CommonName + " hint:";
+			yatText = "Check the selected USB device and its corresponding driver.";
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "yat", Justification = "YAT is YAT, man!")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "yat", Justification = "YAT is YAT, guys!")]
 		public static void MakeLogHint(Log.Provider log, out string yatLead, out string yatText)
 		{
 			var hintText = new StringBuilder();

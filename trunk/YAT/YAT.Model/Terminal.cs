@@ -4174,10 +4174,10 @@ namespace YAT.Model
 					if (ApplicationSettings.LocalUserSettings.General.NotifyNonAvailableIO)
 					{
 						string yatLead, yatText;
-						ErrorHelper.MakeStartHint(SettingsRoot.IOType, out yatLead, out yatText);
+						MakeStartHint(out yatLead, out yatText);
 
 						OnMessageInputRequest
-						(
+						(                                            // Needed to disabmbiguate.
 							ErrorHelper.ComposeMessage(errorMessage, string.Empty, yatLead, yatText),
 							"Terminal Warning",
 							MessageBoxButtons.OK,
@@ -4194,7 +4194,7 @@ namespace YAT.Model
 				if (ApplicationSettings.LocalUserSettings.General.NotifyNonAvailableIO)
 				{
 					string yatLead, yatText;
-					ErrorHelper.MakeExceptionHint(SettingsRoot.IOType, out yatLead, out yatText);
+					MakeExceptionHint(out yatLead, out yatText);
 
 					errorMessage = ErrorHelper.ComposeMessage(errorMessage, ex, yatLead, yatText);
 					OnMessageInputRequest
@@ -4208,6 +4208,106 @@ namespace YAT.Model
 			}
 
 			return (success);
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "yat", Justification = "YAT is YAT, guys!")]
+		protected virtual void MakeStartHint(out string yatLead, out string yatText)
+		{
+			var ioType = SettingsRoot.IOType;
+
+			switch (ioType)
+			{
+				case Domain.IOType.SerialPort:
+				{
+					ErrorHelper.MakeSerialPortStartHint(out yatLead, out yatText);
+					break;
+				}
+
+				case Domain.IOType.TcpClient:
+				case Domain.IOType.UdpClient:
+				{
+					ErrorHelper.MakeIPClientStartHint(out yatLead, out yatText);
+					break;
+				}
+
+				case Domain.IOType.TcpServer:
+				case Domain.IOType.TcpAutoSocket:
+				{
+					ErrorHelper.MakeUdpListenerHint(SettingsRoot.IO.Socket.LocalTcpPort, out yatLead, out yatText);
+					break;
+				}
+
+				case Domain.IOType.UdpServer:
+				case Domain.IOType.UdpPairSocket:
+				{
+					ErrorHelper.MakeTcpListenerHint(SettingsRoot.IO.Socket.LocalUdpPort, out yatLead, out yatText);
+					break;
+				}
+
+				case Domain.IOType.UsbSerialHid:
+				{
+					ErrorHelper.MakeUsbSerialHidStartHint(out yatLead, out yatText);
+					break;
+				}
+
+				default:
+				{
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + ioType + "' is an I/O type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "yat", Justification = "YAT is YAT, guys!")]
+		protected virtual void MakeExceptionHint(out string yatLead, out string yatText)
+		{
+			var ioType = SettingsRoot.IOType;
+
+			switch (ioType)
+			{
+				case Domain.IOType.SerialPort:
+				{
+					ErrorHelper.MakeSerialPortExceptionHint(out yatLead, out yatText);
+					break;
+				}
+
+				case Domain.IOType.TcpClient:
+				case Domain.IOType.UdpClient:
+				{
+					ErrorHelper.MakeIPClientExceptionHint(out yatLead, out yatText);
+					break;
+				}
+
+				case Domain.IOType.TcpServer:
+				case Domain.IOType.TcpAutoSocket:
+				{
+					ErrorHelper.MakeTcpListenerHint(SettingsRoot.IO.Socket.LocalTcpPort, out yatLead, out yatText);
+					break;
+				}
+
+				case Domain.IOType.UdpServer:
+				case Domain.IOType.UdpPairSocket:
+				{
+					ErrorHelper.MakeUdpListenerHint(SettingsRoot.IO.Socket.LocalUdpPort, out yatLead, out yatText);
+					break;
+				}
+
+				case Domain.IOType.UsbSerialHid:
+				{
+					ErrorHelper.MakeUsbSerialHidExceptionHint(out yatLead, out yatText);
+					break;
+				}
+
+				default:
+				{
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + ioType + "' is an I/O type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
 		}
 
 		/// <summary>
