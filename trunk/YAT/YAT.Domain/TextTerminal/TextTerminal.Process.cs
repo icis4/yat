@@ -537,12 +537,12 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ResumeChunkTimeouts(RepositoryType repositoryType, IODirection dir, DateTime startTimeoutAt)
+		protected override void ResumeChunkTimeouts(RepositoryType repositoryType, IODirection dir)
 		{
-			base.ResumeChunkTimeouts(repositoryType, dir, startTimeoutAt);
+			base.ResumeChunkTimeouts(repositoryType, dir);
 
 			if (!IsReloading) // See comments at Terminal.ProcessChunk(RepositoryType, RawChunk, out PostponeResult).
-				ResumeGlueCharsOfLineTimeoutIfNeeded(repositoryType, dir, startTimeoutAt);
+				ResumeGlueCharsOfLineTimeoutIfNeeded(repositoryType, dir);
 		}
 
 		/// <summary>
@@ -1173,12 +1173,15 @@ namespace YAT.Domain
 		/// Chunk and timed processing is synchronized against <see cref="Terminal.ChunkVsTimedSyncObj"/>.
 		/// Thus, timeouts can be suspended during chunk processing.
 		/// </remarks>
-		protected virtual void ResumeGlueCharsOfLineTimeoutIfNeeded(RepositoryType repositoryType, IODirection dir, DateTime startTimeoutAt)
+		protected virtual void ResumeGlueCharsOfLineTimeoutIfNeeded(RepositoryType repositoryType, IODirection dir)
 		{                                         // Glueing only applies to bidirectional processing.
 			if ((repositoryType == RepositoryType.Bidir) && TextTerminalSettings.GlueCharsOfLine.Enabled)
-			{                                                      // Single timeout for both directions.
-				this.glueCharsOfLineTimeout.Start(startTimeoutAt); // Timeout is not dependent on line position,
-			}                                                      // rather on number of postponed chunks.
+			{
+				var overallState = GetOverallState(repositoryType);
+				var lastChunkTimeStamp = overallState.GetLastChunkTimeStamp();
+				                                                     //// Single timeout for both directions.
+				this.glueCharsOfLineTimeout.Start(lastChunkTimeStamp); // Timeout is not dependent on line position,
+			}                                                          // rather on number of postponed chunks.
 		}
 
 		/// <remarks>
@@ -1227,12 +1230,12 @@ namespace YAT.Domain
 						if (overallState.GetPostponedChunkCount(otherDir) > 0)
 						{
 							// Using accurate chunk time stamp rather than inaccurate time stamp of elapsed event:
-							var firstPostponedChunkTimeStampOfInitialDir = overallState.GetFirstPostponedChunkTimeStamp(otherDir);
+							var firstPostponedChunkTimeStampOfOtherDir = overallState.GetFirstPostponedChunkTimeStamp(otherDir);
 
-							DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to perform timed {0} line break at {1} and process postponed chunk(s) starting with {2}.", lineDir, firstPostponedChunkTimeStampOfInitialDir, otherDir));
+							DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to perform timed {0} line break at {1} and process postponed chunk(s) starting with {2}.", lineDir, firstPostponedChunkTimeStampOfOtherDir, otherDir));
 
 							// Line break must be enforced, without ProcessPostponedChunks() would again determine to postpone direction or device line break.
-							ProcessAndSignalTimedLineBreak(repositoryType, firstPostponedChunkTimeStampOfInitialDir, lineDir);
+							ProcessAndSignalTimedLineBreak(repositoryType, firstPostponedChunkTimeStampOfOtherDir, lineDir);
 							ProcessPostponedChunks(repositoryType, otherDir);
 						}
 						else //          GetPostponedChunkCount(lineDir) > 0)
