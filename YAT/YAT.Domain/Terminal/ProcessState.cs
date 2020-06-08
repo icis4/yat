@@ -89,6 +89,9 @@ namespace YAT.Domain
 		public IODirection    LastChunkDirection    { get; private set; }
 
 		/// <summary></summary>
+		public DateTime       LastChunkTimeStamp    { get; private set; }
+
+		/// <summary></summary>
 		public DateTime       LastTxChunkTimeStamp  { get; private set; }
 
 		/// <summary></summary>
@@ -121,6 +124,7 @@ namespace YAT.Domain
 		protected virtual void InitializeValues()
 		{
 			LastChunkDirection     = IODirection.None;
+			LastChunkTimeStamp     = DateTime.MinValue;
 			LastTxChunkTimeStamp   = DateTime.MinValue;
 			LastRxChunkTimeStamp   = DateTime.MinValue;
 			IsFirstLine            = true;
@@ -147,6 +151,7 @@ namespace YAT.Domain
 		public virtual void NotifyChunk(RawChunk chunk)
 		{
 			LastChunkDirection = chunk.Direction;
+			LastChunkTimeStamp = chunk.TimeStamp;
 
 			switch (chunk.Direction)
 			{
@@ -155,6 +160,12 @@ namespace YAT.Domain
 
 				default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
+		}
+
+		/// <remarks>For orthogonality with <see cref="GetLastChunkTimeStamp(IODirection)"/> below.</remarks>
+		public virtual DateTime GetLastChunkTimeStamp()
+		{
+			return (LastChunkTimeStamp);
 		}
 
 		/// <summary></summary>

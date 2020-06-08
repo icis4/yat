@@ -725,7 +725,6 @@ namespace YAT.Domain
 			{
 				// Process chunk(s) of given direction:
 				{
-					DateTime lastChunkTimeStamp;
 					SuspendChunkTimeouts(repositoryType, chunk.Direction);
 					{
 						var overallState = GetOverallState(repositoryType);
@@ -739,21 +738,15 @@ namespace YAT.Domain
 							chunksToProcess.Add(chunk);
 
 							PostponeResult postponeResult; // Ignore, postponed chunks will be processed anyway.
-							lastChunkTimeStamp = overallState.GetLastChunkTimeStamp(chunk.Direction);
-							ProcessChunksOfSameDirection(repositoryType, chunksToProcess.ToArray(), chunk.Direction, out postponeResult, ref lastChunkTimeStamp);
-
-							if (lastChunkTimeStamp == DateTime.MinValue) // This condition may apply at the very beginning when no chunk
-								lastChunkTimeStamp = DateTime.Now;       // of the given direction has been processed yet, fallback to now.
+							ProcessChunksOfSameDirection(repositoryType, chunksToProcess.ToArray(), chunk.Direction, out postponeResult);
 						}
 						else
 						{
 							PostponeResult postponeResult; // Ignore, postponed chunks will be processed anyway.
 							ProcessChunk(repositoryType, chunk, out postponeResult);
-
-							lastChunkTimeStamp = chunk.TimeStamp;
 						}
 					}
-					ResumeChunkTimeouts(repositoryType, chunk.Direction, lastChunkTimeStamp);
+					ResumeChunkTimeouts(repositoryType, chunk.Direction);
 				}
 
 				// Then process postponed chunk(s) starting with other direction:
@@ -769,7 +762,7 @@ namespace YAT.Domain
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		protected virtual void ProcessChunksOfSameDirection(RepositoryType repositoryType, RawChunk[] chunks, IODirection dir, out PostponeResult postponeResult, ref DateTime lastChunkTimeStamp)
+		protected virtual void ProcessChunksOfSameDirection(RepositoryType repositoryType, RawChunk[] chunks, IODirection dir, out PostponeResult postponeResult)
 		{
 			postponeResult = PostponeResult.Nothing;
 
@@ -781,9 +774,6 @@ namespace YAT.Domain
 					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "This method requires that chunks all share the same 'Direction'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 				ProcessChunk(repositoryType, chunk, out postponeResult);
-
-				if (postponeResult != PostponeResult.CompleteChunk)
-					lastChunkTimeStamp = chunk.TimeStamp; // Continuously update the last chunk time stamp.
 
 				if (postponeResult != PostponeResult.Nothing)
 				{
@@ -823,16 +813,12 @@ namespace YAT.Domain
 				{
 					DebugChunks(string.Format(CultureInfo.InvariantCulture, "Processing {0} postponed {1} chunk(s).", postponedChunks.Length, dir));
 
-					var lastChunkTimeStamp = overallState.GetLastChunkTimeStamp(dir);
 					SuspendChunkTimeouts(repositoryType, dir);
 					{
 						PostponeResult postponeResult; // Ignore, other direction shall be processed at least once.
-						ProcessChunksOfSameDirection(repositoryType, postponedChunks, dir, out postponeResult, ref lastChunkTimeStamp);
-
-						if (lastChunkTimeStamp == DateTime.MinValue) // This condition may apply at the very beginning when no chunk
-							lastChunkTimeStamp = DateTime.Now;       // of the given direction has been processed yet, fallback to now.
+						ProcessChunksOfSameDirection(repositoryType, postponedChunks, dir, out postponeResult);
 					}
-					ResumeChunkTimeouts(repositoryType, dir, lastChunkTimeStamp);
+					ResumeChunkTimeouts(repositoryType, dir);
 				}
 
 				// Other direction:
@@ -842,16 +828,12 @@ namespace YAT.Domain
 				{
 					DebugChunks(string.Format(CultureInfo.InvariantCulture, "Processing {0} postponed {1} chunk(s).", postponedChunks.Length, dir));
 
-					var lastChunkTimeStamp = overallState.GetLastChunkTimeStamp(dir);
 					SuspendChunkTimeouts(repositoryType, dir);
 					{
 						PostponeResult postponeResult; // Ignore, break condition is based on processed byte count.
-						ProcessChunksOfSameDirection(repositoryType, postponedChunks, dir, out postponeResult, ref lastChunkTimeStamp);
-
-						if (lastChunkTimeStamp == DateTime.MinValue) // This condition may apply at the very beginning when no chunk
-							lastChunkTimeStamp = DateTime.Now;       // of the given direction has been processed yet, fallback to now.
+						ProcessChunksOfSameDirection(repositoryType, postponedChunks, dir, out postponeResult);
 					}
-					ResumeChunkTimeouts(repositoryType, dir, lastChunkTimeStamp);
+					ResumeChunkTimeouts(repositoryType, dir);
 				}
 
 				// Break condition:
@@ -872,10 +854,10 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void ResumeChunkTimeouts(RepositoryType repositoryType, IODirection dir, DateTime startTimeoutAt)
+		protected virtual void ResumeChunkTimeouts(RepositoryType repositoryType, IODirection dir)
 		{
 			if (!IsReloading) // See comments further below.
-				ResumeTimedLineBreakIfNeeded(dir, startTimeoutAt);
+				ResumeTimedLineBreakIfNeeded(repositoryType, dir);
 		}
 
 		/// <remarks>
@@ -1491,7 +1473,7 @@ namespace YAT.Domain
 		/// Chunk and timed processing is synchronized against <see cref="ChunkVsTimedSyncObj"/>.
 		/// Thus, time line breaks can be suspended during chunk processing.
 		/// </remarks>
-		protected virtual void ResumeTimedLineBreakIfNeeded(IODirection dir, DateTime startTimeoutAt)
+		protected virtual void ResumeTimedLineBreakIfNeeded(RepositoryType repositoryType, IODirection dir)
 		{
 			TimeoutSettingTuple settings;
 			ProcessTimeout timeout;
@@ -1509,7 +1491,13 @@ namespace YAT.Domain
 
 					case LinePosition.Content:
 					case LinePosition.ContentExceeded:
-						timeout.Start(startTimeoutAt);
+						var overallState = GetOverallState(repositoryType);
+						var lastChunkTimeStampOfSameDir = overallState.GetLastChunkTimeStamp(dir);
+
+						if (lastChunkTimeStampOfSameDir == DateTime.MinValue) // This condition may apply at the very beginning when no chunk
+							lastChunkTimeStampOfSameDir = DateTime.Now;       // of the given direction has been processed yet, fallback to now.
+
+						timeout.Start(lastChunkTimeStampOfSameDir); // Timed line break is direction dependent.
 						break;
 
 					default:

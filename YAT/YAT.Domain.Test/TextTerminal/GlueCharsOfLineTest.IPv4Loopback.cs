@@ -157,7 +157,10 @@ namespace YAT.Domain.Test.TextTerminal
 					contentPatternB.Add("(>>) <CR><LF>");
 					Utilities.VerifyContent(terminalB, contentPatternB);
 
-					// Subsequent ping without EOL...
+					// In order to detect errenuos behavior of timeout, wait for twice the timeout before...
+					Thread.Sleep(2 * settingsA.TextTerminal.GlueCharsOfLine.Timeout);
+
+					// ...subsequent ping without EOL...
 					//              A >> B
 					terminalA.SendText(text);
 					expectedTotalByteCountAB += textByteCount;
