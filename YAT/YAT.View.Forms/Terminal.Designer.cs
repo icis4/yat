@@ -1012,7 +1012,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Size = new System.Drawing.Size(266, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Text = "Show Time Stamp";
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.ToolTipText = "The absolute moment in time.\r\n\r\nFormat can be configured in [View > Format...].";
-			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp_Click);
+			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowTimeSpan
 			// 
@@ -1020,7 +1020,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Size = new System.Drawing.Size(266, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Text = "Show Time Span";
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.ToolTipText = "The time that passed relative to [Connect Time].\r\n\r\nFormat can be configured in [View > Format...].";
-			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTimeSpan_Click);
+			this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowTimeSpan_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowTimeDelta
 			// 
@@ -1028,28 +1028,28 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.Size = new System.Drawing.Size(266, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.Text = "Show Time Delta";
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.ToolTipText = "The time that passed relative to the last line.\r\n\r\nFormat can be configured in [View > Format...].";
-			this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTimeDelta_Click);
+			this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowTimeDelta_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowDevice
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowDevice.Name = "toolStripMenuItem_MonitorContextMenu_ShowDevice";
 			this.toolStripMenuItem_MonitorContextMenu_ShowDevice.Size = new System.Drawing.Size(266, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowDevice.Text = "Show I/O Device";
-			this.toolStripMenuItem_MonitorContextMenu_ShowDevice.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowDevice_Click);
+			this.toolStripMenuItem_MonitorContextMenu_ShowDevice.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowDevice_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowDirection
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowDirection.Name = "toolStripMenuItem_MonitorContextMenu_ShowDirection";
 			this.toolStripMenuItem_MonitorContextMenu_ShowDirection.Size = new System.Drawing.Size(266, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowDirection.Text = "Show Direction";
-			this.toolStripMenuItem_MonitorContextMenu_ShowDirection.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowDirection_Click);
+			this.toolStripMenuItem_MonitorContextMenu_ShowDirection.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowDirection_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowEol
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Name = "toolStripMenuItem_MonitorContextMenu_ShowEol";
 			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Size = new System.Drawing.Size(266, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Text = "Show EOL Sequence";
-			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowEol_Click);
+			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowEol_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowLength
 			// 
