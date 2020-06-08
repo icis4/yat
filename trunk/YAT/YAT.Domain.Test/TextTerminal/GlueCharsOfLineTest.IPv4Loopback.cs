@@ -60,10 +60,6 @@ namespace YAT.Domain.Test.TextTerminal
 			settingsA.Display.ShowLength    = true;
 			settingsA.Display.ShowDuration  = true;
 
-			var gcol = settingsA.TextTerminal.GlueCharsOfLine;
-			gcol.Timeout = 500; // 250 ms is too short.
-			settingsA.TextTerminal.GlueCharsOfLine = gcol;
-
 			using (var terminalA = new Domain.TextTerminal(settingsA))
 			{
 				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
@@ -71,7 +67,7 @@ namespace YAT.Domain.Test.TextTerminal
 				var settingsB = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
 				settingsB.Display.ShowDirection = true;
 
-				gcol = settingsB.TextTerminal.GlueCharsOfLine;
+				var gcol = settingsB.TextTerminal.GlueCharsOfLine;
 				gcol.Enabled = false;
 				settingsB.TextTerminal.GlueCharsOfLine = gcol;
 
