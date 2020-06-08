@@ -84,9 +84,11 @@ namespace YAT.Domain.Settings
 		/// <item><description>x.835 and x.984 seconds => ~150 ms</description></item>
 		/// <item><description>x.907 and x.996 seconds => ~100 ms</description></item>
 		/// </list>
-		/// Concluding to use 250 ms, taking a safety margin and longer lines into account.
+		/// Initially concluded to use 250 ms. However, that's too short even for automated testing
+		/// on two interconnected TCP/IP AutoSockets. Therefore using 500 ms, same as other features
+		/// <see cref="LineSendDelay"/> and <see cref="WaitForResponse"/> further below.
 		/// </remarks>
-		public const int GlueCharsOfLineTimeoutDefault = 250;
+		public const int GlueCharsOfLineTimeoutDefault = 500;
 
 		/// <remarks>
 		/// Default is <see cref="TimeoutSettingTuple.Enabled"/> = <c>true</c> for two reasons:
