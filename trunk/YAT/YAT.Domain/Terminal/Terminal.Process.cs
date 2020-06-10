@@ -976,8 +976,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void ProcessAndSignalChunkAttributes(RepositoryType repositoryType, RawChunk chunk)
 		{
-			var processState = GetProcessState(repositoryType);
-			processState.Overall.NotifyChunk(chunk);
+			var overallState = GetOverallState(repositoryType);
+			overallState.NotifyChunk(chunk);
 
 			ProcessAndSignalDirection(repositoryType, chunk.Direction);
 		}
@@ -1123,18 +1123,18 @@ namespace YAT.Domain
 		/// <remarks>Nothing to signal (yet).</remarks>
 		protected virtual void ProcessDirection(RepositoryType repositoryType, IODirection dir)
 		{
-			var processState = GetProcessState(repositoryType);
-			if (processState.Line.Direction != IODirection.None) // IODirection.None means that line processing has not started yet.
+			var lineState = GetLineState(repositoryType);
+			if (lineState.Direction != IODirection.None) // IODirection.None means that line processing has not started yet.
 			{
-				if (processState.Line.Direction != dir)
+				if (lineState.Direction != dir)
 				{
-					processState.Line.Direction = IODirection.Bidir;
+					lineState.Direction = IODirection.Bidir;
 
 					if (TerminalSettings.Display.ShowDirection) // Replace is only needed when containing a 'DisplayElement.DirectionInfo'.
 					{
-						processState.Line.Elements.ReplaceDirection(Direction.Bidir, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache);
+						lineState.Elements.ReplaceDirection(Direction.Bidir, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache);
 					////elementsToAdd.Clear() is not needed as only replace happens above.
-						FlushReplaceAlreadyBeganLine(repositoryType, processState);
+						FlushReplaceAlreadyBeganLine(repositoryType, lineState);
 					}
 				}
 			}
@@ -1330,7 +1330,7 @@ namespace YAT.Domain
 
 		/// <remarks>Named 'Flush' to emphasize pending elements and lines are signaled and cleared.</remarks>
 		/// <remarks>Named 'Began' for consistency with <see cref="LinePosition.Begin"/>.</remarks>
-		protected virtual void FlushReplaceAlreadyBeganLine(RepositoryType repositoryType, ProcessState processState)
+		protected virtual void FlushReplaceAlreadyBeganLine(RepositoryType repositoryType, LineState lineState)
 		{
 		////if ((elementsToAdd != null) && (elementsToAdd.Count > 0)) is not needed (yet).
 		////{
@@ -1344,8 +1344,8 @@ namespace YAT.Domain
 		////	linesToAdd.Clear();
 		////}
 
-			ReplaceCurrentDisplayLine(repositoryType, processState.Line.Elements.Clone()); // Clone to ensure decoupling!
-		}                                                                                  // Elements will be used again!
+			ReplaceCurrentDisplayLine(repositoryType, lineState.Elements.Clone()); // Clone to ensure decoupling!
+		}                                                                          // Elements will be used again!
 
 		/// <remarks>Named 'Flush' to emphasize pending elements and lines are signaled and cleared.</remarks>
 		/// <remarks>Named 'Began' for consistency with <see cref="LinePosition.Begin"/>.</remarks>
