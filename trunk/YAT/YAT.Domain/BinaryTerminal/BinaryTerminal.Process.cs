@@ -233,13 +233,13 @@ namespace YAT.Domain
 				var doReplace = false;
 
 				if (TerminalSettings.Display.ShowTimeStamp) { lineState.Elements.ReplaceTimeStamp(ts,                                              TerminalSettings.Display.TimeStampFormat, TerminalSettings.Display.TimeStampUseUtc, left, right); doReplace = true; }
-				if (TerminalSettings.Display.ShowTimeSpan)  { lineState.Elements.ReplaceTimeSpan( ts - InitialTimeStamp,                           TerminalSettings.Display.TimeSpanFormat,                                            left, right); doReplace = true; }
+				if (TerminalSettings.Display.ShowTimeSpan)  { lineState.Elements.ReplaceTimeSpan( ts - TimeSpanBase,                               TerminalSettings.Display.TimeSpanFormat,                                            left, right); doReplace = true; }
 				if (TerminalSettings.Display.ShowTimeDelta) { lineState.Elements.ReplaceTimeDelta(ts - processState.Overall.PreviousLineTimeStamp, TerminalSettings.Display.TimeDeltaFormat,                                           left, right); doReplace = true; }
 
 				if (doReplace)
 				{
 				////elementsToAdd.Clear() is not needed as only replace happens above.
-					FlushReplaceAlreadyBeganLine(repositoryType, processState);
+					FlushReplaceAlreadyBeganLine(repositoryType, lineState);
 				}
 			}
 		}
@@ -264,7 +264,7 @@ namespace YAT.Domain
 			    TerminalSettings.Display.ShowDirection)
 			{
 				DisplayElementCollection info;
-				PrepareLineBeginInfo(ts, (ts - InitialTimeStamp), (ts - processState.Overall.PreviousLineTimeStamp), dev, dir, out info);
+				PrepareLineBeginInfo(ts, (ts - TimeSpanBase), (ts - processState.Overall.PreviousLineTimeStamp), dev, dir, out info);
 				lp.AddRange(info);
 			}
 
@@ -435,7 +435,7 @@ namespace YAT.Domain
 
 			// Finalize line:                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-			l.AddRange(lineState.Elements); // No clone needed as elements are no more used and will be reset below.
+			l.AddRange(lineState.Elements.Clone()); // Clone to ensure decoupling!
 			l.AddRange(lineEnd);
 			linesToAdd.Add(l);
 
