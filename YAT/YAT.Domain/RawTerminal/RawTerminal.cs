@@ -467,20 +467,18 @@ namespace YAT.Domain
 		{
 			AssertUndisposed();
 
-			List<RawChunk> l = null;
 			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
 				{
-					case RepositoryType.Tx:    l = this.txRepository   .ToChunks(); break;
-					case RepositoryType.Bidir: l = this.bidirRepository.ToChunks(); break;
-					case RepositoryType.Rx:    l = this.rxRepository   .ToChunks(); break;
+					case RepositoryType.Tx:    return (this.txRepository   .ToChunks());
+					case RepositoryType.Bidir: return (this.bidirRepository.ToChunks());
+					case RepositoryType.Rx:    return (this.rxRepository   .ToChunks());
 
 					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
-			return (l);
 		}
 
 		/// <summary></summary>

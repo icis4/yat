@@ -717,7 +717,7 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private DateTime timeStamp;                // = DateTime.MinValue;
+		private DateTime timeStamp;                // = TimeStampDefault = DateTime.MinValue;
 		private Direction direction;               // = Direction.None;
 		private List<Pair<byte[], string>> origin; // = null;
 		private string text;                       // = null;
