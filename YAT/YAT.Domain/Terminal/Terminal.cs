@@ -169,7 +169,7 @@ namespace YAT.Domain
 		private Settings.TerminalSettings terminalSettings;
 
 		private RawTerminal rawTerminal;
-		private DateTime initialTimeStamp;
+		private DateTime timeSpanBase;
 
 		private IOControlState ioControlStateCache;
 		private object ioControlStateCacheSyncObj = new object();
@@ -415,24 +415,29 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual Settings.TerminalSettings TerminalSettings
 		{
-			get { return (this.terminalSettings); }
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				return (this.terminalSettings);
+			}
 		}
 
 		/// <summary></summary>
-		public virtual DateTime InitialTimeStamp
+		public virtual DateTime TimeSpanBase
 		{
 			get
 			{
-				AssertUndisposed();
+			////AssertUndisposed() shall not be called from this simple get-property.
 
-				return (this.initialTimeStamp);
+				return (this.timeSpanBase);
 			}
 
 			set
 			{
 				AssertUndisposed();
 
-				this.initialTimeStamp = value;
+				this.timeSpanBase = value;
 			}
 		}
 
@@ -609,7 +614,7 @@ namespace YAT.Domain
 				var success = this.rawTerminal.Start();
 				if (success)
 				{
-					this.initialTimeStamp = DateTime.Now;
+					this.timeSpanBase = DateTime.Now;
 
 					ConfigurePeriodicXOnTimer();
 					PermitSendThreads();
@@ -1705,29 +1710,24 @@ namespace YAT.Domain
 		{
 			if (e.Inner == null)
 			{
-				// TerminalSettings changed
 				ApplyTerminalSettings();
 			}
 			else
 			{
 				if (ReferenceEquals(e.Inner.Source, this.terminalSettings.IO))
 				{
-					// IOSettings changed
 					ApplyIOSettings();
 				}
 				else if (ReferenceEquals(e.Inner.Source, this.terminalSettings.Buffer))
 				{
-					// BufferSettings changed
 					ApplyBufferSettings();
 				}
 				else if (ReferenceEquals(e.Inner.Source, this.terminalSettings.Display))
 				{
-					// DisplaySettings changed
 					ApplyDisplaySettings();
 				}
 				else if (ReferenceEquals(e.Inner.Source, this.terminalSettings.Send))
 				{
-					// SendSettings changed
 					ApplySendSettings();
 				}
 			}

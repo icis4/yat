@@ -123,12 +123,12 @@ namespace YAT.Domain
 		/// </summary>
 		protected virtual void InitializeValues()
 		{
-			LastChunkDirection     = IODirection.None;
-			LastChunkTimeStamp     = DateTime.MinValue;
-			LastTxChunkTimeStamp   = DateTime.MinValue;
-			LastRxChunkTimeStamp   = DateTime.MinValue;
-			IsFirstLine            = true;
-			PreviousLineTimeStamp  = DisplayElement.TimeStampDefault;
+			LastChunkDirection    = IODirection.None;
+			LastChunkTimeStamp    = DisplayElement.TimeStampDefault;
+			LastTxChunkTimeStamp  = DisplayElement.TimeStampDefault;
+			LastRxChunkTimeStamp  = DisplayElement.TimeStampDefault;
+			IsFirstLine           = true;
+			PreviousLineTimeStamp = DisplayElement.TimeStampDefault;
 
 			PostponedTxChunks = new List<RawChunk>(); // No preset needed, the default behavior is good enough.
 			PostponedRxChunks = new List<RawChunk>(); // No preset needed, the default behavior is good enough.
@@ -185,9 +185,9 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void NotifyLineBegin(DateTime lineTimeStamp)
 		{
-			if (IsFirstLine)
-				PreviousLineTimeStamp = lineTimeStamp; // Set the initial overall time stamp.
-		}
+			if (IsFirstLine)                           // Set the initial processing time stamp.
+				PreviousLineTimeStamp = lineTimeStamp; // Note this differs from the terminal's time span
+		}                                              // base which corresponds to the active connect time base.
 
 		/// <summary>
 		/// Notify the end of a line, i.e. continues processing with the next line.

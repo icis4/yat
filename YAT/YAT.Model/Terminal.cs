@@ -2832,10 +2832,10 @@ namespace YAT.Model
 					this.activeConnectChrono.Restart(e.Value); // Restart, i.e. reset and start from zero.
 					this.totalConnectChrono.Start(   e.Value); // Start again, i.e. continue at last time.
 
-					this.terminal.InitialTimeStamp = e.Value;  // The initial time stamp is used for
-					                                           // time spans. Consequently, the spans
-					if (SettingsRoot.Display.ShowTimeSpan)     // will be based on the active connect
-						this.terminal.RefreshRepositories();   // time, not the total connect time.
+					this.terminal.TimeSpanBase = e.Value;    // The initial time stamp is used for
+					                                         // time spans. Consequently, the spans
+					if (SettingsRoot.Display.ShowTimeSpan)   // will be based on the active connect
+						this.terminal.RefreshRepositories(); // time, not the total connect time.
 				}
 				else if (!isConnectedNow && hasBeenConnected)
 				{
@@ -4588,7 +4588,7 @@ namespace YAT.Model
 			this.activeConnectChrono.Reset(now);
 			this.totalConnectChrono .Reset(now);
 
-			this.terminal.InitialTimeStamp = now;
+			this.terminal.TimeSpanBase = now;
 
 			if (SettingsRoot.Display.ShowTimeSpan)
 				this.terminal.RefreshRepositories();
