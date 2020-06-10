@@ -514,9 +514,9 @@ namespace YAT.Domain
 				this.rxRepository   .Clear();
 			}
 
-			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Tx));
+			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Tx   ));
 			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Bidir));
-			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Rx));
+			OnRepositoryCleared(new EventArgs<RepositoryType>(RepositoryType.Rx   ));
 		}
 
 		/// <summary></summary>
