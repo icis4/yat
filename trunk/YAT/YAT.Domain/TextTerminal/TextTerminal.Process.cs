@@ -532,7 +532,7 @@ namespace YAT.Domain
 		{
 			base.SuspendChunkTimeouts(repositoryType, dir);
 
-			if (!IsReloading) // See comments at Terminal.ProcessChunk(RepositoryType, RawChunk, out PostponeResult).
+			if (!IsReloading) // See comments further below.
 				SuspendGlueCharsOfLineTimeoutIfNeeded(repositoryType, dir);
 		}
 
@@ -541,8 +541,22 @@ namespace YAT.Domain
 		{
 			base.ResumeChunkTimeouts(repositoryType, dir);
 
-			if (!IsReloading) // See comments at Terminal.ProcessChunk(RepositoryType, RawChunk, out PostponeResult).
+			if (!IsReloading) // See comments further below.
 				ResumeGlueCharsOfLineTimeoutIfNeeded(repositoryType, dir);
+		}
+
+		/// <summary></summary>
+		protected override void ProcessChunkPre(RepositoryType repositoryType, RawChunk chunk)
+		{
+			base.ProcessChunkPre(repositoryType, chunk);
+
+			// Glue timeouts are processed asynchronously, as they are only triggered
+			// after a timeout. Except on reload, then glue timeouts are calculated.
+			// Note that all bytes of a chunk have the same time stamp, thus no need to
+			// check for timeout on each byte.
+
+			if (IsReloading)
+				ProcessAndSignalGlueCharsOfLineTimeoutOnReloadIfNeeded();
 		}
 
 		/// <summary>
@@ -1258,7 +1272,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessAndSignalGlueOfCharsTimeoutOnReloadIfNeeded()
+		protected virtual void ProcessAndSignalGlueCharsOfLineTimeoutOnReloadIfNeeded()
 		{
 			if (TextTerminalSettings.GlueCharsOfLine.Enabled)
 				ProcessAndSignalGlueOfCharsTimeout();

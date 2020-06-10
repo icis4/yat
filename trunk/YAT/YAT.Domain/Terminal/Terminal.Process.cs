@@ -860,12 +860,8 @@ namespace YAT.Domain
 				ResumeTimedLineBreakIfNeeded(repositoryType, dir);
 		}
 
-		/// <remarks>
-		/// The caller of this method must synchronize against <see cref="ChunkVsTimedSyncObj"/>!
-		///
-		/// Saying hello to StyleCop ;-.
-		/// </remarks>
-		protected virtual void ProcessChunk(RepositoryType repositoryType, RawChunk chunk, out PostponeResult postponeResult)
+		/// <summary></summary>
+		protected virtual void ProcessChunkPre(RepositoryType repositoryType, RawChunk chunk)
 		{
 			// Timed line breaks are processed asynchronously, as they are only triggered
 			// after a timeout. Except on reload, then timed line breaks are calculated.
@@ -874,6 +870,22 @@ namespace YAT.Domain
 
 			if (IsReloading)
 				ProcessAndSignalTimedLineBreakOnReloadIfNeeded(repositoryType, chunk);
+		}
+
+		/// <summary></summary>
+		protected virtual void ProcessChunkPost(RepositoryType repositoryType, RawChunk chunk)
+		{
+			// Nothing to do yet.
+		}
+
+		/// <remarks>
+		/// The caller of this method must synchronize against <see cref="ChunkVsTimedSyncObj"/>!
+		///
+		/// Saying hello to StyleCop ;-.
+		/// </remarks>
+		protected virtual void ProcessChunk(RepositoryType repositoryType, RawChunk chunk, out PostponeResult postponeResult)
+		{
+			ProcessChunkPre(                                   repositoryType, chunk);
 
 			ProcessAndSignalDeviceOrDirectionLineBreakIfNeeded(repositoryType, chunk);
 			ProcessAndSignalChunkAttributes(                   repositoryType, chunk); // Needed e.g. in case direction changes within a line.
@@ -893,6 +905,8 @@ namespace YAT.Domain
 				PostponeRemainingBytes(                        repositoryType, chunk, byteCountTotal, byteCountProcessed);
 			else
 				ProcessAndSignalChunkLineBreakIfNeeded(        repositoryType, chunk);
+
+			ProcessChunkPost(                                  repositoryType, chunk);
 		}
 
 		/// <summary></summary>
