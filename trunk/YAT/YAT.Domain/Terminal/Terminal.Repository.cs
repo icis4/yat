@@ -200,10 +200,10 @@ namespace YAT.Domain
 					{                                           // Synchronized Tx/Bidir/Rx processing is not...
 						ProcessChunk(RepositoryType.Rx, chunk); // ...useful for synchronized incremental monitor...
 					}                                           // ...refresh because monitors are only refreshed...
-					this.isReloading = false;                   // ...by the subsequent 'ReloadMyRepository' calls.
-					FinishReload(RepositoryType.Tx);
+					FinishReload(RepositoryType.Tx);            // ...by the subsequent 'ReloadMyRepository' calls.
 					FinishReload(RepositoryType.Bidir);
 					FinishReload(RepositoryType.Rx);
+					this.isReloading = false;
 				}
 				finally
 				{
