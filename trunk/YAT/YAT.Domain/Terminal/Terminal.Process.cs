@@ -804,7 +804,7 @@ namespace YAT.Domain
 			while (overallState.GetPostponedChunkCount() > 0)
 			{
 				// Initially implemented as single loop toggling direction, but then switched to
-				// two direction dedicated sections for more more comprehensive implemenation.
+				// two direction dedicated sections for more comprehensive implemenation.
 
 				// Initial direction:
 				var dir = initialDir;

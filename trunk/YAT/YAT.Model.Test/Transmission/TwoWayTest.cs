@@ -332,7 +332,7 @@ namespace YAT.Model.Test.Transmission
 					cycleABBA =  (cycle * 2);      //       2, 4, 6,...
 				}
 
-				// Send 'Ping' test command A >> B:
+				// Send 'Ping' test command A => B:
 				terminalA.SendText(testSet.Command);
 				Utilities.WaitForTransmissionCycleAndVerifyCounts(terminalA, terminalB, testSet, cycleAB);
 
@@ -341,7 +341,7 @@ namespace YAT.Model.Test.Transmission
 				                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
 				                      testSet, cycleAB);
 
-				// Send 'Pong' test command B >> A:
+				// Send 'Pong' test command B => A:
 				terminalB.SendText(testSet.Command);
 				Utilities.WaitForTransmissionCycleAndVerifyCounts(terminalB, terminalA, testSet, cycleABBA);
 

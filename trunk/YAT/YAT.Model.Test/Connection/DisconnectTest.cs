@@ -231,13 +231,13 @@ namespace YAT.Model.Test.Connection
 			int expectedTotalByteCountB = 0;
 			int expectedTotalLineCountB = 0;
 
-			text = "A >> B"; // Initial A >> B
+			text = "A => B"; // Initial A => B
 			terminalA.SendText(text);
 			expectedTotalByteCountA += (encoding.GetByteCount(text) + 2); // 2 = EOL which is fixed to <CR><LF> for this test.
 			expectedTotalLineCountA++;
 			Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);
 
-			text = "B >> A"; // Response B >> A
+			text = "B => A"; // Response B => A
 			terminalB.SendText(text);
 			expectedTotalByteCountB += (encoding.GetByteCount(text) + 2); // 2 = EOL which is fixed to <CR><LF> for this test.
 			expectedTotalLineCountB++;
@@ -249,8 +249,8 @@ namespace YAT.Model.Test.Connection
 
 			if (disconnectIdentifier == 'A')
 			{
-				// Send repeating B >> A then close A:
-				terminalB.SendText(@"B >> A\!(LineRepeat)");
+				// Send repeating B => A then close A:
+				terminalB.SendText(@"B => A\!(LineRepeat)");
 				Thread.Sleep(333); // = approx. 30 lines.
 				terminalA.StopIO();
 				Utilities.WaitForDisconnection(terminalA);
@@ -266,8 +266,8 @@ namespace YAT.Model.Test.Connection
 			}
 			else
 			{
-				// Send repeating A >> B then close B:
-				terminalA.SendText(@"A >> B\!(LineRepeat)");
+				// Send repeating A => B then close B:
+				terminalA.SendText(@"A => B\!(LineRepeat)");
 				Thread.Sleep(333); // = approx. 30 lines.
 				terminalB.StopIO();
 				Utilities.WaitForDisconnection(terminalB);
@@ -287,13 +287,13 @@ namespace YAT.Model.Test.Connection
 			expectedTotalByteCountB = 0;
 			expectedTotalLineCountB = 0;
 
-			text = "A >> B"; // Subsequent A >> B
+			text = "A => B"; // Subsequent A => B
 			terminalA.SendText(text);
 			expectedTotalByteCountA += (encoding.GetByteCount(text) + 2); // 2 = EOL which is fixed to <CR><LF> for this test.
 			expectedTotalLineCountA++;
 			Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);
 
-			text = "B >> A"; // Response B >> A
+			text = "B => A"; // Response B => A
 			terminalB.SendText(text);
 			expectedTotalByteCountB += (encoding.GetByteCount(text) + 2); // 2 = EOL which is fixed to <CR><LF> for this test.
 			expectedTotalLineCountB++;
