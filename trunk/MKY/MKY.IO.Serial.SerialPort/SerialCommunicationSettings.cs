@@ -289,7 +289,7 @@ namespace MKY.IO.Serial.SerialPort
 			get
 			{
 				return ((this.flowControl != SerialFlowControl.None) &&
-						(this.flowControl != SerialFlowControl.RS485));
+				        (this.flowControl != SerialFlowControl.RS485));
 			}
 		}
 
@@ -304,9 +304,9 @@ namespace MKY.IO.Serial.SerialPort
 			get
 			{
 				return ((this.flowControl == SerialFlowControl.Hardware) ||
-						(this.flowControl == SerialFlowControl.Combined) ||
-						(this.flowControl == SerialFlowControl.ManualHardware) ||
-						(this.flowControl == SerialFlowControl.ManualCombined));
+				        (this.flowControl == SerialFlowControl.Combined) ||
+				        (this.flowControl == SerialFlowControl.ManualHardware) ||
+				        (this.flowControl == SerialFlowControl.ManualCombined));
 			}
 		}
 
@@ -320,7 +320,8 @@ namespace MKY.IO.Serial.SerialPort
 			get
 			{
 				return ((this.flowControl == SerialFlowControl.Hardware) ||
-						(this.flowControl == SerialFlowControl.Combined));
+				        (this.flowControl == SerialFlowControl.Combined) ||
+				        (this.flowControl == SerialFlowControl.RS485));
 			}
 		}
 
@@ -343,9 +344,9 @@ namespace MKY.IO.Serial.SerialPort
 			get
 			{
 				return ((this.flowControl == SerialFlowControl.Software) ||
-						(this.flowControl == SerialFlowControl.Combined) ||
-						(this.flowControl == SerialFlowControl.ManualSoftware) ||
-						(this.flowControl == SerialFlowControl.ManualCombined));
+				        (this.flowControl == SerialFlowControl.Combined) ||
+				        (this.flowControl == SerialFlowControl.ManualSoftware) ||
+				        (this.flowControl == SerialFlowControl.ManualCombined));
 			}
 		}
 
@@ -357,7 +358,7 @@ namespace MKY.IO.Serial.SerialPort
 			get
 			{
 				return ((this.flowControl == SerialFlowControl.ManualSoftware) ||
-						(this.flowControl == SerialFlowControl.ManualCombined));
+				        (this.flowControl == SerialFlowControl.ManualCombined));
 			}
 		}
 
