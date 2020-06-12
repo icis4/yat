@@ -137,8 +137,8 @@ namespace YAT.Domain
 					{
 						ProcessChunk(repositoryType, raw);
 					}
-					this.isReloading = false;
 					FinishReload(repositoryType);
+					this.isReloading = false;
 				}
 				finally
 				{
