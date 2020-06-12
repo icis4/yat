@@ -556,7 +556,7 @@ namespace YAT.Domain
 			// check for timeout on each byte.
 
 			if (IsReloading)
-				ProcessAndSignalGlueCharsOfLineTimeoutOnReloadIfNeeded();
+				ProcessAndSignalGlueCharsOfLineTimeoutOfTimedOutPostponedChunksOnReloadIfNeeded(chunk.TimeStamp);
 		}
 
 		/// <summary>
@@ -1221,13 +1221,35 @@ namespace YAT.Domain
 					return;
 
 			////if (TextTerminalSettings.GlueCharsOfLine.Enabled) is implicitly given.
-					ProcessAndSignalGlueOfCharsTimeout();
+					ProcessAndSignalGlueOfCharsTimeoutOfTimedOutPostponedChunks(e.Value);
 			}
 		}
 
-		/// <summary></summary>
-		protected virtual void ProcessAndSignalGlueOfCharsTimeout()
+		/// <remarks>Rather long name, but makes obvious what is being done.</remarks>
+		protected virtual void ProcessAndSignalGlueOfCharsTimeoutOfTimedOutPostponedChunks(DateTime instantInQuestion)
 		{
+			ProcessAndSignalGlueOfCharsTimeout(instantInQuestion);
+		}
+
+		/// <remarks>Rather long name, but makes obvious what is being done.</remarks>
+		protected virtual void ProcessAndSignalGlueOfCharsTimeoutOfRemainingPostponedChunks()
+		{
+			ProcessAndSignalGlueOfCharsTimeout(DateTime.MaxValue);
+		}
+
+		/// <summary></summary>
+		private void ProcessAndSignalGlueOfCharsTimeout(DateTime instantInQuestion)
+		{
+			// Possible states that lead here:
+			//  > Async timeout timer callback, i.e. "normal" timeout during "normal" execution.
+			//  > ChunkPre() on reload, i.e. timeout inbetween chunks on reload.
+			//  > FinishReload(), i.e. remaining after last chunk on reload.
+			//
+			// If no other line break option is active, the line position would be within a line in
+			// all cases, and the direction would always have changed among the current line and the
+			// postponed timed out or remaining chunk. However, as other line break option(s) may
+			// may be active, also consider "interfering" cases.
+
 		////if (repositoryType == RepositoryType.Bidir) is implicitly given.
 			{
 				var repositoryType = RepositoryType.Bidir;
@@ -1238,28 +1260,32 @@ namespace YAT.Domain
 					var lineState = processState.Line; // Convenience shortcut.
 					if (lineState.Position != LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
 					{
+						var lineHasTimedOut = GlueCharsOfLineTimeoutHasElapsed(instantInQuestion, lineState.TimeStamp);
 						var lineDir = lineState.Direction;
 						var otherDir = GetOtherDirection(lineDir);
-
-						if (overallState.GetPostponedChunkCount(otherDir) > 0)
+						if ((overallState.GetPostponedChunkCount(otherDir) > 0) && lineHasTimedOut)
 						{
-							// Using accurate chunk time stamp rather than inaccurate time stamp of elapsed event:
 							var firstPostponedChunkTimeStampOfOtherDir = overallState.GetFirstPostponedChunkTimeStamp(otherDir);
 
 							DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to perform timed {0} line break at {1} and process postponed chunk(s) starting with {2}.", lineDir, firstPostponedChunkTimeStampOfOtherDir, otherDir));
 
 							// Line break must be enforced, without ProcessPostponedChunks() would again determine to postpone direction or device line break.
+							// Note that accurate time stamp of first postponed chunk rather than inaccurate time stamp of elapsed event is used to calculate timeout.
 							ProcessAndSignalTimedLineBreak(repositoryType, firstPostponedChunkTimeStampOfOtherDir, lineDir);
+
 							ProcessPostponedChunks(repositoryType, otherDir);
+
+							// In neither above described case it is possible to have postponed chunks in both directions,
+							// thus a single forced line break is sufficient, i.e. it is not necessary to loop/recurse here.
 						}
-						else //          GetPostponedChunkCount(lineDir) > 0)
+						else // (((GetPostponedChunkCount(lineDir) > 0) || !lineHasTimedOut)
 						{
 							DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to not perform timed {0} line break and process postponed chunk(s) starting with {1} instead.", lineDir, lineDir));
 
 							ProcessPostponedChunks(repositoryType, lineDir);
 						}
 					}
-					else
+					else // (Position == LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
 					{
 						var initialDir = overallState.LastChunkDirection;
 
@@ -1271,11 +1297,18 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
-		protected virtual void ProcessAndSignalGlueCharsOfLineTimeoutOnReloadIfNeeded()
+		/// <remarks>Rather long name, but makes obvious what is being done.</remarks>
+		protected virtual void ProcessAndSignalGlueCharsOfLineTimeoutOfTimedOutPostponedChunksOnReloadIfNeeded(DateTime instantInQuestion)
 		{
 			if (TextTerminalSettings.GlueCharsOfLine.Enabled)
-				ProcessAndSignalGlueOfCharsTimeout();
+				ProcessAndSignalGlueOfCharsTimeoutOfTimedOutPostponedChunks(instantInQuestion);
+		}
+
+		/// <remarks>Rather long name, but makes obvious what is being done.</remarks>
+		protected virtual void ProcessAndSignalGlueCharsOfLineTimeoutOfRemainingPostponedChunksOnReloadIfNeeded()
+		{
+			if (TextTerminalSettings.GlueCharsOfLine.Enabled)
+				ProcessAndSignalGlueOfCharsTimeoutOfRemainingPostponedChunks();
 		}
 
 		#endregion
