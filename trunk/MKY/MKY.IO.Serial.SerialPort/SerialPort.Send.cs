@@ -181,6 +181,19 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
+		/// <summary>
+		/// Flushes the output buffer and waits for a time corresponding to the given number of frames.
+		/// </summary>
+		public virtual void Flush(int additionalWaitFrameCount)
+		{
+			AssertUndisposed();
+
+			this.port.Flush();
+
+			if (additionalWaitFrameCount > 0)
+				Thread.Sleep((int)(Math.Ceiling(this.settings.Communication.FrameTime * additionalWaitFrameCount)));
+		}
+
 		#endregion
 
 		#region Non-Public Methods
@@ -575,6 +588,8 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
+				Flush(0); // Just flush.
+
 				this.port.RtsEnable = true;
 			}
 
@@ -626,8 +641,8 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
-				this.port.Flush(); // Make sure that data is sent before restoring RTS, including the underlying physical UART.
-				Thread.Sleep((int)(Math.Ceiling(this.settings.Communication.FrameTime))); // Single byte/frame.
+				Flush(1); // Single byte/frame.
+
 				this.port.RtsEnable = false;
 			}
 
@@ -656,6 +671,8 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
+				Flush(0); // Just flush.
+
 				this.port.RtsEnable = true;
 			}
 
@@ -739,8 +756,8 @@ namespace MKY.IO.Serial.SerialPort
 				if (effectiveChunkData != null)
 					maxFramesInFifo = Math.Min(effectiveChunkData.Count, 16); // Max 16 bytes/frames in FIFO.
 
-				this.port.Flush(); // Make sure that data is sent before restoring RTS, including the underlying physical UART.
-				Thread.Sleep((int)(Math.Ceiling(this.settings.Communication.FrameTime * maxFramesInFifo)));
+				Flush(maxFramesInFifo);
+
 				this.port.RtsEnable = false;
 			}
 
