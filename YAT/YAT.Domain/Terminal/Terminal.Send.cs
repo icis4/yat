@@ -966,7 +966,7 @@ namespace YAT.Domain
 
 				case Parser.Keyword.Port:
 				{
-					if (TerminalSettings.IO.IOType == IOType.SerialPort)
+					if (IsSerialPort)
 					{
 						var settings = new MKY.IO.Serial.SerialPort.SerialPortSettings(TerminalSettings.IO.SerialPort); // Clone to ensure decoupling while
 						settings.ClearChanged();                                                                        // changing and reapplying settings.
@@ -997,7 +997,7 @@ namespace YAT.Domain
 
 				case Parser.Keyword.PortSettings:
 				{
-					if (TerminalSettings.IO.IOType == IOType.SerialPort)
+					if (IsSerialPort)
 					{
 						var settings = new MKY.IO.Serial.SerialPort.SerialPortSettings(TerminalSettings.IO.SerialPort); // Clone to ensure decoupling while
 						settings.ClearChanged();                                                                        // changing and reapplying settings.
@@ -1059,7 +1059,7 @@ namespace YAT.Domain
 
 				case Parser.Keyword.Baud:
 				{
-					if (TerminalSettings.IO.IOType == IOType.SerialPort)
+					if (IsSerialPort)
 					{
 						var settings = new MKY.IO.Serial.SerialPort.SerialPortSettings(TerminalSettings.IO.SerialPort); // Clone to ensure decoupling while
 						settings.ClearChanged();                                                                        // changing and reapplying settings.
@@ -1090,7 +1090,7 @@ namespace YAT.Domain
 
 				case Parser.Keyword.StopBits:
 				{
-					if (TerminalSettings.IO.IOType == IOType.SerialPort)
+					if (IsSerialPort)
 					{
 						var settings = new MKY.IO.Serial.SerialPort.SerialPortSettings(TerminalSettings.IO.SerialPort); // Clone to ensure decoupling while
 						settings.ClearChanged();                                                                        // changing and reapplying settings.
@@ -1121,7 +1121,7 @@ namespace YAT.Domain
 
 				case Parser.Keyword.DataBits:
 				{
-					if (TerminalSettings.IO.IOType == IOType.SerialPort)
+					if (IsSerialPort)
 					{
 						var settings = new MKY.IO.Serial.SerialPort.SerialPortSettings(TerminalSettings.IO.SerialPort); // Clone to ensure decoupling while
 						settings.ClearChanged();                                                                        // changing and reapplying settings.
@@ -1152,7 +1152,7 @@ namespace YAT.Domain
 
 				case Parser.Keyword.Parity:
 				{
-					if (TerminalSettings.IO.IOType == IOType.SerialPort)
+					if (IsSerialPort)
 					{
 						var settings = new MKY.IO.Serial.SerialPort.SerialPortSettings(TerminalSettings.IO.SerialPort); // Clone to ensure decoupling while
 						settings.ClearChanged();                                                                        // changing and reapplying settings.
@@ -1183,7 +1183,7 @@ namespace YAT.Domain
 
 				case Parser.Keyword.FlowControl:
 				{
-					if (TerminalSettings.IO.IOType == IOType.SerialPort)
+					if (IsSerialPort)
 					{
 						var settings = new MKY.IO.Serial.SerialPort.SerialPortSettings(TerminalSettings.IO.SerialPort); // Clone to ensure decoupling while
 						settings.ClearChanged();                                                                        // changing and reapplying settings.
@@ -1212,14 +1212,267 @@ namespace YAT.Domain
 					break;
 				}
 
-				case Parser.Keyword.FramingErrorsOn:
+				case Parser.Keyword.RtsOn:
 				{
-					if (TerminalSettings.IO.IOType == IOType.SerialPort)
+					if (IsSerialPort)
 					{
 						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+						{
+							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+							if (port != null)
+								port.Flush(0);
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+						{
+							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+							if (port != null)
+								port.RtsEnable = true;
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+					}
+					else
+					{
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the RTS signal is only supported on serial COM ports.", true));
+					}
 
-						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
-						port.IgnoreFramingErrors = false;
+					break;
+				}
+
+				case Parser.Keyword.RtsOff:
+				{
+					if (IsSerialPort)
+					{
+						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+						{
+							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+							if (port != null)
+								port.Flush(0);
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+						{
+							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+							if (port != null)
+								port.RtsEnable = false;
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+					}
+					else
+					{
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the RTS signal is only supported on serial COM ports.", true));
+					}
+
+					break;
+				}
+
+				case Parser.Keyword.RtsToggle:
+				{
+					if (IsSerialPort)
+					{
+						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+						{
+							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+							if (port != null)
+								port.Flush(0);
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+						{
+							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+							if (port != null)
+								port.ToggleRts();
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+					}
+					else
+					{
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the RTS signal is only supported on serial COM ports.", true));
+					}
+
+					break;
+				}
+
+				case Parser.Keyword.DtrOn:
+				{
+					if (IsSerialPort)
+					{
+						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+						{
+							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+							if (port != null)
+								port.Flush(0);
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+						{
+							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+							if (port != null)
+								port.DtrEnable = true;
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+					}
+					else
+					{
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the DTR signal is only supported on serial COM ports.", true));
+					}
+
+					break;
+				}
+
+				case Parser.Keyword.DtrOff:
+				{
+					if (IsSerialPort)
+					{
+						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+						{
+							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+							if (port != null)
+								port.Flush(0);
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+						{
+							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+							if (port != null)
+								port.DtrEnable = false;
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+					}
+					else
+					{
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the DTR signal is only supported on serial COM ports.", true));
+					}
+
+					break;
+				}
+
+				case Parser.Keyword.DtrToggle:
+				{
+					if (IsSerialPort)
+					{
+						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+						{
+							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+							if (port != null)
+								port.Flush(0);
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+						{
+							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+							if (port != null)
+								port.ToggleDtr();
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+					}
+					else
+					{
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the DTR signal is only supported on serial COM ports.", true));
+					}
+
+					break;
+				}
+
+				case Parser.Keyword.OutputBreakOn:
+				{
+					if (IsSerialPort)
+					{
+						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+						{
+							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+							if (port != null)
+								port.Flush(0);
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+						{
+							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+							if (port != null)
+								port.OutputBreak = true;
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+					}
+					else
+					{
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Output break is only supported on serial COM ports.", true));
+					}
+
+					break;
+				}
+
+				case Parser.Keyword.OutputBreakOff:
+				{
+					if (IsSerialPort)
+					{
+						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+						{
+							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+							if (port != null)
+								port.Flush(0);
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+						{
+							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+							if (port != null)
+								port.OutputBreak = false;
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+					}
+					else
+					{
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Output break is only supported on serial COM ports.", true));
+					}
+
+					break;
+				}
+
+				case Parser.Keyword.OutputBreakToggle:
+				{
+					if (IsSerialPort)
+					{
+						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+						{
+							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+							if (port != null)
+								port.Flush(0);
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+						{
+							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+							if (port != null)
+								port.ToggleOutputBreak();
+							else
+								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						}
+					}
+					else
+					{
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Output break is only supported on serial COM ports.", true));
+					}
+
+					break;
+				}
+
+				case Parser.Keyword.FramingErrorsOn:
+				{
+					if (IsSerialPort)
+					{
+						var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+						if (port != null)
+							port.IgnoreFramingErrors = false;
+						else
+							throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 					else
 					{
@@ -1231,12 +1484,13 @@ namespace YAT.Domain
 
 				case Parser.Keyword.FramingErrorsOff:
 				{
-					if (TerminalSettings.IO.IOType == IOType.SerialPort)
+					if (IsSerialPort)
 					{
-						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
-
-						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
-						port.IgnoreFramingErrors = true;
+						var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+						if (port != null)
+							port.IgnoreFramingErrors = true;
+						else
+							throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 					else
 					{
@@ -1248,12 +1502,13 @@ namespace YAT.Domain
 
 				case Parser.Keyword.FramingErrorsRestore:
 				{
-					if (TerminalSettings.IO.IOType == IOType.SerialPort)
+					if (IsSerialPort)
 					{
-						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
-
-						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
-						port.IgnoreFramingErrors = TerminalSettings.IO.SerialPort.IgnoreFramingErrors;
+						var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+						if (port != null)
+							port.IgnoreFramingErrors = TerminalSettings.IO.SerialPort.IgnoreFramingErrors;
+						else
+							throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 					else
 					{
@@ -1263,60 +1518,9 @@ namespace YAT.Domain
 					break;
 				}
 
-				case Parser.Keyword.OutputBreakOn:
-				{
-					if (TerminalSettings.IO.IOType == IOType.SerialPort)
-					{
-						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
-
-						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
-						port.OutputBreak = true;
-					}
-					else
-					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Break is only supported on serial COM ports.", true));
-					}
-
-					break;
-				}
-
-				case Parser.Keyword.OutputBreakOff:
-				{
-					if (TerminalSettings.IO.IOType == IOType.SerialPort)
-					{
-						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
-
-						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
-						port.OutputBreak = false;
-					}
-					else
-					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Break is only supported on serial COM ports.", true));
-					}
-
-					break;
-				}
-
-				case Parser.Keyword.OutputBreakToggle:
-				{
-					if (TerminalSettings.IO.IOType == IOType.SerialPort)
-					{
-						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
-
-						var port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
-						port.ToggleOutputBreak();
-					}
-					else
-					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Break is only supported on serial COM ports.", true));
-					}
-
-					break;
-				}
-
 				case Parser.Keyword.ReportId:
 				{
-					if (TerminalSettings.IO.IOType == IOType.UsbSerialHid)
+					if (IsUsbSerialHid)
 					{
 						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 
@@ -1324,8 +1528,11 @@ namespace YAT.Domain
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
 							reportId = (byte)result.Args[0];
 
-						var device = (MKY.IO.Usb.SerialHidDevice)this.UnderlyingIOInstance;
-						device.ActiveReportId = reportId;
+						var device = (UnderlyingIOInstance as MKY.IO.Usb.SerialHidDevice);
+						if (device != null)
+							device.ActiveReportId = reportId;
+						else
+							throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying USB Ser/HID device object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 					else
 					{
@@ -1566,7 +1773,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		protected virtual bool TryChangeSettingsOnTheFly(MKY.IO.Serial.SerialPort.SerialPortSettings settings, out Exception exception)
 		{
-			var port = (this.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+			var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 			if (port != null)
 			{
 				try
@@ -1591,6 +1798,10 @@ namespace YAT.Domain
 					exception = ex;
 					return (false);
 				}
+			}
+			else
+			{
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			// Reflect the change in the settings:
