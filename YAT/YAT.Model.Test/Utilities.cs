@@ -1368,24 +1368,34 @@ namespace YAT.Model.Test
 				Thread.Sleep(WaitIntervalForTransmission);
 				waitTime += WaitIntervalForTransmission;
 
-				Trace.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
-
-				if (waitTime >= timeout) {
-					Assert.Fail("Transmission timeout! Not enough data received within expected interval.");
-				}
+				Trace.WriteLine("Waiting for receiving, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 
 				rxByteCount = terminalRx.GetRepositoryByteCount(Domain.RepositoryType.Rx);
 				if (rxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
-					Assert.Fail("Transmission error!" +
-					            " Number of received bytes = " + rxByteCount +
+					Assert.Fail("Number of received bytes = " + rxByteCount +
 					            " mismatches expected = " + expectedTotalByteCount + ".");
 				}
 
 				rxLineCount = terminalRx.GetRepositoryLineCount(Domain.RepositoryType.Rx);
 				if (rxLineCount > expectedTotalLineCountDisplayed) { // Break in case of too much data to improve speed of test.
-					Assert.Fail("Transmission error!" +
-					            " Number of received lines = " + rxLineCount +
+					Assert.Fail("Number of received lines = " + rxLineCount +
 					            " mismatches expected = " + expectedTotalLineCountDisplayed + ".");
+				}
+
+				if (waitTime >= timeout) {
+					var sb = new StringBuilder("Timeout!");
+
+					if (rxByteCount < expectedTotalByteCount) {
+						sb.Append(" Number of received bytes = " + rxByteCount +
+						          " mismatches expected = " + expectedTotalByteCount + ".");
+					}
+
+					if (rxLineCount < expectedTotalLineCountDisplayed) {
+						sb.Append(" Number of received lines = " + rxLineCount +
+						          " mismatches expected = " + expectedTotalLineCountDisplayed + ".");
+					}
+
+					Assert.Fail(sb.ToString());
 				}
 			}
 			while ((rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCountDisplayed));
@@ -1466,36 +1476,54 @@ namespace YAT.Model.Test
 
 				Trace.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 
-				if (waitTime >= timeout) {
-					Assert.Fail("Transmission timeout! Not enough data received within expected interval.");
-				}
-
 				txByteCount = terminalTx.GetRepositoryByteCount(Domain.RepositoryType.Tx);
 				if (txByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
-					Assert.Fail("Transmission error!" +
-					            " Number of sent bytes = " + txByteCount +
+					Assert.Fail("Number of sent bytes = " + txByteCount +
 					            " mismatches expected = " + expectedTotalByteCount + ".");
 				}
 
 				txLineCount = terminalTx.GetRepositoryLineCount(Domain.RepositoryType.Tx);
 				if (txLineCount > expectedTotalLineCountDisplayed) { // Break in case of too much data to improve speed of test.
-					Assert.Fail("Transmission error!" +
-					            " Number of sent lines = " + txLineCount +
+					Assert.Fail("Number of sent lines = " + txLineCount +
 					            " mismatches expected = " + expectedTotalLineCountDisplayed + ".");
 				}
 
 				rxByteCount = terminalRx.GetRepositoryByteCount(Domain.RepositoryType.Rx);
 				if (rxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
-					Assert.Fail("Transmission error!" +
-					            " Number of received bytes = " + rxByteCount +
+					Assert.Fail("Number of received bytes = " + rxByteCount +
 					            " mismatches expected = " + expectedTotalByteCount + ".");
 				}
 
 				rxLineCount = terminalRx.GetRepositoryLineCount(Domain.RepositoryType.Rx);
 				if (rxLineCount > expectedTotalLineCountDisplayed) { // Break in case of too much data to improve speed of test.
-					Assert.Fail("Transmission error!" +
-					            " Number of received lines = " + rxLineCount +
+					Assert.Fail("Number of received lines = " + rxLineCount +
 					            " mismatches expected = " + expectedTotalLineCountDisplayed + ".");
+				}
+
+				if (waitTime >= timeout) {
+					var sb = new StringBuilder("Timeout!");
+
+					if (txByteCount < expectedTotalByteCount) {
+						sb.Append(" Number of sent bytes = " + txByteCount +
+						          " mismatches expected = " + expectedTotalByteCount + ".");
+					}
+
+					if (txLineCount < expectedTotalLineCountDisplayed) {
+						sb.Append(" Number of sent lines = " + txLineCount +
+						          " mismatches expected = " + expectedTotalLineCountDisplayed + ".");
+					}
+
+					if (rxByteCount < expectedTotalByteCount) {
+						sb.Append(" Number of received bytes = " + rxByteCount +
+						          " mismatches expected = " + expectedTotalByteCount + ".");
+					}
+
+					if (rxLineCount < expectedTotalLineCountDisplayed) {
+						sb.Append(" Number of received lines = " + rxLineCount +
+						          " mismatches expected = " + expectedTotalLineCountDisplayed + ".");
+					}
+
+					Assert.Fail(sb.ToString());
 				}
 			}
 			while ((txByteCount != expectedTotalByteCount) || (txLineCount != expectedTotalLineCountDisplayed) ||

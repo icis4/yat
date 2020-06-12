@@ -296,27 +296,27 @@ namespace YAT.Domain.Test.TextTerminal
 					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
-					terminalA.SendTextLine("A"); // Line #1 A >> B, must not result in line break.
+					terminalA.SendTextLine("A"); // Line #1 A => B, must not result in line break.
 					Thread.Sleep(WaitForOperation);
 					VerifyLineCount(terminalA, terminalB, 1);
 
-					terminalB.SendTextLine("BB"); // Line #2 B >> A, due to direction line break.
+					terminalB.SendTextLine("BB"); // Line #2 B => A, due to direction line break.
 					Thread.Sleep(WaitForOperation);
 					VerifyLineCount(terminalB, terminalA, 2);
 
-					terminalB.SendTextLine("BB"); // Still line #2 B >> A, must not result in additional line break.
+					terminalB.SendTextLine("BB"); // Still line #2 B => A, must not result in additional line break.
 					Thread.Sleep(WaitForOperation);
 					VerifyLineCount(terminalB, terminalA, 2);
 
-					terminalB.SendTextLine("BB"); // Still line #2 B >> A, must not result in additional line break.
+					terminalB.SendTextLine("BB"); // Still line #2 B => A, must not result in additional line break.
 					Thread.Sleep(WaitForOperation);
 					VerifyLineCount(terminalB, terminalA, 2);
 
-					terminalA.SendTextLine("AAA"); // Line #3 A >> B, due to direction line break.
+					terminalA.SendTextLine("AAA"); // Line #3 A => B, due to direction line break.
 					Thread.Sleep(WaitForOperation);
 					VerifyLineCount(terminalA, terminalB, 3);
 
-					terminalA.SendTextLine("AAA"); // Still line #3 A >> B, must not result in additional line break.
+					terminalA.SendTextLine("AAA"); // Still line #3 A => B, must not result in additional line break.
 					Thread.Sleep(WaitForOperation);
 					VerifyLineCount(terminalA, terminalB, 3);
 
