@@ -704,12 +704,12 @@ namespace YAT.Domain
 
 		private bool IsUsbSerialHid
 		{
-			get { return ((this.terminalSettings != null) && (TerminalSettings.IO.IOType == IOType.UsbSerialHid)); }
+			get { return ((TerminalSettings != null) && (TerminalSettings.IO.IOType == IOType.UsbSerialHid)); }
 		}
 
 		private bool IsSerialPort
 		{
-			get { return ((this.terminalSettings != null) && (TerminalSettings.IO.IOType == IOType.SerialPort)); }
+			get { return ((TerminalSettings != null) && (TerminalSettings.IO.IOType == IOType.SerialPort)); }
 		}
 
 		/// <summary>
@@ -726,6 +726,8 @@ namespace YAT.Domain
 					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 					if (port != null)
 						return (port.ControlPins);
+					else
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				return (new MKY.IO.Ports.SerialPortControlPins());
@@ -746,6 +748,8 @@ namespace YAT.Domain
 					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 					if (port != null)
 						return (port.ControlPinCount);
+					else
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				return (new MKY.IO.Ports.SerialPortControlPinCount());
@@ -822,12 +826,16 @@ namespace YAT.Domain
 				var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 				if (port != null)
 					port.ResetFlowControlCount();
+				else
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 			else
 			{
 				var x = (UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
 				if (x != null)
 					x.ResetXOnXOffCount();
+				else
+					DebugEx.WriteStack(this.GetType(), "The 'UnderlyingIOProvider' does not implement 'IXOnXOffHandler'!");
 			}
 		}
 
@@ -843,6 +851,8 @@ namespace YAT.Domain
 					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 					if (port != null)
 						return (port.InputBreakCount);
+					else
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				return (0);
@@ -861,6 +871,8 @@ namespace YAT.Domain
 					var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 					if (port != null)
 						return (port.OutputBreakCount);
+					else
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				return (0);
@@ -877,6 +889,8 @@ namespace YAT.Domain
 				var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 				if (port != null)
 					port.ResetBreakCount();
+				else
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -908,6 +922,10 @@ namespace YAT.Domain
 							pinState = MKY.IO.Serial.SerialPort.SerialControlPinState.Disabled;
 
 						return (true);
+					}
+					else
+					{
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}
@@ -945,6 +963,10 @@ namespace YAT.Domain
 
 						return (true);
 					}
+					else
+					{
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
 				}
 			}
 
@@ -971,6 +993,10 @@ namespace YAT.Domain
 
 					return (true);
 				}
+				else
+				{
+					DebugEx.WriteStack(this.GetType(), "The 'UnderlyingIOProvider' does not implement 'IXOnXOffHandler'!");
+				}
 			}
 
 			return (false);
@@ -992,6 +1018,10 @@ namespace YAT.Domain
 					x.SignalInputXOn();
 
 					return (true);
+				}
+				else
+				{
+					DebugEx.WriteStack(this.GetType(), "The 'UnderlyingIOProvider' does not implement 'IXOnXOffHandler'!");
 				}
 			}
 
@@ -1017,6 +1047,10 @@ namespace YAT.Domain
 					{
 						p.ToggleOutputBreak();
 						return (true);
+					}
+					else
+					{
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}
@@ -1162,6 +1196,10 @@ namespace YAT.Domain
 						{
 							DebugEx.WriteException(GetType(), ex, "Failed to retrieve XOn/XOff state");
 						}
+					}
+					else
+					{
+						DebugEx.WriteStack(this.GetType(), "The 'UnderlyingIOProvider' does not implement 'IXOnXOffHandler'!");
 					}
 				}
 			}
