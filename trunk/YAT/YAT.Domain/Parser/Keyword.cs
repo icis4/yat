@@ -59,12 +59,18 @@ namespace YAT.Domain.Parser
 		Parity,
 		StopBits,
 		FlowControl,
-		FramingErrorsOn,
-		FramingErrorsOff,
-		FramingErrorsRestore,
+		RtsOn,
+		RtsOff,
+		RtsToggle,
+		DtrOn,
+		DtrOff,
+		DtrToggle,
 		OutputBreakOn,
 		OutputBreakOff,
 		OutputBreakToggle,
+		FramingErrorsOn,
+		FramingErrorsOff,
+		FramingErrorsRestore,
 		ReportId,
 
 		/// <summary>
@@ -111,12 +117,18 @@ namespace YAT.Domain.Parser
 		private const string Parity_string               = "Parity";
 		private const string DataBits_string             = "DataBits";
 		private const string FlowControl_string          = "FlowControl";
-		private const string FramingErrorsOn_string      = "FramingErrorsOn";
-		private const string FramingErrorsOff_string     = "FramingErrorsOff";
-		private const string FramingErrorsRestore_string = "FramingErrorsRestore";
+		private const string RtsOn_string                = "RtsOn";
+		private const string RtsOff_string               = "RtsOff";
+		private const string RtsToggle_string            = "RtsToggle";
+		private const string DtrOn_string                = "DtrOn";
+		private const string DtrOff_string               = "DtrOff";
+		private const string DtrToggle_string            = "DtrToggle";
 		private const string OutputBreakOn_string        = "OutputBreakOn";
 		private const string OutputBreakOff_string       = "OutputBreakOff";
 		private const string OutputBreakToggle_string    = "OutputBreakToggle";
+		private const string FramingErrorsOn_string      = "FramingErrorsOn";
+		private const string FramingErrorsOff_string     = "FramingErrorsOff";
+		private const string FramingErrorsRestore_string = "FramingErrorsRestore";
 		private const string ReportId_string             = "ReportID"; // "ID" instead of "Id" for better readability.
 
 		private const string ZZZ_FIT_string = "ZZZ_FIT"; // = for internal testing.
@@ -167,12 +179,18 @@ namespace YAT.Domain.Parser
 				case Keyword.Parity:               return (Parity_string);
 				case Keyword.StopBits:             return (StopBits_string);
 				case Keyword.FlowControl:          return (FlowControl_string);
-				case Keyword.FramingErrorsOn:      return (FramingErrorsOn_string);
-				case Keyword.FramingErrorsOff:     return (FramingErrorsOff_string);
-				case Keyword.FramingErrorsRestore: return (FramingErrorsRestore_string);
+				case Keyword.RtsOn:                return (RtsOn_string);
+				case Keyword.RtsOff:               return (RtsOff_string);
+				case Keyword.RtsToggle:            return (RtsToggle_string);
+				case Keyword.DtrOn:                return (DtrOn_string);
+				case Keyword.DtrOff:               return (DtrOff_string);
+				case Keyword.DtrToggle:            return (DtrToggle_string);
 				case Keyword.OutputBreakOn:        return (OutputBreakOn_string);
 				case Keyword.OutputBreakOff:       return (OutputBreakOff_string);
 				case Keyword.OutputBreakToggle:    return (OutputBreakToggle_string);
+				case Keyword.FramingErrorsOn:      return (FramingErrorsOn_string);
+				case Keyword.FramingErrorsOff:     return (FramingErrorsOff_string);
+				case Keyword.FramingErrorsRestore: return (FramingErrorsRestore_string);
 				case Keyword.ReportId:             return (ReportId_string);
 
 				case Keyword.ZZZ_FIT: return (ZZZ_FIT_string);
@@ -213,12 +231,18 @@ namespace YAT.Domain.Parser
 			a.Add(new KeywordEx(Keyword.Parity));
 			a.Add(new KeywordEx(Keyword.StopBits));
 			a.Add(new KeywordEx(Keyword.FlowControl));
-			a.Add(new KeywordEx(Keyword.FramingErrorsOn));
-			a.Add(new KeywordEx(Keyword.FramingErrorsOff));
-			a.Add(new KeywordEx(Keyword.FramingErrorsRestore));
+			a.Add(new KeywordEx(Keyword.RtsOn));
+			a.Add(new KeywordEx(Keyword.RtsOff));
+			a.Add(new KeywordEx(Keyword.RtsToggle));
+			a.Add(new KeywordEx(Keyword.DtrOn));
+			a.Add(new KeywordEx(Keyword.DtrOff));
+			a.Add(new KeywordEx(Keyword.DtrToggle));
 			a.Add(new KeywordEx(Keyword.OutputBreakOn));
 			a.Add(new KeywordEx(Keyword.OutputBreakOff));
 			a.Add(new KeywordEx(Keyword.OutputBreakToggle));
+			a.Add(new KeywordEx(Keyword.FramingErrorsOn));
+			a.Add(new KeywordEx(Keyword.FramingErrorsOff));
+			a.Add(new KeywordEx(Keyword.FramingErrorsRestore));
 			a.Add(new KeywordEx(Keyword.ReportId));
 
 			// Do not add 'ZZZ_FIT' (= for internal testing).
@@ -321,12 +345,18 @@ namespace YAT.Domain.Parser
 				case Keyword.Parity:               return ("an integer value where 0 = None, 1 = Odd, 2 = Even, 3 = Mark, 4 = Space");
 				case Keyword.StopBits:             return ("an integer value 0, 1 or 2"); // Attention, a similar message exists in 'View.Forms.AdvancedTerminalSettings'. Changes here may have to be applied there too.
 				case Keyword.FlowControl:          return ("an integer value where 0 = None, 1 = Software, 2 = Hardware, 3 = Combined, 4 = Manual Hardware, 5 = Manual Software, 6 = Manual Combined, 7 = RS-485");
-				case Keyword.FramingErrorsOn:      return (noArgSupportedMessage);
-				case Keyword.FramingErrorsOff:     return (noArgSupportedMessage);
-				case Keyword.FramingErrorsRestore: return (noArgSupportedMessage);
+				case Keyword.RtsOn:                return (noArgSupportedMessage);
+				case Keyword.RtsOff:               return (noArgSupportedMessage);
+				case Keyword.RtsToggle:            return (noArgSupportedMessage);
+				case Keyword.DtrOn:                return (noArgSupportedMessage);
+				case Keyword.DtrOff:               return (noArgSupportedMessage);
+				case Keyword.DtrToggle:            return (noArgSupportedMessage);
 				case Keyword.OutputBreakOn:        return (noArgSupportedMessage);
 				case Keyword.OutputBreakOff:       return (noArgSupportedMessage);
 				case Keyword.OutputBreakToggle:    return (noArgSupportedMessage);
+				case Keyword.FramingErrorsOn:      return (noArgSupportedMessage);
+				case Keyword.FramingErrorsOff:     return (noArgSupportedMessage);
+				case Keyword.FramingErrorsRestore: return (noArgSupportedMessage);
 				case Keyword.ReportId:             return ("an integer value within 0..255 specifying the report ID"); // Attention, a similar message exists in 'View.Controls.UsbSerialHidDeviceSettings'. Changes here may have to be applied there too.
 
 				case Keyword.ZZZ_FIT: // = for internal testing.
@@ -470,19 +500,34 @@ namespace YAT.Domain.Parser
 				result = Keyword.FlowControl;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, FramingErrorsOn_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, RtsOn_string))
 			{
-				result = Keyword.FramingErrorsOn;
+				result = Keyword.RtsOn;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, FramingErrorsOff_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, RtsOff_string))
 			{
-				result = Keyword.FramingErrorsOff;
+				result = Keyword.RtsOff;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, FramingErrorsRestore_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, RtsToggle_string))
 			{
-				result = Keyword.FramingErrorsRestore;
+				result = Keyword.RtsToggle;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, DtrOn_string))
+			{
+				result = Keyword.DtrOn;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, DtrOff_string))
+			{
+				result = Keyword.DtrOff;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, DtrToggle_string))
+			{
+				result = Keyword.DtrToggle;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, OutputBreakOn_string))
@@ -498,6 +543,21 @@ namespace YAT.Domain.Parser
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, OutputBreakToggle_string))
 			{
 				result = Keyword.OutputBreakToggle;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, FramingErrorsOn_string))
+			{
+				result = Keyword.FramingErrorsOn;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, FramingErrorsOff_string))
+			{
+				result = Keyword.FramingErrorsOff;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, FramingErrorsRestore_string))
+			{
+				result = Keyword.FramingErrorsRestore;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, ReportId_string))

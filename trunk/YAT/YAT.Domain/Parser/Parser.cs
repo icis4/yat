@@ -127,14 +127,24 @@ namespace YAT.Domain.Parser
 			@"Change flow control to the specified value ""\!(" + (KeywordEx)Keyword.FlowControl + @"(1))"" (value must be specified as corresponding integer value)." + Environment.NewLine +
 			@"These keywords only apply to serial COM ports." + Environment.NewLine +               // \remind (2018-06-13 / MKY) flow control as integer since yet limited to parsing integer values (FR #404).
 			Environment.NewLine +
-			@"Framing errors on ""\!(" + (KeywordEx)Keyword.FramingErrorsOn + @")""." + Environment.NewLine +
-			@"Framing errors off ""\!(" + (KeywordEx)Keyword.FramingErrorsOff + @")""." + Environment.NewLine +
-			@"Restore framing error setting ""\!(" + (KeywordEx)Keyword.FramingErrorsRestore + @")""." + Environment.NewLine +
+			@"RTS (aka RFR and RTR) signal on ""\!(" + (KeywordEx)Keyword.RtsOn + @")""." + Environment.NewLine +
+			@"RTS (aka RFR and RTR) signal off ""\!(" + (KeywordEx)Keyword.RtsOff + @")""." + Environment.NewLine +
+			@"RTS (aka RFR and RTR) signal toggle ""\!(" + (KeywordEx)Keyword.RtsToggle + @")""." + Environment.NewLine +
+			@"These keywords only apply to serial COM ports. These keywords are not allowed when automatic hardware or RS-485 flow control is active." + Environment.NewLine +
+			Environment.NewLine +
+			@"DTR signal on ""\!(" + (KeywordEx)Keyword.DtrOn + @")""." + Environment.NewLine +
+			@"DTR signal off ""\!(" + (KeywordEx)Keyword.DtrOff + @")""." + Environment.NewLine +
+			@"DTR signal toggle ""\!(" + (KeywordEx)Keyword.DtrToggle + @")""." + Environment.NewLine +
 			@"These keywords only apply to serial COM ports." + Environment.NewLine +
 			Environment.NewLine +
 			@"Output break state on ""\!(" + (KeywordEx)Keyword.OutputBreakOn + @")""." + Environment.NewLine +
 			@"Output break state off ""\!(" + (KeywordEx)Keyword.OutputBreakOff + @")""." + Environment.NewLine +
 			@"Output break state toggle ""\!(" + (KeywordEx)Keyword.OutputBreakToggle + @")""." + Environment.NewLine +
+			@"These keywords only apply to serial COM ports." + Environment.NewLine +
+			Environment.NewLine +
+			@"Framing errors on ""\!(" + (KeywordEx)Keyword.FramingErrorsOn + @")""." + Environment.NewLine +
+			@"Framing errors off ""\!(" + (KeywordEx)Keyword.FramingErrorsOff + @")""." + Environment.NewLine +
+			@"Restore framing error setting ""\!(" + (KeywordEx)Keyword.FramingErrorsRestore + @")""." + Environment.NewLine +
 			@"These keywords only apply to serial COM ports." + Environment.NewLine +
 			Environment.NewLine +
 			@"Change USB Ser/HID report ID to 1 ""\!(" + (KeywordEx)Keyword.ReportId + @"(1))""." + Environment.NewLine +
