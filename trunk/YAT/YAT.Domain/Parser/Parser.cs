@@ -125,22 +125,22 @@ namespace YAT.Domain.Parser
 			@"Change parity to the specified value ""\!(" + (KeywordEx)Keyword.Parity + @"(2))"" (value must be specified as corresponding integer value)." + Environment.NewLine +
 			@"Change stop bits to the specified value ""\!(" + (KeywordEx)Keyword.StopBits + @"(2))"" (value must be specified as integer value, i.e. 1.5 is not supported by this keyword (yet))." + Environment.NewLine +
 			@"Change flow control to the specified value ""\!(" + (KeywordEx)Keyword.FlowControl + @"(1))"" (value must be specified as corresponding integer value)." + Environment.NewLine +
-			@"These keywords only apply to serial COM ports." + Environment.NewLine +               // \remind (2018-06-13 / MKY) flow control as integer since yet limited to parsing integer values (FR #404).
-			Environment.NewLine +
+			@"These keywords only apply to serial COM ports. Port will be closed and reopened to apply keywords." + Environment.NewLine +
+			Environment.NewLine +                                                                   // \remind (2018-06-13 / MKY) flow control as integer since yet limited to parsing integer values (FR #404).
 			@"RTS (aka RFR and RTR) signal on ""\!(" + (KeywordEx)Keyword.RtsOn + @")""." + Environment.NewLine +
 			@"RTS (aka RFR and RTR) signal off ""\!(" + (KeywordEx)Keyword.RtsOff + @")""." + Environment.NewLine +
 			@"RTS (aka RFR and RTR) signal toggle ""\!(" + (KeywordEx)Keyword.RtsToggle + @")""." + Environment.NewLine +
-			@"These keywords only apply to serial COM ports. These keywords are not allowed when automatic hardware or RS-485 flow control is active." + Environment.NewLine +
+			@"These keywords only apply to serial COM ports. Port will be flushed before keywords get applied. Keywords will not be applied when automatic hardware or RS-485 flow control is active." + Environment.NewLine +
 			Environment.NewLine +
 			@"DTR signal on ""\!(" + (KeywordEx)Keyword.DtrOn + @")""." + Environment.NewLine +
 			@"DTR signal off ""\!(" + (KeywordEx)Keyword.DtrOff + @")""." + Environment.NewLine +
 			@"DTR signal toggle ""\!(" + (KeywordEx)Keyword.DtrToggle + @")""." + Environment.NewLine +
-			@"These keywords only apply to serial COM ports." + Environment.NewLine +
+			@"These keywords only apply to serial COM ports. Port will be flushed before keywords get applied." + Environment.NewLine +
 			Environment.NewLine +
 			@"Output break state on ""\!(" + (KeywordEx)Keyword.OutputBreakOn + @")""." + Environment.NewLine +
 			@"Output break state off ""\!(" + (KeywordEx)Keyword.OutputBreakOff + @")""." + Environment.NewLine +
 			@"Output break state toggle ""\!(" + (KeywordEx)Keyword.OutputBreakToggle + @")""." + Environment.NewLine +
-			@"These keywords only apply to serial COM ports." + Environment.NewLine +
+			@"These keywords only apply to serial COM ports. Port will be flushed before keywords get applied." + Environment.NewLine +
 			Environment.NewLine +
 			@"Framing errors on ""\!(" + (KeywordEx)Keyword.FramingErrorsOn + @")""." + Environment.NewLine +
 			@"Framing errors off ""\!(" + (KeywordEx)Keyword.FramingErrorsOff + @")""." + Environment.NewLine +
