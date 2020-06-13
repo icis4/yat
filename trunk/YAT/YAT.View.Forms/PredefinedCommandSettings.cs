@@ -470,11 +470,18 @@ namespace YAT.View.Forms
 				// ...View.Forms.Terminal.contextMenuStrip_Predefined_Opening()
 				// Changes here may have to be applied there too.
 
+				int id = 0;
+				Command c = null;
+				bool cIsDefined = false;
+
+				if (TryGetCommandIdFromLocation(Cursor.Position, out id))
+				{
+					if (TryGetCommandFromId(id, out c))
+						cIsDefined = c.IsDefined;
+				}
+
 				PredefinedCommandPageLayoutEx pageLayoutEx = this.settingsInEdit.PageLayout;
 				var np = pageLayoutEx.CommandCapacityPerPage;
-				var id = GetCommandIdFromLocation(Cursor.Position);
-				var c = GetCommandFromId(id);
-				var cIsDefined = ((id != 0) && (c != null) && (c.IsDefined));
 
 				contextMenuStrip_Commands_SelectedCommandId = id;
 
@@ -726,8 +733,8 @@ namespace YAT.View.Forms
 
 			var targetCommandIndex = (ToolStripMenuItemEx.TagToInt32(sender) - 1); // Attention, 'ToolStripMenuItem' is no 'Control'!
 
-			var sc = GetCommandFromId(contextMenuStrip_Commands_SelectedCommandId);
-			if (sc != null)
+			Command sc;
+			if (TryGetCommandFromId(contextMenuStrip_Commands_SelectedCommandId, out sc))
 			{
 				sc = new Command(sc); // Clone to ensure decoupling. // Replace target by selected:
 				this.settingsInEdit.SetCommand(SelectedPageIndex, targetCommandIndex, sc);
@@ -755,8 +762,8 @@ namespace YAT.View.Forms
 
 			var targetCommandIndex = (ToolStripMenuItemEx.TagToInt32(sender) - 1); // Attention, 'ToolStripMenuItem' is no 'Control'!
 
-			var sc = GetCommandFromId(contextMenuStrip_Commands_SelectedCommandId);
-			if (sc != null)
+			Command sc;
+			if (TryGetCommandFromId(contextMenuStrip_Commands_SelectedCommandId, out sc))
 			{
 				this.settingsInEdit.SuspendChangeEvent();
 
@@ -818,13 +825,14 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.Up()
 			// Changes here may have to be applied there too.
 
-			var sc = GetCommandFromId(selectedCommandId);
-			if (sc != null)
+			Command sc = null;
+			if (TryGetCommandFromId(selectedCommandId, out sc))
 				sc = new Command(sc); // Clone to ensure decoupling.
 
 			targetCommandId = ((selectedCommandId > PredefinedCommandPage.FirstCommandIdPerPage) ? (selectedCommandId - 1) : (lastCommandIdPerPage));
-			var tc = GetCommandFromId(targetCommandId);
-			if (tc != null)
+
+			Command tc = null;
+			if (TryGetCommandFromId(targetCommandId, out tc))
 				tc = new Command(tc); // Clone to ensure decoupling.
 
 			if (tc != null)                            // Replace selected by target:
@@ -879,13 +887,14 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.Down()
 			// Changes here may have to be applied there too.
 
-			var sc = GetCommandFromId(selectedCommandId);
-			if (sc != null)
+			Command sc = null;
+			if (TryGetCommandFromId(selectedCommandId, out sc))
 				sc = new Command(sc); // Clone to ensure decoupling.
 
 			targetCommandId = ((selectedCommandId < lastCommandIdPerPage) ? (selectedCommandId + 1) : (PredefinedCommandPage.FirstCommandIdPerPage));
-			var tc = GetCommandFromId(targetCommandId);
-			if (tc != null)
+
+			Command tc = null;
+			if (TryGetCommandFromId(targetCommandId, out tc))
 				tc = new Command(tc); // Clone to ensure decoupling.
 
 			if (tc != null)                            // Replace selected by target:
@@ -906,8 +915,8 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_Cut_Click()
 			// Changes here may have to be applied there too.
 
-			var sc = GetCommandFromId(contextMenuStrip_Commands_SelectedCommandId);
-			if (sc != null)
+			Command sc;
+			if (TryGetCommandFromId(contextMenuStrip_Commands_SelectedCommandId, out sc))
 			{
 				Cursor = Cursors.WaitCursor;
 				Clipboard.Clear(); // Prevent handling errors in case cutting takes long.
@@ -927,8 +936,8 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_Copy_Click()
 			// Changes here may have to be applied there too.
 
-			var sc = GetCommandFromId(contextMenuStrip_Commands_SelectedCommandId);
-			if (sc != null)
+			Command sc;
+			if (TryGetCommandFromId(contextMenuStrip_Commands_SelectedCommandId, out sc))
 			{
 				Cursor = Cursors.WaitCursor;
 				Clipboard.Clear(); // Prevent handling errors in case cutting takes long.
@@ -1599,10 +1608,10 @@ namespace YAT.View.Forms
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Returns command at the specified <paramref name="id"/>.
-		/// Returns <c>null</c> if command is undefined or invalid.
+		/// Sets <paramref name="command"/> to the command specified by <paramref name="id"/>.
+		/// Returns <c>false</c> and sets <paramref name="command"/> to <c>null</c> if command is undefined or invalid.
 		/// </summary>
-		protected virtual Command GetCommandFromId(int id)
+		protected virtual bool TryGetCommandFromId(int id, out Command command)
 		{
 			if (this.settingsInEdit.Pages != null)
 			{
@@ -1611,42 +1620,47 @@ namespace YAT.View.Forms
 				{
 					var i = (id - 1);
 					if (i < p.Commands.Count)
-						return (p.Commands[i]);
+					{
+						command = p.Commands[i];
+						return (true);
+					}
 				}
 			}
 
-			return (null);
+			command = null;
+			return (false);
 		}
 
 		/// <summary>
-		/// Returns settings set ID (1..max) that is assigned to the set at the specified location.
-		/// Returns 0 if no set.
+		/// Sets <paramref name="id"/> to settings set (1..max) that is assigned to the set at the specified location.
+		/// Returns <c>false</c> and sets <paramref name="id"/> to <c>0</c> if no set.
 		/// </summary>
-		protected virtual int GetCommandIdFromLocation(Point location)
+		protected virtual bool TryGetCommandIdFromLocation(Point location, out int id)
 		{
 			Point pt = groupBox_Page.PointToClient(location);
 			//// Not using GetChildAtPoint() to also support clicking inbetween sets.
 
 			// Ensure that location is within control:
-			if ((pt.X < 0) || (pt.X > Width))  return (0);
-			if ((pt.Y < 0) || (pt.Y > Height)) return (0);
+			if ((pt.X < 0) || (pt.X > Width))  { id = 0; return (false); }
+			if ((pt.Y < 0) || (pt.Y > Height)) { id = 0; return (false); }
 
 			// Ensure that location is around sets:
-			if (pt.Y < predefinedCommandSettingsSet_1.Top)     return (0);
-			if (pt.Y > predefinedCommandSettingsSet_12.Bottom) return (0);
+			if (pt.Y < predefinedCommandSettingsSet_1.Top)     { id = 0; return (false); }
+			if (pt.Y > predefinedCommandSettingsSet_12.Bottom) { id = 0; return (false); }
 
 			// Find the corresponding set:
 			for (int i = 0; i < this.predefinedCommandSettingsSets.Count; i++)
 			{
 				if (pt.Y <= this.predefinedCommandSettingsSets[i].Bottom)
 				{
-					var id = (i + 1); // ID = 1..max
+					id = (i + 1); // ID = 1..max
 					id += (SelectedSubpageIndex * PredefinedCommandPage.CommandCapacityPerSubpage);
-					return (id);
+					return (true);
 				}
 			}
 
-			return (0);
+			id = 0;
+			return (false);
 		}
 
 		/// <param name="setId">Set 1..<see cref="PredefinedCommandPage.CommandCapacityPerSubpage"/>.</param>

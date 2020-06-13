@@ -2686,11 +2686,18 @@ namespace YAT.View.Forms
 				// ...View.Forms.PredefinedCommandSettings.contextMenuStrip_Commands_Opening()
 				// Changes here may have to be applied there too.
 
+				int id = 0;
+				Command c = null;
+				bool cIsDefined = false;
+
+				if (predefined.TryGetCommandIdFromLocation(Cursor.Position, out id))
+				{
+					if (predefined.TryGetCommandFromId(id, out c))
+						cIsDefined = c.IsDefined;
+				}
+
 				PredefinedCommandPageLayoutEx pageLayoutEx = this.settingsRoot.PredefinedCommand.PageLayout;
 				var np = pageLayoutEx.CommandCapacityPerPage;
-				var id = predefined.GetCommandIdFromLocation(Cursor.Position);
-				var c  = predefined.GetCommandFromId(id);
-				var cIsDefined = ((id != 0) && (c != null) && (c.IsDefined));
 
 				contextMenuStrip_Predefined_SelectedCommandId = id;
 
@@ -3036,8 +3043,8 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
-			if (sc != null)
+			Command sc;
+			if (predefined.TryGetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId, out sc))
 			{
 				sc = new Command(sc); // Clone to ensure decoupling.
 				if (sc.IsText)
@@ -3061,8 +3068,8 @@ namespace YAT.View.Forms
 
 			var targetCommandIndex = (ToolStripMenuItemEx.TagToInt32(sender) - 1); // Attention, 'ToolStripMenuItem' is no 'Control'!
 
-			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
-			if (sc != null)
+			Command sc;
+			if (predefined.TryGetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId, out sc))
 			{
 				sc = new Command(sc); // Clone to ensure decoupling.              // Replace target by selected:
 				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandIndex, sc);
@@ -3085,8 +3092,8 @@ namespace YAT.View.Forms
 
 			var targetCommandIndex = (ToolStripMenuItemEx.TagToInt32(sender) - 1); // Attention, 'ToolStripMenuItem' is no 'Control'!
 
-			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
-			if (sc != null)
+			Command sc;
+			if (predefined.TryGetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId, out sc))
 			{
 				this.settingsRoot.PredefinedCommand.SuspendChangeEvent();
 				try
@@ -3144,13 +3151,14 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.Up()
 			// Changes here may have to be applied there too.
 
-			var sc = predefined.GetCommandFromId(selectedCommandId);
-			if (sc != null)
+			Command sc = null;
+			if (predefined.TryGetCommandFromId(selectedCommandId, out sc))
 				sc = new Command(sc); // Clone to ensure decoupling.
 
 			var targetCommandId = ((selectedCommandId > PredefinedCommandPage.FirstCommandIdPerPage) ? (selectedCommandId - 1) : (lastCommandIdPerPage));
-			var tc = predefined.GetCommandFromId(targetCommandId);
-			if (tc != null)
+
+			Command tc = null;
+			if (predefined.TryGetCommandFromId(targetCommandId, out tc))
 				tc = new Command(tc); // Clone to ensure decoupling.
 
 			if (tc != null)                                                       // Replace selected by target:
@@ -3202,13 +3210,14 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.Down()
 			// Changes here may have to be applied there too.
 
-			var sc = predefined.GetCommandFromId(selectedCommandId);
-			if (sc != null)
+			Command sc = null;
+			if (predefined.TryGetCommandFromId(selectedCommandId, out sc))
 				sc = new Command(sc); // Clone to ensure decoupling.
 
 			var targetCommandId = ((selectedCommandId < lastCommandIdPerPage) ? (selectedCommandId + 1) : (PredefinedCommandPage.FirstCommandIdPerPage));
-			var tc = predefined.GetCommandFromId(targetCommandId);
-			if (tc != null)
+
+			Command tc = null;
+			if (predefined.TryGetCommandFromId(targetCommandId, out tc))
 				tc = new Command(tc); // Clone to ensure decoupling.
 
 			if (tc != null)                                                       // Replace selected by target:
@@ -3229,8 +3238,8 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_PredefinedContextMenu_Cut_Click()
 			// Changes here may have to be applied there too.
 
-			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
-			if (sc != null)
+			Command sc;
+			if (predefined.TryGetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId, out sc))
 			{
 				SetFixedStatusText("Preparing cutting to clipboard...");
 				Cursor = Cursors.WaitCursor;
@@ -3258,8 +3267,8 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_PredefinedContextMenu_Copy_Click()
 			// Changes here may have to be applied there too.
 
-			var sc = predefined.GetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId);
-			if (sc != null)
+			Command sc;
+			if (predefined.TryGetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId, out sc))
 			{
 				SetFixedStatusText("Preparing copying to clipboard...");
 				Cursor = Cursors.WaitCursor;

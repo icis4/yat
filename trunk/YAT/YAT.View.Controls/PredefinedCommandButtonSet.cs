@@ -200,10 +200,10 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary>
-		/// Returns command at the specified <paramref name="id"/>.
-		/// Returns <c>null</c> if command is undefined or invalid.
+		/// Sets <paramref name="command"/> to the command specified by <paramref name="id"/>.
+		/// Returns <c>false</c> and sets <paramref name="command"/> to <c>null</c> if command is undefined or invalid.
 		/// </summary>
-		public virtual Command GetCommandFromId(int id)
+		public virtual bool TryGetCommandFromId(int id, out Command command)
 		{
 			int i = (id - 1); // ID = 1..max
 
@@ -215,26 +215,30 @@ namespace YAT.View.Controls
 					if (c != null)
 					{
 						if (c.IsDefined)
-							return (c);
+						{
+							command = c;
+							return (true);
+						}
 					}
 				}
 			}
 
-			return (null);
+			command = null;
+			return (false);
 		}
 
 		/// <summary>
-		/// Returns command ID (1..max) that is assigned to the button at the specified location.
-		/// Returns 0 if no button.
+		/// Sets <paramref name="id"/> to command ID (1..max) that is assigned to the button at the specified location.
+		/// Returns <c>false</c> and sets <paramref name="id"/> to <c>0</c> if no button.
 		/// </summary>
-		public virtual int GetCommandIdFromLocation(Point location)
+		public virtual bool TryGetCommandIdFromLocation(Point location, out int id)
 		{
 			Point pt = PointToClient(location); // Using Control.PointToClient() is OK since buttons are directly placed onto control.
 			//// Not using GetChildAtPoint() to also support clicking inbetween buttons.
 
 			// Ensure that location is within control:
-			if ((pt.X < 0) || (pt.X > Width))  return (0);
-			if ((pt.Y < 0) || (pt.Y > Height)) return (0);
+			if ((pt.X < 0) || (pt.X > Width))  { id = 0; return (false); }
+			if ((pt.Y < 0) || (pt.Y > Height)) { id = 0; return (false); }
 
 			// Find the corresponding button:
 			for (int i = 0; i < this.buttons_commands.Count; i++)
@@ -243,21 +247,28 @@ namespace YAT.View.Controls
 				{
 					int relativeCommandIndex = i;
 					int absoluteCommandIndex = (SubpageCommandIndexOffset + relativeCommandIndex);
-					int absoluteCommandId    = (absoluteCommandIndex + 1);
-					return (absoluteCommandId);
+					int  absoluteCommandId   = (absoluteCommandIndex + 1);
+					id = absoluteCommandId;
+					return (true);
 				}
 			}
 
-			return (0);
+			id = 0;
+			return (false);
 		}
 
 		/// <summary>
-		/// Returns command that is assigned to the button at the specified location.
-		/// Returns <c>null</c> if no button or if command is undefined or invalid.
+		/// Sets <paramref name="command"/> to the command that is assigned to the button at the specified location.
+		/// Returns <c>false</c> and sets <paramref name="command"/> to <c>null</c> if command is undefined or invalid.
 		/// </summary>
-		public virtual Command GetCommandFromLocation(Point location)
+		public virtual bool TryGetCommandFromLocation(Point location, out Command command)
 		{
-			return (GetCommandFromId(GetCommandIdFromLocation(location)));
+			int id;
+			if (TryGetCommandIdFromLocation(location, out id))
+				return (TryGetCommandFromId(id, out command));
+
+			command = null;
+			return (false);
 		}
 
 		/// <remarks>Useful to improve performance.</remarks>
