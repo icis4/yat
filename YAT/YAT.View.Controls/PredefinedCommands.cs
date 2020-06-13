@@ -274,10 +274,10 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary>
-		/// Returns command at the specified <paramref name="id"/>.
-		/// Returns <c>null</c> if command is undefined or invalid.
+		/// Sets <paramref name="command"/> to the command specified by <paramref name="id"/>.
+		/// Returns <c>false</c> and sets <paramref name="command"/> to <c>null</c> if command is undefined or invalid.
 		/// </summary>
-		public virtual Command GetCommandFromId(int id)
+		public virtual bool TryGetCommandFromId(int id, out Command command)
 		{
 			List<Command> commands = null;
 			if ((this.pages != null) && (this.pages.Count > 0))
@@ -292,19 +292,23 @@ namespace YAT.View.Controls
 					if (c != null)
 					{
 						if (c.IsDefined)
-							return (c);
+						{
+							command = c;
+							return (true);
+						}
 					}
 				}
 			}
 
-			return (null);
+			command = null;
+			return (false);
 		}
 
 		/// <summary>
-		/// Returns command ID (1..max) that is assigned to the button at the specified location.
-		/// Returns 0 if no button.
+		/// Sets <paramref name="id"/> to command ID (1..max) that is assigned to the button at the specified location.
+		/// Returns <c>false</c> and sets <paramref name="id"/> to <c>0</c> if no button.
 		/// </summary>
-		public virtual int GetCommandIdFromLocation(Point location)
+		public virtual bool TryGetCommandIdFromLocation(Point location, out int id)
 		{
 			Point pt = tableLayoutPanel_Subpages.PointToClient(location);
 
@@ -313,19 +317,25 @@ namespace YAT.View.Controls
 			{
 				var set = (child as PredefinedCommandButtonSet);
 				if (set != null)
-					return (set.GetCommandIdFromLocation(location));
+					return (set.TryGetCommandIdFromLocation(location, out id));
 			}
 
-			return (0);
+			id = 0;
+			return (false);
 		}
 
 		/// <summary>
-		/// Returns command that is assigned to the button at the specified location.
-		/// Returns <c>null</c> if no button or if command is undefined or invalid.
+		/// Sets <paramref name="command"/> to the command that is assigned to the button at the specified location.
+		/// Returns <c>false</c> and sets <paramref name="command"/> to <c>null</c> if command is undefined or invalid.
 		/// </summary>
-		public virtual Command GetCommandFromLocation(Point location)
+		public virtual bool TryGetCommandFromLocation(Point location, out Command command)
 		{
-			return (GetCommandFromId(GetCommandIdFromLocation(location)));
+			int id;
+			if (TryGetCommandIdFromLocation(location, out id))
+				return (TryGetCommandFromId(id, out command));
+
+			command = null;
+			return (false);
 		}
 
 		/// <remarks>Useful to improve performance.</remarks>
