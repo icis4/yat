@@ -423,6 +423,12 @@ namespace YAT.Domain.Test.TextTerminal
 					// Refresh and verify again:
 					terminalA.RefreshRepositories();
 					terminalB.RefreshRepositories();
+
+					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+					Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+
 					Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
 					Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
 

@@ -112,7 +112,7 @@ namespace MKY.Xml
 					if (ci != null)
 						obj = ci.Invoke(null);
 					else
-						throw (new NotImplementedException("Type '" + type + "'does not provide a default constructor!"));
+						throw (new NotSupportedException("Type '" + type + "'does not provide a default constructor!"));
 				}
 			}
 
