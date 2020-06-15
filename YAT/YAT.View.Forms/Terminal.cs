@@ -6277,9 +6277,9 @@ namespace YAT.View.Forms
 		// Monitor Panels > Methods
 		//------------------------------------------------------------------------------------------
 
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowFormatSettings()
 		{
@@ -8329,7 +8329,7 @@ namespace YAT.View.Forms
 
 		/// <remarks>
 		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that somthing will happen
+		/// However, named "Message" for compactness and more clarity that something will happen
 		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]

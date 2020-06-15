@@ -117,7 +117,7 @@ namespace YAT.Model.Test
 		{
 			var c = new Command();
 
-			string[] text = new string[]{ "ABC", "DEF" };
+			string[] text = new string[] { "ABC", "DEF" };
 			string singleLineText = "<2 lines...> [ABC] [DEF]";
 			c.MultiLineText = text;
 			AssertMultiLineText(c, text, singleLineText);
@@ -131,22 +131,22 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestInitialMultiLineTextThenModify()
 		{
-			string[] initialMulti = new string[]{ "ABC", "DEF" };
+			string[] initialMulti = new string[] { "ABC", "DEF" };
 			string initialSingle = "<2 lines...> [ABC] [DEF]";
 			var c = new Command(initialMulti);
 			AssertMultiLineText(c, initialMulti, initialSingle);
 
-			string[] modifiedMulti = new string[]{ "ABC", "def" }; // Change casing.
+			string[] modifiedMulti = new string[] { "ABC", "def" }; // Change casing.
 			string modifiedSingle = "<2 lines...> [ABC] [def]";
 			c.MultiLineText = modifiedMulti;
 			AssertMultiLineText(c, modifiedMulti, modifiedSingle);
 
-			modifiedMulti = new string[]{ "ABC", "def", "ghi" }; // Add a line.
+			modifiedMulti = new string[] { "ABC", "def", "ghi" }; // Add a line.
 			modifiedSingle = "<3 lines...> [ABC] [def] [ghi]";
 			c.MultiLineText = modifiedMulti;
 			AssertMultiLineText(c, modifiedMulti, modifiedSingle);
 
-			modifiedMulti = new string[]{ "ABC", "ghi" }; // Remove a line.
+			modifiedMulti = new string[] { "ABC", "ghi" }; // Remove a line.
 			modifiedSingle = "<2 lines...> [ABC] [ghi]";
 			c.MultiLineText = modifiedMulti;
 			AssertMultiLineText(c, modifiedMulti, modifiedSingle);
@@ -155,7 +155,7 @@ namespace YAT.Model.Test
 			c.Description = description;
 			AssertMultiLineText(c, modifiedMulti, modifiedSingle, description);
 
-			modifiedMulti = new string[]{ "ABC", "DEF" };
+			modifiedMulti = new string[] { "ABC", "DEF" };
 			modifiedSingle = "<2 lines...> [ABC] [DEF]";
 			c.MultiLineText = modifiedMulti;
 			AssertMultiLineText(c, modifiedMulti, modifiedSingle, description);

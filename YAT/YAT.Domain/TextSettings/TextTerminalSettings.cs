@@ -88,6 +88,7 @@ namespace YAT.Domain.Settings
 		/// on two interconnected TCP/IP AutoSockets. Therefore using 500 ms, same as other features
 		/// <see cref="LineSendDelay"/> and <see cref="WaitForResponse"/> further below.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
 		public const int GlueCharsOfLineTimeoutDefault = 500;
 
 		/// <remarks>
@@ -390,7 +391,7 @@ namespace YAT.Domain.Settings
 		/// <remarks>
 		/// Instead of glueing characters of a line and waiting with displaying the next line in the
 		/// opposite direction (or other I/O device), characters could also be appended to two lines
-		/// simultanously. Technically this would be possible by adding a ReplacePreviousLine() in
+		/// simultaneously. Technically this would be possible by adding a ReplacePreviousLine() in
 		/// next to <see cref="DisplayRepository.ReplaceCurrentLine(DisplayElementCollection)"/>.
 		/// However:
 		/// <list type="bullet">
@@ -398,6 +399,7 @@ namespace YAT.Domain.Settings
 		/// <item><description>Implementation becomes a nightmare (filter, suppress,...).</description></item>
 		/// </list>
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'glueing' is a correct English term.")]
 		[XmlElement("GlueCharsOfLine")]
 		public virtual TimeoutSettingTuple GlueCharsOfLine
 		{

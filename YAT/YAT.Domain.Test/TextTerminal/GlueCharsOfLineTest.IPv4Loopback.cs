@@ -391,7 +391,7 @@ namespace YAT.Domain.Test.TextTerminal
 						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
 
 						// ...and wait for at least twice the default timeout:
-						Thread.Sleep(2* Settings.TextTerminalSettings.GlueCharsOfLineTimeoutDefault); // No margin needed.
+						Thread.Sleep(2 * Settings.TextTerminalSettings.GlueCharsOfLineTimeoutDefault); // No margin needed.
 
 					////expectedContentPatternA = same as before as line from B must be postponed until line from A has completed (timeout = forever).
 						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);

@@ -2366,7 +2366,7 @@ namespace YAT.Domain
 
 		/// <remarks>
 		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that somthing will happen
+		/// However, named "Message" for compactness and more clarity that something will happen
 		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
@@ -2392,6 +2392,7 @@ namespace YAT.Domain
 		/// Name "DebugWrite" would show relation to <see cref="Debug.Write(string)"/>.
 		/// However, named "Message" for orthogonality with <see cref="DebugMessage(string)"/>.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessageLead(string message)
 		{

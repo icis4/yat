@@ -220,8 +220,8 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			// Calculate maximum baud defined send rate:
 			double frameTime   = this.settings.Communication.FrameTime;
-			const int maxFramesPerInterval = 48;                  // Interval shall be rather narrow enough to ensure being inside the limits
-			double interval = (frameTime * maxFramesPerInterval); // even for converters with buffers of just 56 bytes. 48 for two reasons:
+			const int MaxFramesPerInterval = 48;                  // Interval shall be rather narrow enough to ensure being inside the limits
+			double interval = (frameTime * MaxFramesPerInterval); // even for converters with buffers of just 56 bytes. 48 for two reasons:
 			Rate maxBaudRatePerInterval = new Rate(interval);     //  1) 48/56 => 15% safety margin
 			                                                      //  2) Same as SerialPortSettings.MaxChunkSizeDefault.Length
 			// Typical values:
@@ -388,7 +388,7 @@ namespace MKY.IO.Serial.SerialPort
 									// Reduce chunk size if maximum is limited to baud rate:
 									if ((maxChunkSize > 0) && this.settings.BufferMaxBaudRate)
 									{
-										int remainingSizeInInterval = (maxFramesPerInterval - maxBaudRatePerInterval.Value);
+										int remainingSizeInInterval = (MaxFramesPerInterval - maxBaudRatePerInterval.Value);
 										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, Math.Max(remainingSizeInInterval, 0)); // 'max' must be 0 or above.
 									}
 

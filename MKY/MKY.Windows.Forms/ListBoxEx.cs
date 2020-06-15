@@ -1203,7 +1203,9 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <remarks>
-		/// Attention, requires that <see cref="ConditionalAttribute"/> in multiple files!
+		/// Attention, requires that <see cref="ConditionalAttribute"/> is activated in in multiple files!
+		///
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		[Conditional("DEBUG_COUNT_AND_INDICES")]
 		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]
@@ -1213,7 +1215,9 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <remarks>
-		/// Attention, requires that <see cref="ConditionalAttribute"/> in multiple files!
+		/// Attention, requires that <see cref="ConditionalAttribute"/> is activated in in multiple files!
+		///
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		[Conditional("DEBUG_COUNT_AND_INDICES")]
 		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Indices", Justification = "'Indices' is a correct English term and used throughout the .NET framework.")]

@@ -23,6 +23,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 // The YAT.Domain.Settings namespace contains all raw/neutral/binary/text terminal infrastructure.
@@ -31,6 +32,7 @@ using System.Xml.Serialization;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
 	public class TextDisplaySettings : MKY.Settings.SettingsItem, IEquatable<TextDisplaySettings>
 	{
 		/// <summary></summary>

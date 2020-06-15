@@ -30,9 +30,9 @@ using System.Diagnostics.CodeAnalysis;
 namespace YAT.Domain
 {
 	/// <remarks>
-	/// So far, only uni-directional state must be kept. Thus, opposed to <see cref="ProcessState"/>
+	/// So far, only unidirectional state must be kept. Thus, opposed to <see cref="ProcessState"/>
 	/// which is kept three times (Tx/Bidir/Rx), the binary terminal specific state is limited to a
-	/// line state which is instatiated four times (Tx/TxBidir/RxBidir/Rx).
+	/// line state which is instantiated four times (Tx/TxBidir/RxBidir/Rx).
 	/// </remarks>
 	/// <remarks>
 	/// Ideas for potential future refinement of this class:

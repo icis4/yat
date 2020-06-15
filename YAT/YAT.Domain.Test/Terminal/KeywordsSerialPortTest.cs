@@ -50,9 +50,9 @@ namespace YAT.Domain.Test.Terminal
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too many values to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "Too many values to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "Too many values to verify.")]
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
 		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackPairs")]
 		public virtual void TestSettings(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
@@ -242,7 +242,6 @@ namespace YAT.Domain.Test.Terminal
 					terminalA.Stop();
 					Utilities.WaitForDisconnection(terminalA);
 				} // using (terminalA)
-
 			} // using (parser)
 		}
 
@@ -254,9 +253,9 @@ namespace YAT.Domain.Test.Terminal
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too many values to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "Too many values to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "Too many values to verify.")]
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
 		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackPairs")]
 		public virtual void TestSignals(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
@@ -502,7 +501,6 @@ namespace YAT.Domain.Test.Terminal
 					terminalA.Stop();
 					Utilities.WaitForDisconnection(terminalA);
 				} // using (terminalA)
-
 			} // using (parser)
 		}
 

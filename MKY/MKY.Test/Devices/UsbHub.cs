@@ -271,9 +271,9 @@ namespace MKY.Test.Devices
 		/// Enables the given outputs.
 		/// </summary>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Just a debug message.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "Just a debug message.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Just a debug message.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Just a debug message.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines",              Justification = "Just a debug message.")]
 		public static bool Enable(UsbHubDevices device, UsbHubSettings enableMask)
 		{
 			DebugMessage(device, "Enabling  " + SettingToBinaryString(enableMask) + " mask. " +
@@ -291,9 +291,9 @@ namespace MKY.Test.Devices
 		/// Disables the given outputs.
 		/// </summary>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Just a debug message.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "Just a debug message.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Just a debug message.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Just a debug message.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines",              Justification = "Just a debug message.")]
 		public static bool Disable(UsbHubDevices device, UsbHubSettings disableMask)
 		{
 			DebugMessage(device, "Disabling " + SettingToBinaryString(disableMask) + " mask. " +
@@ -454,7 +454,7 @@ namespace MKY.Test.Devices
 
 		/// <remarks>
 		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that somthing will happen
+		/// However, named "Message" for compactness and more clarity that something will happen
 		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
@@ -465,7 +465,7 @@ namespace MKY.Test.Devices
 
 		/// <remarks>
 		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that somthing will happen
+		/// However, named "Message" for compactness and more clarity that something will happen
 		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
