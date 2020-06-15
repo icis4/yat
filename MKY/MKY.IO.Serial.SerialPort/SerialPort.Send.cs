@@ -588,7 +588,7 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
-				Flush(0); // Just flush.
+			////Flush(0) is not required, flushing will happen after each transmission.
 
 				this.port.RtsEnable = true;
 			}
@@ -671,7 +671,7 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
-				Flush(0); // Just flush.
+			////Flush(0) is not required, flushing will happen after each transmission.
 
 				this.port.RtsEnable = true;
 			}
