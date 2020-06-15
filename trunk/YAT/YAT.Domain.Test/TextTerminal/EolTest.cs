@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.1.1 Development
+// YAT Version 2.2.0 Development
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -252,7 +252,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 			} // using (parser)
 
-			Thread.Sleep(WaitForDisposal);
+			Thread.Sleep(WaitForDisposal); // \remind: For whatever reason, subsequent tests tend to fail without this.
 		}
 
 		/// <remarks>
@@ -333,7 +333,7 @@ namespace YAT.Domain.Test.TextTerminal
 				Utilities.WaitForDisconnection(terminalA);
 			}
 
-			Thread.Sleep(WaitForDisposal);
+			Thread.Sleep(WaitForDisposal); // \remind: For whatever reason, subsequent tests tend to fail without this.
 		}
 
 		/// <remarks>
