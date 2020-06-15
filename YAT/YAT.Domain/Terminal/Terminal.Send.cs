@@ -1227,7 +1227,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 							if (port != null)
-								port.RtsEnable = true;
+								port.RtsEnable = true; // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -1255,7 +1255,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 							if (port != null)
-								port.RtsEnable = false;
+								port.RtsEnable = false; // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -1283,7 +1283,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 							if (port != null)
-								port.ToggleRts();
+								port.ToggleRts(); // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -1311,7 +1311,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 							if (port != null)
-								port.DtrEnable = true;
+								port.DtrEnable = true; // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -1339,7 +1339,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 							if (port != null)
-								port.DtrEnable = false;
+								port.DtrEnable = false; // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -1367,7 +1367,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 							if (port != null)
-								port.ToggleDtr();
+								port.ToggleDtr(); // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -1395,7 +1395,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 							if (port != null)
-								port.OutputBreak = true;
+								port.OutputBreak = true; // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -1423,7 +1423,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 							if (port != null)
-								port.OutputBreak = false;
+								port.OutputBreak = false; // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -1451,7 +1451,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 							if (port != null)
-								port.ToggleOutputBreak();
+								port.ToggleOutputBreak(); // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
