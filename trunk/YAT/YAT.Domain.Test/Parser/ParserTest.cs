@@ -603,18 +603,18 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(FlowControl(1))",			Domain.Parser.Keyword.FlowControl,			new int[] { 1 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values (FR #404).
 				yield return (new TestCaseData(@"\!(FlowControl(2))",			Domain.Parser.Keyword.FlowControl,			new int[] { 2 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values (FR #404).
 				yield return (new TestCaseData(@"\!(FlowControl(3))",			Domain.Parser.Keyword.FlowControl,			new int[] { 3 })); // \remind (2018-06-13 / MKY) yet limited to parsing integer values (FR #404).
-				yield return (new TestCaseData(@"\!(RtsOn)",					Domain.Parser.Keyword.RtsOn,				null));
-				yield return (new TestCaseData(@"\!(RtsOn())",					Domain.Parser.Keyword.RtsOn,				null));
-				yield return (new TestCaseData(@"\!(RtsOff)",					Domain.Parser.Keyword.RtsOff,				null));
-				yield return (new TestCaseData(@"\!(RtsOff())",					Domain.Parser.Keyword.RtsOff,				null));
-				yield return (new TestCaseData(@"\!(RtsToggle)",				Domain.Parser.Keyword.RtsToggle,			null));
-				yield return (new TestCaseData(@"\!(RtsToggle())",				Domain.Parser.Keyword.RtsToggle,			null));
-				yield return (new TestCaseData(@"\!(DtrOn)",					Domain.Parser.Keyword.DtrOn,				null));
-				yield return (new TestCaseData(@"\!(DtrOn())",					Domain.Parser.Keyword.DtrOn,				null));
-				yield return (new TestCaseData(@"\!(DtrOff)",					Domain.Parser.Keyword.DtrOff,				null));
-				yield return (new TestCaseData(@"\!(DtrOff())",					Domain.Parser.Keyword.DtrOff,				null));
-				yield return (new TestCaseData(@"\!(DtrToggle)",				Domain.Parser.Keyword.DtrToggle,			null));
-				yield return (new TestCaseData(@"\!(DtrToggle())",				Domain.Parser.Keyword.DtrToggle,			null));
+				yield return (new TestCaseData(@"\!(RTSOn)",					Domain.Parser.Keyword.RtsOn,				null));
+				yield return (new TestCaseData(@"\!(RTSOn())",					Domain.Parser.Keyword.RtsOn,				null));
+				yield return (new TestCaseData(@"\!(RTSOff)",					Domain.Parser.Keyword.RtsOff,				null));
+				yield return (new TestCaseData(@"\!(RTSOff())",					Domain.Parser.Keyword.RtsOff,				null));
+				yield return (new TestCaseData(@"\!(RTSToggle)",				Domain.Parser.Keyword.RtsToggle,			null));
+				yield return (new TestCaseData(@"\!(RTSToggle())",				Domain.Parser.Keyword.RtsToggle,			null));
+				yield return (new TestCaseData(@"\!(DTROn)",					Domain.Parser.Keyword.DtrOn,				null));
+				yield return (new TestCaseData(@"\!(DTROn())",					Domain.Parser.Keyword.DtrOn,				null));
+				yield return (new TestCaseData(@"\!(DTROff)",					Domain.Parser.Keyword.DtrOff,				null));
+				yield return (new TestCaseData(@"\!(DTROff())",					Domain.Parser.Keyword.DtrOff,				null));
+				yield return (new TestCaseData(@"\!(DTRToggle)",				Domain.Parser.Keyword.DtrToggle,			null));
+				yield return (new TestCaseData(@"\!(DTRToggle())",				Domain.Parser.Keyword.DtrToggle,			null));
 				yield return (new TestCaseData(@"\!(OutputBreakOn)",			Domain.Parser.Keyword.OutputBreakOn,		null));
 				yield return (new TestCaseData(@"\!(OutputBreakOn())",			Domain.Parser.Keyword.OutputBreakOn,		null));
 				yield return (new TestCaseData(@"\!(OutputBreakOff)",			Domain.Parser.Keyword.OutputBreakOff,		null));
