@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 
@@ -73,7 +74,8 @@ namespace YAT.Domain.Test.Terminal
 		// Constants
 		//==========================================================================================
 
-		const int SendLineCount = 300; // Must correspond to 300 lines of [Stress-1-Normal.txt].
+		/// <summary></summary>
+		protected const int SendLineCount = 300; // Must correspond to 300 lines of [Stress-1-Normal.txt].
 
 		#endregion
 
@@ -83,6 +85,7 @@ namespace YAT.Domain.Test.Terminal
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Well... Better? Really?")]
 		[Test, Combinatorial] // Test is mandatory, it shall not be excludable. 'IPv4LoopbackIsAvailable' is probed below.
 		public virtual void TestCombinatorial([Values(false, true)]bool allowConcurrency,
 		                                      [Values(Stimulus.SendTextRepeating, Stimulus.SendFile)]Stimulus stimulus,
@@ -191,6 +194,7 @@ namespace YAT.Domain.Test.Terminal
 		}
 
 		/// <summary>Verify that number of lines matches subsequently sent lines and they are found inbetween.</summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'inbetween' is a correct English term.")]
 		protected virtual void VerifyConcurrent(Domain.TextTerminal terminalRx, int subsequentLineCountExpected, string subsequentLineTextExpected)
 		{
 			var displayLines = terminalRx.RepositoryToDisplayLines(RepositoryType.Rx);

@@ -249,7 +249,6 @@ namespace YAT.Domain.Test.TextTerminal
 					terminalA.Stop();
 					Utilities.WaitForDisconnection(terminalA);
 				} // using (terminalA)
-
 			} // using (parser)
 
 			Thread.Sleep(WaitForDisposal); // \remind: For whatever reason, subsequent tests tend to fail without this.

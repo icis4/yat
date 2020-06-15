@@ -146,19 +146,19 @@ namespace YAT.Domain.Test
 		{
 			// Stress text:
 			FilePaths_StressText = new Files();                                                            // Not including EOF.
-			FilePaths_StressText.AddStressFile(StressTestCase.Normal,     "Stress-1-Normal.txt"    ,     8400,    300);
-			FilePaths_StressText.AddStressFile(StressTestCase.Large,      "Stress-2-Large.txt"     ,    82500,   1500);
+			FilePaths_StressText.AddStressFile(StressTestCase.Normal,     "Stress-1-Normal.txt",         8400,    300);
+			FilePaths_StressText.AddStressFile(StressTestCase.Large,      "Stress-2-Large.txt",         82500,   1500);
 			FilePaths_StressText.AddStressFile(StressTestCase.EvenLarger, "Stress-3-EvenLarger.txt",   275000,   5000);
-			FilePaths_StressText.AddStressFile(StressTestCase.Huge,       "Stress-4-Huge.txt"      ,  1090000,  10000);
-			FilePaths_StressText.AddStressFile(StressTestCase.Enormous,   "Stress-5-Enormous.txt"  , 16300000, 100000);
+			FilePaths_StressText.AddStressFile(StressTestCase.Huge,       "Stress-4-Huge.txt",        1090000,  10000);
+			FilePaths_StressText.AddStressFile(StressTestCase.Enormous,   "Stress-5-Enormous.txt",   16300000, 100000);
 
 			// Stress binary:
 			FilePaths_StressBinary = new Files();
-			FilePaths_StressBinary.AddStressFile(StressTestCase.Normal,     "Stress-1-Normal.dat"    ,     8192, -1);
-			FilePaths_StressBinary.AddStressFile(StressTestCase.Large,      "Stress-2-Large.dat"     ,    82432, -1);
+			FilePaths_StressBinary.AddStressFile(StressTestCase.Normal,     "Stress-1-Normal.dat",         8192, -1);
+			FilePaths_StressBinary.AddStressFile(StressTestCase.Large,      "Stress-2-Large.dat",         82432, -1);
 			FilePaths_StressBinary.AddStressFile(StressTestCase.EvenLarger, "Stress-3-EvenLarger.dat",   274944, -1);
-			FilePaths_StressBinary.AddStressFile(StressTestCase.Huge,       "Stress-4-Huge.dat"      ,  1089792, -1);
-			FilePaths_StressBinary.AddStressFile(StressTestCase.Enormous,   "Stress-5-Enormous.dat"  , 16299776, -1);
+			FilePaths_StressBinary.AddStressFile(StressTestCase.Huge,       "Stress-4-Huge.dat",        1089792, -1);
+			FilePaths_StressBinary.AddStressFile(StressTestCase.Enormous,   "Stress-5-Enormous.dat",   16299776, -1);
 		}
 
 		#endregion

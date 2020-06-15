@@ -181,7 +181,7 @@ namespace YAT.Domain
 		private ManualResetEvent nextPermittedSequenceNumberEvent = new ManualResetEvent(false);
 
 		/// <summary></summary>
-		protected bool SendThreadsArePermitted { get; private set;}
+		protected bool SendThreadsArePermitted { get; private set; }
 
 		private int isSendingCount; // = 0;
 		private object isSendingCountSyncObj = new object();
@@ -716,6 +716,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// <paramref name="forSomeTimeEventHelper"/> is located first as needed down the call chain.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'vs.' is a correct English abbreviation.")]
 		protected virtual void DoSendRawData(ForSomeTimeEventHelper forSomeTimeEventHelper, byte[] data)
 		{
 			// Raise the 'IsSendingForSomeTimeChanged' event if a large chunk is about to be sent:
@@ -855,7 +856,6 @@ namespace YAT.Domain
 							// Raise the 'IsSendingForSomeTimeChanged' event if sending already takes quite long:
 							if (forSomeTimeEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold())
 								IncrementIsSendingForSomeTimeChanged();
-
 						} // foreach (result)
 
 						// --- Finalize the line/packet ---

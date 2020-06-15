@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using MKY;
 
@@ -163,6 +164,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>For orthogonality with <see cref="GetLastChunkTimeStamp(IODirection)"/> below.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
 		public virtual DateTime GetLastChunkTimeStamp()
 		{
 			return (LastChunkTimeStamp);

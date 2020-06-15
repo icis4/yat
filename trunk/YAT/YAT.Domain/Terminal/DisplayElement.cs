@@ -465,6 +465,7 @@ namespace YAT.Domain
 
 		/// <summary>The length of the data/control content.</summary>
 		/// <remarks>Prefixed "Content" for a) preventing naming conflict and b) orthogonality with <see cref="ContentSeparator"/> .</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
 		public class ContentLength : InfoElement
 		{

@@ -1255,7 +1255,7 @@ namespace MKY.IO.Serial.Socket
 
 		/// <remarks>
 		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that somthing will happen
+		/// However, named "Message" for compactness and more clarity that something will happen
 		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]

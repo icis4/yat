@@ -707,6 +707,8 @@ namespace MKY.Text
 		/// consider using the <see cref="Encoding.UTF8"/> encoding instead."
 		/// and
 		/// "On .NET Core, the 'Default' property always returns the 'UTF8Encoding'."
+		///
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static readonly Encoding Default = Encoding.UTF8;
 

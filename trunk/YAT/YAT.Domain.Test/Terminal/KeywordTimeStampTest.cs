@@ -175,7 +175,6 @@ namespace YAT.Domain.Test.Terminal
 					terminalTx.Stop();
 					Utilities.WaitForDisconnection(terminalTx);
 				} // using (terminalA)
-
 			} // using (parser)
 		}
 

@@ -83,7 +83,7 @@ namespace MKY.Time
 		{
 		}
 
-		/// <param name="interval">The interval to calculate the value of the rate</param>
+		/// <param name="interval">The interval to calculate the value of the rate.</param>
 		/// <remarks><see cref="Window"/> will be set to <paramref name="interval"/>.</remarks>
 		public Rate(double interval)
 			: this(interval, interval)

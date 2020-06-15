@@ -555,7 +555,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Replaces all occurences of <see cref="DisplayElement.TimeStampInfo"/> with the given arguments.
+		/// Replaces all occurrences of <see cref="DisplayElement.TimeStampInfo"/> with the given arguments.
 		/// </summary>
 		public virtual void ReplaceTimeStamp(DateTime timeStamp, string format, bool useUtc, string infoEnclosureLeft, string infoEnclosureRight)
 		{
@@ -568,7 +568,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Replaces all occurences of <see cref="DisplayElement.TimeSpanInfo"/> with the given arguments.
+		/// Replaces all occurrences of <see cref="DisplayElement.TimeSpanInfo"/> with the given arguments.
 		/// </summary>
 		public virtual void ReplaceTimeSpan(TimeSpan timeSpan, string format, string infoEnclosureLeft, string infoEnclosureRight)
 		{
@@ -581,7 +581,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Replaces all occurences of <see cref="DisplayElement.TimeDeltaInfo"/> with the given arguments.
+		/// Replaces all occurrences of <see cref="DisplayElement.TimeDeltaInfo"/> with the given arguments.
 		/// </summary>
 		public virtual void ReplaceTimeDelta(TimeSpan timeSpan, string format, string infoEnclosureLeft, string infoEnclosureRight)
 		{
@@ -594,7 +594,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Replaces all occurences of <see cref="DisplayElement.DirectionInfo"/> with the given arguments.
+		/// Replaces all occurrences of <see cref="DisplayElement.DirectionInfo"/> with the given arguments.
 		/// </summary>
 		public virtual void ReplaceDirection(Direction direction, string infoEnclosureLeft, string infoEnclosureRight)
 		{

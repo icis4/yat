@@ -82,8 +82,8 @@ namespace MKY.IO.Serial.SerialPort
 		/// meta data, minus some spare bytes, to a value that looks 'well' for computer engineers.
 		///
 		/// Some concrete values 'measured' by experiment:
-		///  > Prolific USB/COM @ MT MKy loses data as soon as chunks above 356 bytes are sent.
-		///  > Dell docking station @ MT SSt (SPI/COM Intel chipset, Microsoft driver), looses
+		///  > Prolific USB/COM @ MT MKY loses data as soon as chunks above 356 bytes are sent.
+		///  > Dell docking station @ MT SST (SPI/COM Intel chipset, Microsoft driver), looses
 		///                                     data as soon as chunks above 56 bytes are sent.
 		/// </summary>
 		/// <remarks>

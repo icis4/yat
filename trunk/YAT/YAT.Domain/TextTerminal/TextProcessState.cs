@@ -30,10 +30,10 @@ using System.Diagnostics.CodeAnalysis;
 namespace YAT.Domain
 {
 	/// <remarks>
-	/// Text processing requires uni-directional as well as bi-directional state. This is the
-	/// uni-directional state. Opposed to <see cref="ProcessState"/> which is kept three times
+	/// Text processing requires unidirectional as well as bidirectional state. This is the
+	/// unidirectional state. Opposed to <see cref="ProcessState"/> which is kept three times
 	/// (Tx/Bidir/Rx), the binary terminal specific state is limited to a line state which is
-	/// instatiated four times (Tx/TxBidir/RxBidir/Rx).
+	/// instantiated four times (Tx/TxBidir/RxBidir/Rx).
 	/// </remarks>
 	public class TextUnidirState
 	{
