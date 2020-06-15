@@ -130,7 +130,7 @@ namespace YAT.Domain.Parser
 			@"RTS (aka RFR and RTR) signal on ""\!(" + (KeywordEx)Keyword.RtsOn + @")""." + Environment.NewLine +
 			@"RTS (aka RFR and RTR) signal off ""\!(" + (KeywordEx)Keyword.RtsOff + @")""." + Environment.NewLine +
 			@"RTS (aka RFR and RTR) signal toggle ""\!(" + (KeywordEx)Keyword.RtsToggle + @")""." + Environment.NewLine +
-			@"These keywords only apply to serial COM ports. Port will be flushed before keywords get applied. Keywords will not be applied when automatic hardware or RS-485 flow control is active." + Environment.NewLine +
+			@"These keywords only apply to serial COM ports. Port will be flushed before keywords get applied. Keywords cannot be applied when automatic hardware or RS-485 flow control is active." + Environment.NewLine +
 			Environment.NewLine +
 			@"DTR signal on ""\!(" + (KeywordEx)Keyword.DtrOn + @")""." + Environment.NewLine +
 			@"DTR signal off ""\!(" + (KeywordEx)Keyword.DtrOff + @")""." + Environment.NewLine +
