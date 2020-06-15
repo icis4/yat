@@ -168,7 +168,7 @@ namespace YAT.Model
 					break;
 
 				default:
-					throw (new NotImplementedException("I/O type " + this.settingsRoot.IOType + "misses implementation"));
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "I/O type " + this.settingsRoot.IOType + " is not supported (yet)!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 			textBuilder.Append(":");
 			titleBuilder.Append(" Error!");
