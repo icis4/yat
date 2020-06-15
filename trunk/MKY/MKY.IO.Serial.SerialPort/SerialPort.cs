@@ -1036,6 +1036,32 @@ namespace MKY.IO.Serial.SerialPort
 		// Port Threads
 		//==========================================================================================
 
+		/// <remarks>
+		/// Measuring timing after introducing the signal related keywords like \!(RTSToggle) in YAT
+		/// revealed a limitation with the current implementation:
+		///
+		/// Sending "A\!(RTSToggle)B+EOL" will result in a significant delay before sending "B+EOL".
+		/// The delay is ~20 ms.
+		///
+		/// The limitation can be made visible by placing debug outputs at various locations in the
+		/// following methods:
+		/// <see cref="Send(byte[])"/>, <see cref="SignalSendThreadSafely"/>, <see cref="SendThread"/>,
+		/// <see cref="TryWriteChunkToPort(int, out List{byte}, out bool, out bool, out bool, out DateTime)"/>
+		///
+		/// The debug outputs reveal that the two send calls ("A" and "B+EOL") of course result in
+		/// scheduling of two threads: The terminal send thread and the I/O send thread.
+		///
+		/// Scheduling will happen at arbitrary locations, but will (always) result in the second
+		/// chunk being significantly delayed.
+		///
+		/// An attempt to raise the priority of the <see cref="SendThread"/> made the situation even
+		/// worse:
+		///
+		/// Doing \!(RTSToggle) will happen way before "AB+EOL" is sent!
+		///
+		/// Accepting the current limitation, but keeping in mind, that refactoring to an action
+		/// queue combining send data and change signal requests could be done to improve this.
+		/// </remarks>
 		private void StartThreads()
 		{
 			lock (this.sendThreadSyncObj)
