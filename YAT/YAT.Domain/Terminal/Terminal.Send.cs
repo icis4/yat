@@ -1220,7 +1220,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 							if (port != null)
-								port.Flush(0);
+								port.Flush(0); // Just best-effort flush, no additional wait time.
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -1248,7 +1248,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 							if (port != null)
-								port.Flush(0);
+								port.Flush(0); // Just best-effort flush, no additional wait time.
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -1276,7 +1276,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 							if (port != null)
-								port.Flush(0);
+								port.Flush(0); // Just best-effort flush, no additional wait time.
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -1304,7 +1304,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 							if (port != null)
-								port.Flush(0);
+								port.Flush(0); // Just best-effort flush, no additional wait time.
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -1332,7 +1332,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 							if (port != null)
-								port.Flush(0);
+								port.Flush(0); // Just best-effort flush, no additional wait time.
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -1360,7 +1360,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 							if (port != null)
-								port.Flush(0);
+								port.Flush(0); // Just best-effort flush, no additional wait time.
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -1388,7 +1388,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 							if (port != null)
-								port.Flush(0);
+								port.Flush(0); // Just best-effort flush, no additional wait time.
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -1416,7 +1416,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 							if (port != null)
-								port.Flush(0);
+								port.Flush(0); // Just best-effort flush, no additional wait time.
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -1444,7 +1444,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 							if (port != null)
-								port.Flush(0);
+								port.Flush(0); // Just best-effort flush, no additional wait time.
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
