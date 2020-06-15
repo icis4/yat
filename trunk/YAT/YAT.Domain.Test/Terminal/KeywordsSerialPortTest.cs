@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.1.1 Development
+// YAT Version 2.2.0 Development
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -26,11 +26,13 @@
 // Using
 //==================================================================================================
 
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 using MKY.Collections.Generic;
 using MKY.IO.Ports.Test;
+using MKY.IO.Serial.SerialPort;
 
 using NUnit.Framework;
 
@@ -42,9 +44,9 @@ namespace YAT.Domain.Test.Terminal
 	[TestFixture]
 	public class KeywordsSerialPortTest
 	{
-		#region Apply
+		#region TestSettings
 		//==========================================================================================
-		// Apply
+		// TestSettings
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -53,26 +55,24 @@ namespace YAT.Domain.Test.Terminal
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
 		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackPairs")]
-		public virtual void TestApplyToSerialPortLoopbackPairs(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
-		                                                       Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB)
+		public virtual void TestSettings(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
+		                                 Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB)
 		{
 			if (!ConfigurationProvider.Configuration.LoopbackPairsAreAvailable)
 				Assert.Ignore("No serial COM port loopback pairs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback pairs is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			const int WaitForChange   = 1500; // 1000 ms is not sufficient.
-			const int WaitForDisposal =  100;
+			const int WaitForApply = 1500; // 1000 ms is not sufficient.
 
 			using (var parser = new Domain.Parser.Parser(Domain.Parser.Mode.NoEscapes)) // Default encoding of UTF-8 is good enough for this test case.
 			{
-				byte[] parseResult;
-
 				var settingsA = settingsDescriptorA.Value1(settingsDescriptorA.Value2);
 				var standardPortNumberInitiallyA = settingsA.IO.SerialPort.PortId.StandardPortNumber;
 				using (var terminalA = new Domain.TextTerminal(settingsA))
 				{
 					Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
 
+					byte[] parseResult;
 					string keyword;
 					string text;
 					int textByteCount;
@@ -91,7 +91,7 @@ namespace YAT.Domain.Test.Terminal
 						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started");
 						Utilities.WaitForConnection(terminalA, terminalB);
 
-						text = "Ping A>>B";
+						text = "Ping A => B";
 						Assert.That(parser.TryParse(text, out parseResult));
 						terminalA.SendTextLine(text);
 						textByteCount = parseResult.Length;
@@ -99,7 +99,7 @@ namespace YAT.Domain.Test.Terminal
 						expectedTotalLineCountAB++;
 						Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-						text = "Pong B>>A";
+						text = "Pong B => A";
 						Assert.That(parser.TryParse(text, out parseResult));
 						terminalB.SendTextLine(text);
 						textByteCount = parseResult.Length;
@@ -118,9 +118,9 @@ namespace YAT.Domain.Test.Terminal
 
 					// Swap ports using keyword (A) vs. settings (B):
 
-					keyword = @"\!(Port(" + standardPortNumberInitiallyB + @"))\!(NoEOL())";
-					terminalA.SendTextLine(keyword);
-					Thread.Sleep(WaitForChange);
+					keyword = @"\!(Port(" + standardPortNumberInitiallyB + @"))\!(NoEOL)";
+					terminalA.SendTextLine(keyword); // Intentionally using Line() with \!(NoEOL) as this will be required for a keyword-only predefined command.
+					Thread.Sleep(WaitForApply);
 					Assert.That(terminalA.TerminalSettings.IO.SerialPort.PortId.StandardPortNumber, Is.EqualTo(standardPortNumberInitiallyB));
 
 					settingsB.IO.SerialPort.PortId = standardPortNumberInitiallyA;
@@ -129,7 +129,7 @@ namespace YAT.Domain.Test.Terminal
 						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be restarted");
 						Utilities.WaitForConnection(terminalA, terminalB);
 
-						text = "Swapped A>>B";
+						text = "Swapped A => B";
 						Assert.That(parser.TryParse(text, out parseResult));
 						terminalA.SendTextLine(text);
 						textByteCount = parseResult.Length;
@@ -137,7 +137,7 @@ namespace YAT.Domain.Test.Terminal
 						expectedTotalLineCountAB++;
 						Utilities.WaitForSendingAndVerifyCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-						text = "Swapped B>>A";
+						text = "Swapped B => A";
 						Assert.That(parser.TryParse(text, out parseResult));
 						terminalB.SendTextLine(text);
 						textByteCount = parseResult.Length;
@@ -155,9 +155,9 @@ namespace YAT.Domain.Test.Terminal
 
 					// Change settings using keyword (A) vs. settings (B):
 
-					keyword = @"\!(Baud(19200))\!(DataBits(7))\!(Parity(2))\!(StopBits(2))\!(NoEOL())"; // Not changing flow control, too difficult to verify here.
-					terminalA.SendTextLine(keyword);
-					Thread.Sleep(WaitForChange * 4);
+					keyword = @"\!(Baud(19200))\!(DataBits(7))\!(Parity(2))\!(StopBits(2))\!(NoEOL)"; // Not changing flow control, too difficult to verify here.
+					terminalA.SendTextLine(keyword); // Intentionally using Line() with \!(NoEOL) as this will be required for a keyword-only predefined command.
+					Thread.Sleep(WaitForApply * 4);
 					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.BaudRate, Is.EqualTo((int)MKY.IO.Ports.BaudRate.Baud_19200));
 					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.DataBits, Is.EqualTo(     MKY.IO.Ports.DataBits.Seven));
 					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.Parity,   Is.EqualTo(  System.IO.Ports.Parity  .Even));
@@ -172,7 +172,7 @@ namespace YAT.Domain.Test.Terminal
 						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be restarted");
 						Utilities.WaitForConnection(terminalA, terminalB);
 
-						text = "Changed dedicated A>>B";
+						text = "Changed dedicated A => B";
 						Assert.That(parser.TryParse(text, out parseResult));
 						terminalA.SendTextLine(text);
 						textByteCount = parseResult.Length;
@@ -180,7 +180,7 @@ namespace YAT.Domain.Test.Terminal
 						expectedTotalLineCountAB++;
 						Utilities.WaitForSendingAndVerifyCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-						text = "Changed dedicated B>>A";
+						text = "Changed dedicated B => A";
 						Assert.That(parser.TryParse(text, out parseResult));
 						terminalB.SendTextLine(text);
 						textByteCount = parseResult.Length;
@@ -198,9 +198,9 @@ namespace YAT.Domain.Test.Terminal
 
 					// Change settings using keyword (A) vs. settings (B):
 
-					keyword = @"\!(PortSettings(115200, 8, 0, 1))\!(NoEOL())"; // Not changing flow control, too difficult to verify here.
-					terminalA.SendTextLine(keyword);
-					Thread.Sleep(WaitForChange);
+					keyword = @"\!(PortSettings(115200, 8, 0, 1))\!(NoEOL)"; // Not changing flow control, too difficult to verify here.
+					terminalA.SendTextLine(keyword); // Intentionally using Line() with \!(NoEOL) as this will be required for a keyword-only predefined command.
+					Thread.Sleep(WaitForApply);
 					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.BaudRate, Is.EqualTo((int)MKY.IO.Ports.BaudRate.Baud_115200));
 					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.DataBits, Is.EqualTo(     MKY.IO.Ports.DataBits.Eight));
 					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.Parity,   Is.EqualTo(  System.IO.Ports.Parity  .None));
@@ -215,7 +215,7 @@ namespace YAT.Domain.Test.Terminal
 						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be restarted");
 						Utilities.WaitForConnection(terminalA, terminalB);
 
-						text = "Changed combined A>>B";
+						text = "Changed combined A => B";
 						Assert.That(parser.TryParse(text, out parseResult));
 						terminalA.SendTextLine(text);
 						textByteCount = parseResult.Length;
@@ -223,7 +223,7 @@ namespace YAT.Domain.Test.Terminal
 						expectedTotalLineCountAB++;
 						Utilities.WaitForSendingAndVerifyCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-						text = "Changed combined B>>A";
+						text = "Changed combined B => A";
 						Assert.That(parser.TryParse(text, out parseResult));
 						terminalB.SendTextLine(text);
 						textByteCount = parseResult.Length;
@@ -244,8 +244,316 @@ namespace YAT.Domain.Test.Terminal
 				} // using (terminalA)
 
 			} // using (parser)
+		}
 
-			Thread.Sleep(WaitForDisposal);
+		#endregion
+
+		#region TestSignals
+		//==========================================================================================
+		// TestSignals
+		//==========================================================================================
+
+		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma", Justification = "Too many values to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too many values to verify.")]
+		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
+		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackPairs")]
+		public virtual void TestSignals(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
+		                                Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB)
+		{
+			if (!ConfigurationProvider.Configuration.LoopbackPairsAreAvailable)
+				Assert.Ignore("No serial COM port loopback pairs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback pairs is properly configured and available if passing this test is required.");
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
+			const int WaitForApply = 100; // Happens async.
+
+			using (var parser = new Domain.Parser.Parser(Domain.Parser.Mode.NoEscapes)) // Default encoding of UTF-8 is good enough for this test case.
+			{
+				var settingsA = settingsDescriptorA.Value1(settingsDescriptorA.Value2);
+				settingsA.IO.SerialPort.Communication.FlowControl = SerialFlowControl.ManualHardware;
+
+				using (var terminalA = new Domain.TextTerminal(settingsA))
+				{
+					Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
+
+					var settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
+					settingsB.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Hardware; // Automatic.
+
+					using (var terminalB = new Domain.TextTerminal(settingsB))
+					{
+						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started");
+						Utilities.WaitForConnection(terminalA, terminalB);
+
+						byte[] parseResult;
+						string keyword;
+						string text;
+						int textByteCount;
+						int eolByteCount = 2; // Fixed to default of <CR><LF>.
+						string eol = "<CR><LF>";
+						int expectedTotalByteCountAB = 0;
+						int expectedTotalByteCountBA = 0;
+						int expectedTotalLineCountAB = 0;
+						int expectedTotalLineCountBA = 0;
+						var expectedContentPatternA = new List<string>(); // Applies to bidir only.
+						var expectedContentPatternB = new List<string>(); // Applies to bidir only.
+
+						// Initial connection:
+						AssertThatPinsAreTrue(terminalA.SerialPortControlPins);
+						AssertThatPinsAreTrue(terminalB.SerialPortControlPins);
+
+						// Initial ping-pong:
+						text = "Ping A => B";
+						Assert.That(parser.TryParse(text, out parseResult));
+						terminalA.SendTextLine(text);
+						textByteCount = parseResult.Length;
+						expectedTotalByteCountAB += (textByteCount + eolByteCount);
+						expectedTotalLineCountAB++;
+						Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+
+						expectedContentPatternA.Add(text + eol);
+						expectedContentPatternB.Add(text + eol);
+						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+
+						text = "Pong B => A";
+						Assert.That(parser.TryParse(text, out parseResult));
+						terminalB.SendTextLine(text);
+						textByteCount = parseResult.Length;
+						expectedTotalByteCountBA += (textByteCount + eolByteCount);
+						expectedTotalLineCountBA++;
+						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+
+						expectedContentPatternA.Add(text + eol);
+						expectedContentPatternB.Add(text + eol);
+						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+
+						// Switch RTS off:
+						keyword = @"\!(RTSOff)\!(NoEOL)";
+						terminalA.SendTextLine(keyword); // Intentionally using Line() with \!(NoEOL) as this will be required for a keyword-only predefined command.
+						Thread.Sleep(WaitForApply);
+						AssertThatRtsPinIsFalse(terminalA.SerialPortControlPins);
+						AssertThatCtsPinIsFalse(terminalB.SerialPortControlPins);
+
+						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+
+						// Switch RTS on:
+						keyword = @"\!(RTSOn)\!(NoEOL)";
+						terminalA.SendTextLine(keyword); // Intentionally using Line() with \!(NoEOL) as this will be required for a keyword-only predefined command.
+						Thread.Sleep(WaitForApply);
+						AssertThatPinsAreTrue(terminalA.SerialPortControlPins);
+						AssertThatPinsAreTrue(terminalB.SerialPortControlPins);
+
+						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+
+						// Switch RTS off:
+						keyword = @"\!(RTSOff)\!(NoEOL)";
+						terminalA.SendTextLine(keyword); // Intentionally using Line() with \!(NoEOL) as this will be required for a keyword-only predefined command.
+						Thread.Sleep(WaitForApply);
+						AssertThatRtsPinIsFalse(terminalA.SerialPortControlPins);
+						AssertThatCtsPinIsFalse(terminalB.SerialPortControlPins);
+
+						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+
+						// Toggle RTS on:
+						keyword = @"\!(RTSToggle)\!(NoEOL)";
+						terminalA.SendTextLine(keyword); // Intentionally using Line() with \!(NoEOL) as this will be required for a keyword-only predefined command.
+						Thread.Sleep(WaitForApply);
+						AssertThatPinsAreTrue(terminalA.SerialPortControlPins);
+						AssertThatPinsAreTrue(terminalB.SerialPortControlPins);
+
+						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+
+						// Subsequent ping-pong:
+						text = "Ping A => B";
+						Assert.That(parser.TryParse(text, out parseResult));
+						terminalA.SendTextLine(text);
+						textByteCount = parseResult.Length;
+						expectedTotalByteCountAB += (textByteCount + eolByteCount);
+						expectedTotalLineCountAB++;
+						Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+
+						expectedContentPatternA.Add(text + eol);
+						expectedContentPatternB.Add(text + eol);
+						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+
+						text = "Pong B => A";
+						Assert.That(parser.TryParse(text, out parseResult));
+						terminalB.SendTextLine(text);
+						textByteCount = parseResult.Length;
+						expectedTotalByteCountBA += (textByteCount + eolByteCount);
+						expectedTotalLineCountBA++;
+						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+
+						expectedContentPatternA.Add(text + eol);
+						expectedContentPatternB.Add(text + eol);
+						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+
+						// Switch DTR off:
+						keyword = @"\!(DTROff)\!(NoEOL)";
+						terminalA.SendTextLine(keyword); // Intentionally using Line() with \!(NoEOL) as this will be required for a keyword-only predefined command.
+						Thread.Sleep(WaitForApply);
+						AssertThatDtrPinIsFalse(terminalA.SerialPortControlPins);
+						AssertThatDsrPinIsFalse(terminalB.SerialPortControlPins);
+
+						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+
+						// Switch DTR on:
+						keyword = @"\!(DTROn)\!(NoEOL)";
+						terminalA.SendTextLine(keyword); // Intentionally using Line() with \!(NoEOL) as this will be required for a keyword-only predefined command.
+						Thread.Sleep(WaitForApply);
+						AssertThatPinsAreTrue(terminalA.SerialPortControlPins);
+						AssertThatPinsAreTrue(terminalB.SerialPortControlPins);
+
+						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+
+						// Switch DTR off:
+						keyword = @"\!(DTROff)\!(NoEOL)";
+						terminalA.SendTextLine(keyword); // Intentionally using Line() with \!(NoEOL) as this will be required for a keyword-only predefined command.
+						Thread.Sleep(WaitForApply);
+						AssertThatDtrPinIsFalse(terminalA.SerialPortControlPins);
+						AssertThatDsrPinIsFalse(terminalB.SerialPortControlPins);
+
+						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+
+						// Toggle DTR on:
+						keyword = @"\!(DTRToggle)\!(NoEOL)";
+						terminalA.SendTextLine(keyword); // Intentionally using Line() with \!(NoEOL) as this will be required for a keyword-only predefined command.
+						Thread.Sleep(WaitForApply);
+						AssertThatPinsAreTrue(terminalA.SerialPortControlPins);
+						AssertThatPinsAreTrue(terminalB.SerialPortControlPins);
+
+						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+
+						// Toggle DTR off in other terminal:
+						keyword = @"\!(DTRToggle)\!(NoEOL)";
+						terminalB.SendTextLine(keyword); // Intentionally using Line() with \!(NoEOL) as this will be required for a keyword-only predefined command.
+						Thread.Sleep(WaitForApply);
+						AssertThatDtrPinIsFalse(terminalB.SerialPortControlPins);
+						AssertThatDsrPinIsFalse(terminalA.SerialPortControlPins);
+
+						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+
+						// Switch DTR on again in other terminal:
+						keyword = @"\!(DTROn)\!(NoEOL)";
+						terminalB.SendTextLine(keyword); // Intentionally using Line() with \!(NoEOL) as this will be required for a keyword-only predefined command.
+						Thread.Sleep(WaitForApply);
+						AssertThatPinsAreTrue(terminalA.SerialPortControlPins);
+						AssertThatPinsAreTrue(terminalB.SerialPortControlPins);
+
+						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+
+						// Try to switch RTS off in other terminal:
+						keyword = @"\!(RTSOff)\!(NoEOL)";
+						terminalB.SendTextLine(keyword); // Intentionally using Line() with \!(NoEOL) as this will be required for a keyword-only predefined command.
+						Thread.Sleep(WaitForApply);
+						AssertThatPinsAreTrue(terminalA.SerialPortControlPins); // Change must be rejected as automatic flow control is active.
+						AssertThatPinsAreTrue(terminalB.SerialPortControlPins);
+						                       //// Escape the [ for Regex.
+						var warningMessage = @"\[Warning: Modifying the RTS signal is not possible when automatic hardware or RS-485 flow control is active.]";
+						expectedContentPatternB.Add(warningMessage);
+						                                                                                                        //// Adjust for warning message.
+						Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA + 1);
+						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+
+						// Refresh and verify again:
+						terminalA.RefreshRepositories();
+						terminalB.RefreshRepositories();
+
+						Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA); // Warning will disappear (pending fix of bug #211 "...indications disappear").
+						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+
+						expectedContentPatternB.Remove(warningMessage); // Warning will disappear (pending fix of bug #211 "...indications disappear").
+
+						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+
+						terminalB.Stop();
+						Utilities.WaitForDisconnection(terminalB);
+					} // using (terminalB)
+
+					terminalA.Stop();
+					Utilities.WaitForDisconnection(terminalA);
+				} // using (terminalA)
+
+			} // using (parser)
+		}
+
+		/// <summary></summary>
+		protected virtual void AssertThatPinsAreTrue(MKY.IO.Ports.SerialPortControlPins pins)
+		{
+			Assert.That(pins.Rts, Is.True);
+			Assert.That(pins.Cts, Is.True);
+			Assert.That(pins.Dtr, Is.True);
+			Assert.That(pins.Dsr, Is.True);
+			Assert.That(pins.Dcd, Is.True); // = DSR
+		}
+
+		/// <summary></summary>
+		protected virtual void AssertThatRtsPinIsFalse(MKY.IO.Ports.SerialPortControlPins pins)
+		{
+			Assert.That(pins.Rts, Is.False);
+			Assert.That(pins.Cts, Is.True);
+			Assert.That(pins.Dtr, Is.True);
+			Assert.That(pins.Dsr, Is.True);
+			Assert.That(pins.Dcd, Is.True); // = DSR
+		}
+
+		/// <summary></summary>
+		protected virtual void AssertThatCtsPinIsFalse(MKY.IO.Ports.SerialPortControlPins pins)
+		{
+			Assert.That(pins.Rts, Is.True);
+			Assert.That(pins.Cts, Is.False);
+			Assert.That(pins.Dtr, Is.True);
+			Assert.That(pins.Dsr, Is.True);
+			Assert.That(pins.Dcd, Is.True); // = DSR
+		}
+
+		/// <summary></summary>
+		protected virtual void AssertThatDtrPinIsFalse(MKY.IO.Ports.SerialPortControlPins pins)
+		{
+			Assert.That(pins.Rts, Is.True);
+			Assert.That(pins.Cts, Is.True);
+			Assert.That(pins.Dtr, Is.False);
+			Assert.That(pins.Dsr, Is.True);
+			Assert.That(pins.Dcd, Is.True); // = DSR
+		}
+
+		/// <summary></summary>
+		protected virtual void AssertThatDsrPinIsFalse(MKY.IO.Ports.SerialPortControlPins pins)
+		{
+			Assert.That(pins.Rts, Is.True);
+			Assert.That(pins.Cts, Is.True);
+			Assert.That(pins.Dtr, Is.True);
+			Assert.That(pins.Dsr, Is.False);
+			Assert.That(pins.Dcd, Is.False); // = DSR
 		}
 
 		#endregion

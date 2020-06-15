@@ -1216,20 +1216,27 @@ namespace YAT.Domain
 				{
 					if (IsSerialPort)
 					{
-						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+						if (!TerminalSettings.IO.SerialPort.Communication.FlowControlManagesRtsCtsAutomatically)
 						{
-							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-							if (port != null)
-								port.Flush(0); // Just best-effort flush, no additional wait time.
-							else
-								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+							{
+								var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+								if (port != null)
+									port.Flush(0); // Just best-effort flush, no additional wait time.
+								else
+									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
+							{
+								var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+								if (port != null)
+									port.RtsEnable = true; // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
+								else
+									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
 						}
+						else
 						{
-							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
-							if (port != null)
-								port.RtsEnable = true; // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
-							else
-								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the RTS signal is not possible when automatic hardware or RS-485 flow control is active.", true));
 						}
 					}
 					else
@@ -1244,20 +1251,27 @@ namespace YAT.Domain
 				{
 					if (IsSerialPort)
 					{
-						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+						if (!TerminalSettings.IO.SerialPort.Communication.FlowControlManagesRtsCtsAutomatically)
 						{
-							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-							if (port != null)
-								port.Flush(0); // Just best-effort flush, no additional wait time.
-							else
-								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+							{
+								var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+								if (port != null)
+									port.Flush(0); // Just best-effort flush, no additional wait time.
+								else
+									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
+							{
+								var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+								if (port != null)
+									port.RtsEnable = false; // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
+								else
+									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
 						}
+						else
 						{
-							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
-							if (port != null)
-								port.RtsEnable = false; // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
-							else
-								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the RTS signal is not possible when automatic hardware or RS-485 flow control is active.", true));
 						}
 					}
 					else
@@ -1272,20 +1286,27 @@ namespace YAT.Domain
 				{
 					if (IsSerialPort)
 					{
-						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+						if (!TerminalSettings.IO.SerialPort.Communication.FlowControlManagesRtsCtsAutomatically)
 						{
-							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-							if (port != null)
-								port.Flush(0); // Just best-effort flush, no additional wait time.
-							else
-								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+							{
+								var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+								if (port != null)
+									port.Flush(0); // Just best-effort flush, no additional wait time.
+								else
+									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
+							{
+								var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+								if (port != null)
+									port.ToggleRts(); // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
+								else
+									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
 						}
+						else
 						{
-							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
-							if (port != null)
-								port.ToggleRts(); // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
-							else
-								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the RTS signal is not possible when automatic hardware or RS-485 flow control is active.", true));
 						}
 					}
 					else
@@ -1300,20 +1321,27 @@ namespace YAT.Domain
 				{
 					if (IsSerialPort)
 					{
-						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+						if (!TerminalSettings.IO.SerialPort.Communication.FlowControlManagesDtrDsrAutomatically)
 						{
-							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-							if (port != null)
-								port.Flush(0); // Just best-effort flush, no additional wait time.
-							else
-								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+							{
+								var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+								if (port != null)
+									port.Flush(0); // Just best-effort flush, no additional wait time.
+								else
+									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
+							{
+								var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+								if (port != null)
+									port.DtrEnable = true; // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
+								else
+									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
 						}
+						else
 						{
-							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
-							if (port != null)
-								port.DtrEnable = true; // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
-							else
-								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the DTR signal is not possible with the current settings.", true));
 						}
 					}
 					else
@@ -1328,20 +1356,27 @@ namespace YAT.Domain
 				{
 					if (IsSerialPort)
 					{
-						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+						if (!TerminalSettings.IO.SerialPort.Communication.FlowControlManagesDtrDsrAutomatically)
 						{
-							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-							if (port != null)
-								port.Flush(0); // Just best-effort flush, no additional wait time.
-							else
-								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+							{
+								var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+								if (port != null)
+									port.Flush(0); // Just best-effort flush, no additional wait time.
+								else
+									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
+							{
+								var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+								if (port != null)
+									port.DtrEnable = false; // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
+								else
+									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
 						}
+						else
 						{
-							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
-							if (port != null)
-								port.DtrEnable = false; // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
-							else
-								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the DTR signal is not possible with the current settings.", true));
 						}
 					}
 					else
@@ -1356,20 +1391,27 @@ namespace YAT.Domain
 				{
 					if (IsSerialPort)
 					{
-						ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+						if (!TerminalSettings.IO.SerialPort.Communication.FlowControlManagesDtrDsrAutomatically)
 						{
-							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-							if (port != null)
-								port.Flush(0); // Just best-effort flush, no additional wait time.
-							else
-								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
+							{
+								var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
+								if (port != null)
+									port.Flush(0); // Just best-effort flush, no additional wait time.
+								else
+									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
+							{
+								var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
+								if (port != null)
+									port.ToggleDtr(); // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
+								else
+									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							}
 						}
+						else
 						{
-							var port = (UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
-							if (port != null)
-								port.ToggleDtr(); // Note the serial port timing related limitation at MKY.IO.Serial.SerialPort.StartThreads().
-							else
-								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist or does not implement 'ISerialPort'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the DTR signal is not possible with the current settings.", true));
 						}
 					}
 					else
