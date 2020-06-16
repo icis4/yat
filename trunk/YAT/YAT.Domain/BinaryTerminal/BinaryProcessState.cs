@@ -44,6 +44,7 @@ namespace YAT.Domain
 	/// </list>
 	/// State shall be renamed or migrated or whatever when meeting the need to do so.
 	/// </remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Unidir", Justification = "Orthogonality with 'Bidir'.")]
 	public class BinaryUnidirState
 	{
 		/// <summary></summary>

@@ -180,6 +180,7 @@ namespace YAT.Domain.Parser
 		/// <summary>
 		/// Default is <see cref="EndiannessEx.Default"/>.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Endianness", Justification = "'Endianness' is a correct English term.")]
 		public const Endianness EndiannessDefault = EndiannessEx.Default;
 
 		#endregion

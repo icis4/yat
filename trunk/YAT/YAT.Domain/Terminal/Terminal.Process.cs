@@ -80,6 +80,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Synchronize processing (raw chunk | timed line break).
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Vs", Justification = "'vs.' is a correct English abbreviation.")]
 		protected object ChunkVsTimedSyncObj { get; private set; } = new object();
 
 		private ProcessTimeout txTimedLineBreak;
@@ -103,6 +104,7 @@ namespace YAT.Domain
 		/// called "multi-byte" in the signature of a method called "byte", this is the most appropriate approach found so far.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiBytes'?")]
 		protected virtual DisplayElement ByteToElement(byte b, DateTime ts, IODirection dir, List<byte> pendingMultiBytesToDecode)
 		{
 			switch (dir)
@@ -123,6 +125,7 @@ namespace YAT.Domain
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiBytes'?")]
 		protected virtual DisplayElement ByteToElement(byte b, DateTime ts, IODirection dir, Radix r, List<byte> pendingMultiBytesToDecode)
 		{
 			bool isControl;
@@ -382,6 +385,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
 		protected static bool RadixIsStringOrChar(Radix r)
 		{
 			return ((r == Radix.String) || (r == Radix.Char));
@@ -667,7 +671,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected IODirection GetOtherDirection(IODirection dir)
+		protected static IODirection GetOtherDirection(IODirection dir)
 		{
 			return ((dir != IODirection.Tx) ? (IODirection.Tx) : (IODirection.Rx));
 		}
@@ -764,6 +768,7 @@ namespace YAT.Domain
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "'out' is preferred over return value in this particular case.")]
 		protected virtual void ProcessChunksOfSameDirection(RepositoryType repositoryType, RawChunk[] chunks, IODirection dir, out PostponeResult postponeResult)
 		{
 			postponeResult = PostponeResult.Nothing;
@@ -885,6 +890,7 @@ namespace YAT.Domain
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "'out' is preferred over return value in this particular case.")]
 		protected virtual void ProcessChunk(RepositoryType repositoryType, RawChunk chunk, out PostponeResult postponeResult)
 		{
 			ProcessChunkPre(                                   repositoryType, chunk);
@@ -912,6 +918,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 		protected virtual void PostponeRemainingBytes(RepositoryType repositoryType, RawChunk chunk, int byteCountTotal, int byteCountProcessed)
 		{
 			var contentPostponed = new List<byte>(byteCountTotal - byteCountProcessed);
@@ -1065,6 +1072,7 @@ namespace YAT.Domain
 		/// performance (by reducing the number of events and repository updates).
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'glueing' is a correct English term.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "'out' is preferred over return value in this particular case.")]
 		protected virtual void ProcessAndSignalChunkContent(RepositoryType repositoryType, RawChunk chunk, out int byteCountProcessed)
 		{
 			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
@@ -1285,6 +1293,7 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "9#", Justification = "'out' is preferred over return value in this particular case.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		protected abstract void ProcessByteOfChunk(RepositoryType repositoryType,
 		                                           byte b, DateTime ts, string dev, IODirection dir,
@@ -1613,6 +1622,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "This is an FxCop false-positive, the called DebugLineBreak() cannot be static.")]
 		[Conditional("DEBUG_LINE_BREAK")]
 		private void DebugLineBreak(RepositoryType repositoryType, string message)
 		{

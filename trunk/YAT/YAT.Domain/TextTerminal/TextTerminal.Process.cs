@@ -511,6 +511,7 @@ namespace YAT.Domain
 		/// <see cref="textTxState"/>, <see cref="textRxState"/>,
 		/// <see cref="textBidirTxState"/>, <see cref="textBidirRxState"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Unidir", Justification = "Orthogonality with 'Bidir'.")]
 		protected TextUnidirState GetTextUnidirState(RepositoryType repositoryType, IODirection dir)
 		{
 			switch (repositoryType)
@@ -572,6 +573,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "'out' is preferred over return value in this particular case.")]
 		protected virtual void ProcessChunkPre(RepositoryType repositoryType, RawChunk chunk, out PostponeResult postponeResult)
 		{
 			if (TextTerminalSettings.GlueCharsOfLine.Enabled)
@@ -681,6 +683,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "'out' is preferred over return value in this particular case.")]
 		protected virtual void DoLineEndPost(RepositoryType repositoryType, ProcessState processState, DateTime ts, IODirection dir, bool isLastByteOfChunk, out bool breakChunk)
 		{
 			if (TextTerminalSettings.GlueCharsOfLine.Enabled)
@@ -1360,6 +1363,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Could be extracted into a separate class or struct.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		protected virtual bool GetLineClearance(ForSomeTimeEventHelper forSomeTimeEventHelper)
 		{
 			DebugWaitForResponse("Getting line clearance..."); //da mues doch IsSending scho aktiv si !!!

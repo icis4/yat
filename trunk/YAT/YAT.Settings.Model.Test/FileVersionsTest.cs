@@ -1468,7 +1468,7 @@ namespace YAT.Settings.Model.Test
 			// \todo:
 			// Add tests that verify that terminals are interconnected.
 
-			UnusedLocal.PreventAnalysisWarning(t2);
+			UnusedLocal.PreventAnalysisWarning(t2, "Yet to do...");
 
 			// \todo:
 			// Add tests that send the commands to terminal 2.

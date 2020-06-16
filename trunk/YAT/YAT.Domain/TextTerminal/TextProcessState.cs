@@ -35,6 +35,7 @@ namespace YAT.Domain
 	/// (Tx/Bidir/Rx), the binary terminal specific state is limited to a line state which is
 	/// instantiated four times (Tx/TxBidir/RxBidir/Rx).
 	/// </remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Unidir", Justification = "Orthogonality with 'Bidir'.")]
 	public class TextUnidirState
 	{
 		/// <summary></summary>

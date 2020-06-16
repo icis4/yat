@@ -86,13 +86,13 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
-		protected override void ProcessInLineKeywords(ForSomeTimeEventHelper forSomeTimeEventHelper, Parser.KeywordResult result, Queue<byte> conflateDataQueue, ref bool doBreakSend)
+		protected override void ProcessInLineKeywords(ForSomeTimeEventHelper forSomeTimeEventHelper, Parser.KeywordResult result, Queue<byte> conflateDataQueue, ref bool doBreak)
 		{
 			switch (result.Keyword)
 			{
 				case Parser.Keyword.Eol:
 				{                                           // Complete and forward the pending packets.
-					ProcessLineEnd(forSomeTimeEventHelper, true, conflateDataQueue, ref doBreakSend); // Would also result in completing and immediately forwarding, but not handle 'WaitForResponse'.
+					ProcessLineEnd(forSomeTimeEventHelper, true, conflateDataQueue, ref doBreak); // Would also result in completing and immediately forwarding, but not handle 'WaitForResponse'.
 				////AppendToPendingPacketAndForwardToRawTerminal(this.txUnidirTextLineState.EolSequence, conflateDataQueue);
 				////base.ProcessInLineKeywords(forSomeTimeEventHelper, result, conflateDataQueue) must not be called as keyword has fully been processed. Calling it would result in an error message!
 					break;
@@ -100,23 +100,23 @@ namespace YAT.Domain
 
 				default:
 				{
-					base.ProcessInLineKeywords(forSomeTimeEventHelper, result, conflateDataQueue, ref doBreakSend);
+					base.ProcessInLineKeywords(forSomeTimeEventHelper, result, conflateDataQueue, ref doBreak);
 					break;
 				}
 			}
 		}
 
 		/// <summary></summary>
-		protected override void ProcessLineEnd(ForSomeTimeEventHelper forSomeTimeEventHelper, bool appendEol, Queue<byte> conflateDataQueue, ref bool doBreakSend)
+		protected override void ProcessLineEnd(ForSomeTimeEventHelper forSomeTimeEventHelper, bool appendEol, Queue<byte> conflateDataQueue, ref bool doBreak)
 		{
 			if (appendEol)           // Just append the EOL, the base method will forward the completed line.
 				AppendToPendingPacketWithoutForwardingToRawTerminalYet(TxEolSequence, conflateDataQueue);
 
 			if (TextTerminalSettings.WaitForResponse.Enabled)
-				doBreakSend = !GetLineClearance(forSomeTimeEventHelper); // See below why there is no need to handle result.
+				doBreak = !GetLineClearance(forSomeTimeEventHelper); // See below why there is no need to handle result.
 
-			base.ProcessLineEnd(forSomeTimeEventHelper, appendEol, conflateDataQueue, ref doBreakSend); // Call base method in any case. Minor limitation:
-		}                                                                                               // Some overhead if no clearance and terminal got closed.
+			base.ProcessLineEnd(forSomeTimeEventHelper, appendEol, conflateDataQueue, ref doBreak); // Call base method in any case. Minor limitation:
+		}                                                                                           // Some overhead if no clearance and terminal got closed.
 
 		/// <summary></summary>
 		protected override int ProcessLineDelayOrInterval(ForSomeTimeEventHelper forSomeTimeEventHelper, bool performLineDelay, int lineDelay, bool performLineInterval, int lineInterval, DateTime lineBeginTimeStamp, DateTime lineEndTimeStamp)

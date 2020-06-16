@@ -133,6 +133,7 @@ namespace YAT.Domain
 		/// <see cref="binaryTxState"/>, <see cref="binaryRxState"/>,
 		/// <see cref="binaryBidirTxState"/>, <see cref="binaryBidirRxState"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Unidir", Justification = "Orthogonality with 'Bidir'.")]
 		protected BinaryUnidirState GetBinaryUnidirState(RepositoryType repositoryType, IODirection dir)
 		{
 			switch (repositoryType)

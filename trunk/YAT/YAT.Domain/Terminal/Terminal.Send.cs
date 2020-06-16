@@ -1597,9 +1597,6 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Directly referring to given object for performance reasons.")]
 		protected virtual void ProcessLineEnd(ForSomeTimeEventHelper forSomeTimeEventHelper, bool appendEol, Queue<byte> conflateDataQueue, ref bool doBreak)
 		{
-			UnusedArg.PreventAnalysisWarning(forSomeTimeEventHelper); // Doesn't need to be handled for the 'neutral' terminal base.
-			UnusedArg.PreventAnalysisWarning(appendEol);         // Doesn't need to be handled for the 'neutral' terminal base.
-
 			if (!doBreak)
 				ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 			else
@@ -2122,7 +2119,7 @@ namespace YAT.Domain
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_BREAK")]
-		private void DebugBreakTail(string message)
+		private static void DebugBreakTail(string message)
 		{
 			Debug.WriteLine(message);
 		}

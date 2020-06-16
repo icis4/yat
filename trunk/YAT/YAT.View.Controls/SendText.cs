@@ -1310,6 +1310,7 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "This is an FxCop false-positive, the called DebugUserInputState() cannot be static.")]
 		[Conditional("DEBUG_USER_INPUT")]
 		private void DebugUserInputEnter(string methodName)
 		{
@@ -1322,6 +1323,7 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "This is an FxCop false-positive, the called DebugUserInputState() cannot be static.")]
 		[Conditional("DEBUG_USER_INPUT")]
 		private void DebugUserInputLeave()
 		{

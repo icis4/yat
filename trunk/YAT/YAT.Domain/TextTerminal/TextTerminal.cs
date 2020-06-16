@@ -168,6 +168,8 @@ namespace YAT.Domain
 		/// <c>true</c> when called from <see cref="Dispose"/>,
 		/// <c>false</c> when called from finalizer.
 		/// </param>
+		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "glueCharsOfLineTimeout", Justification = "DisposeProcess() disposes of this member.")]
+		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "waitForResponseEvent",   Justification = "DisposeProcess() disposes of this member.")]
 		protected override void Dispose(bool disposing)
 		{
 			DetachTextTerminalSettings();

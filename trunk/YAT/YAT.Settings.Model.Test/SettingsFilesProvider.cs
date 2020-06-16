@@ -101,7 +101,7 @@ namespace YAT.Settings.Model.Test
 	}
 
 	/// <summary></summary>
-	public enum WorkspaceSettingsTestCase
+	public enum WorkspaceSettingsTestCase                                                                      // Not possible to use an UnderscoreSuppressionJustification here.
 	{
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "As always, there are exceptions to the rules...")]
 		W_Empty,

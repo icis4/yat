@@ -515,6 +515,7 @@ namespace YAT.Domain.Test.Terminal
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "'RTS' is a common term for serial ports.")]
 		protected virtual void AssertThatRtsPinIsFalse(MKY.IO.Ports.SerialPortControlPins pins)
 		{
 			Assert.That(pins.Rts, Is.False);
@@ -525,6 +526,7 @@ namespace YAT.Domain.Test.Terminal
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cts", Justification = "'CTS' is a common term for serial ports.")]
 		protected virtual void AssertThatCtsPinIsFalse(MKY.IO.Ports.SerialPortControlPins pins)
 		{
 			Assert.That(pins.Rts, Is.True);
@@ -535,6 +537,7 @@ namespace YAT.Domain.Test.Terminal
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "'DTR' is a common term for serial ports.")]
 		protected virtual void AssertThatDtrPinIsFalse(MKY.IO.Ports.SerialPortControlPins pins)
 		{
 			Assert.That(pins.Rts, Is.True);
@@ -545,6 +548,7 @@ namespace YAT.Domain.Test.Terminal
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dsr", Justification = "'DSR' is a common term for serial ports.")]
 		protected virtual void AssertThatDsrPinIsFalse(MKY.IO.Ports.SerialPortControlPins pins)
 		{
 			Assert.That(pins.Rts, Is.True);

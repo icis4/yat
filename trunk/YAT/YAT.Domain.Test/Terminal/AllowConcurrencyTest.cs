@@ -53,13 +53,19 @@ namespace YAT.Domain.Test.Terminal
 
 		#pragma warning disable 1591
 
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "A public type is required for NUnit and this type really belongs to the test data only.")]
 		public enum Stimulus
 		{
 			SendTextRepeating,
 			SendFile
 		}
 
-		public enum Subsequency
+		/// <remarks>
+		/// Named "subsequence" rather than "subsequency" as that is the correct English term.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "A public type is required for NUnit and this type really belongs to the test data only.")]
+		public enum Subsequence
 		{
 			One,
 			Random
@@ -89,7 +95,7 @@ namespace YAT.Domain.Test.Terminal
 		[Test, Combinatorial] // Test is mandatory, it shall not be excludable. 'IPv4LoopbackIsAvailable' is probed below.
 		public virtual void TestCombinatorial([Values(false, true)]bool allowConcurrency,
 		                                      [Values(Stimulus.SendTextRepeating, Stimulus.SendFile)]Stimulus stimulus,
-		                                      [Values(Subsequency.One, Subsequency.Random)]Subsequency subsequency)
+		                                      [Values(Subsequence.One, Subsequence.Random)]Subsequence subsequence)
 		{
 			if (!ConfigurationProvider.Configuration.IPv4LoopbackIsAvailable)
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
@@ -109,13 +115,13 @@ namespace YAT.Domain.Test.Terminal
 					Utilities.WaitForConnection(terminalTx, terminalRx);
 
 					int subsequentLineCount;
-					switch (subsequency)
+					switch (subsequence)
 					{
-						case Subsequency.One:
+						case Subsequence.One:
 							subsequentLineCount = 1; // Ensures that single line = most likely use case works.
 							break;
 
-						case Subsequency.Random:
+						case Subsequence.Random:
 							var random = new Random(RandomEx.NextPseudoRandomSeed());
 							var minValue = (SendLineCount / 100); // 1%
 							var maxValue = (SendLineCount / 10); // 10%
@@ -163,7 +169,6 @@ namespace YAT.Domain.Test.Terminal
 		{
 			var repeating = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 			var repeatingLine = string.Format(CultureInfo.InvariantCulture, @"{0}\!(LineRepeat({1}))", repeating, SendLineCount);
-			var repeatingTextExpected = repeating + "<CR><LF>"; // Text settings for testing have 'ShowEOL' = true in order to include EOL in char count.
 			var repeatingLengthExpected = (repeating.Length + 2); // Adjust for EOL.
 			terminalTx.SendTextLine(repeatingLine);
 
