@@ -51,7 +51,7 @@ namespace MKY.Test.Settings
 		//==========================================================================================
 
 		/// <remarks>Haven't cared for a better implementation yet...</remarks>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "A public type is required for NUnit and this type really belongs to the test data only.")]
 		public enum TestCase
 		{
 			/// <summary></summary>
@@ -78,7 +78,7 @@ namespace MKY.Test.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "A public type is required for NUnit and this type really belongs to the test data only.")]
 		[Serializable]
 		public class TestTreeChildLevel2 : MKY.Settings.SettingsItem, IEquatable<TestTreeChildLevel2>
 		{
@@ -187,7 +187,7 @@ namespace MKY.Test.Settings
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "A public type is required for NUnit and this type really belongs to the test data only.")]
 		[Serializable]
 		public class TestTreeChildLevel1 : MKY.Settings.SettingsItem, IEquatable<TestTreeChildLevel1>
 		{
@@ -352,7 +352,7 @@ namespace MKY.Test.Settings
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "A public type is required for NUnit and this type really belongs to the test data only.")]
 		[Serializable]
 		[XmlRoot("TestTreeRoot")]
 		public class TestTreeRoot : MKY.Settings.SettingsItem, IEquatable<TestTreeRoot>
@@ -532,7 +532,7 @@ namespace MKY.Test.Settings
 		/// The following classes serve to test what happens if different versions of a type are
 		/// serialized/deserialized.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "A public type is required for NUnit and this type really belongs to the test data only.")]
 		[Serializable]
 		[XmlRoot("TestSettings")]
 		public class TestClassV1
@@ -547,7 +547,7 @@ namespace MKY.Test.Settings
 		/// <summary>
 		/// V2 adds a third element.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "A public type is required for NUnit and this type really belongs to the test data only.")]
 		[Serializable]
 		[XmlRoot("TestSettings")]
 		public class TestClassV2
@@ -565,7 +565,7 @@ namespace MKY.Test.Settings
 		/// <summary>
 		/// V3 removes the second element.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This class really belongs to the test data only.")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "A public type is required for NUnit and this type really belongs to the test data only.")]
 		[Serializable]
 		[XmlRoot("TestSettings")]
 		public class TestClassV3
