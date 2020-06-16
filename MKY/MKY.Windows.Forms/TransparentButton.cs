@@ -258,7 +258,7 @@ namespace MKY.Windows.Forms
 		/// </param>
 		public void NotifyDefault(bool value)
 		{
-			UnusedArg.PreventAnalysisWarning(value);
+			UnusedArg.PreventAnalysisWarning(value, "No handling needed (yet).");
 		}
 
 		/// <summary>

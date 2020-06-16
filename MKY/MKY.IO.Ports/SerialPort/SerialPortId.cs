@@ -865,19 +865,35 @@ namespace MKY.IO.Ports
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		[SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "Performance is not an issue here, readability is...")]
+		[SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily", Justification = "The 'as' operator cannot be used with value types.")]
 		public override bool IsValid(ITypeDescriptorContext context, object value)
 		{
 			if (value is int)
 			{
-				try   { SerialPortId port = new SerialPortId((int)value);    UnusedLocal.PreventAnalysisWarning(port); return (true); }
-				catch { return (false); }
+				try
+				{
+					var dummyPortIdToProbeValue = new SerialPortId((int)value);
+					UnusedLocal.PreventAnalysisWarning(dummyPortIdToProbeValue, "Dummy variable improves code readability.");
+					return (true);
+				}
+				catch
+				{
+					return (false);
+				}
 			}
 
 			if (value is string)
 			{
-				try   { SerialPortId port = new SerialPortId((string)value); UnusedLocal.PreventAnalysisWarning(port); return (true); }
-				catch { return (false); }
+				try
+				{
+					var dummyPortIdToProbeValue = new SerialPortId((string)value);
+					UnusedLocal.PreventAnalysisWarning(dummyPortIdToProbeValue, "Dummy variable improves code readability.");
+					return (true);
+				}
+				catch
+				{
+					return (false);
+				}
 			}
 
 			return (base.IsValid(context, value));

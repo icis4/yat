@@ -495,8 +495,7 @@ namespace MKY.Test.IO
 		[Test, TestCaseSource(typeof(PathExTestData), "TestCasesCombineA")]
 		public virtual void TestCombineA(int testSet, int testCase, string absoluteA, string absoluteB, string relativeA, string relativeB)
 		{
-			// Test set is given as additional argument to ease searching for errornous test cases.
-			UnusedArg.PreventAnalysisWarning(testSet);
+			UnusedArg.PreventAnalysisWarning(testSet, "Argument is given to ease searching for erroneous test cases.");
 
 			string result = "";
 
@@ -531,8 +530,7 @@ namespace MKY.Test.IO
 		[Test, TestCaseSource(typeof(PathExTestData), "TestCasesCombineB")]
 		public virtual void TestCombineB(int testSet, int testCase, string absoluteA, string absoluteB, string relativeA, string relativeB)
 		{
-			// Test set is given as additional argument to ease searching for errornous test cases.
-			UnusedArg.PreventAnalysisWarning(testSet);
+			UnusedArg.PreventAnalysisWarning(testSet, "Argument is given to ease searching for erroneous test cases.");
 
 			string result = "";
 
@@ -574,8 +572,7 @@ namespace MKY.Test.IO
 		[Test, TestCaseSource(typeof(PathExTestData), "TestCasesCompare")]
 		public virtual void TestCompare(int testSet, int testCase, string absoluteA, string absoluteB, string relativeA, string relativeB)
 		{
-			// Test set is given as additional argument for potential special treatment of test cases.
-			UnusedArg.PreventAnalysisWarning(testSet);
+			UnusedArg.PreventAnalysisWarning(testSet, "Argument is given to ease searching for erroneous test cases.");
 
 			PathCompareResult result;
 

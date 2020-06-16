@@ -1178,7 +1178,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs<DateTime> e)
 		{
-			UnusedEvent.PreventCompilerWarning(IOControlChanged);
+			UnusedEvent.PreventCompilerWarning(IOControlChanged, "See exception message below.");
 			throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The event 'IOControlChanged' is not in use for UDP/IP sockets!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
