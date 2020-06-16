@@ -96,7 +96,7 @@ namespace MKY.Time
 		public Rate(double interval, double window)
 		{
 			if (window < interval)
-				throw (new ArgumentOutOfRangeException("window", window, MessageHelper.InvalidExecutionPreamble + "Value must be equal or larger than 'interval' = '" + interval + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new ArgumentOutOfRangeException("window", window, MessageHelper.InvalidExecutionPreamble + "'Window' = '" + window + "' must be equal or larger than 'Interval' = '" + interval + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			this.interval = interval;
 			this.window   = window;
@@ -124,7 +124,7 @@ namespace MKY.Time
 			set
 			{
 				if (value > window)
-					throw (new ArgumentOutOfRangeException("value", value, MessageHelper.InvalidExecutionPreamble + "Value must be equal or less than 'window' = '" + window + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("value", value, MessageHelper.InvalidExecutionPreamble + "'Interval' must be equal or less than 'Window' = '" + window + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 				this.interval = value;
 				UpdateNumberOfIntervals();
@@ -145,7 +145,7 @@ namespace MKY.Time
 			set
 			{
 				if (value < interval)
-					throw (new ArgumentOutOfRangeException("value", value, MessageHelper.InvalidExecutionPreamble + "Value must be equal or larger than 'interval' = '" + interval + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("value", value, MessageHelper.InvalidExecutionPreamble + "'Window' must be equal or larger than 'Interval' = '" + interval + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 				this.window = value;
 				UpdateNumberOfIntervals();

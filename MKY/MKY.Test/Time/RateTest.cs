@@ -159,7 +159,7 @@ namespace MKY.Test.Time
 		}
 
 		/// <remarks>Using an odd interval-window-ratio to check for related issues.</remarks>
-		[Test]
+		[Test, Sequential] // Sequential for us / ms / s
 		public virtual void TestIntervalLessThanWindowWithOddRatio([Values(0.001, 1, 1000)] double interval, [Values(0.0015, 1.5, 1500)] double window)
 		{
 			var rate = new Rate(interval, window);
