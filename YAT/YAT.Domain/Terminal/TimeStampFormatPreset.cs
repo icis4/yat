@@ -52,9 +52,9 @@ namespace YAT.Domain
 		DateAndTime,
 		DateAndTimeWithTimeZone,
 
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Clearly indicate that this item is a variant of the according previous item.")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize this item as a variant of the corresponding previous item.")]
 		DateAndTime_Iso8601,
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Clearly indicate that this item is a variant of the according previous item.")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize this item as a variant of the corresponding previous item.")]
 		DateAndTimeWithTimeZone_Iso8601
 	}
 

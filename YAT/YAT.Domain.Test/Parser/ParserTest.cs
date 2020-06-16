@@ -336,6 +336,7 @@ namespace YAT.Domain.Test.Parser
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
+		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
 		public static IEnumerable<Tuple<Encoding, string, byte[]>> TestCaseTuples
 		{
 			get

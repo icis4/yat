@@ -54,7 +54,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
-		protected override void ProcessInLineKeywords(ForSomeTimeEventHelper forSomeTimeEventHelper, Parser.KeywordResult result, Queue<byte> conflateDataQueue, ref bool doBreakSend)
+		protected override void ProcessInLineKeywords(ForSomeTimeEventHelper forSomeTimeEventHelper, Parser.KeywordResult result, Queue<byte> conflateDataQueue, ref bool doBreak)
 		{
 			switch (result.Keyword)
 			{
@@ -68,7 +68,7 @@ namespace YAT.Domain
 
 				default:
 				{
-					base.ProcessInLineKeywords(forSomeTimeEventHelper, result, conflateDataQueue, ref doBreakSend);
+					base.ProcessInLineKeywords(forSomeTimeEventHelper, result, conflateDataQueue, ref doBreak);
 					break;
 				}
 			}

@@ -113,6 +113,7 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[Test]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
 		public virtual void TestEmptyThenMultiLineText()
 		{
 			var c = new Command();
@@ -129,6 +130,7 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[Test]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
 		public virtual void TestInitialMultiLineTextThenModify()
 		{
 			string[] initialMulti = new string[] { "ABC", "DEF" };
@@ -163,6 +165,8 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "multi", Justification = "What's wrong with 'MultiLine'?")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
 		protected virtual void AssertMultiLineText(Command c, string[] multiLineText, string singleLineText, string description = null, Domain.Parser.Mode modes = Domain.Parser.Mode.Default)
 		{
 			Assert.That(c.IsDefined,          Is.True);

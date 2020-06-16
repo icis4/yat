@@ -76,6 +76,7 @@ namespace YAT.Domain.Test
 		public string DirectoryPath { get; }
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
 		public Dictionary<StressTestCase, Tuple<string, int, int>> StressFiles { get; }
 
 		/// <summary></summary>

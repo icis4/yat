@@ -42,6 +42,8 @@ using NUnit.Framework;
 namespace YAT.Domain.Test.TextTerminal
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
+	[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize partial manner of this test class.")]
 	[TestFixture]
 	public class GlueCharsOfLineTest_SerialPortLoopbackSelfs
 	{
@@ -51,6 +53,7 @@ namespace YAT.Domain.Test.TextTerminal
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
 		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
 		public virtual void TestDefault(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
 		{
@@ -64,6 +67,7 @@ namespace YAT.Domain.Test.TextTerminal
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
 		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
 		public virtual void TestInfiniteTimeout(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
 		{
@@ -81,8 +85,9 @@ namespace YAT.Domain.Test.TextTerminal
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
 		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
-		public virtual void TestMinimumTimout(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
+		public virtual void TestMinimumTimeout(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
 		{
 			if (!ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
 				Assert.Ignore("No serial COM port loopback selfs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback self is properly configured and available if passing this test is required.");
@@ -93,10 +98,11 @@ namespace YAT.Domain.Test.TextTerminal
 			gcol.Timeout = 1;
 			settings.TextTerminal.GlueCharsOfLine = gcol;
 
-			TestMinimumTimoutOrTestDisabled(settings);
+			TestMinimumTimeoutOrTestDisabled(settings);
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
 		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
 		public virtual void TestDisabled(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
 		{
@@ -109,7 +115,7 @@ namespace YAT.Domain.Test.TextTerminal
 			gcol.Enabled = false;
 			settings.TextTerminal.GlueCharsOfLine = gcol;
 
-			TestMinimumTimoutOrTestDisabled(settings);
+			TestMinimumTimeoutOrTestDisabled(settings);
 		}
 
 		#endregion
@@ -154,6 +160,7 @@ namespace YAT.Domain.Test.TextTerminal
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 		protected virtual void VerifyDefaultOrInfiniteTimeout(Domain.TextTerminal terminal, int fileLineCount, int fileLineByteCount)
 		{
 			var displayLines = terminal.RepositoryToDisplayLines(RepositoryType.Bidir);
@@ -171,7 +178,7 @@ namespace YAT.Domain.Test.TextTerminal
 		}
 
 		/// <summary></summary>
-		protected virtual void TestMinimumTimoutOrTestDisabled(Settings.TerminalSettings settings)
+		protected virtual void TestMinimumTimeoutOrTestDisabled(Settings.TerminalSettings settings)
 		{
 			using (var terminal = new Domain.TextTerminal(settings)) // Glueing is enabled by default.
 			{
@@ -193,11 +200,11 @@ namespace YAT.Domain.Test.TextTerminal
 				Assert.That(duration.TotalMilliseconds, Is.LessThan(fileTimeout));
 
 				// Verify:
-				VerifyMinimumTimoutOrTestDisabled(terminal, fileLineCount, fileLineByteCount);
+				VerifyMinimumTimeoutOrTestDisabled(terminal, fileLineCount, fileLineByteCount);
 
 				// Refresh and verify again:
 				terminal.RefreshRepositories();
-				VerifyMinimumTimoutOrTestDisabled(terminal, fileLineCount, fileLineByteCount);
+				VerifyMinimumTimeoutOrTestDisabled(terminal, fileLineCount, fileLineByteCount);
 
 				terminal.Stop();
 				Utilities.WaitForDisconnection(terminal);
@@ -205,7 +212,8 @@ namespace YAT.Domain.Test.TextTerminal
 		}
 
 		/// <summary></summary>
-		protected virtual void VerifyMinimumTimoutOrTestDisabled(Domain.TextTerminal terminal, int fileLineCount, int fileLineByteCount)
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
+		protected virtual void VerifyMinimumTimeoutOrTestDisabled(Domain.TextTerminal terminal, int fileLineCount, int fileLineByteCount)
 		{
 			var displayLines = terminal.RepositoryToDisplayLines(RepositoryType.Bidir);   // At least 2 * 300 lines, but rather * 1.5 = 900 lines.
 			Assert.That(displayLines.Count, Is.GreaterThan((int)Math.Round(fileLineCount * 2 * 1.25)));

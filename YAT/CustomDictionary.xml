@@ -24,6 +24,9 @@
     </Recognized>
     <DiscreteExceptions>
       <Term>InCase</Term>
+      <Term>multiLine</Term>
+      <Term>MultiLine</Term>
+      <Term>SomeTime</Term>
       <Term>TimeStamp</Term>
       <Term>whitespace</Term>
     </DiscreteExceptions>

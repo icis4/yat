@@ -89,8 +89,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public IODirection    LastChunkDirection    { get; private set; }
 
-		/// <summary></summary>
-		public DateTime       LastChunkTimeStamp    { get; private set; }
+		/// <remarks><see cref="GetLastChunkTimeStamp()"/> shall be used to retrieve property.</remarks>
+		private DateTime      LastChunkTimeStamp    { get; set; }
 
 		/// <summary></summary>
 		public DateTime       LastTxChunkTimeStamp  { get; private set; }
@@ -165,6 +165,7 @@ namespace YAT.Domain
 
 		/// <remarks>For orthogonality with <see cref="GetLastChunkTimeStamp(IODirection)"/> below.</remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
+		[SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods", Justification = "See remarks.")]
 		public virtual DateTime GetLastChunkTimeStamp()
 		{
 			return (LastChunkTimeStamp);
@@ -230,7 +231,8 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>For orthogonality with <see cref="GetPostponedChunkCount()"/> and <see cref="GetPostponedChunkCount(IODirection)"/> above.</remarks>
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remarks.")]
 		public virtual int GetPostponedByteCount()
 		{
 			int byteCount = 0;

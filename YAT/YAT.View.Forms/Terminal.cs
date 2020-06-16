@@ -531,6 +531,8 @@ namespace YAT.View.Forms
 		/// Must manually be called by <see cref="Main"/> menu because the terminal's [File] menu is
 		/// merged into the main's [File] menu! This seems to be a limitation of WinForms.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "This is an FxCop false-positive because the method is manually called as remarked above.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "tool", Justification = "This is an FxCop false-positive because the method is manually called as remarked above.")]
 		public void toolStripMenuItem_TerminalMenu_File_DropDownOpening(object sender, EventArgs e)
 		{
 			toolStripMenuItem_TerminalMenu_File_SetMenuItems();
@@ -624,6 +626,8 @@ namespace YAT.View.Forms
 		/// Must manually be called by <see cref="Main"/> menu because the terminal's [File] menu is
 		/// merged into the main's [File] menu! This seems to be a limitation of WinForms.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "This is an FxCop false-positive because the method is manually called as remarked above.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "tool", Justification = "This is an FxCop false-positive because the method is manually called as remarked above.")]
 		public void toolStripMenuItem_TerminalMenu_Terminal_DropDownOpening(object sender, EventArgs e)
 		{
 			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
@@ -1623,6 +1627,8 @@ namespace YAT.View.Forms
 		/// Must manually be called by <see cref="Main"/> menu because the terminal's [File] menu is
 		/// merged into the main's [File] menu! This seems to be a limitation of WinForms.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "This is an FxCop false-positive because the method is manually called as remarked above.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "tool", Justification = "This is an FxCop false-positive because the method is manually called as remarked above.")]
 		public void toolStripMenuItem_TerminalMenu_Log_DropDownOpening(object sender, EventArgs e)
 		{
 			toolStripMenuItem_TerminalMenu_Log_SetMenuItems();

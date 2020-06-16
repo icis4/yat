@@ -4761,6 +4761,7 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "This is an FxCop false-positive, the called DebugFindState() cannot be static.")]
 		[Conditional("DEBUG_FIND")]
 		private void DebugFindEnter(string methodName)
 		{
@@ -4773,6 +4774,7 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "This is an FxCop false-positive, the called DebugFindState() cannot be static.")]
 		[Conditional("DEBUG_FIND")]
 		private void DebugFindLeave()
 		{

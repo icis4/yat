@@ -580,7 +580,8 @@ namespace YAT.Model.Test
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static TerminalSettingsRoot GetStartedSerialPortATextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedSerialPortATextSettings());
 		}
 
@@ -599,7 +600,8 @@ namespace YAT.Model.Test
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static TerminalSettingsRoot GetStartedSerialPortBTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedSerialPortBTextSettings());
 		}
 
@@ -620,7 +622,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedSerialPortMTSicsDeviceATextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedSerialPortMTSicsDeviceATextSettings());
 		}
 
@@ -641,7 +644,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedSerialPortMTSicsDeviceBTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedSerialPortMTSicsDeviceBTextSettings());
 		}
 
@@ -680,7 +684,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpClientOnIPv4LoopbackTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedTcpClientOnIPv4LoopbackTextSettings());
 		}
 
@@ -691,7 +696,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpClientOnIPv6LoopbackTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedTcpClientOnIPv6LoopbackTextSettings());
 		}
 
@@ -708,7 +714,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpClientOnIPv4SpecificInterfaceTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedTcpClientOnIPv4SpecificInterfaceTextSettings());
 		}
 
@@ -725,7 +732,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpClientOnIPv6SpecificInterfaceTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedTcpClientOnIPv6SpecificInterfaceTextSettings());
 		}
 
@@ -743,7 +751,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpServerOnIPv4LoopbackTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedTcpServerOnIPv4LoopbackTextSettings());
 		}
 
@@ -754,7 +763,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpServerOnIPv6LoopbackTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedTcpServerOnIPv6LoopbackTextSettings());
 		}
 
@@ -771,7 +781,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpServerOnIPv4SpecificInterfaceTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedTcpServerOnIPv4SpecificInterfaceTextSettings());
 		}
 
@@ -788,7 +799,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpServerOnIPv6SpecificInterfaceTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedTcpServerOnIPv6SpecificInterfaceTextSettings());
 		}
 
@@ -806,7 +818,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings());
 		}
 
@@ -817,7 +830,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpAutoSocketOnIPv6LoopbackTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedTcpAutoSocketOnIPv6LoopbackTextSettings());
 		}
 
@@ -834,7 +848,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpAutoSocketOnIPv4SpecificInterfaceTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedTcpAutoSocketOnIPv4SpecificInterfaceTextSettings());
 		}
 
@@ -851,7 +866,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpAutoSocketOnIPv6SpecificInterfaceTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedTcpAutoSocketOnIPv6SpecificInterfaceTextSettings());
 		}
 
@@ -875,7 +891,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTcpAutoSocketMTSicsDeviceTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedTcpAutoSocketMTSicsDeviceTextSettings());
 		}
 
@@ -893,7 +910,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUdpClientOnIPv4LoopbackTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedUdpClientOnIPv4LoopbackTextSettings());
 		}
 
@@ -904,7 +922,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUdpClientOnIPv6LoopbackTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedUdpClientOnIPv6LoopbackTextSettings());
 		}
 
@@ -921,7 +940,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUdpClientOnIPv4SpecificInterfaceTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedUdpClientOnIPv4SpecificInterfaceTextSettings());
 		}
 
@@ -938,7 +958,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUdpClientOnIPv6SpecificInterfaceTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedUdpClientOnIPv6SpecificInterfaceTextSettings());
 		}
 
@@ -956,7 +977,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUdpServerOnIPv4LoopbackTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedUdpServerOnIPv4LoopbackTextSettings());
 		}
 
@@ -967,7 +989,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUdpServerOnIPv6LoopbackTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedUdpServerOnIPv6LoopbackTextSettings());
 		}
 
@@ -984,7 +1007,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUdpServerOnIPv4SpecificInterfaceTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedUdpServerOnIPv4SpecificInterfaceTextSettings());
 		}
 
@@ -1001,7 +1025,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUdpServerOnIPv6SpecificInterfaceTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedUdpServerOnIPv6SpecificInterfaceTextSettings());
 		}
 
@@ -1019,7 +1044,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUdpPairSocketOnIPv4LoopbackTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedUdpPairSocketOnIPv4LoopbackTextSettings());
 		}
 
@@ -1030,7 +1056,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUdpPairSocketOnIPv6LoopbackTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedUdpPairSocketOnIPv6LoopbackTextSettings());
 		}
 
@@ -1047,7 +1074,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUdpPairSocketOnIPv4SpecificInterfaceTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedUdpPairSocketOnIPv4SpecificInterfaceTextSettings());
 		}
 
@@ -1064,7 +1092,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUdpPairSocketOnIPv6SpecificInterfaceTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedUdpPairSocketOnIPv6SpecificInterfaceTextSettings());
 		}
 
@@ -1108,7 +1137,8 @@ namespace YAT.Model.Test
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static TerminalSettingsRoot GetStartedUsbSerialHidDeviceATextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedUsbSerialHidDeviceATextSettings());
 		}
 
@@ -1127,7 +1157,8 @@ namespace YAT.Model.Test
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		internal static TerminalSettingsRoot GetStartedUsbSerialHidDeviceBTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedUsbSerialHidDeviceBTextSettings());
 		}
 
@@ -1148,7 +1179,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUsbSerialHidMTSicsDeviceATextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedUsbSerialHidMTSicsDeviceATextSettings());
 		}
 
@@ -1169,7 +1201,8 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedUsbSerialHidMTSicsDeviceBTextSettings(string dummy)
 		{
-			UnusedArg.PreventAnalysisWarning(dummy); // Dummy required to provide signature of common type TerminalSettingsDelegate<string>.
+			UnusedArg.PreventAnalysisWarning(dummy, "Argument is required to provide signature of common type TerminalSettingsDelegate<string>.");
+
 			return (GetStartedUsbSerialHidMTSicsDeviceBTextSettings());
 		}
 

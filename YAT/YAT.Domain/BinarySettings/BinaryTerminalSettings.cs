@@ -28,6 +28,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -67,6 +68,7 @@ namespace YAT.Domain.Settings
 		/// </item>
 		/// </list>
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Orthogonality with 'TextTerminalSettings.EncodingDefault' which also is an instance member.")]
 		public readonly int EncodingFixed = (EncodingEx)Encoding.Default;
 
 		#endregion

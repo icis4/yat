@@ -52,6 +52,7 @@ namespace YAT.Domain
 	/// <item><description>Less simple-stupid-forwarder, e.g. directly raising events.</description></item>
 	/// </list>
 	/// </remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public partial class BinaryTerminal : Terminal
 	{
 		#region Object Lifetime

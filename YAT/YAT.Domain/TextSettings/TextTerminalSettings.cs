@@ -65,7 +65,7 @@ namespace YAT.Domain.Settings
 		/// <remarks>
 		/// <see cref="Encoding.Default"/> must not be used because that is limited to an ANSI code page.
 		/// </remarks>
-		public static readonly int EncodingDefault = (EncodingEx)EncodingEx.Default;
+		public const int EncodingDefault = (int)EncodingEx.Default;
 
 		/// <summary></summary>
 		public const bool ShowEolDefault = false;

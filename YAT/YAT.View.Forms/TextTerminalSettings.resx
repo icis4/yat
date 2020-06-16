@@ -138,7 +138,7 @@ adjacently and is useful for sending multi-line commands
 and files with ping-pong-style command sets.
 
 Note that enabling this option will reduce throughput, as
-commands and responses will no longer be full-duplexed.
+commands and responses will no longer be full-duplex.
 
 Also note that [Terminal &gt; Settings... &gt; Advanced...] offers
 other means to limit sending for e.g. serial COM ports.</value>

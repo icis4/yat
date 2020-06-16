@@ -29,6 +29,7 @@ namespace YAT.Domain.Parser
 {
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "'NoEscapes' actually means 'None' but is more obvious.")]
+	[SuppressMessage("Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames", Justification = "I know, actually used a plural name for a while, but usage simply isn't natural at many locations, thus reverted to sigular name.")]
 	[Flags]
 	public enum Mode
 	{

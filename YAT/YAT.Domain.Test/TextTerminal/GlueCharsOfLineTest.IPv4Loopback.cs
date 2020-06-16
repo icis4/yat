@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 using MKY.Net.Test;
@@ -38,6 +39,7 @@ using NUnit.Framework;
 namespace YAT.Domain.Test.TextTerminal
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize partial manner of this test class.")]
 	[TestFixture]
 	public class GlueCharsOfLineTestData_IPv4Loopback
 	{
