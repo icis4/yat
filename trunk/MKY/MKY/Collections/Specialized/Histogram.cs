@@ -124,7 +124,7 @@ namespace MKY.Collections.Specialized
 		////Max = default(T);
 			MaxBinCount = maxBinCount;
 		////BinSize = default(T);
-		////InitializeBins(maxBinCount, 1);
+			InitializeBins(maxBinCount, 1);
 			AutoAdjust = true;
 			OutOfBoundsBehavior = HistogramOutOfBoundsBehavior.Adjust;
 		}
