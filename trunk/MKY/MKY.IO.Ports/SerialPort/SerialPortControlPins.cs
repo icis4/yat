@@ -176,13 +176,15 @@ namespace MKY.IO.Ports
 	[Serializable]
 	public struct SerialPortControlPinCount : IEquatable<SerialPortControlPinCount>
 	{
+		private const string VisibilitySuppressionJustification = "This field is public for the ease of the implementation.";
+
 		/// <summary>
 		/// RTS/RTR (Request To Send/Ready To Receive) control line.
 		/// </summary>
 		/// <remarks>
 		/// RTS/RTR is also known as RFR (Ready For Receiving).
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "'RTS' is a common term for serial ports.")]
 		[XmlElement("RTS")]
 		public int RtsDisableCount;
@@ -190,7 +192,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// CTS (Clear To Send) control line.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Cts", Justification = "'CTS' is a common term for serial ports.")]
 		[XmlElement("CTS")]
 		public int CtsDisableCount;
@@ -198,7 +200,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// DTR (Data Terminal Ready) control line.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "'DTR' is a common term for serial ports.")]
 		[XmlElement("DTR")]
 		public int DtrDisableCount;
@@ -206,7 +208,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// DSR (Data Set Ready) control line.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dsr", Justification = "'DSR' is a common term for serial ports.")]
 		[XmlElement("DSR")]
 		public int DsrDisableCount;
@@ -214,7 +216,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// DCD (Data Carrier Detect) control line.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This field is public for the ease of the implementation.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dcd", Justification = "'DCD' is a common term for serial ports.")]
 		[XmlElement("DCD")]
 		public int DcdCount;
