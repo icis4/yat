@@ -113,9 +113,12 @@ namespace MKY.Test.Time
 			UnusedLocal.PreventAnalysisWarning(dummyRateToForceException, "Dummy variable improves code readability.");
 		}
 
-		/// <summary></summary>
-		[Test, Sequential] // Sequential for us / ms / s
-		public virtual void TestIntervalLessThanWindow([Values(0.001, 1, 1000)] double interval, [Values(0.004, 4, 4000)] double window)
+		/// <remarks>
+		/// Note that "slow" tests run first to ensure everything is loaded by when the "fast" tests get invoked. Without this trick,
+		/// tests for less than a millisecond would not run stable enough, because initial updates would not be within a single interval.
+		/// </remarks>
+		[Test, Sequential] // Sequential for 1 s / 1 ms / 1 us.
+		public virtual void TestIntervalLessThanWindow([Values(1000, 1, 0.001)] double interval, [Values(4000, 4, 0.004)] double window)
 		{
 			var rate = new Rate(interval, window);
 			var initial = DateTime.Now;
@@ -158,9 +161,12 @@ namespace MKY.Test.Time
 			}
 		}
 
-		/// <remarks>Using an odd interval-window-ratio to check for related issues.</remarks>
-		[Test, Sequential] // Sequential for us / ms / s
-		public virtual void TestIntervalLessThanWindowWithOddRatio([Values(0.001, 1, 1000)] double interval, [Values(0.0015, 1.5, 1500)] double window)
+		/// <remarks>
+		/// Note that "slow" tests run first to ensure everything is loaded by when the "fast" tests get invoked. Without this trick,
+		/// tests for less than a millisecond would not run stable enough, because initial updates would not be within a single interval.
+		/// </remarks>
+		[Test, Sequential] // Sequential for 1 s / 1 ms / 1 us.
+		public virtual void TestIntervalLessThanWindowWithOddRatio([Values(1000, 1, 0.001)] double interval, [Values(1500, 1.5, 0.0015)] double window)
 		{
 			var rate = new Rate(interval, window);
 			var initial = DateTime.Now;
@@ -201,9 +207,12 @@ namespace MKY.Test.Time
 			}
 		}
 
-		/// <summary></summary>
-		[Test, Sequential] // Sequential for us / ms / s
-		public virtual void TestIntervalEqualsWindow([Values(0.001, 1, 1000)] double interval, [Values(0.001, 1, 1000)] double window)
+		/// <remarks>
+		/// Note that "slow" tests run first to ensure everything is loaded by when the "fast" tests get invoked. Without this trick,
+		/// tests for less than a millisecond would not run stable enough, because initial updates would not be within a single interval.
+		/// </remarks>
+		[Test, Sequential] // Sequential for 1 s / 1 ms / 1 us.
+		public virtual void TestIntervalEqualsWindow([Values(1000, 1, 0.001)] double interval, [Values(1000, 1, 0.001)] double window)
 		{
 			var rate = new Rate(interval, window);
 			var initial = DateTime.Now;
