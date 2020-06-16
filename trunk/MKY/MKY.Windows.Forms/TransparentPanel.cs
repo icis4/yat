@@ -53,8 +53,6 @@ namespace MKY.Windows.Forms
 		protected override void OnPaintBackground(PaintEventArgs e)
 		{
 			// Do nothing to leave the background invisible, i.e. leave the control transparent.
-
-			UnusedArg.PreventAnalysisWarning(e);
 		}
 	}
 }

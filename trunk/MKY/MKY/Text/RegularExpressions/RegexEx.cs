@@ -141,8 +141,8 @@ namespace MKY.Text.RegularExpressions
 		{
 			try
 			{
-				var regex = new Regex(pattern);
-				UnusedLocal.PreventAnalysisWarning(regex);
+				var dummyRegexToProbePattern = new Regex(pattern);
+				UnusedLocal.PreventAnalysisWarning(dummyRegexToProbePattern, "Dummy variable improves code readability.");
 
 				errorMessage = null;
 				return (true);
@@ -170,8 +170,8 @@ namespace MKY.Text.RegularExpressions
 		{
 			try
 			{
-				var regex = new Regex(pattern, options);
-				UnusedLocal.PreventAnalysisWarning(regex);
+				var dummyRegexToProbePattern = new Regex(pattern, options);
+				UnusedLocal.PreventAnalysisWarning(dummyRegexToProbePattern, "Dummy variable improves code readability.");
 
 				errorMessage = null;
 				return (true);

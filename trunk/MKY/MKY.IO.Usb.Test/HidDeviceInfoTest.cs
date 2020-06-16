@@ -299,7 +299,7 @@ namespace MKY.IO.Usb.Test
 							dummyInfoToForceException = new HidDeviceInfo(vendorId, productId, serial, usagePage, usageId);
 					}
 
-					UnusedLocal.PreventAnalysisWarning(dummyInfoToForceException);
+					UnusedLocal.PreventAnalysisWarning(dummyInfoToForceException, "Dummy variable improves code readability.");
 
 					if (!matchSerial)
 					{
@@ -352,7 +352,7 @@ namespace MKY.IO.Usb.Test
 							////	dummyInfoToForceException = HidDeviceInfo.ParseVidPidSerialUsage(descriptor);
 							}
 
-							UnusedLocal.PreventAnalysisWarning(dummyInfoToForceException);
+							UnusedLocal.PreventAnalysisWarning(dummyInfoToForceException, "Dummy variable improves code readability.");
 
 							Assert.Fail("Invalid descripton " + descriptor + " wasn't properly handled!");
 						}
@@ -376,7 +376,7 @@ namespace MKY.IO.Usb.Test
 		[Test, TestCaseSource(typeof(HidDeviceInfoTestData), "TestCases")]
 		public virtual void TestSerialization(bool isValid, int vendorId, int productId, bool matchSerial, string serial, bool matchUsage, int usagePage, int usageId, string[] descriptors)
 		{
-			UnusedArg.PreventAnalysisWarning(descriptors); // Only used for other test case(s).
+			UnusedArg.PreventAnalysisWarning(descriptors, "Argument is required by other test case(s) that share the same test data.");
 
 			// Attention:
 			// Similar code exists in DeviceInfoTest.TestSerialization().

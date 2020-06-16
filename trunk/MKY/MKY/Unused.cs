@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace MKY
@@ -32,8 +33,10 @@ namespace MKY
 		/// <summary>
 		/// Utility method that can be applied to unused events to prevent compiler warnings.
 		/// </summary>
-		public static void PreventCompilerWarning(EventHandler handler)
+		public static void PreventCompilerWarning(EventHandler handler, string justification)
 		{
+			UnusedArg.PreventAnalysisWarning(justification, "Argument is solely used for stating justification right where issues occurs.");
+
 			if (handler != null)
 				return;
 
@@ -44,8 +47,10 @@ namespace MKY
 		/// Utility method that can be applied to unused events to prevent compiler warnings.
 		/// </summary>
 		/// <typeparam name="T">The type of the generic event handler.</typeparam>
-		public static void PreventCompilerWarning<T>(EventHandler<T> handler) where T : EventArgs
+		public static void PreventCompilerWarning<T>(EventHandler<T> handler, string justification) where T : EventArgs
 		{
+			UnusedArg.PreventAnalysisWarning(justification, "Argument is solely used for stating justification right where issues occurs.");
+
 			if (handler != null)
 				return;
 
@@ -63,8 +68,12 @@ namespace MKY
 		/// Prevent FxCop "CA1801:ReviewUnusedParameters".
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
-		public static void PreventAnalysisWarning(object obj)
+		[Conditional("DEBUG")]
+		public static void PreventAnalysisWarning(object obj, string justification)
 		{
+		////UnusedArg.PreventAnalysisWarning(justification, "...") is not needed, maybe because this method is [Conditional("DEBUG")].
+		////UnusedArg.PreventAnalysisWarning(justification, "...") would result in recursion, thus if (justification != null) would have to be used instead.
+
 			if (obj != null)
 				return;
 
@@ -82,8 +91,11 @@ namespace MKY
 		/// Prevent FxCop "CA1804:RemoveUnusedLocals".
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
-		public static void PreventAnalysisWarning(object obj)
+		[Conditional("DEBUG")]
+		public static void PreventAnalysisWarning(object obj, string justification)
 		{
+		////UnusedArg.PreventAnalysisWarning(justification, "...") is not needed, maybe because this method is [Conditional("DEBUG")].
+
 			if (obj != null)
 				return;
 
@@ -100,8 +112,10 @@ namespace MKY
 		/// <typeparam name="T">The type of the object.</typeparam>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "It is the goal of this method to modify a variable outside this method, and 'out' is better suited than 'ref' as it doesn't require the variable to be initialized.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
-		public static void PreventCompilerWarning<T>(out T obj)
+		public static void PreventCompilerWarning<T>(out T obj, string justification)
 		{
+			UnusedArg.PreventAnalysisWarning(justification, "Argument is solely used for stating justification right where issues occurs.");
+
 			obj = default(T);
 		}
 	}

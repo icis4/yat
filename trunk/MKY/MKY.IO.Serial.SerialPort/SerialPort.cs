@@ -1429,8 +1429,8 @@ namespace MKY.IO.Serial.SerialPort
 					SignalThreadsSafely();
 
 					// Force access to port to check whether the port is still alive:
-					int byteToReadDummy = this.port.BytesToRead; // Force e.g. 'IOException', details see alive timer.
-					UnusedLocal.PreventAnalysisWarning(byteToReadDummy);
+					int dummyByteToRead = this.port.BytesToRead; // Force e.g. 'IOException', details see alive timer.
+					UnusedLocal.PreventAnalysisWarning(dummyByteToRead, "Dummy variable is required to retrieve a property.");
 
 					// Raise events:
 					switch (e.EventType)

@@ -146,9 +146,7 @@ namespace MKY.IO
 		public static bool IsFindable(string fileName)
 		{
 			string filePath;
-			bool result = IsFindable(fileName, out filePath);
-			UnusedLocal.PreventAnalysisWarning(filePath);
-			return (result);
+			return (IsFindable(fileName, out filePath));
 		}
 
 		/// <summary>
