@@ -40,36 +40,36 @@ namespace MKY.IO.Ports
 	/// <remarks>Using "Baud" prefix in order to be CLS-compliant.</remarks>
 	public enum BaudRate
 	{
-		Baud_75      = 75,
-		Baud_110     = 110,
-		Baud_134     = 134,
-		Baud_150     = 150,
-		Baud_300     = 300,
-		Baud_600     = 600,
-		Baud_1200    = 1200,
-		Baud_1800    = 1800,
-		Baud_2400    = 2400,
-		Baud_4800    = 4800,
-		Baud_7200    = 7200,
-		Baud_9600    = 9600,
-		Baud_14400   = 14400, // TI standard baud rate.
-		Baud_19200   = 19200,
-		Baud_28800   = 28800, // TI standard baud rate.
-		Baud_33600   = 33600,
-		Baud_38400   = 38400,
-		Baud_57600   = 57600,
-		Baud_115200  = 115200,
-		Baud_128000  = 128000,
-		Baud_230400  = 230400,
-		Baud_256000  = 256000,
-		Baud_460800  = 460800,
-		Baud_921600  = 921600,
-		Baud_960000  = 960000,  // FTDI standard baud rate (https://www.ftdichip.com/Support/Knowledgebase/index.html?whatbaudratesareachieveabl.htm).
-		Baud_1000000 = 1000000, //  ""
-		Baud_1200000 = 1200000, //  ""
-		Baud_1500000 = 1500000, //  ""
-		Baud_2000000 = 2000000, //  ""
-		Baud_3000000 = 3000000, //  ""
+		Baud75      = 75,
+		Baud110     = 110,
+		Baud134     = 134,
+		Baud150     = 150,
+		Baud300     = 300,
+		Baud600     = 600,
+		Baud1200    = 1200,
+		Baud1800    = 1800,
+		Baud2400    = 2400,
+		Baud4800    = 4800,
+		Baud7200    = 7200,
+		Baud9600    = 9600,
+		Baud14400   = 14400, // TI standard baud rate.
+		Baud19200   = 19200,
+		Baud28800   = 28800, // TI standard baud rate.
+		Baud33600   = 33600,
+		Baud38400   = 38400,
+		Baud57600   = 57600,
+		Baud115200  = 115200,
+		Baud128000  = 128000,
+		Baud230400  = 230400,
+		Baud256000  = 256000,
+		Baud460800  = 460800,
+		Baud921600  = 921600,
+		Baud960000  = 960000,  // FTDI standard baud rate (https://www.ftdichip.com/Support/Knowledgebase/index.html?whatbaudratesareachieveabl.htm).
+		Baud1000000 = 1000000, //  ""
+		Baud1200000 = 1200000, //  ""
+		Baud1500000 = 1500000, //  ""
+		Baud2000000 = 2000000, //  ""
+		Baud3000000 = 3000000, //  ""
 
 		Explicit = 0,
 
@@ -96,8 +96,8 @@ namespace MKY.IO.Ports
 	{
 		private int explicitBaudRate;
 
-		/// <summary>Default is <see cref="BaudRate.Baud_9600"/>.</summary>
-		public const BaudRate Default = BaudRate.Baud_9600;
+		/// <summary>Default is <see cref="BaudRate.Baud9600"/>.</summary>
+		public const BaudRate Default = BaudRate.Baud9600;
 
 		/// <summary>Default is <see cref="Default"/>.</summary>
 		public BaudRateEx()
@@ -254,36 +254,36 @@ namespace MKY.IO.Ports
 		{
 			var a = new List<BaudRateEx>(32); // Preset the required capacity to improve memory management; 32 is a large enough value.
 
-			a.Add(new BaudRateEx(BaudRate.Baud_75));
-			a.Add(new BaudRateEx(BaudRate.Baud_110));
-			a.Add(new BaudRateEx(BaudRate.Baud_134));
-			a.Add(new BaudRateEx(BaudRate.Baud_150));
-			a.Add(new BaudRateEx(BaudRate.Baud_300));
-			a.Add(new BaudRateEx(BaudRate.Baud_600));
-			a.Add(new BaudRateEx(BaudRate.Baud_1200));
-			a.Add(new BaudRateEx(BaudRate.Baud_1800));
-			a.Add(new BaudRateEx(BaudRate.Baud_2400));
-			a.Add(new BaudRateEx(BaudRate.Baud_4800));
-			a.Add(new BaudRateEx(BaudRate.Baud_7200));
-			a.Add(new BaudRateEx(BaudRate.Baud_9600));
-			a.Add(new BaudRateEx(BaudRate.Baud_14400));
-			a.Add(new BaudRateEx(BaudRate.Baud_19200));
-			a.Add(new BaudRateEx(BaudRate.Baud_28800));
-			a.Add(new BaudRateEx(BaudRate.Baud_33600));
-			a.Add(new BaudRateEx(BaudRate.Baud_38400));
-			a.Add(new BaudRateEx(BaudRate.Baud_57600));
-			a.Add(new BaudRateEx(BaudRate.Baud_115200));
-			a.Add(new BaudRateEx(BaudRate.Baud_128000));
-			a.Add(new BaudRateEx(BaudRate.Baud_230400));
-			a.Add(new BaudRateEx(BaudRate.Baud_256000));
-			a.Add(new BaudRateEx(BaudRate.Baud_460800));
-			a.Add(new BaudRateEx(BaudRate.Baud_921600));
-			a.Add(new BaudRateEx(BaudRate.Baud_960000));
-			a.Add(new BaudRateEx(BaudRate.Baud_1000000));
-			a.Add(new BaudRateEx(BaudRate.Baud_1200000));
-			a.Add(new BaudRateEx(BaudRate.Baud_1500000));
-			a.Add(new BaudRateEx(BaudRate.Baud_2000000));
-			a.Add(new BaudRateEx(BaudRate.Baud_3000000));
+			a.Add(new BaudRateEx(BaudRate.Baud75));
+			a.Add(new BaudRateEx(BaudRate.Baud110));
+			a.Add(new BaudRateEx(BaudRate.Baud134));
+			a.Add(new BaudRateEx(BaudRate.Baud150));
+			a.Add(new BaudRateEx(BaudRate.Baud300));
+			a.Add(new BaudRateEx(BaudRate.Baud600));
+			a.Add(new BaudRateEx(BaudRate.Baud1200));
+			a.Add(new BaudRateEx(BaudRate.Baud1800));
+			a.Add(new BaudRateEx(BaudRate.Baud2400));
+			a.Add(new BaudRateEx(BaudRate.Baud4800));
+			a.Add(new BaudRateEx(BaudRate.Baud7200));
+			a.Add(new BaudRateEx(BaudRate.Baud9600));
+			a.Add(new BaudRateEx(BaudRate.Baud14400));
+			a.Add(new BaudRateEx(BaudRate.Baud19200));
+			a.Add(new BaudRateEx(BaudRate.Baud28800));
+			a.Add(new BaudRateEx(BaudRate.Baud33600));
+			a.Add(new BaudRateEx(BaudRate.Baud38400));
+			a.Add(new BaudRateEx(BaudRate.Baud57600));
+			a.Add(new BaudRateEx(BaudRate.Baud115200));
+			a.Add(new BaudRateEx(BaudRate.Baud128000));
+			a.Add(new BaudRateEx(BaudRate.Baud230400));
+			a.Add(new BaudRateEx(BaudRate.Baud256000));
+			a.Add(new BaudRateEx(BaudRate.Baud460800));
+			a.Add(new BaudRateEx(BaudRate.Baud921600));
+			a.Add(new BaudRateEx(BaudRate.Baud960000));
+			a.Add(new BaudRateEx(BaudRate.Baud1000000));
+			a.Add(new BaudRateEx(BaudRate.Baud1200000));
+			a.Add(new BaudRateEx(BaudRate.Baud1500000));
+			a.Add(new BaudRateEx(BaudRate.Baud2000000));
+			a.Add(new BaudRateEx(BaudRate.Baud3000000));
 
 			// This method shall only return the fixed items, 'Explicit' is not added therefore.
 
@@ -422,36 +422,36 @@ namespace MKY.IO.Ports
 		{
 			// Sorted big to small for faster lookup of 'modern' baud rates.
 
-			if      (baudRate == (int)BaudRate.Baud_3000000) return (new BaudRateEx(BaudRate.Baud_3000000));
-			else if (baudRate == (int)BaudRate.Baud_2000000) return (new BaudRateEx(BaudRate.Baud_2000000));
-			else if (baudRate == (int)BaudRate.Baud_1500000) return (new BaudRateEx(BaudRate.Baud_1500000));
-			else if (baudRate == (int)BaudRate.Baud_1200000) return (new BaudRateEx(BaudRate.Baud_1200000));
-			else if (baudRate == (int)BaudRate.Baud_1000000) return (new BaudRateEx(BaudRate.Baud_1000000));
-			else if (baudRate == (int)BaudRate.Baud_960000)  return (new BaudRateEx(BaudRate.Baud_960000));
-			else if (baudRate == (int)BaudRate.Baud_921600)  return (new BaudRateEx(BaudRate.Baud_921600));
-			else if (baudRate == (int)BaudRate.Baud_460800)  return (new BaudRateEx(BaudRate.Baud_460800));
-			else if (baudRate == (int)BaudRate.Baud_256000)  return (new BaudRateEx(BaudRate.Baud_256000));
-			else if (baudRate == (int)BaudRate.Baud_230400)  return (new BaudRateEx(BaudRate.Baud_230400));
-			else if (baudRate == (int)BaudRate.Baud_128000)  return (new BaudRateEx(BaudRate.Baud_128000));
-			else if (baudRate == (int)BaudRate.Baud_115200)  return (new BaudRateEx(BaudRate.Baud_115200));
-			else if (baudRate == (int)BaudRate.Baud_57600)   return (new BaudRateEx(BaudRate.Baud_57600));
-			else if (baudRate == (int)BaudRate.Baud_38400)   return (new BaudRateEx(BaudRate.Baud_38400));
-			else if (baudRate == (int)BaudRate.Baud_33600)   return (new BaudRateEx(BaudRate.Baud_33600));
-			else if (baudRate == (int)BaudRate.Baud_28800)   return (new BaudRateEx(BaudRate.Baud_28800));
-			else if (baudRate == (int)BaudRate.Baud_19200)   return (new BaudRateEx(BaudRate.Baud_19200));
-			else if (baudRate == (int)BaudRate.Baud_14400)   return (new BaudRateEx(BaudRate.Baud_14400));
-			else if (baudRate == (int)BaudRate.Baud_9600)    return (new BaudRateEx(BaudRate.Baud_9600));
-			else if (baudRate == (int)BaudRate.Baud_7200)    return (new BaudRateEx(BaudRate.Baud_7200));
-			else if (baudRate == (int)BaudRate.Baud_4800)    return (new BaudRateEx(BaudRate.Baud_4800));
-			else if (baudRate == (int)BaudRate.Baud_2400)    return (new BaudRateEx(BaudRate.Baud_2400));
-			else if (baudRate == (int)BaudRate.Baud_1200)    return (new BaudRateEx(BaudRate.Baud_1200));
-			else if (baudRate == (int)BaudRate.Baud_600)     return (new BaudRateEx(BaudRate.Baud_600));
-			else if (baudRate == (int)BaudRate.Baud_300)     return (new BaudRateEx(BaudRate.Baud_300));
-			else if (baudRate == (int)BaudRate.Baud_150)     return (new BaudRateEx(BaudRate.Baud_150));
-			else if (baudRate == (int)BaudRate.Baud_134)     return (new BaudRateEx(BaudRate.Baud_134));
-			else if (baudRate == (int)BaudRate.Baud_110)     return (new BaudRateEx(BaudRate.Baud_110));
-			else if (baudRate == (int)BaudRate.Baud_75)      return (new BaudRateEx(BaudRate.Baud_75));
-			else                                             return (new BaudRateEx(baudRate));
+			if      (baudRate == (int)BaudRate.Baud3000000) return (new BaudRateEx(BaudRate.Baud3000000));
+			else if (baudRate == (int)BaudRate.Baud2000000) return (new BaudRateEx(BaudRate.Baud2000000));
+			else if (baudRate == (int)BaudRate.Baud1500000) return (new BaudRateEx(BaudRate.Baud1500000));
+			else if (baudRate == (int)BaudRate.Baud1200000) return (new BaudRateEx(BaudRate.Baud1200000));
+			else if (baudRate == (int)BaudRate.Baud1000000) return (new BaudRateEx(BaudRate.Baud1000000));
+			else if (baudRate == (int)BaudRate.Baud960000)  return (new BaudRateEx(BaudRate.Baud960000));
+			else if (baudRate == (int)BaudRate.Baud921600)  return (new BaudRateEx(BaudRate.Baud921600));
+			else if (baudRate == (int)BaudRate.Baud460800)  return (new BaudRateEx(BaudRate.Baud460800));
+			else if (baudRate == (int)BaudRate.Baud256000)  return (new BaudRateEx(BaudRate.Baud256000));
+			else if (baudRate == (int)BaudRate.Baud230400)  return (new BaudRateEx(BaudRate.Baud230400));
+			else if (baudRate == (int)BaudRate.Baud128000)  return (new BaudRateEx(BaudRate.Baud128000));
+			else if (baudRate == (int)BaudRate.Baud115200)  return (new BaudRateEx(BaudRate.Baud115200));
+			else if (baudRate == (int)BaudRate.Baud57600)   return (new BaudRateEx(BaudRate.Baud57600));
+			else if (baudRate == (int)BaudRate.Baud38400)   return (new BaudRateEx(BaudRate.Baud38400));
+			else if (baudRate == (int)BaudRate.Baud33600)   return (new BaudRateEx(BaudRate.Baud33600));
+			else if (baudRate == (int)BaudRate.Baud28800)   return (new BaudRateEx(BaudRate.Baud28800));
+			else if (baudRate == (int)BaudRate.Baud19200)   return (new BaudRateEx(BaudRate.Baud19200));
+			else if (baudRate == (int)BaudRate.Baud14400)   return (new BaudRateEx(BaudRate.Baud14400));
+			else if (baudRate == (int)BaudRate.Baud9600)    return (new BaudRateEx(BaudRate.Baud9600));
+			else if (baudRate == (int)BaudRate.Baud7200)    return (new BaudRateEx(BaudRate.Baud7200));
+			else if (baudRate == (int)BaudRate.Baud4800)    return (new BaudRateEx(BaudRate.Baud4800));
+			else if (baudRate == (int)BaudRate.Baud2400)    return (new BaudRateEx(BaudRate.Baud2400));
+			else if (baudRate == (int)BaudRate.Baud1200)    return (new BaudRateEx(BaudRate.Baud1200));
+			else if (baudRate == (int)BaudRate.Baud600)     return (new BaudRateEx(BaudRate.Baud600));
+			else if (baudRate == (int)BaudRate.Baud300)     return (new BaudRateEx(BaudRate.Baud300));
+			else if (baudRate == (int)BaudRate.Baud150)     return (new BaudRateEx(BaudRate.Baud150));
+			else if (baudRate == (int)BaudRate.Baud134)     return (new BaudRateEx(BaudRate.Baud134));
+			else if (baudRate == (int)BaudRate.Baud110)     return (new BaudRateEx(BaudRate.Baud110));
+			else if (baudRate == (int)BaudRate.Baud75)      return (new BaudRateEx(BaudRate.Baud75));
+			else                                            return (new BaudRateEx(baudRate));
 		}
 
 		/// <summary></summary>
