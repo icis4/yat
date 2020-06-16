@@ -44,6 +44,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 #endregion
@@ -183,6 +184,7 @@ namespace MKY.Time
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool Update(int item, out int value)
 		{
 			var now = DateTime.Now; // A single time stamp for the whole operation.
@@ -194,6 +196,7 @@ namespace MKY.Time
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual bool AddItemAndUpdate(DateTime timeStamp, int item, out int value)
 		{
 			AddItemToQueue(timeStamp, item);
@@ -213,12 +216,14 @@ namespace MKY.Time
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool Update(DateTime timeStamp, out int value)
 		{
 			return (UpdateWithoutAdd(timeStamp, out value));
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual bool UpdateWithoutAdd(DateTime timeStamp, out int value)
 		{
 			RemoveObsoleteItemsFromQueue(timeStamp);

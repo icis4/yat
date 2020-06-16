@@ -207,6 +207,10 @@ namespace MKY.Settings
 			/// <summary>
 			/// Gets a value indicating whether disposal of object is neither ongoing nor has completed.
 			/// </summary>
+			/// <remarks>
+			/// See remarks at <see cref="DisposableBase.IsUndisposed"/>.
+			/// </remarks>
+			[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Undisposed", Justification = "See remarks.")]
 			public bool IsUndisposed
 			{
 				get { return (Thread.VolatileRead(ref this.disposableState) == 0); }
@@ -272,6 +276,7 @@ namespace MKY.Settings
 			/// <summary>
 			/// Asserts that disposal of object is neither ongoing nor has already completed.
 			/// </summary>
+			[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Undisposed", Justification = "See remarks at 'IsUndisposed'.")]
 			protected virtual void AssertUndisposed()
 			{
 				if (!IsUndisposed)
