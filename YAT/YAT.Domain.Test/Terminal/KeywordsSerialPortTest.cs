@@ -158,12 +158,12 @@ namespace YAT.Domain.Test.Terminal
 					keyword = @"\!(Baud(19200))\!(DataBits(7))\!(Parity(2))\!(StopBits(2))\!(NoEOL)"; // Not changing flow control, too difficult to verify here.
 					terminalA.SendTextLine(keyword); // Intentionally using Line() with \!(NoEOL) as this will be required for a keyword-only predefined command.
 					Thread.Sleep(WaitForApply * 4);
-					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.BaudRate, Is.EqualTo((int)MKY.IO.Ports.BaudRate.Baud_19200));
+					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.BaudRate, Is.EqualTo((int)MKY.IO.Ports.BaudRate.Baud19200));
 					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.DataBits, Is.EqualTo(     MKY.IO.Ports.DataBits.Seven));
 					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.Parity,   Is.EqualTo(  System.IO.Ports.Parity  .Even));
 					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.StopBits, Is.EqualTo(  System.IO.Ports.StopBits.Two));
 
-					settingsB.IO.SerialPort.Communication.BaudRate = (int)MKY.IO.Ports.BaudRate.Baud_19200;
+					settingsB.IO.SerialPort.Communication.BaudRate = (int)MKY.IO.Ports.BaudRate.Baud19200;
 					settingsB.IO.SerialPort.Communication.DataBits =      MKY.IO.Ports.DataBits.Seven;
 					settingsB.IO.SerialPort.Communication.Parity   =   System.IO.Ports.Parity  .Even;
 					settingsB.IO.SerialPort.Communication.StopBits =   System.IO.Ports.StopBits.Two;
@@ -201,12 +201,12 @@ namespace YAT.Domain.Test.Terminal
 					keyword = @"\!(PortSettings(115200, 8, 0, 1))\!(NoEOL)"; // Not changing flow control, too difficult to verify here.
 					terminalA.SendTextLine(keyword); // Intentionally using Line() with \!(NoEOL) as this will be required for a keyword-only predefined command.
 					Thread.Sleep(WaitForApply);
-					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.BaudRate, Is.EqualTo((int)MKY.IO.Ports.BaudRate.Baud_115200));
+					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.BaudRate, Is.EqualTo((int)MKY.IO.Ports.BaudRate.Baud115200));
 					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.DataBits, Is.EqualTo(     MKY.IO.Ports.DataBits.Eight));
 					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.Parity,   Is.EqualTo(  System.IO.Ports.Parity  .None));
 					Assert.That(terminalA.TerminalSettings.IO.SerialPort.Communication.StopBits, Is.EqualTo(  System.IO.Ports.StopBits.One));
 
-					settingsB.IO.SerialPort.Communication.BaudRate = (int)MKY.IO.Ports.BaudRate.Baud_115200;
+					settingsB.IO.SerialPort.Communication.BaudRate = (int)MKY.IO.Ports.BaudRate.Baud115200;
 					settingsB.IO.SerialPort.Communication.DataBits =      MKY.IO.Ports.DataBits.Eight;
 					settingsB.IO.SerialPort.Communication.Parity   =   System.IO.Ports.Parity  .None;
 					settingsB.IO.SerialPort.Communication.StopBits =   System.IO.Ports.StopBits.One;
