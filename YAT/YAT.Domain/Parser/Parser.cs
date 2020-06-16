@@ -161,12 +161,21 @@ namespace YAT.Domain.Parser
 		public const Radix DefaultRadixDefault = Radix.String;
 
 		/// <summary>
-		/// Default is <see cref="EncodingEx.Default"/> which is <see cref="Encoding.UTF8"/>.
+		/// Default is <see cref="EncodingEx.Default"/> which is <see cref="SupportedEncoding.UTF8"/>
+		/// which corresponds to <see cref="Encoding.UTF8"/>.
 		/// </summary>
 		/// <remarks>
 		/// <see cref="Encoding.Default"/> must not be used because that is limited to an ANSI code page.
 		/// </remarks>
-		public static readonly Encoding EncodingDefault = EncodingEx.Default;
+		/// <remarks>
+		/// Must be implemented as property (instead of a readonly) since <see cref="Encoding"/>
+		/// is a mutable reference type. Defining a readonly would correctly result in FxCop
+		/// message CA2104 "DoNotDeclareReadOnlyMutableReferenceTypes" (Microsoft.Security).
+		/// </remarks>
+		public static Encoding EncodingDefault
+		{
+			get { return (Encoding.GetEncoding((int)(EncodingEx.Default))); }
+		}
 
 		/// <summary>
 		/// Default is <see cref="EndiannessEx.Default"/>.

@@ -699,7 +699,7 @@ namespace MKY.Text
 	public class EncodingEx : EnumEx, IEquatable<EncodingEx>
 	{
 		/// <summary>
-		/// Default is <see cref="Encoding.UTF8"/>.
+		/// Default is <see cref="SupportedEncoding.UTF8"/> which corresponds to <see cref="Encoding.UTF8"/>.
 		/// </summary>
 		/// <remarks>
 		/// <see cref="Encoding.Default"/>:
@@ -710,7 +710,12 @@ namespace MKY.Text
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		public static readonly Encoding Default = Encoding.UTF8;
+		/// <remarks>
+		/// Must be implemented as const (instead of a readonly <see cref="Encoding"/>) as that
+		/// is a mutable reference type. Defining a readonly would correctly result in FxCop
+		/// message CA2104 "DoNotDeclareReadOnlyMutableReferenceTypes" (Microsoft.Security).
+		/// </remarks>
+		public const SupportedEncoding Default = SupportedEncoding.UTF8; // = Encoding.UTF8.CodePage;
 
 		private struct EncodingInfoEx
 		{
@@ -741,7 +746,7 @@ namespace MKY.Text
 		/// Default is <see cref="Default"/>.
 		/// </summary>
 		public EncodingEx()
-			: this((SupportedEncoding)Default.CodePage)
+			: this(Default)
 		{
 		}
 
@@ -820,11 +825,7 @@ namespace MKY.Text
 		{
 			get
 			{
-				// Default encoding:
-				if (IsDefault)
-					return (Default);
-
-				// Cached encodings:
+				// Cached encodings, including 'Default':
 				foreach (EncodingInfoEx info in staticInfos)
 				{
 					if ((SupportedEncoding)UnderlyingEnum == info.SupportedEncoding)
@@ -842,14 +843,6 @@ namespace MKY.Text
 		}
 
 		/// <summary>
-		/// Returns the encoding object for the given code page.
-		/// </summary>
-		public static Encoding GetEncoding(int codePage)
-		{
-			return (new EncodingEx(codePage).Encoding);
-		}
-
-		/// <summary>
 		/// Returns the encoding object for the given encoding.
 		/// </summary>
 		public static Encoding GetEncoding(SupportedEncoding encoding)
@@ -864,7 +857,7 @@ namespace MKY.Text
 		{
 			get
 			{
-				return ((int)((SupportedEncoding)UnderlyingEnum) == Default.CodePage);
+				return (((SupportedEncoding)UnderlyingEnum) == Default);
 			}
 		}
 

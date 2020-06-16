@@ -59,7 +59,8 @@ namespace YAT.Domain.Settings
 		public static readonly string EolDefault = EolEx.Parse(Environment.NewLine);
 
 		/// <summary>
-		/// Default is <see cref="EncodingEx.Default"/> which is <see cref="Encoding.UTF8"/>.
+		/// Default is <see cref="EncodingEx.Default"/> which is <see cref="SupportedEncoding.UTF8"/>
+		/// which corresponds to <see cref="Encoding.UTF8"/>.
 		/// </summary>
 		/// <remarks>
 		/// <see cref="Encoding.Default"/> must not be used because that is limited to an ANSI code page.
