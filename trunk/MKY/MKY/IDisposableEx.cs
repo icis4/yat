@@ -29,7 +29,10 @@ namespace MKY
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public interface IDisposableEx
 	{
-		/// <summary></summary>
+		/// <remarks>
+		/// See remarks at <see cref="DisposableBase.IsUndisposed"/>.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Undisposed", Justification = "See remarks.")]
 		bool IsUndisposed { get; }
 	}
 }

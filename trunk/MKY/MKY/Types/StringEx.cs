@@ -927,6 +927,7 @@ namespace MKY
 		/// A new string that contains the spaced version of <paramref name="str"/>.
 		/// </returns>
 		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		[SuppressMessage("Microsoft.Naming", "CA1719:ParameterNamesShouldNotMatchMemberNames", MessageId = "1#", Justification = "Intentionally using the same parameter name to emphasize purpose.")]
 		public static string Space(string str, char space)
 		{
 			if (str == null)

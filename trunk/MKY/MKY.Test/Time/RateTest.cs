@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 using MKY.Threading;
 using MKY.Time;
@@ -50,20 +51,30 @@ namespace MKY.Test.Time
 		[Test]
 		public virtual void TestCreateIntervalLessThanWindow()
 		{
-			var rate1us = new Rate(0.001, 0.0015); // Intentionally using an odd interval-window-ratio.
-			var rate1ms = new Rate(1, 1.5);        // Intentionally using an odd interval-window-ratio.
-			var rate1s  = new Rate(1000, 1500);    // Intentionally using an odd interval-window-ratio.
+			var dummyRateToTestConstrutorWith1us = new Rate(0.001, 0.0015); // Intentionally using an odd interval-window-ratio.
+			var dummyRateToTestConstrutorWith1ms = new Rate(1, 1.5);        // Intentionally using an odd interval-window-ratio.
+			var dummyRateToTestConstrutorWith1s  = new Rate(1000, 1500);    // Intentionally using an odd interval-window-ratio.
+
+			UnusedLocal.PreventAnalysisWarning(dummyRateToTestConstrutorWith1us, "Dummy variable improves code readability.");
+			UnusedLocal.PreventAnalysisWarning(dummyRateToTestConstrutorWith1ms, "Dummy variable improves code readability.");
+			UnusedLocal.PreventAnalysisWarning(dummyRateToTestConstrutorWith1s,  "Dummy variable improves code readability.");
 		}
 
 		/// <summary></summary>
 		[Test]
 		public virtual void TestCreateIntervalEqualsWindow()
 		{
-			var rate    = new Rate();
-			var rate1us = new Rate(0.001);
-			var rate1ms = new Rate(1);
-			var rate1s  = new Rate(1000);
-			var rate1sb = new Rate(1000, 1000);
+			var dummyRateToTestConstrutor        = new Rate();
+			var dummyRateToTestConstrutorWith1us = new Rate(0.001);
+			var dummyRateToTestConstrutorWith1ms = new Rate(1);
+			var dummyRateToTestConstrutorWith1s  = new Rate(1000);
+			var dummyRateToTestConstrutorWith1sb = new Rate(1000, 1000);
+
+			UnusedLocal.PreventAnalysisWarning(dummyRateToTestConstrutor,        "Dummy variable improves code readability.");
+			UnusedLocal.PreventAnalysisWarning(dummyRateToTestConstrutorWith1us, "Dummy variable improves code readability.");
+			UnusedLocal.PreventAnalysisWarning(dummyRateToTestConstrutorWith1ms, "Dummy variable improves code readability.");
+			UnusedLocal.PreventAnalysisWarning(dummyRateToTestConstrutorWith1s,  "Dummy variable improves code readability.");
+			UnusedLocal.PreventAnalysisWarning(dummyRateToTestConstrutorWith1sb, "Dummy variable improves code readability.");
 		}
 
 		/// <summary></summary>
@@ -72,25 +83,34 @@ namespace MKY.Test.Time
 		{
 			Assert.That(CreateIntervalLargerThanWindow1us, Throws.TypeOf<ArgumentOutOfRangeException>());
 			Assert.That(CreateIntervalLargerThanWindow1ms, Throws.TypeOf<ArgumentOutOfRangeException>());
-			Assert.That(CreateIntervalLargerThanWindow1s, Throws.TypeOf<ArgumentOutOfRangeException>());
+			Assert.That(CreateIntervalLargerThanWindow1s,  Throws.TypeOf<ArgumentOutOfRangeException>());
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "us", Justification = "'us' is the correct abbreviation for microseconds.")]
 		protected virtual void CreateIntervalLargerThanWindow1us()
 		{
-			var rate = new Rate(0.001, 0.00075); // Intentionally using an odd interval-window-ratio.
+			var dummyRateToForceException = new Rate(0.001, 0.00075); // Intentionally using an odd interval-window-ratio.
+
+			UnusedLocal.PreventAnalysisWarning(dummyRateToForceException, "Dummy variable improves code readability.");
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ms", Justification = "'ms' is the correct abbreviation for milliseconds.")]
 		protected virtual void CreateIntervalLargerThanWindow1ms()
 		{
-			var rate = new Rate(1, 0.75); // Intentionally using an odd interval-window-ratio.
+			var dummyRateToForceException = new Rate(1, 0.75); // Intentionally using an odd interval-window-ratio.
+
+			UnusedLocal.PreventAnalysisWarning(dummyRateToForceException, "Dummy variable improves code readability.");
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "s", Justification = "'s' is the correct abbreviation for seconds.")]
 		protected virtual void CreateIntervalLargerThanWindow1s()
 		{
-			var rate = new Rate(1000, 750); // Intentionally using an odd interval-window-ratio.
+			var dummyRateToForceException = new Rate(1000, 750); // Intentionally using an odd interval-window-ratio.
+
+			UnusedLocal.PreventAnalysisWarning(dummyRateToForceException, "Dummy variable improves code readability.");
 		}
 
 		/// <summary></summary>

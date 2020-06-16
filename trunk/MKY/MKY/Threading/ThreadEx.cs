@@ -52,6 +52,7 @@ namespace MKY.Threading
 		/// <see cref="SleepUntilAt(DateTime, int)"/> and
 		/// <see cref="SleepUntilOffset(DateTime, int, int)"/> with default argument.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void SleepUntilAt(DateTime at, int sleepInterval = SleepIntervalDefault)
 		{
 			var now = DateTime.Now;
@@ -75,6 +76,7 @@ namespace MKY.Threading
 		/// <see cref="SleepUntilAt(DateTime, int)"/> and
 		/// <see cref="SleepUntilOffset(DateTime, int, int)"/> with default argument.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void SleepUntilOffset(DateTime baseline, TimeSpan offset, int sleepInterval = SleepIntervalDefault)
 		{
 			var at = baseline + offset;
@@ -94,6 +96,7 @@ namespace MKY.Threading
 		/// <see cref="SleepUntilAt(DateTime, int)"/> and
 		/// <see cref="SleepUntilOffset(DateTime, int, int)"/> with default argument.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void SleepUntilOffset(DateTime baseline, int offset, int sleepInterval = SleepIntervalDefault)
 		{
 			SleepUntilOffset(baseline, TimeSpan.FromMilliseconds(offset), sleepInterval);
