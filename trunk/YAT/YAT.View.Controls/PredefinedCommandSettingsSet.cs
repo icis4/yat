@@ -402,9 +402,7 @@ namespace YAT.View.Controls
 				var text = this.command.SingleLineText;
 				if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", text, this.parseModeForText, defaultRadix))
 				{
-					this.command.DefaultRadix = defaultRadix;
-				////this.isValidated is intentionally not set, as the validation above only verifies the changed radix but not the text.
-				////ConfirmSingleLineText() is intentionally not called, as that may confirm the command with not yet updated text on ValidateChildren().
+					ConfirmDefaultRadix(defaultRadix);
 					return (true);
 				}
 			}
@@ -412,17 +410,15 @@ namespace YAT.View.Controls
 			{
 				bool isValid = true;
 
-				foreach (var text in this.command.MultiLineText)
+				foreach (var line in this.command.MultiLineText)
 				{
-					if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", text, this.parseModeForText, defaultRadix))
+					if (Utilities.ValidationHelper.ValidateRadix(this, "default radix", line, this.parseModeForText, defaultRadix))
 						isValid = false;
 				}
 
 				if (isValid)
 				{
-					this.command.DefaultRadix = defaultRadix;
-				////this.isValidated is intentionally not set, as the validation above only verifies the changed radix but not the text.
-				////ConfirmSingleLineText() is intentionally not called, as that may confirm the command with not yet updated text on ValidateChildren().
+					ConfirmDefaultRadix(defaultRadix);
 					return (true);
 				}
 			}
@@ -535,8 +531,6 @@ namespace YAT.View.Controls
 				// Easter egg ;-)
 				if (Model.Settings.SendTextSettings.IsEasterEggCommand(textBox_SingleLineText.Text))
 				{
-					this.isValidated = true;
-
 					if (this.editFocusState == EditFocusState.IsLeavingEdit)
 						SetEditFocusState(EditFocusState.EditIsInactive);
 
@@ -549,8 +543,6 @@ namespace YAT.View.Controls
 				int invalidTextLength;
 				if (Utilities.ValidationHelper.ValidateText(this, "command text", textBox_SingleLineText.Text, out invalidTextStart, out invalidTextLength, this.parseModeForText, this.command.DefaultRadix))
 				{
-					this.isValidated = true;
-
 					if (this.editFocusState == EditFocusState.IsLeavingEdit)
 						SetEditFocusState(EditFocusState.EditIsInactive);
 
@@ -812,18 +804,40 @@ namespace YAT.View.Controls
 		// Non-Public Methods > Handle Command
 		//------------------------------------------------------------------------------------------
 
-		private void ConfirmDescription(string description)
+		private void ConfirmDefaultRadix(Domain.Radix radix)
 		{
-			this.command.Description = description;
+			this.command.DefaultRadix = radix;
+			this.isValidated = true;
 
-			SetControls();
-			OnCommandChanged(EventArgs.Empty);
+			ConfirmCommand();
 		}
 
 		private void ConfirmSingleLineText(string text)
 		{
 			this.command.SingleLineText = text;
+			this.isValidated = true;
 
+			ConfirmCommand();
+		}
+
+		private void ConfirmMultiLineCommand(Command command)
+		{
+			this.command = command;
+			this.isValidated = true;
+
+			ConfirmCommand();
+		}
+
+		private void ConfirmDescription(string description)
+		{
+			this.command.Description = description;
+		////this.isValidated mus not be set as that applies to the radix/text-pair but not the description.
+
+			ConfirmCommand();
+		}
+
+		private void ConfirmCommand()
+		{
 			SetControls();
 			OnCommandChanged(EventArgs.Empty);
 		}
@@ -855,26 +869,17 @@ namespace YAT.View.Controls
 			}
 
 			// Calculate startup location:
-			Rectangle area = requestingControl.RectangleToScreen(requestingControl.DisplayRectangle);
-			Point formStartupLocation = new Point();
+			var area = requestingControl.RectangleToScreen(requestingControl.DisplayRectangle);
+			var formStartupLocation = new Point();
 			formStartupLocation.X = area.X + area.Width;
 			formStartupLocation.Y = area.Y + area.Height;
 
 			// Show multi-line box:
 			var f = new MultiLineBox(this.command, formStartupLocation, this.command.DefaultRadix, this.parseModeForText);
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
-			{
-				this.command = f.CommandResult;
-				this.isValidated = true; // Command has been validated by multi-line box.
-
-				SetControls();
-				OnCommandChanged(EventArgs.Empty);
-			}
+				ConfirmMultiLineCommand(f.CommandResult); // Command has been validated by multi-line box.
 			else
-			{
-				SetControls();
-			////OnCommandChanged() is not called, nothing has changed.
-			}
+				SetControls(); // Nothing has changed, just potentially restore multi-line text indication.
 
 			textBox_Description.Select();
 		}
