@@ -706,8 +706,12 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
+		/// The following list is used to reduce the number of changed settings as
+		/// <c>this.settingsInEdit = f.SettingsResult</c> would.
+		/// </remarks>
+		/// <remarks>
 		/// The following list must handle the same properties as
-		/// <see cref="View.Forms.AdvancedTerminalSettings.SetDefaults()"/> defaults.
+		/// <see cref="AdvancedTerminalSettings.SetDefaults()"/> defaults.
 		/// </remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowAdvancedSettings()

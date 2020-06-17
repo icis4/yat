@@ -1909,7 +1909,7 @@ namespace YAT.View.Forms
 					(
 						this,
 						"To enable this setting, lines must be broken when I/O device changes.",
-						"Incompatible Setting",
+						"Incompatible Settings",
 						MessageBoxButtons.OKCancel,
 						MessageBoxIcon.Information
 					);

@@ -120,14 +120,14 @@ namespace YAT.View.Forms
 		{
 			this.settings = settings;
 			this.settingsInEdit = new Log.Settings.LogSettings(settings); // Clone to ensure decoupling.
-			this.settingsInEdit.Changed += settings_Form_Changed;
+			this.settingsInEdit.Changed += settingsInEdit_Changed;
 
 			// Note that extensions are handled via 'ApplicationSettings'.
 		}
 
 		private void DetachAndAcceptSettings()
 		{
-			this.settingsInEdit.Changed -= settings_Form_Changed;
+			this.settingsInEdit.Changed -= settingsInEdit_Changed;
 			this.settings = this.settingsInEdit;
 
 			ApplicationSettings.RoamingUserSettings.Extensions.ControlLogFiles = this.settings.ControlExtension;
@@ -136,7 +136,7 @@ namespace YAT.View.Forms
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
-		private void settings_Form_Changed(object sender, MKY.Settings.SettingsEventArgs e)
+		private void settingsInEdit_Changed(object sender, MKY.Settings.SettingsEventArgs e)
 		{
 			SetControls();
 		}

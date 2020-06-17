@@ -90,16 +90,16 @@ namespace YAT.View.Forms
 		{
 			this.settings = settings;
 			this.settingsInEdit = new Domain.Settings.BinaryTerminalSettings(settings); // Clone to ensure decoupling.
-			this.settingsInEdit.Changed += settings_Form_Changed;
+			this.settingsInEdit.Changed += settingsInEdit_Changed;
 		}
 
 		private void DetachAndAcceptSettings()
 		{
-			this.settingsInEdit.Changed -= settings_Form_Changed;
+			this.settingsInEdit.Changed -= settingsInEdit_Changed;
 			this.settings = this.settingsInEdit;
 		}
 
-		private void settings_Form_Changed(object sender, MKY.Settings.SettingsEventArgs e)
+		private void settingsInEdit_Changed(object sender, MKY.Settings.SettingsEventArgs e)
 		{
 			SetControls();
 		}

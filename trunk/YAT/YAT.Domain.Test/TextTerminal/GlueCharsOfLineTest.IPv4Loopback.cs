@@ -69,9 +69,9 @@ namespace YAT.Domain.Test.TextTerminal
 				var settingsB = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
 				settingsB.Display.ShowDirection = true;
 
-				var gcol = settingsB.TextTerminal.GlueCharsOfLine;
-				gcol.Enabled = false;
-				settingsB.TextTerminal.GlueCharsOfLine = gcol;
+				var gcolB = settingsB.TextTerminal.GlueCharsOfLine;
+				gcolB.Enabled = false;
+				settingsB.TextTerminal.GlueCharsOfLine = gcolB;
 
 				using (var terminalB = new Domain.TextTerminal(settingsB))
 				{
@@ -247,9 +247,9 @@ namespace YAT.Domain.Test.TextTerminal
 			settingsA.Display.ShowLength    = true;
 			settingsA.Display.ShowDuration  = true;
 
-			var gcol = settingsA.TextTerminal.GlueCharsOfLine;
-			gcol.Timeout = Timeout.Infinite;
-			settingsA.TextTerminal.GlueCharsOfLine = gcol;
+			var gcolA = settingsA.TextTerminal.GlueCharsOfLine;
+			gcolA.Timeout = Timeout.Infinite;
+			settingsA.TextTerminal.GlueCharsOfLine = gcolA;
 
 			using (var terminalA = new Domain.TextTerminal(settingsA))
 			{
@@ -258,9 +258,9 @@ namespace YAT.Domain.Test.TextTerminal
 				var settingsB = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
 				settingsB.Display.ShowDirection = true;
 
-				gcol = settingsB.TextTerminal.GlueCharsOfLine;
-				gcol.Enabled = false;
-				settingsB.TextTerminal.GlueCharsOfLine = gcol;
+				var gcolB = settingsB.TextTerminal.GlueCharsOfLine;
+				gcolB.Enabled = false;
+				settingsB.TextTerminal.GlueCharsOfLine = gcolB;
 
 				using (var terminalB = new Domain.TextTerminal(settingsB))
 				{
