@@ -283,6 +283,10 @@ namespace YAT.Domain.Test.TextTerminal
 			settingsA.TextTerminal.TxEol = "";
 			settingsA.TextTerminal.RxEol = "";
 
+			var gcolA = settingsA.TextTerminal.GlueCharsOfLine;
+			gcolA.Enabled = false; // This test relies on direction line break.
+			settingsA.TextTerminal.GlueCharsOfLine = gcolA;
+
 			using (var terminalA = new Domain.TextTerminal(settingsA))
 			{
 				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
@@ -290,6 +294,11 @@ namespace YAT.Domain.Test.TextTerminal
 				var settingsB = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
 				settingsB.TextTerminal.TxEol = "";
 				settingsB.TextTerminal.RxEol = "";
+
+				var gcolB = settingsB.TextTerminal.GlueCharsOfLine;
+				gcolB.Enabled = false; // This test relies on direction line break.
+				settingsA.TextTerminal.GlueCharsOfLine = gcolB;
+
 				using (var terminalB = new Domain.TextTerminal(settingsB))
 				{
 					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started");
