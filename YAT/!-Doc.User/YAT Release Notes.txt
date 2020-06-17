@@ -156,6 +156,8 @@ Fixed bugs:
   commands yet (related to previous feature requests #28, #257, #365).
 - Import/Paste of a .yacp command page file that contains more predefined commands than currently
   configured now behaves correctly (bug #479, related to previous feature requests #28, #257, #365).
+- Explicit default radix is no longer reset to [String] when multiple predefined command pages are
+  being defined (bug #492).
 - Automatic actions and responses now work chunk independently (feature request #366).
 - Automatic actions [Filter] and [Suppress] now also work for continuous data (bug #478) and on
   refresh (feature request #367).
