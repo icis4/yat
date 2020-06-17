@@ -831,7 +831,7 @@ namespace YAT.View.Controls
 		private void ConfirmDescription(string description)
 		{
 			this.command.Description = description;
-		////this.isValidated mus not be set as that applies to the radix/text-pair but not the description.
+		////this.isValidated must not be set as this flag solely applies to the radix/text-pair (i.e. not the description).
 
 			ConfirmCommand();
 		}

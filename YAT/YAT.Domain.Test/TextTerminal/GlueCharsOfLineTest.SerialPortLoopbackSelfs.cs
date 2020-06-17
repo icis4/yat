@@ -76,6 +76,7 @@ namespace YAT.Domain.Test.TextTerminal
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			var settings = settingsDescriptor.Value1(settingsDescriptor.Value2);
+
 			var gcol = settings.TextTerminal.GlueCharsOfLine;
 			gcol.Enabled = true;
 			gcol.Timeout = Timeout.Infinite;
@@ -94,6 +95,7 @@ namespace YAT.Domain.Test.TextTerminal
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			var settings = settingsDescriptor.Value1(settingsDescriptor.Value2);
+
 			var gcol = settings.TextTerminal.GlueCharsOfLine;
 			gcol.Timeout = 1;
 			settings.TextTerminal.GlueCharsOfLine = gcol;
@@ -111,6 +113,7 @@ namespace YAT.Domain.Test.TextTerminal
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			var settings = settingsDescriptor.Value1(settingsDescriptor.Value2);
+
 			var gcol = settings.TextTerminal.GlueCharsOfLine;
 			gcol.Enabled = false;
 			settings.TextTerminal.GlueCharsOfLine = gcol;
