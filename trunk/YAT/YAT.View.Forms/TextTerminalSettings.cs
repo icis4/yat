@@ -32,6 +32,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -107,16 +108,16 @@ namespace YAT.View.Forms
 		{
 			this.settings = settings;
 			this.settingsInEdit = new Domain.Settings.TextTerminalSettings(settings); // Clone to ensure decoupling.
-			this.settingsInEdit.Changed += settings_Form_Changed;
+			this.settingsInEdit.Changed += settingsInEdit_Changed;
 		}
 
 		private void DetachAndAcceptSettings()
 		{
-			this.settingsInEdit.Changed -= settings_Form_Changed;
+			this.settingsInEdit.Changed -= settingsInEdit_Changed;
 			this.settings = this.settingsInEdit;
 		}
 
-		private void settings_Form_Changed(object sender, MKY.Settings.SettingsEventArgs e)
+		private void settingsInEdit_Changed(object sender, MKY.Settings.SettingsEventArgs e)
 		{
 			SetControls();
 		}
@@ -186,10 +187,33 @@ namespace YAT.View.Forms
 			Domain.EolEx eol;
 			if (Domain.EolEx.TryParse(eolString, out eol))
 			{
-				this.settingsInEdit.TxEol = eol.ToSequenceString();
+				if ((eol == Domain.Eol.None) && (this.settingsInEdit.GlueCharsOfLine.Enabled))
+				{
+					var sb = new StringBuilder();
+					sb.AppendLine("An EOL sequence of " + (Domain.EolEx)Domain.Eol.None + " cannot be used when line breaks are being reduced by glueing characters of a line together.");
+					sb.AppendLine();
+					sb.Append    ("Either keep a non-empty EOL sequence, or go to [Advanced Settings...] and disable [Reduce line breaks...].");
 
-				if (!this.settingsInEdit.SeparateTxRxEol)
-					this.settingsInEdit.RxEol = this.settingsInEdit.TxEol;
+					MessageBoxEx.Show
+					(
+						this,
+						sb.ToString(),
+						"Incompatible Settings",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Information
+					);
+
+					// Attention, disabling GlueCharsOfLine doesn't work here, as this 'Text' dialog will not apply these 'Advanced' settings!
+
+					e.Cancel = true;
+				}
+				else
+				{
+					this.settingsInEdit.TxEol = eol.ToSequenceString();
+
+					if (!this.settingsInEdit.SeparateTxRxEol)
+						this.settingsInEdit.RxEol = this.settingsInEdit.TxEol;
+				}
 			}
 			else
 			{
@@ -230,7 +254,30 @@ namespace YAT.View.Forms
 			Domain.EolEx eol;
 			if (Domain.EolEx.TryParse(eolString, out eol))
 			{
-				this.settingsInEdit.RxEol = eol.ToSequenceString();
+				if ((eol == Domain.Eol.None) && (this.settingsInEdit.GlueCharsOfLine.Enabled))
+				{
+					var sb = new StringBuilder();
+					sb.AppendLine("An EOL sequence of " + (Domain.EolEx)Domain.Eol.None + " cannot be used when line breaks are being reduced by glueing characters of a line together.");
+					sb.AppendLine();
+					sb.Append    ("Either keep a non-empty EOL sequence, or go to [Advanced Settings...] and disable [Reduce line breaks...].");
+
+					MessageBoxEx.Show
+					(
+						this,
+						sb.ToString(),
+						"Incompatible Settings",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Information
+					);
+
+					// Attention, disabling GlueCharsOfLine doesn't work here, as this 'Text' dialog will not apply these 'Advanced' settings!
+
+					e.Cancel = true;
+				}
+				else
+				{
+					this.settingsInEdit.RxEol = eol.ToSequenceString();
+				}
 			}
 			else
 			{

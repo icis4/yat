@@ -30,6 +30,7 @@
 using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -96,16 +97,16 @@ namespace YAT.View.Forms
 		{
 			this.settings = settings;
 			this.settingsInEdit = new TerminalExplicitSettings(settings); // Clone to ensure decoupling.
-			this.settingsInEdit.Changed += settings_Form_Changed;
+			this.settingsInEdit.Changed += settingsInEdit_Changed;
 		}
 
 		private void DetachAndAcceptSettings()
 		{
-			this.settingsInEdit.Changed -= settings_Form_Changed;
+			this.settingsInEdit.Changed -= settingsInEdit_Changed;
 			this.settings = this.settingsInEdit;
 		}
 
-		private void settings_Form_Changed(object sender, MKY.Settings.SettingsEventArgs e)
+		private void settingsInEdit_Changed(object sender, MKY.Settings.SettingsEventArgs e)
 		{
 			SetControls();
 		}
@@ -247,7 +248,7 @@ namespace YAT.View.Forms
 					(
 						this,
 						"To enable this setting, lines must be broken when I/O device changes.",
-						"Incompatible Setting",
+						"Incompatible Settings",
 						MessageBoxButtons.OKCancel,
 						MessageBoxIcon.Information
 					);
@@ -340,7 +341,7 @@ namespace YAT.View.Forms
 				(
 					this,
 					"To disable this setting, I/O device can no longer be shown.",
-					"Incompatible Setting",
+					"Incompatible Settings",
 					MessageBoxButtons.OKCancel,
 					MessageBoxIcon.Information
 				);
@@ -357,14 +358,48 @@ namespace YAT.View.Forms
 			}
 		}
 
+		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
 		private void checkBox_GlueCharsOfLine_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			var gcol = this.settingsInEdit.Terminal.TextTerminal.GlueCharsOfLine;
-			gcol.Enabled = checkBox_GlueCharsOfLine.Checked;
-			this.settingsInEdit.Terminal.TextTerminal.GlueCharsOfLine = gcol; // Settings member must be changed to let the changed event be raised!
+			var enabled = checkBox_GlueCharsOfLine.Checked;
+			if (enabled && (this.settingsInEdit.Terminal.TextTerminal.TxEol == (Domain.EolEx)Domain.Eol.None ||
+			                this.settingsInEdit.Terminal.TextTerminal.RxEol == (Domain.EolEx)Domain.Eol.None))
+			{
+				var sb = new StringBuilder();
+				sb.AppendLine("This setting can only be enabled when the EOL (end-of-line) sequences are other than " + (Domain.EolEx)Domain.Eol.None + ".");
+				sb.AppendLine();
+				sb.Append    ("Either leave this setting disabled, or go to [Text Settings...] and change the EOL settings before enabling this setting.");
+
+				MessageBoxEx.Show
+				(
+					this,
+					sb.ToString(),
+					"Incompatible Settings",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information
+				);
+
+				// Attention, setting Tx/RxEol to e.g. defaults doesn't work here, as this 'Advanced' dialog will not apply these 'Text' settings!
+
+				this.isSettingControls.Enter();
+				try
+				{
+					checkBox_GlueCharsOfLine.Checked = false;
+				}
+				finally
+				{
+					this.isSettingControls.Leave();
+				}
+			}
+			else
+			{
+				var gcol = this.settingsInEdit.Terminal.TextTerminal.GlueCharsOfLine;
+				gcol.Enabled = enabled;
+				this.settingsInEdit.Terminal.TextTerminal.GlueCharsOfLine = gcol; // Settings member must be changed to let the changed event be raised!
+			}
 		}
 
 		private void textBox_GlueCharsOfLineTimeout_TextChanged(object sender, EventArgs e)
