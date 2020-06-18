@@ -37,6 +37,7 @@ using System.Security.Permissions;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY;
 using MKY.Windows.Forms;
 
 using YAT.Model.Types;
@@ -252,20 +253,25 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
-				if (this.commandInEdit.IsSingleLineText)
+				var c = this.commandInEdit;
+				if (c.IsSingleLineText)
 				{
-					textBox_Lines.Text = this.commandInEdit.SingleLineText;
+					textBox_Lines.Text = c.SingleLineText;
 				}
-				else
+				else if (c.IsMultiLineText)
 				{
 					var sb = new StringBuilder();
-					for (int i = 0; i < this.commandInEdit.MultiLineText.Length; i++)
+					for (int i = 0; i < c.MultiLineText.Length; i++)
 					{
-						sb.Append(this.commandInEdit.MultiLineText[i]);
-						if (i < (this.commandInEdit.MultiLineText.Length - 1))
+						sb.Append(c.MultiLineText[i]);
+						if (i < (c.MultiLineText.Length - 1))
 							sb.AppendLine();
 					}
 					textBox_Lines.Text = sb.ToString();
+				}
+				else
+				{
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' does not specify a known text command type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 			finally
