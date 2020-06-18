@@ -132,7 +132,7 @@
   <metadata name="contextMenuStrip_Command.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>566, 56</value>
   </metadata>
-  <data name="toolStripMenuItem_PredefinedContextMenu_CopyOnly.ToolTipText" xml:space="preserve">
+  <data name="toolStripMenuItem_PredefinedContextMenu_CopyTextOrFilePath.ToolTipText" xml:space="preserve">
     <value>Only copies the command's text or file path to the clipboard.
 
 This action is different than the other cut/copy/paste actions.
