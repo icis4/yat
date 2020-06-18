@@ -293,7 +293,7 @@ namespace YAT.Model
 
 			if (c.IsValidText(this.settingsRoot.Terminal.Send.Text.ToParseMode()))
 			{
-				if (c.IsSingleLineText)
+				if      (c.IsSingleLineText)
 				{
 					if (SendTextSettings.IsEasterEggCommand(c.SingleLineText))
 						this.terminal.EnqueueEasterEggMessage();
@@ -352,7 +352,7 @@ namespace YAT.Model
 
 			if (c.IsValidText(this.settingsRoot.Terminal.Send.Text.ToParseMode()))
 			{
-				if (c.IsSingleLineText)
+				if      (c.IsSingleLineText)
 				{
 					if (SendTextSettings.IsEasterEggCommand(c.SingleLineText))
 						this.terminal.EnqueueEasterEggMessage();
@@ -407,7 +407,7 @@ namespace YAT.Model
 				}
 				else
 				{
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Condition is invalid!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' does not specify a known text command type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "c"));
 				}
 
 				// Reset the partial command line, in any case:
