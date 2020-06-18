@@ -365,8 +365,8 @@ namespace YAT.View.Forms
 				return;
 
 			var enabled = checkBox_GlueCharsOfLine.Checked;
-			if (enabled && (this.settingsInEdit.Terminal.TextTerminal.TxEol == (Domain.EolEx)Domain.Eol.None ||
-			                this.settingsInEdit.Terminal.TextTerminal.RxEol == (Domain.EolEx)Domain.Eol.None))
+			if (enabled && (this.settingsInEdit.Terminal.TextTerminal.TxEol == "" || // = ((Domain.EolEx)Domain.Eol.None).ToSequenceString()
+			                this.settingsInEdit.Terminal.TextTerminal.RxEol == ""))  // = ((Domain.EolEx)Domain.Eol.None).ToSequenceString()
 			{
 				var sb = new StringBuilder();
 				sb.AppendLine("This setting can only be enabled when the EOL (end-of-line) sequences are other than " + (Domain.EolEx)Domain.Eol.None + ".");
