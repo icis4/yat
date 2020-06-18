@@ -35,6 +35,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY;
 using MKY.Diagnostics;
 using MKY.IO;
 using MKY.Windows.Forms;
@@ -75,6 +76,68 @@ namespace YAT.View.Utilities
 
 			var sb = new StringBuilder();
 			XmlSerializerEx.SerializeToString(typeof(CommandSettingsRoot), root, CultureInfo.CurrentCulture, ref sb);
+
+			try
+			{
+				Clipboard.SetText(sb.ToString());
+				return (true);
+			}
+			catch (ExternalException) // The clipboard could not be cleared. This typically
+			{                         // occurs when it is being used by another process.
+				var text = new StringBuilder();
+				text.AppendLine("Failed to copy to clipboard!");
+				text.AppendLine();
+				text.Append    ("Make sure the clipboard is not blocked by another process.");
+
+				MessageBoxEx.Show
+				(
+					owner,
+					text.ToString(),
+					"Clipboard Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+				);
+
+				return (false);
+			}
+		}
+
+		/// <summary>Copies the command text or file path to the clipboard.</summary>
+		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
+		public static bool TrySetTextOrFilePath(IWin32Window owner, Command c)
+		{
+			var sb = new StringBuilder();
+
+			if (c.IsText)
+			{
+				if (c.IsSingleLineText)
+				{
+					sb.Append(c.SingleLineText);
+				}
+				else if (c.IsMultiLineText)
+				{
+					for (int i = 0; i < c.MultiLineText.Length; i++)
+					{
+						var isNotLastLine = (i != (c.MultiLineText.Length - 1));
+						if (isNotLastLine)
+							sb.AppendLine(c.MultiLineText[i]);
+						else
+							sb.Append(    c.MultiLineText[i]);
+					}
+				}
+				else
+				{
+					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' does not specify a known text command type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "c"));
+				}
+			}
+			else if (c.IsFilePath)
+			{
+				sb.Append(c.FilePath);
+			}
+			else
+			{
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' does not specify a known command type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "c"));
+			}
 
 			try
 			{
