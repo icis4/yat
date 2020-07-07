@@ -54,8 +54,8 @@ namespace YAT.View.Forms
 		private SettingControlsHelper isSettingControls;
 
 		private int terminalId; // = 0;
-		private string terminalSerialPortName; // = null;
 		private bool terminalIsOpen; // = false;
+		private string terminalSerialPortName; // = null;
 
 		private TerminalExplicitSettings settings;
 		private TerminalExplicitSettings settingsInEdit;
@@ -107,17 +107,17 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>Meta information needed for e.g. "(in use by this terminal)".</remarks>
-		public string TerminalSerialPortName
-		{
-			get { return (this.terminalSerialPortName); }
-			set { this.terminalSerialPortName = value;  }
-		}
-
-		/// <remarks>Meta information needed for e.g. "(in use by this terminal)".</remarks>
 		public bool TerminalIsOpen
 		{
 			get { return (this.terminalIsOpen); }
 			set { this.terminalIsOpen = value;  }
+		}
+
+		/// <remarks>Meta information needed for e.g. "(in use by this terminal)".</remarks>
+		public string TerminalSerialPortName
+		{
+			get { return (this.terminalSerialPortName); }
+			set { this.terminalSerialPortName = value;  }
 		}
 
 		/// <summary></summary>
@@ -598,8 +598,8 @@ namespace YAT.View.Forms
 				serialPortSelection.ActivePortInUseInfo = new InUseInfo
 				(
 					this.terminalId,
-					this.terminalSerialPortName, // Attention: Not using the currently selected port ID as that would result in
-					this.terminalIsOpen,         //            "(in use by another application)" on resettings to [Defaults...].
+					this.terminalSerialPortName, // Attention: Not using the currently selected port as that would result in
+					this.terminalIsOpen,         //            "(in use by another application)" on resetting to [Defaults...].
 					(this.terminalIsOpen ? "(in use by this terminal)" : "(selected by this terminal)")
 				);                           // Attention: Same texts are used in YAT.Model.Main.SerialPortCollection_InUseLookupRequest().
 				                           ////            Changes above likely have to be applied there too.

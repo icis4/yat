@@ -1359,8 +1359,8 @@ namespace YAT.Model
 
 					foreach (var t in this.workspace.Terminals)
 					{
-						var portId = t.IOSerialPortId;
-						if (portId != null)
+						var portName = t.IOSerialPortName;
+						if (string.IsNullOrEmpty(portName))
 						{
 							string inUseText; // Attention: Same texts are used in YAT.View.Forms.TerminalSettings.SetControls().
 							if (t.IsOpen)     //            Changes below likely have to be applied there too.
@@ -1368,7 +1368,7 @@ namespace YAT.Model
 							else
 								inUseText = "(selected by " + t.IndicatedName + ")";
 
-							inUseLookup.Add(new MKY.IO.Ports.InUseInfo(t.SequentialId, portId, t.IsOpen, inUseText));
+							inUseLookup.Add(new MKY.IO.Ports.InUseInfo(t.SequentialId, portName, t.IsOpen, inUseText));
 						}
 					}
 
