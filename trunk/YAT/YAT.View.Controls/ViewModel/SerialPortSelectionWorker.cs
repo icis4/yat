@@ -67,11 +67,11 @@ namespace YAT.View.Controls
 		public event EventHandler<EventArgs<string>> Status2Changed;
 		public event EventHandler<EventArgs<DialogResult>> IsDone;
 
-		public SerialPortSelectionWorker(bool retrieveCaptions, bool detectPortsInUse, InUseInfo thisPortInUseInfo)
+		public SerialPortSelectionWorker(bool retrieveCaptions, bool detectPortsInUse, InUseInfo activePortInUseInfo)
 		{
-			this.retrieveCaptions  = retrieveCaptions;
-			this.detectPortsInUse  = detectPortsInUse;
-			this.activePortInUseInfo = thisPortInUseInfo;
+			this.retrieveCaptions    = retrieveCaptions;
+			this.detectPortsInUse    = detectPortsInUse;
+			this.activePortInUseInfo = activePortInUseInfo;
 		}
 
 		public virtual SerialPortCollection Ports

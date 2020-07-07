@@ -131,7 +131,7 @@ namespace YAT.View.Controls
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks><see cref="RefreshPortList"/> may have to be triggered when property gets changed.</remarks>
 		[Category("Serial Port")]
 		[Description("The serial COM port ID that is selected.")]
 		[DefaultValue(PortIdDefault)]
@@ -162,7 +162,7 @@ namespace YAT.View.Controls
 			get { return (this.portId != null); }
 		}
 
-		/// <summary></summary>
+		/// <remarks><see cref="RefreshPortList"/> may have to be triggered when property gets changed.</remarks>
 		[Category("Serial Port")]
 		[Description(@"The currently active serial COM port indicated as ""this serial port"".")]
 		[DefaultValue(null)]
@@ -174,7 +174,6 @@ namespace YAT.View.Controls
 				if (this.activePortInUseInfo != value)
 				{
 					this.activePortInUseInfo = value;
-					RefreshPortList();
 					OnActivePortInUseInfoChanged(EventArgs.Empty);
 				}
 			}
@@ -475,7 +474,8 @@ namespace YAT.View.Controls
 						else
 						{
 							// Get the 'NotAvailable' string BEFORE defaulting!
-							string portIdNotAvailable = this.portId;
+							string portNotAvailable = null;
+								portNotAvailable = this.portId;
 
 							SerialPortId portIdAlternate;
 							if (scanSuccess && TryGetAlternate(ports, out portIdAlternate))
@@ -484,7 +484,8 @@ namespace YAT.View.Controls
 								// Set property instead of member to ensure that changed event is raised.
 								PortId = portIdAlternate;
 
-								ShowNotAvailableSwitchedMessage(portIdNotAvailable, portIdAlternate);
+								if (!string.IsNullOrEmpty(portNotAvailable)) // Switch silently otherwise.
+									ShowNotAvailableSwitchedMessage(portNotAvailable, PortId);
 							}
 							else
 							{
@@ -493,9 +494,14 @@ namespace YAT.View.Controls
 								PortId = ports[0];
 
 								if (scanSuccess)
-									ShowNotAvailableDefaultedMessage(portIdNotAvailable, ports[0]);
+								{
+									if (!string.IsNullOrEmpty(portNotAvailable)) // Default silently otherwise.
+										ShowNotAvailableDefaultedMessage(portNotAvailable, PortId);
+								}
 								else
+								{
 									ShowErrorMessage(errorException, errorMessageLead, errorMessageHint);
+								}
 							}
 						}
 					}
@@ -566,33 +572,37 @@ namespace YAT.View.Controls
 			label_OnDialogMessage.Text = "No serial COM ports currently available";
 		}
 
-		private void ShowNotAvailableSwitchedMessage(string portIdNotAvailable, string portIdAlternate)
+		private void ShowNotAvailableDefaultedMessage(string portNameNotAvailable, string portNameDefaulted)
 		{
+			// Not using "previous" because message may also be triggered when resetting to defaults.
+
 			string message =
-				"The previous serial port " + portIdNotAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
-				"The selection has been switched to " + portIdAlternate + " (first available port that is currently not in use).";
+				portNameNotAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
+				"The selection has been defaulted to " + portNameDefaulted + " (first available port).";
 
 			MessageBoxEx.Show
 			(
 				this,
 				message,
-				"Previous serial COM port not available",
+				"Serial COM port not available",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information
 			);
 		}
 
-		private void ShowNotAvailableDefaultedMessage(string portIdNotAvailable, string portIdDefaulted)
+		private void ShowNotAvailableSwitchedMessage(string portNameNotAvailable, string portNameAlternate)
 		{
+			// Not using "previous" because message may also be triggered when resetting to defaults.
+
 			string message =
-				"The previous serial port " + portIdNotAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
-				"The selection has been defaulted to " + portIdDefaulted + " (first available port).";
+				portNameNotAvailable + " is currently not available." + Environment.NewLine + Environment.NewLine +
+				"The selection has been switched to " + portNameAlternate + " (first available port that is currently not in use).";
 
 			MessageBoxEx.Show
 			(
 				this,
 				message,
-				"Previous serial COM port not available",
+				"Serial COM port not available",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information
 			);

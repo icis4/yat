@@ -815,26 +815,26 @@ namespace YAT.View.Controls
 							int sameDescriptionIndex = localInterfaces.FindIndexDescription(this.localInterface);
 
 							// Get the 'NotAvailable' string BEFORE defaulting!
-							string localInterfaceNotAvailable = null;
-							if (this.localInterface != null)
-								localInterfaceNotAvailable = this.localInterface;
+							string localInterfaceNotAvailable = this.localInterface;
 
 							// Ensure that the settings item is switched and shown by SetControls().
 							// Set property instead of member to ensure that changed event is raised.
 							LocalInterface = localInterfaces[sameDescriptionIndex];
 
-							ShowNotAvailableSwitchedMessage(localInterfaceNotAvailable, localInterfaces[sameDescriptionIndex]);
+							ShowNotAvailableSwitchedMessage(localInterfaceNotAvailable, LocalInterface);
 						}
 						else
 						{
 							// Get the 'NotAvailable' string BEFORE defaulting!
-							string localInterfaceNotAvailable = this.localInterface;
+							string localInterfaceNotAvailable = null;
+								localInterfaceNotAvailable = this.localInterface;
 
 							// Ensure that the settings item is defaulted and shown by SetControls().
 							// Set property instead of member to ensure that changed event is raised.
 							LocalInterface = localInterfaces[0];
 
-							ShowNotAvailableDefaultedMessage(localInterfaceNotAvailable, localInterfaces[0]);
+							if (!string.IsNullOrEmpty(localInterfaceNotAvailable)) // Default silently otherwise.
+								ShowNotAvailableDefaultedMessage(localInterfaceNotAvailable, LocalInterface);
 						}
 					}
 					else // localInterfaces.Count == 0
@@ -868,15 +868,17 @@ namespace YAT.View.Controls
 
 		private void ShowNotAvailableDefaultedMessage(string localInterfaceNotAvailable, string localInterfaceDefaulted)
 		{
+			// Not using "previous" because message may also be triggered when resetting to defaults.
+
 			string message =
-				"The previous local network interface '" + localInterfaceNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
-				"The selection has been defaulted to the first available interface '" + localInterfaceDefaulted + "'.";
+				"'" + localInterfaceNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+				"The selection has been defaulted to '" + localInterfaceDefaulted + "' (first available interface).";
 
 			MessageBoxEx.Show
 			(
 				this,
 				message,
-				"Previous interface not available",
+				"Network interface not available",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information
 			);
@@ -884,15 +886,17 @@ namespace YAT.View.Controls
 
 		private void ShowNotAvailableSwitchedMessage(string localInterfaceNotAvailable, string localInterfaceSwitched)
 		{
+			// Not using "previous" because message may also be triggered when resetting to defaults.
+
 			string message =
-				"The previous local network interface '" + localInterfaceNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
-				"The selection has been switched to '" + localInterfaceSwitched + "' (first available device with same description).";
+				"'" + localInterfaceNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+				"The selection has been switched to '" + localInterfaceSwitched + "' (first available interface with same description).";
 
 			MessageBoxEx.Show
 			(
 				this,
 				message,
-				"Previous interface not available",
+				"Network interface not available",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information
 			);
