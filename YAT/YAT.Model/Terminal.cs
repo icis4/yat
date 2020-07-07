@@ -889,10 +889,10 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Returns the <see cref="MKY.IO.Ports.SerialPortId"/> for <see cref="Domain.IOType.SerialPort"/>,
+		/// Returns the name of the serial COM port for <see cref="Domain.IOType.SerialPort"/>,
 		/// <c>null</c> for all other terminal types.
 		/// </summary>
-		public virtual MKY.IO.Ports.SerialPortId IOSerialPortId
+		public virtual string IOSerialPortName
 		{
 			get
 			{

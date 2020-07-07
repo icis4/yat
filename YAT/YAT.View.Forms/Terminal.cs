@@ -7584,8 +7584,8 @@ namespace YAT.View.Forms
 
 			// Meta information needed for e.g. "(in use by this terminal)":
 			f.TerminalId             = this.terminal.SequentialId;
-			f.TerminalSerialPortName = this.terminal.IOSerialPortId;
 			f.TerminalIsOpen         = this.terminal.IsOpen;
+			f.TerminalSerialPortName = this.terminal.IOSerialPortName;
 
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
