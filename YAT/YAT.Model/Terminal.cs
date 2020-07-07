@@ -4060,7 +4060,7 @@ namespace YAT.Model
 			var dr = OnMessageInputRequest
 			(
 				message,
-				"Previous USB HID device not available",
+				"Start anyway?",
 				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Question,
 				MessageBoxDefaultButton.Button2
@@ -4072,13 +4072,13 @@ namespace YAT.Model
 		private DialogResult ShowUsbSerialHidDeviceSerialNotAvailableAlternateQuestionYesNo(string deviceInfoNotAvailable, string deviceInfoAlternate)
 		{
 			string message =
-				"The previous device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+				"The previous USB HID device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
 				"Switch to '" + deviceInfoAlternate + "' (first available device with same VID and PID) instead?";
 
 			var dr = OnMessageInputRequest
 			(
 				message,
-				"Switch USB HID device?",
+				"Switch device?",
 				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Question
 			);

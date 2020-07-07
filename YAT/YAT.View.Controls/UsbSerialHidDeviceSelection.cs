@@ -276,16 +276,13 @@ namespace YAT.View.Controls
 							if (ApplicationSettings.LocalUserSettings.General.MatchUsbSerial)
 							{
 								// Get the 'NotAvailable' string BEFORE defaulting!
-								string deviceInfoNotAvailable = null;
-								if (this.deviceInfo != null)
-									deviceInfoNotAvailable = this.deviceInfo;
+								string deviceNotAvailable = this.deviceInfo;
 
 								// Ensure that the settings item is switched and shown by SetControls().
 								// Set property instead of member to ensure that changed event is raised.
 								DeviceInfo = devices[sameVidPidIndex];
 
-								if (!string.IsNullOrEmpty(deviceInfoNotAvailable))
-									ShowNotAvailableSwitchedMessage(deviceInfoNotAvailable, devices[sameVidPidIndex]);
+								ShowNotAvailableSwitchedMessage(deviceNotAvailable, DeviceInfo);
 							}
 							else
 							{
@@ -297,16 +294,15 @@ namespace YAT.View.Controls
 						else // devices.Count == 0
 						{
 							// Get the 'NotAvailable' string BEFORE defaulting!
-							string deviceInfoNotAvailable = null;
-							if (this.deviceInfo != null)
-								deviceInfoNotAvailable = this.deviceInfo;
+							string deviceNotAvailable = null;
+								deviceNotAvailable = this.deviceInfo;
 
 							// Ensure that the settings item is defaulted and shown by SetControls().
 							// Set property instead of member to ensure that changed event is raised.
 							DeviceInfo = devices[0];
 
-							if (!string.IsNullOrEmpty(deviceInfoNotAvailable))
-								ShowNotAvailableDefaultedMessage(deviceInfoNotAvailable, devices[0]);
+							if (!string.IsNullOrEmpty(deviceNotAvailable)) // Default silently otherwise.
+								ShowNotAvailableDefaultedMessage(deviceNotAvailable, DeviceInfo);
 						}
 					}
 					else
@@ -338,33 +334,37 @@ namespace YAT.View.Controls
 			label_OnDialogMessage.Text = "No HID capable USB devices currently available";
 		}
 
-		private void ShowNotAvailableDefaultedMessage(string deviceInfoNotAvailable, string deviceInfoDefaulted)
+		private void ShowNotAvailableDefaultedMessage(string deviceNotAvailable, string deviceDefaulted)
 		{
+			// Not using "previous" because message may also be triggered when resetting to defaults.
+
 			string message =
-				"The previous device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
-				"The selection has been defaulted to the first available device '" + deviceInfoDefaulted + "'.";
+				"'" + deviceNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+				"The selection has been defaulted to '" + deviceDefaulted + "' (first available device).";
 
 			MessageBoxEx.Show
 			(
 				this,
 				message,
-				"Previous USB HID device not available",
+				"USB HID device not available",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information
 			);
 		}
 
-		private void ShowNotAvailableSwitchedMessage(string deviceInfoNotAvailable, string deviceInfoSwitched)
+		private void ShowNotAvailableSwitchedMessage(string deviceNotAvailable, string deviceSwitched)
 		{
+			// Not using "previous" because message may also be triggered when resetting to defaults.
+
 			string message =
-				"The previous device '" + deviceInfoNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
-				"The selection has been switched to '" + deviceInfoSwitched + "' (first available device with previous VID and PID).";
+				"'" + deviceNotAvailable + "' is currently not available." + Environment.NewLine + Environment.NewLine +
+				"The selection has been switched to '" + deviceSwitched + "' (first available device with previous VID and PID).";
 
 			MessageBoxEx.Show
 			(
 				this,
 				message,
-				"Previous USB HID device not available",
+				"USB HID device not available",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Information
 			);
