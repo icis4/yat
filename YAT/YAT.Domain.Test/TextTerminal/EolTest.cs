@@ -64,14 +64,17 @@ namespace YAT.Domain.Test.TextTerminal
 				yield return ("ABC");
 				yield return ("CR");
 				yield return ("X");
+				yield return (" ");
+				yield return (",");
+				yield return (";");
 
 				// Mixed:
 				yield return ("AB<CR>");
 				yield return ("CR<LF>");
 				yield return ("X<NUL>");
-
-				// Space:
-				yield return (" ");
+				yield return (" <NUL>");
+				yield return (",<NUL>");
+				yield return (";<NUL>");
 			}
 		}
 
