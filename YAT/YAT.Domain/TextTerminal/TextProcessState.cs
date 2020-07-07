@@ -63,14 +63,6 @@ namespace YAT.Domain
 			InitializeValues();
 		}
 
-		/// <summary></summary>
-		public TextUnidirState(TextUnidirState rhs)
-		{
-			EolSequence = rhs.EolSequence;
-
-			InitializeValues();
-		}
-
 		/// <summary>
 		/// Indicates that line is yet empty.
 		/// </summary>

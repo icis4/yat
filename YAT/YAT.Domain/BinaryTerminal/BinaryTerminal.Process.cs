@@ -67,18 +67,15 @@ namespace YAT.Domain
 		// Process Elements
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>
-		/// Initializes the processing state.
-		/// </summary>
-		protected override void InitializeProcess()
+		/// <remarks>
+		/// <c>private</c> rather than <c>protected override</c> because method depends on code
+		/// sequence in constructors.
+		/// </remarks>
+		private void InitializeProcess()
 		{
-			// Binary unspecifics:
-			base.InitializeProcess();
-
-			// Binary specifics:
 			using (var p = new Parser.Parser((EncodingEx)BinaryTerminalSettings.EncodingFixed, TerminalSettings.IO.Endianness, Parser.Mode.RadixAndAsciiEscapes))
 			{
-				// Tx:
+				// Tx states:
 				{
 					byte[] txSequenceBreakAfter;
 					if (!p.TryParse(BinaryTerminalSettings.TxDisplay.SequenceLineBreakAfter.Sequence, out txSequenceBreakAfter))
@@ -92,7 +89,7 @@ namespace YAT.Domain
 					this.binaryBidirTxState = new BinaryUnidirState(txSequenceBreakAfter, txSequenceBreakBefore);
 				}
 
-				// Rx:
+				// Rx states:
 				{
 					byte[] rxSequenceBreakAfter;
 					if (!p.TryParse(BinaryTerminalSettings.RxDisplay.SequenceLineBreakAfter.Sequence, out rxSequenceBreakAfter))

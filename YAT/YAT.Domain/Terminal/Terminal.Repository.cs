@@ -437,7 +437,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void CreateRepositories(Settings.TerminalSettings settings)
+		private void CreateRepositories(Settings.TerminalSettings settings)
 		{
 			this.txRepository    = new DisplayRepository(settings.Display.MaxLineCount);
 			this.bidirRepository = new DisplayRepository(settings.Display.MaxLineCount);
@@ -445,7 +445,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void CreateRepositories(Terminal terminal)
+		private void CreateRepositories(Terminal terminal)
 		{
 			this.txRepository    = new DisplayRepository(terminal.txRepository);
 			this.bidirRepository = new DisplayRepository(terminal.bidirRepository);

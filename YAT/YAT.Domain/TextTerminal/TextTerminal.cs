@@ -123,8 +123,7 @@ namespace YAT.Domain
 			: base(settings)
 		{
 			AttachTextTerminalSettings();
-
-			this.lineSendDelayState = new LineSendDelayState();
+			InitializeProcess();
 		}
 
 		/// <summary></summary>
@@ -132,31 +131,7 @@ namespace YAT.Domain
 			: base(settings, terminal)
 		{
 			AttachTextTerminalSettings();
-
-			var casted = (terminal as TextTerminal);
-			if (casted != null)
-			{
-				// Tx:
-				{
-					this.textTxState      = new TextUnidirState(casted.textTxState);
-					this.textBidirTxState = new TextUnidirState(casted.textBidirTxState);
-				}
-
-				// Rx:
-				{
-					this.textBidirRxState = new TextUnidirState(casted.textBidirRxState);
-					this.textRxState      = new TextUnidirState(casted.textRxState);
-				}
-
-				// Bidir:
-				{
-					this.lineSendDelayState = new LineSendDelayState(casted.lineSendDelayState);
-				}
-			}
-			else
-			{
-				this.lineSendDelayState = new LineSendDelayState();
-			}
+			InitializeProcess();
 		}
 
 		#region Disposal
@@ -345,6 +320,9 @@ namespace YAT.Domain
 		// Settings Events
 		//------------------------------------------------------------------------------------------
 
+		/// <remarks>
+		/// Used for e.g. showing/hiding EOL.
+		/// </remarks>
 		private void TextTerminalSettings_Changed(object sender, MKY.Settings.SettingsEventArgs e)
 		{
 			ApplyTextTerminalSettings();
