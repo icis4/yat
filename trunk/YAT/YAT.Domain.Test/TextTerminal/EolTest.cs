@@ -55,8 +55,8 @@ namespace YAT.Domain.Test.TextTerminal
 			get
 			{
 				// Control characters:
-				yield return ("<CR><LF>");
-				yield return ("<LF>"); // Note that <LF><CR> and <CR> cannot be used because they are used in the test implementation further below.
+				yield return ("<CR><LF>"); // Note that <LF><CR> and <CR> cannot be used because they
+				yield return ("<LF>");     //   are used in the test implementation further below.
 				yield return ("<TAB>");
 				yield return ("<NUL>");
 
