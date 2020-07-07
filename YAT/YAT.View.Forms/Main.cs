@@ -631,7 +631,8 @@ namespace YAT.View.Forms
 			try                             // See remarks of the terminal's _DropDownOpening().
 			{
 				var t = (ActiveMdiChild as Terminal);
-				t.toolStripMenuItem_TerminalMenu_File_DropDownOpening(sender, e);
+				if (t != null)
+					t.toolStripMenuItem_TerminalMenu_File_DropDownOpening(sender, e);
 			}
 			finally
 			{
@@ -766,7 +767,8 @@ namespace YAT.View.Forms
 			try                             // See remarks of the terminal's _DropDownOpening().
 			{
 				var t = (ActiveMdiChild as Terminal);
-				t.toolStripMenuItem_TerminalMenu_Terminal_DropDownOpening(sender, e);
+				if (t != null)
+					t.toolStripMenuItem_TerminalMenu_Terminal_DropDownOpening(sender, e);
 			}
 			finally
 			{
@@ -833,7 +835,8 @@ namespace YAT.View.Forms
 			try                             // See remarks of the terminal's _DropDownOpening().
 			{
 				var t = (ActiveMdiChild as Terminal);
-				t.toolStripMenuItem_TerminalMenu_Log_DropDownOpening(sender, e);
+				if (t != null)
+					t.toolStripMenuItem_TerminalMenu_Log_DropDownOpening(sender, e);
 			}
 			finally
 			{
