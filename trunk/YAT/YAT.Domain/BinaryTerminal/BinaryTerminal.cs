@@ -65,6 +65,7 @@ namespace YAT.Domain
 			: base(settings)
 		{
 			AttachBinaryTerminalSettings();
+			InitializeProcess();
 		}
 
 		/// <summary></summary>
@@ -72,22 +73,7 @@ namespace YAT.Domain
 			: base(settings, terminal)
 		{
 			AttachBinaryTerminalSettings();
-
-			var casted = (terminal as BinaryTerminal);
-			if (casted != null)
-			{
-				// Tx:
-				{
-					this.binaryTxState      = new BinaryUnidirState(casted.binaryTxState);
-					this.binaryBidirTxState = new BinaryUnidirState(casted.binaryBidirTxState);
-				}
-
-				// Rx:
-				{
-					this.binaryBidirRxState = new BinaryUnidirState(casted.binaryBidirRxState);
-					this.binaryRxState      = new BinaryUnidirState(casted.binaryRxState);
-				}
-			}
+			InitializeProcess();
 		}
 
 		#region Disposal

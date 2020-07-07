@@ -417,18 +417,15 @@ namespace YAT.Domain
 		// Process Elements
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>
-		/// Initializes the processing state.
-		/// </summary>
-		protected override void InitializeProcess()
+		/// <remarks>
+		/// <c>private</c> rather than <c>protected override</c> because method depends on code
+		/// sequence in constructors.
+		/// </remarks>
+		private void InitializeProcess()
 		{
-			// Text unspecifics:
-			base.InitializeProcess();
-
-			// Text specifics:
 			using (var p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, Parser.Mode.RadixAndAsciiEscapes))
 			{
-				// Tx:
+				// Tx states:
 				{
 					byte[] eol;
 					if (!p.TryParse(TextTerminalSettings.TxEol, out eol))
@@ -444,7 +441,7 @@ namespace YAT.Domain
 					this.textBidirTxState = new TextUnidirState(eol);
 				}
 
-				// Rx:
+				// Rx states:
 				{
 					byte[] eol;
 					if (!p.TryParse(TextTerminalSettings.RxEol, out eol))
@@ -461,6 +458,10 @@ namespace YAT.Domain
 				}
 			}
 
+			// Bidir state:
+			this.lineSendDelayState = new LineSendDelayState();
+
+			// Timer dependents:
 			InitializeGlueCharsOfLineTimeoutIfNeeded();
 			InitializeWaitForResponseIfNeeded();
 		}

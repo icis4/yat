@@ -580,10 +580,11 @@ namespace YAT.Domain
 		// Process Elements
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>
-		/// Initializes the processing state.
-		/// </summary>
-		protected virtual void InitializeProcess()
+		/// <remarks>
+		/// <c>private</c> rather than <c>protected virtual</c> because derived method(s) depend(s)
+		/// on code sequence in constructor(s).
+		/// </remarks>
+		private void InitializeProcess()
 		{
 			this.txProcessState    = new ProcessState();
 			this.bidirProcessState = new ProcessState();

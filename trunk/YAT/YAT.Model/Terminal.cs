@@ -1529,6 +1529,7 @@ namespace YAT.Model
 				{
 					this.settingsRoot.ResumeChangeEvent();
 				}
+
 				this.terminal.RefreshRepositories();
 
 				OnTimedStatusTextRequest("Terminal settings applied.");

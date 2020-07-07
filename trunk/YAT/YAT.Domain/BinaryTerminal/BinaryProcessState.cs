@@ -77,15 +77,6 @@ namespace YAT.Domain
 			InitializeValues();
 		}
 
-		/// <summary></summary>
-		public BinaryUnidirState(BinaryUnidirState rhs)
-		{
-			SequenceAfter  = rhs.SequenceAfter;
-			SequenceBefore = rhs.SequenceBefore;
-
-			InitializeValues();
-		}
-
 		/// <summary>
 		/// Initializes the state.
 		/// </summary>
