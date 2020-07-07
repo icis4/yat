@@ -33,6 +33,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.IO.Ports;
 using MKY.Windows.Forms;
 
 using YAT.Settings.Application;
@@ -53,6 +54,7 @@ namespace YAT.View.Forms
 		private SettingControlsHelper isSettingControls;
 
 		private int terminalId; // = 0;
+		private string terminalSerialPortName; // = null;
 		private bool terminalIsOpen; // = false;
 
 		private TerminalExplicitSettings settings;
@@ -97,14 +99,21 @@ namespace YAT.View.Forms
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>Meta information needed for e.g. "(in use by this terminal)".</remarks>
 		public int TerminalId
 		{
 			get { return (this.terminalId); }
 			set { this.terminalId = value;  }
 		}
 
-		/// <summary></summary>
+		/// <remarks>Meta information needed for e.g. "(in use by this terminal)".</remarks>
+		public string TerminalSerialPortName
+		{
+			get { return (this.terminalSerialPortName); }
+			set { this.terminalSerialPortName = value;  }
+		}
+
+		/// <remarks>Meta information needed for e.g. "(in use by this terminal)".</remarks>
 		public bool TerminalIsOpen
 		{
 			get { return (this.terminalIsOpen); }
@@ -487,8 +496,8 @@ namespace YAT.View.Forms
 			string type;
 			switch (this.settingsInEdit.Terminal.TerminalType)
 			{
-				case Domain.TerminalType.Text:   type = "Text";   break;
-				case Domain.TerminalType.Binary: type = "Binary"; break;
+				case Domain.TerminalType.Text:   type = "[Text]";   break;
+				case Domain.TerminalType.Binary: type = "[Binary]"; break;
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.settingsInEdit.Terminal.TerminalType + "' is a terminal type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -496,17 +505,17 @@ namespace YAT.View.Forms
 			var sb = new StringBuilder();
 			sb.AppendLine("Reset all settings to default values?");
 			sb.Append    (type);
-			sb.Append       (" and advanced settings will also be reset!");
+			sb.Append       (" and [Advanced] settings will be reset too!");
 			//// Actually text and binary are reset. But only one of both is in use anyway...
 
 			if (MessageBoxEx.Show
 				(
-				this,
-				sb.ToString(),
-				"Defaults?",
-				MessageBoxButtons.YesNoCancel,
-				MessageBoxIcon.Question,
-				MessageBoxDefaultButton.Button3
+					this,
+					sb.ToString(),
+					"Defaults?",
+					MessageBoxButtons.YesNoCancel,
+					MessageBoxIcon.Question,
+					MessageBoxDefaultButton.Button3
 				)
 				== DialogResult.Yes)
 			{
@@ -583,15 +592,17 @@ namespace YAT.View.Forms
 
 				terminalSelection.IOType = ioType;
 
+				var forceSerialPortListRefresh = (serialPortSelection.PortId != this.settingsInEdit.Terminal.IO.SerialPort.PortId); // Required to potentially perform fallback to default other than COM1.
+
 				serialPortSelection.PortId = this.settingsInEdit.Terminal.IO.SerialPort.PortId;
-				serialPortSelection.ActivePortInUseInfo = new MKY.IO.Ports.InUseInfo
+				serialPortSelection.ActivePortInUseInfo = new InUseInfo
 				(
 					this.terminalId,
-					this.settingsInEdit.Terminal.IO.SerialPort.PortId,
-					this.terminalIsOpen,     // Attention: Same texts are used in YAT.Model.Main.SerialPortCollection_InUseLookupRequest().
+					this.terminalSerialPortName, // Attention: Not using the currently selected port ID as that would result in
+					this.terminalIsOpen,         //            "(in use by another application)" on resettings to [Defaults...].
 					(this.terminalIsOpen ? "(in use by this terminal)" : "(selected by this terminal)")
-				);                           //            Changes above likely have to be applied there too.
-
+				);                           // Attention: Same texts are used in YAT.Model.Main.SerialPortCollection_InUseLookupRequest().
+				                           ////            Changes above likely have to be applied there too.
 				serialPortSettings.BaudRate     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.BaudRate;
 				serialPortSettings.DataBits     = this.settingsInEdit.Terminal.IO.SerialPort.Communication.DataBits;
 				serialPortSettings.Parity       = this.settingsInEdit.Terminal.IO.SerialPort.Communication.Parity;
@@ -637,11 +648,11 @@ namespace YAT.View.Forms
 				bool wasSocket       = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsSocket;
 				bool wasUsbSerialHid = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsUsbSerialHid;
 
-				if      (isSerialPort   && !wasSerialPort)
+				if      (isSerialPort   && (!wasSerialPort || forceSerialPortListRefresh))
 					serialPortSelection        .RefreshPortList();
-				else if (isSocket       && !wasSocket)
+				else if (isSocket       && (!wasSocket))
 					socketSelection            .RefreshLocalInterfaceList();
-				else if (isUsbSerialHid && !wasUsbSerialHid)
+				else if (isUsbSerialHid && (!wasUsbSerialHid))
 					usbSerialHidDeviceSelection.RefreshDeviceList();
 
 				this.SetControls_ioTypeOld = ioType;
