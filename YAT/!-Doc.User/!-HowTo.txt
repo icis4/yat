@@ -5,7 +5,9 @@ Preliminary Binaries (Dropbox)
 Anonymous Reply (!! GMX email address shall not become globally visible !!)
 ---------------
 
-For replying, either use your SourceForge account if you have one, or contact me via the email address shown in the [Help > About...] dialog.
+If this doesn't help, reply by either using
+For replying, either use
+your SourceForge account if you have one, or contact me via the email address shown in the [Help > About...] dialog.
 
 
 Anonymous Request (!! GMX email address shall not become globally visible !!)
@@ -30,12 +32,7 @@ Hi <>,
 
 <> is implemented now and YAT <x.y.z> is about to be released << soon | within a month or two | ... >>.
 
-If you'd like a preliminary binaries to [get the bug fixed|try out the new feature], let me know your email address either by replying via the SourceForge mail feature or y-a-terminal@users.sourceforge.net and I will provide you with YAT preliminary binaries via dropbox.
-
-Note that you can sign up for the YAT release notification at https://sourceforge.net/p/y-a-terminal/mailman/. As visible in the mail archive at https://sourceforge.net/p/y-a-terminal/mailman/y-a-terminal-users/, no spam, just one notification email per release, unless you keep the SourceForge newsletters activated.
-
-Best regards,
-Matthias
+(!! No need to ask for true email. Try adding user to dropbox (should work) or share link. Then continue below !!)
 
 
 Dropbox Access
@@ -49,6 +46,8 @@ Either, extract the binaries to a temporary location and run "YAT.exe", or repla
 
 Let me know <whatever>.
 Any other finding or feedback to YAT is also highly appreciated.
+
+Note that you can sign up for the YAT release notification at https://sourceforge.net/p/y-a-terminal/mailman/. As visible in the mail archive at https://sourceforge.net/p/y-a-terminal/mailman/y-a-terminal-users/, no spam, just one notification email per release, unless you keep the SourceForge newsletters activated.
 
 Best regards,
 Matthias
