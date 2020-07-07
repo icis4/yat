@@ -733,11 +733,11 @@ namespace YAT.View.Forms
 
 			var targetCommandIndex = (ToolStripMenuItemEx.TagToInt32(sender) - 1); // Attention, 'ToolStripMenuItem' is no 'Control'!
 
-			Command sc;
-			if (TryGetCommandFromId(contextMenuStrip_Commands_SelectedCommandId, out sc))
+			Command c;
+			if (TryGetCommandFromId(contextMenuStrip_Commands_SelectedCommandId, out c))
 			{
-				sc = new Command(sc); // Clone to ensure decoupling. // Replace target by selected:
-				this.settingsInEdit.SetCommand(SelectedPageIndex, targetCommandIndex, sc);
+				c = new Command(c); // Clone to ensure decoupling. // Replace target by selected:
+				this.settingsInEdit.SetCommand(SelectedPageIndex, targetCommandIndex, c);
 			}
 			else
 			{                                              // Clear target:
@@ -762,13 +762,13 @@ namespace YAT.View.Forms
 
 			var targetCommandIndex = (ToolStripMenuItemEx.TagToInt32(sender) - 1); // Attention, 'ToolStripMenuItem' is no 'Control'!
 
-			Command sc;
-			if (TryGetCommandFromId(contextMenuStrip_Commands_SelectedCommandId, out sc))
+			Command c;
+			if (TryGetCommandFromId(contextMenuStrip_Commands_SelectedCommandId, out c))
 			{
 				this.settingsInEdit.SuspendChangeEvent();
 
-				sc = new Command(sc); // Clone to ensure decoupling. // Replace target by selected:
-				this.settingsInEdit.SetCommand(SelectedPageIndex, targetCommandIndex, sc); // Clear selected:
+				c = new Command(c); // Clone to ensure decoupling. // Replace target by selected:
+				this.settingsInEdit.SetCommand(SelectedPageIndex, targetCommandIndex, c); // Clear selected:
 				this.settingsInEdit.ClearCommand(SelectedPageIndex, (contextMenuStrip_Commands_SelectedCommandId - 1));
 
 				this.settingsInEdit.ResumeChangeEvent();
@@ -825,13 +825,13 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.Up()
 			// Changes here may have to be applied there too.
 
-			Command sc = null;
+			Command sc = null; // s = source
 			if (TryGetCommandFromId(selectedCommandId, out sc))
 				sc = new Command(sc); // Clone to ensure decoupling.
 
 			targetCommandId = ((selectedCommandId > PredefinedCommandPage.FirstCommandIdPerPage) ? (selectedCommandId - 1) : (lastCommandIdPerPage));
 
-			Command tc = null;
+			Command tc = null; // t = target
 			if (TryGetCommandFromId(targetCommandId, out tc))
 				tc = new Command(tc); // Clone to ensure decoupling.
 
@@ -887,13 +887,13 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.Down()
 			// Changes here may have to be applied there too.
 
-			Command sc = null;
+			Command sc = null; // s = source
 			if (TryGetCommandFromId(selectedCommandId, out sc))
 				sc = new Command(sc); // Clone to ensure decoupling.
 
 			targetCommandId = ((selectedCommandId < lastCommandIdPerPage) ? (selectedCommandId + 1) : (PredefinedCommandPage.FirstCommandIdPerPage));
 
-			Command tc = null;
+			Command tc = null; // t = target
 			if (TryGetCommandFromId(targetCommandId, out tc))
 				tc = new Command(tc); // Clone to ensure decoupling.
 
@@ -915,12 +915,12 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_Cut_Click()
 			// Changes here may have to be applied there too.
 
-			Command sc;
-			if (TryGetCommandFromId(contextMenuStrip_Commands_SelectedCommandId, out sc))
+			Command c;
+			if (TryGetCommandFromId(contextMenuStrip_Commands_SelectedCommandId, out c))
 			{
 				Cursor = Cursors.WaitCursor;
 				Clipboard.Clear(); // Prevent handling errors in case cutting takes long.
-				if (CommandSettingsClipboardHelper.TrySet(this, sc))
+				if (CommandSettingsClipboardHelper.TrySet(this, c))
 				{
 					this.settingsInEdit.ClearCommand(SelectedPageIndex, (contextMenuStrip_Commands_SelectedCommandId - 1));
 					SetControls();
@@ -936,22 +936,22 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_Copy_Click()
 			// Changes here may have to be applied there too.
 
-			Command sc;
-			if (TryGetCommandFromId(contextMenuStrip_Commands_SelectedCommandId, out sc))
+			Command c;
+			if (TryGetCommandFromId(contextMenuStrip_Commands_SelectedCommandId, out c))
 			{
 				Cursor = Cursors.WaitCursor;
 				Clipboard.Clear(); // Prevent handling errors in case cutting takes long.
-				CommandSettingsClipboardHelper.TrySet(this, sc);
+				CommandSettingsClipboardHelper.TrySet(this, c);
 				Cursor = Cursors.Default;
 			}
 		}
 
 		private void toolStripMenuItem_CommandContextMenu_Paste_Click(object sender, EventArgs e)
 		{
-			Command cc;
-			if (CommandSettingsClipboardHelper.TryGet(this, out cc))
+			Command c;
+			if (CommandSettingsClipboardHelper.TryGet(this, out c))
 			{
-				this.settingsInEdit.SetCommand(SelectedPageIndex, contextMenuStrip_Commands_SelectedCommandId - 1, cc);
+				this.settingsInEdit.SetCommand(SelectedPageIndex, contextMenuStrip_Commands_SelectedCommandId - 1, c);
 				SetControls();
 			}
 		}
