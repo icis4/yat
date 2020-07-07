@@ -231,9 +231,7 @@ namespace YAT.View.Forms
 			this.comboBox_RxEol.Name = "comboBox_RxEol";
 			this.comboBox_RxEol.Size = new System.Drawing.Size(153, 21);
 			this.comboBox_RxEol.TabIndex = 4;
-			this.toolTip.SetToolTip(this.comboBox_RxEol, "Either select a preset from the list, or fill in any sequence of bytes, e.g. <ETB" +
-        "><NUL> or \\h(17 00).\r\n\r\nContact YAT via \"Help > Request Feature\" to request addi" +
-        "tional presets.");
+			this.toolTip.SetToolTip(this.comboBox_RxEol, resources.GetString("comboBox_RxEol.ToolTip"));
 			this.comboBox_RxEol.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_RxEol_Validating);
 			// 
 			// label_RxEol
@@ -245,6 +243,7 @@ namespace YAT.View.Forms
 			this.label_RxEol.Size = new System.Drawing.Size(81, 13);
 			this.label_RxEol.TabIndex = 3;
 			this.label_RxEol.Text = "EOL sequence:";
+			this.toolTip.SetToolTip(this.label_RxEol, resources.GetString("label_RxEol.ToolTip"));
 			// 
 			// comboBox_TxEol
 			// 
@@ -253,9 +252,7 @@ namespace YAT.View.Forms
 			this.comboBox_TxEol.Name = "comboBox_TxEol";
 			this.comboBox_TxEol.Size = new System.Drawing.Size(153, 21);
 			this.comboBox_TxEol.TabIndex = 1;
-			this.toolTip.SetToolTip(this.comboBox_TxEol, "Either select a preset from the list, or fill in any sequence of bytes, e.g. <ETB" +
-        "><NUL> or \\h(17 00).\r\n\r\nContact YAT via \"Help > Request Feature\" to request addi" +
-        "tional presets.");
+			this.toolTip.SetToolTip(this.comboBox_TxEol, resources.GetString("comboBox_TxEol.ToolTip"));
 			this.comboBox_TxEol.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_TxEol_Validating);
 			// 
 			// label_TxEol
@@ -266,6 +263,7 @@ namespace YAT.View.Forms
 			this.label_TxEol.Size = new System.Drawing.Size(81, 13);
 			this.label_TxEol.TabIndex = 0;
 			this.label_TxEol.Text = "EOL sequence:";
+			this.toolTip.SetToolTip(this.label_TxEol, resources.GetString("label_TxEol.ToolTip"));
 			// 
 			// comboBox_Encoding
 			// 

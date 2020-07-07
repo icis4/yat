@@ -120,6 +120,38 @@
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="comboBox_RxEol.ToolTip" xml:space="preserve">
+    <value>Either select a preset from the list, or fill in any sequence of bytes,
+e.g. "&lt;ETB&gt;&lt;NUL&gt;" or "\h(17 00)", or any other parsable text, e.g. ";".
+
+Contact YAT via "Help &gt; Request Feature" to request additional presets.
+
+Note that [Binary] terminals offer alternative ways to configure line break.</value>
+  </data>
+  <data name="label_RxEol.ToolTip" xml:space="preserve">
+    <value>Either select a preset from the list, or fill in any sequence of bytes,
+e.g. "&lt;ETB&gt;&lt;NUL&gt;" or "\h(17 00)", or any other parsable text, e.g. ";".
+
+Contact YAT via "Help &gt; Request Feature" to request additional presets.
+
+Note that [Binary] terminals offer alternative ways to configure line break.</value>
+  </data>
+  <data name="comboBox_TxEol.ToolTip" xml:space="preserve">
+    <value>Either select a preset from the list, or fill in any sequence of bytes,
+e.g. "&lt;ETB&gt;&lt;NUL&gt;" or "\h(17 00)", or any other parsable text, e.g. ";".
+
+Contact YAT via "Help &gt; Request Feature" to request additional presets.
+
+Note that [Binary] terminals offer alternative ways to configure line break.</value>
+  </data>
+  <data name="label_TxEol.ToolTip" xml:space="preserve">
+    <value>Either select a preset from the list, or fill in any sequence of bytes,
+e.g. "&lt;ETB&gt;&lt;NUL&gt;" or "\h(17 00)", or any other parsable text, e.g. ";".
+
+Contact YAT via "Help &gt; Request Feature" to request additional presets.
+
+Note that [Binary] terminals offer alternative ways to configure line break.</value>
+  </data>
   <data name="groupBox_Exclude.ToolTip" xml:space="preserve">
     <value>By default, some common patters are prepared:
  &gt; //... and /*...*/ (C/C++/C#/Java/...-style comments)

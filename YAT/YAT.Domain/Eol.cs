@@ -50,18 +50,20 @@ namespace YAT.Domain
 		LF,
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "CRLF", Justification = "<CR><LF> are ASCII mnemonics.")]
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "CRLF", Justification = "Same as above.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly",   MessageId = "CRLF", Justification = "Same as above.")]
 		CRLF,
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "LFCR", Justification = "<LF><CR> are ASCII mnemonics.")]
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "LFCR", Justification = "Same as above.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly",   MessageId = "LFCR", Justification = "Same as above.")]
 		LFCR,
 
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Nul", Justification = "<NUL> is an ASCII mnemonic.")]
 		Nul,
 
 		Tab,
-		Space
+		Space,
+		Comma,
+		Semicolon
 	}
 
 	#pragma warning restore 1591
@@ -111,6 +113,10 @@ namespace YAT.Domain
 		private const string Space_stringOld1 =  "Space";
 		private const string Space_stringSequence = " ";
 
+		private const string Comma_string = ",";
+
+		private const string Semicolon_string = ";";
+
 		#endregion
 
 		/// <summary>Default is <see cref="Eol.CRLF"/>.</summary>
@@ -141,14 +147,16 @@ namespace YAT.Domain
 		{
 			switch ((Eol)UnderlyingEnum)
 			{
-				case Eol.None:  return ( None_stringNice);
-				case Eol.CR:    return (   CR_stringSequence);
-				case Eol.LF:    return (   LF_stringSequence);
-				case Eol.CRLF:  return ( CRLF_stringSequence);
-				case Eol.LFCR:  return ( LFCR_stringSequence);
-				case Eol.Nul:   return (  Nul_stringSequence);
-				case Eol.Tab:   return (  Tab_stringSequence);
-				case Eol.Space: return (Space_stringNice);
+				case Eol.None:      return (     None_stringNice);
+				case Eol.CR:        return (       CR_stringSequence);
+				case Eol.LF:        return (       LF_stringSequence);
+				case Eol.CRLF:      return (     CRLF_stringSequence);
+				case Eol.LFCR:      return (     LFCR_stringSequence);
+				case Eol.Nul:       return (      Nul_stringSequence);
+				case Eol.Tab:       return (      Tab_stringSequence);
+				case Eol.Space:     return (    Space_stringNice);
+				case Eol.Comma:     return (    Comma_string);
+				case Eol.Semicolon: return (Semicolon_string);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -159,14 +167,16 @@ namespace YAT.Domain
 		{
 			switch ((Eol)UnderlyingEnum)
 			{
-				case Eol.None:  return ( None_stringSequence);
-				case Eol.CR:    return (   CR_stringSequence);
-				case Eol.LF:    return (   LF_stringSequence);
-				case Eol.CRLF:  return ( CRLF_stringSequence);
-				case Eol.LFCR:  return ( LFCR_stringSequence);
-				case Eol.Nul:   return (  Nul_stringSequence);
-				case Eol.Tab:   return (  Tab_stringSequence);
-				case Eol.Space: return (Space_stringSequence);
+				case Eol.None:      return (     None_stringSequence);
+				case Eol.CR:        return (       CR_stringSequence);
+				case Eol.LF:        return (       LF_stringSequence);
+				case Eol.CRLF:      return (     CRLF_stringSequence);
+				case Eol.LFCR:      return (     LFCR_stringSequence);
+				case Eol.Nul:       return (      Nul_stringSequence);
+				case Eol.Tab:       return (      Tab_stringSequence);
+				case Eol.Space:     return (    Space_stringSequence);
+				case Eol.Comma:     return (    Comma_string);
+				case Eol.Semicolon: return (Semicolon_string);
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -184,7 +194,7 @@ namespace YAT.Domain
 		/// </remarks>
 		public static EolEx[] GetItems()
 		{
-			var a = new List<EolEx>(8); // Preset the required capacity to improve memory management.
+			var a = new List<EolEx>(10); // Preset the required capacity to improve memory management.
 
 			a.Add(new EolEx(Eol.None));
 			a.Add(new EolEx(Eol.CR));
@@ -194,6 +204,8 @@ namespace YAT.Domain
 			a.Add(new EolEx(Eol.Nul));
 			a.Add(new EolEx(Eol.Tab));
 			a.Add(new EolEx(Eol.Space));
+			a.Add(new EolEx(Eol.Comma));
+			a.Add(new EolEx(Eol.Semicolon));
 
 			return (a.ToArray());
 		}
@@ -297,6 +309,16 @@ namespace YAT.Domain
 			         StringEx.EqualsOrdinalIgnoreCase(s, Space_stringSequence))
 			{
 				result = Eol.Space;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Comma_string))
+			{
+				result = Eol.Comma;
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Semicolon_string))
+			{
+				result = Eol.Semicolon;
 				return (true);
 			}
 			else // Invalid string!
