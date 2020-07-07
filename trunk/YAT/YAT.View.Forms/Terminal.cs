@@ -3066,16 +3066,16 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			Command sc;
-			if (predefined.TryGetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId, out sc))
+			Command c;
+			if (predefined.TryGetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId, out c))
 			{
-				sc = new Command(sc); // Clone to ensure decoupling.
-				if (sc.IsText)
-					this.settingsRoot.SendText.Command = sc;
-				else if (sc.IsFilePath)
-					this.settingsRoot.SendFile.Command = sc;
+				c = new Command(c); // Clone to ensure decoupling.
+				if (c.IsText)
+					this.settingsRoot.SendText.Command = c;
+				else if (c.IsFilePath)
+					this.settingsRoot.SendFile.Command = c;
 				else
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + @"Invalid command """ + sc.ToDiagnosticsString() + @"""!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + @"Invalid command """ + c.ToDiagnosticsString() + @"""!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -3091,11 +3091,11 @@ namespace YAT.View.Forms
 
 			var targetCommandIndex = (ToolStripMenuItemEx.TagToInt32(sender) - 1); // Attention, 'ToolStripMenuItem' is no 'Control'!
 
-			Command sc;
-			if (predefined.TryGetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId, out sc))
+			Command c;
+			if (predefined.TryGetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId, out c))
 			{
-				sc = new Command(sc); // Clone to ensure decoupling.              // Replace target by selected:
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandIndex, sc);
+				c = new Command(c); // Clone to ensure decoupling.               // Replace target by selected:
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandIndex, c);
 			}
 			else
 			{                                                                         // Clear target:
@@ -3115,14 +3115,14 @@ namespace YAT.View.Forms
 
 			var targetCommandIndex = (ToolStripMenuItemEx.TagToInt32(sender) - 1); // Attention, 'ToolStripMenuItem' is no 'Control'!
 
-			Command sc;
-			if (predefined.TryGetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId, out sc))
+			Command c;
+			if (predefined.TryGetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId, out c))
 			{
 				this.settingsRoot.PredefinedCommand.SuspendChangeEvent();
 				try
 				{
-					sc = new Command(sc); // Clone to ensure decoupling.              // Replace target by selected:
-					this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandIndex, sc); // Clear selected:
+					c = new Command(c); // Clone to ensure decoupling.               // Replace target by selected:
+					this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, targetCommandIndex, c); // Clear selected:
 					this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, (contextMenuStrip_Predefined_SelectedCommandId - 1));
 				}
 				finally
@@ -3174,13 +3174,13 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.Up()
 			// Changes here may have to be applied there too.
 
-			Command sc = null;
+			Command sc = null; // s = source
 			if (predefined.TryGetCommandFromId(selectedCommandId, out sc))
 				sc = new Command(sc); // Clone to ensure decoupling.
 
 			var targetCommandId = ((selectedCommandId > PredefinedCommandPage.FirstCommandIdPerPage) ? (selectedCommandId - 1) : (lastCommandIdPerPage));
 
-			Command tc = null;
+			Command tc = null; // t = target
 			if (predefined.TryGetCommandFromId(targetCommandId, out tc))
 				tc = new Command(tc); // Clone to ensure decoupling.
 
@@ -3233,13 +3233,13 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.Down()
 			// Changes here may have to be applied there too.
 
-			Command sc = null;
+			Command sc = null; // s = source
 			if (predefined.TryGetCommandFromId(selectedCommandId, out sc))
 				sc = new Command(sc); // Clone to ensure decoupling.
 
 			var targetCommandId = ((selectedCommandId < lastCommandIdPerPage) ? (selectedCommandId + 1) : (PredefinedCommandPage.FirstCommandIdPerPage));
 
-			Command tc = null;
+			Command tc = null; // t = target
 			if (predefined.TryGetCommandFromId(targetCommandId, out tc))
 				tc = new Command(tc); // Clone to ensure decoupling.
 
@@ -3261,14 +3261,14 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_PredefinedContextMenu_Cut_Click()
 			// Changes here may have to be applied there too.
 
-			Command sc;
-			if (predefined.TryGetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId, out sc))
+			Command c;
+			if (predefined.TryGetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId, out c))
 			{
 				SetFixedStatusText("Preparing cutting to clipboard...");
 				Cursor = Cursors.WaitCursor;
 				Clipboard.Clear(); // Prevent handling errors in case cutting takes long.
 				SetFixedStatusText("Cutting to clipboard...");
-				if (CommandSettingsClipboardHelper.TrySet(this, sc))
+				if (CommandSettingsClipboardHelper.TrySet(this, c))
 				{
 					this.settingsRoot.PredefinedCommand.ClearCommand(predefined.SelectedPageIndex, (contextMenuStrip_Predefined_SelectedCommandId - 1));
 
@@ -3290,14 +3290,14 @@ namespace YAT.View.Forms
 			// ...View.Forms.PredefinedCommandSettings.toolStripMenuItem_PredefinedContextMenu_Copy_Click()
 			// Changes here may have to be applied there too.
 
-			Command sc;
-			if (predefined.TryGetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId, out sc))
+			Command c;
+			if (predefined.TryGetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId, out c))
 			{
 				SetFixedStatusText("Preparing copying to clipboard...");
 				Cursor = Cursors.WaitCursor;
 				Clipboard.Clear(); // Prevent handling errors in case copying takes long.
 				SetFixedStatusText("Copying to clipboard...");
-				if (CommandSettingsClipboardHelper.TrySet(this, sc))
+				if (CommandSettingsClipboardHelper.TrySet(this, c))
 				{
 					Cursor = Cursors.Default;
 					SetTimedStatusText("Copying to clipboard done");
@@ -3312,14 +3312,14 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_PredefinedContextMenu_CopyTextOrFilePath_Click(object sender, EventArgs e)
 		{
-			Command sc;
-			if (predefined.TryGetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId, out sc))
+			Command c;
+			if (predefined.TryGetCommandFromId(contextMenuStrip_Predefined_SelectedCommandId, out c))
 			{
 				SetFixedStatusText("Preparing copying to clipboard...");
 				Cursor = Cursors.WaitCursor;
 				Clipboard.Clear(); // Prevent handling errors in case copying takes long.
 				SetFixedStatusText("Copying to clipboard...");
-				if (CommandSettingsClipboardHelper.TrySetTextOrFilePath(this, sc))
+				if (CommandSettingsClipboardHelper.TrySetTextOrFilePath(this, c))
 				{
 					Cursor = Cursors.Default;
 					SetTimedStatusText("Copying to clipboard done");
@@ -3334,11 +3334,11 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_PredefinedContextMenu_Paste_Click(object sender, EventArgs e)
 		{
-			Command cc;
+			Command c;
 			SetFixedStatusText("Pasting from clipboard..."); // Do not set Cursor = Cursors.WaitCursor as that would result in WaitCursor on MessageBox!
-			if (CommandSettingsClipboardHelper.TryGet(this, out cc))
+			if (CommandSettingsClipboardHelper.TryGet(this, out c))
 			{
-				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1, cc);
+				this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPageIndex, contextMenuStrip_Predefined_SelectedCommandId - 1, c);
 				SetTimedStatusText("Pasting from clipboard done");
 			}
 			else
@@ -3743,6 +3743,9 @@ namespace YAT.View.Forms
 				toolStripMenuItem_SendContextMenu_SendTextWithoutEol.Enabled = (sendTextEnabled && this.terminal.IsReadyToSend && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.Text.SendImmediately);
 				toolStripMenuItem_SendContextMenu_SendFile.Enabled           = (sendFileEnabled && this.terminal.IsReadyToSend);
 
+				toolStripMenuItem_SendContextMenu_CopyTextToClipboard    .Enabled = sendTextEnabled;
+				toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard.Enabled = sendFileEnabled;
+
 				toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix.Checked = this.settingsRoot.Send.UseExplicitDefaultRadix;
 				toolStripMenuItem_SendContextMenu_AllowConcurrency.Checked        = this.settingsRoot.Send.AllowConcurrency;
 
@@ -3767,6 +3770,22 @@ namespace YAT.View.Forms
 		private void contextMenuStrip_Send_Opening(object sender, CancelEventArgs e)
 		{
 			contextMenuStrip_Send_SetMenuItems();
+		}
+
+		private void toolStripMenuItem_SendContextMenu_Panels_SendText_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.settingsRoot.Layout.SendTextPanelIsVisible = !this.settingsRoot.Layout.SendTextPanelIsVisible;
+		}
+
+		private void toolStripMenuItem_SendContextMenu_Panels_SendFile_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.settingsRoot.Layout.SendFilePanelIsVisible = !this.settingsRoot.Layout.SendFilePanelIsVisible;
 		}
 
 		private void toolStripMenuItem_SendContextMenu_SendText_Click(object sender, EventArgs e)
@@ -3799,20 +3818,40 @@ namespace YAT.View.Forms
 			this.terminal.SendFile();
 		}
 
-		private void toolStripMenuItem_SendContextMenu_Panels_SendText_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_SendContextMenu_CopyTextToClipboard_Click(object sender, EventArgs e)
 		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			this.settingsRoot.Layout.SendTextPanelIsVisible = !this.settingsRoot.Layout.SendTextPanelIsVisible;
+			SetFixedStatusText("Preparing copying to clipboard...");
+			Cursor = Cursors.WaitCursor;
+			Clipboard.Clear(); // Prevent handling errors in case copying takes long.
+			SetFixedStatusText("Copying text to clipboard...");
+			if (CommandSettingsClipboardHelper.TrySetTextOrFilePath(this, send.TextCommand)) // No need for a dedicated TrySetText() method.
+			{
+				Cursor = Cursors.Default;
+				SetTimedStatusText("Copying text to clipboard done");
+			}
+			else
+			{
+				Cursor = Cursors.Default;
+				SetFixedStatusText("Copying text to clipboard failed!");
+			}
 		}
 
-		private void toolStripMenuItem_SendContextMenu_Panels_SendFile_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard_Click(object sender, EventArgs e)
 		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			this.settingsRoot.Layout.SendFilePanelIsVisible = !this.settingsRoot.Layout.SendFilePanelIsVisible;
+			SetFixedStatusText("Preparing copying to clipboard...");
+			Cursor = Cursors.WaitCursor;
+			Clipboard.Clear(); // Prevent handling errors in case copying takes long.
+			SetFixedStatusText("Copying file path to clipboard...");
+			if (CommandSettingsClipboardHelper.TrySetTextOrFilePath(this, send.FileCommand)) // No need for a dedicated TrySetFilePath() method.
+			{
+				Cursor = Cursors.Default;
+				SetTimedStatusText("Copying file path to clipboard done");
+			}
+			else
+			{
+				Cursor = Cursors.Default;
+				SetFixedStatusText("Copying file path to clipboard failed!");
+			}
 		}
 
 		private void toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix_Click(object sender, EventArgs e)

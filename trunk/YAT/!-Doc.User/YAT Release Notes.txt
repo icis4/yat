@@ -135,7 +135,8 @@ Important changes:
 - Binary terminals: Lines are no longer broken each 16 bytes by default, they now by default are
   broken on every chunk (related to bug #477).
 - Consequently, chunk line break settings are now located in the text/binary specific dialog.
-- Comma and semicolon added to list of predefined EOL sequences (related to feature request #409).
+- Comma and semicolon added to list of predefined EOL sequences (feature request #409).
+- Option to [Copy Text / File Path to Clipboard] (bug #493).
 - Adaptive monitor update rate further improved.
 - Calculation of byte/line rates improved.
 - For Bin/Oct/Dec/Hex/Unicode radix, ASCII control characters are no longer converted to mnemonics.
