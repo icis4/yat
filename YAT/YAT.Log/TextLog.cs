@@ -223,7 +223,7 @@ namespace YAT.Log
 				{
 					if (this.rtfWriter != null)
 					{
-						if (!this.rtfWriter.IsUndisposed)
+						if (!this.rtfWriter.IsInDisposal)
 						{
 							this.rtfWriter.Close();
 							this.rtfWriter.Dispose();
@@ -240,7 +240,7 @@ namespace YAT.Log
 				{
 					if (this.textWriter != null)
 					{
-						if (!this.textWriter.IsUndisposed)
+						if (!this.textWriter.IsInDisposal)
 						{
 							this.textWriter.Close();
 							this.textWriter.Dispose();
