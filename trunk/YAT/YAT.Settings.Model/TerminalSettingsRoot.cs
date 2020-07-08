@@ -380,7 +380,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Format.Settings.FormatSettings Format
+		public virtual Format.Settings.FormatSettings Format
 		{
 			get { return (this.explicit_.Format); }
 			set { this.explicit_.Format = value;  }
@@ -388,7 +388,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Log.Settings.LogSettings Log
+		public virtual Log.Settings.LogSettings Log
 		{
 			get { return (this.explicit_.Log); }
 			set { this.explicit_.Log = value;  }
@@ -420,7 +420,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Application.Settings.WindowSettings Window
+		public virtual Application.Settings.WindowSettings Window
 		{
 			get { return (this.implicit_.Window); }
 			set { this.implicit_.Window = value;  }
