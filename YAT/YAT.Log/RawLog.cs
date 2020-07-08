@@ -218,7 +218,7 @@ namespace YAT.Log
 
 		/// <remarks>
 		/// Since raw log uses raw items (time stamp, device, direction) all items are written to the log.
-		/// This differs from neat log, where only the items that are shown are written to the log.
+		/// This differs from text log, where only the items that are shown are written to the log.
 		/// </remarks>
 		public virtual void Write(Domain.RawChunk chunk)
 		{
