@@ -94,7 +94,7 @@ New:
   Useful e.g. for sending a text command while a repeating text command is already ongoing.
   Can be enabled at [Settings... > Advanced... > Send > Allow concurrent sending].
 - Text terminals: Option to glue characters of a line together, enabled by default, resulting in
-  fewer line breaks when simultaneously sending and receiving (rel. to feat. #19 and bug #176).
+  fewer line breaks when sending and receiving in full-duplex (related to feat. #19 and bug #176).
 - Text terminals: Option to wait for response, resulting in request and response being displayed
   adjacently. Useful for sending multi-line commands and files with ping-pong-style command sets
   (feature request #19 and bug #176).
@@ -109,6 +109,8 @@ New:
   Useful for e.g. sending "AT+DATE=20 01 01 12 00 00".
 - Additional keyword \!(Port()) allowing to change the serial COM port on-the-fly (feat. req. #403).
   Especially useful as predefined command e.g. "\!(Port(10))\!(NoEOL())" to change port by shortcut.
+- Additional keywords \!(RtsOn|Off|Toggle) and \!(DtrOn|Off|Toggle) allowing to change serial COM
+  port signals on-the-fly (feature request #408). Also work with predefined commands and shortcuts.
 - Automatic actions and responses now support multiple triggers within a line or chunk.
 - Automatic actions and responses now support text triggers, optionally incl. regular expression.
 - Automatic actions and responses now list recent used trigger and response texts.
@@ -133,6 +135,9 @@ Important changes:
 - Binary terminals: Lines are no longer broken each 16 bytes by default, they now by default are
   broken on every chunk (related to bug #477).
 - Consequently, chunk line break settings are now located in the text/binary specific dialog.
+- Comma and semicolon added to list of predefined EOL sequences (feature request #409).
+- Option to [Copy Text / File Path to Clipboard] (bug #493).
+- Option to hide undefined commands (feature request #410).
 - Adaptive monitor update rate further improved.
 - Calculation of byte/line rates improved.
 - For Bin/Oct/Dec/Hex/Unicode radix, ASCII control characters are no longer converted to mnemonics.
@@ -154,6 +159,8 @@ Fixed bugs:
   commands yet (related to previous feature requests #28, #257, #365).
 - Import/Paste of a .yacp command page file that contains more predefined commands than currently
   configured now behaves correctly (bug #479, related to previous feature requests #28, #257, #365).
+- Explicit default radix is no longer reset to [String] when multiple predefined command pages are
+  being defined (bug #492).
 - Automatic actions and responses now work chunk independently (feature request #366).
 - Automatic actions [Filter] and [Suppress] now also work for continuous data (bug #478) and on
   refresh (feature request #367).

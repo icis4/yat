@@ -31,6 +31,7 @@ namespace YAT.Model.Settings
 	public class PredefinedSettings : MKY.Settings.SettingsItem, IEquatable<PredefinedSettings>
 	{
 		private int selectedPageId;
+		private bool hideUndefinedCommands;
 
 		/// <summary></summary>
 		public PredefinedSettings()
@@ -83,6 +84,21 @@ namespace YAT.Model.Settings
 				if (this.selectedPageId != value)
 				{
 					this.selectedPageId = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("HideUndefinedCommands")]
+		public virtual bool HideUndefinedCommands
+		{
+			get { return (this.hideUndefinedCommands); }
+			set
+			{
+				if (this.hideUndefinedCommands != value)
+				{
+					this.hideUndefinedCommands = value;
 					SetMyChanged();
 				}
 			}

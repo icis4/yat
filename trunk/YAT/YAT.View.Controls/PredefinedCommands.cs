@@ -59,6 +59,8 @@ namespace YAT.View.Controls
 		private const Domain.Parser.Mode ParseModeForTextDefault = Domain.Parser.Mode.Default;
 		private const bool TerminalIsReadyToSendDefault = false;
 
+		private const bool HideUndefinedCommandsDefault = Model.Settings.PredefinedCommandSettings.HideUndefinedCommandsDefault;
+
 		#endregion
 
 		#region Fields
@@ -78,6 +80,8 @@ namespace YAT.View.Controls
 		private Domain.Parser.Mode parseModeForText = ParseModeForTextDefault;
 		private string rootDirectoryForFile; // = null;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
+
+		private bool hideUndefinedCommands = HideUndefinedCommandsDefault;
 
 		private int commandStateUpdateSuspendedCount; // = 0;
 
@@ -250,6 +254,19 @@ namespace YAT.View.Controls
 			set
 			{
 				this.terminalIsReadyToSend = value;
+				SetCommandStateControls();
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual bool HideUndefinedCommands
+		{
+			set
+			{
+				this.hideUndefinedCommands = value;
 				SetCommandStateControls();
 			}
 		}
@@ -586,6 +603,7 @@ namespace YAT.View.Controls
 							set.ParseModeForText      = this.parseModeForText;
 							set.RootDirectoryForFile  = this.rootDirectoryForFile;
 							set.TerminalIsReadyToSend = this.terminalIsReadyToSend;
+							set.HideUndefinedCommands = this.hideUndefinedCommands;
 						}
 						finally
 						{
