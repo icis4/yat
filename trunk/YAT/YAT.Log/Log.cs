@@ -48,9 +48,8 @@ namespace YAT.Log
 		// Constants
 		//==========================================================================================
 
-		// Flushing is a time-intensive operation, it may take up to 10 ms!
-		private const int FlushTimeoutMin =  500;
-		private const int FlushTimeoutMax = 1000;
+		private const int FlushTimeoutMin = 1000;
+		private const int FlushTimeoutMax = 2500;
 
 		#endregion
 
@@ -107,7 +106,7 @@ namespace YAT.Log
 			// Dispose of managed resources:
 			if (disposing)
 			{
-				StopFlushTimer();
+				DisposeFlushTimer();
 
 				// In the 'normal' case, Close() has already been called.
 				Close();
@@ -306,14 +305,19 @@ namespace YAT.Log
 
 		/// <summary>
 		/// Triggers the flush timer. After triggering, <see cref="Flush"/> will be called within
-		/// no more than <see cref="FlushTimeoutMax"/> milliseconds.
+		/// approx. <see cref="FlushTimeoutMin"/> and <see cref="FlushTimeoutMax"/> milliseconds.
 		/// </summary>
 		/// <remarks>
-		/// Unfortunately, neither <see cref="Stream"/> nor any derived class implements some kind
-		/// of intelligent flushing except for <see cref="StreamWriter.AutoFlush"/>. However, that
-		/// is very inefficient. Therefore, a timer is used to flush the stream regularly. This
-		/// ensures that a log file is up to date within a reasonable time, while it is still
-		/// performing well.
+		/// This flushing mechanism is needed because neither <see cref="Stream"/> nor any derived
+		/// class implements some kind of timeout controlled intelligent flushing. .NET would keep
+		/// 4096 bytes buffered. This would lead to:
+		/// <list type="bullet">
+		/// <item><description>"Slow" data would not be written to the file before 4096 got transmitted.</description></item>
+		/// <item><description>Data at the end of a transmission would not be written before stopping log or closing terminal/YAT.</description></item>
+		/// </list>
+		/// Note that <see cref="StreamWriter.AutoFlush"/> does not solve this issue, that is very
+		/// inefficient as it "will flush its buffer to the underlying stream after every call
+		/// to StreamWriter.Write()".
 		/// </remarks>
 		protected virtual void TriggerFlushTimer()
 		{
@@ -321,13 +325,16 @@ namespace YAT.Log
 			{
 				if (this.flushTimer == null)
 				{
-					this.flushTimer = new Timer(new TimerCallback(flushTimer_Timeout), null, flushTimerRandom.Next(FlushTimeoutMin, FlushTimeoutMax), Timeout.Infinite);
+					var dueTime = flushTimerRandom.Next(FlushTimeoutMin, FlushTimeoutMax);
+					var period  = Timeout.Infinite;
+
+					this.flushTimer = new Timer(new TimerCallback(flushTimer_Timeout), null, dueTime, period);
 				}
 			}
 		}
 
 		/// <summary></summary>
-		protected virtual void StopFlushTimer()
+		protected virtual void DisposeFlushTimer()
 		{
 			lock (flushTimerSyncObj)
 			{
@@ -343,15 +350,17 @@ namespace YAT.Log
 		private void flushTimer_Timeout(object obj)
 		{
 			// Non-periodic timer, only a single timeout event thread can be active at a time.
-			// There is no need to synchronize callbacks to this event handler.
+			// There is no need to synchronize concurrent callbacks to this event handler.
 
 			lock (this.flushTimerSyncObj)
 			{
 				if (this.flushTimer == null)
 					return; // Handle overdue event callbacks.
+
+				DisposeFlushTimer(); // A new timer will get created on subsequent triggering.
 			}
 
-			StopFlushTimer();
+			// Flushing is a time-intensive operation, it may take up to 10 ms!
 			Flush();
 		}
 
