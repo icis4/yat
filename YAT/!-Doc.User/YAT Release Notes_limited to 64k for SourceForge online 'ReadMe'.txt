@@ -337,7 +337,7 @@ Limitations and known issues:
 - Switching log off may take several seconds, during which YAT is unresponsive (bug #459).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
+  unknown, could even be a limitation of the memory management of the .NET runtime).
 
 
 YAT 2.0 Final Version 2.0.0 :: 2018-04-13
@@ -407,7 +407,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
+  unknown, could even be a limitation of the memory management of the .NET runtime).
 
 
 YAT 2.0 Epsilon Version 1.99.90 :: 2018-01-12
@@ -490,7 +490,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
+  unknown, could even be a limitation of the memory management of the .NET runtime).
 
 
 YAT 2.0 Delta Version 1.99.80 :: 2017-10-15
@@ -573,7 +573,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
+  unknown, could even be a limitation of the memory management of the .NET runtime).
 
 
 YAT 2.0 Gamma 3 Version 1.99.70 :: 2017-07-04
@@ -658,7 +658,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
+  unknown, could even be a limitation of the memory management of the .NET runtime).
 
 
 YAT 2.0 Gamma 2''          Version 1.99.52 :: 2016-09-30
