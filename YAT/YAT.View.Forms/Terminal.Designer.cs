@@ -337,18 +337,21 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_SendTextWithoutEol = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_SendFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_SendContextMenu_CopyTextToClipboard = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_SendContextMenu_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_AllowConcurrency = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_SendContextMenu_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_SendContextMenu_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_SendContextMenu_KeepSendText = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_SendImmediately = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_EnableEscapesForText = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_SendContextMenu_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_SendContextMenu_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_SendContextMenu_SkipEmptyLines = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_EnableEscapesForFile = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_SendContextMenu_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_SendContextMenu_Separator_7 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_SendContextMenu_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip_Terminal = new MKY.Windows.Forms.MenuStripEx();
 			this.toolStripMenuItem_TerminalMenu_File = new System.Windows.Forms.ToolStripMenuItem();
@@ -531,9 +534,7 @@ namespace YAT.View.Forms
 			this.timer_IOStatusIndicator = new System.Windows.Forms.Timer(this.components);
 			this.timer_AutoActionCountUpdate = new System.Windows.Forms.Timer(this.components);
 			this.timer_AutoResponseCountUpdate = new System.Windows.Forms.Timer(this.components);
-			this.toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_SendContextMenu_CopyTextToClipboard = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_SendContextMenu_Separator_7 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_PredefinedContextMenu_HideShowUndefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Monitor.SuspendLayout();
 			this.contextMenuStrip_Radix.SuspendLayout();
 			this.contextMenuStrip_Predefined.SuspendLayout();
@@ -1220,6 +1221,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_PredefinedContextMenu_Clear,
             this.toolStripMenuItem_PredefinedContextMenu_Separator_5,
             this.toolStripMenuItem_PredefinedContextMenu_Define,
+            this.toolStripMenuItem_PredefinedContextMenu_HideShowUndefined,
             this.toolStripMenuItem_PredefinedContextMenu_Separator_6,
             this.toolStripMenuItem_PredefinedContextMenu_Page,
             this.toolStripMenuItem_PredefinedContextMenu_Separator_7,
@@ -1229,7 +1231,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_PredefinedContextMenu_ImportPagesFromFile,
             this.toolStripMenuItem_PredefinedContextMenu_LinkPageToFile});
 			this.contextMenuStrip_Predefined.Name = "contextMenuStrip_PredefinedCommands";
-			this.contextMenuStrip_Predefined.Size = new System.Drawing.Size(258, 530);
+			this.contextMenuStrip_Predefined.Size = new System.Drawing.Size(258, 574);
 			this.contextMenuStrip_Predefined.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Predefined_Opening);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_Panels
@@ -3091,7 +3093,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_SendContextMenu_Separator_7,
             this.toolStripMenuItem_SendContextMenu_CopyPredefined});
 			this.contextMenuStrip_Send.Name = "contextMenuStrip_Send";
-			this.contextMenuStrip_Send.Size = new System.Drawing.Size(334, 398);
+			this.contextMenuStrip_Send.Size = new System.Drawing.Size(334, 376);
 			this.contextMenuStrip_Send.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Send_Opening);
 			// 
 			// toolStripMenuItem_SendContextMenu_Panels
@@ -3155,6 +3157,25 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_Separator_2.Name = "toolStripMenuItem_SendContextMenu_Separator_2";
 			this.toolStripMenuItem_SendContextMenu_Separator_2.Size = new System.Drawing.Size(330, 6);
 			// 
+			// toolStripMenuItem_SendContextMenu_CopyTextToClipboard
+			// 
+			this.toolStripMenuItem_SendContextMenu_CopyTextToClipboard.Name = "toolStripMenuItem_SendContextMenu_CopyTextToClipboard";
+			this.toolStripMenuItem_SendContextMenu_CopyTextToClipboard.Size = new System.Drawing.Size(333, 22);
+			this.toolStripMenuItem_SendContextMenu_CopyTextToClipboard.Text = "Copy Text to Clipboard";
+			this.toolStripMenuItem_SendContextMenu_CopyTextToClipboard.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_CopyTextToClipboard_Click);
+			// 
+			// toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard
+			// 
+			this.toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard.Name = "toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard";
+			this.toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard.Size = new System.Drawing.Size(333, 22);
+			this.toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard.Text = "Copy File Path to Clipboard";
+			this.toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard_Click);
+			// 
+			// toolStripMenuItem_SendContextMenu_Separator_3
+			// 
+			this.toolStripMenuItem_SendContextMenu_Separator_3.Name = "toolStripMenuItem_SendContextMenu_Separator_3";
+			this.toolStripMenuItem_SendContextMenu_Separator_3.Size = new System.Drawing.Size(330, 6);
+			// 
 			// toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix
 			// 
 			this.toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix.Name = "toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix";
@@ -3173,10 +3194,10 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_AllowConcurrency.ToolTipText = resources.GetString("toolStripMenuItem_SendContextMenu_AllowConcurrency.ToolTipText");
 			this.toolStripMenuItem_SendContextMenu_AllowConcurrency.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_AllowConcurrency_Click);
 			// 
-			// toolStripMenuItem_SendContextMenu_Separator_3
+			// toolStripMenuItem_SendContextMenu_Separator_4
 			// 
-			this.toolStripMenuItem_SendContextMenu_Separator_3.Name = "toolStripMenuItem_SendContextMenu_Separator_3";
-			this.toolStripMenuItem_SendContextMenu_Separator_3.Size = new System.Drawing.Size(330, 6);
+			this.toolStripMenuItem_SendContextMenu_Separator_4.Name = "toolStripMenuItem_SendContextMenu_Separator_4";
+			this.toolStripMenuItem_SendContextMenu_Separator_4.Size = new System.Drawing.Size(330, 6);
 			// 
 			// toolStripMenuItem_SendContextMenu_KeepSendText
 			// 
@@ -3203,10 +3224,10 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_EnableEscapesForText.Text = "Enable <...> and \\... Escapes on [Send Text]";
 			this.toolStripMenuItem_SendContextMenu_EnableEscapesForText.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_EnableEscapesForText_Click);
 			// 
-			// toolStripMenuItem_SendContextMenu_Separator_4
+			// toolStripMenuItem_SendContextMenu_Separator_5
 			// 
-			this.toolStripMenuItem_SendContextMenu_Separator_4.Name = "toolStripMenuItem_SendContextMenu_Separator_4";
-			this.toolStripMenuItem_SendContextMenu_Separator_4.Size = new System.Drawing.Size(330, 6);
+			this.toolStripMenuItem_SendContextMenu_Separator_5.Name = "toolStripMenuItem_SendContextMenu_Separator_5";
+			this.toolStripMenuItem_SendContextMenu_Separator_5.Size = new System.Drawing.Size(330, 6);
 			// 
 			// toolStripMenuItem_SendContextMenu_ExpandMultiLineText
 			// 
@@ -3217,10 +3238,10 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText.Text = "Expand Multi-Line Text";
 			this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_ExpandMultiLineText_Click);
 			// 
-			// toolStripMenuItem_SendContextMenu_Separator_5
+			// toolStripMenuItem_SendContextMenu_Separator_6
 			// 
-			this.toolStripMenuItem_SendContextMenu_Separator_5.Name = "toolStripMenuItem_SendContextMenu_Separator_5";
-			this.toolStripMenuItem_SendContextMenu_Separator_5.Size = new System.Drawing.Size(330, 6);
+			this.toolStripMenuItem_SendContextMenu_Separator_6.Name = "toolStripMenuItem_SendContextMenu_Separator_6";
+			this.toolStripMenuItem_SendContextMenu_Separator_6.Size = new System.Drawing.Size(330, 6);
 			// 
 			// toolStripMenuItem_SendContextMenu_SkipEmptyLines
 			// 
@@ -3238,10 +3259,10 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_EnableEscapesForFile.Text = "Enable <...> and \\... Escapes on [Send File]";
 			this.toolStripMenuItem_SendContextMenu_EnableEscapesForFile.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_EnableEscapesForFile_Click);
 			// 
-			// toolStripMenuItem_SendContextMenu_Separator_6
+			// toolStripMenuItem_SendContextMenu_Separator_7
 			// 
-			this.toolStripMenuItem_SendContextMenu_Separator_6.Name = "toolStripMenuItem_SendContextMenu_Separator_6";
-			this.toolStripMenuItem_SendContextMenu_Separator_6.Size = new System.Drawing.Size(330, 6);
+			this.toolStripMenuItem_SendContextMenu_Separator_7.Name = "toolStripMenuItem_SendContextMenu_Separator_7";
+			this.toolStripMenuItem_SendContextMenu_Separator_7.Size = new System.Drawing.Size(330, 6);
 			// 
 			// toolStripMenuItem_SendContextMenu_CopyPredefined
 			// 
@@ -5056,24 +5077,12 @@ namespace YAT.View.Forms
 			this.timer_AutoResponseCountUpdate.Interval = 73;
 			this.timer_AutoResponseCountUpdate.Tick += new System.EventHandler(this.timer_AutoResponseCountUpdate_Tick);
 			// 
-			// toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard
+			// toolStripMenuItem_PredefinedContextMenu_HideShowUndefined
 			// 
-			this.toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard.Name = "toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard";
-			this.toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard.Size = new System.Drawing.Size(333, 22);
-			this.toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard.Text = "Copy File Path to Clipboard";
-			this.toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard_Click);
-			// 
-			// toolStripMenuItem_SendContextMenu_CopyTextToClipboard
-			// 
-			this.toolStripMenuItem_SendContextMenu_CopyTextToClipboard.Name = "toolStripMenuItem_SendContextMenu_CopyTextToClipboard";
-			this.toolStripMenuItem_SendContextMenu_CopyTextToClipboard.Size = new System.Drawing.Size(333, 22);
-			this.toolStripMenuItem_SendContextMenu_CopyTextToClipboard.Text = "Copy Text to Clipboard";
-			this.toolStripMenuItem_SendContextMenu_CopyTextToClipboard.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_CopyTextToClipboard_Click);
-			// 
-			// toolStripMenuItem_SendContextMenu_Separator_7
-			// 
-			this.toolStripMenuItem_SendContextMenu_Separator_7.Name = "toolStripMenuItem_SendContextMenu_Separator_7";
-			this.toolStripMenuItem_SendContextMenu_Separator_7.Size = new System.Drawing.Size(330, 6);
+			this.toolStripMenuItem_PredefinedContextMenu_HideShowUndefined.Name = "toolStripMenuItem_PredefinedContextMenu_HideShowUndefined";
+			this.toolStripMenuItem_PredefinedContextMenu_HideShowUndefined.Size = new System.Drawing.Size(257, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_HideShowUndefined.Text = "Hide Undefined Commands";
+			this.toolStripMenuItem_PredefinedContextMenu_HideShowUndefined.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_HideShowUndefined_Click);
 			// 
 			// Terminal
 			// 
@@ -5637,5 +5646,6 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_CopyTextToClipboard;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_SendContextMenu_Separator_7;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_HideShowUndefined;
 	}
 }

@@ -45,8 +45,12 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public const PredefinedCommandPageLayout PageLayoutDefault = PredefinedCommandPageLayout.OneByOne;
 
+		/// <summary></summary>
+		public const bool HideUndefinedCommandsDefault = false;
+
 		private PredefinedCommandPageLayout pageLayout;
 		private PredefinedCommandPageCollection pages;
+		private bool hideUndefinedCommands;
 
 		/// <summary></summary>
 		public PredefinedCommandSettings()
@@ -71,6 +75,7 @@ namespace YAT.Model.Settings
 		{
 			PageLayout = rhs.PageLayout;
 			Pages = new PredefinedCommandPageCollection(rhs.Pages);
+			HideUndefinedCommands = rhs.HideUndefinedCommands;
 
 			ClearChanged();
 		}
@@ -84,6 +89,7 @@ namespace YAT.Model.Settings
 
 			PageLayout = PageLayoutDefault;
 			Pages = new PredefinedCommandPageCollection();
+			HideUndefinedCommands = HideUndefinedCommandsDefault;
 		}
 
 		#region Properties
@@ -121,6 +127,23 @@ namespace YAT.Model.Settings
 				if (!IEnumerableEx.ItemsEqual(this.pages, value))
 				{
 					this.pages = new PredefinedCommandPageCollection(value); // Clone to ensure decoupling.
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <remarks>
+		/// Named "Hide" rather than "Show" to make default behavior more obvious.
+		/// </remarks>
+		[XmlElement("HideUndefinedCommands")]
+		public virtual bool HideUndefinedCommands
+		{
+			get { return (this.hideUndefinedCommands); }
+			set
+			{
+				if (this.hideUndefinedCommands != value)
+				{
+					this.hideUndefinedCommands = value;
 					SetMyChanged();
 				}
 			}
@@ -242,8 +265,9 @@ namespace YAT.Model.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ PageLayout.GetHashCode();
-				hashCode = (hashCode * 397) ^ Pages     .GetHashCode();
+				hashCode = (hashCode * 397) ^ PageLayout           .GetHashCode();
+				hashCode = (hashCode * 397) ^ Pages                .GetHashCode();
+				hashCode = (hashCode * 397) ^ HideUndefinedCommands.GetHashCode();
 
 				return (hashCode);
 			}
@@ -274,8 +298,9 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				PageLayout.Equals(other.PageLayout) &&
-				IEnumerableEx.ItemsEqual(Pages, other.Pages)
+				PageLayout.Equals(              other.PageLayout) &&
+				IEnumerableEx.ItemsEqual(Pages, other.Pages)      &&
+				HideUndefinedCommands.Equals(   other.HideUndefinedCommands)
 			);
 		}
 

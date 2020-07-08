@@ -3008,6 +3008,11 @@ namespace YAT.View.Forms
 				////toolStripMenuItem_PredefinedContextMenu_ImportPagesFromFile     .Text = "Import Page(s) from File..." is fixed.
 				////toolStripMenuItem_PredefinedContextMenu_LinkPageToFile          .Text = "Link Page to File..." is fixed.
 				}
+
+				if (this.settingsRoot.PredefinedCommand.HideUndefinedCommands)
+					toolStripMenuItem_PredefinedContextMenu_HideShowUndefined.Text = "Show Undefined Commands";
+				else
+					toolStripMenuItem_PredefinedContextMenu_HideShowUndefined.Text = "Hide Undefined Commands";
 			}
 			finally
 			{
@@ -3364,6 +3369,14 @@ namespace YAT.View.Forms
 				ShowPredefinedCommandSettings(predefined.SelectedPageId, contextMenuStrip_Predefined_SelectedCommandId);
 			else
 				ShowPredefinedCommandSettings(predefined.SelectedPageId, 1);
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_HideShowUndefined_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.settingsRoot.PredefinedCommand.HideUndefinedCommands = !this.settingsRoot.PredefinedCommand.HideUndefinedCommands;
 		}
 
 		// While the purpose of
@@ -6747,9 +6760,11 @@ namespace YAT.View.Forms
 				this.isSettingControls.Enter();
 				try
 				{              // Layout must be changed first! Otherwise pages may not be complete!
-					predefined.PageLayout = this.settingsRoot.PredefinedCommand.PageLayout;
-					predefined.Pages      = this.settingsRoot.PredefinedCommand.Pages;
-				}              // See remarks of this property!
+					predefined.PageLayout            = this.settingsRoot.PredefinedCommand.PageLayout;
+					predefined.Pages                 = this.settingsRoot.PredefinedCommand.Pages;
+					           // See remarks of this property!
+					predefined.HideUndefinedCommands = this.settingsRoot.PredefinedCommand.HideUndefinedCommands;
+				}
 				finally
 				{
 					this.isSettingControls.Leave();
