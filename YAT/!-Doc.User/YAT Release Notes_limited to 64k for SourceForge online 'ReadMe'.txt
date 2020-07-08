@@ -203,6 +203,7 @@ Limitations and known issues:
 - Automatic actions [Filter] and [Suppress] as well as automatic actions and responses based on a
   text trigger are constrained to handle complete lines. Thus, individual characters incl. control
   characters like <XOn> as well as incomplete lines will not be displayed until line is complete.
+- Switching log off may take several seconds, during which YAT is unresponsive (bug #459).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
   unknown, could even be a limitation of the memory management of the .NET runtime).
@@ -333,6 +334,7 @@ Limitations and known issues:
 - Automatic actions [Filter] and [Suppress] do not get reapplied on refresh (feature request #367).
 - Wait for response line (text terminals) not yet implemented (feature request #19 and bug #176).
 - Direct send text mode does not yet support special formats and commands (feature request #10).
+- Switching log off may take several seconds, during which YAT is unresponsive (bug #459).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
   unknown, could even be a limitation of the memory management of the .NET 2.0 runtime).
