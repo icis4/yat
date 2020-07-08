@@ -549,7 +549,7 @@ namespace YAT.View.Forms
 		private void timer_ExecuteManualTest3_Timeout(object obj)
 		{
 			// Non-periodic timer, only a single timeout event thread can be active at a time.
-			// There is no need to synchronize callbacks to this event handler.
+			// There is no need to synchronize concurrent callbacks to this event handler.
 
 			timer_ExecuteManualTest3_Dispose();
 			throw (new InvalidOperationException("Unhandled asynchronous non-synchronized exception test :: This is the outer exception.", new InvalidOperationException("This is the inner exception.")));

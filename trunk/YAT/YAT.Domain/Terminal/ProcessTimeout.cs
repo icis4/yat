@@ -131,13 +131,13 @@ namespace YAT.Domain
 		private void timer_Timeout(object obj)
 		{
 			// Non-periodic timer, only a single timeout event thread can be active at a time.
-			// There is no need to synchronize callbacks to this event handler.
+			// There is no need to synchronize concurrent callbacks to this event handler.
 
 			var now = DateTime.Now; // Capture instant in time as soon as possible.
 
 			lock (this.timerSyncObj)
 			{
-				if ((this.timer == null) || (IsInDisposal)) // Ensure to not handle async timer callback during closing anymore.
+				if ((this.timer == null) || (IsInDisposal)) // Handle overdue event callbacks.
 					return;
 			}
 

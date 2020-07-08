@@ -308,7 +308,7 @@ namespace MKY.Windows.Forms
 		private void timer_Timeout(object obj)
 		{
 			// Non-periodic timer, only a single timeout event thread can be active at a time.
-			// There is no need to synchronize callbacks to this event handler.
+			// There is no need to synchronize concurrent callbacks to this event handler.
 
 			CloseSynchronized(DialogResult.Abort);
 		}
