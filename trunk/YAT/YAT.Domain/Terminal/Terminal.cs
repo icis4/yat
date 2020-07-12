@@ -1073,51 +1073,40 @@ namespace YAT.Domain
 			if (this.periodicXOnTimer == null)
 				CreatePeriodicXOnTimer();
 
-			this.periodicXOnTimer.Interval = interval;
-
-			if (!this.periodicXOnTimer.Enabled)
-				this.periodicXOnTimer.Start();
+			this.periodicXOnTimer.Change(interval, interval); // Periodic!
 		}
 
 		private void DisablePeriodicXOnTimer()
 		{
 			if (this.periodicXOnTimer != null)
-			{
-				if (this.periodicXOnTimer.Enabled)
-					this.periodicXOnTimer.Stop();
-			}
+				this.periodicXOnTimer.Change(Timeout.Infinite, Timeout.Infinite);
 		}
 
 		private void CreatePeriodicXOnTimer()
 		{
-			if (this.periodicXOnTimer == null)
-			{
-				this.periodicXOnTimer = new System.Timers.Timer();
-				this.periodicXOnTimer.AutoReset = true;
-				this.periodicXOnTimer.Elapsed += periodicXOnTimer_Elapsed;
-			}
+			if (this.periodicXOnTimer == null)                                                                // Prevents the timer from starting.
+				this.periodicXOnTimer = new Timer(new TimerCallback(periodicXOnTimer_Periodic_Elapsed), null, Timeout.Infinite, Timeout.Infinite);
 		}
 
 		private void DisposePeriodicXOnTimer()
 		{
 			if (this.periodicXOnTimer != null)
 			{
-				this.periodicXOnTimer.Elapsed -= periodicXOnTimer_Elapsed;
 				this.periodicXOnTimer.Dispose();
 				this.periodicXOnTimer = null;
 			}
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private object periodicXOnTimer_Elapsed_SyncObj = new object();
+		private object periodicXOnTimer_Periodic_Elapsed_SyncObj = new object();
 
-		private void periodicXOnTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void periodicXOnTimer_Periodic_Elapsed(object obj)
 		{
 			// Ensure that only one timer elapsed event thread is active at a time. Because if the
 			// execution takes longer than the timer interval, more and more timer threads will pend
 			// here, and then be executed after the previous has been executed. This will require
 			// more and more resources and lead to a drop in performance.
-			if (Monitor.TryEnter(periodicXOnTimer_Elapsed_SyncObj))
+			if (Monitor.TryEnter(periodicXOnTimer_Periodic_Elapsed_SyncObj))
 			{
 				try
 				{
@@ -1127,7 +1116,7 @@ namespace YAT.Domain
 				}
 				finally
 				{
-					Monitor.Exit(periodicXOnTimer_Elapsed_SyncObj);
+					Monitor.Exit(periodicXOnTimer_Periodic_Elapsed_SyncObj);
 				}
 			}
 			else // Monitor.TryEnter()
