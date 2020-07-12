@@ -25,6 +25,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+///// System.Threading is not used due to ambiguity with 'System.Windows.Forms.Timer' and 'StatusBox.Timeout'.
 using System.Windows.Forms;
 
 using MKY.Diagnostics;
@@ -284,7 +285,11 @@ namespace MKY.Windows.Forms
 			DialogResult dr;
 			Initialize(caption, status1, status2, settingText, setting, showCancel, timeout);
 
-			using (var timer = new System.Threading.Timer(new System.Threading.TimerCallback(timer_Timeout), null, this.timeout, System.Threading.Timeout.Infinite))
+			var callback = new System.Threading.TimerCallback(timeoutTimer_OneShot_Elapsed);
+			var dueTime = this.timeout;
+			var period = System.Threading.Timeout.Infinite; // One-Shot!
+
+			using (var timeoutTimer = new System.Threading.Timer(callback, null, dueTime, period))
 			{
 				this.isShowing = true;
 
@@ -305,9 +310,9 @@ namespace MKY.Windows.Forms
 			return (dr);
 		}
 
-		private void timer_Timeout(object obj)
+		private void timeoutTimer_OneShot_Elapsed(object obj)
 		{
-			// Non-periodic timer, only a single timeout event thread can be active at a time.
+			// Non-periodic timer, only a single callback can be active at a time.
 			// There is no need to synchronize concurrent callbacks to this event handler.
 
 			CloseSynchronized(DialogResult.Abort);

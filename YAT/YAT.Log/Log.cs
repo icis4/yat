@@ -106,7 +106,7 @@ namespace YAT.Log
 			// Dispose of managed resources:
 			if (disposing)
 			{
-				DisposeFlushTimer();
+				StopAndDisposeFlushTimer();
 
 				// In the 'normal' case, Close() has already been called.
 				Close();
@@ -325,16 +325,21 @@ namespace YAT.Log
 			{
 				if (this.flushTimer == null)
 				{
+					var callback = new TimerCallback(flushTimer_OneShot_Elapsed);
 					var dueTime = flushTimerRandom.Next(FlushTimeoutMin, FlushTimeoutMax);
-					var period  = Timeout.Infinite;
+					var period = Timeout.Infinite; // One-Shot!
 
-					this.flushTimer = new Timer(new TimerCallback(flushTimer_Timeout), null, dueTime, period);
+					this.flushTimer = new Timer(callback, null, dueTime, period);
+				}
+				else
+				{
+					// Do not call flushTimer.Change(dueTime, period) as flush shall always happen some now and then.
 				}
 			}
 		}
 
 		/// <summary></summary>
-		protected virtual void DisposeFlushTimer()
+		protected virtual void StopAndDisposeFlushTimer()
 		{
 			lock (flushTimerSyncObj)
 			{
@@ -347,17 +352,17 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		private void flushTimer_Timeout(object obj)
+		private void flushTimer_OneShot_Elapsed(object obj)
 		{
-			// Non-periodic timer, only a single timeout event thread can be active at a time.
+			// Non-periodic timer, only a single callback can be active at a time.
 			// There is no need to synchronize concurrent callbacks to this event handler.
 
 			lock (this.flushTimerSyncObj)
 			{
 				if (this.flushTimer == null)
-					return; // Handle overdue event callbacks.
+					return; // Handle overdue callbacks.
 
-				DisposeFlushTimer(); // A new timer will get created on subsequent triggering.
+				StopAndDisposeFlushTimer(); // A new timer will get created on subsequent triggering.
 			}
 
 			// Flushing is a time-intensive operation, it may take up to 10 ms!

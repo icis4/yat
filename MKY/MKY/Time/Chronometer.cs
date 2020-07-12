@@ -34,8 +34,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading;
 
-using MKY.Diagnostics;
-
 #endregion
 
 namespace MKY.Time
@@ -92,7 +90,7 @@ namespace MKY.Time
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Chronometer).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
 	////private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Chronometer).FullName); // See remarks above!
 
-		private System.Timers.Timer secondTicker; // Not "using" 'System.Timers' to prevent conflicts with 'System.Threading'.
+		private System.Timers.Timer secondTicker; // Ambiguity with 'System.Threading.Timer'.
 		private DateTime startTimeStamp = DateTime.Now;
 		private TimeSpan accumulatedTimeSpan = TimeSpan.Zero;
 
@@ -118,10 +116,10 @@ namespace MKY.Time
 		/// <summary></summary>
 		public Chronometer()
 		{
-			this.secondTicker = new System.Timers.Timer();
-			this.secondTicker.AutoReset = true;
+			this.secondTicker = new System.Timers.Timer(); // 'Timers.Timer' rather than 'Threading.Timer' because 'e.SignalTime' is needed.
 			this.secondTicker.Interval = 1000;
-			this.secondTicker.Elapsed += secondTicker_Elapsed;
+			this.secondTicker.AutoReset = true; // Periodic!
+			this.secondTicker.Elapsed += secondTicker_Periodic_Elapsed;
 		}
 
 		#region Disposal
@@ -308,15 +306,15 @@ namespace MKY.Time
 		//==========================================================================================
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private object secondTicker_Elapsed_SyncObj = new object();
+		private object secondTicker_Periodic_Elapsed_SyncObj = new object();
 
-		private void secondTicker_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void secondTicker_Periodic_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			// Ensure that only one timer elapsed event thread is active at a time. Because if the
 			// execution takes longer than the timer interval, more and more timer threads will pend
 			// here, and then be executed after the previous has been executed. This will require
 			// more and more resources and lead to a drop in performance.
-			if (Monitor.TryEnter(secondTicker_Elapsed_SyncObj))
+			if (Monitor.TryEnter(secondTicker_Periodic_Elapsed_SyncObj))
 			{
 				try
 				{
@@ -328,7 +326,7 @@ namespace MKY.Time
 				}
 				finally
 				{
-					Monitor.Exit(secondTicker_Elapsed_SyncObj);
+					Monitor.Exit(secondTicker_Periodic_Elapsed_SyncObj);
 				}
 			}
 			else // Monitor.TryEnter()
