@@ -151,7 +151,6 @@ Important changes:
 - Consequently, x64 distributions no longer need to be 'AnyCPU' builds (former limitation).
 
 Fixed bugs:
-- Recent TCP/IP and UDP/IP ports, remote hosts and local filters are remembered again (req. #273).
 - Predefined command description gets updated when multi-line command gets changed (bug #481) and
   default descriptions no longer get saved in settings file.
 - Issue with not shown predefined commands when defining more than 12 predefined commands fixed.
@@ -161,6 +160,10 @@ Fixed bugs:
   configured now behaves correctly (bug #479, related to previous feature requests #28, #257, #365).
 - Explicit default radix is no longer reset to [String] when multiple predefined command pages are
   being defined (bug #492).
+- Recent TCP/IP and UDP/IP ports, remote hosts and local filters are remembered again (related to
+  former feature request #273).
+- TCP/IP client terminals now also try to automatically reconnect within configured timeout even in
+  case the server resets an initial SYN and times out a subsequent SYN request (bug #487).
 - Automatic actions and responses now work chunk independently (feature request #366).
 - Automatic actions [Filter] and [Suppress] now also work for continuous data (bug #478) and on
   refresh (feature request #367).

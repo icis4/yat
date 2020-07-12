@@ -173,7 +173,11 @@ namespace MKY.IO.Serial.Socket
 		private Thread dataSentThread;
 		private object dataSentThreadSyncObj = new object();
 
-		private System.Timers.Timer reconnectTimer;
+		private Timer reconnectTimer;
+		private object reconnectTimerSyncObj = new object();
+
+		private Timer reestablishedTimer;
+		private object reestablishedTimerSyncObj = new object();
 
 		#endregion
 
@@ -853,42 +857,137 @@ namespace MKY.IO.Serial.Socket
 
 		private void StartReconnectTimer()
 		{
-			if (this.reconnectTimer != null)
-				StopAndDisposeReconnectTimer();
+			lock (this.reconnectTimerSyncObj)
+			{
+				var dueTime = this.autoReconnect.Interval;
+				var period = Timeout.Infinite; // One-Shot!
 
-			this.reconnectTimer = new System.Timers.Timer(this.autoReconnect.Interval);
-			this.reconnectTimer.AutoReset = false;
-			this.reconnectTimer.Elapsed += reconnectTimer_Elapsed;
-			this.reconnectTimer.Start();
+				if (this.reconnectTimer == null)
+					this.reconnectTimer = new Timer(new TimerCallback(reconnectTimer_OneShot_Elapsed), null, dueTime, period);
+				else
+					this.reconnectTimer.Change(dueTime, period);
+			}
 		}
 
 		private void StopAndDisposeReconnectTimer()
 		{
-			if (this.reconnectTimer != null)
+			lock (this.reconnectTimerSyncObj)
 			{
-				this.reconnectTimer.Stop();
-				this.reconnectTimer.Dispose();
-				this.reconnectTimer = null;
+				if (this.reconnectTimer != null)
+				{
+					this.reconnectTimer.Dispose();
+					this.reconnectTimer = null;
+				}
 			}
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private void reconnectTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void reconnectTimer_OneShot_Elapsed(object obj)
 		{
-			if (AutoReconnectEnabledAndAllowed)
+			// Non-periodic timer, only a single callback can be active at a time.
+			// There is no need to synchronize concurrent callbacks to this event handler.
+
+			lock (this.reconnectTimerSyncObj)
+			{
+				if (this.reconnectTimer == null)
+					return; // Handle overdue callbacks.
+			}
+			    //// Check disposal state first!
+			if (IsUndisposed && IsStarted && !IsConnected) // && AutoReconnectEnabledAndAllowed is implicitly given.
 			{
 				try
 				{
 					StartSocketAndThread();
+					StartReestablishedTimer();
 				}
 				catch
 				{
 					StartReconnectTimer();
 				}
 			}
-			else
+		}
+
+		/// <remarks>
+		/// BSc revealed an issue with 'AutoReconnect' (bug #487). Manually closing/opening a
+		/// connection did work fine. But 'AutoReconnect' only reestablished after approx. 20 s.
+		/// Wireshark traces revealed the details:
+		///
+		/// 1. 500 ms after connection loss, YAT tries to reestablish a connection:
+		///    <![CDATA[Server (Device) << SYN << Client (YAT)]]>
+		/// 2. For whatever reason, the device acknowledges but at the same time resets the connection:
+		///    <![CDATA[Server (Device) >> RST|ACK >> Client (YAT)]]>
+		/// 3. YAT's socket then correctly retransmits the paket:
+		///    <![CDATA[Server (Device) << SYN << Client (YAT)]]>
+		/// 4. Then, nothing happens for 11 seconds anymore:
+		///    YAT's socket waits for acknowledge or timeout.
+		///    The device does nothing anymore.
+		///    <![CDATA[Server (Device) << SYN << Client (YAT)]]>
+		/// 5. After timeout, YAT tries again:
+		///    <![CDATA[Server (Device) << SYN << Client (YAT)]]>
+		/// 6. Approx. 12 seconds later, YAT tries again:
+		///    <![CDATA[Server (Device) << SYN << Client (YAT)]]>
+		/// 7. Then device responses and YAT confirms:
+		///    <![CDATA[Server (Device) >> SYN|ACK >> Client (YAT)]]>
+		///    <![CDATA[Server (Device) << ACK << Client (YAT)]]>
+		///
+		/// However, YAT is configured to try every 500 ms again, this does not happen.
+		/// This additionally added 'Reestablished' timer checks the connection after 500 ms.
+		/// </remarks>
+		private void StartReestablishedTimer()
+		{
+			lock (this.reestablishedTimerSyncObj)
 			{
-				StopAndDisposeReconnectTimer();
+				var dueTime = this.autoReconnect.Interval;
+				var period = Timeout.Infinite; // One-Shot!
+
+				if (this.reestablishedTimer == null)
+					this.reestablishedTimer = new Timer(new TimerCallback(reestablishedTimer_OneShot_Elapsed), null, dueTime, period);
+				else
+					this.reestablishedTimer.Change(dueTime, period);
+			}
+		}
+
+		private void StopAndDisposeReestablishedTimer()
+		{
+			lock (this.reestablishedTimerSyncObj)
+			{
+				if (this.reestablishedTimer != null)
+				{
+					this.reestablishedTimer.Dispose();
+					this.reestablishedTimer = null;
+				}
+			}
+		}
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
+		private void reestablishedTimer_OneShot_Elapsed(object obj)
+		{
+			// Non-periodic timer, only a single callback can be active at a time.
+			// There is no need to synchronize concurrent callbacks to this event handler.
+
+			lock (this.reestablishedTimerSyncObj)
+			{
+				if (this.reestablishedTimer == null)
+					return; // Handle overdue callbacks.
+			}
+			    //// Check disposal state first!
+			if (IsUndisposed && IsStarted && !IsConnected) // && AutoReconnectEnabledAndAllowed is implicitly given.
+			{
+				try
+				{
+					StopAndDisposeSocketAndConnectionsAndThread();
+				}
+				catch { } // Best-effort cleanup.
+
+				try
+				{
+					StartSocketAndThread();
+					StartReestablishedTimer();
+				}
+				catch
+				{
+					StartReconnectTimer();
+				}
 			}
 		}
 
