@@ -681,12 +681,16 @@ namespace MKY.IO.Serial.Usb
 		/// </remarks>
 		private void StopThreads()
 		{
-			// First clear both flags to reduce the time to stop the receive thread, it may already
-			// be signaled while receiving data while the send thread is still running.
+			// First, clear both flags to reduce the time to stop the threads, they may already
+			// be signaled while receiving data or while the send thread is still running:
+
 			lock (this.sendThreadSyncObj)
 				this.sendThreadRunFlag = false;
+
 			lock (this.receiveThreadSyncObj)
 				this.receiveThreadRunFlag = false;
+
+			// Then, wait for threads to terminate:
 
 			lock (this.sendThreadSyncObj)
 			{

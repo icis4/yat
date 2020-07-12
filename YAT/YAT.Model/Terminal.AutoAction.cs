@@ -113,7 +113,7 @@ namespace YAT.Model
 		{
 			UpdateAutoAction(); // Simply forward to general Update() method.
 
-			CreateAndStartAutoActionThread();
+			StartAutoActionThread();
 		}
 
 		/// <summary>
@@ -926,7 +926,7 @@ namespace YAT.Model
 		// Thread
 		//------------------------------------------------------------------------------------------
 
-		private void CreateAndStartAutoActionThread()
+		private void StartAutoActionThread()
 		{
 			lock (this.autoActionThreadSyncObj)
 			{

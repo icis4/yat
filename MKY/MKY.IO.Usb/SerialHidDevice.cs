@@ -727,7 +727,7 @@ namespace MKY.IO.Usb
 			}
 
 			DebugMessage("Opening...");
-			CreateAndStartReceiveThread();
+			StartReceiveThread();
 
 			// Create a new stream and begin to read data from the device.
 			if (CreateStream())
@@ -838,7 +838,7 @@ namespace MKY.IO.Usb
 		// Methods > Threads
 		//------------------------------------------------------------------------------------------
 
-		private void CreateAndStartReceiveThread()
+		private void StartReceiveThread()
 		{
 			lock (this.receiveThreadSyncObj)
 			{

@@ -88,7 +88,7 @@ namespace YAT.Model
 		{
 			UpdateAutoResponse(); // Simply forward to general Update() method.
 
-			CreateAndStartAutoResponseThread();
+			StartAutoResponseThread();
 		}
 
 		/// <summary>
@@ -536,7 +536,7 @@ namespace YAT.Model
 		// Thread
 		//------------------------------------------------------------------------------------------
 
-		private void CreateAndStartAutoResponseThread()
+		private void StartAutoResponseThread()
 		{
 			lock (this.autoResponseThreadSyncObj)
 			{
