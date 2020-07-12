@@ -56,8 +56,8 @@ namespace YAT.Domain
 		public ProcessTimeout(int timeout)
 		{
 			this.timeout = timeout;                                                // Prevents the timer from starting.
-			this.timer = new Timer(new TimerCallback(timer_Timeout), null, Timeout.Infinite, Timeout.Infinite);
-		}
+			this.timer = new Timer(new TimerCallback(timer_OneShot_Elapsed), null, Timeout.Infinite, Timeout.Infinite);
+		}                                                                                            // One-Shot!
 
 		#region Disposal
 		//--------------------------------------------------------------------------------------
@@ -128,16 +128,16 @@ namespace YAT.Domain
 				this.timer.Change(Timeout.Infinite, Timeout.Infinite);
 		}
 
-		private void timer_Timeout(object obj)
+		private void timer_OneShot_Elapsed(object obj)
 		{
-			// Non-periodic timer, only a single timeout event thread can be active at a time.
+			// Non-periodic timer, only a single callback can be active at a time.
 			// There is no need to synchronize concurrent callbacks to this event handler.
 
 			var now = DateTime.Now; // Capture instant in time as soon as possible.
 
 			lock (this.timerSyncObj)
 			{
-				if ((this.timer == null) || (IsInDisposal)) // Handle overdue event callbacks.
+				if ((this.timer == null) || (IsInDisposal)) // Handle overdue callbacks.
 					return;
 			}
 

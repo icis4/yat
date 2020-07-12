@@ -85,7 +85,7 @@ namespace MKY.Time
 		private Rate rate;
 
 		private double updateInterval;
-		private System.Timers.Timer updateTicker; // Not "using" 'System.Timers' to prevent conflicts with 'System.Threading'.
+		private System.Timers.Timer updateTicker; // Ambiguity with 'System.Threading.Timer'.
 
 		#endregion
 
@@ -124,10 +124,11 @@ namespace MKY.Time
 			this.rate = new Rate(rateInterval, rateWindow);
 
 			this.updateInterval = updateInterval;
-			this.updateTicker = new System.Timers.Timer();
-			this.updateTicker.AutoReset = true;
+
+			this.updateTicker = new System.Timers.Timer(); // 'Timers.Timer' rather than 'Threading.Timer' because 'e.SignalTime' is needed.
 			this.updateTicker.Interval = this.updateInterval;
-			this.updateTicker.Elapsed += updateTicker_Elapsed;
+			this.updateTicker.AutoReset = true; // Periodic!
+			this.updateTicker.Elapsed += updateTicker_Periodic_Elapsed;
 			this.updateTicker.Start();
 		}
 
@@ -274,15 +275,15 @@ namespace MKY.Time
 		//==========================================================================================
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private object timer_Elapsed_SyncObj = new object();
+		private object updateTicker_Periodic_Elapsed_SyncObj = new object();
 
-		private void updateTicker_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void updateTicker_Periodic_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			// Ensure that only one timer elapsed event thread is active at a time. Because if the
 			// execution takes longer than the timer interval, more and more timer threads will pend
 			// here, and then be executed after the previous has been executed. This will require
 			// more and more resources and lead to a drop in performance.
-			if (Monitor.TryEnter(timer_Elapsed_SyncObj))
+			if (Monitor.TryEnter(updateTicker_Periodic_Elapsed_SyncObj))
 			{
 				try
 				{
@@ -294,7 +295,7 @@ namespace MKY.Time
 				}
 				finally
 				{
-					Monitor.Exit(timer_Elapsed_SyncObj);
+					Monitor.Exit(updateTicker_Periodic_Elapsed_SyncObj);
 				}
 			}
 			else // Monitor.TryEnter()
