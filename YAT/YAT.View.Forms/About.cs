@@ -518,7 +518,7 @@ namespace YAT.View.Forms
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private System.Threading.Timer timer_ExecuteManualTest3; // Explicitly using 'System.Threading.Timer' to prevent naming conflict with 'System.Windows.Forms.Timer'.
+		private System.Threading.Timer timer_ExecuteManualTest3; // Ambiguity with 'System.Windows.Forms.Timer'.
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private object timer_ExecuteManualTest3SyncObj = new object();
@@ -539,16 +539,20 @@ namespace YAT.View.Forms
 				Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
 
 				lock (this.timer_ExecuteManualTest3SyncObj)
-				{                  // Explicitly using 'System.Threading.Timer' to prevent naming conflict with 'System.Windows.Forms.Timer'.
-					this.timer_ExecuteManualTest3 = new System.Threading.Timer(new System.Threading.TimerCallback(timer_ExecuteManualTest3_Timeout), null, 100, System.Threading.Timeout.Infinite);
+				{
+					var callback = new System.Threading.TimerCallback(timer_ExecuteManualTest3_OneShot_Elapsed);
+					var dueTime = 100;
+					var period = System.Threading.Timeout.Infinite; // One-Shot!
+
+					this.timer_ExecuteManualTest3 = new System.Threading.Timer(callback, null, dueTime, period);
 				}
 			}
 		}
 
 		[SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Justification = "Intentionally raising the most general exception to ensure that EVERY exception handler really catches it.")]
-		private void timer_ExecuteManualTest3_Timeout(object obj)
+		private void timer_ExecuteManualTest3_OneShot_Elapsed(object obj)
 		{
-			// Non-periodic timer, only a single timeout event thread can be active at a time.
+			// Non-periodic timer, only a single callback can be active at a time.
 			// There is no need to synchronize concurrent callbacks to this event handler.
 
 			timer_ExecuteManualTest3_Dispose();

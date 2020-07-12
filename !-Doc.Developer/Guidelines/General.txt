@@ -257,6 +257,16 @@ Useful .NET classes
 - DefaultFontValue
 
 
+Timers
+------
+
+Prefer Threading.Timer over Timers.Timer.
+
+Use Timers.Timer...
+...in a component environment when using SynchronizationObject.
+...when e.SignalTime is needed.
+
+
 Threading
 ---------
 

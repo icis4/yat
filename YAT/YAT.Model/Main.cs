@@ -33,7 +33,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -61,6 +60,15 @@ namespace YAT.Model
 	/// </summary>
 	public class Main : DisposableBase, IGuidProvider
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private const int OperationAndExitTimerInterval = 1000;
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -82,8 +90,11 @@ namespace YAT.Model
 
 		private MainResult result = MainResult.Success;
 
-		private System.Timers.Timer operationTimer;
-		private System.Timers.Timer exitTimer;
+		private System.Threading.Timer operationTimer; // Ambiguity with 'System.Windows.Forms.Timer'.
+		private object operationTimerSyncObj = new object();
+
+		private System.Threading.Timer exitTimer; // Ambiguity with 'System.Windows.Forms.Timer'.
+		private object exitTimerSyncObj = new object();
 
 		#endregion
 
@@ -414,7 +425,7 @@ namespace YAT.Model
 			if (success && this.StartArgs.PerformOperationOnRequestedTerminal)
 			{
 				OnFixedStatusTextRequest("Triggering operation...");
-				CreateAndStartOperationTimer();
+				StartOperationTimer();
 			}
 
 			if (success)
@@ -1815,36 +1826,43 @@ namespace YAT.Model
 		// PerformOperation/Exit
 		//------------------------------------------------------------------------------------------
 
-		private void CreateAndStartOperationTimer()
+		private void StartOperationTimer()
 		{
-			StopAndDisposeOperationTimer();
+			lock (this.operationTimerSyncObj)
+			{
+				var dueTime = OperationAndExitTimerInterval;
+				var period  = OperationAndExitTimerInterval; // Periodic!
 
-			this.operationTimer = new System.Timers.Timer(1000);
-			this.operationTimer.Elapsed += this.operationTimer_Elapsed;
-			this.operationTimer.Start();
+				if (this.operationTimer == null)
+					this.operationTimer = new System.Threading.Timer(new TimerCallback(operationTimer_Periodic_Elapsed), null, dueTime, period);
+				else
+					this.operationTimer.Change(dueTime, period);
+			}
 		}
 
 		private void StopAndDisposeOperationTimer()
 		{
-			if (this.operationTimer != null)
+			lock (this.operationTimerSyncObj)
 			{
-				this.operationTimer.Stop();
-				this.operationTimer.Dispose();
-				this.operationTimer = null;
+				if (this.operationTimer != null)
+				{
+					this.operationTimer.Dispose();
+					this.operationTimer = null;
+				}
 			}
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private object operationTimer_Elapsed_SyncObj = new object();
+		private object operationTimer_Periodic_Elapsed_SyncObj = new object();
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private void operationTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void operationTimer_Periodic_Elapsed(object obj)
 		{
 			// Ensure that only one timer elapsed event thread is active at a time. Because if the
 			// execution takes longer than the timer interval, more and more timer threads will pend
 			// here, and then be executed after the previous has been executed. This will require
 			// more and more resources and lead to a drop in performance.
-			if (Monitor.TryEnter(operationTimer_Elapsed_SyncObj))
+			if (Monitor.TryEnter(operationTimer_Periodic_Elapsed_SyncObj))
 			{
 				try
 				{
@@ -1862,7 +1880,7 @@ namespace YAT.Model
 							MessageBoxIcon.Stop
 						);
 
-						CreateAndStartExitTimerIfNeeded(false);
+						StartExitTimerIfNeeded(false);
 						return;
 					}
 
@@ -1883,7 +1901,7 @@ namespace YAT.Model
 							MessageBoxIcon.Stop
 						);
 
-						CreateAndStartExitTimerIfNeeded(false);
+						StartExitTimerIfNeeded(false);
 						return;
 					}
 
@@ -1937,7 +1955,7 @@ namespace YAT.Model
 							);
 							success = false;
 						}
-						CreateAndStartExitTimerIfNeeded(success);
+						StartExitTimerIfNeeded(success);
 					}
 
 					// Automatically transmit file if desired:
@@ -1965,12 +1983,12 @@ namespace YAT.Model
 							);
 							success = false;
 						}
-						CreateAndStartExitTimerIfNeeded(success);
+						StartExitTimerIfNeeded(success);
 					}
 				}
 				finally
 				{
-					Monitor.Exit(operationTimer_Elapsed_SyncObj);
+					Monitor.Exit(operationTimer_Periodic_Elapsed_SyncObj);
 				}
 			}
 			else // Monitor.TryEnter()
@@ -1979,7 +1997,7 @@ namespace YAT.Model
 			}
 		}
 
-		private void CreateAndStartExitTimerIfNeeded(bool operationSuccess)
+		private void StartExitTimerIfNeeded(bool operationSuccess)
 		{
 			if ((!this.startArgs.KeepOpen) &&
 			    (!(this.startArgs.KeepOpenOnError && !operationSuccess)))
@@ -1989,11 +2007,16 @@ namespace YAT.Model
 				else
 					OnFixedStatusTextRequest("No operation performed, triggering exit...");
 
-				StopAndDisposeExitTimer();
+				lock (this.exitTimerSyncObj)
+				{
+					var dueTime = OperationAndExitTimerInterval;
+					var period  = OperationAndExitTimerInterval; // Periodic!
 
-				this.exitTimer = new System.Timers.Timer(1000);
-				this.exitTimer.Elapsed += this.exitTimer_Elapsed;
-				this.exitTimer.Start();
+					if (this.exitTimer == null)
+						this.exitTimer = new System.Threading.Timer(new TimerCallback(exitTimer_Periodic_Elapsed), null, dueTime, period);
+					else
+						this.exitTimer.Change(dueTime, period);
+				}
 			}
 			else
 			{
@@ -2006,25 +2029,27 @@ namespace YAT.Model
 
 		private void StopAndDisposeExitTimer()
 		{
-			if (this.exitTimer != null)
+			lock (this.exitTimerSyncObj)
 			{
-				this.exitTimer.Stop();
-				this.exitTimer.Dispose();
-				this.exitTimer = null;
+				if (this.exitTimer != null)
+				{
+					this.exitTimer.Dispose();
+					this.exitTimer = null;
+				}
 			}
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private object exitTimer_Elapsed_SyncObj = new object();
+		private object exitTimer_Periodic_Elapsed_SyncObj = new object();
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private void exitTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void exitTimer_Periodic_Elapsed(object obj)
 		{
 			// Ensure that only one timer elapsed event thread is active at a time. Because if the
 			// execution takes longer than the timer interval, more and more timer threads will pend
 			// here, and then be executed after the previous has been executed. This will require
 			// more and more resources and lead to a drop in performance.
-			if (Monitor.TryEnter(exitTimer_Elapsed_SyncObj))
+			if (Monitor.TryEnter(exitTimer_Periodic_Elapsed_SyncObj))
 			{
 				try
 				{
@@ -2074,7 +2099,7 @@ namespace YAT.Model
 				}
 				finally
 				{
-					Monitor.Exit(exitTimer_Elapsed_SyncObj);
+					Monitor.Exit(exitTimer_Periodic_Elapsed_SyncObj);
 				}
 			}
 			else // Monitor.TryEnter()
