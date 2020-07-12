@@ -49,7 +49,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -194,7 +193,7 @@ namespace YAT.Domain
 		private bool breakState;
 		private object breakStateSyncObj = new object();
 
-		private System.Timers.Timer periodicXOnTimer;
+		private Timer periodicXOnTimer;
 
 		#endregion
 
