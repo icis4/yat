@@ -300,7 +300,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 				var gcolB = settingsB.TextTerminal.GlueCharsOfLine;
 				gcolB.Enabled = false; // This test relies on direction line break.
-				settingsA.TextTerminal.GlueCharsOfLine = gcolB;
+				settingsB.TextTerminal.GlueCharsOfLine = gcolB;
 
 				using (var terminalB = new Domain.TextTerminal(settingsB))
 				{
