@@ -261,7 +261,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary>
-		/// Hideing XOn/XOff only makes sense for I/O where XOn/XOff is known to be used.
+		/// Hiding XOn/XOff only makes sense for I/O where XOn/XOff is known to be used.
 		/// </summary>
 		[XmlIgnore]
 		public bool SupportsHideXOnXOff
