@@ -304,8 +304,10 @@ namespace MKY.IO.Serial.Socket
 			// Dispose of managed resources:
 			if (disposing)
 			{
-				// In the 'normal' case, the items have already been disposed of, e.g. OnDisconnected().
 				StopAndDisposeReconnectTimer();
+				StopAndDisposeReestablishedTimer();
+
+				// In the 'normal' case, the items have already been disposed of, e.g. OnDisconnected().
 				StopAndDisposeSocketAndConnectionsAndThreadAsync();
 
 				// Do not dispose of state and shutdown locks because that will result in null
