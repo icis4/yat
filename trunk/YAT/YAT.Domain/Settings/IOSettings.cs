@@ -260,16 +260,34 @@ namespace YAT.Domain.Settings
 			get { return (((IOTypeEx)IOType).IsServerSocket); }
 		}
 
+		/// <summary>
+		/// Hideing XOn/XOff only makes sense for I/O where XOn/XOff is known to be used.
+		/// </summary>
+		[XmlIgnore]
+		public bool SupportsHideXOnXOff
+		{
+			get
+			{
+				switch (IOType)
+				{                                     //// Always support, as users may intentionally configure YAT's
+					case IOType.SerialPort:   return (true); // [FlowControl] to [None] even though a device supports XOn/XOff.
+					case IOType.UsbSerialHid: return (FlowControlIsInUse);
+
+					default:                  return (false);
+				}
+			}
+		}
+
 		/// <summary></summary>
 		[XmlIgnore]
 		public virtual bool FlowControlIsInUse
 		{
 			get
 			{
-				switch (this.ioType)
+				switch (IOType)
 				{
 					case IOType.SerialPort:   return (this.serialPort.Communication.FlowControlIsInUse);
-					case IOType.UsbSerialHid: return (this.usbSerialHidDevice.FlowControlIsInUse);
+					case IOType.UsbSerialHid: return (this.usbSerialHidDevice      .FlowControlIsInUse);
 
 					default:                  return (false);
 				}
@@ -282,10 +300,10 @@ namespace YAT.Domain.Settings
 		{
 			get
 			{
-				switch (this.ioType)
+				switch (IOType)
 				{
 					case IOType.SerialPort:   return (this.serialPort.Communication.FlowControlUsesXOnXOff);
-					case IOType.UsbSerialHid: return (this.usbSerialHidDevice.FlowControlUsesXOnXOff);
+					case IOType.UsbSerialHid: return (this.usbSerialHidDevice      .FlowControlUsesXOnXOff);
 
 					default:                  return (false);
 				}
@@ -298,10 +316,10 @@ namespace YAT.Domain.Settings
 		{
 			get
 			{
-				switch (this.ioType)
+				switch (IOType)
 				{
 					case IOType.SerialPort:   return (this.serialPort.Communication.FlowControlManagesXOnXOffManually);
-					case IOType.UsbSerialHid: return (this.usbSerialHidDevice.FlowControlManagesXOnXOffManually);
+					case IOType.UsbSerialHid: return (this.usbSerialHidDevice      .FlowControlManagesXOnXOffManually);
 
 					default:                  return (false);
 				}
@@ -321,7 +339,7 @@ namespace YAT.Domain.Settings
 		{
 			get
 			{
-				switch (this.ioType)
+				switch (IOType)
 				{
 					case IOType.SerialPort:   return (this.serialPort        .SignalXOnWhenOpened);
 					case IOType.UsbSerialHid: return (this.usbSerialHidDevice.SignalXOnWhenOpened);
@@ -331,7 +349,7 @@ namespace YAT.Domain.Settings
 			}
 			set
 			{
-				switch (this.ioType)
+				switch (IOType)
 				{
 					case IOType.SerialPort:   this.serialPort        .SignalXOnWhenOpened = value; break;
 					case IOType.UsbSerialHid: this.usbSerialHidDevice.SignalXOnWhenOpened = value; break;
@@ -347,7 +365,7 @@ namespace YAT.Domain.Settings
 		{
 			get
 			{
-				switch (this.ioType)
+				switch (IOType)
 				{
 					case IOType.SerialPort:
 					{

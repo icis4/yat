@@ -177,7 +177,7 @@ namespace YAT.Domain
 			}                                                             //    with other behavior, e.g. the "Receiving..." notification in the status
 			else if (MKY.IO.Serial.XOnXOff.IsXOnOrXOffByte(b))            //    bar. Also note that most users won't notice or care.
 			{
-				if (TerminalSettings.IO.FlowControlUsesXOnXOff && TerminalSettings.CharHide.HideXOnXOff)
+				if (TerminalSettings.SupportsHideXOnXOff && TerminalSettings.CharHide.HideXOnXOff)
 					isByteToHide = true;
 			}
 

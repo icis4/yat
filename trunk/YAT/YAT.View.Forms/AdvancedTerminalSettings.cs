@@ -1262,7 +1262,7 @@ namespace YAT.View.Forms
 				checkBox_BeepOnBell.Enabled                 =  beepOnBellEnabled;
 				checkBox_BeepOnBell.Checked                 = (beepOnBellEnabled && this.settingsInEdit.Terminal.CharAction.BeepOnBell);
 
-				checkBox_HideXOnXOff.Enabled                = this.settingsInEdit.Terminal.IO.FlowControlUsesXOnXOff;
+				checkBox_HideXOnXOff.Enabled                = this.settingsInEdit.Terminal.SupportsHideXOnXOff;
 				checkBox_HideXOnXOff.Checked                = this.settingsInEdit.Terminal.CharHide.HideXOnXOff;
 				checkBox_ReplaceSpace.Checked               = this.settingsInEdit.Terminal.CharReplace.ReplaceSpace;
 				checkBox_Hide0x00.Checked                   = this.settingsInEdit.Terminal.CharHide.Hide0x00;
