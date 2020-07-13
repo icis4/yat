@@ -43,7 +43,7 @@ using MKY.Text;
 namespace YAT.Domain.Parser
 {
 	/// <remarks>
-	/// This parser provides all functionality to parse any parsable text to send (commands, files).
+	/// This parser provides all functionality to parse any parseable text to send (commands, files).
 	/// The parser is implemented using the state pattern. The states are implemented in a separate
 	/// file 'States.cs'.
 	///

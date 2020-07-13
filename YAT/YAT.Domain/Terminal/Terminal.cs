@@ -210,7 +210,7 @@ namespace YAT.Domain
 	#if (WITH_SCRIPTING)
 
 		// Note that e.g. a 'SendingText' or 'SendingMessage' event doesn't make sense, as it would
-		// contain parsable text that may even include a keyword to be processed.
+		// contain parseable text that may even include a keyword to be processed.
 
 		/// <summary>
 		/// Occurs when a packet is being sent in the host application. The event args contain the

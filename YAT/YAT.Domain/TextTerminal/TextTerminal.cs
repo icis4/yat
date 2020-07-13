@@ -91,11 +91,6 @@ namespace YAT.Domain
 				LineCount = 0;
 			}
 
-			public LineSendDelayState(LineSendDelayState rhs)
-			{
-				LineCount = rhs.LineCount;
-			}
-
 			public virtual void Reset()
 			{
 				LineCount = 0;
