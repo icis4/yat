@@ -6759,10 +6759,11 @@ namespace YAT.View.Forms
 			{
 				this.isSettingControls.Enter();
 				try
-				{              // Layout must be changed first! Otherwise pages may not be complete!
+				{         //// PageLayout must be changed first! Otherwise pages may not be complete!
 					predefined.PageLayout            = this.settingsRoot.PredefinedCommand.PageLayout;
 					predefined.Pages                 = this.settingsRoot.PredefinedCommand.Pages;
-					           // See remarks of this property!
+					      //// Pages property always sets, not only when the properly has changed. See remarks of this property.
+
 					predefined.HideUndefinedCommands = this.settingsRoot.PredefinedCommand.HideUndefinedCommands;
 				}
 				finally

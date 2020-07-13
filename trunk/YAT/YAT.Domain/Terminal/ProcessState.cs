@@ -232,6 +232,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>For orthogonality with <see cref="GetPostponedChunkCount()"/> and <see cref="GetPostponedChunkCount(IODirection)"/> above.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remarks.")]
 		public virtual int GetPostponedByteCount()
 		{
