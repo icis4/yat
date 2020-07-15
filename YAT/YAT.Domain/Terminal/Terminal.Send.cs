@@ -33,9 +33,9 @@
 ////#define DEBUG_SEND
 
 	// Enable debugging of send related events:
-////#define DEBUG_SEND_EVENTS
+////#define DEBUG_IS_SENDING
 
-	// Enable debugging of break:
+	// Enable debugging of break related properties and events:
 ////#define DEBUG_BREAK
 
 #endif // DEBUG
@@ -287,7 +287,7 @@ namespace YAT.Domain
 		{
 			AssertUndisposed();
 
-			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber);
+			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
 			var asyncInvoker = new Action<byte[], long>(DoSend);
 			asyncInvoker.BeginInvoke(data, sequenceNumber, null, null);
 		}
@@ -330,7 +330,7 @@ namespace YAT.Domain
 			var parseMode = TerminalSettings.Send.Text.ToParseMode(); // Get setting at request/invocation.
 			var item = new TextSendItem(text, defaultRadix, parseMode, SendMode.Text, false);
 
-			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber);
+			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
 			var asyncInvoker = new Action<TextSendItem, long>(DoSendText);
 			asyncInvoker.BeginInvoke(item, sequenceNumber, null, null);
 		}
@@ -373,7 +373,7 @@ namespace YAT.Domain
 			var parseMode = TerminalSettings.Send.Text.ToParseMode(); // Get setting at request/invocation.
 			var item = new TextSendItem(line, defaultRadix, parseMode, SendMode.Text, true);
 
-			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber);
+			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
 			var asyncInvoker = new Action<TextSendItem, long>(DoSendTextLine);
 			asyncInvoker.BeginInvoke(item, sequenceNumber, null, null);
 		}
@@ -420,7 +420,7 @@ namespace YAT.Domain
 			foreach (string line in lines)
 				items.Add(new TextSendItem(line, defaultRadix, parseMode, SendMode.Text, true));
 
-			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber);
+			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
 			var asyncInvoker = new Action<List<TextSendItem>, long>(DoSendTextLines);
 			asyncInvoker.BeginInvoke(items, sequenceNumber, null, null);
 		}
@@ -465,7 +465,7 @@ namespace YAT.Domain
 
 			var item = new FileSendItem(filePath, defaultRadix);
 
-			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber);
+			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
 			var asyncInvoker = new Action<FileSendItem, long>(DoSendFile);
 			asyncInvoker.BeginInvoke(item, sequenceNumber, null, null);
 		}
@@ -626,7 +626,7 @@ namespace YAT.Domain
 				}
 				else
 				{
-					Interlocked.Increment(ref this.nextPermittedSequenceNumber);
+					Interlocked.Increment(ref this.nextPermittedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
 					this.nextPermittedSequenceNumberEvent.Set();
 				}
 			}
@@ -753,14 +753,15 @@ namespace YAT.Domain
 
 				if (TryEnterPacketGate(forSomeTimeEventHelper))
 				{
-					var lineBeginTimeStamp  = DateTime.Now;      // \remind For binary terminals, this is rather a 'PacketBegin'.
-					var lineEndTimeStamp    = DateTime.MinValue; // \remind For binary terminals, this is rather a 'PacketBegin'.
-					var performLineDelay    = false;             // \remind For binary terminals, this is rather a 'PacketDelay'.
-					var lineDelay           = TerminalSettings.Send.DefaultLineDelay;
-					var performLineInterval = false;             // \remind For binary terminals, this is rather a 'PacketInterval'.
-					var lineInterval        = TerminalSettings.Send.DefaultLineInterval;
-					var conflateDataQueue   = new Queue<byte>();
-					var doBreak             = false;
+					var lineBeginTimeStamp    = DateTime.Now;      // \remind For binary terminals, this is rather a 'PacketBegin'.
+					var lineEndTimeStamp      = DateTime.MinValue; // \remind For binary terminals, this is rather a 'PacketBegin'.
+					var performLineDelay      = false;             // \remind For binary terminals, this is rather a 'PacketDelay'.
+					var lineDelay             = TerminalSettings.Send.DefaultLineDelay;
+					var performLineInterval   = false;             // \remind For binary terminals, this is rather a 'PacketInterval'.
+					var lineInterval          = TerminalSettings.Send.DefaultLineInterval;
+					var conflateDataQueue     = new Queue<byte>();
+					var doBreak               = false;
+					var packetGateAlreadyLeft = false;
 
 					try
 					{
@@ -841,7 +842,7 @@ namespace YAT.Domain
 										// Process in-line keywords:
 										default:
 										{
-											ProcessInLineKeywords(forSomeTimeEventHelper, keywordResult, conflateDataQueue, ref doBreak);
+											ProcessInLineKeywords(forSomeTimeEventHelper, keywordResult, conflateDataQueue, ref doBreak, ref packetGateAlreadyLeft);
 
 											break;
 										}
@@ -865,8 +866,8 @@ namespace YAT.Domain
 					}
 					finally
 					{
-						if (!doBreak) // Break means that packet gate already got left and was not entered again!
-							LeavePacketGate(); // Not the best approach to require this call at so many locations...
+						if (!packetGateAlreadyLeft)
+							LeavePacketGate();
 					}
 
 					// Break if requested or terminal has stopped or closed! Must be done prior to a potential Sleep() below!
@@ -898,9 +899,10 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Directly referring to given object for performance reasons.")]
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "InLine", Justification = "It's 'in line' and not inline!")]
 		[SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals", Justification = "Agree, could be refactored. Could be.")]
-		protected virtual void ProcessInLineKeywords(ForSomeTimeEventHelper forSomeTimeEventHelper, Parser.KeywordResult result, Queue<byte> conflateDataQueue, ref bool doBreak)
+		protected virtual void ProcessInLineKeywords(ForSomeTimeEventHelper forSomeTimeEventHelper, Parser.KeywordResult result, Queue<byte> conflateDataQueue, ref bool doBreak, ref bool packetGateAlreadyLeft)
 		{
 			doBreak = false;
+			packetGateAlreadyLeft = false;
 
 			switch (result.Keyword)
 			{
@@ -917,6 +919,7 @@ namespace YAT.Domain
 						this.ClearRepositories();
 					}
 				////doBreak = !TryEnterPacketGate() must not be called, see above.
+				////packetGateAlreadyLeft = doBreak;
 
 					break;
 				}
@@ -924,7 +927,7 @@ namespace YAT.Domain
 				case Parser.Keyword.Delay:
 				{
 					ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
-					LeavePacketGate();                                    // Not the best approach to require this call at so many locations...
+					LeavePacketGate();
 					{
 						int delay = TerminalSettings.Send.DefaultDelay;
 						if (!ArrayEx.IsNullOrEmpty(result.Args))
@@ -937,6 +940,7 @@ namespace YAT.Domain
 						Thread.Sleep(delay);
 					}
 					doBreak = !TryEnterPacketGate(forSomeTimeEventHelper);
+					packetGateAlreadyLeft = doBreak;
 
 					break;
 				}
@@ -2008,7 +2012,7 @@ namespace YAT.Domain
 				if (value)
 				{
 					this.isSendingCount++; // No need to handle overflow, almost impossible to happen with YAT.
-					                            //// And if it happens nevertheless, an OverflowException is OK.
+					                     //// And if it happens nevertheless, an OverflowException is OK.
 					raiseEvent = true; // Always raise, because another send request might already have resumed a
 				}                      // signalled break condition, thus the break condition must be signalled again!
 				else
@@ -2021,7 +2025,7 @@ namespace YAT.Domain
 				}
 			}
 
-			DebugSendEvents(string.Format(CultureInfo.InvariantCulture, "OnIsSendingChanged({0}) resulting in count = {1} and raise = {2}", value, this.isSendingCount, raiseEvent));
+			DebugIsSending(string.Format(CultureInfo.InvariantCulture, "OnIsSendingChanged({0}) resulting in count = {1} and raise = {2}", value, this.isSendingCount, raiseEvent));
 
 			if (raiseEvent)
 				OnIsSendingChanged(new EventArgs<bool>(value));
@@ -2068,7 +2072,7 @@ namespace YAT.Domain
 				}
 			}
 
-			DebugSendEvents(string.Format(CultureInfo.InvariantCulture, "OnIsSendingForSomeTimeChanged({0}) resulting in count = {1} and raise = {2}", value, this.isSendingForSomeTimeCount, raiseEvent));
+			DebugIsSending(string.Format(CultureInfo.InvariantCulture, "OnIsSendingForSomeTimeChanged({0}) resulting in count = {1} and raise = {2}", value, this.isSendingForSomeTimeCount, raiseEvent));
 
 			if (raiseEvent)
 				OnIsSendingForSomeTimeChanged(new EventArgs<bool>(value));
@@ -2099,8 +2103,8 @@ namespace YAT.Domain
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
-		[Conditional("DEBUG_SEND_EVENTS")]
-		private void DebugSendEvents(string message)
+		[Conditional("DEBUG_IS_SENDING")]
+		private void DebugIsSending(string message)
 		{
 			DebugMessage(message);
 		}
