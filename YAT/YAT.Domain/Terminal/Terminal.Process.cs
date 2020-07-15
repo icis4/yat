@@ -731,25 +731,22 @@ namespace YAT.Domain
 			lock (ChunkVsTimedSyncObj) // Synchronize processing (raw chunk | timed line break).
 			{
 				// Process chunk(s) of given direction:
+				PostponeResult postponeResult;
 				{
 					SuspendChunkTimeouts(repositoryType, chunk.Direction);
 					{
 						var overallState = GetOverallState(repositoryType);
-						var postponedChunks = overallState.RemovePostponedChunks(chunk.Direction);
-						if (postponedChunks.Length > 0)
+						var postponedChunkCount = overallState.GetPostponedChunkCount(chunk.Direction);
+						if (postponedChunkCount > 0)
 						{
-							DebugChunks(string.Format(CultureInfo.CurrentCulture, "Processing {0} postponed {1} chunk(s) before processing {2} chunk stamped {3:HH:mm:ss.fff}.", postponedChunks.Length, chunk.Direction, chunk.Direction, chunk.TimeStamp));
+							DebugChunks(string.Format(CultureInfo.CurrentCulture, "Adding {0} chunk stamped {1:HH:mm:ss.fff} to postponed chunks.", chunk.Direction, chunk.TimeStamp));
 
-							var chunksToProcess = new List<RawChunk>(postponedChunks.Length + 1); // Preset the required capacity to improve memory management.
-							chunksToProcess.AddRange(postponedChunks);
-							chunksToProcess.Add(chunk);
+							PostponeChunk(repositoryType, chunk);
 
-							PostponeResult postponeResult; // Ignore, postponed chunks will be processed anyway.
-							ProcessChunksOfSameDirection(repositoryType, chunksToProcess.ToArray(), chunk.Direction, out postponeResult);
+							postponeResult = PostponeResult.CompleteChunk;
 						}
 						else
 						{
-							PostponeResult postponeResult; // Ignore, postponed chunks will be processed anyway.
 							ProcessChunk(repositoryType, chunk, out postponeResult);
 						}
 					}
@@ -757,7 +754,8 @@ namespace YAT.Domain
 				}
 
 				// Then process postponed chunk(s) starting with other direction:
-				{
+				if (postponeResult != PostponeResult.CompleteChunk) // No need to process postponed chunks as chunk got postponed itself,
+				{                                                   // i.e. precondition to release postponed chunks has not changed.
 					var initialDir = GetOtherDirection(chunk.Direction);
 					ProcessPostponedChunks(repositoryType, initialDir);
 				}
@@ -922,9 +920,12 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
 		protected virtual void PostponeRemainingBytes(RepositoryType repositoryType, RawChunk chunk, int byteCountTotal, int byteCountProcessed)
 		{
-			var contentPostponed = new List<byte>(byteCountTotal - byteCountProcessed);
+			var byteCountRemaining = (byteCountTotal - byteCountProcessed);
+			var contentPostponed = new List<byte>(byteCountRemaining);
 			for (int i = byteCountProcessed; i < byteCountTotal; i++)
 				contentPostponed.Add(chunk.Content[i]);
+
+			DebugChunks(string.Format(CultureInfo.CurrentCulture, "Postponing remaining {0} byte(s) of {1} chunk stamped {2:HH:mm:ss.fff}.", byteCountRemaining, chunk.Direction, chunk.TimeStamp));
 
 			var remainingPostponed = new RawChunk
 			                         (
@@ -940,8 +941,6 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void PostponeChunk(RepositoryType repositoryType, RawChunk chunk)
 		{
-			DebugChunks(string.Format(CultureInfo.CurrentCulture, "Postponing whole or partial {0} chunk of {1} byte(s) stamped {2:HH:mm:ss.fff}.", chunk.Direction, chunk.Content.Count, chunk.TimeStamp));
-
 			var overallState = GetOverallState(repositoryType);
 			overallState.AddPostponedChunk(chunk);
 		}
