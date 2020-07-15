@@ -699,7 +699,7 @@ namespace YAT.Domain
 		{
 			lock (ChunkVsTimedSyncObj) // Synchronize processing (raw chunk | timed line break).
 			{
-				DebugChunks(string.Format(CultureInfo.InvariantCulture, "Processing {0} chunk of {1} byte(s) stamped {2}.", chunk.Direction, chunk.Content.Count, chunk.TimeStamp));
+				DebugChunks(string.Format(CultureInfo.CurrentCulture, "Processing {0} chunk of {1} byte(s) stamped {2:HH:mm:ss.fff}.", chunk.Direction, chunk.Content.Count, chunk.TimeStamp));
 
 				switch (chunk.Direction)
 				{
@@ -738,7 +738,7 @@ namespace YAT.Domain
 						var postponedChunks = overallState.RemovePostponedChunks(chunk.Direction);
 						if (postponedChunks.Length > 0)
 						{
-							DebugChunks(string.Format(CultureInfo.InvariantCulture, "Processing {0} postponed {1} chunk(s) before processing {2} chunk stamped {3}.", postponedChunks.Length, chunk.Direction, chunk.Direction, chunk.TimeStamp));
+							DebugChunks(string.Format(CultureInfo.CurrentCulture, "Processing {0} postponed {1} chunk(s) before processing {2} chunk stamped {3:HH:mm:ss.fff}.", postponedChunks.Length, chunk.Direction, chunk.Direction, chunk.TimeStamp));
 
 							var chunksToProcess = new List<RawChunk>(postponedChunks.Length + 1); // Preset the required capacity to improve memory management.
 							chunksToProcess.AddRange(postponedChunks);
@@ -940,7 +940,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void PostponeChunk(RepositoryType repositoryType, RawChunk chunk)
 		{
-			DebugChunks(string.Format(CultureInfo.InvariantCulture, "Postponing whole or partial {0} chunk of {1} byte(s) stamped {2}.", chunk.Direction, chunk.Content.Count, chunk.TimeStamp));
+			DebugChunks(string.Format(CultureInfo.CurrentCulture, "Postponing whole or partial {0} chunk of {1} byte(s) stamped {2:HH:mm:ss.fff}.", chunk.Direction, chunk.Content.Count, chunk.TimeStamp));
 
 			var overallState = GetOverallState(repositoryType);
 			overallState.AddPostponedChunk(chunk);
@@ -1519,12 +1519,12 @@ namespace YAT.Domain
 					case LinePosition.Content:
 					case LinePosition.ContentExceeded:
 						var overallState = GetOverallState(repositoryType);
-						var lastChunkTimeStampOfSameDir = overallState.GetLastChunkTimeStamp(dir);
+						var previousChunkTimeStampOfSameDir = overallState.GetPreviousChunkTimeStamp(dir);
 
-						if (lastChunkTimeStampOfSameDir == DateTime.MinValue) // This condition may apply at the very beginning when no chunk
-							lastChunkTimeStampOfSameDir = DateTime.Now;       // of the given direction has been processed yet, fallback to now.
+						if (previousChunkTimeStampOfSameDir == DateTime.MinValue) // This condition may apply at the very beginning when no chunk
+							previousChunkTimeStampOfSameDir = DateTime.Now;       // of the given direction has been processed yet, fallback to now.
 
-						timeout.Start(lastChunkTimeStampOfSameDir); // Timed line break is direction dependent.
+						timeout.Start(previousChunkTimeStampOfSameDir); // Timed line break is direction dependent.
 						break;
 
 					default:
