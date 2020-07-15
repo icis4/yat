@@ -33,13 +33,13 @@ namespace MKY.Windows.Forms
 {
 	// YAT.View.Forms.Terminal.ShowPredefinedCommandSettings()
 	// YAT.View.Forms.Terminal.SendPredefined()
-	// YAT.View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_Command_Click() => Dialog is opened again => NOK !!!
+	// YAT.View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_Command_Click() => Dialog is opened again => NOK !
 	// [External Code]
 	// YAT.View.Forms.PredefinedCommandSettings.ProcessCmdKey()
 	// [External Code]
 	// YAT.View.Forms.Terminal.ShowPredefinedCommandSettings()
 	// YAT.View.Forms.Terminal.SendPredefined()
-	// YAT.View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_Command_Click() => Dialog is opened again => NOK !!!
+	// YAT.View.Forms.Terminal.toolStripMenuItem_PredefinedContextMenu_Command_Click() => Dialog is opened again => NOK !
 	// [External Code]
 	// YAT.View.Forms.PredefinedCommandSettings.ProcessCmdKey()
 	// [External Code]

@@ -111,7 +111,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 	/// Desktop @ Work (WinXP) with Prolific PL-2303:
 	/// - 2008-06-18 @ 1111 :    0 missing chars out of   ~360'000 chars total :-)
 	///
-	/// => MCT reproducibly lost 1 char/byte per approx. 70'000 chars/bytes !!!
+	/// => MCT reproducibly lost 1 char/byte per approx. 70'000 chars/bytes!
 	///
 	/// Saying hello to StyleCop ;-.
 	/// </remarks>

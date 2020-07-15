@@ -613,18 +613,18 @@ namespace YAT.Application
 						return; // Ignore exception and continue.
 
 					case View.Forms.UnhandledExceptionResult.ExitAndRestart:
-						TrySynchronize(new Action(System.Windows.Forms.Application.Restart)); // Is *not* synchronized => Try to synchronize Restart() !!!
+						TrySynchronize(new Action(System.Windows.Forms.Application.Restart)); // Is *not* synchronized => Try to synchronize Restart()!
 						break;
 
 					case View.Forms.UnhandledExceptionResult.Exit:
 					default:
-						TrySynchronize(new Action(System.Windows.Forms.Application.Exit)); // Is *not* synchronized => Try to synchronize Exit() !!!
+						TrySynchronize(new Action(System.Windows.Forms.Application.Exit)); // Is *not* synchronized => Try to synchronize Exit()!
 						break;
 				}
 			}
 			else
 			{
-				TrySynchronize(new Action(System.Windows.Forms.Application.Exit)); // Is *not* synchronized => Try to synchronize Exit() !!!
+				TrySynchronize(new Action(System.Windows.Forms.Application.Exit)); // Is *not* synchronized => Try to synchronize Exit()!
 			}
 		}
 

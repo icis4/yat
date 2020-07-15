@@ -1374,7 +1374,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		protected virtual bool GetLineClearance(ForSomeTimeEventHelper forSomeTimeEventHelper)
 		{
-			DebugWaitForResponse("Getting line clearance..."); //da mues doch IsSending scho aktiv si !!!
+			DebugWaitForResponse("Getting line clearance...");
 
 			var decrementIsRequired = false;
 

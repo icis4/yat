@@ -438,7 +438,7 @@ namespace MKY.IO.Serial.SerialPort
 										// Measurements (2020-04-24) counting the maximum number of loops with
 										// maxChunkSize = 0 (i.e. doing nothing but wasting CPU) during sending
 										// of a file at 9600 baud revealed:
-										//  > Without additional yield: Up to ~12000 loops !!!
+										//  > Without additional yield: Up to ~12000 loops!
 										//  > Current implementation with additional yield: Just ~32 loops max.
 										//
 										// Note: A small maxChunkSize (e.g. 1) indicates that output buffer and/or
