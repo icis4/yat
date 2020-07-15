@@ -297,9 +297,9 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format("Sending of {0} byte(s) of raw data has been invoked with sequence number {1}.", data.Length, sequenceNumber));
 
-			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
-			EnterRequestPre(false); // RaiseEventIfTotalTimeLagIsAboveThreshold() is always false right after creating helper.
+			EnterRequestPre();
 
+			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
 			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
@@ -318,7 +318,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised);
+			LeaveRequestPost();
 		}
 
 		/// <summary></summary>
@@ -340,9 +340,9 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format(@"Sending of text ""{0}"" has been invoked (sequence number = {1}).", item.Text, sequenceNumber));
 
-			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
-			EnterRequestPre(false); // RaiseEventIfTotalTimeLagIsAboveThreshold() is always false right after creating helper.
+			EnterRequestPre();
 
+			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
 			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
@@ -361,7 +361,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised);
+			LeaveRequestPost();
 		}
 
 		/// <summary></summary>
@@ -383,9 +383,9 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format(@"Sending of text line ""{0}"" has been invoked (sequence number = {1}).", item.Text, sequenceNumber));
 
-			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
-			EnterRequestPre(false); // RaiseEventIfTotalTimeLagIsAboveThreshold() is always false right after creating helper.
+			EnterRequestPre();
 
+			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
 			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
@@ -404,7 +404,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised);
+			LeaveRequestPost();
 		}
 
 		/// <remarks>
@@ -430,9 +430,9 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format("Sending of {0} text lines has been invoked (sequence number = {1}).", items.Count, sequenceNumber));
 
-			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
-			EnterRequestPre(false); // RaiseEventIfTotalTimeLagIsAboveThreshold() is always false right after creating helper.
+			EnterRequestPre();
 
+			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
 			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
@@ -454,7 +454,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised);
+			LeaveRequestPost();
 		}
 
 		/// <summary></summary>
@@ -475,9 +475,9 @@ namespace YAT.Domain
 		{
 			DebugSend(string.Format(@"Sending of ""{0}"" has been invoked (sequence number = {1}).", item.FilePath, sequenceNumber));
 
-			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
-			EnterRequestPre(false); // RaiseEventIfTotalTimeLagIsAboveThreshold() is always false right after creating helper.
+			EnterRequestPre();
 
+			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
 			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
@@ -496,7 +496,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised);
+			LeaveRequestPost();
 		}
 
 		#endregion
@@ -540,23 +540,17 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void EnterRequestPre(bool raiseIsSendingForSomeTimeChangedEvent)
+		protected virtual void EnterRequestPre()
 		{
 			ResumeBreak(); // Each send request shall resume a pending break condition.
-
-			if (raiseIsSendingForSomeTimeChangedEvent)
-				IncrementIsSendingForSomeTimeChanged();
 
 			IncrementIsSendingChanged();
 		}
 
 		/// <summary></summary>
-		protected virtual void LeaveRequestPost(bool raiseIsSendingForSomeTimeChangedEvent)
+		protected virtual void LeaveRequestPost()
 		{
 			DecrementIsSendingChanged();
-
-			if (raiseIsSendingForSomeTimeChangedEvent)
-				DecrementIsSendingForSomeTimeChanged();
 		}
 
 		/// <summary></summary>
