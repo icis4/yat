@@ -147,7 +147,17 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			return (ContentToString());
+			var sb = new StringBuilder();
+
+			sb.Append(TimeStamp.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo));
+			sb.Append(" ");
+			sb.Append(Device);
+			sb.Append(" ");
+			sb.Append(Direction);
+			sb.Append(" ");
+			sb.Append(ContentToString()); // Content last to get better aligned output.
+
+			return (sb.ToString());
 		}
 
 		/// <summary>
@@ -161,10 +171,10 @@ namespace YAT.Domain
 		{
 			var sb = new StringBuilder();
 
-			sb.AppendLine(indent + "> Content:   " + ContentToString());
-			sb.AppendLine(indent + "> TimeStamp: " + TimeStamp.ToLongTimeString() + "." + StringEx.Left(TimeStamp.Millisecond.ToString("D3", CultureInfo.CurrentCulture), 2));
+			sb.AppendLine(indent + "> TimeStamp: " + TimeStamp.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo));
 			sb.AppendLine(indent + "> Device:    " + Device);
 			sb.AppendLine(indent + "> Direction: " + Direction);
+			sb.AppendLine(indent + "> Content:   " + ContentToString()); // Content last same as ToString().
 
 			return (sb.ToString());
 		}
