@@ -298,9 +298,10 @@ namespace YAT.Domain
 			DebugSend(string.Format("Sending of {0} byte(s) of raw data has been invoked with sequence number {1}.", data.Length, sequenceNumber));
 
 			EnterRequestPre();
+			bool decrementIsSendingForSomeTime;
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
-			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
+			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber, out decrementIsSendingForSomeTime)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
@@ -318,7 +319,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost();
+			LeaveRequestPost(decrementIsSendingForSomeTime);
 		}
 
 		/// <summary></summary>
@@ -341,9 +342,10 @@ namespace YAT.Domain
 			DebugSend(string.Format(@"Sending of text ""{0}"" has been invoked (sequence number = {1}).", item.Text, sequenceNumber));
 
 			EnterRequestPre();
+			bool decrementIsSendingForSomeTime;
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
-			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
+			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber, out decrementIsSendingForSomeTime)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
@@ -361,7 +363,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost();
+			LeaveRequestPost(decrementIsSendingForSomeTime);
 		}
 
 		/// <summary></summary>
@@ -384,9 +386,10 @@ namespace YAT.Domain
 			DebugSend(string.Format(@"Sending of text line ""{0}"" has been invoked (sequence number = {1}).", item.Text, sequenceNumber));
 
 			EnterRequestPre();
+			bool decrementIsSendingForSomeTime;
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
-			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
+			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber, out decrementIsSendingForSomeTime)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
@@ -404,7 +407,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost();
+			LeaveRequestPost(decrementIsSendingForSomeTime);
 		}
 
 		/// <remarks>
@@ -431,9 +434,10 @@ namespace YAT.Domain
 			DebugSend(string.Format("Sending of {0} text lines has been invoked (sequence number = {1}).", items.Count, sequenceNumber));
 
 			EnterRequestPre();
+			bool decrementIsSendingForSomeTime;
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
-			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
+			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber, out decrementIsSendingForSomeTime)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
@@ -454,7 +458,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost();
+			LeaveRequestPost(decrementIsSendingForSomeTime);
 		}
 
 		/// <summary></summary>
@@ -476,9 +480,10 @@ namespace YAT.Domain
 			DebugSend(string.Format(@"Sending of ""{0}"" has been invoked (sequence number = {1}).", item.FilePath, sequenceNumber));
 
 			EnterRequestPre();
+			bool decrementIsSendingForSomeTime;
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
-			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
+			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber, out decrementIsSendingForSomeTime)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
@@ -496,7 +501,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost();
+			LeaveRequestPost(decrementIsSendingForSomeTime);
 		}
 
 		#endregion
@@ -548,19 +553,23 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void LeaveRequestPost()
+		protected virtual void LeaveRequestPost(bool decrementIsSendingForSomeTime)
 		{
 			DecrementIsSendingChanged();
+
+			if (decrementIsSendingForSomeTime)
+				DecrementIsSendingForSomeTimeChanged();
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
-		protected virtual bool TryEnterRequestGate(ForSomeTimeEventHelper forSomeTimeEventHelper, long sequenceNumber)
+		protected virtual bool TryEnterRequestGate(ForSomeTimeEventHelper forSomeTimeEventHelper, long sequenceNumber, out bool decrementIsSendingForSomeTime)
 		{
-			var decrementIsRequired = false;
-
-			while (!DoBreak)
-			{
+			decrementIsSendingForSomeTime = false; // Attention, this flag must not be handled here; it must be handled at the helper's
+			                                     //// top-level because decrementing must only happen *after* the whole request has completed.
+			while (!DoBreak)                       // Otherwise, the 'IsSendingForSomeTime' flag and event would be cleared even though
+			{                                      // entering the gate indeed took some time.
 				if (TerminalSettings.Send.AllowConcurrency)
 				{
 					return (true);
@@ -569,8 +578,8 @@ namespace YAT.Domain
 				{
 					if (sequenceNumber == Interlocked.Read(ref this.nextPermittedSequenceNumber))
 					{
-						if (decrementIsRequired)
-							DecrementIsSendingForSomeTimeChanged();
+					////if (decrementIsSendingForSomeTime) must not be handled here, see above.
+					////	DecrementIsSendingForSomeTimeChanged();
 
 						this.nextPermittedSequenceNumberEvent.Reset();
 						return (true);
@@ -579,7 +588,7 @@ namespace YAT.Domain
 					if (forSomeTimeEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold()) // Signal wait operation if needed.
 					{
 						IncrementIsSendingForSomeTimeChanged();
-						decrementIsRequired = true;
+						decrementIsSendingForSomeTime = true;
 					}
 
 					try
@@ -602,8 +611,8 @@ namespace YAT.Domain
 
 			DebugSend("TryEnterRequestGate() has determined to break");
 
-			if (decrementIsRequired)
-				DecrementIsSendingForSomeTimeChanged();
+		////if (decrementIsSendingForSomeTime) must not be handled here, see above.
+		////	DecrementIsSendingForSomeTimeChanged();
 
 			return (false);
 		}
@@ -630,15 +639,15 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		protected virtual bool TryEnterPacketGate(ForSomeTimeEventHelper forSomeTimeEventHelper)
 		{
-			var decrementIsRequired = false;
-
+			var decrementIsSendingForSomeTime = false; // Opposed to the above TryEnterRequestGate(), which is the helper's top-level,
+			                                         //// this lower-level method can completely encapsulate the increment/decrement pair.
 			while (!DoBreak)
 			{
 				if (Monitor.TryEnter(this.packetGateSyncObj))
 				{
 					this.packetGateEvent.Reset();
 
-					if (decrementIsRequired)
+					if (decrementIsSendingForSomeTime)
 						DecrementIsSendingForSomeTimeChanged();
 
 					return (true);
@@ -647,7 +656,7 @@ namespace YAT.Domain
 				if (forSomeTimeEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold()) // Signal wait operation if needed.
 				{
 					IncrementIsSendingForSomeTimeChanged();
-					decrementIsRequired = true;
+					decrementIsSendingForSomeTime = true;
 				}
 
 				try
@@ -669,7 +678,7 @@ namespace YAT.Domain
 
 			DebugSend("TryEnterPacketGate() has determined to break");
 
-			if (decrementIsRequired)
+			if (decrementIsSendingForSomeTime)
 				DecrementIsSendingForSomeTimeChanged();
 
 			return (false);
