@@ -86,6 +86,6 @@ Setup project configuration
     > RemovePrevious = True
     > Subject = YAT - Yet Another Terminal
     > Title = YAT 2.0 Beta 4 Candidate 3 Development
-    > UpgradeCode = 6013B81A-B607-4E05-AFE6-E920B31F4CBC !!!
+    > UpgradeCode = 6013B81A-B607-4E05-AFE6-E920B31F4CBC
     > Version = 1.99.31
-    > ProductCode = E57CEC25-AE3B-4EC3-8FA6-23ADB0A8E376 !!! Change once, then copy
+    > ProductCode = E57CEC25-AE3B-4EC3-8FA6-23ADB0A8E376

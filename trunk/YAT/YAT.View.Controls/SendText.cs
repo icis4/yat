@@ -583,7 +583,7 @@ namespace YAT.View.Controls
 				//              > Cursor @ 0 / Selection @ <ALL> / Selected index @ 0
 				//
 				//     All fine so far, but then something happens, and when Start() returns,
-				//     the state is => Cursor @ 0 / Selection @ <ALL> / Selected index @ 0 !!!
+				//     the state is => Cursor @ 0 / Selection @ <ALL> / Selected index @ 0 !?!
 				//
 				//     Suspecting the issue is caused by layouting, as there is a similar issue with
 				//     SetExplicitDefaultRadixControls() above. That method typically collapses the

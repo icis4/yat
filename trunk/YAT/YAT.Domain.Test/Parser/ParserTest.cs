@@ -374,7 +374,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "abc", new byte[] { 0x61, 0x62, 0x63 }));
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "äöü", new byte[] { 0xC3, 0xA4, 0xC3, 0xB6, 0xC3, 0xBC }));
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "ÄÖÜ", new byte[] { 0xC3, 0x84, 0xC3, 0x96, 0xC3, 0x9C }));
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "$£€", new byte[] { 0x24, 0xC2, 0xA3, 0xE2, 0x82, 0xAC })); // 1-2-3 bytes !!!
+				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "$£€", new byte[] { 0x24, 0xC2, 0xA3, 0xE2, 0x82, 0xAC })); // 1-2-3 bytes!
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "čěř", new byte[] { 0xC4, 0x8D, 0xC4, 0x9B, 0xC5, 0x99 }));
 				                                                                 //// yi er zhou is U+4E00 U+4E8C U+5DDE
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "一二州", new byte[] { 0xE4, 0xB8, 0x80, 0xE4, 0xBA, 0x8C, 0xE5, 0xB7, 0x9E }));
@@ -456,7 +456,7 @@ namespace YAT.Domain.Test.Parser
 				                                                                                             //// "𝄞" not supported
 				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Big5), @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 })); // same as ASCII
 
-				// GBK [936]:                                                                              // is GBK !!!
+				// GBK [936]:                                                                              // is GBK!
 				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
 				                                                                                               //// "äöü" not supported
 				                                                                                               //// "ÄÖÜ" not supported
@@ -467,7 +467,7 @@ namespace YAT.Domain.Test.Parser
 				                                                                                               //// "𝄞", not supported
 				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.GB2312), @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 })); // same as ASCII
 
-				// GB2312 (-80) [20936]:                                                                   // is GB2312 !!!
+				// GB2312 (-80) [20936]:                                                                   // is GB2312!
 				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.X_CP20936), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
 				                                                                                                  //// "äöü" not supported
 				                                                                                                  //// "ÄÖÜ" not supported

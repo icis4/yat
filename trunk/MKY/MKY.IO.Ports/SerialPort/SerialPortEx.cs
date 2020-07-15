@@ -1152,13 +1152,13 @@ namespace MKY.IO.Ports
 
 				if (baseStreamReference != null)
 				{
-					// Attention, do not call Flush() !!!
-					// It will block if the device is no longer available !!!
+					// Attention, do not call Flush()!
+					// It will block if the device is no longer available!
 
 					baseStreamReference.Close();
 
-					// Attention, do not call Dispose() !!!
-					// It can throw after a call to Close() !!!
+					// Attention, do not call Dispose()!
+					// It can throw after a call to Close()!
 				}
 			}
 			catch (Exception ex) // May be 'IOException' or 'ObjectDisposedException' or ...

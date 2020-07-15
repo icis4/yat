@@ -74,8 +74,8 @@ namespace YAT.Domain.Test.TextTerminal
 			switch (supportedEncoding)
 			{
 				case SupportedEncoding.Big5:
-				case SupportedEncoding.GB2312: // is GBK !!!
-				case SupportedEncoding.X_CP20936: // is GB2312 !!!
+				case SupportedEncoding.GB2312: // is GBK!
+				case SupportedEncoding.X_CP20936: // is GB2312!
 				case SupportedEncoding.KS_C_5601_1987:
 				case SupportedEncoding.Shift_JIS:
 					text = text.Replace("ä", "a");

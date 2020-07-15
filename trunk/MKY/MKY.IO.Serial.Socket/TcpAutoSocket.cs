@@ -62,7 +62,7 @@ namespace MKY.IO.Serial.Socket
 	///     => ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.FireOnDisconnected()
 	///         => MKY.IO.Serial.TcpAutoSocket.OnIOChanged()
 	///             => YAT.Model.Terminal.OnIOChanged()
-	///                 => Deadlock when synchronizing onto main thread !!!
+	///                 => Deadlock when synchronizing onto main thread!
 	///
 	/// The issue has been solved in <see cref="ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection"/>
 	/// as well as <see cref="TcpClient"/> or <see cref="TcpServer"/> by invoking Stop() and Dispose()
