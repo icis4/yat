@@ -915,22 +915,22 @@ namespace MKY.IO.Serial.Socket
 		/// Wireshark traces revealed the details:
 		///
 		/// 1. 500 ms after connection loss, YAT tries to reestablish a connection:
-		///    <![CDATA[Server (Device) << SYN << Client (YAT)]]>
+		///    <![CDATA[Server (Device) <= SYN <= Client (YAT)]]>
 		/// 2. For whatever reason, the device acknowledges but at the same time resets the connection:
-		///    <![CDATA[Server (Device) >> RST|ACK >> Client (YAT)]]>
+		///    <![CDATA[Server (Device) => RST|ACK => Client (YAT)]]>
 		/// 3. YAT's socket then correctly retransmits the paket:
-		///    <![CDATA[Server (Device) << SYN << Client (YAT)]]>
+		///    <![CDATA[Server (Device) <= SYN <= Client (YAT)]]>
 		/// 4. Then, nothing happens for 11 seconds anymore:
 		///    YAT's socket waits for acknowledge or timeout.
 		///    The device does nothing anymore.
-		///    <![CDATA[Server (Device) << SYN << Client (YAT)]]>
+		///    <![CDATA[Server (Device) <= SYN <= Client (YAT)]]>
 		/// 5. After timeout, YAT tries again:
-		///    <![CDATA[Server (Device) << SYN << Client (YAT)]]>
+		///    <![CDATA[Server (Device) <= SYN <= Client (YAT)]]>
 		/// 6. Approx. 12 seconds later, YAT tries again:
-		///    <![CDATA[Server (Device) << SYN << Client (YAT)]]>
+		///    <![CDATA[Server (Device) <= SYN <= Client (YAT)]]>
 		/// 7. Then device responses and YAT confirms:
-		///    <![CDATA[Server (Device) >> SYN|ACK >> Client (YAT)]]>
-		///    <![CDATA[Server (Device) << ACK << Client (YAT)]]>
+		///    <![CDATA[Server (Device) => SYN|ACK => Client (YAT)]]>
+		///    <![CDATA[Server (Device) <= ACK <= Client (YAT)]]>
 		///
 		/// However, YAT is configured to try every 500 ms again, this does not happen.
 		/// This additionally added 'Reestablished' timer checks the connection after 500 ms.
