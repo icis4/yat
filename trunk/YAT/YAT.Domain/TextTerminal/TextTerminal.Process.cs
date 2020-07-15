@@ -611,7 +611,7 @@ namespace YAT.Domain
 							var postponeLineBreak = !GlueCharsOfLineTimeoutHasElapsed(chunk.TimeStamp, lineState.TimeStamp);
 							if (postponeLineBreak)
 							{
-								DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to postpone whole {0} chunk of {1} byte(s) stamped {2} instead of performing device or direction line break.", chunk.Direction, chunk.Content.Count, chunk.TimeStamp));
+								DebugGlueCharsOfLine(string.Format(CultureInfo.CurrentCulture, "Glueing determined to postpone whole {0} chunk of {1} byte(s) stamped {2:HH:mm:ss.fff} instead of performing device or direction line break.", chunk.Direction, chunk.Content.Count, chunk.TimeStamp));
 
 								PostponeChunk(repositoryType, chunk);
 								postponeResult = PostponeResult.CompleteChunk;
@@ -702,7 +702,7 @@ namespace YAT.Domain
 							var firstPostponedChunkTimeStampOfOtherDir = overallState.GetFirstPostponedChunkTimeStamp(otherDir);
 							if (firstPostponedChunkTimeStampOfOtherDir < ts)
 							{
-								DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to break {0} chunk stamped {1} and postpone remaining bytes.", dir, ts));
+								DebugGlueCharsOfLine(string.Format(CultureInfo.CurrentCulture, "Glueing determined to break {0} chunk stamped {1:HH:mm:ss.fff} and postpone remaining bytes because first postponed {2} chunk is stamped {3:HH:mm:ss.fff}.", dir, ts, otherDir, firstPostponedChunkTimeStampOfOtherDir));
 
 								breakChunk = true;
 								return;
@@ -1196,10 +1196,10 @@ namespace YAT.Domain
 			if ((repositoryType == RepositoryType.Bidir) && TextTerminalSettings.GlueCharsOfLine.Enabled)
 			{
 				var overallState = GetOverallState(repositoryType);
-				var lastChunkTimeStamp = overallState.GetLastChunkTimeStamp();
-				                                                     //// Single timeout for both directions.
-				this.glueCharsOfLineTimeout.Start(lastChunkTimeStamp); // Timeout is not dependent on line position,
-			}                                                          // rather on number of postponed chunks.
+				var previousChunkTimeStamp = overallState.GetPreviousChunkTimeStamp();
+				                                                         //// Single timeout for both directions.
+				this.glueCharsOfLineTimeout.Start(previousChunkTimeStamp); // Timeout is not dependent on line position,
+			}                                                              // rather on number of postponed chunks.
 		}
 
 		/// <remarks>
@@ -1248,11 +1248,6 @@ namespace YAT.Domain
 			//  > Async timeout timer callback, i.e. "normal" timeout during "normal" execution.
 			//  > ChunkPre() on reload, i.e. timeout inbetween chunks on reload.
 			//  > FinishReload(), i.e. remaining after last chunk on reload.
-			//
-			// If no other line break option is active, the line position would be within a line in
-			// all cases, and the direction would always have changed among the current line and the
-			// postponed timed out or remaining chunk. However, as other line break option(s) may
-			// may be active, also consider "interfering" cases.
 
 		////if (repositoryType == RepositoryType.Bidir) is implicitly given.
 			{
@@ -1271,7 +1266,7 @@ namespace YAT.Domain
 						{
 							var firstPostponedChunkTimeStampOfOtherDir = overallState.GetFirstPostponedChunkTimeStamp(otherDir);
 
-							DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to perform timed {0} line break at {1} and process postponed chunk(s) starting with {2}.", lineDir, firstPostponedChunkTimeStampOfOtherDir, otherDir));
+							DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to perform timed {0} line break at {1} and process postponed chunk(s) starting with {2} because line of {3} has timed out.", lineDir, firstPostponedChunkTimeStampOfOtherDir, otherDir, lineState.TimeStamp));
 
 							// Line break must be enforced, without ProcessPostponedChunks() would again determine to postpone direction or device line break.
 							// Note that accurate time stamp of first postponed chunk rather than inaccurate time stamp of elapsed event is used to calculate timeout.
@@ -1282,21 +1277,33 @@ namespace YAT.Domain
 							// In neither above described case it is possible to have postponed chunks in both directions,
 							// thus a single forced line break is sufficient, i.e. it is not necessary to loop/recurse here.
 						}
-						else // (((GetPostponedChunkCount(lineDir) > 0) || !lineHasTimedOut)
+						else
 						{
-							DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to not perform timed {0} line break and process postponed chunk(s) starting with {1} instead.", lineDir, lineDir));
-
-							ProcessPostponedChunks(repositoryType, lineDir);
+							// Only timed out cases shall be handled here, other cases are handled elsewhere.
 						}
 					}
 					else // (Position == LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
 					{
-						var initialDir = overallState.LastChunkDirection;
+						var firstPostponedChunk = overallState.GetFirstPostponedChunk();
+						var chunkHasTimedOut = GlueCharsOfLineTimeoutHasElapsed(instantInQuestion, firstPostponedChunk.TimeStamp);
+						if (chunkHasTimedOut)
+						{
+							var initialDir = firstPostponedChunk.Direction;
 
-						DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to not perform timed line break and process postponed chunk(s) starting with {0} instead.", initialDir));
+							DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to process timed out postponed chunk(s) starting with {0} because chunk of {1} has timed out.", initialDir, firstPostponedChunk.TimeStamp));
 
-						ProcessPostponedChunks(repositoryType, initialDir);
+							ProcessPostponedChunks(repositoryType, initialDir);
+						}
+						else
+						{
+							// Only timed out cases shall be handled here, other cases are handled elsewhere.
+						}
 					}
+
+					// If no other line break option is active, the line position would be within a line in
+					// all cases, and the direction would always have changed among the current line and the
+					// postponed timed out or remaining chunk. However, as other line break option(s) may
+					// may be active, also "interfering" cases are considered, thus the 'else' clause above.
 				}
 			}
 		}

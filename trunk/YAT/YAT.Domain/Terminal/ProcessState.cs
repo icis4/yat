@@ -71,7 +71,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void NotifyLineEnd()
 		{
-			Overall.NotifyLineEnd(Line.TimeStamp);
+			Overall.NotifyLineEnd(Line.TimeStamp); // , Line.Direction);
 			Line   .NotifyLineEnd();
 		}
 	}
@@ -80,35 +80,38 @@ namespace YAT.Domain
 	public class OverallState
 	{
 		/// <remarks>Dedicated sub-item to make scope obvious.</remarks>
-		public DeviceState    DeviceLineBreak       { get; private set; }
+		public DeviceState       DeviceLineBreak          { get; private set; }
 
 		/// <remarks>Dedicated sub-item to make scope obvious.</remarks>
 		/// <remarks>Only applies to <see cref="RepositoryType.Bidir"/>, still here for simplicity.</remarks>
-		public DirectionState DirectionLineBreak    { get; private set; }
+		public DirectionState    DirectionLineBreak       { get; private set; }
+
+	/////// <summary></summary> is prepared for future use
+	////public IODirection       PreviousChunkDirection   { get; private set; } // Chunks: 1. Direction 2. TimeStamp
+
+		/// <remarks><see cref="GetPreviousChunkTimeStamp()"/> shall be used to retrieve property.</remarks>
+		private DateTime         PreviousChunkTimeStamp   { get; set; }
 
 		/// <summary></summary>
-		public IODirection    LastChunkDirection    { get; private set; }
-
-		/// <remarks><see cref="GetLastChunkTimeStamp()"/> shall be used to retrieve property.</remarks>
-		private DateTime      LastChunkTimeStamp    { get; set; }
+		public DateTime          PreviousTxChunkTimeStamp { get; private set; }
 
 		/// <summary></summary>
-		public DateTime       LastTxChunkTimeStamp  { get; private set; }
+		public DateTime          PreviousRxChunkTimeStamp { get; private set; }
 
 		/// <summary></summary>
-		public DateTime       LastRxChunkTimeStamp  { get; private set; }
-
-		/// <summary></summary>
-		public bool           IsFirstLine           { get; private set; }
+		public bool              IsFirstLine              { get; private set; }
 
 		/// <remarks>"Time Stamp" implicitly means "of Beginning of Line" of the previous line.</remarks>
-		public DateTime       PreviousLineTimeStamp { get; private set; }
+		public DateTime          PreviousLineTimeStamp    { get; private set; }
+
+	/////// <summary></summary> is prepared for future use
+	////public IODirection       PreviousLineDirection    { get; private set; } // Lines: 1. TimeStamp 2. Direction
 
 		/// <remarks>Only applies to <see cref="RepositoryType.Bidir"/>, still here for simplicity.</remarks>
-		protected List<RawChunk> PostponedTxChunks  { get; private set; }
+		protected List<RawChunk> PostponedTxChunks        { get; private set; }
 
 		/// <remarks>Only applies to <see cref="RepositoryType.Bidir"/>, still here for simplicity.</remarks>
-		protected List<RawChunk> PostponedRxChunks  { get; private set; }
+		protected List<RawChunk> PostponedRxChunks        { get; private set; }
 
 		/// <summary></summary>
 		public OverallState()
@@ -124,15 +127,17 @@ namespace YAT.Domain
 		/// </summary>
 		protected virtual void InitializeValues()
 		{
-			LastChunkDirection    = IODirection.None;
-			LastChunkTimeStamp    = DisplayElement.TimeStampDefault;
-			LastTxChunkTimeStamp  = DisplayElement.TimeStampDefault;
-			LastRxChunkTimeStamp  = DisplayElement.TimeStampDefault;
-			IsFirstLine           = true;
-			PreviousLineTimeStamp = DisplayElement.TimeStampDefault;
+		////PreviousChunkDirection   = IODirection.None; is prepared for future use
+			PreviousChunkTimeStamp   = DisplayElement.TimeStampDefault;
+			PreviousTxChunkTimeStamp = DisplayElement.TimeStampDefault;
+			PreviousRxChunkTimeStamp = DisplayElement.TimeStampDefault;
 
-			PostponedTxChunks = new List<RawChunk>(); // No preset needed, the default behavior is good enough.
-			PostponedRxChunks = new List<RawChunk>(); // No preset needed, the default behavior is good enough.
+			IsFirstLine              = true;
+			PreviousLineTimeStamp    = DisplayElement.TimeStampDefault;
+		////PreviousLineDirection    = IODirection.None; is prepared for future use
+
+			PostponedTxChunks        = new List<RawChunk>(); // No preset needed, the default behavior is good enough.
+			PostponedRxChunks        = new List<RawChunk>(); // No preset needed, the default behavior is good enough.
 		}
 
 		/// <summary>
@@ -151,33 +156,33 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void NotifyChunk(RawChunk chunk)
 		{
-			LastChunkDirection = chunk.Direction;
-			LastChunkTimeStamp = chunk.TimeStamp;
+		////PreviousChunkDirection = chunk.Direction; is prepared for future use
+			PreviousChunkTimeStamp = chunk.TimeStamp;
 
 			switch (chunk.Direction)
 			{
-				case IODirection.Tx: LastTxChunkTimeStamp = chunk.TimeStamp; break;
-				case IODirection.Rx: LastRxChunkTimeStamp = chunk.TimeStamp; break;
+				case IODirection.Tx: PreviousTxChunkTimeStamp = chunk.TimeStamp; break;
+				case IODirection.Rx: PreviousRxChunkTimeStamp = chunk.TimeStamp; break;
 
 				default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A chunk must always be tied to Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
-		/// <remarks>For orthogonality with <see cref="GetLastChunkTimeStamp(IODirection)"/> below.</remarks>
+		/// <remarks>For orthogonality with <see cref="GetPreviousChunkTimeStamp(IODirection)"/> below.</remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
 		[SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods", Justification = "See remarks.")]
-		public virtual DateTime GetLastChunkTimeStamp()
+		public virtual DateTime GetPreviousChunkTimeStamp()
 		{
-			return (LastChunkTimeStamp);
+			return (PreviousChunkTimeStamp);
 		}
 
 		/// <summary></summary>
-		public virtual DateTime GetLastChunkTimeStamp(IODirection dir)
+		public virtual DateTime GetPreviousChunkTimeStamp(IODirection dir)
 		{
 			switch (dir)
 			{
-				case IODirection.Tx: return (LastTxChunkTimeStamp);
-				case IODirection.Rx: return (LastRxChunkTimeStamp);
+				case IODirection.Tx: return (PreviousTxChunkTimeStamp);
+				case IODirection.Rx: return (PreviousRxChunkTimeStamp);
 
 				default: throw (new ArgumentOutOfRangeException(MessageHelper.InvalidExecutionPreamble + "Direction must be either Tx or Rx!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -195,10 +200,11 @@ namespace YAT.Domain
 		/// <summary>
 		/// Notify the end of a line, i.e. continues processing with the next line.
 		/// </summary>
-		public virtual void NotifyLineEnd(DateTime lineTimeStamp)
+		public virtual void NotifyLineEnd(DateTime lineTimeStamp) // , IODirection lineDirection)
 		{
 			IsFirstLine = false;
 			PreviousLineTimeStamp = lineTimeStamp;
+		////PreviousLineDirection = lineDirection; is prepared for future use
 		}
 
 		/// <summary></summary>
@@ -245,6 +251,27 @@ namespace YAT.Domain
 				byteCount += chunk.Content.Count;
 
 			return (byteCount);
+		}
+
+		/// <summary></summary>
+		public virtual RawChunk GetFirstPostponedChunk()
+		{
+			var firstPostponedTxChunkTimeStamp = DateTime.MaxValue;
+			var firstPostponedRxChunkTimeStamp = DateTime.MaxValue;
+
+			if (PostponedTxChunks.Count > 0)
+				firstPostponedTxChunkTimeStamp = PostponedTxChunks[0].TimeStamp;
+
+			if (PostponedRxChunks.Count > 0)
+				firstPostponedRxChunkTimeStamp = PostponedRxChunks[0].TimeStamp;
+
+			if (firstPostponedTxChunkTimeStamp < firstPostponedRxChunkTimeStamp)
+				return (PostponedTxChunks[0]);
+
+			if (firstPostponedRxChunkTimeStamp < firstPostponedTxChunkTimeStamp)
+				return (PostponedRxChunks[0]);
+
+			throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "This method requires existance of at least one postponed chunk!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
