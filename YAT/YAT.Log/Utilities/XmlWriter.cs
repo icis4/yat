@@ -335,9 +335,9 @@ namespace YAT.Log.Utilities
 			var sb = new StringBuilder();
 			sb.Append(@"<XmlTransferRawLine");
 			sb.Append(@" TimeStamp=""");
-			sb.Append(transferLine.TimeStamp.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+			sb.Append(transferLine.TimeStamp.ToString("yyyy-MM-dd",      CultureInfo.InvariantCulture)); // Should result in same 'DateTimeFormatInfo.CurrentInfo' as format is fixed anyway.
 			sb.Append(@"T"); // Note that time stamp format is fixed to standard XML format.
-			sb.Append(transferLine.TimeStamp.ToString("HH:mm:ss.fffzzz", CultureInfo.InvariantCulture));
+			sb.Append(transferLine.TimeStamp.ToString("HH:mm:ss.fffzzz", CultureInfo.InvariantCulture)); // Should result in same 'DateTimeFormatInfo.CurrentInfo' as format is fixed anyway.
 			sb.Append(@""" Device=""");
 			sb.Append(transferLine.Device);
 			sb.Append(@""" Direction=""");
