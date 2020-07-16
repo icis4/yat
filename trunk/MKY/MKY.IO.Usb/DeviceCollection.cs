@@ -179,7 +179,7 @@ namespace MKY.IO.Usb
 		{
 			lock (this)
 			{
-				EqualsVidPid<T> predicate = new EqualsVidPid<T>(item);
+				var predicate = new EqualsVidPid<T>(item);
 				return (Find(predicate.Match));
 			}
 		}
@@ -202,7 +202,7 @@ namespace MKY.IO.Usb
 		{
 			lock (this)
 			{
-				EqualsVidPidSerial<T> predicate = new EqualsVidPidSerial<T>(item);
+				var predicate = new EqualsVidPidSerial<T>(item);
 				return (Find(predicate.Match));
 			}
 		}
@@ -226,7 +226,7 @@ namespace MKY.IO.Usb
 		{
 			lock (this)
 			{
-				EqualsVidPid<T> predicate = new EqualsVidPid<T>(item);
+				var predicate = new EqualsVidPid<T>(item);
 				return (FindIndex(predicate.Match));
 			}
 		}
@@ -250,7 +250,7 @@ namespace MKY.IO.Usb
 		{
 			lock (this)
 			{
-				EqualsVidPidSerial<T> predicate = new EqualsVidPidSerial<T>(item);
+				var predicate = new EqualsVidPidSerial<T>(item);
 				return (FindIndex(predicate.Match));
 			}
 		}
