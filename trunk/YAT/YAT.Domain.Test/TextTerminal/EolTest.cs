@@ -146,7 +146,6 @@ namespace YAT.Domain.Test.TextTerminal
 
 				Assert.That(parser.TryParse(eolAB, out parseResult));
 				int eolByteCountAB = parseResult.Length;
-
 				Assert.That(parser.TryParse(eolBA, out parseResult));
 				int eolByteCountBA = parseResult.Length;
 

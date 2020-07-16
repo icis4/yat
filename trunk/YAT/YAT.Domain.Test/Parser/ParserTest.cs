@@ -884,7 +884,7 @@ namespace YAT.Domain.Test.Parser
 			// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
 			// not. Thus, it was decided to again remove the character encoding endianness awareness.
 
-			using (var p = new Domain.Parser.Parser(encoding, Endianness.LittleEndian, Domain.Parser.Mode.RadixAndAsciiEscapes))
+			using (var p = new Domain.Parser.Parser(encoding, Endianness.LittleEndian, Domain.Parser.Mode.AllEscapesExceptKeywords))
 			{
 				byte[] actualBytes;
 				string successfullyParsed;
@@ -892,7 +892,7 @@ namespace YAT.Domain.Test.Parser
 				Assert.That(actualBytes, Is.EqualTo(expectedBytes));
 			}
 
-			using (var p = new Domain.Parser.Parser(encoding, Endianness.BigEndian, Domain.Parser.Mode.RadixAndAsciiEscapes))
+			using (var p = new Domain.Parser.Parser(encoding, Endianness.BigEndian, Domain.Parser.Mode.AllEscapesExceptKeywords))
 			{
 				byte[] actualBytes;
 				string successfullyParsed;
