@@ -725,6 +725,8 @@ namespace YAT.Domain
 			if (forSomeTimeEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(data.Length, this.terminalSettings.IO.RoughlyEstimatedMaxBytesPerMillisecond))
 				IncrementIsSendingForSomeTimeChanged();
 
+			DebugSend(string.Format("Sending {0} byte(s) of raw data by directly forwarding to raw terminal.", data.Length));
+
 			ForwardPacketToRawTerminal(data); // Nothing for further processing, simply forward.
 		}
 
@@ -752,6 +754,8 @@ namespace YAT.Domain
 
 			do // Process at least once, potentially repeat:
 			{
+				DebugSend(string.Format("Sending {0} parser result(s) of {1}.", parseResult.Length, (isLine ? "a text line" : "text")));
+
 				// --- Initialize the line/packet ---
 
 				if (TryEnterPacketGate(forSomeTimeEventHelper))
@@ -889,11 +893,11 @@ namespace YAT.Domain
 					}
 
 					isFirstRepetition = false;
+				} // if (TryEnterPacketGate())
 
-					// Break if requested or terminal has stopped or closed! Must be done prior to a potential repeat below!
-					if (DoBreak)
-						break; // do/while (repeat)
-				}
+				// Break if requested or terminal has stopped or closed! Must be done prior to a potential repeat below!
+				if (DoBreak)
+					break; // do/while (repeat)
 			}
 			while (performLineRepeat && (lineRepeatIsInfinite || (lineRepeatRemaining > 0)));
 		}
