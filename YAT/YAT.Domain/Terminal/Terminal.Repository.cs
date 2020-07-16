@@ -73,7 +73,7 @@ namespace YAT.Domain
 			{
 				try
 				{
-					this.rawTerminal.ClearRepository(repositoryType);
+					this.rawTerminal.ClearRepository(repositoryType); // The 'rawTerminal_RepositoryCleared' event handler will call ResetProcess() and ClearMyRepository().
 				}
 				finally
 				{
@@ -99,7 +99,7 @@ namespace YAT.Domain
 			{
 				try
 				{
-					this.rawTerminal.ClearRepositories();
+					this.rawTerminal.ClearRepositories(); // The 'rawTerminal_RepositoryCleared' event handler will call ResetProcess() and ClearMyRepository().
 				}
 				finally
 				{
