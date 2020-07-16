@@ -402,7 +402,7 @@ namespace YAT.Application.Test
 
 			dr = MessageBoxEx.Show
 			(
-				"Did YAT open with two serial COM port terminals?",
+				"Did YAT open with two interconnected serial COM port terminals?",
 				"Confirmation",
 				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Information,
@@ -429,7 +429,7 @@ namespace YAT.Application.Test
 				"This test will open YAT with a binary serial COM port terminal." + Environment.NewLine +
 				"(YAT will be called [NUnit] due to the NUnit environment)." + Environment.NewLine +
 				Environment.NewLine +
-				"Observe what happens and then exit YAT to complete this test.",
+				"Observe what happens and then exit YAT.",
 				"Instruction",
 				MessageBoxButtons.OKCancel,
 				MessageBoxIcon.Information
