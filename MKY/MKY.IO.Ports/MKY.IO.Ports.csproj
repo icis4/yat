@@ -89,6 +89,7 @@
     <Compile Include="SerialPort\EventArgs.cs" />
     <Compile Include="SerialPort\ISerialPortEx.cs" />
     <Compile Include="SerialPort\ISerialPortDotNet.cs" />
+    <Compile Include="SerialPort\Predicates.cs" />
     <Compile Include="SerialPort\SerialPinChange.cs" />
     <Compile Include="SerialPort\SerialPortControlPins.cs" />
     <Compile Include="SerialPort\SerialPortEx.cs">

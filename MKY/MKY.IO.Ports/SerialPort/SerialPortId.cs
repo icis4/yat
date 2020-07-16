@@ -484,7 +484,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Determines whether this instance's and the specified object's name have value equality.
+		/// Determines whether this instance's and the specified object's <see cref="Name"/> have value equality.
 		/// </summary>
 		/// <remarks>
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
@@ -493,6 +493,18 @@ namespace MKY.IO.Ports
 		public virtual bool EqualsName(string otherName)
 		{
 			return (StringEx.EqualsOrdinalIgnoreCase(Name, otherName));
+		}
+
+		/// <summary>
+		/// Determines whether this instance's and the specified object's <see cref="Caption"/> have value equality.
+		/// </summary>
+		/// <remarks>
+		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
+		/// properties, i.e. properties with some logic, are also properly handled.
+		/// </remarks>
+		public virtual bool EqualsCaption(string otherCaption)
+		{
+			return (StringEx.EqualsOrdinal(Caption, otherCaption)); // Take case into account.
 		}
 
 		/// <summary>
