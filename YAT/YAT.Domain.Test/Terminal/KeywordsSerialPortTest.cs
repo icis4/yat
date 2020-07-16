@@ -272,6 +272,22 @@ namespace YAT.Domain.Test.Terminal
 				var settingsA = settingsDescriptorA.Value1(settingsDescriptorA.Value2);
 				settingsA.IO.SerialPort.Communication.FlowControl = SerialFlowControl.ManualHardware;
 
+				var mctPortNameInQuestion = "COM11";                 // Workaround to bug #354 "Automatic hardware flow control is not supported by MCT"
+				var mctPortCaptionInQuestion = "Serial On USB Port"; // for MCT based converters loopback COM11 <> COM12 in YAT TestLab.
+				if (settingsA.IO.SerialPort.PortId == mctPortNameInQuestion)
+				{
+					var availablePorts = new MKY.IO.Ports.SerialPortCollection();
+					availablePorts.FillWithAvailablePorts(true);
+
+					var predicate = new MKY.IO.Ports.EqualsPortName<MKY.IO.Ports.SerialPortId>(mctPortNameInQuestion);
+					var mctPortIdInQuestion = availablePorts.Find(predicate.Match);
+					if (mctPortIdInQuestion.EqualsCaption(mctPortCaptionInQuestion))
+					{
+						System.Diagnostics.Trace.WriteLine(@"Test is exculded to work around bug #354 ""Automatic hardware flow control is not supported by MCT"".");
+						return; // Green bar.
+					}
+				}
+
 				using (var terminalA = new Domain.TextTerminal(settingsA))
 				{
 					Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
