@@ -581,6 +581,11 @@ namespace MKY.IO.Serial.Socket
 			// Finally, stop the thread. Must be done AFTER the socket got stopped (and disposed) to
 			// ensure that the last socket callbacks 'OnSent' can still be properly processed.
 			StopDataSentThread();
+
+			// And don't forget to clear the corresponding queue, its content would reappear in case
+			// the socket gets started again.
+			lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
+				this.dataSentQueue.Clear();
 		}
 
 		#endregion
@@ -716,9 +721,9 @@ namespace MKY.IO.Serial.Socket
 				sb.AppendLine();
 				sb.AppendLine("Exception error message:");
 				sb.AppendLine(e.Exception.Message);
-				string message = sb.ToString();
-				DebugMessage(message);
 
+				var message = sb.ToString();
+				DebugMessage(message);
 				OnIOError(new IOErrorEventArgs(ErrorSeverity.Fatal, message));
 			}
 		}
