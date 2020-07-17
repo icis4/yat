@@ -213,6 +213,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>Creates a TCP/IP client socket.</summary>
 		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
 		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
 		public TcpClient(IPHost remoteHost, int remotePort, IPNetworkInterface localInterface)
 			: this((IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface)
 		{
@@ -221,6 +222,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>Creates a TCP/IP client socket.</summary>
 		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
 		public TcpClient(IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface)
 			: this(SocketBase.NextInstanceId, remoteHost, remotePort, localInterface)
 		{
@@ -229,6 +231,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>Creates a TCP/IP client socket.</summary>
 		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
 		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
 		public TcpClient(int instanceId, IPHost remoteHost, int remotePort, IPNetworkInterface localInterface)
 			: this(instanceId, (IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface)
 		{
@@ -237,6 +240,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>Creates a TCP/IP client socket.</summary>
 		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
 		public TcpClient(int instanceId, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface)
 			: this(instanceId, remoteHost, remotePort, localInterface, new AutoInterval())
 		{
@@ -245,6 +249,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>Creates a TCP/IP client socket.</summary>
 		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
 		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
 		public TcpClient(IPHost remoteHost, int remotePort, IPNetworkInterface localInterface, AutoInterval autoReconnect)
 			: this((IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface, autoReconnect)
 		{
@@ -253,6 +258,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>Creates a TCP/IP client socket.</summary>
 		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
 		public TcpClient(IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, AutoInterval autoReconnect)
 			: this(SocketBase.NextInstanceId, remoteHost, remotePort, localInterface, autoReconnect)
 		{
@@ -261,6 +267,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>Creates a TCP/IP client socket.</summary>
 		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
 		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
+		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
 		public TcpClient(int instanceId, IPHost remoteHost, int remotePort, IPNetworkInterface localInterface, AutoInterval autoReconnect)
 			: this(instanceId, (IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface, autoReconnect)
 		{
@@ -269,10 +276,18 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>Creates a TCP/IP client socket.</summary>
 		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
+		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
 		public TcpClient(int instanceId, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, AutoInterval autoReconnect)
 		{
-			if (remoteHost == null)     throw (new ArgumentNullException("remoteHost"));
-			if (localInterface == null) throw (new ArgumentNullException("localInterface"));
+			// Verify by-reference arguments:
+
+			if (remoteHost     == null) throw (new ArgumentNullException("remoteHost",     MessageHelper.InvalidExecutionPreamble + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			if (localInterface == null) throw (new ArgumentNullException("localInterface", MessageHelper.InvalidExecutionPreamble + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+			// All arguments are defined!
+
+			if (remoteHost.Address.AddressFamily != localInterface.Address.AddressFamily) // Do not prepend/append 'SubmitBug' as an application could rely and the error message.
+				throw (new ArgumentException(string.Format(CultureInfo.CurrentCulture, "Mismatching address families! Remote host is {0} while local interface is {1}.", remoteHost.Address.AddressFamily, localInterface.Address.AddressFamily)));
 
 			this.instanceId     = instanceId;
 
@@ -1068,7 +1083,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			// AssertUndisposed() shall not be called from such basic method! Its return value is needed for debugging! All underlying fields are still valid after disposal.
 
-			return (this.remoteHost.ToEndpointAddressString() + ":" + this.remotePort);
+			var remoteHostEndpoint = ((this.remoteHost != null) ? (this.remoteHost.ToEndpointAddressString()) : "[none]"); // Required to always be available.
+			return (remoteHostEndpoint + ":" + this.remotePort);
 		}
 
 		#endregion

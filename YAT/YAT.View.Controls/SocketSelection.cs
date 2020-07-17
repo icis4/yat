@@ -278,10 +278,11 @@ namespace YAT.View.Controls
 			get { return (this.localFilter); }
 			set
 			{
-				if ((this.localFilter != value) || // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-					(value.Address.Equals(IPAddress.Any))) // Always SetControls() to be able to
-				{                                          //   deal with the different types of
-					this.localFilter = value;              //   any.
+				if ((this.localFilter != value)            ||
+					(value.Address.Equals(IPAddress.Any))  ||  // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+					(value.Address.Equals(IPAddress.IPv6Any))) // Allow SetControls() to be able to
+				{                                              //   deal with the different types of
+					this.localFilter = value;                  //   any.
 					SetControls();
 					OnLocalFilterChanged(EventArgs.Empty);
 				}

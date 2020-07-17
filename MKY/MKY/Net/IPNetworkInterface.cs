@@ -356,8 +356,8 @@ namespace MKY.Net
 			                 // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 			if      (address.Equals(IPAddress.Any))          return (IPAddress.Broadcast);
 			else if (address.Equals(IPAddress.Loopback))     return (IPAddress.None);
-		////else if (address.Equals(IPAddress.IPv6Any))      return (IPAddress.IPv6Whatever);
-		////else if (address.Equals(IPAddress.IPv6Loopback)) return (IPAddress.IPv6Whatever);
+		////else if (address.Equals(IPAddress.IPv6Any))      return (IPAddress.IPv6Whatever); // IPv6 is only partly implemented yet.
+		////else if (address.Equals(IPAddress.IPv6Loopback)) return (IPAddress.IPv6Whatever); // IPv6 is only partly implemented yet.
 
 			// Calculate address:
 			switch (address.AddressFamily)
@@ -373,7 +373,7 @@ namespace MKY.Net
 
 				case AddressFamily.InterNetworkV6: // IPv6
 				{
-					return (IPAddress.IPv6None); // \remind (MKY / 2019-05-12 / FR #372): IPv6 is currently only minimally implemented.
+					return (IPAddress.IPv6None); // IPv6 is only partly implemented yet.
 				}
 
 				default:
@@ -428,7 +428,7 @@ namespace MKY.Net
 
 				case AddressFamily.InterNetworkV6: // IPv6
 				{
-					return (IPAddress.IPv6Any); // \remind (MKY / 2019-05-12 / FR #372): IPv6 is currently only minimally implemented.
+					return (IPAddress.IPv6Any); // IPv6 is only partly implemented yet.
 				}
 
 				default:
