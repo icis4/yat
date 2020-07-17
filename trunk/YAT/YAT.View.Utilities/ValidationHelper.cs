@@ -31,6 +31,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Net;
 using MKY.Windows.Forms;
 
 #endregion
@@ -95,6 +96,92 @@ namespace YAT.View.Utilities
 
 				var errorMessage = sb.ToString();
 				var errorCaption = "Invalid " + description;
+				return (ShowErrorMessageAndReturnFalse(owner, errorMessage, errorCaption));
+			}
+		}
+
+		/// <summary></summary>
+		public static bool ValidateSettings(IWin32Window owner, Model.Settings.NewTerminalSettings settings)
+		{
+			switch (settings.IOType)
+			{
+				case Domain.IOType.TcpClient:
+				case Domain.IOType.TcpAutoSocket:
+				case Domain.IOType.UdpClient:
+				case Domain.IOType.UdpPairSocket:
+					return (ValidateSettings(owner, settings.SocketRemoteHost, settings.SocketLocalInterface));
+
+				case Domain.IOType.UdpServer:
+					return (ValidateSettings(owner, settings.SocketLocalInterface, settings.SocketLocalFilter));
+
+				default:
+					return (true); // Nothing to validate here.
+			}
+		}
+
+		/// <summary></summary>
+		public static bool ValidateSettings(IWin32Window owner, Settings.Model.TerminalExplicitSettings settings)
+		{
+			switch (settings.Terminal.IO.IOType)
+			{
+				case Domain.IOType.TcpClient:
+				case Domain.IOType.TcpAutoSocket:
+				case Domain.IOType.UdpClient:
+				case Domain.IOType.UdpPairSocket:
+					return (ValidateSettings(owner, settings.Terminal.IO.Socket.RemoteHost, settings.Terminal.IO.Socket.LocalInterface));
+
+				case Domain.IOType.UdpServer:
+					return (ValidateSettings(owner, settings.Terminal.IO.Socket.LocalInterface, settings.Terminal.IO.Socket.LocalFilter));
+
+				default:
+					return (true); // Nothing to validate here.
+			}
+		}
+
+		/// <summary></summary>
+		private static bool ValidateSettings(IWin32Window owner, IPHostEx remoteHost, IPNetworkInterfaceEx localInterface)
+		{
+			if (remoteHost.Address.AddressFamily == localInterface.Address.AddressFamily)
+			{
+				return (true);
+			}
+			else
+			{
+				var sb = new StringBuilder();
+				sb.AppendLine("[Remote Host] and [Local Interface] must be of matching IP addresses, e.g. both IPv4:");
+				sb.AppendLine("   > [localhost] and [any]");
+				sb.AppendLine("   > [192.168.0.1] and [any]");
+				sb.AppendLine();
+				sb.AppendLine("Or both IPv6:");
+				sb.AppendLine("   > [IPv6 localhost] and [IPv6 any]");
+				sb.Append    ("   > [2001:0db8:85a3:08d3::0370:7344] and [IPv6 any]");
+
+				var errorMessage = sb.ToString();
+				var errorCaption = "Mismatching IP Addresses";
+				return (ShowErrorMessageAndReturnFalse(owner, errorMessage, errorCaption));
+			}
+		}
+
+		/// <summary></summary>
+		private static bool ValidateSettings(IWin32Window owner, IPNetworkInterfaceEx localInterface, IPFilterEx localFilter)
+		{
+			if (localInterface.Address.AddressFamily == localFilter.Address.AddressFamily)
+			{
+				return (true);
+			}
+			else
+			{
+				var sb = new StringBuilder();
+				sb.AppendLine("[Local Interface] and [Local Filer] must be of matching IP addresses, e.g. both IPv4:");
+				sb.AppendLine("   > [any] and [localhost]");
+				sb.AppendLine("   > [192.168.0.1] and [any]");
+				sb.AppendLine();
+				sb.AppendLine("Or both IPv6:");
+				sb.AppendLine("   > [IPv6 any] and [IPv6 localhost]");
+				sb.Append    ("   > [2001:0db8:85a3:08d3::0370:7344] and [IPv6 any]");
+
+				var errorMessage = sb.ToString();
+				var errorCaption = "Mismatching IP Addresses";
 				return (ShowErrorMessageAndReturnFalse(owner, errorMessage, errorCaption));
 			}
 		}

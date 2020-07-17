@@ -109,6 +109,14 @@
     <None Include="Properties\YAT.snk" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial.Socket\MKY.IO.Serial.Socket.csproj">
+      <Project>{a19a5215-89ab-49f7-be7b-32a886a76f0c}</Project>
+      <Name>MKY.IO.Serial.Socket</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial\MKY.IO.Serial.csproj">
+      <Project>{e3a19532-d12a-4a90-b7f3-637a0a8fa6bd}</Project>
+      <Name>MKY.IO.Serial</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY</Name>
