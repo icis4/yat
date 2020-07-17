@@ -255,6 +255,20 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlIgnore]
+		public virtual bool IOTypeIsTcpSocket
+		{
+			get { return (((IOTypeEx)IOType).IsTcpSocket); }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool IOTypeIsUdpSocket
+		{
+			get { return (((IOTypeEx)IOType).IsUdpSocket); }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
 		public virtual bool IOTypeIsServerSocket
 		{
 			get { return (((IOTypeEx)IOType).IsServerSocket); }

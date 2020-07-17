@@ -35,6 +35,7 @@ using MKY.Settings;
 
 using NUnit.Framework;
 
+using YAT.Domain.Settings;
 using YAT.Settings.Application;
 
 #endregion
@@ -369,6 +370,13 @@ namespace YAT.Model.Test.Transmission
 		                                      Utilities.TestSet testSet, int transmissionCount)
 		{
 			var settingsA = settingsDescriptorA.Value1(settingsDescriptorA.Value2);
+
+			if (settingsA.IO.IOTypeIsUdpSocket) // Revert to default EOL which is mandatory for this test case.
+			{
+				settingsA.TextTerminal.TxEol = TextTerminalSettings.EolDefault;
+				settingsA.TextTerminal.RxEol = TextTerminalSettings.EolDefault;
+			}
+
 			using (var terminalA = new Terminal(settingsA))
 			{
 				terminalA.MessageInputRequest += Utilities.TerminalMessageInputRequest;
@@ -387,6 +395,13 @@ namespace YAT.Model.Test.Transmission
 				if (settingsDescriptorB.Value1 != null) // Loopback pair:
 				{
 					var settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
+
+					if (settingsB.IO.IOTypeIsUdpSocket) // Revert to default EOL which is mandatory for this test case.
+					{
+						settingsB.TextTerminal.TxEol = TextTerminalSettings.EolDefault;
+						settingsB.TextTerminal.RxEol = TextTerminalSettings.EolDefault;
+					}
+
 					using (var terminalB = new Terminal(settingsB))
 					{
 						terminalB.MessageInputRequest += Utilities.TerminalMessageInputRequest;
