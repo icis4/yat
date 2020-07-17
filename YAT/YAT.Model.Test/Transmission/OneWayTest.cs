@@ -134,7 +134,6 @@ namespace YAT.Model.Test.Transmission
 
 			ControlChar1 = new Utilities.TestSet(new Types.Command(@"\h(00)<CR><LF>\h(00)A<CR><LF>A\h(00)<CR><LF>A\h(00)A"), 4, new int[] { 3, 5, 4, 6 }, new int[] { 3, 4, 4, 5 }, true);
 			ControlChar2 = new Utilities.TestSet(new Types.Command(@"\h(7F)<CR><LF>\h(7F)A<CR><LF>A\h(7F)<CR><LF>A\h(7F)A"), 4, new int[] { 3, 5, 4, 6 }, new int[] { 3, 4, 4, 5 }, true);
-			ControlChar3 = new Utilities.TestSet(new Types.Command(@"\h(FF)<CR><LF>\h(FF)A<CR><LF>A\h(FF)<CR><LF>A\h(FF)A"), 4, new int[] { 4, 4, 4, 4 }, new int[] { 3, 4, 4, 5 }, true); // A non-breaking space isn't a control character.
 
 			Clear1       = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B<CR><LF>C\!(Clear)"),          3, new int[] { 4, 4, 4 }, new int[] { 3, 3, 3 }, false, true);
 			Clear2       = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B<CR><LF>C\!(Clear)\!(NoEOL)"), 2, new int[] { 4, 4, 3 }, new int[] { 3, 3, 1 }, false, true);
