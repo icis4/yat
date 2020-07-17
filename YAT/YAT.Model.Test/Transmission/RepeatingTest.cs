@@ -359,8 +359,8 @@ namespace YAT.Model.Test.Transmission
 			var repeatCommand = new Types.Command(RepeatingTestData.TestCommand);
 
 			var expectedLineCount = repeatCount;
-			if (terminalA == terminalB) // Loopback self:
-				expectedLineCount *= 2; // Twice the number of lines
+			if (doTwoWay && (terminalA == terminalB)) // Loopback self:
+				expectedLineCount *= 2;               // Twice the number of lines.
 
 			var expectedLineByteCount = RepeatingTestData.TestString.Length + 2; // Content + EOL.
 			var expectedTotalByteCount = (expectedLineCount * expectedLineByteCount);
@@ -381,13 +381,13 @@ namespace YAT.Model.Test.Transmission
 
 				var expectedInitialPingByteCount = expectedLineByteCount;
 				var expectedInitialPongByteCount = expectedLineByteCount;
-				if (terminalA == terminalB)            // Loopback self:
-					expectedInitialPongByteCount *= 2; // Twice the number of bytes.
+				if (doTwoWay && (terminalA == terminalB)) // Loopback self:
+					expectedInitialPongByteCount *= 2;    // Twice the number of bytes.
 
 				var expectedInitialPingLineCount = 1;
 				var expectedInitialPongLineCount = 1;
-				if (terminalA == terminalB)            // Loopback self:
-					expectedInitialPongLineCount *= 2; // Twice the number of lines.
+				if (doTwoWay && (terminalA == terminalB)) // Loopback self:
+					expectedInitialPongLineCount *= 2;    // Twice the number of lines.
 
 				terminalA.SendText(singleCommand);
 				Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB,
