@@ -103,7 +103,7 @@ namespace MKY.Net
 		}
 
 		/// <summary>
-		/// Determines whether the specified <paramref name="address"/> has the value of <see cref="IPAddress.None"/>.
+		/// Determines whether the specified <paramref name="address"/> has the value of <see cref="IPAddress.None"/> or <see cref="IPAddress.IPv6None"/>.
 		/// </summary>
 		/// <remarks>
 		/// Convenience method because <see cref="IPAddress"/> does not override the ==/!= operators, thanks Microsoft guys...
@@ -113,13 +113,13 @@ namespace MKY.Net
 		public static bool EqualsNone(IPAddress address)
 		{
 			if (address != null) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-				return (address.Equals(IPAddress.None));
+				return (address.Equals(IPAddress.None) || address.Equals(IPAddress.IPv6None));
 			else
 				return (false);
 		}
 
 		/// <summary>
-		/// Determines whether the specified <paramref name="address"/> has a value other than <see cref="IPAddress.None"/>.
+		/// Determines whether the specified <paramref name="address"/> has a value other than <see cref="IPAddress.None"/> or <see cref="IPAddress.IPv6None"/>.
 		/// </summary>
 		/// <remarks>
 		/// Convenience method because <see cref="IPAddress"/> does not override the ==/!= operators, thanks Microsoft guys...
@@ -128,10 +128,7 @@ namespace MKY.Net
 		/// <returns><c>true</c> if value is valid; otherwise, <c>false</c>.</returns>
 		public static bool NotEqualsNone(IPAddress address)
 		{
-			if (address != null) // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-				return (!address.Equals(IPAddress.None));
-			else
-				return (false);
+			return (!EqualsNone(address));
 		}
 	}
 }

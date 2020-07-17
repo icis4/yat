@@ -290,7 +290,7 @@ namespace MKY.IO.Serial.Socket
 		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public UdpSocket(int instanceId, IPNetworkInterfaceEx localInterface, int localPort, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
-			: this(instanceId, UdpSocketType.Server, System.Net.IPAddress.None, 0, localInterface, localPort, IPAddressEx.GetAnyOfFamily(localInterface.Address), serverSendMode)
+			: this(instanceId, UdpSocketType.Server, IPAddressEx.GetNoneOfFamily(localInterface), 0, localInterface, localPort, IPAddressEx.GetAnyOfFamily(localInterface.Address), serverSendMode)
 		{
 		}
 
@@ -330,7 +330,7 @@ namespace MKY.IO.Serial.Socket
 		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="localInterface"/> and <paramref name="localFilter"/>.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public UdpSocket(int instanceId, IPNetworkInterfaceEx localInterface, int localPort, IPFilterEx localFilter, UdpServerSendMode serverSendMode = UdpServerSendMode.MostRecent)
-			: this(instanceId, UdpSocketType.Server, System.Net.IPAddress.None, 0, localInterface, localPort, localFilter, serverSendMode)
+			: this(instanceId, UdpSocketType.Server, IPAddressEx.GetNoneOfFamily(localInterface), 0, localInterface, localPort, localFilter, serverSendMode)
 		{
 		}
 
