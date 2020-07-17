@@ -907,8 +907,9 @@ namespace MKY.IO.Serial.Socket
 			// Then, create socket:
 			lock (this.socketSyncObj)
 			{
-				// Neither local nor remote endpoint must be set in constructor! Otherwise, options cannot be changed below!
-				this.socket = new System.Net.Sockets.UdpClient();
+				// Address family must be set in order to support IPv6. Otherwise, socket is fixed to IPv4.
+				// But neither local nor remote endpoint must be set in constructor! Otherwise, options cannot be changed below!
+				this.socket = new System.Net.Sockets.UdpClient(this.localInterface.Address.AddressFamily);
 
 				// Configure the listener port:
 				if (this.socketType == UdpSocketType.Server)

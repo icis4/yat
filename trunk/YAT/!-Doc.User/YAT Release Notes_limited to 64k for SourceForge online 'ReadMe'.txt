@@ -145,6 +145,7 @@ Important changes:
 - Option to not send XOn when opending a serial COM port or USB Ser/HID terminal (feat. req. #393).
 - Changes on-the-fly by keywords like \!(Port()), \!(PortSettings()), \!(Baud()),... are now
   reflected in the terminal settings, i.e. also indicated by '*' (related to reqs. #71 and #403).
+- IPv6 support enabled for UDP/IP terminals (feature request #372).
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
 - Upgrade to .NET 4.0 runtime (precondition for new automatic actions [Chart/Plot/Histogram],
   preparing upcoming feature request #74, part of feature request #229).
