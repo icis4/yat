@@ -38,6 +38,7 @@ using MKY.Settings;
 
 using NUnit.Framework;
 
+using YAT.Domain.Settings;
 using YAT.Settings.Application;
 
 #endregion
@@ -76,10 +77,10 @@ namespace YAT.Model.Test.Transmission
 				yield return (new TestCaseData(10, false, false).SetName("_Repeat10OneWay"));
 				yield return (new TestCaseData(10, true,  false).SetName("_Repeat10TwoWay"));
 
-				yield return (new TestCaseData(Domain.Settings.SendSettings.LineRepeatInfinite, false, true ).SetName("_RepeatRandomOneWayAndBreak"));
-				yield return (new TestCaseData(Domain.Settings.SendSettings.LineRepeatInfinite, false, false).SetName("_RepeatRandomOneWayUntilExit"));
-				yield return (new TestCaseData(Domain.Settings.SendSettings.LineRepeatInfinite, true,  true ).SetName("_RepeatRandomTwoWayAndBreak"));
-				yield return (new TestCaseData(Domain.Settings.SendSettings.LineRepeatInfinite, true,  false).SetName("_RepeatRandomTwoWayUntilExit"));
+				yield return (new TestCaseData(SendSettings.LineRepeatInfinite, false, true ).SetName("_RepeatRandomOneWayAndBreak"));
+				yield return (new TestCaseData(SendSettings.LineRepeatInfinite, false, false).SetName("_RepeatRandomOneWayUntilExit"));
+				yield return (new TestCaseData(SendSettings.LineRepeatInfinite, true,  true ).SetName("_RepeatRandomTwoWayAndBreak"));
+				yield return (new TestCaseData(SendSettings.LineRepeatInfinite, true,  false).SetName("_RepeatRandomTwoWayUntilExit"));
 			}
 		}
 
@@ -272,6 +273,19 @@ namespace YAT.Model.Test.Transmission
 		{
 			var settingsA = settingsDescriptorA.Value1(settingsDescriptorA.Value2);
 			settingsA.Send.DefaultLineRepeat = repeatCount; // Set settings to the desired repeat count.
+
+			if (settingsA.IO.IOTypeIsUdpSocket) // Revert to default behavior which is mandatory for this test case.
+			{
+				settingsA.TextTerminal.TxDisplay.ChunkLineBreakEnabled = false;
+				settingsA.TextTerminal.RxDisplay.ChunkLineBreakEnabled = false;
+
+				settingsA.TextTerminal.TxEol = TextTerminalSettings.EolDefault;
+				settingsA.TextTerminal.RxEol = TextTerminalSettings.EolDefault;
+
+				if (doTwoWay)
+					settingsA.Send.DefaultLineRepeat--; // Initial ping-pong needed.
+			}
+
 			using (var terminalA = new Terminal(settingsA))
 			{
 				terminalA.MessageInputRequest += Utilities.TerminalMessageInputRequest;
@@ -291,6 +305,19 @@ namespace YAT.Model.Test.Transmission
 				{
 					var settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
 					settingsB.Send.DefaultLineRepeat = repeatCount; // Set settings to the desired repeat count.
+
+					if (settingsB.IO.IOTypeIsUdpSocket) // Revert to default behavior which is mandatory for this test case.
+					{
+						settingsB.TextTerminal.TxDisplay.ChunkLineBreakEnabled = false;
+						settingsB.TextTerminal.RxDisplay.ChunkLineBreakEnabled = false;
+
+						settingsB.TextTerminal.TxEol = TextTerminalSettings.EolDefault;
+						settingsB.TextTerminal.RxEol = TextTerminalSettings.EolDefault;
+
+						if (doTwoWay)
+							settingsB.Send.DefaultLineRepeat--; // Initial ping-pong needed.
+					}
+
 					using (var terminalB = new Terminal(settingsB))
 					{
 						terminalB.MessageInputRequest += Utilities.TerminalMessageInputRequest;
@@ -316,68 +343,123 @@ namespace YAT.Model.Test.Transmission
 			}
 		}
 
+		private static void TransmitAndVerify(Terminal terminalA, Terminal terminalB, int repeatCount, bool doTwoWay, bool executeBreak)
+		{
+			if (repeatCount >= 0)
+				TransmitAndVerifySpecific(terminalA, terminalB, repeatCount, doTwoWay, executeBreak);
+			else
+				TransmitAndVerifyRandom(terminalA, terminalB, executeBreak); // Yet limited to one-way.
+		}
+
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "Too many values to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "Too many values to verify.")]
-		private static void TransmitAndVerify(Terminal terminalA, Terminal terminalB, int repeatCount, bool doTwoWay, bool executeBreak)
+		private static void TransmitAndVerifySpecific(Terminal terminalA, Terminal terminalB, int repeatCount, bool doTwoWay, bool executeBreak)
 		{
-			var command = new Types.Command(RepeatingTestData.TestCommand);
+			var repeatCommand = new Types.Command(RepeatingTestData.TestCommand);
 
-			terminalA.SendText(command);
-			if (doTwoWay) {
-				terminalB.SendText(command);
-			}
+			var expectedLineCount = repeatCount;
+			if (terminalA == terminalB) // Loopback self:
+				expectedLineCount *= 2; // Twice the number of lines
 
-			if (repeatCount >= 0) // Finite count:
+			var expectedLineByteCount = RepeatingTestData.TestString.Length + 2; // Content + EOL.
+			var expectedTotalByteCount = (expectedLineCount * expectedLineByteCount);
+
+			var testSet = new Utilities.TestSet
+			(
+				repeatCommand, expectedLineCount,
+				ArrayEx.CreateAndInitializeInstance(expectedLineCount, 2), // 2 Elements: Content + EOL.
+				ArrayEx.CreateAndInitializeInstance(expectedLineCount, expectedLineByteCount),
+				false
+			);
+
+			// Two-way UDP/IP requires an initial ping-pong to tell server where to respond to:
+			var requiresInitialPingPong = (doTwoWay && terminalA.SettingsRoot.IO.IOTypeIsUdpSocket);
+			if (requiresInitialPingPong)
 			{
-				var testSet = new Utilities.TestSet
-				(
-					command, repeatCount,
-					ArrayEx.CreateAndInitializeInstance(repeatCount, 2), // Content + EOL.
-					ArrayEx.CreateAndInitializeInstance(repeatCount, (RepeatingTestData.TestString.Length + 2)), // Content + EOL.
-					false
-				);
+				var singleCommand = new Types.Command(RepeatingTestData.TestString);
 
-				var expectedTotalByteCount = (repeatCount * (RepeatingTestData.TestString.Length + 2)); // Content + EOL.
+				var expectedInitialPingByteCount = expectedLineByteCount;
+				var expectedInitialPongByteCount = expectedLineByteCount;
+				if (terminalA == terminalB)            // Loopback self:
+					expectedInitialPongByteCount *= 2; // Twice the number of bytes.
+
+				var expectedInitialPingLineCount = 1;
+				var expectedInitialPongLineCount = 1;
+				if (terminalA == terminalB)            // Loopback self:
+					expectedInitialPongLineCount *= 2; // Twice the number of lines.
+
+				terminalA.SendText(singleCommand);
 				Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB,
-				                                             expectedTotalByteCount,
-				                                             expectedTotalLineCountDisplayed: repeatCount,
-				                                             expectedTotalLineCountCompleted: repeatCount,
-				                                             timeout: (repeatCount * Utilities.WaitTimeoutForLineTransmission));
-				if (doTwoWay) {
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA,
-					                                             expectedTotalByteCount,
-					                                             expectedTotalLineCountDisplayed: repeatCount,
-					                                             expectedTotalLineCountCompleted: repeatCount,
-					                                             timeout: (repeatCount * Utilities.WaitTimeoutForLineTransmission));
-				}
+				                                             expectedTotalByteCount:          expectedInitialPingByteCount,
+				                                             expectedTotalLineCountDisplayed: expectedInitialPingLineCount,
+				                                             expectedTotalLineCountCompleted: expectedInitialPingLineCount,
+				                                             timeout: (1 * Utilities.WaitTimeoutForLineTransmission));
 
-				// Verify transmission:
-				Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-				                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-				                      testSet);
+				terminalB.SendText(singleCommand);
+				Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA,
+				                                             expectedTotalByteCount:          expectedInitialPongByteCount,
+				                                             expectedTotalLineCountDisplayed: expectedInitialPongLineCount,
+				                                             expectedTotalLineCountCompleted: expectedInitialPongLineCount,
+				                                             timeout: (1 * Utilities.WaitTimeoutForLineTransmission));
+			}
+
+			// Send repeating simplex or duplex (for even better test coverage):
+			var requiresInitialPingPongAndIsJustOne = (requiresInitialPingPong && (repeatCount == 1));
+			if (!requiresInitialPingPongAndIsJustOne)
+			{
+				terminalA.SendText(repeatCommand);
 				if (doTwoWay) {
-					Utilities.VerifyLines(terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-					                      terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-					                      testSet);
+					terminalB.SendText(repeatCommand);
 				}
 			}
-			else // Random count:
-			{
-				var random = new Random(RandomEx.NextPseudoRandomSeed());
-				Thread.Sleep(random.Next(100, 10000)); // Something between 0.1..10 seconds to keep test execution fast.
 
-				// Break or stop:
-				if (executeBreak)
-				{
-					terminalA.Break();
-					terminalB.Break();
-				}
-				else
-				{
-					terminalA.StopIO();
-					terminalB.StopIO();
-				}
+			Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB,
+			                                             expectedTotalByteCount:          expectedTotalByteCount,
+			                                             expectedTotalLineCountDisplayed: expectedLineCount,
+			                                             expectedTotalLineCountCompleted: expectedLineCount,
+			                                             timeout: (expectedLineCount * Utilities.WaitTimeoutForLineTransmission));
+			if (doTwoWay) {
+				Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA,
+				                                             expectedTotalByteCount:          expectedTotalByteCount,
+				                                             expectedTotalLineCountDisplayed: expectedLineCount,
+				                                             expectedTotalLineCountCompleted: expectedLineCount,
+				                                             timeout: (expectedLineCount * Utilities.WaitTimeoutForLineTransmission));
+			}
+
+			// Verify transmission:
+			Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
+			                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
+			                      testSet);
+			if (doTwoWay) {
+				Utilities.VerifyLines(terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
+				                      terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
+				                      testSet);
+			}
+		}
+
+		/// <remarks>
+		/// Yet limited to one-way.
+		/// </remarks>
+		private static void TransmitAndVerifyRandom(Terminal terminalA, Terminal terminalB, bool executeBreak)
+		{
+			var repeatCommand = new Types.Command(RepeatingTestData.TestCommand);
+
+			terminalA.SendText(repeatCommand);
+
+			var random = new Random(RandomEx.NextPseudoRandomSeed());
+			Thread.Sleep(random.Next(100, 10000)); // Something between 0.1..10 seconds to keep test execution fast.
+
+			// Break or stop:
+			if (executeBreak)
+			{
+				terminalA.Break();
+				terminalB.Break();
+			}
+			else
+			{
+				terminalA.StopIO();
+				terminalB.StopIO();
 			}
 		}
 
