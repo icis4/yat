@@ -61,7 +61,6 @@ namespace YAT.View.Forms
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 2;
 			this.button_Cancel.Text = "Cancel";
-			this.button_Cancel.Click += new System.EventHandler(this.button_Cancel_Click);
 			// 
 			// button_OK
 			// 
@@ -72,7 +71,6 @@ namespace YAT.View.Forms
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 1;
 			this.button_OK.Text = "OK";
-			this.button_OK.Click += new System.EventHandler(this.button_OK_Click);
 			// 
 			// groupBox_NewTerminal
 			// 
@@ -265,6 +263,7 @@ namespace YAT.View.Forms
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "New Terminal";
 			this.Deactivate += new System.EventHandler(this.NewTerminal_Deactivate);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.NewTerminal_FormClosing);
 			this.Shown += new System.EventHandler(this.NewTerminal_Shown);
 			this.groupBox_NewTerminal.ResumeLayout(false);
 			this.groupBox_NewTerminal.PerformLayout();

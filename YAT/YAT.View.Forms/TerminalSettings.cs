@@ -38,6 +38,7 @@ using MKY.Windows.Forms;
 
 using YAT.Settings.Application;
 using YAT.Settings.Model;
+using YAT.View.Utilities;
 
 #endregion
 
@@ -155,6 +156,24 @@ namespace YAT.View.Forms
 			serialPortSelection.OnFormDeactivateWorkaround();
 			serialPortSettings .OnFormDeactivateWorkaround();
 			socketSelection    .OnFormDeactivateWorkaround();
+		}
+
+		private void TerminalSettings_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			if (DialogResult == DialogResult.OK)
+			{
+				// Validate:
+				var settingsAreInvalid = !ValidationHelper.ValidateSettings(this, this.settingsInEdit);
+				if (settingsAreInvalid)
+				{
+					e.Cancel = true;
+					return;
+				}
+
+				// Accept the new settings:
+				this.settings = this.settingsInEdit;         // Note that 'MatchSerial' is an integral part of MKY.IO.Serial.Usb, will thus be contained in the .yat file, even though always overridden by the 'LocalUserSettings'.
+				this.settings.Terminal.IO.UsbSerialHidDevice.MatchSerial = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial; // Given by the 'LocalUserSettings'.
+			}
 		}
 
 		#endregion
@@ -478,17 +497,6 @@ namespace YAT.View.Forms
 		//------------------------------------------------------------------------------------------
 		// Controls Event Handlers > Buttons
 		//------------------------------------------------------------------------------------------
-
-		private void button_OK_Click(object sender, EventArgs e)
-		{
-			this.settings = this.settingsInEdit;         // Note that 'MatchSerial' is an integral part of MKY.IO.Serial.Usb, will thus be contained in the .yat file, even though always overridden by the 'LocalUserSettings'.
-			this.settings.Terminal.IO.UsbSerialHidDevice.MatchSerial = ApplicationSettings.LocalUserSettings.General.MatchUsbSerial; // Given by the 'LocalUserSettings'.
-		}
-
-		private void button_Cancel_Click(object sender, EventArgs e)
-		{
-			// Do nothing.
-		}
 
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void button_Defaults_Click(object sender, EventArgs e)

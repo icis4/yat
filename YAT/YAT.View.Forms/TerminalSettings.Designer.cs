@@ -62,7 +62,6 @@ namespace YAT.View.Forms
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 1;
 			this.button_OK.Text = "OK";
-			this.button_OK.Click += new System.EventHandler(this.button_OK_Click);
 			// 
 			// button_Cancel
 			// 
@@ -73,7 +72,6 @@ namespace YAT.View.Forms
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 2;
 			this.button_Cancel.Text = "Cancel";
-			this.button_Cancel.Click += new System.EventHandler(this.button_Cancel_Click);
 			// 
 			// groupBox_Settings
 			// 
@@ -109,7 +107,8 @@ namespace YAT.View.Forms
 			this.button_TextOrBinarySettings.Size = new System.Drawing.Size(114, 23);
 			this.button_TextOrBinarySettings.TabIndex = 2;
 			this.button_TextOrBinarySettings.Text = "Te&xt Settings...";
-			this.toolTip.SetToolTip(this.button_TextOrBinarySettings, "Text terminal dependent settings such as encoding, EOL (end-of-line) and comments.");
+			this.toolTip.SetToolTip(this.button_TextOrBinarySettings, "Text terminal dependent settings such as encoding, EOL (end-of-line) and comments" +
+        ".");
 			this.button_TextOrBinarySettings.Click += new System.EventHandler(this.button_TextOrBinarySettings_Click);
 			// 
 			// terminalSelection
@@ -265,6 +264,7 @@ namespace YAT.View.Forms
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Terminal Settings";
 			this.Deactivate += new System.EventHandler(this.TerminalSettings_Deactivate);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TerminalSettings_FormClosing);
 			this.Shown += new System.EventHandler(this.TerminalSettings_Shown);
 			this.groupBox_Settings.ResumeLayout(false);
 			this.groupBox_IOSettings.ResumeLayout(false);
