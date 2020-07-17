@@ -37,7 +37,7 @@ namespace MKY
 		/// </summary>
 		public static string ToHexString(byte value)
 		{
-			return (ToHexString(new byte[] { value }));
+			return (value.ToString("X2", CultureInfo.InvariantCulture));
 		}
 
 		/// <summary>
@@ -55,7 +55,7 @@ namespace MKY
 				else
 					sb.Append(" ");
 
-				sb.Append(b.ToString("X2", CultureInfo.InvariantCulture));
+				sb.Append(ToHexString(b));
 			}
 
 			return (sb.ToString());
