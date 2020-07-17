@@ -21,12 +21,27 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of sending:
+////#define DEBUG_SEND
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
 //==================================================================================================
 
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 //// 'System.Net' as well as 'ALAZ.SystemEx.NetEx' are explicitly used for more obvious distinction.
 using System.Threading;
@@ -81,6 +96,8 @@ namespace MKY.IO.Serial.Socket
 					{
 						this.sendQueue.Enqueue(b);
 					}
+
+					DebugSend(ConvertEx.ToHexString(b) + " enqueued.");
 				}
 
 				// Signal thread:
@@ -167,6 +184,8 @@ namespace MKY.IO.Serial.Socket
 									this.sendQueue.Clear();
 								}
 
+								DebugSend(data.Length + " byte(s) dequeued.");
+
 								System.Net.IPEndPoint remoteEndPoint;
 								lock (this.socketSyncObj)
 									remoteEndPoint = new System.Net.IPEndPoint(this.remoteHost, this.remotePort);
@@ -222,6 +241,22 @@ namespace MKY.IO.Serial.Socket
 			}
 
 			DebugThreadState("SendThread() has terminated.");
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_SEND")]
+		private void DebugSend(string message)
+		{
+			DebugMessage(message);
 		}
 
 		#endregion
