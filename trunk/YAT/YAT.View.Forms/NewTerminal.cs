@@ -133,7 +133,7 @@ namespace YAT.View.Forms
 			// Validate:
 			if (DialogResult == DialogResult.OK)
 			{
-				var settingsAreInvalid = !ValidationHelper.ValidateSettings(this, this.newTerminalSettings);
+				var settingsAreInvalid = !ValidationHelper.ValidateSettings(this, this.newTerminalSettingsInEdit);
 				if (settingsAreInvalid)
 				{
 					e.Cancel = true;
