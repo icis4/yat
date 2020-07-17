@@ -225,83 +225,99 @@ namespace YAT.Model.Test.Connection
 		{
 			var encoding = ((EncodingEx)terminalA.SettingsRoot.TextTerminal.Encoding).Encoding;
 
-			string text;
-			int expectedTotalByteCountA = 0;
-			int expectedTotalLineCountA = 0;
-			int expectedTotalByteCountB = 0;
-			int expectedTotalLineCountB = 0;
-
-			text = "A => B"; // Initial A => B
-			terminalA.SendText(text);
-			expectedTotalByteCountA += (encoding.GetByteCount(text) + 2); // 2 = EOL which is fixed to <CR><LF> for this test.
-			expectedTotalLineCountA++;
-			Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);
-
-			text = "B => A"; // Response B => A
-			terminalB.SendText(text);
-			expectedTotalByteCountB += (encoding.GetByteCount(text) + 2); // 2 = EOL which is fixed to <CR><LF> for this test.
-			expectedTotalLineCountB++;
-			if (isSameTerminal) {
-				expectedTotalByteCountB *= 2;
-				expectedTotalLineCountB *= 2;
-			}
-			Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountB, expectedTotalLineCountB);
-
-			if (disconnectIdentifier == 'A')
+			using (var parser = new Domain.Parser.Parser(encoding, Domain.Parser.Mode.AllEscapes))
 			{
-				// Send repeating B => A then close A:
-				terminalB.SendText(@"B => A\!(LineRepeat)");
-				Thread.Sleep(333); // = approx. 30 lines.
-				terminalA.StopIO();
-				Utilities.WaitForDisconnection(terminalA);
-				Thread.Sleep(100); // Make sure that B has finished processing too.
+				byte[] parseResult;
 
-				terminalA.ClearRepositories();
-				terminalB.ClearRepositories();
-				terminalA.ResetIOCountAndRate();
-				terminalB.ResetIOCountAndRate();
+				var textAB = "A => B";
+				var textBA = "B => A";
 
-				terminalA.StartIO();
-				Utilities.WaitForConnection(terminalA, terminalB);
-			}
-			else
-			{
-				// Send repeating A => B then close B:
-				terminalA.SendText(@"A => B\!(LineRepeat)");
-				Thread.Sleep(333); // = approx. 30 lines.
-				terminalB.StopIO();
-				Utilities.WaitForDisconnection(terminalB);
-				Thread.Sleep(100); // Make sure that A has finished processing too.
+				Assert.That(parser.TryParse(textAB, out parseResult));
+				int textByteCountAB = parseResult.Length;
+				Assert.That(parser.TryParse(textBA, out parseResult));
+				int textByteCountBA = parseResult.Length;
 
-				terminalB.ClearRepositories();
-				terminalA.ClearRepositories();
-				terminalB.ResetIOCountAndRate();
-				terminalA.ResetIOCountAndRate();
+				Assert.That(parser.TryParse(terminalA.SettingsRoot.TextTerminal.TxEol, out parseResult));
+				int eolByteCountAB = parseResult.Length;
+				Assert.That(parser.TryParse(terminalB.SettingsRoot.TextTerminal.TxEol, out parseResult));
+				int eolByteCountBA = parseResult.Length;
 
-				terminalB.StartIO();
-				Utilities.WaitForConnection(terminalB, terminalA);
-			}
+				int byteCountAB = (textByteCountAB + eolByteCountAB);
+				int byteCountBA = (textByteCountBA + eolByteCountBA);
 
-			expectedTotalByteCountA = 0;
-			expectedTotalLineCountA = 0;
-			expectedTotalByteCountB = 0;
-			expectedTotalLineCountB = 0;
+				int expectedTotalByteCountA = 0;
+				int expectedTotalLineCountA = 0;
+				int expectedTotalByteCountB = 0;
+				int expectedTotalLineCountB = 0;
 
-			text = "A => B"; // Subsequent A => B
-			terminalA.SendText(text);
-			expectedTotalByteCountA += (encoding.GetByteCount(text) + 2); // 2 = EOL which is fixed to <CR><LF> for this test.
-			expectedTotalLineCountA++;
-			Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);
+				terminalA.SendText(textAB);// Initial A => B
+				expectedTotalByteCountA += byteCountAB;
+				expectedTotalLineCountA++;
+				Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);
 
-			text = "B => A"; // Response B => A
-			terminalB.SendText(text);
-			expectedTotalByteCountB += (encoding.GetByteCount(text) + 2); // 2 = EOL which is fixed to <CR><LF> for this test.
-			expectedTotalLineCountB++;
-			if (isSameTerminal) {
-				expectedTotalByteCountB *= 2;
-				expectedTotalLineCountB *= 2;
-			}
-			Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountB, expectedTotalLineCountB);
+				terminalB.SendText(textBA); // Response B => A
+				expectedTotalByteCountB += byteCountBA;
+				expectedTotalLineCountB++;
+				if (isSameTerminal) {
+					expectedTotalByteCountB *= 2;
+					expectedTotalLineCountB *= 2;
+				}
+				Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountB, expectedTotalLineCountB);
+
+				if (disconnectIdentifier == 'A')
+				{
+					// Send repeating B => A then close A:
+					terminalB.SendText(@"B => A\!(LineRepeat)");
+					Thread.Sleep(333); // i.e. several hundred lines.
+					terminalA.StopIO();
+					Utilities.WaitForDisconnection(terminalA);
+					Thread.Sleep(100); // Make sure that B has finished processing too.
+					                 //// Note that WaitForDisconnection() would not work for connection-less UDP sockets.
+					terminalA.ClearRepositories();
+					terminalB.ClearRepositories();
+					terminalA.ResetIOCountAndRate();
+					terminalB.ResetIOCountAndRate();
+
+					terminalA.StartIO();
+					Utilities.WaitForConnection(terminalA, terminalB);
+				}
+				else
+				{
+					// Send repeating A => B then close B:
+					terminalA.SendText(@"A => B\!(LineRepeat)");
+					Thread.Sleep(333); // i.e. several hundred lines.
+					terminalB.StopIO();
+					Utilities.WaitForDisconnection(terminalB);
+					Thread.Sleep(100); // Make sure that A has finished processing too.
+					                 //// Note that WaitForDisconnection() would not work for connection-less UDP sockets.
+					terminalB.ClearRepositories();
+					terminalA.ClearRepositories();
+					terminalB.ResetIOCountAndRate();
+					terminalA.ResetIOCountAndRate();
+
+					terminalB.StartIO();
+					Utilities.WaitForConnection(terminalB, terminalA);
+				}
+
+				expectedTotalByteCountA = 0;
+				expectedTotalLineCountA = 0;
+				expectedTotalByteCountB = 0;
+				expectedTotalLineCountB = 0;
+
+				terminalA.SendText(textAB); // Subsequent A => B
+				expectedTotalByteCountA += byteCountAB;
+				expectedTotalLineCountA++;
+				Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);
+
+				terminalB.SendText(textBA); // Response B => A
+				expectedTotalByteCountB += byteCountBA;
+				expectedTotalLineCountB++;
+				if (isSameTerminal) {
+					expectedTotalByteCountB *= 2;
+					expectedTotalLineCountB *= 2;
+				}
+				Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountB, expectedTotalLineCountB);
+			} // using (parser)
 		}
 
 		#endregion
