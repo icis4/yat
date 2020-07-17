@@ -99,7 +99,6 @@ namespace YAT.Model.Test.Transmission
 
 		private static readonly Utilities.TestSet ControlChar1;
 		private static readonly Utilities.TestSet ControlChar2;
-		private static readonly Utilities.TestSet ControlChar3;
 
 		private static readonly Utilities.TestSet Clear1;
 		private static readonly Utilities.TestSet Clear2;
@@ -174,7 +173,6 @@ namespace YAT.Model.Test.Transmission
 
 				yield return (new TestCaseData(ControlChar1, 1).SetName("_ControlChar1"));
 				yield return (new TestCaseData(ControlChar2, 1).SetName("_ControlChar2"));
-				yield return (new TestCaseData(ControlChar3, 1).SetName("_ControlChar3"));
 
 				yield return (new TestCaseData(Clear1,       1).SetName("_Clear1"));
 				yield return (new TestCaseData(Clear2,       1).SetName("_Clear2"));
