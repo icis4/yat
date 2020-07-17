@@ -26,6 +26,7 @@
 // Using
 //==================================================================================================
 
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
@@ -218,7 +219,9 @@ namespace YAT.Model.Test
 		/// <summary></summary>
 		[Test]
 		public virtual void TestEmptyTerminalFilePathPrepare()
-		{
+		{                   // Format following NUnit's "***** YAT.Model.Test.StartTest.<Test>"
+			Trace.Write(" > ** INFO: This test will throw several XML related exception because empty files are being used.");
+
 			using (var m = new Main(EmptyTerminalFilePath))
 			{
 				PrepareMainAndVerifyResult(m, MainResult.CommandLineError);
@@ -236,6 +239,8 @@ namespace YAT.Model.Test
 				Assert.That(m.StartArgs.TerminalSettingsHandler, Is.Null);
 				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);
 			}
+
+			Trace.Write(" > ** INFO: End of test.");
 		}
 
 		#endregion
@@ -248,7 +253,9 @@ namespace YAT.Model.Test
 		/// <summary></summary>
 		[Test]
 		public virtual void TestEmptyWorkspaceFilePathPrepare()
-		{
+		{                   // Format following NUnit's "***** YAT.Model.Test.StartTest.<Test>"
+			Trace.Write(" > ** INFO: This test will throw several XML related exception because empty files are being used.");
+
 			using (var m = new Main(EmptyWorkspaceFilePath))
 			{
 				PrepareMainAndVerifyResult(m, MainResult.CommandLineError);
@@ -266,6 +273,8 @@ namespace YAT.Model.Test
 				Assert.That(m.StartArgs.TerminalSettingsHandler, Is.Null);
 				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);
 			}
+
+			Trace.Write(" > ** INFO: End of test.");
 		}
 
 		#endregion
