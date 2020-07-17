@@ -368,8 +368,11 @@ namespace YAT.Model.Test.Transmission
 		{
 			var settingsA = settingsDescriptorA.Value1(settingsDescriptorA.Value2);
 
-			if (settingsA.IO.IOTypeIsUdpSocket) // Revert to default EOL which is mandatory for this test case.
+			if (settingsA.IO.IOTypeIsUdpSocket) // Revert to default behavior which is mandatory for this test case.
 			{
+				settingsA.TextTerminal.TxDisplay.ChunkLineBreakEnabled = false;
+				settingsA.TextTerminal.RxDisplay.ChunkLineBreakEnabled = false;
+
 				settingsA.TextTerminal.TxEol = TextTerminalSettings.EolDefault;
 				settingsA.TextTerminal.RxEol = TextTerminalSettings.EolDefault;
 			}
@@ -393,8 +396,11 @@ namespace YAT.Model.Test.Transmission
 				{
 					var settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
 
-					if (settingsB.IO.IOTypeIsUdpSocket) // Revert to default EOL which is mandatory for this test case.
+					if (settingsB.IO.IOTypeIsUdpSocket) // Revert to default behavior which is mandatory for this test case.
 					{
+						settingsB.TextTerminal.TxDisplay.ChunkLineBreakEnabled = false;
+						settingsB.TextTerminal.RxDisplay.ChunkLineBreakEnabled = false;
+
 						settingsB.TextTerminal.TxEol = TextTerminalSettings.EolDefault;
 						settingsB.TextTerminal.RxEol = TextTerminalSettings.EolDefault;
 					}
