@@ -711,7 +711,7 @@ namespace MKY.Net
 				result = new IPFilterEx(IPFilter.IPv4Any);
 				return (true);
 			}
-			else if (StringEx.StartsWithOrdinalIgnoreCase(s, (IPv4Localhost_string)) // Explicit IPv4, i.e. adress is appended in parenthesis.
+			else if (StringEx.StartsWithOrdinalIgnoreCase(s, IPv4Localhost_string)) // Explicit IPv4, i.e. adress is appended in parenthesis.
 			{
 				result = new IPFilterEx(IPFilter.IPv4Localhost);
 				return (true);
