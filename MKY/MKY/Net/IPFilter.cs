@@ -706,22 +706,22 @@ namespace MKY.Net
 				result = new IPFilterEx(IPFilter.Localhost);
 				return (true);
 			}
-			else if (s.Contains(IPv4Any_string))
+			else if (StringEx.StartsWithOrdinalIgnoreCase(s, IPv4Any_string)) // Explicit IPv4, i.e. adress is appended in parenthesis.
 			{
 				result = new IPFilterEx(IPFilter.IPv4Any);
 				return (true);
 			}
-			else if (s.Contains(IPv4Localhost_string))
+			else if (StringEx.StartsWithOrdinalIgnoreCase(s, (IPv4Localhost_string)) // Explicit IPv4, i.e. adress is appended in parenthesis.
 			{
 				result = new IPFilterEx(IPFilter.IPv4Localhost);
 				return (true);
 			}
-			else if (s.Contains(IPv6Any_string))
+			else if (StringEx.StartsWithOrdinalIgnoreCase(s, IPv6Any_string)) // Explicit IPv6, i.e. adress is appended in parenthesis.
 			{
 				result = new IPFilterEx(IPFilter.IPv6Any);
 				return (true);
 			}
-			else if (s.Contains(IPv6Localhost_string))
+			else if (StringEx.StartsWithOrdinalIgnoreCase(s, IPv6Localhost_string)) // Explicit IPv6, i.e. adress is appended in parenthesis.
 			{
 				result = new IPFilterEx(IPFilter.IPv6Localhost);
 				return (true);
