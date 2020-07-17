@@ -205,6 +205,7 @@ namespace YAT.Domain.Test
 			return (settings);
 		}
 
+		/// <remarks>Explicitly using "Loopback", i.e. 'Configuration.IPv4LoopbackIsAvailable'.</remarks>
 		internal static TerminalSettings GetTcpAutoSocketOnIPv4LoopbackTextSettings()
 		{
 			return (GetTcpAutoSocketTextSettings((IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
