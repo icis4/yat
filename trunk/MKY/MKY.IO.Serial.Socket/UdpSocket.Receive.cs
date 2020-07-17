@@ -91,7 +91,8 @@ namespace MKY.IO.Serial.Socket
 			// Ensure that async receive is discarded after close/dispose:
 			if (IsUndisposed && (asyncState.Socket != null) && (GetStateSynchronized() == SocketState.Opened)) // Check disposal state first!
 			{
-				var remoteEndPoint = new System.Net.IPEndPoint(System.Net.IPAddress.None, System.Net.IPEndPoint.MinPort);
+				var addressNone = IPAddressEx.GetNoneOfFamily(LocalInterface);
+				var remoteEndPoint = new System.Net.IPEndPoint(addressNone, System.Net.IPEndPoint.MinPort);
 				byte[] data;                // EndReceive() will populate the object with address and port of the sender.
 				bool discard = false;
 				try
@@ -147,7 +148,7 @@ namespace MKY.IO.Serial.Socket
 
 					// Reset state for further processing:
 					data = null;
-					remoteEndPoint.Address = System.Net.IPAddress.None;
+					remoteEndPoint.Address = addressNone;
 					remoteEndPoint.Port    = System.Net.IPEndPoint.MinPort;
 					discard = true;
 				}
