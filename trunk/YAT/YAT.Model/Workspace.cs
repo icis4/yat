@@ -1430,6 +1430,20 @@ namespace YAT.Model
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(GetType(), ex, "Failed to create/open new terminal!");
+
+				var errorMessage = ErrorHelper.ComposeMessage("Unable to create terminal!", ex);
+
+				OnCursorReset();
+				OnFixedStatusTextRequest("Error creating terminal!");
+				OnMessageInputRequest
+				(
+					errorMessage,
+					"Terminal Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Stop
+				);
+				OnTimedStatusTextRequest("Terminal not creating!");
+
 				return (false);
 			}
 
