@@ -224,7 +224,11 @@ namespace MKY.IO.Serial.Socket
 		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		public TcpServer(int instanceId, IPNetworkInterfaceEx localInterface, int localPort)
 		{
+			// Verify by-reference arguments:
+
 			if (localInterface == null) throw (new ArgumentNullException("localInterface"));
+
+			// All arguments are defined!
 
 			this.instanceId     = instanceId;
 

@@ -22,8 +22,10 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using System.Net.Sockets;
 
 namespace MKY.Net
 {
@@ -33,6 +35,51 @@ namespace MKY.Net
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class IPAddressEx
 	{
+		/// <summary>
+		/// Returns <see cref="IPAddress.Any"/> if <paramref name="address"/> is <see cref="AddressFamily.InterNetwork"/>.
+		/// Returns <see cref="IPAddress.IPv6Any"/> if <paramref name="address"/> is <see cref="AddressFamily.InterNetworkV6"/>.
+		/// </summary>
+		public static IPAddress GetAnyOfFamily(IPAddress address)
+		{
+			switch (address.AddressFamily)
+			{
+				case AddressFamily.InterNetwork:   return (IPAddress.Any);
+				case AddressFamily.InterNetworkV6: return (IPAddress.IPv6Any);
+
+				default: throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "This method requires 'AddressFamily.InterNetwork' or 'AddressFamily.InterNetworkV6'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary>
+		/// Returns <see cref="IPAddress.None"/> if <paramref name="address"/> is <see cref="AddressFamily.InterNetwork"/>.
+		/// Returns <see cref="IPAddress.IPv6None"/> if <paramref name="address"/> is <see cref="AddressFamily.InterNetworkV6"/>.
+		/// </summary>
+		public static IPAddress GetNoneOfFamily(IPAddress address)
+		{
+			switch (address.AddressFamily)
+			{
+				case AddressFamily.InterNetwork:   return (IPAddress.None);
+				case AddressFamily.InterNetworkV6: return (IPAddress.IPv6None);
+
+				default: throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "This method requires 'AddressFamily.InterNetwork' or 'AddressFamily.InterNetworkV6'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary>
+		/// Returns <see cref="IPAddress.Loopback"/> if <paramref name="address"/> is <see cref="AddressFamily.InterNetwork"/>.
+		/// Returns <see cref="IPAddress.IPv6Loopback"/> if <paramref name="address"/> is <see cref="AddressFamily.InterNetworkV6"/>.
+		/// </summary>
+		public static IPAddress GetLoopbackOfFamily(IPAddress address)
+		{
+			switch (address.AddressFamily)
+			{
+				case AddressFamily.InterNetwork:   return (IPAddress.Loopback);
+				case AddressFamily.InterNetworkV6: return (IPAddress.IPv6Loopback);
+
+				default: throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "This method requires 'AddressFamily.InterNetwork' or 'AddressFamily.InterNetworkV6'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
 		/// <summary>
 		/// Determines whether the specified <see cref="IPAddress"/> instances are considered equal.
 		/// </summary>
