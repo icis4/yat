@@ -962,31 +962,37 @@ namespace YAT.Model
 						if (!MKY.IO.Usb.DeviceInfo.IsValidProductId(productId))
 							return (false);
 
-						int usagePage;
-						int usageId;
+						// The usage is optional:
+						int usagePage = MKY.IO.Usb.HidDeviceInfo.AnyUsagePage;
+						if (this.commandLineArgs.OptionIsGiven("UsagePage"))
+						{
+							if (!int.TryParse(this.commandLineArgs.UsagePage, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out usagePage))
+								return (false);
 
-						if (!int.TryParse(this.commandLineArgs.UsagePage, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out usagePage))
-							return (false);
+							if (!MKY.IO.Usb.HidDeviceInfo.IsValidUsagePageOrAny(usagePage))
+								return (false);
+						}
 
-						if (!MKY.IO.Usb.HidDeviceInfo.IsValidUsagePageOrAny(usagePage))
-							return (false);
+						int usageId = MKY.IO.Usb.HidDeviceInfo.AnyUsageId;
+						if (this.commandLineArgs.OptionIsGiven("UsageId"))
+						{
+							if (!int.TryParse(this.commandLineArgs.UsageId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out usageId))
+								return (false);
 
-						if (!int.TryParse(this.commandLineArgs.UsageId, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out usageId))
-							return (false);
-
-						if (!MKY.IO.Usb.HidDeviceInfo.IsValidUsageIdOrAny(usageId))
-							return (false);
+							if (!MKY.IO.Usb.HidDeviceInfo.IsValidUsageIdOrAny(usageId))
+								return (false);
+						}
 
 						// The SNR is optional:
-						if (!this.commandLineArgs.OptionIsGiven("SerialString"))
-						{
-							terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.HidDeviceInfo(vendorId, productId, usagePage, usageId);
-							terminalSettings.IO.UsbSerialHidDevice.MatchSerial = false; // Command line option shall override 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
-						}
-						else
+						if (this.commandLineArgs.OptionIsGiven("SerialString"))
 						{
 							terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.HidDeviceInfo(vendorId, productId, this.commandLineArgs.SerialString, usagePage, usageId);
 							terminalSettings.IO.UsbSerialHidDevice.MatchSerial = true; // Command line option shall override 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
+						}
+						else
+						{
+							terminalSettings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.HidDeviceInfo(vendorId, productId, usagePage, usageId);
+							terminalSettings.IO.UsbSerialHidDevice.MatchSerial = false; // Command line option shall override 'ApplicationSettings.LocalUserSettings.General.MatchUsbSerial'.
 						}
 					}
 					else
