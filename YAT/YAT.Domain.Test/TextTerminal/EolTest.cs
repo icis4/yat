@@ -239,6 +239,10 @@ namespace YAT.Domain.Test.TextTerminal
 						expectedTotalLineCountB++;
 						WaitForTransmissionEolAware(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
+						// Wait to ensure that no operation is ongoing anymore and verify again:
+						Utilities.WaitForReverification();
+						WaitForTransmissionEolAware(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
+
 						// Refresh and verify again:
 						terminalA.RefreshRepositories();
 						terminalB.RefreshRepositories();
@@ -328,6 +332,10 @@ namespace YAT.Domain.Test.TextTerminal
 
 					terminalA.SendTextLine("AAA"); // Still line #3 A => B, must not result in additional line break.
 					Thread.Sleep(WaitForOperation);
+					VerifyLineCount(terminalA, terminalB, 3);
+
+					// Wait to ensure that no operation is ongoing anymore and verify again:
+					Utilities.WaitForReverification();
 					VerifyLineCount(terminalA, terminalB, 3);
 
 					// Refresh and verify again:

@@ -342,16 +342,12 @@ namespace YAT.Model.Test.Transmission
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "Too many values to verify.")]
 		private static void TransmitAndVerify(Terminal terminalA, Terminal terminalB, Utilities.TestSet testSet, int transmissionCount)
 		{
+			int cycleAB;
+			int cycleABBA;
+
 			for (int cycle = 1; cycle <= transmissionCount; cycle++)
 			{
-				var cycleAB   = cycle;
-				var cycleABBA = cycle;
-
-				if (terminalA == terminalB)        // Loopback self:
-				{                                  // Cycle 1, 2, 3,... must result in:
-					cycleAB   = ((cycle * 2) - 1); //       1, 3, 5,...
-					cycleABBA =  (cycle * 2);      //       2, 4, 6,...
-				}
+				ToCycles(terminalA, terminalB, cycle, out cycleAB, out cycleABBA);
 
 				// Send 'Ping' test command A => B:
 				terminalA.SendText(testSet.Command);
@@ -370,6 +366,33 @@ namespace YAT.Model.Test.Transmission
 				Utilities.VerifyLines(terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 				                      terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
 				                      testSet, cycleABBA);
+			}
+
+			// Wait to ensure that no operation is ongoing anymore:
+			Utilities.WaitForReverification();
+
+			// Verify again:
+			ToCycles(terminalA, terminalB, transmissionCount, out cycleAB, out cycleABBA);
+			Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
+			                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
+			                      testSet, cycleABBA); // ABBA rather than AB as both ways already done.
+
+			Utilities.VerifyLines(terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
+			                      terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
+			                      testSet, cycleABBA);
+		}
+
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		private static void ToCycles(Terminal terminalA, Terminal terminalB, int cycle, out int cycleAB, out int cycleABBA)
+		{
+			cycleAB   = cycle;
+			cycleABBA = cycle;
+
+			if (terminalA == terminalB)        // Loopback self:
+			{                                  // Cycle 1, 2, 3,... must result in:
+				cycleAB   = ((cycle * 2) - 1); //       1, 3, 5,...
+				cycleABBA =  (cycle * 2);      //       2, 4, 6,...
 			}
 		}
 

@@ -1598,6 +1598,15 @@ namespace YAT.Model.Test
 			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, timeout);
 		}
 
+		/// <remarks>
+		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
+		internal static void WaitForReverification()
+		{
+			Thread.Sleep(2 * WaitTimeoutForLineTransmission);
+		}
+
 		#endregion
 
 		#region Verifications

@@ -582,6 +582,15 @@ namespace YAT.Domain.Test
 			Trace.WriteLine("...done, transmitted and verified");
 		}
 
+		/// <remarks>
+		/// There are similar utility methods in 'Model.Test.Utilities'.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
+		internal static void WaitForReverification()
+		{
+			Thread.Sleep(2 * WaitTimeoutForLineTransmission);
+		}
+
 		#endregion
 
 		#region Verify

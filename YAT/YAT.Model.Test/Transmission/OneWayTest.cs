@@ -461,6 +461,18 @@ namespace YAT.Model.Test.Transmission
 					                      testSet, cycle);
 				}
 			}
+
+			// Wait to ensure that no operation is ongoing anymore and verify again:
+			if (testSet.ClearedIsExpectedInTheEnd && (terminalA == terminalB)) { // Clear* on loopback self:
+			////Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
+			////                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
+			////                      testSet, cycle)  doesn't work because clear will also be applied to Rx at an arbitrary moment.
+			}
+			else {
+				Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
+				                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
+				                      testSet, transmissionCount);
+			}
 		}
 
 		#endregion

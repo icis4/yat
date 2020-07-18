@@ -99,6 +99,10 @@ namespace YAT.Domain.Test.TextTerminal
 					expectedTotalLineCount++;
 					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
+					// Wait to ensure that no operation is ongoing anymore and verify again:
+					Utilities.WaitForReverification();
+					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+
 					// Refresh and verify again:
 					terminalTx.RefreshRepositories();
 					terminalRx.RefreshRepositories();

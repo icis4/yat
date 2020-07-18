@@ -107,6 +107,10 @@ namespace YAT.Domain.Test.Terminal
 						expectedTotalLineCountBA++;
 						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
+						// Wait to ensure that no operation is ongoing anymore and verify again:
+						Utilities.WaitForReverification();
+						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+
 						// Refresh and verify again:
 						terminalA.RefreshRepositories();
 						terminalB.RefreshRepositories();
@@ -143,6 +147,10 @@ namespace YAT.Domain.Test.Terminal
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountBA += (textByteCount + eolByteCount);
 						expectedTotalLineCountBA++;
+						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+
+						// Wait to ensure that no operation is ongoing anymore and verify again:
+						Utilities.WaitForReverification();
 						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						// Refresh and verify again:
@@ -188,6 +196,10 @@ namespace YAT.Domain.Test.Terminal
 						expectedTotalLineCountBA++;
 						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
+						// Wait to ensure that no operation is ongoing anymore and verify again:
+						Utilities.WaitForReverification();
+						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+
 						// Refresh and verify again:
 						terminalA.RefreshRepositories();
 						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
@@ -229,6 +241,10 @@ namespace YAT.Domain.Test.Terminal
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountBA += (textByteCount + eolByteCount);
 						expectedTotalLineCountBA++;
+						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+
+						// Wait to ensure that no operation is ongoing anymore and verify again:
+						Utilities.WaitForReverification();
 						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						// Refresh and verify again:
@@ -495,6 +511,13 @@ namespace YAT.Domain.Test.Terminal
 						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
 						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+
+						// Wait to ensure that no operation is ongoing anymore and verify again:
+						Utilities.WaitForReverification();
+						Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA + 1); // See above.
+						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						// Refresh and verify again:
 						terminalA.RefreshRepositories();
