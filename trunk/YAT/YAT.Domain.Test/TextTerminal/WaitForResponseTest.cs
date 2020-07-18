@@ -183,6 +183,11 @@ namespace YAT.Domain.Test.TextTerminal
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Assert.That(terminalA.IsSendingForSomeTime, Is.False); // No need to WaitForIsNoLongerSending() as already waited for completion above.
 
+					// Wait to ensure that no operation is ongoing anymore and verify again:
+					Utilities.WaitForReverification();
+					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+
 					// Refresh and verify again:
 					terminalA.RefreshRepositories();
 					terminalB.RefreshRepositories();

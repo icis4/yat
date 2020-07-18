@@ -427,6 +427,9 @@ namespace YAT.Model.Test.Transmission
 				                                             timeout: (expectedLineCount * Utilities.WaitTimeoutForLineTransmission));
 			}
 
+			// Wait to ensure that no operation is ongoing anymore:
+			Utilities.WaitForReverification();
+
 			// Verify transmission:
 			Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 			                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
