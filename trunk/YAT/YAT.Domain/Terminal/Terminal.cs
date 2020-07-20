@@ -128,7 +128,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// The timeout for clearing/refreshing/emptying, related to <see cref="ClearRefreshEmptySyncObj"/>.
 		/// </summary>
-		protected const int ClearRefreshEmptyTimeout = 400;
+		protected const int ClearRefreshEmptyTimeout = 1000;
 
 		#endregion
 
