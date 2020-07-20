@@ -57,7 +57,7 @@ namespace YAT.View.Controls
 		private const int SelectedPageIdDefault = 1;
 
 		private const Domain.Parser.Mode ParseModeForTextDefault = Domain.Parser.Mode.Default;
-		private const bool TerminalIsReadyToSendDefault = false;
+		private const bool TerminalIsReadyToSendForSomeTimeDefault = false;
 
 		private const bool HideUndefinedCommandsDefault = Model.Settings.PredefinedCommandSettings.HideUndefinedCommandsDefault;
 
@@ -79,7 +79,7 @@ namespace YAT.View.Controls
 
 		private Domain.Parser.Mode parseModeForText = ParseModeForTextDefault;
 		private string rootDirectoryForFile; // = null;
-		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
+		private bool terminalIsReadyToSendForSomeTime = TerminalIsReadyToSendForSomeTimeDefault;
 
 		private bool hideUndefinedCommands = HideUndefinedCommandsDefault;
 
@@ -249,11 +249,11 @@ namespace YAT.View.Controls
 		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual bool TerminalIsReadyToSend
+		public virtual bool TerminalIsReadyToSendForSomeTime
 		{
 			set
 			{
-				this.terminalIsReadyToSend = value;
+				this.terminalIsReadyToSendForSomeTime = value;
 				SetCommandStateControls();
 			}
 		}
@@ -600,10 +600,10 @@ namespace YAT.View.Controls
 						set.SuspendCommandStateUpdate();
 						try
 						{
-							set.ParseModeForText      = this.parseModeForText;
-							set.RootDirectoryForFile  = this.rootDirectoryForFile;
-							set.TerminalIsReadyToSend = this.terminalIsReadyToSend;
-							set.HideUndefinedCommands = this.hideUndefinedCommands;
+							set.ParseModeForText                 = this.parseModeForText;
+							set.RootDirectoryForFile             = this.rootDirectoryForFile;
+							set.TerminalIsReadyToSendForSomeTime = this.terminalIsReadyToSendForSomeTime;
+							set.HideUndefinedCommands            = this.hideUndefinedCommands;
 						}
 						finally
 						{
@@ -638,7 +638,7 @@ namespace YAT.View.Controls
 					button_PagePrevious.Enabled = (this.selectedPageId > 1);
 					button_PageNext.Enabled     = (this.selectedPageId < pageCount);
 
-					label_Page.Enabled = this.terminalIsReadyToSend;
+					label_Page.Enabled = this.terminalIsReadyToSendForSomeTime;
 					label_Page.Text = "Page " + this.selectedPageId + "/" + pageCount;
 
 					comboBox_Pages.Enabled = (pageCount > 1); // No need to navigate a single page.

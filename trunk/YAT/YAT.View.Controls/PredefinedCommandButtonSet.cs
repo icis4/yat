@@ -57,7 +57,7 @@ namespace YAT.View.Controls
 		private const int SubpageIdDefault = PredefinedCommandPage.FirstSubpageId;
 
 		private const Domain.Parser.Mode ParseModeForTextDefault = Domain.Parser.Mode.Default;
-		private const bool TerminalIsReadyToSendDefault = false;
+		private const bool TerminalIsReadyToSendForSomeTimeDefault = false;
 
 		private const bool HideUndefinedCommandsDefault = Model.Settings.PredefinedCommandSettings.HideUndefinedCommandsDefault;
 
@@ -83,7 +83,7 @@ namespace YAT.View.Controls
 
 		private Domain.Parser.Mode parseModeForText = ParseModeForTextDefault;
 		private string rootDirectoryForFile; // = null;
-		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
+		private bool terminalIsReadyToSendForSomeTime = TerminalIsReadyToSendForSomeTimeDefault;
 
 		private bool hideUndefinedCommands = HideUndefinedCommandsDefault;
 
@@ -187,11 +187,11 @@ namespace YAT.View.Controls
 		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual bool TerminalIsReadyToSend
+		public virtual bool TerminalIsReadyToSendForSomeTime
 		{
 			set
 			{
-				this.terminalIsReadyToSend = value;
+				this.terminalIsReadyToSendForSomeTime = value;
 				SetCommandStateControls();
 			}
 		}
@@ -549,7 +549,7 @@ namespace YAT.View.Controls
 								this.buttons_commands[i].Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
 						}
 
-						bool isValid = (this.terminalIsReadyToSend && this.commands[commandIndex].IsValid(this.parseModeForText, this.rootDirectoryForFile));
+						bool isValid = (this.terminalIsReadyToSendForSomeTime && this.commands[commandIndex].IsValid(this.parseModeForText, this.rootDirectoryForFile));
 						this.buttons_commands[i].Enabled = isValid;
 						this.buttons_commands[i].Visible = true;
 					}

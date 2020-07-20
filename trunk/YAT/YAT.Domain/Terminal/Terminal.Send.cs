@@ -212,7 +212,7 @@ namespace YAT.Domain
 				if (TerminalSettings.Send.AllowConcurrency)
 					return (IsTransmissive);
 				else
-					return (!IsSending);
+					return (IsTransmissive && !IsSending);
 
 				// Until YAT 2.1.0, this property was implemented as 'IsReadyToSend_Internal'
 				// as (IsTransmissive && !IsSending) and it also signalled
@@ -221,6 +221,20 @@ namespace YAT.Domain
 				// With YAT 2.1.1 this became possible, but keeping this property because its
 				// meaning still makes sense, e.g. send related controls can adapt to this send
 				// specific property instead of using the more general 'IsTransmissive'.
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool IsReadyToSendForSomeTime
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				if (TerminalSettings.Send.AllowConcurrency)
+					return (IsTransmissive);
+				else
+					return (IsTransmissive && !IsSendingForSomeTime);
 			}
 		}
 
