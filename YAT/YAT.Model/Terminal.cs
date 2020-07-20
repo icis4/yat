@@ -752,6 +752,20 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public virtual bool IsReadyToSendForSomeTime
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				if (this.terminal != null)
+					return (this.terminal.IsReadyToSendForSomeTime);
+				else
+					return (false);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool IsSending
 		{
 			get

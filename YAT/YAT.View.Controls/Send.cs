@@ -286,12 +286,12 @@ namespace YAT.View.Controls
 		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual bool TerminalIsReadyToSend
+		public virtual bool TerminalIsReadyToSendForSomeTime
 		{
 			set
 			{
-				sendText.TerminalIsReadyToSend = value;
-				sendFile.TerminalIsReadyToSend = value;
+				sendText.TerminalIsReadyToSendForSomeTime = value;
+				sendFile.TerminalIsReadyToSendForSomeTime = value;
 			}
 		}
 

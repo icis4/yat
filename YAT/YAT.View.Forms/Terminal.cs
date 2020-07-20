@@ -752,9 +752,9 @@ namespace YAT.View.Forms
 				// Set the menu item properties:
 
 				toolStripMenuItem_TerminalMenu_Send_Text.Text              =  sendTextText;
-				toolStripMenuItem_TerminalMenu_Send_Text.Enabled           = (sendTextEnabled && this.terminal.IsReadyToSend);
-				toolStripMenuItem_TerminalMenu_Send_TextWithoutEol.Enabled = (sendTextEnabled && this.terminal.IsReadyToSend && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.Text.SendImmediately);
-				toolStripMenuItem_TerminalMenu_Send_File.Enabled           = (sendFileEnabled && this.terminal.IsReadyToSend);
+				toolStripMenuItem_TerminalMenu_Send_Text.Enabled           = (sendTextEnabled && this.terminal.IsReadyToSendForSomeTime); // Using 'ForSomeTime' reduces flickering.
+				toolStripMenuItem_TerminalMenu_Send_TextWithoutEol.Enabled = (sendTextEnabled && this.terminal.IsReadyToSendForSomeTime && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.Text.SendImmediately);
+				toolStripMenuItem_TerminalMenu_Send_File.Enabled           = (sendFileEnabled && this.terminal.IsReadyToSendForSomeTime);
 
 				toolStripMenuItem_TerminalMenu_Send_UseExplicitDefaultRadix.Checked = this.settingsRoot.Send.UseExplicitDefaultRadix;
 				toolStripMenuItem_TerminalMenu_Send_AllowConcurrency.Checked        = this.settingsRoot.Send.AllowConcurrency;
@@ -3548,8 +3548,8 @@ namespace YAT.View.Forms
 
 							this.menuItems_Commands[i].Text = MenuEx.PrependIndex(i + 1, commands[i].Description);
 						}
-
-						bool isValid = (this.terminal.IsReadyToSend && commands[i].IsValid(this.settingsRoot.Send.Text.ToParseMode(), this.terminal.SettingsFilePath));
+						                               //// Using 'ForSomeTime' reduces flickering.
+						bool isValid = (this.terminal.IsReadyToSendForSomeTime && commands[i].IsValid(this.settingsRoot.Send.Text.ToParseMode(), this.terminal.SettingsFilePath));
 						this.menuItems_Commands[i].Enabled = isValid;
 					}
 					else
@@ -3752,9 +3752,9 @@ namespace YAT.View.Forms
 				toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = this.settingsRoot.Layout.SendFilePanelIsVisible;
 
 				toolStripMenuItem_SendContextMenu_SendText.Text              =  sendTextText;
-				toolStripMenuItem_SendContextMenu_SendText.Enabled           = (sendTextEnabled && this.terminal.IsReadyToSend);
-				toolStripMenuItem_SendContextMenu_SendTextWithoutEol.Enabled = (sendTextEnabled && this.terminal.IsReadyToSend && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.Text.SendImmediately);
-				toolStripMenuItem_SendContextMenu_SendFile.Enabled           = (sendFileEnabled && this.terminal.IsReadyToSend);
+				toolStripMenuItem_SendContextMenu_SendText.Enabled           = (sendTextEnabled && this.terminal.IsReadyToSendForSomeTime); // Using 'ForSomeTime' reduces flickering.
+				toolStripMenuItem_SendContextMenu_SendTextWithoutEol.Enabled = (sendTextEnabled && this.terminal.IsReadyToSendForSomeTime && !this.settingsRoot.SendText.Command.IsMultiLineText && !this.settingsRoot.Send.Text.SendImmediately);
+				toolStripMenuItem_SendContextMenu_SendFile.Enabled           = (sendFileEnabled && this.terminal.IsReadyToSendForSomeTime);
 
 				toolStripMenuItem_SendContextMenu_CopyTextToClipboard    .Enabled = sendTextEnabled;
 				toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard.Enabled = sendFileEnabled;
@@ -5787,9 +5787,9 @@ namespace YAT.View.Forms
 			predefined.SuspendCommandStateUpdate();
 			try
 			{
-				predefined.ParseModeForText      = this.settingsRoot.Send.Text.ToParseMode();
-				predefined.RootDirectoryForFile  = Path.GetDirectoryName(this.terminal.SettingsFilePath);
-				predefined.TerminalIsReadyToSend = this.terminal.IsReadyToSend;
+				predefined.ParseModeForText                 = this.settingsRoot.Send.Text.ToParseMode();
+				predefined.RootDirectoryForFile             = Path.GetDirectoryName(this.terminal.SettingsFilePath);
+				predefined.TerminalIsReadyToSendForSomeTime = this.terminal.IsReadyToSendForSomeTime; // Using 'ForSomeTime' reduces flickering.
 			}
 			finally
 			{
@@ -5836,16 +5836,16 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				send.TextCommand             = this.settingsRoot.SendText.Command;
-				send.RecentTextCommands      = this.settingsRoot.SendText.RecentCommands;
-				send.FileCommand             = this.settingsRoot.SendFile.Command;
-				send.RecentFileCommands      = this.settingsRoot.SendFile.RecentCommands;
-				send.TerminalType            = this.settingsRoot.TerminalType;
-				send.UseExplicitDefaultRadix = this.settingsRoot.Send.UseExplicitDefaultRadix;
-				send.ParseModeForText        = this.settingsRoot.Send.Text.ToParseMode();
-				send.SendTextImmediately     = this.settingsRoot.Send.Text.SendImmediately;
-				send.RootDirectoryForFile    = Path.GetDirectoryName(this.terminal.SettingsFilePath);
-				send.TerminalIsReadyToSend   = this.terminal.IsReadyToSend;
+				send.TextCommand                      = this.settingsRoot.SendText.Command;
+				send.RecentTextCommands               = this.settingsRoot.SendText.RecentCommands;
+				send.FileCommand                      = this.settingsRoot.SendFile.Command;
+				send.RecentFileCommands               = this.settingsRoot.SendFile.RecentCommands;
+				send.TerminalType                     = this.settingsRoot.TerminalType;
+				send.UseExplicitDefaultRadix          = this.settingsRoot.Send.UseExplicitDefaultRadix;
+				send.ParseModeForText                 = this.settingsRoot.Send.Text.ToParseMode();
+				send.SendTextImmediately              = this.settingsRoot.Send.Text.SendImmediately;
+				send.RootDirectoryForFile             = Path.GetDirectoryName(this.terminal.SettingsFilePath);
+				send.TerminalIsReadyToSendForSomeTime = this.terminal.IsReadyToSendForSomeTime; // Using 'ForSomeTime' reduces flickering.
 			}
 			finally
 			{
@@ -6647,14 +6647,11 @@ namespace YAT.View.Forms
 		/// <param name="commandId">Command 1..<see cref="PredefinedCommandPage.MaxCommandCapacityPerPage"/>.</param>
 		private void SendPredefined(int commandId)
 		{
-			if (this.terminal.IsReadyToSend)
+			int pageId = predefined.SelectedPageId;
+			if (!this.terminal.SendPredefined(pageId, commandId))
 			{
-				int pageId = predefined.SelectedPageId;
-				if (!this.terminal.SendPredefined(pageId, commandId))
-				{
-					// If command is invalid, show settings dialog.
-					ShowPredefinedCommandSettings(pageId, commandId);
-				}
+				// If command is invalid, show settings dialog.
+				ShowPredefinedCommandSettings(pageId, commandId);
 			}
 		}
 
@@ -6836,12 +6833,12 @@ namespace YAT.View.Forms
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendText))
 			{
 				SetSendControls();
-				SetPredefinedControls(); // Potentially set 'TerminalIsReadyToSend'.
+				SetPredefinedControls(); // Potentially set 'IsReadyToSendForSomeTime'.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendFile))
 			{
 				SetSendControls();
-				SetPredefinedControls(); // Potentially set 'TerminalIsReadyToSend'.
+				SetPredefinedControls(); // Potentially set 'IsReadyToSendForSomeTime'.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Predefined))
 			{

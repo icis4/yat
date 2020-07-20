@@ -81,7 +81,7 @@ namespace YAT.View.Controls
 
 		private const Domain.TerminalType TerminalTypeDefault = Domain.Settings.TerminalSettings.TerminalTypeDefault;
 
-		private const bool TerminalIsReadyToSendDefault = false;
+		private const bool TerminalIsReadyToSendForSomeTimeDefault = false;
 
 		/// <remarks>
 		/// The designer requires that this is a constant.
@@ -105,7 +105,7 @@ namespace YAT.View.Controls
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
 		private bool useExplicitDefaultRadix = Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault;
 
-		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
+		private bool terminalIsReadyToSendForSomeTime = TerminalIsReadyToSendForSomeTimeDefault;
 
 		private int sendSplitterDistance = SendSplitterDistanceDefault;
 
@@ -198,11 +198,11 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual string RootDirectory
 		{
-			get { return (this.rootDirectory); }
 			set
 			{
 				if (this.rootDirectory != value)
@@ -214,11 +214,11 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Domain.TerminalType TerminalType
 		{
-			get { return (this.terminalType); }
 			set
 			{
 				if (this.terminalType != value)
@@ -230,12 +230,11 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Command")]
-		[Description("Whether to use an explicit default radix.")]
-		[DefaultValue(Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault)]
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual bool UseExplicitDefaultRadix
 		{
-			get { return (this.useExplicitDefaultRadix); }
 			set
 			{
 				if (this.useExplicitDefaultRadix != value)
@@ -254,16 +253,16 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual bool TerminalIsReadyToSend
+		public virtual bool TerminalIsReadyToSendForSomeTime
 		{
-			get { return (this.terminalIsReadyToSend); }
 			set
 			{
-				if (this.terminalIsReadyToSend != value)
+				if (this.terminalIsReadyToSendForSomeTime != value)
 				{
-					this.terminalIsReadyToSend = value;
+					this.terminalIsReadyToSendForSomeTime = value;
 					SetSendControls();
 				}
 			}
@@ -608,7 +607,7 @@ namespace YAT.View.Controls
 			try
 			{
 				if (this.command.IsValidFilePath(this.rootDirectory))
-					button_Send.Enabled = this.terminalIsReadyToSend;
+					button_Send.Enabled = this.terminalIsReadyToSendForSomeTime;
 				else
 					button_Send.Enabled = false;
 			}

@@ -32,14 +32,14 @@ namespace YAT.Domain.Utilities
 	/// intensive processing is done. This is required because a client may want to indicate that
 	/// time intensive sending is currently ongoing and no further data shall be sent.
 	/// The event shall be raised if the time lag will significantly be noticeable by the user
-	/// (i.e. >= 400 ms). But the event shall be raised BEFORE the actual time lag. This helper
+	/// (i.e. >= 250 ms). But the event shall be raised BEFORE the actual time lag. This helper
 	/// struct manages the state and the various criteria.
 	/// </summary>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
 	public class ForSomeTimeEventHelper
 	{
 		/// <remarks>In milliseconds.</remarks>
-		public const int Threshold = 400;
+		public const int Threshold = 250;
 
 		private bool eventMustBeRaised;
 		private DateTime initialTimeStamp;

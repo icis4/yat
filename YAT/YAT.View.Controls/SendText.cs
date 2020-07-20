@@ -114,7 +114,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		public const bool SendImmediatelyDefault = false;
 
-		private const bool TerminalIsReadyToSendDefault = false;
+		private const bool TerminalIsReadyToSendForSomeTimeDefault = false;
 
 		/// <remarks>
 		/// The designer requires that this is a constant.
@@ -139,7 +139,7 @@ namespace YAT.View.Controls
 		private Domain.Parser.Mode parseMode = ParseModeDefault;
 
 		private bool sendImmediately = SendImmediatelyDefault;
-		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
+		private bool terminalIsReadyToSendForSomeTime = TerminalIsReadyToSendForSomeTimeDefault;
 
 		private int sendSplitterDistance = SendSplitterDistanceDefault;
 
@@ -250,11 +250,11 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Domain.TerminalType TerminalType
 		{
-			get { return (this.terminalType); }
 			set
 			{
 				if (this.terminalType != value)
@@ -266,12 +266,11 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		[Category("Behavior")]
-		[Description("Whether to use an explicit default radix.")]
-		[DefaultValue(Domain.Settings.SendSettings.UseExplicitDefaultRadixDefault)]
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual bool UseExplicitDefaultRadix
 		{
-			get { return (this.useExplicitDefaultRadix); }
 			set
 			{
 				// Attention:
@@ -294,11 +293,11 @@ namespace YAT.View.Controls
 		}                                                                            // some work and re-testing => future.
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Domain.Parser.Mode ParseMode
 		{
-			get { return (this.parseMode); }
 			set
 			{
 				// Attention:
@@ -319,11 +318,11 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual bool SendImmediately
 		{
-			get { return (this.sendImmediately); }
 			set
 			{
 				if (this.sendImmediately != value)
@@ -335,16 +334,16 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual bool TerminalIsReadyToSend
+		public virtual bool TerminalIsReadyToSendForSomeTime
 		{
-			get { return (this.terminalIsReadyToSend); }
 			set
 			{
-				if (this.terminalIsReadyToSend != value)
+				if (this.terminalIsReadyToSendForSomeTime != value)
 				{
-					this.terminalIsReadyToSend = value;
+					this.terminalIsReadyToSendForSomeTime = value;
 					SetSendControls();
 				}
 			}
@@ -1064,7 +1063,7 @@ namespace YAT.View.Controls
 				if (WithoutEolIsRequestedAndAllowed)
 					text = "Send Text w/o EOL [Ctrl+F3]";
 
-				bool enabled = this.terminalIsReadyToSend;
+				bool enabled = this.terminalIsReadyToSendForSomeTime;
 				if (this.sendImmediately)
 				{
 					if (isTextTerminal)
