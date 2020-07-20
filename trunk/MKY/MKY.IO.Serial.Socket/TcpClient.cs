@@ -953,7 +953,27 @@ namespace MKY.IO.Serial.Socket
 		///    <![CDATA[Server (Device) <= ACK <= Client (YAT)]]>
 		///
 		/// However, YAT is configured to try every 500 ms again, this does not happen.
-		/// This additionally added 'Reestablished' timer checks the connection after 500 ms.
+		/// This additionally added 'Reestablished' timer checks the connection after 500 ms. Now:
+		///
+		/// 1. 500 ms after connection loss, YAT tries to reestablish a connection:
+		///    <![CDATA[Server (Device) <= SYN <= Client (YAT)]]>
+		/// 2. For whatever reason, the device acknowledges but at the same time resets the connection:
+		///    <![CDATA[Server (Device) => RST|ACK => Client (YAT)]]>
+		/// 3. YAT's socket then correctly retransmits the paket:
+		///    <![CDATA[Server (Device) <= SYN <= Client (YAT)]]> @ port e.g. 54659
+		/// 4. Now, after another 500 ms, YAT checks the state and connection is not established yet.
+		///    YAT then closes the already reset socket, i.e. nothing is sent anymore.
+		///    And tries to reestablish a connection again and again:
+		///    <![CDATA[Server (Device) <= SYN <= Client (YAT)]]> @ port e.g. 54660
+		///    <![CDATA[Server (Device) <= SYN <= Client (YAT)]]> @ port e.g. 54661
+		///    <![CDATA[Server (Device) <= SYN <= Client (YAT)]]> @ port e.g. 54662
+		///    ...
+		///    <![CDATA[Server (Device) <= SYN <= Client (YAT)]]> @ port e.g. 54670
+		/// 5. Finally the device responses and YAT confirms:
+		///    <![CDATA[Server (Device) => SYN|ACK => Client (YAT)]]>
+		///    <![CDATA[Server (Device) <= ACK <= Client (YAT)]]>
+		///
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void StartReestablishedTimer()
 		{
