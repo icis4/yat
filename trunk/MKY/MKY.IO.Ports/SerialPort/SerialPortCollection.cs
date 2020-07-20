@@ -146,7 +146,7 @@ namespace MKY.IO.Ports
 			}
 
 			if (retrieveCaptions)
-				RetrieveCaptions(true);
+				RetrieveCaptions();
 		}
 
 		/// <summary>
@@ -211,7 +211,7 @@ namespace MKY.IO.Ports
 
 			lock (staticCaptionsCacheSyncObj)
 			{
-				if ((staticCaptionsCache == null) || (!useCaptionsFromCache))
+				if ((staticCaptionsCache == null) || (forceRetrieveFromSystem) || (!useCaptionsFromCache))
 				{
 					staticCaptionsCache = SerialPortSearcher.GetCaptionsFromSystem();
 
