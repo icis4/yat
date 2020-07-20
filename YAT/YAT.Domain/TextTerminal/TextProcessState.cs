@@ -30,10 +30,9 @@ using System.Diagnostics.CodeAnalysis;
 namespace YAT.Domain
 {
 	/// <remarks>
-	/// Text processing requires unidirectional as well as bidirectional state. This is the
-	/// unidirectional state. Opposed to <see cref="ProcessState"/> which is kept three times
-	/// (Tx/Bidir/Rx), the binary terminal specific state is limited to a line state which is
-	/// instantiated four times (Tx/TxBidir/RxBidir/Rx).
+	/// So far, only unidirectional state must be kept. Opposed to <see cref="ProcessState"/> which
+	/// is kept three times (Tx/Bidir/Rx), the text terminal specific state is limited to a "line"
+	/// state which is instantiated four times (Tx/TxBidir/RxBidir/Rx), "line" meaning "display line".
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Unidir", Justification = "Orthogonality with 'Bidir'.")]
 	public class TextUnidirState
@@ -46,11 +45,11 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiBytes'?")]
 		public List<byte>                        PendingMultiBytesToDecode            { get; private set; }
 
-		/// <summary></summary>
+		/// <remarks>Required to handle lines that only contain an EOL (=> show) or pending EOL (=> hide).</remarks>
 		public int                               ShownCharCount                       { get; private set; }
 
-		/// <remarks>Required to handle empty line that got empty due to backspaces.</remarks>
-		public bool                              HasEverShowedChar                        { get; private set; }
+		/// <remarks>Required to handle empty lines that got empty due to backspaces.</remarks>
+		public bool                              HasEverShownChar                     { get; private set; }
 
 		/// <summary></summary>
 		public Dictionary<string, SequenceQueue> EolOfGivenDevice                     { get; private set; }
@@ -71,7 +70,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual bool IsYetEmpty
 		{
-			get { return ((PendingMultiBytesToDecode.Count == 0) && (ShownCharCount == 0) && (!HasEverShowedChar) && (RetainedUnconfirmedHiddenEolElements.Count == 0)); }
+			get { return ((PendingMultiBytesToDecode.Count == 0) && (ShownCharCount == 0) && (!HasEverShownChar) && (RetainedUnconfirmedHiddenEolElements.Count == 0)); }
 		}
 
 		/// <summary>
@@ -81,7 +80,7 @@ namespace YAT.Domain
 		{
 			PendingMultiBytesToDecode            = new List<byte>(4); // Preset the required capacity to improve memory management; 4 is the maximum value for multi-byte characters.
 			ShownCharCount                       = 0;
-			HasEverShowedChar                    = false;
+			HasEverShownChar                     = false;
 			EolOfGivenDevice                     = new Dictionary<string, SequenceQueue>(); // No preset needed, the default behavior is good enough.
 			RetainedUnconfirmedHiddenEolElements = new List<DisplayElement>(); // No preset needed, the default behavior is good enough.
 		}
@@ -100,7 +99,9 @@ namespace YAT.Domain
 		public virtual void NotifyShownCharCount(int count)
 		{
 			ShownCharCount += count;
-			HasEverShowedChar = true;
+
+			if (count > 0)
+				HasEverShownChar = true;
 		}
 
 		/// <summary>
@@ -108,9 +109,6 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void NotifyLineEnd(string dev)
 		{
-			ShownCharCount = 0;
-			HasEverShowedChar = false;
-
 			var eolOfGivenDeviceIsCompleteMatch = false;
 
 			if (EolOfGivenDevice.ContainsKey(dev))
@@ -130,7 +128,12 @@ namespace YAT.Domain
 			}                                                              // Applies to TCP and UDP server terminals only.
 
 			if (eolOfGivenDeviceIsCompleteMatch) // Otherwise keep unconfirmed hidden elements! They shall be delay-shown in case EOL is indeed unconfirmed!
+			{
 				RetainedUnconfirmedHiddenEolElements.Clear();
+				ShownCharCount = 0; // Needed to hide empty lines that only contain a pending EOL, thus state must be kept across incomplete lines!
+			}
+
+			HasEverShownChar = false;
 		}
 
 		/// <summary></summary>

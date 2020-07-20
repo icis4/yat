@@ -1078,7 +1078,7 @@ namespace YAT.Domain
 			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
 
-			byteCountProcessed = chunk.Content.Count;
+			byteCountProcessed = chunk.Content.Count; // Will be adjusted in case of breaking the chunk.
 			for (int i = 0; i < chunk.Content.Count; i++)
 			{
 				bool isFirstByteOfChunk = (i == 0);
