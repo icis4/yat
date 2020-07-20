@@ -1160,9 +1160,7 @@ namespace YAT.Domain
 
 					if (TerminalSettings.Display.ShowDirection) // Replace is only needed when containing a 'DisplayElement.DirectionInfo'.
 					{
-						Direction dirNew = (Direction)lineState.Direction;
-
-						lineState.Elements.ReplaceDirection(dirNew, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache);
+						lineState.Elements.ReplaceDirection((Direction)lineState.Direction, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache);
 					////elementsToAdd.Clear() is not needed as only replace happens above.
 						FlushReplaceAlreadyBeganLine(repositoryType, lineState);
 					}
