@@ -565,15 +565,6 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void LeaveRequestPost(bool decrementIsSendingForSomeTime)
-		{
-			DecrementIsSendingChanged();
-
-			if (decrementIsSendingForSomeTime)
-				DecrementIsSendingForSomeTimeChanged();
-		}
-
-		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		protected virtual bool TryEnterRequestGate(ForSomeTimeEventHelper forSomeTimeEventHelper, long sequenceNumber)
@@ -621,18 +612,32 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void LeaveRequestGate()
 		{
-			if (IsUndisposed)
+			// Nothing to do (yet).
+		}
+
+		/// <remarks>
+		/// The next permitted sequence number must be incremented even when the request gate could
+		/// not be entered, because the sequence number already got assigned. Without incrementing,
+		/// all subsequent requests would get blocked. This cannot be the idea of the mechanism.
+		/// </remarks>
+		protected virtual void LeaveRequestPost(bool decrementIsSendingForSomeTime)
+		{
+			DecrementIsSendingChanged();
+
+			if (decrementIsSendingForSomeTime)
+				DecrementIsSendingForSomeTimeChanged();
+
+			if (TerminalSettings.Send.AllowConcurrency)
 			{
-				if (TerminalSettings.Send.AllowConcurrency)
-				{
-					// Nothing to do, no need to handle 'nextPermittedSequenceNumber', as changing
-					// the 'AllowConcurrency' setting will lead to TerminalFactory.RecreateTerminal().
-				}
-				else
-				{
-					Interlocked.Increment(ref this.nextPermittedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
+				// Nothing to do, no need to handle 'nextPermittedSequenceNumber', as changing
+				// the 'AllowConcurrency' setting will lead to TerminalFactory.RecreateTerminal().
+			}
+			else
+			{
+				Interlocked.Increment(ref this.nextPermittedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
+
+				if (IsUndisposed)
 					this.nextPermittedSequenceNumberEvent.Set();
-				}
 			}
 		}
 
