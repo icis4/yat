@@ -1377,7 +1377,7 @@ namespace YAT.Model
 					foreach (var t in this.workspace.Terminals)
 					{
 						var portName = t.IOSerialPortName;
-						if (string.IsNullOrEmpty(portName))
+						if (!string.IsNullOrEmpty(portName))
 						{
 							string inUseText; // Attention: Same texts are used in YAT.View.Forms.TerminalSettings.SetControls().
 							if (t.IsOpen)     //            Changes below likely have to be applied there too.
