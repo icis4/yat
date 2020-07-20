@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<Settings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SettingsName>YAT Command Page Definition</SettingsName>
   <SettingsVersion>1.0.2</SettingsVersion>
-  <ProductVersion>2.1.1</ProductVersion>
+  <ProductVersion>2.1.91</ProductVersion>
   <Warning>Modifying structure and/or content may cause undefined behavior!</Warning>
   <Mark>
-    <TimeStamp>2019-11-30T21:57:45.798494+01:00</TimeStamp>
+    <TimeStamp>2020-07-20T15:01:05.6151228+02:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Mark>
   <Page>
@@ -62,6 +62,14 @@
       <Description>A\!(EOL)AB\!(Delay(1000))ABC</Description>
       <DefaultRadix>String</DefaultRadix>
       <CommandLines>A\!(EOL)AB\!(Delay(1000))ABC</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description />
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>A&lt;CR&gt;\!(Delay(1000))B</CommandLines>
       <IsFilePath>false</IsFilePath>
       <FilePath />
     </Commands>
