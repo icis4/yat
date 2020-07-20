@@ -6822,6 +6822,7 @@ namespace YAT.View.Forms
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Send))
 			{
+				SetPredefinedControls(); // Needed for 'Send.Text.ToParseMode()'.
 				SetSendControls();
 			}
 		}
@@ -6835,14 +6836,16 @@ namespace YAT.View.Forms
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendText))
 			{
 				SetSendControls();
+				SetPredefinedControls(); // Potentially set 'TerminalIsReadyToSend'.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendFile))
 			{
 				SetSendControls();
+				SetPredefinedControls(); // Potentially set 'TerminalIsReadyToSend'.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Predefined))
 			{
-				this.isSettingControls.Enter();
+				this.isSettingControls.Enter(); // See remarks in SetPredefinedControls().
 				try
 				{
 					predefined.SelectedPageId = this.settingsRoot.Predefined.SelectedPageId;
@@ -7152,7 +7155,7 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_IsSendingForSomeTimeChanged(object sender, EventArgs<bool> e)
 		{
-			SetIOStatus();
+			SetTerminalControls();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "See event handlers below.")]

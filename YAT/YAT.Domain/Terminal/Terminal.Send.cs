@@ -209,7 +209,10 @@ namespace YAT.Domain
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				return (IsTransmissive);
+				if (TerminalSettings.Send.AllowConcurrency)
+					return (IsTransmissive);
+				else
+					return (!IsSending);
 
 				// Until YAT 2.1.0, this property was implemented as 'IsReadyToSend_Internal'
 				// as (IsTransmissive && !IsSending) and it also signalled
@@ -298,10 +301,9 @@ namespace YAT.Domain
 			DebugSend(string.Format("Sending of {0} byte(s) of raw data has been invoked with sequence number {1}.", data.Length, sequenceNumber));
 
 			EnterRequestPre();
-			bool decrementIsSendingForSomeTime;
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
-			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber, out decrementIsSendingForSomeTime)) // Note that behavior depends on the 'AllowConcurrency' setting.
+			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
@@ -319,7 +321,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost(decrementIsSendingForSomeTime);
+			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised); // This flag can only get set once.
 		}
 
 		/// <summary></summary>
@@ -342,10 +344,9 @@ namespace YAT.Domain
 			DebugSend(string.Format(@"Sending of text ""{0}"" has been invoked (sequence number = {1}).", item.Text, sequenceNumber));
 
 			EnterRequestPre();
-			bool decrementIsSendingForSomeTime;
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
-			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber, out decrementIsSendingForSomeTime)) // Note that behavior depends on the 'AllowConcurrency' setting.
+			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
@@ -363,7 +364,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost(decrementIsSendingForSomeTime);
+			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised); // This flag can only get set once.
 		}
 
 		/// <summary></summary>
@@ -386,10 +387,9 @@ namespace YAT.Domain
 			DebugSend(string.Format(@"Sending of text line ""{0}"" has been invoked (sequence number = {1}).", item.Text, sequenceNumber));
 
 			EnterRequestPre();
-			bool decrementIsSendingForSomeTime;
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
-			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber, out decrementIsSendingForSomeTime)) // Note that behavior depends on the 'AllowConcurrency' setting.
+			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
@@ -407,7 +407,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost(decrementIsSendingForSomeTime);
+			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised); // This flag can only get set once.
 		}
 
 		/// <remarks>
@@ -434,10 +434,9 @@ namespace YAT.Domain
 			DebugSend(string.Format("Sending of {0} text lines has been invoked (sequence number = {1}).", items.Count, sequenceNumber));
 
 			EnterRequestPre();
-			bool decrementIsSendingForSomeTime;
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
-			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber, out decrementIsSendingForSomeTime)) // Note that behavior depends on the 'AllowConcurrency' setting.
+			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
@@ -458,7 +457,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost(decrementIsSendingForSomeTime);
+			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised); // This flag can only get set once.
 		}
 
 		/// <summary></summary>
@@ -480,10 +479,9 @@ namespace YAT.Domain
 			DebugSend(string.Format(@"Sending of ""{0}"" has been invoked (sequence number = {1}).", item.FilePath, sequenceNumber));
 
 			EnterRequestPre();
-			bool decrementIsSendingForSomeTime;
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
-			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber, out decrementIsSendingForSomeTime)) // Note that behavior depends on the 'AllowConcurrency' setting.
+			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
 			{
 				try
 				{
@@ -501,7 +499,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost(decrementIsSendingForSomeTime);
+			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised); // This flag can only get set once.
 		}
 
 		#endregion
@@ -564,12 +562,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
-		protected virtual bool TryEnterRequestGate(ForSomeTimeEventHelper forSomeTimeEventHelper, long sequenceNumber, out bool decrementIsSendingForSomeTime)
+		protected virtual bool TryEnterRequestGate(ForSomeTimeEventHelper forSomeTimeEventHelper, long sequenceNumber)
 		{
-			decrementIsSendingForSomeTime = false; // Attention, this flag must not be handled here; it must be handled at the helper's
-			                                     //// top-level because decrementing must only happen *after* the whole request has completed.
-			while (!DoBreak)                       // Otherwise, the 'IsSendingForSomeTime' flag and event would be cleared even though
-			{                                      // entering the gate indeed took some time.
+			while (!DoBreak)
+			{
 				if (TerminalSettings.Send.AllowConcurrency)
 				{
 					return (true);
@@ -578,18 +574,12 @@ namespace YAT.Domain
 				{
 					if (sequenceNumber == Interlocked.Read(ref this.nextPermittedSequenceNumber))
 					{
-					////if (decrementIsSendingForSomeTime) must not be handled here, see above.
-					////	DecrementIsSendingForSomeTimeChanged();
-
 						this.nextPermittedSequenceNumberEvent.Reset();
 						return (true);
 					}
 
 					if (forSomeTimeEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold()) // Signal wait operation if needed.
-					{
 						IncrementIsSendingForSomeTimeChanged();
-						decrementIsSendingForSomeTime = true;
-					}
 
 					try
 					{
@@ -610,9 +600,6 @@ namespace YAT.Domain
 			}
 
 			DebugSend("TryEnterRequestGate() has determined to break");
-
-		////if (decrementIsSendingForSomeTime) must not be handled here, see above.
-		////	DecrementIsSendingForSomeTimeChanged();
 
 			return (false);
 		}
@@ -639,25 +626,16 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		protected virtual bool TryEnterPacketGate(ForSomeTimeEventHelper forSomeTimeEventHelper)
 		{
-			var decrementIsSendingForSomeTime = false; // Opposed to the above TryEnterRequestGate(), which is the helper's top-level,
-			                                         //// this lower-level method can completely encapsulate the increment/decrement pair.
 			while (!DoBreak)
 			{
 				if (Monitor.TryEnter(this.packetGateSyncObj))
 				{
 					this.packetGateEvent.Reset();
-
-					if (decrementIsSendingForSomeTime)
-						DecrementIsSendingForSomeTimeChanged();
-
 					return (true);
 				}
 
 				if (forSomeTimeEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold()) // Signal wait operation if needed.
-				{
 					IncrementIsSendingForSomeTimeChanged();
-					decrementIsSendingForSomeTime = true;
-				}
 
 				try
 				{
@@ -677,9 +655,6 @@ namespace YAT.Domain
 			}
 
 			DebugSend("TryEnterPacketGate() has determined to break");
-
-			if (decrementIsSendingForSomeTime)
-				DecrementIsSendingForSomeTimeChanged();
 
 			return (false);
 		}
