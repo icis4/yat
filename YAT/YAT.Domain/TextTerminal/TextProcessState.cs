@@ -49,6 +49,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public int                               ShownCharCount                       { get; private set; }
 
+		/// <remarks>Required to handle empty line that got empty due to backspaces.</remarks>
+		public bool                              HasEverShowedChar                        { get; private set; }
+
 		/// <summary></summary>
 		public Dictionary<string, SequenceQueue> EolOfGivenDevice                     { get; private set; }
 
@@ -68,7 +71,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual bool IsYetEmpty
 		{
-			get { return ((PendingMultiBytesToDecode.Count == 0) && (RetainedUnconfirmedHiddenEolElements.Count == 0)); }
+			get { return ((PendingMultiBytesToDecode.Count == 0) && (ShownCharCount == 0) && (!HasEverShowedChar) && (RetainedUnconfirmedHiddenEolElements.Count == 0)); }
 		}
 
 		/// <summary>
@@ -78,6 +81,7 @@ namespace YAT.Domain
 		{
 			PendingMultiBytesToDecode            = new List<byte>(4); // Preset the required capacity to improve memory management; 4 is the maximum value for multi-byte characters.
 			ShownCharCount                       = 0;
+			HasEverShowedChar                    = false;
 			EolOfGivenDevice                     = new Dictionary<string, SequenceQueue>(); // No preset needed, the default behavior is good enough.
 			RetainedUnconfirmedHiddenEolElements = new List<DisplayElement>(); // No preset needed, the default behavior is good enough.
 		}
@@ -96,6 +100,7 @@ namespace YAT.Domain
 		public virtual void NotifyShownCharCount(int count)
 		{
 			ShownCharCount += count;
+			HasEverShowedChar = true;
 		}
 
 		/// <summary>
@@ -104,6 +109,7 @@ namespace YAT.Domain
 		public virtual void NotifyLineEnd(string dev)
 		{
 			ShownCharCount = 0;
+			HasEverShowedChar = false;
 
 			var eolOfGivenDeviceIsCompleteMatch = false;
 
