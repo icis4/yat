@@ -66,12 +66,8 @@ namespace YAT
 		public static readonly string ProductName = System.Windows.Forms.Application.ProductName;
 
 		/// <summary>The build designation.</summary>
-		public const string ProductBuildDesignation = "";
-	////public const string ProductBuildDesignation = " Final";
-	////public const string ProductBuildDesignation = " Almost Final";
-	////public const string ProductBuildDesignation = " Epsilon";
-	////public const string ProductBuildDesignation = " Epsilon Preliminary";
-	////public const string ProductBuildDesignation = " Epsilon Development";
+	////public const string ProductBuildDesignation = "";
+		public const string ProductBuildDesignation = " 2.2.0 Beta Version";
 
 		/// <summary>The product caption that combines product name and build designation.</summary>
 		public static readonly string ProductCaption = ProductName + ProductBuildDesignation;
@@ -110,9 +106,9 @@ namespace YAT
 		}
 
 		/// <summary>The version designation.</summary>
-	////public const string ProductVersionStabilityIndication = "";
+		public const string ProductVersionStabilityIndication = "";
 	////public const string ProductVersionStabilityIndication = " Preliminary";
-		public const string ProductVersionStabilityIndication = " Development";
+	////public const string ProductVersionStabilityIndication = " Development";
 
 		/// <summary>The product version that combines product version and version stability indication.</summary>
 		public static readonly string ProductVersionWithStabilityIndication = ProductVersion + ProductVersionStabilityIndication;
@@ -170,11 +166,7 @@ namespace YAT
 		public static readonly string ExecutableNameWithoutExtension = Path.GetFileNameWithoutExtension(System.Windows.Forms.Application.ExecutablePath);
 
 		/// <summary>The .NET Framework prerequisite.</summary>
-	#if !(WITH_SCRIPTING)
-		public static readonly string PrerequisiteFramework = ".NET Framework 3.5 Service Pack 1";
-	#else
 		public static readonly string PrerequisiteFramework = ".NET Framework 4.0";
-	#endif
 
 		/// <summary>The Windows operating system prerequisite.</summary>
 		public static readonly string PrerequisiteWindowsOS = "Windows 2000 or later";
