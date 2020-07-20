@@ -1920,7 +1920,7 @@ namespace YAT.Model
 					}
 					if (!requestedTerminal.IsReadyToSend)
 					{
-						OnTimedStatusTextRequest("Operation triggered, pending until terminal is ready to transmit...");
+						OnTimedStatusTextRequest("Operation triggered, pending until terminal is ready to send...");
 						return; // Pend!                               Using term 'Transmission' to indicate potential
 					}           //                                     'intelligence' to send + receive/verify the data.
 
