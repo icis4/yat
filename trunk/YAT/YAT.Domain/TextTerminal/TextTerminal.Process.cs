@@ -1376,23 +1376,13 @@ namespace YAT.Domain
 		{
 			DebugWaitForResponse("Getting line clearance...");
 
-			var decrementIsSendingForSomeTime = false; // Opposed to Terminal.TryEnterRequestGate(), which is the helper's top-level,
-			                                         //// this lower-level method can completely encapsulate the increment/decrement pair.
 			while (!DoBreak)
 			{
 				if (ClearanceHasBeenGranted())
-				{
-					if (decrementIsSendingForSomeTime)
-						DecrementIsSendingForSomeTimeChanged();
-
 					return (true);
-				}
 
 				if (forSomeTimeEventHelper.RaiseEventIfTotalTimeLagIsAboveThreshold()) // Signal wait operation if needed.
-				{
 					IncrementIsSendingForSomeTimeChanged();
-					decrementIsSendingForSomeTime = true;
-				}
 
 				try
 				{
@@ -1414,9 +1404,6 @@ namespace YAT.Domain
 			DebugWaitForResponse("GetLineClearance() has determined to break");
 
 			ResetWaitForResponse(); // Required to reset clearance counter.
-
-			if (decrementIsSendingForSomeTime)
-				DecrementIsSendingForSomeTimeChanged();
 
 			return (false);
 		}
