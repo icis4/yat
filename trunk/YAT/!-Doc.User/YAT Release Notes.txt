@@ -104,7 +104,7 @@ New:
   job even with large amount of data.
 - Content separator can now be configured. Useful for e.g. displaying or logging hex data without
   separating spaces, e.g. "414243", using [None]. Separator format can now also be configured.
-- Additional keyword \!(TimeStamp()) allowing injection of current date/time (feature request #400).
+- Additional keyword \!(TimeStamp) allowing injection of current date/time (feature request #400).
   Format according to [View > Format Settings... > Options > Time Stamp].
   Useful for e.g. sending "AT+DATE=20 01 01 12 00 00".
 - Additional keyword \!(Port()) allowing to change the serial COM port on-the-fly (feat. req. #403).
@@ -132,6 +132,7 @@ Important changes:
   lines at the same location as the bidirectional panel (bugs #371 and #477).
 - [Monitor Context Menu > Clear] no longer clears all panels (Tx/Bidir/Rx), just the selected. Use
   [Main Menu > Terminal > Clear [All]] or [Ctrl+L] to clear all panels (related to change above).
+  [Main Menu > Terminal > All Terminals Clear] or [Ctrl+E] to clear all terminals (feat. req. #392).
 - Binary terminals: Lines are no longer broken each 16 bytes by default, they now by default are
   broken on every chunk (related to bug #477).
 - Consequently, chunk line break settings are now located in the text/binary specific dialog.

@@ -82,7 +82,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.SourceForge", "!-Doc.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.User", "!-Doc.User", "{ABECE297-BF82-4016-93F9-DF7204BA05F5}"
 	ProjectSection(SolutionItems) = preProject
-		YAT\!-Doc.User\!-HowTo.txt = YAT\!-Doc.User\!-HowTo.txt
+		YAT\!-Doc.User\!-HowTo-Snippets.txt = YAT\!-Doc.User\!-HowTo-Snippets.txt
 		YAT\!-Doc.User\YAT Release Notes.txt = YAT\!-Doc.User\YAT Release Notes.txt
 		YAT\!-Doc.User\YAT Release Notes_limited to 64k for SourceForge online 'ReadMe'.txt = YAT\!-Doc.User\YAT Release Notes_limited to 64k for SourceForge online 'ReadMe'.txt
 	EndProjectSection
