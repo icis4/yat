@@ -1389,7 +1389,7 @@ namespace YAT.Domain
 					// WaitOne() will wait forever if the underlying I/O provider has crashed, or
 					// if the overlying client isn't able or forgets to call Stop() or Dispose().
 					// Therefore, only wait for a certain period and then poll the state again.
-					// The period can be quite long, as an event trigger will immediately resume.
+					// The period can be quite long, as an event signal will immediately resume.
 					// And there is no need to check the result, logic above will tell how to proceed.
 					this.waitForResponseEvent.WaitOne(StaticRandom.Next(50, 200));
 				}

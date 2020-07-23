@@ -83,6 +83,9 @@ namespace MKY.IO.Serial.Socket
 						if (IsInDisposal || !IsTransmissive) // Check disposal state first!
 							return (false);
 
+						// Signal to ensure send thread stays active:
+						// PENDING SignalSendThreadSafely();
+
 						// Actively yield to other threads to allow dequeuing:
 						var span = (DateTime.Now - initialTimeStamp);
 						if (span.TotalMilliseconds < 4)
@@ -97,10 +100,13 @@ namespace MKY.IO.Serial.Socket
 						this.sendQueue.Enqueue(b);
 					}
 
+					// Do not signal after each byte, this is a) not efficient and b) not desired
+					// as send requests shall ideally be sent as a single chunk.
+
 					DebugSend(ConvertEx.ToHexString(b) + " enqueued.");
 				}
 
-				// Signal thread:
+				// Signal thread to send the requested packet:
 				SignalSendThreadSafely();
 
 				return (true);
@@ -137,17 +143,20 @@ namespace MKY.IO.Serial.Socket
 
 			try
 			{
-				// Outer loop, processes data after a signal has been received:
+				// Outer loop, runs when signaled as well as periodically checking the state:
 				while (IsUndisposed && this.sendThreadRunFlag) // Check disposal state first!
 				{
+					// A signal will only be received a while after initialization, thus waiting for
+					// signal first. Also, placing this code first in the outer loop makes the logic
+					// of the two loops more obvious.
 					try
 					{
 						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
 						// if the overlying client isn't able or forgets to call Stop() or Dispose().
-						// Therefore, only wait for a certain period and then poll the run flag again.
-						// The period can be quite long, as an event trigger will immediately resume.
+						// Therefore, only wait for a certain period and then poll the state again.
+						// The period can be quite long, as an event signal will immediately resume.
 						if (!this.sendThreadEvent.WaitOne(SocketBase.Random.Next(50, 200)))
-							continue;
+							continue; // to periodically check state.
 					}
 					catch (AbandonedMutexException ex)
 					{
@@ -157,9 +166,8 @@ namespace MKY.IO.Serial.Socket
 						break;
 					}
 
-					// Inner loop, runs as long as there is data in the send queue.
-					// Ensure not to send and forward events during closing anymore. Check disposal state first!
-					while (IsUndisposed && this.sendThreadRunFlag && IsTransmissive && (this.sendQueue.Count > 0))
+					// Inner loop, runs as long as there are items in the queue:
+					while (IsUndisposed && this.sendThreadRunFlag && IsTransmissive && (this.sendQueue.Count > 0)) // Check disposal state first!
 					{                                                               // No lock required, just checking for empty.
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.

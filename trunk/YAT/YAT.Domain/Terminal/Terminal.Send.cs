@@ -591,7 +591,7 @@ namespace YAT.Domain
 						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
 						// if the overlying client isn't able or forgets to call Stop() or Dispose().
 						// Therefore, only wait for a certain period and then poll the state again.
-						// The period can be quite long, as an event trigger will immediately resume.
+						// The period can be quite long, as an event signal will immediately resume.
 						// And there is no need to check the result, logic above will tell how to proceed.
 						this.nextPermittedSequenceNumberEvent.WaitOne(StaticRandom.Next(50, 200));
 					}
@@ -662,7 +662,7 @@ namespace YAT.Domain
 					// WaitOne() will wait forever if the underlying I/O provider has crashed, or
 					// if the overlying client isn't able or forgets to call Stop() or Dispose().
 					// Therefore, only wait for a certain period and then poll the state again.
-					// The period can be quite long, as an event trigger will immediately resume.
+					// The period can be quite long, as an event signal will immediately resume.
 					// And there is no need to check the result, logic above will tell how to proceed.
 					this.packetGateEvent.WaitOne(StaticRandom.Next(50, 200));
 				}
@@ -1603,6 +1603,14 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Directly referring to given object for performance reasons.")]
 		protected virtual void ProcessLineEnd(ForSomeTimeEventHelper forSomeTimeEventHelper, bool appendEol, Queue<byte> conflateDataQueue, ref bool doBreak)
 		{
+			// This is the main location where packets are forwarded to the raw terminal and the underlying I/O instance. (Other locations are keywords that delay or require flushing.)
+			// Consequently, everything up to a line end (or packet end for binary terminals) will be conflated until here.
+			// Advantages of this approach:
+			//  > Complete lines will be enqueued for sending, works for single-, multi-line as well as files.
+			//    Opposed to behavior up to YAT 2.1.0 where line content and EOL often got sent in two separate chunks.
+			//  > Every line will trigger a send request.
+			//  > User can still chose to send multiple lines as a single request by manually inserting EOL (e.g. "\r\n" or "<CR><LF>", but not "\!(EOL)").
+
 			if (!doBreak)
 				ForwardPendingPacketToRawTerminal(conflateDataQueue); // Not the best approach to require this call at so many locations...
 			else

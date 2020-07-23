@@ -106,6 +106,9 @@ namespace MKY.IO.Serial.SerialPort
 						if (IsInDisposal || !IsTransmissive) // Check disposal state first!
 							return (false);
 
+						// Signal to ensure send thread stays active:
+						// PENDING SignalSendThreadSafely();
+
 						// Actively yield to other threads to allow dequeuing:
 						var span = (DateTime.Now - initialTimeStamp);
 						if (span.TotalMilliseconds < 4)
@@ -119,10 +122,13 @@ namespace MKY.IO.Serial.SerialPort
 					{
 						this.sendQueue.Enqueue(b);
 					}
+
+					// Do not signal after each byte, this is a) not efficient and b) not desired
+					// as send requests shall ideally be sent as a single chunk.
 				}
 				DebugSendRequest("...enqueuing done");
 
-				// Signal thread:
+				// Signal thread to send the requested packet:
 				SignalSendThreadSafely();
 
 				return (true);
@@ -243,17 +249,20 @@ namespace MKY.IO.Serial.SerialPort
 
 			try
 			{
-				// Outer loop, requires another signal.
+				// Outer loop, runs when signaled as well as periodically checking the state:
 				while (IsUndisposed && this.sendThreadRunFlag) // Check disposal state first!
 				{
+					// A signal will only be received a while after initialization, thus waiting for
+					// signal first. Also, placing this code first in the outer loop makes the logic
+					// of the two loops more obvious.
 					try
 					{
 						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
 						// if the overlying client isn't able or forgets to call Stop() or Dispose().
-						// Therefore, only wait for a certain period and then poll the run flag again.
-						// The period can be quite long, as an event trigger will immediately resume.
+						// Therefore, only wait for a certain period and then poll the state again.
+						// The period can be quite long, as an event signal will immediately resume.
 						if (!this.sendThreadEvent.WaitOne(staticRandom.Next(50, 200)))
-							continue;
+							continue; // to periodically check state.
 					}
 					catch (AbandonedMutexException ex)
 					{
@@ -263,10 +272,9 @@ namespace MKY.IO.Serial.SerialPort
 						break;
 					}
 
-					// Inner loop, runs as long as there is data in the send queue.
-					// Ensure not send and forward events during closing anymore. Check disposal state first!
-					// Note that 'IsOpen' is used instead of 'IsTransmissive' to allow handling break further below.
-					while (IsUndisposed && this.sendThreadRunFlag && IsOpen && (this.sendQueue.Count > 0))
+					// Inner loop, runs as long as there are items in the queue:
+					                                             // 'IsOpen' is used instead of 'IsTransmissive' to allow handling break further below.
+					while (IsUndisposed && this.sendThreadRunFlag && IsOpen && (this.sendQueue.Count > 0)) // Check disposal state first!
 					{                                                       // No lock required, just checking for empty.
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
@@ -522,8 +530,8 @@ namespace MKY.IO.Serial.SerialPort
 						{
 							isOutputBreakOldAndErrorHasBeenSignaled = false;
 						}
-					} // while (dataAvailable)
-				} // while (isRunning)
+					} // Inner loop
+				} // Outer loop
 			}
 			catch (ThreadAbortException ex)
 			{
@@ -600,7 +608,7 @@ namespace MKY.IO.Serial.SerialPort
 
 			try
 			{
-				DebugTransmission("Writing 1 byte to port...");
+				DebugTransmission("Trying to write 1 byte to port...");
 
 				// Try to write the byte, will raise a 'TimeoutException' if not possible:
 				byte[] a = { b };
@@ -695,7 +703,7 @@ namespace MKY.IO.Serial.SerialPort
 				int triedChunkSize = Math.Min(maxChunkSize, a.Length);
 				effectiveChunkData = new List<byte>(triedChunkSize);
 
-				DebugTransmission("Writing " + triedChunkSize + " byte(s) to port...");
+				DebugTransmission("Trying to write " + triedChunkSize + " byte(s) to port...");
 
 				// Try to write the chunk, will raise a 'TimeoutException' if not possible:
 				this.port.Write(a, 0, triedChunkSize); // Do not lock, may take some time!
