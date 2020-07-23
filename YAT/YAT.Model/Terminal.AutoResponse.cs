@@ -320,17 +320,20 @@ namespace YAT.Model
 
 			try
 			{
-				// Outer loop, processes data after a signal has been received:
+				// Outer loop, runs when signaled as well as periodically checking the state:
 				while (IsUndisposed && this.autoResponseThreadRunFlag) // Check disposal state first!
 				{
+					// A signal will only be received a while after initialization, thus waiting for
+					// signal first. Also, placing this code first in the outer loop makes the logic
+					// of the two loops more obvious.
 					try
 					{
 						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
 						// if the overlying client isn't able or forgets to call Stop() or Dispose().
-						// Therefore, only wait for a certain period and then poll the run flag again.
-						// The period can be quite long, as an event trigger will immediately resume.
+						// Therefore, only wait for a certain period and then poll the state again.
+						// The period can be quite long, as an event signal will immediately resume.
 						if (!this.autoResponseThreadEvent.WaitOne(staticRandom.Next(50, 200)))
-							continue;
+							continue; // to periodically check state.
 					}
 					catch (AbandonedMutexException ex)
 					{
@@ -340,10 +343,9 @@ namespace YAT.Model
 						break;
 					}
 
-					// Inner loop, runs as long as there is data in the send queue.
-					// Ensure not to send and forward events during closing anymore. Check disposal state first!
-					while (IsUndisposed && this.autoResponseThreadRunFlag && IsReadyToSend && (this.autoResponseQueue.Count > 0))
-					{                                                                      // No lock required, just checking for empty.
+					// Inner loop, runs as long as there are items in the queue:
+					while (IsUndisposed && this.autoResponseThreadRunFlag && (this.autoResponseQueue.Count > 0)) // Check disposal state first!
+					{                                                     // No lock required, just checking for empty.
 						// Initially, yield to other threads before starting to read the queue,
 						// since it is likely that more triggers are to be enqueued.
 						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as processing shall happen as fast as possible.
