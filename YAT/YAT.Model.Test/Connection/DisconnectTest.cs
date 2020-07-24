@@ -153,6 +153,8 @@ namespace YAT.Model.Test.Connection
 		                                    Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                    char disconnectIdentifier)
 		{
+			// IPLoopbackPairs are always made available by 'Utilities', no need to check for this.
+
 			TransmitAndVerifyAndDisconnect(settingsDescriptorA, settingsDescriptorB, disconnectIdentifier);
 		}
 
@@ -167,6 +169,8 @@ namespace YAT.Model.Test.Connection
 		                                   Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                   char disconnectIdentifier)
 		{
+			// IPLoopbackSelfs are always made available by 'Utilities', no need to check for this.
+
 			TransmitAndVerifyAndDisconnect(settingsDescriptorA, settingsDescriptorB, disconnectIdentifier);
 		}
 

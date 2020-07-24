@@ -220,6 +220,10 @@ namespace YAT.Model.Test.Transmission
 		                                            Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                            int repeatCount, bool doTwoWay, bool executeBreak)
 		{
+			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackPairsAreAvailable)
+				Assert.Ignore("No serial COM port loopback pairs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback pair is properly configured and available if passing this test is required.");
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
 			TransmitAndVerify(settingsDescriptorA, settingsDescriptorB, repeatCount, doTwoWay, executeBreak);
 		}
 
@@ -234,6 +238,10 @@ namespace YAT.Model.Test.Transmission
 		                                            Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                            int repeatCount, bool doTwoWay, bool executeBreak)
 		{
+			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
+				Assert.Ignore("No serial COM port loopback selfs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback self is properly configured and available if passing this test is required.");
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+
 			TransmitAndVerify(settingsDescriptorA, settingsDescriptorB, repeatCount, doTwoWay, executeBreak);
 		}
 
@@ -247,6 +255,8 @@ namespace YAT.Model.Test.Transmission
 		                                    Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                    int repeatCount, bool doTwoWay, bool executeBreak)
 		{
+			// IPLoopbackPairs are always made available by 'Utilities', no need to check for this.
+
 			TransmitAndVerify(settingsDescriptorA, settingsDescriptorB, repeatCount, doTwoWay, executeBreak);
 		}
 
@@ -261,6 +271,8 @@ namespace YAT.Model.Test.Transmission
 		                                   Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
 		                                   int repeatCount, bool doTwoWay, bool executeBreak)
 		{
+			// IPLoopbackSelfs are always made available by 'Utilities', no need to check for this.
+
 			TransmitAndVerify(settingsDescriptorA, settingsDescriptorB, repeatCount, doTwoWay, executeBreak);
 		}
 

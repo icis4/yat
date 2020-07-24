@@ -193,7 +193,7 @@ namespace YAT.Domain.Test.Terminal
 			var subsequentLengthExpected = (subsequentLineText.Length + 2); // Adjust EOL.
 			for (int i = 0; i < subsequentLineCount; i++)
 				terminalTx.SendTextLine(subsequentLineText); // Immediately invoke sending of subsequent data.
-			                                     // Includes EOL.
+			                                     // Includes EOLs.
 			var expectedTotalByteCount = (file.Item2 + (subsequentLengthExpected * subsequentLineCount));
 			var expectedTotalLineCount = (file.Item3 +                             subsequentLineCount);
 			Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1000); // See further above, sending takes 300..600 ms.
