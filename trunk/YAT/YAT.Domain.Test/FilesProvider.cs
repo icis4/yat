@@ -57,7 +57,12 @@ namespace YAT.Domain.Test
 		Large,
 		EvenLarger,
 		Huge,
-		Enormous
+		Enormous,
+
+		LongLine,
+		VeryLongLine,
+		VeryLongMultiLine,
+		EnormousLine
 	}
 
 	#pragma warning restore 1591
@@ -80,26 +85,26 @@ namespace YAT.Domain.Test
 		public Dictionary<StressTestCase, Tuple<string, int, int>> StressFiles { get; }
 
 		/// <summary></summary>
-		public Files()
-			: this(null)
+		public Files(int capacity)
+			: this(capacity, null)
 		{
 		}
 
 		/// <summary></summary>
-		public Files(string directory)
+		public Files(int capacity, string directory)
 		{
 			// Traverse path from "<Root>\YAT\bin\[Debug|Release]\YAT.exe" to "<Root>".
 			System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(Environment.CurrentDirectory);
 			for (int i = 0; i < 3; i++)
 				di = di.Parent;
 
-			// Set path to "<Root>\!-SendFiles\" or "<Root>\!-SendFiles\<Directory>\".
+			// Set path to "<Root>\!-TestFiles\" or "<Root>\!-TestFiles\<Directory>\".
 			if (string.IsNullOrEmpty(directory))
-				DirectoryPath = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-SendFiles" + System.IO.Path.DirectorySeparatorChar;
+				DirectoryPath = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-TestFiles" + System.IO.Path.DirectorySeparatorChar;
 			else
-				DirectoryPath = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-SendFiles" + System.IO.Path.DirectorySeparatorChar + directory + System.IO.Path.DirectorySeparatorChar;
+				DirectoryPath = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-TestFiles" + System.IO.Path.DirectorySeparatorChar + directory + System.IO.Path.DirectorySeparatorChar;
 
-			StressFiles = new Dictionary<StressTestCase, Tuple<string, int, int>>();
+			StressFiles = new Dictionary<StressTestCase, Tuple<string, int, int>>(capacity);
 		}
 
 		/// <summary></summary>
@@ -115,7 +120,7 @@ namespace YAT.Domain.Test
 
 	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "As always, there are exceptions to the rules...")]
-	public static class SendFilesProvider
+	public static class FilesProvider
 	{
 		private const string UnderscoreSuppressionJustification = "As always, there are exceptions to the rules...";
 
@@ -143,18 +148,22 @@ namespace YAT.Domain.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic, and anyway, performance isn't an issue here.")]
-		static SendFilesProvider()
+		static FilesProvider()
 		{
-			// Stress text:
-			FilePaths_StressText = new Files();                                                            // Not including EOF.
-			FilePaths_StressText.AddStressFile(StressTestCase.Normal,     "Stress-1-Normal.txt",         8400,    300);
-			FilePaths_StressText.AddStressFile(StressTestCase.Large,      "Stress-2-Large.txt",         82500,   1500);
-			FilePaths_StressText.AddStressFile(StressTestCase.EvenLarger, "Stress-3-EvenLarger.txt",   275000,   5000);
-			FilePaths_StressText.AddStressFile(StressTestCase.Huge,       "Stress-4-Huge.txt",        1090000,  10000);
-			FilePaths_StressText.AddStressFile(StressTestCase.Enormous,   "Stress-5-Enormous.txt",   16300000, 100000);
+			// Stress text:                  // Preset the required capacity to improve memory management.
+			FilePaths_StressText = new Files(9);                                                                      // Including EOLs; not including EOF.
+			FilePaths_StressText.AddStressFile(StressTestCase.Normal,            "Stress-1-Normal.txt",             8400,    300); //  28 bytes per line.
+			FilePaths_StressText.AddStressFile(StressTestCase.Large,             "Stress-2-Large.txt",             82500,   1500); //  55 bytes per line.
+			FilePaths_StressText.AddStressFile(StressTestCase.EvenLarger,        "Stress-3-EvenLarger.txt",       275000,   5000); //  55 bytes per line.
+			FilePaths_StressText.AddStressFile(StressTestCase.Huge,              "Stress-4-Huge.txt",            1090000,  10000); // 109 bytes per line.
+			FilePaths_StressText.AddStressFile(StressTestCase.Enormous,          "Stress-5-Enormous.txt",       16300000, 100000); // 163 bytes per line.
+			FilePaths_StressText.AddStressFile(StressTestCase.LongLine,          "Stress-6-LongLine.txt",            973,      1);
+			FilePaths_StressText.AddStressFile(StressTestCase.VeryLongLine,      "Stress-7-VeryLongLine.txt",       9991,      1);
+			FilePaths_StressText.AddStressFile(StressTestCase.VeryLongMultiLine, "Stress-8-VeryLongMultiLine.txt", 48650,     50); // 973 bytes per line.
+			FilePaths_StressText.AddStressFile(StressTestCase.EnormousLine,      "Stress-9-EnormousLine.txt",     500014,      1);
 
-			// Stress binary:
-			FilePaths_StressBinary = new Files();
+			// Stress binary:                  // Preset the required capacity to improve memory management.
+			FilePaths_StressBinary = new Files(5);
 			FilePaths_StressBinary.AddStressFile(StressTestCase.Normal,     "Stress-1-Normal.dat",         8192, -1);
 			FilePaths_StressBinary.AddStressFile(StressTestCase.Large,      "Stress-2-Large.dat",         82432, -1);
 			FilePaths_StressBinary.AddStressFile(StressTestCase.EvenLarger, "Stress-3-EvenLarger.dat",   274944, -1);
