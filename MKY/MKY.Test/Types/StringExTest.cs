@@ -237,7 +237,7 @@ namespace MKY.Test.Types
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static IEnumerable QuoteTestCases
+		public static IEnumerable TestCasesQuote
 		{
 			get
 			{
@@ -264,7 +264,7 @@ namespace MKY.Test.Types
 		}
 
 		/// <summary></summary>
-		public static IEnumerable EndWhiteSpaceTestCases
+		public static IEnumerable TestCasesEndWhiteSpace
 		{
 			get
 			{
@@ -431,7 +431,7 @@ namespace MKY.Test.Types
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
-		[Test, TestCaseSource(typeof(TrimTestData), "QuoteTestCases")]
+		[Test, TestCaseSource(typeof(TrimTestData), "TestCasesQuote")]
 		public virtual void TrimOfQuotes(string str, int expectedLength, char[] trimChars)
 		{
 			var trim = str.Trim(trimChars);
@@ -447,7 +447,7 @@ namespace MKY.Test.Types
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
-		[Test, TestCaseSource(typeof(TrimTestData), "EndWhiteSpaceTestCases")]
+		[Test, TestCaseSource(typeof(TrimTestData), "TestCasesEndWhiteSpace")]
 		public virtual void TrimEndOfWhiteSpaces(string str, int expectedLength, char[] trimChars)
 		{
 			var trim = str.TrimEnd(trimChars);
