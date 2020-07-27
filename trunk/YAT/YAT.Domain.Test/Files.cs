@@ -69,32 +69,60 @@ namespace YAT.Domain.Test
 
 	#endregion
 
-	#region Types > Files
+	#region Types > FileDescriptor
 	//------------------------------------------------------------------------------------------
-	// Types > Files
+	// Types > FileDescriptor
 	//------------------------------------------------------------------------------------------
 
 	/// <summary></summary>
-	public class Files
+	public class FileDescriptor
+	{
+		/// <summary></summary>
+		public string FilePath { get; }
+
+		/// <summary></summary>
+		public int FileSize { get; }
+
+		/// <summary></summary>
+		public int LineCount { get; }
+
+		/// <summary></summary>
+		public FileDescriptor(string filePath, int fileSize, int lineCount)
+		{
+			FilePath = filePath;
+			FileSize = fileSize;
+			LineCount = lineCount;
+		}
+	}
+
+	#endregion
+
+	#region Types > FileGroup
+	//------------------------------------------------------------------------------------------
+	// Types > FileGroup
+	//------------------------------------------------------------------------------------------
+
+	/// <summary></summary>
+	public class FileGroup
 	{
 		/// <summary></summary>
 		public string DirectoryPath { get; }
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
-		public Dictionary<StressTestCase, Tuple<string, int, int>> StressFiles { get; }
+		public Dictionary<StressTestCase, FileDescriptor> Stress { get; }
 
 		/// <summary></summary>
-		public Files(int capacity)
+		public FileGroup(int capacity)
 			: this(capacity, null)
 		{
 		}
 
 		/// <summary></summary>
-		public Files(int capacity, string directory)
+		public FileGroup(int capacity, string directory)
 		{
 			// Traverse path from "<Root>\YAT\bin\[Debug|Release]\YAT.exe" to "<Root>".
-			System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(Environment.CurrentDirectory);
+			System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(System.Environment.CurrentDirectory);
 			for (int i = 0; i < 3; i++)
 				di = di.Parent;
 
@@ -104,13 +132,13 @@ namespace YAT.Domain.Test
 			else
 				DirectoryPath = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-TestFiles" + System.IO.Path.DirectorySeparatorChar + directory + System.IO.Path.DirectorySeparatorChar;
 
-			StressFiles = new Dictionary<StressTestCase, Tuple<string, int, int>>(capacity);
+			Stress = new Dictionary<StressTestCase, FileDescriptor>(capacity);
 		}
 
 		/// <summary></summary>
-		public void AddStressFile(StressTestCase fileKey, string fileName, int fileSize, int lineCount)
+		public void Add(StressTestCase fileKey, string fileName, int fileSize, int lineCount)
 		{
-			StressFiles.Add(fileKey, new Tuple<string, int, int>(DirectoryPath + fileName, fileSize, lineCount));
+			Stress.Add(fileKey, new FileDescriptor(DirectoryPath + fileName, fileSize, lineCount));
 		}
 	}
 
@@ -120,7 +148,7 @@ namespace YAT.Domain.Test
 
 	/// <summary></summary>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "As always, there are exceptions to the rules...")]
-	public static class FilesProvider
+	public static class Files
 	{
 		private const string UnderscoreSuppressionJustification = "As always, there are exceptions to the rules...";
 
@@ -132,12 +160,12 @@ namespace YAT.Domain.Test
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of test implementation, especially adding new settings.")]
-		public static readonly Files FilePaths_StressText;
+		public static readonly FileGroup Text;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of test implementation, especially adding new settings.")]
-		public static readonly Files FilePaths_StressBinary;
+		public static readonly FileGroup Binary;
 
 		#endregion
 
@@ -148,27 +176,27 @@ namespace YAT.Domain.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic, and anyway, performance isn't an issue here.")]
-		static FilesProvider()
+		static Files()
 		{
-			// Stress text:                  // Preset the required capacity to improve memory management.
-			FilePaths_StressText = new Files(9);                                                                      // Including EOLs; not including EOF.
-			FilePaths_StressText.AddStressFile(StressTestCase.Normal,            "Stress-1-Normal.txt",             8400,    300); //  28 bytes per line.
-			FilePaths_StressText.AddStressFile(StressTestCase.Large,             "Stress-2-Large.txt",             82500,   1500); //  55 bytes per line.
-			FilePaths_StressText.AddStressFile(StressTestCase.EvenLarger,        "Stress-3-EvenLarger.txt",       275000,   5000); //  55 bytes per line.
-			FilePaths_StressText.AddStressFile(StressTestCase.Huge,              "Stress-4-Huge.txt",            1090000,  10000); // 109 bytes per line.
-			FilePaths_StressText.AddStressFile(StressTestCase.Enormous,          "Stress-5-Enormous.txt",       16300000, 100000); // 163 bytes per line.
-			FilePaths_StressText.AddStressFile(StressTestCase.LongLine,          "Stress-6-LongLine.txt",            973,      1);
-			FilePaths_StressText.AddStressFile(StressTestCase.VeryLongLine,      "Stress-7-VeryLongLine.txt",       9991,      1);
-			FilePaths_StressText.AddStressFile(StressTestCase.VeryLongMultiLine, "Stress-8-VeryLongMultiLine.txt", 48650,     50); // 973 bytes per line.
-			FilePaths_StressText.AddStressFile(StressTestCase.EnormousLine,      "Stress-9-EnormousLine.txt",     500014,      1);
+			// Stress text:        // Preset the required capacity to improve memory management.
+			Text = new FileGroup(9);                                                             // Including EOLs; not including EOF.
+			Text.Add(StressTestCase.Normal,            "Stress-1-Normal.txt",             8400,    300); //  28 bytes per line.
+			Text.Add(StressTestCase.Large,             "Stress-2-Large.txt",             82500,   1500); //  55 bytes per line.
+			Text.Add(StressTestCase.EvenLarger,        "Stress-3-EvenLarger.txt",       275000,   5000); //  55 bytes per line.
+			Text.Add(StressTestCase.Huge,              "Stress-4-Huge.txt",            1090000,  10000); // 109 bytes per line.
+			Text.Add(StressTestCase.Enormous,          "Stress-5-Enormous.txt",       16300000, 100000); // 163 bytes per line.
+			Text.Add(StressTestCase.LongLine,          "Stress-6-LongLine.txt",            973,      1);
+			Text.Add(StressTestCase.VeryLongLine,      "Stress-7-VeryLongLine.txt",       9991,      1);
+			Text.Add(StressTestCase.VeryLongMultiLine, "Stress-8-VeryLongMultiLine.txt", 48650,     50); // 973 bytes per line.
+			Text.Add(StressTestCase.EnormousLine,      "Stress-9-EnormousLine.txt",     500014,      1);
 
 			// Stress binary:                  // Preset the required capacity to improve memory management.
-			FilePaths_StressBinary = new Files(5);
-			FilePaths_StressBinary.AddStressFile(StressTestCase.Normal,     "Stress-1-Normal.dat",         8192, -1);
-			FilePaths_StressBinary.AddStressFile(StressTestCase.Large,      "Stress-2-Large.dat",         82432, -1);
-			FilePaths_StressBinary.AddStressFile(StressTestCase.EvenLarger, "Stress-3-EvenLarger.dat",   274944, -1);
-			FilePaths_StressBinary.AddStressFile(StressTestCase.Huge,       "Stress-4-Huge.dat",        1089792, -1);
-			FilePaths_StressBinary.AddStressFile(StressTestCase.Enormous,   "Stress-5-Enormous.dat",   16299776, -1);
+			Binary = new FileGroup(5);
+			Binary.Add(StressTestCase.Normal,     "Stress-1-Normal.dat",         8192, -1);
+			Binary.Add(StressTestCase.Large,      "Stress-2-Large.dat",         82432, -1);
+			Binary.Add(StressTestCase.EvenLarger, "Stress-3-EvenLarger.dat",   274944, -1);
+			Binary.Add(StressTestCase.Huge,       "Stress-4-Huge.dat",        1089792, -1);
+			Binary.Add(StressTestCase.Enormous,   "Stress-5-Enormous.dat",   16299776, -1);
 		}
 
 		#endregion
