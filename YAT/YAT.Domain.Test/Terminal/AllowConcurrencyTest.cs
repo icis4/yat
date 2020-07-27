@@ -185,7 +185,7 @@ namespace YAT.Domain.Test.Terminal
 		/// <summary></summary>
 		protected virtual void SendFile(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, int subsequentLineCount, string subsequentLineText)
 		{
-			var file = SendFilesProvider.FilePaths_StressText.StressFiles[StressTestCase.Normal];
+			var file = FilesProvider.FilePaths_StressText.StressFiles[StressTestCase.Normal];
 			var message = string.Format(CultureInfo.InvariantCulture, "Precondition: File line count must equal {0} but is {1}!", SendLineCount, file.Item3);
 			Assert.That(file.Item3, Is.EqualTo(SendLineCount), message);
 			terminalTx.SendFile(file.Item1);
