@@ -39,7 +39,7 @@ using NUnit.Framework;
 namespace YAT.Domain.Test.TextTerminal
 {
 	/// <summary></summary>
-	[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize partial manner of this test class.")]
+	[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize partial manner of this item.")]
 	[TestFixture]
 	public class GlueCharsOfLineTestData_IPv4Loopback
 	{
