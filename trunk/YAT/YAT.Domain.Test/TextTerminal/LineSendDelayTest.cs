@@ -60,13 +60,13 @@ namespace YAT.Domain.Test.TextTerminal
 
 			const int DelayTime = 1000;
 
-			var settingsA = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+			var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 			settingsA.TextTerminal.LineSendDelay = new TextLineSendDelaySettingTuple(true, DelayTime, 1); // Delay of 1000 ms per line.
 			using (var terminalTx = new Domain.TextTerminal(settingsA))
 			{
 				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");
 
-				var settingsB = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				using (var terminalRx = new Domain.TextTerminal(settingsB))
 				{
 					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started");

@@ -30,13 +30,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-using MKY.Collections.Generic;
 using MKY.Settings;
 
+using NUnit;
 using NUnit.Framework;
 
+using YAT.Domain;
 using YAT.Domain.Settings;
 using YAT.Settings.Application;
+using YAT.Settings.Model;
 
 #endregion
 
@@ -145,7 +147,7 @@ namespace YAT.Model.Test.Transmission
 		// Test Cases
 		//==========================================================================================
 
-		private static IEnumerable<TestCaseData> TestCasesCommandData
+		private static IEnumerable<TestCaseData> Tests
 		{
 			get
 			{
@@ -179,84 +181,70 @@ namespace YAT.Model.Test.Transmission
 			}
 		}
 
-		/// <param name="loopbackSettings">
-		/// Quadruple of...
-		/// ...Pair(terminalSettingsDelegateA, terminalSettingsArgumentA)...
-		/// ...Pair(terminalSettingsDelegateB, terminalSettingsArgumentB)...
-		/// ...string testCaseName...
-		/// ...string[] testCaseCategories.
-		/// </param>
-		private static IEnumerable<TestCaseData> TestCases(Quadruple<Pair<Utilities.TerminalSettingsDelegate<string>, string>, Pair<Utilities.TerminalSettingsDelegate<string>, string>, string, string[]> loopbackSettings)
-		{
-			foreach (var commandData in TestCasesCommandData) // TestCaseData(Utilities.TestSet command, int transmissionCount).
-			{
-				// Arguments:
-				var args = new List<object>(commandData.Arguments);
-				args.Insert(0, loopbackSettings.Value1); // Insert the settings descriptor A at the beginning.
-				args.Insert(1, loopbackSettings.Value2); // Insert the settings descriptor B at second.
-				var tcd = new TestCaseData(args.ToArray()); // TestCaseData(Pair settingsDescriptorA, Pair settingsDescriptorB, Utilities.TestSet command, int transmissionCount).
-
-				// Name:
-				tcd.SetName(loopbackSettings.Value3 + commandData.TestName);
-
-				// Category(ies):
-				foreach (string cat in loopbackSettings.Value4)
-					tcd.SetCategory(cat);
-
-				yield return (tcd);
-			}
-		}
-
 		/// <summary></summary>
-		public static IEnumerable TestCasesSerialPortLoopbackPairs
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
+		public static IEnumerable TestCasesSerialPortLoopbackPairs_Text
 		{
 			get
 			{
-				foreach (var lp in Utilities.TransmissionSettings.SerialPortLoopbackPairs)
+				foreach (var descriptor in Domain.Test.Environment.SerialPortLoopbackPairs) // Upper level grouping shall be 'by I/O'.
 				{
-					foreach (var tc in TestCases(lp))
-						yield return (tc);
+					var settingsA = Settings.GetSerialPortSettings(TerminalType.Text, descriptor.PortA);
+					var settingsB = Settings.GetSerialPortSettings(TerminalType.Text, descriptor.PortB);
+
+					foreach (var t in Tests)
+						yield return (Data.ToTestCase(descriptor, t, settingsA, settingsB, t.Arguments));
 				}
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
-		public static IEnumerable TestCasesSerialPortLoopbackSelfs
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
+		public static IEnumerable TestCasesSerialPortLoopbackSelfs_Text
 		{
 			get
 			{
-				foreach (var ls in Utilities.TransmissionSettings.SerialPortLoopbackSelfs)
+				foreach (var descriptor in Domain.Test.Environment.SerialPortLoopbackSelfs) // Upper level grouping shall be 'by I/O'.
 				{
-					foreach (var tc in TestCases(ls))
-						yield return (tc);
+					var settings = Settings.GetSerialPortSettings(TerminalType.Text, descriptor.Port);
+
+					foreach (var t in Tests)
+						yield return (Data.ToTestCase(descriptor, t, settings, t.Arguments));
 				}
 			}
 		}
 
 		/// <summary></summary>
-		public static IEnumerable TestCasesIPLoopbackPairs
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
+		public static IEnumerable TestCasesIPLoopbackPairs_Text
 		{
 			get
 			{
-				foreach (var lp in Utilities.TransmissionSettings.IPLoopbackPairs)
+				foreach (var descriptor in Domain.Test.Environment.IPLoopbackPairs) // Upper level grouping shall be 'by I/O'.
 				{
-					foreach (var tc in TestCases(lp))
-						yield return (tc);
+					var settingsA = Settings.GetIPLoopbackSettings(TerminalType.Text, descriptor.SocketTypeA, descriptor.LocalInterface);
+					var settingsB = Settings.GetIPLoopbackSettings(TerminalType.Text, descriptor.SocketTypeB, descriptor.LocalInterface);
+
+					foreach (var t in Tests)
+						yield return (Data.ToTestCase(descriptor, t, settingsA, settingsB, t.Arguments));
 				}
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
-		public static IEnumerable TestCasesIPLoopbackSelfs
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
+		public static IEnumerable TestCasesIPLoopbackSelfs_Text
 		{
 			get
 			{
-				foreach (var ls in Utilities.TransmissionSettings.IPLoopbackSelfs)
+				foreach (var descriptor in Domain.Test.Environment.IPLoopbackSelfs) // Upper level grouping shall be 'by I/O'.
 				{
-					foreach (var tc in TestCases(ls))
-						yield return (tc);
+					var settings = Settings.GetIPLoopbackSettings(TerminalType.Text, descriptor.SocketType, descriptor.LocalInterface);
+
+					foreach (var t in Tests)
+						yield return (Data.ToTestCase(descriptor, t, settings, t.Arguments));
 				}
 			}
 		}
@@ -306,80 +294,49 @@ namespace YAT.Model.Test.Transmission
 		//==========================================================================================
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "Too many values to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "Too many values to verify.")]
-		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
-		[Test, TestCaseSource(typeof(OneWayTestData), "TestCasesSerialPortLoopbackPairs")]
-		public virtual void SerialPortLoopbackPairs(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
-		                                            Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
-		                                            Utilities.TestSet testSet, int transmissionCount)
+		[Test, TestCaseSource(typeof(OneWayTestData), "TestCasesSerialPortLoopbackPairs_Text")]
+		public virtual void SerialPortLoopbackPairs(TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, Utilities.TestSet testSet, int transmissionCount)
 		{
 			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackPairsAreAvailable)
 				Assert.Ignore("No serial COM port loopback pairs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback pair is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			TransmitAndVerify(settingsDescriptorA, settingsDescriptorB, testSet, transmissionCount);
+			TransmitAndVerify(settingsA, settingsB, testSet, transmissionCount);
 		}
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "Too many values to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "Too many values to verify.")]
-		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
-		[Test, TestCaseSource(typeof(OneWayTestData), "TestCasesSerialPortLoopbackSelfs")]
-		public virtual void SerialPortLoopbackSelfs(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
-		                                            Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
-		                                            Utilities.TestSet testSet, int transmissionCount)
+		[Test, TestCaseSource(typeof(OneWayTestData), "TestCasesSerialPortLoopbackSelfs_Text")]
+		public virtual void SerialPortLoopbackSelfs(TerminalSettingsRoot settings, Utilities.TestSet testSet, int transmissionCount)
 		{
 			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
 				Assert.Ignore("No serial COM port loopback selfs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback self is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			TransmitAndVerify(settingsDescriptorA, settingsDescriptorB, testSet, transmissionCount);
+			TransmitAndVerify(settings, null, testSet, transmissionCount);
 		}
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "Too many values to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "Too many values to verify.")]
-		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
-		[Test, TestCaseSource(typeof(OneWayTestData), "TestCasesIPLoopbackPairs")]
-		public virtual void IPLoopbackPairs(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
-		                                    Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
-		                                    Utilities.TestSet testSet, int transmissionCount)
+		[Test, TestCaseSource(typeof(OneWayTestData), "TestCasesIPLoopbackPairs_Text")]
+		public virtual void IPLoopbackPairs(TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, Utilities.TestSet testSet, int transmissionCount)
 		{
 			// IPLoopbackPairs are always made available by 'Utilities', no need to check for this.
 
-			TransmitAndVerify(settingsDescriptorA, settingsDescriptorB, testSet, transmissionCount);
+			TransmitAndVerify(settingsA, settingsB, testSet, transmissionCount);
 		}
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "Too many values to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "Too many values to verify.")]
-		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
-		[Test, TestCaseSource(typeof(OneWayTestData), "TestCasesIPLoopbackSelfs")]
-		public static void IPLoopbackSelfs(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
-		                                   Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
-		                                   Utilities.TestSet testSet, int transmissionCount)
+		[Test, TestCaseSource(typeof(OneWayTestData), "TestCasesIPLoopbackSelfs_Text")]
+		public static void IPLoopbackSelfs(TerminalSettingsRoot settings, Utilities.TestSet testSet, int transmissionCount)
 		{
 			// IPLoopbackSelfs are always made available by 'Utilities', no need to check for this.
 
-			TransmitAndVerify(settingsDescriptorA, settingsDescriptorB, testSet, transmissionCount);
+			TransmitAndVerify(settings, null, testSet, transmissionCount);
 		}
 
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "Too many values to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "Too many values to verify.")]
-		private static void TransmitAndVerify(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
-		                                      Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB,
-		                                      Utilities.TestSet testSet, int transmissionCount)
+		private static void TransmitAndVerify(TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, Utilities.TestSet testSet, int transmissionCount)
 		{
-			var settingsA = settingsDescriptorA.Value1(settingsDescriptorA.Value2);
-
 			if (settingsA.IO.IOTypeIsUdpSocket) // Revert to default behavior which is mandatory for this test case.
 			{
 				settingsA.TextTerminal.TxDisplay.ChunkLineBreakEnabled = false;
@@ -404,10 +361,8 @@ namespace YAT.Model.Test.Transmission
 				}
 				Utilities.WaitForStart(terminalA);
 
-				if (settingsDescriptorB.Value1 != null) // Loopback pair:
+				if (settingsB != null) // Loopback pair:
 				{
-					var settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
-
 					if (settingsB.IO.IOTypeIsUdpSocket) // Revert to default behavior which is mandatory for this test case.
 					{
 						settingsB.TextTerminal.TxDisplay.ChunkLineBreakEnabled = false;

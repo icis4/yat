@@ -97,14 +97,14 @@ namespace YAT.Domain.Test.Terminal
 			{
 				byte[] parseResult;
 
-				var settingsTx = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+				var settingsTx = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				settingsTx.Display.TimeStampFormat = format;
 				settingsTx.Display.TimeStampUseUtc = useUtc;
 				using (var terminalTx = new Domain.TextTerminal(settingsTx))
 				{
 					Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");
 
-					var settingsRx = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+					var settingsRx = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 					settingsRx.Display.TimeStampFormat = format;
 					settingsRx.Display.TimeStampUseUtc = useUtc;
 					using (var terminalRx = new Domain.TextTerminal(settingsRx))

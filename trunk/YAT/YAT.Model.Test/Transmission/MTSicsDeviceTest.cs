@@ -31,17 +31,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Windows.Forms;
 
 using MKY;
 using MKY.Collections.Generic;
-using MKY.IO.Ports.Test;
 using MKY.Settings;
 using MKY.Windows.Forms;
 
+using NUnit;
 using NUnit.Framework;
 
 using YAT.Settings.Application;
+using YAT.Settings.Model;
 
 #endregion
 
@@ -84,7 +86,7 @@ namespace YAT.Model.Test.Transmission
 		// Test Cases
 		//==========================================================================================
 
-		private static IEnumerable<KeyValuePair<TestCaseData, string>> TestCasesWithDurationCategory
+		private static IEnumerable<KeyValuePair<TestCaseData, string>> TestsWithDurationCategory
 		{
 			get
 			{
@@ -96,9 +98,9 @@ namespace YAT.Model.Test.Transmission
 				// set, the 10 loops test was replaced by sets of 2/5/20 which should give better
 				// test coverage.
 
-				string category10m = new NUnit.MinuteDurationCategoryAttribute(10).Name;
-				string category60m = new NUnit.MinuteDurationCategoryAttribute(60).Name;
-				string category24h = new NUnit.HourDurationCategoryAttribute(24).Name;
+				string category10m = new MinuteDurationCategoryAttribute(10).Name;
+				string category60m = new MinuteDurationCategoryAttribute(60).Name;
+				string category24h = new HourDurationCategoryAttribute(24).Name;
 
 				foreach (var c in Commands)
 				{
@@ -122,31 +124,67 @@ namespace YAT.Model.Test.Transmission
 			}
 		}
 
+		private static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TerminalSettingsRoot settings, KeyValuePair<TestCaseData, string> kvp)
+		{
+			var tc = Data.ToTestCase(descriptor, kvp.Key, settings, kvp.Key.Arguments);
+
+			if (!string.IsNullOrEmpty(kvp.Value))
+				tc.Categories.Add(kvp.Value);
+
+			return (tc);
+		}
+
+		/// <summary></summary>
+		public static int DeviceCount
+		{
+			get
+			{
+				var count =
+				(
+					Domain.Test.Environment.MTSicsSerialPortDevices.Count() +
+					Domain.Test.Environment.MTSicsIPDevices        .Count() +
+					Domain.Test.Environment.MTSicsUsbDevices       .Count()
+				);
+				return (count);
+			}
+		}
+
 		/// <summary></summary>
 		public static IEnumerable TestCases
 		{
 			get
 			{
-				foreach (var dev in Utilities.MTSicsDevices)
+				if (DeviceCount > 0)
 				{
-					foreach (var kvp in TestCasesWithDurationCategory)
+					foreach (var descriptor in Domain.Test.Environment.MTSicsSerialPortDevices)
 					{
-						// Arguments:
-						var args = new List<object>(kvp.Key.Arguments);
-						args.Insert(0, dev.Value1); // Insert the settings descriptor delegate at the beginning.
-						var tcd = new TestCaseData(args.ToArray());
+						var settings = Settings.GetMTSicsSerialPortDeviceSettings(descriptor.Port);
 
-						// Category:
-						tcd.SetCategory(dev.Value2); // Set device category.
-
-						if (!string.IsNullOrEmpty(kvp.Value))
-							tcd.SetCategory(kvp.Value); // Set predefined duration category.
-
-						// Name:
-						tcd.SetName(dev.Value3 + kvp.Key.TestName); // Also prepend device indicator.
-
-						yield return (tcd);
+						foreach (var kvp in TestsWithDurationCategory)
+							yield return (ToTestCase(descriptor, settings, kvp));
 					}
+
+					foreach (var descriptor in Domain.Test.Environment.MTSicsIPDevices)
+					{
+						var settings = Settings.GetMTSicsIPDeviceSettings(descriptor.Port);
+
+						foreach (var kvp in TestsWithDurationCategory)
+							yield return (ToTestCase(descriptor, settings, kvp));
+					}
+
+					foreach (var descriptor in Domain.Test.Environment.MTSicsUsbDevices)
+					{
+						var settings = Settings.GetMTSicsUsbSerialHidDeviceSettings(descriptor.DeviceInfo);
+
+						foreach (var kvp in TestsWithDurationCategory)
+							yield return (ToTestCase(descriptor, settings, kvp));
+					}
+				}
+				else
+				{
+					var na = new TestCaseData(null);
+					na.SetName("*NO* MT-SICS devices are available => FIX OR ACCEPT YELLOW BAR");
+					yield return (na); // Test is mandatory, it shall not be excludable. 'MTSicsDevicesCount' is to be probed in tests.
 				}
 			}
 		}
@@ -218,9 +256,11 @@ namespace YAT.Model.Test.Transmission
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
 		[Test, TestCaseSource(typeof(MTSicsDeviceTestData), "TestCases")]
-		public virtual void Transmission(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor, string stimulus, string expected, int transmissionCount)
+		public virtual void Transmission(TerminalSettingsRoot settings, string stimulus, string expected, int transmissionCount)
 		{
-			var settings = settingsDescriptor.Value1(settingsDescriptor.Value2);
+			if (MTSicsDeviceTestData.DeviceCount <= 0)
+				Assert.Ignore("No MT-SICS devices are available, therefore this test is excluded. Ensure that at least one MT-SICS devices is properly configured and available if passing this test is required.");
+			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			// Ensure that EOL is displayed, otherwise the EOL bytes are not available for verification:
 			settings.TextTerminal.ShowEol = true;

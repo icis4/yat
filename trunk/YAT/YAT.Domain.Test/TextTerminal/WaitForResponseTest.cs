@@ -53,9 +53,9 @@ namespace YAT.Domain.Test.TextTerminal
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			const int WaitTimeUntilTimeout = (int)(1.5 * Settings.TextTerminalSettings.WaitForResponseTimeoutDefault);
+			const int WaitTimeUntilTimeout = (int)(1.5 * Domain.Settings.TextTerminalSettings.WaitForResponseTimeoutDefault);
 
-			var settingsA = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+			var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 
 			var wfr = settingsA.TextTerminal.WaitForResponse;
 			wfr.Enabled = true; // For manual test execution, wfr.Timeout must be set to 5000 ms as break is involved.
@@ -65,7 +65,7 @@ namespace YAT.Domain.Test.TextTerminal
 			{
 				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
 
-				var settingsB = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				using (var terminalB = new Domain.TextTerminal(settingsB))
 				{
 					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started");
@@ -218,7 +218,7 @@ namespace YAT.Domain.Test.TextTerminal
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			var settingsA = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+			var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 
 			var wfr = settingsA.TextTerminal.WaitForResponse;
 			wfr.Enabled = true;
@@ -229,7 +229,7 @@ namespace YAT.Domain.Test.TextTerminal
 			{
 				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
 
-				var settingsB = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				using (var terminalB = new Domain.TextTerminal(settingsB))
 				{
 					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started");

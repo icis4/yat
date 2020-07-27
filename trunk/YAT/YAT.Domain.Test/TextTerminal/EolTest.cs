@@ -149,7 +149,7 @@ namespace YAT.Domain.Test.TextTerminal
 				Assert.That(parser.TryParse(eolBA, out parseResult));
 				int eolByteCountBA = parseResult.Length;
 
-				var settingsA = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+				var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				settingsA.TextTerminal.Encoding = (EncodingEx)encoding;
 				settingsA.TextTerminal.TxEol = eolAB;
 				settingsA.TextTerminal.RxEol = eolBA;
@@ -158,7 +158,7 @@ namespace YAT.Domain.Test.TextTerminal
 				{
 					Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
 
-					var settingsB = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+					var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 					settingsB.TextTerminal.Encoding = (EncodingEx)encoding;
 					settingsB.TextTerminal.TxEol = eolBA;
 					settingsB.TextTerminal.RxEol = eolAB;
@@ -285,7 +285,7 @@ namespace YAT.Domain.Test.TextTerminal
 			const int WaitForOperation = 100;
 			const int WaitForDisposal = 100;
 
-			var settingsA = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+			var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 			settingsA.TextTerminal.TxEol = "";
 			settingsA.TextTerminal.RxEol = "";
 
@@ -297,7 +297,7 @@ namespace YAT.Domain.Test.TextTerminal
 			{
 				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
 
-				var settingsB = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				settingsB.TextTerminal.TxEol = "";
 				settingsB.TextTerminal.RxEol = "";
 

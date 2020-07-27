@@ -52,7 +52,7 @@ namespace YAT.Model.Test.FileHandling
 
 		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler()
 		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(Test.Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings()));
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text)));
 		}
 
 		#endregion
@@ -66,7 +66,7 @@ namespace YAT.Model.Test.FileHandling
 		internal static void StartAndCreateDefaultTerminal(out Main main, out Workspace workspace, out Terminal terminal)
 		{
 			main = new Main();
-			main.Start();              // Creates empty workspace
+			main.Start();
 			workspace = main.Workspace;
 			workspace.CreateNewTerminal(GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 			terminal = workspace.ActiveTerminal;

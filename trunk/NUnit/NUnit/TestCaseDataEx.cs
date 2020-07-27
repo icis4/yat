@@ -21,34 +21,39 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-#region Using
-//==================================================================================================
-// Using
-//==================================================================================================
+using System.Diagnostics.CodeAnalysis;
 
 using NUnit.Framework;
 
-#endregion
-
-namespace YAT.Domain.Test.Terminal
+namespace NUnit
 {
 	/// <summary></summary>
-	[TestFixture]
-	public class SendFileTest
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
+	public static class TestCaseDataEx
 	{
-		/* PENDING	var file = FilesProvider.FilePaths_StressText.StressFiles[StressTestCase.Normal];
-			var message = string.Format(CultureInfo.InvariantCulture, "Precondition: File line count must equal {0} but is {1}!", SendLineCount, file.Item3);
-			Assert.That(file.Item3, Is.EqualTo(SendLineCount), message);
-			terminalTx.SendFile(file.Item1);
+		/// <summary></summary>
+		public static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TestCaseData metaDataToMerge, params object[] args)
+		{
+			// Arguments:
+			var tc = new TestCaseData(args);
 
-			var subsequentLengthExpected = (subsequentLineText.Length + 2); // Adjust EOL.
-			for (int i = 0; i < subsequentLineCount; i++)
-				terminalTx.SendTextLine(subsequentLineText); // Immediately invoke sending of subsequent data.
-			                                     // Includes EOLs.
-			var expectedTotalByteCount = (file.Item2 + (subsequentLengthExpected * subsequentLineCount));
-			var expectedTotalLineCount = (file.Item3 +                             subsequentLineCount);
-			Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1000); // See further above, sending takes 300..600 ms.
-*/	}
+			// Name:
+			tc.SetName(descriptor.Name + ((metaDataToMerge != null) ? (metaDataToMerge.TestName) : ""));
+
+			// Category(ies):
+			{
+				foreach (var cat in descriptor.Categories)
+					tc.SetCategory(cat);
+			}
+			if (metaDataToMerge != null)
+			{
+				foreach (var catToMerge in metaDataToMerge.Categories)
+					tc.SetCategory((string)catToMerge);
+			}
+
+			return (tc);
+		}
+	}
 }
 
 //==================================================================================================

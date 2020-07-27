@@ -160,7 +160,7 @@ namespace YAT.Domain.Test.TextTerminal
 			// A limited implementation of this test can be found in BinaryTerminal.FormatTest.Test().
 			// Changes here may also have to be applied to that limited test.
 
-			var settings = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+			var settings = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 			settings.TextTerminal.Encoding = (EncodingEx)encoding;
 			settings.Display.TxRadix = radix;
 			settings.Display.RxRadix = radix;
