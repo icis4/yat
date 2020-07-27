@@ -56,9 +56,9 @@ namespace MKY.IO.Usb.Test
 
 				// \remind (2019-11-12 / MKY) there might be a way to create these
 				// test cases based on 'DeviceInfoTestData.TestCases', someting like:
-				//     foreach (var tcd in DeviceInfoTestData.TestCases)
+				//     foreach (var tc in DeviceInfoTestData.TestCases)
 				//     {
-				//         yield return (new TestCaseData(tcd.Arg0, tcd.Arg1, ..., false, 0, 0, tcd.Arg5))
+				//         yield return (new TestCaseData(tc.Arg0, tc.Arg1, ..., false, 0, 0, tc.Arg5))
 				//     }
 				// But haven't found a way right now, accepting duplication for the moment.
 
