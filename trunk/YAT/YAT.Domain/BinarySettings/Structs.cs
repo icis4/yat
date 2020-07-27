@@ -69,8 +69,8 @@ namespace YAT.Domain.Settings
 			{
 				int hashCode;
 
-				hashCode =                    Enabled .GetHashCode();
-				hashCode = (hashCode * 397) ^ Sequence.GetHashCode();
+				hashCode =                                        Enabled .GetHashCode();
+				hashCode = (hashCode * 397) ^ (Sequence != null ? Sequence.GetHashCode() : 0);
 
 				return (hashCode);
 			}
