@@ -28,9 +28,11 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 
 using MKY;
 using MKY.IO.Serial.SerialPort;
+using MKY.IO.Serial.Socket;
 using MKY.IO.Serial.Usb;
 using MKY.Net;
 
@@ -46,7 +48,8 @@ namespace YAT.Domain.Test
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public static class Settings
 	{
-		private static TerminalSettings GetTextSettings()
+		/// <summary></summary>
+		public static TerminalSettings GetTextSettings()
 		{
 			var settings = new TerminalSettings();
 			settings.TerminalType = TerminalType.Text;
@@ -55,7 +58,8 @@ namespace YAT.Domain.Test
 			return (settings);                    // Consider moving to each test instead.
 		}
 
-		private static TerminalSettings GetBinarySettings()
+		/// <summary></summary>
+		public static TerminalSettings GetBinarySettings()
 		{
 			var settings = new TerminalSettings();
 			settings.TerminalType = TerminalType.Binary;
@@ -63,14 +67,15 @@ namespace YAT.Domain.Test
 			return (settings);
 		}
 
-		private static TerminalSettings GetSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetSettings(TerminalType terminalType)
 		{
 			switch (terminalType)
 			{
 				case TerminalType.Text:   return (GetTextSettings());
 				case TerminalType.Binary: return (GetBinarySettings());
 			}
-			throw (new ArgumentOutOfRangeException("terminalType", terminalType, MessageHelper.InvalidExecutionPreamble + "'" + terminalType + "' is a terminal type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new ArgumentOutOfRangeException("terminalType", terminalType, MessageHelper.InvalidExecutionPreamble + "'" + terminalType + "' is a terminal type that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#region SerialPort
@@ -78,7 +83,8 @@ namespace YAT.Domain.Test
 		// SerialPort
 		//------------------------------------------------------------------------------------------
 
-		internal static void ApplySerialPortSettings(TerminalSettings settings, string portId)
+		/// <summary></summary>
+		public static void ApplySerialPortSettings(TerminalSettings settings, string portId)
 		{
 			settings.IO.IOType = IOType.SerialPort;
 			settings.UpdateIOTypeDependentSettings();
@@ -86,21 +92,27 @@ namespace YAT.Domain.Test
 			settings.UpdateIOSettingsDependentSettings();
 		}
 
-		internal static TerminalSettings GetSerialPortSettings(TerminalType terminalType, string portId)
+		/// <summary></summary>
+		public static TerminalSettings GetSerialPortSettings(TerminalType terminalType, string portId)
 		{
 			var settings = GetSettings(terminalType);
 			ApplySerialPortSettings(settings, portId);
 			return (settings);
 		}
 
-		internal static TerminalSettings GetSerialPortMTSicsDeviceASettings()
+		/// <summary></summary>
+		public static TerminalSettings GetSerialPortMTSicsDeviceSettings(string portId)
+		{
+			var settings = GetSerialPortSettings(TerminalType.Text, portId);
+			ApplyMTSicsSettings(settings);
+			return (settings);
+		}
+
+		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		public static TerminalSettings GetMTSicsSerialPortDeviceASettings()
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable)
-			{
-				var settings = GetSerialPortSettings(TerminalType.Text, MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceA);
-				ApplyMTSicsSettings(settings);
-				return (settings);
-			}
+				return (GetSerialPortMTSicsDeviceSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceA));
 
 			Assert.Ignore("'MTSicsDeviceA' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -108,14 +120,11 @@ namespace YAT.Domain.Test
 			return (null);
 		}
 
-		internal static TerminalSettings GetSerialPortMTSicsDeviceBSettings()
+		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		public static TerminalSettings GetMTSicsSerialPortDeviceBSettings()
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable)
-			{
-				var settings = GetSerialPortSettings(TerminalType.Text, MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceB);
-				ApplyMTSicsSettings(settings);
-				return (settings);
-			}
+				return (GetSerialPortMTSicsDeviceSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceB));
 
 			Assert.Ignore("'MTSicsDeviceB' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -130,30 +139,31 @@ namespace YAT.Domain.Test
 		// Socket
 		//------------------------------------------------------------------------------------------
 
-		internal static void ApplyIPLoopbackSettings(TerminalSettings settings, IOType type, string networkInterface)
+		/// <summary></summary>
+		public static void ApplyIPLoopbackSettings(TerminalSettings settings, SocketType type, IPAddress ipAddress)
 		{
-			IPNetworkInterfaceEx networkInterfaceCasted = networkInterface;
-
-			settings.IO.IOType = type;
+			settings.IO.IOType = (IOType)type;
 			settings.UpdateIOTypeDependentSettings();
-			settings.IO.Socket.RemoteHost     = IPAddressEx.GetLoopbackOfFamily(networkInterfaceCasted);
-			settings.IO.Socket.LocalInterface =                                 networkInterfaceCasted;
-			settings.IO.Socket.LocalFilter    = IPAddressEx.GetLoopbackOfFamily(networkInterfaceCasted);
+			settings.IO.Socket.RemoteHost     = IPAddressEx.GetLoopbackOfFamily(ipAddress);
+			settings.IO.Socket.LocalInterface =           (IPNetworkInterfaceEx)ipAddress;
+			settings.IO.Socket.LocalFilter    = IPAddressEx.GetLoopbackOfFamily(ipAddress);
 			settings.UpdateIOSettingsDependentSettings();
 		}
 
-		internal static TerminalSettings GetIPLoopbackSettings(TerminalType terminalType, IOType type, string networkInterface)
+		/// <summary></summary>
+		public static TerminalSettings GetIPLoopbackSettings(TerminalType terminalType, SocketType type, IPAddress ipAddress)
 		{
 			var settings = GetSettings(terminalType);
-			ApplyIPLoopbackSettings(settings, type, networkInterface);
+			ApplyIPLoopbackSettings(settings, type, ipAddress);
 			return (settings);
 		}
 
-		internal static void ApplyIPSpecificInterfaceSettings(TerminalSettings settings, IOType type, string networkInterface)
+		/// <summary></summary>
+		public static void ApplyIPSpecificInterfaceSettings(TerminalSettings settings, SocketType type, string networkInterface)
 		{
 			IPNetworkInterfaceEx networkInterfaceCasted = networkInterface;
 
-			settings.IO.IOType = type;
+			settings.IO.IOType = (IOType)type;
 			settings.UpdateIOTypeDependentSettings();
 			settings.IO.Socket.RemoteHost     = IPAddressEx.GetLoopbackOfFamily(networkInterfaceCasted); // \ToDo: Complete specific interface based testing.
 			settings.IO.Socket.LocalInterface =                                 networkInterfaceCasted;
@@ -161,7 +171,8 @@ namespace YAT.Domain.Test
 			settings.UpdateIOSettingsDependentSettings();
 		}
 
-		internal static TerminalSettings GetIPSpecificInterfaceSettings(TerminalType terminalType, IOType type, string networkInterface)
+		/// <summary></summary>
+		public static TerminalSettings GetIPSpecificInterfaceSettings(TerminalType terminalType, SocketType type, string networkInterface)
 		{
 			var settings = GetSettings(terminalType);
 			ApplyIPSpecificInterfaceSettings(settings, type, networkInterface);
@@ -173,20 +184,23 @@ namespace YAT.Domain.Test
 		// Socket > TCP/IP Client
 		//------------------------------------------------------------------------------------------
 
-		internal static TerminalSettings GetTcpClientOnIPv4LoopbackSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetTcpClientOnIPv4LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, IOType.TcpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
+			return (GetIPLoopbackSettings(terminalType, SocketType.TcpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
-		internal static TerminalSettings GetTcpClientOnIPv6LoopbackSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetTcpClientOnIPv6LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, IOType.TcpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
+			return (GetIPLoopbackSettings(terminalType, SocketType.TcpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
 		}
 
-		internal static TerminalSettings GetTcpClientOnIPv4SpecificInterfaceSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetTcpClientOnIPv4SpecificInterfaceSettings(TerminalType terminalType)
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
-				return (GetIPSpecificInterfaceSettings(terminalType, IOType.TcpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
+				return (GetIPSpecificInterfaceSettings(terminalType, SocketType.TcpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
 
 			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -194,10 +208,11 @@ namespace YAT.Domain.Test
 			return (null);
 		}
 
-		internal static TerminalSettings GetTcpClientOnIPv6SpecificInterfaceSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetTcpClientOnIPv6SpecificInterfaceSettings(TerminalType terminalType)
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
-				return (GetIPSpecificInterfaceSettings(terminalType, IOType.TcpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
+				return (GetIPSpecificInterfaceSettings(terminalType, SocketType.TcpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
 
 			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -212,20 +227,23 @@ namespace YAT.Domain.Test
 		// Socket > TCP/IP Server
 		//------------------------------------------------------------------------------------------
 
-		internal static TerminalSettings GetTcpServerOnIPv4LoopbackSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetTcpServerOnIPv4LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, IOType.TcpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
+			return (GetIPLoopbackSettings(terminalType, SocketType.TcpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
-		internal static TerminalSettings GetTcpServerOnIPv6LoopbackSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetTcpServerOnIPv6LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, IOType.TcpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
+			return (GetIPLoopbackSettings(terminalType, SocketType.TcpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
 		}
 
-		internal static TerminalSettings GetTcpServerOnIPv4SpecificInterfaceSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetTcpServerOnIPv4SpecificInterfaceSettings(TerminalType terminalType)
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
-				return (GetIPSpecificInterfaceSettings(terminalType, IOType.TcpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
+				return (GetIPSpecificInterfaceSettings(terminalType, SocketType.TcpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
 
 			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -233,10 +251,11 @@ namespace YAT.Domain.Test
 			return (null);
 		}
 
-		internal static TerminalSettings GetTcpServerOnIPv6SpecificInterfaceSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetTcpServerOnIPv6SpecificInterfaceSettings(TerminalType terminalType)
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
-				return (GetIPSpecificInterfaceSettings(terminalType, IOType.TcpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
+				return (GetIPSpecificInterfaceSettings(terminalType, SocketType.TcpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
 
 			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -252,21 +271,22 @@ namespace YAT.Domain.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>Explicitly using "Loopback", corresponding to 'Configuration.IPv4LoopbackIsAvailable'.</remarks>
-		internal static TerminalSettings GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType terminalType)
+		public static TerminalSettings GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, IOType.TcpAutoSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
+			return (GetIPLoopbackSettings(terminalType, SocketType.TcpAutoSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
 		/// <remarks>Explicitly using "Loopback", corresponding to  'Configuration.IPv6LoopbackIsAvailable'.</remarks>
-		internal static TerminalSettings GetTcpAutoSocketOnIPv6LoopbackSettings(TerminalType terminalType)
+		public static TerminalSettings GetTcpAutoSocketOnIPv6LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, IOType.TcpAutoSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
+			return (GetIPLoopbackSettings(terminalType, SocketType.TcpAutoSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
 		}
 
-		internal static TerminalSettings GetTcpAutoSocketOnIPv4SpecificInterfaceSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetTcpAutoSocketOnIPv4SpecificInterfaceSettings(TerminalType terminalType)
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
-				return (GetIPSpecificInterfaceSettings(terminalType, IOType.TcpAutoSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
+				return (GetIPSpecificInterfaceSettings(terminalType, SocketType.TcpAutoSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
 
 			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -274,10 +294,11 @@ namespace YAT.Domain.Test
 			return (null);
 		}
 
-		internal static TerminalSettings GetTcpAutoSocketOnIPv6SpecificInterfaceSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetTcpAutoSocketOnIPv6SpecificInterfaceSettings(TerminalType terminalType)
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
-				return (GetIPSpecificInterfaceSettings(terminalType, IOType.TcpAutoSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
+				return (GetIPSpecificInterfaceSettings(terminalType, SocketType.TcpAutoSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
 
 			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -285,20 +306,21 @@ namespace YAT.Domain.Test
 			return (null);
 		}
 
-		/// <remarks>Interface of <see cref="IPNetworkInterface.IPv4Loopback"/> is implicitly given.</remarks>
-		internal static TerminalSettings GetTcpAutoSocketMTSicsDeviceSettings()
+		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		public static TerminalSettings GetMTSicsIPDeviceSettings(int port)
+		{
+			var settings = GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
+			settings.IO.Socket.LocalTcpPort = port;
+			settings.IO.Socket.RemoteTcpPort = port;
+			ApplyMTSicsSettings(settings);
+			return (settings);
+		}
+
+		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		public static TerminalSettings GetMTSicsIPDeviceSettings()
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.MTSicsDeviceIsAvailable)
-			{
-				var settings = GetIPLoopbackSettings(TerminalType.Text, IOType.TcpAutoSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback);
-
-				int port = MKY.Net.Test.ConfigurationProvider.Configuration.MTSicsDeviceTcpPortAsInt;
-				settings.IO.Socket.LocalTcpPort = port;
-				settings.IO.Socket.RemoteTcpPort = port;
-
-				ApplyMTSicsSettings(settings);
-				return (settings);
-			}
+				return (GetMTSicsIPDeviceSettings(MKY.Net.Test.ConfigurationProvider.Configuration.MTSicsDeviceTcpPortAsInt));
 
 			Assert.Ignore("'MTSicsDevice' is not available, therefore this test is excluded. Ensure that 'MTSicsDevice' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -313,20 +335,23 @@ namespace YAT.Domain.Test
 		// Socket > UDP/IP Client
 		//------------------------------------------------------------------------------------------
 
-		internal static TerminalSettings GetUdpClientOnIPv4LoopbackSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetUdpClientOnIPv4LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, IOType.UdpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
+			return (GetIPLoopbackSettings(terminalType, SocketType.UdpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
-		internal static TerminalSettings GetUdpClientOnIPv6LoopbackSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetUdpClientOnIPv6LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, IOType.UdpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
+			return (GetIPLoopbackSettings(terminalType, SocketType.UdpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
 		}
 
-		internal static TerminalSettings GetUdpClientOnIPv4SpecificInterfaceSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetUdpClientOnIPv4SpecificInterfaceSettings(TerminalType terminalType)
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
-				return (GetIPSpecificInterfaceSettings(terminalType, IOType.UdpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
+				return (GetIPSpecificInterfaceSettings(terminalType, SocketType.UdpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
 
 			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -334,10 +359,11 @@ namespace YAT.Domain.Test
 			return (null);
 		}
 
-		internal static TerminalSettings GetUdpClientOnIPv6SpecificInterfaceSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetUdpClientOnIPv6SpecificInterfaceSettings(TerminalType terminalType)
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
-				return (GetIPSpecificInterfaceSettings(terminalType, IOType.UdpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
+				return (GetIPSpecificInterfaceSettings(terminalType, SocketType.UdpClient, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
 
 			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -352,20 +378,23 @@ namespace YAT.Domain.Test
 		// Socket > UDP/IP Server
 		//------------------------------------------------------------------------------------------
 
-		internal static TerminalSettings GetUdpServerOnIPv4LoopbackSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetUdpServerOnIPv4LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, IOType.UdpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
+			return (GetIPLoopbackSettings(terminalType, SocketType.UdpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
-		internal static TerminalSettings GetUdpServerOnIPv6LoopbackSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetUdpServerOnIPv6LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, IOType.UdpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
+			return (GetIPLoopbackSettings(terminalType, SocketType.UdpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
 		}
 
-		internal static TerminalSettings GetUdpServerOnIPv4SpecificInterfaceSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetUdpServerOnIPv4SpecificInterfaceSettings(TerminalType terminalType)
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
-				return (GetIPSpecificInterfaceSettings(terminalType, IOType.UdpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
+				return (GetIPSpecificInterfaceSettings(terminalType, SocketType.UdpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
 
 			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -373,10 +402,11 @@ namespace YAT.Domain.Test
 			return (null);
 		}
 
-		internal static TerminalSettings GetUdpServerOnIPv6SpecificInterfaceSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetUdpServerOnIPv6SpecificInterfaceSettings(TerminalType terminalType)
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
-				return (GetIPSpecificInterfaceSettings(terminalType, IOType.UdpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
+				return (GetIPSpecificInterfaceSettings(terminalType, SocketType.UdpServer, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
 
 			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -391,20 +421,23 @@ namespace YAT.Domain.Test
 		// Socket > UDP/IP PairSocket
 		//------------------------------------------------------------------------------------------
 
-		internal static TerminalSettings GetUdpPairSocketOnIPv4LoopbackSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetUdpPairSocketOnIPv4LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, IOType.UdpPairSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
+			return (GetIPLoopbackSettings(terminalType, SocketType.UdpPairSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
-		internal static TerminalSettings GetUdpPairSocketOnIPv6LoopbackSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetUdpPairSocketOnIPv6LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, IOType.UdpPairSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
+			return (GetIPLoopbackSettings(terminalType, SocketType.UdpPairSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
 		}
 
-		internal static TerminalSettings GetUdpPairSocketOnIPv4SpecificInterfaceSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetUdpPairSocketOnIPv4SpecificInterfaceSettings(TerminalType terminalType)
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterfaceIsAvailable)
-				return (GetIPSpecificInterfaceSettings(terminalType, IOType.UdpPairSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
+				return (GetIPSpecificInterfaceSettings(terminalType, SocketType.UdpPairSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface));
 
 			Assert.Ignore("'IPv4SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv4SpecificInterface' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -412,10 +445,11 @@ namespace YAT.Domain.Test
 			return (null);
 		}
 
-		internal static TerminalSettings GetUdpPairSocketOnIPv6SpecificInterfaceSettings(TerminalType terminalType)
+		/// <summary></summary>
+		public static TerminalSettings GetUdpPairSocketOnIPv6SpecificInterfaceSettings(TerminalType terminalType)
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable)
-				return (GetIPSpecificInterfaceSettings(terminalType, IOType.UdpPairSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
+				return (GetIPSpecificInterfaceSettings(terminalType, SocketType.UdpPairSocket, MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface));
 
 			Assert.Ignore("'IPv6SpecificInterface' is not available, therefore this test is excluded. Ensure that 'IPv6SpecificInterface' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -432,7 +466,8 @@ namespace YAT.Domain.Test
 		// USB Ser/HID
 		//------------------------------------------------------------------------------------------
 
-		internal static void ApplyUsbSerialHidSettings(TerminalSettings settings, string deviceInfo)
+		/// <summary></summary>
+		public static void ApplyUsbSerialHidSettings(TerminalSettings settings, string deviceInfo)
 		{
 			settings.IO.IOType = IOType.UsbSerialHid;
 			settings.UpdateIOTypeDependentSettings();
@@ -440,21 +475,27 @@ namespace YAT.Domain.Test
 			settings.UpdateIOSettingsDependentSettings();
 		}
 
-		internal static TerminalSettings GetUsbSerialHidSettings(TerminalType terminalType, string deviceInfo)
+		/// <summary></summary>
+		public static TerminalSettings GetUsbSerialHidSettings(TerminalType terminalType, string deviceInfo)
 		{
 			var settings = GetSettings(terminalType);
 			ApplyUsbSerialHidSettings(settings, deviceInfo);
 			return (settings);
 		}
 
-		internal static TerminalSettings GetUsbSerialHidMTSicsDeviceASettings()
+		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		public static TerminalSettings GetMTSicsUsbSerialHidDeviceSettings(string deviceInfo)
+		{
+			var settings = GetUsbSerialHidSettings(TerminalType.Text, deviceInfo);
+			ApplyMTSicsSettings(settings);
+			return (settings);
+		}
+
+		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		public static TerminalSettings GetMTSicsUsbSerialHidDeviceASettings()
 		{
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable)
-			{
-				var settings = GetUsbSerialHidSettings(TerminalType.Text, MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceA);
-				ApplyMTSicsSettings(settings);
-				return (settings);
-			}
+				GetMTSicsUsbSerialHidDeviceSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceA);
 
 			Assert.Ignore("'MTSicsDeviceA' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -462,14 +503,11 @@ namespace YAT.Domain.Test
 			return (null);
 		}
 
-		internal static TerminalSettings GetUsbSerialHidMTSicsDeviceBSettings()
+		/// <summary></summary>
+		public static TerminalSettings GetUsbSerialHidMTSicsDeviceBSettings()
 		{
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable)
-			{
-				var settings = GetUsbSerialHidSettings(TerminalType.Text, MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceB);
-				ApplyMTSicsSettings(settings);
-				return (settings);
-			}
+				GetMTSicsUsbSerialHidDeviceSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceB);
 
 			Assert.Ignore("'MTSicsDeviceB' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -484,7 +522,8 @@ namespace YAT.Domain.Test
 		// MT-SICS
 		//------------------------------------------------------------------------------------------
 
-		private static void ApplyMTSicsSettings(TerminalSettings settings)
+		/// <summary></summary>
+		public static void ApplyMTSicsSettings(TerminalSettings settings)
 		{
 			// MT-SICS devices use XOn/XOff by default:
 			settings.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software;

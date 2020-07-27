@@ -27,15 +27,14 @@
 //==================================================================================================
 
 using System;
-using System.Collections;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Threading;
 
-using MKY.Collections.Generic;
 using MKY.IO.Ports.Test;
 
 using NUnit.Framework;
+
+using YAT.Domain.Settings;
 
 #endregion
 
@@ -43,7 +42,7 @@ namespace YAT.Domain.Test.TextTerminal
 {
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
-	[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize partial manner of this test class.")]
+	[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize partial manner of this item.")]
 	[TestFixture]
 	public class GlueCharsOfLineTest_SerialPortLoopbackSelfs
 	{
@@ -53,29 +52,23 @@ namespace YAT.Domain.Test.TextTerminal
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
-		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
-		public virtual void TestDefault(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
+		[Test, TestCaseSource(typeof(Data.Generic), "TestCasesSerialPortLoopbackSelfs_Text")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
+		public virtual void TestDefault(TerminalSettings settings)
 		{
 			if (!ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
 				Assert.Ignore("No serial COM port loopback selfs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback self is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
-
-			var settings = settingsDescriptor.Value1(settingsDescriptor.Value2);
 
 			TestDefaultOrInfiniteTimeout(settings);
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
-		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
-		public virtual void TestInfiniteTimeout(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
+		[Test, TestCaseSource(typeof(Data.Generic), "TestCasesSerialPortLoopbackSelfs_Text")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
+		public virtual void TestInfiniteTimeout(TerminalSettings settings)
 		{
 			if (!ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
 				Assert.Ignore("No serial COM port loopback selfs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback self is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
-
-			var settings = settingsDescriptor.Value1(settingsDescriptor.Value2);
 
 			var gcol = settings.TextTerminal.GlueCharsOfLine;
 			gcol.Enabled = true;
@@ -86,15 +79,12 @@ namespace YAT.Domain.Test.TextTerminal
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
-		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
-		public virtual void TestMinimumTimeout(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
+		[Test, TestCaseSource(typeof(Data.Generic), "TestCasesSerialPortLoopbackSelfs_Text")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
+		public virtual void TestMinimumTimeout(TerminalSettings settings)
 		{
 			if (!ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
 				Assert.Ignore("No serial COM port loopback selfs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback self is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
-
-			var settings = settingsDescriptor.Value1(settingsDescriptor.Value2);
 
 			var gcol = settings.TextTerminal.GlueCharsOfLine;
 			gcol.Timeout = 1;
@@ -104,15 +94,12 @@ namespace YAT.Domain.Test.TextTerminal
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
-		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackSelfs")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
-		public virtual void TestDisabled(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptor)
+		[Test, TestCaseSource(typeof(Data.Generic), "TestCasesSerialPortLoopbackSelfs_Text")] // Test is mandatory, it shall not be excludable. 'LoopbackSelfsAreAvailable' is probed below.
+		public virtual void TestDisabled(TerminalSettings settings)
 		{
 			if (!ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
 				Assert.Ignore("No serial COM port loopback selfs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback self is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
-
-			var settings = settingsDescriptor.Value1(settingsDescriptor.Value2);
 
 			var gcol = settings.TextTerminal.GlueCharsOfLine;
 			gcol.Enabled = false;
@@ -129,7 +116,7 @@ namespace YAT.Domain.Test.TextTerminal
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void TestDefaultOrInfiniteTimeout(Settings.TerminalSettings settings)
+		protected virtual void TestDefaultOrInfiniteTimeout(TerminalSettings settings)
 		{
 			using (var terminal = new Domain.TextTerminal(settings)) // Glueing is enabled by default.
 			{
@@ -138,7 +125,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 				// Send:
 				var beganAt = DateTime.Now;
-				var file = SendFilesProvider.FilePaths_StressText.StressFiles[StressTestCase.Normal]; // 300 lines will take about 9..12 seconds.
+				var file = Files.Text.Stress[StressTestCase.Normal]; // 300 lines will take about 9..12 seconds.
 				var fileTimeout = 15000;
 				var fileByteCount = file.Item2;
 				var fileLineCount = file.Item3;
@@ -181,7 +168,7 @@ namespace YAT.Domain.Test.TextTerminal
 		}
 
 		/// <summary></summary>
-		protected virtual void TestMinimumTimeoutOrTestDisabled(Settings.TerminalSettings settings)
+		protected virtual void TestMinimumTimeoutOrTestDisabled(TerminalSettings settings)
 		{
 			using (var terminal = new Domain.TextTerminal(settings)) // Glueing is enabled by default.
 			{
@@ -190,7 +177,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 				// Send:
 				var beganAt = DateTime.Now;
-				var file = SendFilesProvider.FilePaths_StressText.StressFiles[StressTestCase.Normal]; // 300 lines will take about 9..12 seconds.
+				var file = Files.Text.Stress[StressTestCase.Normal]; // 300 lines will take about 9..12 seconds.
 				var fileTimeout = 15000;
 				var fileByteCount = file.Item2;
 				var fileLineCount = file.Item3;

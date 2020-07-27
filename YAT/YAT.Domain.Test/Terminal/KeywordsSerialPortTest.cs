@@ -36,6 +36,8 @@ using MKY.IO.Serial.SerialPort;
 
 using NUnit.Framework;
 
+using YAT.Domain.Settings;
+
 #endregion
 
 namespace YAT.Domain.Test.Terminal
@@ -50,13 +52,8 @@ namespace YAT.Domain.Test.Terminal
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "Too many values to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "Too many values to verify.")]
-		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
-		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackPairs")]
-		public virtual void TestSettings(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
-		                                 Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB)
+		[Test, TestCaseSource(typeof(Data.Generic), "TestCasesSerialPortLoopbackPairs_Text")]
+		public virtual void TestSettings(TerminalSettings settingsA, TerminalSettings settingsB)
 		{
 			if (!ConfigurationProvider.Configuration.LoopbackPairsAreAvailable)
 				Assert.Ignore("No serial COM port loopback pairs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback pairs is properly configured and available if passing this test is required.");
@@ -66,7 +63,6 @@ namespace YAT.Domain.Test.Terminal
 
 			using (var parser = new Domain.Parser.Parser(Domain.Parser.Mode.NoEscapes)) // Default encoding of UTF-8 is good enough for this test case.
 			{
-				var settingsA = settingsDescriptorA.Value1(settingsDescriptorA.Value2);
 				var standardPortNumberInitiallyA = settingsA.IO.SerialPort.PortId.StandardPortNumber;
 				using (var terminalA = new Domain.TextTerminal(settingsA))
 				{
@@ -84,7 +80,6 @@ namespace YAT.Domain.Test.Terminal
 
 					// Initial ping-pong:
 
-					var settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
 					var standardPortNumberInitiallyB = settingsB.IO.SerialPort.PortId.StandardPortNumber;
 					using (var terminalB = new Domain.TextTerminal(settingsB))
 					{
@@ -269,13 +264,8 @@ namespace YAT.Domain.Test.Terminal
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "Too many values to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too many values to verify.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "Too many values to verify.")]
-		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
-		[Test, TestCaseSource(typeof(GenericTestData), "TestEnvironmentSerialPortLoopbackPairs")]
-		public virtual void TestSignals(Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorA,
-		                                Pair<Utilities.TerminalSettingsDelegate<string>, string> settingsDescriptorB)
+		[Test, TestCaseSource(typeof(Data.Generic), "TestCasesSerialPortLoopbackPairs_Text")]
+		public virtual void TestSignals(TerminalSettings settingsA, TerminalSettings settingsB)
 		{
 			if (!ConfigurationProvider.Configuration.LoopbackPairsAreAvailable)
 				Assert.Ignore("No serial COM port loopback pairs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback pairs is properly configured and available if passing this test is required.");
@@ -285,7 +275,6 @@ namespace YAT.Domain.Test.Terminal
 
 			using (var parser = new Domain.Parser.Parser(Domain.Parser.Mode.NoEscapes)) // Default encoding of UTF-8 is good enough for this test case.
 			{
-				var settingsA = settingsDescriptorA.Value1(settingsDescriptorA.Value2);
 				settingsA.IO.SerialPort.Communication.FlowControl = SerialFlowControl.ManualHardware;
 
 				var mctPortNameInQuestion = "COM11";                 // Workaround to bug #354 "Automatic hardware flow control is not supported by MCT"
@@ -308,7 +297,6 @@ namespace YAT.Domain.Test.Terminal
 				{
 					Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
 
-					var settingsB = settingsDescriptorB.Value1(settingsDescriptorB.Value2);
 					settingsB.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Hardware; // Automatic.
 
 					using (var terminalB = new Domain.TextTerminal(settingsB))

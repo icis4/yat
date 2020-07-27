@@ -56,7 +56,7 @@ namespace YAT.Domain.Test.TextTerminal
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			var settingsA = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+			var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 			settingsA.Display.ShowTimeStamp = true;
 			settingsA.Display.ShowDirection = true;
 			settingsA.Display.ShowLength    = true;
@@ -66,7 +66,7 @@ namespace YAT.Domain.Test.TextTerminal
 			{
 				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
 
-				var settingsB = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				settingsB.Display.ShowDirection = true;
 
 				var gcolB = settingsB.TextTerminal.GlueCharsOfLine;
@@ -241,7 +241,7 @@ namespace YAT.Domain.Test.TextTerminal
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			var settingsA = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+			var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 			settingsA.Display.ShowTimeStamp = true;
 			settingsA.Display.ShowDirection = true;
 			settingsA.Display.ShowLength    = true;
@@ -255,7 +255,7 @@ namespace YAT.Domain.Test.TextTerminal
 			{
 				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
 
-				var settingsB = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				settingsB.Display.ShowDirection = true;
 
 				var gcolB = settingsB.TextTerminal.GlueCharsOfLine;
@@ -393,7 +393,7 @@ namespace YAT.Domain.Test.TextTerminal
 						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
 
 						// ...and wait for at least twice the default timeout:
-						Thread.Sleep(2 * Settings.TextTerminalSettings.GlueCharsOfLineTimeoutDefault); // No margin needed.
+						Thread.Sleep(2 * Domain.Settings.TextTerminalSettings.GlueCharsOfLineTimeoutDefault); // No margin needed.
 
 					////expectedContentPatternA = same as before as line from B must be postponed until line from A has completed (timeout = forever).
 						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);

@@ -935,8 +935,8 @@ namespace YAT.Domain.Test.Parser
 				Assert.That(p.TryParse(s, out actualBytes, out actualParsed, ref formatException), Is.False);
 
 				string actualMessage;
-				if (formatException.Message.Contains(Environment.NewLine))
-					actualMessage = formatException.Message.Substring(0, formatException.Message.IndexOf(Environment.NewLine, StringComparison.CurrentCultureIgnoreCase));
+				if (formatException.Message.Contains(System.Environment.NewLine))
+					actualMessage = formatException.Message.Substring(0, formatException.Message.IndexOf(System.Environment.NewLine, StringComparison.CurrentCultureIgnoreCase));
 				else
 					actualMessage = formatException.Message;
 

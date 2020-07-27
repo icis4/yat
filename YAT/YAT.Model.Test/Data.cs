@@ -26,29 +26,30 @@
 // Using
 //==================================================================================================
 
+using NUnit;
 using NUnit.Framework;
+
+using YAT.Settings.Model;
 
 #endregion
 
-namespace YAT.Domain.Test.Terminal
+namespace YAT.Model.Test
 {
-	/// <summary></summary>
-	[TestFixture]
-	public class SendFileTest
+	/// <remarks>Just named "Data" instead of "TestCaseData" for compactness.</remarks>
+	public static class Data
 	{
-		/* PENDING	var file = FilesProvider.FilePaths_StressText.StressFiles[StressTestCase.Normal];
-			var message = string.Format(CultureInfo.InvariantCulture, "Precondition: File line count must equal {0} but is {1}!", SendLineCount, file.Item3);
-			Assert.That(file.Item3, Is.EqualTo(SendLineCount), message);
-			terminalTx.SendFile(file.Item1);
+		/// <remarks>Explicitly using two settings for "Pair" test cases, instead of enumerable generic number of settings.</remarks>
+		public static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TestCaseData metaDataToMerge, TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, params object[] args)
+		{
+			return (TestCaseDataEx.ToTestCase(descriptor, metaDataToMerge, settingsA, settingsB, args));
+		}
 
-			var subsequentLengthExpected = (subsequentLineText.Length + 2); // Adjust EOL.
-			for (int i = 0; i < subsequentLineCount; i++)
-				terminalTx.SendTextLine(subsequentLineText); // Immediately invoke sending of subsequent data.
-			                                     // Includes EOLs.
-			var expectedTotalByteCount = (file.Item2 + (subsequentLengthExpected * subsequentLineCount));
-			var expectedTotalLineCount = (file.Item3 +                             subsequentLineCount);
-			Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1000); // See further above, sending takes 300..600 ms.
-*/	}
+		/// <remarks>Explicitly using a single setting for "Self" test cases, instead of enumerable generic number of settings.</remarks>
+		public static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TestCaseData metaDataToMerge, TerminalSettingsRoot settings, params object[] args)
+		{
+			return (TestCaseDataEx.ToTestCase(descriptor, metaDataToMerge, settings, args));
+		}
+	}
 }
 
 //==================================================================================================

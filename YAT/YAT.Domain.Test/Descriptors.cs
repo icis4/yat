@@ -22,38 +22,50 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System.Collections.Generic;
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
+using NUnit;
+
+using MKY.IO.Serial.Socket;
+using MKY.Net;
+
+#endregion
 
 namespace YAT.Domain.Test
 {
-	/// <summary></summary>
-	public class Descriptor
+	#region SerialPort
+	//----------------------------------------------------------------------------------------------
+	// SerialPort
+	//----------------------------------------------------------------------------------------------
+
+	/// <remarks>Just named "Descriptor" instead of "TestCaseDescriptor" for compactness.</remarks>
+	public class SerialPortDescriptor : TestCaseDescriptor
 	{
 		/// <summary></summary>
-		public string Name { get; }
+		public string Port { get; }
 
 		/// <summary></summary>
-		public string[] Categories { get; }
-
-		/// <summary></summary>
-		public Descriptor(string name, string[] categories)
+		public SerialPortDescriptor(string port, string name, string[] categories)
+			: base(name, categories)
 		{
-			Name = name;
-			Categories = categories;
+			Port = port;
 		}
 	}
 
-	/// <summary></summary>
-	public class SerialPortLoopbackPairDescriptor : Descriptor
+	/// <remarks>Just named "Descriptor" instead of "TestCaseDescriptor" for compactness.</remarks>
+	public class SerialPortPairDescriptor : TestCaseDescriptor
 	{
 		/// <summary></summary>
-		public string PortA { get; set; }
+		public string PortA { get; }
 
 		/// <summary></summary>
-		public string PortB { get; set; }
+		public string PortB { get; }
 
 		/// <summary></summary>
-		public SerialPortLoopbackPairDescriptor(string portA, string portB, string name, string[] categories)
+		public SerialPortPairDescriptor(string portA, string portB, string name, string[] categories)
 			: base(name, categories)
 		{
 			PortA = portA;
@@ -61,155 +73,95 @@ namespace YAT.Domain.Test
 		}
 	}
 
-	/// <summary></summary>
-	public class SerialPortLoopbackSelfDescriptor : Descriptor
+	#endregion
+
+	#region Socket
+	//----------------------------------------------------------------------------------------------
+	// Socket
+	//----------------------------------------------------------------------------------------------
+
+	/// <remarks>Just named "Descriptor" instead of "TestCaseDescriptor" for compactness.</remarks>
+	public abstract class IPSocketDescriptorBase : TestCaseDescriptor
 	{
 		/// <summary></summary>
-		public string Port { get; set; }
+		public IPNetworkInterfaceEx LocalInterface { get; }
 
 		/// <summary></summary>
-		public SerialPortLoopbackSelfDescriptor(string port, string name, string[] categories)
+		public IPSocketDescriptorBase(IPNetworkInterfaceEx localInterface, string name, string[] categories)
 			: base(name, categories)
+		{
+			LocalInterface = localInterface;
+		}
+	}
+
+	/// <remarks>Just named "Descriptor" instead of "TestCaseDescriptor" for compactness.</remarks>
+	public class IPSocketTypeDescriptor : IPSocketDescriptorBase
+	{
+		/// <summary></summary>
+		public SocketType SocketType { get; }
+
+		/// <summary></summary>
+		public IPSocketTypeDescriptor(SocketType socketType, IPNetworkInterfaceEx localInterface, string name, string[] categories)
+			: base(localInterface, name, categories)
+		{
+			SocketType = socketType;
+		}
+	}
+
+	/// <remarks>Just named "Descriptor" instead of "TestCaseDescriptor" for compactness.</remarks>
+	public class IPSocketTypePairDescriptor : IPSocketDescriptorBase
+	{
+		/// <summary></summary>
+		public SocketType SocketTypeA { get; }
+
+		/// <summary></summary>
+		public SocketType SocketTypeB { get; }
+
+		/// <summary></summary>
+		public IPSocketTypePairDescriptor(SocketType socketTypeA, SocketType socketTypeB, IPNetworkInterfaceEx localInterface, string name, string[] categories)
+			: base(localInterface, name, categories)
+		{
+			SocketTypeA = socketTypeA;
+			SocketTypeB = socketTypeB;
+		}
+	}
+
+	/// <remarks>Just named "Descriptor" instead of "TestCaseDescriptor" for compactness.</remarks>
+	public class IPSocketDescriptor : IPSocketTypeDescriptor
+	{
+		/// <summary></summary>
+		public int Port { get; }
+
+		/// <summary></summary>
+		public IPSocketDescriptor(SocketType socketType, IPNetworkInterfaceEx localInterface, int port, string name, string[] categories)
+			: base(socketType, localInterface, name, categories)
 		{
 			Port = port;
 		}
 	}
 
-	/// <summary></summary>
-	public static class Descriptors
+	#endregion
+
+	#region USB Ser/HID
+	//----------------------------------------------------------------------------------------------
+	// USB Ser/HID
+	//----------------------------------------------------------------------------------------------
+
+	/// <remarks>Just named "Descriptor" instead of "TestCaseDescriptor" for compactness.</remarks>
+	public class UsbSerialHidDescriptor : TestCaseDescriptor
 	{
-		/// <summary>
-		/// Returns test case descriptors for serial COM port loopback pairs.
-		/// </summary>
-		public static IEnumerable<SerialPortLoopbackPairDescriptor> SerialPortLoopbackPairs
+		/// <summary></summary>
+		public string DeviceInfo { get; }
+
+		/// <summary></summary>
+		public UsbSerialHidDescriptor(string deviceInfo, string name, string[] categories)
+			: base(name, categories)
 		{
-			get
-			{
-				foreach (MKY.IO.Ports.Test.SerialPortPairConfigurationElement ce in MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackPairs)
-				{
-					string name = "SerialPortLoopbackPair_" + ce.PortA + "_" + ce.PortB;
-					string[] cats = { MKY.IO.Ports.Test.ConfigurationCategoryStrings.LoopbackPairsAreAvailable };
-					yield return (new SerialPortLoopbackPairDescriptor(ce.PortA, ce.PortB, name, cats));
-				}
-			}
-		}
-
-		/// <summary>
-		/// Returns test case descriptors for serial COM port loopback selfs.
-		/// </summary>
-		public static IEnumerable<SerialPortLoopbackSelfDescriptor> SerialPortLoopbackSelfs
-		{
-			get
-			{
-				foreach (MKY.IO.Ports.Test.SerialPortConfigurationElement ce in MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackSelfs)
-				{
-					string name = "SerialPortLoopbackSelf_" + ce.Port;
-					string[] cats = { MKY.IO.Ports.Test.ConfigurationCategoryStrings.LoopbackSelfsAreAvailable };
-					yield return (new SerialPortLoopbackSelfDescriptor(ce.Port, name, cats));
-				}
-			}
-		}
-
-		/// <summary>
-		/// Returns test case descriptors for TCP/IP and UDP/IP Client/Server as well as AutoSocket.
-		/// </summary>
-		/// <remarks>
-		/// TCP/IP combinations Server/AutoSocket and AutoSocket/Client are skipped as they don't really offer additional test coverage.
-		/// UPD/IP PairSocket is also skipped as that would require additional settings with different ports, and they are tested further below anyway.
-		/// </remarks>
-		public static IEnumerable<Descriptor> IPLoopbackPairs
-		{
-			get
-			{
-				string name;
-				string[] cats;
-
-				// TCP/IP Client/Server
-
-				name = "TcpClientServer_IPv4Loopback";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4LoopbackIsAvailable };
-				yield return (new Descriptor(name, cats));
-
-				name = "TcpClientServer_IPv6Loopback";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6LoopbackIsAvailable };
-				yield return (new Descriptor(name, cats));
-
-				name = "TcpClientServer_IPv4SpecificInterface";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4SpecificInterfaceIsAvailable };
-				yield return (new Descriptor(name, cats));
-
-				name = "TcpClientServer_IPv6SpecificInterface";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable };
-				yield return (new Descriptor(name, cats));
-
-				// TCP/IP AutoSocket
-
-				name = "TcpAutoSocket_IPv4Loopback";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4LoopbackIsAvailable };
-				yield return (new Descriptor(name, cats));
-
-				name = "TcpAutoSocket_IPv6Loopback";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6LoopbackIsAvailable };
-				yield return (new Descriptor(name, cats));
-
-				name = "TcpAutoSocket_IPv4SpecificInterface";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4SpecificInterfaceIsAvailable };
-				yield return (new Descriptor(name, cats));
-
-				name = "TcpAutoSocket_IPv6SpecificInterface";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable };
-				yield return (new Descriptor(name, cats));
-
-				// UDP/IP Client/Server
-
-				name = "UdpClientServer_IPv4Loopback";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4LoopbackIsAvailable };
-				yield return (new Descriptor(name, cats));
-
-				name = "UdpClientServer_IPv6Loopback";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6LoopbackIsAvailable };
-				yield return (new Descriptor(name, cats));
-
-				name = "UdpClientServer_IPv4SpecificInterface";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4SpecificInterfaceIsAvailable };
-				yield return (new Descriptor(name, cats));
-
-				name = "UdpClientServer_IPv6SpecificInterface";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable };
-				yield return (new Descriptor(name, cats));
-			}
-		}
-
-		/// <summary>
-		/// Returns test case descriptors for UDP/IP PairSocket.
-		/// </summary>
-		public static IEnumerable<Descriptor> IPLoopbackSelfs
-		{
-			get
-			{
-				string name;
-				string[] cats;
-
-				// UDP/IP PairSocket
-
-				name = "UdpPairSocket_IPv4Loopback";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4LoopbackIsAvailable };
-				yield return (new Descriptor(name, cats));
-
-				name = "UdpPairSocket_IPv6Loopback";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6LoopbackIsAvailable };
-				yield return (new Descriptor(name, cats));
-
-				name = "UdpPairSocket_IPv4SpecificInterface";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4SpecificInterfaceIsAvailable };
-				yield return (new Descriptor(name, cats));
-
-				name = "UdpPairSocket_IPv6SpecificInterface";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable };
-				yield return (new Descriptor(name, cats));
-			}
+			DeviceInfo = deviceInfo;
 		}
 	}
+
+	#endregion
 }
 
 //==================================================================================================

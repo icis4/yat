@@ -14,41 +14,49 @@
 // See SVN change log for file revision details.
 // Author(s): Matthias Klaey
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2007-2020 Matthias Kläy.
+// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
+// Copyright © 2003-2020 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-#region Using
-//==================================================================================================
-// Using
-//==================================================================================================
-
-using NUnit.Framework;
-
-#endregion
-
-namespace YAT.Domain.Test.Terminal
+namespace NUnit
 {
-	/// <summary></summary>
-	[TestFixture]
-	public class SendFileTest
+	/// <summary>
+	/// Encapsulates information to initialize <see cref="Framework.TestCaseData"/> objects.
+	/// </summary>
+	/// <remarks>
+	/// Useful to encapsulate information where <see cref="Framework.TestCaseData"/> objects are
+	/// not suitable or suboptimal, e.g. where clearly named arguments shall be used rather than
+	/// just "arg1", "arg2",...
+	/// </remarks>
+	/// <remarks>
+	/// Name "TestCaseDescriptor" rather than e.g. "TestCaseDataHelper" for better distinguishing
+	/// from <see cref="Framework.TestCaseData"/>.
+	/// </remarks>
+	public class TestCaseDescriptor
 	{
-		/* PENDING	var file = FilesProvider.FilePaths_StressText.StressFiles[StressTestCase.Normal];
-			var message = string.Format(CultureInfo.InvariantCulture, "Precondition: File line count must equal {0} but is {1}!", SendLineCount, file.Item3);
-			Assert.That(file.Item3, Is.EqualTo(SendLineCount), message);
-			terminalTx.SendFile(file.Item1);
+		/// <summary>
+		/// The name for setting <see cref="Framework.TestCaseData.TestName"/>.
+		/// </summary>
+		public string Name { get; }
 
-			var subsequentLengthExpected = (subsequentLineText.Length + 2); // Adjust EOL.
-			for (int i = 0; i < subsequentLineCount; i++)
-				terminalTx.SendTextLine(subsequentLineText); // Immediately invoke sending of subsequent data.
-			                                     // Includes EOLs.
-			var expectedTotalByteCount = (file.Item2 + (subsequentLengthExpected * subsequentLineCount));
-			var expectedTotalLineCount = (file.Item3 +                             subsequentLineCount);
-			Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1000); // See further above, sending takes 300..600 ms.
-*/	}
+		/// <summary>
+		/// The categories for setting <see cref="Framework.TestCaseData.Categories"/>.
+		/// </summary>
+		public string[] Categories { get; }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TestCaseDescriptor"/> class.
+		/// </summary>
+		public TestCaseDescriptor(string name, string[] categories)
+		{
+			Name = name;
+			Categories = categories;
+		}
+	}
 }
 
 //==================================================================================================

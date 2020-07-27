@@ -102,14 +102,14 @@ namespace YAT.Domain.Test.Terminal
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			var settingsTx = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+			var settingsTx = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 			settingsTx.Send.AllowConcurrency = allowConcurrency;
 			settingsTx.TextTerminal.LineSendDelay = new TextLineSendDelaySettingTuple(true, 1, 1); // Delay of 1 ms per line, sending over
 			using (var terminalTx = new Domain.TextTerminal(settingsTx))                           // localhost is way too fast otherwise.
 			{                                                                                      //  => 300 lines take 300..600 ms, perfect.
 				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");
 
-				var settingsRx = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+				var settingsRx = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				using (var terminalRx = new Domain.TextTerminal(settingsRx))
 				{
 					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started");
@@ -185,7 +185,7 @@ namespace YAT.Domain.Test.Terminal
 		/// <summary></summary>
 		protected virtual void SendFile(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, int subsequentLineCount, string subsequentLineText)
 		{
-			var file = FilesProvider.FilePaths_StressText.StressFiles[StressTestCase.Normal];
+			var file = Files.Text.Stress[StressTestCase.Normal];
 			var message = string.Format(CultureInfo.InvariantCulture, "Precondition: File line count must equal {0} but is {1}!", SendLineCount, file.Item3);
 			Assert.That(file.Item3, Is.EqualTo(SendLineCount), message);
 			terminalTx.SendFile(file.Item1);

@@ -58,12 +58,12 @@ namespace YAT.Domain.Test.Terminal
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			var settingsA = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+			var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 			using (var terminalTx = new Domain.TextTerminal(settingsA))
 			{
 				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");
 
-				var settingsB = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				using (var terminalRx = new Domain.TextTerminal(settingsB))
 				{
 					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started");
@@ -130,12 +130,12 @@ namespace YAT.Domain.Test.Terminal
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			var settingsA = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+			var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 			using (var terminalTx = new Domain.TextTerminal(settingsA))
 			{
 				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");
 
-				var settingsB = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				using (var terminalRx = new Domain.TextTerminal(settingsB))
 				{
 					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started");
@@ -201,13 +201,13 @@ namespace YAT.Domain.Test.Terminal
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			var settingsA = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+			var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 			settingsA.Display.MaxLineCount = 10000; // Running in NUnit revealed ~2000 lines.
 			using (var terminalTx = new Domain.TextTerminal(settingsA))
 			{
 				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");
 
-				var settingsB = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				settingsB.Display.MaxLineCount = 10000; // Running in NUnit revealed ~2000 lines.
 				using (var terminalRx = new Domain.TextTerminal(settingsB))
 				{
@@ -273,14 +273,14 @@ namespace YAT.Domain.Test.Terminal
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			var settingsA = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+			var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 			settingsA.Display.MaxLineCount = 10000; // Running in NUnit revealed 800..1000 lines.
 			settingsA.TextTerminal.LineSendDelay = new TextLineSendDelaySettingTuple(true, 1, 1); // Delay of 1 ms per line.
 			using (var terminalTx = new Domain.TextTerminal(settingsA))
 			{
 				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");
 
-				var settingsB = Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings();
+				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				settingsB.Display.MaxLineCount = 10000; // Running in NUnit revealed 800..1000 lines.
 				using (var terminalRx = new Domain.TextTerminal(settingsB))
 				{
@@ -289,7 +289,7 @@ namespace YAT.Domain.Test.Terminal
 
 					// Send:
 					var initial = DateTime.Now;
-					var file = FilesProvider.FilePaths_StressText.StressFiles[StressTestCase.EvenLarger]; // 5000 lines would take about 5..10 seconds.
+					var file = Files.Text.Stress[StressTestCase.EvenLarger]; // 5000 lines would take about 5..10 seconds.
 					int fileLineByteCount = (file.Item2 / file.Item3); // Fixed to default of <CR><LF>.
 					terminalTx.SendFile(file.Item1);
 					Utilities.WaitForIsSendingForSomeTime(terminalTx);
