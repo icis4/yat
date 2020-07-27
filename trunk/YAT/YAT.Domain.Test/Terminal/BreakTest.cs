@@ -289,7 +289,7 @@ namespace YAT.Domain.Test.Terminal
 
 					// Send:
 					var initial = DateTime.Now;
-					var file = SendFilesProvider.FilePaths_StressText.StressFiles[StressTestCase.EvenLarger]; // 5000 lines would take about 5..10 seconds.
+					var file = FilesProvider.FilePaths_StressText.StressFiles[StressTestCase.EvenLarger]; // 5000 lines would take about 5..10 seconds.
 					int fileLineByteCount = (file.Item2 / file.Item3); // Fixed to default of <CR><LF>.
 					terminalTx.SendFile(file.Item1);
 					Utilities.WaitForIsSendingForSomeTime(terminalTx);
