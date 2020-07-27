@@ -34,12 +34,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 
-using MKY.Collections.Generic;
-using MKY.Net;
-
 using NUnit.Framework;
-
-using YAT.Domain.Settings;
 
 #endregion
 
@@ -49,59 +44,6 @@ namespace YAT.Domain.Test
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public static class Utilities
 	{
-		#region Types
-		//==========================================================================================
-		// Types
-		//==========================================================================================
-
-		/// <typeparam name="T">The (simple) settings type.</typeparam>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize the 'utility' nature of this delegate.")]
-		[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Why not?")]
-		public delegate TerminalSettings TerminalSettingsDelegate<T>(T arg);
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize the 'utility' nature of this class.")]
-		public static class TransmissionSettings
-		{
-			/// <summary></summary>
-			[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
-			public static IEnumerable<Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>> SerialPortLoopbackPairs
-			{
-				get
-				{
-					foreach (MKY.IO.Ports.Test.SerialPortPairConfigurationElement ce in MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackPairs)
-					{
-						var tsm = new TerminalSettingsDelegate<string>(GetSerialPortTextSettings);
-						var portA = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortA);
-						var portB = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.PortB);
-						string name = "SerialPortLoopbackPair_" + ce.PortA + "_" + ce.PortB;
-						string[] cats = { MKY.IO.Ports.Test.ConfigurationCategoryStrings.LoopbackPairsAreAvailable };
-						yield return (new Quadruple<Pair<TerminalSettingsDelegate<string>, string>, Pair<TerminalSettingsDelegate<string>, string>, string, string[]>(portA, portB, name, cats));
-					}
-				}
-			}
-
-			/// <summary></summary>
-			[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
-			[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
-			public static IEnumerable<Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string[]>> SerialPortLoopbackSelfs
-			{
-				get
-				{
-					foreach (MKY.IO.Ports.Test.SerialPortConfigurationElement ce in MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackSelfs)
-					{
-						var tsm = new TerminalSettingsDelegate<string>(GetSerialPortTextSettings);
-						var port = new Pair<TerminalSettingsDelegate<string>, string>(tsm, ce.Port);
-						string name = "SerialPortLoopbackSelf_" + ce.Port;
-						string[] cats = { MKY.IO.Ports.Test.ConfigurationCategoryStrings.LoopbackSelfsAreAvailable };
-						yield return (new Triple<Pair<TerminalSettingsDelegate<string>, string>, string, string[]>(port, name, cats));
-					}
-				}
-			}
-		}
-
-		#endregion
-
 		#region Constants
 		//==========================================================================================
 		// Constants
@@ -163,96 +105,6 @@ namespace YAT.Domain.Test
 		/// <summary>Simple regex pattern matching the default format of "[d days ][h][h:][m][m:][s]s.fff" reduced to "[s]s.fff" without any value range checks.</summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'fff' is a .NET format string.")]
 		public static readonly string DurationRegexPattern = @"\d{1,2}.\d{3}";
-
-		#endregion
-
-		#region Settings
-		//==========================================================================================
-		// Settings
-		//==========================================================================================
-
-		#region Settings > Text
-		//------------------------------------------------------------------------------------------
-		// Settings > Text
-		//------------------------------------------------------------------------------------------
-
-		internal static TerminalSettings GetTextSettings()
-		{
-			var settings = new TerminalSettings();
-			settings.TerminalType = TerminalType.Text;
-			settings.UpdateTerminalTypeDependentSettings();
-			settings.TextTerminal.ShowEol = true; // Required for easier test verification (char/byte count).
-			return (settings);                    // Consider moving to each test instead.
-		}
-
-		internal static TerminalSettings GetSerialPortTextSettings(string portId)
-		{
-			var settings = GetTextSettings();
-			settings.IO.IOType = IOType.SerialPort;
-			settings.IO.SerialPort.PortId = portId;
-			settings.UpdateIOTypeDependentSettings();
-			settings.UpdateIOSettingsDependentSettings();
-			return (settings);
-		}
-
-		internal static TerminalSettings GetTcpAutoSocketTextSettings(IPNetworkInterfaceEx networkInterface)
-		{
-			var settings = GetTextSettings();
-			settings.IO.IOType = IOType.TcpAutoSocket;
-			settings.UpdateIOTypeDependentSettings();
-			settings.IO.Socket.LocalInterface = networkInterface;
-			settings.UpdateIOSettingsDependentSettings();
-			return (settings);
-		}
-
-		/// <remarks>Explicitly using "Loopback", i.e. 'Configuration.IPv4LoopbackIsAvailable'.</remarks>
-		internal static TerminalSettings GetTcpAutoSocketOnIPv4LoopbackTextSettings()
-		{
-			return (GetTcpAutoSocketTextSettings((IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
-		}
-
-		#endregion
-
-		#region Settings > Binary
-		//------------------------------------------------------------------------------------------
-		// Settings > Binary
-		//------------------------------------------------------------------------------------------
-
-		internal static TerminalSettings GetBinarySettings()
-		{
-			var settings = new TerminalSettings();
-			settings.TerminalType = TerminalType.Binary;
-			settings.UpdateTerminalTypeDependentSettings();
-			return (settings);
-		}
-
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static TerminalSettings GetSerialPortBinarySettings(string portId)
-		{
-			var settings = GetBinarySettings();
-			settings.IO.IOType = IOType.SerialPort;
-			settings.IO.SerialPort.PortId = portId;
-			settings.UpdateIOTypeDependentSettings();
-			settings.UpdateIOSettingsDependentSettings();
-			return (settings);
-		}
-
-		internal static TerminalSettings GetTcpAutoSocketBinarySettings(IPNetworkInterfaceEx networkInterface)
-		{
-			var settings = GetBinarySettings();
-			settings.IO.IOType = IOType.TcpAutoSocket;
-			settings.UpdateIOTypeDependentSettings();
-			settings.IO.Socket.LocalInterface = networkInterface;
-			settings.UpdateIOSettingsDependentSettings();
-			return (settings);
-		}
-
-		internal static TerminalSettings GetTcpAutoSocketOnIPv4LoopbackBinarySettings()
-		{
-			return (GetTcpAutoSocketBinarySettings((IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
-		}
-
-		#endregion
 
 		#endregion
 

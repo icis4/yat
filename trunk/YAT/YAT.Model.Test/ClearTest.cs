@@ -86,9 +86,9 @@ namespace YAT.Model.Test
 		public virtual void TestClearCompleteLine()
 		{
 			// Create terminals from settings and check whether B receives from A:
-			using (var terminalA = new Terminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()))
+			using (var terminalA = new Terminal(Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings()))
 			{
-				using (var terminalB = new Terminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()))
+				using (var terminalB = new Terminal(Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings()))
 				{
 					Utilities.TestSet testSet;
 
@@ -137,9 +137,9 @@ namespace YAT.Model.Test
 		public virtual void TestClearIncompleteLine()
 		{
 			// Create terminals from settings and check whether B receives from A:
-			using (var terminalA = new Terminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()))
+			using (var terminalA = new Terminal(Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings()))
 			{
-				using (var terminalB = new Terminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()))
+				using (var terminalB = new Terminal(Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings()))
 				{
 					// Start and open terminals:
 					Assert.That(terminalA.Start(), Is.True, @"Failed to start """ + terminalA.Caption + @"""");

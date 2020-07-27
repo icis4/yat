@@ -52,7 +52,7 @@ namespace YAT.Model.Test.FileHandling
 
 		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler()
 		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(Test.Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettings()));
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(Test.Utilities.GetTcpAutoSocketOnIPv4LoopbackTextSettings()));
 		}
 
 		#endregion
