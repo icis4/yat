@@ -156,7 +156,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 				using (var terminalA = new Domain.TextTerminal(settingsA))
 				{
-					Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
+					Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
 
 					var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 					settingsB.TextTerminal.Encoding = (EncodingEx)encoding;
@@ -164,7 +164,7 @@ namespace YAT.Domain.Test.TextTerminal
 					settingsB.TextTerminal.RxEol = eolAB;
 					using (var terminalB = new Domain.TextTerminal(settingsB))
 					{
-						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started");
+						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
 						Utilities.WaitForConnection(terminalA, terminalB);
 
 						var eolIsSymmetric = (eolAB == eolBA);
@@ -266,7 +266,7 @@ namespace YAT.Domain.Test.TextTerminal
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
-		private static void WaitForTransmissionEolAware(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, bool eolIsSymmetric, int expectedTotalByteCount, int expectedTotalLineCount)
+		private static void WaitForTransmissionEolAware(Domain.Terminal terminalTx, Domain.Terminal terminalRx, bool eolIsSymmetric, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
 			if (eolIsSymmetric)
 				Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
@@ -295,7 +295,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 			using (var terminalA = new Domain.TextTerminal(settingsA))
 			{
-				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
+				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
 
 				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				settingsB.TextTerminal.TxEol = "";
@@ -307,7 +307,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 				using (var terminalB = new Domain.TextTerminal(settingsB))
 				{
-					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started");
+					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					terminalA.SendTextLine("A"); // Line #1 A => B, must not result in line break.
@@ -360,7 +360,7 @@ namespace YAT.Domain.Test.TextTerminal
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
-		private static void VerifyLineCount(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, int expectedTotalLineCount)
+		private static void VerifyLineCount(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalLineCount)
 		{
 			int txTotalLineCount = terminalTx.GetRepositoryLineCount(RepositoryType.Bidir);
 			int rxTotalLineCount = terminalRx.GetRepositoryLineCount(RepositoryType.Bidir);

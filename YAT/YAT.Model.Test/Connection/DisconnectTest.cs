@@ -163,7 +163,7 @@ namespace YAT.Model.Test.Connection
 				}
 				Utilities.WaitForStart(terminalA);
 
-				if (settingsB != null) // Loopback pair:
+				if (settingsB != null) // Interconnected pair:
 				{
 					using (var terminalB = new Terminal(Settings.Create(settingsB)))
 					{

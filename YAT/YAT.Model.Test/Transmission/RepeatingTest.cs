@@ -224,13 +224,9 @@ namespace YAT.Model.Test.Transmission
 		{
 			settingsA.Send.DefaultLineRepeat = repeatCount; // Set settings to the desired repeat count.
 
-			if (settingsA.IO.IOTypeIsUdpSocket) // Revert to default behavior which is mandatory for this test case.
+			if (settingsA.IO.IOTypeIsUdpSocket)
 			{
-				settingsA.TextTerminal.TxDisplay.ChunkLineBreakEnabled = false;
-				settingsA.TextTerminal.RxDisplay.ChunkLineBreakEnabled = false;
-
-				settingsA.TextTerminal.TxEol = TextTerminalSettings.EolDefault;
-				settingsA.TextTerminal.RxEol = TextTerminalSettings.EolDefault;
+				Domain.Test.Settings.RevertSettingsIfUdpSocket(settingsA); // Revert to default behavior expected by this test case.
 
 				if (doTwoWay)
 					settingsA.Send.DefaultLineRepeat--; // Initial ping-pong needed.
@@ -251,17 +247,13 @@ namespace YAT.Model.Test.Transmission
 				}
 				Utilities.WaitForStart(terminalA);
 
-				if (settingsB != null) // Loopback pair:
+				if (settingsB != null) // Interconnected pair:
 				{
 					settingsB.Send.DefaultLineRepeat = repeatCount; // Set settings to the desired repeat count.
 
-					if (settingsB.IO.IOTypeIsUdpSocket) // Revert to default behavior which is mandatory for this test case.
+					if (settingsB.IO.IOTypeIsUdpSocket)
 					{
-						settingsB.TextTerminal.TxDisplay.ChunkLineBreakEnabled = false;
-						settingsB.TextTerminal.RxDisplay.ChunkLineBreakEnabled = false;
-
-						settingsB.TextTerminal.TxEol = TextTerminalSettings.EolDefault;
-						settingsB.TextTerminal.RxEol = TextTerminalSettings.EolDefault;
+						Domain.Test.Settings.RevertSettingsIfUdpSocket(settingsB); // Revert to default behavior expected by this test case.
 
 						if (doTwoWay)
 							settingsB.Send.DefaultLineRepeat--; // Initial ping-pong needed.

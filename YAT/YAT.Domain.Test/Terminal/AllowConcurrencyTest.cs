@@ -107,12 +107,12 @@ namespace YAT.Domain.Test.Terminal
 			settingsTx.TextTerminal.LineSendDelay = new TextLineSendDelaySettingTuple(true, 1, 1); // Delay of 1 ms per line, sending over
 			using (var terminalTx = new Domain.TextTerminal(settingsTx))                           // localhost is way too fast otherwise.
 			{                                                                                      //  => 300 lines take 300..600 ms, perfect.
-				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");
+				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started!");
 
 				var settingsRx = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				using (var terminalRx = new Domain.TextTerminal(settingsRx))
 				{
-					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started");
+					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalTx, terminalRx);
 
 					int subsequentLineCount;
@@ -165,8 +165,7 @@ namespace YAT.Domain.Test.Terminal
 			} // using (terminalA)
 		}
 
-		/// <summary></summary>
-		protected virtual void SendTextRepeating(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, int subsequentLineCount, string subsequentLineText)
+		private static void SendTextRepeating(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int subsequentLineCount, string subsequentLineText)
 		{
 			var repeating = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 			var repeatingLine = string.Format(CultureInfo.InvariantCulture, @"{0}\!(LineRepeat({1}))", repeating, SendLineCount);
@@ -182,26 +181,25 @@ namespace YAT.Domain.Test.Terminal
 			Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1000); // See further above, sending takes 300..600 ms.
 		}
 
-		/// <summary></summary>
-		protected virtual void SendFile(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, int subsequentLineCount, string subsequentLineText)
+		private static void SendFile(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int subsequentLineCount, string subsequentLineText)
 		{
-			var file = Files.Text.Stress[StressFile.Normal];
-			var message = string.Format(CultureInfo.InvariantCulture, "Precondition: File line count must equal {0} but is {1}!", SendLineCount, file.LineCount);
-			Assert.That(file.LineCount, Is.EqualTo(SendLineCount), message);
-			terminalTx.SendFile(file.Path);
+			var fi = Files.Text.Stress[StressFile.Normal];
+			var message = string.Format(CultureInfo.InvariantCulture, "Precondition: File line count must equal {0} but is {1}!", SendLineCount, fi.LineCount);
+			Assert.That(fi.LineCount, Is.EqualTo(SendLineCount), message);
+			terminalTx.SendFile(fi.Path);
 
 			var subsequentLengthExpected = (subsequentLineText.Length + 2); // Adjust EOL.
 			for (int i = 0; i < subsequentLineCount; i++)
 				terminalTx.SendTextLine(subsequentLineText); // Immediately invoke sending of subsequent data.
-			                                       // Includes EOLs.
-			var expectedTotalByteCount = (file.ByteCount + (subsequentLengthExpected * subsequentLineCount));
-			var expectedTotalLineCount = (file.LineCount +                             subsequentLineCount);
+			                                 // Includes EOLs.
+			var expectedTotalByteCount = (fi.ByteCount + (subsequentLengthExpected * subsequentLineCount));
+			var expectedTotalLineCount = (fi.LineCount +                             subsequentLineCount);
 			Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1000); // See further above, sending takes 300..600 ms.
 		}
 
 		/// <summary>Verify that number of lines matches subsequently sent lines and they are found inbetween.</summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'inbetween' is a correct English term.")]
-		protected virtual void VerifyConcurrent(Domain.TextTerminal terminalRx, int subsequentLineCountExpected, string subsequentLineTextExpected)
+		private static void VerifyConcurrent(Domain.Terminal terminalRx, int subsequentLineCountExpected, string subsequentLineTextExpected)
 		{
 			var displayLines = terminalRx.RepositoryToDisplayLines(RepositoryType.Rx);
 
@@ -217,7 +215,7 @@ namespace YAT.Domain.Test.Terminal
 		}
 
 		/// <summary>Verify that last lines match subsequently sent lines.</summary>
-		protected virtual void VerifyNonConcurrent(Domain.TextTerminal terminalRx, int subsequentLineCountExpected, string subsequentLineTextExpected)
+		private static void VerifyNonConcurrent(Domain.Terminal terminalRx, int subsequentLineCountExpected, string subsequentLineTextExpected)
 		{
 			var displayLines = terminalRx.RepositoryToDisplayLines(RepositoryType.Rx);
 

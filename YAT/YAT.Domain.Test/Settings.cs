@@ -79,9 +79,9 @@ namespace YAT.Domain.Test
 		}
 
 		#region SerialPort
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// SerialPort
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static void ApplySerialPortSettings(TerminalSettings settings, string portId)
@@ -135,9 +135,9 @@ namespace YAT.Domain.Test
 		#endregion
 
 		#region Socket
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Socket
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static void ApplyIPLoopbackSettings(TerminalSettings settings, SocketType socketType, IPAddress ipAddress)
@@ -459,12 +459,38 @@ namespace YAT.Domain.Test
 
 		#endregion
 
+		#region Socket > UDP/IP General
+		//------------------------------------------------------------------------------------------
+		// Socket > UDP/IP General
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public static void RevertSettingsIfUdpSocket(TerminalSettings settings)
+		{
+			if (settings != null)
+			{
+				if (settings.IO.IOTypeIsUdpSocket)
+				{
+					settings.TextTerminal.TxEol = TextTerminalSettings.EolDefault;
+					settings.TextTerminal.RxEol = TextTerminalSettings.EolDefault;
+
+					settings.TextTerminal.TxDisplay.ChunkLineBreakEnabled = false;
+					settings.TextTerminal.RxDisplay.ChunkLineBreakEnabled = false;
+
+					settings.BinaryTerminal.TxDisplay.ChunkLineBreakEnabled = false;
+					settings.BinaryTerminal.RxDisplay.ChunkLineBreakEnabled = false;
+				}
+			}
+		}
+
+		#endregion
+
 		#endregion
 
 		#region USB Ser/HID
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// USB Ser/HID
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static void ApplyUsbSerialHidSettings(TerminalSettings settings, string deviceInfo)
@@ -518,9 +544,9 @@ namespace YAT.Domain.Test
 		#endregion
 
 		#region MT-SICS
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// MT-SICS
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static void ApplyMTSicsSettings(TerminalSettings settings)

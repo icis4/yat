@@ -102,14 +102,14 @@ namespace YAT.Domain.Test.Terminal
 				settingsTx.Display.TimeStampUseUtc = useUtc;
 				using (var terminalTx = new Domain.TextTerminal(settingsTx))
 				{
-					Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");
+					Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started!");
 
 					var settingsRx = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 					settingsRx.Display.TimeStampFormat = format;
 					settingsRx.Display.TimeStampUseUtc = useUtc;
 					using (var terminalRx = new Domain.TextTerminal(settingsRx))
 					{
-						Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started");
+						Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started!");
 						Utilities.WaitForConnection(terminalTx, terminalRx);
 
 						string keyword = @"\!(TimeStamp())";

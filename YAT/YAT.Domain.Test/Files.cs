@@ -69,13 +69,13 @@ namespace YAT.Domain.Test
 
 	#endregion
 
-	#region Types > FileDescriptor
+	#region Types > FileInfo
 	//------------------------------------------------------------------------------------------
-	// Types > FileDescriptor
+	// Types > FileInfo
 	//------------------------------------------------------------------------------------------
 
 	/// <summary></summary>
-	public class FileDescriptor
+	public class FileInfo
 	{
 		/// <summary></summary>
 		public string Path { get; }
@@ -87,11 +87,17 @@ namespace YAT.Domain.Test
 		public int LineCount { get; }
 
 		/// <summary></summary>
-		public FileDescriptor(string path, int byteCount, int lineCount)
+		public FileInfo(string path, int byteCount, int lineCount)
 		{
 			Path = path;
 			ByteCount = byteCount;
 			LineCount = lineCount;
+		}
+
+		/// <remarks>Line byte count, including EOL (text files).</remarks>
+		public int LineByteCount
+		{
+			get { return (ByteCount / LineCount); }
 		}
 	}
 
@@ -110,7 +116,7 @@ namespace YAT.Domain.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
-		public Dictionary<StressFile, FileDescriptor> Stress { get; }
+		public Dictionary<StressFile, FileInfo> Stress { get; }
 
 		/// <summary></summary>
 		public FileGroup(int capacity)
@@ -132,13 +138,13 @@ namespace YAT.Domain.Test
 			else
 				DirectoryPath = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-TestFiles" + System.IO.Path.DirectorySeparatorChar + directory + System.IO.Path.DirectorySeparatorChar;
 
-			Stress = new Dictionary<StressFile, FileDescriptor>(capacity);
+			Stress = new Dictionary<StressFile, FileInfo>(capacity);
 		}
 
 		/// <summary></summary>
 		public void Add(StressFile fileKey, string fileName, int fileSize, int lineCount)
 		{
-			Stress.Add(fileKey, new FileDescriptor(DirectoryPath + fileName, fileSize, lineCount));
+			Stress.Add(fileKey, new FileInfo(DirectoryPath + fileName, fileSize, lineCount));
 		}
 	}
 

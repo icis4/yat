@@ -318,14 +318,7 @@ namespace YAT.Model.Test.Transmission
 
 		private static void TransmitAndVerify(TerminalSettings settingsA, TerminalSettings settingsB, Utilities.TestSet testSet, int transmissionCount)
 		{
-			if (settingsA.IO.IOTypeIsUdpSocket) // Revert to default behavior which is mandatory for this test case.
-			{
-				settingsA.TextTerminal.TxDisplay.ChunkLineBreakEnabled = false;
-				settingsA.TextTerminal.RxDisplay.ChunkLineBreakEnabled = false;
-
-				settingsA.TextTerminal.TxEol = TextTerminalSettings.EolDefault;
-				settingsA.TextTerminal.RxEol = TextTerminalSettings.EolDefault;
-			}
+			Domain.Test.Settings.RevertSettingsIfUdpSocket(settingsA); // Revert to default behavior expected by this test case.
 
 			using (var terminalA = new Terminal(Settings.Create(settingsA)))
 			{
@@ -342,16 +335,9 @@ namespace YAT.Model.Test.Transmission
 				}
 				Utilities.WaitForStart(terminalA);
 
-				if (settingsB != null) // Loopback pair:
+				if (settingsB != null) // Interconnected pair:
 				{
-					if (settingsB.IO.IOTypeIsUdpSocket) // Revert to default behavior which is mandatory for this test case.
-					{
-						settingsB.TextTerminal.TxDisplay.ChunkLineBreakEnabled = false;
-						settingsB.TextTerminal.RxDisplay.ChunkLineBreakEnabled = false;
-
-						settingsB.TextTerminal.TxEol = TextTerminalSettings.EolDefault;
-						settingsB.TextTerminal.RxEol = TextTerminalSettings.EolDefault;
-					}
+					Domain.Test.Settings.RevertSettingsIfUdpSocket(settingsB); // Revert to default behavior expected by this test case.
 
 					using (var terminalB = new Terminal(Settings.Create(settingsB)))
 					{
