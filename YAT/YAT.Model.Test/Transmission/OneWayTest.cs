@@ -38,7 +38,6 @@ using NUnit.Framework;
 using YAT.Domain;
 using YAT.Domain.Settings;
 using YAT.Settings.Application;
-using YAT.Settings.Model;
 
 #endregion
 
@@ -189,11 +188,11 @@ namespace YAT.Model.Test.Transmission
 			{
 				foreach (var descriptor in Domain.Test.Environment.SerialPortLoopbackPairs) // Upper level grouping shall be 'by I/O'.
 				{
-					var settingsA = Settings.GetSerialPortSettings(TerminalType.Text, descriptor.PortA);
-					var settingsB = Settings.GetSerialPortSettings(TerminalType.Text, descriptor.PortB);
+					var settingsA = Domain.Test.Settings.GetSerialPortSettings(TerminalType.Text, descriptor.PortA);
+					var settingsB = Domain.Test.Settings.GetSerialPortSettings(TerminalType.Text, descriptor.PortB);
 
 					foreach (var t in Tests)
-						yield return (Data.ToTestCase(descriptor, t, settingsA, settingsB, t.Arguments));
+						yield return (Domain.Test.Data.ToTestCase(descriptor, t, settingsA, settingsB, t.Arguments));
 				}
 			}
 		}
@@ -207,10 +206,10 @@ namespace YAT.Model.Test.Transmission
 			{
 				foreach (var descriptor in Domain.Test.Environment.SerialPortLoopbackSelfs) // Upper level grouping shall be 'by I/O'.
 				{
-					var settings = Settings.GetSerialPortSettings(TerminalType.Text, descriptor.Port);
+					var settings = Domain.Test.Settings.GetSerialPortSettings(TerminalType.Text, descriptor.Port);
 
 					foreach (var t in Tests)
-						yield return (Data.ToTestCase(descriptor, t, settings, t.Arguments));
+						yield return (Domain.Test.Data.ToTestCase(descriptor, t, settings, t.Arguments));
 				}
 			}
 		}
@@ -223,11 +222,11 @@ namespace YAT.Model.Test.Transmission
 			{
 				foreach (var descriptor in Domain.Test.Environment.IPLoopbackPairs) // Upper level grouping shall be 'by I/O'.
 				{
-					var settingsA = Settings.GetIPLoopbackSettings(TerminalType.Text, descriptor.SocketTypeA, descriptor.LocalInterface);
-					var settingsB = Settings.GetIPLoopbackSettings(TerminalType.Text, descriptor.SocketTypeB, descriptor.LocalInterface);
+					var settingsA = Domain.Test.Settings.GetIPLoopbackSettings(TerminalType.Text, descriptor.SocketTypeA, descriptor.LocalInterface);
+					var settingsB = Domain.Test.Settings.GetIPLoopbackSettings(TerminalType.Text, descriptor.SocketTypeB, descriptor.LocalInterface);
 
 					foreach (var t in Tests)
-						yield return (Data.ToTestCase(descriptor, t, settingsA, settingsB, t.Arguments));
+						yield return (Domain.Test.Data.ToTestCase(descriptor, t, settingsA, settingsB, t.Arguments));
 				}
 			}
 		}
@@ -241,10 +240,10 @@ namespace YAT.Model.Test.Transmission
 			{
 				foreach (var descriptor in Domain.Test.Environment.IPLoopbackSelfs) // Upper level grouping shall be 'by I/O'.
 				{
-					var settings = Settings.GetIPLoopbackSettings(TerminalType.Text, descriptor.SocketType, descriptor.LocalInterface);
+					var settings = Domain.Test.Settings.GetIPLoopbackSettings(TerminalType.Text, descriptor.SocketType, descriptor.LocalInterface);
 
 					foreach (var t in Tests)
-						yield return (Data.ToTestCase(descriptor, t, settings, t.Arguments));
+						yield return (Domain.Test.Data.ToTestCase(descriptor, t, settings, t.Arguments));
 				}
 			}
 		}
@@ -295,7 +294,7 @@ namespace YAT.Model.Test.Transmission
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
 		[Test, TestCaseSource(typeof(OneWayTestData), "TestCasesSerialPortLoopbackPairs_Text")]
-		public virtual void SerialPortLoopbackPairs(TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, Utilities.TestSet testSet, int transmissionCount)
+		public virtual void SerialPortLoopbackPairs(TerminalSettings settingsA, TerminalSettings settingsB, Utilities.TestSet testSet, int transmissionCount)
 		{
 			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackPairsAreAvailable)
 				Assert.Ignore("No serial COM port loopback pairs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback pair is properly configured and available if passing this test is required.");
@@ -307,7 +306,7 @@ namespace YAT.Model.Test.Transmission
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		[Test, TestCaseSource(typeof(OneWayTestData), "TestCasesSerialPortLoopbackSelfs_Text")]
-		public virtual void SerialPortLoopbackSelfs(TerminalSettingsRoot settings, Utilities.TestSet testSet, int transmissionCount)
+		public virtual void SerialPortLoopbackSelfs(TerminalSettings settings, Utilities.TestSet testSet, int transmissionCount)
 		{
 			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
 				Assert.Ignore("No serial COM port loopback selfs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback self is properly configured and available if passing this test is required.");
@@ -318,7 +317,7 @@ namespace YAT.Model.Test.Transmission
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
 		[Test, TestCaseSource(typeof(OneWayTestData), "TestCasesIPLoopbackPairs_Text")]
-		public virtual void IPLoopbackPairs(TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, Utilities.TestSet testSet, int transmissionCount)
+		public virtual void IPLoopbackPairs(TerminalSettings settingsA, TerminalSettings settingsB, Utilities.TestSet testSet, int transmissionCount)
 		{
 			// IPLoopbackPairs are always made available by 'Utilities', no need to check for this.
 
@@ -328,14 +327,14 @@ namespace YAT.Model.Test.Transmission
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		[Test, TestCaseSource(typeof(OneWayTestData), "TestCasesIPLoopbackSelfs_Text")]
-		public static void IPLoopbackSelfs(TerminalSettingsRoot settings, Utilities.TestSet testSet, int transmissionCount)
+		public static void IPLoopbackSelfs(TerminalSettings settings, Utilities.TestSet testSet, int transmissionCount)
 		{
 			// IPLoopbackSelfs are always made available by 'Utilities', no need to check for this.
 
 			TransmitAndVerify(settings, null, testSet, transmissionCount);
 		}
 
-		private static void TransmitAndVerify(TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, Utilities.TestSet testSet, int transmissionCount)
+		private static void TransmitAndVerify(TerminalSettings settingsA, TerminalSettings settingsB, Utilities.TestSet testSet, int transmissionCount)
 		{
 			if (settingsA.IO.IOTypeIsUdpSocket) // Revert to default behavior which is mandatory for this test case.
 			{
@@ -346,7 +345,7 @@ namespace YAT.Model.Test.Transmission
 				settingsA.TextTerminal.RxEol = TextTerminalSettings.EolDefault;
 			}
 
-			using (var terminalA = new Terminal(settingsA))
+			using (var terminalA = new Terminal(Settings.Create(settingsA)))
 			{
 				terminalA.MessageInputRequest += Utilities.TerminalMessageInputRequest;
 				if (!terminalA.Start())
@@ -372,7 +371,7 @@ namespace YAT.Model.Test.Transmission
 						settingsB.TextTerminal.RxEol = TextTerminalSettings.EolDefault;
 					}
 
-					using (var terminalB = new Terminal(settingsB))
+					using (var terminalB = new Terminal(Settings.Create(settingsB)))
 					{
 						terminalB.MessageInputRequest += Utilities.TerminalMessageInputRequest;
 						if (!terminalB.Start())

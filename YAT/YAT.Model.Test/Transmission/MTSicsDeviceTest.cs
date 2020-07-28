@@ -42,8 +42,8 @@ using MKY.Windows.Forms;
 using NUnit;
 using NUnit.Framework;
 
+using YAT.Domain.Settings;
 using YAT.Settings.Application;
-using YAT.Settings.Model;
 
 #endregion
 
@@ -124,9 +124,9 @@ namespace YAT.Model.Test.Transmission
 			}
 		}
 
-		private static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TerminalSettingsRoot settings, KeyValuePair<TestCaseData, string> kvp)
+		private static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TerminalSettings settings, KeyValuePair<TestCaseData, string> kvp)
 		{
-			var tc = Data.ToTestCase(descriptor, kvp.Key, settings, kvp.Key.Arguments);
+			var tc = Domain.Test.Data.ToTestCase(descriptor, kvp.Key, settings, kvp.Key.Arguments);
 
 			if (!string.IsNullOrEmpty(kvp.Value))
 				tc.Categories.Add(kvp.Value);
@@ -158,7 +158,7 @@ namespace YAT.Model.Test.Transmission
 				{
 					foreach (var descriptor in Domain.Test.Environment.MTSicsSerialPortDevices)
 					{
-						var settings = Settings.GetMTSicsSerialPortDeviceSettings(descriptor.Port);
+						var settings = Domain.Test.Settings.GetMTSicsSerialPortDeviceSettings(descriptor.Port);
 
 						foreach (var kvp in TestsWithDurationCategory)
 							yield return (ToTestCase(descriptor, settings, kvp));
@@ -166,7 +166,7 @@ namespace YAT.Model.Test.Transmission
 
 					foreach (var descriptor in Domain.Test.Environment.MTSicsIPDevices)
 					{
-						var settings = Settings.GetMTSicsIPDeviceSettings(descriptor.Port);
+						var settings = Domain.Test.Settings.GetMTSicsIPDeviceSettings(descriptor.Port);
 
 						foreach (var kvp in TestsWithDurationCategory)
 							yield return (ToTestCase(descriptor, settings, kvp));
@@ -174,7 +174,7 @@ namespace YAT.Model.Test.Transmission
 
 					foreach (var descriptor in Domain.Test.Environment.MTSicsUsbDevices)
 					{
-						var settings = Settings.GetMTSicsUsbSerialHidDeviceSettings(descriptor.DeviceInfo);
+						var settings = Domain.Test.Settings.GetMTSicsUsbSerialHidDeviceSettings(descriptor.DeviceInfo);
 
 						foreach (var kvp in TestsWithDurationCategory)
 							yield return (ToTestCase(descriptor, settings, kvp));
@@ -256,7 +256,7 @@ namespace YAT.Model.Test.Transmission
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
 		[Test, TestCaseSource(typeof(MTSicsDeviceTestData), "TestCases")]
-		public virtual void Transmission(TerminalSettingsRoot settings, string stimulus, string expected, int transmissionCount)
+		public virtual void Transmission(TerminalSettings settings, string stimulus, string expected, int transmissionCount)
 		{
 			if (MTSicsDeviceTestData.DeviceCount <= 0)
 				Assert.Ignore("No MT-SICS devices are available, therefore this test is excluded. Ensure that at least one MT-SICS devices is properly configured and available if passing this test is required.");
@@ -266,7 +266,7 @@ namespace YAT.Model.Test.Transmission
 			settings.TextTerminal.ShowEol = true;
 
 			// Create terminals from settings:
-			using (var terminal = new Terminal(settings))
+			using (var terminal = new Terminal(Settings.Create(settings)))
 			{
 				terminal.MessageInputRequest += Utilities.TerminalMessageInputRequest;
 				if (!terminal.Start())

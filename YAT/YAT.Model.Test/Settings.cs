@@ -27,9 +27,6 @@
 //==================================================================================================
 
 using System.Diagnostics.CodeAnalysis;
-using System.Net;
-
-using MKY.IO.Serial.Socket;
 
 using YAT.Domain;
 using YAT.Settings.Model;
@@ -42,8 +39,16 @@ namespace YAT.Model.Test
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public static class Settings
 	{
-		/// <summary></summary>
-		public static TerminalSettingsRoot ToSettings(Domain.Settings.TerminalSettings terminalSettings)
+		/// <remarks>
+		/// Required because <see cref="TerminalSettingsRoot"/> cannot be used as a test argument
+		/// as creating an object thereof requires the application settings being created/loaded.
+		/// </remarks>
+		/// <remarks>
+		/// Until YAT 2.1.0, a rather complicated delegate/callback mechanism was used to defer
+		/// settings creation into the test case itself. With YAT 2.2.0 the mechanism was simplified
+		/// to use domain rather than model settings where test generation is needed.
+		/// </remarks>
+		public static TerminalSettingsRoot Create(Domain.Settings.TerminalSettings terminalSettings)
 		{
 			var settings = new TerminalSettingsRoot();
 			settings.Terminal = terminalSettings;
@@ -56,28 +61,16 @@ namespace YAT.Model.Test
 		// SerialPort
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public static TerminalSettingsRoot GetSerialPortSettings(TerminalType terminalType, string portId)
-		{
-			return (ToSettings(Domain.Test.Settings.GetSerialPortSettings(terminalType, portId)));
-		}
-
-		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
-		public static TerminalSettingsRoot GetMTSicsSerialPortDeviceSettings(string portId)
-		{
-			return (ToSettings(Domain.Test.Settings.GetSerialPortMTSicsDeviceSettings(portId)));
-		}
-
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
 		public static TerminalSettingsRoot GetMTSicsSerialPortDeviceASettings()
 		{
-			return (ToSettings(Domain.Test.Settings.GetMTSicsSerialPortDeviceASettings()));
+			return (Create(Domain.Test.Settings.GetMTSicsSerialPortDeviceASettings()));
 		}
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
 		public static TerminalSettingsRoot GetMTSicsSerialPortDeviceBSettings()
 		{
-			return (ToSettings(Domain.Test.Settings.GetMTSicsSerialPortDeviceBSettings()));
+			return (Create(Domain.Test.Settings.GetMTSicsSerialPortDeviceBSettings()));
 		}
 
 		#endregion
@@ -87,34 +80,22 @@ namespace YAT.Model.Test
 		// Socket
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public static TerminalSettingsRoot GetIPLoopbackSettings(TerminalType terminalType, SocketType socketType, IPAddress ipAddress)
-		{
-			return (ToSettings(Domain.Test.Settings.GetIPLoopbackSettings(terminalType, socketType, ipAddress)));
-		}
-
-		/// <summary></summary>
-		public static TerminalSettingsRoot GetIPSpecificInterfaceSettings(TerminalType terminalType, SocketType socketType, string networkInterface)
-		{
-			return (ToSettings(Domain.Test.Settings.GetIPSpecificInterfaceSettings(terminalType, socketType, networkInterface)));
-		}
-
 		/// <remarks>Explicitly using "Loopback", corresponding to 'Configuration.IPv4LoopbackIsAvailable'.</remarks>
 		public static TerminalSettingsRoot GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType terminalType)
 		{
-			return (ToSettings(Domain.Test.Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(terminalType)));
+			return (Create(Domain.Test.Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(terminalType)));
 		}
 
 		/// <remarks>Explicitly using "Loopback", corresponding to  'Configuration.IPv6LoopbackIsAvailable'.</remarks>
 		public static TerminalSettingsRoot GetTcpAutoSocketOnIPv6LoopbackSettings(TerminalType terminalType)
 		{
-			return (ToSettings(Domain.Test.Settings.GetTcpAutoSocketOnIPv6LoopbackSettings(terminalType)));
+			return (Create(Domain.Test.Settings.GetTcpAutoSocketOnIPv6LoopbackSettings(terminalType)));
 		}
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
-		public static TerminalSettingsRoot GetMTSicsIPDeviceSettings(int port)
+		public static TerminalSettingsRoot GetMTSicsIPDeviceSettings()
 		{
-			return (ToSettings(Domain.Test.Settings.GetMTSicsIPDeviceSettings(port)));
+			return (Create(Domain.Test.Settings.GetMTSicsIPDeviceSettings()));
 		}
 
 		#endregion
@@ -124,16 +105,16 @@ namespace YAT.Model.Test
 		// USB Ser/HID
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
-		public static TerminalSettingsRoot GetUsbSerialHidSettings(TerminalType terminalType, string deviceInfo)
+		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		public static TerminalSettingsRoot GetMTSicsUsbSerialHidDeviceASettings()
 		{
-			return (ToSettings(Domain.Test.Settings.GetUsbSerialHidSettings(terminalType, deviceInfo)));
+			return (Create(Domain.Test.Settings.GetMTSicsUsbSerialHidDeviceASettings()));
 		}
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
-		public static TerminalSettingsRoot GetMTSicsUsbSerialHidDeviceSettings(string deviceInfo)
+		public static TerminalSettingsRoot GetMTSicsUsbSerialHidDeviceBSettings()
 		{
-			return (ToSettings(Domain.Test.Settings.GetMTSicsUsbSerialHidDeviceSettings(deviceInfo)));
+			return (Create(Domain.Test.Settings.GetMTSicsUsbSerialHidDeviceBSettings()));
 		}
 
 		#endregion
