@@ -140,9 +140,9 @@ namespace YAT.Domain.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public static void ApplyIPLoopbackSettings(TerminalSettings settings, SocketType type, IPAddress ipAddress)
+		public static void ApplyIPLoopbackSettings(TerminalSettings settings, SocketType socketType, IPAddress ipAddress)
 		{
-			settings.IO.IOType = (IOType)type;
+			settings.IO.IOType = (IOTypeEx)socketType;
 			settings.UpdateIOTypeDependentSettings();
 			settings.IO.Socket.RemoteHost     = IPAddressEx.GetLoopbackOfFamily(ipAddress);
 			settings.IO.Socket.LocalInterface =           (IPNetworkInterfaceEx)ipAddress;
@@ -151,19 +151,19 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
-		public static TerminalSettings GetIPLoopbackSettings(TerminalType terminalType, SocketType type, IPAddress ipAddress)
+		public static TerminalSettings GetIPLoopbackSettings(TerminalType terminalType, SocketType socketType, IPAddress ipAddress)
 		{
 			var settings = GetSettings(terminalType);
-			ApplyIPLoopbackSettings(settings, type, ipAddress);
+			ApplyIPLoopbackSettings(settings, socketType, ipAddress);
 			return (settings);
 		}
 
 		/// <summary></summary>
-		public static void ApplyIPSpecificInterfaceSettings(TerminalSettings settings, SocketType type, string networkInterface)
+		public static void ApplyIPSpecificInterfaceSettings(TerminalSettings settings, SocketType socketType, string networkInterface)
 		{
 			IPNetworkInterfaceEx networkInterfaceCasted = networkInterface;
 
-			settings.IO.IOType = (IOType)type;
+			settings.IO.IOType = (IOTypeEx)socketType;
 			settings.UpdateIOTypeDependentSettings();
 			settings.IO.Socket.RemoteHost     = IPAddressEx.GetLoopbackOfFamily(networkInterfaceCasted); // \ToDo: Complete specific interface based testing.
 			settings.IO.Socket.LocalInterface =                                 networkInterfaceCasted;
@@ -172,10 +172,10 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
-		public static TerminalSettings GetIPSpecificInterfaceSettings(TerminalType terminalType, SocketType type, string networkInterface)
+		public static TerminalSettings GetIPSpecificInterfaceSettings(TerminalType terminalType, SocketType socketType, string networkInterface)
 		{
 			var settings = GetSettings(terminalType);
-			ApplyIPSpecificInterfaceSettings(settings, type, networkInterface);
+			ApplyIPSpecificInterfaceSettings(settings, socketType, networkInterface);
 			return (settings);
 		}
 

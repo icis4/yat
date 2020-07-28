@@ -386,9 +386,9 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public static implicit operator MKY.IO.Serial.Socket.SocketType(IOTypeEx type)
+		public static implicit operator MKY.IO.Serial.Socket.SocketType(IOTypeEx ioType) // Explicitly prepended "io" for distiguishing "socket" below.
 		{
-			switch ((IOType)type)
+			switch ((IOType)ioType)
 			{
 				case IOType.TcpClient:     return (MKY.IO.Serial.Socket.SocketType.TcpClient);
 				case IOType.TcpServer:     return (MKY.IO.Serial.Socket.SocketType.TcpServer);
@@ -401,9 +401,9 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public static implicit operator IOTypeEx(MKY.IO.Serial.Socket.SocketType type)
+		public static implicit operator IOTypeEx(MKY.IO.Serial.Socket.SocketType socketType) // Explicitly prepended "socket" for distiguishing "io" above.
 		{
-			switch (type)
+			switch (socketType)
 			{
 				case MKY.IO.Serial.Socket.SocketType.TcpClient:     return (IOType.TcpClient);
 				case MKY.IO.Serial.Socket.SocketType.TcpServer:     return (IOType.TcpServer);
