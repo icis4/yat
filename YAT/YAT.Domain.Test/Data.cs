@@ -62,6 +62,142 @@ namespace YAT.Domain.Test
 			return (TestCaseDataEx.ToTestCase(descriptor, metaDataToMerge, args.ToArray())); // Args must be given as a liner list of objects.
 		}
 
+		/// <remarks>Explicitly using two settings for "Pair" test cases, instead of enumerable generic number of settings.</remarks>
+		public static IEnumerable<TestCaseData> ToTestCases(TestCaseDescriptor descriptor, TerminalSettings settingsA, TerminalSettings settingsB, IEnumerable<TestCaseData> tests)
+		{
+			if (tests != null)
+			{
+				foreach (var t in tests)
+					yield return (ToTestCase(descriptor, t, settingsA, settingsB, t.Arguments));
+			}
+			else
+			{
+				yield return (ToTestCase(descriptor, null, settingsA, settingsB));
+			}
+		}
+
+		/// <remarks>Explicitly using a single setting for "Self" test cases, instead of enumerable generic number of settings.</remarks>
+		public static IEnumerable<TestCaseData> ToTestCases(TestCaseDescriptor descriptor, TerminalSettings settings, IEnumerable<TestCaseData> tests)
+		{
+			if (tests != null)
+			{
+				foreach (var t in tests)
+					yield return (ToTestCase(descriptor, t, settings, t.Arguments));
+			}
+			else
+			{
+				yield return (ToTestCase(descriptor, null, settings));
+			}
+		}
+
+		#region SerialPort
+		//------------------------------------------------------------------------------------------
+		// SerialPort
+		//------------------------------------------------------------------------------------------
+
+		private static IEnumerable<TestCaseData> ToSerialPortLoopbackPairsTestCases(TerminalType terminalType)
+		{
+			return (ToSerialPortLoopbackPairsTestCases(terminalType, null));
+		}
+
+		private static IEnumerable<TestCaseData> ToSerialPortLoopbackPairsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
+		{
+			foreach (var descriptor in Environment.SerialPortLoopbackPairs) // Upper level grouping shall be 'by I/O'.
+			{
+				var settingsA = Settings.GetSerialPortSettings(terminalType, descriptor.PortA);
+				var settingsB = Settings.GetSerialPortSettings(terminalType, descriptor.PortB);
+
+				foreach (var tc in ToTestCases(descriptor, settingsA, settingsB, tests))
+					yield return (tc);
+			}
+		}
+
+		/// <summary></summary>
+		public static IEnumerable<TestCaseData> ToSerialPortLoopbackPairsTestCases_Text(IEnumerable<TestCaseData> tests)
+		{
+			foreach (var tc in ToSerialPortLoopbackPairsTestCases(TerminalType.Text, tests))
+				yield return (tc);
+		}
+
+		private static IEnumerable<TestCaseData> ToSerialPortLoopbackSelfsTestCases(TerminalType terminalType)
+		{
+			return (ToSerialPortLoopbackSelfsTestCases(terminalType, null));
+		}
+
+		private static IEnumerable<TestCaseData> ToSerialPortLoopbackSelfsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
+		{
+			foreach (var descriptor in Environment.SerialPortLoopbackSelfs) // Upper level grouping shall be 'by I/O'.
+			{
+				var settings = Settings.GetSerialPortSettings(terminalType, descriptor.Port);
+
+				foreach (var tc in ToTestCases(descriptor, settings, tests))
+					yield return (tc);
+			}
+		}
+
+		/// <summary></summary>
+		public static IEnumerable<TestCaseData> ToSerialPortLoopbackSelfsTestCases_Text(IEnumerable<TestCaseData> tests)
+		{
+			foreach (var tc in ToSerialPortLoopbackSelfsTestCases(TerminalType.Text, tests))
+				yield return (tc);
+		}
+
+		#endregion
+
+		#region Socket
+		//------------------------------------------------------------------------------------------
+		// Socket
+		//------------------------------------------------------------------------------------------
+
+		private static IEnumerable<TestCaseData> ToIPSocketPairsTestCases(TerminalType terminalType)
+		{
+			return (ToIPSocketPairsTestCases(terminalType, null));
+		}
+
+		private static IEnumerable<TestCaseData> ToIPSocketPairsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
+		{
+			foreach (var descriptor in Environment.IPSocketPairs) // Upper level grouping shall be 'by I/O'.
+			{
+				var settingsA = Settings.GetIPSocketSettings(terminalType, descriptor.SocketTypeA, descriptor.LocalInterface);
+				var settingsB = Settings.GetIPSocketSettings(terminalType, descriptor.SocketTypeB, descriptor.LocalInterface);
+
+				foreach (var tc in ToTestCases(descriptor, settingsA, settingsB, tests))
+					yield return (tc);
+			}
+		}
+
+		/// <summary></summary>
+		public static IEnumerable<TestCaseData> ToIPSocketPairsTestCases_Text(IEnumerable<TestCaseData> tests)
+		{
+			foreach (var tc in ToIPSocketPairsTestCases(TerminalType.Text, tests))
+				yield return (tc);
+		}
+
+		private static IEnumerable<TestCaseData> ToIPSocketSelfsTestCases(TerminalType terminalType)
+		{
+			return (ToIPSocketSelfsTestCases(terminalType, null));
+		}
+
+		private static IEnumerable<TestCaseData> ToIPSocketSelfsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
+		{
+			foreach (var descriptor in Environment.IPSocketSelfs) // Upper level grouping shall be 'by I/O'.
+			{
+				var settings = Settings.GetIPSocketSettings(terminalType, descriptor.SocketType, descriptor.LocalInterface);
+
+				foreach (var tc in ToTestCases(descriptor, settings, tests))
+					yield return (tc);
+			}
+		}
+
+		/// <summary></summary>
+		public static IEnumerable<TestCaseData> ToIPSocketSelfsTestCases_Text(IEnumerable<TestCaseData> tests)
+		{
+			foreach (var tc in ToIPSocketSelfsTestCases(TerminalType.Text, tests))
+				yield return (tc);
+		}
+
+		#endregion
+
 		/// <summary></summary>
 		public static class Generic
 		{
@@ -79,12 +215,8 @@ namespace YAT.Domain.Test
 					var loopbackPairs = Environment.SerialPortLoopbackPairs;
 					if (loopbackPairs.Count() > 0)
 					{
-						foreach (var descriptor in loopbackPairs)
-						{
-							var settingsA = Settings.GetSerialPortSettings(TerminalType.Text, descriptor.PortA);
-							var settingsB = Settings.GetSerialPortSettings(TerminalType.Text, descriptor.PortB);
-							yield return (ToTestCase(descriptor, null, settingsA, settingsB));
-						}
+						foreach (var tc in ToSerialPortLoopbackPairsTestCases(TerminalType.Text))
+							yield return (tc);
 					}
 					else
 					{
