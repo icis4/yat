@@ -117,7 +117,7 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForConnection(Domain.Terminal terminalA, Domain.Terminal terminalB)
+		public static void WaitForConnection(Domain.Terminal terminalA, Domain.Terminal terminalB)
 		{
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
@@ -140,7 +140,7 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForDisconnection(Domain.Terminal terminal)
+		public static void WaitForDisconnection(Domain.Terminal terminal)
 		{
 			int waitTime = 0;
 			while (terminal.IsConnected)
@@ -158,7 +158,8 @@ namespace YAT.Domain.Test
 			Trace.WriteLine("...done, disconnected");
 		}
 
-		internal static void WaitForIsSendingForSomeTime(Domain.Terminal terminal, int timeout = WaitTimeoutForIsSendingForSomeTime)
+		/// <summary></summary>
+		public static void WaitForIsSendingForSomeTime(Domain.Terminal terminal, int timeout = WaitTimeoutForIsSendingForSomeTime)
 		{
 			int waitTime = 0;
 			while (!terminal.IsSendingForSomeTime)
@@ -176,7 +177,8 @@ namespace YAT.Domain.Test
 			Trace.WriteLine("...done, 'IsSendingForSomeTime'");
 		}
 
-		internal static void WaitForIsNoLongerSending(Domain.Terminal terminal, int timeout = WaitTimeoutForIsNoLongerSending)
+		/// <summary></summary>
+		public static void WaitForIsNoLongerSending(Domain.Terminal terminal, int timeout = WaitTimeoutForIsNoLongerSending)
 		{
 			int waitTime = 0;
 			while (terminal.IsSending)
@@ -198,7 +200,7 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForSendingAndVerifyByteCount(Domain.Terminal terminalTx, int expectedTotalByteCount, int timeout = WaitTimeoutForLineTransmission)
+		public static void WaitForSendingAndVerifyByteCount(Domain.Terminal terminalTx, int expectedTotalByteCount, int timeout = WaitTimeoutForLineTransmission)
 		{
 			WaitForSendingAndVerifyCounts(terminalTx, expectedTotalByteCount, IgnoreCount, timeout);
 		}
@@ -213,7 +215,7 @@ namespace YAT.Domain.Test
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
-		internal static void WaitForSendingAndVerifyCounts(Domain.Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)
+		public static void WaitForSendingAndVerifyCounts(Domain.Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)
 		{
 			int txByteCount = 0;
 			int txLineCount = 0;
@@ -266,7 +268,7 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForReceivingAndVerifyByteCount(Domain.Terminal terminalRx, int expectedTotalByteCount, int timeout = WaitTimeoutForLineTransmission)
+		public static void WaitForReceivingAndVerifyByteCount(Domain.Terminal terminalRx, int expectedTotalByteCount, int timeout = WaitTimeoutForLineTransmission)
 		{
 			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, IgnoreCount, timeout);
 		}
@@ -281,7 +283,7 @@ namespace YAT.Domain.Test
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
-		internal static void WaitForReceivingAndVerifyCounts(Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)
+		public static void WaitForReceivingAndVerifyCounts(Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)
 		{
 			int rxByteCount = 0;
 			int rxLineCount = 0;
@@ -335,7 +337,7 @@ namespace YAT.Domain.Test
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static void WaitForTransmissionAndVerifyByteCount(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int timeout = WaitTimeoutForLineTransmission)
+		public static void WaitForTransmissionAndVerifyByteCount(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int timeout = WaitTimeoutForLineTransmission)
 		{
 			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, IgnoreCount, timeout);
 		}
@@ -353,7 +355,7 @@ namespace YAT.Domain.Test
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
-		internal static void WaitForTransmissionAndVerifyCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)
+		public static void WaitForTransmissionAndVerifyCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)
 		{
 			// Attention:
 			// Similar code exists in Model.Test.Utilities.WaitForTransmissionAndVerifyCounts().
@@ -438,7 +440,7 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForReverification()
+		public static void WaitForReverification()
 		{
 			Thread.Sleep(2 * WaitTimeoutForLineTransmission);
 		}
@@ -454,7 +456,7 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void VerifyBidirContent(Domain.Terminal terminal, IList<string> contentPattern)
+		public static void VerifyBidirContent(Domain.Terminal terminal, IList<string> contentPattern)
 		{
 			VerifyContent(terminal, RepositoryType.Bidir, contentPattern);
 		}
@@ -463,7 +465,7 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void VerifyContent(Domain.Terminal terminal, RepositoryType repositoryType, IList<string> contentPattern)
+		public static void VerifyContent(Domain.Terminal terminal, RepositoryType repositoryType, IList<string> contentPattern)
 		{
 			var displayLines = terminal.RepositoryToDisplayLines(repositoryType);
 			Assert.That(displayLines.Count, Is.EqualTo(contentPattern.Count));
@@ -486,7 +488,7 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static string DecoratePattern(string contentPattern)
+		public static string DecoratePattern(string contentPattern)
 		{
 			contentPattern = contentPattern.Replace("(", @"\(");
 			contentPattern = contentPattern.Replace(")", @"\)");

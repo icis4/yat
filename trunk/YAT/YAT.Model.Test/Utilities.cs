@@ -298,7 +298,7 @@ namespace YAT.Model.Test
 		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForStart(Terminal terminal)
+		public static void WaitForStart(Terminal terminal)
 		{
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
@@ -321,7 +321,7 @@ namespace YAT.Model.Test
 		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForOpen(Terminal terminal)
+		public static void WaitForOpen(Terminal terminal)
 		{
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
@@ -345,7 +345,7 @@ namespace YAT.Model.Test
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static void WaitForConnection(Terminal terminal)
+		public static void WaitForConnection(Terminal terminal)
 		{
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
@@ -368,7 +368,7 @@ namespace YAT.Model.Test
 		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForConnection(Terminal terminalA, Terminal terminalB)
+		public static void WaitForConnection(Terminal terminalA, Terminal terminalB)
 		{
 			int waitTime = 0;
 			do                         // Initially wait to allow async send,
@@ -391,7 +391,7 @@ namespace YAT.Model.Test
 		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForClose(Terminal terminal)
+		public static void WaitForClose(Terminal terminal)
 		{
 			int waitTime = 0;
 			while (terminal.IsOpen)
@@ -414,7 +414,7 @@ namespace YAT.Model.Test
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		internal static void WaitForDisconnection(Terminal terminal)
+		public static void WaitForDisconnection(Terminal terminal)
 		{
 			int waitTime = 0;
 			while (terminal.IsConnected)
@@ -440,7 +440,7 @@ namespace YAT.Model.Test
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
 		/// </remarks>
-		internal static void WaitForReceivingAndVerifyCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
+		public static void WaitForReceivingAndVerifyCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
 			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCount, expectedTotalLineCount);
 		}
@@ -449,7 +449,7 @@ namespace YAT.Model.Test
 		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForReceivingAndVerifyCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted, int timeout = WaitTimeoutForLineTransmission)
+		public static void WaitForReceivingAndVerifyCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted, int timeout = WaitTimeoutForLineTransmission)
 		{
 			int rxByteCount = 0;
 			int rxLineCount = 0;
@@ -507,7 +507,7 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
 		/// </remarks>
-		internal static void WaitForReceivingCycleAndVerifyCounts(Terminal terminalRx, TestSet testSet, int cycle)
+		public static void WaitForReceivingCycleAndVerifyCounts(Terminal terminalRx, TestSet testSet, int cycle)
 		{
 			// Calculate total expected counts at the receiver side:
 			int expectedTotalByteCount          = (testSet.ExpectedTotalByteCount     * cycle);
@@ -521,7 +521,8 @@ namespace YAT.Model.Test
 			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, timeout);
 		}
 
-		internal static void WaitForTransmissionAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, TestSet testSet)
+		/// <summary></summary>
+		public static void WaitForTransmissionAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, TestSet testSet)
 		{
 			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, testSet.ExpectedTotalByteCount, testSet.ExpectedLineCountDisplayed, testSet.ExpectedLineCountCompleted);
 		}
@@ -537,7 +538,7 @@ namespace YAT.Model.Test
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
 		/// </remarks>
-		internal static void WaitForTransmissionAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
+		public static void WaitForTransmissionAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
 			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, expectedTotalLineCount);
 		}
@@ -549,7 +550,7 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
 		/// </remarks>
-		internal static void WaitForTransmissionAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted, int timeout = WaitTimeoutForLineTransmission)
+		public static void WaitForTransmissionAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted, int timeout = WaitTimeoutForLineTransmission)
 		{
 			// Attention:
 			// Similar code exists in Domain.Test.Utilities.WaitForTransmissionAndVerifyCounts().
@@ -639,7 +640,7 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
 		/// </remarks>
-		internal static void WaitForTransmissionCycleAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, TestSet testSet, int cycle)
+		public static void WaitForTransmissionCycleAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, TestSet testSet, int cycle)
 		{
 			// Calculate total expected counts at the receiver side:
 			int expectedTotalByteCount          = (testSet.ExpectedTotalByteCount     * cycle);
@@ -657,7 +658,7 @@ namespace YAT.Model.Test
 		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		internal static void WaitForReverification()
+		public static void WaitForReverification()
 		{
 			Thread.Sleep(2 * WaitTimeoutForLineTransmission);
 		}
@@ -670,7 +671,7 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
-		internal static void VerifyLines(Domain.DisplayLineCollection displayLinesA, Domain.DisplayLineCollection displayLinesB, TestSet testSet, int cycle = 1)
+		public static void VerifyLines(Domain.DisplayLineCollection displayLinesA, Domain.DisplayLineCollection displayLinesB, TestSet testSet, int cycle = 1)
 		{
 			// Attention: Display line count is not always equal to terminal line count!
 			//  > Display line count = number of lines in view
