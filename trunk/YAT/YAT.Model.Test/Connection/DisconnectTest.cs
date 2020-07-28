@@ -37,8 +37,8 @@ using MKY.Text;
 using NUnit.Framework;
 
 using YAT.Domain;
+using YAT.Domain.Settings;
 using YAT.Settings.Application;
-using YAT.Settings.Model;
 
 #endregion
 
@@ -69,11 +69,11 @@ namespace YAT.Model.Test.Connection
 			{
 				foreach (var descriptor in Domain.Test.Environment.IPLoopbackPairs) // Upper level grouping shall be 'by I/O'.
 				{
-					var settingsA = Settings.GetIPLoopbackSettings(TerminalType.Text, descriptor.SocketTypeA, descriptor.LocalInterface);
-					var settingsB = Settings.GetIPLoopbackSettings(TerminalType.Text, descriptor.SocketTypeB, descriptor.LocalInterface);
+					var settingsA = Domain.Test.Settings.GetIPLoopbackSettings(TerminalType.Text, descriptor.SocketTypeA, descriptor.LocalInterface);
+					var settingsB = Domain.Test.Settings.GetIPLoopbackSettings(TerminalType.Text, descriptor.SocketTypeB, descriptor.LocalInterface);
 
 					foreach (var t in Tests)
-						yield return (Data.ToTestCase(descriptor, t, settingsA, settingsB, t.Arguments));
+						yield return (Domain.Test.Data.ToTestCase(descriptor, t, settingsA, settingsB, t.Arguments));
 				}
 			}
 		}
@@ -87,10 +87,10 @@ namespace YAT.Model.Test.Connection
 			{
 				foreach (var descriptor in Domain.Test.Environment.IPLoopbackSelfs) // Upper level grouping shall be 'by I/O'.
 				{
-					var settings = Settings.GetIPLoopbackSettings(TerminalType.Text, descriptor.SocketType, descriptor.LocalInterface);
+					var settings = Domain.Test.Settings.GetIPLoopbackSettings(TerminalType.Text, descriptor.SocketType, descriptor.LocalInterface);
 
 					foreach (var t in Tests)
-						yield return (Data.ToTestCase(descriptor, t, settings, t.Arguments));
+						yield return (Domain.Test.Data.ToTestCase(descriptor, t, settings, t.Arguments));
 				}
 			}
 		}
@@ -137,7 +137,7 @@ namespace YAT.Model.Test.Connection
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
 		[Test, TestCaseSource(typeof(DisconnectTestData), "TestCasesIPLoopbackPairs_Text")]
-		public virtual void IPLoopbackPairs(TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, char disconnectIdentifier)
+		public virtual void IPLoopbackPairs(TerminalSettings settingsA, TerminalSettings settingsB, char disconnectIdentifier)
 		{
 			// IPLoopbackPairs are always made available by 'Utilities', no need to check for this.
 
@@ -146,16 +146,16 @@ namespace YAT.Model.Test.Connection
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
 		[Test, TestCaseSource(typeof(DisconnectTestData), "TestCasesIPLoopbackSelfs_Text")]
-		public static void IPLoopbackSelfs(TerminalSettingsRoot settings, char disconnectIdentifier)
+		public static void IPLoopbackSelfs(TerminalSettings settings, char disconnectIdentifier)
 		{
 			// IPLoopbackSelfs are always made available by 'Utilities', no need to check for this.
 
 			TransmitAndVerifyAndDisconnect(settings, null, disconnectIdentifier);
 		}
 
-		private static void TransmitAndVerifyAndDisconnect(TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, char disconnectIdentifier)
+		private static void TransmitAndVerifyAndDisconnect(TerminalSettings settingsA, TerminalSettings settingsB, char disconnectIdentifier)
 		{
-			using (var terminalA = new Terminal(settingsA))
+			using (var terminalA = new Terminal(Settings.Create(settingsA)))
 			{
 				terminalA.MessageInputRequest += Utilities.TerminalMessageInputRequest;
 				if (!terminalA.Start())
@@ -172,7 +172,7 @@ namespace YAT.Model.Test.Connection
 
 				if (settingsB != null) // Loopback pair:
 				{
-					using (var terminalB = new Terminal(settingsB))
+					using (var terminalB = new Terminal(Settings.Create(settingsB)))
 					{
 						terminalB.MessageInputRequest += Utilities.TerminalMessageInputRequest;
 						if (!terminalB.Start())

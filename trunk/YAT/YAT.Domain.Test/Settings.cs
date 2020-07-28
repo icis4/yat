@@ -100,8 +100,8 @@ namespace YAT.Domain.Test
 			return (settings);
 		}
 
-		/// <summary></summary>
-		public static TerminalSettings GetSerialPortMTSicsDeviceSettings(string portId)
+		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		public static TerminalSettings GetMTSicsSerialPortDeviceSettings(string portId)
 		{
 			var settings = GetSerialPortSettings(TerminalType.Text, portId);
 			ApplyMTSicsSettings(settings);
@@ -112,7 +112,7 @@ namespace YAT.Domain.Test
 		public static TerminalSettings GetMTSicsSerialPortDeviceASettings()
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable)
-				return (GetSerialPortMTSicsDeviceSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceA));
+				return (GetMTSicsSerialPortDeviceSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceA));
 
 			Assert.Ignore("'MTSicsDeviceA' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -124,7 +124,7 @@ namespace YAT.Domain.Test
 		public static TerminalSettings GetMTSicsSerialPortDeviceBSettings()
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable)
-				return (GetSerialPortMTSicsDeviceSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceB));
+				return (GetMTSicsSerialPortDeviceSettings(MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceB));
 
 			Assert.Ignore("'MTSicsDeviceB' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceB' is properly configured and available if passing this test is required.");
 		//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
@@ -504,7 +504,7 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
-		public static TerminalSettings GetUsbSerialHidMTSicsDeviceBSettings()
+		public static TerminalSettings GetMTSicsUsbSerialHidDeviceBSettings()
 		{
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable)
 				GetMTSicsUsbSerialHidDeviceSettings(MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceB);

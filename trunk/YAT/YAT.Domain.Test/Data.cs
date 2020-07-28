@@ -43,15 +43,15 @@ namespace YAT.Domain.Test
 	public static class Data
 	{
 		/// <remarks>Explicitly using two settings for "Pair" test cases, instead of enumerable generic number of settings.</remarks>
-		public static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TestCaseData metaDataToMerge, TerminalSettings settingsA, TerminalSettings settingsB)
+		public static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TestCaseData metaDataToMerge, TerminalSettings settingsA, TerminalSettings settingsB, params object[] args)
 		{
-			return (TestCaseDataEx.ToTestCase(descriptor, metaDataToMerge, settingsA, settingsB));
+			return (TestCaseDataEx.ToTestCase(descriptor, metaDataToMerge, settingsA, settingsB, args));
 		}
 
 		/// <remarks>Explicitly using a single setting for "Self" test cases, instead of enumerable generic number of settings.</remarks>
-		public static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TestCaseData metaDataToMerge, TerminalSettings settings)
+		public static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TestCaseData metaDataToMerge, TerminalSettings settings, params object[] args)
 		{
-			return (TestCaseDataEx.ToTestCase(descriptor, metaDataToMerge, settings));
+			return (TestCaseDataEx.ToTestCase(descriptor, metaDataToMerge, settings, args));
 		}
 
 		/// <summary></summary>
