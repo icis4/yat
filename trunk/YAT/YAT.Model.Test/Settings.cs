@@ -88,15 +88,15 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public static TerminalSettingsRoot GetIPLoopbackSettings(TerminalType terminalType, SocketType type, IPAddress ipAddress)
+		public static TerminalSettingsRoot GetIPLoopbackSettings(TerminalType terminalType, SocketType socketType, IPAddress ipAddress)
 		{
-			return (ToSettings(Domain.Test.Settings.GetIPLoopbackSettings(terminalType, type, ipAddress)));
+			return (ToSettings(Domain.Test.Settings.GetIPLoopbackSettings(terminalType, socketType, ipAddress)));
 		}
 
 		/// <summary></summary>
-		public static TerminalSettingsRoot GetIPSpecificInterfaceSettings(TerminalType terminalType, SocketType type, string networkInterface)
+		public static TerminalSettingsRoot GetIPSpecificInterfaceSettings(TerminalType terminalType, SocketType socketType, string networkInterface)
 		{
-			return (ToSettings(Domain.Test.Settings.GetIPSpecificInterfaceSettings(terminalType, type, networkInterface)));
+			return (ToSettings(Domain.Test.Settings.GetIPSpecificInterfaceSettings(terminalType, socketType, networkInterface)));
 		}
 
 		/// <remarks>Explicitly using "Loopback", corresponding to 'Configuration.IPv4LoopbackIsAvailable'.</remarks>
