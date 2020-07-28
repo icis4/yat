@@ -55,13 +55,13 @@ namespace YAT.Domain.Test
 	{
 		Normal,
 		Large,
-		EvenLarger,
+		LargeWithLongLines,
 		Huge,
+		HugeWithVeryLongLines,
 		Enormous,
 
 		LongLine,
 		VeryLongLine,
-		VeryLongMultiLine,
 		EnormousLine
 	}
 
@@ -74,7 +74,7 @@ namespace YAT.Domain.Test
 	// Types > FileInfo
 	//------------------------------------------------------------------------------------------
 
-	/// <summary></summary>
+	/// <remarks>Could be migrated to an 'EnumEx', with e.g. 'IsLine' and the like.</remarks>
 	public class FileInfo
 	{
 		/// <summary></summary>
@@ -116,7 +116,7 @@ namespace YAT.Domain.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
-		public Dictionary<StressFile, FileInfo> Stress { get; }
+		public Dictionary<StressFile, FileInfo> Item { get; }
 
 		/// <summary></summary>
 		public FileGroup(int capacity)
@@ -138,13 +138,13 @@ namespace YAT.Domain.Test
 			else
 				DirectoryPath = di.FullName + System.IO.Path.DirectorySeparatorChar + "!-TestFiles" + System.IO.Path.DirectorySeparatorChar + directory + System.IO.Path.DirectorySeparatorChar;
 
-			Stress = new Dictionary<StressFile, FileInfo>(capacity);
+			Item = new Dictionary<StressFile, FileInfo>(capacity);
 		}
 
 		/// <summary></summary>
 		public void Add(StressFile fileKey, string fileName, int fileSize, int lineCount)
 		{
-			Stress.Add(fileKey, new FileInfo(DirectoryPath + fileName, fileSize, lineCount));
+			Item.Add(fileKey, new FileInfo(DirectoryPath + fileName, fileSize, lineCount));
 		}
 	}
 
@@ -166,12 +166,17 @@ namespace YAT.Domain.Test
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of test implementation, especially adding new settings.")]
-		public static readonly FileGroup Text;
+		public static readonly FileGroup SendText;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of test implementation, especially adding new settings.")]
-		public static readonly FileGroup Binary;
+		public static readonly FileGroup TextSendFile;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of test implementation, especially adding new settings.")]
+		public static readonly FileGroup BinarySendFile;
 
 		#endregion
 
@@ -183,26 +188,27 @@ namespace YAT.Domain.Test
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic, and anyway, performance isn't an issue here.")]
 		static Files()
-		{
-			// Stress text:        // Preset the required capacity to improve memory management.
-			Text = new FileGroup(9);                                                             // Including EOLs; not including EOF.
-			Text.Add(StressFile.Normal,            "Stress-1-Normal.txt",             8400,    300); //  28 bytes per line.
-			Text.Add(StressFile.Large,             "Stress-2-Large.txt",             82500,   1500); //  55 bytes per line.
-			Text.Add(StressFile.EvenLarger,        "Stress-3-EvenLarger.txt",       275000,   5000); //  55 bytes per line.
-			Text.Add(StressFile.Huge,              "Stress-4-Huge.txt",            1090000,  10000); // 109 bytes per line.
-			Text.Add(StressFile.Enormous,          "Stress-5-Enormous.txt",       16300000, 100000); // 163 bytes per line.
-			Text.Add(StressFile.LongLine,          "Stress-6-LongLine.txt",            973,      1);
-			Text.Add(StressFile.VeryLongLine,      "Stress-7-VeryLongLine.txt",       9991,      1);
-			Text.Add(StressFile.VeryLongMultiLine, "Stress-8-VeryLongMultiLine.txt", 48650,     50); // 973 bytes per line.
-			Text.Add(StressFile.EnormousLine,      "Stress-9-EnormousLine.txt",     500014,      1);
+		{                                // Preset the required capacity to improve memory management.
+			TextSendFile = new FileGroup(9);                                                             // Including EOLs; not including EOF.
+			TextSendFile.Add(StressFile.Normal,                "Stress-1-Normal.txt",                  8400,    300); //   28 bytes per line.
+			TextSendFile.Add(StressFile.Large,                 "Stress-2-Large.txt",                  82500,   1500); //   55 bytes per line.
+			TextSendFile.Add(StressFile.LargeWithLongLines,    "Stress-3-LargeWithLongLines.txt",     97300,    100); //  973 bytes per line.
+			TextSendFile.Add(StressFile.Huge,                  "Stress-4-Huge.txt",                 1090000,  10000); //  109 bytes per line.
+			TextSendFile.Add(StressFile.HugeWithVeryLongLines, "Stress-5-HugeWithVeryLongLines.txt", 999100,    100); // 9991 bytes per line.
+			TextSendFile.Add(StressFile.Enormous,              "Stress-6-Enormous.txt",            16300000, 100000); //  163 bytes per line.
 
-			// Stress binary:                  // Preset the required capacity to improve memory management.
-			Binary = new FileGroup(5);
-			Binary.Add(StressFile.Normal,     "Stress-1-Normal.dat",         8192, -1);
-			Binary.Add(StressFile.Large,      "Stress-2-Large.dat",         82432, -1);
-			Binary.Add(StressFile.EvenLarger, "Stress-3-EvenLarger.dat",   274944, -1);
-			Binary.Add(StressFile.Huge,       "Stress-4-Huge.dat",        1089792, -1);
-			Binary.Add(StressFile.Enormous,   "Stress-5-Enormous.dat",   16299776, -1);
+			BinarySendFile = new FileGroup(4);                                                           // Not including EOF.
+			BinarySendFile.Add(StressFile.Normal,              "Stress-1-Normal.dat",                  8192, -1);
+			BinarySendFile.Add(StressFile.Large,               "Stress-2-Large.dat",                  82432, -1);
+			////               StressFile.LargeWithLongLines makes little sense for binary terminals
+			BinarySendFile.Add(StressFile.Huge,                "Stress-4-Huge.dat",                 1089792, -1);
+			////               StressFile.HugeWithVeryLongLines makes little sense for binary terminals
+			BinarySendFile.Add(StressFile.Enormous,            "Stress-5-Enormous.dat",            16299776, -1);
+
+			SendText = new FileGroup(3);                                                                 // Including EOL; not including EOF.
+			SendText.Add(StressFile.LongLine,                  "Stress-7-LongLine.txt",                 973, 1);
+			SendText.Add(StressFile.VeryLongLine,              "Stress-8-VeryLongLine.txt",            9991, 1);
+			SendText.Add(StressFile.EnormousLine,              "Stress-9-EnormousLine.txt",          500014, 1);
 		}
 
 		#endregion

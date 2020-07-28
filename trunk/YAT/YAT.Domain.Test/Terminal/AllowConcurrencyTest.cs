@@ -105,12 +105,12 @@ namespace YAT.Domain.Test.Terminal
 			var settingsTx = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 			settingsTx.Send.AllowConcurrency = allowConcurrency;
 			settingsTx.TextTerminal.LineSendDelay = new TextLineSendDelaySettingTuple(true, 1, 1); // Delay of 1 ms per line, sending over
-			using (var terminalTx = new Domain.TextTerminal(settingsTx))                           // localhost is way too fast otherwise.
+			using (var terminalTx = TerminalFactory.CreateTerminal(settingsTx))                    // localhost is way too fast otherwise.
 			{                                                                                      //  => 300 lines take 300..600 ms, perfect.
 				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started!");
 
 				var settingsRx = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
-				using (var terminalRx = new Domain.TextTerminal(settingsRx))
+				using (var terminalRx = TerminalFactory.CreateTerminal(settingsRx))
 				{
 					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalTx, terminalRx);
@@ -183,7 +183,7 @@ namespace YAT.Domain.Test.Terminal
 
 		private static void SendFile(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int subsequentLineCount, string subsequentLineText)
 		{
-			var fi = Files.Text.Stress[StressFile.Normal];
+			var fi = Files.TextSendFile.Item[StressFile.Normal];
 			var message = string.Format(CultureInfo.InvariantCulture, "Precondition: File line count must equal {0} but is {1}!", SendLineCount, fi.LineCount);
 			Assert.That(fi.LineCount, Is.EqualTo(SendLineCount), message);
 			terminalTx.SendFile(fi.Path);
