@@ -449,8 +449,8 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual void SendAutoResponseTrigger(byte[] triggerSequence, string triggerText)
 		{
-			if (!ArrayEx.IsNullOrEmpty(triggerSequence))                         // If sequence is given, use that, no matter
-				this.terminal.SendRawData(ToSequenceWithTxEol(triggerSequence)); // whether 'UseText' is enabled or not.
+			if (!ArrayEx.IsNullOrEmpty(triggerSequence))                     // If sequence is given, use that, no matter
+				this.terminal.SendRaw(ToSequenceWithTxEol(triggerSequence)); // whether 'UseText' is enabled or not.
 			else
 				this.terminal.SendTextLine(triggerText);
 		}
