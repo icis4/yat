@@ -125,12 +125,12 @@ namespace YAT.Domain.Test.TextTerminal
 
 				// Send:
 				var beganAt = DateTime.Now;
-				var file = Files.Text.Stress[StressFile.Normal]; // 300 lines will take about 9..12 seconds.
+				var fi = Files.Text.Stress[StressFile.Normal]; // 300 lines will take about 9..12 seconds.
 				var fileTimeout = 15000;
-				var fileByteCount = file.ByteCount;
-				var fileLineCount = file.LineCount;
+				var fileByteCount = fi.ByteCount;
+				var fileLineCount = fi.LineCount;
 				var fileLineByteCount = (fileByteCount / fileLineCount); // Fixed to default of <CR><LF>.
-				terminal.SendFile(file.Path);
+				terminal.SendFile(fi.Path);
 				Utilities.WaitForSendingAndVerifyCounts(terminal, fileByteCount, fileLineCount, fileTimeout);
 				Utilities.WaitForReceivingAndVerifyCounts(terminal, fileByteCount, fileLineCount);
 				var endedAt = DateTime.Now;
@@ -151,7 +151,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
-		protected virtual void VerifyDefaultOrInfiniteTimeout(Domain.TextTerminal terminal, int fileLineCount, int fileLineByteCount)
+		protected virtual void VerifyDefaultOrInfiniteTimeout(Domain.Terminal terminal, int fileLineCount, int fileLineByteCount)
 		{
 			var displayLines = terminal.RepositoryToDisplayLines(RepositoryType.Bidir);
 			Assert.That(displayLines.Count, Is.EqualTo(fileLineCount * 2));
@@ -177,12 +177,12 @@ namespace YAT.Domain.Test.TextTerminal
 
 				// Send:
 				var beganAt = DateTime.Now;
-				var file = Files.Text.Stress[StressFile.Normal]; // 300 lines will take about 9..12 seconds.
+				var fi = Files.Text.Stress[StressFile.Normal]; // 300 lines will take about 9..12 seconds.
 				var fileTimeout = 15000;
-				var fileByteCount = file.ByteCount;
-				var fileLineCount = file.LineCount;
+				var fileByteCount = fi.ByteCount;
+				var fileLineCount = fi.LineCount;
 				var fileLineByteCount = (fileByteCount / fileLineCount); // Fixed to default of <CR><LF>.
-				terminal.SendFile(file.Path);                         // ByteCount only, lines are expected to be broken more.
+				terminal.SendFile(fi.Path);                         // ByteCount only, lines are expected to be broken more.
 				Utilities.WaitForSendingAndVerifyByteCount(terminal, fileByteCount, fileTimeout);
 				Utilities.WaitForReceivingAndVerifyByteCount(terminal, fileByteCount);
 				var endedAt = DateTime.Now;
@@ -203,7 +203,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
-		protected virtual void VerifyMinimumTimeoutOrTestDisabled(Domain.TextTerminal terminal, int fileLineCount, int fileLineByteCount)
+		protected virtual void VerifyMinimumTimeoutOrTestDisabled(Domain.Terminal terminal, int fileLineCount, int fileLineByteCount)
 		{
 			var displayLines = terminal.RepositoryToDisplayLines(RepositoryType.Bidir);   // At least 2 * 300 lines, but rather * 1.5 = 900 lines.
 			Assert.That(displayLines.Count, Is.GreaterThan((int)Math.Round(fileLineCount * 2 * 1.25)));

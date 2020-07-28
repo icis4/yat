@@ -64,7 +64,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 			using (var terminalA = new Domain.TextTerminal(settingsA))
 			{
-				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
+				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
 
 				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				settingsB.Display.ShowDirection = true;
@@ -75,7 +75,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 				using (var terminalB = new Domain.TextTerminal(settingsB))
 				{
-					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started");
+					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					string text = "ABC";
@@ -253,7 +253,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 			using (var terminalA = new Domain.TextTerminal(settingsA))
 			{
-				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started");
+				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
 
 				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				settingsB.Display.ShowDirection = true;
@@ -264,7 +264,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 				using (var terminalB = new Domain.TextTerminal(settingsB))
 				{
-					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started");
+					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					string text = "ABC";

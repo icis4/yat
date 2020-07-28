@@ -61,12 +61,12 @@ namespace YAT.Domain.Test.Terminal
 			var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 			using (var terminalTx = new Domain.TextTerminal(settingsA))
 			{
-				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");
+				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started!");
 
 				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				using (var terminalRx = new Domain.TextTerminal(settingsB))
 				{
-					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started");
+					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalTx, terminalRx);
 
 					const int DelayTime = 2000; // 3 * IsSendingForSomeTime is 1200 ms
@@ -133,12 +133,12 @@ namespace YAT.Domain.Test.Terminal
 			var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 			using (var terminalTx = new Domain.TextTerminal(settingsA))
 			{
-				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");
+				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started!");
 
 				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				using (var terminalRx = new Domain.TextTerminal(settingsB))
 				{
-					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started");
+					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalTx, terminalRx);
 
 					const int DelayTime = 2000; // 3 * IsSendingForSomeTime is 1200 ms
@@ -205,13 +205,13 @@ namespace YAT.Domain.Test.Terminal
 			settingsA.Display.MaxLineCount = 10000; // Running in NUnit revealed ~2000 lines.
 			using (var terminalTx = new Domain.TextTerminal(settingsA))
 			{
-				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");
+				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started!");
 
 				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				settingsB.Display.MaxLineCount = 10000; // Running in NUnit revealed ~2000 lines.
 				using (var terminalRx = new Domain.TextTerminal(settingsB))
 				{
-					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started");
+					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalTx, terminalRx);
 
 					string textRepeat = @"ABC\!(LineRepeat)";
@@ -278,20 +278,19 @@ namespace YAT.Domain.Test.Terminal
 			settingsA.TextTerminal.LineSendDelay = new TextLineSendDelaySettingTuple(true, 1, 1); // Delay of 1 ms per line.
 			using (var terminalTx = new Domain.TextTerminal(settingsA))
 			{
-				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");
+				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started!");
 
 				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				settingsB.Display.MaxLineCount = 10000; // Running in NUnit revealed 800..1000 lines.
 				using (var terminalRx = new Domain.TextTerminal(settingsB))
 				{
-					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started");
+					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalTx, terminalRx);
 
 					// Send:
 					var initial = DateTime.Now;
-					var file = Files.Text.Stress[StressFile.EvenLarger]; // 5000 lines would take about 5..10 seconds.
-					int fileLineByteCount = (file.ByteCount / file.LineCount); // Fixed to default of <CR><LF>.
-					terminalTx.SendFile(file.Path);
+					var fi = Files.Text.Stress[StressFile.EvenLarger]; // 5000 lines would take about 5..10 seconds.
+					terminalTx.SendFile(fi.Path);
 					Utilities.WaitForIsSendingForSomeTime(terminalTx);
 
 					// Break:
@@ -306,10 +305,10 @@ namespace YAT.Domain.Test.Terminal
 					var rxByteCount = terminalRx.GetRepositoryByteCount(RepositoryType.Rx);
 					var rxLineCount = terminalRx.GetRepositoryLineCount(RepositoryType.Rx);
 					Assert.That(rxByteCount, Is.EqualTo(txByteCount));
-					Assert.That(rxByteCount, Is.GreaterThan(500 * fileLineByteCount));
+					Assert.That(rxByteCount, Is.GreaterThan(500 * fi.LineByteCount));
 					Assert.That(rxLineCount, Is.EqualTo(txLineCount));
 					Assert.That(rxLineCount, Is.GreaterThan(500)); // Running in NUnit revealed 800..1000 lines.
-					Assert.That(rxLineCount, Is.EqualTo((int)(Math.Round((double)txByteCount / fileLineByteCount))));
+					Assert.That(rxLineCount, Is.EqualTo((int)(Math.Round((double)txByteCount / fi.LineByteCount))));
 
 					// Send again to resume break:
 					string textNormal = "123"; // File contains letters.

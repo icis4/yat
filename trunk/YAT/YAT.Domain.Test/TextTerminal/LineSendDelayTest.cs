@@ -64,12 +64,12 @@ namespace YAT.Domain.Test.TextTerminal
 			settingsA.TextTerminal.LineSendDelay = new TextLineSendDelaySettingTuple(true, DelayTime, 1); // Delay of 1000 ms per line.
 			using (var terminalTx = new Domain.TextTerminal(settingsA))
 			{
-				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started");
+				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started!");
 
 				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				using (var terminalRx = new Domain.TextTerminal(settingsB))
 				{
-					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started");
+					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalTx, terminalRx);
 
 					string[] textMulti = ArrayEx.CreateAndInitializeInstance(20, "ABC"); // 20 * 1000 ms = 20 s
