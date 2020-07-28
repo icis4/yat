@@ -300,17 +300,17 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual void Send(byte[] data)
+		public virtual void SendRawData(byte[] data)
 		{
 			AssertUndisposed();
 
 			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
-			var asyncInvoker = new Action<byte[], long>(DoSend);
+			var asyncInvoker = new Action<byte[], long>(DoSendRawData);
 			asyncInvoker.BeginInvoke(data, sequenceNumber, null, null);
 		}
 
 		/// <remarks>This method will be called asynchronously.</remarks>
-		protected virtual void DoSend(byte[] data, long sequenceNumber)
+		protected virtual void DoSendRawData(byte[] data, long sequenceNumber)
 		{
 			DebugSend(string.Format("Sending of {0} byte(s) of raw data has been invoked with sequence number {1}.", data.Length, sequenceNumber));
 
