@@ -125,7 +125,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 				// Send:
 				var beganAt = DateTime.Now;
-				var file = Files.Text.Stress[StressTestCase.Normal]; // 300 lines will take about 9..12 seconds.
+				var file = Files.Text.Stress[StressFile.Normal]; // 300 lines will take about 9..12 seconds.
 				var fileTimeout = 15000;
 				var fileByteCount = file.ByteCount;
 				var fileLineCount = file.LineCount;
@@ -177,7 +177,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 				// Send:
 				var beganAt = DateTime.Now;
-				var file = Files.Text.Stress[StressTestCase.Normal]; // 300 lines will take about 9..12 seconds.
+				var file = Files.Text.Stress[StressFile.Normal]; // 300 lines will take about 9..12 seconds.
 				var fileTimeout = 15000;
 				var fileByteCount = file.ByteCount;
 				var fileLineCount = file.LineCount;
