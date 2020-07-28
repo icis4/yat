@@ -121,9 +121,9 @@ namespace YAT.Domain.Test
 				string[] cats;
 
 				var v4Loopback = (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback; // Convenience shortcut.
-				var v6Loopback = (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback; // Convenience shortcut.         // \ToDo: Complete specific interface based testing.
-				var v4Specific = IPNetworkInterfaceEx.Parse(MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface); // Convenience shortcut.
-				var v6Specific = IPNetworkInterfaceEx.Parse(MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface); // Convenience shortcut.
+				var v6Loopback = (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback; // Convenience shortcut.            // \ToDo: Complete specific interface based testing.
+				var v4Specific = v4Loopback; // IPNetworkInterfaceEx.Parse(MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface); // Convenience shortcut.
+				var v6Specific = v6Loopback; // IPNetworkInterfaceEx.Parse(MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface); // Convenience shortcut.
 
 				// TCP/IP Client/Server
 
@@ -228,9 +228,9 @@ namespace YAT.Domain.Test
 				string[] cats;
 
 				var v4Loopback = (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback; // Convenience shortcut.
-				var v6Loopback = (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback; // Convenience shortcut.         // \ToDo: Complete specific interface based testing.
-				var v4Specific = IPNetworkInterfaceEx.Parse(MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface); // Convenience shortcut.
-				var v6Specific = IPNetworkInterfaceEx.Parse(MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface); // Convenience shortcut.
+				var v6Loopback = (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback; // Convenience shortcut.            // \ToDo: Complete specific interface based testing.
+				var v4Specific = v4Loopback; // IPNetworkInterfaceEx.Parse(MKY.Net.Test.ConfigurationProvider.Configuration.IPv4SpecificInterface); // Convenience shortcut.
+				var v6Specific = v6Loopback; // IPNetworkInterfaceEx.Parse(MKY.Net.Test.ConfigurationProvider.Configuration.IPv6SpecificInterface); // Convenience shortcut.
 
 				// UDP/IP PairSocket
 
