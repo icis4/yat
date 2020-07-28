@@ -124,7 +124,7 @@ namespace YAT.Domain.Test.Terminal
 
 		/// <summary></summary>
 		[Test] // Test is mandatory, it shall not be excludable. 'IPv4LoopbackIsAvailable' is probed below.
-		public virtual void TestLineDelayAndIntervalKeywords([Values(@"\!(LineDelay(2000))", @"\!(LineInterval(2000))")]string keyword)
+		public virtual void TestLineDelayAndIntervalKeywords([Values(@"\!(LineDelay(2000))", @"\!(LineInterval(2000))")] string keyword)
 		{
 			if (!ConfigurationProvider.Configuration.IPv4LoopbackIsAvailable)
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
@@ -289,7 +289,7 @@ namespace YAT.Domain.Test.Terminal
 
 					// Send:
 					var initial = DateTime.Now;
-					var file = Files.Text.Stress[StressTestCase.EvenLarger]; // 5000 lines would take about 5..10 seconds.
+					var file = Files.Text.Stress[StressFile.EvenLarger]; // 5000 lines would take about 5..10 seconds.
 					int fileLineByteCount = (file.ByteCount / file.LineCount); // Fixed to default of <CR><LF>.
 					terminalTx.SendFile(file.Path);
 					Utilities.WaitForIsSendingForSomeTime(terminalTx);

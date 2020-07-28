@@ -94,9 +94,9 @@ namespace YAT.Domain.Test.Terminal
 		/// <summary></summary>
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Well... Better? Really?")]
 		[Test, Combinatorial] // Test is mandatory, it shall not be excludable. 'IPv4LoopbackIsAvailable' is probed below.
-		public virtual void TestCombinatorial([Values(false, true)]bool allowConcurrency,
-		                                      [Values(Stimulus.SendTextRepeating, Stimulus.SendFile)]Stimulus stimulus,
-		                                      [Values(Subsequence.One, Subsequence.Random)]Subsequence subsequence)
+		public virtual void TestCombinatorial([Values(false, true)] bool allowConcurrency,
+		                                      [Values(Stimulus.SendTextRepeating, Stimulus.SendFile)] Stimulus stimulus,
+		                                      [Values(Subsequence.One, Subsequence.Random)] Subsequence subsequence)
 		{
 			if (!ConfigurationProvider.Configuration.IPv4LoopbackIsAvailable)
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
@@ -185,7 +185,7 @@ namespace YAT.Domain.Test.Terminal
 		/// <summary></summary>
 		protected virtual void SendFile(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, int subsequentLineCount, string subsequentLineText)
 		{
-			var file = Files.Text.Stress[StressTestCase.Normal];
+			var file = Files.Text.Stress[StressFile.Normal];
 			var message = string.Format(CultureInfo.InvariantCulture, "Precondition: File line count must equal {0} but is {1}!", SendLineCount, file.LineCount);
 			Assert.That(file.LineCount, Is.EqualTo(SendLineCount), message);
 			terminalTx.SendFile(file.Path);
