@@ -29,8 +29,11 @@ namespace NUnit
 	/// </summary>
 	/// <remarks>
 	/// Useful to encapsulate information where <see cref="Framework.TestCaseData"/> objects are
-	/// not suitable or suboptimal, e.g. where clearly named arguments shall be used rather than
-	/// just "arg1", "arg2",...
+	/// not suitable or suboptimal, e.g. where named and typed arguments shall be used rather than
+	/// just an array of <see cref="object"/> named "arg1", "arg2",...
+	/// </remarks>
+	/// <remarks>
+	/// Simply derive from this class and add arguments as needed.
 	/// </remarks>
 	/// <remarks>
 	/// Name "TestCaseDescriptor" rather than e.g. "TestCaseDataHelper" for better distinguishing
