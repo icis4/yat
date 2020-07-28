@@ -144,7 +144,7 @@ namespace YAT.Domain.Test.BinaryTerminal
 			// This test is a limited implementation of TextTerminal.FormatTest.Test().
 			// Changes here likely also have to be applied to that full test.
 
-			var settings = Utilities.GetTcpAutoSocketOnIPv4LoopbackBinarySettings();
+			var settings = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Binary);
 			settings.Display.TxRadix = radix;
 			settings.Display.RxRadix = radix;
 			settings.Display.ShowRadix = false;

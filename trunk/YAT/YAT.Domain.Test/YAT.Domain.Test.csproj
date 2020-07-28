@@ -87,11 +87,13 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="BinaryTerminal\FormatTest.cs" />
-    <Compile Include="GenericTestData.cs" />
+    <Compile Include="Data.cs" />
+    <Compile Include="Descriptors.cs" />
+    <Compile Include="Environment.cs" />
+    <Compile Include="Files.cs" />
     <Compile Include="Parser\ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestFilesProvider.cs" />
-    <Compile Include="TestCaseDescriptors.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Terminal\AllowConcurrencyTest.cs" />
     <Compile Include="Terminal\SendTextTest.cs" />
     <Compile Include="Terminal\SendFileTest.cs" />
@@ -124,6 +126,18 @@
       <Project>{a19a5215-89ab-49f7-be7b-32a886a76f0c}</Project>
       <Name>MKY.IO.Serial.Socket</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial.Usb\MKY.IO.Serial.Usb.csproj">
+      <Project>{925a9ce4-f45b-4665-ada5-20c832aaa986}</Project>
+      <Name>MKY.IO.Serial.Usb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Usb.Test\MKY.IO.Usb.Test.csproj">
+      <Project>{e909b6f9-f856-4ed5-8d8f-6e77bc02c24c}</Project>
+      <Name>MKY.IO.Usb.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Usb\MKY.IO.Usb.csproj">
+      <Project>{1b657329-940d-4aa1-9768-431288b555e2}</Project>
+      <Name>MKY.IO.Usb</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MKY\MKY.Net.Test\MKY.Net.Test.csproj">
       <Project>{ea8a738e-ba58-4ac2-9fe5-61ea851098a4}</Project>
       <Name>MKY.Net.Test</Name>
@@ -131,6 +145,10 @@
     <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NUnit\NUnit\NUnit.csproj">
+      <Project>{f7bff679-5389-434c-81e4-7ee8530df954}</Project>
+      <Name>NUnit</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Domain\YAT.Domain.csproj">
       <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>

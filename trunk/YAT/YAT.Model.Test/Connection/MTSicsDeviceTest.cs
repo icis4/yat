@@ -36,6 +36,7 @@ using MKY.Test.Devices;
 using NUnit;
 using NUnit.Framework;
 
+using YAT.Domain;
 using YAT.Settings.Application;
 
 #endregion
@@ -104,7 +105,7 @@ namespace YAT.Model.Test.Connection
 				Assert.Ignore("'MTSicsDeviceA' is not available, therefore this test is excluded. Ensure that 'MTSicsDeviceA' is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			var settings = Utilities.GetSerialPortMTSicsDeviceATextSettings();
+			var settings = Settings.GetMTSicsSerialPortDeviceASettings();
 
 			// Create terminals from settings:
 			using (var terminal = new Terminal(settings))
@@ -267,7 +268,7 @@ namespace YAT.Model.Test.Connection
 
 			// --- Precondition: USB hub is set to its defaults, i.e. all outputs are enabled. -----
 
-			var settings = Utilities.GetSerialPortMTSicsDeviceATextSettings();
+			var settings = Settings.GetMTSicsSerialPortDeviceASettings();
 
 			// Create terminals from settings:
 			using (var terminal = new Terminal(settings))

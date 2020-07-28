@@ -68,6 +68,18 @@ namespace YAT.Model.Test
 			return (ToSettings(Domain.Test.Settings.GetSerialPortMTSicsDeviceSettings(portId)));
 		}
 
+		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		public static TerminalSettingsRoot GetMTSicsSerialPortDeviceASettings()
+		{
+			return (ToSettings(Domain.Test.Settings.GetMTSicsSerialPortDeviceASettings()));
+		}
+
+		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		public static TerminalSettingsRoot GetMTSicsSerialPortDeviceBSettings()
+		{
+			return (ToSettings(Domain.Test.Settings.GetMTSicsSerialPortDeviceBSettings()));
+		}
+
 		#endregion
 
 		#region Socket
@@ -85,6 +97,18 @@ namespace YAT.Model.Test
 		public static TerminalSettingsRoot GetIPSpecificInterfaceSettings(TerminalType terminalType, SocketType type, string networkInterface)
 		{
 			return (ToSettings(Domain.Test.Settings.GetIPSpecificInterfaceSettings(terminalType, type, networkInterface)));
+		}
+
+		/// <remarks>Explicitly using "Loopback", corresponding to 'Configuration.IPv4LoopbackIsAvailable'.</remarks>
+		public static TerminalSettingsRoot GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType terminalType)
+		{
+			return (ToSettings(Domain.Test.Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(terminalType)));
+		}
+
+		/// <remarks>Explicitly using "Loopback", corresponding to  'Configuration.IPv6LoopbackIsAvailable'.</remarks>
+		public static TerminalSettingsRoot GetTcpAutoSocketOnIPv6LoopbackSettings(TerminalType terminalType)
+		{
+			return (ToSettings(Domain.Test.Settings.GetTcpAutoSocketOnIPv6LoopbackSettings(terminalType)));
 		}
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
