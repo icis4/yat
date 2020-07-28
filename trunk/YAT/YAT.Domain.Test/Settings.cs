@@ -151,7 +151,7 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
-		public static TerminalSettings GetIPLoopbackSettings(TerminalType terminalType, SocketType socketType, IPAddress ipAddress)
+		public static TerminalSettings GetIPSocketSettings(TerminalType terminalType, SocketType socketType, IPAddress ipAddress)
 		{
 			var settings = GetSettings(terminalType);
 			ApplyIPLoopbackSettings(settings, socketType, ipAddress);
@@ -187,13 +187,13 @@ namespace YAT.Domain.Test
 		/// <summary></summary>
 		public static TerminalSettings GetTcpClientOnIPv4LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, SocketType.TcpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
+			return (GetIPSocketSettings(terminalType, SocketType.TcpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
 		/// <summary></summary>
 		public static TerminalSettings GetTcpClientOnIPv6LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, SocketType.TcpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
+			return (GetIPSocketSettings(terminalType, SocketType.TcpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
 		}
 
 		/// <summary></summary>
@@ -230,13 +230,13 @@ namespace YAT.Domain.Test
 		/// <summary></summary>
 		public static TerminalSettings GetTcpServerOnIPv4LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, SocketType.TcpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
+			return (GetIPSocketSettings(terminalType, SocketType.TcpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
 		/// <summary></summary>
 		public static TerminalSettings GetTcpServerOnIPv6LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, SocketType.TcpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
+			return (GetIPSocketSettings(terminalType, SocketType.TcpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
 		}
 
 		/// <summary></summary>
@@ -273,13 +273,13 @@ namespace YAT.Domain.Test
 		/// <remarks>Explicitly using "Loopback", corresponding to 'Configuration.IPv4LoopbackIsAvailable'.</remarks>
 		public static TerminalSettings GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, SocketType.TcpAutoSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
+			return (GetIPSocketSettings(terminalType, SocketType.TcpAutoSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
 		/// <remarks>Explicitly using "Loopback", corresponding to  'Configuration.IPv6LoopbackIsAvailable'.</remarks>
 		public static TerminalSettings GetTcpAutoSocketOnIPv6LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, SocketType.TcpAutoSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
+			return (GetIPSocketSettings(terminalType, SocketType.TcpAutoSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
 		}
 
 		/// <summary></summary>
@@ -338,13 +338,13 @@ namespace YAT.Domain.Test
 		/// <summary></summary>
 		public static TerminalSettings GetUdpClientOnIPv4LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, SocketType.UdpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
+			return (GetIPSocketSettings(terminalType, SocketType.UdpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
 		/// <summary></summary>
 		public static TerminalSettings GetUdpClientOnIPv6LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, SocketType.UdpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
+			return (GetIPSocketSettings(terminalType, SocketType.UdpClient, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
 		}
 
 		/// <summary></summary>
@@ -381,13 +381,13 @@ namespace YAT.Domain.Test
 		/// <summary></summary>
 		public static TerminalSettings GetUdpServerOnIPv4LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, SocketType.UdpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
+			return (GetIPSocketSettings(terminalType, SocketType.UdpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
 		/// <summary></summary>
 		public static TerminalSettings GetUdpServerOnIPv6LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, SocketType.UdpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
+			return (GetIPSocketSettings(terminalType, SocketType.UdpServer, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
 		}
 
 		/// <summary></summary>
@@ -424,13 +424,13 @@ namespace YAT.Domain.Test
 		/// <summary></summary>
 		public static TerminalSettings GetUdpPairSocketOnIPv4LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, SocketType.UdpPairSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
+			return (GetIPSocketSettings(terminalType, SocketType.UdpPairSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
 		/// <summary></summary>
 		public static TerminalSettings GetUdpPairSocketOnIPv6LoopbackSettings(TerminalType terminalType)
 		{
-			return (GetIPLoopbackSettings(terminalType, SocketType.UdpPairSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
+			return (GetIPSocketSettings(terminalType, SocketType.UdpPairSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
 		}
 
 		/// <summary></summary>
