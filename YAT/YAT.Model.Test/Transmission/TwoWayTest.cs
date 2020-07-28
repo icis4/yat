@@ -90,7 +90,7 @@ namespace YAT.Model.Test.Transmission
 			}
 		}
 
-		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
+		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
 		public static IEnumerable TestCasesSerialPortLoopbackPairs_Text
 		{
@@ -101,7 +101,7 @@ namespace YAT.Model.Test.Transmission
 			}
 		}
 
-		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
+		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
 		public static IEnumerable TestCasesSerialPortLoopbackSelfs_Text
@@ -113,7 +113,7 @@ namespace YAT.Model.Test.Transmission
 			}
 		}
 
-		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
+		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
 		public static IEnumerable TestCasesIPSocketPairs_Text
 		{
@@ -124,7 +124,7 @@ namespace YAT.Model.Test.Transmission
 			}
 		}
 
-		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
+		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
 		public static IEnumerable TestCasesIPSocketSelfs_Text
@@ -180,7 +180,7 @@ namespace YAT.Model.Test.Transmission
 		// Tests
 		//==========================================================================================
 
-		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
+		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[Test, TestCaseSource(typeof(TwoWayTestData), "TestCasesSerialPortLoopbackPairs_Text")]
 		public virtual void TestSerialPortLoopbackPairs(TerminalSettings settingsA, TerminalSettings settingsB, Utilities.TestSet testSet, int transmissionCount)
 		{
@@ -191,7 +191,7 @@ namespace YAT.Model.Test.Transmission
 			TransmitAndVerify(settingsA, settingsB, testSet, transmissionCount);
 		}
 
-		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
+		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		[Test, TestCaseSource(typeof(TwoWayTestData), "TestCasesSerialPortLoopbackSelfs_Text")]
 		public virtual void TestSerialPortLoopbackSelfs(TerminalSettings settings, Utilities.TestSet testSet, int transmissionCount)
@@ -203,7 +203,7 @@ namespace YAT.Model.Test.Transmission
 			TransmitAndVerify(settings, null, testSet, transmissionCount);
 		}
 
-		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
+		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[Test, TestCaseSource(typeof(TwoWayTestData), "TestCasesIPSocketPairs_Text")]
 		public virtual void TestIPSocketPairs(TerminalSettings settingsA, TerminalSettings settingsB, Utilities.TestSet testSet, int transmissionCount)
 		{
@@ -212,7 +212,7 @@ namespace YAT.Model.Test.Transmission
 			TransmitAndVerify(settingsA, settingsB, testSet, transmissionCount);
 		}
 
-		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
+		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		[Test, TestCaseSource(typeof(TwoWayTestData), "TestCasesIPSocketSelfs_Text")]
 		public virtual void TestIPSocketSelfs(TerminalSettings settings, Utilities.TestSet testSet, int transmissionCount)

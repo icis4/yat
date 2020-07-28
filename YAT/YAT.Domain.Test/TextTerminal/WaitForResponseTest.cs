@@ -61,12 +61,12 @@ namespace YAT.Domain.Test.TextTerminal
 			wfr.Enabled = true; // For manual test execution, wfr.Timeout must be set to 5000 ms as break is involved.
 			settingsA.TextTerminal.WaitForResponse = wfr;
 
-			using (var terminalA = new Domain.TextTerminal(settingsA))
+			using (var terminalA = TerminalFactory.CreateTerminal(settingsA))
 			{
 				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
 
 				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
-				using (var terminalB = new Domain.TextTerminal(settingsB))
+				using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
 				{
 					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalA, terminalB);
@@ -225,12 +225,12 @@ namespace YAT.Domain.Test.TextTerminal
 			wfr.Timeout = Timeout.Infinite;
 			settingsA.TextTerminal.WaitForResponse = wfr;
 
-			using (var terminalA = new Domain.TextTerminal(settingsA))
+			using (var terminalA = TerminalFactory.CreateTerminal(settingsA))
 			{
 				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
 
 				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
-				using (var terminalB = new Domain.TextTerminal(settingsB))
+				using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
 				{
 					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalA, terminalB);

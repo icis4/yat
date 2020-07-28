@@ -62,12 +62,12 @@ namespace YAT.Domain.Test.TextTerminal
 
 			var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 			settingsA.TextTerminal.LineSendDelay = new TextLineSendDelaySettingTuple(true, DelayTime, 1); // Delay of 1000 ms per line.
-			using (var terminalTx = new Domain.TextTerminal(settingsA))
+			using (var terminalTx = TerminalFactory.CreateTerminal(settingsA))
 			{
 				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started!");
 
 				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
-				using (var terminalRx = new Domain.TextTerminal(settingsB))
+				using (var terminalRx = TerminalFactory.CreateTerminal(settingsB))
 				{
 					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalTx, terminalRx);
