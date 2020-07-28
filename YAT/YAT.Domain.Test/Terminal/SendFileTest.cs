@@ -32,6 +32,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
+using MKY;
+using MKY.IO.Serial.SerialPort;
+
 using NUnit.Framework;
 
 using YAT.Domain.Settings;
@@ -61,19 +64,19 @@ namespace YAT.Domain.Test.Terminal
 		}
 
 		/// <summary></summary>
-		public static IEnumerable<Tuple<bool, string>> SettingsFlavor
+		public static IEnumerable<Tuple<bool, string>> SettingsFlavors
 		{
 			get
 			{
 				var l = new List<Tuple<bool, string>>(2); // Preset the required capacity to improve memory management.
-				l.Add(new Tuple<bool, string>(false, "_Default"));
-				l.Add(new Tuple<bool, string>(true, "_Modified"));
+				l.Add(new Tuple<bool, string>(false, "Default"));
+				l.Add(new Tuple<bool, string>(true, "Modified"));
 				return (l);
 			}
 		}
 
 		/// <summary></summary>
-		public static IEnumerable<StressFile> Files
+		public static IEnumerable<StressFile> FileSelections
 		{
 			get
 			{
@@ -103,9 +106,9 @@ namespace YAT.Domain.Test.Terminal
 			{
 				foreach (var tt in TerminalTypes)
 				{
-					foreach (var flavor in SettingsFlavor)
+					foreach (var flavor in SettingsFlavors)
 					{
-						foreach (var file in Files)
+						foreach (var file in FileSelections)
 						{
 							var nameSuffix = string.Format(CultureInfo.CurrentCulture, "_{0}_{1}_{2}", tt, flavor.Item2, file);
 
@@ -145,8 +148,15 @@ namespace YAT.Domain.Test.Terminal
 		{
 			get
 			{
-				foreach (var tc in Data.ToIPSocketPairsTestCases_Text(Tests))
-					yield return (tc);
+				foreach (var t in Tests)
+				{
+					var modifySettings = (bool)(t.Arguments[3]);
+					if (modifySettings)
+						continue; // No need to generate these settings for IP sockets (yet).
+
+					foreach (var tc in Data.ToIPSocketPairsTestCases_Text(new TestCaseData[] { t }))
+						yield return (tc);
+				}
 			}
 		}
 
@@ -157,8 +167,15 @@ namespace YAT.Domain.Test.Terminal
 		{
 			get
 			{
-				foreach (var tc in Data.ToIPSocketSelfsTestCases_Text(Tests))
-					yield return (tc);
+				foreach (var t in Tests)
+				{
+					var modifySettings = (bool)(t.Arguments[3]);
+					if (modifySettings)
+						continue; // No need to generate these settings for IP sockets (yet).
+
+					foreach (var tc in Data.ToIPSocketSelfsTestCases_Text(new TestCaseData[] { t }))
+						yield return (tc);
+				}
 			}
 		}
 
@@ -176,49 +193,165 @@ namespace YAT.Domain.Test.Terminal
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
 		[Test, TestCaseSource(typeof(SendFileTestTestData), "TestCasesSerialPortLoopbackPairs_Text"), Combinatorial] // Test is mandatory, it shall not be excludable.
-		public virtual void TestSerialPortLoopbackPairs(TerminalSettings settingsA, TerminalSettings settingsB, TerminalType terminalType, bool modifySettings, StressFile file)
+		public virtual void TestSerialPortLoopbackPairs(TerminalSettings settingsA, TerminalSettings settingsB, TerminalType terminalType, bool modifySettings, StressFile fileSelection)
 		{
 			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackPairsAreAvailable)
 				Assert.Ignore("No serial COM port loopback pairs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback pair is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			TransmitAndVerify(settingsA, settingsB, terminalType, modifySettings, file);
+			SendAndVerify(settingsA, settingsB, terminalType, modifySettings, fileSelection);
 		}
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		[Test, TestCaseSource(typeof(SendFileTestTestData), "TestCasesSerialPortLoopbackSelfs_Text")]
-		public virtual void TestSerialPortLoopbackSelfs(TerminalSettings settings, TerminalType terminalType, bool modifySettings, StressFile file)
+		public virtual void TestSerialPortLoopbackSelfs(TerminalSettings settings, TerminalType terminalType, bool modifySettings, StressFile fileSelection)
 		{
 			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
 				Assert.Ignore("No serial COM port loopback selfs are available, therefore this test is excluded. Ensure that at least one serial COM port loopback self is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			TransmitAndVerify(settings, null, terminalType, modifySettings, file);
+			SendAndVerify(settings, null, terminalType, modifySettings, fileSelection);
 		}
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
 		[Test, TestCaseSource(typeof(SendFileTestTestData), "TestCasesIPSocketPairs_Text")]
-		public virtual void TestIPSocketPairs(TerminalSettings settingsA, TerminalSettings settingsB, TerminalType terminalType, bool modifySettings, StressFile file)
+		public virtual void TestIPSocketPairs(TerminalSettings settingsA, TerminalSettings settingsB, TerminalType terminalType, bool modifySettings, StressFile fileSelection)
 		{
 			// IPSocketPairs are always made available by 'Utilities', no need to check for this.
 
-			TransmitAndVerify(settingsA, settingsB, terminalType, modifySettings, file);
+			SendAndVerify(settingsA, settingsB, terminalType, modifySettings, fileSelection);
 		}
 
 		/// <remarks>Separation into multiple tests for easier handling and execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		[Test, TestCaseSource(typeof(SendFileTestTestData), "TestCasesIPSocketSelfs_Text")]
-		public virtual void TestIPSocketSelfs(TerminalSettings settings, TerminalType terminalType, bool modifySettings, StressFile file)
+		public virtual void TestIPSocketSelfs(TerminalSettings settings, TerminalType terminalType, bool modifySettings, StressFile fileSelection)
 		{
 			// IPSocketSelfs are always made available by 'Utilities', no need to check for this.
 
-			TransmitAndVerify(settings, null, terminalType, modifySettings, file);
+			SendAndVerify(settings, null, terminalType, modifySettings, fileSelection);
 		}
 
-		private static void TransmitAndVerify(TerminalSettings settingsA, TerminalSettings settingsB, TerminalType terminalType, bool modifySettings, StressFile file)
+		private static void SendAndVerify(TerminalSettings settingsA, TerminalSettings settingsB, TerminalType terminalType, bool modifySettings, StressFile fileSelection)
 		{
-			// Line max => file byte
+			Settings.RevertSettingsIfUdpSocket(settingsA); // Revert to default behavior expected by this test case.
+			Settings.RevertSettingsIfUdpSocket(settingsB); // Revert to default behavior expected by this test case.
+
+			var fi = Files.Text.Stress[fileSelection];
+			if (fi.LineByteCount > DisplaySettings.MaxLineLengthDefault) // Adjust maximum line length:
+			{
+				                         settingsA.Display.MaxLineLength = fi.LineByteCount;
+				if (settingsB != null) { settingsB.Display.MaxLineLength = fi.LineByteCount; }
+			}
+
+			if (modifySettings) // Adjust serial port send settings for sending terminal (always A):
+			{
+				settingsA.IO.SerialPort.BufferMaxBaudRate = false;
+				settingsA.IO.SerialPort.MaxChunkSize = new ChunkSize(false, SerialPortSettings.MaxChunkSizeDefault.Size);
+
+				// Attention, in order to also be able to modify socket or USB settings, test case generation has to be adjusted.
+			}
+
+			switch (terminalType)
+			{
+				case TerminalType.Text:   SendAndVerify_Text(  settingsA, settingsB, fi); break;
+				case TerminalType.Binary: SendAndVerify_Binary(settingsA, settingsB, fi); break;
+
+				default: throw (new ArgumentOutOfRangeException("terminalType", terminalType, MessageHelper.InvalidExecutionPreamble + "'" + terminalType + "' is a terminal type that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		private static void SendAndVerify_Text(TerminalSettings settingsA, TerminalSettings settingsB, FileInfo fi)
+		{
+			if (settingsB != null) // Interconnected pair:
+				SendAndVerify_Text_Pair(settingsA, settingsB, fi);
+			else
+				SendAndVerify_Text_Self(settingsA, fi);
+		}
+
+		private static void SendAndVerify_Binary(TerminalSettings settingsA, TerminalSettings settingsB, FileInfo fi)
+		{
+			if (settingsB != null) // Interconnected pair:
+				SendAndVerify_Binary_Pair(settingsA, settingsB, fi);
+			else
+				SendAndVerify_Binary_Self(settingsA, fi);
+		}
+
+		private static void SendAndVerify_Text_Pair(TerminalSettings settingsTx, TerminalSettings settingsRx, FileInfo fi)
+		{
+			using (var terminalTx = new Domain.TextTerminal(settingsTx))
+			{
+				using (var terminalRx = new Domain.TextTerminal(settingsRx))
+				{
+					Assert.That(terminalTx.Start(), Is.True, "Terminal Tx could not be started!");
+					Assert.That(terminalRx.Start(), Is.True, "Terminal Rx could not be started!");
+					Utilities.WaitForConnection(terminalTx, terminalRx);
+
+					SendAndVerify(terminalTx, terminalRx, fi);
+
+					terminalRx.Stop();
+					Utilities.WaitForDisconnection(terminalRx);
+				}
+
+				terminalTx.Stop();
+				Utilities.WaitForDisconnection(terminalTx);
+			}
+		}
+
+		private static void SendAndVerify_Text_Self(TerminalSettings settingsTxRx, FileInfo fi)
+		{
+			using (var terminalTxRx = new Domain.TextTerminal(settingsTxRx))
+			{
+				Assert.That(terminalTxRx.Start(), Is.True, "Terminal Tx/Rx could not be started!");
+				Utilities.WaitForConnection(terminalTxRx, terminalTxRx);
+
+				SendAndVerify(terminalTxRx, terminalTxRx, fi);
+
+				terminalTxRx.Stop();
+				Utilities.WaitForDisconnection(terminalTxRx);
+			}
+		}
+
+		private static void SendAndVerify_Binary_Pair(TerminalSettings settingsTx, TerminalSettings settingsRx, FileInfo fi)
+		{
+			using (var terminalTx = new Domain.BinaryTerminal(settingsTx))
+			{
+				using (var terminalRx = new Domain.BinaryTerminal(settingsRx))
+				{
+					Assert.That(terminalTx.Start(), Is.True, "Terminal Tx could not be started!");
+					Assert.That(terminalRx.Start(), Is.True, "Terminal Rx could not be started!");
+					Utilities.WaitForConnection(terminalTx, terminalRx);
+
+					SendAndVerify(terminalTx, terminalRx, fi);
+
+					terminalRx.Stop();
+					Utilities.WaitForDisconnection(terminalRx);
+				}
+
+				terminalTx.Stop();
+				Utilities.WaitForDisconnection(terminalTx);
+			}
+		}
+
+		private static void SendAndVerify_Binary_Self(TerminalSettings settingsTxRx, FileInfo fi)
+		{
+			using (var terminalTxRx = new Domain.BinaryTerminal(settingsTxRx))
+			{
+				Assert.That(terminalTxRx.Start(), Is.True, "Terminal Tx/Rx could not be started!");
+				Utilities.WaitForConnection(terminalTxRx, terminalTxRx);
+
+				SendAndVerify(terminalTxRx, terminalTxRx, fi);
+
+				terminalTxRx.Stop();
+				Utilities.WaitForDisconnection(terminalTxRx);
+			}
+		}
+
+		private static void SendAndVerify(Domain.Terminal terminalTx, Domain.Terminal terminalRx, FileInfo fi)
+		{
+			terminalTx.SendFile(fi.Path);
+			Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, fi.ByteCount, fi.LineCount, fi.Timeout);
 		}
 
 		#endregion
