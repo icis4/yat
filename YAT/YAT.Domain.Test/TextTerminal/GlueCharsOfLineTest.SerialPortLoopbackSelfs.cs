@@ -127,10 +127,10 @@ namespace YAT.Domain.Test.TextTerminal
 				var beganAt = DateTime.Now;
 				var file = Files.Text.Stress[StressTestCase.Normal]; // 300 lines will take about 9..12 seconds.
 				var fileTimeout = 15000;
-				var fileByteCount = file.Item2;
-				var fileLineCount = file.Item3;
+				var fileByteCount = file.ByteCount;
+				var fileLineCount = file.LineCount;
 				var fileLineByteCount = (fileByteCount / fileLineCount); // Fixed to default of <CR><LF>.
-				terminal.SendFile(file.Item1);
+				terminal.SendFile(file.Path);
 				Utilities.WaitForSendingAndVerifyCounts(terminal, fileByteCount, fileLineCount, fileTimeout);
 				Utilities.WaitForReceivingAndVerifyCounts(terminal, fileByteCount, fileLineCount);
 				var endedAt = DateTime.Now;
@@ -179,10 +179,10 @@ namespace YAT.Domain.Test.TextTerminal
 				var beganAt = DateTime.Now;
 				var file = Files.Text.Stress[StressTestCase.Normal]; // 300 lines will take about 9..12 seconds.
 				var fileTimeout = 15000;
-				var fileByteCount = file.Item2;
-				var fileLineCount = file.Item3;
+				var fileByteCount = file.ByteCount;
+				var fileLineCount = file.LineCount;
 				var fileLineByteCount = (fileByteCount / fileLineCount); // Fixed to default of <CR><LF>.
-				terminal.SendFile(file.Item1);                        // ByteCount only, lines are expected to be broken more.
+				terminal.SendFile(file.Path);                         // ByteCount only, lines are expected to be broken more.
 				Utilities.WaitForSendingAndVerifyByteCount(terminal, fileByteCount, fileTimeout);
 				Utilities.WaitForReceivingAndVerifyByteCount(terminal, fileByteCount);
 				var endedAt = DateTime.Now;

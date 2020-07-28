@@ -290,8 +290,8 @@ namespace YAT.Domain.Test.Terminal
 					// Send:
 					var initial = DateTime.Now;
 					var file = Files.Text.Stress[StressTestCase.EvenLarger]; // 5000 lines would take about 5..10 seconds.
-					int fileLineByteCount = (file.Item2 / file.Item3); // Fixed to default of <CR><LF>.
-					terminalTx.SendFile(file.Item1);
+					int fileLineByteCount = (file.ByteCount / file.LineCount); // Fixed to default of <CR><LF>.
+					terminalTx.SendFile(file.Path);
 					Utilities.WaitForIsSendingForSomeTime(terminalTx);
 
 					// Break:
