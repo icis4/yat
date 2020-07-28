@@ -90,8 +90,10 @@
     <Compile Include="CommandTest.cs" />
     <Compile Include="Connection\DisconnectTest.cs" />
     <Compile Include="Connection\MTSicsDeviceTest.cs" />
+    <Compile Include="Data.cs" />
     <Compile Include="FileHandling\Utilities.cs" />
     <Compile Include="FileHandling\SimpleTest.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="StartTest.cs" />
     <Compile Include="FileHandling\UseCaseTest.cs" />
     <Compile Include="StressTest.cs" />
