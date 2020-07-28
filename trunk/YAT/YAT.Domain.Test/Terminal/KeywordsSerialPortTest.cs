@@ -64,7 +64,7 @@ namespace YAT.Domain.Test.Terminal
 			using (var parser = new Domain.Parser.Parser(Domain.Parser.Mode.NoEscapes)) // Default encoding of UTF-8 is good enough for this test case.
 			{
 				var standardPortNumberInitiallyA = settingsA.IO.SerialPort.PortId.StandardPortNumber;
-				using (var terminalA = new Domain.TextTerminal(settingsA))
+				using (var terminalA = TerminalFactory.CreateTerminal(settingsA))
 				{
 					Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
 
@@ -81,7 +81,7 @@ namespace YAT.Domain.Test.Terminal
 					// Initial ping-pong:
 
 					var standardPortNumberInitiallyB = settingsB.IO.SerialPort.PortId.StandardPortNumber;
-					using (var terminalB = new Domain.TextTerminal(settingsB))
+					using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
 					{
 						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
 						Utilities.WaitForConnection(terminalA, terminalB);
@@ -123,7 +123,7 @@ namespace YAT.Domain.Test.Terminal
 					Assert.That(terminalA.TerminalSettings.IO.SerialPort.PortId.StandardPortNumber, Is.EqualTo(standardPortNumberInitiallyB));
 
 					settingsB.IO.SerialPort.PortId = standardPortNumberInitiallyA;
-					using (var terminalB = new Domain.TextTerminal(settingsB))
+					using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
 					{
 						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be restarted");
 						Utilities.WaitForConnection(terminalA, terminalB);
@@ -170,7 +170,7 @@ namespace YAT.Domain.Test.Terminal
 					settingsB.IO.SerialPort.Communication.DataBits =      MKY.IO.Ports.DataBits.Seven;
 					settingsB.IO.SerialPort.Communication.Parity   =   System.IO.Ports.Parity  .Even;
 					settingsB.IO.SerialPort.Communication.StopBits =   System.IO.Ports.StopBits.Two;
-					using (var terminalB = new Domain.TextTerminal(settingsB))
+					using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
 					{
 						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be restarted");
 						Utilities.WaitForConnection(terminalA, terminalB);
@@ -217,7 +217,7 @@ namespace YAT.Domain.Test.Terminal
 					settingsB.IO.SerialPort.Communication.DataBits =      MKY.IO.Ports.DataBits.Eight;
 					settingsB.IO.SerialPort.Communication.Parity   =   System.IO.Ports.Parity  .None;
 					settingsB.IO.SerialPort.Communication.StopBits =   System.IO.Ports.StopBits.One;
-					using (var terminalB = new Domain.TextTerminal(settingsB))
+					using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
 					{
 						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be restarted");
 						Utilities.WaitForConnection(terminalA, terminalB);
@@ -293,13 +293,13 @@ namespace YAT.Domain.Test.Terminal
 					}
 				}
 
-				using (var terminalA = new Domain.TextTerminal(settingsA))
+				using (var terminalA = TerminalFactory.CreateTerminal(settingsA))
 				{
 					Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
 
 					settingsB.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Hardware; // Automatic.
 
-					using (var terminalB = new Domain.TextTerminal(settingsB))
+					using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
 					{
 						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
 						Utilities.WaitForConnection(terminalA, terminalB);

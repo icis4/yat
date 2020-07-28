@@ -100,14 +100,14 @@ namespace YAT.Domain.Test.Terminal
 				var settingsTx = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				settingsTx.Display.TimeStampFormat = format;
 				settingsTx.Display.TimeStampUseUtc = useUtc;
-				using (var terminalTx = new Domain.TextTerminal(settingsTx))
+				using (var terminalTx = TerminalFactory.CreateTerminal(settingsTx))
 				{
 					Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started!");
 
 					var settingsRx = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 					settingsRx.Display.TimeStampFormat = format;
 					settingsRx.Display.TimeStampUseUtc = useUtc;
-					using (var terminalRx = new Domain.TextTerminal(settingsRx))
+					using (var terminalRx = TerminalFactory.CreateTerminal(settingsRx))
 					{
 						Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started!");
 						Utilities.WaitForConnection(terminalTx, terminalRx);

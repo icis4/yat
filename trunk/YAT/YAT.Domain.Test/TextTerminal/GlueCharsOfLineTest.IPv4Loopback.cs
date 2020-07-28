@@ -62,7 +62,7 @@ namespace YAT.Domain.Test.TextTerminal
 			settingsA.Display.ShowLength    = true;
 			settingsA.Display.ShowDuration  = true;
 
-			using (var terminalA = new Domain.TextTerminal(settingsA))
+			using (var terminalA = TerminalFactory.CreateTerminal(settingsA))
 			{
 				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
 
@@ -73,7 +73,7 @@ namespace YAT.Domain.Test.TextTerminal
 				gcolB.Enabled = false;
 				settingsB.TextTerminal.GlueCharsOfLine = gcolB;
 
-				using (var terminalB = new Domain.TextTerminal(settingsB))
+				using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
 				{
 					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalA, terminalB);
@@ -251,7 +251,7 @@ namespace YAT.Domain.Test.TextTerminal
 			gcolA.Timeout = Timeout.Infinite;
 			settingsA.TextTerminal.GlueCharsOfLine = gcolA;
 
-			using (var terminalA = new Domain.TextTerminal(settingsA))
+			using (var terminalA = TerminalFactory.CreateTerminal(settingsA))
 			{
 				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
 
@@ -262,7 +262,7 @@ namespace YAT.Domain.Test.TextTerminal
 				gcolB.Enabled = false;
 				settingsB.TextTerminal.GlueCharsOfLine = gcolB;
 
-				using (var terminalB = new Domain.TextTerminal(settingsB))
+				using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
 				{
 					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalA, terminalB);

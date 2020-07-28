@@ -154,7 +154,7 @@ namespace YAT.Domain.Test.TextTerminal
 				settingsA.TextTerminal.TxEol = eolAB;
 				settingsA.TextTerminal.RxEol = eolBA;
 
-				using (var terminalA = new Domain.TextTerminal(settingsA))
+				using (var terminalA = TerminalFactory.CreateTerminal(settingsA))
 				{
 					Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
 
@@ -162,7 +162,7 @@ namespace YAT.Domain.Test.TextTerminal
 					settingsB.TextTerminal.Encoding = (EncodingEx)encoding;
 					settingsB.TextTerminal.TxEol = eolBA;
 					settingsB.TextTerminal.RxEol = eolAB;
-					using (var terminalB = new Domain.TextTerminal(settingsB))
+					using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
 					{
 						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
 						Utilities.WaitForConnection(terminalA, terminalB);
@@ -293,7 +293,7 @@ namespace YAT.Domain.Test.TextTerminal
 			gcolA.Enabled = false; // This test relies on direction line break.
 			settingsA.TextTerminal.GlueCharsOfLine = gcolA;
 
-			using (var terminalA = new Domain.TextTerminal(settingsA))
+			using (var terminalA = TerminalFactory.CreateTerminal(settingsA))
 			{
 				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
 
@@ -305,7 +305,7 @@ namespace YAT.Domain.Test.TextTerminal
 				gcolB.Enabled = false; // This test relies on direction line break.
 				settingsB.TextTerminal.GlueCharsOfLine = gcolB;
 
-				using (var terminalB = new Domain.TextTerminal(settingsB))
+				using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
 				{
 					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalA, terminalB);

@@ -165,7 +165,7 @@ namespace YAT.Domain.Test.TextTerminal
 			settings.Display.TxRadix = radix;
 			settings.Display.RxRadix = radix;
 			settings.Display.ShowRadix = false;
-			using (var terminal = new Domain.TextTerminal(settings))
+			using (var terminal = TerminalFactory.CreateTerminal(settings))
 			{                                     // All must result in same text.
 				Assert.That(terminal.Format(data, radix),          Is.EqualTo(expectedText));
 				Assert.That(terminal.Format(data, IODirection.Tx), Is.EqualTo(expectedText));
