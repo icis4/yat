@@ -186,16 +186,16 @@ namespace YAT.Domain.Test.Terminal
 		protected virtual void SendFile(Domain.TextTerminal terminalTx, Domain.TextTerminal terminalRx, int subsequentLineCount, string subsequentLineText)
 		{
 			var file = Files.Text.Stress[StressTestCase.Normal];
-			var message = string.Format(CultureInfo.InvariantCulture, "Precondition: File line count must equal {0} but is {1}!", SendLineCount, file.Item3);
-			Assert.That(file.Item3, Is.EqualTo(SendLineCount), message);
-			terminalTx.SendFile(file.Item1);
+			var message = string.Format(CultureInfo.InvariantCulture, "Precondition: File line count must equal {0} but is {1}!", SendLineCount, file.LineCount);
+			Assert.That(file.LineCount, Is.EqualTo(SendLineCount), message);
+			terminalTx.SendFile(file.Path);
 
 			var subsequentLengthExpected = (subsequentLineText.Length + 2); // Adjust EOL.
 			for (int i = 0; i < subsequentLineCount; i++)
 				terminalTx.SendTextLine(subsequentLineText); // Immediately invoke sending of subsequent data.
-			                                     // Includes EOLs.
-			var expectedTotalByteCount = (file.Item2 + (subsequentLengthExpected * subsequentLineCount));
-			var expectedTotalLineCount = (file.Item3 +                             subsequentLineCount);
+			                                       // Includes EOLs.
+			var expectedTotalByteCount = (file.ByteCount + (subsequentLengthExpected * subsequentLineCount));
+			var expectedTotalLineCount = (file.LineCount +                             subsequentLineCount);
 			Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1000); // See further above, sending takes 300..600 ms.
 		}
 

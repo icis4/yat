@@ -78,19 +78,19 @@ namespace YAT.Domain.Test
 	public class FileDescriptor
 	{
 		/// <summary></summary>
-		public string FilePath { get; }
+		public string Path { get; }
 
-		/// <summary></summary>
-		public int FileSize { get; }
+		/// <remarks>Content byte count, including EOLs (text files), not including EOF.</remarks>
+		public int ByteCount { get; }
 
 		/// <summary></summary>
 		public int LineCount { get; }
 
 		/// <summary></summary>
-		public FileDescriptor(string filePath, int fileSize, int lineCount)
+		public FileDescriptor(string path, int byteCount, int lineCount)
 		{
-			FilePath = filePath;
-			FileSize = fileSize;
+			Path = path;
+			ByteCount = byteCount;
 			LineCount = lineCount;
 		}
 	}
