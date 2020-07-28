@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -43,15 +44,22 @@ namespace YAT.Domain.Test
 	public static class Data
 	{
 		/// <remarks>Explicitly using two settings for "Pair" test cases, instead of enumerable generic number of settings.</remarks>
-		public static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TestCaseData metaDataToMerge, TerminalSettings settingsA, TerminalSettings settingsB, params object[] args)
+		public static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TestCaseData metaDataToMerge, TerminalSettings argSettingsA, TerminalSettings argSettingsB, params object[] argsTest)
 		{
-			return (TestCaseDataEx.ToTestCase(descriptor, metaDataToMerge, settingsA, settingsB, args));
+			var args = new List<object>(2 + argsTest.Length); // Preset the required capacity to improve memory management.
+			args.Add(argSettingsA);
+			args.Add(argSettingsB);
+			args.AddRange(argsTest);
+			return (TestCaseDataEx.ToTestCase(descriptor, metaDataToMerge, args.ToArray())); // Args must be given as a liner list of objects.
 		}
 
 		/// <remarks>Explicitly using a single setting for "Self" test cases, instead of enumerable generic number of settings.</remarks>
-		public static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TestCaseData metaDataToMerge, TerminalSettings settings, params object[] args)
+		public static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TestCaseData metaDataToMerge, TerminalSettings argSettings, params object[] argsTest)
 		{
-			return (TestCaseDataEx.ToTestCase(descriptor, metaDataToMerge, settings, args));
+			var args = new List<object>(1 + argsTest.Length); // Preset the required capacity to improve memory management.
+			args.Add(argSettings);
+			args.AddRange(argsTest);
+			return (TestCaseDataEx.ToTestCase(descriptor, metaDataToMerge, args.ToArray())); // Args must be given as a liner list of objects.
 		}
 
 		/// <summary></summary>
