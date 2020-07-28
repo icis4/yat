@@ -5,9 +5,14 @@
 :: Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 :: Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 :: ------------------------------------------------------------------------------------------------
+:: File based on:
+::  URL:                       svn.code.sf.net/p/y-a-terminal/code/trunk/!-Tools/MT-SICS%20TCP-IP%20Device%20Start.cmd.template $
 :: $URL$
+::  Revision: <REVISION>
 :: $Revision$
+::  Date: <DATE/TIME>
 :: $Date$
+::  Author: <AUTHOR>
 :: $Author$
 :: ------------------------------------------------------------------------------------------------
 :: See release notes for product version details.
@@ -37,19 +42,21 @@
 :: ------------------------------------------------------------------------------------------------
 :: 1. Copy this helper batch template into the directory where the test executable resides.
 :: 2. Remove the ".template" suffix from the file name.
-:: 3. Adapt the below line to the desired executable.
-:: 4. Add the directory to the system's PATH.
+:: 3. Adapt the file meta information ($$ tags).
+:: 4. Adapt the below line to the desired executable.
+:: 5. Add the directory to the system's PATH.
 ::==================================================================================================
 
 SETLOCAL
 
 SET MT_SICS_EXE=ExampleBalance_RB_Evalboard_LPC1769.exe
 
-%MT_SICS_EXE%
+START /MIN "MT-SICS TCP-IP Device" %MT_SICS_EXE%
 
 ENDLOCAL
 
 ::==================================================================================================
-:: End of
+:: End of file based on:
+::  URL:                       svn.code.sf.net/p/y-a-terminal/code/trunk/!-Tools/MT-SICS%20TCP-IP%20Device%20Start.cmd.template
 :: $URL$
 ::==================================================================================================
