@@ -163,6 +163,11 @@ namespace YAT.Domain.Test
 		// Static Fields
 		//==========================================================================================
 
+	/////// <summary></summary>
+	////[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+	////[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of test implementation, especially adding new settings.")]
+	////public static readonly FileGroup SendRaw;
+
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of test implementation, especially adding new settings.")]
@@ -209,6 +214,11 @@ namespace YAT.Domain.Test
 			SendText.Add(StressFile.LongLine,                  "Stress-7-LongLine.txt",                 973, 1);
 			SendText.Add(StressFile.VeryLongLine,              "Stress-8-VeryLongLine.txt",            9991, 1);
 			SendText.Add(StressFile.EnormousLine,              "Stress-9-EnormousLine.txt",          500014, 1);
+
+		////SendRaw = new FileGroup(3);                                                                  // Not including EOF.
+		////SendRaw.Add(StressFile.LongData,                   "Stress-7-LongData.txt",                 973, 1);
+		////SendRaw.Add(StressFile.VeryLongData,               "Stress-8-VeryLongData.txt",            9991, 1);
+		////SendRaw.Add(StressFile.EnormousData,               "Stress-9-EnormousData.txt",          500014, 1);
 		}
 
 		#endregion
