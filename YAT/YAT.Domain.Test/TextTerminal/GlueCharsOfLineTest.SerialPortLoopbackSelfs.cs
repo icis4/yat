@@ -118,14 +118,14 @@ namespace YAT.Domain.Test.TextTerminal
 		/// <summary></summary>
 		protected virtual void TestDefaultOrInfiniteTimeout(TerminalSettings settings)
 		{
-			using (var terminal = new Domain.TextTerminal(settings)) // Glueing is enabled by default.
+			using (var terminal = TerminalFactory.CreateTerminal(settings)) // Glueing is enabled by default.
 			{
 				Assert.That(terminal.Start(), Is.True, "Terminal could not be started");
 				Utilities.WaitForConnection(terminal, terminal);
 
 				// Send:
 				var beganAt = DateTime.Now;
-				var fi = Files.Text.Stress[StressFile.Normal]; // 300 lines will take about 9..12 seconds.
+				var fi = Files.TextSendFile.Item[StressFile.Normal]; // 300 lines will take about 9..12 seconds.
 				var fileTimeout = 15000;
 				var fileByteCount = fi.ByteCount;
 				var fileLineCount = fi.LineCount;
@@ -170,14 +170,14 @@ namespace YAT.Domain.Test.TextTerminal
 		/// <summary></summary>
 		protected virtual void TestMinimumTimeoutOrTestDisabled(TerminalSettings settings)
 		{
-			using (var terminal = new Domain.TextTerminal(settings)) // Glueing is enabled by default.
+			using (var terminal = TerminalFactory.CreateTerminal(settings)) // Glueing is enabled by default.
 			{
 				Assert.That(terminal.Start(), Is.True, "Terminal could not be started");
 				Utilities.WaitForConnection(terminal, terminal);
 
 				// Send:
 				var beganAt = DateTime.Now;
-				var fi = Files.Text.Stress[StressFile.Normal]; // 300 lines will take about 9..12 seconds.
+				var fi = Files.TextSendFile.Item[StressFile.Normal]; // 300 lines will take about 9..12 seconds.
 				var fileTimeout = 15000;
 				var fileByteCount = fi.ByteCount;
 				var fileLineCount = fi.LineCount;

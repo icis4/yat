@@ -59,12 +59,12 @@ namespace YAT.Domain.Test.Terminal
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
-			using (var terminalTx = new Domain.TextTerminal(settingsA))
+			using (var terminalTx = TerminalFactory.CreateTerminal(settingsA))
 			{
 				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started!");
 
 				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
-				using (var terminalRx = new Domain.TextTerminal(settingsB))
+				using (var terminalRx = TerminalFactory.CreateTerminal(settingsB))
 				{
 					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalTx, terminalRx);
@@ -131,12 +131,12 @@ namespace YAT.Domain.Test.Terminal
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
-			using (var terminalTx = new Domain.TextTerminal(settingsA))
+			using (var terminalTx = TerminalFactory.CreateTerminal(settingsA))
 			{
 				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started!");
 
 				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
-				using (var terminalRx = new Domain.TextTerminal(settingsB))
+				using (var terminalRx = TerminalFactory.CreateTerminal(settingsB))
 				{
 					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalTx, terminalRx);
@@ -203,13 +203,13 @@ namespace YAT.Domain.Test.Terminal
 
 			var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 			settingsA.Display.MaxLineCount = 10000; // Running in NUnit revealed ~2000 lines.
-			using (var terminalTx = new Domain.TextTerminal(settingsA))
+			using (var terminalTx = TerminalFactory.CreateTerminal(settingsA))
 			{
 				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started!");
 
 				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				settingsB.Display.MaxLineCount = 10000; // Running in NUnit revealed ~2000 lines.
-				using (var terminalRx = new Domain.TextTerminal(settingsB))
+				using (var terminalRx = TerminalFactory.CreateTerminal(settingsB))
 				{
 					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalTx, terminalRx);
@@ -276,25 +276,25 @@ namespace YAT.Domain.Test.Terminal
 			var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 			settingsA.Display.MaxLineCount = 10000; // Running in NUnit revealed 800..1000 lines.
 			settingsA.TextTerminal.LineSendDelay = new TextLineSendDelaySettingTuple(true, 1, 1); // Delay of 1 ms per line.
-			using (var terminalTx = new Domain.TextTerminal(settingsA))
+			using (var terminalTx = TerminalFactory.CreateTerminal(settingsA))
 			{
 				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started!");
 
 				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				settingsB.Display.MaxLineCount = 10000; // Running in NUnit revealed 800..1000 lines.
-				using (var terminalRx = new Domain.TextTerminal(settingsB))
+				using (var terminalRx = TerminalFactory.CreateTerminal(settingsB))
 				{
 					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalTx, terminalRx);
 
 					// Send:
 					var initial = DateTime.Now;
-					var fi = Files.Text.Stress[StressFile.EvenLarger]; // 5000 lines would take about 5..10 seconds.
+					var fi = Files.TextSendFile.Item[StressFile.Huge]; // 10000 lines would take about 10..20 seconds.
 					terminalTx.SendFile(fi.Path);
 					Utilities.WaitForIsSendingForSomeTime(terminalTx);
 
 					// Break:
-					ThreadEx.SleepUntilOffset(initial, 2500); // About half the lines must have already been sent at breaking below.
+					ThreadEx.SleepUntilOffset(initial, 2500); // About fourth the lines must have already been sent at breaking below.
 					terminalTx.Break();
 					Utilities.WaitForIsNoLongerSending(terminalTx);
 					Thread.Sleep(500); // Wait some more for Rx to complete.
