@@ -32,9 +32,12 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Text;
 
 using MKY;
 using MKY.IO.Serial.SerialPort;
+using MKY.Text;
 
 using NUnit.Framework;
 
@@ -55,7 +58,7 @@ namespace YAT.Domain.Test.Terminal
 	/// <summary></summary>
 	public enum SendMethod
 	{
-		Raw,
+	////Raw is not implemented/used by this test (yet).
 		Text,
 		TextLine,
 		TextLines,
@@ -229,6 +232,15 @@ namespace YAT.Domain.Test.Terminal
 	[TestFixture]
 	public class SendTest
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		const string Eol = "<CR><LF>"; // Fixed to default.
+
+		#endregion
+
 		#region Tests
 		//==========================================================================================
 		// Tests
@@ -379,31 +391,31 @@ namespace YAT.Domain.Test.Terminal
 
 		private static void SendAndVerify(Domain.Terminal terminalTx, Domain.Terminal terminalRx, FileInfo fi, SendMethod sendMethod)
 		{
+			var terminalType = terminalTx.TerminalSettings.TerminalType;
+
 			// Read file content:
 			byte[] fileContentAsBytes = null;
 			string fileContentAsText = null;
 			string[] fileContentAsLines = null;
-			ReadFileContent(terminalTx.TerminalSettings.TerminalType, fi, sendMethod, out fileContentAsBytes, out fileContentAsText, out fileContentAsLines);
+			ReadFileContent(terminalType, fi, sendMethod, out fileContentAsBytes, out fileContentAsText, out fileContentAsLines);
 
 			// Send and verify counts:
 			Send(terminalTx, fi, sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines);
-			Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, fi.ByteCount, fi.LineCount, fi.Timeout);
+			Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, fi.ByteCount, fi.LineCount, 10000000); //, fi.Timeout);
 
 			// Verify content:
-			Utilities.VerifyContent(terminalTx, RepositoryType.Tx, contentPattern);
-			Utilities.VerifyBidirContent(terminalTx,               contentPattern);
-			Utilities.VerifyBidirContent(terminalRx,               contentPattern);
-			Utilities.VerifyContent(terminalRx, RepositoryType.Rx, contentPattern);
+			string[] expectedContent;
+			GetExpectedContent(terminalTx, sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines, out expectedContent);
+			Utilities.VerifyContent(terminalTx, RepositoryType.Tx, expectedContent);
+			Utilities.VerifyContent(terminalRx, RepositoryType.Rx, expectedContent);
 
 			// Wait to ensure that no operation is ongoing anymore and verify again:
 			Utilities.WaitForReverification();
 
 			Utilities.VerifyCounts(terminalTx, terminalRx, fi.ByteCount, fi.LineCount);
 
-			Utilities.VerifyContent(terminalTx, RepositoryType.Tx, contentPattern);
-			Utilities.VerifyBidirContent(terminalTx,               contentPattern);
-			Utilities.VerifyBidirContent(terminalRx,               contentPattern);
-			Utilities.VerifyContent(terminalRx, RepositoryType.Rx, contentPattern);
+			Utilities.VerifyContent(terminalTx, RepositoryType.Tx, expectedContent);
+			Utilities.VerifyContent(terminalRx, RepositoryType.Rx, expectedContent);
 
 			// Refresh and verify again:
 			terminalTx.RefreshRepositories();
@@ -411,39 +423,40 @@ namespace YAT.Domain.Test.Terminal
 
 			Utilities.VerifyCounts(terminalTx, terminalRx, fi.ByteCount, fi.LineCount);
 
-			Utilities.VerifyContent(terminalTx, RepositoryType.Tx, contentPattern);
-			Utilities.VerifyBidirContent(terminalTx,               contentPattern);
-			Utilities.VerifyBidirContent(terminalRx,               contentPattern);
-			Utilities.VerifyContent(terminalRx, RepositoryType.Rx, contentPattern);
+			Utilities.VerifyContent(terminalTx, RepositoryType.Tx, expectedContent);
+			Utilities.VerifyContent(terminalRx, RepositoryType.Rx, expectedContent);
 		}
 
 		private static void ReadFileContent(TerminalType terminalType, FileInfo fi, SendMethod sendMethod, out byte[] fileContentAsBytes, out string fileContentAsText, out string[] fileContentAsLines)
 		{
-			fileContentAsBytes = null;
-			fileContentAsText  = null;
-			fileContentAsLines = null;
-
+			var supportsText = false;
 			switch (sendMethod)
 			{
-				case SendMethod.Raw:       fileContentAsBytes = File.ReadAllBytes(fi.Path); return;
-
 				case SendMethod.Text:
-				case SendMethod.TextLine:  fileContentAsText  = File.ReadAllText( fi.Path); return;
-
-				case SendMethod.TextLines: fileContentAsLines = File.ReadAllLines(fi.Path); return;
+				case SendMethod.TextLine:
+				case SendMethod.TextLines:
+				{
+					supportsText = true;
+					break;
+				}
 
 				case SendMethod.File:
 				{
-					if (terminalType == TerminalType.Text) {
-						                   fileContentAsLines = File.ReadAllLines(fi.Path); return;
-					}
-					else {
-						                   fileContentAsBytes = File.ReadAllBytes(fi.Path); return;
-					}
+					if (terminalType == TerminalType.Text)
+						supportsText = true;
+
+					break;
 				}
 
-				default: throw (new ArgumentOutOfRangeException("sendMethod", sendMethod, MessageHelper.InvalidExecutionPreamble + "'" + sendMethod + "' is a send method that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
+				default:
+				{
+					break; // Nothing to do.
+				}
 			}
+
+			fileContentAsBytes =                 File.ReadAllBytes(fi.Path); // Applicable to any file.
+			fileContentAsText  = (supportsText ? File.ReadAllText( fi.Path) : null);
+			fileContentAsLines = (supportsText ? File.ReadAllLines(fi.Path) : null);;
 		}
 
 		private static void Send(Domain.Terminal terminalTx, FileInfo fi, SendMethod sendMethod, byte[] fileContentAsBytes, string fileContentAsText, string[] fileContentAsLines)
@@ -451,13 +464,69 @@ namespace YAT.Domain.Test.Terminal
 			switch (sendMethod)
 			{
 			////case SendMethod.Raw:       terminalTx.SendRaw(      fileContentAsBytes); return;
-
 				case SendMethod.Text:      terminalTx.SendText(     fileContentAsText);  return;
 				case SendMethod.TextLine:  terminalTx.SendTextLine( fileContentAsText);  return;
-
-			////case SendMethod.TextLines: terminalTx.SendTextLines(fileContentAsLines); return;
-
+				case SendMethod.TextLines: terminalTx.SendTextLines(fileContentAsLines); return;
 				case SendMethod.File:      terminalTx.SendFile(     fi.Path);            return;
+
+				default: throw (new ArgumentOutOfRangeException("sendMethod", sendMethod, MessageHelper.InvalidExecutionPreamble + "'" + sendMethod + "' is a send method that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		private static void GetExpectedContent(Domain.Terminal terminal, SendMethod sendMethod, byte[] fileContentAsBytes, string fileContentAsText, string[] fileContentAsLines, out string[] expectedContent)
+		{                                                         // Just one terminal is enough, both terminals are configured the same.
+			var terminalType = terminal.TerminalSettings.TerminalType;
+			if (terminalType == TerminalType.Text)
+				GetExpectedTextContent(            sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines, out expectedContent);
+			else
+				GetExpectedBinaryContent(terminal, sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines, out expectedContent);
+		}
+
+		private static void GetExpectedTextContent(SendMethod sendMethod, byte[] fileContentAsBytes, string fileContentAsText, string[] fileContentAsLines, out string[] expectedContent)
+		{
+			switch (sendMethod)
+			{
+			////case SendMethod.Raw:       BytesToTextContent(              fileContentAsBytes, out expectedContent);                is not implemented/used by this test (yet).
+				case SendMethod.Text:      expectedContent = new string[] { fileContentAsText };                                     return;
+				case SendMethod.TextLine:  expectedContent = new string[] { fileContentAsText + Eol };                               return;
+				case SendMethod.TextLines:
+				case SendMethod.File:      expectedContent =                fileContentAsLines.Select(line => line + Eol).ToArray(); return;
+
+				default: throw (new ArgumentOutOfRangeException("sendMethod", sendMethod, MessageHelper.InvalidExecutionPreamble + "'" + sendMethod + "' is a send method that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		private static void GetExpectedBinaryContent(Domain.Terminal terminal, SendMethod sendMethod, byte[] fileContentAsBytes, string fileContentAsText, string[] fileContentAsLines, out string[] expectedContent)
+		{                                                               // Just one terminal is enough, both terminals are configured the same.
+			var terminalType = terminal.TerminalSettings.TerminalType;
+			Encoding encoding = (EncodingEx)terminal.TerminalSettings.BinaryTerminal.EncodingFixed;
+
+			string formattedLine;
+			int expectedLineCount;
+			if (!ArrayEx.IsNullOrEmpty(fileContentAsBytes))
+			{
+				formattedLine = terminal.Format(fileContentAsBytes, IODirection.Tx); // Direction doesn't matter, both directions are configured the same.
+				expectedLineCount = 0;
+			}
+			else if (!ArrayEx.IsNullOrEmpty(fileContentAsLines))
+			{
+				byte[] firstLineAsBytes = encoding.GetBytes(fileContentAsLines[0]);
+				formattedLine = terminal.Format(firstLineAsBytes, IODirection.Tx); // Direction doesn't matter, both directions are configured the same.
+				expectedLineCount = fileContentAsLines.Length;
+			}
+			else
+			{
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Argument combination is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
+			}
+
+			switch (sendMethod)
+			{
+			////case SendMethod.Raw:
+				case SendMethod.Text:
+				case SendMethod.TextLine:  expectedContent = new string[] { formattedLine };                                        return;
+
+				case SendMethod.TextLines:
+				case SendMethod.File:      expectedContent = ArrayEx.CreateAndInitializeInstance(expectedLineCount, formattedLine); return;
 
 				default: throw (new ArgumentOutOfRangeException("sendMethod", sendMethod, MessageHelper.InvalidExecutionPreamble + "'" + sendMethod + "' is a send method that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
 			}

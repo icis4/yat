@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -536,31 +537,46 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		public static void VerifyBidirContent(Domain.Terminal terminal, IList<string> contentPattern)
+		public static void VerifyBidirContent(Domain.Terminal terminal, IList<string> expectedContentPattern)
 		{
-			VerifyContent(terminal, RepositoryType.Bidir, contentPattern);
+			VerifyContent(terminal, RepositoryType.Bidir, expectedContentPattern);
 		}
 
 		/// <remarks>
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		public static void VerifyContent(Domain.Terminal terminal, RepositoryType repositoryType, IList<string> contentPattern)
+		public static void VerifyContent(Domain.Terminal terminal, RepositoryType repositoryType, IEnumerable<string> expectedContentPattern)
 		{
 			var displayLines = terminal.RepositoryToDisplayLines(repositoryType);
-			Assert.That(displayLines.Count, Is.EqualTo(contentPattern.Count));
 
+			var dlEnum = displayLines.GetEnumerator();
+			var ecEnum = expectedContentPattern.GetEnumerator();
+
+			var i = 0;
 			var previousLineTimeStamp = DateTime.MinValue;
-			for (int i = 0; i < displayLines.Count; i++)
-			{
-				var dl = displayLines[i];
 
-				var input = dl.ToString();
-				var pattern = DecoratePattern(contentPattern[i]);
+			while (true)
+			{
+				var dlEnumIsAtEnd = !dlEnum.MoveNext(); // Ensure that both enumerators are located
+				var ecEnumIsAtEnd = !ecEnum.MoveNext(); // at the same position! This wouldn't be
+				                                        // given in logical || or && condition!
+				if (dlEnumIsAtEnd || ecEnumIsAtEnd)
+				{
+					if (dlEnumIsAtEnd && ecEnumIsAtEnd)
+						break;
+					else          // Mismatching counts shall be asserted last, i.e. content mismatches shall be asserted first.
+						Assert.Fail("Mismatching counts, terminal contains {0} lines but {1} lines are expected!", displayLines.Count, expectedContentPattern.Count());
+				}
+
+				i++;
+
+				var input = dlEnum.Current.ToString();
+				var pattern = DecoratePattern(ecEnum.Current);
 				Assert.That(Regex.IsMatch(input, pattern), Is.True, @"Line {0} is ""{1}"" mismatching expected ""{2}""", i, input, pattern);
 
-				Assert.That(dl.TimeStamp, Is.GreaterThanOrEqualTo(previousLineTimeStamp));
-				previousLineTimeStamp = dl.TimeStamp;
+				Assert.That(dlEnum.Current.TimeStamp, Is.GreaterThanOrEqualTo(previousLineTimeStamp));
+				previousLineTimeStamp = dlEnum.Current.TimeStamp;
 			}
 		}
 
@@ -568,12 +584,12 @@ namespace YAT.Domain.Test
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		public static string DecoratePattern(string contentPattern)
+		public static string DecoratePattern(string expectedContentPattern)
 		{
-			contentPattern = contentPattern.Replace("(", @"\(");
-			contentPattern = contentPattern.Replace(")", @"\)");
+			expectedContentPattern = expectedContentPattern.Replace("(", @"\(");
+			expectedContentPattern = expectedContentPattern.Replace(")", @"\)");
 
-			return ("^" + contentPattern + "$");
+			return ("^" + expectedContentPattern + "$");
 		}
 
 		#endregion
