@@ -275,6 +275,9 @@ namespace YAT.Model.Test
 		// Constants
 		//==========================================================================================
 
+		/// <summary></summary>
+		public const int IgnoreTimeout = 0;
+
 		                      /// <remarks><see cref="Domain.Test.Utilities.WaitTimeoutForStateChange"/>.</remarks>
 		public const int WaitTimeoutForStateChange  = Domain.Test.Utilities.WaitTimeoutForStateChange;
 
@@ -301,8 +304,11 @@ namespace YAT.Model.Test
 		public static void WaitForStart(Terminal terminal)
 		{
 			int waitTime = 0;
-			do                         // Initially wait to allow async send,
-			{                          //   therefore, use do-while.
+
+			Trace.WriteLine("Waiting for start, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+
+			while (!terminal.IsStarted)
+			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
@@ -312,7 +318,6 @@ namespace YAT.Model.Test
 					Assert.Fail("Start timeout!");
 				}
 			}
-			while (!terminal.IsStarted);
 
 			Trace.WriteLine("...done, started");
 		}
@@ -324,8 +329,11 @@ namespace YAT.Model.Test
 		public static void WaitForOpen(Terminal terminal)
 		{
 			int waitTime = 0;
-			do                         // Initially wait to allow async send,
-			{                          //   therefore, use do-while.
+
+			Trace.WriteLine("Waiting for open, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+
+			while (!terminal.IsOpen)
+			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
@@ -335,7 +343,6 @@ namespace YAT.Model.Test
 					Assert.Fail("Open timeout!");
 				}
 			}
-			while (!terminal.IsOpen);
 
 			Trace.WriteLine("...done, opened");
 		}
@@ -348,8 +355,11 @@ namespace YAT.Model.Test
 		public static void WaitForConnection(Terminal terminal)
 		{
 			int waitTime = 0;
-			do                         // Initially wait to allow async send,
-			{                          //   therefore, use do-while.
+
+			Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+
+			while (!terminal.IsConnected)
+			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
@@ -359,7 +369,6 @@ namespace YAT.Model.Test
 					Assert.Fail("Connect timeout!");
 				}
 			}
-			while (!terminal.IsConnected);
 
 			Trace.WriteLine("...done, connected");
 		}
@@ -371,8 +380,11 @@ namespace YAT.Model.Test
 		public static void WaitForConnection(Terminal terminalA, Terminal terminalB)
 		{
 			int waitTime = 0;
-			do                         // Initially wait to allow async send,
-			{                          //   therefore, use do-while.
+
+			Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+
+			while (!terminalA.IsConnected && !terminalB.IsConnected)
+			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
@@ -382,7 +394,6 @@ namespace YAT.Model.Test
 					Assert.Fail("Connect timeout!");
 				}
 			}
-			while (!terminalA.IsConnected && !terminalB.IsConnected);
 
 			Trace.WriteLine("...done, connected");
 		}
@@ -394,6 +405,9 @@ namespace YAT.Model.Test
 		public static void WaitForClose(Terminal terminal)
 		{
 			int waitTime = 0;
+
+			Trace.WriteLine("Waiting for close, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+
 			while (terminal.IsOpen)
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
@@ -417,6 +431,9 @@ namespace YAT.Model.Test
 		public static void WaitForDisconnection(Terminal terminal)
 		{
 			int waitTime = 0;
+
+			Trace.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+
 			while (terminal.IsConnected)
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
@@ -454,12 +471,21 @@ namespace YAT.Model.Test
 			int rxByteCount = 0;
 			int rxLineCount = 0;
 			int waitTime = 0;
-			do                         // Initially wait to allow async send,
-			{                          //   therefore, use do-while.
-				Thread.Sleep(WaitIntervalForTransmission);
-				waitTime += WaitIntervalForTransmission;
+			bool isFirst = true; // Using do-while, first check state.
 
-				Trace.WriteLine("Waiting for receiving, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+			do
+			{
+				if (isFirst) {
+					isFirst = false;
+				}
+				else {
+					Thread.Sleep(WaitIntervalForTransmission);
+					waitTime += WaitIntervalForTransmission;
+				}
+
+				if (timeout != IgnoreTimeout) {
+					Trace.WriteLine("Waiting for receiving, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+				}
 
 				rxByteCount = terminalRx.GetRepositoryByteCount(Domain.RepositoryType.Rx);
 				if (rxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
@@ -497,7 +523,12 @@ namespace YAT.Model.Test
 			Assert.That(terminalRx.RxByteCount, Is.EqualTo(expectedTotalByteCount));
 			Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
 
-			Trace.WriteLine("...done, received and verified");
+			if (timeout != IgnoreTimeout) {
+				Trace.WriteLine("...done, received and verified");
+			}
+			else {
+				Trace.WriteLine("Receiving verified");
+			}
 		}
 
 		/// <remarks>
@@ -519,6 +550,14 @@ namespace YAT.Model.Test
 			int timeout = (WaitTimeoutForLineTransmission * timeoutFactorPerLine);
 
 			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, timeout);
+		}
+
+		/// <remarks>
+		/// <see cref="WaitForReceivingAndVerifyCounts(Terminal, int, int, int, int)"/> above.
+		/// </remarks>
+		public static void VerifyReceivedCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted)
+		{
+			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, IgnoreTimeout);
 		}
 
 		/// <summary></summary>
@@ -561,12 +600,21 @@ namespace YAT.Model.Test
 			int rxByteCount = 0;
 			int rxLineCount = 0;
 			int waitTime = 0;
-			do                         // Initially wait to allow async send,
-			{                          //   therefore, use do-while.
-				Thread.Sleep(WaitIntervalForTransmission);
-				waitTime += WaitIntervalForTransmission;
+			bool isFirst = true; // Using do-while, first check state.
 
-				Trace.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+			do
+			{
+				if (isFirst) {
+					isFirst = false;
+				}
+				else {
+					Thread.Sleep(WaitIntervalForTransmission);
+					waitTime += WaitIntervalForTransmission;
+				}
+
+				if (timeout != IgnoreTimeout) {
+					Trace.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+				}
 
 				txByteCount = terminalTx.GetRepositoryByteCount(Domain.RepositoryType.Tx);
 				if (txByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
@@ -630,7 +678,12 @@ namespace YAT.Model.Test
 			Assert.That(terminalRx.RxByteCount, Is.EqualTo(expectedTotalByteCount));
 			Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
 
-			Trace.WriteLine("...done, transmitted and verified");
+			if (timeout != IgnoreTimeout) {
+				Trace.WriteLine("...done, transmitted and verified");
+			}
+			else {
+				Trace.WriteLine("Transmission verified");
+			}
 		}
 
 		/// <remarks>
@@ -652,6 +705,14 @@ namespace YAT.Model.Test
 			int timeout = (WaitTimeoutForLineTransmission * timeoutFactorPerLine);
 
 			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, timeout);
+		}
+
+		/// <remarks>
+		/// <see cref="WaitForTransmissionAndVerifyCounts(Terminal, Terminal, int, int, int, int)"/> above.
+		/// </remarks>
+		public static void VerifyCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted)
+		{
+			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, IgnoreTimeout);
 		}
 
 		/// <remarks>
