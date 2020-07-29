@@ -99,12 +99,12 @@ namespace YAT.Domain.Test.Terminal
 
 					// Wait to ensure that no operation is ongoing anymore and verify again:
 					Utilities.WaitForReverification();
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					// Refresh and verify again:
 					terminalTx.RefreshRepositories();
 					terminalRx.RefreshRepositories();
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					terminalRx.Stop();
 					Utilities.WaitForDisconnection(terminalRx);
@@ -170,12 +170,12 @@ namespace YAT.Domain.Test.Terminal
 
 					// Wait to ensure that no operation is ongoing anymore and verify again:
 					Utilities.WaitForReverification();
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					// Refresh and verify again:
 					terminalTx.RefreshRepositories();
 					terminalRx.RefreshRepositories();
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					terminalRx.Stop();
 					Utilities.WaitForDisconnection(terminalRx);
@@ -244,10 +244,14 @@ namespace YAT.Domain.Test.Terminal
 					var expectedTotalLineCount = (txLineCount + 1);
 					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
+					// Wait to ensure that no operation is ongoing anymore and verify again:
+					Utilities.WaitForReverification();
+					Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+
 					// Refresh and verify again:
 					terminalTx.RefreshRepositories();
 					terminalRx.RefreshRepositories();
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					terminalRx.Stop();
 					Utilities.WaitForDisconnection(terminalRx);
@@ -320,12 +324,12 @@ namespace YAT.Domain.Test.Terminal
 
 					// Wait to ensure that no operation is ongoing anymore and verify again:
 					Utilities.WaitForReverification();
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					// Refresh and verify again:
 					terminalTx.RefreshRepositories();
 					terminalRx.RefreshRepositories();
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					terminalRx.Stop();
 					Utilities.WaitForDisconnection(terminalRx);

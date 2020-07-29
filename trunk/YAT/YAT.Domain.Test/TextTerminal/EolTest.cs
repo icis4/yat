@@ -181,7 +181,7 @@ namespace YAT.Domain.Test.TextTerminal
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountA += (textByteCount + eolByteCountAB);
 						expectedTotalLineCountA++;
-						WaitForTransmissionEolAware(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
+						EolAwareWaitForTransmissionAndVerifyCounts(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
 						text = "AA"; // A#2
 						Assert.That(parser.TryParse(text, out parseResult));
@@ -189,7 +189,7 @@ namespace YAT.Domain.Test.TextTerminal
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountA += (textByteCount + eolByteCountAB);
 						expectedTotalLineCountA++;
-						WaitForTransmissionEolAware(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
+						EolAwareWaitForTransmissionAndVerifyCounts(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
 						text = "ABABAB"; // A#3
 						Assert.That(parser.TryParse(text, out parseResult));
@@ -197,7 +197,7 @@ namespace YAT.Domain.Test.TextTerminal
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountA += (textByteCount + eolByteCountAB);
 						expectedTotalLineCountA++;
-						WaitForTransmissionEolAware(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
+						EolAwareWaitForTransmissionAndVerifyCounts(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
 						text = "<CR>"; // B#1
 						Assert.That(parser.TryParse(text, out parseResult));
@@ -205,7 +205,7 @@ namespace YAT.Domain.Test.TextTerminal
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountB += (textByteCount + eolByteCountBA);
 						expectedTotalLineCountB++;
-						WaitForTransmissionEolAware(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
+						EolAwareWaitForTransmissionAndVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
 						text = "<CR><CR>"; // B#2
 						Assert.That(parser.TryParse(text, out parseResult));
@@ -213,7 +213,7 @@ namespace YAT.Domain.Test.TextTerminal
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountB += (textByteCount + eolByteCountBA);
 						expectedTotalLineCountB++;
-						WaitForTransmissionEolAware(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
+						EolAwareWaitForTransmissionAndVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
 						text = "<CR><CR><ESC>"; // B#3
 						Assert.That(parser.TryParse(text, out parseResult));
@@ -221,7 +221,7 @@ namespace YAT.Domain.Test.TextTerminal
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountB += (textByteCount + eolByteCountBA);
 						expectedTotalLineCountB++;
-						WaitForTransmissionEolAware(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
+						EolAwareWaitForTransmissionAndVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
 						text = "<ESC>"; // A#4
 						Assert.That(parser.TryParse(text, out parseResult));
@@ -229,7 +229,7 @@ namespace YAT.Domain.Test.TextTerminal
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountA += (textByteCount + eolByteCountAB);
 						expectedTotalLineCountA++;
-						WaitForTransmissionEolAware(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
+						EolAwareWaitForTransmissionAndVerifyCounts(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
 						text = "BBBB"; // B#4
 						Assert.That(parser.TryParse(text, out parseResult));
@@ -237,16 +237,16 @@ namespace YAT.Domain.Test.TextTerminal
 						textByteCount = parseResult.Length;
 						expectedTotalByteCountB += (textByteCount + eolByteCountBA);
 						expectedTotalLineCountB++;
-						WaitForTransmissionEolAware(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
+						EolAwareWaitForTransmissionAndVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
 						// Wait to ensure that no operation is ongoing anymore and verify again:
 						Utilities.WaitForReverification();
-						WaitForTransmissionEolAware(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
+						EolAwareVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
 						// Refresh and verify again:
 						terminalA.RefreshRepositories();
 						terminalB.RefreshRepositories();
-						WaitForTransmissionEolAware(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
+						EolAwareVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
 						terminalB.Stop();
 						Utilities.WaitForDisconnection(terminalB);
@@ -266,12 +266,26 @@ namespace YAT.Domain.Test.TextTerminal
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
-		private static void WaitForTransmissionEolAware(Domain.Terminal terminalTx, Domain.Terminal terminalRx, bool eolIsSymmetric, int expectedTotalByteCount, int expectedTotalLineCount)
+		private static void EolAwareWaitForTransmissionAndVerifyCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx, bool eolIsSymmetric, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
 			if (eolIsSymmetric)
 				Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 			else
 				Utilities.WaitForSendingAndVerifyCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCount);
+		}
+
+		/// <remarks>
+		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
+		/// i.e. complete as well as incomplete lines.
+		/// Comparison against the completed number of lines is not (yet) possible, change #375
+		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
+		/// </remarks>
+		private static void EolAwareVerifyCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx, bool eolIsSymmetric, int expectedTotalByteCount, int expectedTotalLineCount)
+		{
+			if (eolIsSymmetric)
+				Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+			else
+				Utilities.VerifySentCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCount);
 		}
 
 		/// <summary></summary>

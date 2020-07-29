@@ -185,14 +185,14 @@ namespace YAT.Domain.Test.TextTerminal
 
 					// Wait to ensure that no operation is ongoing anymore and verify again:
 					Utilities.WaitForReverification();
-					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.VerifySentCounts(    terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.VerifyReceivedCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
 					// Refresh and verify again:
 					terminalA.RefreshRepositories();
 					terminalB.RefreshRepositories();
-					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.VerifySentCounts(    terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.VerifyReceivedCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
 					terminalB.Stop();
 					Utilities.WaitForDisconnection(terminalB);
@@ -370,8 +370,8 @@ namespace YAT.Domain.Test.TextTerminal
 					// Refresh and verify again:
 					terminalA.RefreshRepositories();
 					terminalB.RefreshRepositories();
-					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.VerifySentCounts(    terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.VerifyReceivedCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
 					terminalB.Stop();
 					Utilities.WaitForDisconnection(terminalB);
