@@ -250,7 +250,8 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// The frames per millisecond.
+		/// The number of frames per millisecond. Typically equivalent to
+		/// the number of bytes per millisecond.
 		/// </summary>
 		[XmlIgnore]
 		public virtual double FramesPerMillisecond

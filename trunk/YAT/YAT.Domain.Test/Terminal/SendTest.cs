@@ -409,8 +409,9 @@ namespace YAT.Domain.Test.Terminal
 			ReadFileContent(terminalType, fi, sendMethod, out fileContentAsBytes, out fileContentAsText, out fileContentAsLines);
 
 			// Send and verify counts:
+			int timeout = (int)(fi.ByteCount / terminalTx.TerminalSettings.IO.RoughlyEstimatedMaxBytesPerMillisecond) * 2; // Safety margin.
 			Send(terminalTx, fi, sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines);
-			Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, fi.ByteCount, fi.LineCount, 10000000); //, fi.Timeout);
+			Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, fi.ByteCount, fi.LineCount, timeout);
 
 			// Verify content:
 			string[] expectedContent;

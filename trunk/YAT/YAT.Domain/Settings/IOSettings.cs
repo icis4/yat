@@ -381,10 +381,15 @@ namespace YAT.Domain.Settings
 			{
 				switch (IOType)
 				{
-					case IOType.SerialPort:
+					case IOType.Unknown:
 					{
-						return (this.serialPort.Communication.FramesPerMillisecond); // Ignore potential mismatch if 7 data bits are used.
+						return (0);
 					}
+
+					case IOType.SerialPort:
+					{                                                                // It's just a rough estimate:
+						return (this.serialPort.Communication.FramesPerMillisecond); // Ignore mismatch in case 7 data bits are being used.
+					}                                                                // Ignore mismatch in case e.g. 16-bit bytes are being used.
 
 					case IOType.TcpClient:
 					case IOType.TcpServer:
@@ -393,22 +398,22 @@ namespace YAT.Domain.Settings
 					case IOType.UdpServer:
 					case IOType.UdpPairSocket:
 					{
-						// TCP/IP in theory: Less than 6.55 Mbit/sec (https://www.switch.ch/network/tools/tcp_throughput/).
-						// TCP/IP in YAT practise (Stress-4-Huge.txt on two interconnected AutoSockets): ~50000 bytes/s.
-						// UDP/IP in YAT practise (Stress-4-Huge.txt on two interconnected PairSockets): ~50000 bytes/s.
-						return (50);
+						// TCP/IP in theory: Less than 6.55 MiBit/s (https://www.switch.ch/network/tools/tcp_throughput/), i.e. less than 820 KiByte/s.
+						// TCP/IP in YAT practise (Stress-4-Huge.txt on two interconnected AutoSockets with YAT 2.2.0): ~22 KiByte/s, i.e. .
+						// UDP/IP in YAT practise (Stress-4-Huge.txt on two interconnected PairSockets with YAT 2.2.0): ~22 KiByte/s.
+						return (20);
 					}
 
 					case IOType.UsbSerialHid:
 					{
-						// In theory: 64 kByte/s (https://www.tracesystemsinc.com/USB_Tutorials_web/USB/B1_USB_Classes/Books/A3_A_Closer_Look_at_HID_Class/slide01.htm).
-						// In YAT practise probably same as above.
-						return (50);
+						// In theory: 64 KiByte/s (https://www.tracesystemsinc.com/USB_Tutorials_web/USB/B1_USB_Classes/Books/A3_A_Closer_Look_at_HID_Class/slide01.htm).
+						// In YAT practise likely less than above.
+						return (10);
 					}
 
 					default:
 					{
-						return (50); // Just a rough estimate anyway.
+						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + IOType + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}
