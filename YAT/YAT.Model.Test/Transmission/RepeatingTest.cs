@@ -275,12 +275,18 @@ namespace YAT.Model.Test.Transmission
 						Utilities.WaitForConnection(terminalA, terminalB);
 
 						TransmitAndVerify(terminalA, terminalB, repeatCount, doTwoWay, executeBreak);
+
+						terminalB.StopIO();
+						Utilities.WaitForDisconnection(terminalB);
 					}
 				}
 				else // Loopback self:
 				{
 					TransmitAndVerify(terminalA, terminalA, repeatCount, doTwoWay, executeBreak);
 				}
+
+				terminalA.StopIO();
+				Utilities.WaitForDisconnection(terminalA);
 			}
 		}
 
@@ -372,13 +378,9 @@ namespace YAT.Model.Test.Transmission
 			Utilities.WaitForReverification();
 
 			// Verify transmission:
-			Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-			                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-			                      testSet);
+			Utilities.VerifyLines(terminalA, terminalB, testSet);
 			if (doTwoWay) {
-				Utilities.VerifyLines(terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-				                      terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-				                      testSet);
+				Utilities.VerifyLines(terminalB, terminalA, testSet);
 			}
 		}
 

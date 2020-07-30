@@ -181,12 +181,18 @@ namespace YAT.Model.Test.Connection
 						Utilities.WaitForConnection(terminalA, terminalB);
 
 						TransmitAndVerifyAndDisconnect(terminalA, terminalB, disconnectIdentifier, false);
+
+						terminalB.StopIO();
+						Utilities.WaitForDisconnection(terminalB);
 					}
 				}
 				else // Loopback self:
 				{
 					TransmitAndVerifyAndDisconnect(terminalA, terminalA, disconnectIdentifier, true);
 				}
+
+				terminalA.StopIO();
+				Utilities.WaitForDisconnection(terminalA);
 			}
 		}
 

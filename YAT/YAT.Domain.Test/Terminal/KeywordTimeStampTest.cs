@@ -124,7 +124,7 @@ namespace YAT.Domain.Test.Terminal
 						string textToSend;
 						string textExpected;
 						int textByteCount;
-						int eolByteCount = 2; // Fixed to default of <CR><LF>.
+						const int EolByteCount = 2; // Fixed to default of <CR><LF>.
 						int expectedTotalByteCount = 0;
 						int expectedTotalLineCount = 0;
 
@@ -134,7 +134,7 @@ namespace YAT.Domain.Test.Terminal
 						Assert.That(parser.TryParse(textExpected, out parseResult));
 						terminalTx.SendTextLine(textToSend);
 						textByteCount = parseResult.Length;
-						expectedTotalByteCount += (textByteCount + eolByteCount);
+						expectedTotalByteCount += (textByteCount + EolByteCount);
 						expectedTotalLineCount++;
 						Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
@@ -144,7 +144,7 @@ namespace YAT.Domain.Test.Terminal
 						Assert.That(parser.TryParse(textExpected, out parseResult));
 						terminalTx.SendTextLine(textToSend);
 						textByteCount = parseResult.Length;
-						expectedTotalByteCount += (textByteCount + eolByteCount);
+						expectedTotalByteCount += (textByteCount + EolByteCount);
 						expectedTotalLineCount++;
 						Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
@@ -154,7 +154,7 @@ namespace YAT.Domain.Test.Terminal
 						Assert.That(parser.TryParse(textExpected, out parseResult));
 						terminalTx.SendTextLine(textToSend);
 						textByteCount = parseResult.Length;
-						expectedTotalByteCount += (textByteCount + eolByteCount);
+						expectedTotalByteCount += (textByteCount + EolByteCount);
 						expectedTotalLineCount++;
 						Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
@@ -164,7 +164,7 @@ namespace YAT.Domain.Test.Terminal
 						Assert.That(parser.TryParse(textExpected, out parseResult));
 						terminalTx.SendTextLine(textToSend);
 						textByteCount = parseResult.Length;
-						expectedTotalByteCount += (textByteCount + eolByteCount);
+						expectedTotalByteCount += (textByteCount + EolByteCount);
 						expectedTotalLineCount++;
 						Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 

@@ -76,9 +76,8 @@ namespace YAT.Model.Test
 			[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Don't care, straightforward test implementation.")]
 			public int[] ExpectedByteCounts { get; }
 
-			/// <summary>Flag indicating that expected values not only apply to B but also A.</summary>
-			/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
-			public bool ExpectedAlsoApplyToA { get; }
+			/// <summary>Flag indicating that expected values not only apply to Rx but also Tx.</summary>
+			public bool ExpectedAlsoApplyToTx { get; }
 
 			/// <summary>Flag indicating that cleared terminals are expected in the end.</summary>
 			public bool ClearedIsExpectedInTheEnd { get; }
@@ -101,7 +100,7 @@ namespace YAT.Model.Test
 					ExpectedByteCounts[i]    = command.TextLines[i].Length + 2; // Content + EOL.
 				}
 
-				ExpectedAlsoApplyToA = true;
+				ExpectedAlsoApplyToTx = true;
 				ClearedIsExpectedInTheEnd = false;
 			}
 
@@ -113,11 +112,11 @@ namespace YAT.Model.Test
 			/// The expected number of shown characters per display line, ASCII mnemonics (e.g. &lt;CR&gt;) are considered a single shown character,
 			/// which equals the expected number of raw byte content per display line, without hidden EOL or control bytes.
 			/// </param>
-			/// <param name="expectedAlsoApplyToA">Flag indicating that expected values not only apply to B but also A.</param>
+			/// <param name="expectedAlsoApplyToTx">Flag indicating that expected values not only apply to Rx but also Tx.</param>
 			/// <param name="clearedIsExpectedInTheEnd">Flag indicating that cleared terminals are expected in the end.</param>
 			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-			public TestSet(Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedCharAndByteCounts, bool expectedAlsoApplyToA, bool clearedIsExpectedInTheEnd = false)
-				: this(command, expectedLineCount, expectedElementCounts, expectedCharAndByteCounts, expectedCharAndByteCounts, expectedAlsoApplyToA, clearedIsExpectedInTheEnd)
+			public TestSet(Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedCharAndByteCounts, bool expectedAlsoApplyToTx, bool clearedIsExpectedInTheEnd = false)
+				: this(command, expectedLineCount, expectedElementCounts, expectedCharAndByteCounts, expectedCharAndByteCounts, expectedAlsoApplyToTx, clearedIsExpectedInTheEnd)
 			{
 			}
 
@@ -127,10 +126,10 @@ namespace YAT.Model.Test
 			/// <param name="expectedElementCounts">The expected number of display elements per display line, including incomplete lines.</param>
 			/// <param name="expectedCharCounts">The expected number of shown characters per display line, ASCII mnemonics (e.g. &lt;CR&gt;) are considered a single shown character.</param>
 			/// <param name="expectedByteCounts">The expected number of raw byte content per display line, without hidden EOL or control bytes.</param>
-			/// <param name="expectedAlsoApplyToA">Flag indicating that expected values not only apply to B but also A.</param>
+			/// <param name="expectedAlsoApplyToTx">Flag indicating that expected values not only apply to Rx but also Tx.</param>
 			/// <param name="clearedIsExpectedInTheEnd">Flag indicating that cleared terminals are expected in the end.</param>
 			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-			public TestSet(Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedCharCounts, int[] expectedByteCounts, bool expectedAlsoApplyToA, bool clearedIsExpectedInTheEnd = false)
+			public TestSet(Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedCharCounts, int[] expectedByteCounts, bool expectedAlsoApplyToTx, bool clearedIsExpectedInTheEnd = false)
 			{
 				Command = command;
 
@@ -138,7 +137,7 @@ namespace YAT.Model.Test
 				ExpectedElementCounts      = expectedElementCounts;
 				ExpectedCharCounts         = expectedCharCounts;
 				ExpectedByteCounts         = expectedByteCounts;
-				ExpectedAlsoApplyToA       = expectedAlsoApplyToA;
+				ExpectedAlsoApplyToTx      = expectedAlsoApplyToTx;
 				ClearedIsExpectedInTheEnd  = clearedIsExpectedInTheEnd;
 			}
 
@@ -212,7 +211,7 @@ namespace YAT.Model.Test
 					hashCode = (hashCode * 397) ^ (ExpectedElementCounts != null ? ExpectedElementCounts.GetHashCode() : 0);
 					hashCode = (hashCode * 397) ^ (ExpectedCharCounts    != null ? ExpectedCharCounts   .GetHashCode() : 0);
 					hashCode = (hashCode * 397) ^ (ExpectedByteCounts    != null ? ExpectedByteCounts   .GetHashCode() : 0);
-					hashCode = (hashCode * 397) ^  ExpectedAlsoApplyToA                                 .GetHashCode();
+					hashCode = (hashCode * 397) ^  ExpectedAlsoApplyToTx                                .GetHashCode();
 
 					return (hashCode);
 				}
@@ -245,7 +244,7 @@ namespace YAT.Model.Test
 					ArrayEx             .ValuesEqual( ExpectedElementCounts, other.ExpectedElementCounts) &&
 					ArrayEx             .ValuesEqual( ExpectedCharCounts,    other.ExpectedCharCounts) &&
 					ArrayEx             .ValuesEqual( ExpectedByteCounts,    other.ExpectedByteCounts) &&
-					ExpectedAlsoApplyToA      .Equals(                       other.ExpectedAlsoApplyToA)
+					ExpectedAlsoApplyToTx     .Equals(                       other.ExpectedAlsoApplyToTx)
 				);
 			}
 
@@ -314,9 +313,8 @@ namespace YAT.Model.Test
 
 				Trace.WriteLine("Waiting for start, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-				if (waitTime >= WaitTimeoutForStateChange) {
+				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Start timeout!");
-				}
 			}
 
 			Trace.WriteLine("...done, started");
@@ -339,9 +337,8 @@ namespace YAT.Model.Test
 
 				Trace.WriteLine("Waiting for open, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-				if (waitTime >= WaitTimeoutForStateChange) {
+				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Open timeout!");
-				}
 			}
 
 			Trace.WriteLine("...done, opened");
@@ -365,9 +362,8 @@ namespace YAT.Model.Test
 
 				Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-				if (waitTime >= WaitTimeoutForStateChange) {
+				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Connect timeout!");
-				}
 			}
 
 			Trace.WriteLine("...done, connected");
@@ -390,9 +386,8 @@ namespace YAT.Model.Test
 
 				Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-				if (waitTime >= WaitTimeoutForStateChange) {
+				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Connect timeout!");
-				}
 			}
 
 			Trace.WriteLine("...done, connected");
@@ -415,9 +410,8 @@ namespace YAT.Model.Test
 
 				Trace.WriteLine("Waiting for close, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-				if (waitTime >= WaitTimeoutForStateChange) {
+				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Close timeout!");
-				}
 			}
 
 			Trace.WriteLine("...done, closed");
@@ -441,9 +435,8 @@ namespace YAT.Model.Test
 
 				Trace.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-				if (waitTime >= WaitTimeoutForStateChange) {
+				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Disconnect timeout!");
-				}
 			}
 
 			Trace.WriteLine("...done, disconnected");
@@ -475,10 +468,7 @@ namespace YAT.Model.Test
 
 			do
 			{
-				if (isFirst) {
-					isFirst = false;
-				}
-				else {
+				if (!isFirst) {
 					Thread.Sleep(WaitIntervalForTransmission);
 					waitTime += WaitIntervalForTransmission;
 				}
@@ -499,8 +489,14 @@ namespace YAT.Model.Test
 					            " mismatches expected = " + expectedTotalLineCountDisplayed + ".");
 				}
 
-				if (waitTime >= timeout) {
-					var sb = new StringBuilder("Timeout!");
+				if ((waitTime >= timeout) && ((timeout != IgnoreTimeout) || !isFirst)) {
+					StringBuilder sb;
+					if (timeout != IgnoreTimeout) {
+						sb = new StringBuilder("Timeout!");
+					}
+					else {
+						sb = new StringBuilder("Mismatch!");
+					}
 
 					if (rxByteCount < expectedTotalByteCount) {
 						sb.Append(" Number of received bytes = " + rxByteCount +
@@ -513,6 +509,10 @@ namespace YAT.Model.Test
 					}
 
 					Assert.Fail(sb.ToString());
+				}
+
+				if (isFirst) {
+					isFirst = false;
 				}
 			}
 			while ((rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCountDisplayed));
@@ -604,10 +604,7 @@ namespace YAT.Model.Test
 
 			do
 			{
-				if (isFirst) {
-					isFirst = false;
-				}
-				else {
+				if (!isFirst) {
 					Thread.Sleep(WaitIntervalForTransmission);
 					waitTime += WaitIntervalForTransmission;
 				}
@@ -640,8 +637,14 @@ namespace YAT.Model.Test
 					            " mismatches expected = " + expectedTotalLineCountDisplayed + ".");
 				}
 
-				if (waitTime >= timeout) {
-					var sb = new StringBuilder("Timeout!");
+				if ((waitTime >= timeout) && ((timeout != IgnoreTimeout) || !isFirst)) {
+					StringBuilder sb;
+					if (timeout != IgnoreTimeout) {
+						sb = new StringBuilder("Timeout!");
+					}
+					else {
+						sb = new StringBuilder("Mismatch!");
+					}
 
 					if (txByteCount < expectedTotalByteCount) {
 						sb.Append(" Number of sent bytes = " + txByteCount +
@@ -664,6 +667,10 @@ namespace YAT.Model.Test
 					}
 
 					Assert.Fail(sb.ToString());
+				}
+
+				if (isFirst) {
+					isFirst = false;
 				}
 			}
 			while ((txByteCount != expectedTotalByteCount) || (txLineCount != expectedTotalLineCountDisplayed) ||
@@ -731,89 +738,92 @@ namespace YAT.Model.Test
 		// Verifications
 		//==========================================================================================
 
-		/// <remarks>Using 'A' and 'B' instead of 'Tx' and 'Rx' as some tests perform two-way-transmission.</remarks>
-		public static void VerifyLines(Domain.DisplayLineCollection displayLinesA, Domain.DisplayLineCollection displayLinesB, TestSet testSet, int cycle = 1)
+		/// <summary></summary>
+		public static void VerifyLines(Terminal terminalTx, Terminal terminalRx, TestSet testSet, int cycle = 1)
 		{
+			var displayLinesTx = terminalTx.RepositoryToDisplayLines(Domain.RepositoryType.Tx);
+			var displayLinesRx = terminalRx.RepositoryToDisplayLines(Domain.RepositoryType.Rx);
+
 			// Attention: Display line count is not always equal to terminal line count!
 			//  > Display line count = number of lines in view
 			//  > Terminal line count = number of *completed* lines in terminal
 			// This function uses display line count for verification!
 
 			// Calculate total expected display line count at the receiver side:
-			int expectedTotalDisplayLineCountB = 0;
+			int expectedTotalDisplayLineCountRx = 0;
 			if (testSet.ExpectedElementCounts != null)
-				expectedTotalDisplayLineCountB = (testSet.ExpectedElementCounts.Length * cycle);
+				expectedTotalDisplayLineCountRx = (testSet.ExpectedElementCounts.Length * cycle);
 
 			// Compare the expected line count at the receiver side:
-			if (displayLinesB.Count != expectedTotalDisplayLineCountB)
+			if (displayLinesRx.Count != expectedTotalDisplayLineCountRx)
 			{
-				var sbB = new StringBuilder();
-				foreach (Domain.DisplayLine displayLineB in displayLinesB)
-					sbB.Append(ArrayEx.ValuesToString(displayLineB.ToArray()));
+				var sbRx = new StringBuilder();
+				foreach (Domain.DisplayLine displayLineRx in displayLinesRx)
+					sbRx.Append(ArrayEx.ValuesToString(displayLineRx.ToArray()));
 
 				Console.Error.Write
 				(
-					"B:" + Environment.NewLine + sbB + Environment.NewLine
+					"Rx:" + Environment.NewLine + sbRx + Environment.NewLine
 				);
 
 				Assert.Fail
 				(
 					"Line count mismatches: " + Environment.NewLine +
-					"Expected = " + expectedTotalDisplayLineCountB + " line(s), " +
-					"B = " + displayLinesB.Count + " line(s)." + Environment.NewLine +
+					"Expected = " + expectedTotalDisplayLineCountRx + " line(s), " +
+					"Rx = " + displayLinesRx.Count + " line(s)." + Environment.NewLine +
 					@"See ""Output"" for details."
 				);
 			}
 
 			// If both sides are expected to show the same line count, compare the counts,
 			// otherwise, ignore the comparision:
-			if (testSet.ExpectedAlsoApplyToA && !testSet.ClearedIsExpectedInTheEnd)
+			if (testSet.ExpectedAlsoApplyToTx && !testSet.ClearedIsExpectedInTheEnd)
 			{
-				if (displayLinesB.Count == displayLinesA.Count)
+				if (displayLinesRx.Count == displayLinesTx.Count)
 				{
-					for (int i = 0; i < displayLinesA.Count; i++)
+					for (int i = 0; i < displayLinesTx.Count; i++)
 					{
 						int index                = i % testSet.ExpectedElementCounts.Length;
 						int expectedElementCount =     testSet.ExpectedElementCounts[index];
 						int expectedCharCount    =     testSet.ExpectedCharCounts[index];
 						int expectedByteCount    =     testSet.ExpectedByteCounts[index];
 
-						var displayLineA = displayLinesA[i];
-						var displayLineB = displayLinesB[i];
+						var displayLineTx = displayLinesTx[i];
+						var displayLineRx = displayLinesRx[i];
 
-						if ((displayLineB.Count     == displayLineA.Count)     &&
-							(displayLineB.Count     == expectedElementCount)   &&
-							(displayLineB.CharCount == displayLineA.CharCount) &&
-							(displayLineB.CharCount == expectedCharCount)      &&
-							(displayLineB.ByteCount == displayLineA.ByteCount) &&
-							(displayLineB.ByteCount == expectedByteCount))
+						if ((displayLineRx.Count     == displayLineTx.Count)     &&
+							(displayLineRx.Count     == expectedElementCount)   &&
+							(displayLineRx.CharCount == displayLineTx.CharCount) &&
+							(displayLineRx.CharCount == expectedCharCount)      &&
+							(displayLineRx.ByteCount == displayLineTx.ByteCount) &&
+							(displayLineRx.ByteCount == expectedByteCount))
 						{
-							for (int j = 0; j < displayLineA.Count; j++)
-								Assert.That(displayLineB[j].Text, Is.EqualTo(displayLineA[j].Text));
+							for (int j = 0; j < displayLineTx.Count; j++)
+								Assert.That(displayLineRx[j].Text, Is.EqualTo(displayLineTx[j].Text));
 						}
 						else
 						{
-							string strA = ArrayEx.ValuesToString(displayLineA.ToArray());
-							string strB = ArrayEx.ValuesToString(displayLineB.ToArray());
+							string strTx = ArrayEx.ValuesToString(displayLineTx.ToArray());
+							string strRx = ArrayEx.ValuesToString(displayLineRx.ToArray());
 
 							Console.Error.Write
 							(
-								"A:" + Environment.NewLine + strA + Environment.NewLine +
-								"B:" + Environment.NewLine + strB + Environment.NewLine
+								"Tx:" + Environment.NewLine + strTx + Environment.NewLine +
+								"Rx:" + Environment.NewLine + strRx + Environment.NewLine
 							);
 
 							Assert.Fail
 							(
 								"Length of line " + i + " mismatches:" + Environment.NewLine +
 								"Expected = " + expectedElementCount + " element(s), " +
-								"A = " + displayLineA.Count + " element(s), " +
-								"B = " + displayLineB.Count + " element(s)," + Environment.NewLine +
+								"Tx = " + displayLineTx.Count + " element(s), " +
+								"Rx = " + displayLineRx.Count + " element(s)," + Environment.NewLine +
 								"Expected = " + expectedCharCount + " char(s), " +
-								"A = " + displayLineA.CharCount + " char(s), " +
-								"B = " + displayLineB.CharCount + " char(s)." + Environment.NewLine +
+								"Tx = " + displayLineTx.CharCount + " char(s), " +
+								"Rx = " + displayLineRx.CharCount + " char(s)." + Environment.NewLine +
 								"Expected = " + expectedByteCount + " byte(s), " +
-								"A = " + displayLineA.ByteCount + " byte(s), " +
-								"B = " + displayLineB.ByteCount + " byte(s)." + Environment.NewLine +
+								"Tx = " + displayLineTx.ByteCount + " byte(s), " +
+								"Rx = " + displayLineRx.ByteCount + " byte(s)." + Environment.NewLine +
 								@"See ""Output"" for details."
 							);
 						}
@@ -821,26 +831,26 @@ namespace YAT.Model.Test
 				}
 				else
 				{
-					var sbA = new StringBuilder();
-					foreach (Domain.DisplayLine displayLineA in displayLinesA)
-						sbA.Append(ArrayEx.ValuesToString(displayLineA.ToArray()));
+					var sbTx = new StringBuilder();
+					foreach (Domain.DisplayLine displayLineTx in displayLinesTx)
+						sbTx.Append(ArrayEx.ValuesToString(displayLineTx.ToArray()));
 
-					var sbB = new StringBuilder();
-					foreach (Domain.DisplayLine displayLineB in displayLinesB)
-						sbB.Append(ArrayEx.ValuesToString(displayLineB.ToArray()));
+					var sbRx = new StringBuilder();
+					foreach (Domain.DisplayLine displayLineRx in displayLinesRx)
+						sbRx.Append(ArrayEx.ValuesToString(displayLineRx.ToArray()));
 
 					Console.Error.Write
 					(
-						"A:" + Environment.NewLine + sbA + Environment.NewLine +
-						"B:" + Environment.NewLine + sbB + Environment.NewLine
+						"Tx:" + Environment.NewLine + sbTx + Environment.NewLine +
+						"Rx:" + Environment.NewLine + sbRx + Environment.NewLine
 					);
 
 					Assert.Fail
 					(
 						"Line count mismatches: " + Environment.NewLine +
-						"Expected = " + expectedTotalDisplayLineCountB + " line(s), " +
-						"A = " + displayLinesA.Count + " line(s), " +
-						"B = " + displayLinesB.Count + " line(s)." + Environment.NewLine +
+						"Expected = " + expectedTotalDisplayLineCountRx + " line(s), " +
+						"Tx = " + displayLinesTx.Count + " line(s), " +
+						"Rx = " + displayLinesRx.Count + " line(s)." + Environment.NewLine +
 						@"See ""Output"" for details."
 					);
 				}

@@ -261,12 +261,18 @@ namespace YAT.Model.Test.Transmission
 						Utilities.WaitForConnection(terminalA, terminalB);
 
 						TransmitAndVerify(terminalA, terminalB, testSet, transmissionCount);
+
+						terminalB.StopIO();
+						Utilities.WaitForDisconnection(terminalB);
 					}
 				}
 				else // Loopback self:
 				{
 					TransmitAndVerify(terminalA, terminalA, testSet, transmissionCount);
 				}
+
+				terminalA.StopIO();
+				Utilities.WaitForDisconnection(terminalA);
 			}
 		}
 
@@ -287,18 +293,14 @@ namespace YAT.Model.Test.Transmission
 				Utilities.WaitForTransmissionCycleAndVerifyCounts(terminalA, terminalB, testSet, cycleAB);
 
 				// Verify transmission:
-				Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-				                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-				                      testSet, cycleAB);
+				Utilities.VerifyLines(terminalA, terminalB, testSet, cycleAB);
 
 				// Send 'Pong' test command B => A:
 				terminalB.SendText(testSet.Command);
 				Utilities.WaitForTransmissionCycleAndVerifyCounts(terminalB, terminalA, testSet, cycleABBA);
 
 				// Verify transmission:
-				Utilities.VerifyLines(terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-				                      terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-				                      testSet, cycleABBA);
+				Utilities.VerifyLines(terminalB, terminalA, testSet, cycleABBA);
 			}
 
 			// Wait to ensure that no operation is ongoing anymore:
@@ -306,13 +308,8 @@ namespace YAT.Model.Test.Transmission
 
 			// Verify again:
 			ToCycles(terminalA, terminalB, transmissionCount, out cycleAB, out cycleABBA);
-			Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-			                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-			                      testSet, cycleABBA); // ABBA rather than AB as both ways already done.
-
-			Utilities.VerifyLines(terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-			                      terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-			                      testSet, cycleABBA);
+			Utilities.VerifyLines(terminalA, terminalB, testSet, cycleABBA); // ABBA rather than AB as both ways already done.
+			Utilities.VerifyLines(terminalB, terminalA, testSet, cycleABBA);
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]

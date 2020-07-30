@@ -355,12 +355,18 @@ namespace YAT.Model.Test.Transmission
 						Utilities.WaitForConnection(terminalA, terminalB);
 
 						TransmitAndVerify(terminalA, terminalB, testSet, transmissionCount);
+
+						terminalB.StopIO();
+						Utilities.WaitForDisconnection(terminalB);
 					}
 				}
 				else // Loopback self:
 				{
 					TransmitAndVerify(terminalA, terminalA, testSet, transmissionCount);
 				}
+
+				terminalA.StopIO();
+				Utilities.WaitForDisconnection(terminalA);
 			}
 		}
 
@@ -373,7 +379,7 @@ namespace YAT.Model.Test.Transmission
 			{
 				// Send test command:
 				terminalA.SendText(testSet.Command);
-				if (testSet.ExpectedAlsoApplyToA) {
+				if (testSet.ExpectedAlsoApplyToTx) {
 					Utilities.WaitForTransmissionCycleAndVerifyCounts(terminalA, terminalB, testSet, cycle);
 				}
 				else if (testSet.ClearedIsExpectedInTheEnd && (terminalA == terminalB)) { // Clear* on loopback self:
@@ -385,27 +391,19 @@ namespace YAT.Model.Test.Transmission
 
 				// Verify transmission:
 				if (testSet.ClearedIsExpectedInTheEnd && (terminalA == terminalB)) { // Clear* on loopback self:
-				////Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-				////                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-				////                      testSet, cycle)  doesn't work because clear will also be applied to Rx at an arbitrary moment.
+				////Utilities.VerifyLines(terminalA, terminalB, testSet, cycle) doesn't work because clear will also be applied to Rx at an arbitrary moment.
 				}
 				else {
-					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-					                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-					                      testSet, cycle);
+					Utilities.VerifyLines(terminalA, terminalB, testSet, cycle);
 				}
 			}
 
 			// Wait to ensure that no operation is ongoing anymore and verify again:
 			if (testSet.ClearedIsExpectedInTheEnd && (terminalA == terminalB)) { // Clear* on loopback self:
-			////Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-			////                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-			////                      testSet, cycle)  doesn't work because clear will also be applied to Rx at an arbitrary moment.
+			////Utilities.VerifyLines(terminalA, terminalB, testSet, cycle) doesn't work because clear will also be applied to Rx at an arbitrary moment.
 			}
 			else {
-				Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-				                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-				                      testSet, transmissionCount);
+				Utilities.VerifyLines(terminalA, terminalB, testSet, transmissionCount);
 			}
 		}
 
