@@ -42,13 +42,17 @@ namespace YAT.Domain
 	public enum IOType
 	{
 		Unknown,
+
 		SerialPort,
+
 		TcpClient,
 		TcpServer,
 		TcpAutoSocket,
+
 		UdpClient,
 		UdpServer,
 		UdpPairSocket,
+
 		UsbSerialHid
 	}
 
