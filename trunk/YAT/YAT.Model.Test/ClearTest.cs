@@ -106,9 +106,7 @@ namespace YAT.Model.Test
 					Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, testSet);
 
 					// Verify transmission:
-					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-					                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-					                      testSet);
+					Utilities.VerifyLines(terminalA, terminalB, testSet);
 
 					// Create test set to verify clear:
 					testSet = new Utilities.TestSet(new Types.Command(@""), 0, null, null, true); // Empty terminals expected.
@@ -118,10 +116,14 @@ namespace YAT.Model.Test
 					terminalB.ClearRepositories();
 
 					// Verify clear:
-					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-					                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-					                      testSet);
+					Utilities.VerifyLines(terminalA, terminalB, testSet);
+
+					terminalB.StopIO();
+					Utilities.WaitForDisconnection(terminalB);
 				}
+
+				terminalA.StopIO();
+				Utilities.WaitForDisconnection(terminalA);
 			}
 		}
 
@@ -156,20 +158,17 @@ namespace YAT.Model.Test
 					Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, testSetInitial);
 
 					// Verify transmission:
-					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-					                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-					                      testSetInitial);
+					Utilities.VerifyLines(terminalA, terminalB, testSetInitial);
 
 					// Send incomplete line text:
 					terminalA.SendText(testSetContinued.Command);
 					Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, testSetContinued);
 
 					// Verify incomplete line:
-					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-					                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-					                      testSetContinued);
-					var lines = terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx);
-					if (lines.Count != 2)
+					Utilities.VerifyLines(terminalA, terminalB, testSetContinued);
+
+					var linesRx = terminalB.RepositoryToDisplayLines(RepositoryType.Rx);
+					if (linesRx.Count != 2)
 						Assert.Fail("Incomplete line not received!");
 
 					// Create test set to verify clear:
@@ -180,10 +179,14 @@ namespace YAT.Model.Test
 					terminalB.ClearRepositories();
 
 					// Verify clear:
-					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-					                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-					                      testSetCleared);
+					Utilities.VerifyLines(terminalA, terminalB, testSetCleared);
+
+					terminalB.StopIO();
+					Utilities.WaitForDisconnection(terminalB);
 				}
+
+				terminalA.StopIO();
+				Utilities.WaitForDisconnection(terminalA);
 			}
 		}
 

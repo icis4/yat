@@ -112,6 +112,64 @@ namespace YAT.Domain.Test
 
 		#endregion
 
+		#region Transmit
+		//==========================================================================================
+		// Transmit
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static void TransmitAndVerifySentCounts(Domain.Terminal terminalTx,
+		                                       Domain.Parser.Parser parser, string text, int eolByteCount,
+		                                       ref int expectedTotalByteCount, ref int expectedTotalLineCount,
+		                                       int timeout = WaitTimeoutForLineTransmission)
+		{
+			byte[] parseResult;
+			Assert.That(parser.TryParse(text, out parseResult));
+
+			terminalTx.SendTextLine(text);
+
+			int textByteCount = parseResult.Length;
+			expectedTotalByteCount += (textByteCount + eolByteCount);
+			expectedTotalLineCount++;
+			WaitForSendingAndVerifyCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCount, timeout);
+		}
+
+		/// <summary></summary>
+		public static void TransmitAndVerifyReceivedCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx,
+		                                                   Domain.Parser.Parser parser, string text, int eolByteCount,
+		                                                   ref int expectedTotalByteCount, ref int expectedTotalLineCount,
+		                                                   int timeout = WaitTimeoutForLineTransmission)
+		{
+			byte[] parseResult;
+			Assert.That(parser.TryParse(text, out parseResult));
+
+			terminalTx.SendTextLine(text);
+
+			int textByteCount = parseResult.Length;
+			expectedTotalByteCount += (textByteCount + eolByteCount);
+			expectedTotalLineCount++;
+			WaitForReceivingAndVerifyCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCount, timeout);
+		}
+
+		/// <summary></summary>
+		public static void TransmitAndVerifyCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx,
+		                                           Domain.Parser.Parser parser, string text, int eolByteCount,
+		                                           ref int expectedTotalByteCount, ref int expectedTotalLineCount,
+		                                           int timeout = WaitTimeoutForLineTransmission)
+		{
+			byte[] parseResult;
+			Assert.That(parser.TryParse(text, out parseResult));
+
+			terminalTx.SendTextLine(text);
+
+			int textByteCount = parseResult.Length;
+			expectedTotalByteCount += (textByteCount + eolByteCount);
+			expectedTotalLineCount++;
+			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, timeout);
+		}
+
+		#endregion
+
 		#region Wait
 		//==========================================================================================
 		// Wait
@@ -134,9 +192,8 @@ namespace YAT.Domain.Test
 
 				Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-				if (waitTime >= WaitTimeoutForStateChange) {
+				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Connect timeout!");
-				}
 			}
 
 			Trace.WriteLine("...done, connected");
@@ -159,9 +216,8 @@ namespace YAT.Domain.Test
 
 				Trace.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-				if (waitTime >= WaitTimeoutForStateChange) {
+				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Disconnect timeout!");
-				}
 			}
 
 			Trace.WriteLine("...done, disconnected");
@@ -181,9 +237,8 @@ namespace YAT.Domain.Test
 
 				Trace.WriteLine("Waiting for 'IsSendingForSomeTime', " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 
-				if (waitTime >= timeout) {
+				if (waitTime >= timeout)
 					Assert.Fail("'IsSendingForSomeTime' timeout!");
-				}
 			}
 
 			Trace.WriteLine("...done, 'IsSendingForSomeTime'");
@@ -203,9 +258,8 @@ namespace YAT.Domain.Test
 
 				Trace.WriteLine("Waiting for 'IsNoLongerSending', " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 
-				if (waitTime >= timeout) {
+				if (waitTime >= timeout)
 					Assert.Fail("'IsNoLongerSending' timeout!");
-				}
 			}
 
 			Trace.WriteLine("...done, 'IsNoLongerSending'");
@@ -239,10 +293,7 @@ namespace YAT.Domain.Test
 
 			do
 			{
-				if (isFirst) {
-					isFirst = false;
-				}
-				else {
+				if (!isFirst) {
 					Thread.Sleep(WaitIntervalForTransmission);
 					waitTime += WaitIntervalForTransmission;
 				}
@@ -265,8 +316,14 @@ namespace YAT.Domain.Test
 					}
 				}
 
-				if (waitTime >= timeout) {
-					var sb = new StringBuilder("Timeout!");
+				if ((waitTime >= timeout) && ((timeout != IgnoreTimeout) || !isFirst)) {
+					StringBuilder sb;
+					if (timeout != IgnoreTimeout) {
+						sb = new StringBuilder("Timeout!");
+					}
+					else {
+						sb = new StringBuilder("Mismatch!");
+					}
 
 					if (txByteCount < expectedTotalByteCount) {
 						sb.Append(" Number of sent bytes = " + txByteCount +
@@ -279,6 +336,10 @@ namespace YAT.Domain.Test
 					}
 
 					Assert.Fail(sb.ToString());
+				}
+
+				if (isFirst) {
+					isFirst = false;
 				}
 			}
 			while ((txByteCount != expectedTotalByteCount) || ((txLineCount != expectedTotalLineCount) && (expectedTotalLineCount != IgnoreCount)));
@@ -329,10 +390,7 @@ namespace YAT.Domain.Test
 
 			do
 			{
-				if (isFirst) {
-					isFirst = false;
-				}
-				else {
+				if (!isFirst) {
 					Thread.Sleep(WaitIntervalForTransmission);
 					waitTime += WaitIntervalForTransmission;
 				}
@@ -355,8 +413,14 @@ namespace YAT.Domain.Test
 					}
 				}
 
-				if (waitTime >= timeout) {
-					var sb = new StringBuilder("Timeout!");
+				if ((waitTime >= timeout) && ((timeout != IgnoreTimeout) || !isFirst)) {
+					StringBuilder sb;
+					if (timeout != IgnoreTimeout) {
+						sb = new StringBuilder("Timeout!");
+					}
+					else {
+						sb = new StringBuilder("Mismatch!");
+					}
 
 					if (rxByteCount < expectedTotalByteCount) {
 						sb.Append(" Number of received bytes = " + rxByteCount +
@@ -369,6 +433,10 @@ namespace YAT.Domain.Test
 					}
 
 					Assert.Fail(sb.ToString());
+				}
+
+				if (isFirst) {
+					isFirst = false;
 				}
 			}
 			while ((rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCount && (expectedTotalLineCount != IgnoreCount)));
@@ -429,10 +497,7 @@ namespace YAT.Domain.Test
 
 			do
 			{
-				if (isFirst) {
-					isFirst = false;
-				}
-				else {
+				if (!isFirst) {
 					Thread.Sleep(WaitIntervalForTransmission);
 					waitTime += WaitIntervalForTransmission;
 				}
@@ -469,8 +534,14 @@ namespace YAT.Domain.Test
 					}
 				}
 
-				if (waitTime >= timeout) {
-					var sb = new StringBuilder("Timeout!");
+				if ((waitTime >= timeout) && ((timeout != IgnoreTimeout) || !isFirst)) {
+					StringBuilder sb;
+					if (timeout != IgnoreTimeout) {
+						sb = new StringBuilder("Timeout!");
+					}
+					else {
+						sb = new StringBuilder("Mismatch!");
+					}
 
 					if (txByteCount < expectedTotalByteCount) {
 						sb.Append(" Number of sent bytes = " + txByteCount +
@@ -493,6 +564,10 @@ namespace YAT.Domain.Test
 					}
 
 					Assert.Fail(sb.ToString());
+				}
+
+				if (isFirst) {
+					isFirst = false;
 				}
 			}
 			while ((txByteCount != expectedTotalByteCount) || (txLineCount != expectedTotalLineCount && (expectedTotalLineCount != IgnoreCount)) ||

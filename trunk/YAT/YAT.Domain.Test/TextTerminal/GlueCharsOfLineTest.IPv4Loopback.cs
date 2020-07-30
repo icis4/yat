@@ -78,10 +78,10 @@ namespace YAT.Domain.Test.TextTerminal
 					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
-					string text = "ABC";
-					int textByteCount = text.Length;
-					int eolByteCount = 2; // Fixed to default of <CR><LF>.
-					int lineByteCount = (textByteCount + eolByteCount);
+					const string Text = "ABC";
+					const int TextByteCount = 3; // Fixed to "ABC".
+					const int EolByteCount = 2; // Fixed to default of <CR><LF>.
+					const int LineByteCount = (TextByteCount + EolByteCount);
 					int expectedTotalByteCountAB = 0;
 					int expectedTotalByteCountBA = 0;
 					int expectedTotalLineCountAB = 0;
@@ -90,14 +90,14 @@ namespace YAT.Domain.Test.TextTerminal
 					// Initial ping-pong:
 					//           A => B
 					//           A <= B
-					terminalA.SendTextLine(text);
-					expectedTotalByteCountAB += lineByteCount;
+					terminalA.SendTextLine(Text);
+					expectedTotalByteCountAB += LineByteCount;
 					expectedTotalLineCountAB++;
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					terminalB.SendTextLine(text);
-					expectedTotalByteCountBA += lineByteCount;
+					terminalB.SendTextLine(Text);
+					expectedTotalByteCountBA += LineByteCount;
 					expectedTotalLineCountBA++;
 					Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
@@ -116,8 +116,8 @@ namespace YAT.Domain.Test.TextTerminal
 					{
 						// Subsequent ping without EOL...
 						//              A => B
-						terminalA.SendText(text);
-						expectedTotalByteCountAB += textByteCount;
+						terminalA.SendText(Text);
+						expectedTotalByteCountAB += TextByteCount;
 						expectedTotalLineCountAB++; // Line not completed though.
 						Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 						Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
@@ -130,9 +130,8 @@ namespace YAT.Domain.Test.TextTerminal
 
 						// ...pong...
 						//              A <= B
-						lineByteCount = (text.Length + eolByteCount);
-						terminalB.SendTextLine(text); // Line from B must be postponed until ping completes with EOL.
-						expectedTotalByteCountBA += lineByteCount;
+						terminalB.SendTextLine(Text); // Line from B must be postponed until ping completes with EOL.
+						expectedTotalByteCountBA += LineByteCount;
 						expectedTotalLineCountBA++;
 						Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
@@ -146,7 +145,7 @@ namespace YAT.Domain.Test.TextTerminal
 						// ...and complete ping with EOL:
 						//              A => B
 						terminalA.SendTextLine("");
-						expectedTotalByteCountAB += eolByteCount;
+						expectedTotalByteCountAB += EolByteCount;
 					////expectedTotalLineCountAB++; // Line already had started above.
 						Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 						Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
@@ -169,8 +168,8 @@ namespace YAT.Domain.Test.TextTerminal
 					{
 						// ...subsequent ping without EOL...
 						//              A => B
-						terminalA.SendText(text);
-						expectedTotalByteCountAB += textByteCount;
+						terminalA.SendText(Text);
+						expectedTotalByteCountAB += TextByteCount;
 
 						if (i == 0) { // Account for the fact that non-completed line "ABC" will result in "ABCABC" (Tx) during second iteration.
 							expectedTotalLineCountAB++; // Line not completed though.
@@ -186,9 +185,8 @@ namespace YAT.Domain.Test.TextTerminal
 
 						// ...pong...
 						//              A <= B
-						lineByteCount = (text.Length + eolByteCount);
-						terminalB.SendTextLine(text); // Line from B must be postponed until timeout.
-						expectedTotalByteCountBA += lineByteCount;
+						terminalB.SendTextLine(Text); // Line from B must be postponed until timeout.
+						expectedTotalByteCountBA += LineByteCount;
 						expectedTotalLineCountBA++;
 						Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
@@ -267,10 +265,10 @@ namespace YAT.Domain.Test.TextTerminal
 					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
-					string text = "ABC";
-					int textByteCount = text.Length;
-					int eolByteCount = 2; // Fixed to default of <CR><LF>.
-					int lineByteCount = (textByteCount + eolByteCount);
+					const string Text = "ABC";
+					const int TextByteCount = 3; // Fixed to "ABC".
+					const int EolByteCount = 2; // Fixed to default of <CR><LF>.
+					const int LineByteCount = (TextByteCount + EolByteCount);
 					int expectedTotalByteCountAB = 0;
 					int expectedTotalByteCountBA = 0;
 					int expectedTotalLineCountAB = 0;
@@ -280,14 +278,14 @@ namespace YAT.Domain.Test.TextTerminal
 					// Initial ping-pong:
 					//           A => B
 					//           A <= B
-					terminalA.SendTextLine(text);
-					expectedTotalByteCountAB += lineByteCount;
+					terminalA.SendTextLine(Text);
+					expectedTotalByteCountAB += LineByteCount;
 					expectedTotalLineCountAB++;
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					terminalB.SendTextLine(text);
-					expectedTotalByteCountBA += lineByteCount;
+					terminalB.SendTextLine(Text);
+					expectedTotalByteCountBA += LineByteCount;
 					expectedTotalLineCountBA++;
 					Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
@@ -306,8 +304,8 @@ namespace YAT.Domain.Test.TextTerminal
 					{
 						// Subsequent ping without EOL...
 						//              A => B
-						terminalA.SendText(text);
-						expectedTotalByteCountAB += textByteCount;
+						terminalA.SendText(Text);
+						expectedTotalByteCountAB += TextByteCount;
 						expectedTotalLineCountAB++; // Line not completed though.
 						Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 						Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
@@ -320,9 +318,8 @@ namespace YAT.Domain.Test.TextTerminal
 
 						// ...pong...
 						//              A <= B
-						lineByteCount = (text.Length + eolByteCount);
-						terminalB.SendTextLine(text); // Line from B must be postponed until ping completes with EOL.
-						expectedTotalByteCountBA += lineByteCount;
+						terminalB.SendTextLine(Text); // Line from B must be postponed until ping completes with EOL.
+						expectedTotalByteCountBA += LineByteCount;
 						expectedTotalLineCountBA++;
 						Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
@@ -336,7 +333,7 @@ namespace YAT.Domain.Test.TextTerminal
 						// ...and complete ping with EOL:
 						//              A => B
 						terminalA.SendTextLine("");
-						expectedTotalByteCountAB += eolByteCount;
+						expectedTotalByteCountAB += EolByteCount;
 					////expectedTotalLineCountAB++; // Line already had started above.
 						Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 						Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
@@ -356,8 +353,8 @@ namespace YAT.Domain.Test.TextTerminal
 					{
 						// ...subsequent ping without EOL...
 						//              A => B
-						terminalA.SendText(text);
-						expectedTotalByteCountAB += textByteCount;
+						terminalA.SendText(Text);
+						expectedTotalByteCountAB += TextByteCount;
 
 						if (i == 0) { // Account for the fact that non-completed line "ABC" will result in "ABCABC" (Tx) during second iteration.
 							expectedTotalLineCountAB++; // Line not completed though.
@@ -379,9 +376,8 @@ namespace YAT.Domain.Test.TextTerminal
 
 						// ...pong...
 						//              A <= B
-						lineByteCount = (text.Length + eolByteCount);
-						terminalB.SendTextLine(text); // Line from B must be postponed until line from A has completed (timeout = forever).
-						expectedTotalByteCountBA += lineByteCount;
+						terminalB.SendTextLine(Text); // Line from B must be postponed until line from A has completed (timeout = forever).
+						expectedTotalByteCountBA += LineByteCount;
 						expectedTotalLineCountBA++;
 						Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
@@ -405,7 +401,7 @@ namespace YAT.Domain.Test.TextTerminal
 					// Only then complete the two pings with EOL:
 					//              A => B
 					terminalA.SendTextLine("");
-					expectedTotalByteCountAB += eolByteCount;
+					expectedTotalByteCountAB += EolByteCount;
 				////expectedTotalLineCountAB++; // Line already had started above.
 
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);

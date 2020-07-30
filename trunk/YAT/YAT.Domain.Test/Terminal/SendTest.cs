@@ -70,7 +70,7 @@ namespace YAT.Domain.Test.Terminal
 	#endregion
 
 	/// <summary></summary>
-	public static class SendFileTestTestData
+	public static class SendTestData
 	{
 		#region Test Values
 		//==========================================================================================
@@ -94,8 +94,10 @@ namespace YAT.Domain.Test.Terminal
 		{
 			get
 			{
-				var l = new List<Tuple<StressFile, SendMethod>>(6); // Preset the required capacity to improve memory management.
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Normal,                SendMethod.File)); // 'Large*' does not increase test coverage.
+				var l = new List<Tuple<StressFile, SendMethod>>(8); // Preset the required capacity to improve memory management.
+				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Normal,                SendMethod.File));
+				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Large,                 SendMethod.File)); // 'Large' is needed for non-socket, 'Huge' would take too long.
+				l.Add(new Tuple<StressFile, SendMethod>(StressFile.LargeWithLongLines,    SendMethod.File));
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Huge,                  SendMethod.File)); // 'Enormous' would take too long.
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.HugeWithVeryLongLines, SendMethod.File));
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.LongLine,              SendMethod.TextLine));
@@ -113,12 +115,13 @@ namespace YAT.Domain.Test.Terminal
 		{
 			get
 			{
-				var l = new List<Tuple<StressFile, SendMethod>>(5); // Preset the required capacity to improve memory management.
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Normal,            SendMethod.File)); // 'Large*' does not increase test coverage.
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Huge,              SendMethod.File)); // 'Enormous' would take too long.
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.LongLine,          SendMethod.TextLine));
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.VeryLongLine,      SendMethod.TextLine));
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.EnormousLine,      SendMethod.TextLine));
+				var l = new List<Tuple<StressFile, SendMethod>>(6); // Preset the required capacity to improve memory management.
+				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Normal,       SendMethod.File));
+				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Large,        SendMethod.File)); // 'Large' is needed for non-socket, 'Huge' would take too long.
+				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Huge,         SendMethod.File)); // 'Enormous' would take too long.
+				l.Add(new Tuple<StressFile, SendMethod>(StressFile.LongLine,     SendMethod.TextLine));
+				l.Add(new Tuple<StressFile, SendMethod>(StressFile.VeryLongLine, SendMethod.TextLine));
+				l.Add(new Tuple<StressFile, SendMethod>(StressFile.EnormousLine, SendMethod.TextLine));
 				return (l);
 
 				// Could be extended by 'SendMethod.Text'/'TextLines' and a 'LineCount'.
@@ -247,7 +250,7 @@ namespace YAT.Domain.Test.Terminal
 		//==========================================================================================
 
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
-		[Test, TestCaseSource(typeof(SendFileTestTestData), "TestCasesSerialPortLoopbackPairs_Text"), Combinatorial] // Test is mandatory, it shall not be excludable.
+		[Test, TestCaseSource(typeof(SendTestData), "TestCasesSerialPortLoopbackPairs_Text"), Combinatorial] // Test is mandatory, it shall not be excludable.
 		public virtual void TestSerialPortLoopbackPairs(TerminalSettings settingsA, TerminalSettings settingsB, TerminalType terminalType, bool modifySettings, StressFile fileItem, SendMethod sendMethod)
 		{
 			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackPairsAreAvailable)
@@ -259,7 +262,7 @@ namespace YAT.Domain.Test.Terminal
 
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
-		[Test, TestCaseSource(typeof(SendFileTestTestData), "TestCasesSerialPortLoopbackSelfs_Text")]
+		[Test, TestCaseSource(typeof(SendTestData), "TestCasesSerialPortLoopbackSelfs_Text")]
 		public virtual void TestSerialPortLoopbackSelfs(TerminalSettings settings, TerminalType terminalType, bool modifySettings, StressFile fileItem, SendMethod sendMethod)
 		{
 			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
@@ -270,7 +273,7 @@ namespace YAT.Domain.Test.Terminal
 		}
 
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
-		[Test, TestCaseSource(typeof(SendFileTestTestData), "TestCasesIPSocketPairs_Text")]
+		[Test, TestCaseSource(typeof(SendTestData), "TestCasesIPSocketPairs_Text")]
 		public virtual void TestIPSocketPairs(TerminalSettings settingsA, TerminalSettings settingsB, TerminalType terminalType, bool modifySettings, StressFile fileItem, SendMethod sendMethod)
 		{
 			// IPSocketPairs are always made available by 'Utilities', no need to check for this.
@@ -280,7 +283,7 @@ namespace YAT.Domain.Test.Terminal
 
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
-		[Test, TestCaseSource(typeof(SendFileTestTestData), "TestCasesIPSocketSelfs_Text")]
+		[Test, TestCaseSource(typeof(SendTestData), "TestCasesIPSocketSelfs_Text")]
 		public virtual void TestIPSocketSelfs(TerminalSettings settings, TerminalType terminalType, bool modifySettings, StressFile fileItem, SendMethod sendMethod)
 		{
 			// IPSocketSelfs are always made available by 'Utilities', no need to check for this.
@@ -334,13 +337,19 @@ namespace YAT.Domain.Test.Terminal
 				if (settingsB != null) { settingsB.Display.MaxLineLength = fi.LineByteCount; }
 			}
 
-			// Adjust serial port send settings for sending terminal (always A):
+			// Adjust serial port settings:
 			if (modifySettings)
 			{
+				// Sending terminal (always A):
 				settingsA.IO.SerialPort.BufferMaxBaudRate = false;
 				settingsA.IO.SerialPort.MaxChunkSize = new ChunkSize(false, SerialPortSettings.MaxChunkSizeDefault.Size);
 
-				// Attention, in order to also be able to modify socket or USB settings, test case generation has to be adjusted.
+				// Both terminals:
+				int baudRate = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud115200;
+				                         settingsA.IO.SerialPort.Communication.BaudRate = baudRate;
+				if (settingsB != null) { settingsB.IO.SerialPort.Communication.BaudRate = baudRate; }
+
+				// Attention, in order to also be able to modify socket (or USB) settings, test case generation has to be adjusted.
 			}
 
 			// Set terminal type:
@@ -456,7 +465,7 @@ namespace YAT.Domain.Test.Terminal
 
 			fileContentAsBytes =                 File.ReadAllBytes(fi.Path); // Applicable to any file.
 			fileContentAsText  = (supportsText ? File.ReadAllText( fi.Path) : null);
-			fileContentAsLines = (supportsText ? File.ReadAllLines(fi.Path) : null);;
+			fileContentAsLines = (supportsText ? File.ReadAllLines(fi.Path) : null);
 		}
 
 		private static void Send(Domain.Terminal terminalTx, FileInfo fi, SendMethod sendMethod, byte[] fileContentAsBytes, string fileContentAsText, string[] fileContentAsLines)
@@ -464,8 +473,8 @@ namespace YAT.Domain.Test.Terminal
 			switch (sendMethod)
 			{
 			////case SendMethod.Raw:       terminalTx.SendRaw(      fileContentAsBytes); return;
-				case SendMethod.Text:      terminalTx.SendText(     fileContentAsText);  return;
-				case SendMethod.TextLine:  terminalTx.SendTextLine( fileContentAsText);  return;
+				case SendMethod.Text:      terminalTx.SendText(     fileContentAsText ); return;
+				case SendMethod.TextLine:  terminalTx.SendTextLine( fileContentAsText ); return;
 				case SendMethod.TextLines: terminalTx.SendTextLines(fileContentAsLines); return;
 				case SendMethod.File:      terminalTx.SendFile(     fi.Path);            return;
 

@@ -71,10 +71,10 @@ namespace YAT.Domain.Test.TextTerminal
 					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
-					string text = "ABC";
-					int textByteCount = text.Length;
-					int eolByteCount = 2; // Fixed to default of <CR><LF>.
-					int lineByteCount = (textByteCount + eolByteCount);
+					const string Text = "ABC";
+					const int TextByteCount = 3; // Fixed to "ABC".
+					const int EolByteCount = 2; // Fixed to default of <CR><LF>.
+					const int LineByteCount = (TextByteCount + EolByteCount);
 					int expectedTotalByteCountAB = 0;
 					int expectedTotalByteCountBA = 0;
 					int expectedTotalLineCountAB = 0;
@@ -83,10 +83,10 @@ namespace YAT.Domain.Test.TextTerminal
 					// Initial ping-pong:
 					//           A => B
 					//           A <= B
-					terminalA.SendTextLine(text);
-					terminalB.SendTextLine(text);
-					expectedTotalByteCountAB += lineByteCount; // 5 bytes
-					expectedTotalByteCountBA += lineByteCount; // 5 bytes
+					terminalA.SendTextLine(Text);
+					terminalB.SendTextLine(Text);
+					expectedTotalByteCountAB += LineByteCount; // 5 bytes
+					expectedTotalByteCountBA += LineByteCount; // 5 bytes
 					expectedTotalLineCountAB++;                // 1 lines
 					expectedTotalLineCountBA++;                // 1 lines  // Yet symmetrical, a single verification is yet sufficient.
 					Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
@@ -94,15 +94,15 @@ namespace YAT.Domain.Test.TextTerminal
 					// Subsequent ping-ping...
 					//              A => B
 					//              A => B
-					terminalA.SendTextLine(text);
-					expectedTotalByteCountAB += lineByteCount; // 10 bytes
+					terminalA.SendTextLine(Text);
+					expectedTotalByteCountAB += LineByteCount; // 10 bytes
 					expectedTotalLineCountAB++;                // 2 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					terminalA.SendTextLine(text); // Line will be retained until timeout.
+					terminalA.SendTextLine(Text); // Line will be retained until timeout.
 					Thread.Sleep(WaitTimeUntilTimeout); // Pending line of A will time out.
-					expectedTotalByteCountAB += lineByteCount; // 15 bytes
+					expectedTotalByteCountAB += LineByteCount; // 15 bytes
 					expectedTotalLineCountAB++;                // 3 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
@@ -111,10 +111,10 @@ namespace YAT.Domain.Test.TextTerminal
 					// Subsequent pong-pong...
 					//              A <= B
 					//              A <= B
-					terminalB.SendTextLine(text);
-					terminalB.SendTextLine(text); // No restrictions in this direction.
-					expectedTotalByteCountBA += lineByteCount;
-					expectedTotalByteCountBA += lineByteCount; // 15 bytes
+					terminalB.SendTextLine(Text);
+					terminalB.SendTextLine(Text); // No restrictions in this direction.
+					expectedTotalByteCountBA += LineByteCount;
+					expectedTotalByteCountBA += LineByteCount; // 15 bytes
 					expectedTotalLineCountBA++;
 					expectedTotalLineCountBA++;                // 3 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
@@ -123,15 +123,15 @@ namespace YAT.Domain.Test.TextTerminal
 					// ...ping-ping...
 					//              A => B
 					//              A => B
-					terminalA.SendTextLine(text);
-					expectedTotalByteCountAB += lineByteCount; // 20 bytes
+					terminalA.SendTextLine(Text);
+					expectedTotalByteCountAB += LineByteCount; // 20 bytes
 					expectedTotalLineCountAB++;                // 4 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					terminalA.SendTextLine(text); // Line must be retained until timeout again, even in case of pong-pong.
+					terminalA.SendTextLine(Text); // Line must be retained until timeout again, even in case of pong-pong.
 					Thread.Sleep(WaitTimeUntilTimeout); // Pending line of A will time out.
-					expectedTotalByteCountAB += lineByteCount; // 25 bytes
+					expectedTotalByteCountAB += LineByteCount; // 25 bytes
 					expectedTotalLineCountAB++;                // 5 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
@@ -139,8 +139,8 @@ namespace YAT.Domain.Test.TextTerminal
 
 					// Pong to reset clearance to 1 again:
 					//              A <= B
-					terminalB.SendTextLine(text);
-					expectedTotalByteCountBA += lineByteCount; // 20 bytes
+					terminalB.SendTextLine(Text);
+					expectedTotalByteCountBA += LineByteCount; // 20 bytes
 					expectedTotalLineCountBA++;                // 4 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
@@ -149,24 +149,24 @@ namespace YAT.Domain.Test.TextTerminal
 					//              A => B
 					//              A => B
 					//              A => B
-					terminalA.SendTextLine(text);
-					expectedTotalByteCountAB += lineByteCount; // 30 bytes
+					terminalA.SendTextLine(Text);
+					expectedTotalByteCountAB += LineByteCount; // 30 bytes
 					expectedTotalLineCountAB++;                // 6 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					terminalA.SendTextLine(text); // Line must be retained until timeout.
-					terminalA.SendTextLine(text); // Line must be retained until timeout.
+					terminalA.SendTextLine(Text); // Line must be retained until timeout.
+					terminalA.SendTextLine(Text); // Line must be retained until timeout.
 
 					// ...pong the 1st pending...
 					//              A <= B
-					terminalB.SendTextLine(text);
-					expectedTotalByteCountBA += lineByteCount;
+					terminalB.SendTextLine(Text);
+					expectedTotalByteCountBA += LineByteCount;
 					expectedTotalLineCountBA++;
 					Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 					                                         //// 1st retained line of A will have been sent.
-					expectedTotalByteCountAB += lineByteCount; // 35 bytes
+					expectedTotalByteCountAB += LineByteCount; // 35 bytes
 					expectedTotalLineCountAB++;                // 7 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
@@ -176,8 +176,8 @@ namespace YAT.Domain.Test.TextTerminal
 					Utilities.WaitForIsNoLongerSending(terminalA);
 
 					// ...and then resume break by pinging again:
-					terminalA.SendTextLine(text);
-					expectedTotalByteCountAB += lineByteCount; // 40 bytes
+					terminalA.SendTextLine(Text);
+					expectedTotalByteCountAB += LineByteCount; // 40 bytes
 					expectedTotalLineCountAB++;                // 8 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
@@ -235,10 +235,10 @@ namespace YAT.Domain.Test.TextTerminal
 					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
-					string text = "ABC";
-					int textByteCount = text.Length;
-					int eolByteCount = 2; // Fixed to default of <CR><LF>.
-					int lineByteCount = (textByteCount + eolByteCount);
+					const string Text = "ABC";
+					const int TextByteCount = 3; // Fixed to "ABC".
+					const int EolByteCount = 2; // Fixed to default of <CR><LF>.
+					const int LineByteCount = (TextByteCount + EolByteCount);
 					int expectedTotalByteCountAB = 0;
 					int expectedTotalByteCountBA = 0;
 					int expectedTotalLineCountAB = 0;
@@ -247,10 +247,10 @@ namespace YAT.Domain.Test.TextTerminal
 					// Initial ping-pong:
 					//           A => B
 					//           A <= B
-					terminalA.SendTextLine(text);
-					terminalB.SendTextLine(text);
-					expectedTotalByteCountAB += lineByteCount; // 5 bytes
-					expectedTotalByteCountBA += lineByteCount; // 5 bytes
+					terminalA.SendTextLine(Text);
+					terminalB.SendTextLine(Text);
+					expectedTotalByteCountAB += LineByteCount; // 5 bytes
+					expectedTotalByteCountBA += LineByteCount; // 5 bytes
 					expectedTotalLineCountAB++;                // 1 lines
 					expectedTotalLineCountBA++;                // 1 lines  // Yet symmetrical, a single verification is yet sufficient.
 					Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
@@ -258,24 +258,24 @@ namespace YAT.Domain.Test.TextTerminal
 					// Subsequent ping-ping...
 					//              A => B
 					//              A => B
-					terminalA.SendTextLine(text);
-					expectedTotalByteCountAB += lineByteCount; // 10 bytes
+					terminalA.SendTextLine(Text);
+					expectedTotalByteCountAB += LineByteCount; // 10 bytes
 					expectedTotalLineCountAB++;                // 2 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					terminalA.SendTextLine(text); // Line will infinitly be retained.
+					terminalA.SendTextLine(Text); // Line will infinitly be retained.
 					Utilities.WaitForIsSendingForSomeTime(terminalA);
 
 					// ...and pong:
 					//              A <= B
-					terminalB.SendTextLine(text);
-					expectedTotalByteCountBA += lineByteCount; // 10 bytes
+					terminalB.SendTextLine(Text);
+					expectedTotalByteCountBA += LineByteCount; // 10 bytes
 					expectedTotalLineCountBA++;                // 2 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 					                                         //// Retained line of A will have been sent.
-					expectedTotalByteCountAB += lineByteCount; // 15 bytes
+					expectedTotalByteCountAB += LineByteCount; // 15 bytes
 					expectedTotalLineCountAB++;                // 3 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
@@ -284,10 +284,10 @@ namespace YAT.Domain.Test.TextTerminal
 					// Subsequent pong-pong...
 					//              A <= B
 					//              A <= B
-					terminalB.SendTextLine(text);
-					terminalB.SendTextLine(text); // No restrictions in this direction.
-					expectedTotalByteCountBA += lineByteCount; // 15 bytes
-					expectedTotalByteCountBA += lineByteCount; // 20 bytes
+					terminalB.SendTextLine(Text);
+					terminalB.SendTextLine(Text); // No restrictions in this direction.
+					expectedTotalByteCountBA += LineByteCount; // 15 bytes
+					expectedTotalByteCountBA += LineByteCount; // 20 bytes
 					expectedTotalLineCountBA++;                // 3 lines
 					expectedTotalLineCountBA++;                // 4 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
@@ -296,24 +296,24 @@ namespace YAT.Domain.Test.TextTerminal
 					// ...ping-ping...
 					//              A => B
 					//              A => B
-					terminalA.SendTextLine(text);
-					expectedTotalByteCountAB += lineByteCount; // 20 bytes
+					terminalA.SendTextLine(Text);
+					expectedTotalByteCountAB += LineByteCount; // 20 bytes
 					expectedTotalLineCountAB++;                // 4 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					terminalA.SendTextLine(text); // Line must infinitly be retained again, even in case of pong-pong.
+					terminalA.SendTextLine(Text); // Line must infinitly be retained again, even in case of pong-pong.
 					Utilities.WaitForIsSendingForSomeTime(terminalA);
 
 					// ...and pong:
 					//              A <= B
-					terminalB.SendTextLine(text);
-					expectedTotalByteCountBA += lineByteCount; // 25 bytes
+					terminalB.SendTextLine(Text);
+					expectedTotalByteCountBA += LineByteCount; // 25 bytes
 					expectedTotalLineCountBA++;                // 5 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 					                                         //// Retained line of A will have been sent.
-					expectedTotalByteCountAB += lineByteCount; // 25 bytes
+					expectedTotalByteCountAB += LineByteCount; // 25 bytes
 					expectedTotalLineCountAB++;                // 5 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
@@ -321,8 +321,8 @@ namespace YAT.Domain.Test.TextTerminal
 
 					// Pong to reset clearance to 1 again:
 					//              A <= B
-					terminalB.SendTextLine(text);
-					expectedTotalByteCountBA += lineByteCount; // 30 bytes
+					terminalB.SendTextLine(Text);
+					expectedTotalByteCountBA += LineByteCount; // 30 bytes
 					expectedTotalLineCountBA++;                // 6 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
@@ -331,25 +331,25 @@ namespace YAT.Domain.Test.TextTerminal
 					//              A => B
 					//              A => B
 					//              A => B
-					terminalA.SendTextLine(text);
-					expectedTotalByteCountAB += lineByteCount; // 30 bytes
+					terminalA.SendTextLine(Text);
+					expectedTotalByteCountAB += LineByteCount; // 30 bytes
 					expectedTotalLineCountAB++;                // 6 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					terminalA.SendTextLine(text); // Line must infinitly be retained.
-					terminalA.SendTextLine(text); // Line must infinitly be retained.
+					terminalA.SendTextLine(Text); // Line must infinitly be retained.
+					terminalA.SendTextLine(Text); // Line must infinitly be retained.
 					Utilities.WaitForIsSendingForSomeTime(terminalA);
 
 					// ...pong the 1st pending...
 					//              A <= B
-					terminalB.SendTextLine(text);
-					expectedTotalByteCountBA += lineByteCount; // 35 bytes
+					terminalB.SendTextLine(Text);
+					expectedTotalByteCountBA += LineByteCount; // 35 bytes
 					expectedTotalLineCountBA++;                // 7 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 					                                         //// 1st retained line of A will have been sent.
-					expectedTotalByteCountAB += lineByteCount; // 35 bytes
+					expectedTotalByteCountAB += LineByteCount; // 35 bytes
 					expectedTotalLineCountAB++;                // 7 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
@@ -360,8 +360,8 @@ namespace YAT.Domain.Test.TextTerminal
 					Utilities.WaitForIsNoLongerSending(terminalA);
 
 					// ...and then resume break by pinging again:
-					terminalA.SendTextLine(text);
-					expectedTotalByteCountAB += lineByteCount; // 40 bytes
+					terminalA.SendTextLine(Text);
+					expectedTotalByteCountAB += LineByteCount; // 40 bytes
 					expectedTotalLineCountAB++;                // 8 lines
 					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
