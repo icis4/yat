@@ -1152,11 +1152,6 @@ namespace YAT.View.Forms
 				comboBox_LengthSelection      .Items.AddRange(Domain.Utilities.LengthSelectionEx    .GetItems());
 				comboBox_Endianness           .Items.AddRange(Domain.EndiannessEx                   .GetItems());
 				comboBox_ControlCharacterRadix.Items.AddRange(Domain.ControlCharRadixEx             .GetItems());
-
-				if (this.settingsInEdit.Terminal.TerminalType == Domain.TerminalType.Text)
-					this.toolTip.SetToolTip(this.textBox_MaxLineLength, "The maximal number of characters per line is limited to improve performance.");
-				else                   // incl. (TerminalType == Domain.TerminalType.Binary)
-					this.toolTip.SetToolTip(this.textBox_MaxLineLength, "The maximal number of bytes per line is limited to improve performance.");
 			}
 			finally
 			{
