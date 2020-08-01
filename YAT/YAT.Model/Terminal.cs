@@ -872,6 +872,17 @@ namespace YAT.Model
 			}
 		}
 
+		/// <remarks>Only to be used for testing.</remarks>
+		public virtual Domain.Terminal UnderlyingDomain_ForTestOnly
+		{
+			get
+			{
+				AssertUndisposed();
+
+				return (this.terminal);
+			}
+		}
+
 		/// <summary></summary>
 		public virtual string Caption
 		{
