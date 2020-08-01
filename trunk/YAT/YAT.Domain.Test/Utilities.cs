@@ -118,10 +118,10 @@ namespace YAT.Domain.Test
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static void TransmitAndVerifySentCounts(Domain.Terminal terminalTx,
-		                                       Domain.Parser.Parser parser, string text, int eolByteCount,
-		                                       ref int expectedTotalByteCount, ref int expectedTotalLineCount,
-		                                       int timeout = WaitTimeoutForLineTransmission)
+		public static void TransmitAndVerifyTxCounts(Domain.Terminal terminalTx,
+		                                             Domain.Parser.Parser parser, string text, int eolByteCount,
+		                                             ref int expectedTotalByteCount, ref int expectedTotalLineCount,
+		                                             int timeout = WaitTimeoutForLineTransmission)
 		{
 			byte[] parseResult;
 			Assert.That(parser.TryParse(text, out parseResult));
@@ -135,10 +135,10 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
-		public static void TransmitAndVerifyReceivedCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx,
-		                                                   Domain.Parser.Parser parser, string text, int eolByteCount,
-		                                                   ref int expectedTotalByteCount, ref int expectedTotalLineCount,
-		                                                   int timeout = WaitTimeoutForLineTransmission)
+		public static void TransmitAndVerifyRxCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx,
+		                                             Domain.Parser.Parser parser, string text, int eolByteCount,
+		                                             ref int expectedTotalByteCount, ref int expectedTotalLineCount,
+		                                             int timeout = WaitTimeoutForLineTransmission)
 		{
 			byte[] parseResult;
 			Assert.That(parser.TryParse(text, out parseResult));
@@ -357,7 +357,7 @@ namespace YAT.Domain.Test
 		/// <remarks>
 		/// <see cref="WaitForSendingAndVerifyCounts"/> above.
 		/// </remarks>
-		public static void VerifySentCounts(Domain.Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount)
+		public static void VerifyTxCounts(Domain.Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount)
 		{
 			WaitForSendingAndVerifyCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCount, IgnoreTimeout);
 		}
@@ -454,7 +454,7 @@ namespace YAT.Domain.Test
 		/// <remarks>
 		/// <see cref="WaitForReceivingAndVerifyCounts"/> above.
 		/// </remarks>
-		public static void VerifyReceivedCounts(Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount)
+		public static void VerifyRxCounts(Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount)
 		{
 			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCount, IgnoreTimeout);
 		}
@@ -608,20 +608,25 @@ namespace YAT.Domain.Test
 		// Verify
 		//==========================================================================================
 
-		/// <remarks>
-		/// There are similar utility methods in 'Model.Test.Utilities'.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
-		public static void VerifyBidirContent(Domain.Terminal terminal, IList<string> expectedContentPattern)
+		/// <summary></summary>
+		public static void VerifyTxContent(Domain.Terminal terminal, IEnumerable<string> expectedContentPattern)
+		{
+			VerifyContent(terminal, RepositoryType.Tx, expectedContentPattern);
+		}
+
+		/// <summary></summary>
+		public static void VerifyBidirContent(Domain.Terminal terminal, IEnumerable<string> expectedContentPattern)
 		{
 			VerifyContent(terminal, RepositoryType.Bidir, expectedContentPattern);
 		}
 
-		/// <remarks>
-		/// There are similar utility methods in 'Model.Test.Utilities'.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
-		public static void VerifyContent(Domain.Terminal terminal, RepositoryType repositoryType, IEnumerable<string> expectedContentPattern)
+		/// <summary></summary>
+		public static void VerifyRxContent(Domain.Terminal terminal, IEnumerable<string> expectedContentPattern)
+		{
+			VerifyContent(terminal, RepositoryType.Rx, expectedContentPattern);
+		}
+
+		private static void VerifyContent(Domain.Terminal terminal, RepositoryType repositoryType, IEnumerable<string> expectedContentPattern)
 		{
 			var displayLines = terminal.RepositoryToDisplayLines(repositoryType);
 
@@ -655,11 +660,7 @@ namespace YAT.Domain.Test
 			}
 		}
 
-		/// <remarks>
-		/// There are similar utility methods in 'Model.Test.Utilities'.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
-		public static string DecoratePattern(string expectedContentPattern)
+		private static string DecoratePattern(string expectedContentPattern)
 		{
 			expectedContentPattern = expectedContentPattern.Replace("(", @"\(");
 			expectedContentPattern = expectedContentPattern.Replace(")", @"\)");
