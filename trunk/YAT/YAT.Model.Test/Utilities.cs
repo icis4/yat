@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
@@ -291,6 +292,49 @@ namespace YAT.Model.Test
 
 		#endregion
 
+		#region Transmit
+		//==========================================================================================
+		// Transmit
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static void TransmitAndVerifyTxCounts(Terminal terminalTx,
+		                                             Domain.Parser.Parser parser, string text, int eolByteCount,
+		                                             ref int expectedTotalByteCount, ref int expectedTotalLineCount,
+		                                             int timeout = WaitTimeoutForLineTransmission)
+		{
+			Domain.Test.Utilities.TransmitAndVerifyTxCounts(terminalTx.UnderlyingDomain_ForTestOnly,
+			                                                parser, text, eolByteCount,
+			                                                ref expectedTotalByteCount, ref expectedTotalLineCount,
+			                                                timeout);
+		}
+
+		/// <summary></summary>
+		public static void TransmitAndVerifyRxCounts(Terminal terminalTx, Terminal terminalRx,
+		                                             Domain.Parser.Parser parser, string text, int eolByteCount,
+		                                             ref int expectedTotalByteCount, ref int expectedTotalLineCount,
+		                                             int timeout = WaitTimeoutForLineTransmission)
+		{
+			Domain.Test.Utilities.TransmitAndVerifyRxCounts(terminalTx.UnderlyingDomain_ForTestOnly, terminalRx.UnderlyingDomain_ForTestOnly,
+			                                                parser, text, eolByteCount,
+			                                                ref expectedTotalByteCount, ref expectedTotalLineCount,
+			                                                timeout);
+		}
+
+		/// <summary></summary>
+		public static void TransmitAndVerifyCounts(Terminal terminalTx, Terminal terminalRx,
+		                                           Domain.Parser.Parser parser, string text, int eolByteCount,
+		                                           ref int expectedTotalByteCount, ref int expectedTotalLineCount,
+		                                           int timeout = WaitTimeoutForLineTransmission)
+		{
+			Domain.Test.Utilities.TransmitAndVerifyCounts(terminalTx.UnderlyingDomain_ForTestOnly, terminalRx.UnderlyingDomain_ForTestOnly,
+			                                              parser, text, eolByteCount,
+			                                              ref expectedTotalByteCount, ref expectedTotalLineCount,
+			                                              timeout);
+		}
+
+		#endregion
+
 		#region Wait
 		//==========================================================================================
 		// Wait
@@ -443,10 +487,6 @@ namespace YAT.Model.Test
 		}
 
 		/// <remarks>
-		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
-		/// <remarks>
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
 		/// </remarks>
@@ -455,109 +495,59 @@ namespace YAT.Model.Test
 			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCount, expectedTotalLineCount);
 		}
 
-		/// <remarks>
-		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
+		/// <summary></summary>
 		public static void WaitForReceivingAndVerifyCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted, int timeout = WaitTimeoutForLineTransmission)
 		{
-			int rxByteCount = 0;
-			int rxLineCount = 0;
-			int waitTime = 0;
-			bool isFirst = true; // Using do-while, first check state.
+			Domain.Test.Utilities.WaitForReceivingAndVerifyCounts(terminalRx.UnderlyingDomain_ForTestOnly, expectedTotalByteCount, expectedTotalLineCountDisplayed, timeout);
 
-			do
-			{
-				if (!isFirst) {
-					Thread.Sleep(WaitIntervalForTransmission);
-					waitTime += WaitIntervalForTransmission;
-				}
-
-				if (timeout != IgnoreTimeout) {
-					Trace.WriteLine("Waiting for receiving, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
-				}
-
-				rxByteCount = terminalRx.GetRepositoryByteCount(Domain.RepositoryType.Rx);
-				if (rxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
-					Assert.Fail("Number of received bytes = " + rxByteCount +
-					            " mismatches expected = " + expectedTotalByteCount + ".");
-				}
-
-				rxLineCount = terminalRx.GetRepositoryLineCount(Domain.RepositoryType.Rx);
-				if (rxLineCount > expectedTotalLineCountDisplayed) { // Break in case of too much data to improve speed of test.
-					Assert.Fail("Number of received lines = " + rxLineCount +
-					            " mismatches expected = " + expectedTotalLineCountDisplayed + ".");
-				}
-
-				if ((waitTime >= timeout) && ((timeout != IgnoreTimeout) || !isFirst)) {
-					StringBuilder sb;
-					if (timeout != IgnoreTimeout) {
-						sb = new StringBuilder("Timeout!");
-					}
-					else {
-						sb = new StringBuilder("Mismatch!");
-					}
-
-					if (rxByteCount < expectedTotalByteCount) {
-						sb.Append(" Number of received bytes = " + rxByteCount +
-						          " mismatches expected = " + expectedTotalByteCount + ".");
-					}
-
-					if (rxLineCount < expectedTotalLineCountDisplayed) {
-						sb.Append(" Number of received lines = " + rxLineCount +
-						          " mismatches expected = " + expectedTotalLineCountDisplayed + ".");
-					}
-
-					Assert.Fail(sb.ToString());
-				}
-
-				if (isFirst) {
-					isFirst = false;
-				}
-			}
-			while ((rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCountDisplayed));
-
-			Debug.WriteLine("Rx of " + rxByteCount + " bytes / " + rxLineCount + " lines completed");
-
-			// Also assert count properties:
 			Assert.That(terminalRx.RxByteCount, Is.EqualTo(expectedTotalByteCount));
 			Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
-
-			if (timeout != IgnoreTimeout) {
-				Trace.WriteLine("...done, received and verified");
-			}
-			else {
-				Trace.WriteLine("Receiving verified");
-			}
 		}
 
-		/// <remarks>
-		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		/// <remarks>
 		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
 		/// </remarks>
 		public static void WaitForReceivingCycleAndVerifyCounts(Terminal terminalRx, TestSet testSet, int cycle)
 		{
-			// Calculate total expected counts at the receiver side:
-			int expectedTotalByteCount          = (testSet.ExpectedTotalByteCount     * cycle);
-			int expectedTotalLineCountDisplayed = (testSet.ExpectedLineCountDisplayed * cycle);
-			int expectedTotalLineCountCompleted = (testSet.ExpectedLineCountCompleted * cycle);
-
-			// Calculate timeout:
-			int timeoutFactorPerLine = ((testSet.ExpectedLineCountCompleted > 0) ? (testSet.ExpectedLineCountCompleted) : (1)); // Take cases with 0 lines into account!
-			int timeout = (WaitTimeoutForLineTransmission * timeoutFactorPerLine);
+			int expectedTotalByteCount;
+			int expectedTotalLineCountDisplayed;
+			int expectedTotalLineCountCompleted;
+			int timeout;
+			CalculateValues(terminalRx, testSet, cycle, out expectedTotalByteCount, out expectedTotalLineCountDisplayed, out expectedTotalLineCountCompleted, out timeout);
 
 			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, timeout);
 		}
 
 		/// <remarks>
-		/// <see cref="WaitForReceivingAndVerifyCounts(Terminal, int, int, int, int)"/> above.
+		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
+		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
 		/// </remarks>
-		public static void VerifyReceivedCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted)
+		public static void WaitForSendingAndVerifyCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
-			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, IgnoreTimeout);
+			WaitForSendingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCount, expectedTotalLineCount);
+		}
+
+		/// <summary></summary>
+		public static void WaitForSendingAndVerifyCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted, int timeout = WaitTimeoutForLineTransmission)
+		{
+			Domain.Test.Utilities.WaitForSendingAndVerifyCounts(terminalRx.UnderlyingDomain_ForTestOnly, expectedTotalByteCount, expectedTotalLineCountDisplayed, timeout);
+
+			Assert.That(terminalRx.RxByteCount, Is.EqualTo(expectedTotalByteCount));
+			Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
+		}
+
+		/// <remarks>
+		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
+		/// </remarks>
+		public static void WaitForSendingCycleAndVerifyCounts(Terminal terminalRx, TestSet testSet, int cycle)
+		{
+			int expectedTotalByteCount;
+			int expectedTotalLineCountDisplayed;
+			int expectedTotalLineCountCompleted;
+			int timeout;
+			CalculateValues(terminalRx, testSet, cycle, out expectedTotalByteCount, out expectedTotalLineCountDisplayed, out expectedTotalLineCountCompleted, out timeout);
+
+			WaitForSendingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, timeout);
 		}
 
 		/// <summary></summary>
@@ -566,10 +556,6 @@ namespace YAT.Model.Test
 			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, testSet.ExpectedTotalByteCount, testSet.ExpectedLineCountDisplayed, testSet.ExpectedLineCountCompleted);
 		}
 
-		/// <remarks>
-		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		/// <remarks>
 		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
 		/// </remarks>
@@ -583,160 +569,151 @@ namespace YAT.Model.Test
 		}
 
 		/// <remarks>
-		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
-		/// <remarks>
 		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
 		/// </remarks>
 		public static void WaitForTransmissionAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted, int timeout = WaitTimeoutForLineTransmission)
 		{
-			// Attention:
-			// Similar code exists in Domain.Test.Utilities.WaitForTransmissionAndVerifyCounts().
-			// Changes here may have to be applied there too.
+			Domain.Test.Utilities.WaitForTransmissionAndVerifyCounts(terminalTx.UnderlyingDomain_ForTestOnly, terminalRx.UnderlyingDomain_ForTestOnly, expectedTotalByteCount, expectedTotalLineCountDisplayed, timeout);
 
-			int txByteCount = 0;
-			int txLineCount = 0;
-			int rxByteCount = 0;
-			int rxLineCount = 0;
-			int waitTime = 0;
-			bool isFirst = true; // Using do-while, first check state.
-
-			do
-			{
-				if (!isFirst) {
-					Thread.Sleep(WaitIntervalForTransmission);
-					waitTime += WaitIntervalForTransmission;
-				}
-
-				if (timeout != IgnoreTimeout) {
-					Trace.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
-				}
-
-				txByteCount = terminalTx.GetRepositoryByteCount(Domain.RepositoryType.Tx);
-				if (txByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
-					Assert.Fail("Number of sent bytes = " + txByteCount +
-					            " mismatches expected = " + expectedTotalByteCount + ".");
-				}
-
-				txLineCount = terminalTx.GetRepositoryLineCount(Domain.RepositoryType.Tx);
-				if (txLineCount > expectedTotalLineCountDisplayed) { // Break in case of too much data to improve speed of test.
-					Assert.Fail("Number of sent lines = " + txLineCount +
-					            " mismatches expected = " + expectedTotalLineCountDisplayed + ".");
-				}
-
-				rxByteCount = terminalRx.GetRepositoryByteCount(Domain.RepositoryType.Rx);
-				if (rxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
-					Assert.Fail("Number of received bytes = " + rxByteCount +
-					            " mismatches expected = " + expectedTotalByteCount + ".");
-				}
-
-				rxLineCount = terminalRx.GetRepositoryLineCount(Domain.RepositoryType.Rx);
-				if (rxLineCount > expectedTotalLineCountDisplayed) { // Break in case of too much data to improve speed of test.
-					Assert.Fail("Number of received lines = " + rxLineCount +
-					            " mismatches expected = " + expectedTotalLineCountDisplayed + ".");
-				}
-
-				if ((waitTime >= timeout) && ((timeout != IgnoreTimeout) || !isFirst)) {
-					StringBuilder sb;
-					if (timeout != IgnoreTimeout) {
-						sb = new StringBuilder("Timeout!");
-					}
-					else {
-						sb = new StringBuilder("Mismatch!");
-					}
-
-					if (txByteCount < expectedTotalByteCount) {
-						sb.Append(" Number of sent bytes = " + txByteCount +
-						          " mismatches expected = " + expectedTotalByteCount + ".");
-					}
-
-					if (txLineCount < expectedTotalLineCountDisplayed) {
-						sb.Append(" Number of sent lines = " + txLineCount +
-						          " mismatches expected = " + expectedTotalLineCountDisplayed + ".");
-					}
-
-					if (rxByteCount < expectedTotalByteCount) {
-						sb.Append(" Number of received bytes = " + rxByteCount +
-						          " mismatches expected = " + expectedTotalByteCount + ".");
-					}
-
-					if (rxLineCount < expectedTotalLineCountDisplayed) {
-						sb.Append(" Number of received lines = " + rxLineCount +
-						          " mismatches expected = " + expectedTotalLineCountDisplayed + ".");
-					}
-
-					Assert.Fail(sb.ToString());
-				}
-
-				if (isFirst) {
-					isFirst = false;
-				}
-			}
-			while ((txByteCount != expectedTotalByteCount) || (txLineCount != expectedTotalLineCountDisplayed) ||
-			       (rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCountDisplayed));
-
-			Debug.WriteLine("Tx of " + txByteCount + " bytes / " + txLineCount + " lines completed");
-			Debug.WriteLine("Rx of " + rxByteCount + " bytes / " + rxLineCount + " lines completed");
-
-			// Also assert count properties:
 			Assert.That(terminalTx.TxByteCount, Is.EqualTo(expectedTotalByteCount));
 			Assert.That(terminalTx.TxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
 			Assert.That(terminalRx.RxByteCount, Is.EqualTo(expectedTotalByteCount));
 			Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
-
-			if (timeout != IgnoreTimeout) {
-				Trace.WriteLine("...done, transmitted and verified");
-			}
-			else {
-				Trace.WriteLine("Transmission verified");
-			}
 		}
 
-		/// <remarks>
-		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		/// <remarks>
 		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
 		/// </remarks>
 		public static void WaitForTransmissionCycleAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, TestSet testSet, int cycle)
 		{
-			// Calculate total expected counts at the receiver side:
-			int expectedTotalByteCount          = (testSet.ExpectedTotalByteCount     * cycle);
-			int expectedTotalLineCountDisplayed = (testSet.ExpectedLineCountDisplayed * cycle);
-			int expectedTotalLineCountCompleted = (testSet.ExpectedLineCountCompleted * cycle);
-
-			// Calculate timeout:
-			int timeoutFactorPerLine = ((testSet.ExpectedLineCountCompleted > 0) ? (testSet.ExpectedLineCountCompleted) : (1)); // Take cases with 0 lines into account!
-			int timeout = (WaitTimeoutForLineTransmission * timeoutFactorPerLine);
+			int expectedTotalByteCount;
+			int expectedTotalLineCountDisplayed;
+			int expectedTotalLineCountCompleted;
+			int timeout;
+			CalculateValues(terminalRx, testSet, cycle, out expectedTotalByteCount, out expectedTotalLineCountDisplayed, out expectedTotalLineCountCompleted, out timeout);
 
 			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, timeout);
 		}
 
-		/// <remarks>
-		/// <see cref="WaitForTransmissionAndVerifyCounts(Terminal, Terminal, int, int, int, int)"/> above.
-		/// </remarks>
-		public static void VerifyCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted)
+		private static void CalculateValues(Terminal terminalRx, TestSet testSet, int cycle, out int expectedTotalByteCount, out int expectedTotalLineCountDisplayed, out int expectedTotalLineCountCompleted, out int timeout)
 		{
-			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, IgnoreTimeout);
+			// Calculate total expected counts:
+			expectedTotalByteCount          = (testSet.ExpectedTotalByteCount     * cycle);
+			expectedTotalLineCountDisplayed = (testSet.ExpectedLineCountDisplayed * cycle);
+			expectedTotalLineCountCompleted = (testSet.ExpectedLineCountCompleted * cycle);
+
+			// Calculate timeout:
+			int timeoutFactorPerLine = ((testSet.ExpectedLineCountCompleted > 0) ? (testSet.ExpectedLineCountCompleted) : (1)); // Take cases with 0 lines into account!
+			timeout = (WaitTimeoutForLineTransmission * timeoutFactorPerLine);
 		}
 
-		/// <remarks>
-		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
+		/// <summary></summary>
 		public static void WaitForReverification()
 		{
-			Thread.Sleep(2 * WaitTimeoutForLineTransmission);
+			Domain.Test.Utilities.WaitForReverification();
 		}
 
 		#endregion
 
-		#region Verifications
+		#region Verify
 		//==========================================================================================
-		// Verifications
+		// Verify
 		//==========================================================================================
+
+		/// <remarks>
+		/// <see cref="WaitForSendingAndVerifyCounts(Terminal, int, int, int, int)"/> further above.
+		/// </remarks>
+		public static void VerifyTxCounts(Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed)
+		{
+			WaitForSendingAndVerifyCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountDisplayed, IgnoreTimeout); // Simply forward (yet).
+		}
+
+		/// <remarks>
+		/// <see cref="WaitForReceivingAndVerifyCounts(Terminal, int, int, int, int)"/> further above.
+		/// </remarks>
+		public static void VerifyRxCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed)
+		{
+			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountDisplayed, IgnoreTimeout); // Simply forward (yet).
+		}
+
+		/// <remarks>
+		/// <see cref="WaitForTransmissionAndVerifyCounts(Terminal, Terminal, int, int, int, int)"/> further above.
+		/// </remarks>
+		public static void VerifyCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed)
+		{
+			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountDisplayed, IgnoreTimeout); // Simply forward (yet).
+		}
+
+		/// <summary></summary>
+		public static void AddAndVerifyTxContent(Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		{
+			Domain.Test.Utilities.AddAndVerifyTxContent(terminal.UnderlyingDomain_ForTestOnly, contentPatternToAdd, ref expectedContentPattern);
+		}
+
+		/// <summary></summary>
+		public static void AddAndVerifyBidirContent(Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		{
+			Domain.Test.Utilities.AddAndVerifyBidirContent(terminal.UnderlyingDomain_ForTestOnly, contentPatternToAdd, ref expectedContentPattern);
+		}
+
+		/// <remarks>
+		/// Same sequence of arguments as other verify methods.
+		/// </remarks>
+		/// <remarks>
+		/// Using "1" / "2" since neither related to "A" / "B" nor "Tx" / "Rx" terminology.
+		/// </remarks>
+		public static void AddAndVerifyBidirContent(Terminal terminal1, Terminal terminal2, string contentPatternToAdd, ref List<string> expectedContentPattern1, ref List<string> expectedContentPattern2)
+		{
+			AddAndVerifyBidirContent(terminal1, terminal2, contentPatternToAdd, contentPatternToAdd, ref expectedContentPattern1, ref expectedContentPattern2);
+		}
+
+		/// <remarks>
+		/// Same sequence of arguments as other verify methods.
+		/// </remarks>
+		/// <remarks>
+		/// Using "1" / "2" since neither related to "A" / "B" nor "Tx" / "Rx" terminology.
+		/// </remarks>
+		public static void AddAndVerifyBidirContent(Terminal terminal1, Terminal terminal2, string contentPatternToAdd1, string contentPatternToAdd2, ref List<string> expectedContentPattern1, ref List<string> expectedContentPattern2)
+		{
+			AddAndVerifyBidirContent(terminal1, contentPatternToAdd1, ref expectedContentPattern1);
+			AddAndVerifyBidirContent(terminal2, contentPatternToAdd2, ref expectedContentPattern2);
+		}
+
+		/// <summary></summary>
+		public static void AddAndVerifyRxContent(Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		{
+			Domain.Test.Utilities.AddAndVerifyRxContent(terminal.UnderlyingDomain_ForTestOnly, contentPatternToAdd, ref expectedContentPattern);
+		}
+
+		/// <summary></summary>
+		public static void VerifyTxContent(Terminal terminal, IEnumerable<string> expectedContentPattern)
+		{
+			Domain.Test.Utilities.VerifyTxContent(terminal.UnderlyingDomain_ForTestOnly, expectedContentPattern);
+		}
+
+		/// <summary></summary>
+		public static void VerifyBidirContent(Terminal terminal, IEnumerable<string> expectedContentPattern)
+		{
+			Domain.Test.Utilities.VerifyBidirContent(terminal.UnderlyingDomain_ForTestOnly, expectedContentPattern);
+		}
+
+		/// <remarks>
+		/// Same sequence of arguments as other verify methods.
+		/// </remarks>
+		/// <remarks>
+		/// Using "1" / "2" since neither related to "A" / "B" nor "Tx" / "Rx" terminology.
+		/// </remarks>
+		public static void VerifyBidirContent(Terminal terminal1, Terminal terminal2, IEnumerable<string> expectedContentPattern1, IEnumerable<string> expectedContentPattern2)
+		{
+			VerifyBidirContent(terminal1, expectedContentPattern1);
+			VerifyBidirContent(terminal2, expectedContentPattern2);
+		}
+
+		/// <summary></summary>
+		public static void VerifyRxContent(Terminal terminal, IEnumerable<string> expectedContentPattern)
+		{
+			Domain.Test.Utilities.VerifyRxContent(terminal.UnderlyingDomain_ForTestOnly, expectedContentPattern);
+		}
 
 		/// <summary></summary>
 		public static void VerifyLines(Terminal terminalTx, Terminal terminalRx, TestSet testSet, int cycle = 1)

@@ -265,19 +265,12 @@ namespace YAT.Domain.Test
 			Trace.WriteLine("...done, 'IsNoLongerSending'");
 		}
 
-		/// <remarks>
-		/// There are similar utility methods in 'Model.Test.Utilities'.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
+		/// <summary></summary>
 		public static void WaitForSendingAndVerifyByteCount(Domain.Terminal terminalTx, int expectedTotalByteCount, int timeout = WaitTimeoutForLineTransmission)
 		{
 			WaitForSendingAndVerifyCounts(terminalTx, expectedTotalByteCount, IgnoreCount, timeout);
 		}
 
-		/// <remarks>
-		/// There are similar utility methods in 'Model.Test.Utilities'.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		/// <remarks>
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines.
@@ -354,19 +347,12 @@ namespace YAT.Domain.Test
 			}
 		}
 
-		/// <remarks>
-		/// There are similar utility methods in 'Model.Test.Utilities'.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
+		/// <summary></summary>
 		public static void WaitForReceivingAndVerifyByteCount(Domain.Terminal terminalRx, int expectedTotalByteCount, int timeout = WaitTimeoutForLineTransmission)
 		{
 			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, IgnoreCount, timeout);
 		}
 
-		/// <remarks>
-		/// There are similar utility methods in 'Model.Test.Utilities'.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		/// <remarks>
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines.
@@ -443,20 +429,13 @@ namespace YAT.Domain.Test
 			}
 		}
 
-		/// <remarks>
-		/// There are similar utility methods in 'Model.Test.Utilities'.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		public static void WaitForTransmissionAndVerifyByteCount(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int timeout = WaitTimeoutForLineTransmission)
 		{
 			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, IgnoreCount, timeout);
 		}
 
-		/// <remarks>
-		/// There are similar utility methods in 'Model.Test.Utilities'.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
 		/// <remarks>
 		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
 		/// </remarks>
@@ -468,10 +447,6 @@ namespace YAT.Domain.Test
 		/// </remarks>
 		public static void WaitForTransmissionAndVerifyCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)
 		{
-			// Attention:
-			// Similar code exists in Model.Test.Utilities.WaitForTransmissionAndVerifyCounts().
-			// Changes here may have to be applied there too.
-
 			int txByteCount = 0;
 			int txLineCount = 0;
 			int rxByteCount = 0;
@@ -568,10 +543,7 @@ namespace YAT.Domain.Test
 			}
 		}
 
-		/// <remarks>
-		/// There are similar utility methods in 'Model.Test.Utilities'.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
+		/// <summary></summary>
 		public static void WaitForReverification()
 		{
 			Thread.Sleep(2 * WaitTimeoutForLineTransmission);
