@@ -177,6 +177,12 @@ being broken when sending and receiving in full-duplex.
 
 This option is only available for text terminals.</value>
   </data>
+  <data name="textBox_MaxLineLength.ToolTip" xml:space="preserve">
+    <value>Limiting the maximal number of characters/bytes per line is
+useful to improve performance. Unlimited lines could result in
+excessive processing, leading to an unresponive application, in
+case of improperly configured line breaks.</value>
+  </data>
   <data name="checkBox_DeviceLineBreak.ToolTip" xml:space="preserve">
     <value>Available for TCP/IP and UDP/IP servers. Useful if server
 is connected to multiple clients (multiple I/O devices).

@@ -1007,7 +1007,7 @@
 			this.textBox_MaxLineLength.Size = new System.Drawing.Size(48, 20);
 			this.textBox_MaxLineLength.TabIndex = 31;
 			this.textBox_MaxLineLength.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.toolTip.SetToolTip(this.textBox_MaxLineLength, "The maximal number of characters per line is limited to improve performance.");
+			this.toolTip.SetToolTip(this.textBox_MaxLineLength, resources.GetString("textBox_MaxLineLength.ToolTip"));
 			this.textBox_MaxLineLength.TextChanged += new System.EventHandler(this.textBox_MaxLineLength_TextChanged);
 			this.textBox_MaxLineLength.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaxLineLength_Validating);
 			// 
