@@ -285,7 +285,7 @@ namespace YAT.Domain.Test.TextTerminal
 			if (eolIsSymmetric)
 				Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 			else
-				Utilities.VerifySentCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCount);
+				Utilities.VerifyTxCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCount);
 		}
 
 		/// <summary></summary>

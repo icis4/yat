@@ -112,16 +112,16 @@ namespace YAT.Domain.Test.Terminal
 						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be restarted");
 						Utilities.WaitForConnection(terminalA, terminalB);
 
-						Utilities.TransmitAndVerifySentCounts(    terminalA,            parser, "Swapped A => B", EolByteCount, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.TransmitAndVerifyReceivedCounts(terminalB, terminalA, parser, "Swapped B => A", EolByteCount, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
+						Utilities.TransmitAndVerifyTxCounts(terminalA,            parser, "Swapped A => B", EolByteCount, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
+						Utilities.TransmitAndVerifyRxCounts(terminalB, terminalA, parser, "Swapped B => A", EolByteCount, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
 
 						// Wait to ensure that no operation is ongoing anymore and verify again:
 						Utilities.WaitForReverification();
-						Utilities.VerifyReceivedCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						// Refresh and verify again:
 						terminalA.RefreshRepositories();
-						Utilities.VerifyReceivedCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						terminalB.Stop();
 						Utilities.WaitForDisconnection(terminalB);
@@ -146,16 +146,16 @@ namespace YAT.Domain.Test.Terminal
 						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be restarted");
 						Utilities.WaitForConnection(terminalA, terminalB);
 
-						Utilities.TransmitAndVerifySentCounts(    terminalA,            parser, "Changed dedicated A => B", EolByteCount, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.TransmitAndVerifyReceivedCounts(terminalB, terminalA, parser, "Changed dedicated B => A", EolByteCount, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
+						Utilities.TransmitAndVerifyTxCounts(terminalA,            parser, "Changed dedicated A => B", EolByteCount, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
+						Utilities.TransmitAndVerifyRxCounts(terminalB, terminalA, parser, "Changed dedicated B => A", EolByteCount, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
 
 						// Wait to ensure that no operation is ongoing anymore and verify again:
 						Utilities.WaitForReverification();
-						Utilities.VerifyReceivedCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						// Refresh and verify again:
 						terminalA.RefreshRepositories();
-						Utilities.VerifyReceivedCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						terminalB.Stop();
 						Utilities.WaitForDisconnection(terminalB);
@@ -180,16 +180,16 @@ namespace YAT.Domain.Test.Terminal
 						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be restarted");
 						Utilities.WaitForConnection(terminalA, terminalB);
 
-						Utilities.TransmitAndVerifySentCounts(    terminalA,            parser, "Changed combined A => B", EolByteCount, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.TransmitAndVerifyReceivedCounts(terminalB, terminalA, parser, "Changed combined B => A", EolByteCount, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
+						Utilities.TransmitAndVerifyTxCounts(terminalA,            parser, "Changed combined A => B", EolByteCount, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
+						Utilities.TransmitAndVerifyRxCounts(terminalB, terminalA, parser, "Changed combined B => A", EolByteCount, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
 
 						// Wait to ensure that no operation is ongoing anymore and verify again:
 						Utilities.WaitForReverification();
-						Utilities.VerifyReceivedCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						// Refresh and verify again:
 						terminalA.RefreshRepositories();
-						Utilities.VerifyReceivedCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						terminalB.Stop();
 						Utilities.WaitForDisconnection(terminalB);
@@ -266,11 +266,11 @@ namespace YAT.Domain.Test.Terminal
 
 						// Initial ping-pong:
 						text = "Ping A => B";
-						Utilities.TransmitAndVerifyCounts(terminalA, terminalB, parser, text, EolByteCount, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
+						Utilities.TransmitAndVerifyCounts( terminalA, terminalB, parser, text, EolByteCount, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
 						Utilities.AddAndVerifyBidirContent(terminalA, terminalB, text + Eol, ref expectedContentA, ref expectedContentB);
 
 						text = "Pong B => A";
-						Utilities.TransmitAndVerifyCounts(terminalB, terminalA, parser, "Pong B => A", EolByteCount, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
+						Utilities.TransmitAndVerifyCounts( terminalB, terminalA, parser, "Pong B => A", EolByteCount, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
 						Utilities.AddAndVerifyBidirContent(terminalB, terminalA, text + Eol, ref expectedContentB, ref expectedContentA);
 
 						// Switch RTS off:
@@ -281,8 +281,7 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatCtsPinIsFalse(terminalB.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.VerifyBidirContent(terminalA, expectedContentA);
-						Utilities.VerifyBidirContent(terminalB, expectedContentB);
+						Utilities.VerifyBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
 
 						// Switch RTS on:
 						keyword = @"\!(RTSOn)\!(NoEOL)";
@@ -292,8 +291,7 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatPinsAreTrue(terminalB.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.VerifyBidirContent(terminalA, expectedContentA);
-						Utilities.VerifyBidirContent(terminalB, expectedContentB);
+						Utilities.VerifyBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
 
 						// Switch RTS off:
 						keyword = @"\!(RTSOff)\!(NoEOL)";
@@ -303,8 +301,7 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatCtsPinIsFalse(terminalB.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.VerifyBidirContent(terminalA, expectedContentA);
-						Utilities.VerifyBidirContent(terminalB, expectedContentB);
+						Utilities.VerifyBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
 
 						// Toggle RTS on:
 						keyword = @"\!(RTSToggle)\!(NoEOL)";
@@ -314,14 +311,13 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatPinsAreTrue(terminalB.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.VerifyBidirContent(terminalA, expectedContentA);
-						Utilities.VerifyBidirContent(terminalB, expectedContentB);
+						Utilities.VerifyBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
 
 						// Subsequent ping-pong:
-						Utilities.TransmitAndVerifyCounts(terminalA, terminalB, parser, "Ping A => B", EolByteCount, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
+						Utilities.TransmitAndVerifyCounts( terminalA, terminalB, parser, "Ping A => B", EolByteCount, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
 						Utilities.AddAndVerifyBidirContent(terminalA, terminalB, text + Eol, ref expectedContentA, ref expectedContentB);
 
-						Utilities.TransmitAndVerifyCounts(terminalB, terminalA, parser, "Pong B => A", EolByteCount, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
+						Utilities.TransmitAndVerifyCounts( terminalB, terminalA, parser, "Pong B => A", EolByteCount, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
 						Utilities.AddAndVerifyBidirContent(terminalB, terminalA, text + Eol, ref expectedContentB, ref expectedContentA);
 
 						// Switch DTR off:
@@ -332,8 +328,7 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatDsrPinIsFalse(terminalB.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.VerifyBidirContent(terminalA, expectedContentA);
-						Utilities.VerifyBidirContent(terminalB, expectedContentB);
+						Utilities.VerifyBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
 
 						// Switch DTR on:
 						keyword = @"\!(DTROn)\!(NoEOL)";
@@ -343,8 +338,7 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatPinsAreTrue(terminalB.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.VerifyBidirContent(terminalA, expectedContentA);
-						Utilities.VerifyBidirContent(terminalB, expectedContentB);
+						Utilities.VerifyBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
 
 						// Switch DTR off:
 						keyword = @"\!(DTROff)\!(NoEOL)";
@@ -354,8 +348,7 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatDsrPinIsFalse(terminalB.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.VerifyBidirContent(terminalA, expectedContentA);
-						Utilities.VerifyBidirContent(terminalB, expectedContentB);
+						Utilities.VerifyBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
 
 						// Toggle DTR on:
 						keyword = @"\!(DTRToggle)\!(NoEOL)";
@@ -365,8 +358,7 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatPinsAreTrue(terminalB.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.VerifyBidirContent(terminalA, expectedContentA);
-						Utilities.VerifyBidirContent(terminalB, expectedContentB);
+						Utilities.VerifyBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
 
 						// Toggle DTR off in other terminal:
 						keyword = @"\!(DTRToggle)\!(NoEOL)";
@@ -376,8 +368,7 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatDsrPinIsFalse(terminalA.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.VerifyBidirContent(terminalA, expectedContentA);
-						Utilities.VerifyBidirContent(terminalB, expectedContentB);
+						Utilities.VerifyBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
 
 						// Switch DTR on again in other terminal:
 						keyword = @"\!(DTROn)\!(NoEOL)";
@@ -387,8 +378,7 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatPinsAreTrue(terminalB.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.VerifyBidirContent(terminalA, expectedContentA);
-						Utilities.VerifyBidirContent(terminalB, expectedContentB);
+						Utilities.VerifyBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
 
 						// Try to switch RTS off in other terminal:
 						keyword = @"\!(RTSOff)\!(NoEOL)";
@@ -402,32 +392,33 @@ namespace YAT.Domain.Test.Terminal
 						                                                                                                        //// Adjust for warning message.
 						Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA + 1);
 						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.VerifyBidirContent(terminalA, expectedContentA);
+
 						Utilities.VerifyBidirContent(terminalB, expectedContentB);
+						Utilities.VerifyBidirContent(terminalA, expectedContentA);
 
 						// Wait to ensure that no operation is ongoing anymore and verify again:
 						Utilities.WaitForReverification();
-						Utilities.VerifySentCounts(    terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-						Utilities.VerifyReceivedCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
-						Utilities.VerifySentCounts(    terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA + 1); // See above.
-						Utilities.VerifyReceivedCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyTxCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.VerifyRxCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.VerifyTxCounts(terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA + 1); // See above.
+						Utilities.VerifyRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-						Utilities.VerifyBidirContent(terminalA, expectedContentA);
 						Utilities.VerifyBidirContent(terminalB, expectedContentB);
+						Utilities.VerifyBidirContent(terminalA, expectedContentA);
 
 						// Refresh and verify again:
 						terminalA.RefreshRepositories();
 						terminalB.RefreshRepositories();
 
-						Utilities.VerifySentCounts(    terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-						Utilities.VerifyReceivedCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
-						Utilities.VerifySentCounts(    terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA); // Warning will disappear (pending fix of bug #211 "...indications disappear").
-						Utilities.VerifyReceivedCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyTxCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.VerifyRxCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.VerifyTxCounts(terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA); // Warning will disappear (pending fix of bug #211 "...indications disappear").
+						Utilities.VerifyRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						expectedContentB.Remove(warningMessage); // Warning will disappear (pending fix of bug #211 "...indications disappear").
 
-						Utilities.VerifyBidirContent(terminalA, expectedContentA);
 						Utilities.VerifyBidirContent(terminalB, expectedContentB);
+						Utilities.VerifyBidirContent(terminalA, expectedContentA);
 
 						terminalB.Stop();
 						Utilities.WaitForDisconnection(terminalB);

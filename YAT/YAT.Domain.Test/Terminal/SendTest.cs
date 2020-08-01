@@ -416,16 +416,16 @@ namespace YAT.Domain.Test.Terminal
 			// Verify content:
 			string[] expectedContent;
 			GetExpectedContent(terminalTx, sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines, out expectedContent);
-			Utilities.VerifyContent(terminalTx, RepositoryType.Tx, expectedContent);
-			Utilities.VerifyContent(terminalRx, RepositoryType.Rx, expectedContent);
+			Utilities.VerifyTxContent(terminalTx, expectedContent);
+			Utilities.VerifyRxContent(terminalRx, expectedContent);
 
 			// Wait to ensure that no operation is ongoing anymore and verify again:
 			Utilities.WaitForReverification();
 
 			Utilities.VerifyCounts(terminalTx, terminalRx, fi.ByteCount, fi.LineCount);
 
-			Utilities.VerifyContent(terminalTx, RepositoryType.Tx, expectedContent);
-			Utilities.VerifyContent(terminalRx, RepositoryType.Rx, expectedContent);
+			Utilities.VerifyTxContent(terminalTx, expectedContent);
+			Utilities.VerifyRxContent(terminalRx, expectedContent);
 
 			// Refresh and verify again:
 			terminalTx.RefreshRepositories();
@@ -433,8 +433,8 @@ namespace YAT.Domain.Test.Terminal
 
 			Utilities.VerifyCounts(terminalTx, terminalRx, fi.ByteCount, fi.LineCount);
 
-			Utilities.VerifyContent(terminalTx, RepositoryType.Tx, expectedContent);
-			Utilities.VerifyContent(terminalRx, RepositoryType.Rx, expectedContent);
+			Utilities.VerifyTxContent(terminalTx, expectedContent);
+			Utilities.VerifyRxContent(terminalRx, expectedContent);
 		}
 
 		private static void ReadFileContent(TerminalType terminalType, FileInfo fi, SendMethod sendMethod, out byte[] fileContentAsBytes, out string fileContentAsText, out string[] fileContentAsLines)

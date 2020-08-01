@@ -189,10 +189,10 @@ namespace YAT.Model.Test
 
 						// Wait to ensure that no operation is ongoing anymore and verify again:
 						Utilities.WaitForReverification();
-						Utilities.VerifySentCounts(    terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-						Utilities.VerifyReceivedCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
-						Utilities.VerifySentCounts(    terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.VerifyReceivedCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyTxCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.VerifyRxCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.VerifyTxCounts(terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						Utilities.VerifyBidirContent(terminalA, expectedContentA);
 						Utilities.VerifyBidirContent(terminalB, expectedContentB);
@@ -201,10 +201,10 @@ namespace YAT.Model.Test
 						terminalA.RefreshRepositories();
 						terminalB.RefreshRepositories();
 
-						Utilities.VerifySentCounts(    terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-						Utilities.VerifyReceivedCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
-						Utilities.VerifySentCounts(    terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.VerifyReceivedCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyTxCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.VerifyRxCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.VerifyTxCounts(terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.VerifyRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						Utilities.VerifyBidirContent(terminalA, expectedContentA);
 						Utilities.VerifyBidirContent(terminalB, expectedContentB);
