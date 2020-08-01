@@ -355,14 +355,6 @@ namespace YAT.Domain.Test
 		}
 
 		/// <remarks>
-		/// <see cref="WaitForSendingAndVerifyCounts"/> above.
-		/// </remarks>
-		public static void VerifyTxCounts(Domain.Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount)
-		{
-			WaitForSendingAndVerifyCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCount, IgnoreTimeout);
-		}
-
-		/// <remarks>
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
@@ -449,14 +441,6 @@ namespace YAT.Domain.Test
 			else {
 				Trace.WriteLine("Receiving verified");
 			}
-		}
-
-		/// <remarks>
-		/// <see cref="WaitForReceivingAndVerifyCounts"/> above.
-		/// </remarks>
-		public static void VerifyRxCounts(Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount)
-		{
-			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCount, IgnoreTimeout);
 		}
 
 		/// <remarks>
@@ -585,14 +569,6 @@ namespace YAT.Domain.Test
 		}
 
 		/// <remarks>
-		/// <see cref="WaitForTransmissionAndVerifyCounts"/> above.
-		/// </remarks>
-		public static void VerifyCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount)
-		{
-			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, IgnoreTimeout);
-		}
-
-		/// <remarks>
 		/// There are similar utility methods in 'Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
@@ -608,6 +584,84 @@ namespace YAT.Domain.Test
 		// Verify
 		//==========================================================================================
 
+		/// <remarks>
+		/// <see cref="WaitForSendingAndVerifyCounts"/> further above.
+		/// </remarks>
+		public static void VerifyTxCounts(Domain.Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount)
+		{
+			WaitForSendingAndVerifyCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCount, IgnoreTimeout); // Simply forward (yet).
+		}
+
+		/// <remarks>
+		/// <see cref="WaitForReceivingAndVerifyCounts"/> further above.
+		/// </remarks>
+		public static void VerifyRxCounts(Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount)
+		{
+			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCount, IgnoreTimeout); // Simply forward (yet).
+		}
+
+		/// <remarks>
+		/// <see cref="WaitForTransmissionAndVerifyCounts"/> further above.
+		/// </remarks>
+		public static void VerifyCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount)
+		{
+			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, IgnoreTimeout); // Simply forward (yet).
+		}
+
+		/// <summary></summary>
+		public static void AddAndVerifyTxContent(Domain.Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		{
+			expectedContentPattern.Add(contentPatternToAdd);
+
+			VerifyTxContent(terminal, expectedContentPattern);
+		}
+
+		/// <summary></summary>
+		public static void AddAndVerifyBidirContent(Domain.Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		{
+			expectedContentPattern.Add(contentPatternToAdd);
+
+			VerifyBidirContent(terminal, expectedContentPattern);
+		}
+
+		/// <remarks>
+		/// Same sequence of arguments as other verify methods.
+		/// </remarks>
+		/// <remarks>
+		/// Using "1" / "2" since neither related to "A" / "B" nor "Tx" / "Rx" terminology.
+		/// </remarks>
+		public static void AddAndVerifyBidirContent(Domain.Terminal terminal1, Domain.Terminal terminal2, string contentPatternToAdd, ref List<string> expectedContentPattern1, ref List<string> expectedContentPattern2)
+		{
+			AddAndVerifyBidirContent(terminal1, terminal2, contentPatternToAdd, contentPatternToAdd, ref expectedContentPattern1, ref expectedContentPattern2);
+		}
+
+		/// <remarks>
+		/// Same sequence of arguments as other verify methods.
+		/// </remarks>
+		/// <remarks>
+		/// Using "1" / "2" since neither related to "A" / "B" nor "Tx" / "Rx" terminology.
+		/// </remarks>
+		public static void AddAndVerifyBidirContent(Domain.Terminal terminal1, Domain.Terminal terminal2, string contentPatternToAdd1, string contentPatternToAdd2, ref List<string> expectedContentPattern1, ref List<string> expectedContentPattern2)
+		{
+			AddAndVerifyBidirContent(terminal1, contentPatternToAdd1, ref expectedContentPattern1);
+			AddAndVerifyBidirContent(terminal2, contentPatternToAdd2, ref expectedContentPattern2);
+		}
+
+		/// <summary></summary>
+		public static void AddAndVerifyRxContent(Domain.Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		{
+			expectedContentPattern.Add(contentPatternToAdd);
+
+			VerifyRxContent(terminal, expectedContentPattern);
+		}
+
+		private static void AddAndVerifyContent(Domain.Terminal terminal, RepositoryType repositoryType, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		{
+			expectedContentPattern.Add(contentPatternToAdd);
+
+			VerifyContent(terminal, repositoryType, expectedContentPattern);
+		}
+
 		/// <summary></summary>
 		public static void VerifyTxContent(Domain.Terminal terminal, IEnumerable<string> expectedContentPattern)
 		{
@@ -618,6 +672,18 @@ namespace YAT.Domain.Test
 		public static void VerifyBidirContent(Domain.Terminal terminal, IEnumerable<string> expectedContentPattern)
 		{
 			VerifyContent(terminal, RepositoryType.Bidir, expectedContentPattern);
+		}
+
+		/// <remarks>
+		/// Same sequence of arguments as other verify methods.
+		/// </remarks>
+		/// <remarks>
+		/// Using "1" / "2" since neither related to "A" / "B" nor "Tx" / "Rx" terminology.
+		/// </remarks>
+		public static void VerifyBidirContent(Domain.Terminal terminal1, Domain.Terminal terminal2, IEnumerable<string> expectedContentPattern1, IEnumerable<string> expectedContentPattern2)
+		{
+			VerifyBidirContent(terminal1, expectedContentPattern1);
+			VerifyBidirContent(terminal2, expectedContentPattern2);
 		}
 
 		/// <summary></summary>
