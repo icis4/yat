@@ -343,10 +343,22 @@ namespace YAT.Domain
 				lp.Add(de); // No clone needed as element has just been created further above.
 			}
 
-			if (lineState.Position != LinePosition.ContentExceeded)
+			if (!lineState.Exceeded)
 			{
-				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
-				elementsToAdd.AddRange(lp);
+				var totalByteCount = (lineState.Elements.ByteCount + lp.ByteCount);
+				if (totalByteCount <= TerminalSettings.Display.MaxLineLength)
+				{
+					lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+					elementsToAdd.AddRange(lp);
+				}
+				else
+				{
+					lineState.Exceeded = true; // Keep in mind and notify once:
+					                                  //// Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+					var message = "Maximal number of bytes per line exceeded! Check the line break settings in Terminal > Settings > Binary or increase the limit in Terminal > Settings > Advanced.";
+					lineState.Elements.Add(new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true));
+					elementsToAdd.Add(     new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true));
+				}
 			}
 
 			// Evaluate line breaks:
@@ -369,19 +381,6 @@ namespace YAT.Domain
 			{
 				if (lineState.Elements.ByteCount >= binaryDisplaySettings.LengthLineBreak.Length)
 					lineState.Position = LinePosition.End;
-			}
-
-			if (lineState.Position != LinePosition.End)
-			{
-				if ((lineState.Elements.ByteCount > TerminalSettings.Display.MaxLineLength) &&
-				    (lineState.Position != LinePosition.ContentExceeded))
-				{
-					lineState.Position = LinePosition.ContentExceeded;
-					                                  //// Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
-					var message = "Maximal number of bytes per line exceeded! Check the line break settings or increase the limit in the advanced terminal settings.";
-					lineState.Elements.Add(new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true));
-					elementsToAdd.Add(     new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true));
-				}
 			}
 		}
 

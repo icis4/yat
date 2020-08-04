@@ -59,9 +59,7 @@ namespace YAT.Domain
 		/// Also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
 		/// </remarks>
 		Begin,
-
 		Content,
-		ContentExceeded,
 		End
 	}
 

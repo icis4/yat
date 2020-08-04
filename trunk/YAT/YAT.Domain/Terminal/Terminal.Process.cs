@@ -1519,7 +1519,6 @@ namespace YAT.Domain
 						break;
 
 					case LinePosition.Content:
-					case LinePosition.ContentExceeded:
 						var overallState = GetOverallState(repositoryType);
 						var previousChunkTimeStampOfSameDir = overallState.GetPreviousChunkTimeStamp(dir);
 
