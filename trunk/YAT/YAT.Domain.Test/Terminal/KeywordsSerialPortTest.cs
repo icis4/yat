@@ -264,8 +264,8 @@ namespace YAT.Domain.Test.Terminal
 						int expectedTotalByteCountBA = 0;
 						int expectedTotalLineCountAB = 0;
 						int expectedTotalLineCountBA = 0;
-						var expectedContentA = new List<string>(); // Applies to bidir only.
-						var expectedContentB = new List<string>(); // Applies to bidir only.
+						var expectedContentPatternA = new List<string>(); // Applies to bidir only.
+						var expectedContentPatternB = new List<string>(); // Applies to bidir only.
 
 						// Initial connection:
 						AssertThatPinsAreTrue(terminalA.SerialPortControlPins);
@@ -274,11 +274,11 @@ namespace YAT.Domain.Test.Terminal
 						// Initial ping-pong:
 						text = "Ping A => B";
 						Utilities.TransmitAndAssertCounts( terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.AddAndAssertBidirContent(terminalA, terminalB, text + Eol, ref expectedContentA, ref expectedContentB);
+						Utilities.AddAndAssertBidirContent(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 
 						text = "Pong B => A";
-						Utilities.TransmitAndAssertCounts( terminalB, terminalA, parser, "Pong B => A", ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
-						Utilities.AddAndAssertBidirContent(terminalB, terminalA, text + Eol, ref expectedContentB, ref expectedContentA);
+						Utilities.TransmitAndAssertCounts( terminalB, terminalA, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
+						Utilities.AddAndAssertBidirContent(terminalB, terminalA, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
 
 						// Switch RTS off:
 						keyword = @"\!(RTSOff)\!(NoEOL)";
@@ -288,7 +288,7 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatCtsPinIsFalse(terminalB.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndAssertCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
+						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentPatternB, expectedContentPatternA);
 
 						// Switch RTS on:
 						keyword = @"\!(RTSOn)\!(NoEOL)";
@@ -298,7 +298,7 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatPinsAreTrue(terminalB.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndAssertCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
+						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentPatternB, expectedContentPatternA);
 
 						// Switch RTS off:
 						keyword = @"\!(RTSOff)\!(NoEOL)";
@@ -308,7 +308,7 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatCtsPinIsFalse(terminalB.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndAssertCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
+						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentPatternB, expectedContentPatternA);
 
 						// Toggle RTS on:
 						keyword = @"\!(RTSToggle)\!(NoEOL)";
@@ -318,14 +318,16 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatPinsAreTrue(terminalB.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndAssertCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
+						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentPatternB, expectedContentPatternA);
 
 						// Subsequent ping-pong:
-						Utilities.TransmitAndAssertCounts( terminalA, terminalB, parser, "Ping A => B", ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.AddAndAssertBidirContent(terminalA, terminalB, text + Eol, ref expectedContentA, ref expectedContentB);
+						text = "Ping A => B";
+						Utilities.TransmitAndAssertCounts( terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
+						Utilities.AddAndAssertBidirContent(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 
-						Utilities.TransmitAndAssertCounts( terminalB, terminalA, parser, "Pong B => A", ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
-						Utilities.AddAndAssertBidirContent(terminalB, terminalA, text + Eol, ref expectedContentB, ref expectedContentA);
+						text = "Pong B => A";
+						Utilities.TransmitAndAssertCounts( terminalB, terminalA, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
+						Utilities.AddAndAssertBidirContent(terminalB, terminalA, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
 
 						// Switch DTR off:
 						keyword = @"\!(DTROff)\!(NoEOL)";
@@ -335,7 +337,7 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatDsrPinIsFalse(terminalB.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndAssertCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
+						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentPatternB, expectedContentPatternA);
 
 						// Switch DTR on:
 						keyword = @"\!(DTROn)\!(NoEOL)";
@@ -345,7 +347,7 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatPinsAreTrue(terminalB.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndAssertCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
+						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentPatternB, expectedContentPatternA);
 
 						// Switch DTR off:
 						keyword = @"\!(DTROff)\!(NoEOL)";
@@ -355,7 +357,7 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatDsrPinIsFalse(terminalB.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndAssertCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
+						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentPatternB, expectedContentPatternA);
 
 						// Toggle DTR on:
 						keyword = @"\!(DTRToggle)\!(NoEOL)";
@@ -365,7 +367,7 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatPinsAreTrue(terminalB.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndAssertCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
+						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentPatternB, expectedContentPatternA);
 
 						// Toggle DTR off in other terminal:
 						keyword = @"\!(DTRToggle)\!(NoEOL)";
@@ -375,7 +377,7 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatDsrPinIsFalse(terminalA.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndAssertCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
+						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentPatternB, expectedContentPatternA);
 
 						// Switch DTR on again in other terminal:
 						keyword = @"\!(DTROn)\!(NoEOL)";
@@ -385,7 +387,7 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatPinsAreTrue(terminalB.SerialPortControlPins);
 
 						Utilities.WaitForTransmissionAndAssertCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentB, expectedContentA);
+						Utilities.AssertBidirContent(                terminalB, terminalA, expectedContentPatternB, expectedContentPatternA);
 
 						// Try to switch RTS off in other terminal:
 						keyword = @"\!(RTSOff)\!(NoEOL)";
@@ -394,14 +396,14 @@ namespace YAT.Domain.Test.Terminal
 						AssertThatPinsAreTrue(terminalA.SerialPortControlPins); // Change must be rejected as automatic flow control is active.
 						AssertThatPinsAreTrue(terminalB.SerialPortControlPins);
 						                       //// Escape the [ for Regex.
-						var warningMessage = @"\[Warning: Modifying the RTS signal is not possible when automatic hardware or RS-485 flow control is active.]";
-						expectedContentB.Add(warningMessage);
+						var warningMessagePattern = @"\[Warning: Modifying the RTS signal is not possible when automatic hardware or RS-485 flow control is active.]";
+						expectedContentPatternB.Add(warningMessagePattern);
 						                                                                                                        //// Adjust for warning message.
 						Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA + 1);
 						Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-						Utilities.AssertBidirContent(terminalB, expectedContentB);
-						Utilities.AssertBidirContent(terminalA, expectedContentA);
+						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
+						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 						// Wait to ensure that no operation is ongoing anymore and verify again:
 						Utilities.WaitForReverification();
@@ -410,8 +412,8 @@ namespace YAT.Domain.Test.Terminal
 						Utilities.AssertTxCounts(terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA + 1); // See above.
 						Utilities.AssertRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-						Utilities.AssertBidirContent(terminalB, expectedContentB);
-						Utilities.AssertBidirContent(terminalA, expectedContentA);
+						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
+						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 						// Refresh and verify again:
 						terminalA.RefreshRepositories();
@@ -422,10 +424,10 @@ namespace YAT.Domain.Test.Terminal
 						Utilities.AssertTxCounts(terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA); // Warning will disappear (pending fix of bug #211 "...indications disappear").
 						Utilities.AssertRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-						expectedContentB.Remove(warningMessage); // Warning will disappear (pending fix of bug #211 "...indications disappear").
+						expectedContentPatternB.Remove(warningMessagePattern); // Warning will disappear (pending fix of bug #211 "...indications disappear").
 
-						Utilities.AssertBidirContent(terminalB, expectedContentB);
-						Utilities.AssertBidirContent(terminalA, expectedContentA);
+						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
+						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 						terminalB.Stop();
 						Utilities.WaitForDisconnection(terminalB);

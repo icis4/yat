@@ -28,6 +28,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading;
 
 using MKY.Net.Test;
@@ -103,13 +104,13 @@ namespace YAT.Domain.Test.TextTerminal
 					Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 					var expectedContentPatternA = new List<string>(); // Applies to bidir only.
-					expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC<CR><LF> (5) (0.000)");
-					expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)");
+					expectedContentPatternA.Add(Escape("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC<CR><LF> (5) (0.000)"));
+					expectedContentPatternA.Add(Escape("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)"));
 					Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 					var expectedContentPatternB = new List<string>(); // Applies to bidir only.
-					expectedContentPatternB.Add("(>>) ABC<CR><LF>");
-					expectedContentPatternB.Add("(<<) ABC<CR><LF>");
+					expectedContentPatternB.Add(Escape("(>>) ABC<CR><LF>"));
+					expectedContentPatternB.Add(Escape("(<<) ABC<CR><LF>"));
 					Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 					for (int i = 0; i < 2; i++) // ...twice doing...
@@ -122,10 +123,10 @@ namespace YAT.Domain.Test.TextTerminal
 						Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 						Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-						expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC");
+						expectedContentPatternA.Add(Escape("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC"));
 						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
-						expectedContentPatternB.Add("(>>) ABC");
+						expectedContentPatternB.Add(Escape("(>>) ABC"));
 						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 						// ...pong...
@@ -139,7 +140,7 @@ namespace YAT.Domain.Test.TextTerminal
 					////expectedContentPatternA = same as before as line from B must be postponed until timeout.
 						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
-						expectedContentPatternB.Add("(<<) ABC<CR><LF>");
+						expectedContentPatternB.Add(Escape("(<<) ABC<CR><LF>"));
 						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 						// ...and complete ping with EOL:
@@ -153,11 +154,11 @@ namespace YAT.Domain.Test.TextTerminal
 						Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						var previousIndex = (expectedContentPatternA.Count - 1); // Complete the previous line:
-						expectedContentPatternA[previousIndex] +=                                     "<CR><LF> (5) (" + Utilities.DurationRegexPattern + ")";
-						expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)");
+						expectedContentPatternA[previousIndex] +=                                     Escape("<CR><LF> (5) (" + Utilities.DurationRegexPattern + ")");
+						expectedContentPatternA.Add(Escape("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)"));
 						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
-						expectedContentPatternB.Add("(>>) <CR><LF>");
+						expectedContentPatternB.Add(Escape("(>>) <CR><LF>"));
 						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 					}
 
@@ -177,10 +178,10 @@ namespace YAT.Domain.Test.TextTerminal
 						Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 						Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-						expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC");
+						expectedContentPatternA.Add(Escape("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC"));
 						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
-						expectedContentPatternB.Add("(>>) ABC");
+						expectedContentPatternB.Add(Escape("(>>) ABC"));
 						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 						// ...pong...
@@ -194,15 +195,15 @@ namespace YAT.Domain.Test.TextTerminal
 					////expectedContentPatternA = same as before as line from B must be postponed until timeout.
 						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
-						expectedContentPatternB.Add("(<<) ABC<CR><LF>");
+						expectedContentPatternB.Add(Escape("(<<) ABC<CR><LF>"));
 						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 						// ...and wait for timeout:
 						Thread.Sleep(settingsA.TextTerminal.GlueCharsOfLine.Timeout); // No margin needed.
 
 						var previousIndex = (expectedContentPatternA.Count - 1); // Complete the previous line:
-						expectedContentPatternA[previousIndex] +=                                             " (3) (" + Utilities.DurationRegexPattern + ")";
-						expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)");
+						expectedContentPatternA[previousIndex] +=                                             Escape(" (3) (" + Utilities.DurationRegexPattern + ")");
+						expectedContentPatternA.Add(Escape("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)"));
 						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 					////expectedContentPatternB = same as before.
@@ -291,13 +292,13 @@ namespace YAT.Domain.Test.TextTerminal
 					Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 					var expectedContentPatternA = new List<string>(); // Applies to bidir only.
-					expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC<CR><LF> (5) (0.000)");
-					expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)");
+					expectedContentPatternA.Add(Escape("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC<CR><LF> (5) (0.000)"));
+					expectedContentPatternA.Add(Escape("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)"));
 					Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 					var expectedContentPatternB = new List<string>(); // Applies to bidir only.
-					expectedContentPatternB.Add("(>>) ABC<CR><LF>");
-					expectedContentPatternB.Add("(<<) ABC<CR><LF>");
+					expectedContentPatternB.Add(Escape("(>>) ABC<CR><LF>"));
+					expectedContentPatternB.Add(Escape("(<<) ABC<CR><LF>"));
 					Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 					for (int i = 0; i < 2; i++) // ...twice doing...
@@ -310,10 +311,10 @@ namespace YAT.Domain.Test.TextTerminal
 						Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 						Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-						expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC");
+						expectedContentPatternA.Add(Escape("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC"));
 						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
-						expectedContentPatternB.Add("(>>) ABC");
+						expectedContentPatternB.Add(Escape("(>>) ABC"));
 						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 						// ...pong...
@@ -327,7 +328,7 @@ namespace YAT.Domain.Test.TextTerminal
 					////expectedContentPatternA = same as before as line from B must be postponed until line from A has completed (timeout = forever).
 						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
-						expectedContentPatternB.Add("(<<) ABC<CR><LF>");
+						expectedContentPatternB.Add(Escape("(<<) ABC<CR><LF>"));
 						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 						// ...and complete ping with EOL:
@@ -341,11 +342,11 @@ namespace YAT.Domain.Test.TextTerminal
 						Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						previousIndex = (expectedContentPatternA.Count - 1); // Complete the previous line:
-						expectedContentPatternA[previousIndex] +=                                     "<CR><LF> (5) (" + Utilities.DurationRegexPattern + ")";
-						expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)");
+						expectedContentPatternA[previousIndex] +=                                     Escape("<CR><LF> (5) (" + Utilities.DurationRegexPattern + ")");
+						expectedContentPatternA.Add(Escape("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)"));
 						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
-						expectedContentPatternB.Add("(>>) <CR><LF>");
+						expectedContentPatternB.Add(Escape("(>>) <CR><LF>"));
 						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 					}
 
@@ -363,15 +364,15 @@ namespace YAT.Domain.Test.TextTerminal
 						Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
 						if (i == 0) { // Account for the fact that non-completed line "ABC" will result in "ABCABC" (Bidir too) during second iteration.
-							expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC");
+							expectedContentPatternA.Add(Escape("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC"));
 						}
 						else {
 							previousIndex = (expectedContentPatternA.Count - 1); // Add to the previous line:
-							expectedContentPatternA[previousIndex] +=                                     "ABC";
+							expectedContentPatternA[previousIndex] +=                                         "ABC";
 						}
 						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
-						expectedContentPatternB.Add("(>>) ABC");
+						expectedContentPatternB.Add(Escape("(>>) ABC"));
 						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 						// ...pong...
@@ -385,7 +386,7 @@ namespace YAT.Domain.Test.TextTerminal
 					////expectedContentPatternA = same as before as line from B must be postponed until line from A has completed (timeout = forever).
 						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
-						expectedContentPatternB.Add("(<<) ABC<CR><LF>");
+						expectedContentPatternB.Add(Escape("(<<) ABC<CR><LF>"));
 						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 						// ...and wait for at least twice the default timeout:
@@ -410,12 +411,12 @@ namespace YAT.Domain.Test.TextTerminal
 					Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 					previousIndex = (expectedContentPatternA.Count - 1); // Complete the previous line:
-					expectedContentPatternA[previousIndex] +=                                     "<CR><LF> (8) (" + Utilities.DurationRegexPattern + ")";
-					expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)");
-					expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)");
+					expectedContentPatternA[previousIndex] +=                                     Escape("<CR><LF> (8) (" + Utilities.DurationRegexPattern + ")");
+					expectedContentPatternA.Add(Escape("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)"));
+					expectedContentPatternA.Add(Escape("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)"));
 					Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
-					expectedContentPatternB.Add("(>>) <CR><LF>");
+					expectedContentPatternB.Add(Escape("(>>) <CR><LF>"));
 					Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 					// Refresh and verify again:
@@ -437,6 +438,18 @@ namespace YAT.Domain.Test.TextTerminal
 				terminalA.Stop();
 				Utilities.WaitForDisconnection(terminalA);
 			} // using (terminalA)
+		}
+
+		#endregion
+
+		#region Utilities
+		//==========================================================================================
+		// Utilities
+		//==========================================================================================
+
+		private static string Escape(string content)
+		{
+			return (Utilities.EscapeParenthesis(content));
 		}
 
 		#endregion
