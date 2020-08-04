@@ -39,6 +39,7 @@ using MKY.Text;
 
 using NUnit.Framework;
 
+///// YAT.Domain        is not used due to ambiguity with 'YAT.Domain.Test.Terminal'.
 ///// YAT.Domain.Parser is not used due to ambiguity with 'YAT.Domain.Test.Parser'.
 using YAT.Domain.Settings;
 
@@ -128,6 +129,16 @@ namespace YAT.Domain.Test
 		                                             ref int expectedTotalByteCount, ref int expectedTotalLineCount,
 		                                             int timeout = WaitTimeoutForLineTransmission)
 		{
+			TransmitAndAssertTxCountsWithOffset(terminalTx, parser, text, ref expectedTotalByteCount, ref expectedTotalLineCount, 0, timeout);
+		}
+
+		/// <summary></summary>
+		public static void TransmitAndAssertTxCountsWithOffset(Domain.Terminal terminalTx,
+		                                                       Domain.Parser.Parser parser, string text,
+		                                                       ref int expectedTotalByteCount, ref int expectedTotalLineCount,
+		                                                       int expectedTotalByteCountOffset,
+		                                                       int timeout = WaitTimeoutForLineTransmission)
+		{
 			byte[] parseResult;
 			Assert.That(parser.TryParse(text, out parseResult)); // Verify text before sending, as result will be needed anyway.
 			int textByteCount = parseResult.Length;
@@ -143,6 +154,7 @@ namespace YAT.Domain.Test
 			}
 
 			expectedTotalByteCount += (textByteCount + eolByteCount);
+			expectedTotalByteCount += (expectedTotalByteCountOffset);
 			expectedTotalLineCount++;
 			WaitForSendingAndAssertCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCount, timeout);
 		}
@@ -152,6 +164,16 @@ namespace YAT.Domain.Test
 		                                             Domain.Parser.Parser parser, string text,
 		                                             ref int expectedTotalByteCount, ref int expectedTotalLineCount,
 		                                             int timeout = WaitTimeoutForLineTransmission)
+		{
+			TransmitAndAssertRxCountsWithOffset(terminalTx, terminalRx, parser, text, ref expectedTotalByteCount, ref expectedTotalLineCount, 0, timeout);
+		}
+
+		/// <summary></summary>
+		public static void TransmitAndAssertRxCountsWithOffset(Domain.Terminal terminalTx, Domain.Terminal terminalRx,
+		                                                       Domain.Parser.Parser parser, string text,
+		                                                       ref int expectedTotalByteCount, ref int expectedTotalLineCount,
+		                                                       int expectedTotalByteCountOffset,
+		                                                       int timeout = WaitTimeoutForLineTransmission)
 		{
 			byte[] parseResult;
 			Assert.That(parser.TryParse(text, out parseResult)); // Verify text before sending, as result will be needed anyway.
@@ -168,6 +190,7 @@ namespace YAT.Domain.Test
 			}
 
 			expectedTotalByteCount += (textByteCount + eolByteCount);
+			expectedTotalByteCount += (expectedTotalByteCountOffset);
 			expectedTotalLineCount++;
 			WaitForReceivingAndAssertCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCount, timeout);
 		}
@@ -177,6 +200,16 @@ namespace YAT.Domain.Test
 		                                           Domain.Parser.Parser parser, string text,
 		                                           ref int expectedTotalByteCount, ref int expectedTotalLineCount,
 		                                           int timeout = WaitTimeoutForLineTransmission)
+		{
+			TransmitAndAssertCountsWithOffset(terminalTx, terminalRx, parser, text, ref expectedTotalByteCount, ref expectedTotalLineCount, 0, timeout);
+		}
+
+		/// <summary></summary>
+		public static void TransmitAndAssertCountsWithOffset(Domain.Terminal terminalTx, Domain.Terminal terminalRx,
+		                                                     Domain.Parser.Parser parser, string text,
+		                                                     ref int expectedTotalByteCount, ref int expectedTotalLineCount,
+		                                                     int expectedTotalByteCountOffset,
+		                                                     int timeout = WaitTimeoutForLineTransmission)
 		{
 			byte[] parseResult;
 			Assert.That(parser.TryParse(text, out parseResult)); // Verify text before sending, as result will be needed anyway.
@@ -203,6 +236,7 @@ namespace YAT.Domain.Test
 			}
 
 			expectedTotalByteCount += (textByteCount + eolByteCount);
+			expectedTotalByteCount += (expectedTotalByteCountOffset);
 			expectedTotalLineCount++;
 			WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, timeout);
 		}
