@@ -169,6 +169,8 @@ Fixed bugs:
 - Automatic actions and responses now work chunk independently (feature request #366).
 - Automatic actions [Filter] and [Suppress] now also work for continuous data (bug #478) and on
   refresh (feature request #367).
+- Line break detection and processing continues even when exceeding the configured maximum number
+  of characters/bytes per line (related to refactoring of element and line processing).
 - Handling of [Preferences... > ...take serial number/string into account] fixed (rel. to bug #480).
 
 Limitations and known issues:

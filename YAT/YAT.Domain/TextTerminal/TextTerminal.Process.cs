@@ -901,7 +901,7 @@ namespace YAT.Domain
 				lp.Add(de); // No clone needed as element has just been created further above.
 			}
 
-			if (lineState.Position != LinePosition.ContentExceeded)
+			if (!lineState.Exceeded)
 			{
 				if (isBackspace)
 				{
@@ -918,9 +918,21 @@ namespace YAT.Domain
 					}
 				}
 
-				textUnidirState.NotifyShownCharCount(lp.CharCount);
-				lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
-				elementsToAdd.AddRange(lp);
+				var totalCharCount = (lineState.Elements.CharCount + lp.CharCount);
+				if (totalCharCount <= TerminalSettings.Display.MaxLineLength)
+				{
+					textUnidirState.NotifyShownCharCount(lp.CharCount);
+					lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+					elementsToAdd.AddRange(lp);
+				}
+				else
+				{
+					lineState.Exceeded = true; // Keep in mind and notify once:
+
+					var message = "Maximal number of characters per line exceeded! Check the line break settings in Terminal > Settings > Text or increase the limit in Terminal > Settings > Advanced.";
+					lineState.Elements.Add(new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true)); // Create two separate elements
+					elementsToAdd.Add(     new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true)); //     to ensure decoupling.
+				}
 
 				if (isBackspace)
 				{
@@ -960,18 +972,6 @@ namespace YAT.Domain
 
 				// Note that length line break shall be applied even when EOL has just started or is already ongoing,
 				// remaining hidden EOL elements will not result in additional lines.
-			}
-
-			if (lineState.Position != LinePosition.End)
-			{
-				if ((lineState.Position != LinePosition.ContentExceeded) && (lineState.Elements.CharCount > TerminalSettings.Display.MaxLineLength))
-				{
-					lineState.Position = LinePosition.ContentExceeded;
-
-					var message = "Maximal number of characters per line exceeded! Check the EOL (end-of-line) settings or increase the limit in the advanced terminal settings.";
-					lineState.Elements.Add(new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true));
-					elementsToAdd.Add(     new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true));
-				}
 			}
 		}
 

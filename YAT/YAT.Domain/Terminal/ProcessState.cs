@@ -395,6 +395,9 @@ namespace YAT.Domain
 		public DisplayElementCollection Elements  { get; }
 
 		/// <summary></summary>
+		public bool                     Exceeded  { get; set; }
+
+		/// <summary></summary>
 		public LineState()
 		{
 			InitializeValues();
@@ -418,6 +421,7 @@ namespace YAT.Domain
 			TimeStamp = DisplayElement.TimeStampDefault;
 			Device    = null;
 			Direction = IODirection.None;
+			Exceeded  = false;
 		}
 
 		/// <summary>
