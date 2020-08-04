@@ -154,9 +154,8 @@ namespace YAT.Domain.Test
 			}
 
 			expectedTotalByteCount += (textByteCount + eolByteCount);
-			expectedTotalByteCount += (expectedTotalByteCountOffset);
 			expectedTotalLineCount++;
-			WaitForSendingAndAssertCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCount, timeout);
+			WaitForSendingAndAssertCounts(terminalTx, (expectedTotalByteCount + expectedTotalByteCountOffset), expectedTotalLineCount, timeout);
 		}
 
 		/// <summary></summary>
@@ -190,9 +189,8 @@ namespace YAT.Domain.Test
 			}
 
 			expectedTotalByteCount += (textByteCount + eolByteCount);
-			expectedTotalByteCount += (expectedTotalByteCountOffset);
 			expectedTotalLineCount++;
-			WaitForReceivingAndAssertCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCount, timeout);
+			WaitForReceivingAndAssertCounts(terminalRx, (expectedTotalByteCount + expectedTotalByteCountOffset), expectedTotalLineCount, timeout);
 		}
 
 		/// <summary></summary>
@@ -236,9 +234,8 @@ namespace YAT.Domain.Test
 			}
 
 			expectedTotalByteCount += (textByteCount + eolByteCount);
-			expectedTotalByteCount += (expectedTotalByteCountOffset);
 			expectedTotalLineCount++;
-			WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, timeout);
+			WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, (expectedTotalByteCount + expectedTotalByteCountOffset), expectedTotalLineCount, timeout);
 		}
 
 		#endregion
@@ -490,7 +487,7 @@ namespace YAT.Domain.Test
 					isFirst = false;
 				}
 			}
-			while ((rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCount && (expectedTotalLineCount != IgnoreCount)));
+			while ((rxByteCount != expectedTotalByteCount) || ((rxLineCount != expectedTotalLineCount) && (expectedTotalLineCount != IgnoreCount)));
 
 			Debug.WriteLine("Rx of " + rxByteCount + " bytes / " + rxLineCount + " lines completed");
 
@@ -602,8 +599,8 @@ namespace YAT.Domain.Test
 					isFirst = false;
 				}
 			}
-			while ((txByteCount != expectedTotalByteCount) || (txLineCount != expectedTotalLineCount && (expectedTotalLineCount != IgnoreCount)) ||
-			       (rxByteCount != expectedTotalByteCount) || (rxLineCount != expectedTotalLineCount && (expectedTotalLineCount != IgnoreCount)));
+			while ((txByteCount != expectedTotalByteCount) || ((txLineCount != expectedTotalLineCount) && (expectedTotalLineCount != IgnoreCount)) ||
+			       (rxByteCount != expectedTotalByteCount) || ((rxLineCount != expectedTotalLineCount) && (expectedTotalLineCount != IgnoreCount)));
 
 			Debug.WriteLine("Tx of " + txByteCount + " bytes / " + txLineCount + " lines completed");
 			Debug.WriteLine("Rx of " + rxByteCount + " bytes / " + rxLineCount + " lines completed");

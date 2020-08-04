@@ -550,8 +550,8 @@ namespace YAT.Model.Test
 		{
 			Domain.Test.Utilities.WaitForSendingAndAssertCounts(terminalTx.UnderlyingDomain_ForTestOnly, (expectedTotalByteCount + expectedTotalByteCountOffset), expectedTotalLineCountDisplayed, timeout);
 
-			Assert.That(terminalTx.RxByteCount, Is.EqualTo(expectedTotalByteCount));
-			Assert.That(terminalTx.RxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
+			Assert.That(terminalTx.TxByteCount, Is.EqualTo(expectedTotalByteCount));
+			Assert.That(terminalTx.TxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
 		}
 
 		/// <remarks>
