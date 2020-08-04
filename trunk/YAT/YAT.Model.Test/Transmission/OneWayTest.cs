@@ -380,13 +380,13 @@ namespace YAT.Model.Test.Transmission
 				// Send test command:
 				terminalA.SendText(testSet.Command);
 				if (testSet.ExpectedAlsoApplyToTx) {
-					Utilities.WaitForTransmissionCycleAndVerifyCounts(terminalA, terminalB, testSet, cycle);
+					Utilities.WaitForTransmissionCycleAndAssertCounts(terminalA, terminalB, testSet, cycle);
 				}
 				else if (testSet.ClearedIsExpectedInTheEnd && (terminalA == terminalB)) { // Clear* on loopback self:
 				////Utilities.WaitForReceivingCycleAndVerifyCounts(terminalB, testSet, cycle) doesn't work because clear will also be applied to Rx at an arbitrary moment.
 				}
 				else {
-					Utilities.WaitForReceivingCycleAndVerifyCounts(terminalB, testSet, cycle);
+					Utilities.WaitForReceivingCycleAndAssertCounts(terminalB, testSet, cycle);
 				}
 
 				// Verify transmission:
@@ -394,7 +394,7 @@ namespace YAT.Model.Test.Transmission
 				////Utilities.VerifyLines(terminalA, terminalB, testSet, cycle) doesn't work because clear will also be applied to Rx at an arbitrary moment.
 				}
 				else {
-					Utilities.VerifyLines(terminalA, terminalB, testSet, cycle);
+					Utilities.AssertLines(terminalA, terminalB, testSet, cycle);
 				}
 			}
 
@@ -403,7 +403,7 @@ namespace YAT.Model.Test.Transmission
 			////Utilities.VerifyLines(terminalA, terminalB, testSet, cycle) doesn't work because clear will also be applied to Rx at an arbitrary moment.
 			}
 			else {
-				Utilities.VerifyLines(terminalA, terminalB, testSet, transmissionCount);
+				Utilities.AssertLines(terminalA, terminalB, testSet, transmissionCount);
 			}
 		}
 

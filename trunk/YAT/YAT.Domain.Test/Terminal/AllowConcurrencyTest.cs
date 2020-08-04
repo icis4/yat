@@ -178,7 +178,7 @@ namespace YAT.Domain.Test.Terminal
 
 			var expectedTotalByteCount = ((repeatingLengthExpected * SendLineCount) + (subsequentLengthExpected * subsequentLineCount));
 			var expectedTotalLineCount = (                           SendLineCount  +                             subsequentLineCount);
-			Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1000); // See further above, sending takes 300..600 ms.
+			Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1000); // See further above, sending takes 300..600 ms.
 		}
 
 		private static void SendFile(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int subsequentLineCount, string subsequentLineText)
@@ -194,7 +194,7 @@ namespace YAT.Domain.Test.Terminal
 			                                 // Includes EOLs.
 			var expectedTotalByteCount = (fi.ByteCount + (subsequentLengthExpected * subsequentLineCount));
 			var expectedTotalLineCount = (fi.LineCount +                             subsequentLineCount);
-			Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1000); // See further above, sending takes 300..600 ms.
+			Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, 1000); // See further above, sending takes 300..600 ms.
 		}
 
 		/// <summary>Verify that number of lines matches subsequently sent lines and they are found inbetween.</summary>

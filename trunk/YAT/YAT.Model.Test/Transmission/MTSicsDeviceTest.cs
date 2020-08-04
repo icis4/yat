@@ -300,7 +300,7 @@ namespace YAT.Model.Test.Transmission
 					Trace.WriteLine(@">> """ + stimulus + @""" (" + i + ")");
 					terminal.SendText(stimulusCommand);
 					expectedTotalRxByteCount += expectedBytes.Length;
-					Utilities.WaitForReceivingAndVerifyCounts(terminal, expectedTotalRxByteCount, i + 1); // i = transmission count equals line count.
+					Utilities.WaitForReceivingAndAssertCounts(terminal, expectedTotalRxByteCount, i + 1); // i = transmission count equals line count.
 
 					// Verify response:
 					var lastLine = terminal.LastDisplayLineAuxiliary(Domain.RepositoryType.Rx);

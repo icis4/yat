@@ -83,28 +83,28 @@ namespace YAT.Domain.Test.Terminal
 					expectedTotalByteCount += textDelayedByteCount;
 					expectedTotalLineCount++;
 					Utilities.WaitForIsSendingForSomeTime(terminalTx);
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					// Break:
 					terminalTx.Break();
 					Thread.Sleep(DelayTime); // Delay itself cannot be breaked, only subsequent data.
 					Utilities.WaitForIsNoLongerSending(terminalTx);
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					// Send again to resume break:
 					terminalTx.SendTextLine(textCompleted);
 					expectedTotalByteCount += textCompletedByteCount;
 				////expectedTotalLineCount++ does not apply, only already started line gets completed.
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					// Wait to ensure that no operation is ongoing anymore and verify again:
 					Utilities.WaitForReverification();
-					Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					// Refresh and verify again:
 					terminalTx.RefreshRepositories();
 					terminalRx.RefreshRepositories();
-					Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					terminalRx.Stop();
 					Utilities.WaitForDisconnection(terminalRx);
@@ -154,28 +154,28 @@ namespace YAT.Domain.Test.Terminal
 					expectedTotalByteCount += textLineByteCount;
 					expectedTotalLineCount++;
 					Utilities.WaitForIsSendingForSomeTime(terminalTx);
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					// Break:
 					terminalTx.Break();
 					Thread.Sleep(DelayTime); // Delay itself cannot be breaked, only subsequent data.
 					Utilities.WaitForIsNoLongerSending(terminalTx);
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					// Send again to resume break:
 					terminalTx.SendTextLine(textNormal);
 					expectedTotalByteCount += textLineByteCount;
 					expectedTotalLineCount++;
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					// Wait to ensure that no operation is ongoing anymore and verify again:
 					Utilities.WaitForReverification();
-					Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					// Refresh and verify again:
 					terminalTx.RefreshRepositories();
 					terminalRx.RefreshRepositories();
-					Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					terminalRx.Stop();
 					Utilities.WaitForDisconnection(terminalRx);
@@ -242,16 +242,16 @@ namespace YAT.Domain.Test.Terminal
 					terminalTx.SendTextLine(textNormal);
 					var expectedTotalByteCount = (txByteCount + textLineByteCount);
 					var expectedTotalLineCount = (txLineCount + 1);
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					// Wait to ensure that no operation is ongoing anymore and verify again:
 					Utilities.WaitForReverification();
-					Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					// Refresh and verify again:
 					terminalTx.RefreshRepositories();
 					terminalRx.RefreshRepositories();
-					Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					terminalRx.Stop();
 					Utilities.WaitForDisconnection(terminalRx);
@@ -320,16 +320,16 @@ namespace YAT.Domain.Test.Terminal
 					terminalTx.SendTextLine(textNormal);
 					var expectedTotalByteCount = (txByteCount + textLineByteCount);
 					var expectedTotalLineCount = (txLineCount + 1);
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					// Wait to ensure that no operation is ongoing anymore and verify again:
 					Utilities.WaitForReverification();
-					Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					// Refresh and verify again:
 					terminalTx.RefreshRepositories();
 					terminalRx.RefreshRepositories();
-					Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					terminalRx.Stop();
 					Utilities.WaitForDisconnection(terminalRx);

@@ -337,14 +337,14 @@ namespace YAT.Model.Test.Transmission
 					expectedInitialPongLineCount *= 2;    // Twice the number of lines.
 
 				terminalA.SendText(singleCommand);
-				Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB,
+				Utilities.WaitForTransmissionAndAssertCounts(terminalA, terminalB,
 				                                             expectedTotalByteCount:          expectedInitialPingByteCount,
 				                                             expectedTotalLineCountDisplayed: expectedInitialPingLineCount,
 				                                             expectedTotalLineCountCompleted: expectedInitialPingLineCount,
 				                                             timeout: (1 * Utilities.WaitTimeoutForLineTransmission));
 
 				terminalB.SendText(singleCommand);
-				Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA,
+				Utilities.WaitForTransmissionAndAssertCounts(terminalB, terminalA,
 				                                             expectedTotalByteCount:          expectedInitialPongByteCount,
 				                                             expectedTotalLineCountDisplayed: expectedInitialPongLineCount,
 				                                             expectedTotalLineCountCompleted: expectedInitialPongLineCount,
@@ -361,13 +361,13 @@ namespace YAT.Model.Test.Transmission
 				}
 			}
 
-			Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB,
+			Utilities.WaitForTransmissionAndAssertCounts(terminalA, terminalB,
 			                                             expectedTotalByteCount:          expectedTotalByteCount,
 			                                             expectedTotalLineCountDisplayed: expectedLineCount,
 			                                             expectedTotalLineCountCompleted: expectedLineCount,
 			                                             timeout: (expectedLineCount * Utilities.WaitTimeoutForLineTransmission));
 			if (doTwoWay) {
-				Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA,
+				Utilities.WaitForTransmissionAndAssertCounts(terminalB, terminalA,
 				                                             expectedTotalByteCount:          expectedTotalByteCount,
 				                                             expectedTotalLineCountDisplayed: expectedLineCount,
 				                                             expectedTotalLineCountCompleted: expectedLineCount,
@@ -378,9 +378,9 @@ namespace YAT.Model.Test.Transmission
 			Utilities.WaitForReverification();
 
 			// Verify transmission:
-			Utilities.VerifyLines(terminalA, terminalB, testSet);
+			Utilities.AssertLines(terminalA, terminalB, testSet);
 			if (doTwoWay) {
-				Utilities.VerifyLines(terminalB, terminalA, testSet);
+				Utilities.AssertLines(terminalB, terminalA, testSet);
 			}
 		}
 

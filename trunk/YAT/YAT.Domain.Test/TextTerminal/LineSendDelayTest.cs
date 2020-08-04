@@ -91,22 +91,22 @@ namespace YAT.Domain.Test.TextTerminal
 					// Verify;
 					expectedTotalByteCount += (3 * textLineByteCount);
 					expectedTotalLineCount +=  3;
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					// Send again to resume break:
 					terminalTx.SendTextLine(textNormal);
 					expectedTotalByteCount += textLineByteCount;
 					expectedTotalLineCount++;
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					// Wait to ensure that no operation is ongoing anymore and verify again:
 					Utilities.WaitForReverification();
-					Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					// Refresh and verify again:
 					terminalTx.RefreshRepositories();
 					terminalRx.RefreshRepositories();
-					Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+					Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					terminalRx.Stop();
 					Utilities.WaitForDisconnection(terminalRx);
