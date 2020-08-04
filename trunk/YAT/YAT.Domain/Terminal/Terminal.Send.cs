@@ -381,14 +381,16 @@ namespace YAT.Domain
 			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised); // This flag can only get set once.
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Parameter <paramref name="text"/> is not named "line" because e.g. the text EOL sequence will be appended later by the underlying terminal.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public virtual void SendTextLine(string line, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
+		public virtual void SendTextLine(string text, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
 			AssertUndisposed();
 
 			var parseMode = TerminalSettings.Send.Text.ToParseMode(); // Get setting at request/invocation.
-			var item = new TextSendItem(line, defaultRadix, parseMode, SendMode.Text, true);
+			var item = new TextSendItem(text, defaultRadix, parseMode, SendMode.Text, true);
 
 			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
 			var asyncInvoker = new Action<TextSendItem, long>(DoSendTextLine);
@@ -427,14 +429,17 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Required to allow sending multi-line commands "kept together".
 		/// </remarks>
+		/// <remarks>
+		/// Parameter <paramref name="texts"/> is not named "lines" because e.g. the text EOL sequence will be appended later by the underlying terminal.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public virtual void SendTextLines(string[] lines, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
+		public virtual void SendTextLines(string[] texts, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
 		{
 			AssertUndisposed();
 
 			var parseMode = TerminalSettings.Send.Text.ToParseMode(); // Get setting at request/invocation.
-			var items = new List<TextSendItem>(lines.Length); // Preset the required capacity to improve memory management.
-			foreach (string line in lines)
+			var items = new List<TextSendItem>(texts.Length); // Preset the required capacity to improve memory management.
+			foreach (string line in texts)
 				items.Add(new TextSendItem(line, defaultRadix, parseMode, SendMode.Text, true));
 
 			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
