@@ -38,6 +38,8 @@ using MKY;
 
 using NUnit.Framework;
 
+using YAT.Domain;
+
 #endregion
 
 namespace YAT.Model.Test
@@ -298,37 +300,37 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static void TransmitAndVerifyTxCounts(Terminal terminalTx,
-		                                             Domain.Parser.Parser parser, string text, int eolByteCount,
+		public static void TransmitAndAssertTxCounts(Terminal terminalTx,
+		                                             Domain.Parser.Parser parser, string text,
 		                                             ref int expectedTotalByteCount, ref int expectedTotalLineCount,
 		                                             int timeout = WaitTimeoutForLineTransmission)
 		{
-			Domain.Test.Utilities.TransmitAndVerifyTxCounts(terminalTx.UnderlyingDomain_ForTestOnly,
-			                                                parser, text, eolByteCount,
+			Domain.Test.Utilities.TransmitAndAssertTxCounts(terminalTx.UnderlyingDomain_ForTestOnly,
+			                                                parser, text,
 			                                                ref expectedTotalByteCount, ref expectedTotalLineCount,
 			                                                timeout);
 		}
 
 		/// <summary></summary>
-		public static void TransmitAndVerifyRxCounts(Terminal terminalTx, Terminal terminalRx,
-		                                             Domain.Parser.Parser parser, string text, int eolByteCount,
+		public static void TransmitAndAssertRxCounts(Terminal terminalTx, Terminal terminalRx,
+		                                             Domain.Parser.Parser parser, string text,
 		                                             ref int expectedTotalByteCount, ref int expectedTotalLineCount,
 		                                             int timeout = WaitTimeoutForLineTransmission)
 		{
-			Domain.Test.Utilities.TransmitAndVerifyRxCounts(terminalTx.UnderlyingDomain_ForTestOnly, terminalRx.UnderlyingDomain_ForTestOnly,
-			                                                parser, text, eolByteCount,
+			Domain.Test.Utilities.TransmitAndAssertRxCounts(terminalTx.UnderlyingDomain_ForTestOnly, terminalRx.UnderlyingDomain_ForTestOnly,
+			                                                parser, text,
 			                                                ref expectedTotalByteCount, ref expectedTotalLineCount,
 			                                                timeout);
 		}
 
 		/// <summary></summary>
-		public static void TransmitAndVerifyCounts(Terminal terminalTx, Terminal terminalRx,
-		                                           Domain.Parser.Parser parser, string text, int eolByteCount,
+		public static void TransmitAndAssertCounts(Terminal terminalTx, Terminal terminalRx,
+		                                           Domain.Parser.Parser parser, string text,
 		                                           ref int expectedTotalByteCount, ref int expectedTotalLineCount,
 		                                           int timeout = WaitTimeoutForLineTransmission)
 		{
-			Domain.Test.Utilities.TransmitAndVerifyCounts(terminalTx.UnderlyingDomain_ForTestOnly, terminalRx.UnderlyingDomain_ForTestOnly,
-			                                              parser, text, eolByteCount,
+			Domain.Test.Utilities.TransmitAndAssertCounts(terminalTx.UnderlyingDomain_ForTestOnly, terminalRx.UnderlyingDomain_ForTestOnly,
+			                                              parser, text,
 			                                              ref expectedTotalByteCount, ref expectedTotalLineCount,
 			                                              timeout);
 		}
@@ -490,15 +492,15 @@ namespace YAT.Model.Test
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
 		/// </remarks>
-		public static void WaitForReceivingAndVerifyCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
+		public static void WaitForReceivingAndAssertCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
-			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCount, expectedTotalLineCount);
+			WaitForReceivingAndAssertCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCount, expectedTotalLineCount);
 		}
 
 		/// <summary></summary>
-		public static void WaitForReceivingAndVerifyCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted, int timeout = WaitTimeoutForLineTransmission)
+		public static void WaitForReceivingAndAssertCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted, int timeout = WaitTimeoutForLineTransmission)
 		{
-			Domain.Test.Utilities.WaitForReceivingAndVerifyCounts(terminalRx.UnderlyingDomain_ForTestOnly, expectedTotalByteCount, expectedTotalLineCountDisplayed, timeout);
+			Domain.Test.Utilities.WaitForReceivingAndAssertCounts(terminalRx.UnderlyingDomain_ForTestOnly, expectedTotalByteCount, expectedTotalLineCountDisplayed, timeout);
 
 			Assert.That(terminalRx.RxByteCount, Is.EqualTo(expectedTotalByteCount));
 			Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
@@ -507,7 +509,7 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
 		/// </remarks>
-		public static void WaitForReceivingCycleAndVerifyCounts(Terminal terminalRx, TestSet testSet, int cycle)
+		public static void WaitForReceivingCycleAndAssertCounts(Terminal terminalRx, TestSet testSet, int cycle)
 		{
 			int expectedTotalByteCount;
 			int expectedTotalLineCountDisplayed;
@@ -515,22 +517,22 @@ namespace YAT.Model.Test
 			int timeout;
 			CalculateValues(terminalRx, testSet, cycle, out expectedTotalByteCount, out expectedTotalLineCountDisplayed, out expectedTotalLineCountCompleted, out timeout);
 
-			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, timeout);
+			WaitForReceivingAndAssertCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, timeout);
 		}
 
 		/// <remarks>
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
 		/// </remarks>
-		public static void WaitForSendingAndVerifyCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
+		public static void WaitForSendingAndAssertCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
-			WaitForSendingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCount, expectedTotalLineCount);
+			WaitForSendingAndAssertCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCount, expectedTotalLineCount);
 		}
 
 		/// <summary></summary>
-		public static void WaitForSendingAndVerifyCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted, int timeout = WaitTimeoutForLineTransmission)
+		public static void WaitForSendingAndAssertCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted, int timeout = WaitTimeoutForLineTransmission)
 		{
-			Domain.Test.Utilities.WaitForSendingAndVerifyCounts(terminalRx.UnderlyingDomain_ForTestOnly, expectedTotalByteCount, expectedTotalLineCountDisplayed, timeout);
+			Domain.Test.Utilities.WaitForSendingAndAssertCounts(terminalRx.UnderlyingDomain_ForTestOnly, expectedTotalByteCount, expectedTotalLineCountDisplayed, timeout);
 
 			Assert.That(terminalRx.RxByteCount, Is.EqualTo(expectedTotalByteCount));
 			Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
@@ -539,7 +541,7 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
 		/// </remarks>
-		public static void WaitForSendingCycleAndVerifyCounts(Terminal terminalRx, TestSet testSet, int cycle)
+		public static void WaitForSendingCycleAndAssertCounts(Terminal terminalRx, TestSet testSet, int cycle)
 		{
 			int expectedTotalByteCount;
 			int expectedTotalLineCountDisplayed;
@@ -547,13 +549,13 @@ namespace YAT.Model.Test
 			int timeout;
 			CalculateValues(terminalRx, testSet, cycle, out expectedTotalByteCount, out expectedTotalLineCountDisplayed, out expectedTotalLineCountCompleted, out timeout);
 
-			WaitForSendingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, timeout);
+			WaitForSendingAndAssertCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, timeout);
 		}
 
 		/// <summary></summary>
-		public static void WaitForTransmissionAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, TestSet testSet)
+		public static void WaitForTransmissionAndAssertCounts(Terminal terminalTx, Terminal terminalRx, TestSet testSet)
 		{
-			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, testSet.ExpectedTotalByteCount, testSet.ExpectedLineCountDisplayed, testSet.ExpectedLineCountCompleted);
+			WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, testSet.ExpectedTotalByteCount, testSet.ExpectedLineCountDisplayed, testSet.ExpectedLineCountCompleted);
 		}
 
 		/// <remarks>
@@ -563,17 +565,17 @@ namespace YAT.Model.Test
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
 		/// </remarks>
-		public static void WaitForTransmissionAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
+		public static void WaitForTransmissionAndAssertCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
-			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, expectedTotalLineCount);
+			WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, expectedTotalLineCount);
 		}
 
 		/// <remarks>
 		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
 		/// </remarks>
-		public static void WaitForTransmissionAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted, int timeout = WaitTimeoutForLineTransmission)
+		public static void WaitForTransmissionAndAssertCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed, int expectedTotalLineCountCompleted, int timeout = WaitTimeoutForLineTransmission)
 		{
-			Domain.Test.Utilities.WaitForTransmissionAndVerifyCounts(terminalTx.UnderlyingDomain_ForTestOnly, terminalRx.UnderlyingDomain_ForTestOnly, expectedTotalByteCount, expectedTotalLineCountDisplayed, timeout);
+			Domain.Test.Utilities.WaitForTransmissionAndAssertCounts(terminalTx.UnderlyingDomain_ForTestOnly, terminalRx.UnderlyingDomain_ForTestOnly, expectedTotalByteCount, expectedTotalLineCountDisplayed, timeout);
 
 			Assert.That(terminalTx.TxByteCount, Is.EqualTo(expectedTotalByteCount));
 			Assert.That(terminalTx.TxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
@@ -584,7 +586,7 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
 		/// </remarks>
-		public static void WaitForTransmissionCycleAndVerifyCounts(Terminal terminalTx, Terminal terminalRx, TestSet testSet, int cycle)
+		public static void WaitForTransmissionCycleAndAssertCounts(Terminal terminalTx, Terminal terminalRx, TestSet testSet, int cycle)
 		{
 			int expectedTotalByteCount;
 			int expectedTotalLineCountDisplayed;
@@ -592,7 +594,7 @@ namespace YAT.Model.Test
 			int timeout;
 			CalculateValues(terminalRx, testSet, cycle, out expectedTotalByteCount, out expectedTotalLineCountDisplayed, out expectedTotalLineCountCompleted, out timeout);
 
-			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, timeout);
+			WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountCompleted, timeout);
 		}
 
 		private static void CalculateValues(Terminal terminalRx, TestSet testSet, int cycle, out int expectedTotalByteCount, out int expectedTotalLineCountDisplayed, out int expectedTotalLineCountCompleted, out int timeout)
@@ -615,45 +617,51 @@ namespace YAT.Model.Test
 
 		#endregion
 
-		#region Verify
+		#region Assert
 		//==========================================================================================
-		// Verify
+		// Assert
 		//==========================================================================================
 
-		/// <remarks>
-		/// <see cref="WaitForSendingAndVerifyCounts(Terminal, int, int, int, int)"/> further above.
-		/// </remarks>
-		public static void VerifyTxCounts(Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed)
+		/// <summary></summary>
+		public static void AssertMatchingParserSettingsForSendText(Terminal terminalA, Terminal terminalB, out Encoding parserEncoding, out Endianness parserEndianness, out Domain.Parser.Mode parserMode)
 		{
-			WaitForSendingAndVerifyCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountDisplayed, IgnoreTimeout); // Simply forward (yet).
+			Domain.Test.Utilities.AssertMatchingParserSettingsForSendText(terminalA.SettingsRoot.Terminal, terminalB.SettingsRoot.Terminal, out parserEncoding, out parserEndianness, out parserMode);
 		}
 
 		/// <remarks>
-		/// <see cref="WaitForReceivingAndVerifyCounts(Terminal, int, int, int, int)"/> further above.
+		/// <see cref="WaitForSendingAndAssertCounts(Terminal, int, int, int, int)"/> further above.
 		/// </remarks>
-		public static void VerifyRxCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed)
+		public static void AssertTxCounts(Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed)
 		{
-			WaitForReceivingAndVerifyCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountDisplayed, IgnoreTimeout); // Simply forward (yet).
+			WaitForSendingAndAssertCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountDisplayed, IgnoreTimeout); // Simply forward (yet).
 		}
 
 		/// <remarks>
-		/// <see cref="WaitForTransmissionAndVerifyCounts(Terminal, Terminal, int, int, int, int)"/> further above.
+		/// <see cref="WaitForReceivingAndAssertCounts(Terminal, int, int, int, int)"/> further above.
 		/// </remarks>
-		public static void VerifyCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed)
+		public static void AssertRxCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed)
 		{
-			WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountDisplayed, IgnoreTimeout); // Simply forward (yet).
+			WaitForReceivingAndAssertCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountDisplayed, IgnoreTimeout); // Simply forward (yet).
+		}
+
+		/// <remarks>
+		/// <see cref="WaitForTransmissionAndAssertCounts(Terminal, Terminal, int, int, int, int)"/> further above.
+		/// </remarks>
+		public static void AssertCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCountDisplayed)
+		{
+			WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCountDisplayed, expectedTotalLineCountDisplayed, IgnoreTimeout); // Simply forward (yet).
 		}
 
 		/// <summary></summary>
-		public static void AddAndVerifyTxContent(Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		public static void AddAndAssertTxContent(Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
 		{
-			Domain.Test.Utilities.AddAndVerifyTxContent(terminal.UnderlyingDomain_ForTestOnly, contentPatternToAdd, ref expectedContentPattern);
+			Domain.Test.Utilities.AddAndAssertTxContent(terminal.UnderlyingDomain_ForTestOnly, contentPatternToAdd, ref expectedContentPattern);
 		}
 
 		/// <summary></summary>
-		public static void AddAndVerifyBidirContent(Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		public static void AddAndAssertBidirContent(Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
 		{
-			Domain.Test.Utilities.AddAndVerifyBidirContent(terminal.UnderlyingDomain_ForTestOnly, contentPatternToAdd, ref expectedContentPattern);
+			Domain.Test.Utilities.AddAndAssertBidirContent(terminal.UnderlyingDomain_ForTestOnly, contentPatternToAdd, ref expectedContentPattern);
 		}
 
 		/// <remarks>
@@ -662,9 +670,9 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// Using "1" / "2" since neither related to "A" / "B" nor "Tx" / "Rx" terminology.
 		/// </remarks>
-		public static void AddAndVerifyBidirContent(Terminal terminal1, Terminal terminal2, string contentPatternToAdd, ref List<string> expectedContentPattern1, ref List<string> expectedContentPattern2)
+		public static void AddAndAssertBidirContent(Terminal terminal1, Terminal terminal2, string contentPatternToAdd, ref List<string> expectedContentPattern1, ref List<string> expectedContentPattern2)
 		{
-			AddAndVerifyBidirContent(terminal1, terminal2, contentPatternToAdd, contentPatternToAdd, ref expectedContentPattern1, ref expectedContentPattern2);
+			AddAndAssertBidirContent(terminal1, terminal2, contentPatternToAdd, contentPatternToAdd, ref expectedContentPattern1, ref expectedContentPattern2);
 		}
 
 		/// <remarks>
@@ -673,28 +681,28 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// Using "1" / "2" since neither related to "A" / "B" nor "Tx" / "Rx" terminology.
 		/// </remarks>
-		public static void AddAndVerifyBidirContent(Terminal terminal1, Terminal terminal2, string contentPatternToAdd1, string contentPatternToAdd2, ref List<string> expectedContentPattern1, ref List<string> expectedContentPattern2)
+		public static void AddAndAssertBidirContent(Terminal terminal1, Terminal terminal2, string contentPatternToAdd1, string contentPatternToAdd2, ref List<string> expectedContentPattern1, ref List<string> expectedContentPattern2)
 		{
-			AddAndVerifyBidirContent(terminal1, contentPatternToAdd1, ref expectedContentPattern1);
-			AddAndVerifyBidirContent(terminal2, contentPatternToAdd2, ref expectedContentPattern2);
+			AddAndAssertBidirContent(terminal1, contentPatternToAdd1, ref expectedContentPattern1);
+			AddAndAssertBidirContent(terminal2, contentPatternToAdd2, ref expectedContentPattern2);
 		}
 
 		/// <summary></summary>
-		public static void AddAndVerifyRxContent(Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		public static void AddAndAssertRxContent(Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
 		{
-			Domain.Test.Utilities.AddAndVerifyRxContent(terminal.UnderlyingDomain_ForTestOnly, contentPatternToAdd, ref expectedContentPattern);
+			Domain.Test.Utilities.AddAndAssertRxContent(terminal.UnderlyingDomain_ForTestOnly, contentPatternToAdd, ref expectedContentPattern);
 		}
 
 		/// <summary></summary>
-		public static void VerifyTxContent(Terminal terminal, IEnumerable<string> expectedContentPattern)
+		public static void AssertTxContent(Terminal terminal, IEnumerable<string> expectedContentPattern)
 		{
-			Domain.Test.Utilities.VerifyTxContent(terminal.UnderlyingDomain_ForTestOnly, expectedContentPattern);
+			Domain.Test.Utilities.AssertTxContent(terminal.UnderlyingDomain_ForTestOnly, expectedContentPattern);
 		}
 
 		/// <summary></summary>
-		public static void VerifyBidirContent(Terminal terminal, IEnumerable<string> expectedContentPattern)
+		public static void AssertBidirContent(Terminal terminal, IEnumerable<string> expectedContentPattern)
 		{
-			Domain.Test.Utilities.VerifyBidirContent(terminal.UnderlyingDomain_ForTestOnly, expectedContentPattern);
+			Domain.Test.Utilities.AssertBidirContent(terminal.UnderlyingDomain_ForTestOnly, expectedContentPattern);
 		}
 
 		/// <remarks>
@@ -703,20 +711,20 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// Using "1" / "2" since neither related to "A" / "B" nor "Tx" / "Rx" terminology.
 		/// </remarks>
-		public static void VerifyBidirContent(Terminal terminal1, Terminal terminal2, IEnumerable<string> expectedContentPattern1, IEnumerable<string> expectedContentPattern2)
+		public static void AssertBidirContent(Terminal terminal1, Terminal terminal2, IEnumerable<string> expectedContentPattern1, IEnumerable<string> expectedContentPattern2)
 		{
-			VerifyBidirContent(terminal1, expectedContentPattern1);
-			VerifyBidirContent(terminal2, expectedContentPattern2);
+			AssertBidirContent(terminal1, expectedContentPattern1);
+			AssertBidirContent(terminal2, expectedContentPattern2);
 		}
 
 		/// <summary></summary>
-		public static void VerifyRxContent(Terminal terminal, IEnumerable<string> expectedContentPattern)
+		public static void AssertRxContent(Terminal terminal, IEnumerable<string> expectedContentPattern)
 		{
-			Domain.Test.Utilities.VerifyRxContent(terminal.UnderlyingDomain_ForTestOnly, expectedContentPattern);
+			Domain.Test.Utilities.AssertRxContent(terminal.UnderlyingDomain_ForTestOnly, expectedContentPattern);
 		}
 
 		/// <summary></summary>
-		public static void VerifyLines(Terminal terminalTx, Terminal terminalRx, TestSet testSet, int cycle = 1)
+		public static void AssertLines(Terminal terminalTx, Terminal terminalRx, TestSet testSet, int cycle = 1)
 		{
 			var displayLinesTx = terminalTx.RepositoryToDisplayLines(Domain.RepositoryType.Tx);
 			var displayLinesRx = terminalRx.RepositoryToDisplayLines(Domain.RepositoryType.Rx);
