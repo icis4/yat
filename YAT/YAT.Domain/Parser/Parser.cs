@@ -218,7 +218,9 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <remarks>
-		/// <paramref name="mode"/> intentionally not defaulted.
+		/// <paramref name="mode"/> intentionally not defaulted, client must actively select the
+		/// desired mode in order to prevent obscure behavior (default = <see cref="Mode.None"/> or
+		/// rather <see cref="Mode.Default"/> which is <see cref="Mode.AllEscapes"/>?).
 		/// </remarks>
 		public Parser(Mode mode)
 			: this(EncodingDefault, mode)
@@ -226,7 +228,9 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <remarks>
-		/// <paramref name="mode"/> intentionally not defaulted.
+		/// <paramref name="mode"/> intentionally not defaulted, client must actively select the
+		/// desired mode in order to prevent obscure behavior (default = <see cref="Mode.None"/> or
+		/// rather <see cref="Mode.Default"/> which is <see cref="Mode.AllEscapes"/>?).
 		/// </remarks>
 		public Parser(Encoding encoding, Mode mode)
 			: this(encoding, EndiannessDefault, mode)
@@ -234,7 +238,9 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <remarks>
-		/// <paramref name="mode"/> intentionally not defaulted.
+		/// <paramref name="mode"/> intentionally not defaulted, client must actively select the
+		/// desired mode in order to prevent obscure behavior (default = <see cref="Mode.None"/> or
+		/// rather <see cref="Mode.Default"/> which is <see cref="Mode.AllEscapes"/>?).
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
 		public Parser(Endianness endianness, Mode mode)
@@ -243,7 +249,9 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <remarks>
-		/// <paramref name="mode"/> intentionally not defaulted.
+		/// <paramref name="mode"/> intentionally not defaulted, client must actively select the
+		/// desired mode in order to prevent obscure behavior (default = <see cref="Mode.None"/> or
+		/// rather <see cref="Mode.Default"/> which is <see cref="Mode.AllEscapes"/>?).
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
 		public Parser(Encoding encoding, Endianness endianness, Mode mode)
