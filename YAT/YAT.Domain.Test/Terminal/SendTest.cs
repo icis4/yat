@@ -411,30 +411,30 @@ namespace YAT.Domain.Test.Terminal
 			// Send and verify counts:
 			int timeout = (int)(fi.ByteCount / terminalTx.TerminalSettings.IO.RoughlyEstimatedMaxBytesPerMillisecond) * 2; // Safety margin.
 			Send(terminalTx, fi, sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines);
-			Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, fi.ByteCount, fi.LineCount, timeout);
+			Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, fi.ByteCount, fi.LineCount, timeout);
 
 			// Verify content:
 			string[] expectedContent;
 			GetExpectedContent(terminalTx, sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines, out expectedContent);
-			Utilities.VerifyTxContent(terminalTx, expectedContent);
-			Utilities.VerifyRxContent(terminalRx, expectedContent);
+			Utilities.AssertTxContent(terminalTx, expectedContent);
+			Utilities.AssertRxContent(terminalRx, expectedContent);
 
 			// Wait to ensure that no operation is ongoing anymore and verify again:
 			Utilities.WaitForReverification();
 
-			Utilities.VerifyCounts(terminalTx, terminalRx, fi.ByteCount, fi.LineCount);
+			Utilities.AssertCounts(terminalTx, terminalRx, fi.ByteCount, fi.LineCount);
 
-			Utilities.VerifyTxContent(terminalTx, expectedContent);
-			Utilities.VerifyRxContent(terminalRx, expectedContent);
+			Utilities.AssertTxContent(terminalTx, expectedContent);
+			Utilities.AssertRxContent(terminalRx, expectedContent);
 
 			// Refresh and verify again:
 			terminalTx.RefreshRepositories();
 			terminalRx.RefreshRepositories();
 
-			Utilities.VerifyCounts(terminalTx, terminalRx, fi.ByteCount, fi.LineCount);
+			Utilities.AssertCounts(terminalTx, terminalRx, fi.ByteCount, fi.LineCount);
 
-			Utilities.VerifyTxContent(terminalTx, expectedContent);
-			Utilities.VerifyRxContent(terminalRx, expectedContent);
+			Utilities.AssertTxContent(terminalTx, expectedContent);
+			Utilities.AssertRxContent(terminalRx, expectedContent);
 		}
 
 		private static void ReadFileContent(TerminalType terminalType, FileInfo fi, SendMethod sendMethod, out byte[] fileContentAsBytes, out string fileContentAsText, out string[] fileContentAsLines)

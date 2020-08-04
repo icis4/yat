@@ -290,17 +290,17 @@ namespace YAT.Model.Test.Transmission
 
 				// Send 'Ping' test command A => B:
 				terminalA.SendText(testSet.Command);
-				Utilities.WaitForTransmissionCycleAndVerifyCounts(terminalA, terminalB, testSet, cycleAB);
+				Utilities.WaitForTransmissionCycleAndAssertCounts(terminalA, terminalB, testSet, cycleAB);
 
 				// Verify transmission:
-				Utilities.VerifyLines(terminalA, terminalB, testSet, cycleAB);
+				Utilities.AssertLines(terminalA, terminalB, testSet, cycleAB);
 
 				// Send 'Pong' test command B => A:
 				terminalB.SendText(testSet.Command);
-				Utilities.WaitForTransmissionCycleAndVerifyCounts(terminalB, terminalA, testSet, cycleABBA);
+				Utilities.WaitForTransmissionCycleAndAssertCounts(terminalB, terminalA, testSet, cycleABBA);
 
 				// Verify transmission:
-				Utilities.VerifyLines(terminalB, terminalA, testSet, cycleABBA);
+				Utilities.AssertLines(terminalB, terminalA, testSet, cycleABBA);
 			}
 
 			// Wait to ensure that no operation is ongoing anymore:
@@ -308,8 +308,8 @@ namespace YAT.Model.Test.Transmission
 
 			// Verify again:
 			ToCycles(terminalA, terminalB, transmissionCount, out cycleAB, out cycleABBA);
-			Utilities.VerifyLines(terminalA, terminalB, testSet, cycleABBA); // ABBA rather than AB as both ways already done.
-			Utilities.VerifyLines(terminalB, terminalA, testSet, cycleABBA);
+			Utilities.AssertLines(terminalA, terminalB, testSet, cycleABBA); // ABBA rather than AB as both ways already done.
+			Utilities.AssertLines(terminalB, terminalA, testSet, cycleABBA);
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]

@@ -93,24 +93,24 @@ namespace YAT.Domain.Test.TextTerminal
 					terminalA.SendTextLine(Text);
 					expectedTotalByteCountAB += LineByteCount;
 					expectedTotalLineCountAB++;
-					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
 					terminalB.SendTextLine(Text);
 					expectedTotalByteCountBA += LineByteCount;
 					expectedTotalLineCountBA++;
-					Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-					Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+					Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+					Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 					var expectedContentPatternA = new List<string>(); // Applies to bidir only.
 					expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC<CR><LF> (5) (0.000)");
 					expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)");
-					Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+					Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 					var expectedContentPatternB = new List<string>(); // Applies to bidir only.
 					expectedContentPatternB.Add("(>>) ABC<CR><LF>");
 					expectedContentPatternB.Add("(<<) ABC<CR><LF>");
-					Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+					Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 					for (int i = 0; i < 2; i++) // ...twice doing...
 					{
@@ -119,46 +119,46 @@ namespace YAT.Domain.Test.TextTerminal
 						terminalA.SendText(Text);
 						expectedTotalByteCountAB += TextByteCount;
 						expectedTotalLineCountAB++; // Line not completed though.
-						Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-						Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
 						expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC");
-						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 						expectedContentPatternB.Add("(>>) ABC");
-						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 						// ...pong...
 						//              A <= B
 						terminalB.SendTextLine(Text); // Line from B must be postponed until ping completes with EOL.
 						expectedTotalByteCountBA += LineByteCount;
 						expectedTotalLineCountBA++;
-						Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 					////expectedContentPatternA = same as before as line from B must be postponed until timeout.
-						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 						expectedContentPatternB.Add("(<<) ABC<CR><LF>");
-						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 						// ...and complete ping with EOL:
 						//              A => B
 						terminalA.SendTextLine("");
 						expectedTotalByteCountAB += EolByteCount;
 					////expectedTotalLineCountAB++; // Line already had started above.
-						Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-						Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
-						Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						var previousIndex = (expectedContentPatternA.Count - 1); // Complete the previous line:
 						expectedContentPatternA[previousIndex] +=                                     "<CR><LF> (5) (" + Utilities.DurationRegexPattern + ")";
 						expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)");
-						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 						expectedContentPatternB.Add("(>>) <CR><LF>");
-						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 					}
 
 					// In order to detect erroneous behavior of timeout, wait for twice the timeout before...
@@ -174,28 +174,28 @@ namespace YAT.Domain.Test.TextTerminal
 						if (i == 0) { // Account for the fact that non-completed line "ABC" will result in "ABCABC" (Tx) during second iteration.
 							expectedTotalLineCountAB++; // Line not completed though.
 						}
-						Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-						Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
 						expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC");
-						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 						expectedContentPatternB.Add("(>>) ABC");
-						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 						// ...pong...
 						//              A <= B
 						terminalB.SendTextLine(Text); // Line from B must be postponed until timeout.
 						expectedTotalByteCountBA += LineByteCount;
 						expectedTotalLineCountBA++;
-						Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 					////expectedContentPatternA = same as before as line from B must be postponed until timeout.
-						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 						expectedContentPatternB.Add("(<<) ABC<CR><LF>");
-						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 						// ...and wait for timeout:
 						Thread.Sleep(settingsA.TextTerminal.GlueCharsOfLine.Timeout); // No margin needed.
@@ -203,17 +203,17 @@ namespace YAT.Domain.Test.TextTerminal
 						var previousIndex = (expectedContentPatternA.Count - 1); // Complete the previous line:
 						expectedContentPatternA[previousIndex] +=                                             " (3) (" + Utilities.DurationRegexPattern + ")";
 						expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)");
-						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 					////expectedContentPatternB = same as before.
-						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 					}
 
 					// Refresh and verify again:
 					terminalA.RefreshRepositories();
 					terminalB.RefreshRepositories();
-					Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
-					Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+					Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
+					Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 					terminalB.Stop();
 					Utilities.WaitForDisconnection(terminalB);
@@ -281,24 +281,24 @@ namespace YAT.Domain.Test.TextTerminal
 					terminalA.SendTextLine(Text);
 					expectedTotalByteCountAB += LineByteCount;
 					expectedTotalLineCountAB++;
-					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
 					terminalB.SendTextLine(Text);
 					expectedTotalByteCountBA += LineByteCount;
 					expectedTotalLineCountBA++;
-					Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-					Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+					Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+					Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 					var expectedContentPatternA = new List<string>(); // Applies to bidir only.
 					expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC<CR><LF> (5) (0.000)");
 					expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)");
-					Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+					Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 					var expectedContentPatternB = new List<string>(); // Applies to bidir only.
 					expectedContentPatternB.Add("(>>) ABC<CR><LF>");
 					expectedContentPatternB.Add("(<<) ABC<CR><LF>");
-					Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+					Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 					for (int i = 0; i < 2; i++) // ...twice doing...
 					{
@@ -307,46 +307,46 @@ namespace YAT.Domain.Test.TextTerminal
 						terminalA.SendText(Text);
 						expectedTotalByteCountAB += TextByteCount;
 						expectedTotalLineCountAB++; // Line not completed though.
-						Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-						Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
 						expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC");
-						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 						expectedContentPatternB.Add("(>>) ABC");
-						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 						// ...pong...
 						//              A <= B
 						terminalB.SendTextLine(Text); // Line from B must be postponed until ping completes with EOL.
 						expectedTotalByteCountBA += LineByteCount;
 						expectedTotalLineCountBA++;
-						Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 					////expectedContentPatternA = same as before as line from B must be postponed until line from A has completed (timeout = forever).
-						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 						expectedContentPatternB.Add("(<<) ABC<CR><LF>");
-						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 						// ...and complete ping with EOL:
 						//              A => B
 						terminalA.SendTextLine("");
 						expectedTotalByteCountAB += EolByteCount;
 					////expectedTotalLineCountAB++; // Line already had started above.
-						Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-						Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
-						Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						previousIndex = (expectedContentPatternA.Count - 1); // Complete the previous line:
 						expectedContentPatternA[previousIndex] +=                                     "<CR><LF> (5) (" + Utilities.DurationRegexPattern + ")";
 						expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)");
-						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 						expectedContentPatternB.Add("(>>) <CR><LF>");
-						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 					}
 
 					for (int i = 0; i < 2; i++) // Twice doing...
@@ -359,8 +359,8 @@ namespace YAT.Domain.Test.TextTerminal
 						if (i == 0) { // Account for the fact that non-completed line "ABC" will result in "ABCABC" (Tx) during second iteration.
 							expectedTotalLineCountAB++; // Line not completed though.
 						}
-						Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-						Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
 						if (i == 0) { // Account for the fact that non-completed line "ABC" will result in "ABCABC" (Bidir too) during second iteration.
 							expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (<<) ABC");
@@ -369,33 +369,33 @@ namespace YAT.Domain.Test.TextTerminal
 							previousIndex = (expectedContentPatternA.Count - 1); // Add to the previous line:
 							expectedContentPatternA[previousIndex] +=                                     "ABC";
 						}
-						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 						expectedContentPatternB.Add("(>>) ABC");
-						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 						// ...pong...
 						//              A <= B
 						terminalB.SendTextLine(Text); // Line from B must be postponed until line from A has completed (timeout = forever).
 						expectedTotalByteCountBA += LineByteCount;
 						expectedTotalLineCountBA++;
-						Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+						Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 					////expectedContentPatternA = same as before as line from B must be postponed until line from A has completed (timeout = forever).
-						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 						expectedContentPatternB.Add("(<<) ABC<CR><LF>");
-						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 						// ...and wait for at least twice the default timeout:
 						Thread.Sleep(2 * Domain.Settings.TextTerminalSettings.GlueCharsOfLineTimeoutDefault); // No margin needed.
 
 					////expectedContentPatternA = same as before as line from B must be postponed until line from A has completed (timeout = forever).
-						Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+						Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 					////expectedContentPatternB = same as before.
-						Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+						Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 					}
 
 					// Only then complete the two pings with EOL:
@@ -404,31 +404,31 @@ namespace YAT.Domain.Test.TextTerminal
 					expectedTotalByteCountAB += EolByteCount;
 				////expectedTotalLineCountAB++; // Line already had started above.
 
-					Utilities.WaitForSendingAndVerifyCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndVerifyCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForSendingAndVerifyCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-					Utilities.WaitForReceivingAndVerifyCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+					Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+					Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 					previousIndex = (expectedContentPatternA.Count - 1); // Complete the previous line:
 					expectedContentPatternA[previousIndex] +=                                     "<CR><LF> (8) (" + Utilities.DurationRegexPattern + ")";
 					expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)");
 					expectedContentPatternA.Add("(" + Utilities.TimeStampRegexPattern + ") (>>) ABC<CR><LF> (5) (0.000)");
-					Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
+					Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
 
 					expectedContentPatternB.Add("(>>) <CR><LF>");
-					Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+					Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 					// Refresh and verify again:
 					terminalA.RefreshRepositories();
 					terminalB.RefreshRepositories();
 
-					Utilities.VerifyTxCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.VerifyRxCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.VerifyTxCounts(terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-					Utilities.VerifyRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+					Utilities.AssertTxCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.AssertRxCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+					Utilities.AssertTxCounts(terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+					Utilities.AssertRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-					Utilities.VerifyBidirContent(terminalA, expectedContentPatternA);
-					Utilities.VerifyBidirContent(terminalB, expectedContentPatternB);
+					Utilities.AssertBidirContent(terminalA, expectedContentPatternA);
+					Utilities.AssertBidirContent(terminalB, expectedContentPatternB);
 
 					terminalB.Stop();
 					Utilities.WaitForDisconnection(terminalB);

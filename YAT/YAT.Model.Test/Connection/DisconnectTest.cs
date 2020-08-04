@@ -29,14 +29,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using System.Threading;
 
 using MKY.Settings;
-using MKY.Text;
 
 using NUnit.Framework;
 
-using YAT.Domain;
 using YAT.Domain.Settings;
 using YAT.Settings.Application;
 
@@ -198,9 +197,11 @@ namespace YAT.Model.Test.Connection
 
 		private static void TransmitAndVerifyAndDisconnect(Terminal terminalA, Terminal terminalB, char disconnectIdentifier, bool isSameTerminal)
 		{
-			var encoding = ((EncodingEx)terminalA.SettingsRoot.TextTerminal.Encoding).Encoding;
-
-			using (var parser = new Domain.Parser.Parser(encoding, Domain.Parser.Mode.AllEscapes))
+			Encoding parserEncoding;
+			Domain.Endianness parserEndianness;
+			Domain.Parser.Mode parserMode;
+			Utilities.AssertMatchingParserSettingsForSendText(terminalA, terminalB, out parserEncoding, out parserEndianness, out parserMode);
+			using (var parser = new Domain.Parser.Parser(parserEncoding, parserEndianness, parserMode))
 			{
 				byte[] parseResult;
 
@@ -228,7 +229,7 @@ namespace YAT.Model.Test.Connection
 				terminalA.SendText(textAB);// Initial A => B
 				expectedTotalByteCountA += byteCountAB;
 				expectedTotalLineCountA++;
-				Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);
+				Utilities.WaitForTransmissionAndAssertCounts(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);
 
 				terminalB.SendText(textBA); // Response B => A
 				expectedTotalByteCountB += byteCountBA;
@@ -237,7 +238,7 @@ namespace YAT.Model.Test.Connection
 					expectedTotalByteCountB *= 2;
 					expectedTotalLineCountB *= 2;
 				}
-				Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountB, expectedTotalLineCountB);
+				Utilities.WaitForTransmissionAndAssertCounts(terminalB, terminalA, expectedTotalByteCountB, expectedTotalLineCountB);
 
 				if (disconnectIdentifier == 'A')
 				{
@@ -282,7 +283,7 @@ namespace YAT.Model.Test.Connection
 				terminalA.SendText(textAB); // Subsequent A => B
 				expectedTotalByteCountA += byteCountAB;
 				expectedTotalLineCountA++;
-				Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);
+				Utilities.WaitForTransmissionAndAssertCounts(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);
 
 				terminalB.SendText(textBA); // Response B => A
 				expectedTotalByteCountB += byteCountBA;
@@ -291,7 +292,7 @@ namespace YAT.Model.Test.Connection
 					expectedTotalByteCountB *= 2;
 					expectedTotalLineCountB *= 2;
 				}
-				Utilities.WaitForTransmissionAndVerifyCounts(terminalB, terminalA, expectedTotalByteCountB, expectedTotalLineCountB);
+				Utilities.WaitForTransmissionAndAssertCounts(terminalB, terminalA, expectedTotalByteCountB, expectedTotalLineCountB);
 			} // using (parser)
 		}
 

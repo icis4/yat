@@ -269,9 +269,9 @@ namespace YAT.Domain.Test.TextTerminal
 		private static void EolAwareWaitForTransmissionAndVerifyCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx, bool eolIsSymmetric, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
 			if (eolIsSymmetric)
-				Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+				Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 			else
-				Utilities.WaitForSendingAndVerifyCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCount);
+				Utilities.WaitForSendingAndAssertCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCount);
 		}
 
 		/// <remarks>
@@ -283,9 +283,9 @@ namespace YAT.Domain.Test.TextTerminal
 		private static void EolAwareVerifyCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx, bool eolIsSymmetric, int expectedTotalByteCount, int expectedTotalLineCount)
 		{
 			if (eolIsSymmetric)
-				Utilities.VerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+				Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 			else
-				Utilities.VerifyTxCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCount);
+				Utilities.AssertTxCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCount);
 		}
 
 		/// <summary></summary>

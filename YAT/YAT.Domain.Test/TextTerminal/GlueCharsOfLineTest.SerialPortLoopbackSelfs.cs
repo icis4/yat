@@ -131,8 +131,8 @@ namespace YAT.Domain.Test.TextTerminal
 				var fileLineCount = fi.LineCount;
 				var fileLineByteCount = (fileByteCount / fileLineCount); // Fixed to default of <CR><LF>.
 				terminal.SendFile(fi.Path);
-				Utilities.WaitForSendingAndVerifyCounts(terminal, fileByteCount, fileLineCount, fileTimeout);
-				Utilities.WaitForReceivingAndVerifyCounts(terminal, fileByteCount, fileLineCount);
+				Utilities.WaitForSendingAndAssertCounts(terminal, fileByteCount, fileLineCount, fileTimeout);
+				Utilities.WaitForReceivingAndAssertCounts(terminal, fileByteCount, fileLineCount);
 				var endedAt = DateTime.Now;
 				var duration = (endedAt - beganAt);
 				Assert.That(duration.TotalMilliseconds, Is.LessThan(fileTimeout));
@@ -183,8 +183,8 @@ namespace YAT.Domain.Test.TextTerminal
 				var fileLineCount = fi.LineCount;
 				var fileLineByteCount = (fileByteCount / fileLineCount); // Fixed to default of <CR><LF>.
 				terminal.SendFile(fi.Path);                         // ByteCount only, lines are expected to be broken more.
-				Utilities.WaitForSendingAndVerifyByteCount(terminal, fileByteCount, fileTimeout);
-				Utilities.WaitForReceivingAndVerifyByteCount(terminal, fileByteCount);
+				Utilities.WaitForSendingAndAssertByteCount(terminal, fileByteCount, fileTimeout);
+				Utilities.WaitForReceivingAndAssertByteCount(terminal, fileByteCount);
 				var endedAt = DateTime.Now;
 				var duration = (endedAt - beganAt);
 				Assert.That(duration.TotalMilliseconds, Is.LessThan(fileTimeout));

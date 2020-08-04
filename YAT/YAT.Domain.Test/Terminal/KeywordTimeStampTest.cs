@@ -93,7 +93,7 @@ namespace YAT.Domain.Test.Terminal
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			using (var parser = new Domain.Parser.Parser(Domain.Parser.Mode.NoEscapes)) // Default encoding of UTF-8 is good enough for this test case.
+			using (var parser = new Domain.Parser.Parser(Domain.Parser.Mode.Default)) // Defaults are good enough for this test case.
 			{
 				byte[] parseResult;
 
@@ -136,7 +136,7 @@ namespace YAT.Domain.Test.Terminal
 						textByteCount = parseResult.Length;
 						expectedTotalByteCount += (textByteCount + EolByteCount);
 						expectedTotalLineCount++;
-						Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+						Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 						// Prefix + TimeStamp:
 						textToSend   = "AT+DATE=" + keyword;
@@ -146,7 +146,7 @@ namespace YAT.Domain.Test.Terminal
 						textByteCount = parseResult.Length;
 						expectedTotalByteCount += (textByteCount + EolByteCount);
 						expectedTotalLineCount++;
-						Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+						Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 						// TimeStamp + Postfix:
 						textToSend   = keyword   + "=NOW";
@@ -156,7 +156,7 @@ namespace YAT.Domain.Test.Terminal
 						textByteCount = parseResult.Length;
 						expectedTotalByteCount += (textByteCount + EolByteCount);
 						expectedTotalLineCount++;
-						Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+						Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 						// Prefix + TimeStamp + Postfix:
 						textToSend   = "AT+DATE=" +  keyword  + "=NOW";
@@ -166,7 +166,7 @@ namespace YAT.Domain.Test.Terminal
 						textByteCount = parseResult.Length;
 						expectedTotalByteCount += (textByteCount + EolByteCount);
 						expectedTotalLineCount++;
-						Utilities.WaitForTransmissionAndVerifyCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+						Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 						terminalRx.Stop();
 						Utilities.WaitForDisconnection(terminalRx);

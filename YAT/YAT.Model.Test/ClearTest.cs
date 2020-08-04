@@ -103,10 +103,10 @@ namespace YAT.Model.Test
 
 					// Send test command:
 					terminalA.SendText(testSet.Command);
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, testSet);
+					Utilities.WaitForTransmissionAndAssertCounts(terminalA, terminalB, testSet);
 
 					// Verify transmission:
-					Utilities.VerifyLines(terminalA, terminalB, testSet);
+					Utilities.AssertLines(terminalA, terminalB, testSet);
 
 					// Create test set to verify clear:
 					testSet = new Utilities.TestSet(new Types.Command(@""), 0, null, null, true); // Empty terminals expected.
@@ -116,7 +116,7 @@ namespace YAT.Model.Test
 					terminalB.ClearRepositories();
 
 					// Verify clear:
-					Utilities.VerifyLines(terminalA, terminalB, testSet);
+					Utilities.AssertLines(terminalA, terminalB, testSet);
 
 					terminalB.StopIO();
 					Utilities.WaitForDisconnection(terminalB);
@@ -155,17 +155,17 @@ namespace YAT.Model.Test
 
 					// Send test command:
 					terminalA.SendText(testSetInitial.Command);
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, testSetInitial);
+					Utilities.WaitForTransmissionAndAssertCounts(terminalA, terminalB, testSetInitial);
 
 					// Verify transmission:
-					Utilities.VerifyLines(terminalA, terminalB, testSetInitial);
+					Utilities.AssertLines(terminalA, terminalB, testSetInitial);
 
 					// Send incomplete line text:
 					terminalA.SendText(testSetContinued.Command);
-					Utilities.WaitForTransmissionAndVerifyCounts(terminalA, terminalB, testSetContinued);
+					Utilities.WaitForTransmissionAndAssertCounts(terminalA, terminalB, testSetContinued);
 
 					// Verify incomplete line:
-					Utilities.VerifyLines(terminalA, terminalB, testSetContinued);
+					Utilities.AssertLines(terminalA, terminalB, testSetContinued);
 
 					var linesRx = terminalB.RepositoryToDisplayLines(RepositoryType.Rx);
 					if (linesRx.Count != 2)
@@ -179,7 +179,7 @@ namespace YAT.Model.Test
 					terminalB.ClearRepositories();
 
 					// Verify clear:
-					Utilities.VerifyLines(terminalA, terminalB, testSetCleared);
+					Utilities.AssertLines(terminalA, terminalB, testSetCleared);
 
 					terminalB.StopIO();
 					Utilities.WaitForDisconnection(terminalB);
