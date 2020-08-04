@@ -169,7 +169,7 @@ namespace YAT.Domain.Test
 
 			expectedTotalByteCount += (textByteCount + eolByteCount);
 			expectedTotalLineCount++;
-			WaitForReceivingAndAssertCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCount, timeout);
+			WaitForReceivingAndAssertCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCount, timeout);
 		}
 
 		/// <summary></summary>
@@ -763,7 +763,7 @@ namespace YAT.Domain.Test
 				i++;
 
 				var input = dlEnum.Current.ToString();
-				var pattern = DecoratePattern(ecEnum.Current);
+				var pattern = ("^" + ecEnum.Current + "$");
 				Assert.That(Regex.IsMatch(input, pattern), Is.True, @"Line {0} is ""{1}"" mismatching expected ""{2}""", i, input, pattern);
 
 				Assert.That(dlEnum.Current.TimeStamp, Is.GreaterThanOrEqualTo(previousLineTimeStamp));
@@ -771,12 +771,13 @@ namespace YAT.Domain.Test
 			}
 		}
 
-		private static string DecoratePattern(string expectedContentPattern)
+		/// <summary></summary>
+		public static string EscapeParenthesis(string expectedContentPattern)
 		{
 			expectedContentPattern = expectedContentPattern.Replace("(", @"\(");
 			expectedContentPattern = expectedContentPattern.Replace(")", @"\)");
 
-			return ("^" + expectedContentPattern + "$");
+			return (expectedContentPattern);
 		}
 
 		#endregion
