@@ -373,6 +373,25 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		public virtual string RepositoryToString(RepositoryType repositoryType)
+		{
+			AssertUndisposed();
+
+			lock (this.repositorySyncObj)
+			{
+				switch (repositoryType)
+				{
+					case RepositoryType.Tx:    return (this.txRepository   .ToString());
+					case RepositoryType.Bidir: return (this.bidirRepository.ToString());
+					case RepositoryType.Rx:    return (this.rxRepository   .ToString());
+
+					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+			}
+		}
+
+		/// <summary></summary>
 		public virtual string RepositoryToExtendedDiagnosticsString(RepositoryType repositoryType)
 		{
 			return (RepositoryToExtendedDiagnosticsString(repositoryType, ""));
