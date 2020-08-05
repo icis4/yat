@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -732,15 +733,31 @@ namespace YAT.Model.Test
 		}
 
 		/// <summary></summary>
-		public static void AddAndAssertTxContent(Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		public static void AddAndAssertTxContent(Terminal terminal, string contentToAdd, ref List<string> expectedContent)
 		{
-			Domain.Test.Utilities.AddAndAssertTxContent(terminal.UnderlyingDomain_ForTestOnly, contentPatternToAdd, ref expectedContentPattern);
+			Domain.Test.Utilities.AddAndAssertTxContent(terminal.UnderlyingDomain_ForTestOnly, contentToAdd, ref expectedContent);
+		}
+
+		/// <remarks>
+		/// Assertion will be based on <see cref="Regex"/> patterns.
+		/// </remarks>
+		public static void AddAndAssertTxContentPattern(Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		{
+			Domain.Test.Utilities.AddAndAssertTxContentPattern(terminal.UnderlyingDomain_ForTestOnly, contentPatternToAdd, ref expectedContentPattern);
 		}
 
 		/// <summary></summary>
-		public static void AddAndAssertBidirContent(Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		public static void AddAndAssertBidirContent(Terminal terminal, string contentToAdd, ref List<string> expectedContent)
 		{
-			Domain.Test.Utilities.AddAndAssertBidirContent(terminal.UnderlyingDomain_ForTestOnly, contentPatternToAdd, ref expectedContentPattern);
+			Domain.Test.Utilities.AddAndAssertBidirContent(terminal.UnderlyingDomain_ForTestOnly, contentToAdd, ref expectedContent);
+		}
+
+		/// <remarks>
+		/// Assertion will be based on <see cref="Regex"/> patterns.
+		/// </remarks>
+		public static void AddAndAssertBidirContentPattern(Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		{
+			Domain.Test.Utilities.AddAndAssertBidirContentPattern(terminal.UnderlyingDomain_ForTestOnly, contentPatternToAdd, ref expectedContentPattern);
 		}
 
 		/// <remarks>
@@ -749,9 +766,9 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// Using "1" / "2" since neither related to "A" / "B" nor "Tx" / "Rx" terminology.
 		/// </remarks>
-		public static void AddAndAssertBidirContent(Terminal terminal1, Terminal terminal2, string contentPatternToAdd, ref List<string> expectedContentPattern1, ref List<string> expectedContentPattern2)
+		public static void AddAndAssertBidirContentPattern(Terminal terminal1, Terminal terminal2, string contentPatternToAdd, ref List<string> expectedContentPattern1, ref List<string> expectedContentPattern2)
 		{
-			AddAndAssertBidirContent(terminal1, terminal2, contentPatternToAdd, contentPatternToAdd, ref expectedContentPattern1, ref expectedContentPattern2);
+			AddAndAssertBidirContentPattern(terminal1, terminal2, contentPatternToAdd, contentPatternToAdd, ref expectedContentPattern1, ref expectedContentPattern2);
 		}
 
 		/// <remarks>
@@ -760,28 +777,44 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// Using "1" / "2" since neither related to "A" / "B" nor "Tx" / "Rx" terminology.
 		/// </remarks>
-		public static void AddAndAssertBidirContent(Terminal terminal1, Terminal terminal2, string contentPatternToAdd1, string contentPatternToAdd2, ref List<string> expectedContentPattern1, ref List<string> expectedContentPattern2)
+		public static void AddAndAssertBidirContentPattern(Terminal terminal1, Terminal terminal2, string contentPatternToAdd1, string contentPatternToAdd2, ref List<string> expectedContentPattern1, ref List<string> expectedContentPattern2)
 		{
-			AddAndAssertBidirContent(terminal1, contentPatternToAdd1, ref expectedContentPattern1);
-			AddAndAssertBidirContent(terminal2, contentPatternToAdd2, ref expectedContentPattern2);
+			AddAndAssertBidirContentPattern(terminal1, contentPatternToAdd1, ref expectedContentPattern1);
+			AddAndAssertBidirContentPattern(terminal2, contentPatternToAdd2, ref expectedContentPattern2);
 		}
 
 		/// <summary></summary>
-		public static void AddAndAssertRxContent(Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		public static void AddAndAssertRxContent(Terminal terminal, string contentToAdd, ref List<string> expectedContent)
 		{
-			Domain.Test.Utilities.AddAndAssertRxContent(terminal.UnderlyingDomain_ForTestOnly, contentPatternToAdd, ref expectedContentPattern);
+			Domain.Test.Utilities.AddAndAssertRxContent(terminal.UnderlyingDomain_ForTestOnly, contentToAdd, ref expectedContent);
+		}
+
+		/// <remarks>
+		/// Assertion will be based on <see cref="Regex"/> patterns.
+		/// </remarks>
+		public static void AddAndAssertRxContentPattern(Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		{
+			Domain.Test.Utilities.AddAndAssertRxContentPattern(terminal.UnderlyingDomain_ForTestOnly, contentPatternToAdd, ref expectedContentPattern);
 		}
 
 		/// <summary></summary>
-		public static void AssertTxContent(Terminal terminal, IEnumerable<string> expectedContentPattern)
+		public static void AssertTxContent(Terminal terminal, IEnumerable<string> expectedContent)
 		{
-			Domain.Test.Utilities.AssertTxContent(terminal.UnderlyingDomain_ForTestOnly, expectedContentPattern);
+			Domain.Test.Utilities.AssertTxContent(terminal.UnderlyingDomain_ForTestOnly, expectedContent);
+		}
+
+		/// <remarks>
+		/// Assertion will be based on <see cref="Regex"/> patterns.
+		/// </remarks>
+		public static void AssertTxContentPattern(Terminal terminal, IEnumerable<string> expectedContentPattern)
+		{
+			Domain.Test.Utilities.AssertTxContentPattern(terminal.UnderlyingDomain_ForTestOnly, expectedContentPattern);
 		}
 
 		/// <summary></summary>
-		public static void AssertBidirContent(Terminal terminal, IEnumerable<string> expectedContentPattern)
+		public static void AssertBidirContent(Terminal terminal, IEnumerable<string> expectedContent)
 		{
-			Domain.Test.Utilities.AssertBidirContent(terminal.UnderlyingDomain_ForTestOnly, expectedContentPattern);
+			Domain.Test.Utilities.AssertBidirContent(terminal.UnderlyingDomain_ForTestOnly, expectedContent);
 		}
 
 		/// <remarks>
@@ -790,23 +823,39 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// Using "1" / "2" since neither related to "A" / "B" nor "Tx" / "Rx" terminology.
 		/// </remarks>
-		public static void AssertBidirContent(Terminal terminal1, Terminal terminal2, IEnumerable<string> expectedContentPattern1, IEnumerable<string> expectedContentPattern2)
+		public static void AssertBidirContent(Terminal terminal1, Terminal terminal2, IEnumerable<string> expectedContent1, IEnumerable<string> expectedContent2)
 		{
-			AssertBidirContent(terminal1, expectedContentPattern1);
-			AssertBidirContent(terminal2, expectedContentPattern2);
+			AssertBidirContent(terminal1, expectedContent1);
+			AssertBidirContent(terminal2, expectedContent2);
+		}
+
+		/// <remarks>
+		/// Assertion will be based on <see cref="Regex"/> patterns.
+		/// </remarks>
+		public static void AssertBidirContentPattern(Terminal terminal, IEnumerable<string> expectedContentPattern)
+		{
+			Domain.Test.Utilities.AssertBidirContentPattern(terminal.UnderlyingDomain_ForTestOnly, expectedContentPattern);
 		}
 
 		/// <summary></summary>
-		public static void AssertRxContent(Terminal terminal, IEnumerable<string> expectedContentPattern)
+		public static void AssertRxContent(Terminal terminal, IEnumerable<string> expectedContent)
 		{
-			Domain.Test.Utilities.AssertRxContent(terminal.UnderlyingDomain_ForTestOnly, expectedContentPattern);
+			Domain.Test.Utilities.AssertRxContent(terminal.UnderlyingDomain_ForTestOnly, expectedContent);
+		}
+
+		/// <remarks>
+		/// Assertion will be based on <see cref="Regex"/> patterns.
+		/// </remarks>
+		public static void AssertRxContentPattern(Terminal terminal, IEnumerable<string> expectedContentPattern)
+		{
+			Domain.Test.Utilities.AssertRxContentPattern(terminal.UnderlyingDomain_ForTestOnly, expectedContentPattern);
 		}
 
 		/// <summary></summary>
 		public static void AssertLines(Terminal terminalTx, Terminal terminalRx, TestSet testSet, int cycle = 1)
 		{
-			var displayLinesTx = terminalTx.RepositoryToDisplayLines(Domain.RepositoryType.Tx);
-			var displayLinesRx = terminalRx.RepositoryToDisplayLines(Domain.RepositoryType.Rx);
+			var displayLinesTx = terminalTx.RepositoryToDisplayLines(RepositoryType.Tx);
+			var displayLinesRx = terminalRx.RepositoryToDisplayLines(RepositoryType.Rx);
 
 			// Attention: Display line count is not always equal to terminal line count!
 			//  > Display line count = number of lines in view
@@ -822,7 +871,7 @@ namespace YAT.Model.Test
 			if (displayLinesRx.Count != expectedTotalDisplayLineCountRx)
 			{
 				var sbRx = new StringBuilder();
-				foreach (Domain.DisplayLine displayLineRx in displayLinesRx)
+				foreach (var displayLineRx in displayLinesRx)
 					sbRx.Append(ArrayEx.ValuesToString(displayLineRx.ToArray()));
 
 				Console.Error.Write
@@ -896,11 +945,11 @@ namespace YAT.Model.Test
 				else
 				{
 					var sbTx = new StringBuilder();
-					foreach (Domain.DisplayLine displayLineTx in displayLinesTx)
+					foreach (var displayLineTx in displayLinesTx)
 						sbTx.Append(ArrayEx.ValuesToString(displayLineTx.ToArray()));
 
 					var sbRx = new StringBuilder();
-					foreach (Domain.DisplayLine displayLineRx in displayLinesRx)
+					foreach (var displayLineRx in displayLinesRx)
 						sbRx.Append(ArrayEx.ValuesToString(displayLineRx.ToArray()));
 
 					Console.Error.Write
