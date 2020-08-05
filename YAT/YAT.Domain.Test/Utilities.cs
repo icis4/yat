@@ -35,6 +35,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 
+using MKY;
 using MKY.Text;
 
 using NUnit.Framework;
@@ -51,6 +52,19 @@ namespace YAT.Domain.Test
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public static class Utilities
 	{
+		#region Types
+		//==========================================================================================
+		// Types
+		//==========================================================================================
+
+		private enum ComparisonType
+		{
+			String,
+			Regex
+		}
+
+		#endregion
+
 		#region Constants
 		//==========================================================================================
 		// Constants
@@ -685,19 +699,29 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
-		public static void AddAndAssertTxContent(Domain.Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		public static void AddAndAssertTxContent(Domain.Terminal terminal, string contentToAdd, ref List<string> expectedContent)
+		{
+			expectedContent.Add(contentToAdd);
+
+			AssertTxContent(terminal, expectedContent);
+		}
+
+		/// <remarks>
+		/// Assertion will be based on <see cref="Regex"/> patterns.
+		/// </remarks>
+		public static void AddAndAssertTxContentPattern(Domain.Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
 		{
 			expectedContentPattern.Add(contentPatternToAdd);
 
-			AssertTxContent(terminal, expectedContentPattern);
+			AssertTxContentPattern(terminal, expectedContentPattern);
 		}
 
 		/// <summary></summary>
-		public static void AddAndAssertBidirContent(Domain.Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		public static void AddAndAssertBidirContent(Domain.Terminal terminal, string contentToAdd, ref List<string> expectedContent)
 		{
-			expectedContentPattern.Add(contentPatternToAdd);
+			expectedContent.Add(contentToAdd);
 
-			AssertBidirContent(terminal, expectedContentPattern);
+			AssertBidirContent(terminal, expectedContent);
 		}
 
 		/// <remarks>
@@ -706,9 +730,9 @@ namespace YAT.Domain.Test
 		/// <remarks>
 		/// Using "1" / "2" since neither related to "A" / "B" nor "Tx" / "Rx" terminology.
 		/// </remarks>
-		public static void AddAndAssertBidirContent(Domain.Terminal terminal1, Domain.Terminal terminal2, string contentPatternToAdd, ref List<string> expectedContentPattern1, ref List<string> expectedContentPattern2)
+		public static void AddAndAssertBidirContent(Domain.Terminal terminal1, Domain.Terminal terminal2, string contentToAdd, ref List<string> expectedContent1, ref List<string> expectedContent2)
 		{
-			AddAndAssertBidirContent(terminal1, terminal2, contentPatternToAdd, contentPatternToAdd, ref expectedContentPattern1, ref expectedContentPattern2);
+			AddAndAssertBidirContent(terminal1, terminal2, contentToAdd, contentToAdd, ref expectedContent1, ref expectedContent2);
 		}
 
 		/// <remarks>
@@ -717,37 +741,58 @@ namespace YAT.Domain.Test
 		/// <remarks>
 		/// Using "1" / "2" since neither related to "A" / "B" nor "Tx" / "Rx" terminology.
 		/// </remarks>
-		public static void AddAndAssertBidirContent(Domain.Terminal terminal1, Domain.Terminal terminal2, string contentPatternToAdd1, string contentPatternToAdd2, ref List<string> expectedContentPattern1, ref List<string> expectedContentPattern2)
+		public static void AddAndAssertBidirContent(Domain.Terminal terminal1, Domain.Terminal terminal2, string contentToAdd1, string contentToAdd2, ref List<string> expectedContent1, ref List<string> expectedContent2)
 		{
-			AddAndAssertBidirContent(terminal1, contentPatternToAdd1, ref expectedContentPattern1);
-			AddAndAssertBidirContent(terminal2, contentPatternToAdd2, ref expectedContentPattern2);
+			AddAndAssertBidirContent(terminal1, contentToAdd1, ref expectedContent1);
+			AddAndAssertBidirContent(terminal2, contentToAdd2, ref expectedContent2);
 		}
 
-		/// <summary></summary>
-		public static void AddAndAssertRxContent(Domain.Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		/// <remarks>
+		/// Assertion will be based on <see cref="Regex"/> patterns.
+		/// </remarks>
+		public static void AddAndAssertBidirContentPattern(Domain.Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
 		{
 			expectedContentPattern.Add(contentPatternToAdd);
 
-			AssertRxContent(terminal, expectedContentPattern);
+			AssertBidirContentPattern(terminal, expectedContentPattern);
 		}
 
-		private static void AddAndAssertContent(Domain.Terminal terminal, RepositoryType repositoryType, string contentPatternToAdd, ref List<string> expectedContentPattern)
+		/// <summary></summary>
+		public static void AddAndAssertRxContent(Domain.Terminal terminal, string contentToAdd, ref List<string> expectedContent)
+		{
+			expectedContent.Add(contentToAdd);
+
+			AssertRxContent(terminal, expectedContent);
+		}
+
+		/// <remarks>
+		/// Assertion will be based on <see cref="Regex"/> patterns.
+		/// </remarks>
+		public static void AddAndAssertRxContentPattern(Domain.Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
 		{
 			expectedContentPattern.Add(contentPatternToAdd);
 
-			AssertContent(terminal, repositoryType, expectedContentPattern);
+			AssertRxContentPattern(terminal, expectedContentPattern);
 		}
 
 		/// <summary></summary>
-		public static void AssertTxContent(Domain.Terminal terminal, IEnumerable<string> expectedContentPattern)
+		public static void AssertTxContent(Domain.Terminal terminal, IEnumerable<string> expectedContent)
 		{
-			AssertContent(terminal, RepositoryType.Tx, expectedContentPattern);
+			AssertContent(terminal, RepositoryType.Tx, expectedContent, ComparisonType.String);
+		}
+
+		/// <remarks>
+		/// Assertion will be based on <see cref="Regex"/> patterns.
+		/// </remarks>
+		public static void AssertTxContentPattern(Domain.Terminal terminal, IEnumerable<string> expectedContentPattern)
+		{
+			AssertContent(terminal, RepositoryType.Tx, expectedContentPattern, ComparisonType.Regex);
 		}
 
 		/// <summary></summary>
-		public static void AssertBidirContent(Domain.Terminal terminal, IEnumerable<string> expectedContentPattern)
+		public static void AssertBidirContent(Domain.Terminal terminal, IEnumerable<string> expectedContent)
 		{
-			AssertContent(terminal, RepositoryType.Bidir, expectedContentPattern);
+			AssertContent(terminal, RepositoryType.Bidir, expectedContent, ComparisonType.String);
 		}
 
 		/// <remarks>
@@ -756,24 +801,40 @@ namespace YAT.Domain.Test
 		/// <remarks>
 		/// Using "1" / "2" since neither related to "A" / "B" nor "Tx" / "Rx" terminology.
 		/// </remarks>
-		public static void AssertBidirContent(Domain.Terminal terminal1, Domain.Terminal terminal2, IEnumerable<string> expectedContentPattern1, IEnumerable<string> expectedContentPattern2)
+		public static void AssertBidirContent(Domain.Terminal terminal1, Domain.Terminal terminal2, IEnumerable<string> expectedContent1, IEnumerable<string> expectedContent2)
 		{
-			AssertBidirContent(terminal1, expectedContentPattern1);
-			AssertBidirContent(terminal2, expectedContentPattern2);
+			AssertBidirContent(terminal1, expectedContent1);
+			AssertBidirContent(terminal2, expectedContent2);
+		}
+
+		/// <remarks>
+		/// Assertion will be based on <see cref="Regex"/> patterns.
+		/// </remarks>
+		public static void AssertBidirContentPattern(Domain.Terminal terminal, IEnumerable<string> expectedContentPattern)
+		{
+			AssertContent(terminal, RepositoryType.Bidir, expectedContentPattern, ComparisonType.Regex);
 		}
 
 		/// <summary></summary>
 		public static void AssertRxContent(Domain.Terminal terminal, IEnumerable<string> expectedContentPattern)
 		{
-			AssertContent(terminal, RepositoryType.Rx, expectedContentPattern);
+			AssertContent(terminal, RepositoryType.Rx, expectedContentPattern, ComparisonType.String);
 		}
 
-		private static void AssertContent(Domain.Terminal terminal, RepositoryType repositoryType, IEnumerable<string> expectedContentPattern)
+		/// <remarks>
+		/// Assertion will be based on <see cref="Regex"/> patterns.
+		/// </remarks>
+		public static void AssertRxContentPattern(Domain.Terminal terminal, IEnumerable<string> expectedContentPattern)
+		{
+			AssertContent(terminal, RepositoryType.Rx, expectedContentPattern, ComparisonType.Regex);
+		}
+
+		private static void AssertContent(Domain.Terminal terminal, RepositoryType repositoryType, IEnumerable<string> expectedContentOrPattern, ComparisonType comparisonType)
 		{
 			var displayLines = terminal.RepositoryToDisplayLines(repositoryType);
 
 			var dlEnum = displayLines.GetEnumerator();
-			var ecEnum = expectedContentPattern.GetEnumerator();
+			var ecEnum = expectedContentOrPattern.GetEnumerator();
 
 			var i = 0;
 			var previousLineTimeStamp = DateTime.MinValue;
@@ -788,14 +849,34 @@ namespace YAT.Domain.Test
 					if (dlEnumIsAtEnd && ecEnumIsAtEnd)
 						break;
 					else          // Mismatching counts shall be asserted last, i.e. content mismatches shall be asserted first.
-						Assert.Fail("Mismatching counts, terminal contains {0} lines but {1} lines are expected!", displayLines.Count, expectedContentPattern.Count());
+						Assert.Fail("Mismatching counts, terminal contains {0} lines but {1} lines are expected!", displayLines.Count, expectedContentOrPattern.Count());
 				}
 
 				i++;
 
-				var input = dlEnum.Current.ToString();
-				var pattern = ("^" + ecEnum.Current + "$");
-				Assert.That(Regex.IsMatch(input, pattern), Is.True, @"Line {0} is ""{1}"" mismatching expected ""{2}""", i, input, pattern);
+				switch (comparisonType)
+				{
+					case ComparisonType.String:
+					{
+						var actual = dlEnum.Current.ToString();
+						var content = ecEnum.Current;
+						Assert.That(actual.Equals(content, StringComparison.Ordinal), Is.True, @"Line {0} is ""{1}"" mismatching expected ""{2}""", i, actual, content);
+						break;
+					}
+
+					case ComparisonType.Regex:
+					{
+						var actual = dlEnum.Current.ToString();
+						var pattern = ("^" + ecEnum.Current + "$");
+						Assert.That(Regex.IsMatch(actual, pattern), Is.True, @"Line {0} is ""{1}"" mismatching expected ""{2}""", i, actual, pattern);
+						break;
+					}
+
+					default:
+					{
+						throw (new ArgumentOutOfRangeException("comparisonType", comparisonType, MessageHelper.InvalidExecutionPreamble + "'" + comparisonType.ToString() + "' is a comparison type that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
+					}
+				}
 
 				Assert.That(dlEnum.Current.TimeStamp, Is.GreaterThanOrEqualTo(previousLineTimeStamp));
 				previousLineTimeStamp = dlEnum.Current.TimeStamp;
@@ -803,12 +884,20 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
-		public static string EscapeParenthesis(string expectedContentPattern)
+		public static string EscapeRegex(string content)
 		{
-			expectedContentPattern = expectedContentPattern.Replace("(", @"\(");
-			expectedContentPattern = expectedContentPattern.Replace(")", @"\)");
+			return (EscapeParenthesis(content)); // Nothing else to escape needed yet.
+		}
 
-			return (expectedContentPattern);
+		/// <summary></summary>
+		public static string EscapeParenthesis(string content)
+		{
+			string contentPattern = content;
+
+			contentPattern = contentPattern.Replace("(", @"\(");
+			contentPattern = contentPattern.Replace(")", @"\)");
+
+			return (contentPattern);
 		}
 
 		#endregion

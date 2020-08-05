@@ -116,28 +116,28 @@ namespace YAT.Model.Test
 						int expectedTotalByteCountOffsetBA = 0;
 						int expectedTotalLineCountAB = 0;
 						int expectedTotalLineCountBA = 0;
-						var expectedContentA = new List<string>(); // Applies to bidir only.
-						var expectedContentB = new List<string>(); // Applies to bidir only.
+						var expectedContentPatternA = new List<string>(); // Applies to bidir only.
+						var expectedContentPatternB = new List<string>(); // Applies to bidir only.
 
 						// Initial ping-pong:
 						text = "Ping A => B";
 						Utilities.TransmitAndAssertCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.AddAndAssertBidirContent(terminalA, terminalB, text + Eol, ref expectedContentA, ref expectedContentB);
+						Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 
 						text = "Pong B => A";
 						Utilities.TransmitAndAssertCounts(terminalB, terminalA, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
-						Utilities.AddAndAssertBidirContent(terminalB, terminalA, text + Eol, ref expectedContentB, ref expectedContentA);
+						Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
 
 						// Subsequent ping exceeding terminal A, then ping again:
 						text = "PingExceeding A => B";
 						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + MaxLineExceededWarningPattern;
 						expectedTotalByteCountOffsetAB--; // Only B = Rx will show the complete line.
 						Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.AddAndAssertBidirContent(terminalA, terminalB, contentPatternExceeded, text + Eol, ref expectedContentA, ref expectedContentB);
+						Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, contentPatternExceeded, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 
 						text = "Ping A => B";
 						Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.AddAndAssertBidirContent(terminalA, terminalB, text + Eol, ref expectedContentA, ref expectedContentB);
+						Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 
 						// Subsequent multiple pings exceeding terminal A, then ping again:
 						text = "PingExceeding A => B";
@@ -146,23 +146,23 @@ namespace YAT.Model.Test
 						{
 							expectedTotalByteCountOffsetAB--; // Only B = Rx will show the complete line.
 							Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-							Utilities.AddAndAssertBidirContent(terminalA, terminalB, contentPatternExceeded, text + Eol, ref expectedContentA, ref expectedContentB);
+							Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, contentPatternExceeded, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 						}
 
 						text = "Ping A => B";
 						Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.AddAndAssertBidirContent(terminalA, terminalB, text + Eol, ref expectedContentA, ref expectedContentB);
+						Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 
 						// Subsequent ping exceeding terminal A, then pong:
 						text = "PingExceeding A => B";
 						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + MaxLineExceededWarningPattern;
 						expectedTotalByteCountOffsetAB--; // Only B = Rx will show the complete line.
 						Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.AddAndAssertBidirContent(terminalA, terminalB, contentPatternExceeded, text + Eol, ref expectedContentA, ref expectedContentB);
+						Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, contentPatternExceeded, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 
 						text = "Pong B => A";
 						Utilities.TransmitAndAssertRxCountsWithOffset(terminalB, terminalA, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-						Utilities.AddAndAssertBidirContent(terminalB, terminalA, text + Eol, ref expectedContentB, ref expectedContentA);
+						Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
 
 						// Subsequent multiple pings exceeding terminal A, then pong:
 						text = "PingExceeding A => B";
@@ -171,12 +171,12 @@ namespace YAT.Model.Test
 						{
 							expectedTotalByteCountOffsetAB--; // Only B = Rx will show the complete line.
 							Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-							Utilities.AddAndAssertBidirContent(terminalA, terminalB, contentPatternExceeded, text + Eol, ref expectedContentA, ref expectedContentB);
+							Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, contentPatternExceeded, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 						}
 
 						text = "Pong B => A";
 						Utilities.TransmitAndAssertRxCountsWithOffset(terminalB, terminalA, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-						Utilities.AddAndAssertBidirContent(terminalB, terminalA, text + Eol, ref expectedContentB, ref expectedContentA);
+						Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
 
 						// Subsequent pong exceeding terminal A, then pong again:
 						text = "PongExceeding B => A";
@@ -184,11 +184,11 @@ namespace YAT.Model.Test
 						expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
 						Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
 						Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-						Utilities.AddAndAssertBidirContent(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentB, ref expectedContentA);
+						Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentPatternB, ref expectedContentPatternA);
 
 						text = "Pong B => A";
 						Utilities.TransmitAndAssertRxCountsWithOffset(terminalB, terminalA, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-						Utilities.AddAndAssertBidirContent(terminalB, terminalA, text + Eol, ref expectedContentB, ref expectedContentA);
+						Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
 
 						// Subsequent multiple pongs exceeding terminal A, then pong again:
 						text = "PongExceeding B => A";
@@ -198,12 +198,12 @@ namespace YAT.Model.Test
 							expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
 							Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
 							Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-							Utilities.AddAndAssertBidirContent(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentB, ref expectedContentA);
+							Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentPatternB, ref expectedContentPatternA);
 						}
 
 						text = "Pong B => A";
 						Utilities.TransmitAndAssertRxCountsWithOffset(terminalB, terminalA, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-						Utilities.AddAndAssertBidirContent(terminalB, terminalA, text + Eol, ref expectedContentB, ref expectedContentA);
+						Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
 
 						// Subsequent pong exceeding terminal A, then ping:
 						text = "PongExceeding B => A";
@@ -211,11 +211,11 @@ namespace YAT.Model.Test
 						expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
 						Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
 						Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-						Utilities.AddAndAssertBidirContent(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentB, ref expectedContentA);
+						Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentPatternB, ref expectedContentPatternA);
 
 						text = "Ping A => B";
 						Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.AddAndAssertBidirContent(terminalA, terminalB, text + Eol, ref expectedContentA, ref expectedContentB);
+						Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 
 						// Subsequent multiple pongs exceeding terminal A, then ping:
 						text = "PongExceeding B => A";
@@ -225,12 +225,12 @@ namespace YAT.Model.Test
 							expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
 							Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
 							Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-							Utilities.AddAndAssertBidirContent(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentB, ref expectedContentA);
+							Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentPatternB, ref expectedContentPatternA);
 						}
 
 						text = "Ping A => B";
 						Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.AddAndAssertBidirContent(terminalA, terminalB, text + Eol, ref expectedContentA, ref expectedContentB);
+						Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 
 						// Subsequent pongs exceeding terminal A with variation, then ping:
 						text = "PongExceeding B => A "; // Additional space will result in <CR> not being shown.
@@ -239,17 +239,17 @@ namespace YAT.Model.Test
 						expectedTotalByteCountOffsetBA--; // Account for missing <CR>.
 						Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
 						Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-						Utilities.AddAndAssertBidirContent(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentB, ref expectedContentA);
+						Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentPatternB, ref expectedContentPatternA);
 
 						//     "PongExceeding B => A"
 						text = "PongNotEx'ng B => A"; // Less a character will result in <CR><LF> being shown.
 						Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
 						Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-						Utilities.AddAndAssertBidirContent(terminalB, terminalA, text + Eol, text + Eol, ref expectedContentB, ref expectedContentA);
+						Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
 
 						text = "Ping A => B";
 						Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.AddAndAssertBidirContent(terminalA, terminalB, text + Eol, ref expectedContentA, ref expectedContentB);
+						Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 
 						// Wait to ensure that no operation is ongoing anymore and verify again:
 						Utilities.WaitForReverification();
@@ -258,8 +258,8 @@ namespace YAT.Model.Test
 						Utilities.AssertTxCounts(          terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 						Utilities.AssertRxCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
 
-						Utilities.AssertBidirContent(terminalA, expectedContentA);
-						Utilities.AssertBidirContent(terminalB, expectedContentB);
+						Utilities.AssertBidirContentPattern(terminalA, expectedContentPatternA);
+						Utilities.AssertBidirContentPattern(terminalB, expectedContentPatternB);
 
 						// Refresh and verify again:
 						terminalA.RefreshRepositories();
@@ -270,8 +270,8 @@ namespace YAT.Model.Test
 						Utilities.AssertTxCounts(          terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 						Utilities.AssertRxCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
 
-						Utilities.AssertBidirContent(terminalA, expectedContentA);
-						Utilities.AssertBidirContent(terminalB, expectedContentB);
+						Utilities.AssertBidirContentPattern(terminalA, expectedContentPatternA);
+						Utilities.AssertBidirContentPattern(terminalB, expectedContentPatternB);
 
 						terminalB.StopIO();
 						Utilities.WaitForDisconnection(terminalB);
