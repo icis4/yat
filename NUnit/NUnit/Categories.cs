@@ -145,7 +145,7 @@ namespace NUnit
 	{
 		/// <summary></summary>
 		public HourDurationCategoryAttribute(int hours)
-			: base(0, hours, 0, 0, 0, CategoryStrings.Duration + " is approx. " + hours.ToString(CultureInfo.CurrentCulture) + " hour(s)")
+			: base(0, hours, 0, 0, 0, CategoryStrings.Duration + " is approx. " + hours.ToString(CultureInfo.CurrentCulture) + " hour" + ((hours == 1) ? "" : "s"))
 		{
 		}
 
@@ -164,7 +164,7 @@ namespace NUnit
 	{
 		/// <summary></summary>
 		public MinuteDurationCategoryAttribute(int minutes)
-			: base(0, 0, minutes, 0, 0, CategoryStrings.Duration + " is approx. " + minutes.ToString(CultureInfo.CurrentCulture) + " minute(s)")
+			: base(0, 0, minutes, 0, 0, CategoryStrings.Duration + " is approx. " + minutes.ToString(CultureInfo.CurrentCulture) + " minute" + ((minutes == 1) ? "" : "s"))
 		{
 		}
 
@@ -183,7 +183,7 @@ namespace NUnit
 	{
 		/// <summary></summary>
 		public SecondDurationCategoryAttribute(int seconds)
-			: base(0, 0, 0, seconds, 0, CategoryStrings.Duration + " is approx. " + seconds.ToString(CultureInfo.CurrentCulture) + " second(s)")
+			: base(0, 0, 0, seconds, 0, CategoryStrings.Duration + " is approx. " + seconds.ToString(CultureInfo.CurrentCulture) + " second" + ((seconds == 1) ? "" : "s"))
 		{
 		}
 
