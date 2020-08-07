@@ -41,7 +41,7 @@ namespace YAT.Domain.Test
 	// SerialPort
 	//----------------------------------------------------------------------------------------------
 
-	/// <remarks>Just named "Descriptor" instead of "TestCaseDescriptor" for compactness.</remarks>
+	/// <remarks>Just named "Descriptor" rather than "TestCaseDescriptor" for compactness.</remarks>
 	public class SerialPortDescriptor : TestCaseDescriptor
 	{
 		/// <summary></summary>
@@ -55,7 +55,7 @@ namespace YAT.Domain.Test
 		}
 	}
 
-	/// <remarks>Just named "Descriptor" instead of "TestCaseDescriptor" for compactness.</remarks>
+	/// <remarks>Just named "Descriptor" rather than "TestCaseDescriptor" for compactness.</remarks>
 	public class SerialPortPairDescriptor : TestCaseDescriptor
 	{
 		/// <summary></summary>
@@ -80,7 +80,7 @@ namespace YAT.Domain.Test
 	// Socket
 	//----------------------------------------------------------------------------------------------
 
-	/// <remarks>Just named "Descriptor" instead of "TestCaseDescriptor" for compactness.</remarks>
+	/// <remarks>Just named "Descriptor" rather than "TestCaseDescriptor" for compactness.</remarks>
 	public abstract class IPSocketDescriptorBase : TestCaseDescriptor
 	{
 		/// <summary></summary>
@@ -94,7 +94,7 @@ namespace YAT.Domain.Test
 		}
 	}
 
-	/// <remarks>Just named "Descriptor" instead of "TestCaseDescriptor" for compactness.</remarks>
+	/// <remarks>Just named "Descriptor" rather than "TestCaseDescriptor" for compactness.</remarks>
 	public class IPSocketTypeDescriptor : IPSocketDescriptorBase
 	{
 		/// <summary></summary>
@@ -108,7 +108,7 @@ namespace YAT.Domain.Test
 		}
 	}
 
-	/// <remarks>Just named "Descriptor" instead of "TestCaseDescriptor" for compactness.</remarks>
+	/// <remarks>Just named "Descriptor" rather than "TestCaseDescriptor" for compactness.</remarks>
 	public class IPSocketTypePairDescriptor : IPSocketDescriptorBase
 	{
 		/// <summary></summary>
@@ -126,7 +126,7 @@ namespace YAT.Domain.Test
 		}
 	}
 
-	/// <remarks>Just named "Descriptor" instead of "TestCaseDescriptor" for compactness.</remarks>
+	/// <remarks>Just named "Descriptor" rather than "TestCaseDescriptor" for compactness.</remarks>
 	public class IPSocketDescriptor : IPSocketTypeDescriptor
 	{
 		/// <summary></summary>
@@ -147,7 +147,7 @@ namespace YAT.Domain.Test
 	// USB Ser/HID
 	//----------------------------------------------------------------------------------------------
 
-	/// <remarks>Just named "Descriptor" instead of "TestCaseDescriptor" for compactness.</remarks>
+	/// <remarks>Just named "Descriptor" rather than "TestCaseDescriptor" for compactness.</remarks>
 	public class UsbSerialHidDescriptor : TestCaseDescriptor
 	{
 		/// <summary></summary>

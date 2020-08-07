@@ -257,7 +257,7 @@ namespace YAT.Domain.Test.Terminal
 
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
-		public static IEnumerable TestCasesSerialPortLoopbackPairs_Text
+		public static IEnumerable TestCasesSerialPortLoopbackPairs
 		{
 			get
 			{
@@ -296,7 +296,7 @@ namespace YAT.Domain.Test.Terminal
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
-		public static IEnumerable TestCasesSerialPortLoopbackSelfs_Text
+		public static IEnumerable TestCasesSerialPortLoopbackSelfs
 		{
 			get
 			{
@@ -334,7 +334,7 @@ namespace YAT.Domain.Test.Terminal
 
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
-		public static IEnumerable TestCasesIPSocketPairs_Text
+		public static IEnumerable TestCasesIPSocketPairs
 		{
 			get
 			{
@@ -354,7 +354,7 @@ namespace YAT.Domain.Test.Terminal
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
-		public static IEnumerable TestCasesIPSocketSelfs_Text
+		public static IEnumerable TestCasesIPSocketSelfs
 		{
 			get
 			{
@@ -478,7 +478,7 @@ namespace YAT.Domain.Test.Terminal
 		//==========================================================================================
 
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
-		[Test, TestCaseSource(typeof(SendTestData), "TestCasesSerialPortLoopbackPairs_Text"), Combinatorial] // Test is mandatory, it shall not be excludable.
+		[Test, TestCaseSource(typeof(SendTestData), "TestCasesSerialPortLoopbackPairs"), Combinatorial] // Test is mandatory, it shall not be excludable.
 		public virtual void TestSerialPortLoopbackPairs(TerminalSettings settingsA, TerminalSettings settingsB, FileInfo fileInfo, SendMethod sendMethod, int timeout)
 		{
 			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackPairsAreAvailable)
@@ -490,7 +490,7 @@ namespace YAT.Domain.Test.Terminal
 
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
-		[Test, TestCaseSource(typeof(SendTestData), "TestCasesSerialPortLoopbackSelfs_Text")]
+		[Test, TestCaseSource(typeof(SendTestData), "TestCasesSerialPortLoopbackSelfs")]
 		public virtual void TestSerialPortLoopbackSelfs(TerminalSettings settings, FileInfo fileInfo, SendMethod sendMethod, int timeout)
 		{
 			if (!MKY.IO.Ports.Test.ConfigurationProvider.Configuration.LoopbackSelfsAreAvailable)
@@ -501,7 +501,7 @@ namespace YAT.Domain.Test.Terminal
 		}
 
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
-		[Test, TestCaseSource(typeof(SendTestData), "TestCasesIPSocketPairs_Text")]
+		[Test, TestCaseSource(typeof(SendTestData), "TestCasesIPSocketPairs")]
 		public virtual void TestIPSocketPairs(TerminalSettings settingsA, TerminalSettings settingsB, FileInfo fileInfo, SendMethod sendMethod, int timeout)
 		{
 			// IPSocketPairs are always made available by 'Utilities', no need to check for this.
@@ -511,7 +511,7 @@ namespace YAT.Domain.Test.Terminal
 
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
-		[Test, TestCaseSource(typeof(SendTestData), "TestCasesIPSocketSelfs_Text")]
+		[Test, TestCaseSource(typeof(SendTestData), "TestCasesIPSocketSelfs")]
 		public virtual void TestIPSocketSelfs(TerminalSettings settings, FileInfo fileInfo, SendMethod sendMethod, int timeout)
 		{
 			// IPSocketSelfs are always made available by 'Utilities', no need to check for this.

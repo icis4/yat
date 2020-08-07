@@ -40,7 +40,16 @@ using YAT.Domain.Settings;
 
 namespace YAT.Domain.Test
 {
-	/// <remarks>Just named "Data" instead of "TestCaseData" for compactness.</remarks>
+	/// <remarks>
+	/// Using settings as argument(s) rather than e.g. an I/O specific descriptor for:
+	/// <list type="bullet">
+	/// <item><description>Encapsulation of implementation details, i.e. no need to expose I/O specifics to the tests.</description></item>
+	/// <item><description>Simplification of test implementation, i.e. no need for further processing in the simple cases.</description></item>
+	/// </list>
+	/// </remarks>
+	/// <remarks>
+	/// Just named "Data" rather than "TestCaseData" for compactness.
+	/// </remarks>
 	public static class Data
 	{
 		/// <remarks>Explicitly using two settings for "Pair" test cases, instead of enumerable generic number of settings.</remarks>
@@ -100,7 +109,7 @@ namespace YAT.Domain.Test
 			return (ToSerialPortLoopbackPairsTestCases(terminalType, null));
 		}
 
-		/// <summary></summary>
+		/// <remarks>See <see cref="Data"/>.</remarks>
 		public static IEnumerable<TestCaseData> ToSerialPortLoopbackPairsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
 		{
 			foreach (var descriptor in Environment.SerialPortLoopbackPairs) // Upper level grouping shall be 'by I/O'.
@@ -118,7 +127,7 @@ namespace YAT.Domain.Test
 			return (ToSerialPortLoopbackSelfsTestCases(terminalType, null));
 		}
 
-		/// <summary></summary>
+		/// <remarks>See <see cref="Data"/>.</remarks>
 		public static IEnumerable<TestCaseData> ToSerialPortLoopbackSelfsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
 		{
 			foreach (var descriptor in Environment.SerialPortLoopbackSelfs) // Upper level grouping shall be 'by I/O'.
@@ -142,7 +151,7 @@ namespace YAT.Domain.Test
 			return (ToIPSocketPairsTestCases(terminalType, null));
 		}
 
-		/// <summary></summary>
+		/// <remarks>See <see cref="Data"/>.</remarks>
 		public static IEnumerable<TestCaseData> ToIPSocketPairsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
 		{
 			foreach (var descriptor in Environment.IPSocketPairs) // Upper level grouping shall be 'by I/O'.
@@ -160,7 +169,7 @@ namespace YAT.Domain.Test
 			return (ToIPSocketSelfsTestCases(terminalType, null));
 		}
 
-		/// <summary></summary>
+		/// <remarks>See <see cref="Data"/>.</remarks>
 		public static IEnumerable<TestCaseData> ToIPSocketSelfsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
 		{
 			foreach (var descriptor in Environment.IPSocketSelfs) // Upper level grouping shall be 'by I/O'.
@@ -182,7 +191,7 @@ namespace YAT.Domain.Test
 			// SerialPort
 			//--------------------------------------------------------------------------------------
 
-			/// <summary></summary>
+			/// <remarks>See <see cref="Data"/>.</remarks>
 			[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
 			public static IEnumerable TestCasesSerialPortLoopbackPairs_Text
 			{
@@ -203,7 +212,7 @@ namespace YAT.Domain.Test
 				}
 			}
 
-			/// <summary></summary>
+			/// <remarks>See <see cref="Data"/>.</remarks>
 			[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 			[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
 			public static IEnumerable TestCasesSerialPortLoopbackSelfs_Text
