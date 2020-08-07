@@ -190,7 +190,7 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				foreach (var tc in Domain.Test.Data.ToSerialPortLoopbackPairsTestCases_Text(Tests))
+				foreach (var tc in Domain.Test.Data.ToSerialPortLoopbackPairsTestCases(TerminalType.Text, Tests))
 					yield return (tc);
 			}
 		}
@@ -202,7 +202,7 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				foreach (var tc in Domain.Test.Data.ToSerialPortLoopbackSelfsTestCases_Text(Tests))
+				foreach (var tc in Domain.Test.Data.ToSerialPortLoopbackSelfsTestCases(TerminalType.Text, Tests))
 					yield return (tc);
 			}
 		}
@@ -213,7 +213,7 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				foreach (var tc in Domain.Test.Data.ToIPSocketPairsTestCases_Text(Tests))
+				foreach (var tc in Domain.Test.Data.ToIPSocketPairsTestCases(TerminalType.Text, Tests))
 					yield return (tc);
 			}
 		}
@@ -225,7 +225,7 @@ namespace YAT.Model.Test.Transmission
 		{
 			get
 			{
-				foreach (var tc in Domain.Test.Data.ToIPSocketSelfsTestCases_Text(Tests))
+				foreach (var tc in Domain.Test.Data.ToIPSocketSelfsTestCases(TerminalType.Text, Tests))
 					yield return (tc);
 			}
 		}

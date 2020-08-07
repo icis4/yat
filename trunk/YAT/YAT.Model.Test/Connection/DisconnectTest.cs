@@ -36,6 +36,7 @@ using MKY.Settings;
 
 using NUnit.Framework;
 
+using YAT.Domain;
 using YAT.Domain.Settings;
 using YAT.Settings.Application;
 
@@ -70,7 +71,7 @@ namespace YAT.Model.Test.Connection
 		{
 			get
 			{
-				foreach (var tc in Domain.Test.Data.ToIPSocketPairsTestCases_Text(Tests))
+				foreach (var tc in Domain.Test.Data.ToIPSocketPairsTestCases(TerminalType.Text, Tests))
 					yield return (tc);
 			}
 		}
@@ -82,7 +83,7 @@ namespace YAT.Model.Test.Connection
 		{
 			get
 			{
-				foreach (var tc in Domain.Test.Data.ToIPSocketSelfsTestCases_Text(Tests))
+				foreach (var tc in Domain.Test.Data.ToIPSocketSelfsTestCases(TerminalType.Text, Tests))
 					yield return (tc);
 			}
 		}
