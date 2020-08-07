@@ -43,7 +43,9 @@
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 //// 'System.Net' as well as 'ALAZ.SystemEx.NetEx' are explicitly used for more obvious distinction.
+using System.Text;
 using System.Threading;
 
 using MKY.Diagnostics;
@@ -103,7 +105,7 @@ namespace MKY.IO.Serial.Socket
 					// Do not signal after each byte, this is a) not efficient and b) not desired
 					// as send requests shall ideally be sent as a single chunk.
 
-					DebugSend(ConvertEx.ToHexString(b) + " enqueued.");
+					DebugSendEnqueue(ConvertEx.ToHexString(b));
 				}
 
 				// Signal thread to send the requested packet:
@@ -192,7 +194,7 @@ namespace MKY.IO.Serial.Socket
 									this.sendQueue.Clear();
 								}
 
-								DebugSend(data.Length + " byte(s) dequeued.");
+								DebugSendDequeue(data.Length);
 
 								System.Net.IPEndPoint remoteEndPoint;
 								lock (this.socketSyncObj)
@@ -258,13 +260,38 @@ namespace MKY.IO.Serial.Socket
 		// Debug
 		//==========================================================================================
 
+	#if (DEBUG_SEND)
+		private int DebugSend_enqueueCounter; // = 0;
+		private int DebugSend_dequeueCounter; // = 0;
+	#endif
+
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_SEND")]
-		private void DebugSend(string message)
+		private void DebugSendEnqueue(string byteAsHex)
 		{
-			DebugMessage(message);
+			var sb = new StringBuilder(byteAsHex + " enqueued for sending, ");
+		#if (DEBUG_SEND)
+			unchecked { DebugSend_enqueueCounter++; }
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} bytes in total.", DebugSend_enqueueCounter);
+		#endif
+			DebugMessage(sb.ToString());
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_SEND")]
+		private void DebugSendDequeue(int count)
+		{
+			var sb = new StringBuilder();
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} bytes dequeued for sending, ", count);
+		#if (DEBUG_SEND)
+			unchecked { DebugSend_enqueueCounter += count; }
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} bytes in total.", DebugSend_enqueueCounter);
+		#endif
+			DebugMessage(sb.ToString());
 		}
 
 		#endregion

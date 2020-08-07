@@ -21,6 +21,23 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of thread state:
+////#define DEBUG_THREAD_STATE
+
+	// Enable debugging of sending:
+////#define DEBUG_SEND // Attention: Must also be activated in TcpClient.cs !!
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -29,7 +46,9 @@
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 //// 'System.Net' as well as 'ALAZ.SystemEx.NetEx' are explicitly used for more obvious distinction.
+using System.Text;
 using System.Threading;
 
 using MKY.Diagnostics;
@@ -60,6 +79,8 @@ namespace MKY.IO.Serial.Socket
 					if (this.socketConnection != null)
 						this.socketConnection.BeginSend(data);
 				}
+
+				DebugSendBegin(data.Length);
 
 				return (true);
 			}
@@ -245,6 +266,8 @@ namespace MKY.IO.Serial.Socket
 									this.dataSentQueue.Clear();
 								}
 
+								DebugSendDequeue(data.Length);
+
 								OnDataSent(new SocketDataSentEventArgs(data, remoteEndPoint));
 							}
 							finally
@@ -277,6 +300,73 @@ namespace MKY.IO.Serial.Socket
 			}
 
 			DebugThreadState("SendThread() has terminated.");
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_THREAD_STATE")]
+		private void DebugThreadState(string message)
+		{
+			DebugMessage(message);
+		}
+
+	#if (DEBUG_SEND)
+		private int DebugSend_beginCounter;   // = 0;
+		private int DebugSend_enqueueCounter; // = 0;
+		private int DebugSend_dequeueCounter; // = 0;
+	#endif
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_SEND")]
+		private void DebugSendBegin(int count)
+		{
+			var sb = new StringBuilder();
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} bytes invoked for sending, ", count);
+		#if (DEBUG_SEND)
+			unchecked { DebugSend_beginCounter += count; }
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} bytes in total.", DebugSend_beginCounter);
+		#endif
+			DebugMessage(sb.ToString());
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_SEND")]
+		private void DebugSendEnqueue(int count)
+		{
+			var sb = new StringBuilder();
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} sent bytes enqueued, ", count);
+		#if (DEBUG_SEND)
+			unchecked { DebugSend_enqueueCounter += count; }
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} bytes in total.", DebugSend_enqueueCounter);
+		#endif
+			DebugMessage(sb.ToString());
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_SEND")]
+		private void DebugSendDequeue(int count)
+		{
+			var sb = new StringBuilder();
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} sent bytes dequeued, ", count);
+		#if (DEBUG_SEND)
+			unchecked { DebugSend_dequeueCounter += count; }
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} bytes in total.", DebugSend_dequeueCounter);
+		#endif
+			DebugMessage(sb.ToString());
 		}
 
 		#endregion
