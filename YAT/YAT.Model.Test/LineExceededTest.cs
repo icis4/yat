@@ -90,7 +90,6 @@ namespace YAT.Model.Test
 			using (var parser = new Domain.Parser.Parser(Domain.Parser.Mode.Default)) // Defaults are good enough for this test case.
 			{                                 // "Ping A => B<CR><LF>" is 13 chars/bytes.
 				const int MaxLineLength = 21; // "PingExceeding A => B<CR><LF>" is 22 chars/bytes, result shall be "PingExceeding A => B<CR>[Warning: ..."
-				const string MaxLineExceededWarningPattern = @"\[Warning: Maximal number of (characters|bytes) per line exceeded! Check the line break settings in Terminal > Settings > (Text|Binary) or increase the limit in Terminal > Settings > Advanced.\]";
 
 				var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				settingsA.Display.MaxLineLength = MaxLineLength;
@@ -130,7 +129,7 @@ namespace YAT.Model.Test
 
 						// Subsequent ping exceeding terminal A, then ping again:
 						text = "PingExceeding A => B";
-						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + MaxLineExceededWarningPattern;
+						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
 						expectedTotalByteCountOffsetAB--; // Only B = Rx will show the complete line.
 						Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
 						Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, contentPatternExceeded, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
@@ -141,7 +140,7 @@ namespace YAT.Model.Test
 
 						// Subsequent multiple pings exceeding terminal A, then ping again:
 						text = "PingExceeding A => B";
-						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + MaxLineExceededWarningPattern;
+						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
 						for (int i = 0; i < Repetitions; i++)
 						{
 							expectedTotalByteCountOffsetAB--; // Only B = Rx will show the complete line.
@@ -155,7 +154,7 @@ namespace YAT.Model.Test
 
 						// Subsequent ping exceeding terminal A, then pong:
 						text = "PingExceeding A => B";
-						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + MaxLineExceededWarningPattern;
+						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
 						expectedTotalByteCountOffsetAB--; // Only B = Rx will show the complete line.
 						Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
 						Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, contentPatternExceeded, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
@@ -166,7 +165,7 @@ namespace YAT.Model.Test
 
 						// Subsequent multiple pings exceeding terminal A, then pong:
 						text = "PingExceeding A => B";
-						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + MaxLineExceededWarningPattern;
+						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
 						for (int i = 0; i < Repetitions; i++)
 						{
 							expectedTotalByteCountOffsetAB--; // Only B = Rx will show the complete line.
@@ -180,7 +179,7 @@ namespace YAT.Model.Test
 
 						// Subsequent pong exceeding terminal A, then pong again:
 						text = "PongExceeding B => A";
-						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + MaxLineExceededWarningPattern;
+						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
 						expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
 						Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
 						Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
@@ -192,7 +191,7 @@ namespace YAT.Model.Test
 
 						// Subsequent multiple pongs exceeding terminal A, then pong again:
 						text = "PongExceeding B => A";
-						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + MaxLineExceededWarningPattern;
+						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
 						for (int i = 0; i < Repetitions; i++)
 						{
 							expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
@@ -207,7 +206,7 @@ namespace YAT.Model.Test
 
 						// Subsequent pong exceeding terminal A, then ping:
 						text = "PongExceeding B => A";
-						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + MaxLineExceededWarningPattern;
+						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
 						expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
 						Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
 						Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
@@ -219,7 +218,7 @@ namespace YAT.Model.Test
 
 						// Subsequent multiple pongs exceeding terminal A, then ping:
 						text = "PongExceeding B => A";
-						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + MaxLineExceededWarningPattern;
+						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
 						for (int i = 0; i < Repetitions; i++)
 						{
 							expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
@@ -234,7 +233,7 @@ namespace YAT.Model.Test
 
 						// Subsequent pongs exceeding terminal A with variation, then ping:
 						text = "PongExceeding B => A "; // Additional space will result in <CR> not being shown.
-						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + MaxLineExceededWarningPattern;
+						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Utilities.LineExceededWarningPattern;
 						expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
 						expectedTotalByteCountOffsetBA--; // Account for missing <CR>.
 						Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);

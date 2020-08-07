@@ -293,6 +293,9 @@ namespace YAT.Model.Test
 		                       /// <remarks><see cref="Domain.Test.Utilities.WaitIntervalForTransmission"/>.</remarks>
 		public const int WaitIntervalForTransmission = Domain.Test.Utilities.WaitIntervalForTransmission;
 
+		/// <summary></summary>
+		public const string LineExceededWarningPattern =  Domain.Test.Utilities.LineExceededWarningPattern;
+
 		#endregion
 
 		#region Transmit
