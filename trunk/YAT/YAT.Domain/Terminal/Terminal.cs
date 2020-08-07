@@ -29,7 +29,7 @@
 
 #if (DEBUG)
 
-	// Enable debugging of thread state:
+	// Enable debugging of content events:
 ////#define DEBUG_CONTENT_EVENTS
 
 	// Enable debug output line handling for scripting:
@@ -2149,7 +2149,7 @@ namespace YAT.Domain
 			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
 				return;
 
-			DebugContentEvents("OnDisplayLinesTxAdded " + e.Lines.Count);
+			DebugContentEvents("OnDisplayLinesTxAdded " + ((e.Lines.Count == 1) ? e.Lines[0].ToString() : e.Lines.Count + " lines"));
 
 			this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesTxAdded, this, e);
 		}
@@ -2160,7 +2160,7 @@ namespace YAT.Domain
 			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
 				return;
 
-			DebugContentEvents("OnDisplayLinesBidirAdded " + e.Lines.Count);
+			DebugContentEvents("OnDisplayLinesBidirAdded " + ((e.Lines.Count == 1) ? e.Lines[0].ToString() : e.Lines.Count + " lines"));
 
 			this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesBidirAdded, this, e);
 		}
@@ -2171,7 +2171,7 @@ namespace YAT.Domain
 			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
 				return;
 
-			DebugContentEvents("OnDisplayLinesRxAdded " + e.Lines.Count);
+			DebugContentEvents("OnDisplayLinesRxAdded " + ((e.Lines.Count == 1) ? e.Lines[0].ToString() : e.Lines.Count + " lines"));
 
 			this.eventHelper.RaiseSync<DisplayLinesEventArgs>(DisplayLinesRxAdded, this, e);
 		}
