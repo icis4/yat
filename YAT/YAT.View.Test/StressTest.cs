@@ -105,8 +105,7 @@ namespace YAT.View.Test
 		/// Starts an instance of YAT with view and verifies that contents are properly displayed.
 		/// </summary>
 		[Test]
-		[StressCategory]
-		[MinuteDurationCategory(1)]
+		[StressCategory, StandardDurationCategory.Minute1Attribute]
 		public virtual void TestTransmissionDisplay()
 		{
 			// Preparation:
