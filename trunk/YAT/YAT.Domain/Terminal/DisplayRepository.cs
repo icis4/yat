@@ -175,13 +175,13 @@ namespace YAT.Domain
 			if (item is DisplayElement.LineBreak)
 			{
 				// Excess must be manually dequeued, typically just one element has to:
-				while (Count >= Capacity)
-					Dequeue();
+				while (Count > Capacity) // Attention: 'Count' will be ('base.Count' + 1) because
+					Dequeue();           //            the current line contains at least one item.
 
 				// Enqueue new line and reset current line:
-				base.Enqueue(this.currentLine.Clone());            // Clone to ensure decoupling.
-				this.lastLineAuxiliary = this.currentLine.Clone(); // Clone to ensure decoupling.
-				this.currentLine.Clear();
+				base.Enqueue(            this.currentLine.Clone()); // Clone to ensure decoupling.
+				this.lastLineAuxiliary = this.currentLine.Clone();  // Also clone to ensure decoupling,
+				this.currentLine.Clear();                           // because the object is kept.
 			}
 		}
 
@@ -240,10 +240,10 @@ namespace YAT.Domain
 		public new void Clear()
 		{
 			base.Clear();
+
 			this.byteCount = 0;
 
 			this.currentLine.Clear();
-
 			this.lastLineAuxiliary.Clear();
 		}
 
