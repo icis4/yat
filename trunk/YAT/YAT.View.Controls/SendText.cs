@@ -371,7 +371,7 @@ namespace YAT.View.Controls
 					if (splitContainer_Send.SplitterDistance != limitedDistance)
 						splitContainer_Send.SplitterDistance = limitedDistance;
 				}
-			#if DEBUG
+			#if (DEBUG)
 				else
 				{
 					Debugger.Break(); // See debug output for issue and instructions!
