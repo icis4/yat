@@ -84,6 +84,7 @@
     <Compile Include="..\NUnit.Version.cs">
       <Link>Properties\NUnit.Version.cs</Link>
     </Compile>
+    <Compile Include="TestExecutionContextInformation.cs" />
     <Compile Include="ContextDetectorTest.cs" />
     <Compile Include="ContextDetector.cs" />
     <Compile Include="TestCaseDataHelper.cs" />
