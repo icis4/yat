@@ -22,6 +22,23 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of receiving:
+////#define DEBUG_DATA_RECEIVED
+
+	// Enable debugging of sending:
+////#define DEBUG_DATA_SENT
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -37,7 +54,6 @@ using System.Threading;
 
 using MKY;
 using MKY.Contracts;
-using MKY.Diagnostics;
 using MKY.IO.Serial;
 
 #endregion
@@ -725,12 +741,15 @@ namespace YAT.Domain
 				{
 					try
 					{
+						DebugDataReceived(e.Data.Length);
+
 						var re = new RawChunk(e.Data, e.TimeStamp, e.PortStamp, IODirection.Rx);
 						lock (this.repositorySyncObj)
 						{
 							this.rxRepository   .Enqueue(re); // 'RawChunk' objects are immutable, subsequent use is OK.
 							this.bidirRepository.Enqueue(re); // 'RawChunk' objects are immutable, subsequent use is OK.
 						}
+
 						OnChunkReceived(new EventArgs<RawChunk>(re)); // 'RawChunk' objects are immutable, subsequent use is OK.
 					}
 					finally
@@ -763,12 +782,15 @@ namespace YAT.Domain
 				{
 					try
 					{
+						DebugDataSent(e.Data.Length);
+
 						var re = new RawChunk(e.Data, e.TimeStamp, e.PortStamp, IODirection.Tx);
 						lock (this.repositorySyncObj)
 						{
 							this.txRepository   .Enqueue(re); // 'RawChunk' objects are immutable, subsequent use is OK.
 							this.bidirRepository.Enqueue(re); // 'RawChunk' objects are immutable, subsequent use is OK.
 						}
+
 						OnChunkSent(new EventArgs<RawChunk>(re)); // 'RawChunk' objects are immutable, subsequent use is OK.
 					}
 					finally
@@ -926,6 +948,41 @@ namespace YAT.Domain
 					message
 				)
 			);
+		}
+
+	#if (DEBUG_DATA_SENT)
+		private int DebugDataReceived_counter; // = 0;
+		private int DebugDataSent_counter;     // = 0;
+	#endif
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="System.Diagnostics.ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[System.Diagnostics.Conditional("DEBUG_DATA_RECEIVED")]
+		private void DebugDataReceived(int count)
+		{
+			var sb = new StringBuilder();
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} bytes received, ", count);
+		#if (DEBUG_DATA_RECEIVED)
+			unchecked { DebugDataReceived_counter += count; }
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} bytes in total.", DebugDataReceived_counter);
+		#endif
+			DebugMessage(sb.ToString());
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="System.Diagnostics.ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[System.Diagnostics.Conditional("DEBUG_DATA_SENT")]
+		private void DebugDataSent(int count)
+		{
+			var sb = new StringBuilder();
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} bytes sent, ", count);
+		#if (DEBUG_DATA_SENT)
+			unchecked { DebugDataSent_counter += count; }
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} bytes in total.", DebugDataSent_counter);
+		#endif
+			DebugMessage(sb.ToString());
 		}
 
 		#endregion
