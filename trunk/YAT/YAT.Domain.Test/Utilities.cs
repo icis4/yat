@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -370,16 +371,13 @@ namespace YAT.Domain.Test
 			int txLineCount = 0;
 			int waitTime = 0;
 			bool isFirst = true; // Using do-while, first check state.
+			StringBuilder sb;
 
 			do
 			{
 				if (!isFirst) {
 					Thread.Sleep(WaitIntervalForTransmission);
 					waitTime += WaitIntervalForTransmission;
-				}
-
-				if (timeout != IgnoreTimeout) {
-					Trace.WriteLine("Waiting for sending, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 				}
 
 				txByteCount = terminalTx.GetRepositoryByteCount(RepositoryType.Tx);
@@ -397,9 +395,8 @@ namespace YAT.Domain.Test
 				}
 
 				if ((waitTime >= timeout) && ((timeout != IgnoreTimeout) || !isFirst)) {
-					StringBuilder sb;
 					if (timeout != IgnoreTimeout) {
-						sb = new StringBuilder("Timeout!");
+						sb = new StringBuilder("Timeout! (" + timeout + " ms)");
 					}
 					else {
 						sb = new StringBuilder("Mismatch!");
@@ -418,13 +415,18 @@ namespace YAT.Domain.Test
 					Assert.Fail(sb.ToString());
 				}
 
+				sb = new StringBuilder("Waiting for sending, ");
+				sb.AppendFormat("{0}/{1} bytes/lines expected, {2}/{3} sent, ", expectedTotalByteCount, expectedTotalLineCount, txByteCount, txLineCount);
+				if (timeout != IgnoreTimeout) {
+					sb.AppendFormat("{0} ms have passed, timeout is {1} ms..." , waitTime, timeout);
+				}
+				Trace.WriteLine(sb.ToString());
+
 				if (isFirst) {
 					isFirst = false;
 				}
 			}
 			while ((txByteCount != expectedTotalByteCount) || ((txLineCount != expectedTotalLineCount) && (expectedTotalLineCount != IgnoreCount)));
-
-			Debug.WriteLine("Tx of " + txByteCount + " bytes / " + txLineCount + " lines completed");
 
 			if (timeout != IgnoreTimeout) {
 				Trace.WriteLine("...done, sent and verified");
@@ -452,16 +454,13 @@ namespace YAT.Domain.Test
 			int rxLineCount = 0;
 			int waitTime = 0;
 			bool isFirst = true; // Using do-while, first check state.
+			StringBuilder sb;
 
 			do
 			{
 				if (!isFirst) {
 					Thread.Sleep(WaitIntervalForTransmission);
 					waitTime += WaitIntervalForTransmission;
-				}
-
-				if (timeout != IgnoreTimeout) {
-					Trace.WriteLine("Waiting for receiving, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 				}
 
 				rxByteCount = terminalRx.GetRepositoryByteCount(RepositoryType.Rx);
@@ -479,9 +478,8 @@ namespace YAT.Domain.Test
 				}
 
 				if ((waitTime >= timeout) && ((timeout != IgnoreTimeout) || !isFirst)) {
-					StringBuilder sb;
 					if (timeout != IgnoreTimeout) {
-						sb = new StringBuilder("Timeout!");
+						sb = new StringBuilder("Timeout! (" + timeout + " ms)");
 					}
 					else {
 						sb = new StringBuilder("Mismatch!");
@@ -500,13 +498,18 @@ namespace YAT.Domain.Test
 					Assert.Fail(sb.ToString());
 				}
 
+				sb = new StringBuilder("Waiting for receiving, ");
+				sb.AppendFormat("{0}/{1} bytes/lines expected, {2}/{3} received, ", expectedTotalByteCount, expectedTotalLineCount, rxByteCount, rxLineCount);
+				if (timeout != IgnoreTimeout) {
+					sb.AppendFormat("{0} ms have passed, timeout is {1} ms..." , waitTime, timeout);
+				}
+				Trace.WriteLine(sb.ToString());
+
 				if (isFirst) {
 					isFirst = false;
 				}
 			}
 			while ((rxByteCount != expectedTotalByteCount) || ((rxLineCount != expectedTotalLineCount) && (expectedTotalLineCount != IgnoreCount)));
-
-			Debug.WriteLine("Rx of " + rxByteCount + " bytes / " + rxLineCount + " lines completed");
 
 			if (timeout != IgnoreTimeout) {
 				Trace.WriteLine("...done, received and verified");
@@ -540,16 +543,13 @@ namespace YAT.Domain.Test
 			int rxLineCount = 0;
 			int waitTime = 0;
 			bool isFirst = true; // Using do-while, first check state.
+			StringBuilder sb;
 
 			do
 			{
 				if (!isFirst) {
 					Thread.Sleep(WaitIntervalForTransmission);
 					waitTime += WaitIntervalForTransmission;
-				}
-
-				if (timeout != IgnoreTimeout) {
-					Trace.WriteLine("Waiting for transmission, " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
 				}
 
 				txByteCount = terminalTx.GetRepositoryByteCount(RepositoryType.Tx);
@@ -581,9 +581,8 @@ namespace YAT.Domain.Test
 				}
 
 				if ((waitTime >= timeout) && ((timeout != IgnoreTimeout) || !isFirst)) {
-					StringBuilder sb;
 					if (timeout != IgnoreTimeout) {
-						sb = new StringBuilder("Timeout!");
+						sb = new StringBuilder("Timeout! (" + timeout + " ms)");
 					}
 					else {
 						sb = new StringBuilder("Mismatch!");
@@ -612,15 +611,19 @@ namespace YAT.Domain.Test
 					Assert.Fail(sb.ToString());
 				}
 
+				sb = new StringBuilder("Waiting for transmission, ");
+				sb.AppendFormat("{0}/{1} bytes/lines expected, {2}/{3} sent, {4}/{5} received, ", expectedTotalByteCount, expectedTotalLineCount, txByteCount, txLineCount, rxByteCount, rxLineCount);
+				if (timeout != IgnoreTimeout) {
+					sb.AppendFormat("{0} ms have passed, timeout is {1} ms..." , waitTime, timeout);
+				}
+				Trace.WriteLine(sb.ToString());
+
 				if (isFirst) {
 					isFirst = false;
 				}
 			}
 			while ((txByteCount != expectedTotalByteCount) || ((txLineCount != expectedTotalLineCount) && (expectedTotalLineCount != IgnoreCount)) ||
 			       (rxByteCount != expectedTotalByteCount) || ((rxLineCount != expectedTotalLineCount) && (expectedTotalLineCount != IgnoreCount)));
-
-			Debug.WriteLine("Tx of " + txByteCount + " bytes / " + txLineCount + " lines completed");
-			Debug.WriteLine("Rx of " + rxByteCount + " bytes / " + rxLineCount + " lines completed");
 
 			if (timeout != IgnoreTimeout) {
 				Trace.WriteLine("...done, transmitted and verified");
