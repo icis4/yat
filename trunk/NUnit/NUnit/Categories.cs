@@ -79,7 +79,7 @@ namespace NUnit
 	}
 
 	/// <summary></summary>
-	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute may be inherited for specialization.")]
+	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute will be derived for specialization.")]
 	[CLSCompliant(false)]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public class DurationCategoryAttribute : CategoryAttribute
@@ -105,92 +105,221 @@ namespace NUnit
 		{
 			get { return (this.duration); }
 		}
-
-		/// <summary></summary>
-		public virtual int Days
-		{
-			get { return (this.duration.Days); }
-		}
-
-		/// <summary></summary>
-		public virtual int Hours
-		{
-			get { return (this.duration.Hours); }
-		}
-
-		/// <summary></summary>
-		public virtual int Minutes
-		{
-			get { return (this.duration.Minutes); }
-		}
-
-		/// <summary></summary>
-		public virtual int Seconds
-		{
-			get { return (this.duration.Seconds); }
-		}
-
-		/// <summary></summary>
-		public virtual int Milliseconds
-		{
-			get { return (this.duration.Milliseconds); }
-		}
 	}
 
 	/// <summary></summary>
-	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute may be inherited for specialization.")]
+	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute will be derived for specialization.")]
 	[CLSCompliant(false)]
-	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public class HourDurationCategoryAttribute : DurationCategoryAttribute
 	{
 		/// <summary></summary>
 		public HourDurationCategoryAttribute(int hours)
-			: base(0, hours, 0, 0, 0, CategoryStrings.Duration + " is approx. " + hours.ToString(CultureInfo.CurrentCulture) + " hour" + ((hours == 1) ? "" : "s"))
+			: base(0, hours, 0, 0, 0, CategoryStrings.Duration + " is around " + hours.ToString(CultureInfo.CurrentCulture) + " hour" + ((hours == 1) ? "" : "s"))
 		{
 		}
 
 		/// <summary></summary>
-		public new int Hours
+		public int Hours
 		{
 			get { return ((int)Duration.TotalHours); }
 		}
 	}
 
 	/// <summary></summary>
-	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute may be inherited for specialization.")]
+	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute will be derived for specialization.")]
 	[CLSCompliant(false)]
-	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public class MinuteDurationCategoryAttribute : DurationCategoryAttribute
 	{
 		/// <summary></summary>
 		public MinuteDurationCategoryAttribute(int minutes)
-			: base(0, 0, minutes, 0, 0, CategoryStrings.Duration + " is approx. " + minutes.ToString(CultureInfo.CurrentCulture) + " minute" + ((minutes == 1) ? "" : "s"))
+			: base(0, 0, minutes, 0, 0, CategoryStrings.Duration + " is around " + minutes.ToString(CultureInfo.CurrentCulture) + " minute" + ((minutes == 1) ? "" : "s"))
 		{
 		}
 
 		/// <summary></summary>
-		public new int Minutes
+		public int Minutes
 		{
 			get { return ((int)Duration.TotalMinutes); }
 		}
 	}
 
 	/// <summary></summary>
-	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute may be inherited for specialization.")]
+	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute will be derived for specialization.")]
 	[CLSCompliant(false)]
-	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public class SecondDurationCategoryAttribute : DurationCategoryAttribute
 	{
 		/// <summary></summary>
 		public SecondDurationCategoryAttribute(int seconds)
-			: base(0, 0, 0, seconds, 0, CategoryStrings.Duration + " is approx. " + seconds.ToString(CultureInfo.CurrentCulture) + " second" + ((seconds == 1) ? "" : "s"))
+			: base(0, 0, 0, seconds, 0, CategoryStrings.Duration + " is around " + seconds.ToString(CultureInfo.CurrentCulture) + " second" + ((seconds == 1) ? "" : "s"))
 		{
 		}
 
 		/// <summary></summary>
-		public new int Seconds
+		public int Seconds
 		{
 			get { return ((int)Duration.TotalSeconds); }
+		}
+	}
+
+	/// <summary>
+	/// A selection of standard duration categories, kind-of-logarithmically distributed.
+	/// </summary>
+	public static class StandardDurationCategory
+	{
+		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+		[CLSCompliant(false)]
+		public sealed class Second1Attribute : SecondDurationCategoryAttribute
+		{
+			/// <summary></summary>
+			public Second1Attribute()
+				: base(1)
+			{
+			}
+		}
+
+		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+		[CLSCompliant(false)]
+		public sealed class Seconds4Attribute : SecondDurationCategoryAttribute
+		{
+			/// <summary></summary>
+			public Seconds4Attribute()
+				: base(4)
+			{
+			}
+		}
+
+		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+		[CLSCompliant(false)]
+		public sealed class Seconds15Attribute : SecondDurationCategoryAttribute
+		{
+			/// <summary></summary>
+			public Seconds15Attribute()
+				: base(15)
+			{
+			}
+		}
+
+		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+		[CLSCompliant(false)]
+		public sealed class Minute1Attribute : MinuteDurationCategoryAttribute
+		{
+			/// <summary></summary>
+			public Minute1Attribute()
+				: base(1)
+			{
+			}
+		}
+
+		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+		[CLSCompliant(false)]
+		public sealed class Minutes4Attribute : MinuteDurationCategoryAttribute
+		{
+			/// <summary></summary>
+			public Minutes4Attribute()
+				: base(4)
+			{
+			}
+		}
+
+		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+		[CLSCompliant(false)]
+		public sealed class Minutes15Attribute : MinuteDurationCategoryAttribute
+		{
+			/// <summary></summary>
+			public Minutes15Attribute()
+				: base(15)
+			{
+			}
+		}
+
+		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+		[CLSCompliant(false)]
+		public sealed class Hour1Attribute : HourDurationCategoryAttribute
+		{
+			/// <summary></summary>
+			public Hour1Attribute()
+				: base(1)
+			{
+			}
+		}
+
+		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+		[CLSCompliant(false)]
+		public sealed class Hours5Attribute : HourDurationCategoryAttribute
+		{
+			/// <summary></summary>
+			public Hours5Attribute()
+				: base(5)
+			{
+			}
+		}
+
+		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+		[CLSCompliant(false)]
+		public sealed class Hours24Attribute : HourDurationCategoryAttribute
+		{
+			/// <summary></summary>
+			public Hours24Attribute()
+				: base(24)
+			{
+			}
+		}
+
+		/// <summary>
+		/// Returns the most appropriate standard attribute.
+		/// </summary>
+		[CLSCompliant(false)]
+		public static DurationCategoryAttribute AttributeFrom(TimeSpan ts)
+		{
+			// Everything up to twice the value is accepted:
+
+			if (ts.TotalSeconds < 2)
+				return (new Second1Attribute());
+
+			if (ts.TotalSeconds < 8)
+				return (new Seconds4Attribute());
+
+			if (ts.TotalSeconds < 30)
+				return (new Seconds15Attribute());
+
+			if (ts.TotalMinutes < 2)
+				return (new Minute1Attribute());
+
+			if (ts.TotalMinutes < 8)
+				return (new Minutes4Attribute());
+
+			if (ts.TotalMinutes < 30)
+				return (new Minutes15Attribute());
+
+			if (ts.TotalHours < 2)
+				return (new Hour1Attribute());
+
+			if (ts.TotalHours < 10)
+				return (new Hours5Attribute());
+
+			if (ts.TotalHours < 48)
+				return (new Hours24Attribute());
+
+			return (new InfiniteDurationCategoryAttribute());
+		}
+
+		/// <summary>
+		/// Returns the corresponding name suffix.
+		/// </summary>
+		public static string NameSuffixFrom(TimeSpan ts)
+		{
+			// Everything up to twice the boundary:
+
+			if (ts.TotalSeconds < 120)
+				return (string.Format(CultureInfo.CurrentCulture, "_{0:F0}s", ts.TotalSeconds));
+
+			if (ts.TotalMinutes < 120)
+				return (string.Format(CultureInfo.CurrentCulture, "_{0:F0}m", ts.TotalMinutes));
+
+			if (ts.TotalHours < 48)
+				return (string.Format(CultureInfo.CurrentCulture, "_{0:F0}h", ts.TotalHours));
+
+			return (string.Format(CultureInfo.CurrentCulture, "_{0:F0}d", ts.TotalDays));
 		}
 	}
 

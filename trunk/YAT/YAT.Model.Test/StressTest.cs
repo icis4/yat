@@ -51,7 +51,7 @@ namespace YAT.Model.Test
 		/// Starts 100 terminals in parallel and lets them work on 100 data firing devices.
 		/// </summary>
 		[Test]
-		[StressCategory, MinuteDurationCategory(1)]
+		[StressCategory, StandardDurationCategory.Minute1Attribute]
 		public virtual void HeavySimultaneousUsage()
 		{
 			Assert.Ignore("The YAT stress test is not yet implemented (to be done with PowerShell to build stress test script). Note that there already is a TcpConnectionStressTest() in 'MKY.IO.Serial.Socket.Test'.");

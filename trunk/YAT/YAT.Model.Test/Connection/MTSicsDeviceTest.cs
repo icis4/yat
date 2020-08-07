@@ -220,7 +220,7 @@ namespace YAT.Model.Test.Connection
 		/// <remarks>
 		/// So far, the USB hub and USB port assignment is hard-coded, could become configurable.
 		/// </remarks>
-		[Test, MKY.IO.Ports.Test.MTSicsDeviceAIsAvailableCategory, MKY.Test.UsbHub2IsAvailableCategory, MinuteDurationCategory(1)]
+		[Test, MKY.IO.Ports.Test.MTSicsDeviceAIsAvailableCategory, MKY.Test.UsbHub2IsAvailableCategory, StandardDurationCategory.Minute1Attribute]
 		public virtual void TestDisconnectReconnect()
 		{
 			TestDisconnectReconnect(false); // See comments in MKY.IO.Ports.Test.TestDisconnectReconnect().
@@ -232,7 +232,7 @@ namespace YAT.Model.Test.Connection
 		/// <remarks>
 		/// So far, the USB hub and USB port assignment is hard-coded, could become configurable.
 		/// </remarks>
-		[Test, MKY.IO.Ports.Test.MTSicsDeviceAIsAvailableCategory, MKY.Test.UsbHub2IsAvailableCategory, MinuteDurationCategory(1), Explicit("This test requires to manually reset the sending device beause it will remain in continuous mode as well as the port device because it cannot be opened until disconnected/reconnected!")]
+		[Test, MKY.IO.Ports.Test.MTSicsDeviceAIsAvailableCategory, MKY.Test.UsbHub2IsAvailableCategory, StandardDurationCategory.Minute1Attribute, Explicit("This test requires to manually reset the sending device beause it will remain in continuous mode as well as the port device because it cannot be opened until disconnected/reconnected!")]
 		public virtual void TestDisconnectReconnectWithContinuousReceiving()
 		{
 			TestDisconnectReconnect(true); // See comments in MKY.IO.Ports.Test.TestDisconnectReconnect().

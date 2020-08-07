@@ -169,7 +169,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		/// <remarks>
 		/// So far, the USB hub and USB port assignment is hard-coded, could become configurable.
 		/// </remarks>
-		[Test, MTSicsDeviceAIsAvailableCategory, MKY.Test.UsbHub2IsAvailableCategory, MinuteDurationCategory(1)]
+		[Test, MTSicsDeviceAIsAvailableCategory, MKY.Test.UsbHub2IsAvailableCategory, StandardDurationCategory.Minute1Attribute]
 		public virtual void TestDisconnectReconnectSerialPort()
 		{
 			TestDisconnectReconnect(new System.IO.Ports.SerialPort(), false); // See comments in TestDisconnectReconnect().
@@ -182,7 +182,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		/// So far, the USB hub and USB port assignment is hard-coded, could become configurable.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
-		[Test, MTSicsDeviceAIsAvailableCategory, MKY.Test.UsbHub2IsAvailableCategory, MinuteDurationCategory(1)]
+		[Test, MTSicsDeviceAIsAvailableCategory, MKY.Test.UsbHub2IsAvailableCategory, StandardDurationCategory.Minute1Attribute]
 		public virtual void TestDisconnectReconnectSerialPortEx()
 		{
 			TestDisconnectReconnect(new SerialPortEx(), false); // See comments in TestDisconnectReconnect().
@@ -194,7 +194,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		/// <remarks>
 		/// So far, the USB hub and USB port assignment is hard-coded, could become configurable.
 		/// </remarks>
-		[Test, MTSicsDeviceAIsAvailableCategory, MKY.Test.UsbHub2IsAvailableCategory, MinuteDurationCategory(1), Explicit("This test requires to manually reset the sending device beause it will remain in continuous mode as well as the port device because it cannot be opened until disconnected/reconnected!")]
+		[Test, MTSicsDeviceAIsAvailableCategory, MKY.Test.UsbHub2IsAvailableCategory, StandardDurationCategory.Minute1Attribute, Explicit("This test requires to manually reset the sending device beause it will remain in continuous mode as well as the port device because it cannot be opened until disconnected/reconnected!")]
 		public virtual void TestDisconnectReconnectSerialPortExWithContinuousReceiving()
 		{
 			TestDisconnectReconnect(new SerialPortEx(), true); // See comments in TestDisconnectReconnect().

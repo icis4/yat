@@ -45,7 +45,7 @@ namespace MKY.IO.Serial.Socket.Test
 		/// </remarks>
 		[Test]
 		[Repeat(10)]
-		[EnduranceCategory, MinuteDurationCategory(1)]
+		[EnduranceCategory, StandardDurationCategory.Minute1Attribute]
 		public virtual void TestConsecutiveServerClientConnectAndShutdownEndurance01Minute()
 		{
 			var t = new SimpleUdpConnectionTest();
@@ -61,20 +61,11 @@ namespace MKY.IO.Serial.Socket.Test
 
 		/// <summary></summary>
 		[Test]
-		[Repeat(10)]
-		[EnduranceCategory, MinuteDurationCategory(10)]
-		public virtual void TestConsecutiveServerClientConnectAndShutdownEndurance10Minutes()
+		[Repeat(15)]
+		[EnduranceCategory, StandardDurationCategory.Minutes15Attribute]
+		public virtual void TestConsecutiveServerClientConnectAndShutdownEndurance15Minutes()
 		{
 			TestConsecutiveServerClientConnectAndShutdownEndurance01Minute();
-		}
-
-		/// <summary></summary>
-		[Test]
-		[Repeat(6)]
-		[EnduranceCategory, MinuteDurationCategory(60)]
-		public virtual void TestConsecutiveServerClientConnectAndShutdownEndurance60Minutes()
-		{
-			TestConsecutiveServerClientConnectAndShutdownEndurance10Minutes();
 		}
 
 		/// <summary></summary>
@@ -83,7 +74,7 @@ namespace MKY.IO.Serial.Socket.Test
 		[EnduranceCategory, InfiniteDurationCategory]
 		public virtual void TestConsecutiveServerClientConnectAndShutdownEnduranceForever()
 		{
-			TestConsecutiveServerClientConnectAndShutdownEndurance60Minutes();
+			TestConsecutiveServerClientConnectAndShutdownEndurance01Minute();
 		}
 
 		#endregion
@@ -98,7 +89,7 @@ namespace MKY.IO.Serial.Socket.Test
 		/// </remarks>
 		[Test]
 		[Repeat(10)]
-		[EnduranceCategory, MinuteDurationCategory(1)]
+		[EnduranceCategory, StandardDurationCategory.Minute1Attribute]
 		public virtual void TestConsecutivePairSocketPairSocketConnectAndShutdownEndurance01Minute()
 		{
 			var t = new SimpleUdpConnectionTest();
@@ -114,20 +105,11 @@ namespace MKY.IO.Serial.Socket.Test
 
 		/// <summary></summary>
 		[Test]
-		[Repeat(10)]
-		[EnduranceCategory, MinuteDurationCategory(10)]
-		public virtual void TestConsecutivePairSocketPairSocketConnectAndShutdownEndurance10Minutes()
+		[Repeat(15)]
+		[EnduranceCategory, StandardDurationCategory.Minutes15Attribute]
+		public virtual void TestConsecutivePairSocketPairSocketConnectAndShutdownEndurance15Minutes()
 		{
 			TestConsecutivePairSocketPairSocketConnectAndShutdownEndurance01Minute();
-		}
-
-		/// <summary></summary>
-		[Test]
-		[Repeat(6)]
-		[EnduranceCategory, MinuteDurationCategory(60)]
-		public virtual void TestConsecutivePairSocketPairSocketConnectAndShutdownEndurance60Minutes()
-		{
-			TestConsecutivePairSocketPairSocketConnectAndShutdownEndurance10Minutes();
 		}
 
 		/// <summary></summary>
@@ -136,7 +118,7 @@ namespace MKY.IO.Serial.Socket.Test
 		[EnduranceCategory, InfiniteDurationCategory]
 		public virtual void TestConsecutivePairSocketPairSocketConnectAndShutdownEnduranceForever()
 		{
-			TestConsecutivePairSocketPairSocketConnectAndShutdownEndurance60Minutes();
+			TestConsecutivePairSocketPairSocketConnectAndShutdownEndurance01Minute();
 		}
 
 		#endregion
