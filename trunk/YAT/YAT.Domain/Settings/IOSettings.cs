@@ -399,7 +399,7 @@ namespace YAT.Domain.Settings
 					case IOType.UdpPairSocket:
 					{
 						// TCP/IP in theory: Less than 6.55 MiBit/s (https://www.switch.ch/network/tools/tcp_throughput/), i.e. less than 820 KiByte/s.
-						// TCP/IP in YAT practise (Stress-4-Huge.txt on two interconnected AutoSockets with YAT 2.2.0): ~22 KiByte/s, i.e. .
+						// TCP/IP in YAT practise (Stress-4-Huge.txt on two interconnected AutoSockets with YAT 2.2.0): ~22 KiByte/s.
 						// UDP/IP in YAT practise (Stress-4-Huge.txt on two interconnected PairSockets with YAT 2.2.0): ~22 KiByte/s.
 						return (20);
 					}

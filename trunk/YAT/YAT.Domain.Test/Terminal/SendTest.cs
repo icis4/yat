@@ -50,13 +50,11 @@ using System.Linq;
 using System.Text;
 
 using MKY;
-using MKY.Diagnostics;
-using MKY.IO;
 using MKY.IO.Serial.SerialPort;
 using MKY.Text;
 
-using NUnit;
 using NUnit.Framework;
+using NUnitEx;
 
 using YAT.Domain.Settings;
 
@@ -405,11 +403,12 @@ namespace YAT.Domain.Test.Terminal
 				var estimatedTimeB = (fileByteCount / settingsB.IO.RoughlyEstimatedMaxBytesPerMillisecond);
 				estimatedTime = Math.Max(estimatedTimeA, estimatedTimeB);
 			}
+			estimatedTime += 4; // Approx. 4 milliseconds for pre/post (measurements 2020-08-07).
 
 			// Append timeout to arguments:
 			var args = new List<object>(tc.Arguments.Length + 1);
 			args.AddRange(tc.Arguments);
-			int timeout = Math.Max((int)(estimatedTime * 2), 1); // 'timeout' must be 1 or above.
+			int timeout = Math.Max((int)(estimatedTime * 1.5), 1); // 'timeout' must be 1 or above.
 			args.Add(timeout);
 
 			// Determine duration category and also estimated time suffix:
