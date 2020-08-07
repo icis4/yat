@@ -32,7 +32,7 @@
 ////#define DEBUG_THREAD_STATE
 
 	// Enable debugging of sending:
-////#define DEBUG_SEND
+////#define DEBUG_SEND // Attention: Must also be activated in TcpServer.cs !!
 
 #endif // DEBUG
 
