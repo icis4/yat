@@ -21,6 +21,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of test case data generation:
+////#define DEBUG_TEST_CASE_DATA
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -36,6 +50,8 @@ using System.Linq;
 using System.Text;
 
 using MKY;
+using MKY.Diagnostics;
+using MKY.IO;
 using MKY.IO.Serial.SerialPort;
 using MKY.Text;
 
@@ -193,7 +209,7 @@ namespace YAT.Domain.Test.Terminal
 							var fileInfo = GetFileInfo(tt, fileKey, sendMethod);
 
 							var nameSuffix = string.Format(CultureInfo.CurrentCulture, "_{0}_{1}_{2}", tt, flavor, fileKey);
-							var tcd = new TestCaseData(tt, fileInfo, sendMethod).SetName(nameSuffix);
+							var tcd = new TestCaseData(fileInfo, sendMethod).SetName(nameSuffix);
 							yield return (new Tuple<TerminalType, SettingsFlavor, TestCaseData>(tt, flavor, tcd));
 						}
 
@@ -201,7 +217,7 @@ namespace YAT.Domain.Test.Terminal
 						//    settings, fileInfo, sendMethod, timeout
 						// ...or...
 						//    settingsA, settingsB, fileInfo, sendMethod, timeout
-						// ...of which the middle three arguments are generated above.
+						// ...of which the middle two arguments are generated above.
 					}
 				}
 			}
@@ -358,6 +374,10 @@ namespace YAT.Domain.Test.Terminal
 		/// <remarks>Returning new data is required to modify arguments.</remarks>
 		private static TestCaseData DecorateWithTimeoutAndDurationCategory(TestCaseData tc)
 		{
+		#if (DEBUG_TEST_CASE_DATA)
+			TestCaseDataHelper.WriteToTempFile(typeof(SendTestData), tc);
+		#endif
+
 			// Generated arguments must either be...
 			//    settings, fileInfo, sendMethod, timeout
 			// ...or...
@@ -397,7 +417,11 @@ namespace YAT.Domain.Test.Terminal
 			var cat = StandardDurationCategory.AttributeFrom(ts).Name;
 			var nameSuffix = StandardDurationCategory.NameSuffixFrom(ts);
 
-			return (TestCaseDataEx.ToTestCase(tc, nameSuffix, new string[] { cat }, args));
+			var result = TestCaseDataEx.ToTestCase(tc, nameSuffix, new string[] { cat }, args.ToArray());
+		#if (DEBUG_TEST_CASE_DATA)
+			TestCaseDataHelper.WriteToTempFile(typeof(SendTestData), result); // No need to append, file name will differ due to suffix.
+		#endif
+			return (result);
 		}
 
 		#endregion
@@ -414,6 +438,37 @@ namespace YAT.Domain.Test.Terminal
 
 		private const string Eol = "<CR><LF>"; // Fixed to default.
 		private const int MaxLineLengthForTest = 10000;
+
+		#endregion
+
+		#region TestFixture
+		//==========================================================================================
+		// TestFixture
+		//==========================================================================================
+
+		#if (DEBUG_TEST_CASE_DATA)
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SetUp", Justification = "Naming according to NUnit.")]
+		[TestFixtureSetUp]
+		public virtual void TestFixtureSetUp()
+		{
+			var path = Temp.MakeTempPath(GetType(), outputPathToDebug: true);
+
+			Exception ex;
+			if (!DirectoryEx.TryBrowse(path, out ex))
+				DebugEx.WriteException(this.GetType(), ex, "Exception when trying the browse folder with temporary debug log files!");
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
+		[TestFixtureTearDown]
+		public virtual void TestFixtureTearDown()
+		{
+			Temp.CleanTempPath(GetType(), outputPathToDebug: true);
+		}
+
+		#endif // DEBUG_TEST_CASE_DATA
 
 		#endregion
 
@@ -659,6 +714,8 @@ namespace YAT.Domain.Test.Terminal
 			{
 				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Argument combination is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
 			}
+
+			// There is no need to limit the expected content to the maximum line length, as lines got formatted by the terminal.
 
 			switch (sendMethod)
 			{

@@ -668,7 +668,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestTransmitFilePathOptionPrepare()
 		{
-			string filePath = Temp.MakeTempFilePath(GetType());
+			string filePath = Temp.MakeTempFilePath(GetType(), ".xyz");
 			File.Create(filePath); // File must exist!
 
 			using (var m = new Main(new CommandLineArgs(new string[] { TerminalFilePath, "--TransmitFile=" + filePath, "--KeepOpenOnError"})))
@@ -701,7 +701,7 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestTransmitFilePathOptionInWorkspacePrepare()
 		{
-			string filePath = Temp.MakeTempFilePath(GetType());
+			string filePath = Temp.MakeTempFilePath(GetType(), ".xyz");
 			File.Create(filePath); // File must exist!
 
 			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--TransmitFile=" + filePath, "--DynamicTerminalId=2", "--KeepOpenOnError"})))

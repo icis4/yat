@@ -31,13 +31,13 @@ using System.IO;
 namespace MKY.IO
 {
 	/// <summary>
-	/// Utility methods to deal with temporary files during testing.
+	/// Utility methods to deal with temporary files, e.g. during testing.
 	/// </summary>
 	public static class Temp
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static string MakeTempPath(Type type, bool outputPathToDebug = true)
+		public static string MakeTempPath(Type type, bool outputPathToDebug = false)
 		{
 			// Results in e.g. "MKY".
 			string root = "";
@@ -45,14 +45,14 @@ namespace MKY.IO
 			if (splits.Length > 0)
 				root = splits[0];
 
-			// Results in e.g. "D:\Temp\MKY\MKY.Test\MKY.Test.MyClass".
+			// Results in e.g. "C:\Users\<USER>\AppData\Local\Temp\MKY\MKY.Test\MKY.Test.MyClass".
 			string path;
 			if (string.IsNullOrEmpty(root))
 				path = Path.GetTempPath()                                      + type.Namespace + Path.DirectorySeparatorChar + type.Name;
 			else
 				path = Path.GetTempPath() + root + Path.DirectorySeparatorChar + type.Namespace + Path.DirectorySeparatorChar + type.Name;
 
-			if (outputPathToDebug) // ...ry file path is """
+			if (outputPathToDebug) // ...ry path is """
 				Debug.WriteLine(@"Temporary path is      """ + path + @""".");
 
 			if (!Directory.Exists(path))
@@ -63,7 +63,7 @@ namespace MKY.IO
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static void CleanTempPath(Type type, bool outputPathToDebug = true)
+		public static void CleanTempPath(Type type, bool outputPathToDebug = false)
 		{
 			string path = MakeTempPath(type, false);
 
@@ -73,14 +73,13 @@ namespace MKY.IO
 				Directory.Delete(path, true);
 			}
 
-			if (outputPathToDebug) // ...ry file path is """
+			if (outputPathToDebug) // ...ry path is """
 				Debug.WriteLine(@"Temporary path         """ + path + @""" cleaned.");
 		}
 
 		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
 		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static string MakeTempFileName(Type type, string extension = null)
+		public static string MakeTempFileName(Type type, string extension)
 		{
 			return (MakeTempFileName(type, null, extension));
 		}
@@ -88,8 +87,7 @@ namespace MKY.IO
 		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
 		/// <param name="name">An additional name that is appended to the file name.</param>
 		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static string MakeTempFileName(Type type, string name, string extension = null)
+		public static string MakeTempFileName(Type type, string name, string extension)
 		{
 			return (MakeTempFileName(type, name, null, extension, true));
 		}
@@ -98,8 +96,7 @@ namespace MKY.IO
 		/// <param name="name">An additional name that is appended to the file name.</param>
 		/// <param name="postfix">Yet another postfix to the file name.</param>
 		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
-		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static string MakeTempFileName(Type type, string name, string postfix, string extension = null)
+		public static string MakeTempFileName(Type type, string name, string postfix, string extension)
 		{
 			return (MakeTempFileName(type, name, postfix, extension, true));
 		}
@@ -125,22 +122,20 @@ namespace MKY.IO
 
 		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
 		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
+		/// <param name="acceptExistingFile">Set to <c>true</c> to accept an existing file, e.g. when appending to the file. If <c>false</c>, the file name will be postfixed with a unique number.</param>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static string MakeTempFilePath(Type type, string extension = null)
+		public static string MakeTempFilePath(Type type, string extension, bool acceptExistingFile = false)
 		{
-			return (MakeTempFilePath(type, null, extension));
+			return (MakeTempFilePath(type, null, extension, acceptExistingFile));
 		}
 
 		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
 		/// <param name="name">An additional name that is appended to the file name.</param>
 		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
+		/// <param name="acceptExistingFile">Set to <c>true</c> to accept an existing file, e.g. when appending to the file. If <c>false</c>, the file name will be postfixed with a unique number.</param>
+		/// <param name="outputFilePathToDebug">Optionally output the resulting file path to <see cref="Debug"/>.</param>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static string MakeTempFilePath(Type type, string name, string extension = null)
-		{
-			return (MakeTempFilePath(type, name, extension, true));
-		}
-
-		private static string MakeTempFilePath(Type type, string name, string extension, bool outputFilePathToDebug)
+		public static string MakeTempFilePath(Type type, string name, string extension, bool acceptExistingFile = false, bool outputFilePathToDebug = false)
 		{
 			string filePath = MakeTempPath(type, false) + Path.DirectorySeparatorChar + MakeTempFileName(type, name, "", extension, false);
 
@@ -148,7 +143,7 @@ namespace MKY.IO
 			// Do not use a GUID:
 			//  > The file name gets very long.
 			//  > It's more difficult to find related files.
-			if (File.Exists(filePath))
+			if (!acceptExistingFile && File.Exists(filePath))
 			{
 				const int Max = 999999999; // Pretty close to int.MaxValue, and ridiculously long for the number of files in a directory...
 				string istr = "";

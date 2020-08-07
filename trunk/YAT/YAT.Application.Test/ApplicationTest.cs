@@ -90,7 +90,7 @@ namespace YAT.Application.Test
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
-			tempPath = Temp.MakeTempPath(GetType());
+			tempPath = Temp.MakeTempPath(GetType(), outputPathToDebug: true);
 
 			// Temporary in-memory application settings are useless for this YAT.Application based
 			// test, as YAT.Application will retrieve the application settings, that's its job...
@@ -123,7 +123,7 @@ namespace YAT.Application.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			Temp.CleanTempPath(GetType());
+			Temp.CleanTempPath(GetType(), outputPathToDebug: true);
 		}
 
 		#endregion
