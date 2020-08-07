@@ -81,8 +81,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\NUnit.Version.cs">
-      <Link>Properties\NUnit.Version.cs</Link>
+    <Compile Include="..\NUnitEx.Version.cs">
+      <Link>Properties\NUnitEx.Version.cs</Link>
     </Compile>
     <Compile Include="TestExecutionContextInformation.cs" />
     <Compile Include="ContextDetectorTest.cs" />

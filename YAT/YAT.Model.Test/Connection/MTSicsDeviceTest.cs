@@ -33,10 +33,9 @@ using System.Threading;
 using MKY.Settings;
 using MKY.Test.Devices;
 
-using NUnit;
 using NUnit.Framework;
+using NUnitEx;
 
-using YAT.Domain;
 using YAT.Settings.Application;
 
 #endregion

@@ -39,8 +39,8 @@ using MKY.Collections.Generic;
 using MKY.Settings;
 using MKY.Windows.Forms;
 
-using NUnit;
 using NUnit.Framework;
+using NUnitEx;
 
 using YAT.Domain.Settings;
 using YAT.Settings.Application;
