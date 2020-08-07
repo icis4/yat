@@ -535,6 +535,13 @@ namespace YAT.Domain.Test.Terminal
 				}
 			}
 
+			// Adjust maximum number of lines:
+			if (fileInfo.LineCount > DisplaySettings.MaxLineLengthDefault)
+			{
+				                         settingsA.Display.MaxLineCount = fileInfo.LineCount;
+				if (settingsB != null) { settingsB.Display.MaxLineCount = fileInfo.LineCount; }
+			}
+
 			// Ready to send and verify:
 			if (settingsB != null)
 				SendAndVerifyPair(settingsA, settingsB, fileInfo, sendMethod, timeout);
