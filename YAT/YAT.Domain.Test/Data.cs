@@ -100,7 +100,8 @@ namespace YAT.Domain.Test
 			return (ToSerialPortLoopbackPairsTestCases(terminalType, null));
 		}
 
-		private static IEnumerable<TestCaseData> ToSerialPortLoopbackPairsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
+		/// <summary></summary>
+		public static IEnumerable<TestCaseData> ToSerialPortLoopbackPairsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
 		{
 			foreach (var descriptor in Environment.SerialPortLoopbackPairs) // Upper level grouping shall be 'by I/O'.
 			{
@@ -112,19 +113,13 @@ namespace YAT.Domain.Test
 			}
 		}
 
-		/// <summary></summary>
-		public static IEnumerable<TestCaseData> ToSerialPortLoopbackPairsTestCases_Text(IEnumerable<TestCaseData> tests)
-		{
-			foreach (var tc in ToSerialPortLoopbackPairsTestCases(TerminalType.Text, tests))
-				yield return (tc);
-		}
-
 		private static IEnumerable<TestCaseData> ToSerialPortLoopbackSelfsTestCases(TerminalType terminalType)
 		{
 			return (ToSerialPortLoopbackSelfsTestCases(terminalType, null));
 		}
 
-		private static IEnumerable<TestCaseData> ToSerialPortLoopbackSelfsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
+		/// <summary></summary>
+		public static IEnumerable<TestCaseData> ToSerialPortLoopbackSelfsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
 		{
 			foreach (var descriptor in Environment.SerialPortLoopbackSelfs) // Upper level grouping shall be 'by I/O'.
 			{
@@ -133,13 +128,6 @@ namespace YAT.Domain.Test
 				foreach (var tc in ToTestCases(descriptor, settings, tests))
 					yield return (tc);
 			}
-		}
-
-		/// <summary></summary>
-		public static IEnumerable<TestCaseData> ToSerialPortLoopbackSelfsTestCases_Text(IEnumerable<TestCaseData> tests)
-		{
-			foreach (var tc in ToSerialPortLoopbackSelfsTestCases(TerminalType.Text, tests))
-				yield return (tc);
 		}
 
 		#endregion
@@ -154,7 +142,8 @@ namespace YAT.Domain.Test
 			return (ToIPSocketPairsTestCases(terminalType, null));
 		}
 
-		private static IEnumerable<TestCaseData> ToIPSocketPairsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
+		/// <summary></summary>
+		public static IEnumerable<TestCaseData> ToIPSocketPairsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
 		{
 			foreach (var descriptor in Environment.IPSocketPairs) // Upper level grouping shall be 'by I/O'.
 			{
@@ -166,19 +155,13 @@ namespace YAT.Domain.Test
 			}
 		}
 
-		/// <summary></summary>
-		public static IEnumerable<TestCaseData> ToIPSocketPairsTestCases_Text(IEnumerable<TestCaseData> tests)
-		{
-			foreach (var tc in ToIPSocketPairsTestCases(TerminalType.Text, tests))
-				yield return (tc);
-		}
-
 		private static IEnumerable<TestCaseData> ToIPSocketSelfsTestCases(TerminalType terminalType)
 		{
 			return (ToIPSocketSelfsTestCases(terminalType, null));
 		}
 
-		private static IEnumerable<TestCaseData> ToIPSocketSelfsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
+		/// <summary></summary>
+		public static IEnumerable<TestCaseData> ToIPSocketSelfsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
 		{
 			foreach (var descriptor in Environment.IPSocketSelfs) // Upper level grouping shall be 'by I/O'.
 			{
@@ -187,13 +170,6 @@ namespace YAT.Domain.Test
 				foreach (var tc in ToTestCases(descriptor, settings, tests))
 					yield return (tc);
 			}
-		}
-
-		/// <summary></summary>
-		public static IEnumerable<TestCaseData> ToIPSocketSelfsTestCases_Text(IEnumerable<TestCaseData> tests)
-		{
-			foreach (var tc in ToIPSocketSelfsTestCases(TerminalType.Text, tests))
-				yield return (tc);
 		}
 
 		#endregion

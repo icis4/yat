@@ -21,7 +21,9 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 using NUnit.Framework;
 
@@ -31,6 +33,29 @@ namespace NUnit
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class TestCaseDataEx
 	{
+		/// <summary></summary>
+		public static TestCaseData ToTestCase(TestCaseData metaDataBase, string nameSuffix, IEnumerable<string> categoriesToMerge, params object[] args)
+		{
+			// Arguments:
+			var tc = new TestCaseData(args);
+
+			// Name:
+			tc.SetName(metaDataBase.TestName + ((nameSuffix != null) ? (nameSuffix) : ""));
+
+			// Category(ies):
+			{
+				foreach (var cat in metaDataBase.Categories)
+					tc.SetCategory((string)cat);
+			}
+			if (categoriesToMerge != null)
+			{
+				foreach (var catToMerge in categoriesToMerge)
+					tc.SetCategory(catToMerge);
+			}
+
+			return (tc);
+		}
+
 		/// <summary></summary>
 		public static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TestCaseData metaDataToMerge, params object[] args)
 		{
