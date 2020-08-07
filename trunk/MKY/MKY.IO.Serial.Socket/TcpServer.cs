@@ -28,8 +28,8 @@
 
 #if (DEBUG)
 
-	// Enable debugging of thread state:
-////#define DEBUG_THREAD_STATE
+	// Enable debugging of sending:
+////#define DEBUG_SEND // Attention: Must also be activated in TcpClient.Send.cs !!
 
 	// Enable debugging of ALAZ socket shutdown:
 ////#define DEBUG_SOCKET_SHUTDOWN
@@ -667,6 +667,8 @@ namespace MKY.IO.Serial.Socket
 					// mostly be called with rather low numbers of bytes.
 				}
 
+				DebugSendEnqueue(e.Buffer.Length);
+
 				SignalDataSentThreadSafely();
 			}
 		}
@@ -834,15 +836,6 @@ namespace MKY.IO.Serial.Socket
 					message
 				)
 			);
-		}
-
-		/// <remarks>
-		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
-		/// </remarks>
-		[Conditional("DEBUG_THREAD_STATE")]
-		private void DebugThreadState(string message)
-		{
-			DebugMessage(message);
 		}
 
 		/// <remarks>
