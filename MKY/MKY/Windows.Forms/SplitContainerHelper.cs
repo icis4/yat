@@ -55,7 +55,7 @@ namespace MKY.Windows.Forms
 						if (sc.SplitterDistance != limitedDistance)
 							sc.SplitterDistance = limitedDistance;
 					}
-				#if DEBUG
+				#if (DEBUG)
 					else
 					{
 						Debugger.Break(); // See debug output for issue and instructions!

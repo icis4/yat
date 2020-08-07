@@ -32,7 +32,7 @@
 	// Enable debugging of thread state:
 ////#define DEBUG_CONTENT_EVENTS
 
-// Enable debug output line handling for scripting:
+	// Enable debug output line handling for scripting:
 ////#define DEBUG_SCRIPTING
 
 #endif // DEBUG

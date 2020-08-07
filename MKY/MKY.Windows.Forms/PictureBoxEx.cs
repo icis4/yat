@@ -180,7 +180,7 @@ namespace MKY.Windows.Forms
 
 		private void ApplyBaseImageRotationAfterRotationChange()
 		{
-		#if DEBUG_IMAGE_ROTATION
+		#if (DEBUG_IMAGE_ROTATION)
 			// There's a tricky thing about this calculation, as it must correctly work in four situations:
 			//  a) At design time, when the developer instantiates this control (i.e. DesignMode = true).
 			//  b) At design time, when the designer generated code gets executed (i.e. DesignMode = true).
@@ -212,7 +212,7 @@ namespace MKY.Windows.Forms
 
 		private void ApplyBaseImageRotationAfterImageChange()
 		{
-		#if DEBUG_IMAGE_ROTATION
+		#if (DEBUG_IMAGE_ROTATION)
 			// There's a tricky thing about this calculation, as it must correctly work in four situations:
 			//  a) At design time, when the developer instantiates this control (i.e. DesignMode = true).
 			//  b) At design time, when the designer generated code gets executed (i.e. DesignMode = true).
