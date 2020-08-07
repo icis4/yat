@@ -39,6 +39,7 @@ Use special tags
 \remind      :   \remind: <Description>      or   \remind (<Date> / <Author>): <Description>)
 
 Use special temporary tags
+\PENDING
 \TEMP
 \DEBUG
 \TRACE
@@ -71,6 +72,12 @@ statements one level out of normal code structure to clearly show that these sta
 			{
 		#endif
 do not belong to the normal code. Decide on variant a) or b) for better readability.
+
+Use
+#if (DEFINE)
+rather then
+#if DEFINE
+for more similarity with if (condition),
 
 
 Classes
