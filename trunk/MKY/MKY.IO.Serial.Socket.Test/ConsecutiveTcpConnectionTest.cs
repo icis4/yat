@@ -21,8 +21,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using NUnit;
 using NUnit.Framework;
+using NUnitEx;
 
 namespace MKY.IO.Serial.Socket.Test
 {

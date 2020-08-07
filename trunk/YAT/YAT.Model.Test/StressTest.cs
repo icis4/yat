@@ -26,8 +26,8 @@
 // Using
 //==================================================================================================
 
-using NUnit;
 using NUnit.Framework;
+using NUnitEx;
 
 #endregion
 

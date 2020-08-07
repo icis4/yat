@@ -27,7 +27,7 @@
 // Using
 //==================================================================================================
 
-using NUnit;
+using NUnitEx;
 
 using MKY.IO.Serial.Socket;
 using MKY.Net;

@@ -22,13 +22,15 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using NUnit.Framework;
+
 namespace NUnitEx
 {
 	/// <summary>
-	/// Encapsulates information to initialize <see cref="Framework.TestCaseData"/> objects.
+	/// Encapsulates information to initialize <see cref="TestCaseData"/> objects.
 	/// </summary>
 	/// <remarks>
-	/// Useful to encapsulate information where <see cref="Framework.TestCaseData"/> objects are
+	/// Useful to encapsulate information where <see cref="TestCaseData"/> objects are
 	/// not suitable or suboptimal, e.g. where named and typed arguments shall be used rather than
 	/// just an array of <see cref="object"/> named "arg1", "arg2",...
 	/// </remarks>
@@ -37,17 +39,17 @@ namespace NUnitEx
 	/// </remarks>
 	/// <remarks>
 	/// Name "TestCaseDescriptor" rather than e.g. "TestCaseDataHelper" for better distinguishing
-	/// from <see cref="Framework.TestCaseData"/>.
+	/// from <see cref="TestCaseData"/>.
 	/// </remarks>
 	public class TestCaseDescriptor
 	{
 		/// <summary>
-		/// The name for setting <see cref="Framework.TestCaseData.TestName"/>.
+		/// The name for setting <see cref="TestCaseData.TestName"/>.
 		/// </summary>
 		public string Name { get; }
 
 		/// <summary>
-		/// The categories for setting <see cref="Framework.TestCaseData.Categories"/>.
+		/// The categories for setting <see cref="TestCaseData.Categories"/>.
 		/// </summary>
 		public string[] Categories { get; }
 

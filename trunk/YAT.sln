@@ -110,10 +110,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MKY", "MKY", "{41ACF768-829
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "netrtfwriter", "netrtfwriter", "{5DE02EAE-E609-4D95-9498-DC45AB2271FE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NUnitEx", "NUnitEx", "{3772E0E6-CACC-4C35-9026-60E65764BE41}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NUnit", "NUnit", "{3772E0E6-CACC-4C35-9026-60E65764BE41}"
 	ProjectSection(SolutionItems) = preProject
-		NUnitEx\CustomDictionary.xml = NUnitEx\CustomDictionary.xml
-		NUnitEx\NUnitEx.Version.cs = NUnitEx\NUnitEx.Version.cs
+		NUnit\CustomDictionary.xml = NUnit\CustomDictionary.xml
+		NUnit\NUnitEx.Version.cs = NUnit\NUnitEx.Version.cs
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "YAT", "YAT", "{3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}"

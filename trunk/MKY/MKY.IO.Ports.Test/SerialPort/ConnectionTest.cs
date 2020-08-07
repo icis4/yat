@@ -33,8 +33,8 @@ using System.Threading;
 
 using MKY.Test.Devices;
 
-using NUnit;
 using NUnit.Framework;
+using NUnitEx;
 
 #endregion
 

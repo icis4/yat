@@ -35,8 +35,8 @@ using MKY.IO;
 using MKY.Settings;
 using MKY.Windows.Forms;
 
-using NUnit;
 using NUnit.Framework;
+using NUnitEx;
 
 using YAT.Settings.Model.Test;
 

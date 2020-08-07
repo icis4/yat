@@ -35,8 +35,8 @@ using MKY.IO;
 using MKY.Settings;
 using MKY.Text;
 
-using NUnit;
 using NUnit.Framework;
+using NUnitEx;
 
 using YAT.Application.Utilities;
 using YAT.Domain;
