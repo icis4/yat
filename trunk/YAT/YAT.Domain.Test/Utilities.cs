@@ -115,6 +115,9 @@ namespace YAT.Domain.Test
 		/// </remarks>
 		public const int WaitIntervalForTransmission = 20;
 
+		/// <summary></summary>
+		public const string LineExceededWarningPattern = @"\[Warning: Maximal number of (characters|bytes) per line exceeded! Check the line break settings in Terminal > Settings > (Text|Binary) or increase the limit in Terminal > Settings > Advanced.\]";
+
 		#endregion
 
 		#region Regex'es
