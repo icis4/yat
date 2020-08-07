@@ -97,9 +97,9 @@
     <Compile Include="ConfigurationElements.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\NUnit\NUnit\NUnit.csproj">
+    <ProjectReference Include="..\..\NUnit\NUnitEx\NUnitEx.csproj">
       <Project>{f7bff679-5389-434c-81e4-7ee8530df954}</Project>
-      <Name>NUnit</Name>
+      <Name>NUnitEx</Name>
     </ProjectReference>
     <ProjectReference Include="..\MKY.IO.Ports\MKY.IO.Ports.csproj">
       <Project>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</Project>

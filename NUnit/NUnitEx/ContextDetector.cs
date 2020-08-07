@@ -21,22 +21,38 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using NUnit.Framework;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
-namespace NUnit
+namespace NUnitEx
 {
-	/// <summary></summary>
-	[TestFixture]
-	public class TestExecutionContextInformation
+	/// <summary>
+	/// Helper indicating whether the process is currently running in NUnit.
+	/// </summary>
+	/// <remarks>
+	/// This helper should only be used if absolutely necessary, as it usually is a sign
+	/// of bad design.
+	/// </remarks>
+	public static class ContextDetector
 	{
-		/// <summary></summary>
-		[Test]
-		public virtual void EstimateTotalExecutionTime()
+		[SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "Normalizing towards effective file/assembly name.")]
+		static ContextDetector()
 		{
-			// Try to estimate the total execution time based on the number of tests...
-		////Framework.Internal.TestExecutionContext.CurrentContext.CurrentTest => https://github.com/nunit/nunit/issues/2914
-			// ...taking the duration categories into account.
+			IsRunningInNUnit = AppDomain.CurrentDomain.GetAssemblies().Any
+			(
+				a => a.FullName.ToLowerInvariant().StartsWith("nunit.framework", StringComparison.OrdinalIgnoreCase)
+			);
 		}
+
+		/// <summary>
+		/// Gets a value indicating whether the process is currently running in NUnit.
+		/// </summary>
+		/// <remarks>
+		/// This property should only be retrieved if absolutely necessary, as it usually is a sign
+		/// of bad design.
+		/// </remarks>
+		public static bool IsRunningInNUnit { get; private set; }
 	}
 }
 

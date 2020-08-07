@@ -154,9 +154,9 @@
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\NUnit\NUnit\NUnit.csproj">
+    <ProjectReference Include="..\..\NUnit\NUnitEx\NUnitEx.csproj">
       <Project>{F7BFF679-5389-434C-81E4-7EE8530DF954}</Project>
-      <Name>NUnit</Name>
+      <Name>NUnitEx</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Domain.Test\YAT.Domain.Test.csproj">
       <Project>{7ca209c1-b1a8-43e0-bbfb-79eda186ce62}</Project>

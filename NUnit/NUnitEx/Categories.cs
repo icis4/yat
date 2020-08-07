@@ -27,7 +27,7 @@ using System.Globalization;
 
 using NUnit.Framework;
 
-namespace NUnit
+namespace NUnitEx
 {
 	/// <summary></summary>
 	public static class CategoryStrings

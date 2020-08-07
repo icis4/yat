@@ -110,10 +110,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MKY", "MKY", "{41ACF768-829
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "netrtfwriter", "netrtfwriter", "{5DE02EAE-E609-4D95-9498-DC45AB2271FE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NUnit", "NUnit", "{3772E0E6-CACC-4C35-9026-60E65764BE41}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NUnitEx", "NUnitEx", "{3772E0E6-CACC-4C35-9026-60E65764BE41}"
 	ProjectSection(SolutionItems) = preProject
-		NUnit\CustomDictionary.xml = NUnit\CustomDictionary.xml
-		NUnit\NUnit.Version.cs = NUnit\NUnit.Version.cs
+		NUnitEx\CustomDictionary.xml = NUnitEx\CustomDictionary.xml
+		NUnitEx\NUnitEx.Version.cs = NUnitEx\NUnitEx.Version.cs
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "YAT", "YAT", "{3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}"
@@ -166,7 +166,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Windows.Forms.Test", "M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RtfWriter", "netrtfwriter\RtfWriter\RtfWriter.csproj", "{591BCEB5-6B6F-4368-BE6C-F89F668F7DCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit", "NUnit\NUnit\NUnit.csproj", "{F7BFF679-5389-434C-81E4-7EE8530DF954}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitEx", "NUnit\NUnitEx\NUnitEx.csproj", "{F7BFF679-5389-434C-81E4-7EE8530DF954}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OxyPlot", "OxyPlot", "{B530B13B-AEE4-4E02-A831-D87AC761E851}"
 EndProject

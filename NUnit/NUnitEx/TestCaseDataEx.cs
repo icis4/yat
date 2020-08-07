@@ -27,7 +27,7 @@ using System.Linq;
 
 using NUnit.Framework;
 
-namespace NUnit
+namespace NUnitEx
 {
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
