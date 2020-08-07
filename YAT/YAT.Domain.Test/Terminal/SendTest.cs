@@ -403,7 +403,7 @@ namespace YAT.Domain.Test.Terminal
 				var estimatedTimeB = (fileByteCount / settingsB.IO.RoughlyEstimatedMaxBytesPerMillisecond);
 				estimatedTime = Math.Max(estimatedTimeA, estimatedTimeB);
 			}
-			estimatedTime += 4; // Approx. 4 milliseconds for pre/post (measurements 2020-08-07).
+			estimatedTime += 4000; // Approx. 4 seconds for pre/post (measurements 2020-08-07).
 
 			// Append timeout to arguments:
 			var args = new List<object>(tc.Arguments.Length + 1);
