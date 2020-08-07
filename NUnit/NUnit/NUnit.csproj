@@ -86,10 +86,17 @@
     </Compile>
     <Compile Include="ContextDetectorTest.cs" />
     <Compile Include="ContextDetector.cs" />
+    <Compile Include="TestCaseDataHelper.cs" />
     <Compile Include="TestCaseDescriptor.cs" />
     <Compile Include="TestCaseDataEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Categories.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
+      <Project>{f489b948-95cf-49fe-b9aa-a51654f5688b}</Project>
+      <Name>MKY</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

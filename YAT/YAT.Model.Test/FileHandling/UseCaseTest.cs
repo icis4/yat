@@ -127,7 +127,7 @@ namespace YAT.Model.Test.FileHandling
 			ApplicationSettings.LocalUserSettings.AutoWorkspace.ResetFilePath();
 			ApplicationSettings.SaveLocalUserSettings();
 
-			Temp.MakeTempPath(GetType());
+			Temp.MakeTempPath(GetType(), outputPathToDebug: true);
 		}
 
 		/// <summary></summary>
@@ -135,7 +135,7 @@ namespace YAT.Model.Test.FileHandling
 		[TearDown]
 		public virtual void TearDown()
 		{
-			Temp.CleanTempPath(GetType());
+			Temp.CleanTempPath(GetType(), outputPathToDebug: true);
 		}
 
 		#endregion
