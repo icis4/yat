@@ -21,7 +21,7 @@
     <assembly path="MKY\MKY.Win32.Test\bin\Debug\MKY.Win32.Test.dll" />
     <assembly path="MKY\MKY.Windows.Forms\bin\Debug\MKY.Windows.Forms.dll" />
     <assembly path="netrtfwriter\RtfWriter\bin\Debug\RtfWriter.dll" />
-    <assembly path="NUnit\NUnit\bin\Debug\NUnit.dll" />
+    <assembly path="NUnit\NUnitEx\bin\Debug\NUnitEx.dll" />
     <assembly path="YAT\YAT\bin\Debug\YAT.exe" />
     <assembly path="YAT\YAT.Application\bin\Debug\YAT.Application.dll" />
     <assembly path="YAT\YAT.Application.Base\bin\Debug\YAT.Application.Base.dll" />
@@ -64,7 +64,7 @@
     <assembly path="MKY\MKY.Win32.Test\bin\Release\MKY.Win32.Test.dll" />
     <assembly path="MKY\MKY.Windows.Forms\bin\Release\MKY.Windows.Forms.dll" />
     <assembly path="netrtfwriter\RtfWriter\bin\Release\RtfWriter.dll" />
-    <assembly path="NUnit\NUnit\bin\Release\NUnit.dll" />
+    <assembly path="NUnit\NUnitEx\bin\Release\NUnitEx.dll" />
     <assembly path="YAT\YAT\bin\Release\YAT.exe" />
     <assembly path="YAT\YAT.Application\bin\Release\YAT.Application.dll" />
     <assembly path="YAT\YAT.Application.Base\bin\Release\YAT.Application.Base.dll" />
