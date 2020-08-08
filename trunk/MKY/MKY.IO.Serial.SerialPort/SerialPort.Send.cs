@@ -225,7 +225,7 @@ namespace MKY.IO.Serial.SerialPort
 		private void SendThread()
 		{
 			// Calculate maximum baud defined send rate:
-			double frameTime   = this.settings.Communication.FrameTime;
+			double frameTime = this.settings.Communication.FrameTime;
 			const int MaxFramesPerInterval = 48;                  // Interval shall be rather narrow enough to ensure being inside the limits
 			double interval = (frameTime * MaxFramesPerInterval); // even for converters with buffers of just 56 bytes. 48 for two reasons:
 			Rate maxBaudRatePerInterval = new Rate(interval);     //  1) 48/56 => 15% safety margin
