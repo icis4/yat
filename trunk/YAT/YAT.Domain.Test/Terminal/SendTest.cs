@@ -267,7 +267,7 @@ namespace YAT.Domain.Test.Terminal
 						{
 							foreach (var tc in Data.ToSerialPortLoopbackPairsTestCases(t.Item1, new TestCaseData[] { t.Item3 }))
 							{
-								yield return (DecorateWithTimeoutAndDurationCategory(tc));
+								yield return (DecorateWithTimeoutAndDuration(tc));
 							}
 
 							break;
@@ -279,7 +279,7 @@ namespace YAT.Domain.Test.Terminal
 							{
 								ModifySerialPortSettings(tc);
 
-								yield return (DecorateWithTimeoutAndDurationCategory(tc));
+								yield return (DecorateWithTimeoutAndDuration(tc));
 							}
 
 							break;
@@ -306,7 +306,7 @@ namespace YAT.Domain.Test.Terminal
 						{
 							foreach (var tc in Data.ToSerialPortLoopbackSelfsTestCases(t.Item1, new TestCaseData[] { t.Item3 }))
 							{
-								yield return (DecorateWithTimeoutAndDurationCategory(tc));
+								yield return (DecorateWithTimeoutAndDuration(tc));
 							}
 
 							break;
@@ -318,7 +318,7 @@ namespace YAT.Domain.Test.Terminal
 							{
 								ModifySerialPortSettings(tc);
 
-								yield return (DecorateWithTimeoutAndDurationCategory(tc));
+								yield return (DecorateWithTimeoutAndDuration(tc));
 							}
 
 							break;
@@ -343,7 +343,7 @@ namespace YAT.Domain.Test.Terminal
 
 					foreach (var tc in Data.ToIPSocketPairsTestCases(t.Item1, new TestCaseData[] { t.Item3 }))
 					{
-						yield return (DecorateWithTimeoutAndDurationCategory(tc));
+						yield return (DecorateWithTimeoutAndDuration(tc));
 					}
 				}
 			}
@@ -363,14 +363,14 @@ namespace YAT.Domain.Test.Terminal
 
 					foreach (var tc in Data.ToIPSocketSelfsTestCases(t.Item1, new TestCaseData[] { t.Item3 }))
 					{
-						yield return (DecorateWithTimeoutAndDurationCategory(tc));
+						yield return (DecorateWithTimeoutAndDuration(tc));
 					}
 				}
 			}
 		}
 
 		/// <remarks>Returning new data is required to modify arguments.</remarks>
-		private static TestCaseData DecorateWithTimeoutAndDurationCategory(TestCaseData tc)
+		private static TestCaseData DecorateWithTimeoutAndDuration(TestCaseData tc)
 		{
 		#if (DEBUG_TEST_CASE_DATA)
 			TestCaseDataHelper.WriteToTempFile(typeof(SendTestData), tc);
@@ -396,29 +396,35 @@ namespace YAT.Domain.Test.Terminal
 
 			double estimatedTime;
 			if (settingsB == null) {
-				estimatedTime = (fileByteCount / settingsA.IO.RoughlyEstimatedMaxBytesPerMillisecond);
+				estimatedTime = ((fileByteCount / settingsA.IO.RoughlyEstimatedMaxBytesPerMillisecond) / 0.85); // 15% margin.
 			}
 			else {
-				var estimatedTimeA = (fileByteCount / settingsA.IO.RoughlyEstimatedMaxBytesPerMillisecond);
-				var estimatedTimeB = (fileByteCount / settingsB.IO.RoughlyEstimatedMaxBytesPerMillisecond);
+				var estimatedTimeA = ((fileByteCount / settingsA.IO.RoughlyEstimatedMaxBytesPerMillisecond) / 0.85); // 15% margin.
+				var estimatedTimeB = ((fileByteCount / settingsB.IO.RoughlyEstimatedMaxBytesPerMillisecond) / 0.85); // 15% margin.
 				estimatedTime = Math.Max(estimatedTimeA, estimatedTimeB);
 			}
-			estimatedTime += 4000; // Approx. 4 seconds for pre/post (measurements 2020-08-07).
-
-			// Append timeout to arguments:
+			// Timeout:
 			var args = new List<object>(tc.Arguments.Length + 1);
-			args.AddRange(tc.Arguments);
-			int timeout = Math.Max((int)(estimatedTime * 1.5), 1); // 'timeout' must be 1 or above.
+			args.AddRange(tc.Arguments);                // 25% margin relative to estimate without overhead.
+			var timeout = Math.Max((int)(estimatedTime * 1.25), 1); // 'timeout' must be 1 or above.
 			args.Add(timeout);
+			var timeoutCaption = StandardDurationCategory.CaptionFrom(TimeSpan.FromMilliseconds(timeout));
 
-			// Determine duration category and also estimated time suffix:
-			var ts = TimeSpan.FromMilliseconds(estimatedTime);
-			var cat = StandardDurationCategory.AttributeFrom(ts).Name;
-			var nameSuffix = StandardDurationCategory.NameSuffixFrom(ts);
+			// Estimated time:
+			estimatedTime += 1000; // Approx. 1 second for pre/post overhead (analysis 2020-08-07..08).
+			estimatedTime += (fileByteCount / 20); // Approx. 0.5 second per 10'000 bytes for reverification, but dependent on amount and baud rate:
+			                                       // Default  @  9600 baud: 9200 ms for 8400 bytes, total 11 s / 90000 ms for 82500 bytes, total 99 s
+			                                       // Modified @ 115.2 kbaud: 880 ms for 8400 bytes, total  2 s /  6420 ms for 82500 bytes, total 12 s
+			var estimated = TimeSpan.FromMilliseconds(estimatedTime);
+			var estimatedCaption = StandardDurationCategory.CaptionFrom(estimated);
 
+			// Duration category:
+			var cat = StandardDurationCategory.AttributeFrom(estimated).Name;
+
+			var nameSuffix = " (" + estimatedCaption + " estimated total; " + timeoutCaption +" Tx/Rx timeout)";
 			var result = TestCaseDataEx.ToTestCase(tc, nameSuffix, new string[] { cat }, args.ToArray());
 		#if (DEBUG_TEST_CASE_DATA)
-			TestCaseDataHelper.WriteToTempFile(typeof(SendTestData), result); // No need to append, file name will differ due to suffix.
+			TestCaseDataHelper.WriteToTempFile(typeof(SendTestData), result); // No need to append to file, file name will differ due to suffix.
 		#endif
 			return (result);
 		}

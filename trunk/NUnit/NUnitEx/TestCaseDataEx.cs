@@ -34,13 +34,13 @@ namespace NUnitEx
 	public static class TestCaseDataEx
 	{
 		/// <summary></summary>
-		public static TestCaseData ToTestCase(TestCaseData metaDataBase, string nameSuffix, IEnumerable<string> categoriesToMerge, params object[] args)
+		public static TestCaseData ToTestCase(TestCaseData metaDataBase, string nameToAppend, IEnumerable<string> categoriesToMerge, params object[] args)
 		{
 			// Arguments:
 			var tc = new TestCaseData(args);
 
 			// Name:
-			tc.SetName(metaDataBase.TestName + ((nameSuffix != null) ? (nameSuffix) : ""));
+			tc.SetName(metaDataBase.TestName + ((nameToAppend != null) ? (nameToAppend) : ""));
 
 			// Category(ies):
 			{

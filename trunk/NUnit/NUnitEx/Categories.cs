@@ -306,20 +306,20 @@ namespace NUnitEx
 		/// <summary>
 		/// Returns the corresponding name suffix.
 		/// </summary>
-		public static string NameSuffixFrom(TimeSpan ts)
+		public static string CaptionFrom(TimeSpan ts)
 		{
 			// Everything up to twice the boundary:
 
 			if (ts.TotalSeconds < 120)
-				return (string.Format(CultureInfo.CurrentCulture, "_{0:F0}s", ts.TotalSeconds));
+				return (string.Format(CultureInfo.CurrentCulture, "{0:F0} s", ts.TotalSeconds));
 
-			if (ts.TotalMinutes < 120)
-				return (string.Format(CultureInfo.CurrentCulture, "_{0:F0}m", ts.TotalMinutes));
+			if (ts.TotalMinutes < 120)                                    // m is meter!
+				return (string.Format(CultureInfo.CurrentCulture, "{0:F0} min", ts.TotalMinutes));
 
 			if (ts.TotalHours < 48)
-				return (string.Format(CultureInfo.CurrentCulture, "_{0:F0}h", ts.TotalHours));
+				return (string.Format(CultureInfo.CurrentCulture, "{0:F0} h", ts.TotalHours));
 
-			return (string.Format(CultureInfo.CurrentCulture, "_{0:F0}d", ts.TotalDays));
+			return (string.Format(CultureInfo.CurrentCulture, "{0:F0} d", ts.TotalDays));
 		}
 	}
 
