@@ -29,8 +29,8 @@
 
 #if (DEBUG)
 
-	// Enable debugging of send request:
-////#define DEBUG_SEND_REQUEST
+	// Enable debugging of sending:
+////#define DEBUG_SEND
 
 #endif // DEBUG
 
@@ -97,7 +97,7 @@ namespace MKY.IO.Serial.SerialPort
 				else
 					sendBufferSize = SendQueueInitialCapacity;
 
-				DebugSendRequest("Enqueuing " + data.Length.ToString(CultureInfo.CurrentCulture) + " byte(s) for sending...");
+				DebugSend("Enqueuing " + data.Length.ToString(CultureInfo.CurrentCulture) + " byte(s) for sending...");
 				foreach (byte b in data)
 				{
 					// Wait until there is space in the send queue:
@@ -126,7 +126,7 @@ namespace MKY.IO.Serial.SerialPort
 					// Do not signal after each byte, this is a) not efficient and b) not desired
 					// as send requests shall ideally be sent as a single chunk.
 				}
-				DebugSendRequest("...enqueuing done");
+				DebugSend("...enqueuing done");
 
 				// Signal thread to send the requested packet:
 				SignalSendThreadSafely();
@@ -423,9 +423,9 @@ namespace MKY.IO.Serial.SerialPort
 
 										if (TryWriteChunkToPort(maxChunkSize, out effectiveChunkData, out isWriteTimeout, out isOutputBreak, out signalIOControlChanged, out signalIOControlChangedTimeStamp))
 										{
-											DebugSendRequest("Signaling " + effectiveChunkData.Count.ToString() + " byte(s) sent...");
+											DebugSend("Signaling " + effectiveChunkData.Count.ToString() + " byte(s) sent...");
 											OnDataSent(new SerialDataSentEventArgs(effectiveChunkData.ToArray(), PortId));
-											DebugSendRequest("...signaling done");
+											DebugSend("...signaling done");
 
 											effectiveChunkDataCount = effectiveChunkData.Count;
 										}
@@ -826,8 +826,8 @@ namespace MKY.IO.Serial.SerialPort
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
-		[Conditional("DEBUG_SEND_REQUEST")]
-		private void DebugSendRequest(string message)
+		[Conditional("DEBUG_SEND")]
+		private void DebugSend(string message)
 		{
 			DebugMessage(message);
 		}
