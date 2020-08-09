@@ -85,8 +85,8 @@ namespace MKY.IO.Serial.Socket
 						if (IsInDisposal || !IsTransmissive) // Check disposal state first!
 							return (false);
 
-						// Signal to ensure send thread stays active:
-						// PENDING SignalSendThreadSafely();
+						// Signal to ensure send thread keeps working:
+						SignalSendThreadSafely();
 
 						// Actively yield to other threads to allow dequeuing:
 						var span = (DateTime.Now - initialTimeStamp);

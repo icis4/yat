@@ -147,7 +147,7 @@ Important changes:
 - Changes on-the-fly by keywords like \!(Port()), \!(PortSettings()), \!(Baud()),... are now
   reflected in the terminal settings, i.e. also indicated by '*' (related to reqs. #71 and #403).
 - IPv6 support enabled for UDP/IP terminals (feature request #372).
-- Test coverage of [Send Text] and [Send File] use cases significantly increased.
+- Test coverage of sending and processing significantly increased (related to refactorings above).
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
 - Upgrade to .NET 4.0 runtime (precondition for new automatic actions [Chart/Plot/Histogram],
   preparing upcoming feature request #74, part of feature request #229).
@@ -172,6 +172,8 @@ Fixed bugs:
   refresh (feature request #367).
 - Line break detection and processing continues even when exceeding the configured maximum number
   of characters/bytes per line (related to refactoring of element and line processing).
+- Sending of very long lines (in case of e.g. serial COM ports longer than the software buffer,
+  typically 2048 bytes) now works with serial COM ports, UDP/IP sockets and USB Ser/HID (bug #417).
 - Handling of [Preferences... > ...take serial number/string into account] fixed (rel. to bug #480).
 
 Limitations and known issues:
