@@ -106,7 +106,7 @@ namespace YAT.Domain.Test.Terminal
 			{
 				var l = new List<Tuple<StressFile, SendMethod>>(8); // Preset the required capacity to improve memory management.
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Normal,                SendMethod.File));
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Large,                 SendMethod.File)); // 'Large' is needed for non-socket, 'Huge' would take too long.
+				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Large,                 SendMethod.File)); // 'Large' is needed for serial COM ports with defaults, 'Huge' would take too long.
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.LargeWithLongLines,    SendMethod.File));
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Huge,                  SendMethod.File)); // 'Enormous' would take too long.
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.HugeWithVeryLongLines, SendMethod.File));
@@ -127,7 +127,7 @@ namespace YAT.Domain.Test.Terminal
 			{
 				var l = new List<Tuple<StressFile, SendMethod>>(6); // Preset the required capacity to improve memory management.
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Normal,       SendMethod.File));
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Large,        SendMethod.File)); // 'Large' is needed for non-socket, 'Huge' would take too long.
+				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Large,        SendMethod.File)); // 'Large' is needed for serial COM ports with defaults, 'Huge' would take too long.
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Huge,         SendMethod.File)); // 'Enormous' would take too long.
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.LongLine,     SendMethod.TextLine));
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.VeryLongLine, SendMethod.TextLine));
@@ -531,17 +531,17 @@ namespace YAT.Domain.Test.Terminal
 			Settings.RevertSettingsIfUdpSocket(settingsB);
 
 			// Adjust maximum line length, but only up to 10'000 in order to also test with 'Exceeded' warning message:
-			if (fileInfo.LineByteCount > DisplaySettings.MaxLineLengthDefault)
+			if (fileInfo.LineByteCount > settingsA.Display.MaxLineLength) // Potentially differing 'settingsB' will result in assertion on verification.
 			{
 				if (fileInfo.LineByteCount <= MaxLineLengthForTest)
 				{
-					                         settingsA.Display.MaxLineLength = fileInfo.LineByteCount;
-					if (settingsB != null) { settingsB.Display.MaxLineLength = fileInfo.LineByteCount; }
+					                         settingsA.Display.MaxLineLength = MaxLineLengthForTest;
+					if (settingsB != null) { settingsB.Display.MaxLineLength = MaxLineLengthForTest; }
 				}
 			}
 
 			// Adjust maximum number of lines:
-			if (fileInfo.LineCount > DisplaySettings.MaxLineLengthDefault)
+			if (fileInfo.LineCount > settingsA.Display.MaxLineCount) // Potentially differing 'settingsB' will result in assertion on verification.
 			{
 				                         settingsA.Display.MaxLineCount = fileInfo.LineCount;
 				if (settingsB != null) { settingsB.Display.MaxLineCount = fileInfo.LineCount; }
