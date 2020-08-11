@@ -164,9 +164,6 @@ namespace YAT.View.Forms
 		private TerminalSettingsRoot settingsRoot;
 		private bool handlingTerminalSettingsIsSuspended; // = false; // A simple flag is sufficient as
 		                                                              // the form is ISynchronizeInvoke.
-		// Status:
-		private bool ioStatusIndicatorFlashingIsOn; // = false;
-
 		// Find:
 		private string lastFindPattern; // = null; Remark: Using "Pattern" instead of "TextOrPattern" for simplicity.
 
@@ -7670,9 +7667,9 @@ namespace YAT.View.Forms
 
 		private void SetIOStatus()
 		{
-			Image green  = Properties.Resources.Image_Status_Green_12x12;
-			Image yellow = Properties.Resources.Image_Status_Yellow_12x12;
-			Image red    = Properties.Resources.Image_Status_Red_12x12;
+			var green  = Properties.Resources.Image_Status_Green_12x12;
+			var yellow = Properties.Resources.Image_Status_Yellow_12x12;
+			var red    = Properties.Resources.Image_Status_Red_12x12;
 
 			if (TerminalIsAvailable)
 			{
@@ -7682,60 +7679,71 @@ namespace YAT.View.Forms
 				{
 					if (this.terminal.IsTransmissive)
 					{
-						if (!this.terminal.IsSendingForSomeTime) // Not checking for 'IsSending' as that a) might distract user
-						{                                        // and b) consume unncessary CPU time (draw LED quickly twice).
-							ResetIOStatusFlashing();
-							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
-
-							if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != green) // Improve performance by only assigning if different.
-								toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = green;
-						}
-						else // sending is busy
+						if (!this.terminal.IsSendingForSomeTime)   // Not checking for 'IsSending' as that a) might distract user
+						////!this.terminal.IsReceivingForSomeTime) // and b) consume unncessary CPU time (draw LED quickly twice).
 						{
-							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Flashing;
-							StartIOStatusFlashing();
-
-							// Do not directly access the image, it will be flashed by the timer below.
-							// Directly accessing the image could result in irregular flashing.
+							ResetIOStatusFlashing();
+							SetIOStatusSteady(green);
+						}
+						else
+						{
+							StartIOStatusFlashing(green);
 						}
 					}
 					else // can only receive (so far)
 					{
-						ResetIOStatusFlashing();
-						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
-
-						if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != yellow) // Improve performance by only assigning if different.
-							toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = yellow;
+					////if (!this.terminal.IsReceivingForSomeTime)
+						{
+							ResetIOStatusFlashing();
+							SetIOStatusSteady(yellow);
+						}
+					////else
+					////{
+					////	StartIOStatusFlashing(yellow);
+					////}
 					}
 				}
 				else // is closed
 				{
 					ResetIOStatusFlashing();
-					toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
-
-					if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != red) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = red;
+					SetIOStatusSteady(red);
 				}
 
 				toolStripStatusLabel_TerminalStatus_IOStatus.Text = this.terminal.IOStatusText;
 			}
 			else // 'TerminalIsNotAvailable'
 			{
-				ResetIOStatusFlashing();
 				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Enabled = false;
-				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
 
-				if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != red) // Improve performance by only assigning if different.
-					toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = red;
+				ResetIOStatusFlashing();
+				SetIOStatusSteady(red);
 
 				toolStripStatusLabel_TerminalStatus_IOStatus.Text = "";
 			}
 		}
 
-		private void StartIOStatusFlashing()
+		private void SetIOStatusSteady(Image steadyImage)
 		{
+			toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Steady;
+
+			if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != steadyImage) // Improve performance by only assigning if different.
+				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = steadyImage;
+		}
+
+		private void StartIOStatusFlashing(Image onPhaseImage)
+		{
+			toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag = IOStatusIndicatorControl.Flashing;
+
+			// Do not directly access the image, it will be flashed by the timer below.
+			// Directly accessing the image could result in irregular flashing.
+
+			timer_IOStatusIndicator_flashingOnPhaseImage = onPhaseImage;
+
 			timer_IOStatusIndicator.Enabled = true;
 		}
+
+		private Image timer_IOStatusIndicator_flashingOnPhaseImage; // = null;
+		private bool timer_IOStatusIndicator_flashingIsOn; // = false;
 
 		/// <remarks>
 		/// This 'Windows.Forms.Timer' event handler will be called on the application main thread,
@@ -7743,20 +7751,19 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void timer_IOStatusIndicator_Tick(object sender, EventArgs e)
 		{
-			if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag != null)
+			if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag != null) // Cannot use 'as' because the status is an enum, i.e. not a nullable type.
 			{
-				// Only handle the image if flashing is desired:
-				IOStatusIndicatorControl tag = (IOStatusIndicatorControl)toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag;
-				if (tag == IOStatusIndicatorControl.Flashing)
+				var tag = (IOStatusIndicatorControl)toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Tag;
+				if (tag == IOStatusIndicatorControl.Flashing) // Only handle the image if flashing is desired:
 				{
-					ioStatusIndicatorFlashingIsOn = !ioStatusIndicatorFlashingIsOn; // Toggle flashing phase (initially 'false').
+					timer_IOStatusIndicator_flashingIsOn = !timer_IOStatusIndicator_flashingIsOn; // Toggle flashing phase (initially 'false').
 
-					Image onPhase  = Properties.Resources.Image_Status_Green_12x12;
-					Image offPhase = Properties.Resources.Image_Status_Grey_12x12;
+					var onPhase  = this.timer_IOStatusIndicator_flashingOnPhaseImage;
+					var offPhase = Properties.Resources.Image_Status_Grey_12x12;
+					var current  = (timer_IOStatusIndicator_flashingIsOn ? onPhase : offPhase);
 
-					Image phase = (ioStatusIndicatorFlashingIsOn ? onPhase : offPhase);
-					if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != phase) // Improve performance by only assigning if different.
-						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = phase;
+					if (toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image != current) // Improve performance by only assigning if different.
+						toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Image = current;
 				}
 			}
 		}
@@ -7764,7 +7771,7 @@ namespace YAT.View.Forms
 		private void ResetIOStatusFlashing()
 		{
 			timer_IOStatusIndicator.Enabled = false;
-			ioStatusIndicatorFlashingIsOn = false; // Reset flashing phase (initially 'false').
+			timer_IOStatusIndicator_flashingIsOn = false; // Reset flashing phase (initially 'false').
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
@@ -7774,13 +7781,13 @@ namespace YAT.View.Forms
 			SuspendLayout(); // Prevent flickering when visibility of status labels temporarily changes.
 			try
 			{
-				Image on  = Properties.Resources.Image_Status_Green_12x12;
-				Image off = Properties.Resources.Image_Status_Red_12x12;
+				var on  = Properties.Resources.Image_Status_Green_12x12;
+				var off = Properties.Resources.Image_Status_Red_12x12;
 
-				bool isOpen = ((this.terminal != null) && (this.terminal.IsOpen));
+				var isOpen = ((this.terminal != null) && (this.terminal.IsOpen));
 
-				bool isSerialPort   = false;
-				bool isUsbSerialHid = false;
+				var isSerialPort   = false;
+				var isUsbSerialHid = false;
 
 				if (this.settingsRoot != null)
 				{
@@ -7845,8 +7852,8 @@ namespace YAT.View.Forms
 					if (isOpen)
 					{
 						var pins = new MKY.IO.Ports.SerialPortControlPins();
-						bool inputBreak = false;
-						bool outputBreak = false;
+						var inputBreak = false;
+						var outputBreak = false;
 
 						var port = (this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort);
 						if (port != null)
@@ -7867,10 +7874,10 @@ namespace YAT.View.Forms
 							throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying I/O instance is no serial COM port!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
 
-						bool allowXOnXOff    = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;
-						bool indicateXOnXOff = allowXOnXOff; // Indication only works if manual XOn/XOff (bug #214).
-						bool inputIsXOn      = false;
-						bool outputIsXOn     = false;
+						var allowXOnXOff    = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;
+						var indicateXOnXOff = allowXOnXOff; // Indication only works if manual XOn/XOff (bug #214).
+						var inputIsXOn      = false;
+						var outputIsXOn     = false;
 
 						var x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
 						if (x != null)
@@ -7900,10 +7907,10 @@ namespace YAT.View.Forms
 								toolStripStatusLabel_TerminalStatus_RTS.Image = rtsImage;
 						}
 
-						Image ctsImage = (pins.Cts ? on : off);
-						Image dtrImage = (pins.Dtr ? on : off);
-						Image dsrImage = (pins.Dsr ? on : off);
-						Image dcdImage = (pins.Dcd ? on : off);
+						var ctsImage = (pins.Cts ? on : off);
+						var dtrImage = (pins.Dtr ? on : off);
+						var dsrImage = (pins.Dsr ? on : off);
+						var dcdImage = (pins.Dcd ? on : off);
 
 						if (toolStripStatusLabel_TerminalStatus_CTS.Image != ctsImage) // Improve performance by only assigning if different.
 							toolStripStatusLabel_TerminalStatus_CTS.Image = ctsImage;
@@ -7917,11 +7924,11 @@ namespace YAT.View.Forms
 						if (toolStripStatusLabel_TerminalStatus_DCD.Image != dcdImage) // Improve performance by only assigning if different.
 							toolStripStatusLabel_TerminalStatus_DCD.Image = dcdImage;
 
-						bool allowRts = !this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRtsCtsAutomatically;
-						bool allowDtr = !this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesDtrDsrAutomatically;
+						var allowRts = !this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRtsCtsAutomatically;
+						var allowDtr = !this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesDtrDsrAutomatically;
 
-						Color rtsForeColor = (allowRts ? SystemColors.ControlText : SystemColors.GrayText);
-						Color dtrForeColor = (allowDtr ? SystemColors.ControlText : SystemColors.GrayText);
+						var rtsForeColor = (allowRts ? SystemColors.ControlText : SystemColors.GrayText);
+						var dtrForeColor = (allowDtr ? SystemColors.ControlText : SystemColors.GrayText);
 
 						if (toolStripStatusLabel_TerminalStatus_RTS.ForeColor != rtsForeColor) // Improve performance by only assigning if different.
 							toolStripStatusLabel_TerminalStatus_RTS.ForeColor = rtsForeColor;
@@ -7942,8 +7949,8 @@ namespace YAT.View.Forms
 						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
 						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
 
-						Image inputXOnXOffImage  = (inputIsXOn  ? on : off);
-						Image outputXOnXOffImage = (outputIsXOn ? on : off);
+						var inputXOnXOffImage  = (inputIsXOn  ? on : off);
+						var outputXOnXOffImage = (outputIsXOn ? on : off);
 
 						if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image != inputXOnXOffImage) // Improve performance by only assigning if different.
 							toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image = inputXOnXOffImage;
@@ -7951,7 +7958,7 @@ namespace YAT.View.Forms
 						if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image != outputXOnXOffImage) // Improve performance by only assigning if different.
 							toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = outputXOnXOffImage;
 
-						Color inputXOnXOffForeColor  = (allowXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
+						var inputXOnXOffForeColor  = (allowXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
 
 						if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor != inputXOnXOffForeColor) // Improve performance by only assigning if different.
 							toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor = inputXOnXOffForeColor;
@@ -7959,15 +7966,15 @@ namespace YAT.View.Forms
 						if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 							toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
 
-						bool indicateBreakStates = this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates;
-						bool manualOutputBreak   = this.settingsRoot.Terminal.IO.SerialPortOutputBreakIsModifiable;
+						var indicateBreakStates = this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates;
+						var manualOutputBreak   = this.settingsRoot.Terminal.IO.SerialPortOutputBreakIsModifiable;
 
 						toolStripStatusLabel_TerminalStatus_Separator3.Visible  = indicateBreakStates;
 						toolStripStatusLabel_TerminalStatus_InputBreak.Visible  = indicateBreakStates;
 						toolStripStatusLabel_TerminalStatus_OutputBreak.Visible = indicateBreakStates;
 
-						Image inputBreakImage  = (inputBreak  ? off : on);
-						Image outputBreakImage = (outputBreak ? off : on);
+						var inputBreakImage  = (inputBreak  ? off : on);
+						var outputBreakImage = (outputBreak ? off : on);
 
 						if (toolStripStatusLabel_TerminalStatus_InputBreak.Image != inputBreakImage) // Improve performance by only assigning if different.
 							toolStripStatusLabel_TerminalStatus_InputBreak.Image = inputBreakImage;
@@ -7978,7 +7985,7 @@ namespace YAT.View.Forms
 						if (toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 							toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor = SystemColors.GrayText;
 
-						Color manualBreakColor = (manualOutputBreak ? SystemColors.ControlText : SystemColors.GrayText);
+						var manualBreakColor = (manualOutputBreak ? SystemColors.ControlText : SystemColors.GrayText);
 
 						if (toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor != manualBreakColor) // Improve performance by only assigning if different.
 							toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor = manualBreakColor;
@@ -8004,12 +8011,12 @@ namespace YAT.View.Forms
 
 						// Exceptions:
 
-						bool indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;
+						var indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;
 						toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
 						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
 						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
 
-						bool indicateBreakStates = this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates;
+						var indicateBreakStates = this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates;
 						toolStripStatusLabel_TerminalStatus_Separator3.Visible  = indicateBreakStates;
 						toolStripStatusLabel_TerminalStatus_InputBreak.Visible  = indicateBreakStates;
 						toolStripStatusLabel_TerminalStatus_OutputBreak.Visible = indicateBreakStates;
@@ -8045,10 +8052,10 @@ namespace YAT.View.Forms
 
 					if (isOpen)
 					{
-						bool allowXOnXOff    = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;
-						bool indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff;
-						bool inputIsXOn      = false;
-						bool outputIsXOn     = false;
+						var allowXOnXOff    = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;
+						var indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff;
+						var inputIsXOn      = false;
+						var outputIsXOn     = false;
 
 						var x = (this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler);
 						if (x != null)
@@ -8069,8 +8076,8 @@ namespace YAT.View.Forms
 						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
 						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
 
-						Image inputXOnXOffImage = (inputIsXOn ? on : off);
-						Image outputXOnXOffImage = (outputIsXOn ? on : off);
+						var inputXOnXOffImage = (inputIsXOn ? on : off);
+						var outputXOnXOffImage = (outputIsXOn ? on : off);
 
 						if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image != inputXOnXOffImage) // Improve performance by only assigning if different.
 							toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image = inputXOnXOffImage;
@@ -8078,7 +8085,7 @@ namespace YAT.View.Forms
 						if (toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image != outputXOnXOffImage) // Improve performance by only assigning if different.
 							toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = outputXOnXOffImage;
 
-						Color inputXOnXOffForeColor = (allowXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
+						var inputXOnXOffForeColor = (allowXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
 
 						if (toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor != inputXOnXOffForeColor) // Improve performance by only assigning if different.
 							toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor = inputXOnXOffForeColor;
@@ -8094,7 +8101,7 @@ namespace YAT.View.Forms
 					}
 					else // = isClosed
 					{
-						bool indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff;
+						var indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff;
 						toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
 						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
 						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
@@ -8129,7 +8136,7 @@ namespace YAT.View.Forms
 		{
 			timer_RtsLuminescence.Enabled = false;
 
-			Image on = Properties.Resources.Image_Status_Green_12x12;
+			var on = Properties.Resources.Image_Status_Green_12x12;
 			if (toolStripStatusLabel_TerminalStatus_RTS.Image != on) // Improve performance by only assigning if different.
 				toolStripStatusLabel_TerminalStatus_RTS.Image = on;
 
@@ -8149,11 +8156,10 @@ namespace YAT.View.Forms
 
 		private void ResetRts()
 		{
-			bool isOpen = ((this.terminal != null) ? (this.terminal.IsOpen) : (false));
+			var on  = Properties.Resources.Image_Status_Green_12x12;
+			var off = Properties.Resources.Image_Status_Red_12x12;
 
-			Image on  = Properties.Resources.Image_Status_Green_12x12;
-			Image off = Properties.Resources.Image_Status_Red_12x12;
-
+			var isOpen = ((this.terminal != null) ? (this.terminal.IsOpen) : (false));
 			if (isOpen)
 			{
 				var pins = new MKY.IO.Ports.SerialPortControlPins();
@@ -8162,7 +8168,7 @@ namespace YAT.View.Forms
 				if (port != null)
 					pins = port.ControlPins;
 
-				Image rts = (pins.Rts ? on : off);
+				var rts = (pins.Rts ? on : off);
 				if (toolStripStatusLabel_TerminalStatus_RTS.Image != rts) // Improve performance by only assigning if different.
 					toolStripStatusLabel_TerminalStatus_RTS.Image = rts;
 			}
@@ -8382,21 +8388,22 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void SetFixedStatusText(string text)
-		{
-			timer_StatusText.Enabled = false;
-			toolStripStatusLabel_TerminalStatus_Status.Text = text;
-		}
-
 		private void SetFixedStatus(Status status)
 		{
 			SetFixedStatusText(GetStatusText(status));
 		}
 
-		private void SetTimedStatusText(string text)
+		private void SetFixedStatusText(string text)
 		{
 			timer_StatusText.Enabled = false;
+
 			toolStripStatusLabel_TerminalStatus_Status.Text = text;
+		}
+
+		private void SetTimedStatusText(string text)
+		{
+			SetFixedStatusText(text);
+
 			timer_StatusText.Interval = TimedStatusInterval;
 			timer_StatusText.Enabled = true;
 		}
@@ -8417,7 +8424,6 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void timer_StatusText_Tick(object sender, EventArgs e)
 		{
-			timer_StatusText.Enabled = false;
 			ResetStatusText();
 		}
 
