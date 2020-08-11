@@ -1011,12 +1011,6 @@ namespace YAT.View.Controls
 			this.dataStatusHelper.SetCountsAndRates(status);
 		}
 
-		/// <remarks>Separate for performance optimization.</remarks>
-		public virtual void SetDataRateStatusOnly(Model.BytesLinesTuple rates)
-		{
-			this.dataStatusHelper.SetRates(rates);
-		}
-
 		/// <summary></summary>
 		public virtual void ResetDataStatus()
 		{
