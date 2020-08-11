@@ -442,7 +442,7 @@ namespace YAT.Domain.Test.Terminal
 		//==========================================================================================
 
 		private const string Eol = "<CR><LF>"; // Fixed to default.
-		private const int MaxLineLengthForTest = 10000;
+	////private const int MaxLineLengthForTest = 10000;
 
 		#endregion
 
@@ -530,14 +530,19 @@ namespace YAT.Domain.Test.Terminal
 			Settings.RevertSettingsIfUdpSocket(settingsA);
 			Settings.RevertSettingsIfUdpSocket(settingsB);
 
-			// Adjust maximum line length, but only up to 10'000 in order to also test with 'Exceeded' warning message:
+			// Adjust maximum line length:
 			if (fileInfo.LineByteCount > settingsA.Display.MaxLineLength) // Potentially differing 'settingsB' will result in assertion on verification.
 			{
-				if (fileInfo.LineByteCount <= MaxLineLengthForTest)
+			////if (fileInfo.LineByteCount <= MaxLineLengthForTest) // Only adjust up to 10'000 in order to also test with 'Exceeded' warning message:
 				{
-					                         settingsA.Display.MaxLineLength = MaxLineLengthForTest;
-					if (settingsB != null) { settingsB.Display.MaxLineLength = MaxLineLengthForTest; }
+					                         settingsA.Display.MaxLineLength = fileInfo.LineByteCount;
+					if (settingsB != null) { settingsB.Display.MaxLineLength = fileInfo.LineByteCount; }
 				}
+			////else // Requires FR #375 "...migrate Byte/Line Count/Rate from model to domain..." because verification is yet fixed to repositories.
+			////{
+			////	                         settingsA.Display.MaxLineLength = MaxLineLengthForTest;
+			////	if (settingsB != null) { settingsB.Display.MaxLineLength = MaxLineLengthForTest; }
+			////}
 			}
 
 			// Adjust maximum number of lines:
