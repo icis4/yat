@@ -30,7 +30,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -110,11 +109,6 @@ namespace YAT.Domain.Test
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
 		public const int WaitTimeoutForLineTransmission = 300; // See remarks above.
-
-		/// <remarks>
-		/// Note that a longer interval would increase the wait time, thus increasing the test time.
-		/// </remarks>
-		public const int WaitIntervalForTransmission = 20;
 
 		/// <summary></summary>
 		public const string LineExceededWarningPattern = @"\[Warning: Maximal number of (characters|bytes) per line exceeded! Check the line break settings in Terminal > Settings > (Text|Binary) or increase the limit in Terminal > Settings > Advanced.\]";
@@ -371,13 +365,14 @@ namespace YAT.Domain.Test
 			int txLineCount = 0;
 			int waitTime = 0;
 			bool isFirst = true; // Using do-while, first check state.
+			int waitIntervalForTransmission = TimeoutToInterval(timeout);
 			StringBuilder sb;
 
 			do
 			{
 				if (!isFirst) {
-					Thread.Sleep(WaitIntervalForTransmission);
-					waitTime += WaitIntervalForTransmission;
+					Thread.Sleep(waitIntervalForTransmission);
+					waitTime += waitIntervalForTransmission;
 				}
 
 				txByteCount = terminalTx.GetRepositoryByteCount(RepositoryType.Tx);
@@ -454,13 +449,14 @@ namespace YAT.Domain.Test
 			int rxLineCount = 0;
 			int waitTime = 0;
 			bool isFirst = true; // Using do-while, first check state.
+			int waitIntervalForTransmission = TimeoutToInterval(timeout);
 			StringBuilder sb;
 
 			do
 			{
 				if (!isFirst) {
-					Thread.Sleep(WaitIntervalForTransmission);
-					waitTime += WaitIntervalForTransmission;
+					Thread.Sleep(waitIntervalForTransmission);
+					waitTime += waitIntervalForTransmission;
 				}
 
 				rxByteCount = terminalRx.GetRepositoryByteCount(RepositoryType.Rx);
@@ -543,13 +539,14 @@ namespace YAT.Domain.Test
 			int rxLineCount = 0;
 			int waitTime = 0;
 			bool isFirst = true; // Using do-while, first check state.
+			int waitIntervalForTransmission = TimeoutToInterval(timeout);
 			StringBuilder sb;
 
 			do
 			{
 				if (!isFirst) {
-					Thread.Sleep(WaitIntervalForTransmission);
-					waitTime += WaitIntervalForTransmission;
+					Thread.Sleep(waitIntervalForTransmission);
+					waitTime += waitIntervalForTransmission;
 				}
 
 				txByteCount = terminalTx.GetRepositoryByteCount(RepositoryType.Tx);
@@ -631,6 +628,23 @@ namespace YAT.Domain.Test
 			else {
 				Trace.WriteLine("Transmission verified");
 			}
+		}
+
+		private static int TimeoutToInterval(int timeout)
+		{
+			// Note that a longer minimum interval would increase the wait time for short tests, thus
+			// increasing the test time. But also note that such short interval increases the overhead
+			// of the test, thus increasing the test time of long tests. Adaption is the solution.
+			const int MinimumWaitIntervalForTransmission = 20;
+
+			// There shall be at least a trace output every now and then.
+			const int MaximumWaitIntervalForTransmission = 600; // Same as 2 x WaitTimeoutForLineTransmission.
+
+			// The standard timeout shall result in a typical number of updates.
+			const int TypicalNumberOfUpdates = (WaitTimeoutForLineTransmission / MinimumWaitIntervalForTransmission); // 15.
+
+			int interval = (timeout / TypicalNumberOfUpdates); // No need for higher accuracy (float or double), value will be limited anyway.
+			return (Int32Ex.Limit(interval, MinimumWaitIntervalForTransmission, MaximumWaitIntervalForTransmission));
 		}
 
 		/// <summary></summary>

@@ -287,11 +287,9 @@ namespace YAT.Model.Test
 		                      /// <remarks><see cref="Domain.Test.Utilities.WaitIntervalForStateChange"/>.</remarks>
 		public const int WaitIntervalForStateChange = Domain.Test.Utilities.WaitIntervalForStateChange;
 
+		/// <remarks>While transmission will be forwarded to domain test, this is a convenience shortcut for model tests.</remarks>
 		                           /// <remarks><see cref="Domain.Test.Utilities.WaitTimeoutForLineTransmission"/>.</remarks>
 		public const int WaitTimeoutForLineTransmission  = Domain.Test.Utilities.WaitTimeoutForLineTransmission;
-
-		                       /// <remarks><see cref="Domain.Test.Utilities.WaitIntervalForTransmission"/>.</remarks>
-		public const int WaitIntervalForTransmission = Domain.Test.Utilities.WaitIntervalForTransmission;
 
 		/// <summary></summary>
 		public const string LineExceededWarningPattern =  Domain.Test.Utilities.LineExceededWarningPattern;
