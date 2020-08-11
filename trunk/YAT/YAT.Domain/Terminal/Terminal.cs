@@ -58,8 +58,6 @@ using MKY.Contracts;
 using MKY.Diagnostics;
 using MKY.Text;
 
-using YAT.Domain.Utilities;
-
 #endregion
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
