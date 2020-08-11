@@ -392,33 +392,20 @@ namespace YAT.Domain.Test.Terminal
 				fileInfo = (FileInfo)(tc.Arguments[2]);
 			}
 
-			int fileByteCount = fileInfo.ByteCount;
+			var fileByteCount = fileInfo.ByteCount;                             // settingsB are ignored (yet).
+			var estimatedTransmissionTime = Utilities.GetEstimatedTransmissionTime(settingsA, fileByteCount);
 
-			double estimatedTime;
-			if (settingsB == null) {
-				estimatedTime = ((fileByteCount / settingsA.IO.RoughlyEstimatedMaxBytesPerMillisecond) / 0.85); // 15% margin.
-			}
-			else {
-				var estimatedTimeA = ((fileByteCount / settingsA.IO.RoughlyEstimatedMaxBytesPerMillisecond) / 0.85); // 15% margin.
-				var estimatedTimeB = ((fileByteCount / settingsB.IO.RoughlyEstimatedMaxBytesPerMillisecond) / 0.85); // 15% margin.
-				estimatedTime = Math.Max(estimatedTimeA, estimatedTimeB);
-			}
 			// Timeout:
 			var args = new List<object>(tc.Arguments.Length + 1);
-			args.AddRange(tc.Arguments);                // 25% margin relative to estimate without overhead.
-			var timeout = Math.Max((int)(estimatedTime * 1.25), 1); // 'timeout' must be 1 or above.
+			args.AddRange(tc.Arguments);                            // 25% margin.
+			var timeout = Math.Max((int)(estimatedTransmissionTime * 1.25), 1); // 'timeout' must be 1 or above.
 			args.Add(timeout);
 			var timeoutCaption = StandardDurationCategory.CaptionFrom(TimeSpan.FromMilliseconds(timeout));
 
-			// Estimated time:
-			estimatedTime += 1000; // Approx. 1 second for pre/post overhead (analysis 2020-08-07..08).
-			estimatedTime += (fileByteCount / 20); // Approx. 0.5 second per 10'000 bytes for reverification, but dependent on amount and baud rate:
-			                                       // Default  @  9600 baud: 9200 ms for 8400 bytes, total 11 s / 90000 ms for 82500 bytes, total 99 s
-			                                       // Modified @ 115.2 kbaud: 880 ms for 8400 bytes, total  2 s /  6420 ms for 82500 bytes, total 12 s
-			var estimated = TimeSpan.FromMilliseconds(estimatedTime);
+			// Estimated time and duration category:
+			var estimatedOverheadTime = Utilities.GetEstimatedOverheadTime(fileByteCount);
+			var estimated = TimeSpan.FromMilliseconds(estimatedTransmissionTime + estimatedOverheadTime);
 			var estimatedCaption = StandardDurationCategory.CaptionFrom(estimated);
-
-			// Duration category:
 			var cat = StandardDurationCategory.AttributeFrom(estimated).Name;
 
 			var nameSuffix = " (" + estimatedCaption + " estimated total; " + timeoutCaption +" Tx/Rx timeout)";
