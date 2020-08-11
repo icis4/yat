@@ -130,6 +130,48 @@ namespace YAT.Domain.Test
 
 		#endregion
 
+		#region Estimate
+		//==========================================================================================
+		// Estimate
+		//==========================================================================================
+
+		/// <summary>The estimated transmission time in milliseconds.</summary>
+		public static double GetEstimatedTransmissionTime(TerminalSettings settings, int byteCount)
+		{
+			// Analysis and measurement 2020-08-11:
+			//
+			// 9600 baud:                              (theoretically 960 bytes / s)
+			//   >   9.5 s for     8'400 bytes (Normal) @ NUnit =>   ~888 bytes / s
+			//   >  94   s for    82'500 bytes (Large)  @ NUnit =>   ~875 bytes / s
+			//
+			// 115.2 kbaud:                          (theoretically 11520 bytes / s)
+			//   >   0.8 s for     8'400 bytes (Normal) @ NUnit => ~10500 bytes / s
+			//   >   7.5 s for    82'500 bytes (Large)  @ NUnit => ~11000 bytes / s
+			//   >  94   s for 1'090'000 bytes (Huge)   @ NUnit => ~11500 bytes / s
+			//   > 240   s for 1'090'000 bytes (Huge)   @ YAT   =>  ~4500 bytes / s (additional overhead for view, not to be considered in this calculation)
+
+			return ((byteCount / settings.IO.RoughlyEstimatedMaxBytesPerMillisecond) * 1.1); // 10% typical overhead in NUnit.
+		}
+
+		/// <summary>The estimated overhead (initialization, verification, reverification,...) time in milliseconds.</summary>
+		public static double GetEstimatedOverheadTime(int byteCount)
+		{
+			// Analysis and measurement 2020-08-11:
+			//
+			// 9600 baud:                            strictly calculated:            estimated:
+			//   >   1.4 s for     8'400 bytes (Normal) => ~167 us / byte => 1 s + ~47 us / byte
+			//   >   4.5 s for    82'500 bytes (Large)  =>  ~55 us / byte => 1 s + ~42 us / byte
+			//
+			// 115.2 kbaud:                          strictly calculated:            estimated:
+			//   >   1.4 s for     8'400 bytes (Normal) => ~167 us / byte => 1 s + ~47 us / byte
+			//   >   4.5 s for    82'500 bytes (Large)  =>  ~55 us / byte => 1 s + ~42 us / byte
+			//   >  48   s for 1'090'000 bytes (Huge)   =>  ~44 us / byte => 1 s + ~43 us / byte
+
+			return (1.0 + (45E-6 * byteCount));
+		}
+
+		#endregion
+
 		#region Transmit
 		//==========================================================================================
 		// Transmit
