@@ -7074,7 +7074,6 @@ namespace YAT.View.Forms
 			{
 				TimeSpan activeConnectTime;
 				TimeSpan totalConnectTime;
-
 				this.terminal.GetConnectTime(out activeConnectTime, out totalConnectTime);
 
 				monitor_Tx   .SetTimeStatus(activeConnectTime, totalConnectTime);
@@ -7097,9 +7096,9 @@ namespace YAT.View.Forms
 			{
 				var status = this.terminal.DataStatus;
 
-				monitor_Tx   .SetDataRateStatusOnly(status.Rates);
-				monitor_Bidir.SetDataRateStatusOnly(status.Rates);
-				monitor_Rx   .SetDataRateStatusOnly(status.Rates);
+				monitor_Tx   .SetDataStatus(status); // Attention, the complete status must be set here, because
+				monitor_Bidir.SetDataStatus(status); // in case of too long lines, no display elements will get
+				monitor_Rx   .SetDataStatus(status); // added anymore, i.e. counts would no longer get updated.
 			}
 		}
 
