@@ -261,32 +261,8 @@ namespace YAT.Domain.Test.Terminal
 			{
 				foreach (var t in Tests)
 				{
-					switch (t.Item2)
-					{
-						case SettingsFlavor.Default:
-						{
-							foreach (var tc in Data.ToSerialPortLoopbackPairsTestCases(t.Item1, new TestCaseData[] { t.Item3 }))
-							{
-								yield return (DecorateWithTimeoutAndDuration(tc));
-							}
-
-							break;
-						}
-
-						case SettingsFlavor.Modified:
-						{
-							foreach (var tc in Data.ToSerialPortLoopbackPairsTestCases(t.Item1, new TestCaseData[] { t.Item3 }))
-							{
-								ModifySerialPortSettings(tc);
-
-								yield return (DecorateWithTimeoutAndDuration(tc));
-							}
-
-							break;
-						}
-
-						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + t.Item1.ToString() + "' is a flavor that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
-					}
+					foreach (var tc in Data.ToSerialPortLoopbackPairsTestCases(t.Item1, new TestCaseData[] { t.Item3 }))
+						yield return (ComplementTestCase(t, tc));
 				}
 			}
 		}
@@ -300,32 +276,8 @@ namespace YAT.Domain.Test.Terminal
 			{
 				foreach (var t in Tests)
 				{
-					switch (t.Item2)
-					{
-						case SettingsFlavor.Default:
-						{
-							foreach (var tc in Data.ToSerialPortLoopbackSelfsTestCases(t.Item1, new TestCaseData[] { t.Item3 }))
-							{
-								yield return (DecorateWithTimeoutAndDuration(tc));
-							}
-
-							break;
-						}
-
-						case SettingsFlavor.Modified:
-						{
-							foreach (var tc in Data.ToSerialPortLoopbackSelfsTestCases(t.Item1, new TestCaseData[] { t.Item3 }))
-							{
-								ModifySerialPortSettings(tc);
-
-								yield return (DecorateWithTimeoutAndDuration(tc));
-							}
-
-							break;
-						}
-
-						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + t.Item1.ToString() + "' is a flavor that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
-					}
+					foreach (var tc in Data.ToSerialPortLoopbackSelfsTestCases(t.Item1, new TestCaseData[] { t.Item3 }))
+						yield return (ComplementTestCase(t, tc));
 				}
 			}
 		}
@@ -342,9 +294,7 @@ namespace YAT.Domain.Test.Terminal
 						continue; // No need to generate non-default settings (yet).
 
 					foreach (var tc in Data.ToIPSocketPairsTestCases(t.Item1, new TestCaseData[] { t.Item3 }))
-					{
-						yield return (DecorateWithTimeoutAndDuration(tc));
-					}
+						yield return (ComplementTestCase(t, tc));
 				}
 			}
 		}
@@ -362,11 +312,28 @@ namespace YAT.Domain.Test.Terminal
 						continue; // No need to generate non-default settings (yet).
 
 					foreach (var tc in Data.ToIPSocketSelfsTestCases(t.Item1, new TestCaseData[] { t.Item3 }))
-					{
-						yield return (DecorateWithTimeoutAndDuration(tc));
-					}
+						yield return (ComplementTestCase(t, tc));
 				}
 			}
+		}
+
+		private static TestCaseData ComplementTestCase(Tuple<TerminalType, SettingsFlavor, TestCaseData> t, TestCaseData tc)
+		{
+			// Generated arguments must either be...
+			//    settings, fileInfo, sendMethod, timeout
+			// ...or...
+			//    settingsA, settingsB, fileInfo, sendMethod, timeout
+
+			var settingsA = (tc.Arguments[0] as TerminalSettings);
+			var settingsB = (tc.Arguments[1] as TerminalSettings);
+
+			if (settingsA.IO.IOType == IOType.SerialPort) // Ignore settingsB (yet).
+			{
+				if (t.Item2 == SettingsFlavor.Modified)
+					ModifySerialPortSettings(tc);
+			}
+
+			return (DecorateWithTimeoutAndDuration(tc));
 		}
 
 		/// <remarks>Returning new data is required to modify arguments.</remarks>
@@ -385,12 +352,8 @@ namespace YAT.Domain.Test.Terminal
 			var settingsB = (tc.Arguments[1] as TerminalSettings);
 
 			FileInfo fileInfo;
-			if (settingsB == null) {
-				fileInfo = (FileInfo)(tc.Arguments[1]);
-			}
-			else {
-				fileInfo = (FileInfo)(tc.Arguments[2]);
-			}
+			if (settingsB == null) { fileInfo = (FileInfo)(tc.Arguments[1]); }
+			else                   { fileInfo = (FileInfo)(tc.Arguments[2]); }
 
 			var fileByteCount = fileInfo.ByteCount;                             // settingsB are ignored (yet).
 			var estimatedTransmissionTime = Utilities.GetEstimatedTransmissionTime(settingsA, fileByteCount);
@@ -513,7 +476,11 @@ namespace YAT.Domain.Test.Terminal
 
 		private static void SendAndVerify(TerminalSettings settingsA, TerminalSettings settingsB, FileInfo fileInfo, SendMethod sendMethod, int timeout)
 		{
-			// Revert to default behavior expected by this test case:
+			// Configure binary terminal behavior expected by this test case::
+			Settings.ConfigureSettingsIfBinary(settingsA, fileInfo.LineByteCount);
+			Settings.ConfigureSettingsIfBinary(settingsB, fileInfo.LineByteCount);
+
+			// Revert UDP/IP to default behavior expected by this test case:
 			Settings.RevertSettingsIfUdpSocket(settingsA);
 			Settings.RevertSettingsIfUdpSocket(settingsB);
 
@@ -597,7 +564,7 @@ namespace YAT.Domain.Test.Terminal
 
 			// Verify content:
 			string[] expectedContent;
-			GetExpectedContent(terminalTx, sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines, out expectedContent);
+			GetExpectedContent(terminalTx, fileInfo, sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines, out expectedContent);
 			Utilities.AssertTxContent(terminalTx, expectedContent);
 			Utilities.AssertRxContent(terminalRx, expectedContent);
 
@@ -665,20 +632,21 @@ namespace YAT.Domain.Test.Terminal
 			}
 		}
 
-		private static void GetExpectedContent(Domain.Terminal terminal, SendMethod sendMethod, byte[] fileContentAsBytes, string fileContentAsText, string[] fileContentAsLines, out string[] expectedContent)
+		private static void GetExpectedContent(Domain.Terminal terminal, FileInfo fileInfo, SendMethod sendMethod, byte[] fileContentAsBytes, string fileContentAsText, string[] fileContentAsLines, out string[] expectedContent)
 		{                                                         // Just one terminal is enough, both terminals are configured the same.
 			var terminalType = terminal.TerminalSettings.TerminalType;
 			if (terminalType == TerminalType.Text)
-				GetExpectedTextContent(  terminal, sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines, out expectedContent);
+				GetExpectedTextContent(  terminal,           sendMethod,                     fileContentAsText, fileContentAsLines, out expectedContent);
 			else
-				GetExpectedBinaryContent(terminal, sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines, out expectedContent);
+				GetExpectedBinaryContent(terminal, fileInfo, sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines, out expectedContent);
 		}
 
-		private static void GetExpectedTextContent(Domain.Terminal terminal, SendMethod sendMethod, byte[] fileContentAsBytes, string fileContentAsText, string[] fileContentAsLines, out string[] expectedContent)
+		private static void GetExpectedTextContent(Domain.Terminal terminal, SendMethod sendMethod, string fileContentAsText, string[] fileContentAsLines, out string[] expectedContent)
 		{
 			switch (sendMethod)
 			{
-			////case SendMethod.Raw:       BytesToTextContent(              fileContentAsBytes, out expectedContent);                is not implemented/used by this test (yet).
+			////case SendMethod.Raw: is not implemented/used by this test (yet).
+
 				case SendMethod.Text:      expectedContent = new string[] { fileContentAsText };                                     break;
 				case SendMethod.TextLine:  expectedContent = new string[] { fileContentAsText + Eol };                               break;
 				case SendMethod.TextLines:
@@ -696,7 +664,7 @@ namespace YAT.Domain.Test.Terminal
 			}
 		}
 
-		private static void GetExpectedBinaryContent(Domain.Terminal terminal, SendMethod sendMethod, byte[] fileContentAsBytes, string fileContentAsText, string[] fileContentAsLines, out string[] expectedContent)
+		private static void GetExpectedBinaryContent(Domain.Terminal terminal, FileInfo fileInfo, SendMethod sendMethod, byte[] fileContentAsBytes, string fileContentAsText, string[] fileContentAsLines, out string[] expectedContent)
 		{                                                               // Just one terminal is enough, both terminals are configured the same.
 			var terminalType = terminal.TerminalSettings.TerminalType;
 			Encoding encoding = (EncodingEx)terminal.TerminalSettings.BinaryTerminal.EncodingFixed;
@@ -705,8 +673,10 @@ namespace YAT.Domain.Test.Terminal
 			int expectedLineCount;
 			if (!ArrayEx.IsNullOrEmpty(fileContentAsBytes))
 			{
-				formattedLine = terminal.Format(fileContentAsBytes, IODirection.Tx); // Direction doesn't matter, both directions are configured the same.
-				expectedLineCount = 0;
+				byte[] fileContentSlice = new byte[fileInfo.LineByteCount];
+				Array.Copy(fileContentAsBytes, fileContentSlice, fileInfo.LineByteCount);
+				formattedLine = terminal.Format(fileContentSlice, IODirection.Tx); // Direction doesn't matter, both directions are configured the same.
+				expectedLineCount = fileInfo.LineCount;
 			}
 			else if (!ArrayEx.IsNullOrEmpty(fileContentAsLines))
 			{

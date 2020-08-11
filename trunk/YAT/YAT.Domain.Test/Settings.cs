@@ -564,6 +564,39 @@ namespace YAT.Domain.Test
 		}
 
 		#endregion
+
+		#region Binary
+		//==========================================================================================
+		// Binary
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static void ConfigureSettingsIfBinary(TerminalSettings settings, int lengthLineBreakLength)
+		{
+			if (settings != null)
+			{
+				if (settings.TerminalType == TerminalType.Binary)
+				{
+					ConfigureSettingsIfBinary(settings.BinaryTerminal.TxDisplay, lengthLineBreakLength);
+					ConfigureSettingsIfBinary(settings.BinaryTerminal.RxDisplay, lengthLineBreakLength);
+				}
+			}
+		}
+
+		private static void ConfigureSettingsIfBinary(BinaryDisplaySettings settings, int lengthLineBreakLength)
+		{
+			if (settings != null)
+			{
+				settings.ChunkLineBreakEnabled = false;
+
+				var llb = settings.LengthLineBreak;
+				llb.Enabled = true;
+				llb.Length = lengthLineBreakLength;
+				settings.LengthLineBreak = llb;
+			}
+		}
+
+		#endregion
 	}
 }
 
