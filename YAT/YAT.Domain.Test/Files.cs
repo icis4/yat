@@ -203,12 +203,12 @@ namespace YAT.Domain.Test
 			TextSendFile.Add(StressFile.Enormous,              "Stress-6-Enormous.txt",            16300000, 100000); //  163 bytes per line.
 
 			BinarySendFile = new FileGroup(4);                                                           // Not including EOF.
-			BinarySendFile.Add(StressFile.Normal,              "Stress-1-Normal.dat",                  8192, -1);
-			BinarySendFile.Add(StressFile.Large,               "Stress-2-Large.dat",                  82432, -1);
+			BinarySendFile.Add(StressFile.Normal,              "Stress-1-Normal.dat",                  8192, (    8192 / 256)); // Virtual lines of 256 bytes each.
+			BinarySendFile.Add(StressFile.Large,               "Stress-2-Large.dat",                  82432, (   82432 / 256));
 			////               StressFile.LargeWithLongLines makes little sense for binary terminals
-			BinarySendFile.Add(StressFile.Huge,                "Stress-4-Huge.dat",                 1089792, -1);
+			BinarySendFile.Add(StressFile.Huge,                "Stress-4-Huge.dat",                 1089792, ( 1089792 / 256));
 			////               StressFile.HugeWithVeryLongLines makes little sense for binary terminals
-			BinarySendFile.Add(StressFile.Enormous,            "Stress-5-Enormous.dat",            16299776, -1);
+			BinarySendFile.Add(StressFile.Enormous,            "Stress-5-Enormous.dat",            16299776, (16299776 / 256));
 
 			SendText = new FileGroup(3);                                                                 // Including EOL; not including EOF.
 			SendText.Add(StressFile.LongLine,                  "Stress-7-LongLine.txt",                 973, 1);
