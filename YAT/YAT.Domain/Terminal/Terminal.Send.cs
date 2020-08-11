@@ -355,7 +355,7 @@ namespace YAT.Domain
 		/// <remarks>This method will be called asynchronously.</remarks>
 		protected virtual void DoSendText(TextSendItem item, long sequenceNumber)
 		{
-			DebugSend(string.Format(@"Sending of text ""{0}"" has been invoked (sequence number = {1}).", item.Text, sequenceNumber));
+			DebugSend(string.Format(@"Sending of text ""{0}"" ({1} characters) has been invoked (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber));
 
 			EnterRequestPre();
 
@@ -364,13 +364,13 @@ namespace YAT.Domain
 			{
 				try
 				{
-					DebugSend(string.Format(@"Sending of text ""{0}"" has been permitted (sequence number = {1}).", item.Text, sequenceNumber));
+					DebugSend(string.Format(@"Sending of text ""{0}"" ({1} characters) has been permitted (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber));
 
 					DoSendPre();
 					DoSendTextItem(forSomeTimeEventHelper, item);
 					DoSendPost();
 
-					DebugSend(string.Format(@"Sending of text ""{0}"" has been completed (sequence number = {1}).", item.Text, sequenceNumber));
+					DebugSend(string.Format(@"Sending of text ""{0}"" ({1} characters) has been completed (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber));
 				}
 				finally
 				{
@@ -400,7 +400,7 @@ namespace YAT.Domain
 		/// <remarks>This method will be called asynchronously.</remarks>
 		protected virtual void DoSendTextLine(TextSendItem item, long sequenceNumber)
 		{
-			DebugSend(string.Format(@"Sending of text line ""{0}"" has been invoked (sequence number = {1}).", item.Text, sequenceNumber));
+			DebugSend(string.Format(@"Sending of text line ""{0}"" ({1} characters) has been invoked (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber));
 
 			EnterRequestPre();
 
@@ -409,13 +409,13 @@ namespace YAT.Domain
 			{
 				try
 				{
-					DebugSend(string.Format(@"Sending of text line ""{0}"" has been permitted (sequence number = {1}).", item.Text, sequenceNumber));
+					DebugSend(string.Format(@"Sending of text line ""{0}"" ({1} characters) has been permitted (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber));
 
 					DoSendPre();
 					DoSendTextItem(forSomeTimeEventHelper, item);
 					DoSendPost();
 
-					DebugSend(string.Format(@"Sending of text line ""{0}"" has been completed (sequence number = {1}).", item.Text, sequenceNumber));
+					DebugSend(string.Format(@"Sending of text line ""{0}"" ({1} characters) has been completed (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber));
 				}
 				finally
 				{
@@ -618,7 +618,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void LeaveRequestGate()
 		{
-			// Nothing to do (yet).
+			if (IsUndisposed) // Attention, sending is done async, i.e. worker thread may get here only when object already got disposed of!
+			{
+				// Nothing to do (yet).
+			}
 		}
 
 		/// <remarks>
@@ -628,22 +631,24 @@ namespace YAT.Domain
 		/// </remarks>
 		protected virtual void LeaveRequestPost(bool decrementIsSendingForSomeTime)
 		{
-			DecrementIsSendingChanged();
-
-			if (decrementIsSendingForSomeTime)
-				DecrementIsSendingForSomeTimeChanged();
-
-			if (TerminalSettings.Send.AllowConcurrency)
+			if (IsUndisposed) // Attention, sending is done async, i.e. worker thread may get here only when object already got disposed of!
 			{
-				// Nothing to do, no need to handle 'nextPermittedSequenceNumber', as changing
-				// the 'AllowConcurrency' setting will lead to TerminalFactory.RecreateTerminal().
-			}
-			else
-			{
-				Interlocked.Increment(ref this.nextPermittedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
+				DecrementIsSendingChanged();
 
-				if (IsUndisposed)
+				if (decrementIsSendingForSomeTime)
+					DecrementIsSendingForSomeTimeChanged();
+
+				if (TerminalSettings.Send.AllowConcurrency)
+				{
+					// Nothing to do, no need to handle 'nextPermittedSequenceNumber', as changing
+					// the 'AllowConcurrency' setting will lead to TerminalFactory.RecreateTerminal().
+				}
+				else
+				{
+					Interlocked.Increment(ref this.nextPermittedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
+
 					this.nextPermittedSequenceNumberEvent.Set();
+				}
 			}
 		}
 
@@ -688,7 +693,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void LeavePacketGate()
 		{
-			if (IsUndisposed)
+			if (IsUndisposed) // Attention, sending is done async, i.e. worker thread may get here only when object already got disposed of!
 			{
 				Monitor.Exit(this.packetGateSyncObj);
 
@@ -706,7 +711,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void DoSendPost()
 		{
-			// Nothing to do so far.
+			if (IsUndisposed) // Attention, sending is done async, i.e. worker thread may get here only when object already got disposed of!
+			{
+				// Nothing to do so far.
+			}
 		}
 
 		/// <remarks>
