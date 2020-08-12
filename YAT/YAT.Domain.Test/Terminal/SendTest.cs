@@ -57,6 +57,7 @@ using NUnit.Framework;
 using NUnitEx;
 
 using YAT.Domain.Settings;
+using YAT.Domain.Utilities;
 
 #endregion
 
@@ -653,24 +654,22 @@ namespace YAT.Domain.Test.Terminal
 			}
 		}
 
-		private static void GetExpectedBinaryContent(Domain.Terminal terminal, FileInfo fileInfo, SendMethod sendMethod, byte[] fileContentAsBytes, string fileContentAsText, string[] fileContentAsLines, out string[] expectedContent)
+		private static void GetExpectedBinaryContent(Domain.Terminal terminal, FileInfo fileInfo, SendMethod sendMethod, byte[] fileContentAsBytes, string fileContentAsText, string[] fileContentAsLines, out string[] expectedContentPattern)
 		{                                                               // Just one terminal is enough, both terminals are configured the same.
 			var terminalType = terminal.TerminalSettings.TerminalType;
 			Encoding encoding = (EncodingEx)terminal.TerminalSettings.BinaryTerminal.EncodingFixed;
 
-			string formattedLine;
+			byte[] firstLineAsBytes;
 			int expectedLineCount;
 			if (!ArrayEx.IsNullOrEmpty(fileContentAsBytes))
 			{
-				byte[] fileContentSlice = new byte[fileInfo.LineByteCount];
-				Array.Copy(fileContentAsBytes, fileContentSlice, fileInfo.LineByteCount);
-				formattedLine = terminal.Format(fileContentSlice, IODirection.Tx); // Direction doesn't matter, both directions are configured the same.
+				firstLineAsBytes = new byte[fileInfo.LineByteCount];
+				Array.Copy(fileContentAsBytes, firstLineAsBytes, fileInfo.LineByteCount);
 				expectedLineCount = fileInfo.LineCount;
 			}
 			else if (!ArrayEx.IsNullOrEmpty(fileContentAsLines))
 			{
-				byte[] firstLineAsBytes = encoding.GetBytes(fileContentAsLines[0]);
-				formattedLine = terminal.Format(firstLineAsBytes, IODirection.Tx); // Direction doesn't matter, both directions are configured the same.
+				firstLineAsBytes = encoding.GetBytes(fileContentAsLines[0]);
 				expectedLineCount = fileContentAsLines.Length;
 			}
 			else
@@ -678,16 +677,27 @@ namespace YAT.Domain.Test.Terminal
 				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Argument combination is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			// There is no need to limit the expected content to the maximum line length, as line(s) got formatted by the terminal.
+			string formattedLine;
+			if (firstLineAsBytes.Length <= terminal.TerminalSettings.Display.MaxLineLength)
+			{
+				formattedLine = ByteHelper.FormatHexString(firstLineAsBytes);
+			}
+			else
+			{
+				formattedLine = ByteHelper.FormatHexString(firstLineAsBytes.Take(terminal.TerminalSettings.Display.MaxLineLength));
+				formattedLine += Utilities.LineExceededWarningPattern;
+			}
+
+			// Yet limited to files where each resulting line has the same content.
 
 			switch (sendMethod)
 			{
 			////case SendMethod.Raw:
 				case SendMethod.Text:
-				case SendMethod.TextLine:  expectedContent = new string[] { formattedLine };                                        return;
+				case SendMethod.TextLine:  expectedContentPattern = new string[] { formattedLine };                                        return;
 
 				case SendMethod.TextLines:
-				case SendMethod.File:      expectedContent = ArrayEx.CreateAndInitializeInstance(expectedLineCount, formattedLine); return;
+				case SendMethod.File:      expectedContentPattern = ArrayEx.CreateAndInitializeInstance(expectedLineCount, formattedLine); return;
 
 				default: throw (new ArgumentOutOfRangeException("sendMethod", sendMethod, MessageHelper.InvalidExecutionPreamble + "'" + sendMethod + "' is a send method that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
 			}

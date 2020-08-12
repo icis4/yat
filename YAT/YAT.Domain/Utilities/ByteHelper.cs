@@ -30,7 +30,8 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Text;
+
+using MKY;
 
 #endregion
 
@@ -57,23 +58,10 @@ namespace YAT.Domain.Utilities
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static string FormatHexString(IEnumerable<byte> values, bool showRadix = true)
 		{
-			var sb = new StringBuilder();
-
-			bool isFirst = true;
-			foreach (byte b in values)
-			{
-				if (isFirst)
-					isFirst = false;
-				else
-					sb.Append(" ");
-
-				if (showRadix)
-					sb.Append(b.ToString("X2", CultureInfo.InvariantCulture) + "h");
-				else
-					sb.Append(b.ToString("X2", CultureInfo.InvariantCulture));
-			}
-
-			return (sb.ToString());
+			if (showRadix)
+				return (ConvertEx.ToHexString(values, "h"));
+			else
+				return (ConvertEx.ToHexString(values));
 		}
 	}
 }

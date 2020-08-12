@@ -173,9 +173,10 @@ namespace YAT.Domain.Test
 
 			var transmissionTime = ((byteCount / settings.IO.RoughlyEstimatedMaxBytesPerMillisecond) * transmissionOverheadRatio);
 
-			var binaryOverheadRatio = 1.5; // [Binary] takes longer because formatting hex values is more time consuming than appending characters.
+			if (settings.TerminalType == TerminalType.Binary)
+				transmissionTime *= 1.5; // [Binary] takes longer because formatting hex values is more time consuming than appending characters.
 
-			return (transmissionTime * binaryOverheadRatio);
+			return (transmissionTime);
 		}
 
 		/// <summary>The estimated overhead (initialization, verification, reverification,...) time in milliseconds.</summary>

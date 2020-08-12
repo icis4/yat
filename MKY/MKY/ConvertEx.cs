@@ -60,6 +60,54 @@ namespace MKY
 
 			return (sb.ToString());
 		}
+
+		/// <summary>
+		/// Converts the given values into a hexadecimal string (e.g. "0x0A 0xFF 0x20").
+		/// </summary>
+		public static string ToHexString(string prefix, IEnumerable<byte> values)
+		{
+			var sb = new StringBuilder();
+
+			bool isFirst = true;
+			foreach (byte b in values)
+			{
+				if (isFirst)
+					isFirst = false;
+				else
+					sb.Append(" ");
+
+				if (!string.IsNullOrEmpty(prefix))
+					sb.Append(prefix);
+
+				sb.Append(ToHexString(b));
+			}
+
+			return (sb.ToString());
+		}
+
+		/// <summary>
+		/// Converts the given values into a hexadecimal string (e.g. "0Ah FFh 20h").
+		/// </summary>
+		public static string ToHexString(IEnumerable<byte> values, string suffix)
+		{
+			var sb = new StringBuilder();
+
+			bool isFirst = true;
+			foreach (byte b in values)
+			{
+				if (isFirst)
+					isFirst = false;
+				else
+					sb.Append(" ");
+
+				sb.Append(ToHexString(b));
+
+				if (!string.IsNullOrEmpty(suffix))
+					sb.Append(suffix);
+			}
+
+			return (sb.ToString());
+		}
 	}
 }
 
