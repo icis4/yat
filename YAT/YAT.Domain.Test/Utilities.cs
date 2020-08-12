@@ -194,7 +194,7 @@ namespace YAT.Domain.Test
 				default:                   /* Nothing to add. */ break;
 			}
 
-			// Analysis and measurement 2020-08-11:
+			// Analysis and measurement 2020-08-11..12:
 			//
 			// 9600 baud:                            strictly calculated:            estimated:
 			//   >   1.4 s for     8'400 bytes (Normal) => ~167 us / byte => 1 s + ~47 us / byte
@@ -204,9 +204,20 @@ namespace YAT.Domain.Test
 			//   >   1.4 s for     8'400 bytes (Normal) => ~167 us / byte => 1 s + ~47 us / byte
 			//   >   4.5 s for    82'500 bytes (Large)  =>  ~55 us / byte => 1 s + ~42 us / byte
 			//   >  48   s for 1'090'000 bytes (Huge)   =>  ~44 us / byte => 1 s + ~43 us / byte
+			//
+			// TCP/IP:
+			//   >   6.0 s for    82'500 bytes (Large)  =>  ~75 us / byte [Text]
+			//   >   8.0 s for    82'500 bytes (Large)  => ~100 us / byte [Binary]
+			//   >  48   s for 1'090'000 bytes (Huge)   =>  ~44 us / byte [Text]
+			//   > 330   s for 1'090'000 bytes (Huge)   => ~300 us / byte [Binary] (no clue why that long...)
 
-			return (overheadBase + (45E-3 * byteCount));
-		}                              // Result is in ms, not us!
+			                           // Result is in ms, not us!
+			var verificationTime = (45E-3 * byteCount);
+			if (settings.TerminalType == TerminalType.Binary)
+				verificationTime *= 1.5; // [Binary] takes longer because formatting hex values is more time consuming than appending characters.
+
+			return (overheadBase + verificationTime);
+		}
 
 		#endregion
 
