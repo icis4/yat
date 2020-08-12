@@ -157,14 +157,19 @@ namespace YAT.Domain.Test.Terminal
 			var settingsB = (tcd.Arguments[1] as TerminalSettings);
 
 			// Sending terminal (always A):
+
 			settingsA.IO.SerialPort.BufferMaxBaudRate = false;
 			settingsA.IO.SerialPort.MaxChunkSize = new ChunkSize(false, SerialPortSettings.MaxChunkSizeDefault.Size);
 
 			// Both terminals:
+
 			int baudRate = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud115200;
 			                         settingsA.IO.SerialPort.Communication.BaudRate = baudRate;
 			if (settingsB != null) { settingsB.IO.SerialPort.Communication.BaudRate = baudRate; }
-		}
+
+			                         settingsA.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software;   // Required to prevent Rx overruns.
+			if (settingsB != null) { settingsB.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software; } // Note that hardware flow control
+		}                                                                                                              // cannot be used, MCT doesn't support it!
 
 		#endregion
 
