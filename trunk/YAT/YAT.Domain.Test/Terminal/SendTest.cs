@@ -403,6 +403,8 @@ namespace YAT.Domain.Test.Terminal
 		//==========================================================================================
 
 		private const string Eol = "<CR><LF>"; // Fixed to default.
+		private const int EolByteLength = 2;
+
 	////private const int MaxLineLengthForTest = 10000;
 
 		#endregion
@@ -574,18 +576,18 @@ namespace YAT.Domain.Test.Terminal
 			Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, fileInfo.ByteCount, fileInfo.LineCount, timeout);
 
 			// Verify content:
-			string[] expectedContent;
-			GetExpectedContent(terminalTx, fileInfo, sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines, out expectedContent);
-			Utilities.AssertTxContent(terminalTx, expectedContent);
-			Utilities.AssertRxContent(terminalRx, expectedContent);
+			string[] expectedContentPattern;
+			GetExpectedContent(terminalTx, fileInfo, sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines, out expectedContentPattern);
+			Utilities.AssertTxContentPattern(terminalTx, expectedContentPattern);
+			Utilities.AssertRxContentPattern(terminalRx, expectedContentPattern);
 
 			// Wait to ensure that no operation is ongoing anymore and verify again:
 			Utilities.WaitForReverification();
 
 			Utilities.AssertCounts(terminalTx, terminalRx, fileInfo.ByteCount, fileInfo.LineCount);
 
-			Utilities.AssertTxContent(terminalTx, expectedContent);
-			Utilities.AssertRxContent(terminalRx, expectedContent);
+			Utilities.AssertTxContentPattern(terminalTx, expectedContentPattern);
+			Utilities.AssertRxContentPattern(terminalRx, expectedContentPattern);
 
 			// Refresh and verify again:
 			terminalTx.RefreshRepositories();
@@ -593,8 +595,8 @@ namespace YAT.Domain.Test.Terminal
 
 			Utilities.AssertCounts(terminalTx, terminalRx, fileInfo.ByteCount, fileInfo.LineCount);
 
-			Utilities.AssertTxContent(terminalTx, expectedContent);
-			Utilities.AssertRxContent(terminalRx, expectedContent);
+			Utilities.AssertTxContentPattern(terminalTx, expectedContentPattern);
+			Utilities.AssertRxContentPattern(terminalRx, expectedContentPattern);
 		}
 
 		private static void ReadFileContent(TerminalType terminalType, FileInfo fileInfo, SendMethod sendMethod, out byte[] fileContentAsBytes, out string fileContentAsText, out string[] fileContentAsLines)
@@ -643,35 +645,36 @@ namespace YAT.Domain.Test.Terminal
 			}
 		}
 
-		private static void GetExpectedContent(Domain.Terminal terminal, FileInfo fileInfo, SendMethod sendMethod, byte[] fileContentAsBytes, string fileContentAsText, string[] fileContentAsLines, out string[] expectedContent)
+		private static void GetExpectedContent(Domain.Terminal terminal, FileInfo fileInfo, SendMethod sendMethod, byte[] fileContentAsBytes, string fileContentAsText, string[] fileContentAsLines, out string[] expectedContentPattern)
 		{                                                         // Just one terminal is enough, both terminals are configured the same.
 			var terminalType = terminal.TerminalSettings.TerminalType;
 			if (terminalType == TerminalType.Text)
-				GetExpectedTextContent(  terminal,           sendMethod,                     fileContentAsText, fileContentAsLines, out expectedContent);
+				GetExpectedTextContent(  terminal,           sendMethod,                     fileContentAsText, fileContentAsLines, out expectedContentPattern);
 			else
-				GetExpectedBinaryContent(terminal, fileInfo, sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines, out expectedContent);
+				GetExpectedBinaryContent(terminal, fileInfo, sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines, out expectedContentPattern);
 		}
 
-		private static void GetExpectedTextContent(Domain.Terminal terminal, SendMethod sendMethod, string fileContentAsText, string[] fileContentAsLines, out string[] expectedContent)
+		private static void GetExpectedTextContent(Domain.Terminal terminal, SendMethod sendMethod, string fileContentAsText, string[] fileContentAsLines, out string[] expectedContentPattern)
 		{
 			switch (sendMethod)
 			{
 			////case SendMethod.Raw: is not implemented/used by this test (yet).
 
-				case SendMethod.Text:      expectedContent = new string[] { fileContentAsText };                                     break;
-				case SendMethod.TextLine:  expectedContent = new string[] { fileContentAsText + Eol };                               break;
+				case SendMethod.Text:      expectedContentPattern = new string[] { fileContentAsText };                                     break;
+				case SendMethod.TextLine:  expectedContentPattern = new string[] { fileContentAsText + Eol };                               break;
 				case SendMethod.TextLines:
-				case SendMethod.File:      expectedContent =                fileContentAsLines.Select(line => line + Eol).ToArray(); break;
+				case SendMethod.File:      expectedContentPattern =                fileContentAsLines.Select(line => line + Eol).ToArray(); break;
 
 				default: throw (new ArgumentOutOfRangeException("sendMethod", sendMethod, MessageHelper.InvalidExecutionPreamble + "'" + sendMethod + "' is a send method that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			// Limit the expected content to the maximum line length in order to also test with 'Exceeded' warning message:
 			int maxLineLength = terminal.TerminalSettings.Display.MaxLineLength;
-			for (int i = 0; i < expectedContent.Length; i++)
+			for (int i = 0; i < expectedContentPattern.Length; i++)
 			{
-				if (expectedContent[i].Length > maxLineLength)
-					expectedContent[i] = StringEx.Left(expectedContent[i], maxLineLength) + Utilities.LineExceededWarningPattern;
+				var expectedContentLength = (expectedContentPattern[i].Length - Eol.Length + EolByteLength); // Adjust value by length "<CR><LF>" and the corresponding byte length.
+				if (expectedContentLength > maxLineLength)                                            // Works as long there are neither control nor hidden characters in the file.
+					expectedContentPattern[i] = StringEx.Left(expectedContentPattern[i], maxLineLength) + Utilities.LineExceededWarningPattern;
 			}
 		}
 
@@ -700,7 +703,7 @@ namespace YAT.Domain.Test.Terminal
 				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Argument combination is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			// There is no need to limit the expected content to the maximum line length, as lines got formatted by the terminal.
+			// There is no need to limit the expected content to the maximum line length, as line(s) got formatted by the terminal.
 
 			switch (sendMethod)
 			{
