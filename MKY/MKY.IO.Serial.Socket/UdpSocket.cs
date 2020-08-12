@@ -46,6 +46,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 //// 'System.Net' as well as 'ALAZ.SystemEx.NetEx' are explicitly used for more obvious distinction.
+//// 'System.Net.Sockets' including.
 using System.Threading;
 
 using MKY.Collections.Generic;

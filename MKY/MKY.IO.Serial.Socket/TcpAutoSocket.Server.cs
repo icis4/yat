@@ -28,6 +28,7 @@
 
 using System;
 //// 'System.Net' as well as 'ALAZ.SystemEx.NetEx' are explicitly used for more obvious distinction.
+//// 'System.Net.Sockets' including.
 
 using MKY.Net;
 

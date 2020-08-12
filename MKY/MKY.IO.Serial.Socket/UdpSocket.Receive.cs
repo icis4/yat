@@ -45,6 +45,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 //// 'System.Net' as well as 'ALAZ.SystemEx.NetEx' are explicitly used for more obvious distinction.
+//// 'System.Net.Sockets' including.
 using System.Threading;
 
 using MKY.Collections.Generic;
@@ -113,14 +114,14 @@ namespace MKY.IO.Serial.Socket
 						discard = true;
 					}
 				}
-				catch (Exception ex)
+				catch (Exception ex) // Using general catch to reset state for further processing.
 				{
 					var socketException = ex as System.Net.Sockets.SocketException;
 					if (socketException != null)
 					{
 						if (socketException.SocketErrorCode == System.Net.Sockets.SocketError.ConnectionReset)
 						{
-							SocketReset(); // Required after this exception!
+							SocketReset(); // Required after this exception.
 							OnIOError(new IOErrorEventArgs(ErrorSeverity.Acceptable, Direction.Input, ex.Message));
 						}
 						else
@@ -149,7 +150,7 @@ namespace MKY.IO.Serial.Socket
 					// Reset state for further processing:
 					data = null;
 					remoteEndPoint.Address = addressNone;
-					remoteEndPoint.Port    = System.Net.IPEndPoint.MinPort;
+					remoteEndPoint.Port = System.Net.IPEndPoint.MinPort;
 					discard = true;
 				}
 
