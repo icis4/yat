@@ -110,18 +110,18 @@ namespace NUnitEx
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute will be derived for specialization.")]
 	[CLSCompliant(false)]
-	public class HourDurationCategoryAttribute : DurationCategoryAttribute
+	public class SecondDurationCategoryAttribute : DurationCategoryAttribute
 	{
 		/// <summary></summary>
-		public HourDurationCategoryAttribute(int hours)
-			: base(0, hours, 0, 0, 0, CategoryStrings.Duration + " is around " + hours.ToString(CultureInfo.CurrentCulture) + " hour" + ((hours == 1) ? "" : "s"))
+		public SecondDurationCategoryAttribute(int seconds)
+			: base(0, 0, 0, seconds, 0, CategoryStrings.Duration + " is around " + seconds.ToString(CultureInfo.CurrentCulture) + " second" + ((seconds == 1) ? "" : "s"))
 		{
 		}
 
 		/// <summary></summary>
-		public int Hours
+		public int Seconds
 		{
-			get { return ((int)Duration.TotalHours); }
+			get { return ((int)Duration.TotalSeconds); }
 		}
 	}
 
@@ -146,18 +146,18 @@ namespace NUnitEx
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute will be derived for specialization.")]
 	[CLSCompliant(false)]
-	public class SecondDurationCategoryAttribute : DurationCategoryAttribute
+	public class HourDurationCategoryAttribute : DurationCategoryAttribute
 	{
 		/// <summary></summary>
-		public SecondDurationCategoryAttribute(int seconds)
-			: base(0, 0, 0, seconds, 0, CategoryStrings.Duration + " is around " + seconds.ToString(CultureInfo.CurrentCulture) + " second" + ((seconds == 1) ? "" : "s"))
+		public HourDurationCategoryAttribute(int hours)
+			: base(0, hours, 0, 0, 0, CategoryStrings.Duration + " is around " + hours.ToString(CultureInfo.CurrentCulture) + " hour" + ((hours == 1) ? "" : "s"))
 		{
 		}
 
 		/// <summary></summary>
-		public int Seconds
+		public int Hours
 		{
-			get { return ((int)Duration.TotalSeconds); }
+			get { return ((int)Duration.TotalHours); }
 		}
 	}
 
