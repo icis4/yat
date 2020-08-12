@@ -239,7 +239,13 @@ namespace YAT.Domain.Test.Terminal
 				case SendMethod.TextLine:
 				case SendMethod.TextLines:
 				{
-					return (Files.SendText.Item[fileKey]);
+					switch (terminalType)
+					{
+						case TerminalType.Text:   return (Files.TextSendText  .Item[fileKey]);
+						case TerminalType.Binary: return (Files.BinarySendText.Item[fileKey]);
+
+						default: throw (new ArgumentOutOfRangeException("terminalType", terminalType, MessageHelper.InvalidExecutionPreamble + "'" + terminalType + "' is a terminal type that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
+					}
 				}
 
 				case SendMethod.File:
