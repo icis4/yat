@@ -308,10 +308,12 @@ namespace NUnitEx
 		/// </summary>
 		public static string CaptionFrom(TimeSpan ts)
 		{
-			// Everything up to twice the boundary:
+			// Prevent "0 s" captions, everything two thirds of a second shall be identified as "1 s":
 
-			if (ts.TotalMilliseconds < 2000)
+			if (ts.TotalMilliseconds < 666.666)
 				return (string.Format(CultureInfo.CurrentCulture, "{0:F0} ms", ts.TotalMilliseconds));
+
+			// Everything up to twice the boundary:
 
 			if (ts.TotalSeconds < 120)
 				return (string.Format(CultureInfo.CurrentCulture, "{0:F0} s", ts.TotalSeconds));
