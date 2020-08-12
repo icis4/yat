@@ -366,12 +366,12 @@ namespace YAT.Domain.Test.Terminal
 			// Timeout:
 			var args = new List<object>(tc.Arguments.Length + 1);
 			args.AddRange(tc.Arguments);                            // 25% margin.
-			var timeout = Math.Max((int)(estimatedTransmissionTime * 1.25), 1); // 'timeout' must be 1 or above.
-			args.Add(timeout);
+			var timeout = Math.Max((int)(estimatedTransmissionTime * 1.25), Utilities.WaitTimeoutForLineTransmission); // 'timeout' must always be at least
+			args.Add(timeout);                                                                                         // the standard line timeout.
 			var timeoutCaption = StandardDurationCategory.CaptionFrom(TimeSpan.FromMilliseconds(timeout));
 
-			// Estimated time and duration category:
-			var estimatedOverheadTime = Utilities.GetEstimatedOverheadTime(fileByteCount);
+			// Estimated time and duration category:                    // settingsB are ignored (yet).
+			var estimatedOverheadTime = Utilities.GetEstimatedOverheadTime(settingsA, fileByteCount);
 			var estimated = TimeSpan.FromMilliseconds(estimatedTransmissionTime + estimatedOverheadTime);
 			var estimatedCaption = StandardDurationCategory.CaptionFrom(estimated);
 			var cat = StandardDurationCategory.AttributeFrom(estimated).Name;
