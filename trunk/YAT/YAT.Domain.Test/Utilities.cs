@@ -138,7 +138,7 @@ namespace YAT.Domain.Test
 		/// <summary>The estimated transmission time in milliseconds.</summary>
 		public static double GetEstimatedTransmissionTime(TerminalSettings settings, int byteCount)
 		{
-			// Analysis and measurement 2020-08-11:
+			// Analysis and measurements 2020-08-11..12:
 			//
 			// 9600 baud:                              (theoretically 960 bytes / s)
 			//   >   9.5 s for     8'400 bytes (Normal) @ NUnit =>   ~888 bytes / s
@@ -149,13 +149,50 @@ namespace YAT.Domain.Test
 			//   >   7.5 s for    82'500 bytes (Large)  @ NUnit => ~11000 bytes / s
 			//   >  94   s for 1'090'000 bytes (Huge)   @ NUnit => ~11500 bytes / s
 			//   > 240   s for 1'090'000 bytes (Huge)   @ YAT   =>  ~4500 bytes / s (additional overhead for view, not to be considered in this calculation)
+			//
+			// TCP/IP:
+			//   >   0.3 s for     8'400 bytes (Normal) @ NUnit => ~28000 bytes / s
+			//   >   3.5 s for    82'500 bytes (Large)  @ NUnit => ~23500 bytes / s [Text]
+			//   >   5.5 s for    82'500 bytes (Large)  @ NUnit => ~15000 bytes / s [Binary]
+			//   >  42   s for 1'090'000 bytes (Huge)   @ NUnit => ~26000 bytes / s [Text]
+			//   >  66   s for 1'090'000 bytes (Huge)   @ NUnit => ~16500 bytes / s [Binary]
+			//
+			// UDP/IP [Text]:
+			//   >   0.4 s for     8'400 bytes (Normal) @ NUnit => ~21000 bytes / s
+			//   >   4.0 s for    82'500 bytes (Large)  @ NUnit => ~20500 bytes / s
+			//   >  46   s for 1'090'000 bytes (Huge)   @ NUnit => ~23500 bytes / s
 
-			return ((byteCount / settings.IO.RoughlyEstimatedMaxBytesPerMillisecond) * 1.1); // 10% typical overhead in NUnit.
+			var transmissionOverheadRatio = 1.0;
+
+			switch (settings.IO.IOType)
+			{                                                      // 10% typical overhead.
+				case IOType.SerialPort: transmissionOverheadRatio = 1.1; break;
+
+				default:                /* Nothing to change. */         break;
+			}
+
+			var transmissionTime = ((byteCount / settings.IO.RoughlyEstimatedMaxBytesPerMillisecond) * transmissionOverheadRatio);
+
+			var binaryOverheadRatio = 1.5; // [Binary] takes longer because formatting hex values is more time consuming than appending characters.
+
+			return (transmissionTime * binaryOverheadRatio);
 		}
 
 		/// <summary>The estimated overhead (initialization, verification, reverification,...) time in milliseconds.</summary>
-		public static double GetEstimatedOverheadTime(int byteCount)
+		public static double GetEstimatedOverheadTime(TerminalSettings settings, int byteCount)
 		{
+			var overheadBase = 1000; // Typical time to initialize and finalize test case.
+
+			switch (settings.IO.IOType)
+			{
+				case IOType.TcpClient:                       // Typical time to establish connection.
+				case IOType.TcpServer:     overheadBase +=  500; break;
+				                                             //
+				case IOType.TcpAutoSocket: overheadBase += 2000; break;
+
+				default:                   /* Nothing to add. */ break;
+			}
+
 			// Analysis and measurement 2020-08-11:
 			//
 			// 9600 baud:                            strictly calculated:            estimated:
@@ -167,8 +204,8 @@ namespace YAT.Domain.Test
 			//   >   4.5 s for    82'500 bytes (Large)  =>  ~55 us / byte => 1 s + ~42 us / byte
 			//   >  48   s for 1'090'000 bytes (Huge)   =>  ~44 us / byte => 1 s + ~43 us / byte
 
-			return (1.0 + (45E-6 * byteCount));
-		}
+			return (overheadBase + (45E-3 * byteCount));
+		}                              // Result is in ms, not us!
 
 		#endregion
 

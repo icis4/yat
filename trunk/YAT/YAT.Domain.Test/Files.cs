@@ -194,7 +194,7 @@ namespace YAT.Domain.Test
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic, and anyway, performance isn't an issue here.")]
 		static Files()
 		{                                // Preset the required capacity to improve memory management.
-			TextSendFile = new FileGroup(9);                                                             // Including EOLs; not including EOF.
+			TextSendFile = new FileGroup(6);                                                             // Including EOLs; not including EOF.
 			TextSendFile.Add(StressFile.Normal,                "Stress-1-Normal.txt",                  8400,    300); //   28 bytes per line.
 			TextSendFile.Add(StressFile.Large,                 "Stress-2-Large.txt",                  82500,   1500); //   55 bytes per line.
 			TextSendFile.Add(StressFile.LargeWithLongLines,    "Stress-3-LargeWithLongLines.txt",     97300,    100); //  973 bytes per line.
