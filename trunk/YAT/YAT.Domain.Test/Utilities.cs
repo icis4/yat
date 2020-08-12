@@ -40,8 +40,8 @@ using MKY.Text;
 
 using NUnit.Framework;
 
-///// YAT.Domain        is not used due to ambiguity with 'YAT.Domain.Test.Terminal'.
-///// YAT.Domain.Parser is not used due to ambiguity with 'YAT.Domain.Test.Parser'.
+//// 'YAT.Domain'        is not used due to ambiguity with 'YAT.Domain.Test.Terminal'.
+//// 'YAT.Domain.Parser' is not used due to ambiguity with 'YAT.Domain.Test.Parser'.
 using YAT.Domain.Settings;
 
 #endregion
