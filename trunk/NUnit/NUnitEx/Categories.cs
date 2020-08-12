@@ -310,6 +310,9 @@ namespace NUnitEx
 		{
 			// Everything up to twice the boundary:
 
+			if (ts.TotalMilliseconds < 2000)
+				return (string.Format(CultureInfo.CurrentCulture, "{0:F0} ms", ts.TotalMilliseconds));
+
 			if (ts.TotalSeconds < 120)
 				return (string.Format(CultureInfo.CurrentCulture, "{0:F0} s", ts.TotalSeconds));
 
