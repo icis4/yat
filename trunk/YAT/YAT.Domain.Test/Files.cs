@@ -171,7 +171,12 @@ namespace YAT.Domain.Test
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of test implementation, especially adding new settings.")]
-		public static readonly FileGroup SendText;
+		public static readonly FileGroup TextSendText;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
+		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "Ease of test implementation, especially adding new settings.")]
+		public static readonly FileGroup BinarySendText;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = UnderscoreSuppressionJustification)]
@@ -210,10 +215,15 @@ namespace YAT.Domain.Test
 			////               StressFile.HugeWithVeryLongLines makes little sense for binary terminals
 			BinarySendFile.Add(StressFile.Enormous,            "Stress-5-Enormous.dat",            16299776, (16299776 / 256));
 
-			SendText = new FileGroup(3);                                                                 // Including EOL; not including EOF.
-			SendText.Add(StressFile.LongLine,                  "Stress-7-LongLine.txt",                 973, 1);
-			SendText.Add(StressFile.VeryLongLine,              "Stress-8-VeryLongLine.txt",            9991, 1);
-			SendText.Add(StressFile.EnormousLine,              "Stress-9-EnormousLine.txt",          500014, 1);
+			TextSendText = new FileGroup(3);                                                             // Including EOL; not including EOF.
+			TextSendText.Add(StressFile.LongLine,              "Stress-7-LongLine.txt",                 973, 1);
+			TextSendText.Add(StressFile.VeryLongLine,          "Stress-8-VeryLongLine.txt",            9991, 1);
+			TextSendText.Add(StressFile.EnormousLine,          "Stress-9-EnormousLine.txt",          500014, 1);
+
+			BinarySendText = new FileGroup(3);                                                           // Not including EOL; not including EOF.
+			BinarySendText.Add(StressFile.LongLine,            "Stress-7-LongLine.txt",                 971, 1);
+			BinarySendText.Add(StressFile.VeryLongLine,        "Stress-8-VeryLongLine.txt",            9989, 1);
+			BinarySendText.Add(StressFile.EnormousLine,        "Stress-9-EnormousLine.txt",          500012, 1);
 
 		////SendRaw = new FileGroup(3);                                                                  // Not including EOF.
 		////SendRaw.Add(StressFile.LongData,                   "Stress-7-LongData.txt",                 973, 1);
