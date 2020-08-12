@@ -601,34 +601,9 @@ namespace YAT.Domain.Test.Terminal
 
 		private static void ReadFileContent(TerminalType terminalType, FileInfo fileInfo, SendMethod sendMethod, out byte[] fileContentAsBytes, out string fileContentAsText, out string[] fileContentAsLines)
 		{
-			var supportsText = false;
-			switch (sendMethod)
-			{
-				case SendMethod.Text:
-				case SendMethod.TextLine:
-				case SendMethod.TextLines:
-				{
-					supportsText = true;
-					break;
-				}
-
-				case SendMethod.File:
-				{
-					if (terminalType == TerminalType.Text)
-						supportsText = true;
-
-					break;
-				}
-
-				default:
-				{
-					break; // Nothing to do.
-				}
-			}
-
-			fileContentAsBytes =                 File.ReadAllBytes(fileInfo.Path); // Applicable to any file.
-			fileContentAsText  = (supportsText ? File.ReadAllText( fileInfo.Path) : null);
-			fileContentAsLines = (supportsText ? File.ReadAllLines(fileInfo.Path) : null);
+			fileContentAsBytes = ((fileInfo.Type == FileType.Binary) ? File.ReadAllBytes(fileInfo.Path) : null);
+			fileContentAsText  = ((fileInfo.Type == FileType.Text)   ? File.ReadAllText( fileInfo.Path) : null);
+			fileContentAsLines = ((fileInfo.Type == FileType.Text)   ? File.ReadAllLines(fileInfo.Path) : null);
 		}
 
 		private static void Send(Domain.Terminal terminalTx, FileInfo fileInfo, SendMethod sendMethod, byte[] fileContentAsBytes, string fileContentAsText, string[] fileContentAsLines)

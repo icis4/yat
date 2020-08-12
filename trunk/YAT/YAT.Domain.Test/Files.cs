@@ -26,7 +26,6 @@
 // Using
 //==================================================================================================
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -65,6 +64,13 @@ namespace YAT.Domain.Test
 		EnormousLine
 	}
 
+	/// <summary></summary>
+	public enum FileType
+	{
+		Text,
+		Binary
+	}
+
 	#pragma warning restore 1591
 
 	#endregion
@@ -78,18 +84,22 @@ namespace YAT.Domain.Test
 	public class FileInfo
 	{
 		/// <summary></summary>
+		public FileType Type { get; }
+
+		/// <summary></summary>
 		public string Path { get; }
 
 		/// <remarks>Content byte count, including EOLs (text files), not including EOF.</remarks>
 		public int ByteCount { get; }
 
-		/// <summary></summary>
+		/// <remarks>Virtual lines in case of <see cref="FileType.Binary"/>.</remarks>
 		public int LineCount { get; }
 
 		/// <summary></summary>
-		public FileInfo(string path, int byteCount, int lineCount)
+		public FileInfo(FileType type, string path, int byteCount, int lineCount)
 		{
-			Path = path;
+			Type      = type;
+			Path      = path;
 			ByteCount = byteCount;
 			LineCount = lineCount;
 		}
@@ -142,9 +152,9 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
-		public void Add(StressFile fileKey, string fileName, int fileSize, int lineCount)
+		public void Add(StressFile fileKey, FileType fileType, string fileName, int fileSize, int lineCount)
 		{
-			Item.Add(fileKey, new FileInfo(DirectoryPath + fileName, fileSize, lineCount));
+			Item.Add(fileKey, new FileInfo(fileType, DirectoryPath + fileName, fileSize, lineCount));
 		}
 	}
 
@@ -199,36 +209,36 @@ namespace YAT.Domain.Test
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic, and anyway, performance isn't an issue here.")]
 		static Files()
 		{                                // Preset the required capacity to improve memory management.
-			TextSendFile = new FileGroup(6);                                                             // Including EOLs; not including EOF.
-			TextSendFile.Add(StressFile.Normal,                "Stress-1-Normal.txt",                  8400,    300); //   28 bytes per line.
-			TextSendFile.Add(StressFile.Large,                 "Stress-2-Large.txt",                  82500,   1500); //   55 bytes per line.
-			TextSendFile.Add(StressFile.LargeWithLongLines,    "Stress-3-LargeWithLongLines.txt",     97300,    100); //  973 bytes per line.
-			TextSendFile.Add(StressFile.Huge,                  "Stress-4-Huge.txt",                 1090000,  10000); //  109 bytes per line.
-			TextSendFile.Add(StressFile.HugeWithVeryLongLines, "Stress-5-HugeWithVeryLongLines.txt", 999100,    100); // 9991 bytes per line.
-			TextSendFile.Add(StressFile.Enormous,              "Stress-6-Enormous.txt",            16300000, 100000); //  163 bytes per line.
+			TextSendFile = new FileGroup(6);                                                                              // Including EOLs; not including EOF.
+			TextSendFile.Add(StressFile.Normal,                FileType.Text,   "Stress-1-Normal.txt",                  8400,    300); //   28 bytes per line.
+			TextSendFile.Add(StressFile.Large,                 FileType.Text,   "Stress-2-Large.txt",                  82500,   1500); //   55 bytes per line.
+			TextSendFile.Add(StressFile.LargeWithLongLines,    FileType.Text,   "Stress-3-LargeWithLongLines.txt",     97300,    100); //  973 bytes per line.
+			TextSendFile.Add(StressFile.Huge,                  FileType.Text,   "Stress-4-Huge.txt",                 1090000,  10000); //  109 bytes per line.
+			TextSendFile.Add(StressFile.HugeWithVeryLongLines, FileType.Text,   "Stress-5-HugeWithVeryLongLines.txt", 999100,    100); // 9991 bytes per line.
+			TextSendFile.Add(StressFile.Enormous,              FileType.Text,   "Stress-6-Enormous.txt",            16300000, 100000); //  163 bytes per line.
 
-			BinarySendFile = new FileGroup(4);                                                           // Not including EOF.
-			BinarySendFile.Add(StressFile.Normal,              "Stress-1-Normal.dat",                  8192, (    8192 / 256)); // Virtual lines of 256 bytes each.
-			BinarySendFile.Add(StressFile.Large,               "Stress-2-Large.dat",                  82432, (   82432 / 256));
+			BinarySendFile = new FileGroup(4);                                                                            // Not including EOF.
+			BinarySendFile.Add(StressFile.Normal,              FileType.Binary, "Stress-1-Normal.dat",                  8192, (    8192 / 256)); // Virtual lines of 256 bytes each.
+			BinarySendFile.Add(StressFile.Large,               FileType.Binary, "Stress-2-Large.dat",                  82432, (   82432 / 256));
 			////               StressFile.LargeWithLongLines makes little sense for binary terminals
-			BinarySendFile.Add(StressFile.Huge,                "Stress-4-Huge.dat",                 1089792, ( 1089792 / 256));
+			BinarySendFile.Add(StressFile.Huge,                FileType.Binary, "Stress-4-Huge.dat",                 1089792, ( 1089792 / 256));
 			////               StressFile.HugeWithVeryLongLines makes little sense for binary terminals
-			BinarySendFile.Add(StressFile.Enormous,            "Stress-5-Enormous.dat",            16299776, (16299776 / 256));
+			BinarySendFile.Add(StressFile.Enormous,            FileType.Binary, "Stress-5-Enormous.dat",            16299776, (16299776 / 256));
 
-			TextSendText = new FileGroup(3);                                                             // Including EOL; not including EOF.
-			TextSendText.Add(StressFile.LongLine,              "Stress-7-LongLine.txt",                 973, 1);
-			TextSendText.Add(StressFile.VeryLongLine,          "Stress-8-VeryLongLine.txt",            9991, 1);
-			TextSendText.Add(StressFile.EnormousLine,          "Stress-9-EnormousLine.txt",          500014, 1);
+			TextSendText = new FileGroup(3);                                                                              // Including EOL; not including EOF.
+			TextSendText.Add(StressFile.LongLine,              FileType.Text,   "Stress-7-LongLine.txt",                 973, 1);
+			TextSendText.Add(StressFile.VeryLongLine,          FileType.Text,   "Stress-8-VeryLongLine.txt",            9991, 1);
+			TextSendText.Add(StressFile.EnormousLine,          FileType.Text,   "Stress-9-EnormousLine.txt",          500014, 1);
 
-			BinarySendText = new FileGroup(3);                                                           // Not including EOL; not including EOF.
-			BinarySendText.Add(StressFile.LongLine,            "Stress-7-LongLine.txt",                 971, 1);
-			BinarySendText.Add(StressFile.VeryLongLine,        "Stress-8-VeryLongLine.txt",            9989, 1);
-			BinarySendText.Add(StressFile.EnormousLine,        "Stress-9-EnormousLine.txt",          500012, 1);
+			BinarySendText = new FileGroup(3);                                                                            // Not including EOL; not including EOF.
+			BinarySendText.Add(StressFile.LongLine,            FileType.Text,   "Stress-7-LongLine.txt",                 971, 1);
+			BinarySendText.Add(StressFile.VeryLongLine,        FileType.Text,   "Stress-8-VeryLongLine.txt",            9989, 1);
+			BinarySendText.Add(StressFile.EnormousLine,        FileType.Text,   "Stress-9-EnormousLine.txt",          500012, 1);
 
-		////SendRaw = new FileGroup(3);                                                                  // Not including EOF.
-		////SendRaw.Add(StressFile.LongData,                   "Stress-7-LongData.txt",                 973, 1);
-		////SendRaw.Add(StressFile.VeryLongData,               "Stress-8-VeryLongData.txt",            9991, 1);
-		////SendRaw.Add(StressFile.EnormousData,               "Stress-9-EnormousData.txt",          500014, 1);
+		////SendRaw = new FileGroup(3);                                                                                   // Not including EOF.
+		////SendRaw.Add(StressFile.LongData,                   FileType.Text,   "Stress-7-LongData.txt",                 973, 1);
+		////SendRaw.Add(StressFile.VeryLongData,               FileType.Text,   "Stress-8-VeryLongData.txt",            9991, 1);
+		////SendRaw.Add(StressFile.EnormousData,               FileType.Text,   "Stress-9-EnormousData.txt",          500014, 1);
 		}
 
 		#endregion
