@@ -197,23 +197,7 @@ namespace YAT.Domain.Test
 				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable };
 				yield return (new IPSocketTypePairDescriptor(SocketType.UdpClient, SocketType.UdpServer, v6Specific, name, cats));
 
-				// UDP/IP Server/Client
-
-				name = "UdpServerClient_IPv4Loopback";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4LoopbackIsAvailable };
-				yield return (new IPSocketTypePairDescriptor(SocketType.UdpServer, SocketType.UdpClient, v4Loopback, name, cats));
-
-				name = "UdpServerClient_IPv6Loopback";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6LoopbackIsAvailable };
-				yield return (new IPSocketTypePairDescriptor(SocketType.UdpServer, SocketType.UdpClient, v6Loopback, name, cats));
-
-				name = "UdpServerClient_IPv4SpecificInterface";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv4SpecificInterfaceIsAvailable };
-				yield return (new IPSocketTypePairDescriptor(SocketType.UdpServer, SocketType.UdpClient, v4Specific, name, cats));
-
-				name = "UdpServerClient_IPv6SpecificInterface";
-				cats = new string[] { MKY.Net.Test.ConfigurationCategoryStrings.IPv6SpecificInterfaceIsAvailable };
-				yield return (new IPSocketTypePairDescriptor(SocketType.UdpServer, SocketType.UdpClient, v6Specific, name, cats));
+				// UDP/IP Server/Client makes no sense, a server initially doesn't know where to send to.
 			}
 		}
 
