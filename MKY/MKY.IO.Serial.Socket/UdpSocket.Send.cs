@@ -45,6 +45,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 //// 'System.Net' as well as 'ALAZ.SystemEx.NetEx' are explicitly used for more obvious distinction.
+//// 'System.Net.Sockets' including.
 using System.Text;
 using System.Threading;
 
@@ -187,12 +188,38 @@ namespace MKY.IO.Serial.Socket
 						{                                                // could be busy mostly locking the object.
 							try
 							{
+								// Based on experiments:
+								//
+								// 65507 bytes is the maximum 'dgram' that can be handled by the Send() method below.
+								//  > Anything larger than that results in WSAEMSGSIZE 10040 "Message too long."
+								//  > https://docs.microsoft.com/en-us/windows/win32/winsock/windows-sockets-error-codes-2
+								//
+								// Based on https://stackoverflow.com/questions/1098897/what-is-the-largest-safe-udp-packet-size-on-the-internet:
+								//
+								// 508 bytes is the maximum safe payload for IPv4 as well as IPv6.
+								//  > Using that. If this ever becomes an issue, it will have to be configured.
+
+								const int MaxSafePayloadLength = 508;
+
 								byte[] data;
 								lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 								{
-									data = this.sendQueue.ToArray();
-									this.sendQueue.Clear();
+									if (this.sendQueue.Count <= MaxSafePayloadLength) // Easy case, simply retrieve whole queue:
+									{
+										data = this.sendQueue.ToArray();
+										this.sendQueue.Clear();
+									}
+									else // Chunking is needed:
+									{
+										data = new byte[MaxSafePayloadLength];
+										for (int i = 0; i < MaxSafePayloadLength; i++)
+											data[i] = this.sendQueue.Dequeue();
+									}
 								}
+
+								// This approach should be good enough for the Send() method below,
+								// further processing will be done synchronously, so there is no need
+								// for using BeginSend() from this already asynchronous thread.
 
 								DebugSendDequeue(data.Length);
 
@@ -203,6 +230,19 @@ namespace MKY.IO.Serial.Socket
 								this.socket.Send(data, data.Length, remoteEndPoint);
 
 								OnDataSent(new SocketDataSentEventArgs(data, remoteEndPoint));
+							}
+							catch (System.Net.Sockets.SocketException ex)
+							{
+								if (ex.SocketErrorCode == System.Net.Sockets.SocketError.ConnectionReset)
+								{
+									SocketReset(); // Required after this exception.
+									OnIOError(new IOErrorEventArgs(ErrorSeverity.Acceptable, Direction.Output, ex.Message));
+								}
+								else
+								{
+								////SocketReset() shall not be done in case sending fails (yet). Additional cases to be added here.
+									OnIOError(new IOErrorEventArgs(ErrorSeverity.Severe, Direction.Output, ex.Message));
+								}
 							}
 							finally
 							{
