@@ -162,16 +162,7 @@ namespace YAT.Domain.Test
 			//   >   4.0 s for    82'500 bytes (Large)  @ NUnit => ~20500 bytes / s
 			//   >  46   s for 1'090'000 bytes (Huge)   @ NUnit => ~23500 bytes / s
 
-			var transmissionOverheadRatio = 1.0;
-
-			switch (settings.IO.IOType)
-			{                                                      // 10% typical overhead.
-				case IOType.SerialPort: transmissionOverheadRatio = 1.1; break;
-
-				default:                /* Nothing to change. */         break;
-			}
-
-			var transmissionTime = ((byteCount / settings.IO.RoughlyEstimatedMaxBytesPerMillisecond) * transmissionOverheadRatio);
+			var transmissionTime = ((byteCount / settings.IO.TypicalNumberOfBytesPerMillisecond));
 
 			if (settings.TerminalType == TerminalType.Binary)
 				transmissionTime *= 1.5; // [Binary] takes longer because formatting hex values is more time consuming than appending characters.
