@@ -194,7 +194,6 @@ namespace MKY.Time
 		public int RateValue
 		{
 			get { AssertUndisposed(); return (this.rate.Value);        }
-			set { AssertUndisposed();         this.rate.Value = value; }
 		}
 
 		#endregion
