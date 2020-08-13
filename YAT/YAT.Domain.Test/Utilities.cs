@@ -194,7 +194,7 @@ namespace YAT.Domain.Test
 				default:                   /* Nothing to add. */ break;
 			}
 
-			// Analysis and measurement 2020-08-11..12:
+			// Analysis and measurement 2020-08-11:
 			//
 			// 9600 baud:                            strictly calculated:            estimated:
 			//   >   1.4 s for     8'400 bytes (Normal) => ~167 us / byte => 1 s + ~47 us / byte
@@ -205,16 +205,19 @@ namespace YAT.Domain.Test
 			//   >   4.5 s for    82'500 bytes (Large)  =>  ~55 us / byte => 1 s + ~42 us / byte
 			//   >  48   s for 1'090'000 bytes (Huge)   =>  ~44 us / byte => 1 s + ~43 us / byte
 			//
+			// Analysis and measurement 2020-08-13:
+			//
 			// TCP/IP:
-			//   >   6.0 s for    82'500 bytes (Large)  =>  ~75 us / byte [Text]
-			//   >   8.0 s for    82'500 bytes (Large)  => ~100 us / byte [Binary]
-			//   >  48   s for 1'090'000 bytes (Huge)   =>  ~44 us / byte [Text]
-			//   > 330   s for 1'090'000 bytes (Huge)   => ~300 us / byte [Binary] (no clue why that long...)
+			//   >  10   s total for    82'500 bytes (Large) where base ~3 s and transmission  ~3 s =>   ~4 s =>  ~48 us / byte [Text]
+			//   >  16   s total for    82'500 bytes (Large) where base ~3 s and transmission  ~5 s =>   ~8 s => ~100 us / byte [Binary]
+			//   >  97   s total for 1'090'000 bytes (Huge)  where base ~3 s and transmission ~43 s =>  ~51 s =>  ~47 us / byte [Text]
+			//   > 184   s total for 1'090'000 bytes (Huge)  where base ~3 s and transmission ~68 s => ~124 s => ~104 us / byte [Binary]
 
-			                           // Result is in ms, not us!
-			var verificationTime = (45E-3 * byteCount);
-			if (settings.TerminalType == TerminalType.Binary)
-				verificationTime *= 1.5; // [Binary] takes longer because formatting hex values is more time consuming than appending characters.
+			double verificationTime;
+			if (settings.TerminalType == TerminalType.Text)
+				verificationTime = (45E-3 * byteCount);
+			else                       // Result is in ms, not us!
+				verificationTime = (100E-3 * byteCount);; // [Binary] takes longer because formatting hex values is more time consuming than appending characters.
 
 			return (overheadBase + verificationTime);
 		}
