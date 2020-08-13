@@ -21,19 +21,38 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using ALAZ.SystemEx.NetEx.SocketsEx;
+
 namespace MKY.IO.Serial.Socket
 {
 	/// <summary></summary>
 	public static class SocketDefaults
 	{
-		/// <summary></summary>
-		public const int FrameSize = 1024;
+		/// <remarks>
+		/// Value by default used by
+		/// <see cref="BaseSocketConnectionHost"/>,
+		/// <see cref="SocketClient"/> and
+		/// <see cref="SocketServer"/>.
+		///
+		/// Note that
+		/// <see cref="System.Net.Sockets.Socket.SendBufferSize"/> and
+		/// <see cref="System.Net.Sockets.Socket.ReceiveBufferSize"/>
+		/// use a default value of 8196.
+		/// </remarks>
+		public const int SocketBufferSize = 2048;
 
-		/// <summary></summary>
-		public const int SocketBufferSize = 2 * FrameSize;
-
-		/// <summary></summary>
-		public const int MessageBufferSize = 16 * FrameSize;
+		/// <remarks>
+		/// Value by default used by
+		/// <see cref="BaseSocketConnectionHost"/>,
+		/// <see cref="SocketClient"/> and
+		/// <see cref="SocketServer"/>.
+		///
+		/// Note that
+		/// <see cref="System.Net.Sockets.Socket.SendBufferSize"/> and
+		/// <see cref="System.Net.Sockets.Socket.ReceiveBufferSize"/>
+		/// use a default value of 8196.
+		/// </remarks>
+		public const int MessageBufferSize = 2048;
 	}
 }
 
