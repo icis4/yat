@@ -153,15 +153,17 @@ namespace MKY.IO.Serial.Socket
 			// 508 bytes is the maximum safe payload for IPv4 as well as IPv6.
 			// 1212 bytes is the maximum safe payload for IPv6-only routes.
 			//  > Using these. If this ever becomes an issue, it will have to be configured.
+			//
+			// See 'SocketDefaults' for measurements.
 
 			const int SafePayloadLengthOnIPv4 = 516;
 			const int SafePayloadLengthOnIPv6 = 1220;
 
-			int safePayloadLength;
+			int maxChunkLength;
 			switch (this.localInterface.Address.AddressFamily)
 			{
-				case System.Net.Sockets.AddressFamily.InterNetwork:   safePayloadLength = SafePayloadLengthOnIPv4; break;
-				case System.Net.Sockets.AddressFamily.InterNetworkV6: safePayloadLength = SafePayloadLengthOnIPv6; break;
+				case System.Net.Sockets.AddressFamily.InterNetwork:   maxChunkLength = SafePayloadLengthOnIPv4; break;
+				case System.Net.Sockets.AddressFamily.InterNetworkV6: maxChunkLength = SafePayloadLengthOnIPv6; break;
 
 				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.localInterface.Address.AddressFamily.ToString() + "' is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -213,15 +215,15 @@ namespace MKY.IO.Serial.Socket
 								byte[] data;
 								lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 								{
-									if (this.sendQueue.Count <= safePayloadLength) // Easy case, simply retrieve whole queue:
+									if (this.sendQueue.Count <= maxChunkLength) // Easy case, simply retrieve whole queue:
 									{
 										data = this.sendQueue.ToArray();
 										this.sendQueue.Clear();
 									}
 									else // Chunking is needed:
 									{
-										data = new byte[safePayloadLength];
-										for (int i = 0; i < safePayloadLength; i++)
+										data = new byte[maxChunkLength];
+										for (int i = 0; i < maxChunkLength; i++)
 											data[i] = this.sendQueue.Dequeue();
 									}
 								}
@@ -242,10 +244,6 @@ namespace MKY.IO.Serial.Socket
 							{
 								Monitor.Exit(this.dataEventSyncObj);
 							}
-						}
-						else // Monitor.TryEnter()
-						{
-							DebugMessage("SendThread() monitor has timed out, trying again...");
 						}
 
 						// Note the Thread.Sleep(TimeSpan.Zero) further above.

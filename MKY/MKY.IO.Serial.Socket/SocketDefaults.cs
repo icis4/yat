@@ -53,6 +53,22 @@ namespace MKY.IO.Serial.Socket
 		/// use a default value of 8196.
 		/// </remarks>
 		public const int MessageBufferSize = 2048;
+
+		// Measurements 2020-08-13 using two interconnected TCP/IP AutoSockets with default
+		// settings, transmitting 'Huge.txt' (~1 MiB):
+		//
+		// [Debug]
+		//  > Small buffers and safe maximum payload lengths result in ~19.5 kiB/s.
+		//  > Large buffers and large maximum payload lengths result in ~22.5 kiB/s.
+		//    (32768 bytes)                    (30000 bytes)
+		//
+		// [Release]
+		//  > Small buffers and safe maximum payload lengths result in ~43.6 kiB/s.
+		//  > Large buffers and large maximum payload lengths result in ~51.9 kiB/s.
+		//    (32768 bytes)                    (30000 bytes)
+		//
+		// Decided to use the safe sizes, i.e. value robustness over maximum throughput. If this
+		// ever becomes an issue, the payload (and buffer) sizes could be made configurable.
 	}
 }
 
