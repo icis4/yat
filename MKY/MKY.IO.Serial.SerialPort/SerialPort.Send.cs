@@ -32,6 +32,9 @@
 	// Enable debugging of sending:
 ////#define DEBUG_SEND
 
+	// Enable debugging of sending:
+////#define DEBUG_SEND_CHUNK
+
 #endif // DEBUG
 
 #endregion
@@ -226,15 +229,20 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			// Calculate maximum baud defined send rate:
 			double frameTime = this.settings.Communication.FrameTime;
+			const int MaxFramesSafetyMargin = 6;                  // Safety margin of 12.5%. Using this value for keeping calculation integral.
 			const int MaxFramesPerInterval = 48;                  // Interval shall be rather narrow enough to ensure being inside the limits
 			double interval = (frameTime * MaxFramesPerInterval); // even for converters with buffers of just 56 bytes. 48 for two reasons:
 			Rate maxBaudRatePerInterval = new Rate(interval);     //  1) 48/56 => 15% safety margin
 			                                                      //  2) Same as SerialPortSettings.MaxChunkSizeDefault.Length
+		#if (DEBUG_SEND_CHUNK)
+			maxBaudRatePerInterval.DebugEnabled = true;
+			DebugSendChunk(string.Format(CultureInfo.CurrentCulture, "FrameTime = {0}, MaxFramesPerInterval = {1}, MaxFramesSafetyMargin = {2}, Interval = {3}", frameTime, MaxFramesPerInterval, MaxFramesSafetyMargin, interval));
+		#endif
 			// Typical values:
 			//   baudRate  frameTime  interval
-			// >     9600      ~1 ms     48 ms
-			// >   115.2k     ~85 us      4 ms
-			// >       1M     ~10 us    480 us
+			// >     9600      ~1 ms     50 ms
+			// >   115.2k     ~85 us     ~4 ms
+			// >       1M      10 us    480 us
 
 			bool intervalFourthIsAtLeastOneMillisecond = ((interval / 4) > 1.0);
 
@@ -396,22 +404,69 @@ namespace MKY.IO.Serial.SerialPort
 									// Reduce chunk size if maximum is limited to baud rate:
 									if ((maxChunkSize > 0) && this.settings.BufferMaxBaudRate)
 									{
-										int remainingSizeInInterval = (MaxFramesPerInterval - maxBaudRatePerInterval.Value);
-										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, Math.Max(remainingSizeInInterval, 0)); // 'max' must be 0 or above.
+										int numberOfMissedIntervals = maxBaudRatePerInterval.NumberOfIntervalsSinceLastItem;
+										if (numberOfMissedIntervals < 1)                      // Note that the calculations are not perfect, but considered good enough for the moment:
+										{                                                     //  > Using a single interval is better than using a sliding window (because 'older'
+											int intervalValue;                                //    numbers will not further reduce the remaining size) but inaccurate by nature.
+											maxBaudRatePerInterval.Update(out intervalValue); //  > Update will only be done after writing, i.e. after a delay.
+											int remainingSizeInInterval = Math.Max((MaxFramesPerInterval - MaxFramesSafetyMargin - intervalValue), 0); // 'remaining' must be 0 or above.
+
+											if (maxChunkSize > remainingSizeInInterval) {
+												maxChunkSize = remainingSizeInInterval;
+
+												DebugSendChunk(string.Format(CultureInfo.CurrentCulture, "MaxBaudRateIntervalValue = {0}, Remaining = {1}, Limited = {2}", intervalValue, remainingSizeInInterval, maxChunkSize));
+											}
+										}
+										else // Account for the fact that, for higher baud rates, this loop may/will not run once per interval:
+										{
+											int allowance = (numberOfMissedIntervals * (MaxFramesPerInterval - MaxFramesSafetyMargin));
+
+											if (maxChunkSize > allowance) {
+												maxChunkSize = allowance;
+
+												DebugSendChunk(string.Format(CultureInfo.CurrentCulture, "MaxBaudRateAllowance = {0}, Limited = {1}", allowance, maxChunkSize));
+											}
+										}
 									}
 
 									// Reduce chunk size if maximum send rate is specified:
 									if ((maxChunkSize > 0) && this.settings.MaxSendRate.Enabled)
 									{
-										int remainingSizeInInterval = (this.settings.MaxSendRate.Size - maxSendRate.Value);
-										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, Math.Max(remainingSizeInInterval, 0)); // 'max' must be 0 or above.
+										int numberOfMissedIntervals = maxSendRate.NumberOfIntervalsSinceLastItem;
+										if (numberOfMissedIntervals < 1)       // Note that the calculations are not perfect, but considered good enough for the moment:
+										{                                      //  > Using a single interval is better than using a sliding window (because 'older'
+											int rateValue;                     //    numbers will not further reduce the remaining size) but inaccurate by nature.
+											maxSendRate.Update(out rateValue); //  > Update will only be done after writing, i.e. after a delay.
+											int remainingSizeInInterval = Math.Max((this.settings.MaxSendRate.Size - rateValue), 0); // 'remaining' must be 0 or above.
+
+											if (maxChunkSize > remainingSizeInInterval) {
+												maxChunkSize = remainingSizeInInterval;
+
+												DebugSendChunk(string.Format(CultureInfo.CurrentCulture, "MaxSendRateValue = {0}, Remaining = {1}, Limited = {2}", rateValue, remainingSizeInInterval, maxChunkSize));
+											}
+										}
+										else // Account for the fact that, for higher baud rates, this loop may/will not run once per interval:
+										{
+											int allowance = (numberOfMissedIntervals * this.settings.MaxSendRate.Size);
+
+											if (maxChunkSize > allowance) {
+												maxChunkSize = allowance;
+
+												DebugSendChunk(string.Format(CultureInfo.CurrentCulture, "MaxSendRateAllowance = {0}, Limited = {1}", allowance, maxChunkSize));
+											}
+										}
 									}
 
 									// Further reduce chunk size if maximum is specified:
 									if ((maxChunkSize > 0) && this.settings.MaxChunkSize.Enabled)
 									{
-										int maxChunkSizeSetting = this.settings.MaxChunkSize.Size;
-										maxChunkSize = Int32Ex.Limit(maxChunkSize, 0, maxChunkSizeSetting); // 'Setting' is always above 0.
+										int maxChunkSizeSetting = this.settings.MaxChunkSize.Size; // 'Setting' is always above 0.
+
+										if (maxChunkSize > maxChunkSizeSetting) {
+											maxChunkSize = maxChunkSizeSetting;
+
+											DebugSendChunk(string.Format(CultureInfo.CurrentCulture, "MaxChunkSizeSetting = {0}, Limited = {1}", maxChunkSizeSetting, maxChunkSize));
+										}
 									}
 
 									int effectiveChunkDataCount = 0;
@@ -824,6 +879,15 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		[Conditional("DEBUG_SEND")]
 		private void DebugSend(string message)
+		{
+			DebugMessage(message);
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_SEND_CHUNK")]
+		private void DebugSendChunk(string message)
 		{
 			DebugMessage(message);
 		}

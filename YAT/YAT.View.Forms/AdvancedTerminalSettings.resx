@@ -141,8 +141,8 @@ underlying operating system writes faster to the output buffer than
 the baud rate permits.
 
 Either, tell YAT to limit writing to the speed the baud rate permits
-(minus a safety margin of 15%), or tell YAT to limit sending by one
-of the other settings.</value>
+(less a safety margin), or tell YAT to limit sending by one of the
+other settings.</value>
   </data>
   <data name="checkBox_OutputBufferSize.ToolTip" xml:space="preserve">
     <value>Limiting the output buffer improves the responsiveness of hardware
