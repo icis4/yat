@@ -314,7 +314,7 @@ namespace MKY.IO.Serial.Socket
 							DebugMessage("ReceiveThread() monitor has timed out, trying again...");
 						}
 
-						// Note the Thread.Sleep(TimeSpan.Zero) above.
+						// Note the Thread.Sleep(TimeSpan.Zero) further above.
 
 						// Saying hello to StyleCop ;-.
 					} // Inner loop

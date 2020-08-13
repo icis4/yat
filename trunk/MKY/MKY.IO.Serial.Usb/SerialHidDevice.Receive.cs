@@ -110,8 +110,6 @@ namespace MKY.IO.Serial.Usb
 								}
 
 								OnDataReceived(new SerialDataReceivedEventArgs(data, Info, this.device.ReportFormat.UseId, this.device.ActiveReportId));
-
-								// Note the Thread.Sleep(TimeSpan.Zero) above.
 							}
 							finally
 							{
@@ -122,6 +120,10 @@ namespace MKY.IO.Serial.Usb
 						{
 							DebugMessage("ReceiveThread() monitor has timed out, trying again...");
 						}
+
+						// Note the Thread.Sleep(TimeSpan.Zero) further above.
+
+						// Saying hello to StyleCop ;-.
 					} // Inner loop
 				} // Outer loop
 			}

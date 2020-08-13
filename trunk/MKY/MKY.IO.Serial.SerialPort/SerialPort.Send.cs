@@ -85,7 +85,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		public virtual bool Send(byte[] data)
 		{
-		////AssertUndisposed() is called by 'IsStarted' below.
+		////AssertUndisposed() is called by 'IsTransmissive' below.
 
 			if (IsTransmissive)
 			{
