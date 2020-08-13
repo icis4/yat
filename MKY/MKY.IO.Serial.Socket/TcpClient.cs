@@ -126,9 +126,19 @@ namespace MKY.IO.Serial.Socket
 		// Constants
 		//==========================================================================================
 
-		private const int DataSentQueueInitialCapacity = 4096;
+		private const int SendQueueFixedCapacity       = SocketDefaults.MessageBufferSize;
+		private const int DataSentQueueInitialCapacity = SocketDefaults.MessageBufferSize;
 
 		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
+
+		#endregion
+
+		#region Static Fields
+		//==========================================================================================
+		// Static Fields
+		//==========================================================================================
+
+		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
 
 		#endregion
 
@@ -166,12 +176,17 @@ namespace MKY.IO.Serial.Socket
 
 		private object dataEventSyncObj = new object();
 
+		private Queue<byte> sendQueue = new Queue<byte>(SendQueueFixedCapacity);
+		private bool sendThreadRunFlag;
+		private AutoResetEvent sendThreadEvent;
+		private Thread sendThread;
+		private object sendThreadSyncObj = new object();
+
 		/// <remarks>
 		/// Async event handling. The capacity is set large enough to reduce the number of resizing
 		/// operations while adding items.
 		/// </remarks>
 		private Queue<byte> dataSentQueue = new Queue<byte>(DataSentQueueInitialCapacity);
-
 		private bool dataSentThreadRunFlag;
 		private AutoResetEvent dataSentThreadEvent;
 		private Thread dataSentThread;
@@ -453,11 +468,6 @@ namespace MKY.IO.Serial.Socket
 			get { return (IsConnected); }
 		}
 
-		private bool AutoReconnectEnabledAndAllowed
-		{
-			get { return (IsUndisposed && IsStarted && !IsOpen && AutoReconnect.Enabled); } // Check disposal state first!
-		}
-
 		private bool IsStoppingAndDisposingSocketSynchronized
 		{
 			get
@@ -507,7 +517,7 @@ namespace MKY.IO.Serial.Socket
 				if (this.remoteHost.TryResolve())
 				{
 					DebugMessage("Starting...");
-					StartSocketAndThread();
+					StartSocketAndThreads();
 					return (true);
 				}
 
@@ -591,13 +601,13 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Note that ALAZ sockets start asynchronously, same as stopping.
 		/// </remarks>
-		private void StartSocketAndThread()
+		private void StartSocketAndThreads()
 		{
 			IsStoppingAndDisposingSocketSynchronized = false;
 
 			SetStateSynchronizedAndNotify(SocketState.Connecting);
 
-			StartDataSentThread();
+			StartThreads();
 
 			lock (this.socketSyncObj)
 			{
@@ -673,7 +683,7 @@ namespace MKY.IO.Serial.Socket
 
 			// Finally, stop the thread. Must be done AFTER the socket got stopped (and disposed) to
 			// ensure that the last socket callbacks 'OnSent' can still be properly processed.
-			StopDataSentThread();
+			StopThreads();
 
 			// And don't forget to clear the corresponding queue, its content would reappear in case
 			// the socket gets started again.
@@ -756,7 +766,7 @@ namespace MKY.IO.Serial.Socket
 					// mostly be called with rather low numbers of bytes.
 				}
 
-				DebugSendEnqueue(e.Buffer.Length);
+				DebugDataSentEnqueue(e.Buffer.Length);
 
 				SignalDataSentThreadSafely();
 			}
@@ -790,9 +800,6 @@ namespace MKY.IO.Serial.Socket
 				// Changes here may have to be applied there too.
 				if (IsUndisposed && IsStarted) // Check disposal state first!
 				{
-					// Signal that socket got disconnected to ensure that auto reconnect is allowed:
-					SetStateSynchronizedAndNotify(SocketState.Disconnected);
-
 					if (AutoReconnectEnabledAndAllowed)
 					{
 						SetStateSynchronizedAndNotify(SocketState.WaitingForReconnect);
@@ -840,9 +847,6 @@ namespace MKY.IO.Serial.Socket
 				// Changes here may have to be applied there too.
 				if (IsUndisposed && IsStarted) // Check disposal state first!
 				{
-					// Signal that socket got disconnected to ensure that auto reconnect is allowed:
-					SetStateSynchronizedAndNotify(SocketState.Disconnected);
-
 					if (AutoReconnectEnabledAndAllowed)
 					{
 						SetStateSynchronizedAndNotify(SocketState.WaitingForReconnect);
@@ -850,7 +854,11 @@ namespace MKY.IO.Serial.Socket
 					}
 					else
 					{
-						SetStateSynchronizedAndNotify(SocketState.Error);
+						// Attention, the error event must be raised before changing the state,
+						// because e.g. in case of an AutoSocket, the state change to 'Error'
+						// will trigger disposal of this Client, thus a subsequent event would
+						// get discarded and no error would be raised anymore. Note that the same
+						// applies to the Server implementation.
 
 						if (e.Exception is ALAZ.SystemEx.NetEx.SocketsEx.ReconnectAttemptException)
 						{
@@ -862,7 +870,7 @@ namespace MKY.IO.Serial.Socket
 							sb.AppendLine("The socket of this TCP/IP client has thrown an exception!");
 							sb.AppendLine();
 							sb.AppendLine("Exception type:");
-							sb.AppendLine(e.Exception.GetType().Name);
+							sb.AppendLine(e.Exception.GetType().FullName);
 							sb.AppendLine();
 							sb.AppendLine("Exception error message:");
 							sb.AppendLine(e.Exception.Message);
@@ -871,9 +879,220 @@ namespace MKY.IO.Serial.Socket
 							DebugMessage(message);
 							OnIOError(new IOErrorEventArgs(ErrorSeverity.Fatal, message));
 						}
+
+						SetStateSynchronizedAndNotify(SocketState.Error);
 					}
 				}
 			}
+		}
+
+		/// <remarks>
+		/// There must not be an additional <code>&amp;&amp; !IsOpen</code> check because 'state'
+		/// will still be 'Connected' when this property gets checked by the callbacks above. And
+		/// just setting 'state' to 'Disconnected' in the callbacks above makes no sense as it would
+		/// result in an additional unnecessary state change events.
+		/// </remarks>
+		private bool AutoReconnectEnabledAndAllowed
+		{
+			get { return (IsUndisposed && IsStarted && AutoReconnect.Enabled); } // Check disposal state first!
+		}
+
+		#endregion
+
+		#region Socket Threads
+		//==========================================================================================
+		// Socket Threads
+		//==========================================================================================
+
+		private void StartThreads()
+		{
+			lock (this.sendThreadSyncObj)
+			{
+				if (this.sendThread == null)
+				{
+					this.sendThreadRunFlag = true;
+					this.sendThreadEvent = new AutoResetEvent(false);
+					this.sendThread = new Thread(new ThreadStart(SendThread));
+					this.sendThread.Name = ToShortEndPointString() + " Send Thread";
+					this.sendThread.Start();
+				}
+			}
+
+			lock (this.dataSentThreadSyncObj)
+			{
+				if (this.dataSentThread == null)
+				{
+					this.dataSentThreadRunFlag = true;
+					this.dataSentThreadEvent = new AutoResetEvent(false);
+					this.dataSentThread = new Thread(new ThreadStart(DataSentThread));
+					this.dataSentThread.Name = ToShortEndPointString() + " DataSent Thread";
+					this.dataSentThread.Start();
+				}
+			}
+		}
+
+		/// <remarks>
+		/// Using 'Stop' instead of 'Terminate' to emphasize graceful termination, i.e. trying
+		/// to join first, then abort if not successfully joined.
+		/// </remarks>
+		private void StopThreads()
+		{
+			// First, clear both flags to reduce the time to stop the threads, they may already
+			// be signaled while receiving data or while the send thread is still running:
+
+			lock (this.sendThreadSyncObj)
+				this.sendThreadRunFlag = false;
+
+			lock (this.dataSentThreadSyncObj)
+					this.dataSentThreadRunFlag = false;
+
+			// Then, wait for threads to terminate:
+
+			lock (this.sendThreadSyncObj)
+			{
+				if (this.sendThread != null)
+				{
+					Debug.Assert(this.sendThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
+
+					DebugThreadState("SendThread() gets stopped...");
+
+					// Ensure that thread has stopped after the stop request:
+					try
+					{
+						bool isAborting = false;
+						int accumulatedTimeout = 0;
+						int interval = 0; // Use a relatively short random interval to trigger the thread:
+						while (!this.sendThread.Join(interval = staticRandom.Next(5, 20)))
+						{
+							SignalSendThreadSafely();
+
+							accumulatedTimeout += interval;
+							if (accumulatedTimeout >= ThreadWaitTimeout)
+							{
+								DebugThreadState("...failed! Aborting...");
+								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
+
+								isAborting = true;       // Thread.Abort() must not be used whenever possible!
+								this.sendThread.Abort(); // This is only the fall-back in case joining fails for too long.
+								break;
+							}
+
+							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
+						}
+
+						if (!isAborting)
+							DebugThreadState("...successfully stopped.");
+					}
+					catch (ThreadStateException)
+					{
+						// Ignore thread state exceptions such as "Thread has not been started" and
+						// "Thread cannot be aborted" as it just needs to be ensured that the thread
+						// has or will be terminated for sure.
+
+						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+					}
+
+					this.sendThread = null;
+				}
+
+				if (this.sendThreadEvent != null)
+				{
+					try     { this.sendThreadEvent.Close(); }
+					finally { this.sendThreadEvent = null; }
+				}
+			} // lock (sendThreadSyncObj)
+
+			lock (this.dataSentThreadSyncObj)
+			{
+				if (this.dataSentThread != null)
+				{
+					Debug.Assert(this.dataSentThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
+
+					DebugThreadState("DataSentThread() gets stopped...");
+
+					// Ensure that thread has stopped after the stop request:
+					try
+					{
+						bool isAborting = false;
+						int accumulatedTimeout = 0;
+						int interval = 0; // Use a relatively short random interval to trigger the thread:
+						while (!this.dataSentThread.Join(interval = SocketBase.Random.Next(5, 20)))
+						{
+							SignalDataSentThreadSafely();
+
+							accumulatedTimeout += interval;
+							if (accumulatedTimeout >= ThreadWaitTimeout)
+							{
+								DebugThreadState("...failed! Aborting...");
+								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
+
+								isAborting = true;           // Thread.Abort() must not be used whenever possible!
+								this.dataSentThread.Abort(); // This is only the fall-back in case joining fails for too long.
+								break;
+							}
+
+							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
+						}
+
+						if (!isAborting)
+							DebugThreadState("...successfully stopped.");
+					}
+					catch (ThreadStateException)
+					{
+						// Ignore thread state exceptions such as "Thread has not been started" and
+						// "Thread cannot be aborted" as it just needs to be ensured that the thread
+						// has or will be terminated for sure.
+
+						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+					}
+
+					this.dataSentThread = null;
+				}
+
+				if (this.dataSentThreadEvent != null)
+				{
+					try     { this.dataSentThreadEvent.Close(); }
+					finally { this.dataSentThreadEvent = null; }
+				}
+			}
+		}
+
+		/// <remarks>
+		/// Especially useful during potentially dangerous creation and disposal sequence.
+		/// </remarks>
+		private void SignalSendThreadSafely()
+		{
+			try
+			{
+				if (this.sendThreadEvent != null)
+					this.sendThreadEvent.Set();
+			}
+			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+
+			// Catch 'NullReferenceException' for the unlikely case that the event has just been
+			// disposed after the if-check. This way, the event doesn't need to be locked (which
+			// is a relatively time-consuming operation). Still keep the if-check for the normal
+			// cases.
+		}
+
+		/// <remarks>
+		/// Especially useful during potentially dangerous creation and disposal sequence.
+		/// </remarks>
+		private void SignalDataSentThreadSafely()
+		{
+			try
+			{
+				if (this.dataSentThreadEvent != null)
+					this.dataSentThreadEvent.Set();
+			}
+			catch (ObjectDisposedException ex) { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+			catch (NullReferenceException ex)  { DebugEx.WriteException(GetType(), ex, "Unsafe thread signaling caught"); }
+
+			// Catch 'NullReferenceException' for the unlikely case that the event has just been
+			// disposed after the if-check. This way, the event doesn't need to be locked (which
+			// is a relatively time-consuming operation). Still keep the if-check for the normal
+			// cases.
 		}
 
 		#endregion
@@ -925,7 +1144,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				try
 				{
-					StartSocketAndThread();
+					StartSocketAndThreads();
 					StartReestablishedTimer();
 				}
 				catch
@@ -1029,7 +1248,7 @@ namespace MKY.IO.Serial.Socket
 
 				try
 				{
-					StartSocketAndThread();
+					StartSocketAndThreads();
 					StartReestablishedTimer();
 				}
 				catch
