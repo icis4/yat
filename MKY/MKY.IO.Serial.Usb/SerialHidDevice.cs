@@ -109,12 +109,7 @@ namespace MKY.IO.Serial.Usb
 		private object deviceSyncObj = new object();
 		private object dataEventSyncObj = new object();
 
-		/// <remarks>
-		/// Async sending. The capacity is set large enough to reduce the number of resizing
-		/// operations while adding items.
-		/// </remarks>
 		private Queue<byte> sendQueue = new Queue<byte>(SendQueueFixedCapacity);
-
 		private bool sendThreadRunFlag;
 		private AutoResetEvent sendThreadEvent;
 		private Thread sendThread;
@@ -125,7 +120,6 @@ namespace MKY.IO.Serial.Usb
 		/// operations while adding items.
 		/// </remarks>
 		private Queue<byte> receiveQueue = new Queue<byte>(ReceiveQueueInitialCapacity);
-
 		private bool receiveThreadRunFlag;
 		private AutoResetEvent receiveThreadEvent;
 		private Thread receiveThread;

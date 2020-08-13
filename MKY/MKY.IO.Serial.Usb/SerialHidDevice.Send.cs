@@ -66,7 +66,7 @@ namespace MKY.IO.Serial.Usb
 		/// </remarks>
 		public virtual bool Send(byte[] data)
 		{
-		////AssertUndisposed() is called by 'IsStarted' below.
+		////AssertUndisposed() is called by 'IsTransmissive' below.
 
 			if (IsTransmissive)
 			{
@@ -297,12 +297,10 @@ namespace MKY.IO.Serial.Usb
 									this.sendQueue.Clear();
 								}
 
-								this.device.Send(data);
+								this.device.Send(data); // No need for exception handling here, the underlying Write() method does this.
 
 								if (this.settings.FlowControlUsesXOnXOff)
 									HandleXOnOrXOffAndNotify(data);
-
-								// Note the Thread.Sleep(TimeSpan.Zero) above.
 							}
 							finally
 							{
@@ -313,6 +311,10 @@ namespace MKY.IO.Serial.Usb
 						{
 							DebugMessage("SendThread() monitor has timed out, trying again...");
 						}
+
+						// Note the Thread.Sleep(TimeSpan.Zero) further above.
+
+						// Saying hello to StyleCop ;-.
 					} // Inner loop
 				} // Outer loop
 			}

@@ -72,7 +72,7 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		public virtual bool Send(byte[] data)
 		{
-		////AssertUndisposed() is called by 'IsStarted' below.
+		////AssertUndisposed() is called by 'IsTransmissive' below.
 
 			if (IsTransmissive)
 			{
@@ -265,7 +265,7 @@ namespace MKY.IO.Serial.Socket
 							DebugMessage("SendThread() monitor has timed out, trying again...");
 						}
 
-						// Note the Thread.Sleep(TimeSpan.Zero) above.
+						// Note the Thread.Sleep(TimeSpan.Zero) further above.
 
 						if (this.socketType == UdpSocketType.Client)
 						{
@@ -282,8 +282,9 @@ namespace MKY.IO.Serial.Socket
 								}
 							}
 
-							if (hasChanged)
+							if (hasChanged) {
 								OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
+							}
 						} // Client
 					} // Inner loop
 				} // Outer loop

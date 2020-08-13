@@ -141,12 +141,7 @@ namespace MKY.IO.Serial.SerialPort
 		private MKY.IO.Ports.ISerialPort port;
 		private object portSyncObj = new object(); // Required as port will be disposed and recreated on open/close.
 
-		/// <remarks>
-		/// Async sending. The capacity is set large enough to reduce the number of resizing
-		/// operations while adding items.
-		/// </remarks>
 		private Queue<byte> sendQueue = new Queue<byte>(SendQueueInitialCapacity);
-
 		private bool sendThreadRunFlag;
 		private AutoResetEvent sendThreadEvent;
 		private Thread sendThread;
@@ -157,7 +152,6 @@ namespace MKY.IO.Serial.SerialPort
 		/// operations while adding items.
 		/// </remarks>
 		private Queue<byte> receiveQueue = new Queue<byte>(ReceiveQueueInitialCapacity);
-
 		private bool receiveThreadRunFlag;
 		private AutoResetEvent receiveThreadEvent;
 		private Thread receiveThread;

@@ -118,8 +118,6 @@ namespace MKY.IO.Serial.SerialPort
 								DebugReceiveRequest("Signaling " + data.Length.ToString() + " byte(s) received...");
 								OnDataReceived(new SerialDataReceivedEventArgs(data, PortId));
 								DebugReceiveRequest("...signaling done");
-
-								// Note the Thread.Sleep(TimeSpan.Zero) above.
 							}
 							finally
 							{
@@ -130,6 +128,10 @@ namespace MKY.IO.Serial.SerialPort
 						{
 							DebugMessage("ReceiveThread() monitor has timed out, trying again...");
 						}
+
+						// Note the Thread.Sleep(TimeSpan.Zero) further above.
+
+						// Saying hello to StyleCop ;-.
 					} // Inner loop
 				} // Outer loop
 			}

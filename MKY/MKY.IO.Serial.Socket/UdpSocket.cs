@@ -136,12 +136,7 @@ namespace MKY.IO.Serial.Socket
 		private object socketSyncObj = new object();
 		private object dataEventSyncObj = new object();
 
-		/// <remarks>
-		/// Async sending. The capacity is set large enough to reduce the number of resizing
-		/// operations while adding items.
-		/// </remarks>
 		private Queue<byte> sendQueue = new Queue<byte>(SendQueueFixedCapacity);
-
 		private bool sendThreadRunFlag;
 		private AutoResetEvent sendThreadEvent;
 		private Thread sendThread;
@@ -152,7 +147,6 @@ namespace MKY.IO.Serial.Socket
 		/// operations while adding items.
 		/// </remarks>
 		private Queue<Pair<byte, System.Net.IPEndPoint>> receiveQueue = new Queue<Pair<byte, System.Net.IPEndPoint>>(ReceiveQueueInitialCapacity);
-
 		private bool receiveThreadRunFlag;
 		private AutoResetEvent receiveThreadEvent;
 		private Thread receiveThread;
@@ -811,7 +805,7 @@ namespace MKY.IO.Serial.Socket
 		private void StartSocket()
 		{
 			SetStateSynchronizedAndNotify(SocketState.Opening);
-			CreateSocketAndThreads();
+			StartSocketAndThreads();
 			SetStateSynchronizedAndNotify(SocketState.Opened);
 
 			// Immediately begin receiving data:
@@ -885,7 +879,12 @@ namespace MKY.IO.Serial.Socket
 		// Socket Methods
 		//==========================================================================================
 
-		private void CreateSocketAndThreads()
+		/// <remarks>
+		/// Not using into a separate StartThreads() like other implemenations as ReceiveThread() is
+		/// created and started before socket and SendThread(). Other implementations could also
+		/// follow this implementation when there is need to do so.
+		/// </remarks>
+		private void StartSocketAndThreads()
 		{
 			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 			{
@@ -1020,12 +1019,15 @@ namespace MKY.IO.Serial.Socket
 		{
 			// First clear both flags to reduce the time to stop the receive thread, it may already
 			// be signaled while receiving data while the send thread is still running.
+
 			lock (this.sendThreadSyncObj)
 				this.sendThreadRunFlag = false;
+
 			lock (this.receiveThreadSyncObj)
 				this.receiveThreadRunFlag = false;
 
-			// First, stop and dispose send thread to prevent more data being forwarded to socket:
+			// Then, stop and dispose send thread to prevent more data being forwarded to socket:
+
 			lock (this.sendThreadSyncObj)
 			{
 				if (this.sendThread != null)
@@ -1086,6 +1088,7 @@ namespace MKY.IO.Serial.Socket
 			}
 
 			// Then, close and dispose socket:
+
 			lock (this.socketSyncObj)
 			{
 				if (this.socket != null)
@@ -1096,6 +1099,7 @@ namespace MKY.IO.Serial.Socket
 			}
 
 			// Finally, stop and dispose receive thread:
+
 			lock (this.receiveThreadSyncObj)
 			{
 				if (this.receiveThread != null)
@@ -1161,7 +1165,7 @@ namespace MKY.IO.Serial.Socket
 			SetStateSynchronizedAndNotify(SocketState.Closing);
 			DisposeSocketAndThreads();
 			SetStateSynchronizedAndNotify(SocketState.Opening);
-			CreateSocketAndThreads();
+			StartSocketAndThreads();
 			SetStateSynchronizedAndNotify(SocketState.Opened);
 		}
 
