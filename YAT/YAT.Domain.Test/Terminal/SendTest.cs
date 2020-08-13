@@ -105,12 +105,12 @@ namespace YAT.Domain.Test.Terminal
 		{
 			get
 			{
-				var l = new List<Tuple<StressFile, SendMethod>>(8); // Preset the required capacity to improve memory management.
+				var l = new List<Tuple<StressFile, SendMethod>>(7); // Preset the required capacity to improve memory management.
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Normal,                SendMethod.File));
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Large,                 SendMethod.File)); // 'Large' is needed for serial COM ports with defaults, 'Huge' would take too long.
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.LargeWithLongLines,    SendMethod.File));
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Huge,                  SendMethod.File)); // 'Enormous' would take too long.
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.HugeWithVeryLongLines, SendMethod.File));
+			////l.Add(new Tuple<StressFile, SendMethod>(StressFile.Large,                 SendMethod.File)); // Covered by 'LargeWithLongLines' below.
+				l.Add(new Tuple<StressFile, SendMethod>(StressFile.LargeWithLongLines,    SendMethod.File)); // 'Huge' would take too long for serial COM ports with defaults.
+				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Huge,                  SendMethod.File)); // Covered by 'HugeWithVeryLongLines' below, but needed until FR #375 has been resolved.
+				l.Add(new Tuple<StressFile, SendMethod>(StressFile.HugeWithVeryLongLines, SendMethod.File)); // 'Enormous' would take too long.
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.LongLine,              SendMethod.TextLine));
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.VeryLongLine,          SendMethod.TextLine));
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.EnormousLine,          SendMethod.TextLine));
@@ -128,7 +128,7 @@ namespace YAT.Domain.Test.Terminal
 			{
 				var l = new List<Tuple<StressFile, SendMethod>>(6); // Preset the required capacity to improve memory management.
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Normal,       SendMethod.File));
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Large,        SendMethod.File)); // 'Large' is needed for serial COM ports with defaults, 'Huge' would take too long.
+				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Large,        SendMethod.File)); // 'Huge' would take too long for serial COM ports with defaults.
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Huge,         SendMethod.File)); // 'Enormous' would take too long.
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.LongLine,     SendMethod.TextLine));
 				l.Add(new Tuple<StressFile, SendMethod>(StressFile.VeryLongLine, SendMethod.TextLine));
@@ -373,15 +373,20 @@ namespace YAT.Domain.Test.Terminal
 			var fileByteCount = fileInfo.ByteCount;                             // settingsB are ignored (yet).
 			var estimatedTransmissionTime = Utilities.GetEstimatedTransmissionTime(settingsA, fileByteCount);
 
-			// Workaround to two issues:
-			//  > YAT: Becomes really slow in case of such long lines. With FR #375 (see further below) this can be fixed for this test.
-			//  > NUnit: Memory consumption increases such RAM becomes full and execution takes forever, maybe due to reason above.
+			// Workaround to these issues:
+			//  > YAT: Becomes really slow in case of such long lines. With FR #375 (see further below) this can be fixed for this test. With FR #406 this would be fixed in YAT.
+			//  > NUnit: Memory consumption increases such RAM becomes full and execution takes forever, maybe due to reason above, maybe fixed with FR #293 (upgrade to NUnit V3).
 			string workaround = "";
 			if (fileInfo.Path.Contains("HugeWith") ||
 			    fileInfo.Path.Contains("EnormousLine"))
 			{
 				estimatedTransmissionTime *= 999; // Will result in a "high" enough duration category to easily let it exclude.
-				workaround = " WORKAROUND FR #375";
+				workaround = " WORKAROUND FR #375 / FR #406"; // \remind (2020-08-13 / MKY)
+			}
+			else if (fileInfo.Path.Contains("Huge") && (settingsA.TerminalType == TerminalType.Binary))
+			{
+				estimatedTransmissionTime *= 999; // Will result in a "high" enough duration category to easily let it exclude.
+				workaround = " WORKAROUND FR #293 / FR #406"; // \remind (2020-08-13 / MKY)
 			}
 
 			// Timeout:
@@ -515,7 +520,7 @@ namespace YAT.Domain.Test.Terminal
 			// Adjust maximum line length:
 			if (fileInfo.LineByteCount > settingsA.Display.MaxLineLength) // Potentially differing 'settingsB' will result in assertion on verification.
 			{
-			////if (fileInfo.LineByteCount <= MaxLineLengthForTest) // Only adjust up to 10'000 in order to also test with 'Exceeded' warning message:
+			////if (fileInfo.LineByteCount <= MaxLineLengthForTest) // Only adjust up to 10'000 characters/bytes in order to also test with 'Exceeded' warning message:
 				{
 					                         settingsA.Display.MaxLineLength = fileInfo.LineByteCount;
 					if (settingsB != null) { settingsB.Display.MaxLineLength = fileInfo.LineByteCount; }
@@ -530,8 +535,16 @@ namespace YAT.Domain.Test.Terminal
 			// Adjust maximum number of lines:
 			if (fileInfo.LineCount > settingsA.Display.MaxLineCount) // Potentially differing 'settingsB' will result in assertion on verification.
 			{
-				                         settingsA.Display.MaxLineCount = fileInfo.LineCount;
-				if (settingsB != null) { settingsB.Display.MaxLineCount = fileInfo.LineCount; }
+			////if (fileInfo.MaxLineCount <= MaxLineCountForTest) // Only adjust up to 10'000 lines in order to not excessivly consume memory:
+				{
+					                         settingsA.Display.MaxLineCount = fileInfo.LineCount;
+					if (settingsB != null) { settingsB.Display.MaxLineCount = fileInfo.LineCount; }
+				}
+			////else // Requires FR #375 "...migrate Byte/Line Count/Rate from model to domain..." because verification is yet fixed to repositories.
+			////{
+			////	                         settingsA.Display.MaxLineCount = MaxLineCountForTest;
+			////	if (settingsB != null) { settingsB.Display.MaxLineCount = MaxLineCountForTest; }
+			////}
 			}
 
 			// Ready to send and verify:
