@@ -731,7 +731,7 @@ namespace YAT.Domain
 		protected virtual void DoSendRawData(ForSomeTimeEventHelper forSomeTimeEventHelper, byte[] data)
 		{
 			// Raise the 'IsSendingForSomeTimeChanged' event if a large chunk is about to be sent:
-			if (forSomeTimeEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(data.Length, this.terminalSettings.IO.RoughlyEstimatedMaxBytesPerMillisecond))
+			if (forSomeTimeEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(data.Length, this.terminalSettings.IO.TypicalNumberOfBytesPerMillisecond))
 				IncrementIsSendingForSomeTimeChanged();
 
 			DebugSend(string.Format("Sending {0} byte(s) of raw data by directly forwarding to raw terminal.", data.Length));
@@ -789,7 +789,7 @@ namespace YAT.Domain
 							if (bytesResult != null)
 							{
 								// Raise the 'IsSendingForSomeTimeChanged' event if a large chunk is about to be sent:
-								if (forSomeTimeEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(bytesResult.Bytes.Length, this.terminalSettings.IO.RoughlyEstimatedMaxBytesPerMillisecond))
+								if (forSomeTimeEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(bytesResult.Bytes.Length, this.terminalSettings.IO.TypicalNumberOfBytesPerMillisecond))
 									IncrementIsSendingForSomeTimeChanged();
 
 								// For performance reasons, as well as joining text terminal EOL with line content,

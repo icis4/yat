@@ -58,17 +58,17 @@ namespace YAT.Domain.Utilities
 		}
 
 		/// <remarks>Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.</remarks>
-		public static bool ChunkSizeIsAboveThreshold(int chunkSize, double bytesPerMillisecond)
+		public static bool ChunkSizeIsAboveThreshold(int chunkSize, double typicalNumberOfBytesPerMillisecond)
 		{
-			return (chunkSize >= (Threshold * bytesPerMillisecond));
+			return (chunkSize >= (Threshold * typicalNumberOfBytesPerMillisecond));
 		}
 
 		/// <remarks>Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate", Justification = "Funny, this *is* an event helper.")]
-		public bool RaiseEventIfChunkSizeIsAboveThreshold(int chunkSize, double bytesPerMillisecond)
+		public bool RaiseEventIfChunkSizeIsAboveThreshold(int chunkSize, double typicalNumberOfBytesPerMillisecond)
 		{
 			// Only let the event get raised if it hasn't been yet:
-			if (!this.eventMustBeRaised && ChunkSizeIsAboveThreshold(chunkSize, bytesPerMillisecond))
+			if (!this.eventMustBeRaised && ChunkSizeIsAboveThreshold(chunkSize, typicalNumberOfBytesPerMillisecond))
 			{
 				this.eventMustBeRaised = true;
 				return (true);

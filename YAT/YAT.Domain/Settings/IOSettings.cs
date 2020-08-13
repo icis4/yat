@@ -375,7 +375,7 @@ namespace YAT.Domain.Settings
 
 		/// <remarks>Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.</remarks>
 		[XmlIgnore]
-		public virtual double RoughlyEstimatedMaxBytesPerMillisecond
+		public virtual double TypicalNumberOfBytesPerMillisecond
 		{
 			get
 			{
@@ -387,9 +387,9 @@ namespace YAT.Domain.Settings
 					}
 
 					case IOType.SerialPort:
-					{                                                                // It's just a rough estimate:
-						return (this.serialPort.Communication.FramesPerMillisecond); // Ignore mismatch in case 7 data bits are being used.
-					}                                                                // Ignore mismatch in case e.g. 16-bit bytes are being used.
+					{                                                               // 10% typical overhead. But attention, it's just a 'typical' value:
+						return (this.serialPort.Communication.FramesPerMillisecond * 1.1); // Ignore mismatch in case 7 data bits are being used.
+					}                                                                      // Ignore mismatch in case e.g. 16-bit bytes are being used.
 
 					case IOType.TcpClient:
 					case IOType.TcpServer:
@@ -398,7 +398,7 @@ namespace YAT.Domain.Settings
 						// In theory:
 						// Less than 6.55 MiBit/s (https://www.switch.ch/network/tools/tcp_throughput/), i.e. less than 820 KiByte/s.
 						//
-						// In YAT practise:
+						// In YAT practise (e.g. 'Huge.txt'):
 						//  > ~19.5 KiByte/s for [Debug]
 						//  > ~43.6 KiByte/s for [Release]
 						// See 'MKY.IO.Serial.Socket.SocketDefaults' for measurements.
@@ -407,13 +407,15 @@ namespace YAT.Domain.Settings
 					#else
 						return (43.6);
 					#endif
+						// But attention, the view consumes a lot of CPU. Sending e.g. 'EnormousLine.txt'
+						// where view has almost nothing to do happens almost instantly, at up to ~250 KiByte/s!
 					}
 
 					case IOType.UdpClient:
 					case IOType.UdpServer:
 					case IOType.UdpPairSocket:
 					{
-						// In YAT practise:
+						// In YAT practise (e.g. 'Huge.txt'):
 						// Approx. 5% less than TCP/IP.
 					#if (DEBUG)
 						return (19.5 * 0.95);
