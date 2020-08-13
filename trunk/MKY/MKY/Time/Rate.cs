@@ -70,7 +70,7 @@ namespace MKY.Time
 
 		private DateTime lastItemTimeStamp; // = DateTime.MinValue;
 
-	#if (DEBUG_UPDATE)
+	#if (DEBUG)
 		private bool debugEnabled; // = false;
 	#endif
 
@@ -262,6 +262,13 @@ namespace MKY.Time
 		}
 
 		/// <summary></summary>
+		public virtual bool Update()
+		{
+			int value;
+			return (Update(out value));
+		}
+
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[CLSCompliant(false)]
 		public virtual bool Update(out int value)
@@ -402,7 +409,7 @@ namespace MKY.Time
 		[Conditional("DEBUG_UPDATE")]
 		private void DebugUpdate(string message)
 		{
-		#if (DEBUG_UPDATE)
+		#if (DEBUG)
 			if (DebugEnabled)
 		#endif
 			{

@@ -140,23 +140,23 @@ namespace MKY.Test.Time
 				// --- 0 ~ 20 ms have passed since 'initial' ---
 
 				ThreadEx.SleepUntilOffset(initial, 1500);
-				Assert.That(rate.Update(DateTime.Now), Is.True);
+				Assert.That(rate.Update(), Is.True);
 				Assert.That(rate.Value, Is.GreaterThanOrEqualTo(12)); // 12..17 per interval; weighed per interval throughout window.
 				Assert.That(rate.Value, Is.LessThanOrEqualTo(17));
 
 				ThreadEx.SleepUntilOffset(initial, 3500);
-				Assert.That(rate.Update(DateTime.Now), Is.True);
+				Assert.That(rate.Update(), Is.True);
 				Assert.That(rate.Value, Is.EqualTo(6)); // 6 per interval; weighed per interval throughout window.
 
 				Assert.That(rate.Update(20), Is.True);
 				Assert.That(rate.Value, Is.EqualTo(14)); // 14 per interval; weighed per interval throughout window.
 
 				ThreadEx.SleepUntilOffset(initial, 4500);
-				Assert.That(rate.Update(DateTime.Now), Is.True);
+				Assert.That(rate.Update(), Is.True);
 				Assert.That(rate.Value, Is.EqualTo(6)); // 6 per interval; weighed per interval throughout window.
 
 				ThreadEx.SleepUntilOffset(initial, 8000);
-				Assert.That(rate.Update(DateTime.Now), Is.True);
+				Assert.That(rate.Update(), Is.True);
 				Assert.That(rate.Value, Is.EqualTo(0)); // Back to zero.
 			}
 		}
@@ -188,7 +188,7 @@ namespace MKY.Test.Time
 				// --- 0 ~ 20 ms have passed since 'initial' ---
 
 				ThreadEx.SleepUntilOffset(initial, 500);
-				Assert.That(rate.Update(DateTime.Now), Is.True);
+				Assert.That(rate.Update(), Is.True);
 				Assert.That(rate.Value, Is.GreaterThanOrEqualTo(20)); // Reduced to 20..37 per interval; weighed per interval throughout window.
 				Assert.That(rate.Value, Is.LessThanOrEqualTo(37));
 
@@ -202,7 +202,7 @@ namespace MKY.Test.Time
 				Assert.That(rate.Value, Is.LessThanOrEqualTo(60));
 
 				ThreadEx.SleepUntilOffset(initial, 3000);
-				Assert.That(rate.Update(DateTime.Now), Is.True);
+				Assert.That(rate.Update(), Is.True);
 				Assert.That(rate.Value, Is.EqualTo(0)); // Back to zero.
 			}
 		}
@@ -234,7 +234,7 @@ namespace MKY.Test.Time
 				// --- 0 ~ 20 ms have passed since 'initial' ---
 
 				ThreadEx.SleepUntilOffset(initial, 500);
-				Assert.That(rate.Update(DateTime.Now), Is.False);
+				Assert.That(rate.Update(), Is.False);
 				Assert.That(rate.Value, Is.EqualTo(60)); // Still 60 per interval.
 
 				ThreadEx.SleepUntilOffset(initial, 750);
@@ -246,7 +246,7 @@ namespace MKY.Test.Time
 				Assert.That(rate.Value, Is.EqualTo(60)); // Just most recent 2 x 30 per interval.
 
 				ThreadEx.SleepUntilOffset(initial, 2500);
-				Assert.That(rate.Update(DateTime.Now), Is.True);
+				Assert.That(rate.Update(), Is.True);
 				Assert.That(rate.Value, Is.EqualTo(0)); // Back to zero.
 			}
 		}
