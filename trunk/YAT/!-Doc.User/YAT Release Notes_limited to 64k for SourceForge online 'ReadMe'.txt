@@ -147,8 +147,7 @@ Important changes:
 - Changes on-the-fly by keywords like \!(Port()), \!(PortSettings()), \!(Baud()),... are now
   reflected in the terminal settings, i.e. also indicated by '*' (related to reqs. #71 and #403).
 - IPv6 support enabled for UDP/IP terminals (feature request #372).
-- Improved UDP/IP error handling on sending (related to testing below).
-- UDP/IP datagram payload size limited to the safe maximum of 508 bytes (related to testing below).
+- UDP/IP datagram payload size limited to the safe maximum of 508 bytes (IPv4) or 1212 bytes (IPv6).
 - Test coverage of sending and processing significantly increased (related to refactorings above).
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
 - Upgrade to .NET 4.0 runtime (precondition for new automatic actions [Chart/Plot/Histogram],
