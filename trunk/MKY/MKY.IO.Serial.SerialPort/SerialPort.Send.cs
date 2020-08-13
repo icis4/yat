@@ -471,10 +471,6 @@ namespace MKY.IO.Serial.SerialPort
 									Monitor.Exit(this.dataEventSyncObj);
 								}
 							}
-							else // Monitor.TryEnter()
-							{
-								DebugMessage("SendThread() monitor has timed out, trying again...");
-							}
 
 							if (yieldSomeMore)
 								Thread.Sleep((intervalFourthIsAtLeastOneMillisecond ? 1 : 0));
