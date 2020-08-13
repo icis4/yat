@@ -144,6 +144,30 @@ namespace MKY.IO.Serial.Socket
 		{
 			DebugThreadState("SendThread() has started.");
 
+			// Based on experiments:
+			//
+			// 65507 bytes is the maximum 'dgram' that can be handled by the Send() method further below in case of IPv4.
+			//  > Anything larger than that results in WSAEMSGSIZE 10040 "Message too long."
+			//  > https://docs.microsoft.com/en-us/windows/win32/winsock/windows-sockets-error-codes-2
+			//
+			// Based on https://stackoverflow.com/questions/1098897/what-is-the-largest-safe-udp-packet-size-on-the-internet:
+			//
+			// 508 bytes is the maximum safe payload for IPv4 as well as IPv6.
+			// 1212 bytes is the maximum safe payload for IPv6-only routes.
+			//  > Using these. If this ever becomes an issue, it will have to be configured.
+
+			const int SafePayloadLengthOnIPv4 = 508;
+			const int SafePayloadLengthOnIPv6 = 1212;
+
+			int safePayloadLength;
+			switch (this.localInterface.Address.AddressFamily)
+			{
+				case System.Net.Sockets.AddressFamily.InterNetwork:   safePayloadLength = SafePayloadLengthOnIPv4; break;
+				case System.Net.Sockets.AddressFamily.InterNetworkV6: safePayloadLength = SafePayloadLengthOnIPv6; break;
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.localInterface.Address.AddressFamily.ToString() + "' is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+
 			try
 			{
 				// Outer loop, runs when signaled as well as periodically checking the state:
@@ -188,31 +212,18 @@ namespace MKY.IO.Serial.Socket
 						{                                                // could be busy mostly locking the object.
 							try
 							{
-								// Based on experiments:
-								//
-								// 65507 bytes is the maximum 'dgram' that can be handled by the Send() method below.
-								//  > Anything larger than that results in WSAEMSGSIZE 10040 "Message too long."
-								//  > https://docs.microsoft.com/en-us/windows/win32/winsock/windows-sockets-error-codes-2
-								//
-								// Based on https://stackoverflow.com/questions/1098897/what-is-the-largest-safe-udp-packet-size-on-the-internet:
-								//
-								// 508 bytes is the maximum safe payload for IPv4 as well as IPv6.
-								//  > Using that. If this ever becomes an issue, it will have to be configured.
-
-								const int MaxSafePayloadLength = 508;
-
 								byte[] data;
 								lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 								{
-									if (this.sendQueue.Count <= MaxSafePayloadLength) // Easy case, simply retrieve whole queue:
+									if (this.sendQueue.Count <= safePayloadLength) // Easy case, simply retrieve whole queue:
 									{
 										data = this.sendQueue.ToArray();
 										this.sendQueue.Clear();
 									}
 									else // Chunking is needed:
 									{
-										data = new byte[MaxSafePayloadLength];
-										for (int i = 0; i < MaxSafePayloadLength; i++)
+										data = new byte[safePayloadLength];
+										for (int i = 0; i < safePayloadLength; i++)
 											data[i] = this.sendQueue.Dequeue();
 									}
 								}
