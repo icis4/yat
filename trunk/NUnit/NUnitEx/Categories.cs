@@ -161,177 +161,29 @@ namespace NUnitEx
 		}
 	}
 
-	/// <summary>
-	/// A selection of standard duration categories, kind-of-logarithmically distributed.
-	/// </summary>
-	public static class StandardDurationCategory
+	/// <summary></summary>
+	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute will be derived for specialization.")]
+	[CLSCompliant(false)]
+	public class DayDurationCategoryAttribute : DurationCategoryAttribute
 	{
-		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-		[CLSCompliant(false)]
-		public sealed class Second1Attribute : SecondDurationCategoryAttribute
+		/// <summary></summary>
+		public DayDurationCategoryAttribute(int days)
+			: base(days, 0, 0, 0, 0, CategoryStrings.Duration + " is around " + days.ToString(CultureInfo.CurrentCulture) + " days" + ((days == 1) ? "" : "s"))
 		{
-			/// <summary></summary>
-			public Second1Attribute()
-				: base(1)
-			{
-			}
 		}
 
-		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-		[CLSCompliant(false)]
-		public sealed class Seconds4Attribute : SecondDurationCategoryAttribute
+		/// <summary></summary>
+		public int Days
 		{
-			/// <summary></summary>
-			public Seconds4Attribute()
-				: base(4)
-			{
-			}
-		}
-
-		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-		[CLSCompliant(false)]
-		public sealed class Seconds15Attribute : SecondDurationCategoryAttribute
-		{
-			/// <summary></summary>
-			public Seconds15Attribute()
-				: base(15)
-			{
-			}
-		}
-
-		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-		[CLSCompliant(false)]
-		public sealed class Minute1Attribute : MinuteDurationCategoryAttribute
-		{
-			/// <summary></summary>
-			public Minute1Attribute()
-				: base(1)
-			{
-			}
-		}
-
-		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-		[CLSCompliant(false)]
-		public sealed class Minutes4Attribute : MinuteDurationCategoryAttribute
-		{
-			/// <summary></summary>
-			public Minutes4Attribute()
-				: base(4)
-			{
-			}
-		}
-
-		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-		[CLSCompliant(false)]
-		public sealed class Minutes15Attribute : MinuteDurationCategoryAttribute
-		{
-			/// <summary></summary>
-			public Minutes15Attribute()
-				: base(15)
-			{
-			}
-		}
-
-		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-		[CLSCompliant(false)]
-		public sealed class Hour1Attribute : HourDurationCategoryAttribute
-		{
-			/// <summary></summary>
-			public Hour1Attribute()
-				: base(1)
-			{
-			}
-		}
-
-		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-		[CLSCompliant(false)]
-		public sealed class Hours5Attribute : HourDurationCategoryAttribute
-		{
-			/// <summary></summary>
-			public Hours5Attribute()
-				: base(5)
-			{
-			}
-		}
-
-		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-		[CLSCompliant(false)]
-		public sealed class Hours24Attribute : HourDurationCategoryAttribute
-		{
-			/// <summary></summary>
-			public Hours24Attribute()
-				: base(24)
-			{
-			}
-		}
-
-		/// <summary>
-		/// Returns the most appropriate standard attribute.
-		/// </summary>
-		[CLSCompliant(false)]
-		public static DurationCategoryAttribute AttributeFrom(TimeSpan ts)
-		{
-			// Everything up to twice the value is accepted:
-
-			if (ts.TotalSeconds < 2)
-				return (new Second1Attribute());
-
-			if (ts.TotalSeconds < 8)
-				return (new Seconds4Attribute());
-
-			if (ts.TotalSeconds < 30)
-				return (new Seconds15Attribute());
-
-			if (ts.TotalMinutes < 2)
-				return (new Minute1Attribute());
-
-			if (ts.TotalMinutes < 8)
-				return (new Minutes4Attribute());
-
-			if (ts.TotalMinutes < 30)
-				return (new Minutes15Attribute());
-
-			if (ts.TotalHours < 2)
-				return (new Hour1Attribute());
-
-			if (ts.TotalHours < 10)
-				return (new Hours5Attribute());
-
-			if (ts.TotalHours < 48)
-				return (new Hours24Attribute());
-
-			return (new InfiniteDurationCategoryAttribute());
-		}
-
-		/// <summary>
-		/// Returns the corresponding name suffix.
-		/// </summary>
-		public static string CaptionFrom(TimeSpan ts)
-		{
-			// Prevent "0 s" captions, everything two thirds of a second shall be identified as "1 s":
-
-			if (ts.TotalMilliseconds < 666.666)
-				return (string.Format(CultureInfo.CurrentCulture, "{0:F0} ms", ts.TotalMilliseconds));
-
-			// Everything up to twice the boundary:
-
-			if (ts.TotalSeconds < 120)
-				return (string.Format(CultureInfo.CurrentCulture, "{0:F0} s", ts.TotalSeconds));
-
-			if (ts.TotalMinutes < 120)                                    // m is meter!
-				return (string.Format(CultureInfo.CurrentCulture, "{0:F0} min", ts.TotalMinutes));
-
-			if (ts.TotalHours < 48)
-				return (string.Format(CultureInfo.CurrentCulture, "{0:F0} h", ts.TotalHours));
-
-			return (string.Format(CultureInfo.CurrentCulture, "{0:F0} d", ts.TotalDays));
+			get { return ((int)Duration.TotalDays); }
 		}
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[CLSCompliant(false)]
+	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute will be derived by the standard specialization.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public sealed class InfiniteDurationCategoryAttribute : DurationCategoryAttribute
+	public class InfiniteDurationCategoryAttribute : DurationCategoryAttribute
 	{
 		/// <summary></summary>
 		public InfiniteDurationCategoryAttribute()
