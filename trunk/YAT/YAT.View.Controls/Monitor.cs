@@ -489,7 +489,7 @@ namespace YAT.View.Controls
 			get { return (textBox_CopyOfActiveLine.Focused); }
 		}
 
-////#if (DEBUG) must not be active, configuration shall always be available.
+////#if (DEBUG) must not be active, configuration must always be available for designer.
 
 		/// <remarks>
 		/// Flag in a addition to configuration item to allow selective debugging of just a single
