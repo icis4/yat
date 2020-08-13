@@ -29,7 +29,7 @@
 
 #if (DEBUG)
 
-	// Enable debugging of update:
+	// Enable debugging of update if 'DebugEnabled' is set:
 ////#define DEBUG_UPDATE
 
 #endif // DEBUG
@@ -67,6 +67,12 @@ namespace MKY.Time
 
 		private Queue<TimeStampItem<int>> queue;
 		private int value;
+
+		private DateTime lastItemTimeStamp; // = DateTime.MinValue;
+
+	#if (DEBUG_UPDATE)
+		private bool debugEnabled; // = false;
+	#endif
 
 		#endregion
 
@@ -118,7 +124,7 @@ namespace MKY.Time
 		/// <remarks>Set to 0.001 to get <see cref="Value"/> in items per microsecond.</remarks>
 		/// <remarks>Set to 1 to get <see cref="Value"/> in items per millisecond.</remarks>
 		/// <remarks>Set to 1000 to get <see cref="Value"/> in items per second.</remarks>
-		public double Interval
+		public virtual double Interval
 		{
 			get { return (this.interval); }
 			set
@@ -139,7 +145,7 @@ namespace MKY.Time
 		/// and the values are weighed. The value of the less recent interval is weighed most, more
 		/// recent intervals are weighed less.
 		/// </remarks>
-		public double Window
+		public virtual double Window
 		{
 			get { return (this.window); }
 			set
@@ -163,11 +169,56 @@ namespace MKY.Time
 		/// <item><description>Client does not need to round the value.</description></item>
 		/// </list>
 		/// </remarks>
-		public int Value
+		public virtual int Value
 		{
 			get { return (this.value); }
-			set { this.value = value;  }
 		}
+
+		/// <summary>
+		/// The time stamp of the last update.
+		/// </summary>
+		public virtual DateTime LastItemTimeStamp
+		{
+			get { return (this.lastItemTimeStamp); }
+		}
+
+		/// <summary></summary>
+		public virtual bool LastItemWasWithinCurrentInterval
+		{
+			get
+			{
+				if (LastItemTimeStamp == default(DateTime))
+					return (false);
+				else
+					return (((DateTime.Now - LastItemTimeStamp).TotalMilliseconds) < Interval);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual int NumberOfIntervalsSinceLastItem
+		{
+			get
+			{
+				if (LastItemTimeStamp == default(DateTime))
+					return (0);
+				else
+					return ((int)Math.Floor(((DateTime.Now - LastItemTimeStamp).TotalMilliseconds) / Interval));
+			}
+		}
+
+	#if (DEBUG)
+
+		/// <remarks>
+		/// Flag in a addition to configuration item to allow selective debugging of one or multiple
+		/// rate objects.
+		/// </remarks>
+		public virtual bool DebugEnabled
+		{
+			get { return (this.debugEnabled); }
+			set { this.debugEnabled = value;  }
+		}
+
+	#endif
 
 		#endregion
 
@@ -189,6 +240,8 @@ namespace MKY.Time
 		{
 			var now = DateTime.Now; // A single time stamp for the whole operation.
 
+			this.lastItemTimeStamp = now; // While there may be no need to add, still use this time stamp.
+
 			if (item != 0)
 				return (AddItemAndUpdate(now, item, out value));
 			else // There is no need to add zero-items to queue; improves performance especially in case of frequent updates.
@@ -209,10 +262,12 @@ namespace MKY.Time
 		}
 
 		/// <summary></summary>
-		public virtual bool Update(DateTime timeStamp)
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[CLSCompliant(false)]
+		public virtual bool Update(out int value)
 		{
-			int value;
-			return (Update(timeStamp, out value));
+			var now = DateTime.Now;
+			return (Update(now, out value));
 		}
 
 		/// <summary></summary>
@@ -345,9 +400,14 @@ namespace MKY.Time
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_UPDATE")]
-		private static void DebugUpdate(string message)
+		private void DebugUpdate(string message)
 		{
-			Debug.WriteLine(message);
+		#if (DEBUG_UPDATE)
+			if (DebugEnabled)
+		#endif
+			{
+				Debug.WriteLine(message);
+			}
 		}
 
 		#endregion
