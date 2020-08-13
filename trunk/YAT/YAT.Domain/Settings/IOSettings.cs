@@ -395,24 +395,41 @@ namespace YAT.Domain.Settings
 					case IOType.TcpServer:
 					case IOType.TcpAutoSocket:
 					{
-						// TCP/IP in theory: Less than 6.55 MiBit/s (https://www.switch.ch/network/tools/tcp_throughput/), i.e. less than 820 KiByte/s.
-						// TCP/IP in YAT practise (Stress-4-Huge.txt on two interconnected AutoSockets with YAT 2.2.0): ~22 KiByte/s.
-						return (25);
+						// In theory:
+						// Less than 6.55 MiBit/s (https://www.switch.ch/network/tools/tcp_throughput/), i.e. less than 820 KiByte/s.
+						//
+						// In YAT practise:
+						//  > ~19.5 KiByte/s for [Debug]
+						//  > ~43.6 KiByte/s for [Release]
+						// See 'MKY.IO.Serial.Socket.SocketDefaults' for measurements.
+					#if (DEBUG)
+						return (19.5);
+					#else
+						return (43.6);
+					#endif
 					}
 
 					case IOType.UdpClient:
 					case IOType.UdpServer:
 					case IOType.UdpPairSocket:
 					{
-						// UDP/IP in YAT practise approx. 10% less than TCP/IP.
-						return (22.5);
+						// In YAT practise:
+						// Approx. 5% less than TCP/IP.
+					#if (DEBUG)
+						return (19.5 * 0.95);
+					#else
+						return (43.6 * 0.95);
+					#endif
 					}
 
 					case IOType.UsbSerialHid:
 					{
-						// In theory: 64 KiByte/s (https://www.tracesystemsinc.com/USB_Tutorials_web/USB/B1_USB_Classes/Books/A3_A_Closer_Look_at_HID_Class/slide01.htm).
-						// In YAT practise likely less than above.
-						return (10);
+						// In theory:
+						// 64 KiByte/s (https://www.tracesystemsinc.com/USB_Tutorials_web/USB/B1_USB_Classes/Books/A3_A_Closer_Look_at_HID_Class/slide01.htm).
+						//
+						// In YAT practise:
+						// Likely less.
+						return (20);
 					}
 
 					default:

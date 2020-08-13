@@ -174,8 +174,9 @@ Fixed bugs:
   refresh (feature request #367).
 - Line break detection and processing continues even when exceeding the configured maximum number
   of characters/bytes per line (related to refactoring of element and line processing).
-- Sending of very long lines (in case of e.g. serial COM ports longer than the software buffer,
-  typically 2048 bytes) now works with serial COM ports, UDP/IP sockets and USB Ser/HID (bug #417).
+- Sending of very long lines now also works for TCP/IP based terminals (bug #340).
+- Sending of very long lines in other terminal types (in case of e.g. serial COM ports longer than
+  the software buffer, typically 2048 bytes) works again (bug #417).
 - Handling of [Preferences... > ...take serial number/string into account] fixed (rel. to bug #480).
 
 Limitations and known issues:
