@@ -111,6 +111,7 @@ New:
   Especially useful as predefined command e.g. "\!(Port(10))\!(NoEOL())" to change port by shortcut.
 - Additional keywords \!(RtsOn|Off|Toggle) and \!(DtrOn|Off|Toggle) allowing to change serial COM
   port signals on-the-fly (feature request #408). Also work with predefined commands and shortcuts.
+- Additional option to disable warnings like "XOff state, retaining data..." on sending.
 - Automatic actions and responses now support multiple triggers within a line or chunk.
 - Automatic actions and responses now support text triggers, optionally incl. regular expression.
 - Automatic actions and responses now list recent used trigger and response texts.

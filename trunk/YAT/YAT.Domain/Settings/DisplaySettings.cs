@@ -106,6 +106,11 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		public const bool IncludeIOControlDefault = false;
 
+		/// <remarks>
+		/// Prepended "IO" for orthogonality with <see cref="IncludeIOControl"/>.
+		/// </remarks>
+		public const bool IncludeIOWarningsDefault = true;
+
 		/// <summary></summary>
 		public const int MaxLineCountDefault = 1000;
 
@@ -153,6 +158,7 @@ namespace YAT.Domain.Settings
 		private bool   showDuration;
 		private string timeDurationFormat;
 		private bool   includeIOControl;
+		private bool   includeIOWarnings;
 
 		private bool directionLineBreakEnabled;
 		private bool deviceLineBreakEnabled;
@@ -211,6 +217,7 @@ namespace YAT.Domain.Settings
 			ShowDuration        = rhs.ShowDuration;
 			TimeDurationFormat  = rhs.TimeDurationFormat;
 			IncludeIOControl    = rhs.IncludeIOControl;
+			IncludeIOWarnings   = rhs.IncludeIOWarnings;
 
 			DirectionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
 			DeviceLineBreakEnabled    = rhs.DeviceLineBreakEnabled;
@@ -253,6 +260,7 @@ namespace YAT.Domain.Settings
 			ShowDuration        = ShowDurationDefault;
 			TimeDurationFormat  = TimeDurationFormatDefault;
 			IncludeIOControl    = IncludeIOControlDefault;
+			IncludeIOWarnings   = IncludeIOWarningsDefault;
 
 			DirectionLineBreakEnabled = DirectionLineBreakEnabledDefault;
 			DeviceLineBreakEnabled    = DeviceLineBreakEnabledDefault;
@@ -619,6 +627,23 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <remarks>
+		/// Prepended "IO" for orthogonality with <see cref="IncludeIOControl"/>.
+		/// </remarks>
+		[XmlElement("IncludeIOWarnings")]
+		public virtual bool IncludeIOWarnings
+		{
+			get { return (this.includeIOWarnings); }
+			set
+			{
+				if (this.includeIOWarnings != value)
+				{
+					this.includeIOWarnings = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <remarks>
 		/// Part of the text/binary independent settings to ease handling the dependency
 		/// to <see cref="ShowDirection"/> in the advanced settings dialog.
 		/// </remarks>
@@ -889,6 +914,7 @@ namespace YAT.Domain.Settings
 				hashCode = (hashCode * 397) ^  ShowDuration       .GetHashCode();
 				hashCode = (hashCode * 397) ^ (TimeDurationFormat != null ? TimeDurationFormat.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^  IncludeIOControl   .GetHashCode();
+				hashCode = (hashCode * 397) ^  IncludeIOWarnings  .GetHashCode();
 
 				hashCode = (hashCode * 397) ^  DirectionLineBreakEnabled.GetHashCode();
 				hashCode = (hashCode * 397) ^  DeviceLineBreakEnabled   .GetHashCode();
@@ -950,6 +976,7 @@ namespace YAT.Domain.Settings
 				ShowDuration                       .Equals(other.ShowDuration)        &&
 				StringEx.EqualsOrdinal(TimeDurationFormat, other.TimeDurationFormat)  &&
 				IncludeIOControl                   .Equals(other.IncludeIOControl)    &&
+				IncludeIOWarnings                  .Equals(other.IncludeIOWarnings)   &&
 
 				DirectionLineBreakEnabled.Equals(other.DirectionLineBreakEnabled) &&
 				DeviceLineBreakEnabled   .Equals(other.DeviceLineBreakEnabled)    &&
