@@ -1773,6 +1773,7 @@ namespace YAT.Domain
 			{
 				this.rawTerminal.IOChanged         += rawTerminal_IOChanged;
 				this.rawTerminal.IOControlChanged  += rawTerminal_IOControlChanged;
+				this.rawTerminal.IOWarning         += rawTerminal_IOWarning;
 				this.rawTerminal.IOError           += rawTerminal_IOError;
 
 				this.rawTerminal.ChunkSent         += rawTerminal_ChunkSent;
@@ -1787,6 +1788,7 @@ namespace YAT.Domain
 			{
 				this.rawTerminal.IOChanged         -= rawTerminal_IOChanged;
 				this.rawTerminal.IOControlChanged  -= rawTerminal_IOControlChanged;
+				this.rawTerminal.IOWarning         -= rawTerminal_IOWarning;
 				this.rawTerminal.IOError           -= rawTerminal_IOError;
 
 				this.rawTerminal.ChunkSent         -= rawTerminal_ChunkSent;
@@ -1841,6 +1843,26 @@ namespace YAT.Domain
 			}
 		}
 
+		private void rawTerminal_IOWarning(object sender, IOWarningEventArgs e)
+		{
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
+
+			// Do not lock (ClearRefreshEmptySyncObj)! That would lead to deadlocks if close/dispose
+			// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread!
+			{
+				switch (e.Direction) // Warnings are only shown as terminal text:
+				{
+					case IODirection.None:  InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.None,  e.Message, true)); break;
+					case IODirection.Rx:    InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx,    e.Message, true)); break;
+					case IODirection.Bidir: InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Bidir, e.Message, true)); break;
+					case IODirection.Tx:    InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Tx,    e.Message, true)); break;
+
+					default: throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + e.Direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "e"));
+				}
+			}
+		}
+
 		private void rawTerminal_IOError(object sender, IOErrorEventArgs e)
 		{
 			if (IsInDisposal) // Ensure to not handle event during closing anymore.
@@ -1852,29 +1874,34 @@ namespace YAT.Domain
 				var spe = (e as SerialPortErrorEventArgs);
 				if (spe != null)
 				{
-					// Handle serial port errors whenever possible:
-					switch (spe.SerialPortError)
+					switch (spe.SerialPortError) // Handle serial port errors where known:
 					{                                                                               // Same as 'spe.Direction'.
-						case System.IO.Ports.SerialError.Frame:    InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx, RxFramingErrorString));        break;
-						case System.IO.Ports.SerialError.Overrun:  InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx, RxBufferOverrunErrorString));  break;
-						case System.IO.Ports.SerialError.RXOver:   InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx, RxBufferOverflowErrorString)); break;
-						case System.IO.Ports.SerialError.RXParity: InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx, RxParityErrorString));         break;
-						case System.IO.Ports.SerialError.TXFull:   InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Tx, TxBufferFullErrorString));     break;
-						default:                                   OnIOError(e);                                                                                                               break;
+						case System.IO.Ports.SerialError.Frame:    InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx, RxFramingErrorString));        return;
+						case System.IO.Ports.SerialError.Overrun:  InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx, RxBufferOverrunErrorString));  return;
+						case System.IO.Ports.SerialError.RXOver:   InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx, RxBufferOverflowErrorString)); return;
+						case System.IO.Ports.SerialError.RXParity: InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx, RxParityErrorString));         return;
+						case System.IO.Ports.SerialError.TXFull:   InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Tx, TxBufferFullErrorString));     return;
+
+						default: break; // Fall-through to default behavior.
 					}
 				}
-				else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Rx)) // Acceptable errors are only shown as terminal text.
+				else if (e.Severity == IOErrorSeverity.Acceptable) // Acceptable errors are only shown as terminal text:
 				{
-					InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx, e.Message, true));
+					switch (e.Direction)
+					{
+						case IODirection.None:  InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.None,  e.Message, true)); return;
+						case IODirection.Rx:    InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx,    e.Message, true)); return;
+						case IODirection.Bidir: InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Bidir, e.Message, true)); return;
+						case IODirection.Tx:    InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Tx,    e.Message, true)); return;
+
+						default: throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + e.Direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "e"));
+					}
 				}
-				else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Tx)) // Acceptable errors are only shown as terminal text.
-				{
-					InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Tx, e.Message, true));
-				}
-				else
-				{
-					OnIOError(e);
-				}
+
+				// Default behavior = show in terminal text and forward event:
+
+				InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, (Direction)e.Direction, e.Message));
+				OnIOError(e);
 			}
 		}
 

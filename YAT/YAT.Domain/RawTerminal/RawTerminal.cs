@@ -183,6 +183,9 @@ namespace YAT.Domain
 		public event EventHandler<EventArgs<DateTime>> IOControlChanged;
 
 		/// <summary></summary>
+		public event EventHandler<IOWarningEventArgs> IOWarning;
+
+		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
@@ -673,6 +676,7 @@ namespace YAT.Domain
 			{
 				this.io.IOChanged        += io_IOChanged;
 				this.io.IOControlChanged += io_IOControlChanged;
+				this.io.IOWarning        += io_IOWarning;
 				this.io.IOError          += io_IOError;
 				this.io.DataReceived     += io_DataReceived;
 				this.io.DataSent         += io_DataSent;
@@ -685,6 +689,7 @@ namespace YAT.Domain
 			{
 				this.io.IOChanged        -= io_IOChanged;
 				this.io.IOControlChanged -= io_IOControlChanged;
+				this.io.IOWarning        -= io_IOWarning;
 				this.io.IOError          -= io_IOError;
 				this.io.DataReceived     -= io_DataReceived;
 				this.io.DataSent         -= io_DataSent;
@@ -711,6 +716,12 @@ namespace YAT.Domain
 		{
 			if (IsUndisposed) // Ensure to not handle event during closing anymore.
 				OnIOControlChanged(e);
+		}
+
+		private void io_IOWarning(object sender, MKY.IO.Serial.IOWarningEventArgs e)
+		{
+			if (IsUndisposed) // Ensure to not handle event during closing anymore.
+				OnIOWarning(new IOWarningEventArgs((IODirection)e.Direction, e.Message, e.TimeStamp));
 		}
 
 		private void io_IOError(object sender, MKY.IO.Serial.IOErrorEventArgs e)
@@ -826,6 +837,13 @@ namespace YAT.Domain
 		{
 			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseSync(IOControlChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnIOWarning(IOWarningEventArgs e)
+		{
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
+				this.eventHelper.RaiseSync<IOWarningEventArgs>(IOWarning, this, e);
 		}
 
 		/// <summary></summary>
