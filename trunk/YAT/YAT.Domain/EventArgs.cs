@@ -120,6 +120,33 @@ namespace YAT.Domain
 	}
 
 	/// <summary></summary>
+	public class IOWarningEventArgs : EventArgs
+	{
+		/// <summary></summary>
+		public IODirection Direction { get; }
+
+		/// <summary></summary>
+		public string Message { get; }
+
+		/// <summary></summary>
+		public DateTime TimeStamp { get; }
+
+		/// <summary></summary>
+		public IOWarningEventArgs(IODirection direction, string message)
+			: this(direction, message, DateTime.Now)
+		{
+		}
+
+		/// <summary></summary>
+		public IOWarningEventArgs(IODirection direction, string message, DateTime timeStamp)
+		{
+			Direction = direction;
+			Message   = message;
+			TimeStamp = timeStamp;
+		}
+	}
+
+	/// <summary></summary>
 	public class IOErrorEventArgs : EventArgs
 	{
 		/// <summary></summary>
