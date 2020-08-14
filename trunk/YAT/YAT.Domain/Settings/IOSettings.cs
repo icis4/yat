@@ -287,9 +287,9 @@ namespace YAT.Domain.Settings
 						return (0);
 					}
 
-					case IOType.SerialPort:                                             // 25% typical overhead, incl. safety margin. But attention, it's just a 'typical' value:
+					case IOType.SerialPort:                                             // 20% typical overhead, incl. safety margin. But attention, it's just a 'typical' value:
 					{                                                                  //      Ignore fact that overhead increases with higher baud rates.
-						return (this.serialPort.Communication.FramesPerMillisecond * 0.75); // Ignore mismatch in case 7 data bits are being used.
+						return (this.serialPort.Communication.FramesPerMillisecond * 0.80); // Ignore mismatch in case 7 data bits are being used.
 					}                                                                       // Ignore mismatch in case e.g. 16-bit bytes are being used.
 
 					case IOType.TcpClient:
