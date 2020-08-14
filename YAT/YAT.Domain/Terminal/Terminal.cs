@@ -1848,17 +1848,20 @@ namespace YAT.Domain
 			if (IsInDisposal) // Ensure to not handle event during closing anymore.
 				return;
 
-			// Do not lock (ClearRefreshEmptySyncObj)! That would lead to deadlocks if close/dispose
-			// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread!
+			if (TerminalSettings.Display.IncludeIOWarnings)
 			{
-				switch (e.Direction) // Warnings are only shown as terminal text:
+				// Do not lock (ClearRefreshEmptySyncObj)! That would lead to deadlocks if close/dispose
+				// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread!
 				{
-					case IODirection.None:  InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.None,  e.Message, true)); break;
-					case IODirection.Rx:    InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx,    e.Message, true)); break;
-					case IODirection.Bidir: InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Bidir, e.Message, true)); break;
-					case IODirection.Tx:    InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Tx,    e.Message, true)); break;
+					switch (e.Direction) // Warnings are only shown as terminal text:
+					{
+						case IODirection.None:  InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.None,  e.Message, true)); break;
+						case IODirection.Rx:    InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx,    e.Message, true)); break;
+						case IODirection.Bidir: InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Bidir, e.Message, true)); break;
+						case IODirection.Tx:    InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Tx,    e.Message, true)); break;
 
-					default: throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + e.Direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "e"));
+						default: throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + e.Direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "e"));
+					}
 				}
 			}
 		}

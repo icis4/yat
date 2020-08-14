@@ -166,6 +166,14 @@ Either, if the size of the hardware buffer is known, tell YAT to reduce
 the software buffer accordingly, or tell YAT to limit sending by one
 of the other settings.</value>
   </data>
+  <data name="checkBox_IncludeIOWarnings.ToolTip" xml:space="preserve">
+    <value>Include I/O warnings in monitor view, for...
+...serial COM ports: Flow control (hardware, software), break state.
+...USB Ser/HID ports: Flow control (software).
+
+Example:
+"XOff state, retaining data..."</value>
+  </data>
   <data name="checkBox_GlueCharsOfLine.ToolTip" xml:space="preserve">
     <value>This option reduces the number of line breaks in the
 [Bidirectional Panel] when direction (or I/O device)
