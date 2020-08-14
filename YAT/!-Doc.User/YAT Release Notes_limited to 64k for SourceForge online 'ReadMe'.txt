@@ -122,7 +122,7 @@ New:
 Important changes:
 - Using term "I/O" instead of "Port" for terminal, settings,... for reducing mix-up of term in YAT
   with TCP and UDP "Port" terminology, where a "Port" only is a part of the overall "I/O" subsystem.
-- High FTDI baud rates added to list of standard baud rates (feature request #398).
+- High FTDI and Prolific baud rates added to list of standard baud rates (feature request #398).
 - Text terminals: Now by default using UTF-8 instead of .NET's [Encoding.Default] that is limited to
   an ANSI code page, e.g. Windows-1252 in Western Europe (related to former bugs #427, #428, #429).
 - Sending refactored (precondition for feature requests #19, #333, #387 and fix of bug #176).
