@@ -309,10 +309,10 @@ namespace MKY.IO.Serial.Socket
 								Monitor.Exit(this.dataEventSyncObj);
 							}
 						}
-						else // Monitor.TryEnter()
-						{
-							DebugMessage("ReceiveThread() monitor has timed out, trying again...");
-						}
+					////else // Monitor.TryEnter()
+					////{
+					////	DebugMessage("ReceiveThread() monitor has timed out, trying again...");
+					////}
 
 						// Note the Thread.Sleep(TimeSpan.Zero) further above.
 

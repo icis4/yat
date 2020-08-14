@@ -245,6 +245,10 @@ namespace MKY.IO.Serial.Socket
 								Monitor.Exit(this.dataEventSyncObj);
 							}
 						}
+					////else // Monitor.TryEnter()
+					////{
+					////	DebugMessage("SendThread() monitor has timed out, trying again...");
+					////}
 
 						// Note the Thread.Sleep(TimeSpan.Zero) further above.
 
@@ -349,10 +353,10 @@ namespace MKY.IO.Serial.Socket
 								Monitor.Exit(this.dataEventSyncObj);
 							}
 						}
-						else // Monitor.TryEnter()
-						{
-							DebugMessage("DataSentThread() monitor has timed out, trying again...");
-						}
+					////else // Monitor.TryEnter()
+					////{
+					////	DebugMessage("DataSentThread() monitor has timed out, trying again...");
+					////}
 
 						// Note the Thread.Sleep(TimeSpan.Zero) further above.
 
