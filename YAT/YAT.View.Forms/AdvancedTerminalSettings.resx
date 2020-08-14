@@ -145,12 +145,15 @@ Either, tell YAT to limit writing to the speed the baud rate permits
 other settings.</value>
   </data>
   <data name="checkBox_OutputBufferSize.ToolTip" xml:space="preserve">
-    <value>Limiting the output buffer improves the responsiveness of hardware
-and/or software flow control, i.e. sending will be suspended sooner.
+    <value>This settings overrides the system's default of typically 2048 bytes.
+
 Enlarging the output buffer may increase throughput.
 
-Limiting the size of the output buffer also prevents data loss for e.g.
-USB/COM and SPI/COM converters that have a hardware output
+Limiting the output buffer may improve the responsiveness of flow
+flow control, i.e. sending will be suspended sooner.
+
+Limiting the size of the output buffer may also prevent data loss for
+e.g. USB/COM and SPI/COM converters that have a hardware output
 buffer that is much smaller than the typical software output buffer
 but do not feed the buffer state back to the respective driver.
 
