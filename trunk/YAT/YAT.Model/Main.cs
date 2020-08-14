@@ -844,18 +844,18 @@ namespace YAT.Model
 				if (this.commandLineArgs.OptionIsGiven("SerialPortAliveMonitor"))
 				{
 					if (this.commandLineArgs.SerialPortAliveMonitor == 0)
-						terminalSettings.IO.SerialPort.AliveMonitor = new MKY.IO.Serial.AutoInterval(false, 0);
+						terminalSettings.IO.SerialPort.AliveMonitor = new MKY.IO.Serial.IntervalSettingTuple(false, 0);
 					else if (this.commandLineArgs.SerialPortAliveMonitor >= MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorMinInterval)
-						terminalSettings.IO.SerialPort.AliveMonitor = new MKY.IO.Serial.AutoInterval(true, this.commandLineArgs.SerialPortAliveMonitor);
+						terminalSettings.IO.SerialPort.AliveMonitor = new MKY.IO.Serial.IntervalSettingTuple(true, this.commandLineArgs.SerialPortAliveMonitor);
 					else
 						return (false);
 				}
 				if (this.commandLineArgs.OptionIsGiven("SerialPortAutoReopen"))
 				{
 					if (this.commandLineArgs.SerialPortAutoReopen == 0)
-						terminalSettings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.AutoInterval(false, 0);
+						terminalSettings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.IntervalSettingTuple(false, 0);
 					else if (this.commandLineArgs.SerialPortAutoReopen >= MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenMinInterval)
-						terminalSettings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.AutoInterval(true, this.commandLineArgs.SerialPortAutoReopen);
+						terminalSettings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.IntervalSettingTuple(true, this.commandLineArgs.SerialPortAutoReopen);
 					else
 						return (false);
 				}
@@ -922,9 +922,9 @@ namespace YAT.Model
 				    this.commandLineArgs.OptionIsGiven("TCPAutoReconnect"))
 				{
 					if (this.commandLineArgs.TcpAutoReconnect == 0)
-						terminalSettings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoInterval(false, 0);
+						terminalSettings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.IntervalSettingTuple(false, 0);
 					else if (this.commandLineArgs.TcpAutoReconnect >= MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectMinInterval)
-						terminalSettings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoInterval(true, this.commandLineArgs.TcpAutoReconnect);
+						terminalSettings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.IntervalSettingTuple(true, this.commandLineArgs.TcpAutoReconnect);
 					else
 						return (false);
 				}

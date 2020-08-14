@@ -61,10 +61,10 @@ namespace YAT.View.Controls
 
 		private SettingControlsHelper isSettingControls;
 
-		private MKY.IO.Serial.Socket.SocketType socketType               = SocketTypeDefault;
+		private MKY.IO.Serial.Socket.SocketType socketType                = SocketTypeDefault;
 
-		private MKY.IO.Serial.AutoInterval tcpClientAutoReconnect        = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
-		private MKY.IO.Serial.Socket.UdpServerSendMode udpServerSendMode = UdpServerSendModeDefault;
+		private MKY.IO.Serial.IntervalSettingTuple tcpClientAutoReconnect = MKY.IO.Serial.Socket.SocketSettings.TcpClientAutoReconnectDefault;
+		private MKY.IO.Serial.Socket.UdpServerSendMode udpServerSendMode  = UdpServerSendModeDefault;
 
 		#endregion
 
@@ -130,7 +130,7 @@ namespace YAT.View.Controls
 		/// </remarks>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public MKY.IO.Serial.AutoInterval TcpClientAutoReconnect
+		public MKY.IO.Serial.IntervalSettingTuple TcpClientAutoReconnect
 		{
 			get { return (this.tcpClientAutoReconnect); }
 			set

@@ -42,8 +42,8 @@ namespace YAT.Model.Settings
 
 		private MKY.IO.Ports.SerialPortId serialPortId;
 		private MKY.IO.Serial.SerialPort.SerialCommunicationSettings serialPortCommunication;
-		private MKY.IO.Serial.AutoInterval serialPortAliveMonitor;
-		private MKY.IO.Serial.AutoInterval serialPortAutoReopen;
+		private MKY.IO.Serial.IntervalSettingTuple serialPortAliveMonitor;
+		private MKY.IO.Serial.IntervalSettingTuple serialPortAutoReopen;
 
 		private IPHostEx socketRemoteHost;
 		private int socketRemoteTcpPort;
@@ -52,7 +52,7 @@ namespace YAT.Model.Settings
 		private IPFilterEx socketLocalFilter;
 		private int socketLocalTcpPort;
 		private int socketLocalUdpPort;
-		private MKY.IO.Serial.AutoInterval tcpClientAutoReconnect;
+		private MKY.IO.Serial.IntervalSettingTuple tcpClientAutoReconnect;
 		private MKY.IO.Serial.Socket.UdpServerSendMode udpServerSendMode;
 
 		private MKY.IO.Usb.HidDeviceInfo usbSerialHidDeviceInfo;
@@ -236,7 +236,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("SerialPortAliveMonitor")]
-		public virtual MKY.IO.Serial.AutoInterval SerialPortAliveMonitor
+		public virtual MKY.IO.Serial.IntervalSettingTuple SerialPortAliveMonitor
 		{
 			get { return (this.serialPortAliveMonitor); }
 			set
@@ -251,7 +251,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("SerialPortAutoReopen")]
-		public virtual MKY.IO.Serial.AutoInterval SerialPortAutoReopen
+		public virtual MKY.IO.Serial.IntervalSettingTuple SerialPortAutoReopen
 		{
 			get { return (this.serialPortAutoReopen); }
 			set
@@ -448,7 +448,7 @@ namespace YAT.Model.Settings
 		/// <remarks>Item is already named 'TcpClient', therefore no 'Socket' is prepended.</remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "A type shall spell 'Tcp' like this...")]
 		[XmlElement("TcpClientAutoReconnect")]
-		public virtual MKY.IO.Serial.AutoInterval TcpClientAutoReconnect
+		public virtual MKY.IO.Serial.IntervalSettingTuple TcpClientAutoReconnect
 		{
 			get { return (this.tcpClientAutoReconnect); }
 			set

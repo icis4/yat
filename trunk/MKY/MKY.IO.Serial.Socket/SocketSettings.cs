@@ -85,9 +85,9 @@ namespace MKY.IO.Serial.Socket
 		/// Must be implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
-		public static AutoInterval TcpClientAutoReconnectDefault
+		public static IntervalSettingTuple TcpClientAutoReconnectDefault
 		{
-			get { return (new AutoInterval(true, 500)); }
+			get { return (new IntervalSettingTuple(true, 500)); }
 		}
 
 		/// <summary></summary>
@@ -116,7 +116,7 @@ namespace MKY.IO.Serial.Socket
 		private int localTcpPort;
 		private int localUdpPort;
 
-		private AutoInterval tcpClientAutoReconnect;
+		private IntervalSettingTuple tcpClientAutoReconnect;
 		private UdpServerSendMode udpServerSendMode;
 
 		#endregion
@@ -186,7 +186,7 @@ namespace MKY.IO.Serial.Socket
 		/// There potentially is additional code that needs to be run within the property method.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public SocketSettings(SocketType type, string remoteHost, int remoteTcpPort, int remoteUdpPort, IPNetworkInterfaceDescriptorPair localInterface, string localFilter, int localTcpPort, int localUdpPort, AutoInterval tcpClientAutoReconnect, UdpServerSendMode udpServerSendMode = UdpServerSendModeDefault)
+		public SocketSettings(SocketType type, string remoteHost, int remoteTcpPort, int remoteUdpPort, IPNetworkInterfaceDescriptorPair localInterface, string localFilter, int localTcpPort, int localUdpPort, IntervalSettingTuple tcpClientAutoReconnect, UdpServerSendMode udpServerSendMode = UdpServerSendModeDefault)
 		{
 			Type           = type;
 
@@ -514,7 +514,7 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary></summary>
 		[XmlElement("TcpClientAutoReconnect")]
-		public virtual AutoInterval TcpClientAutoReconnect
+		public virtual IntervalSettingTuple TcpClientAutoReconnect
 		{
 			get { return (this.tcpClientAutoReconnect); }
 			set
@@ -751,7 +751,7 @@ namespace MKY.IO.Serial.Socket
 																	if (bool.TryParse(sa[9], out arEnabled) &&
 																	    int.TryParse(sa[10], out arInterval))
 																	{
-																		var autoRetry = new AutoInterval(arEnabled, arInterval);
+																		var autoRetry = new IntervalSettingTuple(arEnabled, arInterval);
 
 																		if (sa.Length > 11)
 																		{

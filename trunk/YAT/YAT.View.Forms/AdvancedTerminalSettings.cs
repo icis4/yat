@@ -803,9 +803,9 @@ namespace YAT.View.Forms
 			int size;
 			if (int.TryParse(textBox_MaxChunkSize.Text, out size) && (size >= 1) && (size <= maxSize))
 			{
-				MKY.IO.Serial.SerialPort.ChunkSize sr = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize;
-				sr.Size = size;
-				this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize = sr;
+				MKY.IO.Serial.SerialPort.SizeSettingTuple cs = this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize;
+				cs.Size = size;
+				this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize = cs;
 			}
 			else
 			{
