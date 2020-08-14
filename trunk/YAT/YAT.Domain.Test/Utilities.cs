@@ -208,7 +208,7 @@ namespace YAT.Domain.Test
 			if (settings.TerminalType == TerminalType.Text)
 				verificationTime = (45E-3 * byteCount);
 			else                       // Result is in ms, not us!
-				verificationTime = (100E-3 * byteCount);; // [Binary] takes longer because formatting hex values is more time consuming than appending characters.
+				verificationTime = (100E-3 * byteCount); // [Binary] takes longer because formatting hex values is more time consuming than appending characters.
 
 			return (overheadBase + verificationTime);
 		}

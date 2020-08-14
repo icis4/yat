@@ -1284,7 +1284,7 @@ namespace MKY.IO.Ports
 				// Note that this event is raised synchronously even though there is the deadlock
 				// issue documented on top. Reason: This SerialPortEx shall behave the same as the
 				// base implementation SerialPort. To work around the issue, a client class shall
-				// ensure that these event are handled asynchronously.
+				// ensure that these events are handled asynchronously.
 			}
 
 			OnDataReceived(new SerialDataReceivedEventArgs(e.EventType));
@@ -1292,7 +1292,7 @@ namespace MKY.IO.Ports
 			// Note that this event is raised synchronously even though there is the deadlock
 			// issue documented on top. Reason: This SerialPortEx shall behave the same as the
 			// base implementation SerialPort. To work around the issue, a client class shall
-			// ensure that these event are handled asynchronously.
+			// ensure that these events are handled asynchronously.
 		}
 
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "SerialPort.PinChanged: Only one event handler can execute at a time.")]
@@ -1351,7 +1351,7 @@ namespace MKY.IO.Ports
 			// Note that this event is raised synchronously even though there is the deadlock
 			// issue documented on top. Reason: This SerialPortEx shall behave the same as the
 			// base implementation SerialPort. To work around the issue, a client class shall
-			// ensure that these event are handled asynchronously.
+			// ensure that these events are handled asynchronously.
 		}
 
 		private void base_ErrorReceived(object sender, System.IO.Ports.SerialErrorReceivedEventArgs e)
@@ -1361,7 +1361,7 @@ namespace MKY.IO.Ports
 			// Note that this event is raised synchronously even though there is the deadlock
 			// issue documented on top. Reason: This SerialPortEx shall behave the same as the
 			// base implementation SerialPort. To work around the issue, a client class shall
-			// ensure that these event are handled asynchronously.
+			// ensure that these events are handled asynchronously.
 		}
 
 		#endregion
