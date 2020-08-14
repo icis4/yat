@@ -168,7 +168,7 @@ namespace NUnitEx
 	{
 		/// <summary></summary>
 		public DayDurationCategoryAttribute(int days)
-			: base(days, 0, 0, 0, 0, CategoryStrings.Duration + " is around " + days.ToString(CultureInfo.CurrentCulture) + " days" + ((days == 1) ? "" : "s"))
+			: base(days, 0, 0, 0, 0, CategoryStrings.Duration + " is around " + days.ToString(CultureInfo.CurrentCulture) + " day" + ((days == 1) ? "" : "s"))
 		{
 		}
 
