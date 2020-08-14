@@ -160,7 +160,7 @@ namespace YAT.Domain.Test.Terminal
 			// Sending terminal (always A):
 
 			settingsA.IO.SerialPort.BufferMaxBaudRate = false;
-			settingsA.IO.SerialPort.MaxChunkSize = new ChunkSize(false, SerialPortSettings.MaxChunkSizeDefault.Size);
+			settingsA.IO.SerialPort.MaxChunkSize = new SizeSettingTuple(false, SerialPortSettings.MaxChunkSizeDefault.Size);
 
 			// Both terminals:
 
@@ -393,7 +393,7 @@ namespace YAT.Domain.Test.Terminal
 			var args = new List<object>(tc.Arguments.Length + 1);      // A 50% timeout margin is required to account for the inaccuracy of the estimate/typical,
 			args.AddRange(tc.Arguments);                               // as well as possible temporary congestion and the amount of tests (RAM consumption = slower).
 			var timeout = Math.Max((int)(estimatedTransmissionTime * 1.50), Utilities.WaitTimeoutForLineTransmission); // 'timeout' must always be at least
-			args.Add(timeout);   // int in ms is enough for ~1000 hours.                                            // the standard line timeout.
+			args.Add(timeout);   // int in ms is enough for ~1000 hours.                                               // the standard line timeout.
 			var timeoutCaption = StandardDurationCategory.CaptionFrom(TimeSpan.FromMilliseconds(timeout));
 
 			// Estimated time and duration category:                    // settingsB are ignored (yet).

@@ -28,7 +28,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public struct AutoInterval : IEquatable<AutoInterval>
+	public struct IntervalSettingTuple : IEquatable<IntervalSettingTuple>
 	{
 		/// <summary></summary>
 		[XmlElement("Enabled")]
@@ -39,7 +39,7 @@ namespace MKY.IO.Serial
 		public int Interval { get; set; }
 
 		/// <summary></summary>
-		public AutoInterval(bool enabled, int interval)
+		public IntervalSettingTuple(bool enabled, int interval)
 		{
 			Enabled  = enabled;
 			Interval = interval;
@@ -91,8 +91,8 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is AutoInterval)
-				return (Equals((AutoInterval)obj));
+			if (obj is IntervalSettingTuple)
+				return (Equals((IntervalSettingTuple)obj));
 			else
 				return (false);
 		}
@@ -104,7 +104,7 @@ namespace MKY.IO.Serial
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(AutoInterval other)
+		public bool Equals(IntervalSettingTuple other)
 		{
 			return
 			(
@@ -116,7 +116,7 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Determines whether the two specified objects have value equality.
 		/// </summary>
-		public static bool operator ==(AutoInterval lhs, AutoInterval rhs)
+		public static bool operator ==(IntervalSettingTuple lhs, IntervalSettingTuple rhs)
 		{
 			return (lhs.Equals(rhs));
 		}
@@ -124,7 +124,7 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Determines whether the two specified objects have value inequality.
 		/// </summary>
-		public static bool operator !=(AutoInterval lhs, AutoInterval rhs)
+		public static bool operator !=(IntervalSettingTuple lhs, IntervalSettingTuple rhs)
 		{
 			return (!(lhs == rhs));
 		}

@@ -56,13 +56,13 @@ namespace YAT.View.Controls
 		// Constants
 		//==========================================================================================
 
-		private const int                                        BaudRateDefault     = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.BaudRateDefault;
-		private const MKY.IO.Ports.DataBits                      DataBitsDefault     = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.DataBitsDefault;
-		private const System.IO.Ports.Parity                     ParityDefault       = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.ParityDefault;
-		private const System.IO.Ports.StopBits                   StopBitsDefault     = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.StopBitsDefault;
-		private const MKY.IO.Serial.SerialPort.SerialFlowControl FlowControlDefault  = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.FlowControlDefault;
-		private static readonly MKY.IO.Serial.AutoInterval       AliveMonitorDefault = MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorDefault;
-		private static readonly MKY.IO.Serial.AutoInterval       AutoReopenDefault   = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
+		private const int                                          BaudRateDefault     = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.BaudRateDefault;
+		private const MKY.IO.Ports.DataBits                        DataBitsDefault     = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.DataBitsDefault;
+		private const System.IO.Ports.Parity                       ParityDefault       = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.ParityDefault;
+		private const System.IO.Ports.StopBits                     StopBitsDefault     = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.StopBitsDefault;
+		private const MKY.IO.Serial.SerialPort.SerialFlowControl   FlowControlDefault  = MKY.IO.Serial.SerialPort.SerialCommunicationSettings.FlowControlDefault;
+		private static readonly MKY.IO.Serial.IntervalSettingTuple AliveMonitorDefault = MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorDefault;
+		private static readonly MKY.IO.Serial.IntervalSettingTuple AutoReopenDefault   = MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault;
 
 		#endregion
 
@@ -78,8 +78,8 @@ namespace YAT.View.Controls
 		private System.IO.Ports.Parity                     parity       = ParityDefault;
 		private System.IO.Ports.StopBits                   stopBits     = StopBitsDefault;
 		private MKY.IO.Serial.SerialPort.SerialFlowControl flowControl  = FlowControlDefault;
-		private MKY.IO.Serial.AutoInterval                 aliveMonitor = AliveMonitorDefault;
-		private MKY.IO.Serial.AutoInterval                 autoReopen   = AutoReopenDefault;
+		private MKY.IO.Serial.IntervalSettingTuple         aliveMonitor = AliveMonitorDefault;
+		private MKY.IO.Serial.IntervalSettingTuple         autoReopen   = AutoReopenDefault;
 
 		#endregion
 
@@ -241,7 +241,7 @@ namespace YAT.View.Controls
 		/// </remarks>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual MKY.IO.Serial.AutoInterval AliveMonitor
+		public virtual MKY.IO.Serial.IntervalSettingTuple AliveMonitor
 		{
 			get { return (this.aliveMonitor); }
 			set
@@ -260,7 +260,7 @@ namespace YAT.View.Controls
 		/// </remarks>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual MKY.IO.Serial.AutoInterval AutoReopen
+		public virtual MKY.IO.Serial.IntervalSettingTuple AutoReopen
 		{
 			get { return (this.autoReopen); }
 			set

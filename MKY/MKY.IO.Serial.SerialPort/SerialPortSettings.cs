@@ -45,9 +45,9 @@ namespace MKY.IO.Serial.SerialPort
 		/// Must be implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
-		public static AutoInterval AliveMonitorDefault
+		public static IntervalSettingTuple AliveMonitorDefault
 		{
-			get { return (new AutoInterval(true, 500)); }
+			get { return (new IntervalSettingTuple(true, 500)); }
 		}
 
 		/// <summary></summary>
@@ -57,9 +57,9 @@ namespace MKY.IO.Serial.SerialPort
 		/// Must be implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
-		public static AutoInterval AutoReopenDefault
+		public static IntervalSettingTuple AutoReopenDefault
 		{
-			get { return (new AutoInterval(true, 2000)); }
+			get { return (new IntervalSettingTuple(true, 2000)); }
 		}
 
 		/// <summary></summary>
@@ -69,9 +69,9 @@ namespace MKY.IO.Serial.SerialPort
 		/// Must be implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
-		public static OutputBufferSize OutputBufferSizeDefault
+		public static SizeSettingTuple OutputBufferSizeDefault
 		{
-			get { return (new OutputBufferSize(false, 2048)); } // 2048 is default of 'SerialPort'.
+			get { return (new SizeSettingTuple(false, 2048)); } // 2048 is default of 'SerialPort'.
 		}
 
 		/// <summary></summary>
@@ -90,9 +90,9 @@ namespace MKY.IO.Serial.SerialPort
 		/// Must be implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
-		public static ChunkSize MaxChunkSizeDefault
+		public static SizeSettingTuple MaxChunkSizeDefault
 		{
-			get { return (new ChunkSize(true, 48)); }
+			get { return (new SizeSettingTuple(true, 48)); }
 		}
 
 		/// <summary>
@@ -102,9 +102,9 @@ namespace MKY.IO.Serial.SerialPort
 		/// Must be implemented as property that creates a new object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same object.
 		/// </remarks>
-		public static SendRate MaxSendRateDefault
+		public static RateSettingTuple MaxSendRateDefault
 		{
-			get { return (new SendRate(false, 48, 10)); }
+			get { return (new RateSettingTuple(false, 48, 10)); }
 		}
 
 		/// <summary></summary>
@@ -135,12 +135,12 @@ namespace MKY.IO.Serial.SerialPort
 
 		private SerialCommunicationSettings communication;
 		private bool signalXOnWhenOpened;
-		private AutoInterval aliveMonitor;
-		private AutoInterval autoReopen;
-		private OutputBufferSize outputBufferSize;
+		private IntervalSettingTuple aliveMonitor;
+		private IntervalSettingTuple autoReopen;
+		private SizeSettingTuple outputBufferSize;
 		private bool bufferMaxBaudRate;
-		private ChunkSize maxChunkSize;
-		private SendRate maxSendRate;
+		private SizeSettingTuple maxChunkSize;
+		private RateSettingTuple maxSendRate;
 
 		private bool ignoreFramingErrors;
 		private bool enableRetainingWarnings;
@@ -325,7 +325,7 @@ namespace MKY.IO.Serial.SerialPort
 
 		/// <summary></summary>
 		[XmlElement("AliveMonitor")]
-		public virtual AutoInterval AliveMonitor
+		public virtual IntervalSettingTuple AliveMonitor
 		{
 			get { return (this.aliveMonitor); }
 			set
@@ -340,7 +340,7 @@ namespace MKY.IO.Serial.SerialPort
 
 		/// <summary></summary>
 		[XmlElement("AutoReopen")]
-		public virtual AutoInterval AutoReopen
+		public virtual IntervalSettingTuple AutoReopen
 		{
 			get { return (this.autoReopen); }
 			set
@@ -358,7 +358,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// not be able to deal with that much data. <see cref="SerialPort"/> for details.
 		/// </summary>
 		[XmlElement("OutputBufferSize")]
-		public virtual OutputBufferSize OutputBufferSize
+		public virtual SizeSettingTuple OutputBufferSize
 		{
 			get { return (this.outputBufferSize); }
 			set
@@ -395,7 +395,7 @@ namespace MKY.IO.Serial.SerialPort
 
 		/// <summary></summary>
 		[XmlElement("MaxChunkSize")]
-		public virtual ChunkSize MaxChunkSize
+		public virtual SizeSettingTuple MaxChunkSize
 		{
 			get { return (this.maxChunkSize); }
 			set
@@ -423,7 +423,7 @@ namespace MKY.IO.Serial.SerialPort
 
 		/// <summary></summary>
 		[XmlElement("MaxSendRate")]
-		public virtual SendRate MaxSendRate
+		public virtual RateSettingTuple MaxSendRate
 		{
 			get { return (this.maxSendRate); }
 			set

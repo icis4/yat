@@ -157,7 +157,7 @@ namespace MKY.IO.Serial.Socket
 		private IPHostEx remoteHost;
 		private int remotePort;
 		private IPNetworkInterfaceEx localInterface;
-		private AutoInterval autoReconnect;
+		private IntervalSettingTuple autoReconnect;
 
 		private SocketState state = SocketState.Reset;
 		private object stateSyncObj = new object();
@@ -264,7 +264,7 @@ namespace MKY.IO.Serial.Socket
 		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
 		public TcpClient(int instanceId, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface)
-			: this(instanceId, remoteHost, remotePort, localInterface, new AutoInterval())
+			: this(instanceId, remoteHost, remotePort, localInterface, new IntervalSettingTuple())
 		{
 		}
 
@@ -272,7 +272,7 @@ namespace MKY.IO.Serial.Socket
 		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
 		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
 		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
-		public TcpClient(IPHost remoteHost, int remotePort, IPNetworkInterface localInterface, AutoInterval autoReconnect)
+		public TcpClient(IPHost remoteHost, int remotePort, IPNetworkInterface localInterface, IntervalSettingTuple autoReconnect)
 			: this((IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface, autoReconnect)
 		{
 		}
@@ -281,7 +281,7 @@ namespace MKY.IO.Serial.Socket
 		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
-		public TcpClient(IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, AutoInterval autoReconnect)
+		public TcpClient(IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, IntervalSettingTuple autoReconnect)
 			: this(SocketBase.NextInstanceId, remoteHost, remotePort, localInterface, autoReconnect)
 		{
 		}
@@ -290,7 +290,7 @@ namespace MKY.IO.Serial.Socket
 		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
 		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
 		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
-		public TcpClient(int instanceId, IPHost remoteHost, int remotePort, IPNetworkInterface localInterface, AutoInterval autoReconnect)
+		public TcpClient(int instanceId, IPHost remoteHost, int remotePort, IPNetworkInterface localInterface, IntervalSettingTuple autoReconnect)
 			: this(instanceId, (IPHostEx)remoteHost, remotePort, (IPNetworkInterfaceEx)localInterface, autoReconnect)
 		{
 		}
@@ -299,7 +299,7 @@ namespace MKY.IO.Serial.Socket
 		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
-		public TcpClient(int instanceId, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, AutoInterval autoReconnect)
+		public TcpClient(int instanceId, IPHostEx remoteHost, int remotePort, IPNetworkInterfaceEx localInterface, IntervalSettingTuple autoReconnect)
 		{
 			// Verify by-reference arguments:
 
@@ -399,7 +399,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		public virtual AutoInterval AutoReconnect
+		public virtual IntervalSettingTuple AutoReconnect
 		{
 			get
 			{
