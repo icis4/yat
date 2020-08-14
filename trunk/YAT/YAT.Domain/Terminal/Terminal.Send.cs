@@ -1832,6 +1832,7 @@ namespace YAT.Domain
 			{
 				var leadMessage = "Unable to send data:";
 				DebugEx.WriteException(GetType(), ex, leadMessage);
+				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, leadMessage + ex.Message));
 				OnIOError(new IOErrorEventArgs(IOErrorSeverity.Fatal, IODirection.Tx, leadMessage + Environment.NewLine + ex.Message));
 			}
 		}
