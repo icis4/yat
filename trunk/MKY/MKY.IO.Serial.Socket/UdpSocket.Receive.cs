@@ -123,7 +123,7 @@ namespace MKY.IO.Serial.Socket
 						{
 							SocketReset(); // Required after this exception.
 							OnIOError(new IOErrorEventArgs(ErrorSeverity.Acceptable, Direction.Input, ex.Message));
-						}
+						}                                             // Acceptable as situation may recover.
 						else
 						{
 							SocketError();

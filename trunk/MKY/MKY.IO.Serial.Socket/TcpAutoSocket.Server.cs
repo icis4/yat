@@ -55,6 +55,7 @@ namespace MKY.IO.Serial.Socket
 				this.server = new TcpServer(this.instanceId, localInterface, localPort);
 
 				this.server.IOChanged    += server_IOChanged;
+				this.server.IOWarning    += server_IOWarning;
 				this.server.IOError      += server_IOError;
 				this.server.DataReceived += server_DataReceived;
 				this.server.DataSent     += server_DataSent;
@@ -68,6 +69,7 @@ namespace MKY.IO.Serial.Socket
 				if (this.server != null)
 				{
 					this.server.IOChanged    -= server_IOChanged;
+					this.server.IOWarning    -= server_IOWarning;
 					this.server.IOError      -= server_IOError;
 					this.server.DataReceived -= server_DataReceived;
 					this.server.DataSent     -= server_DataSent;
@@ -138,6 +140,12 @@ namespace MKY.IO.Serial.Socket
 					break;
 				}
 			}
+		}
+
+		private void server_IOWarning(object sender, IOWarningEventArgs e)
+		{
+			if (IsUndisposed && IsServer) // Check disposal state first!
+				OnIOWarning(e);
 		}
 
 		private void server_IOError(object sender, IOErrorEventArgs e)

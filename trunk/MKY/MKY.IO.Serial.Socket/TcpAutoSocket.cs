@@ -154,6 +154,9 @@ namespace MKY.IO.Serial.Socket
 		public event EventHandler<EventArgs<DateTime>> IOControlChanged;
 
 		/// <summary></summary>
+		public event EventHandler<IOWarningEventArgs> IOWarning;
+
+		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
@@ -741,7 +744,7 @@ namespace MKY.IO.Serial.Socket
 
 				AutoSocketError
 				(
-					ErrorSeverity.Acceptable,
+					ErrorSeverity.Severe,
 					message
 				);
 			}
@@ -790,6 +793,13 @@ namespace MKY.IO.Serial.Socket
 		{
 			UnusedEvent.PreventCompilerWarning(IOControlChanged, "See exception message below.");
 			throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The event 'IOControlChanged' is not in use for TCP/IP AutoSockets!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		/// <summary></summary>
+		protected virtual void OnIOWarning(IOWarningEventArgs e)
+		{
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore. This may happen on an async System.Net.Sockets.SocketAsyncEventArgs.CompletionPortCallback.
+				this.eventHelper.RaiseSync<IOWarningEventArgs>(IOWarning, this, e);
 		}
 
 		/// <summary></summary>

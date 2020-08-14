@@ -126,6 +126,45 @@ namespace MKY.IO.Serial
 	}
 
 	/// <summary></summary>
+	public class IOWarningEventArgs : EventArgs
+	{
+		/// <summary></summary>
+		public Direction Direction { get; }
+
+		/// <summary></summary>
+		public string Message { get; }
+
+		/// <summary></summary>
+		public DateTime TimeStamp { get; }
+
+		/// <summary></summary>
+		public IOWarningEventArgs(string message)
+			: this(Direction.None, message, DateTime.Now)
+		{
+		}
+
+		/// <summary></summary>
+		public IOWarningEventArgs(string message, DateTime timeStamp)
+			: this(Direction.None, message, timeStamp)
+		{
+		}
+
+		/// <summary></summary>
+		public IOWarningEventArgs(Direction direction, string message)
+			: this(direction, message, DateTime.Now)
+		{
+		}
+
+		/// <summary></summary>
+		public IOWarningEventArgs(Direction direction, string message, DateTime timeStamp)
+		{
+			Direction = direction;
+			Message   = message;
+			TimeStamp = timeStamp;
+		}
+	}
+
+	/// <summary></summary>
 	public class IOErrorEventArgs : EventArgs
 	{
 		/// <summary></summary>

@@ -297,7 +297,7 @@ namespace MKY.IO.Serial.SerialPort
 						{
 							if (!isOutputBreakOldAndErrorHasBeenSignaled)
 							{
-								InvokeOutputBreakErrorEvent();
+								InvokeOutputBreakWarningsEventIfEnabled();
 								isOutputBreakOldAndErrorHasBeenSignaled = true;
 							}
 
@@ -309,7 +309,7 @@ namespace MKY.IO.Serial.SerialPort
 						{
 							if (!isCtsInactiveOldAndErrorHasBeenSignaled)
 							{
-								InvokeCtsInactiveErrorEvent();
+								InvokeCtsInactiveWarningEventIfEnabled();
 								isCtsInactiveOldAndErrorHasBeenSignaled = true;
 							}
 
@@ -352,7 +352,7 @@ namespace MKY.IO.Serial.SerialPort
 							{
 								if (!isXOffStateOldAndErrorHasBeenSignaled)
 								{
-									InvokeXOffErrorEvent();
+									InvokeXOffWarningEventIfEnabled();
 									isXOffStateOldAndErrorHasBeenSignaled = true;
 								}
 
@@ -541,7 +541,7 @@ namespace MKY.IO.Serial.SerialPort
 							{
 								if (!isCtsInactiveOldAndErrorHasBeenSignaled)
 								{
-									InvokeCtsInactiveErrorEvent();
+									InvokeCtsInactiveWarningEventIfEnabled();
 									isCtsInactiveOldAndErrorHasBeenSignaled = true;
 								}
 							}
@@ -549,7 +549,7 @@ namespace MKY.IO.Serial.SerialPort
 							{
 								if (!isXOffStateOldAndErrorHasBeenSignaled)
 								{
-									InvokeXOffErrorEvent();
+									InvokeXOffWarningEventIfEnabled();
 									isXOffStateOldAndErrorHasBeenSignaled = true;
 								}
 							}
@@ -557,7 +557,7 @@ namespace MKY.IO.Serial.SerialPort
 							{                                                            // information not available for 'Software' or 'Combined'!
 								if (!isXOffStateOldAndErrorHasBeenSignaled)
 								{
-									InvokeXOffErrorEvent();
+									InvokeXOffWarningEventIfEnabled();
 									isXOffStateOldAndErrorHasBeenSignaled = true;
 								}
 							}
@@ -577,7 +577,7 @@ namespace MKY.IO.Serial.SerialPort
 						{                  // May only be partial, some data may have been sent before break.
 							if (!isOutputBreakOldAndErrorHasBeenSignaled)
 							{
-								InvokeOutputBreakErrorEvent();
+								InvokeOutputBreakWarningsEventIfEnabled();
 								isOutputBreakOldAndErrorHasBeenSignaled = true;
 							}
 						}
@@ -832,43 +832,52 @@ namespace MKY.IO.Serial.SerialPort
 			return (writeSuccess);
 		}
 
-		private void InvokeOutputBreakErrorEvent()
+		/// <summary></summary>
+		private void InvokeOutputBreakWarningsEventIfEnabled()
 		{
-			OnIOError
-			(
-				new IOErrorEventArgs
+			if (this.settings.EnableRetainingWarnings)
+			{
+				OnIOWarning
 				(
-					ErrorSeverity.Acceptable,
-					Direction.Output,
-					"Output break state, retaining data..."
-				)
-			);
+					new IOWarningEventArgs
+					(
+						Direction.Output,
+						"Output break state, retaining data..."
+					)
+				);
+			}
 		}
 
-		private void InvokeCtsInactiveErrorEvent()
+		/// <summary></summary>
+		private void InvokeCtsInactiveWarningEventIfEnabled()
 		{
-			OnIOError
-			(
-				new IOErrorEventArgs
+			if (this.settings.EnableRetainingWarnings)
+			{
+				OnIOWarning
 				(
-					ErrorSeverity.Acceptable,
-					Direction.Output,
-					"CTS inactive, retaining data..."
-				)
-			);
+					new IOWarningEventArgs
+					(
+						Direction.Output,
+						"CTS inactive, retaining data..."
+					)
+				);
+			}
 		}
 
-		private void InvokeXOffErrorEvent()
+		/// <summary></summary>
+		private void InvokeXOffWarningEventIfEnabled()
 		{
-			OnIOError
-			(
-				new IOErrorEventArgs
+			if (this.settings.EnableRetainingWarnings)
+			{
+				OnIOWarning
 				(
-					ErrorSeverity.Acceptable,
-					Direction.Output,
-					"XOff state, retaining data..."
-				)
-			);
+					new IOWarningEventArgs
+					(
+						Direction.Output,
+						"XOff state, retaining data..."
+					)
+				);
+			}
 		}
 
 		#endregion
