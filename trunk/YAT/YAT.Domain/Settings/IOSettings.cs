@@ -274,6 +274,75 @@ namespace YAT.Domain.Settings
 			get { return (((IOTypeEx)IOType).IsServerSocket); }
 		}
 
+		/// <remarks>Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.</remarks>
+		[XmlIgnore]
+		public virtual double TypicalNumberOfBytesPerMillisecond
+		{
+			get
+			{
+				switch (IOType)
+				{
+					case IOType.Unknown:
+					{
+						return (0);
+					}
+
+					case IOType.SerialPort:                                             // 25% typical overhead, incl. safety margin. But attention, it's just a 'typical' value:
+					{                                                                  //      Ignore fact that overhead increases with higher baud rates.
+						return (this.serialPort.Communication.FramesPerMillisecond * 1.25); // Ignore mismatch in case 7 data bits are being used.
+					}                                                                       // Ignore mismatch in case e.g. 16-bit bytes are being used.
+
+					case IOType.TcpClient:
+					case IOType.TcpServer:
+					case IOType.TcpAutoSocket:
+					{
+						// In theory:
+						// Less than 6.55 MiBit/s (https://www.switch.ch/network/tools/tcp_throughput/), i.e. less than 820 KiByte/s.
+						//
+						// In YAT practise (e.g. 'Huge.txt'):
+						//  > ~19.5 KiByte/s for [Debug]
+						//  > ~43.6 KiByte/s for [Release]
+						// See 'MKY.IO.Serial.Socket.SocketDefaults' for measurements.
+					#if (DEBUG)
+						return (19.5);
+					#else
+						return (43.6);
+					#endif
+						// But attention, the view consumes a lot of CPU. Sending e.g. 'EnormousLine.txt'
+						// where view has almost nothing to do happens almost instantly, at up to ~250 KiByte/s!
+					}
+
+					case IOType.UdpClient:
+					case IOType.UdpServer:
+					case IOType.UdpPairSocket:
+					{
+						// In YAT practise (e.g. 'Huge.txt'):
+						// Approx. 5% less than TCP/IP.
+					#if (DEBUG)
+						return (19.5 * 0.95);
+					#else
+						return (43.6 * 0.95);
+					#endif
+					}
+
+					case IOType.UsbSerialHid:
+					{
+						// In theory:
+						// 64 KiByte/s (https://www.tracesystemsinc.com/USB_Tutorials_web/USB/B1_USB_Classes/Books/A3_A_Closer_Look_at_HID_Class/slide01.htm).
+						//
+						// In YAT practise:
+						// Likely less.
+						return (20);
+					}
+
+					default:
+					{
+						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + IOType + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
+				}
+			}
+		}
+
 		/// <summary>
 		/// Hiding XOn/XOff only makes sense for I/O where XOn/XOff is known to be used.
 		/// </summary>
@@ -369,75 +438,6 @@ namespace YAT.Domain.Settings
 					case IOType.UsbSerialHid: this.usbSerialHidDevice.SignalXOnWhenOpened = value; break;
 
 					default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'SignalXOnWhenOpened' can only be applied to serial COM ports or USB Ser/HID devices!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-			}
-		}
-
-		/// <remarks>Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.</remarks>
-		[XmlIgnore]
-		public virtual double TypicalNumberOfBytesPerMillisecond
-		{
-			get
-			{
-				switch (IOType)
-				{
-					case IOType.Unknown:
-					{
-						return (0);
-					}
-
-					case IOType.SerialPort:
-					{                                                               // 10% typical overhead. But attention, it's just a 'typical' value:
-						return (this.serialPort.Communication.FramesPerMillisecond * 1.1); // Ignore mismatch in case 7 data bits are being used.
-					}                                                                      // Ignore mismatch in case e.g. 16-bit bytes are being used.
-
-					case IOType.TcpClient:
-					case IOType.TcpServer:
-					case IOType.TcpAutoSocket:
-					{
-						// In theory:
-						// Less than 6.55 MiBit/s (https://www.switch.ch/network/tools/tcp_throughput/), i.e. less than 820 KiByte/s.
-						//
-						// In YAT practise (e.g. 'Huge.txt'):
-						//  > ~19.5 KiByte/s for [Debug]
-						//  > ~43.6 KiByte/s for [Release]
-						// See 'MKY.IO.Serial.Socket.SocketDefaults' for measurements.
-					#if (DEBUG)
-						return (19.5);
-					#else
-						return (43.6);
-					#endif
-						// But attention, the view consumes a lot of CPU. Sending e.g. 'EnormousLine.txt'
-						// where view has almost nothing to do happens almost instantly, at up to ~250 KiByte/s!
-					}
-
-					case IOType.UdpClient:
-					case IOType.UdpServer:
-					case IOType.UdpPairSocket:
-					{
-						// In YAT practise (e.g. 'Huge.txt'):
-						// Approx. 5% less than TCP/IP.
-					#if (DEBUG)
-						return (19.5 * 0.95);
-					#else
-						return (43.6 * 0.95);
-					#endif
-					}
-
-					case IOType.UsbSerialHid:
-					{
-						// In theory:
-						// 64 KiByte/s (https://www.tracesystemsinc.com/USB_Tutorials_web/USB/B1_USB_Classes/Books/A3_A_Closer_Look_at_HID_Class/slide01.htm).
-						//
-						// In YAT practise:
-						// Likely less.
-						return (20);
-					}
-
-					default:
-					{
-						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + IOType + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-					}
 				}
 			}
 		}
