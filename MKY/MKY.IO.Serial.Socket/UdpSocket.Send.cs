@@ -326,7 +326,7 @@ namespace MKY.IO.Serial.Socket
 			var sb = new StringBuilder(byteAsHex + " enqueued for sending, ");
 		#if (DEBUG_SEND)
 			unchecked { DebugSend_enqueueCounter++; }
-			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} bytes in total.", DebugSend_enqueueCounter);
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) in total.", DebugSend_enqueueCounter);
 		#endif
 			DebugMessage(sb.ToString());
 		}
@@ -338,10 +338,10 @@ namespace MKY.IO.Serial.Socket
 		private void DebugSendDequeue(int count)
 		{
 			var sb = new StringBuilder();
-			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} bytes dequeued for sending, ", count);
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) dequeued for sending, ", count);
 		#if (DEBUG_SEND)
 			unchecked { DebugSend_enqueueCounter += count; }
-			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} bytes in total.", DebugSend_enqueueCounter);
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) in total.", DebugSend_enqueueCounter);
 		#endif
 			DebugMessage(sb.ToString());
 		}

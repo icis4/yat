@@ -968,9 +968,11 @@ namespace YAT.Domain
 			);
 		}
 
-	#if (DEBUG_DATA_SENT)
+	#if (DEBUG_DATA_RECEIVED)
 		private int DebugDataReceived_counter; // = 0;
-		private int DebugDataSent_counter;     // = 0;
+	#endif
+	#if (DEBUG_DATA_SENT)
+		private int DebugDataSent_counter; // = 0;
 	#endif
 
 		/// <remarks>
@@ -980,10 +982,10 @@ namespace YAT.Domain
 		private void DebugDataReceived(int count)
 		{
 			var sb = new StringBuilder();
-			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} bytes received, ", count);
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) received, ", count);
 		#if (DEBUG_DATA_RECEIVED)
 			unchecked { DebugDataReceived_counter += count; }
-			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} bytes in total.", DebugDataReceived_counter);
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) in total.", DebugDataReceived_counter);
 		#endif
 			DebugMessage(sb.ToString());
 		}
@@ -995,10 +997,10 @@ namespace YAT.Domain
 		private void DebugDataSent(int count)
 		{
 			var sb = new StringBuilder();
-			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} bytes sent, ", count);
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) sent, ", count);
 		#if (DEBUG_DATA_SENT)
 			unchecked { DebugDataSent_counter += count; }
-			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} bytes in total.", DebugDataSent_counter);
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) in total.", DebugDataSent_counter);
 		#endif
 			DebugMessage(sb.ToString());
 		}

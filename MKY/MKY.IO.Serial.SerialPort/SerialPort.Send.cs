@@ -29,11 +29,17 @@
 
 #if (DEBUG)
 
+	// Enable debugging of thread state (send and receive threads):
+////#define DEBUG_THREAD_STATE // Attention: Must also be activated in SerialPort[.Receive].cs !!
+
 	// Enable debugging of sending:
 ////#define DEBUG_SEND
 
-	// Enable debugging of sending:
+	// Enable debugging of handling chunk:
 ////#define DEBUG_SEND_CHUNK
+
+	// Enable debugging of writing to port:
+////#define DEBUG_SEND_WRITE
 
 #endif // DEBUG
 
@@ -663,14 +669,14 @@ namespace MKY.IO.Serial.SerialPort
 
 			try
 			{
-				DebugTransmission("Trying to write 1 byte to port...");
+				DebugSendWrite("Trying to write 1 byte to port...");
 
 				// Try to write the byte, will raise a 'TimeoutException' if not possible:
 				byte[] a = { b };
 				this.port.Write(a, 0, 1); // Do not lock, may take some time!
 				writeSuccess = true;
 
-				DebugTransmission("...writing done.");
+				DebugSendWrite("...writing done.");
 
 				// Handle XOn/XOff if required:
 				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
@@ -758,13 +764,13 @@ namespace MKY.IO.Serial.SerialPort
 				int triedChunkSize = Math.Min(maxChunkSize, a.Length);
 				effectiveChunkData = new List<byte>(triedChunkSize);
 
-				DebugTransmission("Trying to write " + triedChunkSize + " byte(s) to port...");
+				DebugSendWrite("Trying to write " + triedChunkSize + " byte(s) to port...");
 
 				// Try to write the chunk, will raise a 'TimeoutException' if not possible:
 				this.port.Write(a, 0, triedChunkSize); // Do not lock, may take some time!
 				writeSuccess = true;
 
-				DebugTransmission("...writing done.");
+				DebugSendWrite("...writing done.");
 
 				// Finalize the write operation:
 				lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
@@ -901,6 +907,15 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		[Conditional("DEBUG_SEND_CHUNK")]
 		private void DebugSendChunk(string message)
+		{
+			DebugMessage(message);
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_SEND_WRITE")]
+		private void DebugSendWrite(string message)
 		{
 			DebugMessage(message);
 		}

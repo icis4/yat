@@ -29,8 +29,11 @@
 
 #if (DEBUG)
 
-	// Enable debugging of receive request:
-////#define DEBUG_RECEIVE_REQUEST
+	// Enable debugging of thread state (send and receive threads):
+////#define DEBUG_THREAD_STATE // Attention: Must also be activated in SerialPort[.Send].cs !!
+
+	// Enable debugging of receiving:
+////#define DEBUG_RECEIVE // Attention: Must also be activated in SerialPort.cs !!
 
 #endif // DEBUG
 
@@ -44,6 +47,8 @@
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Text;
 using System.Threading;
 
 using MKY.Diagnostics;
@@ -115,9 +120,11 @@ namespace MKY.IO.Serial.SerialPort
 									this.receiveQueue.Clear();
 								}
 
-								DebugReceiveRequest("Signaling " + data.Length.ToString() + " byte(s) received...");
+								DebugReceiveDequeue(data.Length);
+
 								OnDataReceived(new SerialDataReceivedEventArgs(data, PortId));
-								DebugReceiveRequest("...signaling done");
+
+								DebugReceiveSignal(data.Length);
 							}
 							finally
 							{
@@ -158,13 +165,55 @@ namespace MKY.IO.Serial.SerialPort
 		// Debug
 		//==========================================================================================
 
+	#if (DEBUG_RECEIVE)
+		private int DebugReceive_enqueueCounter; // = 0;
+		private int DebugReceive_dequeueCounter; // = 0;
+		private int DebugReceive_signalCounter;  // = 0;
+	#endif
+
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
-		[Conditional("DEBUG_RECEIVE_REQUEST")]
-		private void DebugReceiveRequest(string message)
+		[Conditional("DEBUG_RECEIVE")]
+		private void DebugReceiveEnqueue(int count)
 		{
-			DebugMessage(message);
+			var sb = new StringBuilder();
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) enqueued for receiving, ", count);
+		#if (DEBUG_RECEIVE)
+			unchecked { DebugReceive_enqueueCounter += count; }
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) in total.", DebugReceive_enqueueCounter);
+		#endif
+			DebugMessage(sb.ToString());
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_RECEIVE")]
+		private void DebugReceiveDequeue(int count)
+		{
+			var sb = new StringBuilder();
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) dequeued for receiving, ", count);
+		#if (DEBUG_RECEIVE)
+			unchecked { DebugReceive_dequeueCounter += count; }
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) in total.", DebugReceive_dequeueCounter);
+		#endif
+			DebugMessage(sb.ToString());
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_RECEIVE")]
+		private void DebugReceiveSignal(int count)
+		{
+			var sb = new StringBuilder();
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) signaled for receiving, ", count);
+		#if (DEBUG_RECEIVE)
+			unchecked { DebugReceive_signalCounter += count; }
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) in total.", DebugReceive_signalCounter);
+		#endif
+			DebugMessage(sb.ToString());
 		}
 
 		#endregion
