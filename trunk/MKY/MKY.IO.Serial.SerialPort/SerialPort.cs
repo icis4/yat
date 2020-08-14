@@ -30,10 +30,10 @@
 #if (DEBUG)
 
 	// Enable debugging of thread state (send and receive threads):
-////#define DEBUG_THREAD_STATE
+////#define DEBUG_THREAD_STATE // Attention: Must also be activated in SerialPort.(Receive&Send).cs !!
 
-	// Enable debugging of data transmission to/from port:
-////#define DEBUG_TRANSMISSION
+	// Enable debugging of receiving:
+////#define DEBUG_RECEIVE // Attention: Must also be activated in SerialPort.Receive.cs !!
 
 #endif // DEBUG
 
@@ -1360,7 +1360,6 @@ namespace MKY.IO.Serial.SerialPort
 
 					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 					{
-						DebugTransmission("Enqueuing " + data.Length.ToString(CultureInfo.CurrentCulture) + " byte(s) for receiving...");
 						foreach (byte b in data)
 						{
 							this.receiveQueue.Enqueue(b);
@@ -1384,8 +1383,9 @@ namespace MKY.IO.Serial.SerialPort
 								}
 							}
 						} // foreach (byte b in data)
-						DebugTransmission("...enqueuing done");
 					} // lock (this.receiveQueue)
+
+					DebugReceiveEnqueue(data.Length);
 
 					// Signal XOn/XOff change to send thread:
 					if (signalXOnXOff)
@@ -1884,15 +1884,6 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		[Conditional("DEBUG_THREAD_STATE")]
 		private void DebugThreadState(string message)
-		{
-			DebugMessage(message);
-		}
-
-		/// <remarks>
-		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
-		/// </remarks>
-		[Conditional("DEBUG_TRANSMISSION")]
-		private void DebugTransmission(string message)
 		{
 			DebugMessage(message);
 		}
