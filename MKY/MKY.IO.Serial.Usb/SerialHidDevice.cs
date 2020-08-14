@@ -146,6 +146,9 @@ namespace MKY.IO.Serial.Usb
 		public event EventHandler<EventArgs<DateTime>> IOControlChanged;
 
 		/// <summary></summary>
+		public event EventHandler<IOWarningEventArgs> IOWarning;
+
+		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
@@ -495,10 +498,11 @@ namespace MKY.IO.Serial.Usb
 					// Ensure to create device info from VID/PID/SNR/USAGE since system path is not saved.
 					this.device = new IO.Usb.SerialHidDevice(di.VendorId, di.ProductId, di.Serial, di.UsagePage, di.UsageId);
 					this.device.MatchSerial           = this.settings.MatchSerial;
-				////                                    this.settings.Preset does not to be considered when creating a device.
+					                                ////this.settings.Preset is handled by this class and not the underlying device.
 					this.device.ReportFormat          = this.settings.ReportFormat;
 					this.device.RxFilterUsage         = this.settings.RxFilterUsage;
 					this.device.AutoOpen              = this.settings.AutoOpen;
+					                                ////this.settings.EnableRetainingWarnings is handled by this class and not the underlying device.
 					this.device.IncludeNonPayloadData = this.settings.IncludeNonPayloadData;
 
 					this.device.Connected    += device_Connected;
@@ -917,6 +921,14 @@ namespace MKY.IO.Serial.Usb
 		{
 			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
 				this.eventHelper.RaiseAsync(IOControlChanged, this, e);
+		}
+
+		/// <summary></summary>
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
+		protected virtual void OnIOWarning(IOWarningEventArgs e)
+		{
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
+				this.eventHelper.RaiseSync<IOWarningEventArgs>(IOWarning, this, e);
 		}
 
 		/// <summary></summary>

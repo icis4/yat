@@ -69,6 +69,9 @@ namespace MKY.IO.Serial.Usb
 		public const bool AutoOpenDefault = IO.Usb.SerialHidDevice.AutoOpenDefault;
 
 		/// <summary></summary>
+		public const bool EnableRetainingWarningsDefault = true;
+
+		/// <summary></summary>
 		public const bool IncludeNonPayloadDataDefault = IO.Usb.SerialHidDevice.IncludeNonPayloadDataDefault;
 
 		#endregion
@@ -90,6 +93,7 @@ namespace MKY.IO.Serial.Usb
 		private SerialHidFlowControl flowControl;
 		private bool signalXOnWhenOpened;
 		private bool autoOpen;
+		private bool enableRetainingWarnings;
 
 		private bool includeNonPayloadData;
 
@@ -133,9 +137,10 @@ namespace MKY.IO.Serial.Usb
 			ReportFormat  = rhs.ReportFormat;
 			RxFilterUsage = rhs.RxFilterUsage;
 
-			FlowControl         = rhs.FlowControl;
-			SignalXOnWhenOpened = rhs.SignalXOnWhenOpened;
-			AutoOpen            = rhs.AutoOpen;
+			FlowControl             = rhs.FlowControl;
+			SignalXOnWhenOpened     = rhs.SignalXOnWhenOpened;
+			AutoOpen                = rhs.AutoOpen;
+			EnableRetainingWarnings = rhs.EnableRetainingWarnings;
 
 			IncludeNonPayloadData = rhs.IncludeNonPayloadData;
 
@@ -156,9 +161,10 @@ namespace MKY.IO.Serial.Usb
 			ReportFormat  = ReportFormatDefault;
 			RxFilterUsage = RxFilterUsageDefault;
 
-			FlowControl         = FlowControlDefault;
-			SignalXOnWhenOpened = SignalXOnWhenOpenedDefault;
-			AutoOpen            = AutoOpenDefault;
+			FlowControl             = FlowControlDefault;
+			SignalXOnWhenOpened     = SignalXOnWhenOpenedDefault;
+			AutoOpen                = AutoOpenDefault;
+			EnableRetainingWarnings = EnableRetainingWarningsDefault;
 
 			IncludeNonPayloadData = IncludeNonPayloadDataDefault;
 		}
@@ -322,6 +328,26 @@ namespace MKY.IO.Serial.Usb
 			}
 		}
 
+		/// <summary>
+		/// Enables warnings like "XOff state, retaining data..." on sending.
+		/// </summary>
+		/// <remarks>
+		/// This setting is enabled by default.
+		/// </remarks>
+		[XmlElement("EnableRetainingWarnings")]
+		public virtual bool EnableRetainingWarnings
+		{
+			get { return (this.enableRetainingWarnings); }
+			set
+			{
+				if (this.enableRetainingWarnings != value)
+				{
+					this.enableRetainingWarnings = value;
+					SetMyChanged();
+				}
+			}
+		}
+
 		/// <summary></summary>
 		[XmlElement("IncludeNonPayloadData")]
 		public virtual bool IncludeNonPayloadData
@@ -376,6 +402,7 @@ namespace MKY.IO.Serial.Usb
 				hashCode = (hashCode * 397) ^  FlowControl                    .GetHashCode();
 				hashCode = (hashCode * 397) ^  SignalXOnWhenOpened            .GetHashCode();
 				hashCode = (hashCode * 397) ^  AutoOpen                       .GetHashCode();
+				hashCode = (hashCode * 397) ^  EnableRetainingWarnings        .GetHashCode();
 
 				hashCode = (hashCode * 397) ^  IncludeNonPayloadData          .GetHashCode();
 
@@ -415,9 +442,10 @@ namespace MKY.IO.Serial.Usb
 				ReportFormat .Equals(other.ReportFormat)  &&
 				RxFilterUsage.Equals(other.RxFilterUsage) &&
 
-				FlowControl        .Equals(other.FlowControl)         &&
-				SignalXOnWhenOpened.Equals(other.SignalXOnWhenOpened) &&
-				AutoOpen           .Equals(other.AutoOpen)            &&
+				FlowControl            .Equals(other.FlowControl)             &&
+				SignalXOnWhenOpened    .Equals(other.SignalXOnWhenOpened)     &&
+				AutoOpen               .Equals(other.AutoOpen)                &&
+				EnableRetainingWarnings.Equals(other.EnableRetainingWarnings) &&
 
 				IncludeNonPayloadData.Equals(other.IncludeNonPayloadData)
 			);

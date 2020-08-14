@@ -114,6 +114,9 @@ namespace MKY.IO.Serial.SerialPort
 		public const bool IgnoreFramingErrorsDefault = false;
 
 		/// <summary></summary>
+		public const bool EnableRetainingWarningsDefault = true;
+
+		/// <summary></summary>
 		public const bool NoSendOnOutputBreakDefault = true;
 
 		/// <summary></summary>
@@ -140,6 +143,7 @@ namespace MKY.IO.Serial.SerialPort
 		private SendRate maxSendRate;
 
 		private bool ignoreFramingErrors;
+		private bool enableRetainingWarnings;
 
 		private bool noSendOnOutputBreak;
 		private bool noSendOnInputBreak;
@@ -227,7 +231,8 @@ namespace MKY.IO.Serial.SerialPort
 			MaxChunkSize        = rhs.MaxChunkSize;
 			MaxSendRate         = rhs.MaxSendRate;
 
-			IgnoreFramingErrors = rhs.IgnoreFramingErrors;
+			IgnoreFramingErrors     = rhs.IgnoreFramingErrors;
+			EnableRetainingWarnings = rhs.EnableRetainingWarnings;
 
 			NoSendOnOutputBreak = rhs.NoSendOnOutputBreak;
 			NoSendOnInputBreak  = rhs.NoSendOnInputBreak;
@@ -257,7 +262,8 @@ namespace MKY.IO.Serial.SerialPort
 			MaxChunkSize        = MaxChunkSizeDefault;
 			MaxSendRate         = MaxSendRateDefault;
 
-			IgnoreFramingErrors = IgnoreFramingErrorsDefault;
+			IgnoreFramingErrors     = IgnoreFramingErrorsDefault;
+			EnableRetainingWarnings = EnableRetainingWarningsDefault;
 
 			NoSendOnOutputBreak = NoSendOnOutputBreakDefault;
 			NoSendOnInputBreak  = NoSendOnInputBreakDefault;
@@ -445,6 +451,26 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
+		/// <summary>
+		/// Enables warnings like "XOff state, retaining data..." on sending.
+		/// </summary>
+		/// <remarks>
+		/// This setting is enabled by default.
+		/// </remarks>
+		[XmlElement("EnableRetainingWarnings")]
+		public virtual bool EnableRetainingWarnings
+		{
+			get { return (this.enableRetainingWarnings); }
+			set
+			{
+				if (this.enableRetainingWarnings != value)
+				{
+					this.enableRetainingWarnings = value;
+					SetMyChanged();
+				}
+			}
+		}
+
 		/// <summary></summary>
 		[XmlElement("NoSendOnOutputBreak")]
 		public virtual bool NoSendOnOutputBreak
@@ -526,7 +552,8 @@ namespace MKY.IO.Serial.SerialPort
 				hashCode = (hashCode * 397) ^  MaxChunkSize       .GetHashCode();
 				hashCode = (hashCode * 397) ^  MaxSendRate        .GetHashCode();
 
-				hashCode = (hashCode * 397) ^  IgnoreFramingErrors.GetHashCode();
+				hashCode = (hashCode * 397) ^  IgnoreFramingErrors    .GetHashCode();
+				hashCode = (hashCode * 397) ^  EnableRetainingWarnings.GetHashCode();
 
 				hashCode = (hashCode * 397) ^  NoSendOnOutputBreak.GetHashCode();
 				hashCode = (hashCode * 397) ^  NoSendOnInputBreak .GetHashCode();
@@ -570,7 +597,8 @@ namespace MKY.IO.Serial.SerialPort
 				MaxChunkSize       .Equals(other.MaxChunkSize)        &&
 				MaxSendRate        .Equals(other.MaxSendRate)         &&
 
-				IgnoreFramingErrors.Equals(other.IgnoreFramingErrors) &&
+				IgnoreFramingErrors    .Equals(other.IgnoreFramingErrors)     &&
+				EnableRetainingWarnings.Equals(other.EnableRetainingWarnings) &&
 
 				NoSendOnOutputBreak.Equals(other.NoSendOnOutputBreak) &&
 				NoSendOnInputBreak .Equals(other.NoSendOnInputBreak)

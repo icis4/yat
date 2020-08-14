@@ -166,6 +166,9 @@ namespace MKY.IO.Serial.Socket
 		public event EventHandler<EventArgs<DateTime>> IOControlChanged;
 
 		/// <summary></summary>
+		public event EventHandler<IOWarningEventArgs> IOWarning;
+
+		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
@@ -1194,6 +1197,13 @@ namespace MKY.IO.Serial.Socket
 		{
 			UnusedEvent.PreventCompilerWarning(IOControlChanged, "See exception message below.");
 			throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The event 'IOControlChanged' is not in use for UDP/IP sockets!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		/// <summary></summary>
+		protected virtual void OnIOWarning(IOWarningEventArgs e)
+		{
+			if (IsUndisposed && IsOpen) // Make sure to propagate event only if active. // Ensure to not propagate event during closing anymore.
+				this.eventHelper.RaiseSync<IOWarningEventArgs>(IOWarning, this, e);
 		}
 
 		/// <summary></summary>

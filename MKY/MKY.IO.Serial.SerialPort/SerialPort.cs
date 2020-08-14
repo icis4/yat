@@ -194,6 +194,9 @@ namespace MKY.IO.Serial.SerialPort
 		public event EventHandler<EventArgs<DateTime>> IOControlChanged;
 
 		/// <summary></summary>
+		public event EventHandler<IOWarningEventArgs> IOWarning;
+
+		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
@@ -1774,6 +1777,14 @@ namespace MKY.IO.Serial.SerialPort
 					this.nextIOControlEventTickStamp = (Stopwatch.GetTimestamp() + IOControlChangedTickInterval); // Loop-around is OK.
 				}
 			}
+		}
+
+		/// <summary></summary>
+		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true)]
+		protected virtual void OnIOWarning(IOWarningEventArgs e)
+		{
+			if (IsUndisposed) // Ensure to not propagate event during closing anymore.
+				this.eventHelper.RaiseSync<IOWarningEventArgs>(IOWarning, this, e);
 		}
 
 		/// <summary></summary>

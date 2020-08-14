@@ -59,6 +59,11 @@ namespace MKY.IO.Serial
 		event EventHandler<EventArgs<DateTime>> IOControlChanged;
 
 		/// <summary>
+		/// Event raised after an I/O warning is issued.
+		/// </summary>
+		event EventHandler<IOWarningEventArgs> IOWarning;
+
+		/// <summary>
 		/// Event raised after an I/O error has occurred.
 		/// </summary>
 		event EventHandler<IOErrorEventArgs> IOError;

@@ -267,7 +267,7 @@ namespace MKY.IO.Serial.Usb
 							{
 								if (!isXOffStateOldAndErrorHasBeenSignaled)
 								{
-									InvokeXOffErrorEvent();
+									InvokeXOffWarningEventIfEnabled();
 									isXOffStateOldAndErrorHasBeenSignaled = true;
 								}
 
@@ -363,17 +363,20 @@ namespace MKY.IO.Serial.Usb
 				OnIOControlChanged(new EventArgs<DateTime>(DateTime.Now));
 		}
 
-		private void InvokeXOffErrorEvent()
+		/// <summary></summary>
+		private void InvokeXOffWarningEventIfEnabled()
 		{
-			OnIOError
-			(
-				new IOErrorEventArgs
+			if (this.settings.EnableRetainingWarnings)
+			{
+				OnIOWarning
 				(
-					ErrorSeverity.Acceptable,
-					Direction.Output,
-					"XOff state, retaining data..."
-				)
-			);
+					new IOWarningEventArgs
+					(
+						Direction.Output,
+						"XOff state, retaining data..."
+					)
+				);
+			}
 		}
 
 		#endregion

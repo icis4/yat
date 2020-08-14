@@ -248,7 +248,7 @@ namespace MKY.IO.Serial.Socket
 								{
 									SocketReset(); // Required after this exception.
 									OnIOError(new IOErrorEventArgs(ErrorSeverity.Acceptable, Direction.Output, ex.Message));
-								}
+								}                                             // Acceptable as situation may recover.
 								else
 								{
 								////SocketReset() shall not be done in case sending fails (yet). Additional cases to be added here.
