@@ -517,6 +517,12 @@ namespace YAT.Domain.Test.Terminal
 			Settings.RevertSettingsIfUdpSocket(settingsA);
 			Settings.RevertSettingsIfUdpSocket(settingsB);
 
+			// Prevent inlined messages:
+			                         settingsA.Display.IncludeIOControl  = false;
+			if (settingsB != null) { settingsB.Display.IncludeIOControl  = false; }
+			                         settingsA.Display.IncludeIOWarnings = false;
+			if (settingsB != null) { settingsB.Display.IncludeIOWarnings = false; }
+
 			// Adjust maximum line length:
 			if (fileInfo.LineByteCount > settingsA.Display.MaxLineLength) // Potentially differing 'settingsB' will result in assertion on verification.
 			{
@@ -618,13 +624,16 @@ namespace YAT.Domain.Test.Terminal
 			Utilities.AssertRxContentPattern(terminalRx, expectedContentPattern);
 
 			// Refresh and verify again:
-			terminalTx.RefreshRepositories();
-			terminalRx.RefreshRepositories();
+			if (fileInfo.ByteCount <= BufferSettings.BufferSizeDefault) // Restriction of FR #412 "Make raw buffer size user configurable".
+			{                                                           // Example of this restriction on Prolific COM32 Rx: Just 68682 bytes in 65536 chunks!
+				terminalTx.RefreshRepositories();
+				terminalRx.RefreshRepositories();
 
-			Utilities.AssertCounts(terminalTx, terminalRx, fileInfo.ByteCount, fileInfo.LineCount);
+				Utilities.AssertCounts(terminalTx, terminalRx, fileInfo.ByteCount, fileInfo.LineCount);
 
-			Utilities.AssertTxContentPattern(terminalTx, expectedContentPattern);
-			Utilities.AssertRxContentPattern(terminalRx, expectedContentPattern);
+				Utilities.AssertTxContentPattern(terminalTx, expectedContentPattern);
+				Utilities.AssertRxContentPattern(terminalRx, expectedContentPattern);
+			}
 		}
 
 		private static void ReadFileContent(TerminalType terminalType, FileInfo fileInfo, SendMethod sendMethod, out byte[] fileContentAsBytes, out string fileContentAsText, out string[] fileContentAsLines)
