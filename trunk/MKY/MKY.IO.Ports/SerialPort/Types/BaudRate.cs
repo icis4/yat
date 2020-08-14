@@ -40,36 +40,38 @@ namespace MKY.IO.Ports
 	/// <remarks>Using "Baud" prefix in order to be CLS-compliant.</remarks>
 	public enum BaudRate
 	{
-		Baud75      = 75,
-		Baud110     = 110,
-		Baud134     = 134,
-		Baud150     = 150,
-		Baud300     = 300,
-		Baud600     = 600,
-		Baud1200    = 1200,
-		Baud1800    = 1800,
-		Baud2400    = 2400,
-		Baud4800    = 4800,
-		Baud7200    = 7200,
-		Baud9600    = 9600,
-		Baud14400   = 14400, // TI standard baud rate.
-		Baud19200   = 19200,
-		Baud28800   = 28800, // TI standard baud rate.
-		Baud33600   = 33600,
-		Baud38400   = 38400,
-		Baud57600   = 57600,
-		Baud115200  = 115200,
-		Baud128000  = 128000,
-		Baud230400  = 230400,
-		Baud256000  = 256000,
-		Baud460800  = 460800,
-		Baud921600  = 921600,
-		Baud960000  = 960000,  // FTDI standard baud rate (https://www.ftdichip.com/Support/Knowledgebase/index.html?whatbaudratesareachieveabl.htm).
-		Baud1000000 = 1000000, //  ""
-		Baud1200000 = 1200000, //  ""
-		Baud1500000 = 1500000, //  ""
-		Baud2000000 = 2000000, //  ""
-		Baud3000000 = 3000000, //  ""
+		Baud75       = 75,
+		Baud110      = 110,
+		Baud134      = 134,
+		Baud150      = 150,
+		Baud300      = 300,
+		Baud600      = 600,
+		Baud1200     = 1200,
+		Baud1800     = 1800,
+		Baud2400     = 2400,
+		Baud4800     = 4800,
+		Baud7200     = 7200,
+		Baud9600     = 9600,
+		Baud14400    = 14400, // TI standard baud rate.
+		Baud19200    = 19200,
+		Baud28800    = 28800, // TI standard baud rate.
+		Baud33600    = 33600,
+		Baud38400    = 38400,
+		Baud57600    = 57600,
+		Baud115200   = 115200,
+		Baud128000   = 128000,
+		Baud230400   = 230400,
+		Baud256000   = 256000,
+		Baud460800   = 460800,
+		Baud921600   = 921600,
+		Baud960000   = 960000,   // FTDI standard baud rate (https://www.ftdichip.com/Support/Knowledgebase/index.html?whatbaudratesareachieveabl.htm).
+		Baud1000000  = 1000000,  //  ""                     (Likely outdated, 2010 is stated, this would explain the finding below...)
+		Baud1200000  = 1200000,  //  ""
+		Baud1500000  = 1500000,  //  ""
+		Baud2000000  = 2000000,  //  ""
+		Baud3000000  = 3000000,  //  ""
+		Baud6000000  = 6000000,  // Prolific high baud rate (http://www.prolific.com.tw/UserFiles/files/ds_pl2303HXD_v1_4_4.pdf).
+		Baud12000000 = 12000000, //  ""                     (Interestingly, these rates work with FTDI but Prolific doesn't...)
 
 		Explicit = 0,
 
@@ -252,7 +254,7 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public static BaudRateEx[] GetItems()
 		{
-			var a = new List<BaudRateEx>(32); // Preset the required capacity to improve memory management; 32 is a large enough value.
+			var a = new List<BaudRateEx>(32); // Preset the required capacity to improve memory management.
 
 			a.Add(new BaudRateEx(BaudRate.Baud75));
 			a.Add(new BaudRateEx(BaudRate.Baud110));
@@ -284,6 +286,8 @@ namespace MKY.IO.Ports
 			a.Add(new BaudRateEx(BaudRate.Baud1500000));
 			a.Add(new BaudRateEx(BaudRate.Baud2000000));
 			a.Add(new BaudRateEx(BaudRate.Baud3000000));
+			a.Add(new BaudRateEx(BaudRate.Baud6000000));
+			a.Add(new BaudRateEx(BaudRate.Baud12000000));
 
 			// This method shall only return the fixed items, 'Explicit' is not added therefore.
 
@@ -422,36 +426,38 @@ namespace MKY.IO.Ports
 		{
 			// Sorted big to small for faster lookup of 'modern' baud rates.
 
-			if      (baudRate == (int)BaudRate.Baud3000000) return (new BaudRateEx(BaudRate.Baud3000000));
-			else if (baudRate == (int)BaudRate.Baud2000000) return (new BaudRateEx(BaudRate.Baud2000000));
-			else if (baudRate == (int)BaudRate.Baud1500000) return (new BaudRateEx(BaudRate.Baud1500000));
-			else if (baudRate == (int)BaudRate.Baud1200000) return (new BaudRateEx(BaudRate.Baud1200000));
-			else if (baudRate == (int)BaudRate.Baud1000000) return (new BaudRateEx(BaudRate.Baud1000000));
-			else if (baudRate == (int)BaudRate.Baud960000)  return (new BaudRateEx(BaudRate.Baud960000));
-			else if (baudRate == (int)BaudRate.Baud921600)  return (new BaudRateEx(BaudRate.Baud921600));
-			else if (baudRate == (int)BaudRate.Baud460800)  return (new BaudRateEx(BaudRate.Baud460800));
-			else if (baudRate == (int)BaudRate.Baud256000)  return (new BaudRateEx(BaudRate.Baud256000));
-			else if (baudRate == (int)BaudRate.Baud230400)  return (new BaudRateEx(BaudRate.Baud230400));
-			else if (baudRate == (int)BaudRate.Baud128000)  return (new BaudRateEx(BaudRate.Baud128000));
-			else if (baudRate == (int)BaudRate.Baud115200)  return (new BaudRateEx(BaudRate.Baud115200));
-			else if (baudRate == (int)BaudRate.Baud57600)   return (new BaudRateEx(BaudRate.Baud57600));
-			else if (baudRate == (int)BaudRate.Baud38400)   return (new BaudRateEx(BaudRate.Baud38400));
-			else if (baudRate == (int)BaudRate.Baud33600)   return (new BaudRateEx(BaudRate.Baud33600));
-			else if (baudRate == (int)BaudRate.Baud28800)   return (new BaudRateEx(BaudRate.Baud28800));
-			else if (baudRate == (int)BaudRate.Baud19200)   return (new BaudRateEx(BaudRate.Baud19200));
-			else if (baudRate == (int)BaudRate.Baud14400)   return (new BaudRateEx(BaudRate.Baud14400));
-			else if (baudRate == (int)BaudRate.Baud9600)    return (new BaudRateEx(BaudRate.Baud9600));
-			else if (baudRate == (int)BaudRate.Baud7200)    return (new BaudRateEx(BaudRate.Baud7200));
-			else if (baudRate == (int)BaudRate.Baud4800)    return (new BaudRateEx(BaudRate.Baud4800));
-			else if (baudRate == (int)BaudRate.Baud2400)    return (new BaudRateEx(BaudRate.Baud2400));
-			else if (baudRate == (int)BaudRate.Baud1200)    return (new BaudRateEx(BaudRate.Baud1200));
-			else if (baudRate == (int)BaudRate.Baud600)     return (new BaudRateEx(BaudRate.Baud600));
-			else if (baudRate == (int)BaudRate.Baud300)     return (new BaudRateEx(BaudRate.Baud300));
-			else if (baudRate == (int)BaudRate.Baud150)     return (new BaudRateEx(BaudRate.Baud150));
-			else if (baudRate == (int)BaudRate.Baud134)     return (new BaudRateEx(BaudRate.Baud134));
-			else if (baudRate == (int)BaudRate.Baud110)     return (new BaudRateEx(BaudRate.Baud110));
-			else if (baudRate == (int)BaudRate.Baud75)      return (new BaudRateEx(BaudRate.Baud75));
-			else                                            return (new BaudRateEx(baudRate));
+			if      (baudRate == (int)BaudRate.Baud12000000) return (new BaudRateEx(BaudRate.Baud12000000));
+			else if (baudRate == (int)BaudRate.Baud6000000)  return (new BaudRateEx(BaudRate.Baud6000000));
+			else if (baudRate == (int)BaudRate.Baud3000000)  return (new BaudRateEx(BaudRate.Baud3000000));
+			else if (baudRate == (int)BaudRate.Baud2000000)  return (new BaudRateEx(BaudRate.Baud2000000));
+			else if (baudRate == (int)BaudRate.Baud1500000)  return (new BaudRateEx(BaudRate.Baud1500000));
+			else if (baudRate == (int)BaudRate.Baud1200000)  return (new BaudRateEx(BaudRate.Baud1200000));
+			else if (baudRate == (int)BaudRate.Baud1000000)  return (new BaudRateEx(BaudRate.Baud1000000));
+			else if (baudRate == (int)BaudRate.Baud960000)   return (new BaudRateEx(BaudRate.Baud960000));
+			else if (baudRate == (int)BaudRate.Baud921600)   return (new BaudRateEx(BaudRate.Baud921600));
+			else if (baudRate == (int)BaudRate.Baud460800)   return (new BaudRateEx(BaudRate.Baud460800));
+			else if (baudRate == (int)BaudRate.Baud256000)   return (new BaudRateEx(BaudRate.Baud256000));
+			else if (baudRate == (int)BaudRate.Baud230400)   return (new BaudRateEx(BaudRate.Baud230400));
+			else if (baudRate == (int)BaudRate.Baud128000)   return (new BaudRateEx(BaudRate.Baud128000));
+			else if (baudRate == (int)BaudRate.Baud115200)   return (new BaudRateEx(BaudRate.Baud115200));
+			else if (baudRate == (int)BaudRate.Baud57600)    return (new BaudRateEx(BaudRate.Baud57600));
+			else if (baudRate == (int)BaudRate.Baud38400)    return (new BaudRateEx(BaudRate.Baud38400));
+			else if (baudRate == (int)BaudRate.Baud33600)    return (new BaudRateEx(BaudRate.Baud33600));
+			else if (baudRate == (int)BaudRate.Baud28800)    return (new BaudRateEx(BaudRate.Baud28800));
+			else if (baudRate == (int)BaudRate.Baud19200)    return (new BaudRateEx(BaudRate.Baud19200));
+			else if (baudRate == (int)BaudRate.Baud14400)    return (new BaudRateEx(BaudRate.Baud14400));
+			else if (baudRate == (int)BaudRate.Baud9600)     return (new BaudRateEx(BaudRate.Baud9600));
+			else if (baudRate == (int)BaudRate.Baud7200)     return (new BaudRateEx(BaudRate.Baud7200));
+			else if (baudRate == (int)BaudRate.Baud4800)     return (new BaudRateEx(BaudRate.Baud4800));
+			else if (baudRate == (int)BaudRate.Baud2400)     return (new BaudRateEx(BaudRate.Baud2400));
+			else if (baudRate == (int)BaudRate.Baud1200)     return (new BaudRateEx(BaudRate.Baud1200));
+			else if (baudRate == (int)BaudRate.Baud600)      return (new BaudRateEx(BaudRate.Baud600));
+			else if (baudRate == (int)BaudRate.Baud300)      return (new BaudRateEx(BaudRate.Baud300));
+			else if (baudRate == (int)BaudRate.Baud150)      return (new BaudRateEx(BaudRate.Baud150));
+			else if (baudRate == (int)BaudRate.Baud134)      return (new BaudRateEx(BaudRate.Baud134));
+			else if (baudRate == (int)BaudRate.Baud110)      return (new BaudRateEx(BaudRate.Baud110));
+			else if (baudRate == (int)BaudRate.Baud75)       return (new BaudRateEx(BaudRate.Baud75));
+			else                                             return (new BaudRateEx(baudRate));
 		}
 
 		/// <summary></summary>
