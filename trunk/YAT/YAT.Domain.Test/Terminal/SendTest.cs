@@ -380,20 +380,20 @@ namespace YAT.Domain.Test.Terminal
 			if (fileInfo.Path.Contains("HugeWith") ||
 			    fileInfo.Path.Contains("EnormousLine"))
 			{
-				estimatedTransmissionTime *= 999; // Will result in a "high" enough duration category to easily let it exclude.
+				estimatedTransmissionTime *= 99; // Will result in a "high" enough duration category to easily let it exclude.
 				workaround = " WORKAROUND FR #375 / FR #406"; // \remind (2020-08-13 / MKY)
 			}
 			else if (fileInfo.Path.Contains("Huge") && (settingsA.TerminalType == TerminalType.Binary))
 			{
-				estimatedTransmissionTime *= 999; // Will result in a "high" enough duration category to easily let it exclude.
+				estimatedTransmissionTime *= 99; // Will result in a "high" enough duration category to easily let it exclude.
 				workaround = " WORKAROUND FR #293 / FR #406"; // \remind (2020-08-13 / MKY)
 			}
 
 			// Timeout:
-			var args = new List<object>(tc.Arguments.Length + 1);
-			args.AddRange(tc.Arguments);                            // 50% margin to account for temporary congestion and the amount of tests (RAM consumption).
-			var timeout = Math.Max((int)(estimatedTransmissionTime * 1.5), Utilities.WaitTimeoutForLineTransmission); // 'timeout' must always be at least
-			args.Add(timeout);                                                                                        // the standard line timeout.
+			var args = new List<object>(tc.Arguments.Length + 1);  // A 100% timeout margin is required to account for the inaccuracy of the estimate/typical,
+			args.AddRange(tc.Arguments);                           // as well as possible temporary congestion and the amount of tests (RAM consumption = slower).
+			var timeout = Math.Max((int)(estimatedTransmissionTime * 2), Utilities.WaitTimeoutForLineTransmission); // 'timeout' must always be at least
+			args.Add(timeout);   // int in ms is enough for ~1000 hours.                                            // the standard line timeout.
 			var timeoutCaption = StandardDurationCategory.CaptionFrom(TimeSpan.FromMilliseconds(timeout));
 
 			// Estimated time and duration category:                    // settingsB are ignored (yet).
