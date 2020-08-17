@@ -377,7 +377,8 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		/// <remarks>
 		/// Somewhat awkward name, but neither "OutputMaxBaudRate" nor "WriteMaxBaudRate"
-		/// nor "LimitBufferToBaudRate" are better...
+		/// nor "LimitBufferToBaudRate" are better... And "MaxBaudRate" would obviously
+		/// be misleading...
 		/// </remarks>
 		[XmlElement("BufferMaxBaudRate")]
 		public virtual bool BufferMaxBaudRate
