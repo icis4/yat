@@ -1501,10 +1501,10 @@ namespace YAT.Model
 
 				if (StopIO(false))
 				{
-					OnFixedStatusTextRequest("Applying terminal settings...");
+					OnFixedStatusTextRequest("Applying settings and refreshing terminal...");
 
-					this.terminal.EmptyRepositories(); // ResumeChangeEvent() below will take long, emptying makes
-					                                 //// it more obvious to the user that something is ongoing,
+					this.terminal.EmptyRepositories();           // RecreateTerminal() below will take long, emptying makes
+					                                           //// it more obvious to the user that something is ongoing,
 					System.Windows.Forms.Application.DoEvents(); // but requires yielding to let view be refreshed.
 
 					this.settingsRoot.SuspendChangeEvent();
@@ -1524,6 +1524,10 @@ namespace YAT.Model
 						this.settingsRoot.ResumeChangeEvent();
 					}
 
+					OnFixedStatusTextRequest("...refreshing view..."); // RefreshRepositories() below may also take long, stating makes
+					                                                 //// it more obvious to the user that something is ongoing,
+					System.Windows.Forms.Application.DoEvents();       // but requires yielding to let view be refreshed.
+
 					this.terminal.RefreshRepositories();
 
 					if (StartIO(false))
@@ -1538,6 +1542,12 @@ namespace YAT.Model
 			}
 			else // Terminal is stopped, simply set the new settings:
 			{
+				OnFixedStatusTextRequest("Applying settings and refreshing terminal...");
+
+				this.terminal.EmptyRepositories();           // RecreateTerminal() below will take long, emptying makes
+				                                           //// it more obvious to the user that something is ongoing,
+				System.Windows.Forms.Application.DoEvents(); // but requires yielding to let view be refreshed.
+
 				this.settingsRoot.SuspendChangeEvent();
 				try
 				{
@@ -1554,6 +1564,10 @@ namespace YAT.Model
 				{
 					this.settingsRoot.ResumeChangeEvent();
 				}
+
+				OnFixedStatusTextRequest("...refreshing view..."); // RefreshRepositories() below may also take long, stating makes
+				                                                 //// it more obvious to the user that something is ongoing,
+				System.Windows.Forms.Application.DoEvents();       // but requires yielding to let view be refreshed.
 
 				this.terminal.RefreshRepositories();
 
@@ -4424,7 +4438,11 @@ namespace YAT.Model
 		{
 			AssertUndisposed();
 
-			if (!this.terminal.ClearRepository(repositoryType))
+			OnFixedStatusTextRequest("Clearing...");
+
+			if (this.terminal.ClearRepository(repositoryType))
+				OnResetStatusTextRequest(); // Simply reset, no need for "Cleared" or the like.
+			else
 				OnTimedStatusTextRequest("Clear request has timed out");
 		}
 
@@ -4435,7 +4453,11 @@ namespace YAT.Model
 		{
 			AssertUndisposed();
 
-			if (!this.terminal.ClearRepositories())
+			OnFixedStatusTextRequest("Clearing...");
+
+			if (this.terminal.ClearRepositories())
+				OnResetStatusTextRequest(); // Simply reset, no need for "Cleared" or the like.
+			else
 				OnTimedStatusTextRequest("Clear request has timed out");
 		}
 
@@ -4446,7 +4468,11 @@ namespace YAT.Model
 		{
 			AssertUndisposed();
 
-			if (!this.terminal.RefreshRepositories())
+			OnFixedStatusTextRequest("Refreshing...");
+
+			if (this.terminal.RefreshRepositories())
+				OnResetStatusTextRequest(); // Simply reset, no need for "Refreshed" or the like.
+			else
 				OnTimedStatusTextRequest("Refresh request has timed out");
 		}
 
@@ -4457,7 +4483,11 @@ namespace YAT.Model
 		{
 			AssertUndisposed();
 
-			if (!this.terminal.RefreshRepository(repositoryType))
+			OnFixedStatusTextRequest("Refreshing...");
+
+			if (this.terminal.RefreshRepository(repositoryType))
+				OnResetStatusTextRequest(); // Simply reset, no need for "Refreshed" or the like.
+			else
 				OnTimedStatusTextRequest("Refresh request has timed out");
 		}
 
