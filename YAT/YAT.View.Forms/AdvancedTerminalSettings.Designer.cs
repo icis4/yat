@@ -526,9 +526,7 @@
 			this.checkBox_MaxChunkSizeEnable.Size = new System.Drawing.Size(129, 17);
 			this.checkBox_MaxChunkSizeEnable.TabIndex = 4;
 			this.checkBox_MaxChunkSizeEnable.Text = "Buffer chunks of max.";
-			this.toolTip.SetToolTip(this.checkBox_MaxChunkSizeEnable, "Limiting the chunk size improves the responsiveness of hardware\r\nand/or software " +
-        "flow control, i.e. sending will be suspended sooner.\r\nEnlarging the chunk size m" +
-        "ay increase throughput.");
+			this.toolTip.SetToolTip(this.checkBox_MaxChunkSizeEnable, resources.GetString("checkBox_MaxChunkSizeEnable.ToolTip"));
 			this.checkBox_MaxChunkSizeEnable.UseVisualStyleBackColor = true;
 			this.checkBox_MaxChunkSizeEnable.CheckedChanged += new System.EventHandler(this.checkBox_MaxChunkSizeEnable_CheckedChanged);
 			// 

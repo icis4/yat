@@ -142,12 +142,17 @@ the baud rate permits.
 
 Either, tell YAT to limit writing to the speed the baud rate permits
 (less a safety margin), or tell YAT to limit sending by one of the
-other settings.</value>
+other settings.
+
+In order to prevent potential data loss, this setting is enabled by
+default. It must be deactivated for optimizing for the highest
+possible send rate. This will work fine for e.g. FTDI converters as
+well as MCT and Prolific converters at high baud rates.</value>
   </data>
   <data name="checkBox_OutputBufferSize.ToolTip" xml:space="preserve">
     <value>This settings overrides the system's default of typically 2048 bytes.
 
-Enlarging the output buffer may increase throughput.
+Enlarging the output buffer may increase the send rate.
 
 Limiting the output buffer may improve the responsiveness of flow
 flow control, i.e. sending will be suspended sooner.
@@ -168,6 +173,16 @@ the baud rate permits.
 Either, if the size of the hardware buffer is known, tell YAT to reduce
 the software buffer accordingly, or tell YAT to limit sending by one
 of the other settings.</value>
+  </data>
+  <data name="checkBox_MaxChunkSizeEnable.ToolTip" xml:space="preserve">
+    <value>Limiting the chunk size improves the responsiveness of hardware
+and/or software flow control, i.e. sending will be suspended sooner.
+Enlarging the chunk size may increase throughput.
+
+In order to prevent potential data loss, this setting is enabled by
+default. It must be deactivated for optimizing for the highest
+possible send rate. This will work fine for e.g. FTDI converters as
+well as MCT and Prolific converters at high baud rates.</value>
   </data>
   <data name="checkBox_IncludeIOWarnings.ToolTip" xml:space="preserve">
     <value>Include I/O warnings in monitor view, for...
