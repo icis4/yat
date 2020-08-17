@@ -348,6 +348,7 @@ namespace YAT.Domain
 			AttachTerminalSettings(settings);
 			CreateRepositories(settings);
 			InitializeProcess();
+			InitializeSend();
 			AttachRawTerminal(new RawTerminal(this.terminalSettings.IO, this.terminalSettings.Buffer));
 
 		////this.isReloading has been initialized to false.
@@ -361,6 +362,7 @@ namespace YAT.Domain
 			AttachTerminalSettings(settings);
 			CreateRepositories(terminal);
 			InitializeProcess();
+			InitializeSend();
 			AttachRawTerminal(new RawTerminal(terminal.rawTerminal, this.terminalSettings.IO, this.terminalSettings.Buffer));
 
 			this.isReloading = terminal.isReloading;
@@ -388,8 +390,8 @@ namespace YAT.Domain
 				BreakSendThreads();
 
 				// and the related timers will already have been stopped in Stop()...
-				DisposeProcess();
 				DisposeSend();
+				DisposeProcess();
 				DisposePeriodicXOnTimer();
 
 				// ...and objects will already have been detached and disposed of in Close():

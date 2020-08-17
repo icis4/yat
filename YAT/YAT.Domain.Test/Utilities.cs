@@ -136,36 +136,49 @@ namespace YAT.Domain.Test
 		//==========================================================================================
 
 		/// <summary>The estimated transmission time in milliseconds.</summary>
-		public static double GetEstimatedTransmissionTime(TerminalSettings settings, int byteCount)
+		public static double GetEstimatedTransmissionTime(TerminalSettings settings, int byteCount, int lineByteCount)
 		{
-			// Analysis and measurements 2020-08-11..12:
+			// Analysis and measurements 2020-08-11..14:
 			//
-			// 9600 baud:                              (theoretically 960 bytes / s)
-			//   >   9.5 s for     8'400 bytes (Normal) @ NUnit =>   ~888 bytes / s
-			//   >  94   s for    82'500 bytes (Large)  @ NUnit =>   ~875 bytes / s
+			// 9600 baud:                              (theoretically 960 bytes/s)
+			//   >   9.5 s for     8'400 bytes (Normal) @ NUnit/Debug =>   ~888 bytes/s
+			//   >  94   s for    82'500 bytes (Large)  @ NUnit/Debug =>   ~875 bytes/s
 			//
-			// 115.2 kbaud:                          (theoretically 11520 bytes / s)
-			//   >   0.8 s for     8'400 bytes (Normal) @ NUnit => ~10500 bytes / s
-			//   >   7.5 s for    82'500 bytes (Large)  @ NUnit => ~11000 bytes / s
-			//   >  94   s for 1'090'000 bytes (Huge)   @ NUnit => ~11500 bytes / s
-			//   > 240   s for 1'090'000 bytes (Huge)   @ YAT   =>  ~4500 bytes / s (additional overhead for view, not to be considered in this calculation)
+			// 115.2 kbaud:                          (theoretically 11520 bytes/s)
+			//   >   0.8 s for     8'400 bytes (Normal) @ NUnit/Debug => ~10500 bytes/s
+			//   >   7.5 s for    82'500 bytes (Large)  @ NUnit/Debug => ~11000 bytes/s
+			//   >  94   s for 1'090'000 bytes (Huge)   @ NUnit/Debug => ~11500 bytes/s
 			//
 			// TCP/IP:
-			//   >   0.3 s for     8'400 bytes (Normal) @ NUnit => ~28000 bytes / s
-			//   >   3.5 s for    82'500 bytes (Large)  @ NUnit => ~23500 bytes / s [Text]
-			//   >   5.5 s for    82'500 bytes (Large)  @ NUnit => ~15000 bytes / s [Binary]
-			//   >  42   s for 1'090'000 bytes (Huge)   @ NUnit => ~26000 bytes / s [Text]
-			//   >  66   s for 1'090'000 bytes (Huge)   @ NUnit => ~16500 bytes / s [Binary]
+			//   >   0.3 s for     8'400 bytes (Normal) @ NUnit/Debug => ~28000 bytes/s
+			//   >   3.5 s for    82'500 bytes (Large)  @ NUnit/Debug => ~23500 bytes/s [Text]
+			//   >   5.5 s for    82'500 bytes (Large)  @ NUnit/Debug => ~15000 bytes/s [Binary]
+			//   >  42   s for 1'090'000 bytes (Huge)   @ NUnit/Debug => ~26000 bytes/s [Text]
+			//   >  66   s for 1'090'000 bytes (Huge)   @ NUnit/Debug => ~16500 bytes/s [Binary]
 			//
 			// UDP/IP [Text]:
-			//   >   0.4 s for     8'400 bytes (Normal) @ NUnit => ~21000 bytes / s
-			//   >   4.0 s for    82'500 bytes (Large)  @ NUnit => ~20500 bytes / s
-			//   >  46   s for 1'090'000 bytes (Huge)   @ NUnit => ~23500 bytes / s
+			//   >   0.4 s for     8'400 bytes (Normal) @ NUnit/Debug => ~21000 bytes/s
+			//   >   4.0 s for    82'500 bytes (Large)  @ NUnit/Debug => ~20500 bytes/s
+			//   >  46   s for 1'090'000 bytes (Huge)   @ NUnit/Debug => ~23500 bytes/s
 
-			var transmissionTime = ((byteCount / settings.IO.TypicalNumberOfBytesPerMillisecond));
+			var transmissionTime = (byteCount / settings.IO.TypicalNumberOfBytesPerMillisecond);
 
+			// Account for the additional overhead in NUnit:
+			transmissionTime *= 1.25;
+
+			// Account for the higher overhead ratio of long lines:
+			if (     lineByteCount > 1000)
+				transmissionTime *= 1.25;
+			else if (lineByteCount > 10000)
+				transmissionTime *= 1.5;
+			else if (lineByteCount > 100000)
+				transmissionTime *= 1.75;
+			else
+				transmissionTime *= 2.0;
+
+			// [Binary] takes longer because formatting hex values is more time consuming than appending characters:
 			if (settings.TerminalType == TerminalType.Binary)
-				transmissionTime *= 1.5; // [Binary] takes longer because formatting hex values is more time consuming than appending characters.
+				transmissionTime *= 1.5;
 
 			return (transmissionTime);
 		}
