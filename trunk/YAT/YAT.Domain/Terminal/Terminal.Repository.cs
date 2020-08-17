@@ -579,15 +579,11 @@ namespace YAT.Domain
 		/// </remarks>
 		private void InlineDisplayElement(RepositoryType repositoryType, IODirection direction, DisplayElement.InlineElement element)
 		{
-			var lp = new DisplayElementCollection(1 + 1); // Preset the required capacity to improve memory management.
+			var lp = new DisplayElementCollection(1 + 1); // Preset the maximal required capacity to improve memory management.
 			var lineState = GetLineState(repositoryType);
 
-			// Add space if necessary:
-			if (ElementsAreSeparate(lineState.Direction))
-				AddContentSeparatorIfNecessary(lineState, direction, lp, element);
-
-			// Add element:
-			lp.Add(element);
+			AddContentSeparatorIfNecessary(lineState, direction, lp, element);
+			lp.Add(element); // No clone needed as elements must already have been cloned when calling this method.
 
 			AddDisplayElements(repositoryType, lp);
 
@@ -631,15 +627,11 @@ namespace YAT.Domain
 		/// </remarks>
 		private void InlineDisplayElements(RepositoryType repositoryType, IODirection direction, DisplayElementCollection elements)
 		{
-			var lp = new DisplayElementCollection(1 + elements.Count); // Preset the required capacity to improve memory management.
+			var lp = new DisplayElementCollection(1 + elements.Count); // Preset the maximal required capacity to improve memory management.
 			var lineState = GetLineState(repositoryType);
 
-			// Add space if necessary:
-			if (ElementsAreSeparate(lineState.Direction))
-				AddContentSeparatorIfNecessary(lineState, direction, lp, elements.First());
-
-			// Add elements:
-			lp.AddRange(elements);
+			AddContentSeparatorIfNecessary(lineState, direction, lp, elements.First());
+			lp.AddRange(elements); // No clone needed as elements must already have been cloned when calling this method.
 
 			AddDisplayElements(repositoryType, lp);
 
