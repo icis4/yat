@@ -164,15 +164,77 @@ namespace YAT.Domain.Test.Terminal
 
 			// Both terminals:
 
-			int baudRate = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud115200;
-			                         settingsA.IO.SerialPort.Communication.BaudRate = baudRate;
-			if (settingsB != null) { settingsB.IO.SerialPort.Communication.BaudRate = baudRate; }
+		////var availablePorts = new MKY.IO.Ports.SerialPortCollection(); // Caption based check is excluded for improving the performance on test generation.
+		////availablePorts.FillWithAvailablePorts(true);
 
-			                         settingsA.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software;   // Required to prevent Rx overruns. Note that hardware
-			if (settingsB != null) { settingsB.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software; } // flow control, cannot be used, MCT doesn't support it!
+		////var predicate = new MKY.IO.Ports.EqualsPortName<MKY.IO.Ports.SerialPortId>(*PortNameInQuestion);
+		////var *PortIdInQuestion = availablePorts.Find(predicate.Match);
+		////if (*PortIdInQuestion.EqualsCaption(*PortCaptionInQuestion))
 
-			                         settingsA.IO.SerialPort.SignalXOnWhenOpened = false;   // Required to match file size. Could alternatively
-			if (settingsB != null) { settingsB.IO.SerialPort.SignalXOnWhenOpened = false; } // be handled by adding one byte to the expected.
+			switch ((string)settingsA.IO.SerialPort.PortId) // Use different settings, optimized to the capabilities of the driver.
+			{                                               // To be refined once test configuration becomes driver aware with bug #354 "Automatic...".
+				case "COM31": // Prolific => 256 kbaud, hardware flow control, unlimited (work with these high baud rates).
+				{
+					int br = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud256000;
+					                         settingsA.IO.SerialPort.Communication.BaudRate = br;
+					if (settingsB != null) { settingsB.IO.SerialPort.Communication.BaudRate = br; }
+
+					                         settingsA.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Hardware;
+					if (settingsB != null) { settingsB.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Hardware; }
+
+					                         settingsA.IO.SerialPort.BufferMaxBaudRate = false;
+					if (settingsB != null) { settingsB.IO.SerialPort.BufferMaxBaudRate = false; }
+
+					var cs = new SizeSettingTuple(false, SerialPortSettings.MaxChunkSizeDefault.Size);
+					                         settingsA.IO.SerialPort.MaxChunkSize = cs;
+					if (settingsB != null) { settingsB.IO.SerialPort.MaxChunkSize = cs; }
+
+					break;
+				}
+
+				case "COM21": // FTDI => 1 Mbaud, no flow control, unlimited.
+				{
+					int br = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud1000000;
+					                         settingsA.IO.SerialPort.Communication.BaudRate = br;
+					if (settingsB != null) { settingsB.IO.SerialPort.Communication.BaudRate = br; }
+
+					                         settingsA.IO.SerialPort.Communication.FlowControl = SerialFlowControl.None;
+					if (settingsB != null) { settingsB.IO.SerialPort.Communication.FlowControl = SerialFlowControl.None; }
+
+					                         settingsA.IO.SerialPort.BufferMaxBaudRate = false;
+					if (settingsB != null) { settingsB.IO.SerialPort.BufferMaxBaudRate = false; }
+
+					var cs = new SizeSettingTuple(false, SerialPortSettings.MaxChunkSizeDefault.Size);
+					                         settingsA.IO.SerialPort.MaxChunkSize = cs;
+					if (settingsB != null) { settingsB.IO.SerialPort.MaxChunkSize = cs; }
+
+					break;
+				}
+
+				case "COM11": // MCT => 115.2 kbaud, software flow control, unlimited.
+				default:
+				{
+					int br = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud115200;
+					                         settingsA.IO.SerialPort.Communication.BaudRate = br;
+					if (settingsB != null) { settingsB.IO.SerialPort.Communication.BaudRate = br; }
+
+					                         settingsA.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software;   // Required to prevent Rx overruns. Note that hardware
+					if (settingsB != null) { settingsB.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software; } // flow control, cannot be used, MCT doesn't support it!
+
+					                         settingsA.IO.SerialPort.SignalXOnWhenOpened = false;   // Required to match file size. Could alternatively
+					if (settingsB != null) { settingsB.IO.SerialPort.SignalXOnWhenOpened = false; } // be handled by adding one byte to the expected.
+
+					                         settingsA.IO.SerialPort.BufferMaxBaudRate = false;
+					if (settingsB != null) { settingsB.IO.SerialPort.BufferMaxBaudRate = false; }
+
+					var cs = new SizeSettingTuple(false, SerialPortSettings.MaxChunkSizeDefault.Size);
+					                         settingsA.IO.SerialPort.MaxChunkSize = cs;
+					if (settingsB != null) { settingsB.IO.SerialPort.MaxChunkSize = cs; }
+
+					break;
+				}
+			}
+
 		}
 
 		#endregion
@@ -369,9 +431,8 @@ namespace YAT.Domain.Test.Terminal
 			FileInfo fileInfo;
 			if (settingsB == null) { fileInfo = (FileInfo)(tc.Arguments[1]); }
 			else                   { fileInfo = (FileInfo)(tc.Arguments[2]); }
-
-			var fileByteCount = fileInfo.ByteCount;                             // settingsB are ignored (yet).
-			var estimatedTransmissionTime = Utilities.GetEstimatedTransmissionTime(settingsA, fileByteCount);
+			                                                                  //// settingsB are ignored (yet).
+			var estimatedTransmissionTime = Utilities.GetEstimatedTransmissionTime(settingsA, fileInfo.ByteCount, fileInfo.LineByteCount);
 
 			// Workaround to these issues:
 			//  > YAT: Becomes really slow in case of such long lines. With FR #375 (see further below) this can be fixed for this test. With FR #406 this would be fixed in YAT.
@@ -397,7 +458,7 @@ namespace YAT.Domain.Test.Terminal
 			var timeoutCaption = StandardDurationCategory.CaptionFrom(TimeSpan.FromMilliseconds(timeout));
 
 			// Estimated time and duration category:                    // settingsB are ignored (yet).
-			var estimatedOverheadTime = Utilities.GetEstimatedOverheadTime(settingsA, fileByteCount);
+			var estimatedOverheadTime = Utilities.GetEstimatedOverheadTime(settingsA, fileInfo.ByteCount);
 			var estimated = TimeSpan.FromMilliseconds(estimatedTransmissionTime + estimatedOverheadTime);
 			var estimatedCaption = StandardDurationCategory.CaptionFrom(estimated);
 			var cat = StandardDurationCategory.AttributeFrom(estimated).Name;
