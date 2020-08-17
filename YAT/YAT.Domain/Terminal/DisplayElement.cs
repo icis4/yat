@@ -1013,7 +1013,18 @@ namespace YAT.Domain
 		/// </remarks>
 		public virtual bool AcceptsAppendOf(DisplayElement other)
 		{
-			if (GetType() != other.GetType())
+			// Special case:
+
+			var otherType = other.GetType();
+			if (otherType == typeof(ContentSeparator))
+			{
+				if (string.IsNullOrWhiteSpace(other.Text)) // For performance reasons, whitespace content separators
+					return (true);                         // are appended to the preceeding element.
+			}
+
+			// Standard case:
+
+			if (GetType() != otherType)
 				return (false);
 
 			if (!IsContent || !other.IsContent) // Disallow non-content elements.
@@ -1044,17 +1055,21 @@ namespace YAT.Domain
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The given element '" + other + "' cannot be appended to this element '" + this + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			// TimeStamp of this element is kept, other is ignored.
-			// Direction of this element is kept, other is same anyway (asserted by AcceptsAppendOf() above).
+			// Direction of this element is kept, other is same as asserted by AcceptsAppendOf() above.
 
-			if (this.origin != null)
-				this.origin.AddRange(PerformDeepClone(other.origin));
-			else
+			if (this.origin == null) {
 				this.origin = PerformDeepClone(other.origin);
+			}                               // No need to add empty origin.
+			else if ((other.origin != null) && (other.origin.Count > 0)) {
+				this.origin.AddRange(PerformDeepClone(other.origin));
+			}
 
-			if (this.text != null)
-				this.text += other.text;
-			else
+			if (this.text == null) {
 				this.text = other.text;
+			}                      // No need to add empty text.
+			else if (!string.IsNullOrEmpty(other.text)) {
+				this.text += other.text;
+			}
 
 			this.charCount += other.charCount;
 			this.byteCount += other.byteCount;
