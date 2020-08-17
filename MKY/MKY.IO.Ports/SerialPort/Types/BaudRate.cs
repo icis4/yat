@@ -71,8 +71,8 @@ namespace MKY.IO.Ports
 		Baud2000000  = 2000000,  //  ""
 		Baud3000000  = 3000000,  //  ""
 		Baud6000000  = 6000000,  // Prolific high baud rate (http://www.prolific.com.tw/UserFiles/files/ds_pl2303HXD_v1_4_4.pdf).
-		Baud12000000 = 12000000, //  ""                     (Interestingly, these rates work with FTDI but Prolific doesn't...)
-
+		Baud12000000 = 12000000, //  ""                     (Interestingly, both these rates do not work with Prolifi in the YAT TestLab.
+		                         ////                        But, both these rates do work with FTDI, though fall back to 115.2 kbaud.)
 		Explicit = 0,
 
 		/// <summary>Theoretical minimum is 1.</summary>
