@@ -274,9 +274,14 @@ namespace YAT.Domain.Settings
 			get { return (((IOTypeEx)IOType).IsServerSocket); }
 		}
 
-		/// <remarks>Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.</remarks>
+		/// <remarks>
+		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings!
+		/// </remarks>
+		/// <remarks>
+		/// Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+		/// </remarks>
 		[XmlIgnore]
-		public virtual double TypicalNumberOfBytesPerMillisecond
+		public virtual double ApproximateTypicalNumberOfBytesPerMillisecond
 		{
 			get
 			{
@@ -326,6 +331,12 @@ namespace YAT.Domain.Settings
 						// Using https://mycurvefit.com/ to fit the measured values into a function:
 						//  > [Power] [y = a * x^b] would require using Pow(), i.e. less performant.
 						//  > [Michaelis-Menten] [y = (Vmax * x) / (Km + x)] is more performant.
+						//
+						// Attention, while fitting is fine, individual rates may not, e.g. 9600:
+						// x = 0.96
+						// y = (24.08415 * 0.96) / (15.65619 + 0.96) = 1.39, i.e. factor ~2.
+						// Also 115.2 kbaud which is 5500...11600 bytes/s, i.e. also factor ~2.
+
 						var x = this.serialPort.Communication.FramesPerMillisecond;
 					#if (DEBUG)
 						//   x     y
@@ -354,6 +365,7 @@ namespace YAT.Domain.Settings
 						// y = (55.52183 * x) / (40.01806 + x) with 115.2 kbaud  ~8000 bytes/s (interpolated)
 						return (55.52183 * x) / (40.01806 + x);
 					#endif
+
 						// Notes:
 						//  > Ignoring mismatch in case 7 data bits are being used.
 						//  > Ignoring mismatch in case non-8-bit bytes are being used.

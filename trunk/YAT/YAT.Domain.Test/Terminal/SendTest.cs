@@ -431,39 +431,32 @@ namespace YAT.Domain.Test.Terminal
 			FileInfo fileInfo;
 			if (settingsB == null) { fileInfo = (FileInfo)(tc.Arguments[1]); }
 			else                   { fileInfo = (FileInfo)(tc.Arguments[2]); }
-			                                                                  //// settingsB are ignored (yet).
-			var estimatedTransmissionTime = Utilities.GetEstimatedTransmissionTime(settingsA, fileInfo.ByteCount, fileInfo.LineByteCount);
+			                                                                                 //// settingsB are ignored (yet).
+			var roughlyEstimatedTransmissionTime = Utilities.GetRoughtlyEstimatedTransmissionTime(settingsA, fileInfo.ByteCount, fileInfo.LineByteCount);
 
-			// Workaround to these issues:
-			//  > YAT: Becomes really slow in case of such long lines. With FR #375 (see further below) this can be fixed for this test. With FR #406 this would be fixed in YAT.
-			//  > NUnit: Memory consumption increases such RAM becomes full and execution takes forever, maybe due to reason above, maybe fixed with FR #293 (upgrade to NUnit V3).
+			// Workaround to issue that YAT becomes really slow in case of very long lines.
+			// With FR #375 (see further below) this will be fixable for this test.
 			string workaround = "";
-			if (fileInfo.Path.Contains("HugeWith") ||
-			    fileInfo.Path.Contains("EnormousLine"))
+			if (fileInfo.Path.Contains("EnormousLine"))
 			{
-				estimatedTransmissionTime *= 99; // Will result in a "high" enough duration category to easily let it exclude.
-				workaround = " WORKAROUND FR #375 / FR #406"; // \remind (2020-08-13 / MKY)
-			}
-			else if (fileInfo.Path.Contains("Huge") && (settingsA.TerminalType == TerminalType.Binary))
-			{
-				estimatedTransmissionTime *= 99; // Will result in a "high" enough duration category to easily let it exclude.
-				workaround = " WORKAROUND FR #293 / FR #406"; // \remind (2020-08-13 / MKY)
+				roughlyEstimatedTransmissionTime *= 99; // Will result in a "high" enough duration category to easily let it exclude.
+				workaround = " WORKAROUND FR #375"; // \remind (2020-08-13 / MKY)
 			}
 
 			// Timeout:
-			var args = new List<object>(tc.Arguments.Length + 1);      // A 50% timeout margin is required to account for the inaccuracy of the estimate/typical,
-			args.AddRange(tc.Arguments);                               // as well as possible temporary congestion and the amount of tests (RAM consumption = slower).
-			var timeout = Math.Max((int)(estimatedTransmissionTime * 1.50), Utilities.WaitTimeoutForLineTransmission); // 'timeout' must always be at least
-			args.Add(timeout);   // int in ms is enough for ~1000 hours.                                               // the standard line timeout.
+			var args = new List<object>(tc.Arguments.Length + 1);      // A 100% timeout margin is required to account for the inaccuracy,
+			args.AddRange(tc.Arguments);                               // of the rough estimate, as well as possible temporary hickups.
+			var timeout = Math.Max((int)(roughlyEstimatedTransmissionTime * 2), Utilities.WaitTimeoutForLineTransmission); // 'timeout' must always be at least
+			args.Add(timeout);   // int in ms is enough for ~1000 hours.                                                   // the standard line timeout.
 			var timeoutCaption = StandardDurationCategory.CaptionFrom(TimeSpan.FromMilliseconds(timeout));
 
-			// Estimated time and duration category:                    // settingsB are ignored (yet).
-			var estimatedOverheadTime = Utilities.GetEstimatedOverheadTime(settingsA, fileInfo.ByteCount);
-			var estimated = TimeSpan.FromMilliseconds(estimatedTransmissionTime + estimatedOverheadTime);
-			var estimatedCaption = StandardDurationCategory.CaptionFrom(estimated);
-			var cat = StandardDurationCategory.AttributeFrom(estimated).Name;
+			// Estimated time and duration category:                                  // settingsB are ignored (yet).
+			var roughlyEstimatedOverheadTime = Utilities.GetRoughlyEstimatedOverheadTime(settingsA, fileInfo.ByteCount);
+			var roughlyEstimated = TimeSpan.FromMilliseconds(roughlyEstimatedTransmissionTime + roughlyEstimatedOverheadTime);
+			var roughlyEstimatedCaption = StandardDurationCategory.CaptionFrom(roughlyEstimated);
+			var cat = StandardDurationCategory.AttributeFrom(roughlyEstimated).Name;
 
-			var nameSuffix = " (" + estimatedCaption + " estimated total; " + timeoutCaption +" Tx/Rx timeout)" + workaround;
+			var nameSuffix = " (" + roughlyEstimatedCaption + " roughly estimated total; " + timeoutCaption +" Tx/Rx timeout)" + workaround;
 			var result = TestCaseDataEx.ToTestCase(tc, nameSuffix, new string[] { cat }, args.ToArray());
 		#if (DEBUG_TEST_CASE_DATA)
 			TestCaseDataHelper.WriteToTempFile(typeof(SendTestData), result); // No need to append to file, file name will differ due to suffix.
