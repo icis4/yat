@@ -395,7 +395,7 @@ namespace YAT.Domain
 			var sb = new StringBuilder();
 			sb.Append(@"Byte sequence """);
 			sb.Append(bytesAsString);
-			sb.Append(@""" is outside the basic multilingual plane (plane 0) which is not supported by the .NET Framework but tracked as YAT feature request #329.");
+			sb.Append(@""" is outside the Unicode basic multilingual plane (plane 0) which is not supported by the .NET Framework but tracked as YAT feature request #329.");
 
 			return (new DisplayElement.ErrorInfo(ts, (Direction)dir, sb.ToString(), true));
 		}
@@ -406,7 +406,10 @@ namespace YAT.Domain
 			if (ElementsAreSeparate(dir) && !string.IsNullOrEmpty(de.Text))
 			{
 				if ((lineState.Elements.CharCount > 0) || (lp.CharCount > 0))
-					lp.Add(new DisplayElement.ContentSeparator((Direction)dir, TerminalSettings.Display.ContentSeparatorCache));
+				{
+					if (!string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache))
+						lp.Add(new DisplayElement.ContentSeparator((Direction)dir, TerminalSettings.Display.ContentSeparatorCache));
+				}
 			}
 		}
 
