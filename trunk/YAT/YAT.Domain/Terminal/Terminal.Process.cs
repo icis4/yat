@@ -308,16 +308,13 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <remarks>
-		/// Note the limitation FR #329:
-		/// Unicode is limited to the basic multilingual plane (U+0000..U+FFFF).
-		/// </remarks>
+		/// <summary></summary>
 		[CLSCompliant(false)]
 		protected virtual string UnicodeValueToNumericString(ushort value)
 		{
 			if (TerminalSettings.Display.ShowRadix)
 				return ("U+" + value.ToString("X4", CultureInfo.InvariantCulture));
-			else
+			else                               // Note limitation FR #329: Unicode is limited to the basic multilingual plane (U+0000..U+FFFF).
 				return (       value.ToString("X4", CultureInfo.InvariantCulture));
 		}
 

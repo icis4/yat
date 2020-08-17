@@ -968,7 +968,7 @@ namespace YAT.Domain.Parser
 						{
 							bool found = false;
 
-							int from = Math.Min(4, remaining.Length); // Note the limitation FR #329: Unicode is limited to the basic multilingual plane (U+0000..U+FFFF).
+							int from = Math.Min(4, remaining.Length); // Note limitation FR #329: Unicode is limited to the basic multilingual plane (U+0000..U+FFFF).
 							for (int i = from; i >= 1; i--) // Probe the 4-3-2-1 left-most characters for a valid hexadecimal Unicode value.
 							{
 								ushort value;
