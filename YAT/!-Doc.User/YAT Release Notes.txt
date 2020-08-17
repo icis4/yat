@@ -181,7 +181,9 @@ Fixed bugs:
 - Handling of [Preferences... > ...take serial number/string into account] fixed (rel. to bug #480).
 
 Limitations and known issues:
-- General imitations of .NET Windows.Forms:
+- General limitations of .NET Framework:
+   > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
+- General limitations of .NET Windows.Forms:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
@@ -196,13 +198,12 @@ Limitations and known issues:
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
    > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
      selected may lead to a severe drop of the overall performance (related to bug #383).
-   > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
    > Link label text rendering issues after plotting (bug #485).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
    > Issue with layouting when closing an MDI child (bug #399).
-- Serial COM port limitations of .NET:
+- Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
      result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
@@ -310,7 +311,9 @@ Fixed bugs:
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
-- General imitations of .NET Windows.Forms:
+- General limitations of .NET Framework:
+   > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
+- General limitations of .NET Windows.Forms:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
@@ -324,12 +327,11 @@ Limitations and known issues:
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
    > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
      selected may lead to a severe drop of the overall performance (related to bug #383).
-   > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
    > Issue with layouting when closing an MDI child (bug #399).
-- Serial COM port limitations of .NET:
+- Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
      result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
@@ -386,7 +388,9 @@ Fixed bugs:
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
-- General imitations of .NET Windows.Forms:
+- General limitations of .NET Framework:
+   > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
+- General limitations of .NET Windows.Forms:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
@@ -400,12 +404,11 @@ Limitations and known issues:
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
    > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
      selected may lead to a severe drop of the overall performance (related to bug #383).
-   > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
    > Issue with layouting when closing an MDI child (bug #399).
-- Serial COM port limitations of .NET:
+- Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
      result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
@@ -472,7 +475,9 @@ Fixed bugs:
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
-- General imitations of .NET Windows.Forms:
+- General limitations of .NET Framework:
+   > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
+- General limitations of .NET Windows.Forms:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
@@ -485,12 +490,11 @@ Limitations and known issues:
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
    > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
      selected may lead to a severe drop of the overall performance (related to bug #383).
-   > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
    > Issue with layouting when closing an MDI child (bug #399).
-- Serial COM port limitations of .NET:
+- Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
      result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
@@ -559,7 +563,7 @@ Fixed bugs:
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
-- General imitations of .NET Windows.Forms:
+- General limitations of .NET Windows.Forms:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
@@ -573,7 +577,7 @@ Limitations and known issues:
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
-- Serial COM port limitations of .NET:
+- Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
      result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
@@ -646,7 +650,7 @@ Fixed bugs:
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
-- General imitations of .NET Windows.Forms:
+- General limitations of .NET Windows.Forms:
    > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
    > System errors are output in local language, even though YAT is all-English (bug #66).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
@@ -656,7 +660,7 @@ Limitations and known issues:
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
-- Serial COM port limitations of .NET:
+- Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of USB/RS-232 converters (USB CDC) while disconnect, undock or hibernate without closing
      the serial COM port may require to reset the converters, i.e. disconnect and reconnect them,
@@ -788,7 +792,7 @@ Fixed bugs:
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
-- General imitations of .NET Windows.Forms:
+- General limitations of .NET Windows.Forms:
    > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
    > System errors are output in local language, even though YAT is all-English (bug #66).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
@@ -798,7 +802,7 @@ Limitations and known issues:
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
-- Serial COM port limitations of .NET:
+- Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of USB/RS-232 converters (USB CDC) while disconnect, undock or hibernate without closing
      the serial COM port may require to reset the converters, i.e. disconnect and reconnect them,
@@ -910,7 +914,7 @@ Fixed bugs:
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2013 on .NET 3.5 SP1 (feat. #229)
-- General imitations of .NET Windows.Forms
+- General limitations of .NET Windows.Forms
    > If YAT is not the active application, two clicks are required to execute an action. Reason:
      In .NET Windows.Forms the first click only activates the application but doesn't execute
      anything (bug #210)
@@ -1023,7 +1027,7 @@ Fixed bugs:
 - Proper startup when YAT is started minimized or without view (bug #3542973>#237)
 
 Limitations and known issues:
-- General imitations of .NET Windows.Forms
+- General limitations of .NET Windows.Forms
    > If YAT is not the active application, two clicks are required to execute an action. Reason:
      In .NET Windows.Forms the first click only activates the application but doesn't execute
      anything (bug #3454532>#210)
@@ -1115,7 +1119,7 @@ Fixed bugs:
 - 'NullReferenceException' in YAT.Log fixed (bug #3441961)
 
 Limitations and known issues:
-- General imitations of .NET Windows.Forms
+- General limitations of .NET Windows.Forms
    > System errors are output in local language, even though YAT is all-English (bug #1927786)
 - MDI limitations of .NET
    > Issues with frame (bugs #1808492 and #1808493)

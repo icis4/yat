@@ -395,7 +395,7 @@ namespace YAT.Domain
 			var sb = new StringBuilder();
 			sb.Append(@"Byte sequence """);
 			sb.Append(bytesAsString);
-			sb.Append(@""" is outside the basic multilingual plane (plane 0) which is not yet supported but tracked as feature request #329.");
+			sb.Append(@""" is outside the basic multilingual plane (plane 0) which is not supported by the .NET Framework but tracked as YAT feature request #329.");
 
 			return (new DisplayElement.ErrorInfo(ts, (Direction)dir, sb.ToString(), true));
 		}
