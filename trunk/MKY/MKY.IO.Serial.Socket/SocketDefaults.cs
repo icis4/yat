@@ -54,8 +54,8 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		public const int MessageBufferSize = 2048;
 
-		// Measurements 2020-08-13 using two interconnected TCP/IP AutoSockets with default
-		// settings, transmitting 'Huge.txt' (~1 MiB):
+		// Measurements 2020-08-13 using two interconnected YAT TCP/IP AutoSocket terminals with
+		// default settings, transmitting 'Huge.txt' (~1 MiB):
 		//
 		// [Debug]
 		//  > Small buffers and safe maximum payload lengths result in ~19.5 kiB/s.

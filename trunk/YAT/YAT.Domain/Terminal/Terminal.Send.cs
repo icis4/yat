@@ -153,6 +153,11 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary>
+		/// The cached <see cref="Settings.IOSettings.TypicalNumberOfBytesPerMillisecond"/> value.
+		/// </summary>
+		protected double TypicalNumberOfBytesPerMillisecond { get; private set; }
+
+		/// <summary>
 		/// The sequence number of the next send request.
 		/// </summary>
 		/// <remarks>
@@ -528,6 +533,15 @@ namespace YAT.Domain
 		// Non-Public Methods
 		//==========================================================================================
 
+		/// <remarks>
+		/// <c>private</c> rather than <c>protected virtual</c> because derived method(s) depend(s)
+		/// on code sequence in constructor(s).
+		/// </remarks>
+		private void InitializeSend()
+		{
+			TypicalNumberOfBytesPerMillisecond = this.terminalSettings.IO.TypicalNumberOfBytesPerMillisecond; // Retrieving once is sufficient, a new terminal will be created when settings have changed.
+		}
+
 		/// <summary>
 		/// Disposes the processing state.
 		/// </summary>
@@ -731,7 +745,7 @@ namespace YAT.Domain
 		protected virtual void DoSendRawData(ForSomeTimeEventHelper forSomeTimeEventHelper, byte[] data)
 		{
 			// Raise the 'IsSendingForSomeTimeChanged' event if a large chunk is about to be sent:
-			if (forSomeTimeEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(data.Length, this.terminalSettings.IO.TypicalNumberOfBytesPerMillisecond))
+			if (forSomeTimeEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(data.Length, TypicalNumberOfBytesPerMillisecond))
 				IncrementIsSendingForSomeTimeChanged();
 
 			DebugSend(string.Format("Sending {0} byte(s) of raw data by directly forwarding to raw terminal.", data.Length));
@@ -789,7 +803,7 @@ namespace YAT.Domain
 							if (bytesResult != null)
 							{
 								// Raise the 'IsSendingForSomeTimeChanged' event if a large chunk is about to be sent:
-								if (forSomeTimeEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(bytesResult.Bytes.Length, this.terminalSettings.IO.TypicalNumberOfBytesPerMillisecond))
+								if (forSomeTimeEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(bytesResult.Bytes.Length, TypicalNumberOfBytesPerMillisecond))
 									IncrementIsSendingForSomeTimeChanged();
 
 								// For performance reasons, as well as joining text terminal EOL with line content,

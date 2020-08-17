@@ -287,17 +287,87 @@ namespace YAT.Domain.Settings
 						return (0);
 					}
 
-					case IOType.SerialPort:                                             // 20% typical overhead, incl. safety margin. But attention, it's just a 'typical' value:
-					{                                                                  //      Ignore fact that overhead increases with higher baud rates.
-						return (this.serialPort.Communication.FramesPerMillisecond * 0.80); // Ignore mismatch in case 7 data bits are being used.
-					}                                                                       // Ignore mismatch in case e.g. 16-bit bytes are being used.
+					case IOType.SerialPort:
+					{
+						// Measurements 2020-08-17 using two interconnected serial COM port
+						// terminals, transmitting 'Large.txt' (~80 KiB) / 'Huge.txt' (~1 MiB):
+						//
+						// [Debug]
+						//  >     0  baud                      :          =>      0 bytes/s
+						//  >  9600  baud =   0.96 frames/ms @1: t = 1:55 =>   ~715 bytes/s
+						//  > 115.2 kbaud =  11.52 frames/ms @1: t = 0:16 =>  ~5150 bytes/s
+						//  > 115.2 kbaud =  11.52 frames/ms @2: t = 1:55 =>  ~9500 bytes/s
+						//  > 256   kbaud =  25.6  frames/ms @2: t = 1:00 => ~18150 bytes/s
+						//  >   1   Mbaud = 100    frames/ms @2: t = 0:53 => ~20600 bytes/s
+						//  >   3   Mbaud = 300    frames/ms @2: t = 0:49 => ~22250 bytes/s
+						//
+						// [Release]
+						//  >     0  baud                      :          =>      0 bytes/s
+						//  >  9600  baud =   0.96 frames/ms @1: t = 1:55 =>   ~715 bytes/s
+						//  > 115.2 kbaud =  11.52 frames/ms @1: t = 0:15 =>  ~5500 bytes/s
+						//  > 115.2 kbaud =  11.52 frames/ms @2: t = 1:34 => ~11600 bytes/s
+						//  > 256   kbaud =  25.6  frames/ms @2: t = 0:46 => ~23700 bytes/s
+						//  >   1   Mbaud = 100    frames/ms @2: t = 0:26 => ~41900 bytes/s
+						//  >   3   Mbaud = 300    frames/ms @2: t = 0:23 => ~47400 bytes/s
+						//
+						// @1 'Large.txt' using default settings, i.e. limited to baud rate and 48 byte chunks.
+						// @2 'Huge.txt' using optimized settings, i.e. unlimited.
+						//
+						// measured throughput [bytes/ms]
+						//  ^
+						//  |                                        *
+						//  |       *
+						//  |   *
+						//  | *
+						//  |*
+						//  *-----------------------------------------> configured rate [frames/ms]
+						//  0 0.96 11.52 25.6 100                   300
+						//
+						// Using https://mycurvefit.com/ to fit the measured values into a function:
+						//  > [Power] [y = a * x^b] would require using Pow(), i.e. less performant.
+						//  > [Michaelis-Menten] [y = (Vmax * x) / (Km + x)] is more performant.
+						var x = this.serialPort.Communication.FramesPerMillisecond;
+					#if (DEBUG)
+						//   x     y
+						//   0     0
+						//   0.96  0.715
+						//  11.52  5.15
+						//  25.6  18.15
+						// 100    20.6
+						// 300    22.25
+						//
+						// y = (24.61117 * x) / (19.36483 + x) with 115.2 kbaud ~5150 bytes/s (measured)
+						// y = (23.65423 * x) / (12.84387 + x) with 115.2 kbaud ~9500 bytes/s (measured)
+						// y = (24.08415 * x) / (15.65619 + x) with 115.2 kbaud ~7500 bytes/s (interpolated)
+						return (24.08415 * x) / (15.65619 + x);
+					#else
+						//   x     y
+						//   0     0
+						//   0.96  0.715
+						//  11.52  8
+						//  25.6  23.7
+						// 100    41.9
+						// 300    47.7
+						//
+						// y = (56.47081 * x) / (43.93722 + x) with 115.2 kbaud  ~5500 bytes/s (measured)
+						// y = (54.15617 * x) / (34.62719 + x) with 115.2 kbaud ~11600 bytes/s (measured)
+						// y = (55.52183 * x) / (40.01806 + x) with 115.2 kbaud  ~8000 bytes/s (interpolated)
+						return (55.52183 * x) / (40.01806 + x);
+					#endif
+						// Notes:
+						//  > Ignoring mismatch in case 7 data bits are being used.
+						//  > Ignoring mismatch in case non-8-bit bytes are being used.
+						//  > No need to consider overhead, incl. safety margin as measure values already include this.
+						//     > 20% typical overhead for lower baud rates
+						//     > Overhead increases for higher baud rates.
+					}
 
 					case IOType.TcpClient:
 					case IOType.TcpServer:
 					case IOType.TcpAutoSocket:
 					{
 						// In theory:
-						// Less than 6.55 MiBit/s (https://www.switch.ch/network/tools/tcp_throughput/), i.e. less than 820 KiByte/s.
+						// Less than 6.55 MiBit/s (https://www.switch.ch/network/tools/tcp_throughput/), i.e. less than ~800 KiByte/s.
 						//
 						// In YAT practise (e.g. 'Huge.txt'):
 						//  > ~19.5 KiByte/s for [Debug]
@@ -332,7 +402,11 @@ namespace YAT.Domain.Settings
 						//
 						// In YAT practise:
 						// Likely less.
+					#if (DEBUG)
+						return (10);
+					#else
 						return (20);
+					#endif
 					}
 
 					default:
