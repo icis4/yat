@@ -153,9 +153,12 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary>
-		/// The cached <see cref="Settings.IOSettings.TypicalNumberOfBytesPerMillisecond"/> value.
+		/// The cached <see cref="Settings.IOSettings.ApproximateTypicalNumberOfBytesPerMillisecond"/> value.
 		/// </summary>
-		protected double TypicalNumberOfBytesPerMillisecond { get; private set; }
+		/// <remarks>
+		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings!
+		/// </remarks>
+		protected double ApproximateTypicalNumberOfBytesPerMillisecond { get; private set; }
 
 		/// <summary>
 		/// The sequence number of the next send request.
@@ -539,7 +542,9 @@ namespace YAT.Domain
 		/// </remarks>
 		private void InitializeSend()
 		{
-			TypicalNumberOfBytesPerMillisecond = this.terminalSettings.IO.TypicalNumberOfBytesPerMillisecond; // Retrieving once is sufficient, a new terminal will be created when settings have changed.
+			ApproximateTypicalNumberOfBytesPerMillisecond = this.terminalSettings.IO.ApproximateTypicalNumberOfBytesPerMillisecond;
+
+			// Retrieving once is sufficient, a new terminal will be created when settings have changed.
 		}
 
 		/// <summary>
@@ -745,7 +750,7 @@ namespace YAT.Domain
 		protected virtual void DoSendRawData(ForSomeTimeEventHelper forSomeTimeEventHelper, byte[] data)
 		{
 			// Raise the 'IsSendingForSomeTimeChanged' event if a large chunk is about to be sent:
-			if (forSomeTimeEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(data.Length, TypicalNumberOfBytesPerMillisecond))
+			if (forSomeTimeEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(data.Length, ApproximateTypicalNumberOfBytesPerMillisecond))
 				IncrementIsSendingForSomeTimeChanged();
 
 			DebugSend(string.Format("Sending {0} byte(s) of raw data by directly forwarding to raw terminal.", data.Length));
@@ -803,7 +808,7 @@ namespace YAT.Domain
 							if (bytesResult != null)
 							{
 								// Raise the 'IsSendingForSomeTimeChanged' event if a large chunk is about to be sent:
-								if (forSomeTimeEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(bytesResult.Bytes.Length, TypicalNumberOfBytesPerMillisecond))
+								if (forSomeTimeEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(bytesResult.Bytes.Length, ApproximateTypicalNumberOfBytesPerMillisecond))
 									IncrementIsSendingForSomeTimeChanged();
 
 								// For performance reasons, as well as joining text terminal EOL with line content,
