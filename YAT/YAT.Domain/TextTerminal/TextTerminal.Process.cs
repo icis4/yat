@@ -403,13 +403,10 @@ namespace YAT.Domain
 		/// <remarks>This text specific implementation is based on <see cref="DisplayElementCollection.CharCount"/>.</remarks>
 		protected override void AddContentSeparatorIfNecessary(LineState lineState, IODirection dir, DisplayElementCollection lp, DisplayElement de)
 		{
-			if (ElementsAreSeparate(dir) && !string.IsNullOrEmpty(de.Text))
+			if (RadixSupportsSeparateElements(dir) && !string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache) && !string.IsNullOrEmpty(de.Text))
 			{
 				if ((lineState.Elements.CharCount > 0) || (lp.CharCount > 0))
-				{
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache))
-						lp.Add(new DisplayElement.ContentSeparator((Direction)dir, TerminalSettings.Display.ContentSeparatorCache));
-				}
+					lp.Add(new DisplayElement.ContentSeparator((Direction)dir, TerminalSettings.Display.ContentSeparatorCache));
 			}
 		}
 

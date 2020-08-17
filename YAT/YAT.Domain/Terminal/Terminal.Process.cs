@@ -403,15 +403,15 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual bool ElementsAreSeparate(IODirection dir)
+		protected virtual bool RadixSupportsSeparateElements(IODirection dir)
 		{
 			switch (dir)
-			{                                                                                         // Pragmatic best-effort approach.
-				case IODirection.None:  return (ElementsAreSeparate(TerminalSettings.Display.TxRadix) || ElementsAreSeparate(TerminalSettings.Display.RxRadix));
-				case IODirection.Bidir: return (ElementsAreSeparate(TerminalSettings.Display.TxRadix) || ElementsAreSeparate(TerminalSettings.Display.RxRadix));
+			{                                                                                                   // Pragmatic best-effort approach.
+				case IODirection.None:  return (RadixSupportsSeparateElements(TerminalSettings.Display.TxRadix) || RadixSupportsSeparateElements(TerminalSettings.Display.RxRadix));
+				case IODirection.Bidir: return (RadixSupportsSeparateElements(TerminalSettings.Display.TxRadix) || RadixSupportsSeparateElements(TerminalSettings.Display.RxRadix));
 
-				case IODirection.Tx:    return (ElementsAreSeparate(TerminalSettings.Display.TxRadix)                                                         );
-				case IODirection.Rx:    return (                                                         ElementsAreSeparate(TerminalSettings.Display.RxRadix));
+				case IODirection.Tx:    return (RadixSupportsSeparateElements(TerminalSettings.Display.TxRadix)                                                         );
+				case IODirection.Rx:    return (                                                                   RadixSupportsSeparateElements(TerminalSettings.Display.RxRadix));
 
 				default:                throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -419,7 +419,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		protected virtual bool ElementsAreSeparate(Radix r)
+		protected virtual bool RadixSupportsSeparateElements(Radix r)
 		{
 			switch (r)
 			{
@@ -445,13 +445,10 @@ namespace YAT.Domain
 		/// </remarks>
 		protected virtual void AddContentSeparatorIfNecessary(IODirection dir, DisplayElementCollection lp, DisplayElement de)
 		{
-			if (ElementsAreSeparate(dir) && !string.IsNullOrEmpty(de.Text))
+			if (RadixSupportsSeparateElements(dir) && !string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache) && !string.IsNullOrEmpty(de.Text))
 			{
 				if (lp.ByteCount > 0)
-				{
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache))
-						lp.Add(new DisplayElement.ContentSeparator((Direction)dir, TerminalSettings.Display.ContentSeparatorCache));
-				}
+					lp.Add(new DisplayElement.ContentSeparator((Direction)dir, TerminalSettings.Display.ContentSeparatorCache));
 			}
 		}
 
@@ -463,20 +460,17 @@ namespace YAT.Domain
 		/// </remarks>
 		protected virtual void AddContentSeparatorIfNecessary(LineState lineState, IODirection dir, DisplayElementCollection lp, DisplayElement de)
 		{
-			if (ElementsAreSeparate(dir) && !string.IsNullOrEmpty(de.Text))
+			if (RadixSupportsSeparateElements(dir) && !string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache) && !string.IsNullOrEmpty(de.Text))
 			{
 				if ((lineState.Elements.ByteCount > 0) || (lp.ByteCount > 0))
-				{
-					if (!string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache))
-						lp.Add(new DisplayElement.ContentSeparator((Direction)dir, TerminalSettings.Display.ContentSeparatorCache));
-				}
+					lp.Add(new DisplayElement.ContentSeparator((Direction)dir, TerminalSettings.Display.ContentSeparatorCache));
 			}
 		}
 
 		/// <summary></summary>
 		protected virtual void RemoveContentSeparatorIfNecessary(IODirection dir, DisplayElementCollection lp)
 		{
-			if (ElementsAreSeparate(dir))
+			if (RadixSupportsSeparateElements(dir))
 			{
 				int count = lp.Count;
 				if ((count > 0) && (lp[count - 1] is DisplayElement.ContentSeparator))
