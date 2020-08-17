@@ -230,8 +230,8 @@ namespace YAT.Domain.Test.Terminal
 			{
 				settingsA.IO.SerialPort.Communication.FlowControl = SerialFlowControl.ManualHardware;
 
-				var mctPortNameInQuestion = "COM11";                 // Workaround to bug #354 "Automatic hardware flow control is not supported by MCT"
-				var mctPortCaptionInQuestion = "Serial On USB Port"; // for MCT based converters loopback COM11 <> COM12 in YAT TestLab.
+				var mctPortNameInQuestion = "COM11";                                 // Workaround to bug #354 "Automatic hardware flow control is not supported by MCT"
+				var mctPortCaptionInQuestion = MKY.IO.Ports.SerialPortId.CaptionMCT; // for MCT based converters loopback COM11 <> COM12 in YAT TestLab.
 				if (settingsA.IO.SerialPort.PortId == mctPortNameInQuestion)
 				{
 					var availablePorts = new MKY.IO.Ports.SerialPortCollection();

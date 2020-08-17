@@ -110,6 +110,15 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static readonly Regex UserPortNameRegex = new Regex(@"(?<portName>\w+)\x20?", Options);
 
+		/// <summary></summary>
+		public const string CaptionMCT = "Serial On USB Port";
+
+		/// <summary></summary>
+		public const string CaptionFTDI = "USB Serial Port";
+
+		/// <summary></summary>
+		public const string CaptionStartProlific = "Prolific";
+
 		#endregion
 
 		#region Static Properties
