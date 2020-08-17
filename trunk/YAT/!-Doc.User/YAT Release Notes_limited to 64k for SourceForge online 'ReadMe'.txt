@@ -142,7 +142,9 @@ Important changes:
 - Option to hide undefined commands (feature request #410).
 - Adaptive monitor update rate further improved.
 - Calculation of byte/line rates improved.
-- For Bin/Oct/Dec/Hex/Unicode radix, ASCII control characters are no longer converted to mnemonics.
+- For Bin/Oct/Dec/Hex/Unicode radix:
+   > Performance significanty improved (feature request #406).
+   > ASCII control characters are no longer converted to mnemonics.
 - The time information of a line is no longer defined by hidden bytes like e.g. an initial XOn.
 - Option to not send XOn when opending a serial COM port or USB Ser/HID terminal (feat. req. #393).
 - Changes on-the-fly by keywords like \!(Port()), \!(PortSettings()), \!(Baud()),... are now
