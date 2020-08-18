@@ -101,8 +101,8 @@ namespace MKY.IO.Serial.SerialPort
 
 		private const string Undefined = "<Undefined>";
 
-		private const int SendQueueInitialCapacity    = 2048; // = default 'WriteBufferSize'
-		private const int ReceiveQueueInitialCapacity = 4096; // = default 'ReadBufferSize'
+		private const int SendQueueInitialCapacity    = Ports.SerialPortEx.WriteBufferSizeDefault;
+		private const int ReceiveQueueInitialCapacity = Ports.SerialPortEx.ReadBufferSizeDefault;
 
 		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
 		private const int AliveInterval     = 500;

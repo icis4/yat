@@ -47,6 +47,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
+//// 'System.IO.Ports' is not used due to ambiguity of event args type names.
 using System.Reflection;
 using System.Threading;
 
@@ -88,6 +89,24 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 		// Constants
 		//==========================================================================================
+
+		/// <summary>
+		/// The hard-coded default value of <see cref="SerialPort.WriteBufferSize"/>.
+		/// </summary>
+		/// <remarks>
+		/// Value cannot be retrieved from <see cref="SerialPort"/>.
+		/// Value is hard-coded, there is no need to create an object and retrieve the value.
+		/// </remarks>
+		public const int WriteBufferSizeDefault = 2048;
+
+		/// <summary>
+		/// The hard-coded default value of <see cref="SerialPort.ReadBufferSize"/>.
+		/// </summary>
+		/// <remarks>
+		/// Value cannot be retrieved from <see cref="SerialPort"/>.
+		/// Value is hard-coded, there is no need to create an object and retrieve the value.
+		/// </remarks>
+		public const int ReadBufferSizeDefault = 4096;
 
 		private const string Undefined = "<Undefined>";
 

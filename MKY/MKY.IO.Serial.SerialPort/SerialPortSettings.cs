@@ -71,7 +71,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		public static SizeSettingTuple OutputBufferSizeDefault
 		{
-			get { return (new SizeSettingTuple(false, 2048)); } // 2048 is default of 'SerialPort'.
+			get { return (new SizeSettingTuple(false, SerialPortEx.WriteBufferSizeDefault)); }
 		}
 
 		/// <summary></summary>
