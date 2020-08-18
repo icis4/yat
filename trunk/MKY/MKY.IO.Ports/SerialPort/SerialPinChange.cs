@@ -24,6 +24,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+//// 'System.IO.Ports' is not used due to ambiguity of event args type names.
 
 namespace MKY.IO.Ports
 {
