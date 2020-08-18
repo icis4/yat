@@ -26,7 +26,7 @@ using System.Net.Sockets;
 namespace MKY.Net.Sockets
 {
 	/// <summary>Hard coded default values</summary>
-	public static class SocketDefaults
+	public static class SocketEx
 	{
 		/// <remarks>
 		/// The hard-coded default value of <see cref="Socket.SendBufferSize"/>.
@@ -35,12 +35,12 @@ namespace MKY.Net.Sockets
 		/// Value cannot be retrieved from <see cref="Socket"/>.
 		/// Value is hard-coded, there is no need to create an object and retrieve the value.
 		/// </remarks>
-		public const int SendBufferSize = 8192;
+		public const int SendBufferSizeDefault = 8192;
 
 		/// <remarks>
 		/// The hard-coded default value of <see cref="Socket.ReceiveBufferSize"/>.
 		/// </remarks>
-		public const int ReceiveBufferSize = 8192;
+		public const int ReceiveBufferSizeDefault = 8192;
 	}
 }
 
