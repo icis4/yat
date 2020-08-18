@@ -3524,7 +3524,7 @@ namespace YAT.View.Forms
 			}
 			else if (ReferenceEquals(e.Inner.Source, ApplicationSettings.LocalUserSettings.MainWindow))
 			{
-				SetMainControls();
+				SetWindowControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, ApplicationSettings.LocalUserSettings.RecentFiles))
 			{
@@ -3743,18 +3743,17 @@ namespace YAT.View.Forms
 
 		private void SetControls()
 		{
+			SetWindowControls();
 			SetMainControls();
 			SetChildControls();
 			SetRecentControls();
 			SetWorkspaceControls();
 		}
 
-		private void SetMainControls()
+		private void SetWindowControls()
 		{
 			// Shortcuts associated to menu items are only active when items are visible and enabled!
-			toolStripMenuItem_MainMenu_Window_SetMainMenuItems();
-
-			toolStripButton_MainTool_SetControls(); // Contains 'Main' as well as 'Child' dependent controls.
+			toolStripMenuItem_MainMenu_Window_SetMainMenuItems(); // Contains 'Main' as well as 'Window' dependent controls!
 
 			this.isSettingControls.Enter();
 			try
@@ -3771,6 +3770,14 @@ namespace YAT.View.Forms
 			}
 
 			TopMost = ApplicationSettings.LocalUserSettings.MainWindow.AlwaysOnTop;
+		}
+
+		private void SetMainControls()
+		{
+			// Shortcuts associated to menu items are only active when items are visible and enabled!
+			toolStripMenuItem_MainMenu_Window_SetMainMenuItems(); // Contains 'Main' as well as 'Window' dependent controls!
+
+			toolStripButton_MainTool_SetControls(); // Contains 'Main' as well as 'Child' dependent controls!
 		}
 
 		/// <remarks>
@@ -3793,7 +3800,7 @@ namespace YAT.View.Forms
 			toolStripMenuItem_MainMenu_Log_SetChildMenuItems();
 			toolStripMenuItem_MainMenu_Window_SetChildMenuItems();
 
-			toolStripButton_MainTool_SetControls(); // Contains 'Main' as well as 'Child' dependent controls.
+			toolStripButton_MainTool_SetControls(); // Contains 'Main' as well as 'Child' dependent controls!
 		}
 
 		/// <remarks>
