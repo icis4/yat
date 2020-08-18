@@ -849,31 +849,29 @@ namespace MKY.IO.Serial.Socket
 
 		private SocketState GetStateSynchronized()
 		{
-			SocketState state;
-
 			lock (this.stateSyncObj)
-				state = this.state;
-
-			return (state);
+				return (this.state);
 		}
 
 		private void SetStateSynchronizedAndNotify(SocketState state)
 		{
-		#if (DEBUG)
-			SocketState oldState = this.state;
-		#endif
+			SocketState oldState;
 
 			lock (this.stateSyncObj)
+			{
+				oldState = this.state;
 				this.state = state;
+			}
 
 		#if (DEBUG)
-			if (this.state != oldState)
+			if (state != oldState)
 				DebugMessage("State has changed from " + oldState + " to " + state + ".");
 			else
 				DebugMessage("State is already " + oldState + ".");
 		#endif
 
-			OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
+			if (state != oldState)
+				OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
 		}
 
 		#endregion

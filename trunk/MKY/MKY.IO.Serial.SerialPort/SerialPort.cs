@@ -800,16 +800,18 @@ namespace MKY.IO.Serial.SerialPort
 
 		private void SetStateSynchronizedAndNotify(State state, bool withNotify = true)
 		{
-		#if (DEBUG)
-			State oldState = GetStateSynchronized();
-		#endif
-			lock (this.stateSyncObj)
-				this.state = state;
+			State oldState;
 
-			if (withNotify)
+			lock (this.stateSyncObj)
+			{
+				oldState = this.state;
+				this.state = state;
+			}
+
+			if ((state != oldState) && withNotify)
 			{
 			#if (DEBUG)
-				if (this.state != oldState)
+				if (state != oldState)
 					DebugMessage("State has changed from " + oldState + " to " + state + ".");
 				else
 					DebugMessage("State is already " + oldState + ".");
