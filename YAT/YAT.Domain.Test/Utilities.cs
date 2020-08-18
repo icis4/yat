@@ -168,11 +168,14 @@ namespace YAT.Domain.Test
 
 			var transmissionTime = (byteCount / settings.IO.ApproximateTypicalNumberOfBytesPerMillisecond);
 
+			// Account for the longer initial delay when transmitting long lines:
+			transmissionTime += (Math.Log10(lineByteCount) * 100); // Results in += ~300 ms for 'Long' and += ~400 ms for 'VeryLong'.
+
 			// [Binary] takes a bit longer because formatting hex values is more time consuming:
 			if (settings.TerminalType == TerminalType.Binary)
 				transmissionTime *= 1.1;
 
-			return (byteCount / settings.IO.ApproximateTypicalNumberOfBytesPerMillisecond);
+			return (transmissionTime);
 		}
 
 		/// <summary>
