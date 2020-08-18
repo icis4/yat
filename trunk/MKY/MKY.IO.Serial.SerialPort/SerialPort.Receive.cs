@@ -165,6 +165,15 @@ namespace MKY.IO.Serial.SerialPort
 		// Debug
 		//==========================================================================================
 
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_RECEIVE")]
+		private void DebugReceive(string format, params object[] args)
+		{
+			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+		}
+
 	#if (DEBUG_RECEIVE)
 		private int DebugReceive_enqueueCounter; // = 0;
 		private int DebugReceive_dequeueCounter; // = 0;

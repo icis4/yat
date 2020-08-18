@@ -1280,9 +1280,9 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 
 		/// <remarks>
-		/// As soon as YAT started to write the maximum chunk size (in Q1/2016 ;-), data got lost
-		/// even for e.g. a local port loopback pair. All seems to work fine as long as small chunks
-		/// of e.g. 48 bytes some now and then are transmitted.
+		/// As soon as YAT started to write the maximum chunk size (in Q1/2016), data got lost even
+		/// for e.g. a local port loopback pair. All seems to work fine as long as small chunks of
+		/// e.g. 48 bytes some now and then are transmitted.
 		///
 		/// For a while, I assumed data loss happens in the receive path. Therefore, I tried to use
 		/// async reading instead of the 'DataReceived' event, as suggested by online resources like
@@ -1300,7 +1300,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// to the physical limitations of the USB/COM and SPI/COM converter: If more data is sent
 		/// than the baud rate permits forwarding, the converter simply discards supernumerous data!
 		/// Of course, what else could it do... Actually, it could propagate the information back to
-		/// <see cref="System.IO.Ports.SerialPort.BytesToWrite"/>. But that obviously isn't done...
+		/// <see cref="System.IO.Ports.SerialPort.BytesToWrite"/>. But that apparently isn't done...
 		///
 		///
 		/// Additional information on receiving
@@ -1343,15 +1343,22 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				if (IsUndisposed && IsOpen) // Ensure not to perform any operations during closing anymore. Check disposal state first!
 				{
+					DebugReceive("'DataReceived' event...");
+
 					// Immediately read data on this thread:
 					int bytesToRead;
 					byte[] data;
 					lock (this.portSyncObj)
 					{
 						bytesToRead = this.port.BytesToRead;
+
+						DebugReceive("...with {0} bytes...", bytesToRead);
+
 						data = new byte[bytesToRead];
 						this.port.Read(data, 0, bytesToRead);
 					}
+
+					DebugReceive("...read completed.");
 
 					// Attention:
 					// XOn/XOff handling is implemented in MKY.IO.Serial.Usb.SerialHidDevice too!
@@ -1563,13 +1570,15 @@ namespace MKY.IO.Serial.SerialPort
 
 				switch (e.EventType)
 				{
-					case System.IO.Ports.SerialError.Frame:    direction = Direction.Input;  message = "Input framing error!";            break;
-					case System.IO.Ports.SerialError.Overrun:  direction = Direction.Input;  message = "Input character buffer overrun!"; break;
-					case System.IO.Ports.SerialError.RXOver:   direction = Direction.Input;  message = "Input buffer overflow!";          break;
-					case System.IO.Ports.SerialError.RXParity: direction = Direction.Input;  message = "Input parity error!";             break;
-					case System.IO.Ports.SerialError.TXFull:   direction = Direction.Output; message = "Output buffer full!";             break;
-					default: severity = ErrorSeverity.Fatal;   direction = Direction.None;   message = "Unknown error!";                  break;
+					case System.IO.Ports.SerialError.Frame:    direction = Direction.Input;  message = "Input framing error!";   break;
+					case System.IO.Ports.SerialError.Overrun:  direction = Direction.Input;  message = "Input buffer overrun!";  break;
+					case System.IO.Ports.SerialError.RXOver:   direction = Direction.Input;  message = "Input buffer overflow!"; break;
+					case System.IO.Ports.SerialError.RXParity: direction = Direction.Input;  message = "Input parity error!";    break;
+					case System.IO.Ports.SerialError.TXFull:   direction = Direction.Output; message = "Output buffer full!";    break;
+					default: severity = ErrorSeverity.Fatal;   direction = Direction.None;   message = "Unknown error!";         break;
 				}
+
+				DebugMessage(message); // Output in any case, likely to help debugging tricky cases.
 
 				OnIOErrorAsync(new SerialPortErrorEventArgs(severity, direction, message, e.EventType)); // Async! See remarks above.
 			}

@@ -726,7 +726,7 @@ namespace YAT.Domain
 			if (i == 0)
 			{
 				sb.Append(indent);
-				sb.Append("None");
+				sb.Append("<None>");
 				sb.AppendLine();
 			}
 

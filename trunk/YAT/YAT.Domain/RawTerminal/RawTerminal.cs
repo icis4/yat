@@ -720,12 +720,16 @@ namespace YAT.Domain
 
 		private void io_IOWarning(object sender, MKY.IO.Serial.IOWarningEventArgs e)
 		{
+			DebugMessage("io_IOWarning() = " + e.ToDiagnosticsString());
+
 			if (IsUndisposed) // Ensure to not handle event during closing anymore.
 				OnIOWarning(new IOWarningEventArgs((IODirection)e.Direction, e.Message, e.TimeStamp));
 		}
 
 		private void io_IOError(object sender, MKY.IO.Serial.IOErrorEventArgs e)
 		{
+			DebugMessage("io_IOError() = " + e.ToDiagnosticsString());
+
 			if (IsUndisposed) // Ensure to not handle event during closing anymore.
 			{
 				var spe = (e as MKY.IO.Serial.SerialPortErrorEventArgs);
@@ -947,6 +951,13 @@ namespace YAT.Domain
 		//==========================================================================================
 		// Debug
 		//==========================================================================================
+
+		/// <summary></summary>
+		[System.Diagnostics.Conditional("DEBUG")]
+		protected virtual void DebugMessage(string format, params object[] args)
+		{
+			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+		}
 
 		/// <summary></summary>
 		[System.Diagnostics.Conditional("DEBUG")]

@@ -106,7 +106,7 @@ namespace MKY.IO.Serial.SerialPort
 				else
 					sendBufferSize = SendQueueInitialCapacity;
 
-				DebugSend("Enqueuing " + data.Length.ToString(CultureInfo.CurrentCulture) + " byte(s) for sending...");
+				DebugSend("Enqueuing {0} byte(s) for sending...", data.Length);
 				foreach (byte b in data)
 				{
 					// Wait until there is space in the send queue:
@@ -286,6 +286,11 @@ namespace MKY.IO.Serial.SerialPort
 						break;
 					}
 
+				#if (DEBUG_SEND)
+					int chunkZeroLoopCount = 0;
+					int writeFailLoopCount = 0;
+				#endif
+
 					// Inner loop, runs as long as there are items in the queue:
 					                                             // 'IsOpen' is used instead of 'IsTransmissive' to allow handling break further below.
 					while (IsUndisposed && this.sendThreadRunFlag && IsOpen && (this.sendQueue.Count > 0)) // Check disposal state first!
@@ -388,9 +393,9 @@ namespace MKY.IO.Serial.SerialPort
 
 									// Notes on sending:
 									//
-									// As soon as YAT started to write the maximum chunk size (in Q1/2016 ;-), data got lost
-									// even for e.g. a local port loopback pair. All seems to work fine as long as small chunks
-									// of e.g. 48 bytes some now and then are transmitted.
+									// As soon as YAT started to write the maximum chunk size (in Q1/2016), data got lost even
+									// for e.g. a local port loopback pair. All seems to work fine as long as small chunks of
+									// e.g. 48 bytes some now and then are transmitted.
 									//
 									// For a while, I assumed data loss happens in the receive path. Therefore, I tried to use
 									// async reading instead of the 'DataReceived' event, as suggested by online resources like
@@ -403,7 +408,7 @@ namespace MKY.IO.Serial.SerialPort
 									// to the physical limitations of the USB/COM and SPI/COM converter: If more data is sent
 									// than the baud rate permits forwarding, the converter simply discards supernumerous data!
 									// Of course, what else could it do... Actually, it could propagate the information back to
-									// 'System.IO.Ports.SerialPort.BytesToWrite'. But that obviously isn't done...
+									// 'System.IO.Ports.SerialPort.BytesToWrite'. But that apparently isn't done...
 									//
 									// Solution: Limit output writing to baud rate :-)
 
@@ -420,7 +425,7 @@ namespace MKY.IO.Serial.SerialPort
 											if (maxChunkSize > remainingSizeInInterval) {
 												maxChunkSize = remainingSizeInInterval;
 
-												DebugSendChunk(string.Format(CultureInfo.CurrentCulture, "MaxBaudRateIntervalValue = {0}, Remaining = {1}, Limited = {2}", intervalValue, remainingSizeInInterval, maxChunkSize));
+												DebugSendChunk("MaxBaudRateIntervalValue = {0}, Remaining = {1}, Limited = {2}", intervalValue, remainingSizeInInterval, maxChunkSize);
 											}
 										}
 										else // Account for the fact that, for higher baud rates, this loop may/will not run once per interval:
@@ -430,7 +435,7 @@ namespace MKY.IO.Serial.SerialPort
 											if (maxChunkSize > allowance) {
 												maxChunkSize = allowance;
 
-												DebugSendChunk(string.Format(CultureInfo.CurrentCulture, "MaxBaudRateAllowance = {0}, Limited = {1}", allowance, maxChunkSize));
+												DebugSendChunk("MaxBaudRateAllowance = {0}, Limited = {1}", allowance, maxChunkSize);
 											}
 										}
 									}
@@ -448,7 +453,7 @@ namespace MKY.IO.Serial.SerialPort
 											if (maxChunkSize > remainingSizeInInterval) {
 												maxChunkSize = remainingSizeInInterval;
 
-												DebugSendChunk(string.Format(CultureInfo.CurrentCulture, "MaxSendRateValue = {0}, Remaining = {1}, Limited = {2}", rateValue, remainingSizeInInterval, maxChunkSize));
+												DebugSendChunk("MaxSendRateValue = {0}, Remaining = {1}, Limited = {2}", rateValue, remainingSizeInInterval, maxChunkSize);
 											}
 										}
 										else // Account for the fact that, for higher baud rates, this loop may/will not run once per interval:
@@ -458,7 +463,7 @@ namespace MKY.IO.Serial.SerialPort
 											if (maxChunkSize > allowance) {
 												maxChunkSize = allowance;
 
-												DebugSendChunk(string.Format(CultureInfo.CurrentCulture, "MaxSendRateAllowance = {0}, Limited = {1}", allowance, maxChunkSize));
+												DebugSendChunk("MaxSendRateAllowance = {0}, Limited = {1}", allowance, maxChunkSize);
 											}
 										}
 									}
@@ -471,24 +476,53 @@ namespace MKY.IO.Serial.SerialPort
 										if (maxChunkSize > maxChunkSizeSetting) {
 											maxChunkSize = maxChunkSizeSetting;
 
-											DebugSendChunk(string.Format(CultureInfo.CurrentCulture, "MaxChunkSizeSetting = {0}, Limited = {1}", maxChunkSizeSetting, maxChunkSize));
+											DebugSendChunk("MaxChunkSizeSetting = {0}, Limited = {1}", maxChunkSizeSetting, maxChunkSize);
 										}
 									}
 
-									int effectiveChunkDataCount = 0;
 									if (maxChunkSize > 0)
 									{
+									#if (DEBUG_SEND)
+										chunkZeroLoopCount = 0;
+									#endif
+
 										List<byte> effectiveChunkData;
 										bool signalIOControlChanged;
 										DateTime signalIOControlChangedTimeStamp;
 
 										if (TryWriteChunkToPort(maxChunkSize, out effectiveChunkData, out isWriteTimeout, out isOutputBreak, out signalIOControlChanged, out signalIOControlChangedTimeStamp))
 										{
-											DebugSend("Signaling " + effectiveChunkData.Count.ToString() + " byte(s) sent...");
+										#if (DEBUG_SEND)
+											writeFailLoopCount = 0;
+										#endif
+
+											var effectiveChunkDataCount = effectiveChunkData.Count;
+
+											DebugSend("Signaling {0} byte(s) sent...", effectiveChunkDataCount);
 											OnDataSent(new SerialDataSentEventArgs(effectiveChunkData.ToArray(), PortId));
 											DebugSend("...signaling done");
 
-											effectiveChunkDataCount = effectiveChunkData.Count;
+											// Update the send rates with the effective chunk size of the current interval.
+											// It is sufficient to only update when writing to port has succeeded, as the value
+											// will be updated with the correct time stamp on the next loop iteration anyway.
+
+											if (this.settings.BufferMaxBaudRate)
+												maxBaudRatePerInterval.Update(effectiveChunkDataCount);
+
+											if (this.settings.MaxSendRate.Enabled)
+												maxSendRate.Update(effectiveChunkDataCount);
+										}
+										else
+										{
+											// Further above, Thread.Sleep(TimeSpan.Zero) already yields. However,
+											// failed Write() indicates that either the thread is much faster than the
+											// underlying sending, or something else is wrong, thus yield some more.
+
+											yieldSomeMore = true;
+
+										#if (DEBUG_SEND)
+											DebugSend("Writing has failed, loop count = {0}, yielding some more...", ++writeFailLoopCount);
+										#endif
 										}
 
 										if (signalIOControlChanged)
@@ -504,6 +538,10 @@ namespace MKY.IO.Serial.SerialPort
 
 										yieldSomeMore = true;
 
+									#if (DEBUG_SEND)
+										DebugSend("Chunk has been limited to 0, loop count = {0}, yielding some more...", ++chunkZeroLoopCount);
+									#endif
+
 										// Measurements (2020-04-24) counting the maximum number of loops with
 										// maxChunkSize = 0 (i.e. doing nothing but wasting CPU) during sending
 										// of a file at 9600 baud revealed:
@@ -515,17 +553,6 @@ namespace MKY.IO.Serial.SerialPort
 										//
 										// Attention: yield/sleep must not happen within lock(dataEventSyncObj)!
 									}
-
-									// Update the send rates with the effective chunk size of the current interval.
-									// This must be done no matter whether writing to port has succeeded or not!
-									// Otherwise, on overload, a rate value may "get stuck" at the limit!
-									// Note that 'Rate.Update(0)' does optimize, i.e. no need to further optimize.
-
-									if (this.settings.BufferMaxBaudRate)
-										maxBaudRatePerInterval.Update(effectiveChunkDataCount);
-
-									if (this.settings.MaxSendRate.Enabled)
-										maxSendRate.Update(effectiveChunkDataCount);
 								}
 								finally
 								{
@@ -691,7 +718,11 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			catch (TimeoutException ex)
 			{
+			#if (DEBUG_SEND_WRITE)
 				DebugEx.WriteException(GetType(), ex, "Timeout while writing to port!");
+			#else
+				UnusedArg.PreventCompilerWarning(ex, "Exception object is only needed when writing debug output.");
+			#endif
 				isWriteTimeout = true;
 
 				if (this.settings.Communication.FlowControlManagesXOnXOffManually) // XOn/XOff information is not available for 'Software' or 'Combined'!
@@ -764,7 +795,7 @@ namespace MKY.IO.Serial.SerialPort
 				int triedChunkSize = Math.Min(maxChunkSize, a.Length);
 				effectiveChunkData = new List<byte>(triedChunkSize);
 
-				DebugSendWrite("Trying to write " + triedChunkSize + " byte(s) to port...");
+				DebugSendWrite("Trying to write {0} byte(s) to port...", triedChunkSize);
 
 				// Try to write the chunk, will raise a 'TimeoutException' if not possible:
 				this.port.Write(a, 0, triedChunkSize); // Do not lock, may take some time!
@@ -799,7 +830,11 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			catch (TimeoutException ex)
 			{
+			#if (DEBUG_SEND_WRITE)
 				DebugEx.WriteException(GetType(), ex, "Timeout while writing to port!");
+			#else
+				UnusedArg.PreventCompilerWarning(ex, "Exception object is only needed when writing debug output.");
+			#endif
 				effectiveChunkData = null;
 				isWriteTimeout = true;
 
@@ -897,27 +932,27 @@ namespace MKY.IO.Serial.SerialPort
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_SEND")]
-		private void DebugSend(string message)
+		private void DebugSend(string format, params object[] args)
 		{
-			DebugMessage(message);
+			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
 		}
 
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_SEND_CHUNK")]
-		private void DebugSendChunk(string message)
+		private void DebugSendChunk(string format, params object[] args)
 		{
-			DebugMessage(message);
+			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
 		}
 
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_SEND_WRITE")]
-		private void DebugSendWrite(string message)
+		private void DebugSendWrite(string format, params object[] args)
 		{
-			DebugMessage(message);
+			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
 		}
 
 		#endregion
