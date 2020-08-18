@@ -739,87 +739,87 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
 				// Status:
-				this.settingsInEdit.Terminal.Status.ShowConnectTime                        = f.SettingsResult.Terminal.Status.ShowConnectTime;
-				this.settingsInEdit.Terminal.Status.ShowCountAndRate                       = f.SettingsResult.Terminal.Status.ShowCountAndRate;
+				this.settingsInEdit.Terminal.Status.ShowConnectTime                      = f.SettingsResult.Terminal.Status.ShowConnectTime;
+				this.settingsInEdit.Terminal.Status.ShowCountAndRate                     = f.SettingsResult.Terminal.Status.ShowCountAndRate;
 
 				// Radix:
-				this.settingsInEdit.Terminal.Display.SeparateTxRxRadix                     = f.SettingsResult.Terminal.Display.SeparateTxRxRadix;
-				this.settingsInEdit.Terminal.Display.TxRadix                               = f.SettingsResult.Terminal.Display.TxRadix;
-				this.settingsInEdit.Terminal.Display.RxRadix                               = f.SettingsResult.Terminal.Display.RxRadix;
+				this.settingsInEdit.Terminal.Display.SeparateTxRxRadix                   = f.SettingsResult.Terminal.Display.SeparateTxRxRadix;
+				this.settingsInEdit.Terminal.Display.TxRadix                             = f.SettingsResult.Terminal.Display.TxRadix;
+				this.settingsInEdit.Terminal.Display.RxRadix                             = f.SettingsResult.Terminal.Display.RxRadix;
 
 				// Display:
-				this.settingsInEdit.Terminal.Display.ShowRadix                             = f.SettingsResult.Terminal.Display.ShowRadix;
-				this.settingsInEdit.Terminal.Display.ShowLineNumbers                       = f.SettingsResult.Terminal.Display.ShowLineNumbers;
-				this.settingsInEdit.Terminal.Display.LineNumberSelection                   = f.SettingsResult.Terminal.Display.LineNumberSelection;
-				this.settingsInEdit.Terminal.Display.ShowTimeStamp                         = f.SettingsResult.Terminal.Display.ShowTimeStamp;
-				this.settingsInEdit.Terminal.Display.ShowTimeSpan                          = f.SettingsResult.Terminal.Display.ShowTimeSpan;
-				this.settingsInEdit.Terminal.Display.ShowTimeDelta                         = f.SettingsResult.Terminal.Display.ShowTimeDelta;
-				this.settingsInEdit.Terminal.Display.ShowDevice                            = f.SettingsResult.Terminal.Display.ShowDevice;
-				this.settingsInEdit.Terminal.Display.ShowDirection                         = f.SettingsResult.Terminal.Display.ShowDirection;
-				this.settingsInEdit.Terminal.Display.ShowLength                            = f.SettingsResult.Terminal.Display.ShowLength;
-				this.settingsInEdit.Terminal.Display.LengthSelection                       = f.SettingsResult.Terminal.Display.LengthSelection;
-				this.settingsInEdit.Terminal.Display.ShowDuration                          = f.SettingsResult.Terminal.Display.ShowDuration;
-				this.settingsInEdit.Terminal.Display.IncludeIOControl                      = f.SettingsResult.Terminal.Display.IncludeIOControl;
-				this.settingsInEdit.Terminal.Display.IncludeIOWarnings                     = f.SettingsResult.Terminal.Display.IncludeIOWarnings;
+				this.settingsInEdit.Terminal.Display.ShowRadix                           = f.SettingsResult.Terminal.Display.ShowRadix;
+				this.settingsInEdit.Terminal.Display.ShowLineNumbers                     = f.SettingsResult.Terminal.Display.ShowLineNumbers;
+				this.settingsInEdit.Terminal.Display.LineNumberSelection                 = f.SettingsResult.Terminal.Display.LineNumberSelection;
+				this.settingsInEdit.Terminal.Display.ShowTimeStamp                       = f.SettingsResult.Terminal.Display.ShowTimeStamp;
+				this.settingsInEdit.Terminal.Display.ShowTimeSpan                        = f.SettingsResult.Terminal.Display.ShowTimeSpan;
+				this.settingsInEdit.Terminal.Display.ShowTimeDelta                       = f.SettingsResult.Terminal.Display.ShowTimeDelta;
+				this.settingsInEdit.Terminal.Display.ShowDevice                          = f.SettingsResult.Terminal.Display.ShowDevice;
+				this.settingsInEdit.Terminal.Display.ShowDirection                       = f.SettingsResult.Terminal.Display.ShowDirection;
+				this.settingsInEdit.Terminal.Display.ShowLength                          = f.SettingsResult.Terminal.Display.ShowLength;
+				this.settingsInEdit.Terminal.Display.LengthSelection                     = f.SettingsResult.Terminal.Display.LengthSelection;
+				this.settingsInEdit.Terminal.Display.ShowDuration                        = f.SettingsResult.Terminal.Display.ShowDuration;
+				this.settingsInEdit.Terminal.Display.IncludeIOControl                    = f.SettingsResult.Terminal.Display.IncludeIOControl;
+				this.settingsInEdit.Terminal.Display.IncludeIOWarnings                   = f.SettingsResult.Terminal.Display.IncludeIOWarnings;
 
-				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled             = f.SettingsResult.Terminal.Display.DirectionLineBreakEnabled;
-				this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled                = f.SettingsResult.Terminal.Display.DeviceLineBreakEnabled;
-				this.settingsInEdit.Terminal.TextTerminal.GlueCharsOfLine                  = f.SettingsResult.Terminal.TextTerminal.GlueCharsOfLine; // Tightly coupled to settings above, thus located in advanced dialog.
+				this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled           = f.SettingsResult.Terminal.Display.DirectionLineBreakEnabled;
+				this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled              = f.SettingsResult.Terminal.Display.DeviceLineBreakEnabled;
+				this.settingsInEdit.Terminal.TextTerminal.GlueCharsOfLine                = f.SettingsResult.Terminal.TextTerminal.GlueCharsOfLine; // Tightly coupled to settings above, thus located in advanced dialog.
 
-				this.settingsInEdit.Terminal.Display.MaxLineCount                          = f.SettingsResult.Terminal.Display.MaxLineCount;
-				this.settingsInEdit.Terminal.Display.MaxLineLength                         = f.SettingsResult.Terminal.Display.MaxLineLength;
-				this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine                  = f.SettingsResult.Terminal.Display.ShowCopyOfActiveLine;
+				this.settingsInEdit.Terminal.Display.MaxLineCount                        = f.SettingsResult.Terminal.Display.MaxLineCount;
+				this.settingsInEdit.Terminal.Display.MaxLineLength                       = f.SettingsResult.Terminal.Display.MaxLineLength;
+				this.settingsInEdit.Terminal.Display.ShowCopyOfActiveLine                = f.SettingsResult.Terminal.Display.ShowCopyOfActiveLine;
 
 				// Char replace/hide:
-				this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars               = f.SettingsResult.Terminal.CharReplace.ReplaceControlChars;
-				this.settingsInEdit.Terminal.CharReplace.ControlCharRadix                  = f.SettingsResult.Terminal.CharReplace.ControlCharRadix;
-				this.settingsInEdit.Terminal.CharReplace.ReplaceBackspace                  = f.SettingsResult.Terminal.CharReplace.ReplaceBackspace;
-				this.settingsInEdit.Terminal.CharReplace.ReplaceTab                        = f.SettingsResult.Terminal.CharReplace.ReplaceTab;
-				this.settingsInEdit.Terminal.CharHide.HideXOnXOff                          = f.SettingsResult.Terminal.CharHide.HideXOnXOff;
-				this.settingsInEdit.Terminal.CharAction.BeepOnBell                         = f.SettingsResult.Terminal.CharAction.BeepOnBell;
-				this.settingsInEdit.Terminal.CharReplace.ReplaceSpace                      = f.SettingsResult.Terminal.CharReplace.ReplaceSpace;
-				this.settingsInEdit.Terminal.CharHide.Hide0x00                             = f.SettingsResult.Terminal.CharHide.Hide0x00;
-				this.settingsInEdit.Terminal.CharHide.Hide0xFF                             = f.SettingsResult.Terminal.CharHide.Hide0xFF;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceControlChars             = f.SettingsResult.Terminal.CharReplace.ReplaceControlChars;
+				this.settingsInEdit.Terminal.CharReplace.ControlCharRadix                = f.SettingsResult.Terminal.CharReplace.ControlCharRadix;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceBackspace                = f.SettingsResult.Terminal.CharReplace.ReplaceBackspace;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceTab                      = f.SettingsResult.Terminal.CharReplace.ReplaceTab;
+				this.settingsInEdit.Terminal.CharHide.HideXOnXOff                        = f.SettingsResult.Terminal.CharHide.HideXOnXOff;
+				this.settingsInEdit.Terminal.CharAction.BeepOnBell                       = f.SettingsResult.Terminal.CharAction.BeepOnBell;
+				this.settingsInEdit.Terminal.CharReplace.ReplaceSpace                    = f.SettingsResult.Terminal.CharReplace.ReplaceSpace;
+				this.settingsInEdit.Terminal.CharHide.Hide0x00                           = f.SettingsResult.Terminal.CharHide.Hide0x00;
+				this.settingsInEdit.Terminal.CharHide.Hide0xFF                           = f.SettingsResult.Terminal.CharHide.Hide0xFF;
 
 				// USB Ser/HID:
-				this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData   = f.SettingsResult.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData;
+				this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData = f.SettingsResult.Terminal.IO.UsbSerialHidDevice.IncludeNonPayloadData;
 
 				// Communication:
-				this.settingsInEdit.Terminal.IO.Endianness                                 = f.SettingsResult.Terminal.IO.Endianness;
-				this.settingsInEdit.Terminal.IO.SerialPort.IgnoreFramingErrors             = f.SettingsResult.Terminal.IO.SerialPort.IgnoreFramingErrors;
-				this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates              = f.SettingsResult.Terminal.IO.IndicateSerialPortBreakStates;
-				this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable          = f.SettingsResult.Terminal.IO.SerialPortOutputBreakIsModifiable;
+				this.settingsInEdit.Terminal.IO.Endianness                               = f.SettingsResult.Terminal.IO.Endianness;
+				this.settingsInEdit.Terminal.IO.SerialPort.IgnoreFramingErrors           = f.SettingsResult.Terminal.IO.SerialPort.IgnoreFramingErrors;
+				this.settingsInEdit.Terminal.IO.IndicateSerialPortBreakStates            = f.SettingsResult.Terminal.IO.IndicateSerialPortBreakStates;
+				this.settingsInEdit.Terminal.IO.SerialPortOutputBreakIsModifiable        = f.SettingsResult.Terminal.IO.SerialPortOutputBreakIsModifiable;
 
-				this.settingsInEdit.Terminal.Status.ShowBreakCount                         = f.SettingsResult.Terminal.Status.ShowBreakCount;
-				this.settingsInEdit.Terminal.Status.ShowFlowControlCount                   = f.SettingsResult.Terminal.Status.ShowFlowControlCount;
+				this.settingsInEdit.Terminal.Status.ShowBreakCount                       = f.SettingsResult.Terminal.Status.ShowBreakCount;
+				this.settingsInEdit.Terminal.Status.ShowFlowControlCount                 = f.SettingsResult.Terminal.Status.ShowFlowControlCount;
 
 				// Send:
-				this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix                  = f.SettingsResult.Terminal.Send.UseExplicitDefaultRadix;
-				this.settingsInEdit.Terminal.Send.AllowConcurrency                         = f.SettingsResult.Terminal.Send.AllowConcurrency;
-				this.settingsInEdit.Terminal.Send.Text.KeepSendText                        = f.SettingsResult.Terminal.Send.Text.KeepSendText;
-				this.settingsInEdit.Terminal.Send.Text.SendImmediately                     = f.SettingsResult.Terminal.Send.Text.SendImmediately;
-				this.settingsInEdit.Terminal.Send.File.SkipEmptyLines                      = f.SettingsResult.Terminal.Send.File.SkipEmptyLines;
-				this.settingsInEdit.Terminal.Send.CopyPredefined                           = f.SettingsResult.Terminal.Send.CopyPredefined;
+				this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix                = f.SettingsResult.Terminal.Send.UseExplicitDefaultRadix;
+				this.settingsInEdit.Terminal.Send.AllowConcurrency                       = f.SettingsResult.Terminal.Send.AllowConcurrency;
+				this.settingsInEdit.Terminal.Send.Text.KeepSendText                      = f.SettingsResult.Terminal.Send.Text.KeepSendText;
+				this.settingsInEdit.Terminal.Send.Text.SendImmediately                   = f.SettingsResult.Terminal.Send.Text.SendImmediately;
+				this.settingsInEdit.Terminal.Send.File.SkipEmptyLines                    = f.SettingsResult.Terminal.Send.File.SkipEmptyLines;
+				this.settingsInEdit.Terminal.Send.CopyPredefined                         = f.SettingsResult.Terminal.Send.CopyPredefined;
 
-				this.settingsInEdit.Terminal.IO.SerialPort        .SignalXOnWhenOpened     = f.SettingsResult.Terminal.IO.SerialPort.SignalXOnWhenOpened;
-				this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.SignalXOnWhenOpened     = f.SettingsResult.Terminal.IO.UsbSerialHidDevice.SignalXOnWhenOpened;
+				this.settingsInEdit.Terminal.IO.SerialPort        .SignalXOnWhenOpened   = f.SettingsResult.Terminal.IO.SerialPort.SignalXOnWhenOpened;
+				this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.SignalXOnWhenOpened   = f.SettingsResult.Terminal.IO.UsbSerialHidDevice.SignalXOnWhenOpened;
 
-				this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission          = f.SettingsResult.Terminal.Send.SignalXOnBeforeEachTransmission;
-				this.settingsInEdit.Terminal.Send.SignalXOnPeriodically                    = f.SettingsResult.Terminal.Send.SignalXOnPeriodically;
-				this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize                = f.SettingsResult.Terminal.IO.SerialPort.OutputBufferSize;
-				this.settingsInEdit.Terminal.IO.SerialPort.BufferMaxBaudRate               = f.SettingsResult.Terminal.IO.SerialPort.BufferMaxBaudRate;
-				this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize                    = f.SettingsResult.Terminal.IO.SerialPort.MaxChunkSize;
-				this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate                     = f.SettingsResult.Terminal.IO.SerialPort.MaxSendRate;
-				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak             = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnOutputBreak;
-				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak              = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnInputBreak;
+				this.settingsInEdit.Terminal.Send.SignalXOnBeforeEachTransmission        = f.SettingsResult.Terminal.Send.SignalXOnBeforeEachTransmission;
+				this.settingsInEdit.Terminal.Send.SignalXOnPeriodically                  = f.SettingsResult.Terminal.Send.SignalXOnPeriodically;
+				this.settingsInEdit.Terminal.IO.SerialPort.OutputBufferSize              = f.SettingsResult.Terminal.IO.SerialPort.OutputBufferSize;
+				this.settingsInEdit.Terminal.IO.SerialPort.BufferMaxBaudRate             = f.SettingsResult.Terminal.IO.SerialPort.BufferMaxBaudRate;
+				this.settingsInEdit.Terminal.IO.SerialPort.MaxChunkSize                  = f.SettingsResult.Terminal.IO.SerialPort.MaxChunkSize;
+				this.settingsInEdit.Terminal.IO.SerialPort.MaxSendRate                   = f.SettingsResult.Terminal.IO.SerialPort.MaxSendRate;
+				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak           = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnOutputBreak;
+				this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak            = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
-				this.settingsInEdit.Terminal.Send.Text.EnableEscapes                       = f.SettingsResult.Terminal.Send.Text.EnableEscapes;
-				this.settingsInEdit.Terminal.Send.File.EnableEscapes                       = f.SettingsResult.Terminal.Send.File.EnableEscapes;
+				this.settingsInEdit.Terminal.Send.Text.EnableEscapes                     = f.SettingsResult.Terminal.Send.Text.EnableEscapes;
+				this.settingsInEdit.Terminal.Send.File.EnableEscapes                     = f.SettingsResult.Terminal.Send.File.EnableEscapes;
 
-				this.settingsInEdit.Terminal.Send.DefaultDelay                             = f.SettingsResult.Terminal.Send.DefaultDelay;
-				this.settingsInEdit.Terminal.Send.DefaultLineDelay                         = f.SettingsResult.Terminal.Send.DefaultLineDelay;
-				this.settingsInEdit.Terminal.Send.DefaultLineInterval                      = f.SettingsResult.Terminal.Send.DefaultLineInterval;
-				this.settingsInEdit.Terminal.Send.DefaultLineRepeat                        = f.SettingsResult.Terminal.Send.DefaultLineRepeat;
+				this.settingsInEdit.Terminal.Send.DefaultDelay                           = f.SettingsResult.Terminal.Send.DefaultDelay;
+				this.settingsInEdit.Terminal.Send.DefaultLineDelay                       = f.SettingsResult.Terminal.Send.DefaultLineDelay;
+				this.settingsInEdit.Terminal.Send.DefaultLineInterval                    = f.SettingsResult.Terminal.Send.DefaultLineInterval;
+				this.settingsInEdit.Terminal.Send.DefaultLineRepeat                      = f.SettingsResult.Terminal.Send.DefaultLineRepeat;
 
 				// User:
 				this.settingsInEdit.UserName = f.SettingsResult.UserName;
