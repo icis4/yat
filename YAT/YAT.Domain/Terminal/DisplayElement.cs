@@ -1216,13 +1216,13 @@ namespace YAT.Domain
 			var sb = new StringBuilder();
 
 			sb.Append(indent);
-			sb.Append((Text != null) ? (@"""" + StringEx.ConvertToPrintableString(Text) + @"""") : "None");
+			sb.Append((Text != null) ? (@"""" + StringEx.ConvertToPrintableString(Text) + @"""") : "<None>");
 			sb.Append(" | CharCount = ");
 			sb.Append(CharCount.ToString(CultureInfo.CurrentCulture));
 			sb.Append(" | ByteCount = ");
 			sb.Append(ByteCount.ToString(CultureInfo.CurrentCulture));
 			sb.Append(" | OriginCount = ");
-			sb.Append((Origin != null) ? Origin.Count.ToString(CultureInfo.CurrentCulture) : "None");
+			sb.Append((Origin != null) ? Origin.Count.ToString(CultureInfo.CurrentCulture) : "<None>");
 			sb.Append(" | Type = ");
 			sb.Append(GetType().Name);
 			sb.Append(" | Direction = ");

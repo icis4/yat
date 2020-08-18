@@ -62,6 +62,20 @@ namespace MKY
 	public static class UnusedArg
 	{
 		/// <summary>
+		/// Utility method that can be applied to unused arguments to prevent compiler warnings.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
+		public static void PreventCompilerWarning(object obj, string justification)
+		{
+			PreventAnalysisWarning(justification, "Argument is solely used for stating justification right where issues occurs.");
+
+			if (obj != null)
+				return;
+
+			// else return too...
+		}
+
+		/// <summary>
 		/// Utility method that can be applied to unused arguments to prevent code analysis warnings (e.g. FxCop).
 		/// </summary>
 		/// <remarks>
@@ -71,8 +85,8 @@ namespace MKY
 		[Conditional("DEBUG")]
 		public static void PreventAnalysisWarning(object obj, string justification)
 		{
-		////UnusedArg.PreventAnalysisWarning(justification, "...") is not needed, maybe because this method is [Conditional("DEBUG")].
-		////UnusedArg.PreventAnalysisWarning(justification, "...") would result in recursion, thus if (justification != null) would have to be used instead.
+		////PreventAnalysisWarning(justification, "...") is not needed, maybe because this method is [Conditional("DEBUG")].
+		////PreventAnalysisWarning(justification, "...") would result in recursion, thus if (justification != null) would have to be used instead.
 
 			if (obj != null)
 				return;
@@ -84,6 +98,20 @@ namespace MKY
 	/// <summary></summary>
 	public static class UnusedLocal
 	{
+		/// <summary>
+		/// Utility method that can be applied to unused local variables to prevent compiler warnings.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
+		public static void PreventCompilerWarning(object obj, string justification)
+		{
+			PreventAnalysisWarning(justification, "Argument is solely used for stating justification right where issues occurs.");
+
+			if (obj != null)
+				return;
+
+			// else return too...
+		}
+
 		/// <summary>
 		/// Utility method that can be applied to unused local variables to prevent code analysis warnings (e.g. FxCop).
 		/// </summary>

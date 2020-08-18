@@ -80,7 +80,8 @@ namespace MKY.IO.Serial
 		/// <remarks>
 		/// Limited to a single line to keep debug output compact, same as <see cref="ToString()"/>.
 		/// </remarks>
-		public virtual string ToDiagnosticsString(string indent)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public virtual string ToDiagnosticsString(string indent = "")
 		{
 			var sb = new StringBuilder();
 
@@ -162,6 +163,41 @@ namespace MKY.IO.Serial
 			Message   = message;
 			TimeStamp = timeStamp;
 		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		public override string ToString()
+		{
+			if (Message != null)
+				return (Message);
+			else
+				return ("");
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
+		/// <remarks>
+		/// Limited to a single line to keep debug output compact, same as <see cref="ToString()"/>.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public virtual string ToDiagnosticsString(string indent = "")
+		{
+			var sb = new StringBuilder();
+
+			sb.Append(indent);
+			sb.Append((Message != null) ? Message : "<None>");
+			sb.Append(" | Direction = ");
+			sb.Append(Direction.ToString());
+			sb.Append(" | TimeStamp = ");
+			sb.Append(TimeStamp.ToString(CultureInfo.CurrentCulture));
+
+			return (sb.ToString());
+		}
 	}
 
 	/// <summary></summary>
@@ -204,6 +240,43 @@ namespace MKY.IO.Serial
 			Direction = direction;
 			Message   = message;
 			TimeStamp = timeStamp;
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		public override string ToString()
+		{
+			if (Message != null)
+				return (Message);
+			else
+				return ("");
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
+		/// <remarks>
+		/// Limited to a single line to keep debug output compact, same as <see cref="ToString()"/>.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public virtual string ToDiagnosticsString(string indent = "")
+		{
+			var sb = new StringBuilder();
+
+			sb.Append(indent);
+			sb.Append((Message != null) ? Message : "<None>");
+			sb.Append(" | Severity = ");
+			sb.Append(Severity.ToString());
+			sb.Append(" | Direction = ");
+			sb.Append(Direction.ToString());
+			sb.Append(" | TimeStamp = ");
+			sb.Append(TimeStamp.ToString(CultureInfo.CurrentCulture));
+
+			return (sb.ToString());
 		}
 	}
 
