@@ -163,17 +163,10 @@ namespace YAT.Domain.Test.Terminal
 			settingsA.IO.SerialPort.MaxChunkSize = new SizeSettingTuple(false, SerialPortSettings.MaxChunkSizeDefault.Size);
 
 			// Both terminals:
-
-		////var availablePorts = new MKY.IO.Ports.SerialPortCollection(); // Caption based check is excluded for improving the performance on test generation.
-		////availablePorts.FillWithAvailablePorts(true);
-
-		////var predicate = new MKY.IO.Ports.EqualsPortName<MKY.IO.Ports.SerialPortId>(*PortNameInQuestion);
-		////var *PortIdInQuestion = availablePorts.Find(predicate.Match);
-		////if (*PortIdInQuestion.EqualsCaption(*PortCaptionInQuestion))
-
-			switch ((string)settingsA.IO.SerialPort.PortId) // Use different settings, optimized to the capabilities of the driver.
-			{                                               // To be refined once test configuration becomes driver aware with bug #354 "Automatic...".
-				case "COM31": // Prolific => 256 kbaud, hardware flow control, unlimited (work with these high baud rates).
+			                                                // Use different settings, optimized to the capabilities of the driver.
+			switch ((string)settingsA.IO.SerialPort.PortId) // To be refined once test configuration becomes driver aware with bug #354 "Automatic...".
+			{                                               // Caption based check is excluded for improving the performance on test generation.
+				case "COM31": // Prolific => 256 kbaud, (hardware flow control), unlimited (work with these high baud rates).
 				case "COM32":
 				case "COM33":
 				case "COM34":
@@ -182,20 +175,16 @@ namespace YAT.Domain.Test.Terminal
 					                         settingsA.IO.SerialPort.Communication.BaudRate = br;
 					if (settingsB != null) { settingsB.IO.SerialPort.Communication.BaudRate = br; }
 
-					                         settingsA.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Hardware;
-					if (settingsB != null) { settingsB.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Hardware; }
-
-					                         settingsA.IO.SerialPort.BufferMaxBaudRate = false;
-					if (settingsB != null) { settingsB.IO.SerialPort.BufferMaxBaudRate = false; }
-
-					var cs = new SizeSettingTuple(false, SerialPortSettings.MaxChunkSizeDefault.Size);
-					                         settingsA.IO.SerialPort.MaxChunkSize = cs;
-					if (settingsB != null) { settingsB.IO.SerialPort.MaxChunkSize = cs; }
+					if (settingsA.TerminalType == TerminalType.Binary) // Prolific uses hardware flow control for binary, whereas
+					{                                                  // FTDI uses hardware flow control for text.
+						                         settingsA.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Hardware;
+						if (settingsB != null) { settingsB.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Hardware; }
+					}
 
 					break;
 				}
 
-				case "COM21": // FTDI => 1 Mbaud, no flow control, unlimited.
+				case "COM21": // FTDI => 1 Mbaud, (hardware flow control), unlimited.
 				case "COM22":
 				case "COM23":
 				case "COM24":
@@ -204,15 +193,11 @@ namespace YAT.Domain.Test.Terminal
 					                         settingsA.IO.SerialPort.Communication.BaudRate = br;
 					if (settingsB != null) { settingsB.IO.SerialPort.Communication.BaudRate = br; }
 
-					                         settingsA.IO.SerialPort.Communication.FlowControl = SerialFlowControl.None;
-					if (settingsB != null) { settingsB.IO.SerialPort.Communication.FlowControl = SerialFlowControl.None; }
-
-					                         settingsA.IO.SerialPort.BufferMaxBaudRate = false;
-					if (settingsB != null) { settingsB.IO.SerialPort.BufferMaxBaudRate = false; }
-
-					var cs = new SizeSettingTuple(false, SerialPortSettings.MaxChunkSizeDefault.Size);
-					                         settingsA.IO.SerialPort.MaxChunkSize = cs;
-					if (settingsB != null) { settingsB.IO.SerialPort.MaxChunkSize = cs; }
+					if (settingsA.TerminalType != TerminalType.Binary) // FTDI uses hardware flow control for text, whereas
+					{                                                  // Prolific uses hardware flow control for binary.
+						                         settingsA.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Hardware;
+						if (settingsB != null) { settingsB.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Hardware; }
+					}
 
 					break;
 				}
@@ -227,20 +212,14 @@ namespace YAT.Domain.Test.Terminal
 					                         settingsA.IO.SerialPort.Communication.BaudRate = br;
 					if (settingsB != null) { settingsB.IO.SerialPort.Communication.BaudRate = br; }
 
-/* unusual */	if (settingsA.TerminalType != TerminalType.Binary) // XOn/XOff doesn't work with binary data containing 0x11/0x13!
-/*   ::    */	{                                                  // Hardware flow control cannot be used, MCT doesn't support it!
-/* indent. */		                         settingsA.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software;
-/*   ::    */		if (settingsB != null) { settingsB.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software; }
-/* intend. */	}
-					                         settingsA.IO.SerialPort.SignalXOnWhenOpened = false;   // Required to match file size. Could alternatively
-					if (settingsB != null) { settingsB.IO.SerialPort.SignalXOnWhenOpened = false; } // be handled by adding one byte to the expected.
+					if (settingsA.TerminalType != TerminalType.Binary) // XOn/XOff doesn't work with binary data containing 0x11/0x13!
+					{                                                  // Hardware flow control cannot be used, MCT doesn't support it!
+						                         settingsA.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software;
+						if (settingsB != null) { settingsB.IO.SerialPort.Communication.FlowControl = SerialFlowControl.Software; }
 
-					                         settingsA.IO.SerialPort.BufferMaxBaudRate = false;
-					if (settingsB != null) { settingsB.IO.SerialPort.BufferMaxBaudRate = false; }
-
-					var cs = new SizeSettingTuple(false, SerialPortSettings.MaxChunkSizeDefault.Size);
-					                         settingsA.IO.SerialPort.MaxChunkSize = cs;
-					if (settingsB != null) { settingsB.IO.SerialPort.MaxChunkSize = cs; }
+						                         settingsA.IO.SerialPort.SignalXOnWhenOpened = false;   // Required to match file size. Could alternatively
+						if (settingsB != null) { settingsB.IO.SerialPort.SignalXOnWhenOpened = false; } // be handled by adding one byte to the expected.
+					}
 
 					break;
 				}
