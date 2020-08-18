@@ -230,21 +230,8 @@ namespace YAT.Domain.Test.Terminal
 			{
 				settingsA.IO.SerialPort.Communication.FlowControl = SerialFlowControl.ManualHardware;
 
-				var mctPortNameInQuestion = "COM11";                                 // Workaround to bug #354 "Automatic hardware flow control is not supported by MCT"
-				var mctPortCaptionInQuestion = MKY.IO.Ports.SerialPortId.CaptionMCT; // for MCT based converters loopback COM11 <> COM12 in YAT TestLab.
-				if (settingsA.IO.SerialPort.PortId == mctPortNameInQuestion)
-				{
-					var availablePorts = new MKY.IO.Ports.SerialPortCollection();
-					availablePorts.FillWithAvailablePorts(true);
-
-					var predicate = new MKY.IO.Ports.EqualsPortName<MKY.IO.Ports.SerialPortId>(mctPortNameInQuestion);
-					var mctPortIdInQuestion = availablePorts.Find(predicate.Match);
-					if (mctPortIdInQuestion.EqualsCaption(mctPortCaptionInQuestion))
-					{
-						System.Diagnostics.Trace.WriteLine(@"Test is exculded to work around bug #354 ""Automatic hardware flow control is not supported by MCT"".");
-						return; // Green bar.
-					}
-				}
+				if (TestIsExcludedForMCT(settingsA, new string[] { "COM11", "COM12", "COM13", "COM14" }))
+					return; // Green bar.
 
 				using (var terminalA = TerminalFactory.CreateTerminal(settingsA))
 				{
@@ -492,6 +479,35 @@ namespace YAT.Domain.Test.Terminal
 			Assert.That(pins.Dsr, Is.False);
 			Assert.That(pins.Dcd, Is.False); // = DSR
 		}
+
+		/// <remarks>
+		/// Workaround to bug #354 "Automatic hardware flow control is not supported by MCT"
+		/// for MCT based converters loopback COM1x in YAT TestLab.
+		/// </remarks>
+		protected virtual bool TestIsExcludedForMCT(TerminalSettings settings, IEnumerable<string> mctPortNamesInQuestion)
+		{
+			var mctPortCaptionInQuestion = MKY.IO.Ports.SerialPortId.CaptionMCT;
+
+			foreach (var mctPortNameInQuestion in mctPortNamesInQuestion)
+			{
+				if (settings.IO.SerialPort.PortId == mctPortNameInQuestion)
+				{
+					var availablePorts = new MKY.IO.Ports.SerialPortCollection();
+					availablePorts.FillWithAvailablePorts(true);
+
+					var predicate = new MKY.IO.Ports.EqualsPortName<MKY.IO.Ports.SerialPortId>(mctPortNameInQuestion);
+					var mctPortIdInQuestion = availablePorts.Find(predicate.Match);
+					if (mctPortIdInQuestion.EqualsCaption(mctPortCaptionInQuestion))
+					{
+						System.Diagnostics.Trace.WriteLine(@"Test is exculded to work around bug #354 ""Automatic hardware flow control is not supported by MCT"".");
+						return (true);
+					}
+				}
+			}
+
+			return (false);
+		}
+
 
 		#endregion
 	}
