@@ -53,6 +53,7 @@ using MKY.Collections.Generic;
 using MKY.Contracts;
 using MKY.Diagnostics;
 using MKY.Net;
+using MKY.Net.Sockets;
 
 #endregion
 
@@ -101,8 +102,8 @@ namespace MKY.IO.Serial.Socket
 		// Constants
 		//==========================================================================================
 
-		private const int SendQueueFixedCapacity      = 8192; // = default 'Socket.SendBufferSize'
-		private const int ReceiveQueueInitialCapacity = 8192; // = default 'Socket.ReceiveBufferSize'
+		private const int SendQueueFixedCapacity      = SocketDefaults.SendBufferSize;
+		private const int ReceiveQueueInitialCapacity = SocketDefaults.ReceiveBufferSize;
 
 		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
 

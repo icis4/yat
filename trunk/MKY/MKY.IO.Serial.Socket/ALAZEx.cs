@@ -26,7 +26,7 @@ using ALAZ.SystemEx.NetEx.SocketsEx;
 namespace MKY.IO.Serial.Socket
 {
 	/// <summary></summary>
-	public static class SocketDefaults
+	public static class ALAZEx
 	{
 		/// <remarks>
 		/// Value by default used by
@@ -37,9 +37,9 @@ namespace MKY.IO.Serial.Socket
 		/// Note that
 		/// <see cref="System.Net.Sockets.Socket.SendBufferSize"/> and
 		/// <see cref="System.Net.Sockets.Socket.ReceiveBufferSize"/>
-		/// use a default value of 8196.
+		/// use a default value of 8192.
 		/// </remarks>
-		public const int SocketBufferSize = 2048;
+		public const int SocketBufferSizeDefault = 2048;
 
 		/// <remarks>
 		/// Value by default used by
@@ -50,9 +50,9 @@ namespace MKY.IO.Serial.Socket
 		/// Note that
 		/// <see cref="System.Net.Sockets.Socket.SendBufferSize"/> and
 		/// <see cref="System.Net.Sockets.Socket.ReceiveBufferSize"/>
-		/// use a default value of 8196.
+		/// use a default value of 8192.
 		/// </remarks>
-		public const int MessageBufferSize = 2048;
+		public const int MessageBufferSizeDefault = 2048;
 
 		// Measurements 2020-08-13 using two interconnected YAT TCP/IP AutoSocket terminals with
 		// default settings, transmitting 'Huge.txt' (~1 MiB):

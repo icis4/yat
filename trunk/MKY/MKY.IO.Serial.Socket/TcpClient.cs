@@ -126,8 +126,8 @@ namespace MKY.IO.Serial.Socket
 		// Constants
 		//==========================================================================================
 
-		private const int SendQueueFixedCapacity       = SocketDefaults.MessageBufferSize;
-		private const int DataSentQueueInitialCapacity = SocketDefaults.MessageBufferSize;
+		private const int SendQueueFixedCapacity       = ALAZEx.MessageBufferSizeDefault;
+		private const int DataSentQueueInitialCapacity = ALAZEx.MessageBufferSizeDefault;
 
 		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
 
@@ -620,8 +620,8 @@ namespace MKY.IO.Serial.Socket
 					this,
 					ALAZ.SystemEx.NetEx.SocketsEx.DelimiterType.dtNone,
 					null,
-					SocketDefaults.SocketBufferSize,
-					SocketDefaults.MessageBufferSize,
+					ALAZEx.SocketBufferSizeDefault,
+					ALAZEx.MessageBufferSizeDefault,
 					Timeout.Infinite,
 					Timeout.Infinite
 				);

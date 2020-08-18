@@ -150,7 +150,7 @@ possible send rate. This will work fine for e.g. FTDI converters as
 well as MCT and Prolific converters at high baud rates.</value>
   </data>
   <data name="checkBox_OutputBufferSize.ToolTip" xml:space="preserve">
-    <value>This settings overrides the system's default of typically 2048 bytes.
+    <value>This settings overrides the system's default value of 2048 bytes.
 
 Enlarging the output buffer may increase the send rate.
 

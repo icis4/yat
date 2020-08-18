@@ -159,6 +159,7 @@
     <Compile Include="Net\Local.cs" />
     <Compile Include="Net\RecentIPFilterCollection.cs" />
     <Compile Include="Net\RecentIPHostCollection.cs" />
+    <Compile Include="Net\Sockets\SocketDefaults.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Random\RandomEx.cs" />
     <Compile Include="Reflection\InvocationHelper.cs" />
@@ -241,6 +242,7 @@
   <ItemGroup>
     <None Include="Properties\MKY.snk" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
