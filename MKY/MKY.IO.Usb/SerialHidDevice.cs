@@ -1221,12 +1221,8 @@ namespace MKY.IO.Usb
 
 		private State GetStateSynchronized()
 		{
-			State state;
-
 			lock (this.stateSyncObj)
-				state = this.state;
-
-			return (state);
+				return (this.state);
 		}
 
 		private void SetStateSynchronized(State state)
@@ -1239,8 +1235,8 @@ namespace MKY.IO.Usb
 				this.state = state;
 
 		#if (DEBUG)
-			if (this.state != oldState)
-				DebugMessage("State has changed from " + oldState + " to " + this.state + ".");
+			if (state != oldState)
+				DebugMessage("State has changed from " + oldState + " to " + state + ".");
 			else
 				DebugMessage("State is already " + oldState + ".");
 		#endif
