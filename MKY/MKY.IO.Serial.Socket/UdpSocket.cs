@@ -102,8 +102,8 @@ namespace MKY.IO.Serial.Socket
 		// Constants
 		//==========================================================================================
 
-		private const int SendQueueFixedCapacity      = SocketDefaults.SendBufferSize;
-		private const int ReceiveQueueInitialCapacity = SocketDefaults.ReceiveBufferSize;
+		private const int SendQueueFixedCapacity      = SocketEx.SendBufferSizeDefault;
+		private const int ReceiveQueueInitialCapacity = SocketEx.ReceiveBufferSizeDefault;
 
 		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
 

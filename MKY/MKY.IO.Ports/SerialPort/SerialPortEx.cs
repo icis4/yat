@@ -91,19 +91,19 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		/// <summary>
-		/// The hard-coded default value of <see cref="SerialPort.WriteBufferSize"/>.
+		/// The hard-coded default value of <see cref="System.IO.Ports.SerialPort.WriteBufferSize"/>.
 		/// </summary>
 		/// <remarks>
-		/// Value cannot be retrieved from <see cref="SerialPort"/>.
+		/// Value cannot be retrieved from <see cref="System.IO.Ports.SerialPort"/>.
 		/// Value is hard-coded, there is no need to create an object and retrieve the value.
 		/// </remarks>
 		public const int WriteBufferSizeDefault = 2048;
 
 		/// <summary>
-		/// The hard-coded default value of <see cref="SerialPort.ReadBufferSize"/>.
+		/// The hard-coded default value of <see cref="System.IO.Ports.SerialPort.ReadBufferSize"/>.
 		/// </summary>
 		/// <remarks>
-		/// Value cannot be retrieved from <see cref="SerialPort"/>.
+		/// Value cannot be retrieved from <see cref="System.IO.Ports.SerialPort"/>.
 		/// Value is hard-coded, there is no need to create an object and retrieve the value.
 		/// </remarks>
 		public const int ReadBufferSizeDefault = 4096;
