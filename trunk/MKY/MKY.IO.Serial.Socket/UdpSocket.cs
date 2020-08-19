@@ -707,15 +707,10 @@ namespace MKY.IO.Serial.Socket
 			{
 			////AssertUndisposed() is called by 'IsOpen' below.
 
-				if ((this.socketType == UdpSocketType.Client) ||
-					(this.socketType == UdpSocketType.PairSocket)) // Remote endpoint has been defaulted on Create().
-				{
-					return (IsOpen);
-				}
-				else // Server => Remote endpoint is the sender of the first or most recently received data.
-				{
-					return (IsOpen && RemoteIPAddressIsDefined);
-				}
+				if (this.socketType == UdpSocketType.Server)
+					return (IsOpen && RemoteIPAddressIsDefined); // Remote endpoint is the sender of the first or most recently received data.
+				else
+					return (IsOpen); // Remote endpoint has been defaulted on Create().
 			}
 		}
 

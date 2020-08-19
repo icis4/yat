@@ -46,7 +46,7 @@
 
 using System;
 using System.Collections.Generic;
-//// 'System.Diagnostics' are explicitly used for preventing ambiguity between 'MKY.IO.Serial.DataReceivedEventArgs' and 'System.Diagnostics.DataReceivedEventArgs'.
+//// 'System.Diagnostics' is explicitly used for preventing ambiguity between 'MKY.IO.Serial.DataReceivedEventArgs' and 'System.Diagnostics.DataReceivedEventArgs'.
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;

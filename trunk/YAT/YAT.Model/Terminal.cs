@@ -4876,7 +4876,7 @@ namespace YAT.Model
 			}
 
 			OnIOCountChanged_Promptly(EventArgs.Empty);
-			OnIORateChanged_Promptly(EventArgs.Empty);
+			OnIORateChanged_Promptly( EventArgs.Empty);
 			OnIORateChanged_Decimated(EventArgs.Empty);
 		}
 
@@ -4892,7 +4892,7 @@ namespace YAT.Model
 				this.rxByteRate    = new RateProvider(RateInterval, RateWindow, UpdateInterval);
 
 				this.txLineRate    = new RateProvider(RateInterval, RateWindow, UpdateInterval);
-			////this.bidirLineRate = new RateProvider(rateInterval, rateWindow, updateInterval) would technically be possible, but doesn't make much sense.
+			////this.bidirLineRate = new RateProvider(RateInterval, RateWindow, UpdateInterval) would technically be possible, but doesn't make much sense.
 				this.rxLineRate    = new RateProvider(RateInterval, RateWindow, UpdateInterval);
 
 				this.txByteRate   .Changed += rate_Changed;
