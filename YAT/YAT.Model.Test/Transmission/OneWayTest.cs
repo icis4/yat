@@ -335,7 +335,7 @@ namespace YAT.Model.Test.Transmission
 				}
 				Utilities.WaitForStart(terminalA);
 
-				if (settingsB != null) // Interconnected pair:
+				if (settingsB != null) // Loopback pair:
 				{
 					Domain.Test.Settings.RevertSettingsIfUdpSocket(settingsB); // Revert to default behavior expected by this test case.
 

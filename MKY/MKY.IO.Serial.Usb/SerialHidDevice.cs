@@ -510,7 +510,7 @@ namespace MKY.IO.Serial.Usb
 					this.device.Opened       += device_Opened;
 					this.device.Closed       += device_Closed;
 					this.device.DataReceived += device_DataReceived;
-					this.device.DataSent     += Device_DataSent;
+					this.device.DataSent     += device_DataSent;
 					this.device.IOError      += device_IOError;
 				}
 
@@ -572,6 +572,8 @@ namespace MKY.IO.Serial.Usb
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private void DisposeDeviceAndThreads()
 		{
+			StopThreads();
+
 			lock (this.deviceSyncObj)
 			{
 				try
@@ -589,16 +591,18 @@ namespace MKY.IO.Serial.Usb
 				}
 			}
 
-			try
-			{
-				StopThreads();
-			}
-			catch (Exception ex)
-			{
-				DebugEx.WriteException(GetType(), ex, "Exception while stopping threads!");
-			}
+			ClearQueues();
 
 			OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
+		}
+
+		private void ClearQueues()
+		{
+			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+				this.sendQueue.Clear();
+
+			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+				this.receiveQueue.Clear();
 		}
 
 		#endregion
@@ -882,7 +886,7 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		[CallingContract(IsNeverMainThread = true, IsAlwaysSequential = true, Rationale = "Usb.SerialHidDevice uses asynchronous 'Write' to invoke this event.")]
-		private void Device_DataSent(object sender, IO.Usb.DataEventArgs e)
+		private void device_DataSent(object sender, IO.Usb.DataEventArgs e)
 		{
 			OnDataSent(new SerialDataSentEventArgs(e.Data, e.TimeStamp, Info, this.device.ReportFormat.UseId, this.device.ActiveReportId));
 		}

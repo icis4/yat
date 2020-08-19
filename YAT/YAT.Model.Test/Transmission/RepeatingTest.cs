@@ -247,7 +247,7 @@ namespace YAT.Model.Test.Transmission
 				}
 				Utilities.WaitForStart(terminalA);
 
-				if (settingsB != null) // Interconnected pair:
+				if (settingsB != null) // Loopback pair:
 				{
 					settingsB.Send.DefaultLineRepeat = repeatCount; // Set settings to the desired repeat count.
 

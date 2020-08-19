@@ -1762,18 +1762,18 @@ namespace YAT.Domain
 		protected virtual void BreakPendingPacket(Queue<byte> conflateDataQueue)
 		{
 			// Retrieve pending data:
-			byte[] data;
+			int droppedDataLength;
 			lock (conflateDataQueue)
 			{
-				data = conflateDataQueue.ToArray();
+				droppedDataLength = conflateDataQueue.Count;
 				conflateDataQueue.Clear();
 			}
 
 			string message;
-			if (data.Length <= 1)
-				message = data.Length + " byte not sent anymore due to break."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+			if (droppedDataLength <= 1)
+				message = droppedDataLength + " byte not sent anymore due to break."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
 			else
-				message = data.Length + " bytes not sent anymore due to break."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+				message = droppedDataLength + " bytes not sent anymore due to break."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
 
 			InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, message, true));
 
