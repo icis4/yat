@@ -630,9 +630,9 @@ namespace YAT.Model.Test
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
 		/// </remarks>
-		public static void WaitForTransmissionAndAssertCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount, int timeout = WaitTimeoutForLineTransmission)
-		{
-			WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, expectedTotalLineCount, timeout);
+		public static void WaitForTransmissionAndAssertCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount) // int timeout = WaitTimeoutForLineTransmission must not be used here,
+		{                                                                                                                                                       // it would result in ambiguity with method below!
+			WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, expectedTotalLineCount);
 		}
 
 		/// <remarks>
