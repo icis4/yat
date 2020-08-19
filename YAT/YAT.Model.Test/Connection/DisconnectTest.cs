@@ -163,7 +163,7 @@ namespace YAT.Model.Test.Connection
 				}
 				Utilities.WaitForStart(terminalA);
 
-				if (settingsB != null) // Interconnected pair:
+				if (settingsB != null) // Loopback pair:
 				{
 					using (var terminalB = new Terminal(Settings.Create(settingsB)))
 					{
@@ -180,7 +180,7 @@ namespace YAT.Model.Test.Connection
 						}
 						Utilities.WaitForConnection(terminalA, terminalB);
 
-						TransmitAndVerifyAndDisconnect(terminalA, terminalB, disconnectIdentifier, false);
+						TransmitAndVerifyAndDisconnect(terminalA, terminalB, disconnectIdentifier);
 
 						terminalB.StopIO();
 						Utilities.WaitForDisconnection(terminalB);
@@ -188,7 +188,7 @@ namespace YAT.Model.Test.Connection
 				}
 				else // Loopback self:
 				{
-					TransmitAndVerifyAndDisconnect(terminalA, terminalA, disconnectIdentifier, true);
+					TransmitAndVerifyAndDisconnect(terminalA, terminalA, disconnectIdentifier);
 				}
 
 				terminalA.StopIO();
@@ -196,10 +196,10 @@ namespace YAT.Model.Test.Connection
 			}
 		}
 
-		private static void TransmitAndVerifyAndDisconnect(Terminal terminalA, Terminal terminalB, char disconnectIdentifier, bool isSameTerminal)
+		private static void TransmitAndVerifyAndDisconnect(Terminal terminalA, Terminal terminalB, char disconnectIdentifier)
 		{
 			Encoding parserEncoding;
-			Domain.Endianness parserEndianness;
+			Endianness parserEndianness;
 			Domain.Parser.Mode parserMode;
 			Utilities.AssertMatchingParserSettingsForSendText(terminalA, terminalB, out parserEncoding, out parserEndianness, out parserMode);
 			using (var parser = new Domain.Parser.Parser(parserEncoding, parserEndianness, parserMode))
@@ -235,10 +235,13 @@ namespace YAT.Model.Test.Connection
 				terminalB.SendText(textBA); // Response B => A
 				expectedTotalByteCountB += byteCountBA;
 				expectedTotalLineCountB++;
-				if (isSameTerminal) {
+
+				if (terminalA == terminalB) // Loopback self:
+				{
 					expectedTotalByteCountB *= 2;
 					expectedTotalLineCountB *= 2;
 				}
+
 				Utilities.WaitForTransmissionAndAssertCounts(terminalB, terminalA, expectedTotalByteCountB, expectedTotalLineCountB);
 
 				if (disconnectIdentifier == 'A')
@@ -248,29 +251,33 @@ namespace YAT.Model.Test.Connection
 					Thread.Sleep(333); // i.e. several hundred lines.
 					terminalA.StopIO();
 					Utilities.WaitForDisconnection(terminalA);
-					Thread.Sleep(100); // Make sure that B has finished processing too.
-					                 //// Note that WaitForDisconnection() would not work for connection-less UDP sockets.
-					terminalA.ClearRepositories();
+					Thread.Sleep(100); // Make sure that B can deal with disconnected A. Note that WaitForDisconnection() would not work for connection-less UDP sockets.
+					terminalB.Break(); // TCP terminals break sending when disconnected. But explicitly breaking is needed for connection-less UDP sockets.
+					Thread.Sleep(100);
+
 					terminalB.ClearRepositories();
-					terminalA.ResetIOCountAndRate();
+					terminalA.ClearRepositories();
 					terminalB.ResetIOCountAndRate();
+					terminalA.ResetIOCountAndRate();
 
 					terminalA.StartIO();
 					Utilities.WaitForConnection(terminalA, terminalB);
 				}
-				else
+				else       // Identifier == 'B')
 				{
 					// Send repeating A => B then close B:
 					terminalA.SendText(@"A => B\!(LineRepeat)");
 					Thread.Sleep(333); // i.e. several hundred lines.
 					terminalB.StopIO();
 					Utilities.WaitForDisconnection(terminalB);
-					Thread.Sleep(100); // Make sure that A has finished processing too.
-					                 //// Note that WaitForDisconnection() would not work for connection-less UDP sockets.
-					terminalB.ClearRepositories();
+					Thread.Sleep(100); // Make sure that A can deal with disconnected B. Note that WaitForDisconnection() would not work for connection-less UDP sockets.
+					terminalA.Break(); // TCP terminals break sending when disconnected. But explicitly breaking is needed for connection-less UDP sockets.
+					Thread.Sleep(100);
+
 					terminalA.ClearRepositories();
-					terminalB.ResetIOCountAndRate();
+					terminalB.ClearRepositories();
 					terminalA.ResetIOCountAndRate();
+					terminalB.ResetIOCountAndRate();
 
 					terminalB.StartIO();
 					Utilities.WaitForConnection(terminalB, terminalA);
@@ -289,10 +296,13 @@ namespace YAT.Model.Test.Connection
 				terminalB.SendText(textBA); // Response B => A
 				expectedTotalByteCountB += byteCountBA;
 				expectedTotalLineCountB++;
-				if (isSameTerminal) {
+
+				if (terminalA == terminalB) // Loopback self:
+				{
 					expectedTotalByteCountB *= 2;
 					expectedTotalLineCountB *= 2;
 				}
+
 				Utilities.WaitForTransmissionAndAssertCounts(terminalB, terminalA, expectedTotalByteCountB, expectedTotalLineCountB);
 			} // using (parser)
 		}
