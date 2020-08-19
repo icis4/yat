@@ -22,6 +22,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of byte count handling:
+////#define DEBUG_BYTE_COUNT
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -29,9 +43,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
+using System.Threading;
 
 #endregion
 
@@ -70,7 +86,8 @@ namespace YAT.Domain
 			: base(capacity)
 		{
 			this.capacity    = capacity;
-		////this.byteCount   = 0;                       // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
+		////this.byteCount   = 0;
+			                                            // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			this.currentLine = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 			                                                  // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
 			this.lastLineAuxiliary = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
@@ -168,8 +185,10 @@ namespace YAT.Domain
 		public virtual void Enqueue(DisplayElement item)
 		{
 			// Add element to current line:
-			this.byteCount += item.ByteCount;
 			this.currentLine.Add(item);
+			DebugByteCount("Enqueueing, byte count was {0}...", this.byteCount);
+			this.byteCount += item.ByteCount;
+			DebugByteCount("...now is {0}", this.byteCount);
 
 			// Check whether a line break is needed:
 			if (item is DisplayElement.LineBreak)
@@ -209,8 +228,12 @@ namespace YAT.Domain
 		{
 			var dl = base.Dequeue();
 
+			DebugByteCount("Dequeueing, byte count was {0}...", this.byteCount);
+
 			foreach (var de in dl)
 				this.byteCount -= de.ByteCount;
+
+			DebugByteCount("...now is {0}", this.byteCount);
 
 			return (dl);
 		}
@@ -230,7 +253,9 @@ namespace YAT.Domain
 		{
 			if (this.currentLine.Count > 0) // Only something to do if there is something in current line indeed.
 			{
+				DebugByteCount("Clearing current line, byte count was {0}...", this.byteCount);
 				this.byteCount -= this.currentLine.ByteCount;
+				DebugByteCount("...now is {0}", this.byteCount);
 
 				this.currentLine.Clear();
 			}
@@ -241,7 +266,9 @@ namespace YAT.Domain
 		{
 			base.Clear();
 
+			DebugByteCount("Clearing repository, byte count was {0}...", this.byteCount);
 			this.byteCount = 0;
+			DebugByteCount("...now is {0}", this.byteCount);
 
 			this.currentLine.Clear();
 			this.lastLineAuxiliary.Clear();
@@ -340,6 +367,42 @@ namespace YAT.Domain
 				sb.AppendLine(indent + "<None>");
 
 			return (sb.ToString());
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		protected virtual void DebugMessage(string message)
+		{
+			Debug.WriteLine
+			(
+				string.Format
+				(
+					CultureInfo.CurrentCulture,
+					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
+					GetType(),
+					"",
+					"",
+					message
+				)
+			);
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_BYTE_COUNT")]
+		private void DebugByteCount(string format, params object[] args)
+		{
+			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
 		}
 
 		#endregion
