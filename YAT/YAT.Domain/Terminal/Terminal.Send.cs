@@ -320,7 +320,7 @@ namespace YAT.Domain
 		/// <remarks>This method will be called asynchronously.</remarks>
 		protected virtual void DoSendRaw(byte[] data, long sequenceNumber)
 		{
-			DebugSend(string.Format("Sending of {0} byte(s) of raw data has been invoked with sequence number {1}.", data.Length, sequenceNumber));
+			DebugSend("Sending of {0} byte(s) of raw data has been invoked with sequence number {1}.", data.Length, sequenceNumber);
 
 			EnterRequestPre();
 
@@ -329,13 +329,13 @@ namespace YAT.Domain
 			{
 				try
 				{
-					DebugSend(string.Format("Sending of {0} byte(s) of raw data has been permitted (sequence number = {1}).", data.Length, sequenceNumber));
+					DebugSend("Sending of {0} byte(s) of raw data has been permitted (sequence number = {1}).", data.Length, sequenceNumber);
 
 					DoSendPre();
 					DoSendRawData(forSomeTimeEventHelper, data);
 					DoSendPost();
 
-					DebugSend(string.Format("Sending of {0} byte(s) of raw data has been completed (sequence number = {1}).", data.Length, sequenceNumber));
+					DebugSend("Sending of {0} byte(s) of raw data has been completed (sequence number = {1}).", data.Length, sequenceNumber);
 				}
 				finally
 				{
@@ -363,7 +363,7 @@ namespace YAT.Domain
 		/// <remarks>This method will be called asynchronously.</remarks>
 		protected virtual void DoSendText(TextSendItem item, long sequenceNumber)
 		{
-			DebugSend(string.Format(@"Sending of text ""{0}"" ({1} characters) has been invoked (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber));
+			DebugSend(@"Sending of text ""{0}"" ({1} characters) has been invoked (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber);
 
 			EnterRequestPre();
 
@@ -372,13 +372,13 @@ namespace YAT.Domain
 			{
 				try
 				{
-					DebugSend(string.Format(@"Sending of text ""{0}"" ({1} characters) has been permitted (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber));
+					DebugSend(@"Sending of text ""{0}"" ({1} characters) has been permitted (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber);
 
 					DoSendPre();
 					DoSendTextItem(forSomeTimeEventHelper, item);
 					DoSendPost();
 
-					DebugSend(string.Format(@"Sending of text ""{0}"" ({1} characters) has been completed (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber));
+					DebugSend(@"Sending of text ""{0}"" ({1} characters) has been completed (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber);
 				}
 				finally
 				{
@@ -408,7 +408,7 @@ namespace YAT.Domain
 		/// <remarks>This method will be called asynchronously.</remarks>
 		protected virtual void DoSendTextLine(TextSendItem item, long sequenceNumber)
 		{
-			DebugSend(string.Format(@"Sending of text line ""{0}"" ({1} characters) has been invoked (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber));
+			DebugSend(@"Sending of text line ""{0}"" ({1} characters) has been invoked (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber);
 
 			EnterRequestPre();
 
@@ -417,13 +417,13 @@ namespace YAT.Domain
 			{
 				try
 				{
-					DebugSend(string.Format(@"Sending of text line ""{0}"" ({1} characters) has been permitted (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber));
+					DebugSend(@"Sending of text line ""{0}"" ({1} characters) has been permitted (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber);
 
 					DoSendPre();
 					DoSendTextItem(forSomeTimeEventHelper, item);
 					DoSendPost();
 
-					DebugSend(string.Format(@"Sending of text line ""{0}"" ({1} characters) has been completed (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber));
+					DebugSend(@"Sending of text line ""{0}"" ({1} characters) has been completed (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber);
 				}
 				finally
 				{
@@ -458,7 +458,7 @@ namespace YAT.Domain
 		/// <remarks>This method will be called asynchronously.</remarks>
 		protected virtual void DoSendTextLines(List<TextSendItem> items, long sequenceNumber)
 		{
-			DebugSend(string.Format("Sending of {0} text lines has been invoked (sequence number = {1}).", items.Count, sequenceNumber));
+			DebugSend("Sending of {0} text lines has been invoked (sequence number = {1}).", items.Count, sequenceNumber);
 
 			EnterRequestPre();
 
@@ -467,7 +467,7 @@ namespace YAT.Domain
 			{
 				try
 				{
-					DebugSend(string.Format("Sending of {0} text lines has been permitted (sequence number = {1}).", items.Count, sequenceNumber));
+					DebugSend("Sending of {0} text lines has been permitted (sequence number = {1}).", items.Count, sequenceNumber);
 
 					DoSendPre();
 
@@ -476,7 +476,7 @@ namespace YAT.Domain
 
 					DoSendPost();
 
-					DebugSend(string.Format("Sending of {0} text lines has been completed (sequence number = {1}).", items.Count, sequenceNumber));
+					DebugSend("Sending of {0} text lines has been completed (sequence number = {1}).", items.Count, sequenceNumber);
 				}
 				finally
 				{
@@ -503,7 +503,7 @@ namespace YAT.Domain
 		/// <remarks>This method will be called asynchronously.</remarks>
 		protected virtual void DoSendFile(FileSendItem item, long sequenceNumber)
 		{
-			DebugSend(string.Format(@"Sending of ""{0}"" has been invoked (sequence number = {1}).", item.FilePath, sequenceNumber));
+			DebugSend(@"Sending of ""{0}"" has been invoked (sequence number = {1}).", item.FilePath, sequenceNumber);
 
 			EnterRequestPre();
 
@@ -512,13 +512,13 @@ namespace YAT.Domain
 			{
 				try
 				{
-					DebugSend(string.Format(@"Sending of ""{0}"" has been permitted (sequence number = {1}).", item.FilePath, sequenceNumber));
+					DebugSend(@"Sending of ""{0}"" has been permitted (sequence number = {1}).", item.FilePath, sequenceNumber);
 
 					DoSendPre();
 					DoSendFileItem(forSomeTimeEventHelper, item);
 					DoSendPost();
 
-					DebugSend(string.Format(@"Sending of ""{0}"" has been completed (sequence number = {1}).", item.FilePath, sequenceNumber));
+					DebugSend(@"Sending of ""{0}"" has been completed (sequence number = {1}).", item.FilePath, sequenceNumber);
 				}
 				finally
 				{
@@ -753,7 +753,7 @@ namespace YAT.Domain
 			if (forSomeTimeEventHelper.RaiseEventIfChunkSizeIsAboveThreshold(data.Length, ApproximateTypicalNumberOfBytesPerMillisecond))
 				IncrementIsSendingForSomeTimeChanged();
 
-			DebugSend(string.Format("Sending {0} byte(s) of raw data by directly forwarding to raw terminal.", data.Length));
+			DebugSend("Sending {0} byte(s) of raw data by directly forwarding to raw terminal.", data.Length);
 
 			ForwardPacketToRawTerminal(data); // Nothing for further processing, simply forward.
 		}
@@ -782,7 +782,7 @@ namespace YAT.Domain
 
 			do // Process at least once, potentially repeat:
 			{
-				DebugSend(string.Format("Sending {0} parser result(s) of {1}.", parseResult.Length, (isLine ? "a text line" : "text")));
+				DebugSend("Sending {0} parser result(s) of {1}.", parseResult.Length, (isLine ? "a text line" : "text"));
 
 				// --- Initialize the line/packet ---
 
@@ -2135,6 +2135,15 @@ namespace YAT.Domain
 		//==========================================================================================
 		// Debug
 		//==========================================================================================
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_SEND")]
+		private void DebugSend(string format, params object[] args)
+		{
+			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+		}
 
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
