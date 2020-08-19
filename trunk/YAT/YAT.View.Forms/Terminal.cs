@@ -7690,17 +7690,18 @@ namespace YAT.View.Forms
 							StartIOStatusFlashing(green);
 						}
 					}
-					else // can only receive (so far)
+					else // IsOpen && !IsTransmissive => can only send *or* receive (so far)
 					{
-					////if (!this.terminal.IsReceivingForSomeTime)
+						if (!this.terminal.IsSendingForSomeTime)   // Not checking for 'IsSending' as that a) might distract user
+						////!this.terminal.IsReceivingForSomeTime) // and b) consume unncessary CPU time (draw LED quickly twice).
 						{
 							ResetIOStatusFlashing();
 							SetIOStatusSteady(yellow);
 						}
-					////else
-					////{
-					////	StartIOStatusFlashing(yellow);
-					////}
+						else
+						{
+							StartIOStatusFlashing(yellow);
+						}
 					}
 				}
 				else // is closed
