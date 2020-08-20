@@ -989,26 +989,19 @@ namespace MKY.IO.Ports
 
 			if (IsOpen)
 			{
-				try
+				var initialTimeStamp = DateTime.Now;
+				while (BytesToWrite > 0)
 				{
-					var initialTimeStamp = DateTime.Now;
-					while (BytesToWrite > 0)
-					{
-						// Actively yield to other threads to allow processing:
-						var span = (DateTime.Now - initialTimeStamp);
-						if (span.TotalMilliseconds < 4)
-							Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as flush
-						else                             // a) is expected to be blocking and
-							Thread.Sleep(1);             // b) is short (max. 4 ms) yet.
-					}                                    // But sleep if longer!
+					// Actively yield to other threads to allow processing:
+					var span = (DateTime.Now - initialTimeStamp);
+					if (span.TotalMilliseconds < 4)
+						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as flush
+					else                             // a) is expected to be blocking and
+						Thread.Sleep(1);             // b) is short (max. 4 ms) yet.
+				}                                    // But sleep if longer!
 
-					// Alternatively, base.BaseStream.Flush() could be called.
-					// But that approach doesn't offer flexibility, so no-go.
-				}
-				catch (Exception ex)
-				{
-					throw (new System.IO.IOException(ex.Message));
-				}
+				// Alternatively, base.BaseStream.Flush() could be called.
+				// But that approach doesn't offer flexibility, so no-go.
 			}
 		}
 
