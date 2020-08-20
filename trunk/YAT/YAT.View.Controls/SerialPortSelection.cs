@@ -206,9 +206,9 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary>
-		/// Startup flag only used in the following event handler.
+		/// Flag only used by the following event handler.
 		/// </summary>
-		private bool isStartingUp = true;
+		private bool SerialPortSelection_Paint_IsFirst { get; set; } = true;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
@@ -219,9 +219,8 @@ namespace YAT.View.Controls
 		/// </remarks>
 		private void SerialPortSelection_Paint(object sender, PaintEventArgs e)
 		{
-			if (this.isStartingUp)
-			{
-				this.isStartingUp = false;
+			if (SerialPortSelection_Paint_IsFirst) {
+				SerialPortSelection_Paint_IsFirst = false;
 
 				SetPortSelection();
 			}

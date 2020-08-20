@@ -300,9 +300,9 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary>
-		/// Startup flag only used in the following event handler.
+		/// Flag only used by the following event handler.
 		/// </summary>
-		private bool isStartingUp = true;
+		private bool UsbSerialHidPortSettings_Paint_IsFirst { get; set; } = true;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
@@ -313,9 +313,8 @@ namespace YAT.View.Controls
 		/// </remarks>
 		private void UsbSerialHidPortSettings_Paint(object sender, PaintEventArgs e)
 		{
-			if (this.isStartingUp)
-			{
-				this.isStartingUp = false;
+			if (UsbSerialHidPortSettings_Paint_IsFirst) {
+				UsbSerialHidPortSettings_Paint_IsFirst = false;
 
 				SetControls();
 			}
