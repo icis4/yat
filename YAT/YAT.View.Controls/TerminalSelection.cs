@@ -200,7 +200,7 @@ namespace YAT.View.Controls
 		/// </remarks>
 		private void TerminalSelection_Paint(object sender, PaintEventArgs e)
 		{
-			if (TerminalSelection_Paint_IsFirst {
+			if (TerminalSelection_Paint_IsFirst) {
 				TerminalSelection_Paint_IsFirst = false;
 
 				SetControls();

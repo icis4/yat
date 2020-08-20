@@ -143,8 +143,8 @@ namespace YAT.View.Forms
 		private SizeHelper sendSizeHelper = new SizeHelper();
 		private SplitContainerHelper splitContainerHelper = new SplitContainerHelper();
 
-		// Startup/Update/Closing:
-		private bool isStartingUp = true;
+		// Initiating/Update/Closing:
+		private bool isInitiating = true;
 		private SettingControlsHelper isSettingControls;
 		private SettingControlsHelper isUpdatingSplitterRatio;
 		private bool isIntegralMdiLayouting = false;
@@ -346,7 +346,7 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void Terminal_Shown(object sender, EventArgs e)
 		{
-			this.isStartingUp = false;
+			this.isInitiating = false;
 
 			this.mdiParent = MdiParent;
 
@@ -402,13 +402,13 @@ namespace YAT.View.Forms
 
 		private void Terminal_LocationChanged(object sender, EventArgs e)
 		{
-			if (!IsStartingUp && !IsIntegraMdiLayouting && !IsClosing)
+			if (!IsInitiating && !IsIntegraMdiLayouting && !IsClosing)
 				UpdateWindowSettings();
 		}
 
 		private void Terminal_SizeChanged(object sender, EventArgs e)
 		{
-			if (!IsStartingUp && !IsIntegraMdiLayouting && !IsClosing)
+			if (!IsInitiating && !IsIntegraMdiLayouting && !IsClosing)
 				UpdateWindowSettings();
 		}
 
@@ -421,7 +421,7 @@ namespace YAT.View.Forms
 		/// </remarks>
 		public void NotifyWindowStateChanged()
 		{
-			if (!IsStartingUp && !IsIntegraMdiLayouting && !IsClosing)
+			if (!IsInitiating && !IsIntegraMdiLayouting && !IsClosing)
 				UpdateWindowSettings();
 		}
 
@@ -4017,7 +4017,7 @@ namespace YAT.View.Forms
 
 		private void splitContainer_TxMonitor_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!IsStartingUp && !this.isSettingControls && !IsIntegraMdiLayouting && !IsClosing)
+			if (!IsInitiating && !this.isSettingControls && !IsIntegraMdiLayouting && !IsClosing)
 			{
 				// No need to 'splitContainerHelper.CalculateUnscaledDistanceFromScaled()' since no
 				// panel of 'splitContainer_TxMonitor' is fixed. Code if this was the case:
@@ -4043,7 +4043,7 @@ namespace YAT.View.Forms
 
 		private void splitContainer_RxMonitor_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!IsStartingUp && !this.isSettingControls && !IsIntegraMdiLayouting && !IsClosing)
+			if (!IsInitiating && !this.isSettingControls && !IsIntegraMdiLayouting && !IsClosing)
 			{
 				// No need to 'splitContainerHelper.CalculateUnscaledDistanceFromScaled()' since no
 				// panel of 'splitContainer_RxMonitor' is fixed. Code if this was the case:
@@ -4069,7 +4069,7 @@ namespace YAT.View.Forms
 
 		private void splitContainer_Predefined_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!IsStartingUp && !this.isSettingControls && !IsIntegraMdiLayouting && !IsClosing)
+			if (!IsInitiating && !this.isSettingControls && !IsIntegraMdiLayouting && !IsClosing)
 			{
 				// No need to 'splitContainerHelper.CalculateUnscaledDistanceFromScaled()' since no
 				// panel of 'splitContainer_Predefined' is fixed. Code if this was the case:
@@ -4421,11 +4421,17 @@ namespace YAT.View.Forms
 			}
 		}
 
-		/// <remarks>Property for orthogonality with <see cref="IsClosing"/>, <see cref="IsIntegraMdiLayouting"/>,...</remarks>
+		/// <remarks>
+		/// Using term "initiating" for distinction with "initialize", "create" and "load" which are
+		/// already occupied by the .NET WinForms terminology.
+		/// </remarks>
+		/// <remarks>
+		/// Property for orthogonality with <see cref="IsClosing"/>.
+		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
-		private bool IsStartingUp
+		private bool IsInitiating
 		{
-			get { return (this.isStartingUp); }
+			get { return (this.isInitiating); }
 		}
 
 		private bool IsIntegraMdiLayouting
