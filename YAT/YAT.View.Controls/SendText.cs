@@ -131,6 +131,11 @@ namespace YAT.View.Controls
 
 		private SettingControlsHelper isSettingControls;
 
+		/// <summary>
+		/// Flag to work around the issue described furter below.
+		/// </summary>
+		private bool userInputIsInStandby; // = false;
+
 		private Command command = new Command();
 		private RecentItemCollection<Command> recent;
 
@@ -415,8 +420,8 @@ namespace YAT.View.Controls
 		/// </remarks>
 		public virtual void StandbyInUserInput()
 		{
-			if (this.isStartingUp)
-				this.isStartingUpInStandby = true;
+			if (SendText_Paint_IsFirst)
+				this.userInputIsInStandby = true;
 
 			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
 			{
@@ -437,8 +442,8 @@ namespace YAT.View.Controls
 		/// </remarks>
 		public virtual void PrepareUserInput()
 		{
-			if (this.isStartingUp)
-				this.isStartingUpInStandby = false;
+			if (SendText_Paint_IsFirst)
+				this.userInputIsInStandby = false;
 
 			DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
 			{
@@ -522,14 +527,9 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <summary>
-		/// Startup flag only used in the following event handler.
+		/// Flag only used by the following event handler.
 		/// </summary>
-		private bool isStartingUp = true;
-
-		/// <summary>
-		/// Startup flag to work around the issue described below.
-		/// </summary>
-		private bool isStartingUpInStandby; // = false;
+		private bool SendText_Paint_IsFirst { get; set; } = true;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
@@ -540,9 +540,8 @@ namespace YAT.View.Controls
 		/// </remarks>
 		private void SendText_Paint(object sender, PaintEventArgs e)
 		{
-			if (this.isStartingUp)
-			{
-				this.isStartingUp = false;
+			if (SendText_Paint_IsFirst) {
+				SendText_Paint_IsFirst = false;
 
 				DebugUserInputEnter(MethodBase.GetCurrentMethod().Name);
 				{
@@ -550,7 +549,7 @@ namespace YAT.View.Controls
 					SetRecentControls();
 					SetCommandControls();
 
-					if (this.isStartingUpInStandby) // Attention, see comments below!
+					if (this.userInputIsInStandby) // Attention, see comments below!
 					{
 						comboBox_SingleLineText.SelectionLength = 0;
 						comboBox_SingleLineText.SelectionStart = comboBox_SingleLineText.Text.Length;

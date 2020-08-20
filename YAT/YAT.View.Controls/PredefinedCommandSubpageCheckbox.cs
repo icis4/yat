@@ -43,9 +43,9 @@ namespace YAT.View.Controls
 		private int subpageId = SubpageIdDefault;
 
 		/// <summary>
-		/// Startup flag only used in the following event handler.
+		/// Flag only used by the following event handler.
 		/// </summary>
-		private bool isStartingUp = true;
+		private bool OnPaint_IsFirst { get; set; } = true;
 
 		/// <summary>
 		/// Raises the <see cref="M:ButtonBase.OnPaint(System.Windows.Forms.PaintEventArgs)" /> event.
@@ -53,9 +53,8 @@ namespace YAT.View.Controls
 		/// <param name="pevent">A <see cref="T:PaintEventArgs" /> that contains the event data.</param>
 		protected override void OnPaint(PaintEventArgs pevent)
 		{
-			if (this.isStartingUp)
-			{
-				this.isStartingUp = false;
+			if (OnPaint_IsFirst) {
+				OnPaint_IsFirst = false;
 
 				SetControls(); // Required to properly draw/show also in case of default values.
 			}
