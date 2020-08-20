@@ -203,14 +203,8 @@ namespace MKY.IO.Serial.Socket
 					}
 
 					// Inner loop, runs as long as there are items in the queue:
-					while (IsUndisposed && this.sendThreadRunFlag && (this.sendQueue.Count > 0)) // Check disposal state first!
-					{                                             // No lock required, just checking for empty.
-						if (!IsTransmissive)
-						{
-							DropSendQueueAndNotify(); // Drop queueud data in case device has been disconnected.
-							break; // while()
-						}
-
+					while (IsUndisposed && this.sendThreadRunFlag && IsTransmissive && (this.sendQueue.Count > 0)) // Check disposal state first!
+					{                                                               // No lock required, just checking for empty.
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.
@@ -336,14 +330,8 @@ namespace MKY.IO.Serial.Socket
 					}
 
 					// Inner loop, runs as long as there are items in the queue:
-					while (IsUndisposed && this.dataSentThreadRunFlag && (this.dataSentQueue.Count > 0)) // Check disposal state first!
-					{                                                 // No lock required, just checking for empty.
-						if (!IsTransmissive)
-						{
-							DropDataSentQueueAndNotify(); // Drop queueud data in case socket has been disconnected.
-							break; // while()
-						}
-
+					while (IsUndisposed && this.dataSentThreadRunFlag && IsTransmissive && (this.dataSentQueue.Count > 0)) // Check disposal state first!
+					{                                                                   // No lock required, just checking for empty.
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.
@@ -401,43 +389,6 @@ namespace MKY.IO.Serial.Socket
 			}
 
 			DebugThreadState("SendThread() has terminated.");
-		}
-
-		private void DropQueuesAndNotify()
-		{
-			DropSendQueueAndNotify();
-			DropDataSentQueueAndNotify();
-		}
-
-		private void DropSendQueueAndNotify()
-		{
-			DropQueueAndNotify(this.sendQueue);
-		}
-
-		private void DropDataSentQueueAndNotify()
-		{
-			DropQueueAndNotify(this.dataSentQueue);
-		}
-
-		private void DropQueueAndNotify(Queue<byte> queue)
-		{
-			int droppedCount;
-			lock (queue) // Lock is required because Queue<T> is not synchronized.
-			{
-				droppedCount = queue.Count;
-				queue.Clear();
-			}
-
-			if (droppedCount > 0)
-			{
-				string message;
-				if (droppedCount <= 1)
-					message = droppedCount + " byte not sent anymore.";  // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
-				else                                                     // Reason cannot be stated, could be "disconnected" or "stopped/closed"
-					message = droppedCount + " bytes not sent anymore."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
-
-				OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
-			}
 		}
 
 		#endregion
