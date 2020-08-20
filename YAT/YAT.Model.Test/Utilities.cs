@@ -300,6 +300,12 @@ namespace YAT.Model.Test
 		/// <summary></summary>
 		public const int WaitIntervalForCounts = 50;
 
+		                              /// <remarks><see cref="Domain.Test.Utilities.WaitTimeoutForIsSendingForSomeTime"/>.</remarks>
+		public const int WaitTimeoutForIsSendingForSomeTime = Domain.Test.Utilities.WaitTimeoutForIsSendingForSomeTime;
+
+		                           /// <remarks><see cref="Domain.Test.Utilities.WaitTimeoutForIsNoLongerSending"/>.</remarks>
+		public const int WaitTimeoutForIsNoLongerSending = Domain.Test.Utilities.WaitTimeoutForIsNoLongerSending;
+
 		/// <summary></summary>
 		public const string LineExceededWarningPattern =  Domain.Test.Utilities.LineExceededWarningPattern;
 
@@ -394,7 +400,7 @@ namespace YAT.Model.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for start, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for start, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 			while (!terminal.IsStarted)
 			{
@@ -418,7 +424,7 @@ namespace YAT.Model.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for open, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for open, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 			while (!terminal.IsOpen)
 			{
@@ -443,7 +449,7 @@ namespace YAT.Model.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for connection, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 			while (!terminal.IsConnected)
 			{
@@ -467,7 +473,7 @@ namespace YAT.Model.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for connection, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 			while (!terminalA.IsConnected && !terminalB.IsConnected)
 			{
@@ -483,6 +489,18 @@ namespace YAT.Model.Test
 			Trace.WriteLine("...done, connected");
 		}
 
+		/// <summary></summary>
+		public static void WaitForIsSendingForSomeTime(Terminal terminal, int timeout = WaitTimeoutForIsSendingForSomeTime)
+		{
+			Domain.Test.Utilities.WaitForIsSendingForSomeTime(terminal.UnderlyingDomain_ForTestOnly, timeout);
+		}
+
+		/// <summary></summary>
+		public static void WaitForIsNoLongerSending(Terminal terminal, int timeout = WaitTimeoutForIsNoLongerSending)
+		{
+			Domain.Test.Utilities.WaitForIsNoLongerSending(terminal.UnderlyingDomain_ForTestOnly, timeout);
+		}
+
 		/// <remarks>
 		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
@@ -491,7 +509,7 @@ namespace YAT.Model.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for close, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for close, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 			while (terminal.IsOpen)
 			{
@@ -516,7 +534,7 @@ namespace YAT.Model.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for disconnection, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 			while (!terminal.IsStopped)
 			{
@@ -675,13 +693,13 @@ namespace YAT.Model.Test
 					waitTime += WaitIntervalForCounts;
 				}
 
-				txByteCount = terminalTx.GetRepositoryByteCount(RepositoryType.Tx);
+				txByteCount = terminalTx.TxByteCount;
 				if (txByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Number of sent bytes = " + txByteCount +
 					            " mismatches expected = " + expectedTotalByteCount + ".");
 				}
 
-				txLineCount = terminalTx.GetRepositoryLineCount(RepositoryType.Tx);
+				txLineCount = terminalTx.TxLineCount;
 				if (expectedTotalLineCount != IgnoreCount) {
 					if (txLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
 						Assert.Fail("Number of sent lines = " + txLineCount +
@@ -689,13 +707,13 @@ namespace YAT.Model.Test
 					}
 				}
 
-				rxByteCount = terminalRx.GetRepositoryByteCount(RepositoryType.Rx);
+				rxByteCount = terminalRx.RxByteCount;
 				if (rxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
 					Assert.Fail("Number of received bytes = " + rxByteCount +
 					            " mismatches expected = " + expectedTotalByteCount + ".");
 				}
 
-				rxLineCount = terminalRx.GetRepositoryLineCount(RepositoryType.Rx);
+				rxLineCount = terminalRx.RxLineCount;
 				if (expectedTotalLineCount != IgnoreCount) {
 					if (rxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
 						Assert.Fail("Number of received lines = " + rxLineCount +

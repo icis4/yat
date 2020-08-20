@@ -84,6 +84,16 @@ namespace YAT.Domain.Test
 		/// </remarks>
 		public const int WaitIntervalForStateChange = 100;
 
+		/// <remarks>
+		/// Timeout of 200 ms is too short for serial COM ports at 9600 baud, especially when
+		/// debugger is connected. Measurements:
+		///  > TripleLine (where timeout would be 3 * 200 ms = 600 ms) takes around 500 ms.
+		///  > MultiLine (where timeout would be 26 * 200 ms = 5200 ms) takes around 5000 ms.
+		///     => 300 ms seems defensive enough while still not too long to waste time.
+		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
+		public const int WaitTimeoutForLineTransmission = 300; // See remarks above.
+
 		/// <summary></summary>
 		public const int WaitTimeoutForIsSendingForSomeTime = (3 * Domain.Utilities.ForSomeTimeEventHelper.Threshold);
 
@@ -99,16 +109,6 @@ namespace YAT.Domain.Test
 		/// Note that a shorter interval would increase debug output, spoiling the debug console.
 		/// </remarks>
 		public const int WaitIntervalForIsNoLongerSending = WaitIntervalForStateChange;
-
-		/// <remarks>
-		/// Timeout of 200 ms is too short for serial COM ports at 9600 baud, especially when
-		/// debugger is connected. Measurements:
-		///  > TripleLine (where timeout would be 3 * 200 ms = 600 ms) takes around 500 ms.
-		///  > MultiLine (where timeout would be 26 * 200 ms = 5200 ms) takes around 5000 ms.
-		///     => 300 ms seems defensive enough while still not too long to waste time.
-		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
-		public const int WaitTimeoutForLineTransmission = 300; // See remarks above.
 
 		/// <summary></summary>
 		public const string LineExceededWarningPattern = @"\[Warning: Maximal number of (characters|bytes) per line exceeded! Check the line break settings in Terminal > Settings > (Text|Binary) or increase the limit in Terminal > Settings > Advanced.\]";
@@ -360,7 +360,7 @@ namespace YAT.Domain.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for connection, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 			while (!terminalA.IsConnected && !terminalB.IsConnected)
 			{
@@ -381,7 +381,7 @@ namespace YAT.Domain.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for 'IsSendingForSomeTime', " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+			Trace.WriteLine("Waiting for 'IsSendingForSomeTime', 0 ms have passed, timeout is " + timeout + " ms...");
 
 			while (!terminal.IsSendingForSomeTime)
 			{
@@ -402,7 +402,7 @@ namespace YAT.Domain.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for 'IsNoLongerSending', " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+			Trace.WriteLine("Waiting for 'IsNoLongerSending', 0 ms have passed, timeout is " + timeout + " ms...");
 
 			while (terminal.IsSending)
 			{
@@ -426,7 +426,7 @@ namespace YAT.Domain.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for disconnection, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 			while (!terminal.IsStopped)
 			{
