@@ -90,7 +90,7 @@ namespace YAT.Domain.Test.Terminal
 							Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 							// Break:
-							terminalTx.Break();
+							terminalTx.ActivateBreak();
 							Thread.Sleep(DelayTime); // Delay itself cannot be breaked, only subsequent data.
 							Utilities.WaitForIsNoLongerSending(terminalTx);
 							Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
@@ -171,7 +171,7 @@ namespace YAT.Domain.Test.Terminal
 							Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 							// Break:
-							terminalTx.Break();
+							terminalTx.ActivateBreak();
 							Thread.Sleep(DelayTime); // Delay itself cannot be breaked, only subsequent data.
 							Utilities.WaitForIsNoLongerSending(terminalTx);
 							Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
@@ -247,7 +247,7 @@ namespace YAT.Domain.Test.Terminal
 							Utilities.WaitForIsSendingForSomeTime(terminalTx);
 
 							// Break:
-							terminalTx.Break();
+							terminalTx.ActivateBreak();
 							Utilities.WaitForIsNoLongerSending(terminalTx);
 							Thread.Sleep(500); // Wait some more for Rx to complete.
 
@@ -333,7 +333,7 @@ namespace YAT.Domain.Test.Terminal
 
 							// Break:
 							ThreadEx.SleepUntilOffset(initial, 2500); // About fourth the lines must have already been sent at breaking below.
-							terminalTx.Break();
+							terminalTx.ActivateBreak();
 							Utilities.WaitForIsNoLongerSending(terminalTx);
 							Thread.Sleep(500); // Wait some more for Rx to complete.
 

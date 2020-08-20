@@ -88,7 +88,7 @@ namespace YAT.Domain.Test.TextTerminal
 
 							// Break:
 							ThreadEx.SleepUntilOffset(initial, 2500); // 3 lines must have already been sent at breaking below.
-							terminalTx.Break();
+							terminalTx.ActivateBreak();
 							Thread.Sleep(DelayTime); // Delay itself cannot be breaked, only subsequent data.
 							Utilities.WaitForIsNoLongerSending(terminalTx);
 

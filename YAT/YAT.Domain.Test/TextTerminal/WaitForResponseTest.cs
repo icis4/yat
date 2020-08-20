@@ -176,7 +176,7 @@ namespace YAT.Domain.Test.TextTerminal
 							Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
 							// ...break the 2nd pending line...
-							terminalA.Break();
+							terminalA.ActivateBreak();
 							Utilities.WaitForIsNoLongerSending(terminalA);
 
 							// ...and then resume break by pinging again:
@@ -370,7 +370,7 @@ namespace YAT.Domain.Test.TextTerminal
 							Assert.That(terminalA.IsSendingForSomeTime, Is.True); // No need to WaitForIsSendingForSomeTime() as already waited for completion above.
 
 							// ...break the 2nd pending line...
-							terminalA.Break();
+							terminalA.ActivateBreak();
 							Utilities.WaitForIsNoLongerSending(terminalA);
 
 							// ...and then resume break by pinging again:
