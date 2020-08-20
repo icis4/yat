@@ -95,189 +95,199 @@ namespace YAT.Model.Test
 				settingsA.Display.MaxLineLength = MaxLineLength;
 				using (var terminalA = new Terminal(settingsA))
 				{
-					Assert.That(terminalA.Launch(), Is.True, "Terminal A could not be started!");
-
-					var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
-				////settingsB.Display.MaxLineLength is kept at default of 1000 chars/bytes.
-					using (var terminalB = new Terminal(settingsB))
+					try
 					{
-						Assert.That(terminalB.Launch(), Is.True, "Terminal B could not be started!");
-						Utilities.WaitForConnection(terminalA, terminalB);
+						Assert.That(terminalA.Launch(), Is.True, "Terminal A could not be started!");
 
-						string text;
-						const string Cr = "<CR>"; // Related to 'MaxLineLength = 21' above.
-						const string Eol = "<CR><LF>";
-						const int Repetitions = 3;
-						string contentPatternExceeded;
-						int expectedTotalByteCountAB = 0;
-						int expectedTotalByteCountBA = 0;
-						int expectedTotalByteCountOffsetAB = 0;
-						int expectedTotalByteCountOffsetBA = 0;
-						int expectedTotalLineCountAB = 0;
-						int expectedTotalLineCountBA = 0;
-						var expectedContentPatternA = new List<string>(); // Applies to bidir only.
-						var expectedContentPatternB = new List<string>(); // Applies to bidir only.
-
-						// Initial ping-pong:
-						text = "Ping A => B";
-						Utilities.TransmitAndAssertCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
-
-						text = "Pong B => A";
-						Utilities.TransmitAndAssertCounts(terminalB, terminalA, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
-						Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
-
-						// Subsequent ping exceeding terminal A, then ping again:
-						text = "PingExceeding A => B";
-						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
-						expectedTotalByteCountOffsetAB--; // Only B = Rx will show the complete line.
-						Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, contentPatternExceeded, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
-
-						text = "Ping A => B";
-						Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
-
-						// Subsequent multiple pings exceeding terminal A, then ping again:
-						text = "PingExceeding A => B";
-						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
-						for (int i = 0; i < Repetitions; i++)
+						var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
+					////settingsB.Display.MaxLineLength is kept at default of 1000 chars/bytes.
+						using (var terminalB = new Terminal(settingsB))
 						{
-							expectedTotalByteCountOffsetAB--; // Only B = Rx will show the complete line.
-							Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-							Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, contentPatternExceeded, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
-						}
+							try
+							{
+								Assert.That(terminalB.Launch(), Is.True, "Terminal B could not be started!");
+								Utilities.WaitForConnection(terminalA, terminalB);
 
-						text = "Ping A => B";
-						Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
+								string text;
+								const string Cr = "<CR>"; // Related to 'MaxLineLength = 21' above.
+								const string Eol = "<CR><LF>";
+								const int Repetitions = 3;
+								string contentPatternExceeded;
+								int expectedTotalByteCountAB = 0;
+								int expectedTotalByteCountBA = 0;
+								int expectedTotalByteCountOffsetAB = 0;
+								int expectedTotalByteCountOffsetBA = 0;
+								int expectedTotalLineCountAB = 0;
+								int expectedTotalLineCountBA = 0;
+								var expectedContentPatternA = new List<string>(); // Applies to bidir only.
+								var expectedContentPatternB = new List<string>(); // Applies to bidir only.
 
-						// Subsequent ping exceeding terminal A, then pong:
-						text = "PingExceeding A => B";
-						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
-						expectedTotalByteCountOffsetAB--; // Only B = Rx will show the complete line.
-						Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, contentPatternExceeded, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
+								// Initial ping-pong:
+								text = "Ping A => B";
+								Utilities.TransmitAndAssertCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
+								Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 
-						text = "Pong B => A";
-						Utilities.TransmitAndAssertRxCountsWithOffset(terminalB, terminalA, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-						Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
+								text = "Pong B => A";
+								Utilities.TransmitAndAssertCounts(terminalB, terminalA, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
+								Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
 
-						// Subsequent multiple pings exceeding terminal A, then pong:
-						text = "PingExceeding A => B";
-						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
-						for (int i = 0; i < Repetitions; i++)
-						{
-							expectedTotalByteCountOffsetAB--; // Only B = Rx will show the complete line.
-							Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-							Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, contentPatternExceeded, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
-						}
+								// Subsequent ping exceeding terminal A, then ping again:
+								text = "PingExceeding A => B";
+								contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
+								expectedTotalByteCountOffsetAB--; // Only B = Rx will show the complete line.
+								Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
+								Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, contentPatternExceeded, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 
-						text = "Pong B => A";
-						Utilities.TransmitAndAssertRxCountsWithOffset(terminalB, terminalA, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-						Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
+								text = "Ping A => B";
+								Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
+								Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 
-						// Subsequent pong exceeding terminal A, then pong again:
-						text = "PongExceeding B => A";
-						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
-						expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
-						Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
-						Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-						Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentPatternB, ref expectedContentPatternA);
+								// Subsequent multiple pings exceeding terminal A, then ping again:
+								text = "PingExceeding A => B";
+								contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
+								for (int i = 0; i < Repetitions; i++)
+								{
+									expectedTotalByteCountOffsetAB--; // Only B = Rx will show the complete line.
+									Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
+									Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, contentPatternExceeded, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
+								}
 
-						text = "Pong B => A";
-						Utilities.TransmitAndAssertRxCountsWithOffset(terminalB, terminalA, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-						Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
+								text = "Ping A => B";
+								Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
+								Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 
-						// Subsequent multiple pongs exceeding terminal A, then pong again:
-						text = "PongExceeding B => A";
-						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
-						for (int i = 0; i < Repetitions; i++)
-						{
-							expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
-							Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
-							Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-							Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentPatternB, ref expectedContentPatternA);
-						}
+								// Subsequent ping exceeding terminal A, then pong:
+								text = "PingExceeding A => B";
+								contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
+								expectedTotalByteCountOffsetAB--; // Only B = Rx will show the complete line.
+								Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
+								Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, contentPatternExceeded, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 
-						text = "Pong B => A";
-						Utilities.TransmitAndAssertRxCountsWithOffset(terminalB, terminalA, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-						Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
+								text = "Pong B => A";
+								Utilities.TransmitAndAssertRxCountsWithOffset(terminalB, terminalA, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
+								Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
 
-						// Subsequent pong exceeding terminal A, then ping:
-						text = "PongExceeding B => A";
-						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
-						expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
-						Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
-						Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-						Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentPatternB, ref expectedContentPatternA);
+								// Subsequent multiple pings exceeding terminal A, then pong:
+								text = "PingExceeding A => B";
+								contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
+								for (int i = 0; i < Repetitions; i++)
+								{
+									expectedTotalByteCountOffsetAB--; // Only B = Rx will show the complete line.
+									Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
+									Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, contentPatternExceeded, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
+								}
 
-						text = "Ping A => B";
-						Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
+								text = "Pong B => A";
+								Utilities.TransmitAndAssertRxCountsWithOffset(terminalB, terminalA, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
+								Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
 
-						// Subsequent multiple pongs exceeding terminal A, then ping:
-						text = "PongExceeding B => A";
-						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
-						for (int i = 0; i < Repetitions; i++)
-						{
-							expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
-							Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
-							Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-							Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentPatternB, ref expectedContentPatternA);
-						}
+								// Subsequent pong exceeding terminal A, then pong again:
+								text = "PongExceeding B => A";
+								contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
+								expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
+								Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
+								Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
+								Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentPatternB, ref expectedContentPatternA);
 
-						text = "Ping A => B";
-						Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
+								text = "Pong B => A";
+								Utilities.TransmitAndAssertRxCountsWithOffset(terminalB, terminalA, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
+								Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
 
-						// Subsequent pongs exceeding terminal A with variation, then ping:
-						text = "PongExceeding B => A "; // Additional space will result in <CR> not being shown.
-						contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Utilities.LineExceededWarningPattern;
-						expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
-						expectedTotalByteCountOffsetBA--; // Account for missing <CR>.
-						Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
-						Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-						Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentPatternB, ref expectedContentPatternA);
+								// Subsequent multiple pongs exceeding terminal A, then pong again:
+								text = "PongExceeding B => A";
+								contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
+								for (int i = 0; i < Repetitions; i++)
+								{
+									expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
+									Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
+									Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
+									Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentPatternB, ref expectedContentPatternA);
+								}
 
-						//     "PongExceeding B => A"
-						text = "PongNotEx'ng B => A"; // Less a character will result in <CR><LF> being shown.
-						Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
-						Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
-						Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
+								text = "Pong B => A";
+								Utilities.TransmitAndAssertRxCountsWithOffset(terminalB, terminalA, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
+								Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
 
-						text = "Ping A => B";
-						Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
-						Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
+								// Subsequent pong exceeding terminal A, then ping:
+								text = "PongExceeding B => A";
+								contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
+								expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
+								Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
+								Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
+								Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentPatternB, ref expectedContentPatternA);
 
-						// Wait to ensure that no operation is ongoing anymore and verify again:
-						Utilities.WaitForReverification();
-						Utilities.AssertTxCountsWithOffset(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB, expectedTotalByteCountOffsetAB);
-						Utilities.AssertRxCounts(          terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
-						Utilities.AssertTxCounts(          terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.AssertRxCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
+								text = "Ping A => B";
+								Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
+								Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 
-						Utilities.AssertBidirContentPattern(terminalA, expectedContentPatternA);
-						Utilities.AssertBidirContentPattern(terminalB, expectedContentPatternB);
+								// Subsequent multiple pongs exceeding terminal A, then ping:
+								text = "PongExceeding B => A";
+								contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Cr + Utilities.LineExceededWarningPattern;
+								for (int i = 0; i < Repetitions; i++)
+								{
+									expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
+									Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
+									Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
+									Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentPatternB, ref expectedContentPatternA);
+								}
 
-						// Refresh and verify again:
-						terminalA.RefreshRepositories();
-						terminalB.RefreshRepositories();
+								text = "Ping A => B";
+								Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
+								Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 
-						Utilities.AssertTxCountsWithOffset(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB, expectedTotalByteCountOffsetAB);
-						Utilities.AssertRxCounts(          terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
-						Utilities.AssertTxCounts(          terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-						Utilities.AssertRxCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
+								// Subsequent pongs exceeding terminal A with variation, then ping:
+								text = "PongExceeding B => A "; // Additional space will result in <CR> not being shown.
+								contentPatternExceeded = StringEx.Left(text, MaxLineLength) + Utilities.LineExceededWarningPattern;
+								expectedTotalByteCountOffsetBA--; // Only B = Tx will show the complete line.
+								expectedTotalByteCountOffsetBA--; // Account for missing <CR>.
+								Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
+								Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
+								Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, contentPatternExceeded, ref expectedContentPatternB, ref expectedContentPatternA);
 
-						Utilities.AssertBidirContentPattern(terminalA, expectedContentPatternA);
-						Utilities.AssertBidirContentPattern(terminalB, expectedContentPatternB);
+								//     "PongExceeding B => A"
+								text = "PongNotEx'ng B => A"; // Less a character will result in <CR><LF> being shown.
+								Utilities.TransmitAndAssertTxCounts(terminalB, parser, text, ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
+								Utilities.WaitForReceivingAndAssertCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
+								Utilities.AddAndAssertBidirContentPattern(terminalB, terminalA, text + Eol, text + Eol, ref expectedContentPatternB, ref expectedContentPatternA);
 
-						terminalB.Stop();
-						Utilities.WaitForStop(terminalB);
-					} // using (terminalB)
+								text = "Ping A => B";
+								Utilities.TransmitAndAssertRxCounts(terminalA, terminalB, parser, text, ref expectedTotalByteCountAB, ref expectedTotalLineCountAB);
+								Utilities.AddAndAssertBidirContentPattern(terminalA, terminalB, text + Eol, ref expectedContentPatternA, ref expectedContentPatternB);
 
-					terminalA.Stop();
-					Utilities.WaitForStop(terminalA);
+								// Wait to ensure that no operation is ongoing anymore and verify again:
+								Utilities.WaitForReverification();
+								Utilities.AssertTxCountsWithOffset(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB, expectedTotalByteCountOffsetAB);
+								Utilities.AssertRxCounts(          terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+								Utilities.AssertTxCounts(          terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+								Utilities.AssertRxCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
+
+								Utilities.AssertBidirContentPattern(terminalA, expectedContentPatternA);
+								Utilities.AssertBidirContentPattern(terminalB, expectedContentPatternB);
+
+								// Refresh and verify again:
+								terminalA.RefreshRepositories();
+								terminalB.RefreshRepositories();
+
+								Utilities.AssertTxCountsWithOffset(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB, expectedTotalByteCountOffsetAB);
+								Utilities.AssertRxCounts(          terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+								Utilities.AssertTxCounts(          terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+								Utilities.AssertRxCountsWithOffset(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA, expectedTotalByteCountOffsetBA);
+
+								Utilities.AssertBidirContentPattern(terminalA, expectedContentPatternA);
+								Utilities.AssertBidirContentPattern(terminalB, expectedContentPatternB);
+							}
+							finally // Properly stop even in case of an exception, e.g. a failed assertion.
+							{
+								terminalB.Stop();
+								Utilities.WaitForStop(terminalB);
+							}
+						} // using (terminalB)
+					}
+					finally // Properly stop even in case of an exception, e.g. a failed assertion.
+					{
+						terminalA.Stop();
+						Utilities.WaitForStop(terminalA);
+					}
 				} // using (terminalA)
 			} // using (parser)
 		}

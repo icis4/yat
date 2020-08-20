@@ -89,42 +89,52 @@ namespace YAT.Model.Test
 			// Create terminals from settings and check whether B receives from A:
 			using (var terminalA = new Terminal(Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text)))
 			{
-				using (var terminalB = new Terminal(Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text)))
+				try
 				{
-					Utilities.TestSet testSet;
+					using (var terminalB = new Terminal(Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text)))
+					{
+						try
+						{
+							Utilities.TestSet testSet;
 
-					// Start and open terminals:
-					Assert.That(terminalA.Launch(), Is.True, @"Failed to launch """ + terminalA.Caption + @"""");
-					Assert.That(terminalB.Launch(), Is.True, @"Failed to launch """ + terminalB.Caption + @"""");
-					Utilities.WaitForConnection(terminalA, terminalB);
+							// Start and open terminals:
+							Assert.That(terminalA.Launch(), Is.True, @"Failed to launch """ + terminalA.Caption + @"""");
+							Assert.That(terminalB.Launch(), Is.True, @"Failed to launch """ + terminalB.Caption + @"""");
+							Utilities.WaitForConnection(terminalA, terminalB);
 
-					// Create test set to verify transmission:                              // LineStart + EOL + LineBreak result in three more elements.
-					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 4 }, new int[] { 3 }, true);
+							// Create test set to verify transmission:                              // LineStart + EOL + LineBreak result in three more elements.
+							testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 4 }, new int[] { 3 }, true);
 
-					// Send test command:
-					terminalA.SendText(testSet.Command);
-					Utilities.WaitForTransmissionAndAssertCounts(terminalA, terminalB, testSet);
+							// Send test command:
+							terminalA.SendText(testSet.Command);
+							Utilities.WaitForTransmissionAndAssertCounts(terminalA, terminalB, testSet);
 
-					// Verify transmission:
-					Utilities.AssertLines(terminalA, terminalB, testSet);
+							// Verify transmission:
+							Utilities.AssertLines(terminalA, terminalB, testSet);
 
-					// Create test set to verify clear:
-					testSet = new Utilities.TestSet(new Types.Command(@""), 0, null, null, true); // Empty terminals expected.
+							// Create test set to verify clear:
+							testSet = new Utilities.TestSet(new Types.Command(@""), 0, null, null, true); // Empty terminals expected.
 
-					// Clear data:
-					terminalA.ClearRepositories();
-					terminalB.ClearRepositories();
+							// Clear data:
+							terminalA.ClearRepositories();
+							terminalB.ClearRepositories();
 
-					// Verify clear:
-					Utilities.AssertLines(terminalA, terminalB, testSet);
-
-					terminalB.Stop();
-					Utilities.WaitForStop(terminalB);
+							// Verify clear:
+							Utilities.AssertLines(terminalA, terminalB, testSet);
+						}
+						finally // Properly stop even in case of an exception, e.g. a failed assertion.
+						{
+							terminalB.Stop();
+							Utilities.WaitForStop(terminalB);
+						}
+					} // using (terminalB)
 				}
-
-				terminalA.Stop();
-				Utilities.WaitForStop(terminalA);
-			}
+				finally // Properly stop even in case of an exception, e.g. a failed assertion.
+				{
+					terminalA.Stop();
+					Utilities.WaitForStop(terminalA);
+				}
+			} // using (terminalA)
 		}
 
 		#endregion
@@ -142,52 +152,62 @@ namespace YAT.Model.Test
 			// Create terminals from settings and check whether B receives from A:
 			using (var terminalA = new Terminal(Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text)))
 			{
-				using (var terminalB = new Terminal(Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text)))
+				try
 				{
-					// Start and open terminals:
-					Assert.That(terminalA.Launch(), Is.True, @"Failed to launch """ + terminalA.Caption + @"""");
-					Assert.That(terminalB.Launch(), Is.True, @"Failed to launch """ + terminalB.Caption + @"""");
-					Utilities.WaitForConnection(terminalA, terminalB);
+					using (var terminalB = new Terminal(Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text)))
+					{
+						try
+						{
+							// Start and open terminals:
+							Assert.That(terminalA.Launch(), Is.True, @"Failed to launch """ + terminalA.Caption + @"""");
+							Assert.That(terminalB.Launch(), Is.True, @"Failed to launch """ + terminalB.Caption + @"""");
+							Utilities.WaitForConnection(terminalA, terminalB);
 
-					// Create test set to verify transmission:                                                    // LineStart + EOL + LineBreak result in three more elements.
-					var testSetInitial   = new Utilities.TestSet(new Types.Command(@"A"),          1, new int[] { 4 },    new int[] { 3 },    true);
-					var testSetContinued = new Utilities.TestSet(new Types.Command(@"B\!(NoEOL)"), 1, new int[] { 4, 2 }, new int[] { 3, 1 }, true);
+							// Create test set to verify transmission:                                                    // LineStart + EOL + LineBreak result in three more elements.
+							var testSetInitial   = new Utilities.TestSet(new Types.Command(@"A"),          1, new int[] { 4 },    new int[] { 3 },    true);
+							var testSetContinued = new Utilities.TestSet(new Types.Command(@"B\!(NoEOL)"), 1, new int[] { 4, 2 }, new int[] { 3, 1 }, true);
 
-					// Send test command:
-					terminalA.SendText(testSetInitial.Command);
-					Utilities.WaitForTransmissionAndAssertCounts(terminalA, terminalB, testSetInitial);
+							// Send test command:
+							terminalA.SendText(testSetInitial.Command);
+							Utilities.WaitForTransmissionAndAssertCounts(terminalA, terminalB, testSetInitial);
 
-					// Verify transmission:
-					Utilities.AssertLines(terminalA, terminalB, testSetInitial);
+							// Verify transmission:
+							Utilities.AssertLines(terminalA, terminalB, testSetInitial);
 
-					// Send incomplete line text:
-					terminalA.SendText(testSetContinued.Command);
-					Utilities.WaitForTransmissionAndAssertCounts(terminalA, terminalB, testSetContinued);
+							// Send incomplete line text:
+							terminalA.SendText(testSetContinued.Command);
+							Utilities.WaitForTransmissionAndAssertCounts(terminalA, terminalB, testSetContinued);
 
-					// Verify incomplete line:
-					Utilities.AssertLines(terminalA, terminalB, testSetContinued);
+							// Verify incomplete line:
+							Utilities.AssertLines(terminalA, terminalB, testSetContinued);
 
-					var linesRx = terminalB.RepositoryToDisplayLines(RepositoryType.Rx);
-					if (linesRx.Count != 2)
-						Assert.Fail("Incomplete line not received!");
+							var linesRx = terminalB.RepositoryToDisplayLines(RepositoryType.Rx);
+							if (linesRx.Count != 2)
+								Assert.Fail("Incomplete line not received!");
 
-					// Create test set to verify clear:
-					var testSetCleared = new Utilities.TestSet(new Types.Command(@""), 0, null, null, true); // Empty terminals expected.
+							// Create test set to verify clear:
+							var testSetCleared = new Utilities.TestSet(new Types.Command(@""), 0, null, null, true); // Empty terminals expected.
 
-					// Clear data:
-					terminalA.ClearRepositories();
-					terminalB.ClearRepositories();
+							// Clear data:
+							terminalA.ClearRepositories();
+							terminalB.ClearRepositories();
 
-					// Verify clear:
-					Utilities.AssertLines(terminalA, terminalB, testSetCleared);
-
-					terminalB.Stop();
-					Utilities.WaitForStop(terminalB);
+							// Verify clear:
+							Utilities.AssertLines(terminalA, terminalB, testSetCleared);
+						}
+						finally // Properly stop even in case of an exception, e.g. a failed assertion.
+						{
+							terminalB.Stop();
+							Utilities.WaitForStop(terminalB);
+						}
+					} // using (terminalB)
 				}
-
-				terminalA.Stop();
-				Utilities.WaitForStop(terminalA);
-			}
+				finally // Properly stop even in case of an exception, e.g. a failed assertion.
+				{
+					terminalA.Stop();
+					Utilities.WaitForStop(terminalA);
+				}
+			} // using (terminalA)
 		}
 
 		#endregion

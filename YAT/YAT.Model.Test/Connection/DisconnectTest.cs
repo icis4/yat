@@ -150,50 +150,60 @@ namespace YAT.Model.Test.Connection
 		{
 			using (var terminalA = new Terminal(Settings.Create(settingsA)))
 			{
-				terminalA.MessageInputRequest += Utilities.TerminalMessageInputRequest;
-				if (!terminalA.Launch())
+				try
 				{
-					if (Utilities.TerminalMessageInputRequestResultsInExclude) {
-						Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
-					//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
-					}
-					else {
-						Assert.Fail(@"Failed to launch """ + terminalA.Caption + @"""");
-					}
-				}
-				Utilities.WaitForStart(terminalA);
-
-				if (settingsB != null) // Loopback pair:
-				{
-					using (var terminalB = new Terminal(Settings.Create(settingsB)))
+					terminalA.MessageInputRequest += Utilities.TerminalMessageInputRequest;
+					if (!terminalA.Launch())
 					{
-						terminalB.MessageInputRequest += Utilities.TerminalMessageInputRequest;
-						if (!terminalB.Launch())
-						{
-							if (Utilities.TerminalMessageInputRequestResultsInExclude) {
-								Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
-							//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
-							}
-							else {
-								Assert.Fail(@"Failed to launch """ + terminalB.Caption + @"""");
-							}
+						if (Utilities.TerminalMessageInputRequestResultsInExclude) {
+							Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
+						//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 						}
-						Utilities.WaitForConnection(terminalA, terminalB);
+						else {
+							Assert.Fail(@"Failed to launch """ + terminalA.Caption + @"""");
+						}
+					}
+					Utilities.WaitForStart(terminalA);
 
-						TransmitAndVerifyAndDisconnect(terminalA, terminalB, disconnectIdentifier);
+					if (settingsB != null) // Loopback pair:
+					{
+						using (var terminalB = new Terminal(Settings.Create(settingsB)))
+						{
+							try
+							{
+								terminalB.MessageInputRequest += Utilities.TerminalMessageInputRequest;
+								if (!terminalB.Launch())
+								{
+									if (Utilities.TerminalMessageInputRequestResultsInExclude) {
+										Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
+									//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+									}
+									else {
+										Assert.Fail(@"Failed to launch """ + terminalB.Caption + @"""");
+									}
+								}
+								Utilities.WaitForConnection(terminalA, terminalB);
 
-						terminalB.Stop();
-						Utilities.WaitForStop(terminalB);
+								TransmitAndVerifyAndDisconnect(terminalA, terminalB, disconnectIdentifier);
+							}
+							finally // Properly stop even in case of an exception, e.g. a failed assertion.
+							{
+								terminalB.Stop();
+								Utilities.WaitForStop(terminalB);
+							}
+						} // using (terminalB)
+					}
+					else // Loopback self:
+					{
+						TransmitAndVerifyAndDisconnect(terminalA, terminalA, disconnectIdentifier);
 					}
 				}
-				else // Loopback self:
+				finally // Properly stop even in case of an exception, e.g. a failed assertion.
 				{
-					TransmitAndVerifyAndDisconnect(terminalA, terminalA, disconnectIdentifier);
+					terminalA.Stop();
+					Utilities.WaitForStop(terminalA);
 				}
-
-				terminalA.Stop();
-				Utilities.WaitForStop(terminalA);
-			}
+			} // using (terminalA)
 		}
 
 		private static void TransmitAndVerifyAndDisconnect(Terminal terminalA, Terminal terminalB, char disconnectIdentifier)

@@ -64,56 +64,66 @@ namespace YAT.Domain.Test.TextTerminal
 			settingsA.TextTerminal.LineSendDelay = new TextLineSendDelaySettingTuple(true, DelayTime, 1); // Delay of 1000 ms per line.
 			using (var terminalTx = TerminalFactory.CreateTerminal(settingsA))
 			{
-				Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started!");
-
-				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
-				using (var terminalRx = TerminalFactory.CreateTerminal(settingsB))
+				try
 				{
-					Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started!");
-					Utilities.WaitForConnection(terminalTx, terminalRx);
+					Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started!");
 
-					string[] textMulti = ArrayEx.CreateAndInitializeInstance(20, "ABC"); // 20 * 1000 ms = 20 s
-					string textNormal = "ABC";
-					int textLineByteCount = (3 + 2); // Fixed to default of <CR><LF>.
-					int expectedTotalByteCount = 0;
-					int expectedTotalLineCount = 0;
+					var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
+					using (var terminalRx = TerminalFactory.CreateTerminal(settingsB))
+					{
+						try
+						{
+							Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started!");
+							Utilities.WaitForConnection(terminalTx, terminalRx);
 
-					// Send:
-					var initial = DateTime.Now;
-					terminalTx.SendTextLines(textMulti);
+							string[] textMulti = ArrayEx.CreateAndInitializeInstance(20, "ABC"); // 20 * 1000 ms = 20 s
+							string textNormal = "ABC";
+							int textLineByteCount = (3 + 2); // Fixed to default of <CR><LF>.
+							int expectedTotalByteCount = 0;
+							int expectedTotalLineCount = 0;
 
-					// Break:
-					ThreadEx.SleepUntilOffset(initial, 2500); // 3 lines must have already been sent at breaking below.
-					terminalTx.Break();
-					Thread.Sleep(DelayTime); // Delay itself cannot be breaked, only subsequent data.
-					Utilities.WaitForIsNoLongerSending(terminalTx);
+							// Send:
+							var initial = DateTime.Now;
+							terminalTx.SendTextLines(textMulti);
 
-					// Verify;
-					expectedTotalByteCount += (3 * textLineByteCount);
-					expectedTotalLineCount +=  3;
-					Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+							// Break:
+							ThreadEx.SleepUntilOffset(initial, 2500); // 3 lines must have already been sent at breaking below.
+							terminalTx.Break();
+							Thread.Sleep(DelayTime); // Delay itself cannot be breaked, only subsequent data.
+							Utilities.WaitForIsNoLongerSending(terminalTx);
 
-					// Send again to resume break:
-					terminalTx.SendTextLine(textNormal);
-					expectedTotalByteCount += textLineByteCount;
-					expectedTotalLineCount++;
-					Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+							// Verify;
+							expectedTotalByteCount += (3 * textLineByteCount);
+							expectedTotalLineCount +=  3;
+							Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
-					// Wait to ensure that no operation is ongoing anymore and verify again:
-					Utilities.WaitForReverification();
-					Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+							// Send again to resume break:
+							terminalTx.SendTextLine(textNormal);
+							expectedTotalByteCount += textLineByteCount;
+							expectedTotalLineCount++;
+							Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
-					// Refresh and verify again:
-					terminalTx.RefreshRepositories();
-					terminalRx.RefreshRepositories();
-					Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+							// Wait to ensure that no operation is ongoing anymore and verify again:
+							Utilities.WaitForReverification();
+							Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
-					terminalRx.Stop();
-					Utilities.WaitForStop(terminalRx);
-				} // using (terminalB)
-
-				terminalTx.Stop();
-				Utilities.WaitForStop(terminalTx);
+							// Refresh and verify again:
+							terminalTx.RefreshRepositories();
+							terminalRx.RefreshRepositories();
+							Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+						}
+						finally // Properly stop even in case of an exception, e.g. a failed assertion.
+						{
+							terminalRx.Stop();
+							Utilities.WaitForStop(terminalRx);
+						}
+					} // using (terminalB)
+				}
+				finally // Properly stop even in case of an exception, e.g. a failed assertion.
+				{
+					terminalTx.Stop();
+					Utilities.WaitForStop(terminalTx);
+				}
 			} // using (terminalA)
 		}
 
