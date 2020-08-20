@@ -237,6 +237,7 @@ namespace YAT.Model.Test.Connection
 				int expectedTotalByteCountB = 0;
 				int expectedTotalLineCountB = 0;
 
+				// Initial ping-pong:
 				terminalA.SendText(textAB);// Initial A => B
 				expectedTotalByteCountA += byteCountAB;
 				expectedTotalLineCountA++;
@@ -256,8 +257,6 @@ namespace YAT.Model.Test.Connection
 
 				if (disconnectIdentifier == 'A')
 				{
-					IOTypeEx ioTypeB = terminalB.IOType;
-
 					// Send repeating B => A then close A:
 					terminalB.SendText(@"B => A\!(LineRepeat)");
 					Thread.Sleep(333); // Unlimited, i.e. up to several thousand lines.
@@ -265,29 +264,22 @@ namespace YAT.Model.Test.Connection
 					Utilities.WaitForStop(terminalA);
 					Thread.Sleep(333); // Make sure that B can deal with disconnected A. Note that WaitForDisconnection() would not work for connection-less UDP sockets.
 
-					if (!ioTypeB.IsTcpSocket) { // TCP terminals break sending when disconnected.
-						terminalB.Break();      // Explicitly breaking is needed for other I/O types.
-						Thread.Sleep(333);
-					}
+					// Stop repeating:
+					terminalB.Stop();
+					Utilities.WaitForStop(terminalB);
 
-					if (ioTypeB.IsServerSocket) { // Server sockets must tell the IP stack to discard still "flying" pakets/segments.
-						terminalB.Stop();         // Otherwise, the pakets/segments will be received as soon as the other terminal is started again below.
-						Utilities.WaitForStop(terminalB);
-						terminalB.Start();
-					}
-
+					// Cleanup and start again:
 					terminalB.ClearRepositories();
 					terminalA.ClearRepositories();
-					terminalB.ResetIOCountAndRate();
-					terminalA.ResetIOCountAndRate();
+					terminalB.ResetCountAndRate();
+					terminalA.ResetCountAndRate();
 
+					terminalB.Start();
 					terminalA.Start();
-					Utilities.WaitForConnection(terminalA, terminalB);
+					Utilities.WaitForConnection(terminalB, terminalA);
 				}
 				else       // Identifier == 'B')
 				{
-					IOTypeEx ioTypeA = terminalA.IOType;
-
 					// Send repeating A => B then close B:
 					terminalA.SendText(@"A => B\!(LineRepeat)");
 					Thread.Sleep(333); // Unlimited, i.e. up to several thousand lines.
@@ -295,31 +287,30 @@ namespace YAT.Model.Test.Connection
 					Utilities.WaitForStop(terminalB);
 					Thread.Sleep(333); // Make sure that A can deal with disconnected B. Note that WaitForDisconnection() would not work for connection-less UDP sockets.
 
-					if (!ioTypeA.IsTcpSocket) { // TCP terminals break sending when disconnected.
-						terminalA.Break();      // Explicitly breaking is needed for other I/O types.
-						Thread.Sleep(333);
-					}
+					// Stop repeating:
+					terminalA.Stop();
+					Utilities.WaitForStop(terminalA);
 
-					if (ioTypeA.IsServerSocket) { // Server sockets must tell the IP stack to discard still "flying" pakets/segments.
-						terminalA.Stop();         // Otherwise, the pakets/segments will be received as soon as the other terminal is started again below.
-						Utilities.WaitForStop(terminalA);
-						terminalA.Start();
-					}
-
+					// Cleanup and start again:
 					terminalA.ClearRepositories();
 					terminalB.ClearRepositories();
-					terminalA.ResetIOCountAndRate();
-					terminalB.ResetIOCountAndRate();
+					terminalA.ResetCountAndRate();
+					terminalB.ResetCountAndRate();
 
+					terminalA.Start();
 					terminalB.Start();
 					Utilities.WaitForConnection(terminalB, terminalA);
 				}
 
+				// Verify cleanup:
 				expectedTotalByteCountA = 0;
 				expectedTotalLineCountA = 0;
 				expectedTotalByteCountB = 0;
 				expectedTotalLineCountB = 0;
+				Utilities.AssertCounts(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);
+				Utilities.AssertCounts(terminalB, terminalA, expectedTotalByteCountB, expectedTotalLineCountB);
 
+				// Subsequent ping-pong:
 				terminalA.SendText(textAB); // Subsequent A => B
 				expectedTotalByteCountA += byteCountAB;
 				expectedTotalLineCountA++;
