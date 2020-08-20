@@ -568,19 +568,20 @@ namespace YAT.Model
 					lock (this.autoActionClearRepositoriesSyncObj)
 					{
 						this.autoActionClearRepositoriesOnSubsequentRxIsArmed = true;
-						this.autoActionClearRepositoriesTriggerTimeStamp = triggerTimeStamp;
-						this.autoActionClearRepositoriesTriggerText      = triggerText;
-						this.autoActionClearRepositoriesTriggerMatches   = triggerMatches;
-						this.autoActionClearRepositoriesDataStatus       = dataStatus;
+						this.autoActionClearRepositoriesTriggerTimeStamp      = triggerTimeStamp;
+						this.autoActionClearRepositoriesTriggerText           = triggerText;
+						this.autoActionClearRepositoriesTriggerMatches        = triggerMatches;
+						this.autoActionClearRepositoriesDataStatus            = dataStatus;
 					}
 					break;
 				}
 
-				case AutoAction.ResetCountAndRate: ResetIOCountAndRate(); break;
-				case AutoAction.SwitchLogOn:       SwitchLogOn();         break;
-				case AutoAction.SwitchLogOff:      SwitchLogOff();        break;
-				case AutoAction.ToggleLogOnOrOff:  ToggleLogOnOrOff();    break;
-				case AutoAction.Stop:              Stop();                break;
+				case AutoAction.ResetCountAndRate: ResetCountAndRate(); break;
+				case AutoAction.SwitchLogOn:       SwitchLogOn();       break;
+				case AutoAction.SwitchLogOff:      SwitchLogOff();      break;
+				case AutoAction.ToggleLogOnOrOff:  ToggleLogOnOrOff();  break;
+				case AutoAction.Stop:              Stop();              break;
+
 				case AutoAction.CloseTerminal:
 				{
 					lock (this.autoActionCloseOrExitSyncObj)
@@ -608,7 +609,9 @@ namespace YAT.Model
 				}
 
 				default:
+				{
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + action + "' is an automatic action that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 			}
 		}
 

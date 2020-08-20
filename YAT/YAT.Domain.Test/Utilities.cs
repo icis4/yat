@@ -456,11 +456,11 @@ namespace YAT.Domain.Test
 		/// </remarks>
 		public static void WaitForSendingAndAssertCounts(Domain.Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)
 		{
+			bool isFirst = true; // Using do-while, first check state.
+			int waitTime = 0;
+			int waitIntervalForTransmission = TimeoutToInterval(timeout);
 			int txByteCount = 0;
 			int txLineCount = 0;
-			int waitTime = 0;
-			bool isFirst = true; // Using do-while, first check state.
-			int waitIntervalForTransmission = TimeoutToInterval(timeout);
 			StringBuilder sb;
 
 			do
@@ -540,11 +540,11 @@ namespace YAT.Domain.Test
 		/// </remarks>
 		public static void WaitForReceivingAndAssertCounts(Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)
 		{
+			bool isFirst = true; // Using do-while, first check state.
+			int waitTime = 0;
+			int waitIntervalForTransmission = TimeoutToInterval(timeout);
 			int rxByteCount = 0;
 			int rxLineCount = 0;
-			int waitTime = 0;
-			bool isFirst = true; // Using do-while, first check state.
-			int waitIntervalForTransmission = TimeoutToInterval(timeout);
 			StringBuilder sb;
 
 			do
@@ -628,13 +628,13 @@ namespace YAT.Domain.Test
 		/// </remarks>
 		public static void WaitForTransmissionAndAssertCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)
 		{
+			bool isFirst = true; // Using do-while, first check state.
+			int waitTime = 0;
+			int waitIntervalForTransmission = TimeoutToInterval(timeout);
 			int txByteCount = 0;
 			int txLineCount = 0;
 			int rxByteCount = 0;
 			int rxLineCount = 0;
-			int waitTime = 0;
-			bool isFirst = true; // Using do-while, first check state.
-			int waitIntervalForTransmission = TimeoutToInterval(timeout);
 			StringBuilder sb;
 
 			do

@@ -1720,13 +1720,13 @@ namespace YAT.View.Forms
 
 				// Connect time:
 				bool showConnectTime = this.settingsRoot.Status.ShowConnectTime;
-				toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Checked  = showConnectTime;
-				toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime.Enabled = showConnectTime;
+				toolStripMenuItem_TerminalMenu_View_ConnectTime_Show.Checked  = showConnectTime;
+				toolStripMenuItem_TerminalMenu_View_ConnectTime_Reset.Enabled = showConnectTime;
 
 				// Counters:
 				bool showCountAndRate = this.settingsRoot.Status.ShowCountAndRate;
-				toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate.Checked = showCountAndRate;
-				toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount.Enabled = showCountAndRate;
+				toolStripMenuItem_TerminalMenu_View_CountAndRate_Show.Checked  = showCountAndRate;
+				toolStripMenuItem_TerminalMenu_View_CountAndRate_Reset.Enabled = showCountAndRate;
 
 				// Display:
 				bool isShowable = (this.settingsRoot.Display.TxRadixIsShowable ||
@@ -1838,24 +1838,24 @@ namespace YAT.View.Forms
 			ViewRearrange();
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_ConnectTime_Show_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Status.ShowConnectTime = !this.settingsRoot.Status.ShowConnectTime;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_ConnectTime_ResetConnectTime_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_ConnectTime_Reset_Click(object sender, EventArgs e)
 		{
 			this.terminal.ResetConnectTime();
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_CountAndRate_Show_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Status.ShowCountAndRate = !this.settingsRoot.Status.ShowCountAndRate;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_CountAndRate_Reset_Click(object sender, EventArgs e)
 		{
-			this.terminal.ResetIOCountAndRate();
+			this.terminal.ResetCountAndRate();
 
 			// The 'terminal_IOCount/RateChanged_Promptly' events are not used because of the reason
 			// described in the remarks of 'terminal_RawChunkSent/Received' of 'Model.Terminal'.
@@ -2124,7 +2124,7 @@ namespace YAT.View.Forms
 
 				bool showCountAndRate = this.settingsRoot.Status.ShowCountAndRate;
 				toolStripMenuItem_MonitorContextMenu_ShowCountAndRate.Checked  = showCountAndRate;
-				toolStripMenuItem_MonitorContextMenu_ResetCount.Enabled        = showCountAndRate;
+				toolStripMenuItem_MonitorContextMenu_ResetCountAndRate.Enabled = showCountAndRate;
 
 				toolStripMenuItem_MonitorContextMenu_Clear.Enabled = isMonitor;
 
@@ -2211,12 +2211,12 @@ namespace YAT.View.Forms
 			this.settingsRoot.Status.ShowCountAndRate = !this.settingsRoot.Status.ShowCountAndRate;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ResetCount_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_ResetCountAndRate_Click(object sender, EventArgs e)
 		{
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			this.terminal.ResetIOCountAndRate();
+			this.terminal.ResetCountAndRate();
 
 			// The 'terminal_IOCount/RateChanged_Promptly' events are not used because of the reason
 			// described in the remarks of 'terminal_RawChunkSent/Received' of 'Model.Terminal'.
