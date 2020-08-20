@@ -617,11 +617,11 @@ namespace YAT.Domain.Test.Terminal
 					SendAndVerify(terminalTx, terminalRx, fileInfo, sendMethod, timeout);
 
 					terminalRx.Stop();
-					Utilities.WaitForDisconnection(terminalRx);
+					Utilities.WaitForStop(terminalRx);
 				}
 
 				terminalTx.Stop();
-				Utilities.WaitForDisconnection(terminalTx);
+				Utilities.WaitForStop(terminalTx);
 			}
 		}
 
@@ -635,7 +635,7 @@ namespace YAT.Domain.Test.Terminal
 				SendAndVerify(terminalTxRx, terminalTxRx, fileInfo, sendMethod, timeout);
 
 				terminalTxRx.Stop();
-				Utilities.WaitForDisconnection(terminalTxRx);
+				Utilities.WaitForStop(terminalTxRx);
 			}
 		}
 

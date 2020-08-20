@@ -145,7 +145,7 @@ namespace YAT.Domain.Test.TextTerminal
 				VerifyDefaultOrInfiniteTimeout(terminal, fileLineCount, fileLineByteCount);
 
 				terminal.Stop();
-				Utilities.WaitForDisconnection(terminal);
+				Utilities.WaitForStop(terminal);
 			} // using (terminal)
 		}
 
@@ -197,7 +197,7 @@ namespace YAT.Domain.Test.TextTerminal
 				VerifyMinimumTimeoutOrTestDisabled(terminal, fileLineCount, fileLineByteCount);
 
 				terminal.Stop();
-				Utilities.WaitForDisconnection(terminal);
+				Utilities.WaitForStop(terminal);
 			} // using (terminal)
 		}
 

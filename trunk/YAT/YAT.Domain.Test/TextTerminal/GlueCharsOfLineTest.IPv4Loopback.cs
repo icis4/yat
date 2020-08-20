@@ -217,11 +217,11 @@ namespace YAT.Domain.Test.TextTerminal
 					Utilities.AssertBidirContentPattern(terminalB, expectedContentPatternB);
 
 					terminalB.Stop();
-					Utilities.WaitForDisconnection(terminalB);
+					Utilities.WaitForStop(terminalB);
 				} // using (terminalB)
 
 				terminalA.Stop();
-				Utilities.WaitForDisconnection(terminalA);
+				Utilities.WaitForStop(terminalA);
 			} // using (terminalA)
 		}
 
@@ -432,11 +432,11 @@ namespace YAT.Domain.Test.TextTerminal
 					Utilities.AssertBidirContentPattern(terminalB, expectedContentPatternB);
 
 					terminalB.Stop();
-					Utilities.WaitForDisconnection(terminalB);
+					Utilities.WaitForStop(terminalB);
 				} // using (terminalB)
 
 				terminalA.Stop();
-				Utilities.WaitForDisconnection(terminalA);
+				Utilities.WaitForStop(terminalA);
 			} // using (terminalA)
 		}
 

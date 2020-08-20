@@ -249,11 +249,11 @@ namespace YAT.Domain.Test.TextTerminal
 						EolAwareVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
 						terminalB.Stop();
-						Utilities.WaitForDisconnection(terminalB);
+						Utilities.WaitForStop(terminalB);
 					} // using (terminalB)
 
 					terminalA.Stop();
-					Utilities.WaitForDisconnection(terminalA);
+					Utilities.WaitForStop(terminalA);
 				} // using (terminalA)
 			} // using (parser)
 
@@ -358,11 +358,11 @@ namespace YAT.Domain.Test.TextTerminal
 					VerifyLineCount(terminalA, terminalB, 3);
 
 					terminalB.Stop();
-					Utilities.WaitForDisconnection(terminalB);
+					Utilities.WaitForStop(terminalB);
 				}
 
 				terminalA.Stop();
-				Utilities.WaitForDisconnection(terminalA);
+				Utilities.WaitForStop(terminalA);
 			}
 
 			Thread.Sleep(WaitForDisposal); // \remind: For whatever reason, subsequent tests tend to fail without this.

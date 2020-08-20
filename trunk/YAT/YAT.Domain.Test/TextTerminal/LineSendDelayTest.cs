@@ -109,11 +109,11 @@ namespace YAT.Domain.Test.TextTerminal
 					Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					terminalRx.Stop();
-					Utilities.WaitForDisconnection(terminalRx);
+					Utilities.WaitForStop(terminalRx);
 				} // using (terminalB)
 
 				terminalTx.Stop();
-				Utilities.WaitForDisconnection(terminalTx);
+				Utilities.WaitForStop(terminalTx);
 			} // using (terminalA)
 		}
 
