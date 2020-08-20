@@ -265,8 +265,8 @@ namespace YAT.Model.Test.Connection
 
 					// Stop repeating:
 					Thread.Sleep(333); // Make sure that B can deal with disconnected A. Note that WaitForDisconnection() would not work for connection-less UDP sockets.
-					terminalB.Stop();
-					Utilities.WaitForStop(terminalB);
+					terminalB.Break();
+					Utilities.WaitForIsNoLongerSending(terminalB);
 
 					// Cleanup and start again:
 					terminalB.ClearRepositories();
@@ -274,7 +274,6 @@ namespace YAT.Model.Test.Connection
 					terminalB.ResetCountAndRate();
 					terminalA.ResetCountAndRate();
 
-					terminalB.Start();
 					terminalA.Start();
 					Utilities.WaitForConnection(terminalB, terminalA);
 				}
@@ -288,8 +287,8 @@ namespace YAT.Model.Test.Connection
 
 					// Stop repeating:
 					Thread.Sleep(333); // Make sure that A can deal with disconnected B. Note that WaitForDisconnection() would not work for connection-less UDP sockets.
-					terminalA.Stop();
-					Utilities.WaitForStop(terminalA);
+					terminalA.Break();
+					Utilities.WaitForIsNoLongerSending(terminalA);
 
 					// Cleanup and start again:
 					terminalA.ClearRepositories();
@@ -297,7 +296,6 @@ namespace YAT.Model.Test.Connection
 					terminalA.ResetCountAndRate();
 					terminalB.ResetCountAndRate();
 
-					terminalA.Start();
 					terminalB.Start();
 					Utilities.WaitForConnection(terminalB, terminalA);
 				}
