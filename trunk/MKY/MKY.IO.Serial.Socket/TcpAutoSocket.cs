@@ -520,6 +520,27 @@ namespace MKY.IO.Serial.Socket
 			return (false);
 		}
 
+		/// <summary>
+		/// Clears the send buffer(s) immediately.
+		/// </summary>
+		public virtual int ClearSendBuffer()
+		{
+			AssertUndisposed();
+
+		////if (IsTransmissive) shall not be checked for, clearing the buffer shall be available in any case.
+			{
+				lock (this.socketSyncObj)
+				{
+					if (IsClient && (this.client != null))
+						return (this.client.ClearSendBuffer());
+					else if (IsServer && (this.server != null))
+						return (this.server.ClearSendBuffer());
+				}
+			}
+
+			return (0);
+		}
+
 		#endregion
 
 		#region State Methods

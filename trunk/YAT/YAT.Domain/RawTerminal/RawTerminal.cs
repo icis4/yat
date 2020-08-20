@@ -480,6 +480,14 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
+		public virtual int ClearSendBuffer()
+		{
+			AssertUndisposed();
+
+			return (this.io.ClearSendBuffer());
+		}
+
 		//------------------------------------------------------------------------------------------
 		// Repository Access
 		//------------------------------------------------------------------------------------------

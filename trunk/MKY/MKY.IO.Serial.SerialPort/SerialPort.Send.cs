@@ -206,16 +206,43 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <summary>
-		/// Flushes the output buffer and waits for a time corresponding to the given number of frames.
+		/// Flushes the send buffer(s) and waits for a time corresponding to the given number of frames.
 		/// </summary>
-		public virtual void Flush(int additionalWaitFrameCount)
+		public virtual void FlushSendBuffer(int additionalWaitFrameCount)
 		{
 			AssertUndisposed();
 
-			this.port.Flush();
+			if (IsOpen)
+			{
+				var initialTimeStamp = DateTime.Now;
+				while (IsUndisposed && this.sendThreadRunFlag && IsOpen && (this.sendQueue.Count > 0))
+				{
+					// Actively yield to other threads to allow processing:
+					var span = (DateTime.Now - initialTimeStamp);
+					if (span.TotalMilliseconds < 4)
+						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as flush
+					else                             // a) is expected to be blocking and
+						Thread.Sleep(1);             // b) is short (max. 4 ms) yet.
+				}                                    // But sleep if longer!
 
-			if (additionalWaitFrameCount > 0)
-				Thread.Sleep((int)(Math.Ceiling(this.settings.Communication.FrameTime * additionalWaitFrameCount)));
+				if (IsUndisposed && IsOpen) // = if still open
+				{
+					this.port.Flush();
+
+					if (additionalWaitFrameCount > 0)
+						Thread.Sleep((int)(Math.Ceiling(this.settings.Communication.FrameTime * additionalWaitFrameCount)));
+				}
+			}
+		}
+
+		/// <summary>
+		/// Clears the send buffer(s) immediately.
+		/// </summary>
+		public virtual int ClearSendBuffer()
+		{
+			AssertUndisposed();
+
+			return (DropSendQueueAndNotify(false));
 		}
 
 		#endregion
@@ -750,7 +777,7 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
 			{
-				Flush(1); // Single byte/frame.
+				FlushSendBuffer(1); // Single byte/frame.
 
 				this.port.RtsEnable = false;
 			}
@@ -869,7 +896,7 @@ namespace MKY.IO.Serial.SerialPort
 				if (effectiveChunkData != null)
 					maxFramesInFifo = Math.Min(effectiveChunkData.Count, 16); // Max 16 bytes/frames in FIFO.
 
-				Flush(maxFramesInFifo);
+				FlushSendBuffer(maxFramesInFifo);
 
 				this.port.RtsEnable = false;
 			}

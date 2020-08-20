@@ -129,6 +129,16 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
+		/// <summary>
+		/// Clears the send buffer(s) immediately.
+		/// </summary>
+		public virtual int ClearSendBuffer()
+		{
+			AssertUndisposed();
+
+			return (DropSendQueueAndNotify(false));
+		}
+
 		#endregion
 
 		#region Non-Public Methods

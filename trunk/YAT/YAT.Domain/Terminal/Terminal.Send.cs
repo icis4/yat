@@ -322,7 +322,7 @@ namespace YAT.Domain
 		{
 			DebugSend("Sending of {0} byte(s) of raw data has been invoked with sequence number {1}.", data.Length, sequenceNumber);
 
-			EnterRequestPre();
+			RequestPre();
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
 			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
@@ -343,7 +343,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised); // This flag can only get set once.
+			RequestPost(forSomeTimeEventHelper.EventMustBeRaised); // This flag can only get set once.
 		}
 
 		/// <summary></summary>
@@ -365,7 +365,7 @@ namespace YAT.Domain
 		{
 			DebugSend(@"Sending of text ""{0}"" ({1} characters) has been invoked (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber);
 
-			EnterRequestPre();
+			RequestPre();
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
 			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
@@ -386,7 +386,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised); // This flag can only get set once.
+			RequestPost(forSomeTimeEventHelper.EventMustBeRaised); // This flag can only get set once.
 		}
 
 		/// <remarks>
@@ -410,7 +410,7 @@ namespace YAT.Domain
 		{
 			DebugSend(@"Sending of text line ""{0}"" ({1} characters) has been invoked (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber);
 
-			EnterRequestPre();
+			RequestPre();
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
 			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
@@ -431,7 +431,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised); // This flag can only get set once.
+			RequestPost(forSomeTimeEventHelper.EventMustBeRaised); // This flag can only get set once.
 		}
 
 		/// <remarks>
@@ -460,7 +460,7 @@ namespace YAT.Domain
 		{
 			DebugSend("Sending of {0} text lines has been invoked (sequence number = {1}).", items.Count, sequenceNumber);
 
-			EnterRequestPre();
+			RequestPre();
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
 			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
@@ -484,7 +484,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised); // This flag can only get set once.
+			RequestPost(forSomeTimeEventHelper.EventMustBeRaised); // This flag can only get set once.
 		}
 
 		/// <summary></summary>
@@ -505,7 +505,7 @@ namespace YAT.Domain
 		{
 			DebugSend(@"Sending of ""{0}"" has been invoked (sequence number = {1}).", item.FilePath, sequenceNumber);
 
-			EnterRequestPre();
+			RequestPre();
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
 			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
@@ -526,7 +526,7 @@ namespace YAT.Domain
 				}
 			}
 
-			LeaveRequestPost(forSomeTimeEventHelper.EventMustBeRaised); // This flag can only get set once.
+			RequestPost(forSomeTimeEventHelper.EventMustBeRaised); // This flag can only get set once.
 		}
 
 		#endregion
@@ -572,6 +572,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void BreakSendThreads()
 		{
+			DebugBreak("BreakSendThreads()");
+
 			// Clear flag telling threads to stop...
 			SendThreadsArePermitted = false;
 
@@ -581,7 +583,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void EnterRequestPre()
+		protected virtual void RequestPre()
 		{
 			if (IsUndisposed) // Attention, sending is done async, i.e. worker thread may get here only when object already got disposed of!
 			{
@@ -651,13 +653,16 @@ namespace YAT.Domain
 		/// not be entered, because the sequence number already got assigned. Without incrementing,
 		/// all subsequent requests would get blocked. This cannot be the idea of the mechanism.
 		/// </remarks>
-		protected virtual void LeaveRequestPost(bool decrementIsSendingForSomeTime)
+		protected virtual void RequestPost(bool decrementIsSendingForSomeTime)
 		{
 			if (IsUndisposed) // Attention, sending is done async, i.e. worker thread may get here only when object already got disposed of!
 			{
 				DecrementIsSendingChanged();
 
-				if (decrementIsSendingForSomeTime)
+				if (DoBreak)                            // Ensure that already buffered data is cleared.
+					this.rawTerminal.ClearSendBuffer(); // Note a limitation of the implementation:
+				                                      //// There is only a single break state, multiple
+				if (decrementIsSendingForSomeTime)      // requests may trigger clearing the buffer.
 					DecrementIsSendingForSomeTimeChanged();
 
 				if (TerminalSettings.Send.AllowConcurrency)
@@ -1266,7 +1271,7 @@ namespace YAT.Domain
 							{
 								var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 								if (port != null)
-									port.Flush(0); // Just best-effort flush, no additional wait time.
+									port.FlushSendBuffer(0); // Just best-effort flush, no additional wait time.
 								else
 									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
@@ -1301,7 +1306,7 @@ namespace YAT.Domain
 							{
 								var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 								if (port != null)
-									port.Flush(0); // Just best-effort flush, no additional wait time.
+									port.FlushSendBuffer(0); // Just best-effort flush, no additional wait time.
 								else
 									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
@@ -1336,7 +1341,7 @@ namespace YAT.Domain
 							{
 								var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 								if (port != null)
-									port.Flush(0); // Just best-effort flush, no additional wait time.
+									port.FlushSendBuffer(0); // Just best-effort flush, no additional wait time.
 								else
 									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
@@ -1371,7 +1376,7 @@ namespace YAT.Domain
 							{
 								var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 								if (port != null)
-									port.Flush(0); // Just best-effort flush, no additional wait time.
+									port.FlushSendBuffer(0); // Just best-effort flush, no additional wait time.
 								else
 									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
@@ -1406,7 +1411,7 @@ namespace YAT.Domain
 							{
 								var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 								if (port != null)
-									port.Flush(0); // Just best-effort flush, no additional wait time.
+									port.FlushSendBuffer(0); // Just best-effort flush, no additional wait time.
 								else
 									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
@@ -1441,7 +1446,7 @@ namespace YAT.Domain
 							{
 								var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 								if (port != null)
-									port.Flush(0); // Just best-effort flush, no additional wait time.
+									port.FlushSendBuffer(0); // Just best-effort flush, no additional wait time.
 								else
 									throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 							}
@@ -1474,7 +1479,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 							if (port != null)
-								port.Flush(0); // Just best-effort flush, no additional wait time.
+								port.FlushSendBuffer(0); // Just best-effort flush, no additional wait time.
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -1502,7 +1507,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 							if (port != null)
-								port.Flush(0); // Just best-effort flush, no additional wait time.
+								port.FlushSendBuffer(0); // Just best-effort flush, no additional wait time.
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -1530,7 +1535,7 @@ namespace YAT.Domain
 						{
 							var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 							if (port != null)
-								port.Flush(0); // Just best-effort flush, no additional wait time.
+								port.FlushSendBuffer(0); // Just best-effort flush, no additional wait time.
 							else
 								throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The underlying serial port object does not exist!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
@@ -2167,6 +2172,15 @@ namespace YAT.Domain
 		/// </remarks>
 		[Conditional("DEBUG_IS_SENDING")]
 		private void DebugIsSending(string message)
+		{
+			DebugMessage(message);
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_BREAK")]
+		private void DebugBreak(string message)
 		{
 			DebugMessage(message);
 		}

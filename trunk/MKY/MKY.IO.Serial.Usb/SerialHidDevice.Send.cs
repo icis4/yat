@@ -172,6 +172,16 @@ namespace MKY.IO.Serial.Usb
 			OnIOControlChanged(new EventArgs<DateTime>(DateTime.Now));
 		}
 
+		/// <summary>
+		/// Clears the send buffer(s) immediately.
+		/// </summary>
+		public virtual int ClearSendBuffer()
+		{
+			AssertUndisposed();
+
+			return (DropSendQueueAndNotify(false));
+		}
+
 		#endregion
 
 		#region Non-Public Methods

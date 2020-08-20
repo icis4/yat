@@ -135,6 +135,16 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
+		/// <summary>
+		/// Clears the send buffer(s) immediately.
+		/// </summary>
+		public virtual int ClearSendBuffer()
+		{
+			AssertUndisposed();
+
+			return (DropSendQueueAndNotify(false));
+		}
+
 		#endregion
 
 		#region Non-Public Methods
@@ -251,6 +261,7 @@ namespace MKY.IO.Serial.Socket
 							}
 							catch (Exception ex)
 							{
+								DebugMessage(ex.Message);
 								OnIOError(new IOErrorEventArgs(ErrorSeverity.Severe, Direction.Output, ex.Message));
 							}
 							finally
