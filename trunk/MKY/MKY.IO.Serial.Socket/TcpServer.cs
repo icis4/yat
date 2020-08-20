@@ -599,13 +599,61 @@ namespace MKY.IO.Serial.Socket
 			lock (this.socketConnections) // Directly locking the list is OK, it is kept throughout the lifetime of an object.
 				this.socketConnections.Clear();
 
-			// Finally, stop the thread. Must be done AFTER the socket got stopped (and disposed) to
-			// ensure that the last socket callbacks 'OnSent' can still be properly processed.
+			// Finally, stop the thread. Must be done AFTER the socket got stopped (and disposed)
+			// to ensure that the last socket callbacks 'OnSent' can still be properly processed.
 			StopThreads();
 
-			// And don't forget to clear the corresponding queues, its content would reappear in case
-			// the socket gets started again.
+			// And don't forget to clear the corresponding queues, its content would reappear in
+			// case the socket gets started again.
 			DropQueuesAndNotify();
+		}
+
+		private void DropQueuesAndNotify()
+		{
+			DropSendQueueAndNotify();
+			DropDataSentQueueAndNotify();
+		}
+
+		private void DropSendQueueAndNotify()
+		{
+			int droppedCount;
+			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+			{
+				droppedCount = this.sendQueue.Count;
+				this.sendQueue.Clear();
+			}
+
+			if (droppedCount > 0)
+			{
+				string message;
+				if (droppedCount <= 1)
+					message = droppedCount + " byte not sent anymore.";  // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+				else                                                     // Reason cannot be stated, could be "disconnected" or "stopped/closed"
+					message = droppedCount + " bytes not sent anymore."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+
+				OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
+			}
+		}
+
+		private void DropDataSentQueueAndNotify()
+		{
+			int droppedCount;
+			lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
+			{
+				droppedCount = this.dataSentQueue.Count;
+				this.dataSentQueue.Clear();
+			}
+
+			if (droppedCount > 0)
+			{
+				string message;
+				if (droppedCount <= 1)
+					message = droppedCount + " byte not sent anymore.";  // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+				else                                                     // Reason cannot be stated, could be "disconnected" or "stopped/closed"
+					message = droppedCount + " bytes not sent anymore."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+
+				OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
+			}
 		}
 
 		#endregion
