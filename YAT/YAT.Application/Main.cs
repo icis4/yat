@@ -274,7 +274,7 @@ namespace YAT.Application
 			// processed and validated for a first time, even BEFORE the application settings have
 			// been created/loaded. Then they will be processed and validated for a second time
 			// AFTER the application settings were created/loaded. This second processing happens
-			// in YAT.Model.Main.ProcessCommandLineArgsIntoStartRequests().
+			// in YAT.Model.Main.ProcessCommandLineArgsIntoLaunchRequests().
 			//
 			// In case of automated testing, the command line arguments will be processed and
 			// validated in PrepareRun() above, and also in YAT.Model.Main.
@@ -879,7 +879,7 @@ namespace YAT.Application
 				try
 			#endif
 				{
-					var modelResult = model.Start();
+					var modelResult = model.Launch();
 					if (modelResult == Model.MainResult.Success)
 						modelResult = model.Exit();
 
@@ -991,7 +991,7 @@ namespace YAT.Application
 				try
 			#endif
 				{
-					var modelResult = model.Start();
+					var modelResult = model.Launch();
 					if (modelResult == Model.MainResult.Success)
 						modelResult = model.Exit();
 

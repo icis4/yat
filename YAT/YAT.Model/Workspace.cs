@@ -105,7 +105,7 @@ namespace YAT.Model
 		/// </summary>
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Workspace).FullName);
 
-		private WorkspaceStartArgs startArgs;
+		private WorkspaceLaunchArgs launchArgs;
 		private Guid guid;
 
 		// Settings.
@@ -169,25 +169,25 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public Workspace(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler)
-			: this(new WorkspaceStartArgs(), settingsHandler, Guid.Empty)
+			: this(new WorkspaceLaunchArgs(), settingsHandler, Guid.Empty)
 		{
 		}
 
 		/// <summary></summary>
-		public Workspace(WorkspaceStartArgs startArgs)
-			: this(startArgs, new DocumentSettingsHandler<WorkspaceSettingsRoot>(), Guid.Empty)
+		public Workspace(WorkspaceLaunchArgs launchArgs)
+			: this(launchArgs, new DocumentSettingsHandler<WorkspaceSettingsRoot>(), Guid.Empty)
 		{
 		}
 
 		/// <remarks><see cref="Guid.Empty"/> cannot be used as default argument as it is read-only.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
-		public Workspace(WorkspaceStartArgs startArgs, DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, Guid guid)
+		public Workspace(WorkspaceLaunchArgs launchArgs, DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, Guid guid)
 		{
 			try
 			{
 				DebugMessage("Creating...");
 
-				this.startArgs = startArgs;
+				this.launchArgs = launchArgs;
 
 				if (guid != Guid.Empty)
 					this.guid = guid;
@@ -294,13 +294,13 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual WorkspaceStartArgs StartArgs
+		public virtual WorkspaceLaunchArgs LaunchArgs
 		{
 			get
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				return (this.startArgs);
+				return (this.launchArgs);
 			}
 		}
 
@@ -1425,7 +1425,7 @@ namespace YAT.Model
 			Terminal t;
 			try
 			{
-				t = new Terminal(this.startArgs.ToTerminalStartArgs(), settingsHandler);
+				t = new Terminal(this.launchArgs.ToTerminalLaunchArgs(), settingsHandler);
 			}
 			catch (Exception ex)
 			{
@@ -1703,23 +1703,23 @@ namespace YAT.Model
 				settingsHandler.Settings.Window = windowSettings;
 
 			// Override settings if requested:
-			if (this.startArgs.Override.StartTerminal)
+			if (this.launchArgs.Override.StartTerminal)
 				settingsHandler.Settings.TerminalIsStarted = true;
 
-			if (this.startArgs.Override.KeepTerminalStopped)
+			if (this.launchArgs.Override.KeepTerminalStopped)
 				settingsHandler.Settings.TerminalIsStarted = false;
 
-			if (this.startArgs.Override.LogOn)
+			if (this.launchArgs.Override.LogOn)
 				settingsHandler.Settings.LogIsOn = true;
 
-			if (this.startArgs.Override.KeepLogOff)
+			if (this.launchArgs.Override.KeepLogOff)
 				settingsHandler.Settings.LogIsOn = false;
 
 			// Create terminal from settings:
 			Terminal t;
 			try
 			{
-				t = new Terminal(this.startArgs.ToTerminalStartArgs(), settingsHandler, guid);
+				t = new Terminal(this.launchArgs.ToTerminalLaunchArgs(), settingsHandler, guid);
 			}
 			catch (Exception ex)
 			{
@@ -2435,7 +2435,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
-			if (this.startArgs.Interactive)
+			if (this.launchArgs.Interactive)
 			{
 				DebugMessage(text);
 
@@ -2467,7 +2467,7 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual DialogResult OnSaveAsFileDialogRequest()
 		{
-			if (this.startArgs.Interactive)
+			if (this.launchArgs.Interactive)
 			{
 				OnCursorReset(); // Just in case...
 
@@ -2497,7 +2497,7 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual FilePathDialogResult OnSaveCommandPageAsFileDialogRequest(string filePathOld)
 		{
-			if (this.startArgs.Interactive)
+			if (this.launchArgs.Interactive)
 			{
 				OnCursorReset(); // Just in case...
 
@@ -2527,7 +2527,7 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual FilePathDialogResult OnOpenCommandPageFileDialogRequest(string filePathOld)
 		{
-			if (this.startArgs.Interactive)
+			if (this.launchArgs.Interactive)
 			{
 				OnCursorReset(); // Just in case...
 

@@ -499,8 +499,8 @@ namespace YAT.Model.Test.FileHandling
 
 			using (main = new Main())
 			{
-				success = (main.Start() == MainResult.Success);
-				Assert.That(success, Is.True, "Main could not be started!");
+				success = (main.Launch() == MainResult.Success);
+				Assert.That(success, Is.True, "Main could not be launched!");
 
 				workspace = main.Workspace;
 				Assert.That(workspace, Is.Not.Null, "Workspace not opened from file!");
@@ -552,8 +552,8 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				step = "Step 1: ";
-				success = (m.Start() == MainResult.Success);
-				Assert.That(success, Is.True, step + "Main could not be started!");
+				success = (m.Launch() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be launched!");
 
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, step + "Workspace not created!");
@@ -606,8 +606,8 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				step = "Step 1: ";
-				success = (m.Start() == MainResult.Success);
-				Assert.That(success, Is.True, step + "Main could not be started!");
+				success = (m.Launch() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be launched!");
 
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, step + "Workspace not created!");
@@ -640,8 +640,8 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				step = "Step 2: ";
-				success = (m.Start() == MainResult.Success);
-				Assert.That(success, Is.True, step + "Main could not be started!");
+				success = (m.Launch() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be launched!");
 
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, step + "Workspace not created!");
@@ -690,8 +690,8 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				step = "Step 1: ";
-				success = (m.Start() == MainResult.Success);
-				Assert.That(success, Is.True, step + "Main could not be started!");
+				success = (m.Launch() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be launched!");
 
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, step + "Workspace not created!");
@@ -730,8 +730,8 @@ namespace YAT.Model.Test.FileHandling
 				step = "Step 3: ";
 				int countBefore = this.workspace_MessageInputRequest_No_counter;
 				m.WorkspaceOpened += main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No;
-				success = (m.Start() == MainResult.Success);
-				Assert.That(success, Is.True, step + "Main could not be started!");
+				success = (m.Launch() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be launched!");
 				m.WorkspaceOpened -= main_WorkspaceOpened_AttachToWorkspace_MessageInputRequest_No;
 				int countAfter = this.workspace_MessageInputRequest_No_counter;
 				Assert.That(countAfter, Is.Not.EqualTo(countBefore), "Workspace 'MessageInputRequest' was not called!");
@@ -775,8 +775,8 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				step = "Step 1: ";
-				success = (m.Start() == MainResult.Success);
-				Assert.That(success, Is.True, step + "Main could not be started!");
+				success = (m.Launch() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be launched!");
 
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, step + "Workspace not created!");
@@ -818,8 +818,8 @@ namespace YAT.Model.Test.FileHandling
 				step = "Step 3: ";
 				int countBefore = this.main_MessageInputRequest_Cancel_counter;
 				m.MessageInputRequest += main_MessageInputRequest_Cancel;
-				success = (m.Start() == MainResult.ApplicationStartCancel);
-				Assert.That(success, Is.True, step + "Main could be started even though workspace file is missing!");
+				success = (m.Launch() == MainResult.ApplicationStartCancel);
+				Assert.That(success, Is.True, step + "Main could be launched even though workspace file is missing!");
 				m.MessageInputRequest -= main_MessageInputRequest_Cancel;
 				int countAfter = this.main_MessageInputRequest_Cancel_counter;
 				Assert.That(countAfter, Is.Not.EqualTo(countBefore), "Workspace 'MessageInputRequest' was not called!");
@@ -1087,8 +1087,8 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				step = "Step 9: ";
-				success = (m.Start() == MainResult.Success);
-				Assert.That(success, Is.True, step + "Main could not be started!");
+				success = (m.Launch() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be launched!");
 
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, step + "Workspace not created!");
@@ -1126,8 +1126,8 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				step = "Step 1: ";
-				success = (m.Start() == MainResult.Success);
-				Assert.That(success, Is.True, step + "Main could not be started!");
+				success = (m.Launch() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be launched!");
 
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, step + "Workspace not created!");
@@ -1160,8 +1160,8 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				step = "Step 2: ";
-				success = (m.Start() == MainResult.Success);
-				Assert.That(success, Is.True, step + "Main could not be started!");
+				success = (m.Launch() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be launched!");
 
 				var w = m.Workspace;
 				Assert.That(w,               Is.Not.Null,   step + "Workspace not created!");
@@ -1205,8 +1205,8 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				step = "Step 3: ";
-				success = (m.Start() == MainResult.Success);
-				Assert.That(success, Is.True, step + "Main could not be started!");
+				success = (m.Launch() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be launched!");
 
 				var w = m.Workspace;
 				Assert.That(w,               Is.Not.Null,   step + "Workspace not created!");
@@ -1241,8 +1241,8 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				step = "Step 4: ";
-				success = (m.Start() == MainResult.Success);
-				Assert.That(success, Is.True, step + "Main could not be started!");
+				success = (m.Launch() == MainResult.Success);
+				Assert.That(success, Is.True, step + "Main could not be launched!");
 
 				var w = m.Workspace;
 				Assert.That(w,               Is.Not.Null,   step + "Workspace not created!");

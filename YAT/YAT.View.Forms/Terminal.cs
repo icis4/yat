@@ -7106,7 +7106,7 @@ namespace YAT.View.Forms
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		[ModalBehaviorContract(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
+		[ModalBehaviorContract(ModalBehavior.InCaseOfNonUserError, Approval = "LaunchArgs are considered to decide on behavior.")]
 		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)
 		{
 			SetTerminalControls();
@@ -7115,7 +7115,7 @@ namespace YAT.View.Forms
 			bool showErrorModally = false;
 			var main = (this.mdiParent as Main);
 			if (main != null)
-				showErrorModally = main.UnderlyingMain.StartArgs.KeepOpenOnError;
+				showErrorModally = main.UnderlyingMain.LaunchArgs.KeepOpenOnError;
 
 			if (e.Severity == Domain.IOErrorSeverity.Acceptable) // Handle acceptable issues.
 			{

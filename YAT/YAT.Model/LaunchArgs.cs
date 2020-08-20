@@ -151,11 +151,13 @@ namespace YAT.Model
 		#endregion
 	}
 
-	/// <summary></summary>
-	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Start arguments are implemented as public just as command line arguments are.")]
-	public class MainStartArgs
+	/// <remarks>
+	/// Using term "launch" rather than "start" for distinction with "start/stop" I/O.
+	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Launch arguments are implemented as public just as command line arguments are.")]
+	public class MainLaunchArgs
 	{
-		private const string VisibilitySuppressionJustification = "Start arguments are implemented as public just as command line arguments are.";
+		private const string VisibilitySuppressionJustification = "Launch arguments are implemented as public just as command line arguments are.";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
@@ -246,9 +248,9 @@ namespace YAT.Model
 		public string ErrorMessage;
 
 		/// <summary></summary>
-		public WorkspaceStartArgs ToWorkspaceStartArgs()
+		public WorkspaceLaunchArgs ToWorkspaceLaunchArgs()
 		{
-			var args = new WorkspaceStartArgs();
+			var args = new WorkspaceLaunchArgs();
 
 			args.Override = this.Override;
 
@@ -268,11 +270,13 @@ namespace YAT.Model
 		}
 	}
 
-	/// <summary></summary>
-	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Start arguments are implemented as public just as command line arguments are.")]
-	public class WorkspaceStartArgs
+	/// <remarks>
+	/// Using term "launch" rather than "start" for distinction with "start/stop" I/O.
+	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Launch arguments are implemented as public just as command line arguments are.")]
+	public class WorkspaceLaunchArgs
 	{
-		private const string VisibilitySuppressionJustification = "Start arguments are implemented as public just as command line arguments are.";
+		private const string VisibilitySuppressionJustification = "Launch arguments are implemented as public just as command line arguments are.";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
@@ -291,9 +295,9 @@ namespace YAT.Model
 		public bool NonInteractive;
 
 		/// <summary></summary>
-		public TerminalStartArgs ToTerminalStartArgs()
+		public TerminalLaunchArgs ToTerminalLaunchArgs()
 		{
-			var args = new TerminalStartArgs();
+			var args = new TerminalLaunchArgs();
 
 			args.NonInteractive  = this.NonInteractive;
 
@@ -309,11 +313,13 @@ namespace YAT.Model
 		}
 	}
 
-	/// <summary></summary>
-	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Start arguments are implemented as public just as command line arguments are.")]
-	public class TerminalStartArgs
+	/// <remarks>
+	/// Using term "launch" rather than "start" for distinction with "start/stop" I/O.
+	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Launch arguments are implemented as public just as command line arguments are.")]
+	public class TerminalLaunchArgs
 	{
-		private const string VisibilitySuppressionJustification = "Start arguments are implemented as public just as command line arguments are.";
+		private const string VisibilitySuppressionJustification = "Launch arguments are implemented as public just as command line arguments are.";
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]

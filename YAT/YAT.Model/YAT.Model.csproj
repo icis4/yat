@@ -95,7 +95,7 @@
     <Compile Include="Main.cs" />
     <Compile Include="MainResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StartArgs.cs" />
+    <Compile Include="LaunchArgs.cs" />
     <Compile Include="Structs.cs" />
     <Compile Include="Terminal.Send.cs" />
     <Compile Include="Terminal.AutoResponse.cs" />

@@ -45,7 +45,7 @@ namespace YAT.Model.Test
 {
 	/// <summary></summary>
 	[TestFixture]
-	public class StartTest
+	public class LaunchTest
 	{
 		#region Constants
 		//==========================================================================================
@@ -130,18 +130,18 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler, Is.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler,  Is.Null);
-				Assert.That(m.StartArgs.ShowNewTerminalDialog,    Is.True);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,  Is.Null);
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,    Is.True);
 
-				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.StartArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
-				Assert.That(m.StartArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
+				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.False);
+				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
+				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
-				Assert.That(m.StartArgs.KeepOpen,        Is.True);
-				Assert.That(m.StartArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.StartArgs.TileHorizontal,  Is.False);
-				Assert.That(m.StartArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,        Is.True);
+				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
 			}
 		}
 
@@ -160,20 +160,20 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler,                 Is.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler,                  Is.Not.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(TerminalFilePath));
-				Assert.That(m.StartArgs.ShowNewTerminalDialog,                    Is.False);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                 Is.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                  Is.Not.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(TerminalFilePath));
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                    Is.False);
 			}
 
 			using (var m = new Main(new CommandLineArgs(new string[] { TerminalFilePath })))
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler,                 Is.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler,                  Is.Not.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(TerminalFilePath));
-				Assert.That(m.StartArgs.ShowNewTerminalDialog,                    Is.False);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                 Is.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                  Is.Not.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(TerminalFilePath));
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                    Is.False);
 			}
 		}
 
@@ -192,20 +192,20 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
-				Assert.That(m.StartArgs.TerminalSettingsHandler,                   Is.Not.Null); // By default the last terminal in the workspace.
-				Assert.That(m.StartArgs.ShowNewTerminalDialog,                     Is.False);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Not.Null); // By default the last terminal in the workspace.
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                     Is.False);
 			}
 
 			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath })))
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
-				Assert.That(m.StartArgs.TerminalSettingsHandler,                   Is.Not.Null); // By default the last terminal in the workspace.
-				Assert.That(m.StartArgs.ShowNewTerminalDialog,                     Is.False);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Not.Null); // By default the last terminal in the workspace.
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                     Is.False);
 			}
 		}
 
@@ -226,18 +226,18 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m, MainResult.CommandLineError);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler, Is.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler, Is.Null);
-				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler, Is.Null);
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 			}
 
 			using (var m = new Main(new CommandLineArgs(new string[] { EmptyTerminalFilePath })))
 			{
 				PrepareMainAndVerifyResult(m, MainResult.CommandLineError);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler, Is.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler, Is.Null);
-				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler, Is.Null);
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 			}
 
 			Trace.Write(" > ** INFO: End of test.");
@@ -260,18 +260,18 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m, MainResult.CommandLineError);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler, Is.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler, Is.Null);
-				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler, Is.Null);
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 			}
 
 			using (var m = new Main(new CommandLineArgs(new string[] { EmptyWorkspaceFilePath })))
 			{
 				PrepareMainAndVerifyResult(m, MainResult.CommandLineError);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler, Is.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler, Is.Null);
-				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler, Is.Null);
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 			}
 
 			Trace.Write(" > ** INFO: End of test.");
@@ -293,10 +293,10 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
-				Assert.That(m.StartArgs.TerminalSettingsHandler,                   Is.Not.Null); // By default the last terminal in the workspace.
-				Assert.That(m.StartArgs.ShowNewTerminalDialog,                     Is.False);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Not.Null); // By default the last terminal in the workspace.
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                     Is.False);
 			}
 
 			// Terminal only:
@@ -304,10 +304,10 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler,                 Is.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler,                  Is.Not.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(Terminal1FilePath));
-				Assert.That(m.StartArgs.ShowNewTerminalDialog,                    Is.False);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                 Is.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                  Is.Not.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(Terminal1FilePath));
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                    Is.False);
 			}
 
 			// Workspace + Terminal = Terminal (the last argument is used):
@@ -315,10 +315,10 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler,                 Is.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler,                  Is.Not.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(Terminal1FilePath));
-				Assert.That(m.StartArgs.ShowNewTerminalDialog,                    Is.False);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                 Is.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                  Is.Not.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(Terminal1FilePath));
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                    Is.False);
 			}
 
 			// Terminal + Workspace = Workspace (the last argument is used):
@@ -326,10 +326,10 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
-				Assert.That(m.StartArgs.TerminalSettingsHandler,                   Is.Not.Null); // By default the last terminal in the workspace.
-				Assert.That(m.StartArgs.ShowNewTerminalDialog,                     Is.False);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Not.Null); // By default the last terminal in the workspace.
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                     Is.False);
 			}
 
 			// Terminal1 + Terminal2 = Terminal2 (the last argument is used):
@@ -337,10 +337,10 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler,                 Is.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler,                  Is.Not.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(Terminal2FilePath));
-				Assert.That(m.StartArgs.ShowNewTerminalDialog,                    Is.False);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                 Is.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                  Is.Not.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(Terminal2FilePath));
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                    Is.False);
 			}
 
 			// Invalid file:
@@ -349,8 +349,8 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m, MainResult.CommandLineError);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler, Is.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler,  Is.Null);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,  Is.Null);
 			}
 		}
 
@@ -369,9 +369,9 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				bool hasRecent = ((m.StartArgs.TerminalSettingsHandler != null) || ((m.StartArgs.WorkspaceSettingsHandler != null)));
+				bool hasRecent = ((m.LaunchArgs.TerminalSettingsHandler != null) || ((m.LaunchArgs.WorkspaceSettingsHandler != null)));
 				Assert.That(hasRecent, Is.True);
-				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 			}
 		}
 
@@ -390,7 +390,7 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 			}
 		}
 
@@ -409,40 +409,40 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.TerminalSettingsHandler, Is.Not.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler, Is.Not.Null);
 
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.TerminalType, Is.EqualTo(Domain.TerminalType.Binary));
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IOType,       Is.EqualTo(Domain.IOType.SerialPort));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.TerminalType, Is.EqualTo(Domain.TerminalType.Binary));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IOType,       Is.EqualTo(Domain.IOType.SerialPort));
 
-				Assert.That((int)m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.PortId, Is.EqualTo(5)); // COM5
+				Assert.That((int)m.LaunchArgs.TerminalSettingsHandler.Settings.IO.SerialPort.PortId, Is.EqualTo(5)); // COM5
 
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.BaudRate,    Is.EqualTo(MKY.IO.Serial.SerialPort.SerialCommunicationSettings.BaudRateDefault));
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.DataBits,    Is.EqualTo(MKY.IO.Ports.DataBits.Seven));
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.Parity,      Is.EqualTo(System.IO.Ports.Parity.Even));
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.StopBits,    Is.EqualTo(MKY.IO.Serial.SerialPort.SerialCommunicationSettings.StopBitsDefault));
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.FlowControl, Is.EqualTo(MKY.IO.Serial.SerialPort.SerialFlowControl.Software));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.BaudRate,    Is.EqualTo(MKY.IO.Serial.SerialPort.SerialCommunicationSettings.BaudRateDefault));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.DataBits,    Is.EqualTo(MKY.IO.Ports.DataBits.Seven));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.Parity,      Is.EqualTo(System.IO.Ports.Parity.Even));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.StopBits,    Is.EqualTo(MKY.IO.Serial.SerialPort.SerialCommunicationSettings.StopBitsDefault));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.FlowControl, Is.EqualTo(MKY.IO.Serial.SerialPort.SerialFlowControl.Software));
 
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.SignalXOnWhenOpened,   Is.EqualTo(MKY.IO.Serial.SerialPort.SerialPortSettings.SignalXOnWhenOpenedDefault));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.SerialPort.SignalXOnWhenOpened,   Is.EqualTo(MKY.IO.Serial.SerialPort.SerialPortSettings.SignalXOnWhenOpenedDefault));
 
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.AliveMonitor.Enabled,  Is.EqualTo(MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorDefault.Enabled));
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.AliveMonitor.Interval, Is.EqualTo(MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorDefault.Interval));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.SerialPort.AliveMonitor.Enabled,  Is.EqualTo(MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorDefault.Enabled));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.SerialPort.AliveMonitor.Interval, Is.EqualTo(MKY.IO.Serial.SerialPort.SerialPortSettings.AliveMonitorDefault.Interval));
 
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.AutoReopen.Enabled,  Is.EqualTo(MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault.Enabled));
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.AutoReopen.Interval, Is.EqualTo(MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault.Interval));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.SerialPort.AutoReopen.Enabled,  Is.EqualTo(MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault.Enabled));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.SerialPort.AutoReopen.Interval, Is.EqualTo(MKY.IO.Serial.SerialPort.SerialPortSettings.AutoReopenDefault.Interval));
 
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.TerminalIsStarted, Is.True);
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.TerminalIsStarted, Is.True);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
 
-				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.StartArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
-				Assert.That(m.StartArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
+				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.False);
+				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
+				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
-				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 
-				Assert.That(m.StartArgs.KeepOpen,        Is.True);
-				Assert.That(m.StartArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.StartArgs.TileHorizontal,  Is.False);
-				Assert.That(m.StartArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,        Is.True);
+				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
 			}
 		}
 
@@ -461,30 +461,30 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.TerminalSettingsHandler, Is.Not.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler, Is.Not.Null);
 
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.TerminalType, Is.EqualTo(Domain.TerminalType.Text));
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IOType,       Is.EqualTo(Domain.IOType.TcpAutoSocket));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.TerminalType, Is.EqualTo(Domain.TerminalType.Text));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IOType,       Is.EqualTo(Domain.IOType.TcpAutoSocket));
 
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.Socket.RemoteHost, Is.EqualTo((MKY.Net.IPHostEx)MKY.Net.IPHost.Localhost));
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.Socket.RemotePort, Is.EqualTo(12345));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.Socket.RemoteHost, Is.EqualTo((MKY.Net.IPHostEx)MKY.Net.IPHost.Localhost));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.Socket.RemotePort, Is.EqualTo(12345));
 
-				Assert.That((MKY.Net.IPNetworkInterfaceEx)m.StartArgs.TerminalSettingsHandler.Settings.IO.Socket.LocalInterface, Is.EqualTo((MKY.Net.IPNetworkInterfaceEx)MKY.Net.IPNetworkInterface.Any));
-				Assert.That(                              m.StartArgs.TerminalSettingsHandler.Settings.IO.Socket.LocalPort,      Is.EqualTo(56789));
+				Assert.That((MKY.Net.IPNetworkInterfaceEx)m.LaunchArgs.TerminalSettingsHandler.Settings.IO.Socket.LocalInterface, Is.EqualTo((MKY.Net.IPNetworkInterfaceEx)MKY.Net.IPNetworkInterface.Any));
+				Assert.That(                              m.LaunchArgs.TerminalSettingsHandler.Settings.IO.Socket.LocalPort,      Is.EqualTo(56789));
 
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.TerminalIsStarted, Is.True);
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.TerminalIsStarted, Is.True);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
 
-				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.StartArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
-				Assert.That(m.StartArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
+				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.False);
+				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
+				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
-				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 
-				Assert.That(m.StartArgs.KeepOpen,        Is.True);
-				Assert.That(m.StartArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.StartArgs.TileHorizontal,  Is.False);
-				Assert.That(m.StartArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,        Is.True);
+				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
 			}
 		}
 
@@ -503,30 +503,30 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.TerminalSettingsHandler, Is.Not.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler, Is.Not.Null);
 
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.TerminalType, Is.EqualTo(Domain.TerminalType.Text));
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IOType,       Is.EqualTo(Domain.IOType.UsbSerialHid));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.TerminalType, Is.EqualTo(Domain.TerminalType.Text));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IOType,       Is.EqualTo(Domain.IOType.UsbSerialHid));
 
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.UsbSerialHidDevice.DeviceInfo.VendorIdString,  Is.EqualTo("1234"));
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.UsbSerialHidDevice.DeviceInfo.ProductIdString, Is.EqualTo("ABCD"));
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.UsbSerialHidDevice.FlowControl,                Is.EqualTo(MKY.IO.Serial.Usb.SerialHidFlowControl.None));
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.UsbSerialHidDevice.SignalXOnWhenOpened,        Is.True);
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.UsbSerialHidDevice.AutoOpen,                   Is.False);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.UsbSerialHidDevice.DeviceInfo.VendorIdString,  Is.EqualTo("1234"));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.UsbSerialHidDevice.DeviceInfo.ProductIdString, Is.EqualTo("ABCD"));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.UsbSerialHidDevice.FlowControl,                Is.EqualTo(MKY.IO.Serial.Usb.SerialHidFlowControl.None));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.UsbSerialHidDevice.SignalXOnWhenOpened,        Is.True);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.UsbSerialHidDevice.AutoOpen,                   Is.False);
 
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.TerminalIsStarted, Is.True);
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.TerminalIsStarted, Is.True);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
 
-				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.StartArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
-				Assert.That(m.StartArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
+				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.False);
+				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
+				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
-				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 
-				Assert.That(m.StartArgs.KeepOpen,        Is.True);
-				Assert.That(m.StartArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.StartArgs.TileHorizontal,  Is.False);
-				Assert.That(m.StartArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,        Is.True);
+				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
 			}
 		}
 
@@ -545,19 +545,19 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler,                 Is.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler,                  Is.Not.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(TerminalFilePath));
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                 Is.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                  Is.Not.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(TerminalFilePath));
 
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.BaudRate, Is.EqualTo(19200));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.BaudRate, Is.EqualTo(19200));
 
-				Assert.That(m.StartArgs.ShowNewTerminalDialog,               Is.False);
-				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.False);
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,               Is.False);
+				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.False);
 
-				Assert.That(m.StartArgs.KeepOpen,        Is.True);
-				Assert.That(m.StartArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.StartArgs.TileHorizontal,  Is.False);
-				Assert.That(m.StartArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,        Is.True);
+				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
 			}
 		}
 
@@ -576,19 +576,19 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
-				Assert.That(m.StartArgs.RequestedDynamicTerminalId,             Is.EqualTo(2));
-				Assert.That(m.StartArgs.TerminalSettingsHandler,                   Is.Not.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.DataBits, Is.EqualTo(MKY.IO.Ports.DataBits.Seven));
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
+				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,             Is.EqualTo(2));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Not.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.DataBits, Is.EqualTo(MKY.IO.Ports.DataBits.Seven));
 
-				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);
-				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.False);
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
+				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.False);
 
-				Assert.That(m.StartArgs.KeepOpen,        Is.True);
-				Assert.That(m.StartArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.StartArgs.TileHorizontal,  Is.False);
-				Assert.That(m.StartArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,        Is.True);
+				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
 			}
 		}
 
@@ -609,18 +609,18 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler,                 Is.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler,                  Is.Not.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(TerminalFilePath));
-				Assert.That(m.StartArgs.RequestedTransmitText,                    Is.EqualTo(text));
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                 Is.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                  Is.Not.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(TerminalFilePath));
+				Assert.That(m.LaunchArgs.RequestedTransmitText,                    Is.EqualTo(text));
 
-				Assert.That(m.StartArgs.ShowNewTerminalDialog,               Is.False);
-				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.True);
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,               Is.False);
+				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.True);
 
-				Assert.That(m.StartArgs.KeepOpen,        Is.False);
-				Assert.That(m.StartArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.StartArgs.TileHorizontal,  Is.False);
-				Assert.That(m.StartArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,        Is.False);
+				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
 			}
 		}
 
@@ -641,19 +641,19 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
-				Assert.That(m.StartArgs.TerminalSettingsHandler,                   Is.Not.Null);
-				Assert.That(m.StartArgs.RequestedTransmitText,                     Is.EqualTo(text));
-				Assert.That(m.StartArgs.RequestedDynamicTerminalId,             Is.EqualTo(2));
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Not.Null);
+				Assert.That(m.LaunchArgs.RequestedTransmitText,                     Is.EqualTo(text));
+				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,             Is.EqualTo(2));
 
-				Assert.That(m.StartArgs.ShowNewTerminalDialog,               Is.False);
-				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.True);
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,               Is.False);
+				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.True);
 
-				Assert.That(m.StartArgs.KeepOpen,        Is.False);
-				Assert.That(m.StartArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.StartArgs.TileHorizontal,  Is.False);
-				Assert.That(m.StartArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,        Is.False);
+				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
 			}
 		}
 
@@ -675,18 +675,18 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler,                 Is.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler,                  Is.Not.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(TerminalFilePath));
-				Assert.That(m.StartArgs.RequestedTransmitFilePath,                Is.EqualTo(filePath));
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                 Is.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                  Is.Not.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(TerminalFilePath));
+				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,                Is.EqualTo(filePath));
 
-				Assert.That(m.StartArgs.ShowNewTerminalDialog,               Is.False);
-				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.True);
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,               Is.False);
+				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.True);
 
-				Assert.That(m.StartArgs.KeepOpen,        Is.False);
-				Assert.That(m.StartArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.StartArgs.TileHorizontal,  Is.False);
-				Assert.That(m.StartArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,        Is.False);
+				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
 			}
 		}
 
@@ -708,19 +708,19 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
-				Assert.That(m.StartArgs.TerminalSettingsHandler,                   Is.Not.Null);
-				Assert.That(m.StartArgs.RequestedTransmitFilePath,                 Is.EqualTo(filePath));
-				Assert.That(m.StartArgs.RequestedDynamicTerminalId,             Is.EqualTo(2));
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Not.Null);
+				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,                 Is.EqualTo(filePath));
+				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,             Is.EqualTo(2));
 
-				Assert.That(m.StartArgs.ShowNewTerminalDialog,               Is.False);
-				Assert.That(m.StartArgs.PerformOperationOnRequestedTerminal, Is.True);
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,               Is.False);
+				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.True);
 
-				Assert.That(m.StartArgs.KeepOpen,        Is.False);
-				Assert.That(m.StartArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.StartArgs.TileHorizontal,  Is.False);
-				Assert.That(m.StartArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,        Is.False);
+				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
 			}
 		}
 
@@ -739,15 +739,15 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.WorkspaceSettingsHandler, Is.Null);
-				Assert.That(m.StartArgs.TerminalSettingsHandler, Is.Null);
+				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler, Is.Null);
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler, Is.Null);
 
-				Assert.That(m.StartArgs.ShowNewTerminalDialog, Is.False);
+				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 
-				Assert.That(m.StartArgs.KeepOpen,        Is.False);
-				Assert.That(m.StartArgs.KeepOpenOnError, Is.False);
-				Assert.That(m.StartArgs.TileHorizontal,  Is.False);
-				Assert.That(m.StartArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,        Is.False);
+				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.False);
+				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
 			}
 		}
 
@@ -766,24 +766,24 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.TileHorizontal, Is.True);
-				Assert.That(m.StartArgs.TileVertical,   Is.False);
+				Assert.That(m.LaunchArgs.TileHorizontal, Is.True);
+				Assert.That(m.LaunchArgs.TileVertical,   Is.False);
 			}
 
 			using (var m = new Main(new CommandLineArgs(new string[] { "--TileVertical" })))
 			{
 				PrepareMainAndVerifyResult(m);
 
-				Assert.That(m.StartArgs.TileHorizontal, Is.False);
-				Assert.That(m.StartArgs.TileVertical,   Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal, Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,   Is.True);
 			}
 
 			using (var m = new Main(new CommandLineArgs(new string[] { "--TileHorizontal", "--TileVertical" })))
 			{
 				PrepareMainAndVerifyResult(m, MainResult.CommandLineError);
 
-				Assert.That(m.StartArgs.TileHorizontal, Is.False);
-				Assert.That(m.StartArgs.TileVertical,   Is.False);
+				Assert.That(m.LaunchArgs.TileHorizontal, Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,   Is.False);
 			}
 		}
 
@@ -835,7 +835,7 @@ namespace YAT.Model.Test
 
 		private static void PrepareMainAndVerifyResult(Main main, MainResult expectedMainResult)
 		{
-			var mainResult = main.PrepareStart();
+			var mainResult = main.PrepareLaunch();
 			Assert.That(mainResult, Is.EqualTo(expectedMainResult));
 		}
 

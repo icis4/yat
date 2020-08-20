@@ -202,13 +202,13 @@ namespace YAT.Model
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
 	////private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName); // See remarks above!
 
-		private TerminalStartArgs startArgs;
+		private TerminalLaunchArgs launchArgs;
 		private Guid guid;
 		private int sequentialId;
 		private string sequentialName;
 		private string fileName;
 
-		// Startup:
+		// Initiating:
 		private bool autoIsReady; // = false;
 
 		// Settings:
@@ -429,25 +429,25 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public Terminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
-			: this(new TerminalStartArgs(), settingsHandler)
+			: this(new TerminalLaunchArgs(), settingsHandler)
 		{
 		}
 
 		/// <summary></summary>
-		public Terminal(TerminalStartArgs startArgs, DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
-			: this(startArgs, settingsHandler, Guid.Empty)
+		public Terminal(TerminalLaunchArgs launchArgs, DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
+			: this(launchArgs, settingsHandler, Guid.Empty)
 		{
 		}
 
 		/// <remarks>See <see cref="Guid.Empty"/> cannot be used as default argument as it is read-only.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
-		public Terminal(TerminalStartArgs startArgs, DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid)
+		public Terminal(TerminalLaunchArgs launchArgs, DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid)
 		{
 			try
 			{
 				DebugMessage("Creating...");
 
-				this.startArgs = startArgs;
+				this.launchArgs = launchArgs;
 
 				if (guid != Guid.Empty)
 					this.guid = guid;
@@ -643,13 +643,13 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual TerminalStartArgs StartArgs
+		public virtual TerminalLaunchArgs LaunchArgs
 		{
 			get
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				return (this.startArgs);
+				return (this.launchArgs);
 			}
 		}
 
@@ -1113,8 +1113,11 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary>
-		/// Starts terminal, i.e. starts log and opens I/O.
+		/// Launches the terminal, i.e. starts log and opens I/O.
 		/// </summary>
+		/// <remarks>
+		/// Using term "launch" rather than "start" for distinction with "start/stop" I/O.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
 		public virtual bool Start()
 		{
@@ -4153,6 +4156,9 @@ namespace YAT.Model
 		/// <summary>
 		/// Starts the terminal's I/O instance.
 		/// </summary>
+		/// <remarks>
+		/// Named "IO" to disambiguate <see cref="Start"/>.
+		/// </remarks>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		public virtual bool StartIO()
 		{
@@ -4163,6 +4169,9 @@ namespace YAT.Model
 		/// <summary>
 		/// Starts the terminal's I/O instance.
 		/// </summary>
+		/// <remarks>
+		/// Named "IO" to disambiguate <see cref="Start"/>.
+		/// </remarks>
 		/// <param name="errorMessage">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
@@ -4174,6 +4183,9 @@ namespace YAT.Model
 		/// <summary>
 		/// Starts the terminal's I/O instance.
 		/// </summary>
+		/// <remarks>
+		/// Named "IO" to disambiguate <see cref="Start"/>.
+		/// </remarks>
 		/// <param name="saveStatus">Flag indicating whether status of terminal shall be saved.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		private bool StartIO(bool saveStatus)
@@ -4185,6 +4197,9 @@ namespace YAT.Model
 		/// <summary>
 		/// Starts the terminal's I/O instance.
 		/// </summary>
+		/// <remarks>
+		/// Named "IO" to disambiguate <see cref="Start"/>.
+		/// </remarks>
 		/// <param name="saveStatus">Flag indicating whether status of terminal shall be saved.</param>
 		/// <param name="errorMessage">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
@@ -4353,6 +4368,9 @@ namespace YAT.Model
 		/// <summary>
 		/// Stops the terminal's I/O instance.
 		/// </summary>
+		/// <remarks>
+		/// Named "IO" for orthogonality with <see cref="StartIO()"/>.
+		/// </remarks>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		public virtual bool StopIO()
 		{
@@ -4363,6 +4381,9 @@ namespace YAT.Model
 		/// <summary>
 		/// Stops the terminal's I/O instance.
 		/// </summary>
+		/// <remarks>
+		/// Named "IO" for orthogonality with <see cref="StartIO(out string)"/>.
+		/// </remarks>
 		/// <param name="errorMessage">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
@@ -4374,6 +4395,9 @@ namespace YAT.Model
 		/// <summary>
 		/// Stops the terminal's I/O instance.
 		/// </summary>
+		/// <remarks>
+		/// Named "IO" for orthogonality with <see cref="StartIO(bool)"/>.
+		/// </remarks>
 		/// <param name="saveStatus">Flag indicating whether status of terminal shall be saved.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		private bool StopIO(bool saveStatus)
@@ -4385,6 +4409,9 @@ namespace YAT.Model
 		/// <summary>
 		/// Stops the terminal's I/O instance.
 		/// </summary>
+		/// <remarks>
+		/// Named "IO" for orthogonality with <see cref="StartIO(bool, out string)"/>.
+		/// </remarks>
 		/// <param name="saveStatus">Flag indicating whether status of terminal shall be saved.</param>
 		/// <param name="errorMessage">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
@@ -5752,7 +5779,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
 		{
-			if (this.startArgs.Interactive)
+			if (this.launchArgs.Interactive)
 			{
 				DebugMessage(text);
 
@@ -5784,7 +5811,7 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual DialogResult OnSaveAsFileDialogRequest()
 		{
-			if (this.startArgs.Interactive)
+			if (this.launchArgs.Interactive)
 			{
 				OnCursorReset(); // Just in case...
 
@@ -5814,7 +5841,7 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual FilePathDialogResult OnSaveCommandPageAsFileDialogRequest(string filePathOld)
 		{
-			if (this.startArgs.Interactive)
+			if (this.launchArgs.Interactive)
 			{
 				OnCursorReset(); // Just in case...
 
@@ -5844,7 +5871,7 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual FilePathDialogResult OnOpenCommandPageFileDialogRequest(string filePathOld)
 		{
-			if (this.startArgs.Interactive)
+			if (this.launchArgs.Interactive)
 			{
 				OnCursorReset(); // Just in case...
 
