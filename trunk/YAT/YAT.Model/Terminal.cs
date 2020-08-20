@@ -4857,7 +4857,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual void ResetIOCountAndRate()
+		public virtual void ResetCountAndRate()
 		{
 			AssertUndisposed();
 
