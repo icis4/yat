@@ -1761,25 +1761,27 @@ namespace YAT.Domain
 		/// </remarks>
 		protected virtual void BreakPendingPacket(Queue<byte> conflateDataQueue)
 		{
-			// Retrieve pending data:
-			int droppedDataLength;
+			int droppedCount;
 			lock (conflateDataQueue)
 			{
-				droppedDataLength = conflateDataQueue.Count;
+				droppedCount = conflateDataQueue.Count;
 				conflateDataQueue.Clear();
 			}
 
-			string message;
-			if (droppedDataLength <= 1)
-				message = droppedDataLength + " byte not sent anymore due to break."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
-			else
-				message = droppedDataLength + " bytes not sent anymore due to break."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+			if (droppedCount > 0)
+			{
+				string message;
+				if (droppedCount <= 1)
+					message = droppedCount + " byte not sent anymore due to break."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+				else
+					message = droppedCount + " bytes not sent anymore due to break."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
 
-			InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, message, true));
+				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, message, true));
 
-			// Note a suboptimality (bug #352) described in Terminal.InlineDisplayElement():
-			// The above warning message may be appended at a suboptiomal location, e.g.
-			// at the end of an already EOL'd line. Currently accepting this suboptimality.
+				// Note a suboptimality (bug #352) described in Terminal.InlineDisplayElement():
+				// The above warning message may be appended at a suboptiomal location, e.g.
+				// at the end of an already EOL'd line. Currently accepting this suboptimality.
+			}
 		}
 
 		/// <remarks>
