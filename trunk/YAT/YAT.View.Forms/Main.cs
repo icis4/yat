@@ -134,8 +134,8 @@ namespace YAT.View.Forms
 		// Fields
 		//==========================================================================================
 
-		// Startup/Update/Closing:
-		private bool isStartingUp = true;
+		// Initiating/Update/Closing:
+		private bool isInitiating = true;
 		private SettingControlsHelper isSettingControls;
 		private bool isLayoutingMdi = false;
 		private bool invokeLayout = false;
@@ -221,11 +221,17 @@ namespace YAT.View.Forms
 		// Properties
 		//==========================================================================================
 
-		/// <remarks>Property for orthogonality with <see cref="IsClosing"/>.</remarks>
+		/// <remarks>
+		/// Using term "initiating" for distinction with "initialize", "create" and "load" which are
+		/// already occupied by the .NET WinForms terminology.
+		/// </remarks>
+		/// <remarks>
+		/// Property for orthogonality with <see cref="IsClosing"/>.
+		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
-		private bool IsStartingUp
+		private bool IsInitiating
 		{
-			get { return (this.isStartingUp); }
+			get { return (this.isInitiating); }
 		}
 
 		private bool IsClosing
@@ -293,7 +299,7 @@ namespace YAT.View.Forms
 		[ModalBehaviorContract(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
 		private void Main_Shown(object sender, EventArgs e)
 		{
-			this.isStartingUp = false;
+			this.isInitiating = false;
 
 			SetControls();
 
@@ -431,19 +437,19 @@ namespace YAT.View.Forms
 
 		private void Main_LocationChanged(object sender, EventArgs e)
 		{
-			if (!IsStartingUp && !IsClosing)
+			if (!IsInitiating && !IsClosing)
 				UpdateWindowSettings(true);
 		}
 
 		private void Main_SizeChanged(object sender, EventArgs e)
 		{
-			if (!IsStartingUp && !IsClosing)
+			if (!IsInitiating && !IsClosing)
 				UpdateWindowSettings(false);
 		}
 
 		private void Main_Resize(object sender, EventArgs e)
 		{
-			if (!IsStartingUp && !IsClosing)
+			if (!IsInitiating && !IsClosing)
 				ResizeWorkspace();
 		}
 

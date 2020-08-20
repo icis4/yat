@@ -79,7 +79,7 @@ namespace YAT.View.Forms
 
 		private Color plotAreaBackColor = SystemColors.Control;
 
-		private bool isStartingUp = true;
+		private bool isInitiating = true;
 		private bool isClosing = false;
 
 		private SettingControlsHelper isSettingControls;
@@ -187,7 +187,7 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void AutoActionPlot_Shown(object sender, EventArgs e)
 		{
-			this.isStartingUp = false;
+			this.isInitiating = false;
 		}
 
 		private void AutoActionPlot_PlotAreaBackColorChanged(object sender, EventArgs e)
@@ -197,13 +197,13 @@ namespace YAT.View.Forms
 
 		private void AutoActionPlot_LocationChanged(object sender, EventArgs e)
 		{
-			if (!this.isStartingUp && !this.isClosing)
+			if (!this.isInitiating && !this.isClosing)
 				UpdateWindowSettings(true);
 		}
 
 		private void AutoActionPlot_SizeChanged(object sender, EventArgs e)
 		{
-			if (!this.isStartingUp && !this.isClosing)
+			if (!this.isInitiating && !this.isClosing)
 				UpdateWindowSettings(false);
 		}
 
