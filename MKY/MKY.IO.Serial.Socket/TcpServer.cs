@@ -330,7 +330,7 @@ namespace MKY.IO.Serial.Socket
 				switch (GetStateSynchronized())
 				{
 					case SocketState.Reset:
-					case SocketState.Stopping: // Stopping is considered 'Stopped' because it will eventually result to that.
+				////case SocketState.Stopping shall not be considered 'Stopped' even though it will eventually result to that.
 					case SocketState.Error:
 					{
 						return (true);
@@ -346,7 +346,24 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		public virtual bool IsStarted
 		{
-			get { return (!IsStopped); }
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				switch (GetStateSynchronized())
+				{
+					case SocketState.Reset:
+					case SocketState.Stopping: // Shall not be considered 'Started' as it is already on the way to 'Stopped'.
+					case SocketState.Error:
+					{
+						return (false);
+					}
+					default:
+					{
+						return (true);
+					}
+				}
+			}
 		}
 
 		/// <summary></summary>
@@ -614,7 +631,7 @@ namespace MKY.IO.Serial.Socket
 			DropDataSentQueueAndNotify();
 		}
 
-		private void DropSendQueueAndNotify()
+		private int DropSendQueueAndNotify(bool withNotify = true)
 		{
 			int droppedCount;
 			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
@@ -623,7 +640,7 @@ namespace MKY.IO.Serial.Socket
 				this.sendQueue.Clear();
 			}
 
-			if (droppedCount > 0)
+			if (withNotify && (droppedCount > 0))
 			{
 				string message;
 				if (droppedCount <= 1)
@@ -633,6 +650,8 @@ namespace MKY.IO.Serial.Socket
 
 				OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
 			}
+
+			return (droppedCount);
 		}
 
 		private void DropDataSentQueueAndNotify()
@@ -648,9 +667,9 @@ namespace MKY.IO.Serial.Socket
 			{
 				string message;
 				if (droppedCount <= 1)
-					message = droppedCount + " byte not sent anymore.";  // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
-				else                                                     // Reason cannot be stated, could be "disconnected" or "stopped/closed"
-					message = droppedCount + " bytes not sent anymore."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+					message = droppedCount + " sent byte dropped.";  // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+				else                                                 // Reason cannot be stated, could be "disconnected" or "stopped/closed"
+					message = droppedCount + " sent bytes dropped."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
 
 				OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
 			}

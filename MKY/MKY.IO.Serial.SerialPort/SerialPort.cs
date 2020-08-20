@@ -1026,7 +1026,7 @@ namespace MKY.IO.Serial.SerialPort
 			DropReceiveQueueAndNotify();
 		}
 
-		private void DropSendQueueAndNotify()
+		private int DropSendQueueAndNotify(bool withNotify = true)
 		{
 			int droppedCount;
 			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
@@ -1035,7 +1035,7 @@ namespace MKY.IO.Serial.SerialPort
 				this.sendQueue.Clear();
 			}
 
-			if (droppedCount > 0)
+			if (withNotify && (droppedCount > 0))
 			{
 				string message;
 				if (droppedCount <= 1)
@@ -1045,6 +1045,8 @@ namespace MKY.IO.Serial.SerialPort
 
 				OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
 			}
+
+			return (droppedCount);
 		}
 
 		private void DropReceiveQueueAndNotify()

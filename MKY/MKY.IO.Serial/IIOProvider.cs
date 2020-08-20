@@ -213,7 +213,7 @@ namespace MKY.IO.Serial
 		void Stop();
 
 		/// <summary>
-		/// Sends data to a the underlying I/O instance.
+		/// Sends data to the underlying I/O instance.
 		/// </summary>
 		/// <remarks>
 		/// If the underlying buffer has space, this method will immediately return; otherwise
@@ -227,6 +227,14 @@ namespace MKY.IO.Serial
 		/// <c>true</c> if data has successfully been sent; otherwise, <c>false</c>.
 		/// </returns>
 		bool Send(byte[] data);
+
+		/// <summary>
+		/// Clears the the send buffer of the underlying I/O instance.
+		/// </summary>
+		/// <returns>
+		/// The number of bytes cleared.
+		/// </returns>
+		int ClearSendBuffer();
 
 		#endregion
 	}
