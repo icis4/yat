@@ -2647,14 +2647,14 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal
+		#region Domain
 		//==========================================================================================
-		// Terminal
+		// Domain
 		//==========================================================================================
 
-		#region Terminal > Lifetime
+		#region Domain > Lifetime
 		//------------------------------------------------------------------------------------------
-		// Terminal > Lifetime
+		// Domain > Lifetime
 		//------------------------------------------------------------------------------------------
 
 		private void AttachTerminalEventHandlers()
@@ -2751,9 +2751,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Auxiliary
+		#region Domain > Auxiliary
 		//------------------------------------------------------------------------------------------
-		// Terminal > Auxiliary
+		// Domain > Auxiliary
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
@@ -2841,9 +2841,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Event Handlers
+		#region Domain > Event Handlers
 		//------------------------------------------------------------------------------------------
-		// Terminal > Event Handlers
+		// Domain > Event Handlers
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -3615,9 +3615,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Check I/O
+		#region Domain > Check I/O
 		//------------------------------------------------------------------------------------------
-		// Terminal > Check I/O
+		// Domain > Check I/O
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -4148,13 +4148,13 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Start/Stop I/O
+		#region Domain > Start/Stop
 		//------------------------------------------------------------------------------------------
-		// Terminal > Start/Stop I/O
+		// Domain > Start/Stop
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Starts the terminal's I/O instance.
+		/// Starts the terminal.
 		/// </summary>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		public virtual bool Start()
@@ -4429,9 +4429,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Repositories
+		#region Domain > Repositories
 		//------------------------------------------------------------------------------------------
-		// Terminal > Repositories
+		// Domain > Repositories
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -4546,9 +4546,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Format
+		#region Domain > Format
 		//------------------------------------------------------------------------------------------
-		// Terminal > Format
+		// Domain > Format
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -4571,9 +4571,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Time Status
+		#region Domain > Time Status
 		//------------------------------------------------------------------------------------------
-		// Terminal > Time Status
+		// Domain > Time Status
 		//------------------------------------------------------------------------------------------
 
 		private void CreateChronos()
@@ -4660,9 +4660,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Data Status
+		#region Domain > Data Status
 		//------------------------------------------------------------------------------------------
-		// Terminal > Data Status
+		// Domain > Data Status
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
@@ -4988,9 +4988,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Flow Control and Break Status
+		#region Domain > Flow Control and Break Status
 		//------------------------------------------------------------------------------------------
-		// Terminal > Flow Control and Break Status
+		// Domain > Flow Control and Break Status
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -5157,9 +5157,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > I/O Control
+		#region Domain > I/O Control
 		//------------------------------------------------------------------------------------------
-		// Terminal > I/O Control
+		// Domain > I/O Control
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>

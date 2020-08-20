@@ -158,7 +158,7 @@ namespace YAT.Model.Test.Connection
 					//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 					}
 					else {
-						Assert.Fail(@"Failed to start """ + terminalA.Caption + @"""");
+						Assert.Fail(@"Failed to launch """ + terminalA.Caption + @"""");
 					}
 				}
 				Utilities.WaitForStart(terminalA);
@@ -175,7 +175,7 @@ namespace YAT.Model.Test.Connection
 							//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 							}
 							else {
-								Assert.Fail(@"Failed to start """ + terminalB.Caption + @"""");
+								Assert.Fail(@"Failed to launch """ + terminalB.Caption + @"""");
 							}
 						}
 						Utilities.WaitForConnection(terminalA, terminalB);
