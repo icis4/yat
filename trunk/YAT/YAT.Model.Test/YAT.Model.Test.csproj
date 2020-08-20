@@ -94,7 +94,7 @@
     <Compile Include="FileHandling\Utilities.cs" />
     <Compile Include="FileHandling\SimpleTest.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="StartTest.cs" />
+    <Compile Include="LaunchTest.cs" />
     <Compile Include="FileHandling\UseCaseTest.cs" />
     <Compile Include="StressTest.cs" />
     <Compile Include="Transmission\MTSicsDeviceTest.cs" />

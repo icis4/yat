@@ -67,7 +67,7 @@ namespace YAT.Model.Test.FileHandling
 		internal static void StartAndCreateDefaultTerminal(out Main main, out Workspace workspace, out Terminal terminal)
 		{
 			main = new Main();
-			main.Start();
+			main.Launch();
 			workspace = main.Workspace;
 			workspace.CreateNewTerminal(GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 			terminal = workspace.ActiveTerminal;
@@ -107,8 +107,8 @@ namespace YAT.Model.Test.FileHandling
 		{
 			bool success = false;
 
-			success = (main.Start() == MainResult.Success);
-			Assert.That(success, Is.True, step + "Main could not be started!");
+			success = (main.Launch() == MainResult.Success);
+			Assert.That(success, Is.True, step + "Main could not be launched!");
 
 			workspace = main.Workspace;
 			Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
@@ -150,8 +150,8 @@ namespace YAT.Model.Test.FileHandling
 		{
 			bool success = false;
 
-			success = (main.Start() == MainResult.Success);
-			Assert.That(success, Is.True, step + "Main could not be started!");
+			success = (main.Launch() == MainResult.Success);
+			Assert.That(success, Is.True, step + "Main could not be launched!");
 
 			workspace = main.Workspace;
 			Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");

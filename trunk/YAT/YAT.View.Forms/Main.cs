@@ -293,24 +293,24 @@ namespace YAT.View.Forms
 		/// event can depend on a properly drawn form, as the 'Paint' event of this form and its
 		/// child controls has been raised before this 'Shown' event.
 		/// Note that this main form is only created when YAT is run WITH a view. If YAT is run
-		/// WITHOUT a view, <see cref="Model.Main.Start"/> is called by either
+		/// WITHOUT a view, <see cref="Model.Main.Launch"/> is called by either
 		/// YAT.Application.Main.RunFullyFromConsole() or YAT.Application.Main.RunInvisible().
 		/// </remarks>
-		[ModalBehaviorContract(ModalBehavior.InCaseOfNonUserError, Approval = "StartArgs are considered to decide on behavior.")]
+		[ModalBehaviorContract(ModalBehavior.InCaseOfNonUserError, Approval = "LaunchArgs are considered to decide on behavior.")]
 		private void Main_Shown(object sender, EventArgs e)
 		{
 			this.isInitiating = false;
 
 			SetControls();
 
-			this.isLayoutingMdi = true;      // Temporarily notify MDI layouting to prevent that
-			this.result = this.main.Start(); // initial layouting overwrites the workspace settings.
+			this.isLayoutingMdi = true;       // Temporarily notify MDI layouting to prevent that
+			this.result = this.main.Launch(); // initial layouting overwrites the workspace settings.
 			this.isLayoutingMdi = false;
 
 			if (this.result != Model.MainResult.Success)
 			{
-				bool showErrorModally = this.main.StartArgs.Interactive;
-				bool keepOpenOnError  = this.main.StartArgs.KeepOpenOnError;
+				bool showErrorModally = this.main.LaunchArgs.Interactive;
+				bool keepOpenOnError  = this.main.LaunchArgs.KeepOpenOnError;
 
 				switch (this.result)
 				{
@@ -347,11 +347,11 @@ namespace YAT.View.Forms
 							sb.Append(ApplicationEx.ProductName); // "YAT" or "YATConsole", as indicated in main title bar.
 							sb.Append(" could not be started with the given settings!");
 
-							if (!string.IsNullOrEmpty(this.main.StartArgs.ErrorMessage))
+							if (!string.IsNullOrEmpty(this.main.LaunchArgs.ErrorMessage))
 							{
 								sb.AppendLine();
 								sb.AppendLine();
-								sb.Append(this.main.StartArgs.ErrorMessage);
+								sb.Append(this.main.LaunchArgs.ErrorMessage);
 							}
 
 							MessageBoxEx.Show
@@ -412,7 +412,7 @@ namespace YAT.View.Forms
 				if (this.workspace.TerminalCount == 0)
 				{
 					// If workspace is empty, and the new terminal dialog is requested, display it:
-					if (this.main.StartArgs.ShowNewTerminalDialog)
+					if (this.main.LaunchArgs.ShowNewTerminalDialog)
 					{
 						// Let those settings that are given by the command line args be modified/overridden:
 						var processedSettings = new Model.Settings.NewTerminalSettings(ApplicationSettings.LocalUserSettings.NewTerminal);
@@ -425,9 +425,9 @@ namespace YAT.View.Forms
 				else
 				{
 					// If workspace contains terminals, and if requested, arrange them accordingly:
-					if (this.main.StartArgs.TileHorizontal)
+					if (this.main.LaunchArgs.TileHorizontal)
 						LayoutWorkspace(WorkspaceLayout.TileHorizontal);
-					else if (this.main.StartArgs.TileVertical)
+					else if (this.main.LaunchArgs.TileVertical)
 						LayoutWorkspace(WorkspaceLayout.TileVertical);
 					else
 						LayoutWorkspace();

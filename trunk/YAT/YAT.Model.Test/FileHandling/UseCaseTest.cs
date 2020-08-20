@@ -171,7 +171,7 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				uc = "UC1: ";
-				success = (m.Start() == MainResult.Success);
+				success = (m.Launch() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				var w = m.Workspace;
@@ -201,7 +201,7 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				uc = "UC2: ";
-				success = (m.Start() == MainResult.Success);
+				success = (m.Launch() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				var w = m.Workspace;
@@ -234,7 +234,7 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				uc = "UC2a: ";
-				success = (m.Start() == MainResult.Success);
+				success = (m.Launch() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				var w = m.Workspace;
@@ -269,7 +269,7 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				uc = "UC3: ";
-				success = (m.Start() == MainResult.Success);
+				success = (m.Launch() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				var w = m.Workspace;
@@ -326,7 +326,7 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				uc = "UC3a: ";
-				success = (m.Start() == MainResult.Success);
+				success = (m.Launch() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				var workspace = m.Workspace;
@@ -388,7 +388,7 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				uc = "UC4: ";
-				success = (m.Start() == MainResult.Success);
+				success = (m.Launch() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				var w = m.Workspace;
@@ -449,7 +449,7 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				uc = "UC4a: ";
-				success = (m.Start() == MainResult.Success);
+				success = (m.Launch() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				var w = m.Workspace;
@@ -529,7 +529,7 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				uc = "UC5: ";
-				success = (m.Start() == MainResult.Success);
+				success = (m.Launch() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				var w = m.Workspace;
@@ -589,7 +589,7 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				uc = "UC5a: ";
-				success = (m.Start() == MainResult.Success);
+				success = (m.Launch() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				var w = m.Workspace;
@@ -672,7 +672,7 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main())
 			{
 				uc = "UC6..9prep: ";
-				success = (m.Start() == MainResult.Success);
+				success = (m.Launch() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				var workspace = m.Workspace;
@@ -740,7 +740,7 @@ namespace YAT.Model.Test.FileHandling
 			using (var m = new Main(this.normalTerminal1FilePath))
 			{
 				uc = "UC7: ";
-				success = (m.Start() == MainResult.Success);
+				success = (m.Launch() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				var workspace = m.Workspace;
@@ -796,7 +796,7 @@ namespace YAT.Model.Test.FileHandling
 
 				// Main 1 start:
 				{
-					success = (main1.Start() == MainResult.Success);
+					success = (main1.Launch() == MainResult.Success);
 					Assert.That(success, Is.True, uc + "Main 1 could not be started!");
 
 					workspace1 = main1.Workspace;
@@ -813,7 +813,7 @@ namespace YAT.Model.Test.FileHandling
 
 				// Main 2 start:
 				{
-					success = (main2.Start() == MainResult.Success);
+					success = (main2.Launch() == MainResult.Success);
 					Assert.That(success, Is.True, uc + "Main 2 could not be started!");
 
 					workspace2 = main2.Workspace;
@@ -860,7 +860,7 @@ namespace YAT.Model.Test.FileHandling
 
 				// Main 2 start:
 				{
-					success = (main2.Start() == MainResult.Success);
+					success = (main2.Launch() == MainResult.Success);
 					Assert.That(success, Is.True, uc + "Main 2 could not be started!");
 
 					workspace2 = main2.Workspace;
@@ -894,7 +894,7 @@ namespace YAT.Model.Test.FileHandling
 
 			using (var m = new Main(requestedPath))
 			{
-				success = (m.Start() == MainResult.Success);
+				success = (m.Launch() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be started!");
 
 				var w = m.Workspace;

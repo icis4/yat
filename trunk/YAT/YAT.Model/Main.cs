@@ -80,7 +80,7 @@ namespace YAT.Model
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Main).FullName);
 
 		private CommandLineArgs commandLineArgs;
-		private MainStartArgs startArgs;
+		private MainLaunchArgs launchArgs;
 		private Guid guid;
 
 		private Workspace workspace; // = null;
@@ -216,13 +216,13 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual MainStartArgs StartArgs
+		public virtual MainLaunchArgs LaunchArgs
 		{
 			get
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				return (this.startArgs);
+				return (this.launchArgs);
 			}
 		}
 
@@ -294,12 +294,11 @@ namespace YAT.Model
 		/// <summary>
 		/// This method is used to test the command line argument processing.
 		/// </summary>
-		public virtual MainResult PrepareStart()
+		public virtual MainResult PrepareLaunch()
 		{
 			AssertUndisposed();
 
-			// Process command line args into start requests:
-			if (ProcessCommandLineArgsIntoStartRequests())
+			if (ProcessCommandLineArgsIntoLaunchRequests())
 				return (MainResult.Success);
 			else
 				return (MainResult.CommandLineError);
@@ -311,15 +310,18 @@ namespace YAT.Model
 		/// Else, this method tries to open the most recent workspace of the current user.
 		/// If still unsuccessful, a new workspace is created.
 		/// </summary>
+		/// <remarks>
+		/// Using term "launch" rather than "start" for distinction with "start/stop" I/O.
+		/// </remarks>
 		/// <returns>
 		/// Returns <c>true</c> if either operation succeeded; otherwise, <c>false</c>.
 		/// </returns>
-		public virtual MainResult Start()
+		public virtual MainResult Launch()
 		{
 			AssertUndisposed();
 
 			// Process command line args into start requests:
-			if (!ProcessCommandLineArgsIntoStartRequests())
+			if (!ProcessCommandLineArgsIntoLaunchRequests())
 			{
 				if ((this.commandLineArgs == null) || (!this.commandLineArgs.IsValid))
 					return (MainResult.CommandLineError);
@@ -330,28 +332,28 @@ namespace YAT.Model
 			// Application will start, hence initialize required resources:
 			ProcessorLoad.Initialize();
 		#if (WITH_SCRIPTING)
-			this.scriptBridge = new ScriptBridge(this, this.startArgs.ScriptRunIsRequested);
+			this.scriptBridge = new ScriptBridge(this, this.launchArgs.ScriptRunIsRequested);
 		#endif
 
 			// Start according to the start requests:
 			bool success = false;
 
-			bool workspaceIsRequested = (this.startArgs.WorkspaceSettingsHandler != null);
-			bool terminalIsRequested  = (this.startArgs.TerminalSettingsHandler  != null);
+			bool workspaceIsRequested = (this.launchArgs.WorkspaceSettingsHandler != null);
+			bool terminalIsRequested  = (this.launchArgs.TerminalSettingsHandler  != null);
 
 			if (workspaceIsRequested || terminalIsRequested)
 			{
 				if (workspaceIsRequested && terminalIsRequested)
 				{
-					success = OpenWorkspaceFromSettings(this.startArgs.WorkspaceSettingsHandler, this.startArgs.RequestedDynamicTerminalId, this.startArgs.TerminalSettingsHandler);
+					success = OpenWorkspaceFromSettings(this.launchArgs.WorkspaceSettingsHandler, this.launchArgs.RequestedDynamicTerminalId, this.launchArgs.TerminalSettingsHandler);
 				}
 				else if (workspaceIsRequested) // Workspace only.
 				{
-					success = OpenWorkspaceFromSettings(this.startArgs.WorkspaceSettingsHandler);
+					success = OpenWorkspaceFromSettings(this.launchArgs.WorkspaceSettingsHandler);
 				}
 				else // Terminal only.
 				{
-					success = OpenTerminalFromSettings(this.startArgs.TerminalSettingsHandler);
+					success = OpenTerminalFromSettings(this.launchArgs.TerminalSettingsHandler);
 				}
 
 				// Note that any existing auto workspace settings are kept as they are.
@@ -422,7 +424,7 @@ namespace YAT.Model
 			}
 
 			// If requested, trigger operation:
-			if (success && this.StartArgs.PerformOperationOnRequestedTerminal)
+			if (success && this.LaunchArgs.PerformOperationOnRequestedTerminal)
 			{
 				OnFixedStatusTextRequest("Triggering operation...");
 				StartOperationTimer();
@@ -446,13 +448,13 @@ namespace YAT.Model
 
 		/// <summary>
 		/// Process the command line arguments according to their priority and translate them into
-		/// start requests.
+		/// launch requests.
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1515:SingleLineCommentMustBePrecededByBlankLine", Justification = "Consistent section titles.")]
-		private bool ProcessCommandLineArgsIntoStartRequests()
+		private bool ProcessCommandLineArgsIntoLaunchRequests()
 		{
 			// Always create start requests to ensure that object exists.
-			this.startArgs = new MainStartArgs();
+			this.launchArgs = new MainLaunchArgs();
 
 			// Process and validate command line arguments:
 			if (this.commandLineArgs != null)
@@ -473,9 +475,9 @@ namespace YAT.Model
 				// This is the standard case, the 'New Terminal' dialog will get shown:
 				if (this.commandLineArgs == null)
 				{
-					this.startArgs.ShowNewTerminalDialog = true;
-					this.startArgs.KeepOpen              = true;
-					this.startArgs.KeepOpenOnError       = true;
+					this.launchArgs.ShowNewTerminalDialog = true;
+					this.launchArgs.KeepOpen              = true;
+					this.launchArgs.KeepOpenOnError       = true;
 
 					return (true);
 				}
@@ -483,9 +485,9 @@ namespace YAT.Model
 				// i.e. 'Interactive' will be cleared, and no 'New Terminal' dialog shall get shown:
 				else
 				{
-					this.startArgs.ShowNewTerminalDialog = this.commandLineArgs.Interactive;
-					this.startArgs.KeepOpen              = true;
-					this.startArgs.KeepOpenOnError       = true;
+					this.launchArgs.ShowNewTerminalDialog = this.commandLineArgs.Interactive;
+					this.launchArgs.KeepOpen              = true;
+					this.launchArgs.KeepOpenOnError       = true;
 
 					return (true);
 				}
@@ -500,15 +502,15 @@ namespace YAT.Model
 			// Prio 2 = Empty:
 			if (this.commandLineArgs.Empty)
 			{
-				this.startArgs.ShowNewTerminalDialog = false;
-				this.startArgs.KeepOpen              = this.commandLineArgs.KeepOpen;
-				this.startArgs.KeepOpenOnError       = this.commandLineArgs.KeepOpenOnError;
+				this.launchArgs.ShowNewTerminalDialog = false;
+				this.launchArgs.KeepOpen              = this.commandLineArgs.KeepOpen;
+				this.launchArgs.KeepOpenOnError       = this.commandLineArgs.KeepOpenOnError;
 
 				return (true);
 			}
 
 			// Arguments are available and valid, transfer 'NonInteractive' option:
-			this.startArgs.NonInteractive = this.commandLineArgs.NonInteractive;
+			this.launchArgs.NonInteractive = this.commandLineArgs.NonInteractive;
 
 			// Prio 3 = Recent:
 			string requestedFilePath = null;
@@ -545,11 +547,11 @@ namespace YAT.Model
 					Exception ex;
 					if (OpenWorkspaceFile(requestedFilePath, out absoluteFilePath, out sh, out ex))
 					{
-						this.startArgs.WorkspaceSettingsHandler = sh;
+						this.launchArgs.WorkspaceSettingsHandler = sh;
 					}
 					else
 					{
-						this.startArgs.ErrorMessage = ErrorHelper.ComposeMessage("Unable to open workspace file", absoluteFilePath, ex);
+						this.launchArgs.ErrorMessage = ErrorHelper.ComposeMessage("Unable to open workspace file", absoluteFilePath, ex);
 						return (false);
 					}
 				}
@@ -560,11 +562,11 @@ namespace YAT.Model
 					Exception ex;
 					if (OpenTerminalFile(requestedFilePath, out absoluteFilePath, out sh, out ex))
 					{
-						this.startArgs.TerminalSettingsHandler = sh;
+						this.launchArgs.TerminalSettingsHandler = sh;
 					}
 					else
 					{
-						this.startArgs.ErrorMessage = ErrorHelper.ComposeMessage("Unable to open terminal file", absoluteFilePath, ex);
+						this.launchArgs.ErrorMessage = ErrorHelper.ComposeMessage("Unable to open terminal file", absoluteFilePath, ex);
 						return (false);
 					}
 				}
@@ -577,110 +579,110 @@ namespace YAT.Model
 			// Prio 7 = Retrieve the requested terminal within the workspace and validate it:
 			Domain.IOType implicitIOType = Domain.IOType.Unknown;
 			bool updateDependentSettings = false;
-			if (this.startArgs.WorkspaceSettingsHandler != null) // Applies to a terminal within a workspace.
+			if (this.launchArgs.WorkspaceSettingsHandler != null) // Applies to a terminal within a workspace.
 			{
-				if (this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count > 0)
+				if (this.launchArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count > 0)
 				{
 					int requestedDynamicTerminalId = this.commandLineArgs.RequestedDynamicTerminalId;
-					int lastDynamicId = TerminalIds.IndexToDynamicId(this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1);
+					int lastDynamicId = TerminalIds.IndexToDynamicId(this.launchArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1);
 
 					if     ((          requestedDynamicTerminalId >= TerminalIds.FirstDynamicId) && (requestedDynamicTerminalId <= lastDynamicId))
-						this.startArgs.RequestedDynamicTerminalId = requestedDynamicTerminalId;
+						this.launchArgs.RequestedDynamicTerminalId = requestedDynamicTerminalId;
 					else if (          requestedDynamicTerminalId == TerminalIds.ActiveDynamicId)
-						this.startArgs.RequestedDynamicTerminalId  = TerminalIds.ActiveDynamicId;
+						this.launchArgs.RequestedDynamicTerminalId  = TerminalIds.ActiveDynamicId;
 					else if (          requestedDynamicTerminalId == TerminalIds.InvalidDynamicId)
-						this.startArgs.RequestedDynamicTerminalId  = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
+						this.launchArgs.RequestedDynamicTerminalId  = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
 					else
 						return (false);
 
-					if (this.startArgs.RequestedDynamicTerminalId != TerminalIds.InvalidDynamicId)
+					if (this.launchArgs.RequestedDynamicTerminalId != TerminalIds.InvalidDynamicId)
 					{
-						string workspaceFilePath = this.startArgs.WorkspaceSettingsHandler.SettingsFilePath;
+						string workspaceFilePath = this.launchArgs.WorkspaceSettingsHandler.SettingsFilePath;
 
 						string terminalFilePath;
-						if (this.startArgs.RequestedDynamicTerminalId == TerminalIds.ActiveDynamicId) // The active terminal is located last in the collection:
-							terminalFilePath = this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1].FilePath;
+						if (this.launchArgs.RequestedDynamicTerminalId == TerminalIds.ActiveDynamicId) // The active terminal is located last in the collection:
+							terminalFilePath = this.launchArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[this.launchArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1].FilePath;
 						else
-							terminalFilePath = this.startArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[TerminalIds.DynamicIdToIndex(this.startArgs.RequestedDynamicTerminalId)].FilePath;
+							terminalFilePath = this.launchArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[TerminalIds.DynamicIdToIndex(this.launchArgs.RequestedDynamicTerminalId)].FilePath;
 
 						DocumentSettingsHandler<TerminalSettingsRoot> sh;
 						if (OpenTerminalFile(workspaceFilePath, terminalFilePath, out sh))
-							this.startArgs.TerminalSettingsHandler = sh;
+							this.launchArgs.TerminalSettingsHandler = sh;
 						else
 							return (false);
 					}
 				}
 			}
-			else if (this.startArgs.TerminalSettingsHandler != null) // Applies to a dedicated terminal.
+			else if (this.launchArgs.TerminalSettingsHandler != null) // Applies to a dedicated terminal.
 			{
 				if (this.commandLineArgs.RequestedDynamicTerminalId == TerminalIds.InvalidDynamicId)
-					this.startArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
+					this.launchArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
 			}
 			else if (this.commandLineArgs.NewIsRequested) // Applies to a new terminal.
 			{
 				if (this.commandLineArgs.RequestedDynamicTerminalId == TerminalIds.InvalidDynamicId)
-					this.startArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
+					this.launchArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
 
-				this.startArgs.TerminalSettingsHandler = new DocumentSettingsHandler<TerminalSettingsRoot>();
+				this.launchArgs.TerminalSettingsHandler = new DocumentSettingsHandler<TerminalSettingsRoot>();
 			}
 			else if (this.commandLineArgs.NewIsRequestedImplicitly(out implicitIOType)) // Also applies to a new terminal.
 			{
 				if (this.commandLineArgs.RequestedDynamicTerminalId == TerminalIds.InvalidDynamicId)
-					this.startArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
+					this.launchArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
 
-				this.startArgs.TerminalSettingsHandler = new DocumentSettingsHandler<TerminalSettingsRoot>();
+				this.launchArgs.TerminalSettingsHandler = new DocumentSettingsHandler<TerminalSettingsRoot>();
 
 				if (implicitIOType != Domain.IOType.Unknown)
-					this.startArgs.TerminalSettingsHandler.Settings.IOType = implicitIOType;
+					this.launchArgs.TerminalSettingsHandler.Settings.IOType = implicitIOType;
 
 				updateDependentSettings = true; // Same as when using the on the 'New Terminal' or 'Terminal Settings'
 			}                                   // dialog, dependent settings must be updated accordingly. But this
 			else                                // must happen AFTER having processed the args into the settings!
 			{
-				this.startArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Disable the operation.
+				this.launchArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Disable the operation.
 			}
 
 			// Prio 8 = Override explicit settings as desired:
-			if (this.startArgs.TerminalSettingsHandler != null) // Applies to a dedicated terminal.
+			if (this.launchArgs.TerminalSettingsHandler != null) // Applies to a dedicated terminal.
 			{
-				if (!ProcessCommandLineArgsIntoExistingTerminalSettings(this.startArgs.TerminalSettingsHandler.Settings.Terminal))
+				if (!ProcessCommandLineArgsIntoExistingTerminalSettings(this.launchArgs.TerminalSettingsHandler.Settings.Terminal))
 					return (false);
 
 				if (updateDependentSettings) // See comments further above.
-					this.startArgs.TerminalSettingsHandler.Settings.Terminal.UpdateAllDependentSettings();
+					this.launchArgs.TerminalSettingsHandler.Settings.Terminal.UpdateAllDependentSettings();
 
 				if (this.commandLineArgs.OptionIsGiven("StartTerminal"))
-					this.startArgs.TerminalSettingsHandler.Settings.TerminalIsStarted = this.commandLineArgs.StartTerminal;
+					this.launchArgs.TerminalSettingsHandler.Settings.TerminalIsStarted = this.commandLineArgs.StartTerminal;
 
 				if (this.commandLineArgs.OptionIsGiven("LogOn"))
-					this.startArgs.TerminalSettingsHandler.Settings.LogIsOn           = this.commandLineArgs.LogOn;
+					this.launchArgs.TerminalSettingsHandler.Settings.LogIsOn           = this.commandLineArgs.LogOn;
 			}
 
 			// Prio 9 = Override overall settings as desired:
 			if (this.commandLineArgs.OptionIsGiven("StartTerminal"))
-				this.startArgs.Override.StartTerminal       = this.commandLineArgs.StartTerminal;
+				this.launchArgs.Override.StartTerminal       = this.commandLineArgs.StartTerminal;
 
 			if (this.commandLineArgs.OptionIsGiven("KeepTerminalStopped"))
-				this.startArgs.Override.KeepTerminalStopped = this.commandLineArgs.KeepTerminalStopped;
+				this.launchArgs.Override.KeepTerminalStopped = this.commandLineArgs.KeepTerminalStopped;
 
 			if (this.commandLineArgs.OptionIsGiven("LogOn"))
-				this.startArgs.Override.LogOn               = this.commandLineArgs.LogOn;
+				this.launchArgs.Override.LogOn               = this.commandLineArgs.LogOn;
 
 			if (this.commandLineArgs.OptionIsGiven("KeepLogOff"))
-				this.startArgs.Override.KeepLogOff          = this.commandLineArgs.KeepLogOff;
+				this.launchArgs.Override.KeepLogOff          = this.commandLineArgs.KeepLogOff;
 
 			// Prio 10 = Perform requested operation:
-			if (this.startArgs.RequestedDynamicTerminalId != TerminalIds.InvalidDynamicId)
+			if (this.launchArgs.RequestedDynamicTerminalId != TerminalIds.InvalidDynamicId)
 			{
 				if (this.commandLineArgs.OptionIsGiven("TransmitText"))
 				{
-					this.startArgs.RequestedTransmitText = this.commandLineArgs.RequestedTransmitText;
-					this.startArgs.PerformOperationOnRequestedTerminal = true;
+					this.launchArgs.RequestedTransmitText = this.commandLineArgs.RequestedTransmitText;
+					this.launchArgs.PerformOperationOnRequestedTerminal = true;
 				}
 				else if (this.commandLineArgs.OptionIsGiven("TransmitFile"))
 				{
-					this.startArgs.RequestedTransmitFilePath = this.commandLineArgs.RequestedTransmitFilePath;
-					this.startArgs.PerformOperationOnRequestedTerminal = true;
+					this.launchArgs.RequestedTransmitFilePath = this.commandLineArgs.RequestedTransmitFilePath;
+					this.launchArgs.PerformOperationOnRequestedTerminal = true;
 				}
 			}
 
@@ -688,51 +690,51 @@ namespace YAT.Model
 			// Prio 11 = Run script:
 			if (this.commandLineArgs.OptionIsGiven("Script"))
 			{
-				this.startArgs.RequestedScriptFilePath = this.commandLineArgs.RequestedScriptFilePath;
+				this.launchArgs.RequestedScriptFilePath = this.commandLineArgs.RequestedScriptFilePath;
 
 				if (this.commandLineArgs.OptionIsGiven("ScriptLog"))
 				{
 					if (PathEx.IsValid(this.commandLineArgs.RequestedScriptLogFilePath))
-						this.startArgs.RequestedScriptLogFilePath = this.commandLineArgs.RequestedScriptLogFilePath;
+						this.launchArgs.RequestedScriptLogFilePath = this.commandLineArgs.RequestedScriptLogFilePath;
 					else
 						return (false);
 				}
 
 				if (this.commandLineArgs.OptionIsGiven("ScriptLogTimeStamp"))
-					this.startArgs.AppendTimeStampToScriptLogFileName = true;
+					this.launchArgs.AppendTimeStampToScriptLogFileName = true;
 
 				if (this.commandLineArgs.OptionIsGiven("ScriptArgs"))
-					this.startArgs.RequestedScriptArgs = this.commandLineArgs.RequestedScriptArgs;
+					this.launchArgs.RequestedScriptArgs = this.commandLineArgs.RequestedScriptArgs;
 
-				this.startArgs.ScriptRunIsRequested = true;
+				this.launchArgs.ScriptRunIsRequested = true;
 			}
 		#endif
 
 			// Prio 12 = Set behavior:
-			if (this.startArgs.PerformOperationOnRequestedTerminal)
+			if (this.launchArgs.PerformOperationOnRequestedTerminal)
 			{
-				this.startArgs.OperationDelay = this.commandLineArgs.OperationDelay;
-				this.startArgs.ExitDelay      = this.commandLineArgs.ExitDelay;
+				this.launchArgs.OperationDelay = this.commandLineArgs.OperationDelay;
+				this.launchArgs.ExitDelay      = this.commandLineArgs.ExitDelay;
 			}
 
 		#if !(WITH_SCRIPTING)
-			if (this.startArgs.PerformOperationOnRequestedTerminal)
+			if (this.launchArgs.PerformOperationOnRequestedTerminal)
 		#else
-			if (this.startArgs.PerformOperationOnRequestedTerminal || this.startArgs.ScriptRunIsRequested)
+			if (this.launchArgs.PerformOperationOnRequestedTerminal || this.launchArgs.ScriptRunIsRequested)
 		#endif
 			{
-				this.startArgs.KeepOpen        = this.commandLineArgs.KeepOpen;
-				this.startArgs.KeepOpenOnError = this.commandLineArgs.KeepOpenOnError;
+				this.launchArgs.KeepOpen        = this.commandLineArgs.KeepOpen;
+				this.launchArgs.KeepOpenOnError = this.commandLineArgs.KeepOpenOnError;
 			}
 			else
 			{
-				this.startArgs.KeepOpen        = true;
-				this.startArgs.KeepOpenOnError = true;
+				this.launchArgs.KeepOpen        = true;
+				this.launchArgs.KeepOpenOnError = true;
 			}
 
 			// Prio 13 = Set layout:
-			this.startArgs.TileHorizontal = this.commandLineArgs.TileHorizontal;
-			this.startArgs.TileVertical   = this.commandLineArgs.TileVertical;
+			this.launchArgs.TileHorizontal = this.commandLineArgs.TileHorizontal;
+			this.launchArgs.TileVertical   = this.commandLineArgs.TileVertical;
 
 			return (true);
 		}
@@ -1485,7 +1487,7 @@ namespace YAT.Model
 			OnFixedStatusTextRequest("Creating new workspace...");
 			OnCursorRequest(Cursors.WaitCursor);
 
-			this.workspace = new Workspace(this.startArgs.ToWorkspaceStartArgs());
+			this.workspace = new Workspace(this.launchArgs.ToWorkspaceLaunchArgs());
 			AttachWorkspaceEventHandlers();
 			OnWorkspaceOpened(this.workspace);
 
@@ -1597,7 +1599,7 @@ namespace YAT.Model
 			Workspace w;
 			try
 			{
-				w = new Workspace(this.startArgs.ToWorkspaceStartArgs(), settings, guid);
+				w = new Workspace(this.launchArgs.ToWorkspaceLaunchArgs(), settings, guid);
 			}
 			catch (Exception ex)
 			{
@@ -1890,7 +1892,7 @@ namespace YAT.Model
 						return;
 					}
 
-					int id = this.startArgs.RequestedDynamicTerminalId;
+					int id = this.launchArgs.RequestedDynamicTerminalId;
 
 					Terminal requestedTerminal;
 					if (!this.workspace.TryGetTerminalByDynamicId(id, out requestedTerminal))
@@ -1927,7 +1929,7 @@ namespace YAT.Model
 					// Preconditions fullfilled!
 					StopAndDisposeOperationTimer();
 
-					int delay = this.startArgs.OperationDelay;
+					int delay = this.launchArgs.OperationDelay;
 					if (delay > 0)
 					{
 						OnFixedStatusTextRequest("Operation triggered, delaying for " + delay.ToString(CultureInfo.CurrentCulture) + " ms...");
@@ -1937,7 +1939,7 @@ namespace YAT.Model
 					OnFixedStatusTextRequest("Operation triggered, preparing...");
 
 					// Automatically transmit text if desired:
-					string text = this.startArgs.RequestedTransmitText;
+					string text = this.launchArgs.RequestedTransmitText;
 					if (!string.IsNullOrEmpty(text))
 					{
 						bool success;
@@ -1965,7 +1967,7 @@ namespace YAT.Model
 					}
 
 					// Automatically transmit file if desired:
-					string filePath = this.startArgs.RequestedTransmitFilePath;
+					string filePath = this.launchArgs.RequestedTransmitFilePath;
 					if (!string.IsNullOrEmpty(filePath))
 					{
 						bool success;
@@ -2005,8 +2007,8 @@ namespace YAT.Model
 
 		private void StartExitTimerIfNeeded(bool operationSuccess)
 		{
-			if ((!this.startArgs.KeepOpen) &&
-			    (!(this.startArgs.KeepOpenOnError && !operationSuccess)))
+			if ((!this.launchArgs.KeepOpen) &&
+			    (!(this.launchArgs.KeepOpenOnError && !operationSuccess)))
 			{
 				if (operationSuccess)
 					OnFixedStatusTextRequest("Operation successfully performed, triggering exit...");
@@ -2061,7 +2063,7 @@ namespace YAT.Model
 				{
 					if (this.workspace != null)
 					{
-						int id = this.startArgs.RequestedDynamicTerminalId;
+						int id = this.launchArgs.RequestedDynamicTerminalId;
 
 						Terminal t;
 						if (this.workspace.TryGetTerminalByDynamicId(id, out t) && (t.IsSending))
@@ -2075,7 +2077,7 @@ namespace YAT.Model
 
 					StopAndDisposeExitTimer();
 
-					int delay = this.startArgs.ExitDelay;
+					int delay = this.launchArgs.ExitDelay;
 					if (delay > 0)
 					{
 						OnFixedStatusTextRequest("Exit triggered, delaying for " + delay.ToString(CultureInfo.CurrentCulture) + " ms...");
@@ -2151,7 +2153,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
 		{
-			if (this.startArgs.Interactive)
+			if (this.launchArgs.Interactive)
 			{
 				DebugMessage(text);
 
