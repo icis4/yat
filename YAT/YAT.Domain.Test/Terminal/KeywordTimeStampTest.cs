@@ -169,11 +169,11 @@ namespace YAT.Domain.Test.Terminal
 						Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 						terminalRx.Stop();
-						Utilities.WaitForDisconnection(terminalRx);
+						Utilities.WaitForStop(terminalRx);
 					} // using (terminalB)
 
 					terminalTx.Stop();
-					Utilities.WaitForDisconnection(terminalTx);
+					Utilities.WaitForStop(terminalTx);
 				} // using (terminalA)
 			} // using (parser)
 		}

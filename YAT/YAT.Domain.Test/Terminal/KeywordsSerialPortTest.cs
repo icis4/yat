@@ -100,7 +100,7 @@ namespace YAT.Domain.Test.Terminal
 						Utilities.AssertCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						terminalB.Stop();
-						Utilities.WaitForDisconnection(terminalB);
+						Utilities.WaitForStop(terminalB);
 					} // using (terminalB)
 
 					// Swap ports using keyword (A) vs. settings (B):
@@ -128,7 +128,7 @@ namespace YAT.Domain.Test.Terminal
 						Utilities.AssertRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						terminalB.Stop();
-						Utilities.WaitForDisconnection(terminalB);
+						Utilities.WaitForStop(terminalB);
 					} // using (terminalB)
 
 					// Change settings using keyword (A) vs. settings (B):
@@ -162,7 +162,7 @@ namespace YAT.Domain.Test.Terminal
 						Utilities.AssertRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						terminalB.Stop();
-						Utilities.WaitForDisconnection(terminalB);
+						Utilities.WaitForStop(terminalB);
 					} // using (terminalB)
 
 					// Change settings using keyword (A) vs. settings (B):
@@ -196,11 +196,11 @@ namespace YAT.Domain.Test.Terminal
 						Utilities.AssertRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 						terminalB.Stop();
-						Utilities.WaitForDisconnection(terminalB);
+						Utilities.WaitForStop(terminalB);
 					} // using (terminalB)
 
 					terminalA.Stop();
-					Utilities.WaitForDisconnection(terminalA);
+					Utilities.WaitForStop(terminalA);
 				} // using (terminalA)
 			} // using (parser)
 		}
@@ -417,11 +417,11 @@ namespace YAT.Domain.Test.Terminal
 						Utilities.AssertBidirContent(terminalA, expectedContentA);
 
 						terminalB.Stop();
-						Utilities.WaitForDisconnection(terminalB);
+						Utilities.WaitForStop(terminalB);
 					} // using (terminalB)
 
 					terminalA.Stop();
-					Utilities.WaitForDisconnection(terminalA);
+					Utilities.WaitForStop(terminalA);
 				} // using (terminalA)
 			} // using (parser)
 		}

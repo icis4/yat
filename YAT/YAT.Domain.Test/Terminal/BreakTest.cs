@@ -107,11 +107,11 @@ namespace YAT.Domain.Test.Terminal
 					Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					terminalRx.Stop();
-					Utilities.WaitForDisconnection(terminalRx);
+					Utilities.WaitForStop(terminalRx);
 				} // using (terminalB)
 
 				terminalTx.Stop();
-				Utilities.WaitForDisconnection(terminalTx);
+				Utilities.WaitForStop(terminalTx);
 			} // using (terminalA)
 		}
 
@@ -178,11 +178,11 @@ namespace YAT.Domain.Test.Terminal
 					Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					terminalRx.Stop();
-					Utilities.WaitForDisconnection(terminalRx);
+					Utilities.WaitForStop(terminalRx);
 				} // using (terminalB)
 
 				terminalTx.Stop();
-				Utilities.WaitForDisconnection(terminalTx);
+				Utilities.WaitForStop(terminalTx);
 			} // using (terminalA)
 		}
 
@@ -254,11 +254,11 @@ namespace YAT.Domain.Test.Terminal
 					Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					terminalRx.Stop();
-					Utilities.WaitForDisconnection(terminalRx);
+					Utilities.WaitForStop(terminalRx);
 				} // using (terminalB)
 
 				terminalTx.Stop();
-				Utilities.WaitForDisconnection(terminalTx);
+				Utilities.WaitForStop(terminalTx);
 			} // using (terminalA)
 		}
 
@@ -332,11 +332,11 @@ namespace YAT.Domain.Test.Terminal
 					Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 					terminalRx.Stop();
-					Utilities.WaitForDisconnection(terminalRx);
+					Utilities.WaitForStop(terminalRx);
 				} // using (terminalB)
 
 				terminalTx.Stop();
-				Utilities.WaitForDisconnection(terminalTx);
+				Utilities.WaitForStop(terminalTx);
 			} // using (terminalA)
 		}
 

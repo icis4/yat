@@ -376,30 +376,6 @@ namespace YAT.Domain.Test
 			Trace.WriteLine("...done, connected");
 		}
 
-		/// <remarks>
-		/// There are similar utility methods in 'Model.Test.Utilities'.
-		/// Changes here may have to be applied there too.
-		/// </remarks>
-		public static void WaitForDisconnection(Domain.Terminal terminal)
-		{
-			int waitTime = 0;
-
-			Trace.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
-
-			while (terminal.IsConnected)
-			{
-				Thread.Sleep(WaitIntervalForStateChange);
-				waitTime += WaitIntervalForStateChange;
-
-				Trace.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
-
-				if (waitTime >= WaitTimeoutForStateChange)
-					Assert.Fail("Disconnect timeout!");
-			}
-
-			Trace.WriteLine("...done, disconnected");
-		}
-
 		/// <summary></summary>
 		public static void WaitForIsSendingForSomeTime(Domain.Terminal terminal, int timeout = WaitTimeoutForIsSendingForSomeTime)
 		{
@@ -440,6 +416,30 @@ namespace YAT.Domain.Test
 			}
 
 			Trace.WriteLine("...done, 'IsNoLongerSending'");
+		}
+
+		/// <remarks>
+		/// There are similar utility methods in 'Model.Test.Utilities'.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
+		public static void WaitForStop(Domain.Terminal terminal)
+		{
+			int waitTime = 0;
+
+			Trace.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+
+			while (!terminal.IsStopped)
+			{
+				Thread.Sleep(WaitIntervalForStateChange);
+				waitTime += WaitIntervalForStateChange;
+
+				Trace.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+
+				if (waitTime >= WaitTimeoutForStateChange)
+					Assert.Fail("Disconnect timeout!");
+			}
+
+			Trace.WriteLine("...done, disconnected");
 		}
 
 		/// <summary></summary>
