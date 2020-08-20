@@ -1022,11 +1022,8 @@ namespace MKY.IO.Serial.SerialPort
 
 		private void ClearQueues()
 		{
-			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
-				this.sendQueue.Clear();
-
-			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
-				this.receiveQueue.Clear();
+			DropSendQueueAndNotify();
+			DropReceiveQueueAndNotify();
 		}
 
 		#endregion

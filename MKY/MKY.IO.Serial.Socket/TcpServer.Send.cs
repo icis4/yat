@@ -207,24 +207,9 @@ namespace MKY.IO.Serial.Socket
 					// Inner loop, runs as long as there are items in the queue:
 					while (IsUndisposed && this.sendThreadRunFlag && (this.sendQueue.Count > 0)) // Check disposal state first!
 					{                                             // No lock required, just checking for empty.
-						// Drop queueud data in case socket has been disconnected:
 						if (!IsTransmissive)
 						{
-							int droppedDataLength;
-							lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
-							{
-								droppedDataLength = this.sendQueue.Count;
-								this.sendQueue.Clear();
-							}
-
-							string message;
-							if (droppedDataLength <= 1)
-								message = droppedDataLength + " byte not sent anymore."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
-							else
-								message = droppedDataLength + " bytes not sent anymore."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
-
-							OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
-
+							DropSendQueueAndNotify(); // Drop queueud data in case device has been disconnected.
 							break; // while()
 						}
 
@@ -351,6 +336,12 @@ namespace MKY.IO.Serial.Socket
 					// Inner loop, runs as long as there are items in the queue:
 					while (IsUndisposed && this.dataSentThreadRunFlag && (this.dataSentQueue.Count > 0)) // Check disposal state first!
 					{                                                 // No lock required, just checking for empty.
+						if (!IsTransmissive)
+						{
+							DropDataSentQueueAndNotify(); // Drop queueud data in case socket has been disconnected.
+							break; // while()
+						}
+
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.
@@ -428,6 +419,54 @@ namespace MKY.IO.Serial.Socket
 			DebugThreadState("SendThread() has terminated.");
 		}
 
+		private void DropQueuesAndNotify()
+		{
+			DropSendQueueAndNotify();
+			DropDataSentQueueAndNotify();
+		}
+
+		private void DropSendQueueAndNotify()
+		{
+			int droppedCount;
+			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+			{
+				droppedCount = this.sendQueue.Count;
+				this.sendQueue.Clear();
+			}
+
+			if (droppedCount > 0)
+			{
+				string message;
+				if (droppedCount <= 1)
+					message = droppedCount + " byte not sent anymore.";  // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+				else                                                     // Reason cannot be stated, could be "disconnected" or "stopped/closed"
+					message = droppedCount + " bytes not sent anymore."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+
+				OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
+			}
+		}
+
+		private void DropDataSentQueueAndNotify()
+		{
+			int droppedCount;
+			lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
+			{
+				droppedCount = this.dataSentQueue.Count;
+				this.dataSentQueue.Clear();
+			}
+
+			if (droppedCount > 0)
+			{
+				string message;
+				if (droppedCount <= 1)
+					message = droppedCount + " byte not sent anymore.";  // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+				else                                                     // Reason cannot be stated, could be "disconnected" or "stopped/closed"
+					message = droppedCount + " bytes not sent anymore."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+
+				OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
+			}
+		}
+
 		#endregion
 
 		#region Debug
@@ -475,8 +514,8 @@ namespace MKY.IO.Serial.Socket
 			var sb = new StringBuilder();
 			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) dequeued for sending, ", count);
 		#if (DEBUG_SEND)
-			unchecked { DebugSend_enqueueCounter += count; }
-			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) in total.", DebugSend_enqueueCounter);
+			unchecked { DebugSend_dequeueCounter += count; }
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) in total.", DebugSend_dequeueCounter);
 		#endif
 			DebugMessage(sb.ToString());
 		}

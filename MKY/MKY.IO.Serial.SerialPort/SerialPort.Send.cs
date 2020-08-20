@@ -303,24 +303,9 @@ namespace MKY.IO.Serial.SerialPort
 					// Inner loop, runs as long as there are items in the queue:
 					while (IsUndisposed && this.sendThreadRunFlag && (this.sendQueue.Count > 0)) // Check disposal state first!
 					{                                             // No lock required, just checking for empty.
-						// Drop queueud data in case port has been closed:
 						if (!IsOpen) // 'IsOpen' is used instead of 'IsTransmissive' to allow handling break further below.
 						{
-							int droppedDataLength;
-							lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
-							{
-								droppedDataLength = this.sendQueue.Count;
-								this.sendQueue.Clear();
-							}
-
-							string message;
-							if (droppedDataLength <= 1)
-								message = droppedDataLength + " byte not sent anymore."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
-							else
-								message = droppedDataLength + " bytes not sent anymore."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
-
-							OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
-
+							DropSendQueueAndNotify(); // Drop queueud data in case port has been closed.
 							break; // while()
 						}
 
@@ -947,6 +932,48 @@ namespace MKY.IO.Serial.SerialPort
 						"XOff state, retaining data..."
 					)
 				);
+			}
+		}
+
+		private void DropSendQueueAndNotify()
+		{
+			int droppedCount;
+			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+			{
+				droppedCount = this.sendQueue.Count;
+				this.sendQueue.Clear();
+			}
+
+			if (droppedCount > 0)
+			{
+				string message;
+				if (droppedCount <= 1)
+					message = droppedCount + " byte not sent anymore.";  // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+				else                                                     // Reason cannot be stated, could be "disconnected" or "stopped/closed"
+					message = droppedCount + " bytes not sent anymore."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+
+				OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
+			}
+		}
+
+		private void DropReceiveQueueAndNotify()
+		{
+			int droppedCount;
+			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+			{
+				droppedCount = this.receiveQueue.Count;
+				this.receiveQueue.Clear();
+			}
+
+			if (droppedCount > 0)
+			{
+				string message;
+				if (droppedCount <= 1)
+					message = droppedCount + " received byte dropped.";  // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+				else                                                     // Reason cannot be stated, could be "disconnected" or "stopped/closed"
+					message = droppedCount + " received bytes dropped."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+
+				OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
 			}
 		}
 
