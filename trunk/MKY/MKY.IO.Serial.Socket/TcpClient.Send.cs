@@ -76,6 +76,15 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		public virtual bool Send(byte[] data)
 		{
+			// Attention:
+			// Same code exists in [SerialPort|TcpClient|UdpSocket|SerialHidDevice].Send().
+			// Changes here will have to be applied there too.
+			//
+			// Notes:
+			// Implemented seperately rather than...
+			// ...a 'SendBase' for more obviousness and compactness.
+			// ...in YAT's 'RawTerminal' to make this class usable without YAT.
+
 		////AssertUndisposed() is called by 'IsTransmissive' below.
 
 			if (IsTransmissive)
@@ -194,8 +203,29 @@ namespace MKY.IO.Serial.Socket
 					}
 
 					// Inner loop, runs as long as there are items in the queue:
-					while (IsUndisposed && this.sendThreadRunFlag && IsTransmissive && (this.sendQueue.Count > 0)) // Check disposal state first!
-					{                                                               // No lock required, just checking for empty.
+					while (IsUndisposed && this.sendThreadRunFlag && (this.sendQueue.Count > 0)) // Check disposal state first!
+					{                                             // No lock required, just checking for empty.
+						// Drop queueud data in case socket has been disconnected:
+						if (!IsTransmissive)
+						{
+							int droppedDataLength;
+							lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+							{
+								droppedDataLength = this.sendQueue.Count;
+								this.sendQueue.Clear();
+							}
+
+							string message;
+							if (droppedDataLength <= 1)
+								message = droppedDataLength + " byte not sent anymore."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+							else
+								message = droppedDataLength + " bytes not sent anymore."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+
+							OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
+
+							break; // while()
+						}
+
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.
