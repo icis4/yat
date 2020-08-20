@@ -262,9 +262,9 @@ namespace YAT.Model.Test.Connection
 					Thread.Sleep(333); // Unlimited, i.e. up to several thousand lines.
 					terminalA.Stop();
 					Utilities.WaitForStop(terminalA);
-					Thread.Sleep(333); // Make sure that B can deal with disconnected A. Note that WaitForDisconnection() would not work for connection-less UDP sockets.
 
 					// Stop repeating:
+					Thread.Sleep(333); // Make sure that B can deal with disconnected A. Note that WaitForDisconnection() would not work for connection-less UDP sockets.
 					terminalB.Stop();
 					Utilities.WaitForStop(terminalB);
 
@@ -285,9 +285,9 @@ namespace YAT.Model.Test.Connection
 					Thread.Sleep(333); // Unlimited, i.e. up to several thousand lines.
 					terminalB.Stop();
 					Utilities.WaitForStop(terminalB);
-					Thread.Sleep(333); // Make sure that A can deal with disconnected B. Note that WaitForDisconnection() would not work for connection-less UDP sockets.
 
 					// Stop repeating:
+					Thread.Sleep(333); // Make sure that A can deal with disconnected B. Note that WaitForDisconnection() would not work for connection-less UDP sockets.
 					terminalA.Stop();
 					Utilities.WaitForStop(terminalA);
 

@@ -296,7 +296,7 @@ namespace YAT.Application.Test
 				"This test will open YAT and show the [New Terminal] dialog." + Environment.NewLine +
 				"(YAT will be called [NUnit] due to the NUnit environment)." + Environment.NewLine +
 				Environment.NewLine +
-				"Simply [Cancel] and then exit YAT.",
+				"In the [New Terminal], simply [Cancel] and then exit YAT.",
 				"Instruction",
 				MessageBoxButtons.OKCancel,
 				MessageBoxIcon.Information
@@ -426,7 +426,7 @@ namespace YAT.Application.Test
 		{
 			var dr = MessageBoxEx.Show
 			(
-				"This test will open YAT with a binary serial COM port terminal." + Environment.NewLine +
+				"This test will open YAT with a serial COM port terminal." + Environment.NewLine +
 				"(YAT will be called [NUnit] due to the NUnit environment)." + Environment.NewLine +
 				Environment.NewLine +
 				"Observe what happens and then exit YAT.",
@@ -444,7 +444,7 @@ namespace YAT.Application.Test
 
 			dr = MessageBoxEx.Show
 			(
-				"Did YAT open a binary serial COM port terminal?",
+				"Did YAT open a serial COM port terminal?",
 				"Confirmation",
 				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Information,
