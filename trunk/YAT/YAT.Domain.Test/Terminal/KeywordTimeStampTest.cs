@@ -102,78 +102,88 @@ namespace YAT.Domain.Test.Terminal
 				settingsTx.Display.TimeStampUseUtc = useUtc;
 				using (var terminalTx = TerminalFactory.CreateTerminal(settingsTx))
 				{
-					Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started!");
-
-					var settingsRx = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
-					settingsRx.Display.TimeStampFormat = format;
-					settingsRx.Display.TimeStampUseUtc = useUtc;
-					using (var terminalRx = TerminalFactory.CreateTerminal(settingsRx))
+					try
 					{
-						Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started!");
-						Utilities.WaitForConnection(terminalTx, terminalRx);
+						Assert.That(terminalTx.Start(), Is.True, "Terminal A could not be started!");
 
-						string keyword = @"\!(TimeStamp())";
+						var settingsRx = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
+						settingsRx.Display.TimeStampFormat = format;
+						settingsRx.Display.TimeStampUseUtc = useUtc;
+						using (var terminalRx = TerminalFactory.CreateTerminal(settingsRx))
+						{
+							try
+							{
+								Assert.That(terminalRx.Start(), Is.True, "Terminal B could not be started!");
+								Utilities.WaitForConnection(terminalTx, terminalRx);
 
-						DateTime now = DateTime.Now;
-						string timeStamp;
-						if (useUtc)        // UTC
-							timeStamp = now.ToUniversalTime().ToString(format, DateTimeFormatInfo.CurrentInfo);
-						else
-							timeStamp = now.ToString(format, DateTimeFormatInfo.CurrentInfo);
+								string keyword = @"\!(TimeStamp())";
 
-						string textToSend;
-						string textExpected;
-						int textByteCount;
-						const int EolByteCount = 2; // Fixed to default of <CR><LF>.
-						int expectedTotalByteCount = 0;
-						int expectedTotalLineCount = 0;
+								DateTime now = DateTime.Now;
+								string timeStamp;
+								if (useUtc)        // UTC
+									timeStamp = now.ToUniversalTime().ToString(format, DateTimeFormatInfo.CurrentInfo);
+								else
+									timeStamp = now.ToString(format, DateTimeFormatInfo.CurrentInfo);
 
-						// TimeStamp only:
-						textToSend   = keyword;
-						textExpected = timeStamp;
-						Assert.That(parser.TryParse(textExpected, out parseResult));
-						terminalTx.SendTextLine(textToSend);
-						textByteCount = parseResult.Length;
-						expectedTotalByteCount += (textByteCount + EolByteCount);
-						expectedTotalLineCount++;
-						Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+								string textToSend;
+								string textExpected;
+								int textByteCount;
+								const int EolByteCount = 2; // Fixed to default of <CR><LF>.
+								int expectedTotalByteCount = 0;
+								int expectedTotalLineCount = 0;
 
-						// Prefix + TimeStamp:
-						textToSend   = "AT+DATE=" + keyword;
-						textExpected = "AT+DATE=" + timeStamp;
-						Assert.That(parser.TryParse(textExpected, out parseResult));
-						terminalTx.SendTextLine(textToSend);
-						textByteCount = parseResult.Length;
-						expectedTotalByteCount += (textByteCount + EolByteCount);
-						expectedTotalLineCount++;
-						Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+								// TimeStamp only:
+								textToSend   = keyword;
+								textExpected = timeStamp;
+								Assert.That(parser.TryParse(textExpected, out parseResult));
+								terminalTx.SendTextLine(textToSend);
+								textByteCount = parseResult.Length;
+								expectedTotalByteCount += (textByteCount + EolByteCount);
+								expectedTotalLineCount++;
+								Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
-						// TimeStamp + Postfix:
-						textToSend   = keyword   + "=NOW";
-						textExpected = timeStamp + "=NOW";
-						Assert.That(parser.TryParse(textExpected, out parseResult));
-						terminalTx.SendTextLine(textToSend);
-						textByteCount = parseResult.Length;
-						expectedTotalByteCount += (textByteCount + EolByteCount);
-						expectedTotalLineCount++;
-						Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+								// Prefix + TimeStamp:
+								textToSend   = "AT+DATE=" + keyword;
+								textExpected = "AT+DATE=" + timeStamp;
+								Assert.That(parser.TryParse(textExpected, out parseResult));
+								terminalTx.SendTextLine(textToSend);
+								textByteCount = parseResult.Length;
+								expectedTotalByteCount += (textByteCount + EolByteCount);
+								expectedTotalLineCount++;
+								Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
-						// Prefix + TimeStamp + Postfix:
-						textToSend   = "AT+DATE=" +  keyword  + "=NOW";
-						textExpected = "AT+DATE=" + timeStamp + "=NOW";
-						Assert.That(parser.TryParse(textExpected, out parseResult));
-						terminalTx.SendTextLine(textToSend);
-						textByteCount = parseResult.Length;
-						expectedTotalByteCount += (textByteCount + EolByteCount);
-						expectedTotalLineCount++;
-						Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+								// TimeStamp + Postfix:
+								textToSend   = keyword   + "=NOW";
+								textExpected = timeStamp + "=NOW";
+								Assert.That(parser.TryParse(textExpected, out parseResult));
+								terminalTx.SendTextLine(textToSend);
+								textByteCount = parseResult.Length;
+								expectedTotalByteCount += (textByteCount + EolByteCount);
+								expectedTotalLineCount++;
+								Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
-						terminalRx.Stop();
-						Utilities.WaitForStop(terminalRx);
-					} // using (terminalB)
-
-					terminalTx.Stop();
-					Utilities.WaitForStop(terminalTx);
+								// Prefix + TimeStamp + Postfix:
+								textToSend   = "AT+DATE=" +  keyword  + "=NOW";
+								textExpected = "AT+DATE=" + timeStamp + "=NOW";
+								Assert.That(parser.TryParse(textExpected, out parseResult));
+								terminalTx.SendTextLine(textToSend);
+								textByteCount = parseResult.Length;
+								expectedTotalByteCount += (textByteCount + EolByteCount);
+								expectedTotalLineCount++;
+								Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+							}
+							finally // Properly stop even in case of an exception, e.g. a failed assertion.
+							{
+								terminalRx.Stop();
+								Utilities.WaitForStop(terminalRx);
+							}
+						} // using (terminalB)
+					}
+					finally // Properly stop even in case of an exception, e.g. a failed assertion.
+					{
+						terminalTx.Stop();
+						Utilities.WaitForStop(terminalTx);
+					}
 				} // using (terminalA)
 			} // using (parser)
 		}

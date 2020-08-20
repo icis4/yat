@@ -138,8 +138,6 @@ namespace YAT.Domain.Test.TextTerminal
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
-			const int WaitForDisposal = 100;
-
 			using (var parser = new Domain.Parser.Parser(encoding, Domain.Parser.Mode.RadixAndAsciiEscapes))
 			{
 				byte[] parseResult;
@@ -156,108 +154,116 @@ namespace YAT.Domain.Test.TextTerminal
 
 				using (var terminalA = TerminalFactory.CreateTerminal(settingsA))
 				{
-					Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
-
-					var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
-					settingsB.TextTerminal.Encoding = (EncodingEx)encoding;
-					settingsB.TextTerminal.TxEol = eolBA;
-					settingsB.TextTerminal.RxEol = eolAB;
-					using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
+					try
 					{
-						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
-						Utilities.WaitForConnection(terminalA, terminalB);
+						Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
 
-						var eolIsSymmetric = (eolAB == eolBA);
-						string text;
-						int textByteCount;
-						int expectedTotalByteCountA = 0;
-						int expectedTotalByteCountB = 0;
-						int expectedTotalLineCountA = 0;
-						int expectedTotalLineCountB = 0;
+						var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
+						settingsB.TextTerminal.Encoding = (EncodingEx)encoding;
+						settingsB.TextTerminal.TxEol = eolBA;
+						settingsB.TextTerminal.RxEol = eolAB;
+						using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
+						{
+							try
+							{
+								Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
+								Utilities.WaitForConnection(terminalA, terminalB);
 
-						text = ""; // A#1
-						Assert.That(parser.TryParse(text, out parseResult));
-						terminalA.SendTextLine(text);
-						textByteCount = parseResult.Length;
-						expectedTotalByteCountA += (textByteCount + eolByteCountAB);
-						expectedTotalLineCountA++;
-						EolAwareWaitForTransmissionAndVerifyCounts(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
+								var eolIsSymmetric = (eolAB == eolBA);
+								string text;
+								int textByteCount;
+								int expectedTotalByteCountA = 0;
+								int expectedTotalByteCountB = 0;
+								int expectedTotalLineCountA = 0;
+								int expectedTotalLineCountB = 0;
 
-						text = "AA"; // A#2
-						Assert.That(parser.TryParse(text, out parseResult));
-						terminalA.SendTextLine(text);
-						textByteCount = parseResult.Length;
-						expectedTotalByteCountA += (textByteCount + eolByteCountAB);
-						expectedTotalLineCountA++;
-						EolAwareWaitForTransmissionAndVerifyCounts(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
+								text = ""; // A#1
+								Assert.That(parser.TryParse(text, out parseResult));
+								terminalA.SendTextLine(text);
+								textByteCount = parseResult.Length;
+								expectedTotalByteCountA += (textByteCount + eolByteCountAB);
+								expectedTotalLineCountA++;
+								EolAwareWaitForTransmissionAndVerifyCounts(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
-						text = "ABABAB"; // A#3
-						Assert.That(parser.TryParse(text, out parseResult));
-						terminalA.SendTextLine(text);
-						textByteCount = parseResult.Length;
-						expectedTotalByteCountA += (textByteCount + eolByteCountAB);
-						expectedTotalLineCountA++;
-						EolAwareWaitForTransmissionAndVerifyCounts(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
+								text = "AA"; // A#2
+								Assert.That(parser.TryParse(text, out parseResult));
+								terminalA.SendTextLine(text);
+								textByteCount = parseResult.Length;
+								expectedTotalByteCountA += (textByteCount + eolByteCountAB);
+								expectedTotalLineCountA++;
+								EolAwareWaitForTransmissionAndVerifyCounts(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
-						text = "<CR>"; // B#1
-						Assert.That(parser.TryParse(text, out parseResult));
-						terminalB.SendTextLine(text);
-						textByteCount = parseResult.Length;
-						expectedTotalByteCountB += (textByteCount + eolByteCountBA);
-						expectedTotalLineCountB++;
-						EolAwareWaitForTransmissionAndVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
+								text = "ABABAB"; // A#3
+								Assert.That(parser.TryParse(text, out parseResult));
+								terminalA.SendTextLine(text);
+								textByteCount = parseResult.Length;
+								expectedTotalByteCountA += (textByteCount + eolByteCountAB);
+								expectedTotalLineCountA++;
+								EolAwareWaitForTransmissionAndVerifyCounts(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
-						text = "<CR><CR>"; // B#2
-						Assert.That(parser.TryParse(text, out parseResult));
-						terminalB.SendTextLine(text);
-						textByteCount = parseResult.Length;
-						expectedTotalByteCountB += (textByteCount + eolByteCountBA);
-						expectedTotalLineCountB++;
-						EolAwareWaitForTransmissionAndVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
+								text = "<CR>"; // B#1
+								Assert.That(parser.TryParse(text, out parseResult));
+								terminalB.SendTextLine(text);
+								textByteCount = parseResult.Length;
+								expectedTotalByteCountB += (textByteCount + eolByteCountBA);
+								expectedTotalLineCountB++;
+								EolAwareWaitForTransmissionAndVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
-						text = "<CR><CR><ESC>"; // B#3
-						Assert.That(parser.TryParse(text, out parseResult));
-						terminalB.SendTextLine(text);
-						textByteCount = parseResult.Length;
-						expectedTotalByteCountB += (textByteCount + eolByteCountBA);
-						expectedTotalLineCountB++;
-						EolAwareWaitForTransmissionAndVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
+								text = "<CR><CR>"; // B#2
+								Assert.That(parser.TryParse(text, out parseResult));
+								terminalB.SendTextLine(text);
+								textByteCount = parseResult.Length;
+								expectedTotalByteCountB += (textByteCount + eolByteCountBA);
+								expectedTotalLineCountB++;
+								EolAwareWaitForTransmissionAndVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
-						text = "<ESC>"; // A#4
-						Assert.That(parser.TryParse(text, out parseResult));
-						terminalA.SendTextLine(text);
-						textByteCount = parseResult.Length;
-						expectedTotalByteCountA += (textByteCount + eolByteCountAB);
-						expectedTotalLineCountA++;
-						EolAwareWaitForTransmissionAndVerifyCounts(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
+								text = "<CR><CR><ESC>"; // B#3
+								Assert.That(parser.TryParse(text, out parseResult));
+								terminalB.SendTextLine(text);
+								textByteCount = parseResult.Length;
+								expectedTotalByteCountB += (textByteCount + eolByteCountBA);
+								expectedTotalLineCountB++;
+								EolAwareWaitForTransmissionAndVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
-						text = "BBBB"; // B#4
-						Assert.That(parser.TryParse(text, out parseResult));
-						terminalB.SendTextLine(text);
-						textByteCount = parseResult.Length;
-						expectedTotalByteCountB += (textByteCount + eolByteCountBA);
-						expectedTotalLineCountB++;
-						EolAwareWaitForTransmissionAndVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
+								text = "<ESC>"; // A#4
+								Assert.That(parser.TryParse(text, out parseResult));
+								terminalA.SendTextLine(text);
+								textByteCount = parseResult.Length;
+								expectedTotalByteCountA += (textByteCount + eolByteCountAB);
+								expectedTotalLineCountA++;
+								EolAwareWaitForTransmissionAndVerifyCounts(terminalA, terminalB, eolIsSymmetric, expectedTotalByteCountA, expectedTotalLineCountA);
 
-						// Wait to ensure that no operation is ongoing anymore and verify again:
-						Utilities.WaitForReverification();
-						EolAwareVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
+								text = "BBBB"; // B#4
+								Assert.That(parser.TryParse(text, out parseResult));
+								terminalB.SendTextLine(text);
+								textByteCount = parseResult.Length;
+								expectedTotalByteCountB += (textByteCount + eolByteCountBA);
+								expectedTotalLineCountB++;
+								EolAwareWaitForTransmissionAndVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
-						// Refresh and verify again:
-						terminalA.RefreshRepositories();
-						terminalB.RefreshRepositories();
-						EolAwareVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
+								// Wait to ensure that no operation is ongoing anymore and verify again:
+								Utilities.WaitForReverification();
+								EolAwareVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
-						terminalB.Stop();
-						Utilities.WaitForStop(terminalB);
-					} // using (terminalB)
-
-					terminalA.Stop();
-					Utilities.WaitForStop(terminalA);
+								// Refresh and verify again:
+								terminalA.RefreshRepositories();
+								terminalB.RefreshRepositories();
+								EolAwareVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
+							}
+							finally // Properly stop even in case of an exception, e.g. a failed assertion.
+							{
+								terminalB.Stop();
+								Utilities.WaitForStop(terminalB);
+							}
+						} // using (terminalB)
+					}
+					finally // Properly stop even in case of an exception, e.g. a failed assertion.
+					{
+						terminalA.Stop();
+						Utilities.WaitForStop(terminalA);
+					}
 				} // using (terminalA)
 			} // using (parser)
-
-			Thread.Sleep(WaitForDisposal); // \remind: For whatever reason, subsequent tests tend to fail without this.
 		}
 
 		/// <remarks>
@@ -297,7 +303,6 @@ namespace YAT.Domain.Test.TextTerminal
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 
 			const int WaitForOperation = 100;
-			const int WaitForDisposal = 100;
 
 			var settingsA = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 			settingsA.TextTerminal.TxEol = "";
@@ -309,63 +314,71 @@ namespace YAT.Domain.Test.TextTerminal
 
 			using (var terminalA = TerminalFactory.CreateTerminal(settingsA))
 			{
-				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
-
-				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
-				settingsB.TextTerminal.TxEol = "";
-				settingsB.TextTerminal.RxEol = "";
-
-				var gcolB = settingsB.TextTerminal.GlueCharsOfLine;
-				gcolB.Enabled = false; // This test relies on direction line break.
-				settingsB.TextTerminal.GlueCharsOfLine = gcolB;
-
-				using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
+				try
 				{
-					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
-					Utilities.WaitForConnection(terminalA, terminalB);
+					Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
 
-					terminalA.SendTextLine("A"); // Line #1 A => B, must not result in line break.
-					Thread.Sleep(WaitForOperation);
-					VerifyLineCount(terminalA, terminalB, 1);
+					var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
+					settingsB.TextTerminal.TxEol = "";
+					settingsB.TextTerminal.RxEol = "";
 
-					terminalB.SendTextLine("BB"); // Line #2 B => A, due to direction line break.
-					Thread.Sleep(WaitForOperation);
-					VerifyLineCount(terminalB, terminalA, 2);
+					var gcolB = settingsB.TextTerminal.GlueCharsOfLine;
+					gcolB.Enabled = false; // This test relies on direction line break.
+					settingsB.TextTerminal.GlueCharsOfLine = gcolB;
 
-					terminalB.SendTextLine("BB"); // Still line #2 B => A, must not result in additional line break.
-					Thread.Sleep(WaitForOperation);
-					VerifyLineCount(terminalB, terminalA, 2);
+					using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
+					{
+						try
+						{
+							Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
+							Utilities.WaitForConnection(terminalA, terminalB);
 
-					terminalB.SendTextLine("BB"); // Still line #2 B => A, must not result in additional line break.
-					Thread.Sleep(WaitForOperation);
-					VerifyLineCount(terminalB, terminalA, 2);
+							terminalA.SendTextLine("A"); // Line #1 A => B, must not result in line break.
+							Thread.Sleep(WaitForOperation);
+							VerifyLineCount(terminalA, terminalB, 1);
 
-					terminalA.SendTextLine("AAA"); // Line #3 A => B, due to direction line break.
-					Thread.Sleep(WaitForOperation);
-					VerifyLineCount(terminalA, terminalB, 3);
+							terminalB.SendTextLine("BB"); // Line #2 B => A, due to direction line break.
+							Thread.Sleep(WaitForOperation);
+							VerifyLineCount(terminalB, terminalA, 2);
 
-					terminalA.SendTextLine("AAA"); // Still line #3 A => B, must not result in additional line break.
-					Thread.Sleep(WaitForOperation);
-					VerifyLineCount(terminalA, terminalB, 3);
+							terminalB.SendTextLine("BB"); // Still line #2 B => A, must not result in additional line break.
+							Thread.Sleep(WaitForOperation);
+							VerifyLineCount(terminalB, terminalA, 2);
 
-					// Wait to ensure that no operation is ongoing anymore and verify again:
-					Utilities.WaitForReverification();
-					VerifyLineCount(terminalA, terminalB, 3);
+							terminalB.SendTextLine("BB"); // Still line #2 B => A, must not result in additional line break.
+							Thread.Sleep(WaitForOperation);
+							VerifyLineCount(terminalB, terminalA, 2);
 
-					// Refresh and verify again:
-					terminalA.RefreshRepositories();
-					terminalB.RefreshRepositories();
-					VerifyLineCount(terminalA, terminalB, 3);
+							terminalA.SendTextLine("AAA"); // Line #3 A => B, due to direction line break.
+							Thread.Sleep(WaitForOperation);
+							VerifyLineCount(terminalA, terminalB, 3);
 
-					terminalB.Stop();
-					Utilities.WaitForStop(terminalB);
+							terminalA.SendTextLine("AAA"); // Still line #3 A => B, must not result in additional line break.
+							Thread.Sleep(WaitForOperation);
+							VerifyLineCount(terminalA, terminalB, 3);
+
+							// Wait to ensure that no operation is ongoing anymore and verify again:
+							Utilities.WaitForReverification();
+							VerifyLineCount(terminalA, terminalB, 3);
+
+							// Refresh and verify again:
+							terminalA.RefreshRepositories();
+							terminalB.RefreshRepositories();
+							VerifyLineCount(terminalA, terminalB, 3);
+						}
+						finally // Properly stop even in case of an exception, e.g. a failed assertion.
+						{
+							terminalB.Stop();
+							Utilities.WaitForStop(terminalB);
+						}
+					} // using (terminalB)
 				}
-
-				terminalA.Stop();
-				Utilities.WaitForStop(terminalA);
-			}
-
-			Thread.Sleep(WaitForDisposal); // \remind: For whatever reason, subsequent tests tend to fail without this.
+				finally // Properly stop even in case of an exception, e.g. a failed assertion.
+				{
+					terminalA.Stop();
+					Utilities.WaitForStop(terminalA);
+				}
+			} // using (terminalA)
 		}
 
 		/// <remarks>

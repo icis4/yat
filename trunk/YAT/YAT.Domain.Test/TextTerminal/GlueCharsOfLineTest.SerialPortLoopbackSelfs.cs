@@ -120,32 +120,37 @@ namespace YAT.Domain.Test.TextTerminal
 		{
 			using (var terminal = TerminalFactory.CreateTerminal(settings)) // Glueing is enabled by default.
 			{
-				Assert.That(terminal.Start(), Is.True, "Terminal could not be started");
-				Utilities.WaitForConnection(terminal, terminal);
+				try
+				{
+					Assert.That(terminal.Start(), Is.True, "Terminal could not be started");
+					Utilities.WaitForConnection(terminal, terminal);
 
-				// Send:
-				var beganAt = DateTime.Now;
-				var fi = Files.TextSendFile.Item[StressFile.Normal]; // 300 lines will take about 9..12 seconds.
-				var fileTimeout = 15000;
-				var fileByteCount = fi.ByteCount;
-				var fileLineCount = fi.LineCount;
-				var fileLineByteCount = (fileByteCount / fileLineCount); // Fixed to default of <CR><LF>.
-				terminal.SendFile(fi.Path);
-				Utilities.WaitForSendingAndAssertCounts(terminal, fileByteCount, fileLineCount, fileTimeout);
-				Utilities.WaitForReceivingAndAssertCounts(terminal, fileByteCount, fileLineCount);
-				var endedAt = DateTime.Now;
-				var duration = (endedAt - beganAt);
-				Assert.That(duration.TotalMilliseconds, Is.LessThan(fileTimeout));
+					// Send:
+					var beganAt = DateTime.Now;
+					var fi = Files.TextSendFile.Item[StressFile.Normal]; // 300 lines will take about 9..12 seconds.
+					var fileTimeout = 15000;
+					var fileByteCount = fi.ByteCount;
+					var fileLineCount = fi.LineCount;
+					var fileLineByteCount = (fileByteCount / fileLineCount); // Fixed to default of <CR><LF>.
+					terminal.SendFile(fi.Path);
+					Utilities.WaitForSendingAndAssertCounts(terminal, fileByteCount, fileLineCount, fileTimeout);
+					Utilities.WaitForReceivingAndAssertCounts(terminal, fileByteCount, fileLineCount);
+					var endedAt = DateTime.Now;
+					var duration = (endedAt - beganAt);
+					Assert.That(duration.TotalMilliseconds, Is.LessThan(fileTimeout));
 
-				// Verify:
-				VerifyDefaultOrInfiniteTimeout(terminal, fileLineCount, fileLineByteCount);
+					// Verify:
+					VerifyDefaultOrInfiniteTimeout(terminal, fileLineCount, fileLineByteCount);
 
-				// Refresh and verify again:
-				terminal.RefreshRepositories();
-				VerifyDefaultOrInfiniteTimeout(terminal, fileLineCount, fileLineByteCount);
-
-				terminal.Stop();
-				Utilities.WaitForStop(terminal);
+					// Refresh and verify again:
+					terminal.RefreshRepositories();
+					VerifyDefaultOrInfiniteTimeout(terminal, fileLineCount, fileLineByteCount);
+				}
+				finally // Properly stop even in case of an exception, e.g. a failed assertion.
+				{
+					terminal.Stop();
+					Utilities.WaitForStop(terminal);
+				}
 			} // using (terminal)
 		}
 
@@ -172,32 +177,37 @@ namespace YAT.Domain.Test.TextTerminal
 		{
 			using (var terminal = TerminalFactory.CreateTerminal(settings)) // Glueing is enabled by default.
 			{
-				Assert.That(terminal.Start(), Is.True, "Terminal could not be started");
-				Utilities.WaitForConnection(terminal, terminal);
+				try
+				{
+					Assert.That(terminal.Start(), Is.True, "Terminal could not be started");
+					Utilities.WaitForConnection(terminal, terminal);
 
-				// Send:
-				var beganAt = DateTime.Now;
-				var fi = Files.TextSendFile.Item[StressFile.Normal]; // 300 lines will take about 9..12 seconds.
-				var fileTimeout = 15000;
-				var fileByteCount = fi.ByteCount;
-				var fileLineCount = fi.LineCount;
-				var fileLineByteCount = (fileByteCount / fileLineCount); // Fixed to default of <CR><LF>.
-				terminal.SendFile(fi.Path);                         // ByteCount only, lines are expected to be broken more.
-				Utilities.WaitForSendingAndAssertByteCount(terminal, fileByteCount, fileTimeout);
-				Utilities.WaitForReceivingAndAssertByteCount(terminal, fileByteCount);
-				var endedAt = DateTime.Now;
-				var duration = (endedAt - beganAt);
-				Assert.That(duration.TotalMilliseconds, Is.LessThan(fileTimeout));
+					// Send:
+					var beganAt = DateTime.Now;
+					var fi = Files.TextSendFile.Item[StressFile.Normal]; // 300 lines will take about 9..12 seconds.
+					var fileTimeout = 15000;
+					var fileByteCount = fi.ByteCount;
+					var fileLineCount = fi.LineCount;
+					var fileLineByteCount = (fileByteCount / fileLineCount); // Fixed to default of <CR><LF>.
+					terminal.SendFile(fi.Path);                         // ByteCount only, lines are expected to be broken more.
+					Utilities.WaitForSendingAndAssertByteCount(terminal, fileByteCount, fileTimeout);
+					Utilities.WaitForReceivingAndAssertByteCount(terminal, fileByteCount);
+					var endedAt = DateTime.Now;
+					var duration = (endedAt - beganAt);
+					Assert.That(duration.TotalMilliseconds, Is.LessThan(fileTimeout));
 
-				// Verify:
-				VerifyMinimumTimeoutOrTestDisabled(terminal, fileLineCount, fileLineByteCount);
+					// Verify:
+					VerifyMinimumTimeoutOrTestDisabled(terminal, fileLineCount, fileLineByteCount);
 
-				// Refresh and verify again:
-				terminal.RefreshRepositories();
-				VerifyMinimumTimeoutOrTestDisabled(terminal, fileLineCount, fileLineByteCount);
-
-				terminal.Stop();
-				Utilities.WaitForStop(terminal);
+					// Refresh and verify again:
+					terminal.RefreshRepositories();
+					VerifyMinimumTimeoutOrTestDisabled(terminal, fileLineCount, fileLineByteCount);
+				}
+				finally // Properly stop even in case of an exception, e.g. a failed assertion.
+				{
+					terminal.Stop();
+					Utilities.WaitForStop(terminal);
+				}
 			} // using (terminal)
 		}
 

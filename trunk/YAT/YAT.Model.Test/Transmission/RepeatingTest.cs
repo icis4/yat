@@ -234,60 +234,70 @@ namespace YAT.Model.Test.Transmission
 
 			using (var terminalA = new Terminal(Settings.Create(settingsA)))
 			{
-				terminalA.MessageInputRequest += Utilities.TerminalMessageInputRequest;
-				if (!terminalA.Launch())
+				try
 				{
-					if (Utilities.TerminalMessageInputRequestResultsInExclude) {
-						Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
-					//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
-					}
-					else {
-						Assert.Fail(@"Failed to start """ + terminalA.Caption + @"""");
-					}
-				}
-				Utilities.WaitForStart(terminalA);
-
-				if (settingsB != null) // Loopback pair:
-				{
-					settingsB.Send.DefaultLineRepeat = repeatCount; // Set settings to the desired repeat count.
-
-					if (settingsB.IO.IOTypeIsUdpSocket)
+					terminalA.MessageInputRequest += Utilities.TerminalMessageInputRequest;
+					if (!terminalA.Launch())
 					{
-						Domain.Test.Settings.RevertSettingsIfUdpSocket(settingsB); // Revert to default behavior expected by this test case.
-
-						if (doTwoWay)
-							settingsB.Send.DefaultLineRepeat--; // Initial ping-pong needed.
-					}
-
-					using (var terminalB = new Terminal(Settings.Create(settingsB)))
-					{
-						terminalB.MessageInputRequest += Utilities.TerminalMessageInputRequest;
-						if (!terminalB.Launch())
-						{
-							if (Utilities.TerminalMessageInputRequestResultsInExclude) {
-								Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
-							//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
-							}
-							else {
-								Assert.Fail(@"Failed to start """ + terminalB.Caption + @"""");
-							}
+						if (Utilities.TerminalMessageInputRequestResultsInExclude) {
+							Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
+						//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 						}
-						Utilities.WaitForConnection(terminalA, terminalB);
+						else {
+							Assert.Fail(@"Failed to start """ + terminalA.Caption + @"""");
+						}
+					}
+					Utilities.WaitForStart(terminalA);
 
-						TransmitAndVerify(terminalA, terminalB, repeatCount, doTwoWay, executeBreak);
+					if (settingsB != null) // Loopback pair:
+					{
+						settingsB.Send.DefaultLineRepeat = repeatCount; // Set settings to the desired repeat count.
 
-						terminalB.Stop();
-						Utilities.WaitForStop(terminalB);
+						if (settingsB.IO.IOTypeIsUdpSocket)
+						{
+							Domain.Test.Settings.RevertSettingsIfUdpSocket(settingsB); // Revert to default behavior expected by this test case.
+
+							if (doTwoWay)
+								settingsB.Send.DefaultLineRepeat--; // Initial ping-pong needed.
+						}
+
+						using (var terminalB = new Terminal(Settings.Create(settingsB)))
+						{
+							try
+							{
+								terminalB.MessageInputRequest += Utilities.TerminalMessageInputRequest;
+								if (!terminalB.Launch())
+								{
+									if (Utilities.TerminalMessageInputRequestResultsInExclude) {
+										Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
+									//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+									}
+									else {
+										Assert.Fail(@"Failed to start """ + terminalB.Caption + @"""");
+									}
+								}
+								Utilities.WaitForConnection(terminalA, terminalB);
+
+								TransmitAndVerify(terminalA, terminalB, repeatCount, doTwoWay, executeBreak);
+							}
+							finally // Properly stop even in case of an exception, e.g. a failed assertion.
+							{
+								terminalB.Stop();
+								Utilities.WaitForStop(terminalB);
+							}
+						} // using (terminalB)
+					}
+					else // Loopback self:
+					{
+						TransmitAndVerify(terminalA, terminalA, repeatCount, doTwoWay, executeBreak);
 					}
 				}
-				else // Loopback self:
+				finally // Properly stop even in case of an exception, e.g. a failed assertion.
 				{
-					TransmitAndVerify(terminalA, terminalA, repeatCount, doTwoWay, executeBreak);
+					terminalA.Stop();
+					Utilities.WaitForStop(terminalA);
 				}
-
-				terminalA.Stop();
-				Utilities.WaitForStop(terminalA);
-			}
+			} // using (terminalA)
 		}
 
 		private static void TransmitAndVerify(Terminal terminalA, Terminal terminalB, int repeatCount, bool doTwoWay, bool executeBreak)

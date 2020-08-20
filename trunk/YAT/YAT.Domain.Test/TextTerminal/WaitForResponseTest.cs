@@ -63,143 +63,153 @@ namespace YAT.Domain.Test.TextTerminal
 
 			using (var terminalA = TerminalFactory.CreateTerminal(settingsA))
 			{
-				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
-
-				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
-				using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
+				try
 				{
-					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
-					Utilities.WaitForConnection(terminalA, terminalB);
+					Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
 
-					const string Text = "ABC";
-					const int TextByteCount = 3; // Fixed to "ABC".
-					const int EolByteCount = 2; // Fixed to default of <CR><LF>.
-					const int LineByteCount = (TextByteCount + EolByteCount);
-					int expectedTotalByteCountAB = 0;
-					int expectedTotalByteCountBA = 0;
-					int expectedTotalLineCountAB = 0;
-					int expectedTotalLineCountBA = 0;
+					var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
+					using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
+					{
+						try
+						{
+							Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
+							Utilities.WaitForConnection(terminalA, terminalB);
 
-					// Initial ping-pong:
-					//           A => B
-					//           A <= B
-					terminalA.SendTextLine(Text);
-					terminalB.SendTextLine(Text);
-					expectedTotalByteCountAB += LineByteCount; // 5 bytes
-					expectedTotalByteCountBA += LineByteCount; // 5 bytes
-					expectedTotalLineCountAB++;                // 1 lines
-					expectedTotalLineCountBA++;                // 1 lines  // Yet symmetrical, a single verification is yet sufficient.
-					Utilities.WaitForTransmissionAndAssertCounts(terminalA, terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							const string Text = "ABC";
+							const int TextByteCount = 3; // Fixed to "ABC".
+							const int EolByteCount = 2; // Fixed to default of <CR><LF>.
+							const int LineByteCount = (TextByteCount + EolByteCount);
+							int expectedTotalByteCountAB = 0;
+							int expectedTotalByteCountBA = 0;
+							int expectedTotalLineCountAB = 0;
+							int expectedTotalLineCountBA = 0;
 
-					// Subsequent ping-ping...
-					//              A => B
-					//              A => B
-					terminalA.SendTextLine(Text);
-					expectedTotalByteCountAB += LineByteCount; // 10 bytes
-					expectedTotalLineCountAB++;                // 2 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							// Initial ping-pong:
+							//           A => B
+							//           A <= B
+							terminalA.SendTextLine(Text);
+							terminalB.SendTextLine(Text);
+							expectedTotalByteCountAB += LineByteCount; // 5 bytes
+							expectedTotalByteCountBA += LineByteCount; // 5 bytes
+							expectedTotalLineCountAB++;                // 1 lines
+							expectedTotalLineCountBA++;                // 1 lines  // Yet symmetrical, a single verification is yet sufficient.
+							Utilities.WaitForTransmissionAndAssertCounts(terminalA, terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					terminalA.SendTextLine(Text); // Line will be retained until timeout.
-					Thread.Sleep(WaitTimeUntilTimeout); // Pending line of A will time out.
-					expectedTotalByteCountAB += LineByteCount; // 15 bytes
-					expectedTotalLineCountAB++;                // 3 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Assert.That(terminalA.IsSendingForSomeTime, Is.False); // No need to WaitForIsNoLongerSending() as already waited for completion above.
+							// Subsequent ping-ping...
+							//              A => B
+							//              A => B
+							terminalA.SendTextLine(Text);
+							expectedTotalByteCountAB += LineByteCount; // 10 bytes
+							expectedTotalLineCountAB++;                // 2 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					// Subsequent pong-pong...
-					//              A <= B
-					//              A <= B
-					terminalB.SendTextLine(Text);
-					terminalB.SendTextLine(Text); // No restrictions in this direction.
-					expectedTotalByteCountBA += LineByteCount;
-					expectedTotalByteCountBA += LineByteCount; // 15 bytes
-					expectedTotalLineCountBA++;
-					expectedTotalLineCountBA++;                // 3 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-					Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+							terminalA.SendTextLine(Text); // Line will be retained until timeout.
+							Thread.Sleep(WaitTimeUntilTimeout); // Pending line of A will time out.
+							expectedTotalByteCountAB += LineByteCount; // 15 bytes
+							expectedTotalLineCountAB++;                // 3 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Assert.That(terminalA.IsSendingForSomeTime, Is.False); // No need to WaitForIsNoLongerSending() as already waited for completion above.
 
-					// ...ping-ping...
-					//              A => B
-					//              A => B
-					terminalA.SendTextLine(Text);
-					expectedTotalByteCountAB += LineByteCount; // 20 bytes
-					expectedTotalLineCountAB++;                // 4 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							// Subsequent pong-pong...
+							//              A <= B
+							//              A <= B
+							terminalB.SendTextLine(Text);
+							terminalB.SendTextLine(Text); // No restrictions in this direction.
+							expectedTotalByteCountBA += LineByteCount;
+							expectedTotalByteCountBA += LineByteCount; // 15 bytes
+							expectedTotalLineCountBA++;
+							expectedTotalLineCountBA++;                // 3 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+							Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-					terminalA.SendTextLine(Text); // Line must be retained until timeout again, even in case of pong-pong.
-					Thread.Sleep(WaitTimeUntilTimeout); // Pending line of A will time out.
-					expectedTotalByteCountAB += LineByteCount; // 25 bytes
-					expectedTotalLineCountAB++;                // 5 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Assert.That(terminalA.IsSendingForSomeTime, Is.False); // No need to WaitForIsNoLongerSending() as already waited for completion above.
+							// ...ping-ping...
+							//              A => B
+							//              A => B
+							terminalA.SendTextLine(Text);
+							expectedTotalByteCountAB += LineByteCount; // 20 bytes
+							expectedTotalLineCountAB++;                // 4 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					// Pong to reset clearance to 1 again:
-					//              A <= B
-					terminalB.SendTextLine(Text);
-					expectedTotalByteCountBA += LineByteCount; // 20 bytes
-					expectedTotalLineCountBA++;                // 4 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-					Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+							terminalA.SendTextLine(Text); // Line must be retained until timeout again, even in case of pong-pong.
+							Thread.Sleep(WaitTimeUntilTimeout); // Pending line of A will time out.
+							expectedTotalByteCountAB += LineByteCount; // 25 bytes
+							expectedTotalLineCountAB++;                // 5 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Assert.That(terminalA.IsSendingForSomeTime, Is.False); // No need to WaitForIsNoLongerSending() as already waited for completion above.
 
-					// Subsequent ping-ping-ping...
-					//              A => B
-					//              A => B
-					//              A => B
-					terminalA.SendTextLine(Text);
-					expectedTotalByteCountAB += LineByteCount; // 30 bytes
-					expectedTotalLineCountAB++;                // 6 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							// Pong to reset clearance to 1 again:
+							//              A <= B
+							terminalB.SendTextLine(Text);
+							expectedTotalByteCountBA += LineByteCount; // 20 bytes
+							expectedTotalLineCountBA++;                // 4 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+							Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-					terminalA.SendTextLine(Text); // Line must be retained until timeout.
-					terminalA.SendTextLine(Text); // Line must be retained until timeout.
+							// Subsequent ping-ping-ping...
+							//              A => B
+							//              A => B
+							//              A => B
+							terminalA.SendTextLine(Text);
+							expectedTotalByteCountAB += LineByteCount; // 30 bytes
+							expectedTotalLineCountAB++;                // 6 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					// ...pong the 1st pending...
-					//              A <= B
-					terminalB.SendTextLine(Text);
-					expectedTotalByteCountBA += LineByteCount;
-					expectedTotalLineCountBA++;
-					Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-					Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-					                                         //// 1st retained line of A will have been sent.
-					expectedTotalByteCountAB += LineByteCount; // 35 bytes
-					expectedTotalLineCountAB++;                // 7 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							terminalA.SendTextLine(Text); // Line must be retained until timeout.
+							terminalA.SendTextLine(Text); // Line must be retained until timeout.
 
-					// ...break the 2nd pending line...
-					terminalA.Break();
-					Utilities.WaitForIsNoLongerSending(terminalA);
+							// ...pong the 1st pending...
+							//              A <= B
+							terminalB.SendTextLine(Text);
+							expectedTotalByteCountBA += LineByteCount;
+							expectedTotalLineCountBA++;
+							Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+							Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+																	 //// 1st retained line of A will have been sent.
+							expectedTotalByteCountAB += LineByteCount; // 35 bytes
+							expectedTotalLineCountAB++;                // 7 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					// ...and then resume break by pinging again:
-					terminalA.SendTextLine(Text);
-					expectedTotalByteCountAB += LineByteCount; // 40 bytes
-					expectedTotalLineCountAB++;                // 8 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Assert.That(terminalA.IsSendingForSomeTime, Is.False); // No need to WaitForIsNoLongerSending() as already waited for completion above.
+							// ...break the 2nd pending line...
+							terminalA.Break();
+							Utilities.WaitForIsNoLongerSending(terminalA);
 
-					// Wait to ensure that no operation is ongoing anymore and verify again:
-					Utilities.WaitForReverification();
-					Utilities.AssertTxCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.AssertRxCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							// ...and then resume break by pinging again:
+							terminalA.SendTextLine(Text);
+							expectedTotalByteCountAB += LineByteCount; // 40 bytes
+							expectedTotalLineCountAB++;                // 8 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Assert.That(terminalA.IsSendingForSomeTime, Is.False); // No need to WaitForIsNoLongerSending() as already waited for completion above.
 
-					// Refresh and verify again:
-					terminalA.RefreshRepositories();
-					terminalB.RefreshRepositories();
-					Utilities.AssertTxCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.AssertRxCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							// Wait to ensure that no operation is ongoing anymore and verify again:
+							Utilities.WaitForReverification();
+							Utilities.AssertTxCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Utilities.AssertRxCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					terminalB.Stop();
-					Utilities.WaitForStop(terminalB);
-				} // using (terminalB)
-
-				terminalA.Stop();
-				Utilities.WaitForStop(terminalA);
+							// Refresh and verify again:
+							terminalA.RefreshRepositories();
+							terminalB.RefreshRepositories();
+							Utilities.AssertTxCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Utilities.AssertRxCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						}
+						finally // Properly stop even in case of an exception, e.g. a failed assertion.
+						{
+							terminalB.Stop();
+							Utilities.WaitForStop(terminalB);
+						}
+					} // using (terminalB)
+				}
+				finally // Properly stop even in case of an exception, e.g. a failed assertion.
+				{
+					terminalA.Stop();
+					Utilities.WaitForStop(terminalA);
+				}
 			} // using (terminalA)
 		}
 
@@ -227,158 +237,168 @@ namespace YAT.Domain.Test.TextTerminal
 
 			using (var terminalA = TerminalFactory.CreateTerminal(settingsA))
 			{
-				Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
-
-				var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
-				using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
+				try
 				{
-					Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
-					Utilities.WaitForConnection(terminalA, terminalB);
+					Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
 
-					const string Text = "ABC";
-					const int TextByteCount = 3; // Fixed to "ABC".
-					const int EolByteCount = 2; // Fixed to default of <CR><LF>.
-					const int LineByteCount = (TextByteCount + EolByteCount);
-					int expectedTotalByteCountAB = 0;
-					int expectedTotalByteCountBA = 0;
-					int expectedTotalLineCountAB = 0;
-					int expectedTotalLineCountBA = 0;
+					var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
+					using (var terminalB = TerminalFactory.CreateTerminal(settingsB))
+					{
+						try
+						{
+							Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
+							Utilities.WaitForConnection(terminalA, terminalB);
 
-					// Initial ping-pong:
-					//           A => B
-					//           A <= B
-					terminalA.SendTextLine(Text);
-					terminalB.SendTextLine(Text);
-					expectedTotalByteCountAB += LineByteCount; // 5 bytes
-					expectedTotalByteCountBA += LineByteCount; // 5 bytes
-					expectedTotalLineCountAB++;                // 1 lines
-					expectedTotalLineCountBA++;                // 1 lines  // Yet symmetrical, a single verification is yet sufficient.
-					Utilities.WaitForTransmissionAndAssertCounts(terminalA, terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							const string Text = "ABC";
+							const int TextByteCount = 3; // Fixed to "ABC".
+							const int EolByteCount = 2; // Fixed to default of <CR><LF>.
+							const int LineByteCount = (TextByteCount + EolByteCount);
+							int expectedTotalByteCountAB = 0;
+							int expectedTotalByteCountBA = 0;
+							int expectedTotalLineCountAB = 0;
+							int expectedTotalLineCountBA = 0;
 
-					// Subsequent ping-ping...
-					//              A => B
-					//              A => B
-					terminalA.SendTextLine(Text);
-					expectedTotalByteCountAB += LineByteCount; // 10 bytes
-					expectedTotalLineCountAB++;                // 2 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							// Initial ping-pong:
+							//           A => B
+							//           A <= B
+							terminalA.SendTextLine(Text);
+							terminalB.SendTextLine(Text);
+							expectedTotalByteCountAB += LineByteCount; // 5 bytes
+							expectedTotalByteCountBA += LineByteCount; // 5 bytes
+							expectedTotalLineCountAB++;                // 1 lines
+							expectedTotalLineCountBA++;                // 1 lines  // Yet symmetrical, a single verification is yet sufficient.
+							Utilities.WaitForTransmissionAndAssertCounts(terminalA, terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					terminalA.SendTextLine(Text); // Line will infinitly be retained.
-					Utilities.WaitForIsSendingForSomeTime(terminalA);
+							// Subsequent ping-ping...
+							//              A => B
+							//              A => B
+							terminalA.SendTextLine(Text);
+							expectedTotalByteCountAB += LineByteCount; // 10 bytes
+							expectedTotalLineCountAB++;                // 2 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					// ...and pong:
-					//              A <= B
-					terminalB.SendTextLine(Text);
-					expectedTotalByteCountBA += LineByteCount; // 10 bytes
-					expectedTotalLineCountBA++;                // 2 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-					Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-					                                         //// Retained line of A will have been sent.
-					expectedTotalByteCountAB += LineByteCount; // 15 bytes
-					expectedTotalLineCountAB++;                // 3 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Assert.That(terminalA.IsSendingForSomeTime, Is.False); // No need to WaitForIsNoLongerSending() as already waited for completion above.
+							terminalA.SendTextLine(Text); // Line will infinitly be retained.
+							Utilities.WaitForIsSendingForSomeTime(terminalA);
 
-					// Subsequent pong-pong...
-					//              A <= B
-					//              A <= B
-					terminalB.SendTextLine(Text);
-					terminalB.SendTextLine(Text); // No restrictions in this direction.
-					expectedTotalByteCountBA += LineByteCount; // 15 bytes
-					expectedTotalByteCountBA += LineByteCount; // 20 bytes
-					expectedTotalLineCountBA++;                // 3 lines
-					expectedTotalLineCountBA++;                // 4 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-					Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+							// ...and pong:
+							//              A <= B
+							terminalB.SendTextLine(Text);
+							expectedTotalByteCountBA += LineByteCount; // 10 bytes
+							expectedTotalLineCountBA++;                // 2 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+							Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+																	 //// Retained line of A will have been sent.
+							expectedTotalByteCountAB += LineByteCount; // 15 bytes
+							expectedTotalLineCountAB++;                // 3 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Assert.That(terminalA.IsSendingForSomeTime, Is.False); // No need to WaitForIsNoLongerSending() as already waited for completion above.
 
-					// ...ping-ping...
-					//              A => B
-					//              A => B
-					terminalA.SendTextLine(Text);
-					expectedTotalByteCountAB += LineByteCount; // 20 bytes
-					expectedTotalLineCountAB++;                // 4 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							// Subsequent pong-pong...
+							//              A <= B
+							//              A <= B
+							terminalB.SendTextLine(Text);
+							terminalB.SendTextLine(Text); // No restrictions in this direction.
+							expectedTotalByteCountBA += LineByteCount; // 15 bytes
+							expectedTotalByteCountBA += LineByteCount; // 20 bytes
+							expectedTotalLineCountBA++;                // 3 lines
+							expectedTotalLineCountBA++;                // 4 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+							Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-					terminalA.SendTextLine(Text); // Line must infinitly be retained again, even in case of pong-pong.
-					Utilities.WaitForIsSendingForSomeTime(terminalA);
+							// ...ping-ping...
+							//              A => B
+							//              A => B
+							terminalA.SendTextLine(Text);
+							expectedTotalByteCountAB += LineByteCount; // 20 bytes
+							expectedTotalLineCountAB++;                // 4 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					// ...and pong:
-					//              A <= B
-					terminalB.SendTextLine(Text);
-					expectedTotalByteCountBA += LineByteCount; // 25 bytes
-					expectedTotalLineCountBA++;                // 5 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-					Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-					                                         //// Retained line of A will have been sent.
-					expectedTotalByteCountAB += LineByteCount; // 25 bytes
-					expectedTotalLineCountAB++;                // 5 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Assert.That(terminalA.IsSendingForSomeTime, Is.False); // No need to WaitForIsNoLongerSending() as already waited for completion above.
+							terminalA.SendTextLine(Text); // Line must infinitly be retained again, even in case of pong-pong.
+							Utilities.WaitForIsSendingForSomeTime(terminalA);
 
-					// Pong to reset clearance to 1 again:
-					//              A <= B
-					terminalB.SendTextLine(Text);
-					expectedTotalByteCountBA += LineByteCount; // 30 bytes
-					expectedTotalLineCountBA++;                // 6 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-					Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+							// ...and pong:
+							//              A <= B
+							terminalB.SendTextLine(Text);
+							expectedTotalByteCountBA += LineByteCount; // 25 bytes
+							expectedTotalLineCountBA++;                // 5 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+							Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+																	 //// Retained line of A will have been sent.
+							expectedTotalByteCountAB += LineByteCount; // 25 bytes
+							expectedTotalLineCountAB++;                // 5 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Assert.That(terminalA.IsSendingForSomeTime, Is.False); // No need to WaitForIsNoLongerSending() as already waited for completion above.
 
-					// Subsequent ping-ping-ping...
-					//              A => B
-					//              A => B
-					//              A => B
-					terminalA.SendTextLine(Text);
-					expectedTotalByteCountAB += LineByteCount; // 30 bytes
-					expectedTotalLineCountAB++;                // 6 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							// Pong to reset clearance to 1 again:
+							//              A <= B
+							terminalB.SendTextLine(Text);
+							expectedTotalByteCountBA += LineByteCount; // 30 bytes
+							expectedTotalLineCountBA++;                // 6 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+							Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-					terminalA.SendTextLine(Text); // Line must infinitly be retained.
-					terminalA.SendTextLine(Text); // Line must infinitly be retained.
-					Utilities.WaitForIsSendingForSomeTime(terminalA);
+							// Subsequent ping-ping-ping...
+							//              A => B
+							//              A => B
+							//              A => B
+							terminalA.SendTextLine(Text);
+							expectedTotalByteCountAB += LineByteCount; // 30 bytes
+							expectedTotalLineCountAB++;                // 6 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-					// ...pong the 1st pending...
-					//              A <= B
-					terminalB.SendTextLine(Text);
-					expectedTotalByteCountBA += LineByteCount; // 35 bytes
-					expectedTotalLineCountBA++;                // 7 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
-					Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
-					                                         //// 1st retained line of A will have been sent.
-					expectedTotalByteCountAB += LineByteCount; // 35 bytes
-					expectedTotalLineCountAB++;                // 7 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Assert.That(terminalA.IsSendingForSomeTime, Is.True); // No need to WaitForIsSendingForSomeTime() as already waited for completion above.
+							terminalA.SendTextLine(Text); // Line must infinitly be retained.
+							terminalA.SendTextLine(Text); // Line must infinitly be retained.
+							Utilities.WaitForIsSendingForSomeTime(terminalA);
 
-					// ...break the 2nd pending line...
-					terminalA.Break();
-					Utilities.WaitForIsNoLongerSending(terminalA);
+							// ...pong the 1st pending...
+							//              A <= B
+							terminalB.SendTextLine(Text);
+							expectedTotalByteCountBA += LineByteCount; // 35 bytes
+							expectedTotalLineCountBA++;                // 7 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
+							Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
+																	 //// 1st retained line of A will have been sent.
+							expectedTotalByteCountAB += LineByteCount; // 35 bytes
+							expectedTotalLineCountAB++;                // 7 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Assert.That(terminalA.IsSendingForSomeTime, Is.True); // No need to WaitForIsSendingForSomeTime() as already waited for completion above.
 
-					// ...and then resume break by pinging again:
-					terminalA.SendTextLine(Text);
-					expectedTotalByteCountAB += LineByteCount; // 40 bytes
-					expectedTotalLineCountAB++;                // 8 lines
-					Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Assert.That(terminalA.IsSendingForSomeTime, Is.False); // No need to WaitForIsNoLongerSending() as already waited for completion above.
+							// ...break the 2nd pending line...
+							terminalA.Break();
+							Utilities.WaitForIsNoLongerSending(terminalA);
 
-					// Refresh and verify again:
-					terminalA.RefreshRepositories();
-					terminalB.RefreshRepositories();
-					Utilities.AssertTxCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
-					Utilities.AssertRxCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							// ...and then resume break by pinging again:
+							terminalA.SendTextLine(Text);
+							expectedTotalByteCountAB += LineByteCount; // 40 bytes
+							expectedTotalLineCountAB++;                // 8 lines
+							Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Assert.That(terminalA.IsSendingForSomeTime, Is.False); // No need to WaitForIsNoLongerSending() as already waited for completion above.
 
-					terminalB.Stop();
-					Utilities.WaitForStop(terminalB);
-				} // using (terminalB)
-
-				terminalA.Stop();
-				Utilities.WaitForStop(terminalA);
+							// Refresh and verify again:
+							terminalA.RefreshRepositories();
+							terminalB.RefreshRepositories();
+							Utilities.AssertTxCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
+							Utilities.AssertRxCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
+						}
+						finally // Properly stop even in case of an exception, e.g. a failed assertion.
+						{
+							terminalB.Stop();
+							Utilities.WaitForStop(terminalB);
+						}
+					} // using (terminalB)
+				}
+				finally // Properly stop even in case of an exception, e.g. a failed assertion.
+				{
+					terminalA.Stop();
+					Utilities.WaitForStop(terminalA);
+				}
 			} // using (terminalA)
 		}
 

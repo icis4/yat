@@ -228,52 +228,62 @@ namespace YAT.Model.Test.Transmission
 
 			using (var terminalA = new Terminal(Settings.Create(settingsA)))
 			{
-				terminalA.MessageInputRequest += Utilities.TerminalMessageInputRequest;
-				if (!terminalA.Launch())
+				try
 				{
-					if (Utilities.TerminalMessageInputRequestResultsInExclude) {
-						Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
-					//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
-					}
-					else {
-						Assert.Fail(@"Failed to start """ + terminalA.Caption + @"""");
-					}
-				}
-				Utilities.WaitForStart(terminalA);
-
-				if (settingsB != null) // Loopback pair:
-				{
-					Domain.Test.Settings.RevertSettingsIfUdpSocket(settingsB); // Revert to default behavior expected by this test case.
-
-					using (var terminalB = new Terminal(Settings.Create(settingsB)))
+					terminalA.MessageInputRequest += Utilities.TerminalMessageInputRequest;
+					if (!terminalA.Launch())
 					{
-						terminalB.MessageInputRequest += Utilities.TerminalMessageInputRequest;
-						if (!terminalB.Launch())
-						{
-							if (Utilities.TerminalMessageInputRequestResultsInExclude) {
-								Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
-							//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
-							}
-							else {
-								Assert.Fail(@"Failed to start """ + terminalB.Caption + @"""");
-							}
+						if (Utilities.TerminalMessageInputRequestResultsInExclude) {
+							Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
+						//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 						}
-						Utilities.WaitForConnection(terminalA, terminalB);
+						else {
+							Assert.Fail(@"Failed to start """ + terminalA.Caption + @"""");
+						}
+					}
+					Utilities.WaitForStart(terminalA);
 
-						TransmitAndVerify(terminalA, terminalB, testSet, transmissionCount);
+					if (settingsB != null) // Loopback pair:
+					{
+						Domain.Test.Settings.RevertSettingsIfUdpSocket(settingsB); // Revert to default behavior expected by this test case.
 
-						terminalB.Stop();
-						Utilities.WaitForStop(terminalB);
+						using (var terminalB = new Terminal(Settings.Create(settingsB)))
+						{
+							try
+							{
+								terminalB.MessageInputRequest += Utilities.TerminalMessageInputRequest;
+								if (!terminalB.Launch())
+								{
+									if (Utilities.TerminalMessageInputRequestResultsInExclude) {
+										Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
+									//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
+									}
+									else {
+										Assert.Fail(@"Failed to start """ + terminalB.Caption + @"""");
+									}
+								}
+								Utilities.WaitForConnection(terminalA, terminalB);
+
+								TransmitAndVerify(terminalA, terminalB, testSet, transmissionCount);
+							}
+							finally // Properly stop even in case of an exception, e.g. a failed assertion.
+							{
+								terminalB.Stop();
+								Utilities.WaitForStop(terminalB);
+							}
+						} // using (terminalB)
+					}
+					else // Loopback self:
+					{
+						TransmitAndVerify(terminalA, terminalA, testSet, transmissionCount);
 					}
 				}
-				else // Loopback self:
+				finally // Properly stop even in case of an exception, e.g. a failed assertion.
 				{
-					TransmitAndVerify(terminalA, terminalA, testSet, transmissionCount);
+					terminalA.Stop();
+					Utilities.WaitForStop(terminalA);
 				}
-
-				terminalA.Stop();
-				Utilities.WaitForStop(terminalA);
-			}
+			} // using (terminalA)
 		}
 
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "Too many values to verify.")]

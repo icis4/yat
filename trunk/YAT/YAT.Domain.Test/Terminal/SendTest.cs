@@ -608,35 +608,50 @@ namespace YAT.Domain.Test.Terminal
 		{
 			using (var terminalTx = TerminalFactory.CreateTerminal(settingsTx))
 			{
-				using (var terminalRx = TerminalFactory.CreateTerminal(settingsRx))
+				try
 				{
-					Assert.That(terminalTx.Start(), Is.True, "Terminal Tx could not be started!");
-					Assert.That(terminalRx.Start(), Is.True, "Terminal Rx could not be started!");
-					Utilities.WaitForConnection(terminalTx, terminalRx);
+					using (var terminalRx = TerminalFactory.CreateTerminal(settingsRx))
+					{
+						try
+						{
+							Assert.That(terminalTx.Start(), Is.True, "Terminal Tx could not be started!");
+							Assert.That(terminalRx.Start(), Is.True, "Terminal Rx could not be started!");
+							Utilities.WaitForConnection(terminalTx, terminalRx);
 
-					SendAndVerify(terminalTx, terminalRx, fileInfo, sendMethod, timeout);
-
-					terminalRx.Stop();
-					Utilities.WaitForStop(terminalRx);
+							SendAndVerify(terminalTx, terminalRx, fileInfo, sendMethod, timeout);
+						}
+						finally // Properly stop even in case of an exception, e.g. a failed assertion.
+						{
+							terminalRx.Stop();
+							Utilities.WaitForStop(terminalRx);
+						}
+					} // using (terminalRx)
 				}
-
-				terminalTx.Stop();
-				Utilities.WaitForStop(terminalTx);
-			}
+				finally // Properly stop even in case of an exception, e.g. a failed assertion.
+				{
+					terminalTx.Stop();
+					Utilities.WaitForStop(terminalTx);
+				}
+			} // using (terminalTx)
 		}
 
 		private static void SendAndVerifySelf(TerminalSettings settingsTxRx, FileInfo fileInfo, SendMethod sendMethod, int timeout)
 		{
 			using (var terminalTxRx = TerminalFactory.CreateTerminal(settingsTxRx))
 			{
-				Assert.That(terminalTxRx.Start(), Is.True, "Terminal Tx/Rx could not be started!");
-				Utilities.WaitForConnection(terminalTxRx, terminalTxRx);
+				try
+				{
+					Assert.That(terminalTxRx.Start(), Is.True, "Terminal Tx/Rx could not be started!");
+					Utilities.WaitForConnection(terminalTxRx, terminalTxRx);
 
-				SendAndVerify(terminalTxRx, terminalTxRx, fileInfo, sendMethod, timeout);
-
-				terminalTxRx.Stop();
-				Utilities.WaitForStop(terminalTxRx);
-			}
+					SendAndVerify(terminalTxRx, terminalTxRx, fileInfo, sendMethod, timeout);
+				}
+				finally // Properly stop even in case of an exception, e.g. a failed assertion.
+				{
+					terminalTxRx.Stop();
+					Utilities.WaitForStop(terminalTxRx);
+				}
+			} // using (terminalTxRx)
 		}
 
 		private static void SendAndVerify(Domain.Terminal terminalTx, Domain.Terminal terminalRx, FileInfo fileInfo, SendMethod sendMethod, int timeout)
