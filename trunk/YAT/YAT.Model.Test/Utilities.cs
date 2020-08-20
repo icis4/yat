@@ -279,7 +279,10 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
-		public const int IgnoreTimeout = 0;
+		public const int IgnoreCount = Domain.Test.Utilities.IgnoreCount;
+
+		/// <summary></summary>
+		public const int IgnoreTimeout = Domain.Test.Utilities.IgnoreTimeout;
 
 		                      /// <remarks><see cref="Domain.Test.Utilities.WaitTimeoutForStateChange"/>.</remarks>
 		public const int WaitTimeoutForStateChange  = Domain.Test.Utilities.WaitTimeoutForStateChange;
@@ -290,6 +293,12 @@ namespace YAT.Model.Test
 		/// <remarks>While transmission will be forwarded to domain test, this is a convenience shortcut for model tests.</remarks>
 		                           /// <remarks><see cref="Domain.Test.Utilities.WaitTimeoutForLineTransmission"/>.</remarks>
 		public const int WaitTimeoutForLineTransmission  = Domain.Test.Utilities.WaitTimeoutForLineTransmission;
+
+		/// <summary></summary>
+		public const int WaitTimeoutForCounts  = 200;
+
+		/// <summary></summary>
+		public const int WaitIntervalForCounts = 50;
 
 		/// <summary></summary>
 		public const string LineExceededWarningPattern =  Domain.Test.Utilities.LineExceededWarningPattern;
@@ -642,10 +651,104 @@ namespace YAT.Model.Test
 		{
 			Domain.Test.Utilities.WaitForTransmissionAndAssertCounts(terminalTx.UnderlyingDomain_ForTestOnly, terminalRx.UnderlyingDomain_ForTestOnly, expectedTotalByteCount, expectedTotalLineCountDisplayed, timeout);
 
-			Assert.That(terminalTx.TxByteCount, Is.EqualTo(expectedTotalByteCount));
-			Assert.That(terminalTx.TxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
-			Assert.That(terminalRx.RxByteCount, Is.EqualTo(expectedTotalByteCount));
-			Assert.That(terminalRx.RxLineCount, Is.EqualTo(expectedTotalLineCountCompleted));
+			WaitForAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCountCompleted);
+		}
+
+		/// <remarks>
+		/// Needed to prevent hickups due to the fact that (domain) repositories and (model) counts are not
+		/// updated simultanously. FR #375 "migrate Byte/Line Count/Rate from model to domain" will fix this.
+		/// </remarks>
+		private static void WaitForAndAssertCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount, int timeout = WaitTimeoutForCounts)
+		{
+			bool isFirst = true; // Using do-while, first check state.
+			int waitTime = 0;
+			int txByteCount = 0;
+			int txLineCount = 0;
+			int rxByteCount = 0;
+			int rxLineCount = 0;
+			StringBuilder sb;
+
+			do
+			{
+				if (!isFirst) {
+					Thread.Sleep(WaitIntervalForCounts);
+					waitTime += WaitIntervalForCounts;
+				}
+
+				txByteCount = terminalTx.GetRepositoryByteCount(RepositoryType.Tx);
+				if (txByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+					Assert.Fail("Number of sent bytes = " + txByteCount +
+					            " mismatches expected = " + expectedTotalByteCount + ".");
+				}
+
+				txLineCount = terminalTx.GetRepositoryLineCount(RepositoryType.Tx);
+				if (expectedTotalLineCount != IgnoreCount) {
+					if (txLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+						Assert.Fail("Number of sent lines = " + txLineCount +
+						            " mismatches expected = " + expectedTotalLineCount + ".");
+					}
+				}
+
+				rxByteCount = terminalRx.GetRepositoryByteCount(RepositoryType.Rx);
+				if (rxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+					Assert.Fail("Number of received bytes = " + rxByteCount +
+					            " mismatches expected = " + expectedTotalByteCount + ".");
+				}
+
+				rxLineCount = terminalRx.GetRepositoryLineCount(RepositoryType.Rx);
+				if (expectedTotalLineCount != IgnoreCount) {
+					if (rxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+						Assert.Fail("Number of received lines = " + rxLineCount +
+						            " mismatches expected = " + expectedTotalLineCount + ".");
+					}
+				}
+
+				if ((waitTime >= timeout) && ((timeout != IgnoreTimeout) || !isFirst)) {
+					if (timeout != IgnoreTimeout) {
+						sb = new StringBuilder("Timeout! (" + timeout + " ms)");
+					}
+					else {
+						sb = new StringBuilder("Mismatch!");
+					}
+
+					if (txByteCount < expectedTotalByteCount) {
+						sb.Append(" Number of sent bytes = " + txByteCount +
+						          " mismatches expected = " + expectedTotalByteCount + ".");
+					}
+
+					if (txLineCount < expectedTotalLineCount) {
+						sb.Append(" Number of sent lines = " + txLineCount +
+						          " mismatches expected = " + expectedTotalLineCount + ".");
+					}
+
+					if (rxByteCount < expectedTotalByteCount) {
+						sb.Append(" Number of received bytes = " + rxByteCount +
+						          " mismatches expected = " + expectedTotalByteCount + ".");
+					}
+
+					if (rxLineCount < expectedTotalLineCount) {
+						sb.Append(" Number of received lines = " + rxLineCount +
+						          " mismatches expected = " + expectedTotalLineCount + ".");
+					}
+
+					Assert.Fail(sb.ToString());
+				}
+
+				sb = new StringBuilder("Waiting for transmission, ");
+				sb.AppendFormat("{0}/{1} bytes/lines expected, {2}/{3} sent, {4}/{5} received, ", expectedTotalByteCount, expectedTotalLineCount, txByteCount, txLineCount, rxByteCount, rxLineCount);
+				if (timeout != IgnoreTimeout) {
+					sb.AppendFormat("{0} ms have passed, timeout is {1} ms..." , waitTime, timeout);
+				}
+				Trace.WriteLine(sb.ToString());
+
+				if (isFirst) {
+					isFirst = false;
+				}
+			}
+			while ((txByteCount != expectedTotalByteCount) || ((txLineCount != expectedTotalLineCount) && (expectedTotalLineCount != IgnoreCount)) ||
+			       (rxByteCount != expectedTotalByteCount) || ((rxLineCount != expectedTotalLineCount) && (expectedTotalLineCount != IgnoreCount)));
+
+			Trace.WriteLine("...done, asserted");
 		}
 
 		/// <remarks>
