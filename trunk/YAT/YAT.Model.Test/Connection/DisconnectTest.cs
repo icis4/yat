@@ -151,7 +151,7 @@ namespace YAT.Model.Test.Connection
 			using (var terminalA = new Terminal(Settings.Create(settingsA)))
 			{
 				terminalA.MessageInputRequest += Utilities.TerminalMessageInputRequest;
-				if (!terminalA.Start())
+				if (!terminalA.Launch())
 				{
 					if (Utilities.TerminalMessageInputRequestResultsInExclude) {
 						Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
@@ -168,7 +168,7 @@ namespace YAT.Model.Test.Connection
 					using (var terminalB = new Terminal(Settings.Create(settingsB)))
 					{
 						terminalB.MessageInputRequest += Utilities.TerminalMessageInputRequest;
-						if (!terminalB.Start())
+						if (!terminalB.Launch())
 						{
 							if (Utilities.TerminalMessageInputRequestResultsInExclude) {
 								Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
@@ -182,8 +182,8 @@ namespace YAT.Model.Test.Connection
 
 						TransmitAndVerifyAndDisconnect(terminalA, terminalB, disconnectIdentifier);
 
-						terminalB.StopIO();
-						Utilities.WaitForDisconnection(terminalB);
+						terminalB.Stop();
+						Utilities.WaitForStop(terminalB);
 					}
 				}
 				else // Loopback self:
@@ -191,8 +191,8 @@ namespace YAT.Model.Test.Connection
 					TransmitAndVerifyAndDisconnect(terminalA, terminalA, disconnectIdentifier);
 				}
 
-				terminalA.StopIO();
-				Utilities.WaitForDisconnection(terminalA);
+				terminalA.Stop();
+				Utilities.WaitForStop(terminalA);
 			}
 		}
 
@@ -246,40 +246,62 @@ namespace YAT.Model.Test.Connection
 
 				if (disconnectIdentifier == 'A')
 				{
+					IOTypeEx ioTypeB = terminalB.IOType;
+
 					// Send repeating B => A then close A:
 					terminalB.SendText(@"B => A\!(LineRepeat)");
-					Thread.Sleep(333); // i.e. several hundred lines.
-					terminalA.StopIO();
-					Utilities.WaitForDisconnection(terminalA);
-					Thread.Sleep(100); // Make sure that B can deal with disconnected A. Note that WaitForDisconnection() would not work for connection-less UDP sockets.
-					terminalB.Break(); // TCP terminals break sending when disconnected. But explicitly breaking is needed for connection-less UDP sockets.
-					Thread.Sleep(100);
+					Thread.Sleep(333); // Unlimited, i.e. up to several thousand lines.
+					terminalA.Stop();
+					Utilities.WaitForStop(terminalA);
+					Thread.Sleep(333); // Make sure that B can deal with disconnected A. Note that WaitForDisconnection() would not work for connection-less UDP sockets.
+
+					if (!ioTypeB.IsTcpSocket) { // TCP terminals break sending when disconnected.
+						terminalB.Break();      // Explicitly breaking is needed for other I/O types.
+						Thread.Sleep(333);
+					}
+
+					if (ioTypeB.IsServerSocket) { // Server sockets must tell the IP stack to discard still "flying" pakets/segments.
+						terminalB.Stop();         // Otherwise, the pakets/segments will be received as soon as the other terminal is started again below.
+						Utilities.WaitForStop(terminalB);
+						terminalB.Start();
+					}
 
 					terminalB.ClearRepositories();
 					terminalA.ClearRepositories();
 					terminalB.ResetIOCountAndRate();
 					terminalA.ResetIOCountAndRate();
 
-					terminalA.StartIO();
+					terminalA.Start();
 					Utilities.WaitForConnection(terminalA, terminalB);
 				}
 				else       // Identifier == 'B')
 				{
+					IOTypeEx ioTypeA = terminalA.IOType;
+
 					// Send repeating A => B then close B:
 					terminalA.SendText(@"A => B\!(LineRepeat)");
-					Thread.Sleep(333); // i.e. several hundred lines.
-					terminalB.StopIO();
-					Utilities.WaitForDisconnection(terminalB);
-					Thread.Sleep(100); // Make sure that A can deal with disconnected B. Note that WaitForDisconnection() would not work for connection-less UDP sockets.
-					terminalA.Break(); // TCP terminals break sending when disconnected. But explicitly breaking is needed for connection-less UDP sockets.
-					Thread.Sleep(100);
+					Thread.Sleep(333); // Unlimited, i.e. up to several thousand lines.
+					terminalB.Stop();
+					Utilities.WaitForStop(terminalB);
+					Thread.Sleep(333); // Make sure that A can deal with disconnected B. Note that WaitForDisconnection() would not work for connection-less UDP sockets.
+
+					if (!ioTypeA.IsTcpSocket) { // TCP terminals break sending when disconnected.
+						terminalA.Break();      // Explicitly breaking is needed for other I/O types.
+						Thread.Sleep(333);
+					}
+
+					if (ioTypeA.IsServerSocket) { // Server sockets must tell the IP stack to discard still "flying" pakets/segments.
+						terminalA.Stop();         // Otherwise, the pakets/segments will be received as soon as the other terminal is started again below.
+						Utilities.WaitForStop(terminalA);
+						terminalA.Start();
+					}
 
 					terminalA.ClearRepositories();
 					terminalB.ClearRepositories();
 					terminalA.ResetIOCountAndRate();
 					terminalB.ResetIOCountAndRate();
 
-					terminalB.StartIO();
+					terminalB.Start();
 					Utilities.WaitForConnection(terminalB, terminalA);
 				}
 

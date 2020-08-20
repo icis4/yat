@@ -66,7 +66,7 @@ namespace YAT.Model.Types
 		SwitchLogOn,
 		SwitchLogOff,
 		ToggleLogOnOrOff,
-		StopIO,
+		Stop,
 		CloseTerminal,
 		ExitApplication
 	}
@@ -113,7 +113,7 @@ namespace YAT.Model.Types
 		private const string             SwitchLogOn_string         = "[Log On]"; // Translating from code to user terminology.
 		private const string             SwitchLogOff_string        = "[Log Off]"; // Translating from code to user terminology.
 		private const string             ToggleLogOnOrOff_string    = "[Toggle Log On/Off]"; // Translating from code to user terminology.
-		private const string             StopIO_string              = "[Close/Stop I/O]"; // Translating from code to user terminology.
+		private const string             Stop_string                = "[Close/Stop I/O]"; // Translating from code to user terminology.
 		private const string             CloseTerminal_string       = "[Close Terminal]";
 		private static readonly string   ExitApplication_string     = "[Exit " + ApplicationEx.ProductName + "]"; // "YAT" or "YATConsole", as indicated in main title bar.
 		private const string             ExitApplication_stringAlternativeStart = "[Exit " + ApplicationEx.CommonName;
@@ -274,7 +274,7 @@ namespace YAT.Model.Types
 				case AutoAction.SwitchLogOn:                     return (SwitchLogOn_string);
 				case AutoAction.SwitchLogOff:                    return (SwitchLogOff_string);
 				case AutoAction.ToggleLogOnOrOff:                return (ToggleLogOnOrOff_string);
-				case AutoAction.StopIO:                          return (StopIO_string);
+				case AutoAction.Stop:                            return (Stop_string);
 				case AutoAction.CloseTerminal:                   return (CloseTerminal_string);
 				case AutoAction.ExitApplication:                 return (ExitApplication_string);
 
@@ -373,7 +373,7 @@ namespace YAT.Model.Types
 			a.Add(new AutoActionEx(AutoAction.SwitchLogOn));
 			a.Add(new AutoActionEx(AutoAction.SwitchLogOff));
 			a.Add(new AutoActionEx(AutoAction.ToggleLogOnOrOff));
-			a.Add(new AutoActionEx(AutoAction.StopIO));
+			a.Add(new AutoActionEx(AutoAction.Stop));
 			a.Add(new AutoActionEx(AutoAction.CloseTerminal));
 			a.Add(new AutoActionEx(AutoAction.ExitApplication));
 
@@ -549,9 +549,9 @@ namespace YAT.Model.Types
 				result = AutoAction.ToggleLogOnOrOff;
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(s, StopIO_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, Stop_string))
 			{
-				result = AutoAction.StopIO;
+				result = AutoAction.Stop;
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase(s, CloseTerminal_string))

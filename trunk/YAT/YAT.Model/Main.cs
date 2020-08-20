@@ -286,9 +286,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Start
+		#region Launch
 		//==========================================================================================
-		// Start
+		// Launch
 		//==========================================================================================
 
 		/// <summary>
@@ -420,7 +420,7 @@ namespace YAT.Model
 			// Start all included terminals:
 			if (success)
 			{
-				this.workspace.StartAllTerminals(); // Don't care about success, workspace itself is fine.
+				this.workspace.LaunchAllTerminals(); // Don't care about success, workspace itself is fine.
 			}
 
 			// If requested, trigger operation:
@@ -441,9 +441,9 @@ namespace YAT.Model
 			}
 		}
 
-		#region Start > Private Methods
+		#region Launch > Private Methods
 		//------------------------------------------------------------------------------------------
-		// Start > Private Methods
+		// Launch > Private Methods
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -1183,7 +1183,7 @@ namespace YAT.Model
 			{
 				if (OpenWorkspaceFromFile(filePath))
 				{
-					this.workspace.StartAllTerminals(); // Don't care about success, workspace itself is fine.
+					this.workspace.LaunchAllTerminals(); // Don't care about success, workspace itself is fine.
 
 					OnStarted(); // Same as at OpenTerminalFromFile() below.
 					return (true);
@@ -1205,7 +1205,7 @@ namespace YAT.Model
 
 				if (this.workspace.OpenTerminalFromFile(filePath))
 				{
-					if (this.workspace.ActiveTerminal.Start())
+					if (this.workspace.ActiveTerminal.Launch())
 					{
 						if (signalStarted)
 							OnStarted(); // Same as at OpenWorkspaceFromFile() above.

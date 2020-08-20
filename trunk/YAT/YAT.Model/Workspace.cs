@@ -1472,7 +1472,7 @@ namespace YAT.Model
 			////OnTimedStatusTextRequest("Linked settings loaded."); is done within TryLoadLinkedSettings().
 			}
 
-			t.Start(); // Errors are handled within Start().
+			t.Launch(); // Errors are handled within Launch().
 
 			return (true);
 		}
@@ -1762,7 +1762,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual bool StartAllTerminals()
+		public virtual bool LaunchAllTerminals()
 		{
 			bool success = true;
 
@@ -1770,7 +1770,7 @@ namespace YAT.Model
 			{
 				foreach (var t in this.terminals)
 				{
-					if (!t.Start())
+					if (!t.Launch())
 						success = false;
 				}
 			}
@@ -2364,23 +2364,23 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual bool OpenActiveTerminalIO()
+		public virtual bool StartActiveTerminal()
 		{
 			AssertUndisposed();
 
 			if (this.activeTerminal != null)
-				return (this.activeTerminal.StartIO());
+				return (this.activeTerminal.Start());
 			else
 				return (false);
 		}
 
 		/// <summary></summary>
-		public virtual bool CloseActiveTerminalIO()
+		public virtual bool StopActiveTerminal()
 		{
 			AssertUndisposed();
 
 			if (this.activeTerminal != null)
-				return (this.activeTerminal.StopIO());
+				return (this.activeTerminal.Stop());
 			else
 				return (false);
 		}

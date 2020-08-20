@@ -580,7 +580,7 @@ namespace YAT.Model
 				case AutoAction.SwitchLogOn:       SwitchLogOn();         break;
 				case AutoAction.SwitchLogOff:      SwitchLogOff();        break;
 				case AutoAction.ToggleLogOnOrOff:  ToggleLogOnOrOff();    break;
-				case AutoAction.StopIO:            StopIO();              break;
+				case AutoAction.Stop:              Stop();                break;
 				case AutoAction.CloseTerminal:
 				{
 					lock (this.autoActionCloseOrExitSyncObj)
@@ -647,7 +647,7 @@ namespace YAT.Model
 				case AutoAction.SwitchLogOn:
 				case AutoAction.SwitchLogOff:
 				case AutoAction.ToggleLogOnOrOff:
-				case AutoAction.StopIO:
+				case AutoAction.Stop:
 				case AutoAction.CloseTerminal:
 				case AutoAction.ExitApplication:
 					return (true);

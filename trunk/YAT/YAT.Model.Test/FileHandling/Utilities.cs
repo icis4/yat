@@ -58,13 +58,13 @@ namespace YAT.Model.Test.FileHandling
 
 		#endregion
 
-		#region Start
+		#region Launch
 		//==========================================================================================
-		// Start
+		// Launch
 		//==========================================================================================
 
 		/// <summary></summary>
-		internal static void StartAndCreateDefaultTerminal(out Main main, out Workspace workspace, out Terminal terminal)
+		internal static void LaunchAndCreateDefaultTerminal(out Main main, out Workspace workspace, out Terminal terminal)
 		{
 			main = new Main();
 			main.Launch();

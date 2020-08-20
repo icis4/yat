@@ -95,13 +95,13 @@ namespace YAT.Model.Test
 				settingsA.Display.MaxLineLength = MaxLineLength;
 				using (var terminalA = new Terminal(settingsA))
 				{
-					Assert.That(terminalA.Start(), Is.True, "Terminal A could not be started!");
+					Assert.That(terminalA.Launch(), Is.True, "Terminal A could not be started!");
 
 					var settingsB = Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
 				////settingsB.Display.MaxLineLength is kept at default of 1000 chars/bytes.
 					using (var terminalB = new Terminal(settingsB))
 					{
-						Assert.That(terminalB.Start(), Is.True, "Terminal B could not be started!");
+						Assert.That(terminalB.Launch(), Is.True, "Terminal B could not be started!");
 						Utilities.WaitForConnection(terminalA, terminalB);
 
 						string text;
@@ -272,12 +272,12 @@ namespace YAT.Model.Test
 						Utilities.AssertBidirContentPattern(terminalA, expectedContentPatternA);
 						Utilities.AssertBidirContentPattern(terminalB, expectedContentPatternB);
 
-						terminalB.StopIO();
-						Utilities.WaitForDisconnection(terminalB);
+						terminalB.Stop();
+						Utilities.WaitForStop(terminalB);
 					} // using (terminalB)
 
-					terminalA.StopIO();
-					Utilities.WaitForDisconnection(terminalA);
+					terminalA.Stop();
+					Utilities.WaitForStop(terminalA);
 				} // using (terminalA)
 			} // using (parser)
 		}

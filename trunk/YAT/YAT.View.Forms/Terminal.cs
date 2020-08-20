@@ -632,12 +632,12 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Start_Click(object sender, EventArgs e)
 		{
-			this.terminal.StartIO();
+			this.terminal.Start();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Stop_Click(object sender, EventArgs e)
 		{
-			this.terminal.StopIO();
+			this.terminal.Stop();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Break_Click(object sender, EventArgs e)
@@ -4498,7 +4498,7 @@ namespace YAT.View.Forms
 		public virtual bool RequestStartTerminal()
 		{
 			if (this.terminal != null)
-				return (this.terminal.StartIO());
+				return (this.terminal.Start());
 
 			return (false);
 		}
@@ -4507,7 +4507,7 @@ namespace YAT.View.Forms
 		public virtual bool RequestStopTerminal()
 		{
 			if (this.terminal != null)
-				return (this.terminal.StopIO());
+				return (this.terminal.Stop());
 
 			return (false);
 		}
