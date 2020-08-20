@@ -583,9 +583,12 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void EnterRequestPre()
 		{
-			ResumeBreak(); // Each send request shall resume a pending break condition.
+			if (IsUndisposed) // Attention, sending is done async, i.e. worker thread may get here only when object already got disposed of!
+			{
+				ResumeBreak(); // Each send request shall resume a pending break condition.
 
-			IncrementIsSendingChanged();
+				IncrementIsSendingChanged();
+			}
 		}
 
 		/// <summary></summary>
@@ -723,8 +726,11 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void DoSendPre()
 		{
-			if (TerminalSettings.Send.SignalXOnBeforeEachTransmission)
-				RequestSignalInputXOn();
+			if (IsUndisposed) // Attention, sending is done async, i.e. worker thread may get here only when object already got disposed of!
+			{
+				if (TerminalSettings.Send.SignalXOnBeforeEachTransmission)
+					RequestSignalInputXOn();
+			}
 		}
 
 		/// <summary></summary>
@@ -2007,7 +2013,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Breaks all currently ongoing operations in the terminal.
 		/// </summary>
-		public virtual void Break()
+		public virtual void ActivateBreak()
 		{
 			DebugBreakLead("Break has been requested");
 
@@ -2020,7 +2026,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Resumes all currently suspended operations in the terminal.
 		/// </summary>
-		public virtual void ResumeBreak()
+		protected virtual void ResumeBreak()
 		{
 			DebugBreakLead("Resume from break has been requested");
 

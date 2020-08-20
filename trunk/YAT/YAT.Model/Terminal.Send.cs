@@ -588,9 +588,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Break/Resume
+		#region Terminal > Break
 		//------------------------------------------------------------------------------------------
-		// Terminal > Break/Resume
+		// Terminal > Break
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -600,17 +600,7 @@ namespace YAT.Model
 		{
 			AssertUndisposed();
 
-			this.terminal.Break();
-		}
-
-		/// <summary>
-		/// Resumes all currently suspended operations in the terminal.
-		/// </summary>
-		public virtual void ResumeBreak()
-		{
-			AssertUndisposed();
-
-			this.terminal.ResumeBreak();
+			this.terminal.ActivateBreak();
 		}
 
 		#endregion
