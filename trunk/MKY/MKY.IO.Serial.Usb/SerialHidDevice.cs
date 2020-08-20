@@ -591,18 +591,7 @@ namespace MKY.IO.Serial.Usb
 				}
 			}
 
-			ClearQueues();
-
 			OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
-		}
-
-		private void ClearQueues()
-		{
-			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
-				this.sendQueue.Clear();
-
-			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
-				this.receiveQueue.Clear();
 		}
 
 		#endregion
@@ -748,6 +737,11 @@ namespace MKY.IO.Serial.Usb
 				}
 			} // lock (sendThreadSyncObj)
 
+			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+			{
+				this.sendQueue.Clear();
+			}
+
 			lock (this.receiveThreadSyncObj)
 			{
 				if (this.receiveThread != null)
@@ -801,6 +795,11 @@ namespace MKY.IO.Serial.Usb
 					finally { this.receiveThreadEvent = null; }
 				}
 			} // lock (receiveThreadSyncObj)
+
+			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+			{
+				this.receiveQueue.Clear();
+			}
 		}
 
 		#endregion
@@ -817,6 +816,8 @@ namespace MKY.IO.Serial.Usb
 
 		private void device_Disconnected(object sender, EventArgs e)
 		{
+			DropSendQueueAndNotify();
+
 			OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
 		}
 
@@ -827,6 +828,8 @@ namespace MKY.IO.Serial.Usb
 
 		private void device_Closed(object sender, EventArgs e)
 		{
+			DropSendQueueAndNotify();
+
 			OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
 		}
 
@@ -893,6 +896,8 @@ namespace MKY.IO.Serial.Usb
 
 		private void device_IOError(object sender, IO.Usb.ErrorEventArgs e)
 		{
+			DropSendQueueAndNotify();
+
 			OnIOError(new IOErrorEventArgs(ErrorSeverity.Severe, e.Message, e.TimeStamp));
 		}
 

@@ -686,10 +686,9 @@ namespace MKY.IO.Serial.Socket
 			// ensure that the last socket callbacks 'OnSent' can still be properly processed.
 			StopThreads();
 
-			// And don't forget to clear the corresponding queue, its content would reappear in case
+			// And don't forget to clear the corresponding queues, its content would reappear in case
 			// the socket gets started again.
-			lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
-				this.dataSentQueue.Clear();
+			DropQueuesAndNotify();
 		}
 
 		#endregion

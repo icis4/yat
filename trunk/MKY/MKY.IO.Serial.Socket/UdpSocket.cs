@@ -1077,7 +1077,7 @@ namespace MKY.IO.Serial.Socket
 					try     { this.sendThreadEvent.Close(); }
 					finally { this.sendThreadEvent = null; }
 				}
-			} // sendThreadSyncObj
+			} // lock (sendThreadSyncObj)
 
 			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 			{

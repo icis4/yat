@@ -205,24 +205,9 @@ namespace MKY.IO.Serial.Socket
 					// Inner loop, runs as long as there are items in the queue:
 					while (IsUndisposed && this.sendThreadRunFlag && (this.sendQueue.Count > 0)) // Check disposal state first!
 					{                                             // No lock required, just checking for empty.
-						// Drop queueud data in case socket has been disconnected:
 						if (!IsTransmissive)
 						{
-							int droppedDataLength;
-							lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
-							{
-								droppedDataLength = this.sendQueue.Count;
-								this.sendQueue.Clear();
-							}
-
-							string message;
-							if (droppedDataLength <= 1)
-								message = droppedDataLength + " byte not sent anymore."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
-							else
-								message = droppedDataLength + " bytes not sent anymore."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
-
-							OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
-
+							DropSendQueueAndNotify(); // Drop queueud data in case socket has been disconnected.
 							break; // while()
 						}
 
@@ -335,6 +320,27 @@ namespace MKY.IO.Serial.Socket
 			DebugThreadState("SendThread() has terminated.");
 		}
 
+		private void DropSendQueueAndNotify()
+		{
+			int droppedCount;
+			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+			{
+				droppedCount = this.sendQueue.Count;
+				this.sendQueue.Clear();
+			}
+
+			if (droppedCount > 0)
+			{
+				string message;
+				if (droppedCount <= 1)
+					message = droppedCount + " byte not sent anymore.";  // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+				else                                                     // Reason cannot be stated, could be "disconnected" or "stopped/closed"
+					message = droppedCount + " bytes not sent anymore."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+
+				OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
+			}
+		}
+
 		#endregion
 
 		#region Debug
@@ -370,8 +376,8 @@ namespace MKY.IO.Serial.Socket
 			var sb = new StringBuilder();
 			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) dequeued for sending, ", count);
 		#if (DEBUG_SEND)
-			unchecked { DebugSend_enqueueCounter += count; }
-			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) in total.", DebugSend_enqueueCounter);
+			unchecked { DebugSend_dequeueCounter += count; }
+			sb.AppendFormat(CultureInfo.CurrentCulture, "{0} byte(s) in total.", DebugSend_dequeueCounter);
 		#endif
 			DebugMessage(sb.ToString());
 		}
