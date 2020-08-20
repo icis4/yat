@@ -269,7 +269,7 @@ namespace YAT.Model.Test.Transmission
 			using (var terminal = new Terminal(Settings.Create(settings)))
 			{
 				terminal.MessageInputRequest += Utilities.TerminalMessageInputRequest;
-				if (!terminal.Start())
+				if (!terminal.Launch())
 				{
 					if (Utilities.TerminalMessageInputRequestResultsInExclude) {
 						Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);

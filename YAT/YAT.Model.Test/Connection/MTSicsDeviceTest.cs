@@ -110,7 +110,7 @@ namespace YAT.Model.Test.Connection
 			using (var terminal = new Terminal(settings))
 			{
 				terminal.MessageInputRequest += Utilities.TerminalMessageInputRequest;
-				if (!terminal.StartIO())
+				if (!terminal.Start())
 				{
 					if (Utilities.TerminalMessageInputRequestResultsInExclude)
 					{
@@ -129,12 +129,12 @@ namespace YAT.Model.Test.Connection
 				// --- Test: Close/Reopen without sending. -----------------------------------------
 
 				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
-				Assert.That(terminal.StopIO(),       Is.True);
+				Assert.That(terminal.Stop(),         Is.True);
 				Assert.That(terminal.IsStarted,      Is.False);
 				Assert.That(terminal.IsOpen,         Is.False);
 				Assert.That(terminal.IsTransmissive, Is.False);
 				Thread.Sleep(WaitForOperation);
-				Assert.That(terminal.StartIO(),      Is.True);
+				Assert.That(terminal.Start(),        Is.True);
 				Assert.That(terminal.IsStarted,      Is.True);
 				Assert.That(terminal.IsOpen,         Is.True);
 				Assert.That(terminal.IsTransmissive, Is.True);
@@ -159,12 +159,12 @@ namespace YAT.Model.Test.Connection
 				Utilities.WaitForReceivingAndAssertCounts(terminal, expectedTotalByteCount, expectedTotalLineCount);
 
 				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
-				Assert.That(terminal.StopIO(),       Is.True);
+				Assert.That(terminal.Stop(),         Is.True);
 				Assert.That(terminal.IsStarted,      Is.False);
 				Assert.That(terminal.IsOpen,         Is.False);
 				Assert.That(terminal.IsTransmissive, Is.False);
 				Thread.Sleep(WaitForOperation);
-				Assert.That(terminal.StartIO(),      Is.True);
+				Assert.That(terminal.Start(),        Is.True);
 				Assert.That(terminal.IsStarted,      Is.True);
 				Assert.That(terminal.IsOpen,         Is.True);
 				Assert.That(terminal.IsTransmissive, Is.True);
@@ -184,12 +184,12 @@ namespace YAT.Model.Test.Connection
 				Thread.Sleep(WaitForOperation);
 
 				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
-				Assert.That(terminal.StopIO(),       Is.True);
+				Assert.That(terminal.Stop(),         Is.True);
 				Assert.That(terminal.IsStarted,      Is.False);
 				Assert.That(terminal.IsOpen,         Is.False);
 				Assert.That(terminal.IsTransmissive, Is.False);
 				Thread.Sleep(WaitForOperation);
-				Assert.That(terminal.StartIO(),      Is.True);
+				Assert.That(terminal.Start(),        Is.True);
 				Assert.That(terminal.IsStarted,      Is.True);
 				Assert.That(terminal.IsOpen,         Is.True);
 				Assert.That(terminal.IsTransmissive, Is.True);
@@ -199,7 +199,7 @@ namespace YAT.Model.Test.Connection
 				Thread.Sleep(WaitForOperation);
 
 				// Close terminal. Expected: No exceptions, terminal can be closed.
-				Assert.That(terminal.StopIO(),       Is.True);
+				Assert.That(terminal.Stop(),         Is.True);
 				Assert.That(terminal.IsStarted,      Is.False);
 				Assert.That(terminal.IsOpen,         Is.False);
 				Assert.That(terminal.IsTransmissive, Is.False);
@@ -273,7 +273,7 @@ namespace YAT.Model.Test.Connection
 			using (var terminal = new Terminal(settings))
 			{
 				terminal.MessageInputRequest += Utilities.TerminalMessageInputRequest;
-				if (!terminal.StartIO())
+				if (!terminal.Start())
 				{
 					if (Utilities.TerminalMessageInputRequestResultsInExclude)
 					{
@@ -305,21 +305,21 @@ namespace YAT.Model.Test.Connection
 				Assert.That(terminal.IsOpen,         Is.True);
 				Assert.That(terminal.IsTransmissive, Is.True);
 
-				// Verify that subsequently calling StartIO() also works:
-				Assert.That(terminal.StartIO(),      Is.True);
+				// Verify that subsequently calling Start() also works:
+				Assert.That(terminal.Start(),        Is.True);
 				Assert.That(terminal.IsStarted,      Is.True);
 				Assert.That(terminal.IsOpen,         Is.True);
 				Assert.That(terminal.IsTransmissive, Is.True);
 
 				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
 				Thread.Sleep(WaitForOperation);
-				Assert.That(terminal.StopIO(),       Is.True);
+				Assert.That(terminal.Stop(),         Is.True);
 				Assert.That(terminal.IsStarted,      Is.False);
 				Assert.That(terminal.IsOpen,         Is.False);
 				Assert.That(terminal.IsTransmissive, Is.False);
 
 				Thread.Sleep(WaitForOperation);
-				Assert.That(terminal.StartIO(),      Is.True);
+				Assert.That(terminal.Start(),        Is.True);
 				Assert.That(terminal.IsStarted,      Is.True);
 				Assert.That(terminal.IsOpen,         Is.True);
 				Assert.That(terminal.IsTransmissive, Is.True);
@@ -363,8 +363,8 @@ namespace YAT.Model.Test.Connection
 				expectedTotalRxByteCount += emptyCommandExpected.Length;
 				Utilities.WaitForReceivingAndAssertCounts(terminal, expectedTotalRxByteCount, expectedTotalRxLineCount);
 
-				// Verify that subsequently calling StartIO() also works:
-				Assert.That(terminal.StartIO(),      Is.True);
+				// Verify that subsequently calling Start() also works:
+				Assert.That(terminal.Start(),        Is.True);
 				Assert.That(terminal.IsStarted,      Is.True);
 				Assert.That(terminal.IsOpen,         Is.True);
 				Assert.That(terminal.IsTransmissive, Is.True);
@@ -376,13 +376,13 @@ namespace YAT.Model.Test.Connection
 				Utilities.WaitForReceivingAndAssertCounts(terminal, expectedTotalRxByteCount, expectedTotalRxLineCount);
 
 				// Close and reopen terminal. Expected: No exceptions, terminal can be closed and reopened.
-				Assert.That(terminal.StopIO(),       Is.True);
+				Assert.That(terminal.Stop(),         Is.True);
 				Assert.That(terminal.IsStarted,      Is.False);
 				Assert.That(terminal.IsOpen,         Is.False);
 				Assert.That(terminal.IsTransmissive, Is.False);
 				Thread.Sleep(WaitForOperation);
 
-				Assert.That(terminal.StartIO(),      Is.True);
+				Assert.That(terminal.Start(),        Is.True);
 				Assert.That(terminal.IsStarted,      Is.True);
 				Assert.That(terminal.IsOpen,         Is.True);
 				Assert.That(terminal.IsTransmissive, Is.True);
@@ -437,18 +437,18 @@ namespace YAT.Model.Test.Connection
 				Assert.That(terminal.IsTransmissive, Is.False);
 
 				// Manually close terminal. Expected: No exceptions, terminal can be closed.
-				Assert.That(terminal.StopIO(),       Is.True);
+				Assert.That(terminal.Stop(),         Is.True);
 				Assert.That(terminal.IsStarted,      Is.False);
 				Assert.That(terminal.IsOpen,         Is.False);
 				Assert.That(terminal.IsTransmissive, Is.False);
 
 				// Reconnect USB/RS-232 converter. Expected: No exceptions, terminal can be reopened.
 				Assert.That(UsbHubControl.Enable(UsbHubDevices.Hub2, portOut), Is.True, "Failed to change USB hub configuration!");
-				Assert.That(terminal.IsStarted, Is.False);
+				Assert.That(terminal.IsStarted,      Is.False);
 
 				// Manually open terminal again. Expected: No exceptions, terminal can be opened.
 				Thread.Sleep(WaitForOperation);
-				Assert.That(terminal.StartIO(), Is.True);
+				Assert.That(terminal.Start(),        Is.True);
 				Utilities.WaitForOpen(terminal);
 				Assert.That(terminal.IsStarted,      Is.True);
 				Assert.That(terminal.IsOpen,         Is.True);
@@ -456,7 +456,7 @@ namespace YAT.Model.Test.Connection
 
 				// Close terminal. Expected: No exceptions, terminal can be closed.
 				Thread.Sleep(WaitForOperation);
-				Assert.That(terminal.StopIO(),       Is.True);
+				Assert.That(terminal.Stop(),         Is.True);
 				Assert.That(terminal.IsStarted,      Is.False);
 				Assert.That(terminal.IsOpen,         Is.False);
 				Assert.That(terminal.IsTransmissive, Is.False);

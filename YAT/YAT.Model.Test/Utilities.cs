@@ -503,13 +503,13 @@ namespace YAT.Model.Test
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
-		public static void WaitForDisconnection(Terminal terminal)
+		public static void WaitForStop(Terminal terminal)
 		{
 			int waitTime = 0;
 
 			Trace.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-			while (terminal.IsConnected)
+			while (!terminal.IsStopped)
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;

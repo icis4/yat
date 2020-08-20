@@ -323,7 +323,7 @@ namespace YAT.Model.Test.Transmission
 			using (var terminalA = new Terminal(Settings.Create(settingsA)))
 			{
 				terminalA.MessageInputRequest += Utilities.TerminalMessageInputRequest;
-				if (!terminalA.Start())
+				if (!terminalA.Launch())
 				{
 					if (Utilities.TerminalMessageInputRequestResultsInExclude) {
 						Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
@@ -342,7 +342,7 @@ namespace YAT.Model.Test.Transmission
 					using (var terminalB = new Terminal(Settings.Create(settingsB)))
 					{
 						terminalB.MessageInputRequest += Utilities.TerminalMessageInputRequest;
-						if (!terminalB.Start())
+						if (!terminalB.Launch())
 						{
 							if (Utilities.TerminalMessageInputRequestResultsInExclude) {
 								Assert.Ignore(Utilities.TerminalMessageInputRequestResultsInExcludeText);
@@ -356,8 +356,8 @@ namespace YAT.Model.Test.Transmission
 
 						TransmitAndVerify(terminalA, terminalB, testSet, transmissionCount);
 
-						terminalB.StopIO();
-						Utilities.WaitForDisconnection(terminalB);
+						terminalB.Stop();
+						Utilities.WaitForStop(terminalB);
 					}
 				}
 				else // Loopback self:
@@ -365,8 +365,8 @@ namespace YAT.Model.Test.Transmission
 					TransmitAndVerify(terminalA, terminalA, testSet, transmissionCount);
 				}
 
-				terminalA.StopIO();
-				Utilities.WaitForDisconnection(terminalA);
+				terminalA.Stop();
+				Utilities.WaitForStop(terminalA);
 			}
 		}
 

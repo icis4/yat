@@ -94,8 +94,8 @@ namespace YAT.Model.Test
 					Utilities.TestSet testSet;
 
 					// Start and open terminals:
-					Assert.That(terminalA.Start(), Is.True, @"Failed to start """ + terminalA.Caption + @"""");
-					Assert.That(terminalB.Start(), Is.True, @"Failed to start """ + terminalB.Caption + @"""");
+					Assert.That(terminalA.Launch(), Is.True, @"Failed to launch """ + terminalA.Caption + @"""");
+					Assert.That(terminalB.Launch(), Is.True, @"Failed to launch """ + terminalB.Caption + @"""");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					// Create test set to verify transmission:                              // LineStart + EOL + LineBreak result in three more elements.
@@ -118,12 +118,12 @@ namespace YAT.Model.Test
 					// Verify clear:
 					Utilities.AssertLines(terminalA, terminalB, testSet);
 
-					terminalB.StopIO();
-					Utilities.WaitForDisconnection(terminalB);
+					terminalB.Stop();
+					Utilities.WaitForStop(terminalB);
 				}
 
-				terminalA.StopIO();
-				Utilities.WaitForDisconnection(terminalA);
+				terminalA.Stop();
+				Utilities.WaitForStop(terminalA);
 			}
 		}
 
@@ -145,8 +145,8 @@ namespace YAT.Model.Test
 				using (var terminalB = new Terminal(Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text)))
 				{
 					// Start and open terminals:
-					Assert.That(terminalA.Start(), Is.True, @"Failed to start """ + terminalA.Caption + @"""");
-					Assert.That(terminalB.Start(), Is.True, @"Failed to start """ + terminalB.Caption + @"""");
+					Assert.That(terminalA.Launch(), Is.True, @"Failed to launch """ + terminalA.Caption + @"""");
+					Assert.That(terminalB.Launch(), Is.True, @"Failed to launch """ + terminalB.Caption + @"""");
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					// Create test set to verify transmission:                                                    // LineStart + EOL + LineBreak result in three more elements.
@@ -181,12 +181,12 @@ namespace YAT.Model.Test
 					// Verify clear:
 					Utilities.AssertLines(terminalA, terminalB, testSetCleared);
 
-					terminalB.StopIO();
-					Utilities.WaitForDisconnection(terminalB);
+					terminalB.Stop();
+					Utilities.WaitForStop(terminalB);
 				}
 
-				terminalA.StopIO();
-				Utilities.WaitForDisconnection(terminalA);
+				terminalA.Stop();
+				Utilities.WaitForStop(terminalA);
 			}
 		}
 

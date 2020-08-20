@@ -1059,7 +1059,7 @@ namespace YAT.Settings.Model.Test
 				// Required if COM101 is not available.
 				t.MessageInputRequest += terminal_MessageInputRequest;
 
-				Assert.That(t.Start(), Is.True, @"Failed to start """ + t.Caption + @"""");
+				Assert.That(t.Launch(), Is.True, @"Failed to launch """ + t.Caption + @"""");
 
 				VerifySettingsCase01(t);
 			}
@@ -1082,7 +1082,7 @@ namespace YAT.Settings.Model.Test
 				// Required if COM102 is not available.
 				t.MessageInputRequest += terminal_MessageInputRequest;
 
-				Assert.That(t.Start(), Is.True, @"Failed to start """ + t.Caption + @"""");
+				Assert.That(t.Launch(), Is.True, @"Failed to launch """ + t.Caption + @"""");
 
 				VerifySettingsCase02(t);
 			}
@@ -1102,7 +1102,7 @@ namespace YAT.Settings.Model.Test
 			// Create terminal from settings and check whether settings are correctly set.
 			using (var t = new Terminal(sh))
 			{
-				Assert.That(t.Start(), Is.True, @"Failed to start """ + t.Caption + @"""");
+				Assert.That(t.Launch(), Is.True, @"Failed to launch """ + t.Caption + @"""");
 
 				VerifySettingsCase03(t);
 			}
@@ -1144,7 +1144,7 @@ namespace YAT.Settings.Model.Test
 				// Required if COM101 is not available.
 				t.MessageInputRequest += terminal_MessageInputRequest;
 
-				Assert.That(t.Start(), Is.True, @"Failed to start """ + t.Caption + @"""");
+				Assert.That(t.Launch(), Is.True, @"Failed to launch """ + t.Caption + @"""");
 
 				VerifySettingsCase05(t);
 			}
@@ -1183,7 +1183,7 @@ namespace YAT.Settings.Model.Test
 			// Create terminal from settings and check whether settings are correctly set.
 			using (var t = new Terminal(sh))
 			{
-				Assert.That(t.Start(), Is.True, @"Failed to start """ + t.Caption + @"""");
+				Assert.That(t.Launch(), Is.True, @"Failed to launch """ + t.Caption + @"""");
 
 				VerifySettingsCase07(t);
 			}

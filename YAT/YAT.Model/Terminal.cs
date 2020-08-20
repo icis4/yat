@@ -1107,9 +1107,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Start
+		#region Launch
 		//==========================================================================================
-		// Start
+		// Launch
 		//==========================================================================================
 
 		/// <summary>
@@ -1119,7 +1119,7 @@ namespace YAT.Model
 		/// Using term "launch" rather than "start" for distinction with "start/stop" I/O.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Indication of a fatal bug that shall be reported but cannot be easily handled with 'Debug|Trace.Assert()'.")]
-		public virtual bool Start()
+		public virtual bool Launch()
 		{
 			AssertUndisposed();
 
@@ -1137,7 +1137,7 @@ namespace YAT.Model
 				var result = CheckIOAvailability();
 				switch (result)
 				{
-					case CheckResult.OK:     return (StartIO());
+					case CheckResult.OK:     return (Start());
 					case CheckResult.Cancel: return (false);
 					case CheckResult.Ignore: return (true);
 
@@ -1502,7 +1502,7 @@ namespace YAT.Model
 			{
 				// Note that the whole terminal will be recreated. Thus, it must also be recreated if non-IO settings have changed.
 
-				if (StopIO(false))
+				if (Stop(false))
 				{
 					OnFixedStatusTextRequest("Applying settings and refreshing terminal...");
 
@@ -1533,7 +1533,7 @@ namespace YAT.Model
 
 					this.terminal.RefreshRepositories();
 
-					if (StartIO(false))
+					if (Start(false))
 						OnTimedStatusTextRequest("Terminal settings applied.");
 					else
 						OnFixedStatusTextRequest("Terminal settings applied but terminal could not be started anymore.");
@@ -2585,7 +2585,7 @@ namespace YAT.Model
 
 			if (success && this.terminal.IsStarted)
 			{
-				success = StopIO(false);
+				success = Stop(false);
 			}
 
 			if (success && this.log.AnyIsOn)
@@ -4156,56 +4156,44 @@ namespace YAT.Model
 		/// <summary>
 		/// Starts the terminal's I/O instance.
 		/// </summary>
-		/// <remarks>
-		/// Named "IO" to disambiguate <see cref="Start"/>.
-		/// </remarks>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-		public virtual bool StartIO()
+		public virtual bool Start()
 		{
 			string errorMessage;
-			return (StartIO(out errorMessage));
+			return (Start(out errorMessage));
 		}
 
 		/// <summary>
-		/// Starts the terminal's I/O instance.
+		/// Starts the terminal.
 		/// </summary>
-		/// <remarks>
-		/// Named "IO" to disambiguate <see cref="Start"/>.
-		/// </remarks>
 		/// <param name="errorMessage">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool StartIO(out string errorMessage)
+		public virtual bool Start(out string errorMessage)
 		{
-			return (StartIO(true, out errorMessage));
+			return (Start(true, out errorMessage));
 		}
 
 		/// <summary>
-		/// Starts the terminal's I/O instance.
+		/// Starts the terminal.
 		/// </summary>
-		/// <remarks>
-		/// Named "IO" to disambiguate <see cref="Start"/>.
-		/// </remarks>
 		/// <param name="saveStatus">Flag indicating whether status of terminal shall be saved.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
-		private bool StartIO(bool saveStatus)
+		private bool Start(bool saveStatus)
 		{
 			string errorMessage;
-			return (StartIO(saveStatus, out errorMessage));
+			return (Start(saveStatus, out errorMessage));
 		}
 
 		/// <summary>
-		/// Starts the terminal's I/O instance.
+		/// Starts the terminal.
 		/// </summary>
-		/// <remarks>
-		/// Named "IO" to disambiguate <see cref="Start"/>.
-		/// </remarks>
 		/// <param name="saveStatus">Flag indicating whether status of terminal shall be saved.</param>
 		/// <param name="errorMessage">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool StartIO(bool saveStatus, out string errorMessage)
+		private bool Start(bool saveStatus, out string errorMessage)
 		{
 			bool success = false;
 
@@ -4366,58 +4354,46 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Stops the terminal's I/O instance.
+		/// Stops the terminal.
 		/// </summary>
-		/// <remarks>
-		/// Named "IO" for orthogonality with <see cref="StartIO()"/>.
-		/// </remarks>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-		public virtual bool StopIO()
+		public virtual bool Stop()
 		{
 			string errorMessage;
-			return (StopIO(out errorMessage));
+			return (Stop(out errorMessage));
 		}
 
 		/// <summary>
-		/// Stops the terminal's I/O instance.
+		/// Stops the terminal.
 		/// </summary>
-		/// <remarks>
-		/// Named "IO" for orthogonality with <see cref="StartIO(out string)"/>.
-		/// </remarks>
 		/// <param name="errorMessage">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool StopIO(out string errorMessage)
+		public virtual bool Stop(out string errorMessage)
 		{
-			return (StopIO(true, out errorMessage));
+			return (Stop(true, out errorMessage));
 		}
 
 		/// <summary>
-		/// Stops the terminal's I/O instance.
+		/// Stops the terminal.
 		/// </summary>
-		/// <remarks>
-		/// Named "IO" for orthogonality with <see cref="StartIO(bool)"/>.
-		/// </remarks>
 		/// <param name="saveStatus">Flag indicating whether status of terminal shall be saved.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
-		private bool StopIO(bool saveStatus)
+		private bool Stop(bool saveStatus)
 		{
 			string errorMessage;
-			return (StopIO(saveStatus, out errorMessage));
+			return (Stop(saveStatus, out errorMessage));
 		}
 
 		/// <summary>
-		/// Stops the terminal's I/O instance.
+		/// Stops the terminal.
 		/// </summary>
-		/// <remarks>
-		/// Named "IO" for orthogonality with <see cref="StartIO(bool, out string)"/>.
-		/// </remarks>
 		/// <param name="saveStatus">Flag indicating whether status of terminal shall be saved.</param>
 		/// <param name="errorMessage">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool StopIO(bool saveStatus, out string errorMessage)
+		private bool Stop(bool saveStatus, out string errorMessage)
 		{
 			bool success = false;
 

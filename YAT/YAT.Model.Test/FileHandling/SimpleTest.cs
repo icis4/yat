@@ -162,7 +162,7 @@ namespace YAT.Model.Test.FileHandling
 			Workspace workspace;
 			Terminal terminal;
 
-			Utilities.StartAndCreateDefaultTerminal(out main, out workspace, out terminal);
+			Utilities.LaunchAndCreateDefaultTerminal(out main, out workspace, out terminal);
 
 			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
@@ -189,7 +189,7 @@ namespace YAT.Model.Test.FileHandling
 			Workspace workspace;
 			Terminal terminal;
 
-			Utilities.StartAndCreateDefaultTerminal(out main, out workspace, out terminal);
+			Utilities.LaunchAndCreateDefaultTerminal(out main, out workspace, out terminal);
 
 			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
@@ -221,7 +221,7 @@ namespace YAT.Model.Test.FileHandling
 			Workspace workspace;
 			Terminal terminal;
 
-			Utilities.StartAndCreateDefaultTerminal(out main, out workspace, out terminal);
+			Utilities.LaunchAndCreateDefaultTerminal(out main, out workspace, out terminal);
 
 			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
@@ -253,7 +253,7 @@ namespace YAT.Model.Test.FileHandling
 			Workspace workspace;
 			Terminal terminal;
 
-			Utilities.StartAndCreateDefaultTerminal(out main, out workspace, out terminal);
+			Utilities.LaunchAndCreateDefaultTerminal(out main, out workspace, out terminal);
 
 			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
@@ -482,7 +482,7 @@ namespace YAT.Model.Test.FileHandling
 
 			// Initial start with auto save on exit:
 
-			Utilities.StartAndCreateDefaultTerminal(out main, out workspace, out terminal);
+			Utilities.LaunchAndCreateDefaultTerminal(out main, out workspace, out terminal);
 
 			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
 			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
