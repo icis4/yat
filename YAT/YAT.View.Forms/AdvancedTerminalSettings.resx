@@ -186,11 +186,13 @@ well as MCT and Prolific converters at high baud rates.</value>
   </data>
   <data name="checkBox_IncludeIOWarnings.ToolTip" xml:space="preserve">
     <value>Include I/O warnings in monitor view, for...
+...all terminal types: Send interruption (disconnect, break).
 ...serial COM ports: Flow control (hardware, software), break state.
-...USB Ser/HID ports: Flow control (software).
+...USB Ser/HID devices: Flow control (software).
 
-Example:
-"XOff state, retaining data..."</value>
+Examples:
+"XOff state, retaining data..."
+"5 bytes not sent anymore due to break."</value>
   </data>
   <data name="checkBox_GlueCharsOfLine.ToolTip" xml:space="preserve">
     <value>This option reduces the number of line breaks in the
@@ -217,6 +219,14 @@ Default is enabled.
 
 When the reduce/glue option is enabled below, this
 option is only relevant after the timeout has elapsed.</value>
+  </data>
+  <data name="checkBox_IncludeIOControl.ToolTip" xml:space="preserve">
+    <value>Include I/O control events in monitor view, for...
+...serial COM ports: Flow control (hardware, software), break state.
+...USB Ser/HID devices: Flow control (software).
+
+Example:
+"[RTS=on,DTR=on][CTS=on,DSR=on,DCD=on]"</value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>60</value>

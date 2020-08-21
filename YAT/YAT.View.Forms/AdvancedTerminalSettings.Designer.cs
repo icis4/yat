@@ -1054,9 +1054,7 @@
 			this.checkBox_IncludeIOControl.Size = new System.Drawing.Size(150, 17);
 			this.checkBox_IncludeIOControl.TabIndex = 18;
 			this.checkBox_IncludeIOControl.Text = "Include I/O control events";
-			this.toolTip.SetToolTip(this.checkBox_IncludeIOControl, "Include I/O control events in monitor view, for...\r\n...serial COM ports: Flow con" +
-        "trol (hardware, software), break state.\r\n...USB Ser/HID ports: Flow control (sof" +
-        "tware).");
+			this.toolTip.SetToolTip(this.checkBox_IncludeIOControl, resources.GetString("checkBox_IncludeIOControl.ToolTip"));
 			this.checkBox_IncludeIOControl.UseVisualStyleBackColor = true;
 			this.checkBox_IncludeIOControl.CheckedChanged += new System.EventHandler(this.checkBox_IncludeIOControl_CheckedChanged);
 			// 
