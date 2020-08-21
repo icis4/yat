@@ -22,17 +22,18 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
 // MKY.Collections for consistency with the 'System.Collections' namespace hierarchy.
-namespace MKY
+namespace MKY.Collections
 {
 	/// <summary>
-	/// Collections utility methods.
+	/// <see cref="IList"/> utility methods.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
-	public static class CollectionsEx
+	public static class IListEx
 	{
 		/// <summary>
 		/// An invalid index is represented by -1.
