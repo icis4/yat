@@ -92,16 +92,16 @@ New:
   implement multiple usages (e.g. a standard interface and a firmware upgrade interface) (bug #480).
 - Support for concurrent sending, i.e. multiple commands can be active simultaneously (feat. #387).
   Useful e.g. for sending a text command while a repeating text command is already ongoing.
-  Can be enabled at [Settings... > Advanced... > Send > Allow concurrent sending].
+  Can be enabled at [Terminal > Settings... > Advanced... > Send > Allow concurrent sending].
 - Text terminals: Option to glue characters of a line together, enabled by default, resulting in
   fewer line breaks when sending and receiving in full-duplex (related to feat. #19 and bug #176).
 - Text terminals: Option to wait for response, resulting in request and response being displayed
   adjacently. Useful for sending multi-line commands and files with ping-pong-style command sets
   (feature request #19 and bug #176).
   Note for serial COM ports: In order to only limit the send rate, YAT offers other settings, e.g.
-  [Settings... > Advanced... > Send > Buffer not more than baud rate permits]. That setting limits
-  the send rate enough in most cases, and lets an active hardware or software flow control do its
-  job even with large amount of data.
+  [Terminal > Settings... > Advanced... > Send > Buffer not more than baud rate permits] which
+  limits the send rate and lets an active hardware or software flow control do its job even for
+  small buffers and large amount of data.
 - Content separator can now be configured. Useful for e.g. displaying or logging hex data without
   separating spaces, e.g. "414243", using [None]. Separator format can now also be configured.
 - Additional keyword \!(TimeStamp) allowing injection of current date/time (feature request #400).
@@ -120,9 +120,12 @@ New:
 - New automatic actions [Line Chart], [Scatter Plot] and [Histogram].
 
 Important changes:
+- High FTDI and Prolific baud rates added to list of standard baud rates (feature request #398).
 - Using term "I/O" instead of "Port" for terminal, settings,... for reducing mix-up of term in YAT
   with TCP and UDP "Port" terminology, where a "Port" only is a part of the overall "I/O" subsystem.
-- High FTDI and Prolific baud rates added to list of standard baud rates (feature request #398).
+- TCP/IP segment payload size limited to the safe maximum of 516 (IPv4) or 1220 octets (IPv6).
+- UDP/IP datagram payload size limited to the safe maximum of 508 (IPv4) or 1212 octets (IPv6).
+- IPv6 support enabled for UDP/IP terminals (feature request #372).
 - Text terminals: Now by default using UTF-8 instead of .NET's [Encoding.Default] that is limited to
   an ANSI code page, e.g. Windows-1252 in Western Europe (related to former bugs #427, #428, #429).
 - Sending refactored (precondition for feature requests #19, #333, #387 and fix of bug #176).
@@ -145,18 +148,15 @@ Important changes:
 - For Bin/Oct/Dec/Hex/Unicode radix:
    > Performance significanty improved (feature request #406).
    > ASCII control characters are no longer converted to mnemonics.
-- The time information of a line is no longer defined by hidden bytes like e.g. an initial XOn.
 - Option to not send XOn when opending a serial COM port or USB Ser/HID terminal (feat. req. #393).
 - Changes on-the-fly by keywords like \!(Port()), \!(PortSettings()), \!(Baud()),... are now
   reflected in the terminal settings, i.e. also indicated by '*' (related to reqs. #71 and #403).
-- TCP/IP segment payload size limited to the safe maximum of 516 (IPv4) or 1220 octets (IPv6).
-- UDP/IP datagram payload size limited to the safe maximum of 508 (IPv4) or 1212 octets (IPv6).
-- IPv6 support enabled for UDP/IP terminals (feature request #372).
-- Test coverage of sending and processing significantly increased (related to refactorings above).
-- Project/Assembly structure slightly refined (preparing upcoming feature request #74).
+- [Terminal > Settings... > Advanced...] dialog rearranged for better fitting screen.
 - Upgrade to .NET 4.0 runtime (precondition for new automatic actions [Chart/Plot/Histogram],
   preparing upcoming feature request #74, part of feature request #229).
 - Consequently, x64 distributions no longer need to be 'AnyCPU' builds (former limitation).
+- Project/Assembly structure slightly refined (preparing upcoming feature request #74).
+- Test coverage of sending and processing significantly increased (related to refactorings above).
 
 Fixed bugs:
 - Predefined command description gets updated when multi-line command gets changed (bug #481) and
@@ -175,6 +175,7 @@ Fixed bugs:
 - Automatic actions and responses now work chunk independently (feature request #366).
 - Automatic actions [Filter] and [Suppress] now also work for continuous data (bug #478) and on
   refresh (feature request #367).
+- The time information of a line is no longer defined by hidden bytes like e.g. an initial XOn.
 - Line break detection and processing continues even when exceeding the configured maximum number
   of characters/bytes per line (related to refactoring of element and line processing).
 - Sending of very long lines now also works for TCP/IP based terminals (bug #340).
