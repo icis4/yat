@@ -46,6 +46,9 @@ namespace MKY
 		/// <summary>
 		/// Indicates whether the specified array is <c>null</c> or empty.
 		/// </summary>
+		/// <remarks>
+		/// Same syntax and semantic as <see cref="string.IsNullOrEmpty(string)"/>.
+		/// </remarks>
 		/// <param name="value">The array to test.</param>
 		/// <returns>
 		/// <c>true</c> if the value parameter is <c>null</c> or empty; otherwise, <c>false</c>.

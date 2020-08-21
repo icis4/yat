@@ -87,6 +87,7 @@
     <Compile Include="..\MKY.Version.cs">
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
+    <Compile Include="Collections\ICollectionEx.cs" />
     <Compile Include="Collections\Generic\Quadruple.cs" />
     <Compile Include="Collections\Generic\Triple.cs" />
     <Compile Include="Collections\Generic\Pair.cs" />
@@ -95,7 +96,7 @@
     <Compile Include="Collections\Specialized\RecentItem.cs" />
     <Compile Include="Collections\Specialized\Histogram.cs" />
     <Compile Include="Collections\Specialized\RecentItemCollection.cs" />
-    <Compile Include="Collections\CollectionsEx.cs" />
+    <Compile Include="Collections\IListEx.cs" />
     <Compile Include="Collections\IEnumeratorEx.cs" />
     <Compile Include="Collections\IEnumerableEx.cs" />
     <Compile Include="Collections\NamedStringDictionary.cs" />

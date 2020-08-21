@@ -66,6 +66,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Collections;
 using MKY.Collections.Specialized;
 using MKY.Contracts;
 using MKY.Diagnostics;
@@ -1786,10 +1787,10 @@ namespace YAT.View.Controls
 		////var lblin = fastListBox_LineNumbers => Nothing to do (yet).
 			var lbmon = fastListBox_Monitor;
 
-			if ((lbmon.Items != null) && (lbmon.Items.Count > 0))
+			if (!ICollectionEx.IsNullOrEmpty(lbmon.Items)) // lbmon is master.
 			{
 				var dl = (lbmon.Items[lbmon.Items.Count - 1] as Domain.DisplayLine);
-				if ((dl != null) && (dl.Count > 0) && (!dl.IsComplete)) // 'IsComplete' means that this is no longer the "current" line.
+				if (!ICollectionEx.IsNullOrEmpty(dl) && (!dl.IsComplete)) // 'IsComplete' means that this is no longer the "current" line.
 				{
 					dl.Clear();
 					lbmon.Invalidate();
@@ -1802,10 +1803,10 @@ namespace YAT.View.Controls
 			var lblin = fastListBox_LineNumbers;
 			var lbmon = fastListBox_Monitor;
 
-			if ((lbmon.Items != null) && (lbmon.Items.Count > 0)) // lbmon is master.
+			if (!ICollectionEx.IsNullOrEmpty(lbmon.Items)) // lbmon is master.
 			{
 				var dl = (lbmon.Items[lbmon.Items.Count - 1] as Domain.DisplayLine);
-				if ((dl != null) && (dl.Count > 0) && (!dl.IsComplete)) // 'IsComplete' means that this is no longer the "current" line.
+				if (!ICollectionEx.IsNullOrEmpty(dl) && (!dl.IsComplete)) // 'IsComplete' means that this is no longer the "current" line.
 				{
 					int adjustedTopIndex = Math.Max(0, (lbmon.TopIndex - 1)); // lbmon is master; decrement accounts for item that will be removed.
 					DebugVerticalAutoScroll("Clearing current line...");

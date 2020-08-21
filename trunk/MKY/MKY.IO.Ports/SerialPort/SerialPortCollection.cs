@@ -49,6 +49,7 @@ using System.Text;
 using System.Threading;
 using System.Xml.Serialization;
 
+using MKY.Collections;
 using MKY.Diagnostics;
 
 #endregion
@@ -400,7 +401,7 @@ namespace MKY.IO.Ports
 			if (isInUseByActivePort && (activePortInUseInfo != null))
 				inUseText.Append(activePortInUseInfo.InUseText); // "(in use by this serial port)"
 
-			if ((otherPortInUseInfo != null) && (otherPortInUseInfo.Count > 0))
+			if (!ICollectionEx.IsNullOrEmpty(otherPortInUseInfo))
 			{
 				foreach (var statement in otherPortInUseInfo)
 				{

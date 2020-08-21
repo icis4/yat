@@ -520,7 +520,7 @@ namespace YAT.View.Controls
 				pathComboBox_FilePath.Items.Clear();
 
 				// Fill the drop down list, depending on the amount of recent files:
-				if ((this.recent != null) && (this.recent.Count > 0))
+				if (!ICollectionEx.IsNullOrEmpty(this.recent))
 				{
 					// Add the current command, or "<Set a file...>", to the top of the list:
 					if (this.command.IsFilePath)
