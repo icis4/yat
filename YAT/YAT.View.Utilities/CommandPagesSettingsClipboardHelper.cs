@@ -34,6 +34,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Collections;
 using MKY.Diagnostics;
 using MKY.Windows.Forms;
 using MKY.Xml;
@@ -260,7 +261,7 @@ namespace YAT.View.Utilities
 				//  > Issue described here and below still applies, thus a workaround/check would still be needed.
 
 				var rootCasted = (CommandPagesSettingsRoot)root;
-				if ((rootCasted.Pages != null) && (rootCasted.Pages.Count > 0))
+				if (!ICollectionEx.IsNullOrEmpty(rootCasted.Pages))
 				{
 					if (rootCasted.Pages.TotalDefinedCommandCount < 1)
 					{

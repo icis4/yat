@@ -35,6 +35,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Collections;
 using MKY.IO.Ports;
 using MKY.Windows.Forms;
 
@@ -458,7 +459,7 @@ namespace YAT.View.Controls
 				{
 					comboBox_Port.Items.Clear();
 
-					if ((ports != null) && (ports.Count > 0))
+					if (!ICollectionEx.IsNullOrEmpty(ports))
 					{
 						comboBox_Port.Items.AddRange(ports.ToArray());
 

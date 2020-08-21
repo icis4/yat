@@ -54,7 +54,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
-using MKY.Collections.Generic;
+using MKY.Collections;
 using MKY.Contracts;
 using MKY.Diagnostics;
 using MKY.IO;
@@ -2896,7 +2896,7 @@ namespace YAT.Model
 				return;
 
 			// Log:
-			if ((e.Texts != null) && (e.Texts.Count > 0))
+			if (!ICollectionEx.IsNullOrEmpty(e.Texts))
 			{
 				if (this.log.AnyControlIsOn)                                   // Status text is always included (so far).
 					this.log.WriteLine(IOControlToDisplayLine(e.TimeStamp, e, true), Log.LogChannel.Control);
@@ -3121,7 +3121,7 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 
 			// AutoAction for actions that also apply to Tx (e.g. Plot Count/Rate):
-			if ((autoActionTriggers != null) && (autoActionTriggers.Count > 0))
+			if (!ICollectionEx.IsNullOrEmpty(autoActionTriggers))
 			{
 				EnqueueAutoActions(autoActionTriggers);
 			}
@@ -3187,13 +3187,13 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 
 			// AutoAction:
-			if ((autoActionTriggers != null) && (autoActionTriggers.Count > 0))
+			if (!ICollectionEx.IsNullOrEmpty(autoActionTriggers))
 			{
 				EnqueueAutoActions(autoActionTriggers);
 			}
 
 			// AutoResponse:
-			if ((autoResponseTriggers != null) && (autoResponseTriggers.Count > 0))
+			if (!ICollectionEx.IsNullOrEmpty(autoResponseTriggers))
 			{
 				EnqueueAutoResponses(autoResponseTriggers);
 			}
@@ -3475,7 +3475,7 @@ namespace YAT.Model
 				// doesn't help in this 'LinesRxAdded' event, as the monitors already get updated
 				// in the 'ElementsRxAdded' event further above.
 			}
-			else if ((autoActionTriggers != null) && (autoActionTriggers.Count > 0))
+			else if (!ICollectionEx.IsNullOrEmpty(autoActionTriggers))
 			{
 				EnqueueAutoActions(autoActionTriggers);
 			}
@@ -3493,7 +3493,7 @@ namespace YAT.Model
 				// doesn't help in this 'LinesRxAdded' event, as the monitors already get updated
 				// in the 'ElementsRxAdded' event further above.
 			}
-			else if ((autoResponseTriggers != null) && (autoResponseTriggers.Count > 0))
+			else if (!ICollectionEx.IsNullOrEmpty(autoResponseTriggers))
 			{
 				EnqueueAutoResponses(autoResponseTriggers);
 			}

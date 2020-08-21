@@ -35,6 +35,7 @@ using System.Text;
 using System.Xml.Serialization;
 
 using MKY;
+using MKY.Collections;
 using MKY.Collections.Generic;
 using MKY.Diagnostics;
 
@@ -1059,8 +1060,8 @@ namespace YAT.Domain
 
 			if (this.origin == null) {
 				this.origin = PerformDeepClone(other.origin);
-			}                               // No need to add empty origin.
-			else if ((other.origin != null) && (other.origin.Count > 0)) {
+			}                             // No need to add empty origin.
+			else if (!ICollectionEx.IsNullOrEmpty(other.origin)) {
 				this.origin.AddRange(PerformDeepClone(other.origin));
 			}
 

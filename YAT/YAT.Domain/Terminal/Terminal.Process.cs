@@ -52,6 +52,7 @@ using System.Globalization;
 using System.Text;
 
 using MKY;
+using MKY.Collections;
 using MKY.Text;
 
 using YAT.Domain.Settings;
@@ -1335,13 +1336,13 @@ namespace YAT.Domain
 		protected virtual void Flush(RepositoryType repositoryType,
 		                             DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
-			if ((elementsToAdd != null) && (elementsToAdd.Count > 0))
+			if (!ICollectionEx.IsNullOrEmpty(elementsToAdd))
 			{
 				AddDisplayElements(repositoryType, elementsToAdd);
 				elementsToAdd.Clear();
 			}
 
-			if ((linesToAdd != null) && (linesToAdd.Count > 0))
+			if (!ICollectionEx.IsNullOrEmpty(linesToAdd))
 			{
 				AddDisplayLines(repositoryType, linesToAdd);
 				linesToAdd.Clear();
@@ -1352,13 +1353,13 @@ namespace YAT.Domain
 		/// <remarks>Named 'Began' for consistency with <see cref="LinePosition.Begin"/>.</remarks>
 		protected virtual void FlushReplaceAlreadyBeganLine(RepositoryType repositoryType, LineState lineState)
 		{
-		////if ((elementsToAdd != null) && (elementsToAdd.Count > 0)) is not needed (yet).
+		////if (!ICollectionEx.IsNullOrEmpty(elementsToAdd)) is not needed (yet).
 		////{
 		////	AddDisplayElements(repositoryType, elementsToAdd);
 		////	elementsToAdd.Clear();
 		////}
 
-		////if ((linesToAdd != null) && (linesToAdd.Count > 0)) is not needed (yet).
+		////if (!ICollectionEx.IsNullOrEmpty(linesToAdd)) is not needed (yet).
 		////{
 		////	AddDisplayLines(repositoryType, linesToAdd);
 		////	linesToAdd.Clear();
@@ -1375,13 +1376,13 @@ namespace YAT.Domain
 		protected virtual void FlushClearAlreadyBeganLine(RepositoryType repositoryType, ProcessState processState,
 		                                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 		{
-			if ((elementsToAdd != null) && (elementsToAdd.Count > 0))
+			if (!ICollectionEx.IsNullOrEmpty(elementsToAdd))
 			{
 				AddDisplayElements(repositoryType, elementsToAdd);
 				elementsToAdd.Clear();
 			}
 
-			if ((linesToAdd != null) && (linesToAdd.Count > 0))
+			if (!ICollectionEx.IsNullOrEmpty(linesToAdd))
 			{
 				AddDisplayLines(repositoryType, linesToAdd);
 				linesToAdd.Clear();

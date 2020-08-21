@@ -195,7 +195,7 @@ namespace YAT.View.Controls
 			set
 			{
 				int selectedPageIdNew;
-				if ((this.pages != null) && (this.pages.Count > 0))
+				if (!ICollectionEx.IsNullOrEmpty(this.pages))
 					selectedPageIdNew = Int32Ex.Limit(value, SelectedPageIdDefault, this.pages.Count); // 'Count' is 1 or above.
 				else
 					selectedPageIdNew = SelectedPageIdDefault;
@@ -297,7 +297,7 @@ namespace YAT.View.Controls
 		public virtual bool TryGetCommandFromId(int id, out Command command)
 		{
 			List<Command> commands = null;
-			if ((this.pages != null) && (this.pages.Count > 0))
+			if (!ICollectionEx.IsNullOrEmpty(this.pages))
 				commands = this.pages[SelectedPageIndex].Commands;
 
 			if (commands != null)
@@ -563,7 +563,7 @@ namespace YAT.View.Controls
 			try
 			{
 				List<Command> commands = null;
-				if ((this.pages != null) && (this.pages.Count > 0))
+				if (!ICollectionEx.IsNullOrEmpty(this.pages))
 					commands = this.pages[SelectedPageIndex].Commands;
 
 				foreach (var set in this.buttonSets)

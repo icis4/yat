@@ -36,6 +36,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 
+using MKY.Collections;
 using MKY.Diagnostics;
 
 #endregion
@@ -1081,7 +1082,7 @@ namespace MKY.CommandLine
 		private void EndArrayOption()
 		{
 			if ((this.arrayOptionField != null) && (this.arrayOptionValues != null) &&
-				(this.arrayOptionStrings != null) && (this.arrayOptionStrings.Count > 0))
+			    !ICollectionEx.IsNullOrEmpty(this.arrayOptionStrings))
 			{
 				if (this.arrayOptionValues.Count > 0)
 				{
