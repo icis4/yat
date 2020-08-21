@@ -330,7 +330,7 @@ namespace MKY.Collections.Generic
 				if (item is S)
 					return (this.source.IndexOf((S)item));
 				else
-					return (CollectionsEx.InvalidIndex);
+					return (IListEx.InvalidIndex);
 			}
 
 			/// <summary>
