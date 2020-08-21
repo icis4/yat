@@ -34,6 +34,7 @@ using System.Linq;
 using System.Threading;
 
 using MKY;
+using MKY.Collections;
 
 #endregion
 
@@ -579,38 +580,41 @@ namespace YAT.Domain
 		/// </remarks>
 		private void InlineDisplayElement(RepositoryType repositoryType, IODirection direction, DisplayElement.InlineElement element)
 		{
-			var lp = new DisplayElementCollection(1 + 1); // Preset the maximal required capacity to improve memory management.
-			var lineState = GetLineState(repositoryType);
+			if (element != null) // In this case, for simplicity in using, robust programming!
+			{
+				var lp = new DisplayElementCollection(1 + 1); // Preset the maximal required capacity to improve memory management.
+				var lineState = GetLineState(repositoryType);
 
-			AddContentSeparatorIfNecessary(lineState, direction, lp, element);
-			lp.Add(element); // No clone needed as elements must already have been cloned when calling this method.
+				AddContentSeparatorIfNecessary(lineState, direction, lp, element);
+				lp.Add(element); // No clone needed as elements must already have been cloned when calling this method.
 
-			AddDisplayElements(repositoryType, lp);
+				AddDisplayElements(repositoryType, lp);
 
-			// Note that simply adding leads to a suboptimality (bug #352):
-			//
-			// ABC<CR><LF>[Warning: 5 bytes not sent anymore due to break.]
-			//
-			// ABCD<CR><LF>
-			// ABCD<CR><LF>[Warning: CTS inactive, retaining data...] <= Warning appears on already completed line
-			//
-			// [Error: EOL keyword is not supported for binary terminals!]
-			// 41h 41h 42h
-			// 41h 42h 43h[Error: EOL keyword is not supported for binary terminals!]
-			//
-			// => Simply adding may result in inlining at suboptimal locations.
-			//
-			// However, the current approach also has advantages over moving message to a separate line:
-			//  > In the first example, the number of shown lines relates to true number of lines.
-			//  > Separate line would require additional LineStart/End elements, somewhat inconsistent.
-			//  > Separate line would also be inconsistent in general, e.g. length would be useless.
-			//
-			// => Insert into RawRepository? Same as for retaining e.g. "RX PARITY ERROR"?
-			// => Significant refactoring of the raw terminal repository content would be required to
-			//    solve this, e.g. changing the raw terminal from byte to 'IOElement'.
-			//
-			// https://sourceforge.net/p/y-a-terminal/bugs/352/ (Terminal warnings are not shown on separate line)
-			// https://sourceforge.net/p/y-a-terminal/bugs/211/ (RX PARITY ERROR indications disappear)
+				// Note that simply adding leads to a suboptimality (bug #352):
+				//
+				// ABC<CR><LF>[Warning: 5 bytes not sent anymore due to break.]
+				//
+				// ABCD<CR><LF>
+				// ABCD<CR><LF>[Warning: CTS inactive, retaining data...] <= Warning appears on already completed line
+				//
+				// [Error: EOL keyword is not supported for binary terminals!]
+				// 41h 41h 42h
+				// 41h 42h 43h[Error: EOL keyword is not supported for binary terminals!]
+				//
+				// => Simply adding may result in inlining at suboptimal locations.
+				//
+				// However, the current approach also has advantages over moving message to a separate line:
+				//  > In the first example, the number of shown lines relates to true number of lines.
+				//  > Separate line would require additional LineStart/End elements, somewhat inconsistent.
+				//  > Separate line would also be inconsistent in general, e.g. length would be useless.
+				//
+				// => Insert into RawRepository? Same as for retaining e.g. "RX PARITY ERROR"?
+				// => Significant refactoring of the raw terminal repository content would be required to
+				//    solve this, e.g. changing the raw terminal from byte to 'IOElement'.
+				//
+				// https://sourceforge.net/p/y-a-terminal/bugs/352/ (Terminal warnings are not shown on separate line)
+				// https://sourceforge.net/p/y-a-terminal/bugs/211/ (RX PARITY ERROR indications disappear)
+			}
 		}
 
 		/// <remarks>
@@ -627,15 +631,18 @@ namespace YAT.Domain
 		/// </remarks>
 		private void InlineDisplayElements(RepositoryType repositoryType, IODirection direction, DisplayElementCollection elements)
 		{
-			var lp = new DisplayElementCollection(1 + elements.Count); // Preset the maximal required capacity to improve memory management.
-			var lineState = GetLineState(repositoryType);
+			if (!ICollectionEx.IsNullOrEmpty(elements)) // In this case, for simplicity in using, robust programming!
+			{
+				var lp = new DisplayElementCollection(1 + elements.Count); // Preset the maximal required capacity to improve memory management.
+				var lineState = GetLineState(repositoryType);
 
-			AddContentSeparatorIfNecessary(lineState, direction, lp, elements.First());
-			lp.AddRange(elements); // No clone needed as elements must already have been cloned when calling this method.
+				AddContentSeparatorIfNecessary(lineState, direction, lp, elements.First());
+				lp.AddRange(elements); // No clone needed as elements must already have been cloned when calling this method.
 
-			AddDisplayElements(repositoryType, lp);
+				AddDisplayElements(repositoryType, lp);
 
-			// Consider note at InlineDisplayElement() above.
+				// Consider note at InlineDisplayElement() above.
+			}
 		}
 
 		/// <remarks>

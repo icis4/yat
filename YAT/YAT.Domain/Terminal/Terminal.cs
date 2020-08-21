@@ -1825,16 +1825,18 @@ namespace YAT.Domain
 			if (TerminalSettings.Display.IncludeIOControl)
 			{
 				var texts = IOControlChangeTexts();
-				var c = new DisplayElementCollection(texts.Count); // Preset the required capacity to improve memory management.
+				var elements = new DisplayElementCollection(texts.Count); // Preset the required capacity to improve memory management.
 				foreach (var t in texts)
-				{                        // 'IOControlInfo' elements are inline elements, thus neither add info separators nor content spaces inbetween.
-					c.Add(new DisplayElement.IOControlInfo(e.Value, Direction.Bidir, t));
+				{                               // 'IOControlInfo' elements are inline elements, thus neither add info separators nor content spaces inbetween.
+					elements.Add(new DisplayElement.IOControlInfo(e.Value, Direction.Bidir, t));
 				}
 
-				// Do not lock (ClearRefreshEmptySyncObj)! That would lead to deadlocks if close/dispose
-				// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread!
+				if (elements.Count > 0)
 				{
-					InlineDisplayElements(IODirection.Bidir, c);
+					// Do not lock (ClearRefreshEmptySyncObj)! That would lead to deadlocks if close/dispose
+					// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread!
+
+					InlineDisplayElements(IODirection.Bidir, elements);
 				}
 
 				OnIOControlChanged(new IOControlEventArgs(IODirection.Bidir, texts));
