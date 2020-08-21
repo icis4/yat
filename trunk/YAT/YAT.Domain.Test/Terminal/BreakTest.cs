@@ -260,13 +260,21 @@ namespace YAT.Domain.Test.Terminal
 							Assert.That(rxByteCount, Is.GreaterThan(500 * textLineByteCount));
 							Assert.That(rxLineCount, Is.EqualTo(txLineCount));
 							Assert.That(rxLineCount, Is.GreaterThan(500)); // Running in NUnit revealed ~2000 lines.
-							Assert.That(rxLineCount, Is.EqualTo((int)(Math.Round((double)txByteCount / textLineByteCount))));
+						////Assert.That(rxLineCount, Is.EqualTo((int)(Math.Round((double)txByteCount / textLineByteCount)))) doesn't work as partial lines have to be expected.
 
 							// Send again to resume break:
 							terminalTx.SendTextLine(textNormal);
 							var expectedTotalByteCount = (txByteCount + textLineByteCount);
-							var expectedTotalLineCount = (txLineCount + 1);
-							Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+							var expectedTotalLineCount = (txLineCount); // Assume partial line, i.e. additional line will not create another.
+							try
+							{
+								Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+							}
+							catch (AssertionException)
+							{
+								expectedTotalLineCount = (txLineCount + 1);
+								Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+							}
 
 							// Wait to ensure that no operation is ongoing anymore and verify again:
 							Utilities.WaitForReverification();
@@ -346,15 +354,24 @@ namespace YAT.Domain.Test.Terminal
 							Assert.That(rxByteCount, Is.GreaterThan(500 * fi.LineByteCount));
 							Assert.That(rxLineCount, Is.EqualTo(txLineCount));
 							Assert.That(rxLineCount, Is.GreaterThan(500)); // Running in NUnit revealed 800..1000 lines.
-							Assert.That(rxLineCount, Is.EqualTo((int)(Math.Round((double)txByteCount / fi.LineByteCount))));
+						////Assert.That(rxLineCount, Is.EqualTo((int)(Math.Round((double)txByteCount / fi.LineByteCount)))) doesn't work as partial lines have to be expected.
 
 							// Send again to resume break:
 							string textNormal = "123"; // File contains letters.
 							int textLineByteCount = (3 + 2); // Fixed to default of <CR><LF>.
 							terminalTx.SendTextLine(textNormal);
+
 							var expectedTotalByteCount = (txByteCount + textLineByteCount);
-							var expectedTotalLineCount = (txLineCount + 1);
-							Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+							var expectedTotalLineCount = (txLineCount); // Assume partial line, i.e. additional line will not create another.
+							try
+							{
+								Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+							}
+							catch (AssertionException)
+							{
+								expectedTotalLineCount = (txLineCount + 1);
+								Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
+							}
 
 							// Wait to ensure that no operation is ongoing anymore and verify again:
 							Utilities.WaitForReverification();
