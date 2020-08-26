@@ -77,7 +77,7 @@ namespace MKY.IO.Serial.Socket.Test
 			{
 				int p;
 				TcpAutoSocket s;
-				Utilities.StartAsyncAsServer(out s, out p);
+				Utilities.CreateAndStartAsyncAsServer(out s, out p);
 				Utilities.WaitForTcpAutoSocketToBeStartedAsServer(s, "TCP/IP AutoSocket " + i + " could not be started as server!");
 				serverSockets.Add(s);
 				serverPorts.Add(p);
@@ -92,7 +92,7 @@ namespace MKY.IO.Serial.Socket.Test
 				int p = serverPorts[j];
 				TcpAutoSocket s = serverSockets[j];
 				TcpAutoSocket c;
-				Utilities.StartAsyncAsClient(out c, p);
+				Utilities.CreateAndStartAsyncAsClient(out c, p);
 				Utilities.WaitForStart(c, "TCP/IP AutoSocket " + i + " could not be started!");
 				Utilities.WaitForConnect(c, s, "TCP/IP AutoSocket " + i + " could not be connected to AutoSocket " + s);
 				clientSockets.Add(c);

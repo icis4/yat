@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
@@ -28,7 +33,10 @@ using System.Net.NetworkInformation;
 using System.Threading;
 
 using MKY.Net;
+
 using NUnit.Framework;
+
+#endregion
 
 namespace MKY.IO.Serial.Socket.Test
 {
@@ -153,7 +161,7 @@ namespace MKY.IO.Serial.Socket.Test
 		// Start/Stop
 		//==========================================================================================
 
-		internal static void StartAsync(out TcpServer server, out int localPort)
+		internal static void CreateAndStartAsync(out TcpServer server, out int localPort)
 		{
 			localPort = AvailableLocalTcpPort;
 			server = new TcpServer(IPNetworkInterface.Any, localPort);
@@ -167,9 +175,16 @@ namespace MKY.IO.Serial.Socket.Test
 				Assert.Fail("TCP/IP server could not be started!");
 		}
 
-		internal static void StartAsync(out TcpClient client, int remotePort)
+		internal static void CreateAndStartAsync(out TcpClient client, int remotePort)
 		{
 			client = new TcpClient(IPHost.Localhost, remotePort, IPNetworkInterface.Any);
+
+			StartAsync(client);
+		}
+
+		internal static void CreateAndStartAsync(out TcpClient client, int remotePort, IntervalSettingTuple autoReconnect)
+		{
+			client = new TcpClient(IPHost.Localhost, remotePort, IPNetworkInterface.Any, autoReconnect);
 
 			StartAsync(client);
 		}
@@ -180,7 +195,7 @@ namespace MKY.IO.Serial.Socket.Test
 				Assert.Fail("TCP/IP client could not be started!");
 		}
 
-		internal static void StartAsyncAsServer(out TcpAutoSocket autoSocket, out int localPort)
+		internal static void CreateAndStartAsyncAsServer(out TcpAutoSocket autoSocket, out int localPort)
 		{
 			localPort = AvailableLocalTcpPort;
 			autoSocket = new TcpAutoSocket(IPHost.Localhost, localPort, IPNetworkInterface.Any, localPort);
@@ -194,7 +209,7 @@ namespace MKY.IO.Serial.Socket.Test
 				Assert.Fail("TCP/IP AutoSocket could not be started!");
 		}
 
-		internal static void StartAsyncAsClient(out TcpAutoSocket autoSocket, int remotePort)
+		internal static void CreateAndStartAsyncAsClient(out TcpAutoSocket autoSocket, int remotePort)
 		{
 			autoSocket = new TcpAutoSocket(IPHost.Localhost, remotePort, IPNetworkInterface.Any, remotePort);
 
@@ -207,21 +222,21 @@ namespace MKY.IO.Serial.Socket.Test
 				Assert.Fail("TCP/IP AutoSocket could not be started!");
 		}
 
-		internal static void StartAsServer(out UdpSocket server, int localPort)
+		internal static void CreateAndStartAsServer(out UdpSocket server, int localPort)
 		{
 			server = new UdpSocket(IPNetworkInterface.Any, localPort);
 
 			Start(server);
 		}
 
-		internal static void StartAsClient(out UdpSocket client, int remotePort)
+		internal static void CreateAndStartAsClient(out UdpSocket client, int remotePort)
 		{
 			client = new UdpSocket(IPHost.Localhost, remotePort);
 
 			Start(client);
 		}
 
-		internal static void StartAsPairSocket(out UdpSocket pairSocket, int remotePort, int localPort)
+		internal static void CreateAndStartAsPairSocket(out UdpSocket pairSocket, int remotePort, int localPort)
 		{
 			pairSocket = new UdpSocket(IPHost.Localhost, remotePort, IPNetworkInterface.Any, localPort);
 

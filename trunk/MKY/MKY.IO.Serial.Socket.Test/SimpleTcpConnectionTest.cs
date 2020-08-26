@@ -60,9 +60,9 @@ namespace MKY.IO.Serial.Socket.Test
 			TcpServer server;
 			TcpClient client;
 
-			Utilities.StartAsync(out server, out serverPort);
+			Utilities.CreateAndStartAsync(out server, out serverPort);
 			Utilities.WaitForStart(server, "TCP/IP server could not be started!");
-			Utilities.StartAsync(out client, serverPort);
+			Utilities.CreateAndStartAsync(out client, serverPort);
 			Utilities.WaitForStart(client, "TCP/IP client could not be started!");
 			Utilities.WaitForConnect(client, server, "TCP/IP client could not be connected to server!");
 			Utilities.AssertStartedAndTransmissive(client);
@@ -93,9 +93,9 @@ namespace MKY.IO.Serial.Socket.Test
 			TcpServer server;
 			TcpClient client;
 
-			Utilities.StartAsync(out server, out serverPort);
+			Utilities.CreateAndStartAsync(out server, out serverPort);
 			Utilities.WaitForStart(server, "TCP/IP server could not be started!");
-			Utilities.StartAsync(out client, serverPort);
+			Utilities.CreateAndStartAsync(out client, serverPort);
 			Utilities.WaitForStart(client, "TCP/IP client could not be started!");
 			Utilities.WaitForConnect(client, server, "TCP/IP client could not be connected to server!");
 			Utilities.AssertStartedAndTransmissive(client);
@@ -126,9 +126,9 @@ namespace MKY.IO.Serial.Socket.Test
 			TcpServer server;
 			TcpAutoSocket autoSocket;
 
-			Utilities.StartAsync(out server, out serverPort);
+			Utilities.CreateAndStartAsync(out server, out serverPort);
 			Utilities.WaitForStart(server, "TCP/IP server could not be started!");
-			Utilities.StartAsyncAsClient(out autoSocket, serverPort);
+			Utilities.CreateAndStartAsyncAsClient(out autoSocket, serverPort);
 			Utilities.WaitForStart(autoSocket, "TCP/IP AutoSocket could not be started!");
 			Utilities.WaitForConnect(autoSocket, server, "TCP/IP AutoSocket could not be connected to server!");
 			Utilities.AssertStartedAndTransmissive(autoSocket);
@@ -159,9 +159,9 @@ namespace MKY.IO.Serial.Socket.Test
 			TcpServer server;
 			TcpAutoSocket autoSocket;
 
-			Utilities.StartAsync(out server, out serverPort);
+			Utilities.CreateAndStartAsync(out server, out serverPort);
 			Utilities.WaitForStart(server, "TCP/IP server could not be started!");
-			Utilities.StartAsyncAsClient(out autoSocket, serverPort);
+			Utilities.CreateAndStartAsyncAsClient(out autoSocket, serverPort);
 			Utilities.WaitForStart(autoSocket, "TCP/IP AutoSocket could not be started!");
 			Utilities.WaitForConnect(autoSocket, server, "TCP/IP AutoSocket could not be connected to server!");
 			Utilities.AssertStartedAndTransmissive(autoSocket);
@@ -192,10 +192,10 @@ namespace MKY.IO.Serial.Socket.Test
 			TcpAutoSocket autoSocket;
 			TcpClient client;
 
-			Utilities.StartAsyncAsServer(out autoSocket, out serverPort);
+			Utilities.CreateAndStartAsyncAsServer(out autoSocket, out serverPort);
 			Utilities.WaitForStart(autoSocket, "TCP/IP AutoSocket could not be started!");
 			Thread.Sleep(AutoSocketDelay); // Wait a while to let AutoSocket become a server.
-			Utilities.StartAsync(out client, serverPort);
+			Utilities.CreateAndStartAsync(out client, serverPort);
 			Utilities.WaitForStart(client, "TCP/IP client could not be started!");
 			Utilities.WaitForConnect(client, autoSocket, "TCP/IP client could not be connected to server!");
 			Utilities.AssertStartedAndTransmissive(client);
@@ -226,10 +226,10 @@ namespace MKY.IO.Serial.Socket.Test
 			TcpAutoSocket autoSocket;
 			TcpClient client;
 
-			Utilities.StartAsyncAsServer(out autoSocket, out serverPort);
+			Utilities.CreateAndStartAsyncAsServer(out autoSocket, out serverPort);
 			Utilities.WaitForStart(autoSocket, "TCP/IP AutoSocket could not be started!");
 			Thread.Sleep(AutoSocketDelay); // Wait a while to let AutoSocket become a server.
-			Utilities.StartAsync(out client, serverPort);
+			Utilities.CreateAndStartAsync(out client, serverPort);
 			Utilities.WaitForStart(client, "TCP/IP client could not be started!");
 			Utilities.WaitForConnect(client, autoSocket, "TCP/IP client could not be connected to server");
 			Utilities.AssertStartedAndTransmissive(client);
@@ -260,9 +260,9 @@ namespace MKY.IO.Serial.Socket.Test
 			TcpAutoSocket autoSocketA;
 			TcpAutoSocket autoSocketB;
 
-			Utilities.StartAsyncAsServer(out autoSocketA, out serverPort);
+			Utilities.CreateAndStartAsyncAsServer(out autoSocketA, out serverPort);
 			Utilities.WaitForStart(autoSocketA, "TCP/IP AutoSocket A could not be started!");
-			Utilities.StartAsyncAsClient(out autoSocketB, serverPort);
+			Utilities.CreateAndStartAsyncAsClient(out autoSocketB, serverPort);
 			Utilities.WaitForStart(autoSocketB, "TCP/IP AutoSocket B could not be started!");
 			Utilities.WaitForConnect(autoSocketB, autoSocketA, "TCP/IP AutoSocket B could not be connected to AutoSocket A!");
 			Utilities.AssertStartedAndTransmissive(autoSocketB);
@@ -293,9 +293,9 @@ namespace MKY.IO.Serial.Socket.Test
 			TcpAutoSocket autoSocketA;
 			TcpAutoSocket autoSocketB;
 
-			Utilities.StartAsyncAsServer(out autoSocketA, out serverPort);
+			Utilities.CreateAndStartAsyncAsServer(out autoSocketA, out serverPort);
 			Utilities.WaitForStart(autoSocketA, "TCP/IP AutoSocket A could not be started!");
-			Utilities.StartAsyncAsClient(out autoSocketB, serverPort);
+			Utilities.CreateAndStartAsyncAsClient(out autoSocketB, serverPort);
 			Utilities.WaitForStart(autoSocketB, "TCP/IP AutoSocket B could not be started!");
 			Utilities.WaitForConnect(autoSocketB, autoSocketA, "TCP/IP AutoSocket B could not be connected to AutoSocket A!");
 			Utilities.AssertStartedAndTransmissive(autoSocketB);
