@@ -219,7 +219,7 @@ namespace YAT.Model.Test.Connection
 		/// <remarks>
 		/// So far, the USB hub and USB port assignment is hard-coded, could become configurable.
 		/// </remarks>
-		[Test, MKY.IO.Ports.Test.MTSicsDeviceAIsAvailableCategory, MKY.Test.UsbHub2IsAvailableCategory, StandardDurationCategory.Minute1Attribute]
+		[Test, MKY.IO.Ports.Test.MTSicsDeviceAIsAvailableCategory, MKY.Test.UsbHub2IsAvailableCategory, StandardDurationCategory.Minute1]
 		public virtual void TestDisconnectReconnect()
 		{
 			TestDisconnectReconnect(false); // See comments in MKY.IO.Ports.Test.TestDisconnectReconnect().

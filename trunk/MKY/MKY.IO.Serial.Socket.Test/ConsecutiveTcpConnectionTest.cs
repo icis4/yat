@@ -45,7 +45,7 @@ namespace MKY.IO.Serial.Socket.Test
 		/// </remarks>
 		[Test]
 		[Repeat(4)]
-		[EnduranceCategory, StandardDurationCategory.Minute1Attribute]
+		[EnduranceCategory, StandardDurationCategory.Minute1]
 		public virtual void TestConsecutiveServerClientConnectAndShutdownEndurance01Minute()
 		{
 			var t = new SimpleTcpConnectionTest();
@@ -62,7 +62,7 @@ namespace MKY.IO.Serial.Socket.Test
 		/// <summary></summary>
 		[Test]
 		[Repeat(15)]
-		[EnduranceCategory, StandardDurationCategory.Minutes15Attribute]
+		[EnduranceCategory, StandardDurationCategory.Minutes15]
 		public virtual void TestConsecutiveServerClientConnectAndShutdownEndurance15Minutes()
 		{
 			TestConsecutiveServerClientConnectAndShutdownEndurance01Minute();
@@ -89,7 +89,7 @@ namespace MKY.IO.Serial.Socket.Test
 		/// </remarks>
 		[Test]
 		[Repeat(4)]
-		[EnduranceCategory, StandardDurationCategory.Minute1Attribute]
+		[EnduranceCategory, StandardDurationCategory.Minute1]
 		public virtual void TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEndurance01Minute()
 		{
 			var t = new SimpleTcpConnectionTest();
@@ -106,7 +106,7 @@ namespace MKY.IO.Serial.Socket.Test
 		/// <summary></summary>
 		[Test]
 		[Repeat(15)]
-		[EnduranceCategory, StandardDurationCategory.Minutes15Attribute]
+		[EnduranceCategory, StandardDurationCategory.Minutes15]
 		public virtual void TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEndurance15Minutes()
 		{
 			TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEndurance01Minute();
