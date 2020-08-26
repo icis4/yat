@@ -91,13 +91,28 @@ namespace MKY.IO.Serial.Socket
 			{
 				var initialTimeStamp = DateTime.Now;
 
-				foreach (byte b in data)
+				for (int i = 0; i < data.Length; i++)
 				{
 					// Wait until there is space in the send queue:
 					while (this.sendQueue.Count >= SendQueueFixedCapacity) // No lock required, just checking for full.
 					{
-						if (IsInDisposal || !IsTransmissive) // Check disposal state first!
+						var isInDisposal = IsInDisposal;
+						if (isInDisposal || !IsTransmissive) // Check disposal state first!
+						{
+							if (!isInDisposal)
+							{
+								string message;
+								var droppedCount = (data.Length - i);
+								if (droppedCount <= 1)
+									message = droppedCount + " byte not enqueued for sending anymore.";  // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+								else                                                                     // Reason cannot be stated, could be "disconnected" or "stopped/closed"
+									message = droppedCount + " bytes not enqueued for sending anymore."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+
+								OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
+							}
+
 							return (false);
+						}
 
 						// Signal to ensure send thread keeps working:
 						SignalSendThreadSafely();
@@ -111,15 +126,15 @@ namespace MKY.IO.Serial.Socket
 					}                                    // But sleep if longer!
 
 					// There is space for at least one byte:
+					var b = data[i];
 					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 					{
 						this.sendQueue.Enqueue(b);
 					}
+					DebugSendEnqueue(ConvertEx.ToHexString(b));
 
 					// Do not signal after each byte, this is a) not efficient and b) not desired
 					// as send requests shall ideally be sent as a single chunk.
-
-					DebugSendEnqueue(ConvertEx.ToHexString(b));
 				}
 
 				// Signal thread to send the requested packet:
