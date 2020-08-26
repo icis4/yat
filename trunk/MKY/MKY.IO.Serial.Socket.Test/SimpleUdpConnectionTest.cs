@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using NUnit.Framework;
+using NUnitEx;
 
 namespace MKY.IO.Serial.Socket.Test
 {
@@ -41,23 +42,24 @@ namespace MKY.IO.Serial.Socket.Test
 
 		/// <summary></summary>
 		[Test]
+		[StandardDurationCategory.Second1]
 		public virtual void TestServerClientConnectAndClientShutdown()
 		{
 			int serverPort = Utilities.AvailableLocalUdpPort;
 			UdpSocket server;
 			UdpSocket client;
 
-			Utilities.StartUdpServer(out server, serverPort);
+			Utilities.StartAsServer(out server, serverPort);
 			Utilities.WaitForStart(server, "UDP/IP server could not be started!");
-			Utilities.StartUdpClient(out client, serverPort);
+			Utilities.StartAsClient(out client, serverPort);
 			Utilities.WaitForStart(client, "UDP/IP client could not be started!");
 			Utilities.AssertStartedAndTransmissive(client);
 			Utilities.AssertStartedAndConnected(server); // Only transmissive after client has sent something.
 
-			Utilities.StopUdpSocket(client);
+			Utilities.Stop(client);
 			Utilities.WaitForStop(client, "UDP/IP client could not be stopped!");
 			Utilities.AssertStopped(client);
-			Utilities.StopUdpSocket(server);
+			Utilities.Stop(server);
 			Utilities.WaitForStop(server, "UDP/IP server could not be stopped!");
 			Utilities.AssertStopped(server);
 		}
@@ -71,23 +73,24 @@ namespace MKY.IO.Serial.Socket.Test
 
 		/// <summary></summary>
 		[Test]
+		[StandardDurationCategory.Second1]
 		public virtual void TestServerClientConnectAndServerShutdown()
 		{
 			int serverPort = Utilities.AvailableLocalUdpPort;
 			UdpSocket server;
 			UdpSocket client;
 
-			Utilities.StartUdpServer(out server, serverPort);
+			Utilities.StartAsServer(out server, serverPort);
 			Utilities.WaitForStart(server, "UDP/IP server could not be started!");
-			Utilities.StartUdpClient(out client, serverPort);
+			Utilities.StartAsClient(out client, serverPort);
 			Utilities.WaitForStart(client, "UDP/IP client could not be started!");
 			Utilities.AssertStartedAndTransmissive(client);
 			Utilities.AssertStartedAndConnected(server); // Only transmissive after client has sent something.
 
-			Utilities.StopUdpSocket(server);
+			Utilities.Stop(server);
 			Utilities.WaitForStop(server, "UDP/IP server could not be stopped!");
 			Utilities.AssertStopped(server);
-			Utilities.StopUdpSocket(client);
+			Utilities.Stop(client);
 			Utilities.WaitForStop(client, "UDP/IP client could not be stopped!");
 			Utilities.AssertStopped(client);
 		}
@@ -101,6 +104,7 @@ namespace MKY.IO.Serial.Socket.Test
 
 		/// <summary></summary>
 		[Test]
+		[StandardDurationCategory.Second1]
 		public virtual void TestPairSocketPairSocketConnectAndPairSocketBShutdown()
 		{
 			int portA;
@@ -109,17 +113,17 @@ namespace MKY.IO.Serial.Socket.Test
 			UdpSocket pairSocketA;
 			UdpSocket pairSocketB;
 
-			Utilities.StartUdpPairSocket(out pairSocketA, portB, portA);
+			Utilities.StartAsPairSocket(out pairSocketA, portB, portA);
 			Utilities.WaitForStart(pairSocketA, "UDP/IP PairSocket A could not be started!");
-			Utilities.StartUdpPairSocket(out pairSocketB, portA, portB);
+			Utilities.StartAsPairSocket(out pairSocketB, portA, portB);
 			Utilities.WaitForStart(pairSocketB, "UDP/IP PairSocket B could not be started!");
 			Utilities.AssertStartedAndTransmissive(pairSocketB);
 			Utilities.AssertStartedAndTransmissive(pairSocketA);
 
-			Utilities.StopUdpSocket(pairSocketB);
+			Utilities.Stop(pairSocketB);
 			Utilities.WaitForStop(pairSocketB, "UDP/IP PairSocket B could not be stopped!");
 			Utilities.AssertStopped(pairSocketB);
-			Utilities.StopUdpSocket(pairSocketA);
+			Utilities.Stop(pairSocketA);
 			Utilities.WaitForStop(pairSocketA, "UDP/IP PairSocket A could not be stopped!");
 			Utilities.AssertStopped(pairSocketA);
 		}
@@ -133,6 +137,7 @@ namespace MKY.IO.Serial.Socket.Test
 
 		/// <summary></summary>
 		[Test]
+		[StandardDurationCategory.Second1]
 		public virtual void TestPairSocketPairSocketConnectAndPairSocketAShutdown()
 		{
 			int portA;
@@ -141,17 +146,17 @@ namespace MKY.IO.Serial.Socket.Test
 			UdpSocket pairSocketA;
 			UdpSocket pairSocketB;
 
-			Utilities.StartUdpPairSocket(out pairSocketA, portB, portA);
+			Utilities.StartAsPairSocket(out pairSocketA, portB, portA);
 			Utilities.WaitForStart(pairSocketA, "UDP/IP PairSocket A could not be started!");
-			Utilities.StartUdpPairSocket(out pairSocketB, portA, portB);
+			Utilities.StartAsPairSocket(out pairSocketB, portA, portB);
 			Utilities.WaitForStart(pairSocketB, "UDP/IP PairSocket B could not be started!");
 			Utilities.AssertStartedAndTransmissive(pairSocketB);
 			Utilities.AssertStartedAndTransmissive(pairSocketA);
 
-			Utilities.StopUdpSocket(pairSocketA);
+			Utilities.Stop(pairSocketA);
 			Utilities.WaitForStop(pairSocketA, "UDP/IP PairSocket A could not be stopped!");
 			Utilities.AssertStopped(pairSocketA);
-			Utilities.StopUdpSocket(pairSocketB);
+			Utilities.Stop(pairSocketB);
 			Utilities.WaitForStop(pairSocketB, "UDP/IP PairSocket B could not be stopped!");
 			Utilities.AssertStopped(pairSocketB);
 		}
