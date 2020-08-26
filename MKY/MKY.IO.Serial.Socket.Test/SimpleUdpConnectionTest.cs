@@ -49,9 +49,9 @@ namespace MKY.IO.Serial.Socket.Test
 			UdpSocket server;
 			UdpSocket client;
 
-			Utilities.StartAsServer(out server, serverPort);
+			Utilities.CreateAndStartAsServer(out server, serverPort);
 			Utilities.WaitForStart(server, "UDP/IP server could not be started!");
-			Utilities.StartAsClient(out client, serverPort);
+			Utilities.CreateAndStartAsClient(out client, serverPort);
 			Utilities.WaitForStart(client, "UDP/IP client could not be started!");
 			Utilities.AssertStartedAndTransmissive(client);
 			Utilities.AssertStartedAndConnected(server); // Only transmissive after client has sent something.
@@ -80,9 +80,9 @@ namespace MKY.IO.Serial.Socket.Test
 			UdpSocket server;
 			UdpSocket client;
 
-			Utilities.StartAsServer(out server, serverPort);
+			Utilities.CreateAndStartAsServer(out server, serverPort);
 			Utilities.WaitForStart(server, "UDP/IP server could not be started!");
-			Utilities.StartAsClient(out client, serverPort);
+			Utilities.CreateAndStartAsClient(out client, serverPort);
 			Utilities.WaitForStart(client, "UDP/IP client could not be started!");
 			Utilities.AssertStartedAndTransmissive(client);
 			Utilities.AssertStartedAndConnected(server); // Only transmissive after client has sent something.
@@ -113,9 +113,9 @@ namespace MKY.IO.Serial.Socket.Test
 			UdpSocket pairSocketA;
 			UdpSocket pairSocketB;
 
-			Utilities.StartAsPairSocket(out pairSocketA, portB, portA);
+			Utilities.CreateAndStartAsPairSocket(out pairSocketA, portB, portA);
 			Utilities.WaitForStart(pairSocketA, "UDP/IP PairSocket A could not be started!");
-			Utilities.StartAsPairSocket(out pairSocketB, portA, portB);
+			Utilities.CreateAndStartAsPairSocket(out pairSocketB, portA, portB);
 			Utilities.WaitForStart(pairSocketB, "UDP/IP PairSocket B could not be started!");
 			Utilities.AssertStartedAndTransmissive(pairSocketB);
 			Utilities.AssertStartedAndTransmissive(pairSocketA);
@@ -146,9 +146,9 @@ namespace MKY.IO.Serial.Socket.Test
 			UdpSocket pairSocketA;
 			UdpSocket pairSocketB;
 
-			Utilities.StartAsPairSocket(out pairSocketA, portB, portA);
+			Utilities.CreateAndStartAsPairSocket(out pairSocketA, portB, portA);
 			Utilities.WaitForStart(pairSocketA, "UDP/IP PairSocket A could not be started!");
-			Utilities.StartAsPairSocket(out pairSocketB, portA, portB);
+			Utilities.CreateAndStartAsPairSocket(out pairSocketB, portA, portB);
 			Utilities.WaitForStart(pairSocketB, "UDP/IP PairSocket B could not be started!");
 			Utilities.AssertStartedAndTransmissive(pairSocketB);
 			Utilities.AssertStartedAndTransmissive(pairSocketA);
