@@ -153,73 +153,103 @@ namespace MKY.IO.Serial.Socket.Test
 		// Start/Stop
 		//==========================================================================================
 
-		internal static void StartTcpServer(out TcpServer server, out int localPort)
+		internal static void StartAsync(out TcpServer server, out int localPort)
 		{
 			localPort = AvailableLocalTcpPort;
 			server = new TcpServer(IPNetworkInterface.Any, localPort);
+
+			StartAsync(server);
+		}
+
+		internal static void StartAsync(TcpServer server)
+		{
 			if (!server.Start()) // <= is initiated async!
 				Assert.Fail("TCP/IP server could not be started!");
 		}
 
-		internal static void StartTcpClient(out TcpClient client, int remotePort)
+		internal static void StartAsync(out TcpClient client, int remotePort)
 		{
 			client = new TcpClient(IPHost.Localhost, remotePort, IPNetworkInterface.Any);
+
+			StartAsync(client);
+		}
+
+		internal static void StartAsync(TcpClient client)
+		{
 			if (!client.Start()) // <= is initiated async!
 				Assert.Fail("TCP/IP client could not be started!");
 		}
 
-		internal static void StartTcpAutoSocketAsServer(out TcpAutoSocket autoSocket, out int localPort)
+		internal static void StartAsyncAsServer(out TcpAutoSocket autoSocket, out int localPort)
 		{
 			localPort = AvailableLocalTcpPort;
 			autoSocket = new TcpAutoSocket(IPHost.Localhost, localPort, IPNetworkInterface.Any, localPort);
+
+			StartAsyncAsServer(autoSocket);
+		}
+
+		internal static void StartAsyncAsServer(TcpAutoSocket autoSocket)
+		{
 			if (!autoSocket.Start()) // <= is initiated async!
 				Assert.Fail("TCP/IP AutoSocket could not be started!");
 		}
 
-		internal static void StartTcpAutoSocketAsClient(out TcpAutoSocket autoSocket, int remotePort)
+		internal static void StartAsyncAsClient(out TcpAutoSocket autoSocket, int remotePort)
 		{
 			autoSocket = new TcpAutoSocket(IPHost.Localhost, remotePort, IPNetworkInterface.Any, remotePort);
+
+			StartAsyncAsClient(autoSocket);
+		}
+
+		internal static void StartAsyncAsClient(TcpAutoSocket autoSocket)
+		{
 			if (!autoSocket.Start()) // <= is initiated async!
 				Assert.Fail("TCP/IP AutoSocket could not be started!");
 		}
 
-		internal static void StartUdpServer(out UdpSocket server, int localPort)
+		internal static void StartAsServer(out UdpSocket server, int localPort)
 		{
 			server = new UdpSocket(IPNetworkInterface.Any, localPort);
-			if (!server.Start())
-				Assert.Fail("UDP/IP server could not be started!");
+
+			Start(server);
 		}
 
-		internal static void StartUdpClient(out UdpSocket client, int remotePort)
+		internal static void StartAsClient(out UdpSocket client, int remotePort)
 		{
 			client = new UdpSocket(IPHost.Localhost, remotePort);
-			if (!client.Start())
-				Assert.Fail("UDP/IP client could not be started!");
+
+			Start(client);
 		}
 
-		internal static void StartUdpPairSocket(out UdpSocket pairSocket, int remotePort, int localPort)
+		internal static void StartAsPairSocket(out UdpSocket pairSocket, int remotePort, int localPort)
 		{
 			pairSocket = new UdpSocket(IPHost.Localhost, remotePort, IPNetworkInterface.Any, localPort);
-			if (!pairSocket.Start())
-				Assert.Fail("UDP/IP PairSocket could not be started!");
+
+			Start(pairSocket);
 		}
 
-		internal static void StopTcpServer(TcpServer server)
+		internal static void Start(UdpSocket socket)
+		{
+			if (!socket.Start())
+				Assert.Fail("UDP/IP socket could not be started!");
+		}
+
+		internal static void StopAsync(TcpServer server)
 		{
 			server.Stop(); // <= is initiated async!
 		}
 
-		internal static void StopTcpClient(TcpClient client)
+		internal static void StopAsync(TcpClient client)
 		{
 			client.Stop(); // <= is initiated async!
 		}
 
-		internal static void StopTcpAutoSocket(TcpAutoSocket autoSocket)
+		internal static void StopAsync(TcpAutoSocket autoSocket)
 		{
 			autoSocket.Stop(); // <= is initiated async!
 		}
 
-		internal static void StopUdpSocket(UdpSocket socket)
+		internal static void Stop(UdpSocket socket)
 		{
 			socket.Stop();
 		}
@@ -308,6 +338,14 @@ namespace MKY.IO.Serial.Socket.Test
 		// Assert
 		//==========================================================================================
 
+		internal static void AssertStartedAndDisconnected(IIOProvider io)
+		{
+			Assert.That(io.IsStarted);
+		////Assert.That(io.IsOpen depends on the I/O.
+			Assert.That(io.IsConnected, Is.False);
+			Assert.That(io.IsTransmissive, Is.False);
+		}
+
 		internal static void AssertStartedAndConnected(IIOProvider io)
 		{
 			Assert.That(io.IsStarted);
@@ -325,10 +363,10 @@ namespace MKY.IO.Serial.Socket.Test
 
 		internal static void AssertStopped(IIOProvider io)
 		{
-			Assert.That( io.IsStopped);
-			Assert.That(!io.IsOpen);
-			Assert.That(!io.IsConnected);
-			Assert.That(!io.IsTransmissive);
+			Assert.That(io.IsStopped);
+			Assert.That(io.IsOpen,         Is.False);
+			Assert.That(io.IsConnected,    Is.False);
+			Assert.That(io.IsTransmissive, Is.False);
 		}
 
 		#endregion
