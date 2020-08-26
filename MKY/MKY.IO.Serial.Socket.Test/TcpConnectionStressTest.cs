@@ -53,7 +53,7 @@ namespace MKY.IO.Serial.Socket.Test
 
 		/// <summary></summary>
 		[Test]
-		[StressCategory, StandardDurationCategory.Minute1Attribute]
+		[StressCategory, StandardDurationCategory.Minute1]
 		public virtual void Stress10AutoSocketServersWith100AutoSocketClients()
 		{
 			StressAutoSocketServersWithAutoSocketClients(10, 100);
@@ -61,7 +61,7 @@ namespace MKY.IO.Serial.Socket.Test
 
 		/// <summary></summary>
 		[Test]
-		[StressCategory, StandardDurationCategory.Minutes15Attribute]
+		[StressCategory, StandardDurationCategory.Minutes15]
 		public virtual void Stress100AutoSocketServersWith1000AutoSocketClients()
 		{
 			StressAutoSocketServersWithAutoSocketClients(100, 1000);
