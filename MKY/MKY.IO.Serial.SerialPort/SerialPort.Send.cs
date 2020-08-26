@@ -116,13 +116,28 @@ namespace MKY.IO.Serial.SerialPort
 					sendBufferSize = SendQueueInitialCapacity;
 
 				DebugSend("Enqueuing {0} byte(s) for sending...", data.Length);
-				foreach (byte b in data)
+				for (int i = 0; i < data.Length; i++)
 				{
 					// Wait until there is space in the send queue:
 					while (this.sendQueue.Count >= sendBufferSize) // No lock required, just checking for full.
 					{
-						if (IsInDisposal || !IsTransmissive) // Check disposal state first!
+						var isInDisposal = IsInDisposal;
+						if (isInDisposal || !IsTransmissive) // Check disposal state first!
+						{
+							if (!isInDisposal)
+							{
+								string message;
+								var droppedCount = (data.Length - i);
+								if (droppedCount <= 1)
+									message = droppedCount + " byte not enqueued for sending anymore.";  // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+								else                                                                     // Reason cannot be stated, could be "disconnected" or "stopped/closed"
+									message = droppedCount + " bytes not enqueued for sending anymore."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+
+								OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
+							}
+
 							return (false);
+						}
 
 						// Signal to ensure send thread keeps working:
 						SignalSendThreadSafely();
@@ -138,6 +153,7 @@ namespace MKY.IO.Serial.SerialPort
 					// There is space for at least one byte:
 					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 					{
+						var b = data[i];
 						this.sendQueue.Enqueue(b);
 					}
 
