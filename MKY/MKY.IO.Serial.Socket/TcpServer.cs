@@ -695,8 +695,7 @@ namespace MKY.IO.Serial.Socket
 
 			SetStateSynchronizedAndNotify(SocketState.Accepted);
 
-			// Immediately begin receiving data:
-			e.Connection.BeginReceive();
+			e.Connection.BeginReceive(); // Immediately begin receiving.
 		}
 
 		/// <summary>
@@ -721,8 +720,7 @@ namespace MKY.IO.Serial.Socket
 				OnDataReceived(new SocketDataReceivedEventArgs((byte[])e.Buffer.Clone(), e.Connection.RemoteEndPoint));
 			}
 
-			// Continue receiving:
-			e.Connection.BeginReceive();
+			e.Connection.BeginReceive(); // Continue receiving.
 		}
 
 		/// <summary>
@@ -766,16 +764,16 @@ namespace MKY.IO.Serial.Socket
 		{
 			DebugSocketShutdown("Socket 'OnDisconnected' event!");
 
-			bool isConnected = false;
+			bool isStillConnected = false;
 			lock (this.socketConnections) // Directly locking the list is OK, it is kept throughout the lifetime of an object.
 			{
 				this.socketConnections.Remove(e.Connection);
-				isConnected = (this.socketConnections.Count > 0);
+				isStillConnected = (this.socketConnections.Count > 0);
 			}
 
 			// Note that state and shutdown locks do not get disposed in order to be still able to
 			// access while asynchronously closing/disconnecting. See Dispose() for more details.
-			if (!isConnected && !IsStoppingAndDisposingSocketSynchronized)
+			if (!isStillConnected && !IsStoppingAndDisposingSocketSynchronized)
 			{
 				DropSendQueueAndNotify();
 				DropDataSentQueueAndNotify();

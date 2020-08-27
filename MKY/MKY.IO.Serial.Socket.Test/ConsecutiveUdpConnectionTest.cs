@@ -72,7 +72,7 @@ namespace MKY.IO.Serial.Socket.Test
 		[Test]
 		[Repeat(int.MaxValue)]
 		[EnduranceCategory, InfiniteDurationCategory]
-		public virtual void TestConsecutiveServerClientConnectAndShutdownEnduranceForever()
+		public virtual void TestConsecutiveServerClientConnectAndShutdownEnduranceInfinite()
 		{
 			TestConsecutiveServerClientConnectAndShutdownEndurance01Minute();
 		}
@@ -116,7 +116,7 @@ namespace MKY.IO.Serial.Socket.Test
 		[Test]
 		[Repeat(int.MaxValue)]
 		[EnduranceCategory, InfiniteDurationCategory]
-		public virtual void TestConsecutivePairSocketPairSocketConnectAndShutdownEnduranceForever()
+		public virtual void TestConsecutivePairSocketPairSocketConnectAndShutdownEnduranceInfinite()
 		{
 			TestConsecutivePairSocketPairSocketConnectAndShutdownEndurance01Minute();
 		}
