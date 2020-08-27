@@ -161,10 +161,11 @@ namespace MKY.IO.Serial.Socket.Test
 		// Start/Stop
 		//==========================================================================================
 
-		internal static void CreateAndStartAsync(out TcpServer server, out int localPort)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		internal static void CreateAndStartAsync(out TcpServer server, out int localPort, int connectionAllowance = TcpServer.ConnectionAllowanceDefault)
 		{
 			localPort = AvailableLocalTcpPort;
-			server = new TcpServer(IPNetworkInterface.Any, localPort);
+			server = new TcpServer(IPNetworkInterface.Any, localPort, connectionAllowance);
 
 			StartAsync(server);
 		}
