@@ -378,6 +378,13 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[Conditional("DEBUG")]
+		protected void DebugMessage(string format, params object[] args)
+		{
+			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+		}
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
 		{
 			Debug.WriteLine
@@ -402,7 +409,7 @@ namespace YAT.Domain
 		[Conditional("DEBUG_BYTE_COUNT")]
 		private void DebugByteCount(string format, params object[] args)
 		{
-			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+			DebugMessage(format, args);
 		}
 
 		#endregion

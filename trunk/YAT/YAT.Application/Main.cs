@@ -410,9 +410,9 @@ namespace YAT.Application
 				else
 					ShowConsoleHelp(true);
 			}
-			                                                                                                           //// Two args required to format without leading
-			DebugMessage(string.Format(CultureInfo.CurrentCulture, "Exiting with {0} (0x{1:X}).", result, (int)result)); // zeros, same as Visual Studio is doing, e.g.:
-			                                                                                                             // "The program '[<ID>] <APP>.exe' has exited with code 0 (0x0)".
+			                                                                //// Two args required to format without leading
+			DebugMessage("Exiting with {0} (0x{1:X}).", result, (int)result); // zeros, same as Visual Studio is doing, e.g.:
+			                                                                  // "The program '[<ID>] <APP>.exe' has exited with code 0 (0x0)".
 			return (result);
 		}
 
@@ -1339,6 +1339,13 @@ namespace YAT.Application
 		//==========================================================================================
 		// Debug
 		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		protected void DebugMessage(string format, params object[] args)
+		{
+			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+		}
 
 		/// <remarks>
 		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.

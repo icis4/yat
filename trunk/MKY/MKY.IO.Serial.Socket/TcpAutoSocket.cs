@@ -472,7 +472,7 @@ namespace MKY.IO.Serial.Socket
 				}
 				default:
 				{
-					DebugMessage("Start() requested but state is already " + state + ".");
+					DebugMessage("Start() requested but state already is {0}.", state);
 					return (true); // Return 'true' since socket is already started.
 				}
 			}
@@ -489,7 +489,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				case SocketState.Reset:
 				{
-					DebugMessage("Stop() requested but state is " + state + ".");
+					DebugMessage("Stop() requested but state is {0}.", state);
 					return;
 				}
 				default:
@@ -567,18 +567,18 @@ namespace MKY.IO.Serial.Socket
 		#if (DEBUG)
 			string isClientOrServerString;
 			if      (IsClient && IsConnected) // 'Doppel-moppel', but keep it as a check during development and debugging
-				isClientOrServerString = "is connected as client";
+				isClientOrServerString = "connected as client";
 			else if (IsServer && IsConnected)
-				isClientOrServerString = "is connected as server";
+				isClientOrServerString = "connected as server";
 			else if (IsServer && !IsConnected)
-				isClientOrServerString = "is server and listening";
+				isClientOrServerString = "server and listening";
 			else
-				isClientOrServerString = "is neither client nor server";
+				isClientOrServerString = "neither client nor server";
 
 			if (state != oldState)
-				DebugMessage("State has changed from " + oldState + " to " + state + ", " + isClientOrServerString + ".");
+				DebugMessage("State has changed from {0} to {1}, is {2}.", oldState, state, isClientOrServerString);
 			else
-				DebugMessage("State is already " + oldState + ".");
+				DebugMessage("State already is {0}.", oldState);
 		#endif
 
 			if (state != oldState)
@@ -652,7 +652,7 @@ namespace MKY.IO.Serial.Socket
 		private void StartConnecting()
 		{
 			int randomDelay = SocketBase.Random.Next(MinConnectDelay, MaxConnectDelay);
-			DebugMessage("Delaying connecting by random value of " + randomDelay + " ms.");
+			DebugMessage("Delaying connecting by random value of {0} ms.", randomDelay);
 			Thread.Sleep(randomDelay);
 
 			// Only continue if socket is still up and running after the delay! Required because
@@ -691,7 +691,7 @@ namespace MKY.IO.Serial.Socket
 		private void StartListening()
 		{
 			int randomDelay = SocketBase.Random.Next(MinListenDelay, MaxListenDelay);
-			DebugMessage("Delaying listening by random value of " + randomDelay + " ms.");
+			DebugMessage("Delaying listening by random value of {0} ms.", randomDelay);
 			Thread.Sleep(randomDelay);
 
 			// Only continue if socket is still up and running after the delay! Required because
@@ -751,7 +751,7 @@ namespace MKY.IO.Serial.Socket
 
 			if (tryAgain)
 			{
-				DebugMessage("Trying connect cycle #" + this.startCycleCounter + ".");
+				DebugMessage("Trying connect cycle #{0}.", this.startCycleCounter);
 
 				StartConnecting();
 			}
@@ -879,6 +879,13 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 		// Debug
 		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		protected void DebugMessage(string format, params object[] args)
+		{
+			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+		}
 
 		/// <remarks>
 		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
