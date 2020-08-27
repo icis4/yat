@@ -86,6 +86,12 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
         private HostType FHostType;
         private long FConnectionId;
 
+        // ----- \remind BEGIN -----
+        // 2020-08-27 / Matthias Klaey
+        // Moved increment to constructor using a static field.
+        private static long StaticConnectionId = 1000;
+        // ----- \remind  END  -----
+
         private DelimiterType FDelimiterType;
         private CallbackThreadType FCallbackThreadType;
 
@@ -124,7 +130,12 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
         {
 
             FHostType = hostType;
-            FConnectionId = 1000;
+
+            // ----- \remind BEGIN -----
+            // 2020-08-27 / Matthias Klaey
+            // Moved increment to constructor using a static field.
+            FConnectionId = Interlocked.Increment(ref StaticConnectionId);
+            // ----- \remind  END  -----
 
             FSocketConnectionsSync = new ReaderWriterLockSlim();
 
@@ -333,7 +344,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                         // 2010-05-14 / Matthias Klaey
                         // Added catch (NullReferenceException) to handle cases where asynchronous
                         // operations set the reference to null while this method is active.
-                        // 
+                        //
                         // 2012-10-23 / Matthias Klaey
                         // Check (FWaitCreatorsDisposing != null) added to prevent exceptions.
 
@@ -1732,7 +1743,13 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
         internal long GetConnectionId()
         {
-            return Interlocked.Increment(ref FConnectionId);
+            // ----- \remind BEGIN -----
+            // 2020-08-27 / Matthias Klaey
+            // Moved increment to constructor using a static field.
+
+            return FConnectionId;
+
+            // ----- \remind  END  -----
         }
 
         #endregion
@@ -1777,11 +1794,11 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
               // ----- \remind BEGIN -----
               // 2012-09-12 / Matthias Klaey (in Lianyungang :-)
               // Added if != null due to NullReferenceExecption to finally{}.
-              // 
+              //
               // 2012-10-15 / Matthias Klaey
               // Added catch (NullReferenceException) to handle cases where asynchronous
               // operations set the reference to null while this method is active.
-              // 
+              //
               // 2012-10-23 / Matthias Klaey
               // Rearranged checks (FSocketConnectionsSync != null) and (FSocketConnections != null).
 
