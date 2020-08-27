@@ -986,7 +986,7 @@ namespace MKY.IO.Serial.SerialPort
 		[Conditional("DEBUG_SEND")]
 		private void DebugSend(string format, params object[] args)
 		{
-			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+			DebugMessage(format, args);
 		}
 
 		/// <remarks>
@@ -995,7 +995,7 @@ namespace MKY.IO.Serial.SerialPort
 		[Conditional("DEBUG_SEND_CHUNK")]
 		private void DebugSendChunk(string format, params object[] args)
 		{
-			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+			DebugMessage(format, args);
 		}
 
 		/// <remarks>
@@ -1004,7 +1004,7 @@ namespace MKY.IO.Serial.SerialPort
 		[Conditional("DEBUG_SEND_WRITE")]
 		private void DebugSendWrite(string format, params object[] args)
 		{
-			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+			DebugMessage(format, args);
 		}
 
 		#endregion

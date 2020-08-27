@@ -748,7 +748,7 @@ namespace MKY.IO.Serial.Socket
 						DebugMessage("...failed!");
 						return (false);
 					}
-					DebugMessage("...succeeded (" + this.remoteHost + ").");
+					DebugMessage("...succeeded ({0}).", this.remoteHost);
 				}
 
 				// Adjust the local filter in case it is set to a limited or directed broadcast address.
@@ -788,7 +788,7 @@ namespace MKY.IO.Serial.Socket
 					DebugMessage("...failed!");
 					return (false);
 				}
-				DebugMessage("...succeeded (" + this.localFilter + ").");
+				DebugMessage("...succeeded ({0}).", this.localFilter);
 
 				DebugMessage("Starting...");
 				StartSocket();
@@ -796,7 +796,7 @@ namespace MKY.IO.Serial.Socket
 			}
 			else
 			{
-				DebugMessage("Start() requested but state is already " + GetStateSynchronized() + ".");
+				DebugMessage("Start() requested but state already is {0}.", GetStateSynchronized());
 				return (true); // Return 'true' since socket is already started.
 			}
 		}
@@ -804,7 +804,7 @@ namespace MKY.IO.Serial.Socket
 		private void StartSocket()
 		{
 			SetStateSynchronizedAndNotify(SocketState.Opening);
-			StartSocketAndThreads();
+			CreateAndStartSocketAndThreads();
 			SetStateSynchronizedAndNotify(SocketState.Opened);
 
 			BeginReceiveIfEnabled(); // Immediately begin receiving.
@@ -823,7 +823,7 @@ namespace MKY.IO.Serial.Socket
 			}
 			else
 			{
-				DebugMessage("Stop() requested but state is " + GetStateSynchronized() + ".");
+				DebugMessage("Stop() requested but state is {0}.", GetStateSynchronized());
 			}
 		}
 
@@ -859,9 +859,9 @@ namespace MKY.IO.Serial.Socket
 
 		#if (DEBUG)
 			if (state != oldState)
-				DebugMessage("State has changed from " + oldState + " to " + state + ".");
+				DebugMessage("State has changed from {0} to {1}.", oldState, state);
 			else
-				DebugMessage("State is already " + oldState + ".");
+				DebugMessage("State already is {0}.", oldState);
 		#endif
 
 			if (state != oldState)
@@ -880,7 +880,7 @@ namespace MKY.IO.Serial.Socket
 		/// created and started before socket and SendThread(). Other implementations could also
 		/// follow this implementation when there is need to do so.
 		/// </remarks>
-		private void StartSocketAndThreads()
+		private void CreateAndStartSocketAndThreads()
 		{
 			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
 			{
@@ -925,7 +925,7 @@ namespace MKY.IO.Serial.Socket
 				//                In this case, the service provider will assign an available port number between 49152 and 65535."
 				var localEP = new System.Net.IPEndPoint(this.localInterface.Address, this.localPort);
 				this.socket.Client.Bind(localEP);
-				DebugMessage(string.Format(CultureInfo.InvariantCulture, "Socket bound to {0}.", localEP));
+				DebugMessage("Socket bound to {0}.", localEP);
 
 			////// Set the default remote endpoint of a client socket:
 			////if ((this.socketType == UdpSocketType.Client) ||
@@ -1199,7 +1199,7 @@ namespace MKY.IO.Serial.Socket
 			SetStateSynchronizedAndNotify(SocketState.Closing);
 			DisposeSocketAndThreads();
 			SetStateSynchronizedAndNotify(SocketState.Opening);
-			StartSocketAndThreads();
+			CreateAndStartSocketAndThreads();
 			SetStateSynchronizedAndNotify(SocketState.Opened);
 		}
 
@@ -1309,6 +1309,13 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 		// Debug
 		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		protected void DebugMessage(string format, params object[] args)
+		{
+			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+		}
 
 		/// <remarks>
 		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.

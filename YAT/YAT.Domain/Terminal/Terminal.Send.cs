@@ -2155,7 +2155,7 @@ namespace YAT.Domain
 		[Conditional("DEBUG_SEND")]
 		private void DebugSend(string format, params object[] args)
 		{
-			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+			DebugMessage(format, args);
 		}
 
 		/// <remarks>

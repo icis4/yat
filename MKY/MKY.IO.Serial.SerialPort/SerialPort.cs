@@ -674,7 +674,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			else
 			{
-				DebugMessage("Start() requested but state is already " + GetStateSynchronized() + ".");
+				DebugMessage("Start() requested but state already is {0}.", GetStateSynchronized());
 				return (true); // Return 'true' since port is already open.
 			}
 		}
@@ -691,7 +691,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 			else
 			{
-				DebugMessage("Stop() requested but state is " + GetStateSynchronized() + ".");
+				DebugMessage("Stop() requested but state is {0}.", GetStateSynchronized());
 			}
 		}
 
@@ -811,10 +811,10 @@ namespace MKY.IO.Serial.SerialPort
 			if ((state != oldState) && withNotify)
 			{
 			#if (DEBUG)
-				if (state != oldState)
-					DebugMessage("State has changed from " + oldState + " to " + state + ".");
-				else
-					DebugMessage("State is already " + oldState + ".");
+			if (state != oldState)
+				DebugMessage("State has changed from {0} to {1}.", oldState, state);
+			else
+				DebugMessage("State already is {0}.", oldState);
 			#endif
 				// Notify asynchronously because the state will get changed from asynchronous items
 				// such as the reopen timer. In case of that timer, the port needs to be locked to
@@ -1906,6 +1906,13 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 		// Debug
 		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		protected void DebugMessage(string format, params object[] args)
+		{
+			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+		}
 
 		/// <remarks>
 		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.

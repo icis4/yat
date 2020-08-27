@@ -171,7 +171,7 @@ namespace MKY.IO.Serial.SerialPort
 		[Conditional("DEBUG_RECEIVE")]
 		private void DebugReceive(string format, params object[] args)
 		{
-			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+			DebugMessage(format, args);
 		}
 
 	#if (DEBUG_RECEIVE)
