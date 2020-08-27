@@ -807,8 +807,7 @@ namespace MKY.IO.Serial.Socket
 			StartSocketAndThreads();
 			SetStateSynchronizedAndNotify(SocketState.Opened);
 
-			// Immediately begin receiving data:
-			BeginReceiveIfEnabled();
+			BeginReceiveIfEnabled(); // Immediately begin receiving.
 		}
 
 		/// <summary></summary>
