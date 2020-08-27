@@ -35,43 +35,76 @@ namespace MKY.IO.Serial.Socket.Test
 		// Tests
 		//==========================================================================================
 
-		#region Tests > ConsecutiveDisconnect()
+		#region Tests > ConsecutiveDisconnectReconnect()
 		//------------------------------------------------------------------------------------------
-		// Tests > ConsecutiveDisconnect()
+		// Tests > ConsecutiveDisconnectReconnect()
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		[Test]
 		[EnduranceCategory, StandardDurationCategory.Minute1]
-		public virtual void TestConsecutiveDisconnectEndurance01Minute()
+		public virtual void TestConsecutiveDisconnectReconnectEndurance01Minute()
 		{
-			TestConsecutiveDisconnectEndurance(1);
+			TestConsecutiveDisconnectReconnect(1);
 		}
 
 		/// <summary></summary>
 		[Test]
 		[EnduranceCategory, StandardDurationCategory.Minutes15]
-		public virtual void TestConsecutiveDisconnectEndurance15Minutes()
+		public virtual void TestConsecutiveDisconnectReconnectEndurance15Minutes()
 		{
-			TestConsecutiveDisconnectEndurance(15);
+			TestConsecutiveDisconnectReconnect(15);
 		}
 
 		/// <summary></summary>
 		[Test]
 		[EnduranceCategory, InfiniteDurationCategory]
-		public virtual void TestConsecutiveDisconnectEnduranceForever()
+		public virtual void TestConsecutiveDisconnectReconnectEnduranceInfinite()
 		{
-			TestConsecutiveDisconnectEndurance(int.MaxValue);
+			TestConsecutiveDisconnectReconnect(int.MaxValue);
+		}
+
+		#endregion
+
+		#region Tests > ConsecutiveDisconnectReconnectWithLimitedAllowance()
+		//------------------------------------------------------------------------------------------
+		// Tests > ConsecutiveDisconnectReconnectWithLimitedAllowance()
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		[EnduranceCategory, StandardDurationCategory.Minute1]
+		public virtual void TestConsecutiveDisconnectReconnectWithLimitedAllowanceEndurance01Minute()
+		{
+			TestConsecutiveDisconnectReconnect(1, 1);
 		}
 
 		/// <summary></summary>
-		public static void TestConsecutiveDisconnectEndurance(int minutes)
+		[Test]
+		[EnduranceCategory, StandardDurationCategory.Minutes15]
+		public virtual void TestConsecutiveDisconnectReconnectWithLimitedAllowanceEndurance15Minutes()
+		{
+			TestConsecutiveDisconnectReconnect(15, 1);
+		}
+
+		/// <summary></summary>
+		[Test]
+		[EnduranceCategory, InfiniteDurationCategory]
+		public virtual void TestConsecutiveDisconnectReconnectWithLimitedAllowanceEnduranceInfinite()
+		{
+			TestConsecutiveDisconnectReconnect(int.MaxValue, 1);
+		}
+
+		#endregion
+
+		/// <summary></summary>
+		public static void TestConsecutiveDisconnectReconnect(int minutes, int serverConnectionAllowance = TcpServer.ConnectionAllowanceDefault)
 		{
 			int serverPort;
 			TcpServer server;
 			TcpClient client;
 
-			Utilities.CreateAndStartAsync(out server, out serverPort);
+			Utilities.CreateAndStartAsync(out server, out serverPort, serverConnectionAllowance);
 			Utilities.WaitForStart(server, "TCP/IP server could not be started!");
 			Utilities.CreateAndStartAsync(out client, serverPort, SocketSettings.TcpClientAutoReconnectDefault);
 			Utilities.WaitForStart(client, "TCP/IP client could not be started!");
@@ -82,24 +115,30 @@ namespace MKY.IO.Serial.Socket.Test
 			for (int minute = 0; minute < minutes; minute++) // A loop takes around 1 minute.
 			{
 				// Repeat server disconnect a few times:
-				for (int i = 0; i < 10; i++)
+				for (int i = 0; i < 30; i++) {
 					ServerDisconnectReconnect(server, client);
+				}
 
-				// Toggle client/server disconnect a few times:
-				ClientDisconnectReconnect(client, server);
-				ServerDisconnectReconnect(server, client);
-				ClientDisconnectReconnect(client, server);
-				ServerDisconnectReconnect(server, client);
-				ClientDisconnectReconnect(client, server);
-				ServerDisconnectReconnect(server, client);
-				ClientDisconnectReconnect(client, server);
-				ServerDisconnectReconnect(server, client);
-				ClientDisconnectReconnect(client, server);
-				ServerDisconnectReconnect(server, client);
+				// Toggle different client/server disconnect patterns a few times:
+				for (int i = 0; i < 10; i++) {
+					ClientDisconnectReconnect(client, server);
+					ServerDisconnectReconnect(server, client);
+				}
+				for (int i = 0; i < 10; i++) {
+					ClientDisconnectReconnect(client, server);
+					ClientDisconnectReconnect(client, server);
+					ServerDisconnectReconnect(server, client);
+				}
+				for (int i = 0; i < 10; i++) {
+					ClientDisconnectReconnect(client, server);
+					ServerDisconnectReconnect(server, client);
+					ServerDisconnectReconnect(server, client);
+				}
 
 				// Repeat client disconnect a few times:
-				for (int i = 0; i < 10; i++)
+				for (int i = 0; i < 30; i++) {
 					ClientDisconnectReconnect(client, server);
+				}
 			}
 
 			Utilities.StopAsync(client);
@@ -119,11 +158,12 @@ namespace MKY.IO.Serial.Socket.Test
 			Utilities.AssertStopped(server);
 			Assert.That(server.ConnectedClientCount, Is.EqualTo(0));
 
+			Utilities.WaitForDisconnect(client, server, "TCP/IP client is not disconnected from server!");
 			Utilities.AssertStartedAndDisconnected(client);
 
 			Utilities.StartAsync(server);
 			Utilities.WaitForStart(server, "TCP/IP server could not be started!");
-			Utilities.WaitForConnect(client, server, "TCP/IP client could not be connected to server!");
+			Utilities.WaitForConnect(server, client, "TCP/IP server could not be connected to client!");
 			Assert.That(server.ConnectedClientCount, Is.EqualTo(1));
 		}
 
@@ -134,6 +174,7 @@ namespace MKY.IO.Serial.Socket.Test
 			Utilities.WaitForStop(client, "TCP/IP client could not be stopped!");
 			Utilities.AssertStopped(client);
 
+			Utilities.WaitForDisconnect(server, client, "TCP/IP server is not disconnected from client!");
 			Utilities.AssertStartedAndDisconnected(server);
 			Assert.That(server.ConnectedClientCount, Is.EqualTo(0));
 
@@ -142,8 +183,6 @@ namespace MKY.IO.Serial.Socket.Test
 			Utilities.WaitForConnect(client, server, "TCP/IP client could not be connected to server!");
 			Assert.That(server.ConnectedClientCount, Is.EqualTo(1));
 		}
-
-		#endregion
 
 		#endregion
 	}

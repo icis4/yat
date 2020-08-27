@@ -31,6 +31,9 @@
 	// Enable debugging of sending:
 ////#define DEBUG_SEND // Attention: Must also be activated in TcpClient.Send.cs !!
 
+	// Enable debugging of the ALAZ connection(s):
+////#define DEBUG_CONNECTIONS
+
 	// Enable debugging of ALAZ socket shutdown:
 ////#define DEBUG_SOCKET_SHUTDOWN
 
@@ -121,6 +124,11 @@ namespace MKY.IO.Serial.Socket
 		// Constants
 		//==========================================================================================
 
+		/// <summary>
+		/// The maximum possible connections are allowed by default.
+		/// </summary>
+		public const int ConnectionAllowanceDefault = int.MaxValue;
+
 		private const int SendQueueFixedCapacity       = ALAZEx.MessageBufferSizeDefault;
 		private const int DataSentQueueInitialCapacity = ALAZEx.MessageBufferSizeDefault;
 
@@ -151,6 +159,7 @@ namespace MKY.IO.Serial.Socket
 
 		private IPNetworkInterfaceEx localInterface;
 		private int localPort;
+		private int connectionAllowance;
 
 		private SocketState state = SocketState.Reset;
 		private object stateSyncObj = new object();
@@ -220,28 +229,32 @@ namespace MKY.IO.Serial.Socket
 
 		/// <summary>Creates a TCP/IP server socket.</summary>
 		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
-		public TcpServer(IPNetworkInterface localInterface, int localPort)
-			: this((IPNetworkInterfaceEx)localInterface, localPort)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public TcpServer(IPNetworkInterface localInterface, int localPort, int connectionAllowance = ConnectionAllowanceDefault)
+			: this((IPNetworkInterfaceEx)localInterface, localPort, connectionAllowance)
 		{
 		}
 
 		/// <summary>Creates a TCP/IP server socket.</summary>
 		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
-		public TcpServer(IPNetworkInterfaceEx localInterface, int localPort)
-			: this(SocketBase.NextInstanceId, localInterface, localPort)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public TcpServer(IPNetworkInterfaceEx localInterface, int localPort, int connectionAllowance = ConnectionAllowanceDefault)
+			: this(SocketBase.NextInstanceId, localInterface, localPort, connectionAllowance)
 		{
 		}
 
 		/// <summary>Creates a TCP/IP server socket.</summary>
 		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
-		public TcpServer(int instanceId, IPNetworkInterface localInterface, int localPort)
-			: this(instanceId, (IPNetworkInterfaceEx)localInterface, localPort)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public TcpServer(int instanceId, IPNetworkInterface localInterface, int localPort, int connectionAllowance = ConnectionAllowanceDefault)
+			: this(instanceId, (IPNetworkInterfaceEx)localInterface, localPort, connectionAllowance)
 		{
 		}
 
 		/// <summary>Creates a TCP/IP server socket.</summary>
 		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
-		public TcpServer(int instanceId, IPNetworkInterfaceEx localInterface, int localPort)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public TcpServer(int instanceId, IPNetworkInterfaceEx localInterface, int localPort, int connectionAllowance = ConnectionAllowanceDefault)
 		{
 			// Verify by-reference arguments:
 
@@ -249,10 +262,11 @@ namespace MKY.IO.Serial.Socket
 
 			// All arguments are defined!
 
-			this.instanceId     = instanceId;
+			this.instanceId          = instanceId;
 
-			this.localInterface = localInterface;
-			this.localPort      = localPort;
+			this.localInterface      = localInterface;
+			this.localPort           = localPort;
+			this.connectionAllowance = connectionAllowance;
 		}
 
 		#region Disposal
@@ -460,12 +474,12 @@ namespace MKY.IO.Serial.Socket
 			if (IsStopped)
 			{
 				DebugMessage("Starting...");
-				StartSocketAndThreads();
+				CreateAndStartSocketAndThreads();
 				return (true);
 			}
 			else
 			{
-				DebugMessage("Start() requested but state is already " + GetStateSynchronized() + ".");
+				DebugMessage("Start() requested but state is already {0}.", GetStateSynchronized());
 				return (true); // Return 'true' since socket is already started.
 			}
 		}
@@ -488,7 +502,7 @@ namespace MKY.IO.Serial.Socket
 			}
 			else
 			{
-				DebugMessage("Stop() requested but state is " + GetStateSynchronized() + ".");
+				DebugMessage("Stop() requested but state is {0}.", GetStateSynchronized());
 			}
 		}
 
@@ -517,9 +531,9 @@ namespace MKY.IO.Serial.Socket
 
 		#if (DEBUG)
 			if (state != oldState)
-				DebugMessage("State has changed from " + oldState + " to " + state + ".");
+				DebugMessage("State has changed from {0} to {1}.", oldState, state);
 			else
-				DebugMessage("State is already " + oldState + ".");
+				DebugMessage("State already is {0}.", oldState);
 		#endif
 
 			if (state != oldState)
@@ -536,7 +550,7 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Note that ALAZ sockets start asynchronously, same as stopping.
 		/// </remarks>
-		private void StartSocketAndThreads()
+		private void CreateAndStartSocketAndThreads()
 		{
 			IsStoppingAndDisposingSocketSynchronized = false;
 
@@ -614,7 +628,14 @@ namespace MKY.IO.Serial.Socket
 			}
 
 			lock (this.socketConnections) // Directly locking the list is OK, it is kept throughout the lifetime of an object.
-				this.socketConnections.Clear();
+			{
+				if (this.socketConnections.Count > 0)
+				{
+					this.socketConnections.Clear();
+
+					DebugConnections("Connections reset to 0.");
+				}
+			}
 
 			// Finally, stop the thread. Must be done AFTER the socket got stopped (and disposed)
 			// to ensure that the last socket callbacks 'OnSent' can still be properly processed.
@@ -690,12 +711,39 @@ namespace MKY.IO.Serial.Socket
 		/// </param>
 		public virtual void OnConnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
-			lock (this.socketConnections) // Directly locking the list is OK, it is kept throughout the lifetime of an object.
-				this.socketConnections.Add(e.Connection);
+			lock (this.stateSyncObj) // Ensure state is handled atomically.
+			{
+				bool rejectSupernumerousConnection = false;
 
-			SetStateSynchronizedAndNotify(SocketState.Accepted);
+				lock (this.socketConnections) // Directly locking the list is OK, it is kept throughout the lifetime of an object.
+				{
+					var state = GetStateSynchronized();
+					if (((state == SocketState.Listening) || (state == SocketState.Accepted)) && // Only handle when expected.
+					    (this.socketConnections.Count < this.connectionAllowance))
+					{
+						this.socketConnections.Add(e.Connection);
 
-			e.Connection.BeginReceive(); // Immediately begin receiving.
+						DebugConnections("Connection added (ID = {0}).", e.Connection.ConnectionId);
+					}
+					else
+					{
+						rejectSupernumerousConnection = true;
+					}
+				}
+
+				if (rejectSupernumerousConnection)
+				{
+					DebugMessage("Connection allowance of {0} has already been reached, rejecting additional connection (ID = {0}).", this.connectionAllowance, e.Connection.ConnectionId);
+
+					e.Connection.BeginDisconnect(); // Immediately begin disconnecting.
+				}                                   // Silently, i.e. no OnIOWarning().
+				else
+				{
+					SetStateSynchronizedAndNotify(SocketState.Accepted); // OK to set if already 'Accepted'.
+
+					e.Connection.BeginReceive(); // Immediately begin receiving.
+				}
+			}
 		}
 
 		/// <summary>
@@ -1109,6 +1157,13 @@ namespace MKY.IO.Serial.Socket
 		// Debug
 		//==========================================================================================
 
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		protected void DebugMessage(string format, params object[] args)
+		{
+			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+		}
+
 		/// <remarks>
 		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
 		/// However, named "Message" for compactness and more clarity that something will happen
@@ -1131,6 +1186,15 @@ namespace MKY.IO.Serial.Socket
 					message
 				)
 			);
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_CONNECTIONS")]
+		private void DebugConnections(string format, params object[] args)
+		{
+			DebugMessage(format, args);
 		}
 
 		/// <remarks>
