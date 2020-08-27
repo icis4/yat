@@ -1,7 +1,4 @@
-@@ -37,6 +37,19 @@
-  * OF THE POSSIBILITY OF SUCH DAMAGE. 
-  */
- 
+@@ -39,0 +40,13 @@
 +#if (DEBUG)
 +
 +	// Enable debugging of exceptions:
@@ -15,13 +12,23 @@
 +using System.Diagnostics;
 +using System.Globalization;
 +
- using System;
- using System.Collections.Generic;
- using System.Threading;
-@@ -194,7 +207,17 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
-                 FBufferManager = null;
-             }
- 
+@@ -75,0 +89,6 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
++        // ----- \remind BEGIN -----
++        // 2020-08-27 / Matthias Klaey
++        // Moved increment to constructor using a static field.
++        private static long StaticConnectionId = 1000;
++        // ----- \remind  END  -----
++
+@@ -114 +132,0 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+-            FConnectionId = 1000;
+@@ -115,0 +134,6 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
++            // ----- \remind BEGIN -----
++            // 2020-08-27 / Matthias Klaey
++            // Moved increment to constructor using a static field.
++            FConnectionId = Interlocked.Increment(ref StaticConnectionId);
++            // ----- \remind  END  -----
++
+@@ -196,0 +221,9 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +            // ----- \remind BEGIN -----
 +            // 2012-10-21 / Matthias Klaey
 +            // Ensure that lock is properly released, even in cases where asynchronous calls are
@@ -31,21 +38,15 @@
 +
 +            // ----- \remind  END  -----
 +
-             FSocketConnectionsSync = null;
+@@ -197,0 +231 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +
-             FSocketService = null;
-             FDelimiter = null;
-             FDelimiterEncrypt = null;
-@@ -306,7 +329,27 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
- 
-                     if (creators.Length > 0)
-                     {
+@@ -309 +343,21 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -                        FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
 +                        // ----- \remind BEGIN -----
 +                        // 2010-05-14 / Matthias Klaey
 +                        // Added catch (NullReferenceException) to handle cases where asynchronous
 +                        // operations set the reference to null while this method is active.
-+                        // 
++                        //
 +                        // 2012-10-23 / Matthias Klaey
 +                        // Check (FWaitCreatorsDisposing != null) added to prevent exceptions.
 +
@@ -62,157 +63,104 @@
 +                        }
 +
 +                        // ----- \remind  END  -----
-                     }
- 
-                 }
-@@ -329,8 +372,10 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
-                 if (connections != null)
-                 {
- 
-+                    DebugShutdownMessage("Resetting 'FWaitConnectionsDisposing'...");
-                     FWaitConnectionsDisposing.Reset();
+@@ -331,0 +386 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
++                    DebugShutdown("Resetting 'FWaitConnectionsDisposing'...");
+@@ -333 +388,2 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -                    
-+                    DebugShutdownMessage("...'FWaitConnectionsDisposing' reset.");
++                    DebugShutdown("...'FWaitConnectionsDisposing' reset.");
 +
-                     int loopSleep = 0;
- 
-                     foreach (BaseSocketConnection connection in connections)
-@@ -341,7 +386,9 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
- 
-                     if (connections.Length > 0)
-                     {
-+                        DebugShutdownMessage("Waiting 'FWaitConnectionsDisposing'...");
-                         FWaitConnectionsDisposing.WaitOne(Timeout.Infinite, false);
-+                        DebugShutdownMessage("...'FWaitConnectionsDisposing' waited.");
-                     }
- 
-                 }
-@@ -404,7 +451,11 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
- 
-         #region FireOnSent
- 
+@@ -343,0 +400 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
++                        DebugShutdown("Waiting 'FWaitConnectionsDisposing'...");
+@@ -344,0 +402 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
++                        DebugShutdown("...'FWaitConnectionsDisposing' waited.");
+@@ -407 +465,5 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -        private void FireOnSent(BaseSocketConnection connection, bool sentByServer)
 +        // ----- \remind BEGIN -----
 +        // 2012-10-13 / Matthias Klaey
 +        // Added buffer which is now forwarded to FSocketService.OnSent().
 +
 +        private void FireOnSent(BaseSocketConnection connection, byte[] buffer, bool sentByServer)
-         {
- 
-             if (!Disposed)
-@@ -421,7 +472,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
- 
-                             case EventProcessing.epUser:
- 
+@@ -424 +486 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -                                FSocketService.OnSent(new MessageEventArgs(connection, null, sentByServer));
 +                                FSocketService.OnSent(new MessageEventArgs(connection, buffer, sentByServer));
-                                 break;
- 
-                             case EventProcessing.epEncrypt:
-@@ -448,6 +499,8 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
- 
-         }
- 
+@@ -450,0 +513,2 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +        // ----- \remind  END  -----
 +
-         #endregion
- 
-         #region FireOnReceived
-@@ -718,9 +771,15 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
-                         connection.Stream.EndWrite(ar);
-                         connection.SetConnectionData(0, connection.WriteOV.Count);
- 
+@@ -720,0 +785,6 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +                        // ----- \remind BEGIN -----
 +                        // 2012-10-14 / Matthias Klaey
 +                        // Clone buffer to forwared it to FireOnSent().
 +
 +                        byte[] buffer = (byte[])connection.WriteOV.Buffer.Clone();
 +
-                         FBufferManager.ReturnBuffer(connection.WriteOV.Buffer);
- 
+@@ -723 +793 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -                        FireOnSent(connection, sentByServer);
 +                        FireOnSent(connection, buffer, sentByServer);
- 
-                         if (connection.Active)
-                         {
-@@ -748,6 +807,8 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
- 
-                         }
- 
+@@ -750,0 +821,2 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +                        // ----- \remind  END  -----
 +
-                     }
- 
-                 }
-@@ -832,12 +893,18 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
-                             }
-                             else
-                             {
+@@ -834,0 +907,3 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +                                // ----- \remind BEGIN -----
 +                                // 2012-10-14 / Matthias Klaey
 +                                // Clone buffer to forwared it to FireOnSent().
- 
+@@ -835,0 +911,2 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +                                byte[] buffer = (byte[])e.Buffer.Clone();
 +
-                                 FBufferManager.ReturnBuffer(e.Buffer);
-                                 e.SetBuffer(null, 0, 0);
- 
+@@ -839 +916 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -                                FireOnSent(connection, sentByServer);
 +                                FireOnSent(connection, buffer, sentByServer);
- 
+@@ -840,0 +918 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +                                // ----- \remind  END  -----
-                             }
- 
-                         }
-@@ -1707,34 +1774,66 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
-           if (!Disposed)
-           {
- 
+@@ -1668 +1746,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+-            return Interlocked.Increment(ref FConnectionId);
++            // ----- \remind BEGIN -----
++            // 2020-08-27 / Matthias Klaey
++            // Moved increment to constructor using a static field.
++
++            return FConnectionId;
++
++            // ----- \remind  END  -----
+@@ -1710 +1794,12 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -              if (socketConnection != null)
 +              // ----- \remind BEGIN -----
 +              // 2012-09-12 / Matthias Klaey (in Lianyungang :-)
 +              // Added if != null due to NullReferenceExecption to finally{}.
-+              // 
++              //
 +              // 2012-10-15 / Matthias Klaey
 +              // Added catch (NullReferenceException) to handle cases where asynchronous
 +              // operations set the reference to null while this method is active.
-+              // 
++              //
 +              // 2012-10-23 / Matthias Klaey
 +              // Rearranged checks (FSocketConnectionsSync != null) and (FSocketConnections != null).
 +
 +              if ((socketConnection != null)  && (FSocketConnectionsSync != null))
-               {
- 
+@@ -1713 +1807,0 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -
-                   FSocketConnectionsSync.EnterWriteLock();
- 
-                   try
-                   {
+@@ -1717,0 +1812,2 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +                      if (FSocketConnections != null)
 +                          FSocketConnections.Remove(socketConnection.ConnectionId);
- 
+@@ -1719,2 +1815 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -                      FSocketConnections.Remove(socketConnection.ConnectionId);
 -
 +                      // Do not write the stack in the 'normal' case.
-                   }
+@@ -1721,0 +1817,4 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +                  catch (NullReferenceException ex)
 +                  {
 +                      DebugExceptions(ex);
 +                  }
-                   finally
-                   {
+@@ -1724,2 +1823 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -
 -                      if (FSocketConnections.Count <= 0)
 +                      try
-                       {
+@@ -1727 +1825,6 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -                          FWaitConnectionsDisposing.Set();
 +                          if (FSocketConnections.Count <= 0)
 +                          {
-+                              DebugShutdownMessage("Setting 'FWaitConnectionsDisposing'...");
++                              DebugShutdown("Setting 'FWaitConnectionsDisposing'...");
 +                              FWaitConnectionsDisposing.Set();
-+                              DebugShutdownMessage("...'FWaitConnectionsDisposing' set.");
++                              DebugShutdown("...'FWaitConnectionsDisposing' set.");
 +                          }
-                       }
+@@ -1728,0 +1832,13 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +                      catch (NullReferenceException ex)
 +                      {
 +                          DebugExceptions(ex);
@@ -226,25 +174,16 @@
 +                          if (FSocketConnectionsSync != null)
 +                              FSocketConnectionsSync.ExitWriteLock();
 +                      }
- 
+@@ -1730,2 +1845,0 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -                      FSocketConnectionsSync.ExitWriteLock();
 -
-                   }
- 
-               }
- 
+@@ -1736 +1850 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -        }
 +              // ----- \remind  END  -----
- 
+@@ -1737,0 +1852,2 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +          }
 +
-         }
- 
-         #endregion
-@@ -1788,12 +1887,22 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
-             if (!Disposed)
-             {
- 
+@@ -1790,0 +1907,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +              // ----- \remind BEGIN -----
 +              // 2012-10-28 / Matthias Klaey
 +              // Handling exceptions:
@@ -252,26 +191,17 @@
 +              try
 +              {
 +
-                 connection.Active = false;
-                 connection.Socket.Shutdown(SocketShutdown.Send);
- 
+@@ -1794 +1917 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -                lock (connection.WriteQueue)
 +                if (connection.WriteQueue != null)
-                 {
- 
+@@ -1796,0 +1920,3 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +                  lock (connection.WriteQueue)
 +                  {
 +
-                     if (connection.WriteQueue.Count > 0)
-                     {
- 
-@@ -1811,7 +1920,18 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
- 
-                     }
- 
+@@ -1813,0 +1940,2 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +                  }
 +
-                 }
+@@ -1814,0 +1943,9 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +
 +              }
 +              catch (Exception ex)
@@ -281,52 +211,43 @@
 +
 +              // ----- \remind  END  -----
 +
-             }
-         }
- 
-@@ -2197,7 +2317,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
-                     }
- 
-                 }
+@@ -2200 +2337 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -                catch(Exception ex)
 +                catch (Exception ex)
-                 {
-                     FireOnException(connection, ex);
-                 }
-@@ -2626,6 +2746,36 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
- 
-         #endregion
- 
+@@ -2628,0 +2766,36 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +		#region Debug
 +		//==========================================================================================
 +		// Debug
 +		//==========================================================================================
 +
++		/// <remarks>
++		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
++		/// </remarks>
 +		[Conditional("DEBUG_EXCEPTIONS")]
 +		private void DebugExceptions(Exception ex)
 +		{
 +			MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes. It indicates an issue in ALAZ.");
 +		}
 +
++		/// <remarks>
++		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
++		/// </remarks>
 +		[Conditional("DEBUG_SHUTDOWN")]
-+		private void DebugShutdownMessage(string message)
++		private void DebugShutdown(string message)
 +		{
 +			Debug.WriteLine
 +			(
 +				string.Format
 +				(
-+					CultureInfo.InvariantCulture,
++					CultureInfo.CurrentCulture,
 +					" @ {0} @ Thread #{1} : {2} {3} : {4}",
-+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo),
-+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.InvariantCulture),
++					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
++					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
 +					GetType(),
-+					"#" + this.FConnectionId.ToString("D2", CultureInfo.InvariantCulture),
++					"#" + this.FConnectionId.ToString("D2", CultureInfo.CurrentCulture),
 +					message
 +				)
 +			);
 +		}
 +
 +		#endregion
-     }
- 
- }
