@@ -102,52 +102,58 @@ namespace MKY.IO.Serial.Socket.Test
 		{
 			int serverPort;
 			TcpServer server;
-			TcpClient client;
-
 			Utilities.CreateAndStartAsync(out server, out serverPort, serverConnectionAllowance);
-			Utilities.WaitForStart(server, "TCP/IP server could not be started!");
-			Utilities.CreateAndStartAsync(out client, serverPort, SocketSettings.TcpClientAutoReconnectDefault);
-			Utilities.WaitForStart(client, "TCP/IP client could not be started!");
-			Utilities.WaitForConnect(client, server, "TCP/IP client could not be connected to server!");
-			Utilities.AssertStartedAndTransmissive(client);
-			Utilities.AssertStartedAndTransmissive(server);
-
-			for (int minute = 0; minute < minutes; minute++) // A loop takes around 1 minute.
+			using (server)
 			{
-				// Repeat server disconnect a few times:
-				for (int i = 0; i < 30; i++) {
-					ServerDisconnectReconnect(server, client);
-				}
+				Utilities.WaitForStart(server, "TCP/IP server could not be started!");
 
-				// Toggle different client/server disconnect patterns a few times:
-				for (int i = 0; i < 10; i++) {
-					ClientDisconnectReconnect(client, server);
-					ServerDisconnectReconnect(server, client);
-				}
-				for (int i = 0; i < 10; i++) {
-					ClientDisconnectReconnect(client, server);
-					ClientDisconnectReconnect(client, server);
-					ServerDisconnectReconnect(server, client);
-				}
-				for (int i = 0; i < 10; i++) {
-					ClientDisconnectReconnect(client, server);
-					ServerDisconnectReconnect(server, client);
-					ServerDisconnectReconnect(server, client);
-				}
+				TcpClient client;
+				Utilities.CreateAndStartAsync(out client, serverPort, SocketSettings.TcpClientAutoReconnectDefault);
+				using (client)
+				{
+					Utilities.WaitForStart(client, "TCP/IP client could not be started!");
+					Utilities.WaitForConnect(client, server, "TCP/IP client could not be connected to server!");
+					Utilities.AssertStartedAndTransmissive(client);
+					Utilities.AssertStartedAndTransmissive(server);
 
-				// Repeat client disconnect a few times:
-				for (int i = 0; i < 30; i++) {
-					ClientDisconnectReconnect(client, server);
+					for (int minute = 0; minute < minutes; minute++) // A loop takes around 1 minute.
+					{
+						// Repeat server disconnect a few times:
+						for (int i = 0; i < 30; i++) {
+							ServerDisconnectReconnect(server, client);
+						}
+
+						// Toggle different client/server disconnect patterns a few times:
+						for (int i = 0; i < 10; i++) {
+							ClientDisconnectReconnect(client, server);
+							ServerDisconnectReconnect(server, client);
+						}
+						for (int i = 0; i < 10; i++) {
+							ClientDisconnectReconnect(client, server);
+							ClientDisconnectReconnect(client, server);
+							ServerDisconnectReconnect(server, client);
+						}
+						for (int i = 0; i < 10; i++) {
+							ClientDisconnectReconnect(client, server);
+							ServerDisconnectReconnect(server, client);
+							ServerDisconnectReconnect(server, client);
+						}
+
+						// Repeat client disconnect a few times:
+						for (int i = 0; i < 30; i++) {
+							ClientDisconnectReconnect(client, server);
+						}
+					}
+
+					Utilities.StopAsync(client);
+					Utilities.WaitForDisconnect(server, client, "TCP/IP server is not disconnected!");
+					Utilities.WaitForStop(client, "TCP/IP client could not be stopped!");
+					Utilities.AssertStopped(client);
+					Utilities.StopAsync(server);
+					Utilities.WaitForStop(server, "TCP/IP server could not be stopped!");
+					Utilities.AssertStopped(server);
 				}
 			}
-
-			Utilities.StopAsync(client);
-			Utilities.WaitForDisconnect(server, client, "TCP/IP server is not disconnected!");
-			Utilities.WaitForStop(client, "TCP/IP client could not be stopped!");
-			Utilities.AssertStopped(client);
-			Utilities.StopAsync(server);
-			Utilities.WaitForStop(server, "TCP/IP server could not be stopped!");
-			Utilities.AssertStopped(server);
 		}
 
 		/// <summary></summary>
