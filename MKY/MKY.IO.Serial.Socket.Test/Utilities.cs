@@ -50,7 +50,7 @@ namespace MKY.IO.Serial.Socket.Test
 		//==========================================================================================
 
 		private const int WaitInterval = 100;
-		private const int WaitTimeoutForStateChange = 3000; // Same as 'YAT.Domain.Test.Utilities.WaitTimeoutForStateChange'.
+		private const int WaitTimeoutForStateChange = 5000; // Same as 'YAT.Domain.Test.Utilities.WaitTimeoutForStateChange'.
 
 		#endregion
 
