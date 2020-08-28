@@ -798,7 +798,7 @@ namespace MKY.IO.Serial.SerialPort
 				return (this.state);
 		}
 
-		private void SetStateSynchronizedAndNotify(State state, bool withNotify = true)
+		private void SetStateSynchronizedAndNotify(State state, bool notify = true)
 		{
 			State oldState;
 
@@ -808,14 +808,15 @@ namespace MKY.IO.Serial.SerialPort
 				this.state = state;
 			}
 
-			if ((state != oldState) && withNotify)
-			{
-			#if (DEBUG)
+		#if (DEBUG)
 			if (state != oldState)
 				DebugMessage("State has changed from {0} to {1}.", oldState, state);
 			else
 				DebugMessage("State already is {0}.", oldState);
-			#endif
+		#endif
+
+			if (notify && (state != oldState))
+			{
 				// Notify asynchronously because the state will get changed from asynchronous items
 				// such as the reopen timer. In case of that timer, the port needs to be locked to
 				// ensure proper operation. In such case, a synchronous notification callback would
@@ -953,7 +954,7 @@ namespace MKY.IO.Serial.SerialPort
 			DoRestartOrResetPortAndThreadsAfterException(false);
 		}
 
-		private void DoRestartOrResetPortAndThreadsAfterException(bool withNotify)
+		private void DoRestartOrResetPortAndThreadsAfterException(bool notify)
 		{
 			if (this.settings.AutoReopen.Enabled)
 			{
@@ -971,11 +972,11 @@ namespace MKY.IO.Serial.SerialPort
 				CloseAndDisposePort(true); // This method is always called 'AfterException'.
 				ClearQueues();
 
-				SetStateSynchronizedAndNotify(State.Closed, withNotify); // Notification must succeed here, do not try/catch.
+				SetStateSynchronizedAndNotify(State.Closed, notify); // Notification must succeed here, do not try/catch.
 
 				StartReopenTimeout();
 
-				SetStateSynchronizedAndNotify(State.WaitingForReopen, withNotify); // Notification must succeed here, do not try/catch.
+				SetStateSynchronizedAndNotify(State.WaitingForReopen, notify); // Notification must succeed here, do not try/catch.
 			}
 			else
 			{
@@ -994,7 +995,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		private void DoResetPortAndThreads(bool isAfterException, bool withNotify)
+		private void DoResetPortAndThreads(bool isAfterException, bool notify)
 		{
 			StopAndDisposeReopenTimeout();
 			StopAndDisposeAliveMonitor();
@@ -1012,7 +1013,7 @@ namespace MKY.IO.Serial.SerialPort
 
 			try
 			{
-				SetStateSynchronizedAndNotify(State.Reset, withNotify);
+				SetStateSynchronizedAndNotify(State.Reset, notify);
 			}
 			catch (Exception ex)
 			{
@@ -1026,16 +1027,10 @@ namespace MKY.IO.Serial.SerialPort
 			DropReceiveQueueAndNotify();
 		}
 
-		private int DropSendQueueAndNotify(bool withNotify = true)
+		private int DropSendQueueAndNotify()
 		{
-			int droppedCount;
-			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
-			{
-				droppedCount = this.sendQueue.Count;
-				this.sendQueue.Clear();
-			}
-
-			if (withNotify && (droppedCount > 0))
+			int droppedCount = DropSendQueue();
+			if (droppedCount > 0)
 			{
 				string message;
 				if (droppedCount <= 1)
@@ -1049,15 +1044,21 @@ namespace MKY.IO.Serial.SerialPort
 			return (droppedCount);
 		}
 
-		private void DropReceiveQueueAndNotify()
+		private int DropSendQueue()
 		{
 			int droppedCount;
-			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 			{
-				droppedCount = this.receiveQueue.Count;
-				this.receiveQueue.Clear();
+				droppedCount = this.sendQueue.Count;
+				this.sendQueue.Clear();
 			}
 
+			return (droppedCount);
+		}
+
+		private void DropReceiveQueueAndNotify()
+		{
+			int droppedCount = DropReceivedQueue();
 			if (droppedCount > 0)
 			{
 				string message;
@@ -1068,6 +1069,18 @@ namespace MKY.IO.Serial.SerialPort
 
 				OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
 			}
+		}
+
+		private int DropReceivedQueue()
+		{
+			int droppedCount;
+			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+			{
+				droppedCount = this.receiveQueue.Count;
+				this.receiveQueue.Clear();
+			}
+
+			return (droppedCount);
 		}
 
 		#endregion

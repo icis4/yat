@@ -258,7 +258,7 @@ namespace MKY.IO.Serial.SerialPort
 		{
 			AssertUndisposed();
 
-			return (DropSendQueueAndNotify(false));
+			return (DropSendQueue());
 		}
 
 		#endregion

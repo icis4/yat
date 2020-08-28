@@ -30,12 +30,12 @@ namespace MKY
 	public static class MessageHelper
 	{
 		/// <summary>
-		/// The default invalid execution preamble is <![CDATA["Program execution should never get here! "]]>.
+		/// The default invalid execution preamble is <![CDATA["Program execution must never get here! "]]>.
 		/// </summary>
 		/// <remarks>
 		/// Note the adjacent space.
 		/// </remarks>
-		public const string InvalidExecutionPreambleDefault = "Program execution should never get here! ";
+		public const string InvalidExecutionPreambleDefault = "Program execution must never get here! ";
 
 		/// <summary>
 		/// The default support request message is <![CDATA["Support may be requested at the origin of this software."]]>.
