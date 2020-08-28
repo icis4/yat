@@ -77,7 +77,7 @@ namespace YAT.Domain.Test
 		public const int IgnoreTimeout = 0;
 
 		/// <summary></summary>
-		public const int WaitTimeoutForStateChange = 3000;
+		public const int WaitTimeoutForStateChange = 3000; // Same as 'MKY.IO.Serial.Socket.Test.Utilities.WaitTimeoutForStateChange'.
 
 		/// <remarks>
 		/// Note that a shorter interval would increase debug output, spoiling the debug console.

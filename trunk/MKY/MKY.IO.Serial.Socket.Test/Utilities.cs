@@ -50,7 +50,7 @@ namespace MKY.IO.Serial.Socket.Test
 		//==========================================================================================
 
 		private const int WaitInterval = 100;
-		private const int WaitTimeout = 10000;
+		private const int WaitTimeoutForStateChange = 3000; // Same as 'YAT.Domain.Test.Utilities.WaitTimeoutForStateChange'.
 
 		#endregion
 
@@ -285,7 +285,7 @@ namespace MKY.IO.Serial.Socket.Test
 				Thread.Sleep(WaitInterval);
 				timeout += WaitInterval;
 
-				if (timeout >= WaitTimeout)
+				if (timeout >= WaitTimeoutForStateChange)
 					Assert.Fail(message);
 			}
 			while (!io.IsStarted);
@@ -299,7 +299,7 @@ namespace MKY.IO.Serial.Socket.Test
 				Thread.Sleep(WaitInterval);
 				timeout += WaitInterval;
 
-				if (timeout >= WaitTimeout)
+				if (timeout >= WaitTimeoutForStateChange)
 					Assert.Fail(message);
 			}
 			while (!(io.IsStarted && io.IsServer));
@@ -313,7 +313,7 @@ namespace MKY.IO.Serial.Socket.Test
 				Thread.Sleep(WaitInterval);
 				timeout += WaitInterval;
 
-				if (timeout >= WaitTimeout)
+				if (timeout >= WaitTimeoutForStateChange)
 					Assert.Fail(message);
 			}
 			while (!ioA.IsConnected && !ioB.IsConnected);
@@ -327,7 +327,7 @@ namespace MKY.IO.Serial.Socket.Test
 				Thread.Sleep(WaitInterval);
 				timeout += WaitInterval;
 
-				if (timeout >= WaitTimeout)
+				if (timeout >= WaitTimeoutForStateChange)
 					Assert.Fail(message);
 			}
 			while (ioA.IsConnected || ioB.IsConnected);
@@ -341,7 +341,7 @@ namespace MKY.IO.Serial.Socket.Test
 				Thread.Sleep(WaitInterval);
 				timeout += WaitInterval;
 
-				if (timeout >= WaitTimeout)
+				if (timeout >= WaitTimeoutForStateChange)
 					Assert.Fail(message);
 			}
 			while (io.IsStarted);
@@ -357,8 +357,8 @@ namespace MKY.IO.Serial.Socket.Test
 		internal static void AssertStartedAndDisconnected(IIOProvider io)
 		{
 			Assert.That(io.IsStarted);
-		////Assert.That(io.IsOpen depends on the I/O.
-			Assert.That(io.IsConnected, Is.False);
+			Assert.That(io.IsOpen,         Is.False);
+			Assert.That(io.IsConnected,    Is.False);
 			Assert.That(io.IsTransmissive, Is.False);
 		}
 
