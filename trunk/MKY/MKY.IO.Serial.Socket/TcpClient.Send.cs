@@ -29,7 +29,7 @@
 #if (DEBUG)
 
 	// Enable debugging of thread state:
-////#define DEBUG_THREAD_STATE
+////#define DEBUG_THREAD_STATE // Attention: Must also be activated in TcpClient.cs !!
 
 	// Enable debugging of sending:
 ////#define DEBUG_SEND // Attention: Must also be activated in TcpClient.cs !!
