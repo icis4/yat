@@ -76,8 +76,11 @@ namespace YAT.Domain.Test
 		/// <summary></summary>
 		public const int IgnoreTimeout = 0;
 
-		/// <summary></summary>
-		public const int WaitTimeoutForStateChange = 3000; // Same as 'MKY.IO.Serial.Socket.Test.Utilities.WaitTimeoutForStateChange'.
+		/// <remarks>
+		/// State changes on a <see cref="MKY.IO.Serial.Socket.TcpAutoSocket"/> are the slowest,
+		/// due to the nature of the AutoSocket to try this and that.
+		/// </remarks>
+		public const int WaitTimeoutForStateChange = 5000; // Same as 'MKY.IO.Serial.Socket.Test.Utilities.WaitTimeoutForStateChange'.
 
 		/// <remarks>
 		/// Note that a shorter interval would increase debug output, spoiling the debug console.
