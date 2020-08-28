@@ -796,16 +796,10 @@ namespace MKY.IO.Serial.Usb
 			DropReceiveQueueAndNotify();
 		}
 
-		private int DropSendQueueAndNotify(bool withNotify = true)
+		private int DropSendQueueAndNotify()
 		{
-			int droppedCount;
-			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
-			{
-				droppedCount = this.sendQueue.Count;
-				this.sendQueue.Clear();
-			}
-
-			if (withNotify && (droppedCount > 0))
+			int droppedCount = DropSendQueue();
+			if (droppedCount > 0)
 			{
 				string message;
 				if (droppedCount <= 1)
@@ -819,15 +813,21 @@ namespace MKY.IO.Serial.Usb
 			return (droppedCount);
 		}
 
-		private void DropReceiveQueueAndNotify()
+		private int DropSendQueue()
 		{
 			int droppedCount;
-			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
 			{
-				droppedCount = this.receiveQueue.Count;
-				this.receiveQueue.Clear();
+				droppedCount = this.sendQueue.Count;
+				this.sendQueue.Clear();
 			}
 
+			return (droppedCount);
+		}
+
+		private void DropReceiveQueueAndNotify()
+		{
+			int droppedCount = DropReceivedQueue();
 			if (droppedCount > 0)
 			{
 				string message;
@@ -838,6 +838,18 @@ namespace MKY.IO.Serial.Usb
 
 				OnIOWarning(new IOWarningEventArgs(Direction.Output, message));
 			}
+		}
+
+		private int DropReceivedQueue()
+		{
+			int droppedCount;
+			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+			{
+				droppedCount = this.receiveQueue.Count;
+				this.receiveQueue.Clear();
+			}
+
+			return (droppedCount);
 		}
 
 		#endregion
