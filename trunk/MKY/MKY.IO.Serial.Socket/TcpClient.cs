@@ -986,48 +986,60 @@ namespace MKY.IO.Serial.Socket
 			DebugSocketShutdown("Socket 'OnException' event!");
 
 			bool stateHasChanged = false;
+			bool notifyError = false;
 
 			lock (this.stateSyncObj) // Ensure state is handled atomically.
 			{
-				stateHasChanged = SetStateSynchronized(SocketState.Error, notify: false); // Don't notify yet!
-
-				// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
-				StopAndDisposeSocketAndConnectionAndThreadAsync(); // Must by async when called from main thread or ALAZ event callback! See remarks of the header of this class for details.
-
-				if (AutoReconnectEnabledAndAllowed)
+				var state = GetStateSynchronized();
+				if (!((state == SocketState.Error) || (state == SocketState.Reset))) // Don't handle when no longer active.
 				{
-					stateHasChanged = SetStateSynchronized(SocketState.WaitingForReconnect, notify: false); // Notify outside lock!
-					StartReconnectTimer();
-				}
-				else
-				{
-					// Attention, the error event must be raised before notifying the state,
-					// because e.g. in case of an AutoSocket, the state change to 'Error'
-					// will trigger disposal of this Client, thus a subsequent event would
-					// get discarded and no error would be raised anymore. Note that the same
-					// applies to the Server implementation.
+					stateHasChanged = SetStateSynchronized(SocketState.Error, notify: false); // Set state for stopping/disposing! Later notify outside lock!
 
-					if (e.Exception is ALAZ.SystemEx.NetEx.SocketsEx.ReconnectAttemptException)
-					{                                             // Acceptable as situation may recover. And attention, the AutoSocket implementation relies on this!
-						OnIOError(new IOErrorEventArgs(ErrorSeverity.Acceptable, "Failed to connect to TCP/IP server " + this.remoteHost.Address + ":" + this.remotePort));
+					// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
+					StopAndDisposeSocketAndConnectionAndThreadAsync(); // Must by async when called from main thread or ALAZ event callback! See remarks of the header of this class for details.
+
+					if (AutoReconnectEnabledAndAllowed)
+					{
+						stateHasChanged = SetStateSynchronized(SocketState.WaitingForReconnect, notify: false); // Notify outside lock!
+						StartReconnectTimer();
 					}
 					else
 					{
-						var sb = new StringBuilder();
-						sb.AppendLine("The socket of this TCP/IP client has thrown an exception!");
-						sb.AppendLine();
-						sb.AppendLine("Exception type:");
-						sb.AppendLine(e.Exception.GetType().FullName);
-						sb.AppendLine();
-						sb.AppendLine("Exception error message:");
-						sb.AppendLine(e.Exception.Message);
-
-						var message = sb.ToString();
-						DebugMessage(message);
-						OnIOError(new IOErrorEventArgs(ErrorSeverity.Fatal, message));
+						notifyError = true;
 					}
+				}
+				else // (Error || Reset) => don't handle when no longer active.
+				{
+					DebugEx.WriteException(GetType(), e.Exception, "'OnException' event callback is ignored as socket is no longer active.");
+				}
+			}
 
-					stateHasChanged = SetStateSynchronized(SocketState.Error, notify: false); // Notify outside lock!
+			if (notifyError) // Notify outside lock!
+			{
+				// Attention, the error event must be raised before notifying the state,
+				// because e.g. in case of an AutoSocket, the state change to 'Error'
+				// will trigger disposal of this Client, thus a subsequent event would
+				// get discarded and no error would be raised anymore. Note that the same
+				// applies to the Server implementation.
+
+				if (e.Exception is ALAZ.SystemEx.NetEx.SocketsEx.ReconnectAttemptException)
+				{                                             // Acceptable as situation may recover. And attention, the AutoSocket implementation relies on this!
+					OnIOError(new IOErrorEventArgs(ErrorSeverity.Acceptable, "Failed to connect to TCP/IP server " + this.remoteHost.Address + ":" + this.remotePort));
+				}
+				else
+				{
+					var sb = new StringBuilder();
+					sb.AppendLine("The socket of this TCP/IP client has thrown an exception!");
+					sb.AppendLine();
+					sb.AppendLine("Exception type:");
+					sb.AppendLine(e.Exception.GetType().FullName);
+					sb.AppendLine();
+					sb.AppendLine("Exception error message:");
+					sb.AppendLine(e.Exception.Message);
+
+					var message = sb.ToString();
+					DebugMessage(message);
+					OnIOError(new IOErrorEventArgs(ErrorSeverity.Fatal, message));
 				}
 			}
 
