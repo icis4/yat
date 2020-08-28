@@ -908,7 +908,7 @@ namespace MKY.IO.Serial.Socket
 					droppedDataSentCount = DropDataSentQueue();
 
 					if (GetStateSynchronized() == SocketState.Accepted)
-						SetStateSynchronized(SocketState.Listening, notify: false); // Notify outside lock!
+						stateHasChanged = SetStateSynchronized(SocketState.Listening, notify: false); // Notify outside lock!
 				}
 			}
 
@@ -945,13 +945,28 @@ namespace MKY.IO.Serial.Socket
 			}
 
 			bool stateHasChanged = false;
+			bool notifyError = false;
 
 			lock (this.stateSyncObj) // Ensure state is handled atomically.
 			{
-				stateHasChanged = SetStateSynchronized(SocketState.Error, notify: false); // Don't notify yet!
+				var state = GetStateSynchronized();
+				if (!((state == SocketState.Error) || (state == SocketState.Reset))) // Don't handle when no longer active.
+				{
+					stateHasChanged = SetStateSynchronized(SocketState.Error, notify: false); // Notify outside lock!
 
-				// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
-				StopAndDisposeSocketAndConnectionsAndThreadAsync(); // Must by async when called from main thread or ALAZ event callback! See remarks of the header of this class for details.
+					// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
+					StopAndDisposeSocketAndConnectionsAndThreadAsync(); // Must by async when called from main thread or ALAZ event callback! See remarks of the header of this class for details.
+
+					notifyError = true;
+				}
+				else // (Error || Reset) => don't handle when no longer active.
+				{
+					DebugEx.WriteException(GetType(), e.Exception, "'OnException' event callback is ignored as socket is no longer active.");
+				}
+			}
+
+			if (notifyError) // Notify outside lock!
+			{
 				// Attention, the error event must be raised before changing the state,
 				// because e.g. in case of an AutoSocket, the state change to 'Error'
 				// will trigger disposal of this Server, thus a subsequent event would
@@ -969,9 +984,7 @@ namespace MKY.IO.Serial.Socket
 
 				var message = sb.ToString();
 				DebugMessage(message);
-				OnIOError(new IOErrorEventArgs(ErrorSeverity.Fatal, message));
-
-				stateHasChanged = SetStateSynchronized(SocketState.Error, notify: false); // Notify outside lock!
+				OnIOError(new IOErrorEventArgs(ErrorSeverity.Fatal, message)); // Notify outside lock!
 			}
 
 			if (stateHasChanged)
