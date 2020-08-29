@@ -123,9 +123,6 @@ Important changes:
 - High FTDI and Prolific baud rates added to list of standard baud rates (feature request #398).
 - Using term "I/O" instead of "Port" for terminal, settings,... for reducing mix-up of term in YAT
   with TCP and UDP "Port" terminology, where a "Port" only is a part of the overall "I/O" subsystem.
-- TCP/IP segment payload size limited to the safe maximum of 516 (IPv4) or 1220 octets (IPv6).
-- UDP/IP datagram payload size limited to the safe maximum of 508 (IPv4) or 1212 octets (IPv6).
-- IPv6 support enabled for UDP/IP terminals (feature request #372).
 - Text terminals: Now by default using UTF-8 instead of .NET's [Encoding.Default] that is limited to
   an ANSI code page, e.g. Windows-1252 in Western Europe (related to former bugs #427, #428, #429).
 - Sending refactored (precondition for feature requests #19, #333, #387 and fix of bug #176).
@@ -149,10 +146,14 @@ Important changes:
    > Performance significanty improved (feature request #406).
    > ASCII control characters are no longer converted to mnemonics.
 - Option to not send XOn when opending a serial COM port or USB Ser/HID terminal (feat. req. #393).
+- TCP/IP connection state management improved in terms of stress resilience.
+- TCP/IP segment payload size limited to the safe maximum of 516 (IPv4) or 1220 octets (IPv6).
+- UDP/IP datagram payload size limited to the safe maximum of 508 (IPv4) or 1212 octets (IPv6).
+- IPv6 support enabled for UDP/IP terminals (feature request #372).
 - Changes on-the-fly by keywords like \!(Port()), \!(PortSettings()), \!(Baud()),... are now
   reflected in the terminal settings, i.e. also indicated by '*' (related to reqs. #71 and #403).
 - [Terminal > Settings... > Advanced...] dialog rearranged for better fitting screen.
-- Upgrade to .NET 4.0 runtime (precondition for new automatic actions [Chart/Plot/Histogram],
+- Upgrade to .NET 4.0 runtime (precondition for new automatic actions [Chart/Plot/Histogram] and
   preparing upcoming feature request #74, part of feature request #229).
 - Consequently, x64 distributions no longer need to be 'AnyCPU' builds (former limitation).
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
