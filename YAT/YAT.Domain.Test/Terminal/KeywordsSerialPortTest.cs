@@ -532,10 +532,13 @@ namespace YAT.Domain.Test.Terminal
 
 					var predicate = new MKY.IO.Ports.EqualsPortName<MKY.IO.Ports.SerialPortId>(mctPortNameInQuestion);
 					var mctPortIdInQuestion = availablePorts.Find(predicate.Match);
-					if (mctPortIdInQuestion.EqualsCaption(mctPortCaptionInQuestion))
+					if (mctPortIdInQuestion != null) // MCT port in question has been found.
 					{
-						System.Diagnostics.Trace.WriteLine(@"Test is exculded to work around bug #354 ""Automatic hardware flow control is not supported by MCT"".");
-						return (true);
+						if (mctPortIdInQuestion.EqualsCaption(mctPortCaptionInQuestion))
+						{
+							System.Diagnostics.Trace.WriteLine(@"Test is exculded to work around bug #354 ""Automatic hardware flow control is not supported by MCT"".");
+							return (true);
+						}
 					}
 				}
 			}
