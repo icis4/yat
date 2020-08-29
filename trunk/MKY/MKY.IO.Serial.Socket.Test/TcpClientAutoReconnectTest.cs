@@ -169,7 +169,7 @@ namespace MKY.IO.Serial.Socket.Test
 
 			Utilities.StartAsync(server);
 			Utilities.WaitForStart(server, "TCP/IP server could not be started!");
-			Utilities.WaitForConnect(server, client, "TCP/IP server could not be connected to client!");
+			Utilities.WaitForConnect(server, client, "TCP/IP server could not be reconnected to client!");
 			Assert.That(server.ConnectedClientCount, Is.EqualTo(1));
 		}
 
@@ -186,7 +186,7 @@ namespace MKY.IO.Serial.Socket.Test
 
 			Utilities.StartAsync(client);
 			Utilities.WaitForStart(client, "TCP/IP client could not be started!");
-			Utilities.WaitForConnect(client, server, "TCP/IP client could not be connected to server!");
+			Utilities.WaitForConnect(client, server, "TCP/IP client could not be reconnected to server!");
 			Assert.That(server.ConnectedClientCount, Is.EqualTo(1));
 		}
 
