@@ -155,7 +155,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			AssertUndisposed();
 
-			return (DropSendQueue());
+			return (DropSendQueueAndNotify());
 		}
 
 		#endregion

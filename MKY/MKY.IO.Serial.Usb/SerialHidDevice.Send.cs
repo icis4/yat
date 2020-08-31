@@ -195,7 +195,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			AssertUndisposed();
 
-			return (DropSendQueue());
+			return (DropSendQueueAndNotify());
 		}
 
 		#endregion
