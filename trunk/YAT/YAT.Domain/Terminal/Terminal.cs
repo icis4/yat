@@ -1858,11 +1858,11 @@ namespace YAT.Domain
 				// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread!
 				{
 					switch (e.Direction) // Warnings are only shown as terminal text:
-					{
-						case IODirection.None:  InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.None,  e.Message, true)); break;
-						case IODirection.Rx:    InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx,    e.Message, true)); break;
-						case IODirection.Bidir: InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Bidir, e.Message, true)); break;
-						case IODirection.Tx:    InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Tx,    e.Message, true)); break;
+					{                                                            // Inlining requires a direction!
+						case IODirection.None:  InlineDisplayElement(IODirection.Bidir, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.None,  e.Message, true)); break;
+						case IODirection.Rx:    InlineDisplayElement(e.Direction,       new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx,    e.Message, true)); break;
+						case IODirection.Bidir: InlineDisplayElement(e.Direction,       new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Bidir, e.Message, true)); break;
+						case IODirection.Tx:    InlineDisplayElement(e.Direction,       new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Tx,    e.Message, true)); break;
 
 						default: throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + e.Direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "e"));
 					}
@@ -1895,11 +1895,11 @@ namespace YAT.Domain
 				else if (e.Severity == IOErrorSeverity.Acceptable) // Acceptable errors are only shown as terminal text:
 				{
 					switch (e.Direction)
-					{
-						case IODirection.None:  InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.None,  e.Message, true)); return;
-						case IODirection.Rx:    InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx,    e.Message, true)); return;
-						case IODirection.Bidir: InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Bidir, e.Message, true)); return;
-						case IODirection.Tx:    InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Tx,    e.Message, true)); return;
+					{                                                            // Inlining requires a direction!
+						case IODirection.None:  InlineDisplayElement(IODirection.Bidir, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.None,  e.Message, true)); return;
+						case IODirection.Rx:    InlineDisplayElement(e.Direction,       new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx,    e.Message, true)); return;
+						case IODirection.Bidir: InlineDisplayElement(e.Direction,       new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Bidir, e.Message, true)); return;
+						case IODirection.Tx:    InlineDisplayElement(e.Direction,       new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Tx,    e.Message, true)); return;
 
 						default: throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + e.Direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "e"));
 					}
