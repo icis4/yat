@@ -946,12 +946,12 @@ namespace MKY.IO.Serial.SerialPort
 
 		private void RestartOrResetPortAndThreadsAfterExceptionAndNotify()
 		{
-			DoRestartOrResetPortAndThreadsAfterException(true);
+			DoRestartOrResetPortAndThreadsAfterException(notify: true);
 		}
 
 		private void RestartOrResetPortAndThreadsAfterExceptionWithoutNotify()
 		{
-			DoRestartOrResetPortAndThreadsAfterException(false);
+			DoRestartOrResetPortAndThreadsAfterException(notify: false);
 		}
 
 		private void DoRestartOrResetPortAndThreadsAfterException(bool notify)
