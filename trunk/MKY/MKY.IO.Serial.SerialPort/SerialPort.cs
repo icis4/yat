@@ -1702,6 +1702,20 @@ namespace MKY.IO.Serial.SerialPort
 							DebugMessage("aliveMonitorTimeout_Elapsed() has detected shutdown of port as it is no longer available.");
 							RestartOrResetPortAndThreadsAfterExceptionAndNotify();
 						}
+
+						// Note:
+						//
+						// Initially, until YAT 1.99.34, the port's 'IsOpen' was checked, expecting
+						// it to return 'false' or potentially throw in case the port is no longer
+						// available. However, this did not work in all cases.
+						//
+						// Then, with YAT 1.99.50, "...use of USB/RS-232 converters (USB CDC) while
+						// disconnect, undock or hibernate..." got improved and now uses the above
+						// implementation.
+						//
+						// The above implementation also works e.g. with the ToriLogic USB driver,
+						// while the 'IsOpen' unfortunately returns 'true' even when the device got
+						// disconnected.
 					}
 					else
 					{
