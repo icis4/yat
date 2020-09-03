@@ -135,7 +135,14 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
             if (!Disposed)
             {
 
+                // ----- \remind BEGIN -----
+                // 2020-05-18 / Matthias Klaey in Corona HomeOffice
+                // Support for IPv6.
+
                 FSocket = new Socket(LocalEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
+                // ----- \remind  END  -----
+
                 FSocket.Bind(LocalEndPoint);
                 FSocket.Listen(FBackLog * FAcceptThreads);
 
@@ -236,7 +243,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                 e2.Completed += new EventHandler<SocketAsyncEventArgs>(BeginAcceptCallbackAsync);
 
                 // ----- \remind BEGIN -----
-                // 2010-05-14 / Matthias Klaey
+                // 2010-05-14, 2020-09-03 / Matthias Klaey
                 // Handling exceptions.
 
                 try
@@ -247,6 +254,10 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                     }
                 }
                 catch (ObjectDisposedException ex)
+                {
+                    DebugException(ex);
+                }
+                catch (NullReferenceException ex)
                 {
                     DebugException(ex);
                 }
