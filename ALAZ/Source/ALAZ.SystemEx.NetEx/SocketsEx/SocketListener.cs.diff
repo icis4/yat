@@ -1,7 +1,4 @@
-@@ -37,6 +37,15 @@
-  * OF THE POSSIBILITY OF SUCH DAMAGE. 
-  */
- 
+@@ -39,0 +40,9 @@
 +#if (DEBUG)
 +
 +	// Enable debugging of exceptions:
@@ -11,54 +8,50 @@
 +
 +using System.Diagnostics;
 +
- using System;
- using System.Net;
- using System.Net.Sockets;
-@@ -126,7 +135,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
-             if (!Disposed)
-             {
- 
+@@ -129 +138,8 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -                FSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
++                // ----- \remind BEGIN -----
++                // 2020-05-18 / Matthias Klaey in Corona HomeOffice
++                // Support for IPv6.
++
 +                FSocket = new Socket(LocalEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                 FSocket.Bind(LocalEndPoint);
-                 FSocket.Listen(FBackLog * FAcceptThreads);
- 
-@@ -226,11 +235,24 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
-                 e2.UserToken = listener;
-                 e2.Completed += new EventHandler<SocketAsyncEventArgs>(BeginAcceptCallbackAsync);
- 
++
++                // ----- \remind  END  -----
++
+@@ -229 +245,5 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -                if (!listener.Socket.AcceptAsync(e2))
 +                // ----- \remind BEGIN -----
-+                // 2010-05-14 / Matthias Klaey
++                // 2010-05-14, 2020-09-03 / Matthias Klaey
 +                // Handling exceptions.
 +
 +                try
-                 {
+@@ -231 +251,4 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -                    BeginAcceptCallbackAsync(this, e2);
 +                    if (!listener.Socket.AcceptAsync(e2))
 +                    {
 +                        BeginAcceptCallbackAsync(this, e2);
 +                    }
-                 }
+@@ -232,0 +256,8 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +                catch (ObjectDisposedException ex)
 +                {
 +                    DebugException(ex);
 +                }
- 
++                catch (NullReferenceException ex)
++                {
++                    DebugException(ex);
++                }
+@@ -233,0 +265,2 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +                // ----- \remind  END  -----
 +
-             }
- 
-             e.UserToken = null;
-@@ -278,6 +300,18 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
- 
-         #endregion
- 
+@@ -280,0 +314,15 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +		#region Debug
 +		//==========================================================================================
 +		// Debug
 +		//==========================================================================================
 +
++		/// <remarks>
++		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
++		/// </remarks>
 +		[Conditional("DEBUG_EXCEPTIONS")]
 +		private void DebugException(Exception ex)
 +		{
@@ -66,6 +59,3 @@
 +		}
 +
 +		#endregion
-     }
- 
- }
