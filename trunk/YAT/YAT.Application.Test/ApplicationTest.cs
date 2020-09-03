@@ -376,7 +376,7 @@ namespace YAT.Application.Test
 		/// COM101 and COM102 will be opened in this test case
 		/// (WorkspaceArgs refers to WorkspaceSettingsTestCase.W_04_Matthias).
 		/// </remarks>
-		[Test] // Test is mandatory, it shall not be excludable.
+		[Test] // Test is mandatory, it shall not be excludable, thus no [InteractiveCategory].
 		public virtual void TestWorkspaceCommandLineArgRunInteractive()
 		{
 			AssertWorkspaceCommandLineArgRunPreconditions();

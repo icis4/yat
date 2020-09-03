@@ -214,6 +214,8 @@ namespace YAT.Model.Test.Transmission
 		{
 			// \remind (2016-05-26 / MKY) should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
 			// \remind (2017-10-09 / MKY) even better to be replaced by a runtime check for availability of a weighing capable MT-SICS device.
+			// \remind (2020-09-03 / MKY) and make the behavior dependent on the [Interactive] category (possible when upgraded to NUnit 3).
+
 			var dr = MessageBoxEx.Show
 			(
 				"This test requires a weighing MT-SICS device:" + Environment.NewLine +
