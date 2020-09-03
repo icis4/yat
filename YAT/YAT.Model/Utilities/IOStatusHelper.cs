@@ -55,17 +55,17 @@ namespace YAT.Model.Utilities
 						var port = (terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 						if (port != null) // Effective settings from port object:
 						{
-							var s = port.Settings;
-							portNameAndCaption = s.PortId.ToNameAndCaptionString();
-							communication      = s.Communication.ToString();
-							autoReopenEnabled  = s.AutoReopen.Enabled;
+							var settings = port.Settings;
+							portNameAndCaption = settings.PortId.ToNameAndCaptionString();
+							communication      = settings.Communication.ToString();
+							autoReopenEnabled  = settings.AutoReopen.Enabled;
 						}
 						else // Fallback to settings object tree;
 						{
-							var s = settingsRoot.IO.SerialPort;
-							portNameAndCaption = s.PortId.ToNameAndCaptionString();
-							communication      = s.Communication.ToString();
-							autoReopenEnabled  = s.AutoReopen.Enabled;
+							var settings = settingsRoot.IO.SerialPort;
+							portNameAndCaption = settings.PortId.ToNameAndCaptionString();
+							communication      = settings.Communication.ToString();
+							autoReopenEnabled  = settings.AutoReopen.Enabled;
 						}
 
 						sb.Append("Serial port "); // Not adding "COM" as the port name will already state that.
@@ -98,24 +98,26 @@ namespace YAT.Model.Utilities
 
 					case Domain.IOType.TcpClient:
 					{
-						MKY.IO.Serial.Socket.SocketSettings s = settingsRoot.IO.Socket;
+						var settings = settingsRoot.IO.Socket;
 						sb.Append("TCP/IP client");
 
 						if (isConnected)
 							sb.Append(" is connected to ");
-						else if (isStarted && s.TcpClientAutoReconnect.Enabled)
+						else if (isStarted && settings.TcpClientAutoReconnect.Enabled)
 							sb.Append(" is disconnected and waiting for reconnect to ");
 						else
 							sb.Append(" is disconnected from ");
 
-						sb.Append(s.RemoteEndPointString);
+						sb.Append(settings.RemoteEndPointString);
 						break;
 					}
 
 					case Domain.IOType.TcpServer:
 					{
-						var s = settingsRoot.IO.Socket;
-						sb.Append("TCP/IP server");
+						var settings = settingsRoot.IO.Socket;
+						sb.Append("TCP/IP server on local port ");
+						sb.Append(settings.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+
 						if (isStarted)
 						{
 							if (isConnected)
@@ -148,14 +150,12 @@ namespace YAT.Model.Utilities
 							sb.Append(" is closed");
 						}
 
-						sb.Append(" on local port ");
-						sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
 						break;
 					}
 
 					case Domain.IOType.TcpAutoSocket:
 					{
-						var s = settingsRoot.IO.Socket;
+						var settings = settingsRoot.IO.Socket;
 						sb.Append("TCP/IP AutoSocket");
 						if (isStarted)
 						{
@@ -172,24 +172,24 @@ namespace YAT.Model.Utilities
 							if (isClient)
 							{
 								sb.Append(" is connected to ");
-								sb.Append(s.RemoteEndPointString);
+								sb.Append(settings.RemoteEndPointString);
 							}
 							else if (isServer)
 							{
-								sb.Append(isConnected ? " is connected" : " is listening");
 								sb.Append(" on local port ");
-								sb.Append(s.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+								sb.Append(settings.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+								sb.Append(isConnected ? " is connected" : " is listening");
 							}
 							else
 							{
 								sb.Append(" is starting to connect to ");
-								sb.Append(s.RemoteEndPointString);
+								sb.Append(settings.RemoteEndPointString);
 							}
 						}
 						else
 						{
 							sb.Append(" is disconnected from ");
-							sb.Append(s.RemoteEndPointString);
+							sb.Append(settings.RemoteEndPointString);
 						}
 
 						break;
@@ -277,14 +277,14 @@ namespace YAT.Model.Utilities
 
 					case Domain.IOType.UsbSerialHid:
 					{
-						var s = settingsRoot.IO.UsbSerialHidDevice;
+						var settings = settingsRoot.IO.UsbSerialHidDevice;
 						sb.Append("USB HID device '");
 
 						var device = (terminal.UnderlyingIOProvider as MKY.IO.Serial.Usb.SerialHidDevice);
 						if (device != null)
 							sb.Append(device.InfoString);
 						else
-							s.DeviceInfo.ToString(true, false);
+							settings.DeviceInfo.ToString(true, false);
 
 						sb.Append("'");
 
