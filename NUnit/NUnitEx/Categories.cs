@@ -29,7 +29,10 @@ using NUnit.Framework;
 
 namespace NUnitEx
 {
-	/// <summary></summary>
+	/// <remarks>
+	/// A "Quick" category doesn't make much sense, as almost every short running test could be included
+	/// in "Quick". It makes much more sense to exclude long running tests via the "Duration" categories.
+	/// </remarks>
 	public static class CategoryStrings
 	{
 		/// <summary></summary>
