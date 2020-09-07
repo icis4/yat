@@ -81,6 +81,30 @@ namespace MKY.Net
 		}
 
 		/// <summary>
+		/// Determines whether the specified address is a multicast address.
+		/// </summary>
+		public static bool IsMulticast(IPAddress address)
+		{
+			switch (address.AddressFamily)
+			{
+				case AddressFamily.InterNetwork:   return (IsIPv4Multicast(address));
+				case AddressFamily.InterNetworkV6: return (address.IsIPv6Multicast);
+
+				default: throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "This method requires 'AddressFamily.InterNetwork' or 'AddressFamily.InterNetworkV6'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary>
+		/// Determines whether the specified address is an IPv4 multicast address.
+		/// </summary>
+		public static bool IsIPv4Multicast(IPAddress address)
+		{
+			var addressBytes = address.GetAddressBytes();
+			var octet1 = addressBytes[0];
+			return ((octet1 >= 224) && (octet1 <= 239));
+		}
+
+		/// <summary>
 		/// Determines whether the specified <see cref="IPAddress"/> instances are considered equal.
 		/// </summary>
 		/// <remarks>
