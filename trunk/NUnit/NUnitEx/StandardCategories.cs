@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace NUnitEx
@@ -33,6 +34,8 @@ namespace NUnitEx
 	{
 		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 		[CLSCompliant(false)]
+		[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public sealed class Second1Attribute : SecondDurationCategoryAttribute
 		{
 			/// <summary></summary>
@@ -44,6 +47,8 @@ namespace NUnitEx
 
 		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 		[CLSCompliant(false)]
+		[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public sealed class Seconds4Attribute : SecondDurationCategoryAttribute
 		{
 			/// <summary></summary>
@@ -55,6 +60,8 @@ namespace NUnitEx
 
 		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 		[CLSCompliant(false)]
+		[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public sealed class Seconds15Attribute : SecondDurationCategoryAttribute
 		{
 			/// <summary></summary>
@@ -66,6 +73,8 @@ namespace NUnitEx
 
 		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 		[CLSCompliant(false)]
+		[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public sealed class Minute1Attribute : MinuteDurationCategoryAttribute
 		{
 			/// <summary></summary>
@@ -77,6 +86,8 @@ namespace NUnitEx
 
 		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 		[CLSCompliant(false)]
+		[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public sealed class Minutes4Attribute : MinuteDurationCategoryAttribute
 		{
 			/// <summary></summary>
@@ -88,6 +99,8 @@ namespace NUnitEx
 
 		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 		[CLSCompliant(false)]
+		[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public sealed class Minutes15Attribute : MinuteDurationCategoryAttribute
 		{
 			/// <summary></summary>
@@ -99,6 +112,8 @@ namespace NUnitEx
 
 		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 		[CLSCompliant(false)]
+		[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public sealed class Hour1Attribute : HourDurationCategoryAttribute
 		{
 			/// <summary></summary>
@@ -110,6 +125,8 @@ namespace NUnitEx
 
 		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 		[CLSCompliant(false)]
+		[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public sealed class Hours5Attribute : HourDurationCategoryAttribute
 		{
 			/// <summary></summary>
@@ -121,6 +138,8 @@ namespace NUnitEx
 
 		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 		[CLSCompliant(false)]
+		[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public sealed class Hours24Attribute : HourDurationCategoryAttribute
 		{
 			/// <summary></summary>
@@ -132,6 +151,8 @@ namespace NUnitEx
 
 		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 		[CLSCompliant(false)]
+		[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public sealed class Day1Attribute : DayDurationCategoryAttribute
 		{
 			/// <summary></summary>
@@ -143,6 +164,8 @@ namespace NUnitEx
 
 		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 		[CLSCompliant(false)]
+		[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public sealed class Days7Attribute : DayDurationCategoryAttribute
 		{
 			/// <summary></summary>
@@ -154,6 +177,8 @@ namespace NUnitEx
 
 		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 		[CLSCompliant(false)]
+		[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public sealed class Days30Attribute : DayDurationCategoryAttribute
 		{
 			/// <summary></summary>
@@ -165,6 +190,8 @@ namespace NUnitEx
 
 		/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 		[CLSCompliant(false)]
+		[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public sealed class InfiniteAttribute : InfiniteDurationCategoryAttribute
 		{
 			/// <summary></summary>

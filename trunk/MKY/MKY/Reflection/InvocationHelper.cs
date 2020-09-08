@@ -35,7 +35,7 @@ namespace MKY.Reflection
 		/// <summary>
 		/// Attribute to select a static property of a generic type, i.e. kind of a static interface.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		[CLSCompliant(false)]
 		[AttributeUsage(AttributeTargets.Class)]
 		public sealed class StaticPropertyAttribute : Attribute

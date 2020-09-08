@@ -105,7 +105,7 @@ namespace YAT.Domain
 
 		/// <remarks>Using 'nonentitiy' instead of 'nothing' as that is a keyword in other .NET languages.</remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Nonentity' is a correct English term.")]
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class Nonentity : DisplayElement
 		{
 			/// <summary></summary>
@@ -116,7 +116,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class TxData : DisplayElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
@@ -146,7 +146,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class TxControl : DisplayElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
@@ -176,7 +176,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class RxData : DisplayElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
@@ -206,7 +206,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class RxControl : DisplayElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
@@ -236,7 +236,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public abstract class InfoElement : DisplayElement
 		{
 			/// <summary></summary>
@@ -271,7 +271,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class TimeStampInfo : InfoElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
@@ -308,7 +308,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class TimeSpanInfo : InfoElement
 		{
 			/// <summary></summary>
@@ -344,7 +344,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class TimeDeltaInfo : InfoElement
 		{
 			/// <summary></summary>
@@ -380,7 +380,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class TimeDurationInfo : InfoElement
 		{
 			/// <summary></summary>
@@ -408,7 +408,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class DeviceInfo : InfoElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
@@ -432,7 +432,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class DirectionInfo : InfoElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
@@ -467,7 +467,7 @@ namespace YAT.Domain
 		/// <summary>The length of the data/control content.</summary>
 		/// <remarks>Prefixed "Content" for a) preventing naming conflict and b) orthogonality with <see cref="ContentSeparator"/> .</remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class ContentLength : InfoElement
 		{
 			/// <summary></summary>
@@ -496,7 +496,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public abstract class FormatElement : DisplayElement
 		{
 			/// <summary></summary>
@@ -526,7 +526,7 @@ namespace YAT.Domain
 
 		/// <summary>The separator that is added inbetween characters of the data/control content (e.g. radix = char).</summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'inbetween' is a correct English term.")]
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class ContentSeparator : FormatElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
@@ -544,7 +544,7 @@ namespace YAT.Domain
 
 		/// <summary>The separator that is added inbetween info elements as well as to the left/right of the data/control content.</summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'inbetween' is a correct English term.")]
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class InfoSeparator : FormatElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
@@ -562,7 +562,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class LineStart : FormatElement
 		{
 			/// <summary></summary>
@@ -572,7 +572,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class LineBreak : FormatElement
 		{
 			/// <summary></summary>
@@ -582,7 +582,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public abstract class InlineElement : DisplayElement
 		{
 			/// <summary></summary>
@@ -619,7 +619,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class IOControlInfo : InlineElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
@@ -648,7 +648,7 @@ namespace YAT.Domain
 		/// .NET languages such as VB.NET. As a result, any identifier called 'Error' or 'error'
 		/// will cause StyleCop/FxCop to issue a severe warning. So 'ErrorInfo' is used instead.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Well, this is what is intended here...")]
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class ErrorInfo : InlineElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
@@ -741,43 +741,43 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		private DisplayElement()
+		protected DisplayElement()
 			: this(ElementAttributes.None)
 		{
 		}
 
 		/// <summary></summary>
-		private DisplayElement(ElementAttributes flags)
+		protected DisplayElement(ElementAttributes flags)
 			: this(DirectionDefault, flags)
 		{
 		}
 
 		/// <summary></summary>
-		private DisplayElement(Direction direction, ElementAttributes flags)
+		protected DisplayElement(Direction direction, ElementAttributes flags)
 			: this(TimeStampDefault, direction, flags)
 		{
 		}
 
 		/// <summary></summary>
-		private DisplayElement(DateTime timeStamp, Direction direction, ElementAttributes flags)
+		protected DisplayElement(DateTime timeStamp, Direction direction, ElementAttributes flags)
 			: this(timeStamp, direction, null, flags)
 		{
 		}
 
 		/// <summary></summary>
-		private DisplayElement(DateTime timeStamp, Direction direction, string text, ElementAttributes flags)
+		protected DisplayElement(DateTime timeStamp, Direction direction, string text, ElementAttributes flags)
 		{
 			Initialize(timeStamp, direction, null, text, 0, 0, flags);
 		}
 
 		/// <summary></summary>
-		private DisplayElement(DateTime timeStamp, Direction direction, byte origin, string text, int charCount, ElementAttributes attributes)
+		protected DisplayElement(DateTime timeStamp, Direction direction, byte origin, string text, int charCount, ElementAttributes attributes)
 			: this(timeStamp, direction, new byte[] { origin }, text, charCount, attributes)
 		{
 		}
 
 		/// <summary></summary>
-		private DisplayElement(DateTime timeStamp, Direction direction, byte[] origin, string text, int charCount, ElementAttributes attributes)
+		protected DisplayElement(DateTime timeStamp, Direction direction, byte[] origin, string text, int charCount, ElementAttributes attributes)
 		{                                                                   // Makes sense since elements of the same type will be appended.
 			var l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 			l.Add(new Pair<byte[], string>(origin, text));

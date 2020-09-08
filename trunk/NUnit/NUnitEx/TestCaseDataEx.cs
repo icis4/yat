@@ -23,7 +23,6 @@
 
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 using NUnit.Framework;
 
@@ -34,6 +33,8 @@ namespace NUnitEx
 	public static class TestCaseDataEx
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "metaData", Justification = "Emphasize relation to 'Data' of 'TestCaseData'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "DataBase", Justification = "Emphasize relation to 'Data' of 'TestCaseData'.")]
 		public static TestCaseData ToTestCase(TestCaseData metaDataBase, string nameToAppend, IEnumerable<string> categoriesToMerge, params object[] args)
 		{
 			// Arguments:
@@ -57,6 +58,7 @@ namespace NUnitEx
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "metaData", Justification = "Emphasize relation to 'Data' of 'TestCaseData'.")]
 		public static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TestCaseData metaDataToMerge, params object[] args)
 		{
 			// Arguments:

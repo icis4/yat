@@ -22,6 +22,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using NUnit.Framework;
@@ -54,12 +55,12 @@ namespace NUnitEx
 		/// <summary>
 		/// The categories for setting <see cref="TestCaseData.Categories"/>.
 		/// </summary>
-		public string[] Categories { get; }
+		public IEnumerable<string> Categories { get; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TestCaseDescriptor"/> class.
 		/// </summary>
-		public TestCaseDescriptor(string name, string[] categories)
+		public TestCaseDescriptor(string name, IEnumerable<string> categories)
 		{
 			Name = name;
 			Categories = categories;

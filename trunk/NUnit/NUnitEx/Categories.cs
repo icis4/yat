@@ -49,7 +49,7 @@ namespace NUnitEx
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 	public sealed class InteractiveCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
@@ -60,7 +60,7 @@ namespace NUnitEx
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 	public sealed class EnduranceCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
@@ -71,7 +71,7 @@ namespace NUnitEx
 	}
 
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 	public sealed class StressCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
@@ -82,22 +82,20 @@ namespace NUnitEx
 	}
 
 	/// <summary></summary>
-	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute will be derived for specialization.")]
 	[CLSCompliant(false)]
-	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	public class DurationCategoryAttribute : CategoryAttribute
+	public abstract class DurationCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
 		private readonly TimeSpan duration;
 
 		/// <summary></summary>
-		public DurationCategoryAttribute(int days, int hours, int minutes, int seconds, int milliseconds, string name)
+		protected DurationCategoryAttribute(int days, int hours, int minutes, int seconds, int milliseconds, string name)
 			: this(new TimeSpan(days, hours, minutes, seconds, milliseconds), name)
 		{
 		}
 
 		/// <summary></summary>
-		public DurationCategoryAttribute(TimeSpan duration, string name)
+		protected DurationCategoryAttribute(TimeSpan duration, string name)
 			: base(name)
 		{
 			this.duration = duration;
@@ -113,6 +111,7 @@ namespace NUnitEx
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute will be derived for specialization.")]
 	[CLSCompliant(false)]
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 	public class SecondDurationCategoryAttribute : DurationCategoryAttribute
 	{
 		/// <summary></summary>
@@ -131,6 +130,7 @@ namespace NUnitEx
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute will be derived for specialization.")]
 	[CLSCompliant(false)]
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 	public class MinuteDurationCategoryAttribute : DurationCategoryAttribute
 	{
 		/// <summary></summary>
@@ -149,6 +149,7 @@ namespace NUnitEx
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute will be derived for specialization.")]
 	[CLSCompliant(false)]
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 	public class HourDurationCategoryAttribute : DurationCategoryAttribute
 	{
 		/// <summary></summary>
@@ -167,6 +168,7 @@ namespace NUnitEx
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute will be derived for specialization.")]
 	[CLSCompliant(false)]
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 	public class DayDurationCategoryAttribute : DurationCategoryAttribute
 	{
 		/// <summary></summary>
@@ -185,7 +187,7 @@ namespace NUnitEx
 	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
 	[CLSCompliant(false)]
 	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute will be derived by the standard specialization.")]
-	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 	public class InfiniteDurationCategoryAttribute : DurationCategoryAttribute
 	{
 		/// <summary></summary>
