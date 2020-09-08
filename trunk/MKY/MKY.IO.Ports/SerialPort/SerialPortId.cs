@@ -111,9 +111,11 @@ namespace MKY.IO.Ports
 		public static readonly Regex UserPortNameRegex = new Regex(@"(?<portName>\w+)\x20?", Options);
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "MCT", Justification = "MCT is a name.")]
 		public const string CaptionMCT = "Serial On USB Port";
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "FTDI", Justification = "FTDI is a name.")]
 		public const string CaptionFTDI = "USB Serial Port";
 
 		/// <summary></summary>

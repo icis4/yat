@@ -278,6 +278,7 @@ namespace MKY.IO.Serial.Socket
 		/// <c>false</c> when called from finalizer.
 		/// </param>
 		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "stateLock", Justification = "See comments below.")]
+		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "sendThreadEvent", Justification = "Disposed of asynchronously via DisposeAsyncWithoutNotify().")]
 		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "dataSentThreadEvent", Justification = "Disposed of asynchronously via DisposeAsyncWithoutNotify().")]
 		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "socket", Justification = "Disposed of asynchronously via DisposeAsyncWithoutNotify().")]
 		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "isStoppingAndDisposingLock", Justification = "See comments below.")]
@@ -660,7 +661,6 @@ namespace MKY.IO.Serial.Socket
 		/// Name shall make obvious what happens in detail.
 		/// Named "shutdown" to make obvious this is not the same as <see cref="Stop"/>.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private void ShutdownSocketAndConnectionsAndThreads(int expectedStateCount, SocketState intendedState, bool notify)
 		{
 		////if (!IsUndisposed) must not be checked for, as this async call will also be invoked by Dispose()!
@@ -687,6 +687,7 @@ namespace MKY.IO.Serial.Socket
 			if (stateHasChanged) { NotifyStateHasChanged(); } // Notify outside lock!
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private void ShutdownSocketAndConnectionsAndThreadsAnyNotify()
 		{
 			lock (this.socketSyncObj)
