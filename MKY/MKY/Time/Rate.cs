@@ -276,7 +276,7 @@ namespace MKY.Time
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[CLSCompliant(false)]
 		public virtual bool Update(out int value)
 		{

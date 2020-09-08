@@ -21,6 +21,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 using NUnit.Framework;
 using NUnitEx;
 
@@ -28,7 +30,7 @@ namespace MKY.IO.Serial.Socket.Test
 {
 	/// <summary></summary>
 	[TestFixture]
-	public class TcpClientAutoReconnectTest
+	public class TcpClientAutoReconnectEnduranceTest
 	{
 		#region Tests
 		//==========================================================================================
@@ -98,6 +100,7 @@ namespace MKY.IO.Serial.Socket.Test
 		#endregion
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void TestConsecutiveDisconnectReconnect(int minutes, int serverConnectionAllowance = TcpServer.ConnectionAllowanceDefault)
 		{
 			int serverPort;

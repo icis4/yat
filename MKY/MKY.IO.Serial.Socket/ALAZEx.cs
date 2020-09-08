@@ -21,11 +21,15 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 using ALAZ.SystemEx.NetEx.SocketsEx;
 
 namespace MKY.IO.Serial.Socket
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
+	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ALAZ", Justification = "ALAZ is a name.")]
 	public static class ALAZEx
 	{
 		/// <remarks>
