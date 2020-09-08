@@ -97,6 +97,7 @@ namespace MKY.Net
 		/// <summary>
 		/// Determines whether the specified address is an IPv4 multicast address.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv4...")]
 		public static bool IsIPv4Multicast(IPAddress address)
 		{
 			var addressBytes = address.GetAddressBytes();

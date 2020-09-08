@@ -142,7 +142,7 @@ namespace YAT.Domain.Test
 		/// The roughly estimated transmission time in milliseconds.
 		/// </summary>
 		/// <remarks>
-		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings!
+		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings.
 		/// </remarks>
 		public static double GetRoughtlyEstimatedTransmissionTime(TerminalSettings settings, int byteCount, int lineByteCount)
 		{
@@ -185,8 +185,9 @@ namespace YAT.Domain.Test
 		/// The roughly estimated overhead (initialization, verification, reverification,...) time in milliseconds.
 		/// </summary>
 		/// <remarks>
-		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings!
+		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'reverification' is a correct English term.")]
 		public static double GetRoughlyEstimatedOverheadTime(TerminalSettings settings, int byteCount)
 		{
 			var overheadBase = 1000; // Typical time to initialize and finalize test case.
@@ -195,7 +196,7 @@ namespace YAT.Domain.Test
 			{
 				case IOType.TcpClient:                       // Typical time to establish connection.
 				case IOType.TcpServer:     overheadBase +=  500; break;
-				                                             //
+				                                           //// Time needed to determined whether client or server.
 				case IOType.TcpAutoSocket: overheadBase += 2000; break;
 
 				default:                   /* Nothing to add. */ break;
@@ -234,6 +235,9 @@ namespace YAT.Domain.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		public static void TransmitAndAssertTxCounts(Domain.Terminal terminalTx,
 		                                             Domain.Parser.Parser parser, string text,
 		                                             ref int expectedTotalByteCount, ref int expectedTotalLineCount,
@@ -243,6 +247,9 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		public static void TransmitAndAssertTxCountsWithOffset(Domain.Terminal terminalTx,
 		                                                       Domain.Parser.Parser parser, string text,
 		                                                       ref int expectedTotalByteCount, ref int expectedTotalLineCount,
@@ -269,6 +276,9 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		public static void TransmitAndAssertRxCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx,
 		                                             Domain.Parser.Parser parser, string text,
 		                                             ref int expectedTotalByteCount, ref int expectedTotalLineCount,
@@ -278,6 +288,9 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		public static void TransmitAndAssertRxCountsWithOffset(Domain.Terminal terminalTx, Domain.Terminal terminalRx,
 		                                                       Domain.Parser.Parser parser, string text,
 		                                                       ref int expectedTotalByteCount, ref int expectedTotalLineCount,
@@ -304,6 +317,9 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		public static void TransmitAndAssertCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx,
 		                                           Domain.Parser.Parser parser, string text,
 		                                           ref int expectedTotalByteCount, ref int expectedTotalLineCount,
@@ -313,6 +329,9 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		public static void TransmitAndAssertCountsWithOffset(Domain.Terminal terminalTx, Domain.Terminal terminalRx,
 		                                                     Domain.Parser.Parser parser, string text,
 		                                                     ref int expectedTotalByteCount, ref int expectedTotalLineCount,
@@ -511,7 +530,7 @@ namespace YAT.Domain.Test
 				sb = new StringBuilder("Waiting for sending, ");
 				sb.AppendFormat("{0}/{1} bytes/lines expected, {2}/{3} sent, ", expectedTotalByteCount, expectedTotalLineCount, txByteCount, txLineCount);
 				if (timeout != IgnoreTimeout) {
-					sb.AppendFormat("{0} ms have passed, timeout is {1} ms..." , waitTime, timeout);
+					sb.AppendFormat("{0} ms have passed, timeout is {1} ms...", waitTime, timeout);
 				}
 				Trace.WriteLine(sb.ToString());
 
@@ -595,7 +614,7 @@ namespace YAT.Domain.Test
 				sb = new StringBuilder("Waiting for receiving, ");
 				sb.AppendFormat("{0}/{1} bytes/lines expected, {2}/{3} received, ", expectedTotalByteCount, expectedTotalLineCount, rxByteCount, rxLineCount);
 				if (timeout != IgnoreTimeout) {
-					sb.AppendFormat("{0} ms have passed, timeout is {1} ms..." , waitTime, timeout);
+					sb.AppendFormat("{0} ms have passed, timeout is {1} ms...", waitTime, timeout);
 				}
 				Trace.WriteLine(sb.ToString());
 
@@ -709,7 +728,7 @@ namespace YAT.Domain.Test
 				sb = new StringBuilder("Waiting for transmission, ");
 				sb.AppendFormat("{0}/{1} bytes/lines expected, {2}/{3} sent, {4}/{5} received, ", expectedTotalByteCount, expectedTotalLineCount, txByteCount, txLineCount, rxByteCount, rxLineCount);
 				if (timeout != IgnoreTimeout) {
-					sb.AppendFormat("{0} ms have passed, timeout is {1} ms..." , waitTime, timeout);
+					sb.AppendFormat("{0} ms have passed, timeout is {1} ms...", waitTime, timeout);
 				}
 				Trace.WriteLine(sb.ToString());
 
@@ -947,6 +966,7 @@ namespace YAT.Domain.Test
 			AssertContent(terminal, RepositoryType.Rx, expectedContentPattern, ComparisonType.Regex);
 		}
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'dl'/'ec' = DisplayLine/ExpectedContent.")]
 		private static void AssertContent(Domain.Terminal terminal, RepositoryType repositoryType, IEnumerable<string> expectedContentOrPattern, ComparisonType comparisonType)
 		{
 			var displayLines = terminal.RepositoryToDisplayLines(repositoryType);

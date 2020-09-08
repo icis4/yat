@@ -275,7 +275,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <remarks>
-		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings!
+		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings.
 		/// </remarks>
 		/// <remarks>
 		/// Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
@@ -353,7 +353,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <remarks>
-		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings!
+		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings.
 		/// </remarks>
 		/// <remarks>
 		/// Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.

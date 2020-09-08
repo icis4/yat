@@ -25,7 +25,7 @@ using System.Net.Sockets;
 
 namespace MKY.Net.Sockets
 {
-	/// <summary>Hard coded default values</summary>
+	/// <summary>Hard coded default values.</summary>
 	public static class SocketEx
 	{
 		/// <remarks>

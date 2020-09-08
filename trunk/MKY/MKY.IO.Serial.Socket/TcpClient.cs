@@ -1500,7 +1500,7 @@ namespace MKY.IO.Serial.Socket
 							if (this.stateTokenForShutdown)
 							{
 								this.stateTokenForShutdown = false;
-								    // Check disposal state first!
+								    //// Check disposal state first!
 								if (IsUndisposed && IsStarted && !IsConnected) // && AutoReconnectIsEnabledAndAllowed is implicitly given.
 								{
 									if (GetStateSynchronized() == SocketState.WaitingForOrTryingReconnecting)

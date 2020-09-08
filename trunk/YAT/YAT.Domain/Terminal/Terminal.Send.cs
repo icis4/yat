@@ -156,7 +156,7 @@ namespace YAT.Domain
 		/// The cached <see cref="Settings.IOSettings.ApproximateTypicalNumberOfBytesPerMillisecond"/> value.
 		/// </summary>
 		/// <remarks>
-		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings!
+		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings.
 		/// </remarks>
 		protected double ApproximateTypicalNumberOfBytesPerMillisecond { get; private set; }
 

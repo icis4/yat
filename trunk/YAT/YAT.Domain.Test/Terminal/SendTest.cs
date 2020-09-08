@@ -224,7 +224,6 @@ namespace YAT.Domain.Test.Terminal
 					break;
 				}
 			}
-
 		}
 
 		#endregion
@@ -318,7 +317,6 @@ namespace YAT.Domain.Test.Terminal
 				default: throw (new ArgumentOutOfRangeException("sendMethod", sendMethod, MessageHelper.InvalidExecutionPreamble + "'" + sendMethod + "' is a send method that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
-
 
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
@@ -446,7 +444,7 @@ namespace YAT.Domain.Test.Terminal
 			var roughlyEstimatedCaption = StandardDurationCategory.CaptionFrom(roughlyEstimated);
 			var cat = StandardDurationCategory.AttributeFrom(roughlyEstimated).Name;
 
-			var nameSuffix = " (" + roughlyEstimatedCaption + " roughly estimated total; " + timeoutCaption +" Tx/Rx timeout)" + workaround;
+			var nameSuffix = " (" + roughlyEstimatedCaption + " roughly estimated total; " + timeoutCaption + " Tx/Rx timeout)" + workaround;
 			var result = TestCaseDataEx.ToTestCase(tc, nameSuffix, new string[] { cat }, args.ToArray());
 		#if (DEBUG_TEST_CASE_DATA)
 			TestCaseDataHelper.WriteToTempFile(typeof(SendTestData), result); // No need to append to file, file name will differ due to suffix.

@@ -88,6 +88,7 @@ namespace MKY
 		/// <summary>
 		/// Converts the given values into a hexadecimal string (e.g. "0Ah FFh 20h").
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to deal with arbitrary string content...")]
 		public static string ToHexString(IEnumerable<byte> values, string suffix)
 		{
 			var sb = new StringBuilder();

@@ -238,7 +238,7 @@ namespace YAT.Model.Test.Connection
 				int expectedTotalLineCountB = 0;
 
 				// Initial ping-pong:
-				terminalA.SendText(textAB);// Initial A => B
+				terminalA.SendText(textAB); // Initial A => B
 				expectedTotalByteCountA += byteCountAB;
 				expectedTotalLineCountA++;
 				Utilities.WaitForTransmissionAndAssertCounts(terminalA, terminalB, expectedTotalByteCountA, expectedTotalLineCountA);

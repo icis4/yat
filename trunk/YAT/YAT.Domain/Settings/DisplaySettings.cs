@@ -109,6 +109,7 @@ namespace YAT.Domain.Settings
 		/// <remarks>
 		/// Prepended "IO" for orthogonality with <see cref="IncludeIOControl"/>.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
 		public const bool IncludeIOWarningsDefault = true;
 
 		/// <summary></summary>
@@ -629,6 +630,7 @@ namespace YAT.Domain.Settings
 		/// <remarks>
 		/// Prepended "IO" for orthogonality with <see cref="IncludeIOControl"/>.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
 		[XmlElement("IncludeIOWarnings")]
 		public virtual bool IncludeIOWarnings
 		{

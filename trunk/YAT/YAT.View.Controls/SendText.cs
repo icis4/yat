@@ -132,7 +132,7 @@ namespace YAT.View.Controls
 		private SettingControlsHelper isSettingControls;
 
 		/// <summary>
-		/// Flag to work around the issue described furter below.
+		/// Flag to work around the issue described further below.
 		/// </summary>
 		private bool userInputIsInStandby; // = false;
 
