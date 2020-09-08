@@ -27,6 +27,8 @@
 // Using
 //==================================================================================================
 
+using System.Collections.Generic;
+
 using MKY.IO.Serial.Socket;
 using MKY.Net;
 
@@ -48,7 +50,7 @@ namespace YAT.Domain.Test
 		public string Port { get; }
 
 		/// <summary></summary>
-		public SerialPortDescriptor(string port, string name, string[] categories)
+		public SerialPortDescriptor(string port, string name, IEnumerable<string> categories)
 			: base(name, categories)
 		{
 			Port = port;
@@ -65,7 +67,7 @@ namespace YAT.Domain.Test
 		public string PortB { get; }
 
 		/// <summary></summary>
-		public SerialPortPairDescriptor(string portA, string portB, string name, string[] categories)
+		public SerialPortPairDescriptor(string portA, string portB, string name, IEnumerable<string> categories)
 			: base(name, categories)
 		{
 			PortA = portA;
@@ -87,7 +89,7 @@ namespace YAT.Domain.Test
 		public IPNetworkInterfaceEx LocalInterface { get; }
 
 		/// <summary></summary>
-		public IPSocketDescriptorBase(IPNetworkInterfaceEx localInterface, string name, string[] categories)
+		public IPSocketDescriptorBase(IPNetworkInterfaceEx localInterface, string name, IEnumerable<string> categories)
 			: base(name, categories)
 		{
 			LocalInterface = localInterface;
@@ -154,7 +156,7 @@ namespace YAT.Domain.Test
 		public string DeviceInfo { get; }
 
 		/// <summary></summary>
-		public UsbSerialHidDescriptor(string deviceInfo, string name, string[] categories)
+		public UsbSerialHidDescriptor(string deviceInfo, string name, IEnumerable<string> categories)
 			: base(name, categories)
 		{
 			DeviceInfo = deviceInfo;

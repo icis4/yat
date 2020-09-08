@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<FxCopProject Version="10.0" Name="NUnit.Debug">
+<FxCopProject Version="10.0" Name="NUnitEx.Debug">
  <ProjectOptions>
   <SharedProject>True</SharedProject>
   <Stylesheet Apply="False">$(FxCopDir)\Xml\FxCopReport.xsl</Stylesheet>
@@ -22,7 +22,7 @@
   <TargetFrameworkVersion>3.5</TargetFrameworkVersion>
  </ProjectOptions>
  <Targets>
-  <Target Name="$(ProjectDir)/NUnit/bin/Debug/NUnit.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/NUnitEx/bin/Debug/NUnitEx.dll" Analyze="True" AnalyzeAllChildren="True" />
  </Targets>
  <Rules>
   <RuleFiles>

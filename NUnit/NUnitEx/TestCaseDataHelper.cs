@@ -54,7 +54,7 @@ namespace NUnitEx
 
 					if (argAsString == null)
 						sw.WriteLine("    #{0}    [null]", i);
-					else if (argAsString == "")
+					else if (argAsString.Length <= 0)
 						sw.WriteLine("    #{0}    [empty]", i);
 					else
 						sw.WriteLine("    #{0}    {1}", i, argAsString);
