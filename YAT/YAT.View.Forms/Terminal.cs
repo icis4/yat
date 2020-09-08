@@ -7749,7 +7749,10 @@ namespace YAT.View.Forms
 			timer_IOStatusIndicator.Enabled = true;
 		}
 
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private Image timer_IOStatusIndicator_flashingOnPhaseImage; // = null;
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private bool timer_IOStatusIndicator_flashingIsOn; // = false;
 
 		/// <remarks>

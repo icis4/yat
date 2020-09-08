@@ -27,10 +27,10 @@
 // Using
 //==================================================================================================
 
-using NUnitEx;
-
 using MKY.IO.Serial.Socket;
 using MKY.Net;
+
+using NUnitEx;
 
 #endregion
 

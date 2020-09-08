@@ -101,6 +101,7 @@ namespace YAT.Domain.Test
 		}
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
 		public static TerminalSettings GetMTSicsSerialPortDeviceSettings(string portId)
 		{
 			var settings = GetSerialPortSettings(TerminalType.Text, portId);
@@ -109,6 +110,7 @@ namespace YAT.Domain.Test
 		}
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
 		public static TerminalSettings GetMTSicsSerialPortDeviceASettings()
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable)
@@ -121,6 +123,7 @@ namespace YAT.Domain.Test
 		}
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
 		public static TerminalSettings GetMTSicsSerialPortDeviceBSettings()
 		{
 			if (MKY.IO.Ports.Test.ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable)
@@ -271,12 +274,14 @@ namespace YAT.Domain.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>Explicitly using "Loopback", corresponding to 'Configuration.IPv4LoopbackIsAvailable'.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv4...")]
 		public static TerminalSettings GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType terminalType)
 		{
 			return (GetIPSocketSettings(terminalType, SocketType.TcpAutoSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv4Loopback));
 		}
 
 		/// <remarks>Explicitly using "Loopback", corresponding to  'Configuration.IPv6LoopbackIsAvailable'.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
 		public static TerminalSettings GetTcpAutoSocketOnIPv6LoopbackSettings(TerminalType terminalType)
 		{
 			return (GetIPSocketSettings(terminalType, SocketType.TcpAutoSocket, (IPNetworkInterfaceEx)IPNetworkInterface.IPv6Loopback));
@@ -307,6 +312,7 @@ namespace YAT.Domain.Test
 		}
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
 		public static TerminalSettings GetMTSicsIPDeviceSettings(int port)
 		{
 			var settings = GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType.Text);
@@ -317,6 +323,7 @@ namespace YAT.Domain.Test
 		}
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
 		public static TerminalSettings GetMTSicsIPDeviceSettings()
 		{
 			if (MKY.Net.Test.ConfigurationProvider.Configuration.MTSicsDeviceIsAvailable)
@@ -510,6 +517,7 @@ namespace YAT.Domain.Test
 		}
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
 		public static TerminalSettings GetMTSicsUsbSerialHidDeviceSettings(string deviceInfo)
 		{
 			var settings = GetUsbSerialHidSettings(TerminalType.Text, deviceInfo);
@@ -518,6 +526,7 @@ namespace YAT.Domain.Test
 		}
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
 		public static TerminalSettings GetMTSicsUsbSerialHidDeviceASettings()
 		{
 			if (MKY.IO.Usb.Test.ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable)

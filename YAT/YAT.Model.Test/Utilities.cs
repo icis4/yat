@@ -317,6 +317,9 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		public static void TransmitAndAssertTxCounts(Terminal terminalTx,
 		                                             Domain.Parser.Parser parser, string text,
 		                                             ref int expectedTotalByteCount, ref int expectedTotalLineCount,
@@ -326,6 +329,9 @@ namespace YAT.Model.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		public static void TransmitAndAssertTxCountsWithOffset(Terminal terminalTx,
 		                                                       Domain.Parser.Parser parser, string text,
 		                                                       ref int expectedTotalByteCount, ref int expectedTotalLineCount,
@@ -340,6 +346,9 @@ namespace YAT.Model.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		public static void TransmitAndAssertRxCounts(Terminal terminalTx, Terminal terminalRx,
 		                                             Domain.Parser.Parser parser, string text,
 		                                             ref int expectedTotalByteCount, ref int expectedTotalLineCount,
@@ -349,6 +358,9 @@ namespace YAT.Model.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		public static void TransmitAndAssertRxCountsWithOffset(Terminal terminalTx, Terminal terminalRx,
 		                                                       Domain.Parser.Parser parser, string text,
 		                                                       ref int expectedTotalByteCount, ref int expectedTotalLineCount,
@@ -363,6 +375,9 @@ namespace YAT.Model.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		public static void TransmitAndAssertCounts(Terminal terminalTx, Terminal terminalRx,
 		                                           Domain.Parser.Parser parser, string text,
 		                                           ref int expectedTotalByteCount, ref int expectedTotalLineCount,
@@ -372,6 +387,9 @@ namespace YAT.Model.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		public static void TransmitAndAssertCountsWithOffset(Terminal terminalTx, Terminal terminalRx,
 		                                                     Domain.Parser.Parser parser, string text,
 		                                                     ref int expectedTotalByteCount, ref int expectedTotalLineCount,
@@ -553,6 +571,8 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
+		///
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static void WaitForSendingAndAssertCounts(Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount, int timeout = WaitTimeoutForLineTransmission)
 		{
@@ -568,6 +588,8 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
+		///
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static void WaitForSendingAndAssertCountsWithOffset(Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount, int expectedTotalByteCountOffset, int timeout = WaitTimeoutForLineTransmission)
 		{
@@ -600,6 +622,8 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
+		///
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static void WaitForReceivingAndAssertCounts(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount, int timeout = WaitTimeoutForLineTransmission)
 		{
@@ -615,6 +639,8 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
+		///
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static void WaitForReceivingAndAssertCountsWithOffset(Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount, int expectedTotalByteCountOffset, int timeout = WaitTimeoutForLineTransmission)
 		{
@@ -656,6 +682,8 @@ namespace YAT.Model.Test
 		/// <remarks>
 		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
 		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
+		///
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static void WaitForTransmissionAndAssertCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount) // int timeout = WaitTimeoutForLineTransmission must not be used here,
 		{                                                                                                                                                       // it would result in ambiguity with method below!
@@ -674,8 +702,9 @@ namespace YAT.Model.Test
 
 		/// <remarks>
 		/// Needed to prevent hickups due to the fact that (domain) repositories and (model) counts are not
-		/// updated simultanously. FR #375 "migrate Byte/Line Count/Rate from model to domain" will fix this.
+		/// updated simultaneously. FR #375 "migrate Byte/Line Count/Rate from model to domain" will fix this.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'hickups' is a correct English term.")]
 		private static void WaitForAndAssertCounts(Terminal terminalTx, Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount, int timeout = WaitTimeoutForCounts)
 		{
 			bool isFirst = true; // Using do-while, first check state.
@@ -755,7 +784,7 @@ namespace YAT.Model.Test
 				sb = new StringBuilder("Waiting for transmission, ");
 				sb.AppendFormat("{0}/{1} bytes/lines expected, {2}/{3} sent, {4}/{5} received, ", expectedTotalByteCount, expectedTotalLineCount, txByteCount, txLineCount, rxByteCount, rxLineCount);
 				if (timeout != IgnoreTimeout) {
-					sb.AppendFormat("{0} ms have passed, timeout is {1} ms..." , waitTime, timeout);
+					sb.AppendFormat("{0} ms have passed, timeout is {1} ms...", waitTime, timeout);
 				}
 				Trace.WriteLine(sb.ToString());
 
@@ -974,6 +1003,7 @@ namespace YAT.Model.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'sb' = StringBuilder.")]
 		public static void AssertLines(Terminal terminalTx, Terminal terminalRx, TestSet testSet, int cycle = 1)
 		{
 			var displayLinesTx = terminalTx.RepositoryToDisplayLines(RepositoryType.Tx);

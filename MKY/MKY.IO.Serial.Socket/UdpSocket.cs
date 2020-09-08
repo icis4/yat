@@ -876,9 +876,9 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <remarks>
-		/// Not using into a separate StartThreads() like other implemenations as ReceiveThread() is
-		/// created and started before socket and SendThread(). Other implementations could also
-		/// follow this implementation when there is need to do so.
+		/// Not using a separate StartThreads() like implementation of other serial entities as
+		/// ReceiveThread() is created and started before socket and SendThread(). Implementation of
+		/// other serial entities could also follow this implementation when there is need to do so.
 		/// </remarks>
 		private void CreateAndStartSocketAndThreads()
 		{

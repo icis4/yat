@@ -546,7 +546,6 @@ namespace YAT.Domain.Test.Terminal
 			return (false);
 		}
 
-
 		#endregion
 	}
 }

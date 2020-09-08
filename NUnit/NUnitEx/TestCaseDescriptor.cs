@@ -22,6 +22,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 using NUnit.Framework;
 
 namespace NUnitEx
@@ -41,6 +43,7 @@ namespace NUnitEx
 	/// Name "TestCaseDescriptor" rather than e.g. "TestCaseDataHelper" for better distinguishing
 	/// from <see cref="TestCaseData"/>.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'argI' just happens to be an 'arg'...")]
 	public class TestCaseDescriptor
 	{
 		/// <summary>

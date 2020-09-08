@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using MKY.IO.Serial.Socket;
 using MKY.Net;
@@ -62,6 +63,7 @@ namespace YAT.Domain.Test
 		/// <summary>
 		/// Returns test case descriptors for serial COM port loopback selfs.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Multiple items of 'Self', same as 'Pairs'.")]
 		public static IEnumerable<SerialPortDescriptor> SerialPortLoopbackSelfs
 		{
 			get
@@ -76,6 +78,7 @@ namespace YAT.Domain.Test
 		}
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
 		public static IEnumerable<SerialPortDescriptor> MTSicsSerialPortDevices
 		{
 			get
@@ -113,6 +116,7 @@ namespace YAT.Domain.Test
 		/// TCP/IP combinations Server/AutoSocket and AutoSocket/Client are skipped as they don't really offer additional test coverage.
 		/// UPD/IP PairSocket is also skipped as that would require additional settings with different ports, and they are tested further below anyway.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'v4'/'v6' to distiguish variant.")]
 		public static IEnumerable<IPSocketTypePairDescriptor> IPSocketPairs
 		{
 			get
@@ -204,6 +208,7 @@ namespace YAT.Domain.Test
 		/// <summary>
 		/// Returns test case descriptors for UDP/IP PairSocket.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'v4'/'v6' to distiguish variant.")]
 		public static IEnumerable<IPSocketTypeDescriptor> IPSocketSelfs
 		{
 			get
@@ -237,6 +242,8 @@ namespace YAT.Domain.Test
 		}
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'v4'/'v6' to distiguish variant.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
 		public static IEnumerable<IPSocketDescriptor> MTSicsIPDevices
 		{
 			get
@@ -261,6 +268,7 @@ namespace YAT.Domain.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
 		public static IEnumerable<UsbSerialHidDescriptor> MTSicsUsbDevices
 		{
 			get

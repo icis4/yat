@@ -123,6 +123,7 @@ namespace MKY.IO
 		/// <param name="type">The type of an object, is used to retrieve namespace and type name.</param>
 		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
 		/// <param name="acceptExistingFile">Set to <c>true</c> to accept an existing file, e.g. when appending to the file. If <c>false</c>, the file name will be postfixed with a unique number.</param>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'postfixed' is a correct English term.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static string MakeTempFilePath(Type type, string extension, bool acceptExistingFile = false)
 		{
@@ -134,6 +135,7 @@ namespace MKY.IO
 		/// <param name="extension">The desired file extension, must include the dot as it is the case in similar I/O methods of .NET.</param>
 		/// <param name="acceptExistingFile">Set to <c>true</c> to accept an existing file, e.g. when appending to the file. If <c>false</c>, the file name will be postfixed with a unique number.</param>
 		/// <param name="outputFilePathToDebug">Optionally output the resulting file path to <see cref="Debug"/>.</param>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'postfixed' is a correct English term.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static string MakeTempFilePath(Type type, string name, string extension, bool acceptExistingFile = false, bool outputFilePathToDebug = false)
 		{

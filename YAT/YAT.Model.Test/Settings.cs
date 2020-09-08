@@ -62,12 +62,14 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
 		public static TerminalSettingsRoot GetMTSicsSerialPortDeviceASettings()
 		{
 			return (Create(Domain.Test.Settings.GetMTSicsSerialPortDeviceASettings()));
 		}
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
 		public static TerminalSettingsRoot GetMTSicsSerialPortDeviceBSettings()
 		{
 			return (Create(Domain.Test.Settings.GetMTSicsSerialPortDeviceBSettings()));
@@ -81,18 +83,21 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>Explicitly using "Loopback", corresponding to 'Configuration.IPv4LoopbackIsAvailable'.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv4...")]
 		public static TerminalSettingsRoot GetTcpAutoSocketOnIPv4LoopbackSettings(TerminalType terminalType)
 		{
 			return (Create(Domain.Test.Settings.GetTcpAutoSocketOnIPv4LoopbackSettings(terminalType)));
 		}
 
 		/// <remarks>Explicitly using "Loopback", corresponding to  'Configuration.IPv6LoopbackIsAvailable'.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
 		public static TerminalSettingsRoot GetTcpAutoSocketOnIPv6LoopbackSettings(TerminalType terminalType)
 		{
 			return (Create(Domain.Test.Settings.GetTcpAutoSocketOnIPv6LoopbackSettings(terminalType)));
 		}
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
 		public static TerminalSettingsRoot GetMTSicsIPDeviceSettings()
 		{
 			return (Create(Domain.Test.Settings.GetMTSicsIPDeviceSettings()));
@@ -106,12 +111,14 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
 		public static TerminalSettingsRoot GetMTSicsUsbSerialHidDeviceASettings()
 		{
 			return (Create(Domain.Test.Settings.GetMTSicsUsbSerialHidDeviceASettings()));
 		}
 
 		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
 		public static TerminalSettingsRoot GetMTSicsUsbSerialHidDeviceBSettings()
 		{
 			return (Create(Domain.Test.Settings.GetMTSicsUsbSerialHidDeviceBSettings()));
