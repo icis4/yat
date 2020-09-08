@@ -84,6 +84,7 @@ namespace YAT.Domain.Test
 	public class FileInfo
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods", Justification = "Meaning is clear here; repeating 'File' makes little sense.")]
 		public FileType Type { get; }
 
 		/// <summary></summary>
@@ -96,6 +97,7 @@ namespace YAT.Domain.Test
 		public int LineCount { get; }
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public FileInfo(FileType type, string path, int byteCount, int lineCount)
 		{
 			Type      = type;
@@ -125,7 +127,7 @@ namespace YAT.Domain.Test
 		public string DirectoryPath { get; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
+		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
 		public Dictionary<StressFile, FileInfo> Item { get; }
 
 		/// <summary></summary>

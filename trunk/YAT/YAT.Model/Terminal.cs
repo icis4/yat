@@ -873,6 +873,7 @@ namespace YAT.Model
 		}
 
 		/// <remarks>Only to be used for testing.</remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize purpose of this property.")]
 		public virtual Domain.Terminal UnderlyingDomain_ForTestOnly
 		{
 			get
@@ -4357,6 +4358,7 @@ namespace YAT.Model
 		/// Stops the terminal.
 		/// </summary>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "'Stop' is a common term to start/stop something.")]
 		public virtual bool Stop()
 		{
 			string errorMessage;
@@ -4369,6 +4371,7 @@ namespace YAT.Model
 		/// <param name="errorMessage">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "'Stop' is a common term to start/stop something.")]
 		public virtual bool Stop(out string errorMessage)
 		{
 			return (Stop(true, out errorMessage));

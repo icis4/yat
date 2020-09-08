@@ -64,6 +64,7 @@ namespace YAT.Domain.Test
 		/// Returns test case descriptors for serial COM port loopback selfs.
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Multiple items of 'Self', same as 'Pairs'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		public static IEnumerable<SerialPortDescriptor> SerialPortLoopbackSelfs
 		{
 			get
@@ -77,8 +78,9 @@ namespace YAT.Domain.Test
 			}
 		}
 
-		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		/// <remarks>"MTSics" prepended (instead of inserted as "*MTSicsDevices") for grouping and easier lookup.</remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		public static IEnumerable<SerialPortDescriptor> MTSicsSerialPortDevices
 		{
 			get
@@ -209,6 +211,7 @@ namespace YAT.Domain.Test
 		/// Returns test case descriptors for UDP/IP PairSocket.
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'v4'/'v6' to distiguish variant.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		public static IEnumerable<IPSocketTypeDescriptor> IPSocketSelfs
 		{
 			get
@@ -241,9 +244,10 @@ namespace YAT.Domain.Test
 			}
 		}
 
-		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		/// <remarks>"MTSics" prepended (instead of inserted as "*MTSicsDevices") for grouping and easier lookup.</remarks>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'v4'/'v6' to distiguish variant.")]
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		public static IEnumerable<IPSocketDescriptor> MTSicsIPDevices
 		{
 			get
@@ -267,8 +271,9 @@ namespace YAT.Domain.Test
 		// USB Ser/HID
 		//------------------------------------------------------------------------------------------
 
-		/// <remarks>"MTSics" prepended for grouping and easier lookup.</remarks>
+		/// <remarks>"MTSics" prepended (instead of inserted as "*MTSicsDevices") for grouping and easier lookup.</remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		public static IEnumerable<UsbSerialHidDescriptor> MTSicsUsbDevices
 		{
 			get

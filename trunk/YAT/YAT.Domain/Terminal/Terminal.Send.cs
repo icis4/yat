@@ -942,7 +942,8 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>Shall not be called if keywords are disabled.</remarks>
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Directly referring to given object for performance reasons.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for modifying the overall state.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for modifying the overall state.")]
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "InLine", Justification = "It's 'in line' and not inline!")]
 		[SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals", Justification = "Agree, could be refactored. Could be.")]
 		protected virtual void ProcessInLineKeywords(ForSomeTimeEventHelper forSomeTimeEventHelper, Parser.KeywordResult result, Queue<byte> conflateDataQueue, ref bool doBreak, ref bool packetGateAlreadyLeft)
@@ -1643,7 +1644,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>For binary terminals, this is rather a 'ProcessPacketEnd'.</remarks>
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Directly referring to given object for performance reasons.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for modifying the overall state.")]
 		protected virtual void ProcessLineEnd(ForSomeTimeEventHelper forSomeTimeEventHelper, bool appendEol, Queue<byte> conflateDataQueue, ref bool doBreak)
 		{
 			// This is the main location where packets are forwarded to the raw terminal and the underlying I/O instance. (Other locations are keywords that delay or require flushing.)

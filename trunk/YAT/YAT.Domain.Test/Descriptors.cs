@@ -89,7 +89,7 @@ namespace YAT.Domain.Test
 		public IPNetworkInterfaceEx LocalInterface { get; }
 
 		/// <summary></summary>
-		public IPSocketDescriptorBase(IPNetworkInterfaceEx localInterface, string name, IEnumerable<string> categories)
+		protected IPSocketDescriptorBase(IPNetworkInterfaceEx localInterface, string name, IEnumerable<string> categories)
 			: base(name, categories)
 		{
 			LocalInterface = localInterface;

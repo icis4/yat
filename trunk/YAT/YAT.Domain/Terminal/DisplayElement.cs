@@ -481,7 +481,7 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
+			[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 			public ContentLength(int length, string enclosureLeft, string enclosureRight)
 				: base(ToText(length, enclosureLeft, enclosureRight))
 			{
@@ -747,27 +747,27 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected DisplayElement(ElementAttributes flags)
-			: this(DirectionDefault, flags)
+		protected DisplayElement(ElementAttributes attributes)
+			: this(DirectionDefault, attributes)
 		{
 		}
 
 		/// <summary></summary>
-		protected DisplayElement(Direction direction, ElementAttributes flags)
-			: this(TimeStampDefault, direction, flags)
+		protected DisplayElement(Direction direction, ElementAttributes attributes)
+			: this(TimeStampDefault, direction, attributes)
 		{
 		}
 
 		/// <summary></summary>
-		protected DisplayElement(DateTime timeStamp, Direction direction, ElementAttributes flags)
-			: this(timeStamp, direction, null, flags)
+		protected DisplayElement(DateTime timeStamp, Direction direction, ElementAttributes attributes)
+			: this(timeStamp, direction, null, attributes)
 		{
 		}
 
 		/// <summary></summary>
-		protected DisplayElement(DateTime timeStamp, Direction direction, string text, ElementAttributes flags)
+		protected DisplayElement(DateTime timeStamp, Direction direction, string text, ElementAttributes attributes)
 		{
-			Initialize(timeStamp, direction, null, text, 0, 0, flags);
+			Initialize(timeStamp, direction, null, text, 0, 0, attributes);
 		}
 
 		/// <summary></summary>

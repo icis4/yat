@@ -358,6 +358,7 @@ namespace YAT.Domain.Settings
 		/// <remarks>
 		/// Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the scope.")]
 		[XmlIgnore]
 		protected virtual double CalculatedApproximateTypicalNumberOfBytesPerMillisecond_SerialPort
 		{

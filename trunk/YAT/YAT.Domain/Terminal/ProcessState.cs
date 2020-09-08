@@ -168,7 +168,7 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <remarks>For orthogonality with <see cref="GetPreviousChunkTimeStamp(IODirection)"/> below.</remarks>
+		/// <remarks>Method instead of property for orthogonality with <see cref="GetPreviousChunkTimeStamp(IODirection)"/> below.</remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
 		[SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods", Justification = "See remarks.")]
 		public virtual DateTime GetPreviousChunkTimeStamp()
@@ -219,7 +219,7 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>Method instead of property for orthogonality with <see cref="GetPostponedChunkCount(IODirection)"/> below.</remarks>
 		public virtual int GetPostponedChunkCount()
 		{
 			return (PostponedTxChunks.Count + PostponedRxChunks.Count);
@@ -237,7 +237,7 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <remarks>For orthogonality with <see cref="GetPostponedChunkCount()"/> and <see cref="GetPostponedChunkCount(IODirection)"/> above.</remarks>
+		/// <remarks>Method instead of property for orthogonality with <see cref="GetPostponedChunkCount()"/> above.</remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remarks.")]
 		public virtual int GetPostponedByteCount()
@@ -253,7 +253,9 @@ namespace YAT.Domain
 			return (byteCount);
 		}
 
-		/// <summary></summary>
+		/// <remarks>Method instead of property for orthogonality with other "Postponed" methods above.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remarks.")]
 		public virtual RawChunk GetFirstPostponedChunk()
 		{
 			var firstPostponedTxChunkTimeStamp = DateTime.MaxValue;
