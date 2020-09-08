@@ -32,7 +32,7 @@ namespace NUnitEx
 	public class ContextDetectorTest
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TestIs", Justification = "FxCop...")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TestIs", Justification = "FxCop, are you nuts? What the heck could this method have to do with 'testis'...")]
 		[Test]
 		public virtual void TestIsRunningInNUnit()
 		{

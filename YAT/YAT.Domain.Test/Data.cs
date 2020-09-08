@@ -50,9 +50,11 @@ namespace YAT.Domain.Test
 	/// <remarks>
 	/// Just named "Data" rather than "TestCaseData" for compactness.
 	/// </remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public static class Data
 	{
 		/// <remarks>Explicitly using two settings for "Pair" test cases, instead of enumerable generic number of settings.</remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "metaData", Justification = "Emphasize relation to 'Data' of 'TestCaseData'.")]
 		public static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TestCaseData metaDataToMerge, TerminalSettings argSettingsA, TerminalSettings argSettingsB, params object[] argsTest)
 		{
 			var args = new List<object>(2 + argsTest.Length); // Preset the required capacity to improve memory management.
@@ -63,6 +65,7 @@ namespace YAT.Domain.Test
 		}
 
 		/// <remarks>Explicitly using a single setting for "Self" test cases, instead of enumerable generic number of settings.</remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "metaData", Justification = "Emphasize relation to 'Data' of 'TestCaseData'.")]
 		public static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TestCaseData metaDataToMerge, TerminalSettings argSettings, params object[] argsTest)
 		{
 			var args = new List<object>(1 + argsTest.Length); // Preset the required capacity to improve memory management.
@@ -122,12 +125,14 @@ namespace YAT.Domain.Test
 			}
 		}
 
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		private static IEnumerable<TestCaseData> ToSerialPortLoopbackSelfsTestCases(TerminalType terminalType)
 		{
 			return (ToSerialPortLoopbackSelfsTestCases(terminalType, null));
 		}
 
 		/// <remarks>See <see cref="Data"/>.</remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		public static IEnumerable<TestCaseData> ToSerialPortLoopbackSelfsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
 		{
 			foreach (var descriptor in Environment.SerialPortLoopbackSelfs) // Upper level grouping shall be 'by I/O'.
@@ -146,10 +151,10 @@ namespace YAT.Domain.Test
 		// Socket
 		//------------------------------------------------------------------------------------------
 
-		private static IEnumerable<TestCaseData> ToIPSocketPairsTestCases(TerminalType terminalType)
-		{
-			return (ToIPSocketPairsTestCases(terminalType, null));
-		}
+	////private static IEnumerable<TestCaseData> ToIPSocketPairsTestCases(TerminalType terminalType)
+	////{
+	////	return (ToIPSocketPairsTestCases(terminalType, null));
+	////}
 
 		/// <remarks>See <see cref="Data"/>.</remarks>
 		public static IEnumerable<TestCaseData> ToIPSocketPairsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
@@ -164,12 +169,14 @@ namespace YAT.Domain.Test
 			}
 		}
 
-		private static IEnumerable<TestCaseData> ToIPSocketSelfsTestCases(TerminalType terminalType)
-		{
-			return (ToIPSocketSelfsTestCases(terminalType, null));
-		}
+	////[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
+	////private static IEnumerable<TestCaseData> ToIPSocketSelfsTestCases(TerminalType terminalType)
+	////{
+	////	return (ToIPSocketSelfsTestCases(terminalType, null));
+	////}
 
 		/// <remarks>See <see cref="Data"/>.</remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		public static IEnumerable<TestCaseData> ToIPSocketSelfsTestCases(TerminalType terminalType, IEnumerable<TestCaseData> tests)
 		{
 			foreach (var descriptor in Environment.IPSocketSelfs) // Upper level grouping shall be 'by I/O'.
@@ -184,6 +191,8 @@ namespace YAT.Domain.Test
 		#endregion
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
+		[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 		public static class Generic
 		{
 			#region SerialPort
@@ -192,7 +201,7 @@ namespace YAT.Domain.Test
 			//--------------------------------------------------------------------------------------
 
 			/// <remarks>See <see cref="Data"/>.</remarks>
-			[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
+			[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this property.")]
 			public static IEnumerable TestCasesSerialPortLoopbackPairs_Text
 			{
 				get
@@ -214,7 +223,7 @@ namespace YAT.Domain.Test
 
 			/// <remarks>See <see cref="Data"/>.</remarks>
 			[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
-			[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
+			[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this property.")]
 			public static IEnumerable TestCasesSerialPortLoopbackSelfs_Text
 			{
 				get
@@ -222,11 +231,8 @@ namespace YAT.Domain.Test
 					var loopbackSelfs = Environment.SerialPortLoopbackSelfs;
 					if (loopbackSelfs.Count() > 0)
 					{
-						foreach (var descriptor in loopbackSelfs)
-						{
-							var settings = Settings.GetSerialPortSettings(TerminalType.Text, descriptor.Port);
-							yield return (ToTestCase(descriptor, null, settings));
-						}
+						foreach (var tc in ToSerialPortLoopbackSelfsTestCases(TerminalType.Text))
+							yield return (tc);
 					}
 					else
 					{

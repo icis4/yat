@@ -41,15 +41,15 @@ namespace MKY.Test.CommandLine
 	public enum CommandLineEnum
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "A", Justification = "Who cares, it's OK for testing.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "A", Justification = "Make test idea more obvious.")]
 		A,
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Bb", Justification = "Who cares, it's OK for testing.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Bb", Justification = "Make test idea more obvious.")]
 		Bb,
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ccc", Justification = "Who cares, it's OK for testing.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ccc", Justification = "Make test idea more obvious.")]
 		Ccc
 	}
 

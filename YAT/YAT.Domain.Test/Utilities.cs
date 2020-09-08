@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -144,7 +145,8 @@ namespace YAT.Domain.Test
 		/// <remarks>
 		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings.
 		/// </remarks>
-		public static double GetRoughtlyEstimatedTransmissionTime(TerminalSettings settings, int byteCount, int lineByteCount)
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
+		public static double GetRoughlyEstimatedTransmissionTime(TerminalSettings settings, int byteCount, int lineByteCount)
 		{
 			// Analysis and measurements 2020-08-11..17:
 			//
@@ -188,6 +190,7 @@ namespace YAT.Domain.Test
 		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'reverification' is a correct English term.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static double GetRoughlyEstimatedOverheadTime(TerminalSettings settings, int byteCount)
 		{
 			var overheadBase = 1000; // Typical time to initialize and finalize test case.
@@ -238,6 +241,10 @@ namespace YAT.Domain.Test
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for modifying the total count.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for modifying the total count.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static void TransmitAndAssertTxCounts(Domain.Terminal terminalTx,
 		                                             Domain.Parser.Parser parser, string text,
 		                                             ref int expectedTotalByteCount, ref int expectedTotalLineCount,
@@ -250,6 +257,10 @@ namespace YAT.Domain.Test
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for modifying the total count.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for modifying the total count.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static void TransmitAndAssertTxCountsWithOffset(Domain.Terminal terminalTx,
 		                                                       Domain.Parser.Parser parser, string text,
 		                                                       ref int expectedTotalByteCount, ref int expectedTotalLineCount,
@@ -279,6 +290,10 @@ namespace YAT.Domain.Test
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for modifying the total count.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Required for modifying the total count.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static void TransmitAndAssertRxCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx,
 		                                             Domain.Parser.Parser parser, string text,
 		                                             ref int expectedTotalByteCount, ref int expectedTotalLineCount,
@@ -291,6 +306,10 @@ namespace YAT.Domain.Test
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for modifying the total count.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Required for modifying the total count.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static void TransmitAndAssertRxCountsWithOffset(Domain.Terminal terminalTx, Domain.Terminal terminalRx,
 		                                                       Domain.Parser.Parser parser, string text,
 		                                                       ref int expectedTotalByteCount, ref int expectedTotalLineCount,
@@ -320,6 +339,10 @@ namespace YAT.Domain.Test
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for modifying the total count.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Required for modifying the total count.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static void TransmitAndAssertCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx,
 		                                           Domain.Parser.Parser parser, string text,
 		                                           ref int expectedTotalByteCount, ref int expectedTotalLineCount,
@@ -332,6 +355,10 @@ namespace YAT.Domain.Test
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for modifying the total count.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Required for modifying the total count.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static void TransmitAndAssertCountsWithOffset(Domain.Terminal terminalTx, Domain.Terminal terminalRx,
 		                                                     Domain.Parser.Parser parser, string text,
 		                                                     ref int expectedTotalByteCount, ref int expectedTotalLineCount,
@@ -399,6 +426,7 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void WaitForIsSendingForSomeTime(Domain.Terminal terminal, int timeout = WaitTimeoutForIsSendingForSomeTime)
 		{
 			int waitTime = 0;
@@ -420,6 +448,7 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void WaitForIsNoLongerSending(Domain.Terminal terminal, int timeout = WaitTimeoutForIsNoLongerSending)
 		{
 			int waitTime = 0;
@@ -465,6 +494,8 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static void WaitForSendingAndAssertByteCount(Domain.Terminal terminalTx, int expectedTotalByteCount, int timeout = WaitTimeoutForLineTransmission)
 		{
 			WaitForSendingAndAssertCounts(terminalTx, expectedTotalByteCount, IgnoreCount, timeout);
@@ -476,6 +507,8 @@ namespace YAT.Domain.Test
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static void WaitForSendingAndAssertCounts(Domain.Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)
 		{
 			bool isFirst = true; // Using do-while, first check state.
@@ -528,9 +561,9 @@ namespace YAT.Domain.Test
 				}
 
 				sb = new StringBuilder("Waiting for sending, ");
-				sb.AppendFormat("{0}/{1} bytes/lines expected, {2}/{3} sent, ", expectedTotalByteCount, expectedTotalLineCount, txByteCount, txLineCount);
+				sb.AppendFormat(CultureInfo.CurrentCulture, "{0}/{1} bytes/lines expected, {2}/{3} sent, ", expectedTotalByteCount, expectedTotalLineCount, txByteCount, txLineCount);
 				if (timeout != IgnoreTimeout) {
-					sb.AppendFormat("{0} ms have passed, timeout is {1} ms...", waitTime, timeout);
+					sb.AppendFormat(CultureInfo.CurrentCulture, "{0} ms have passed, timeout is {1} ms...", waitTime, timeout);
 				}
 				Trace.WriteLine(sb.ToString());
 
@@ -549,6 +582,8 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static void WaitForReceivingAndAssertByteCount(Domain.Terminal terminalRx, int expectedTotalByteCount, int timeout = WaitTimeoutForLineTransmission)
 		{
 			WaitForReceivingAndAssertCounts(terminalRx, expectedTotalByteCount, IgnoreCount, timeout);
@@ -560,6 +595,8 @@ namespace YAT.Domain.Test
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static void WaitForReceivingAndAssertCounts(Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)
 		{
 			bool isFirst = true; // Using do-while, first check state.
@@ -612,9 +649,9 @@ namespace YAT.Domain.Test
 				}
 
 				sb = new StringBuilder("Waiting for receiving, ");
-				sb.AppendFormat("{0}/{1} bytes/lines expected, {2}/{3} received, ", expectedTotalByteCount, expectedTotalLineCount, rxByteCount, rxLineCount);
+				sb.AppendFormat(CultureInfo.CurrentCulture, "{0}/{1} bytes/lines expected, {2}/{3} received, ", expectedTotalByteCount, expectedTotalLineCount, rxByteCount, rxLineCount);
 				if (timeout != IgnoreTimeout) {
-					sb.AppendFormat("{0} ms have passed, timeout is {1} ms...", waitTime, timeout);
+					sb.AppendFormat(CultureInfo.CurrentCulture, "{0} ms have passed, timeout is {1} ms...", waitTime, timeout);
 				}
 				Trace.WriteLine(sb.ToString());
 
@@ -634,6 +671,8 @@ namespace YAT.Domain.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static void WaitForTransmissionAndAssertByteCount(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int timeout = WaitTimeoutForLineTransmission)
 		{
 			WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, IgnoreCount, timeout);
@@ -648,6 +687,8 @@ namespace YAT.Domain.Test
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static void WaitForTransmissionAndAssertCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)
 		{
 			bool isFirst = true; // Using do-while, first check state.
@@ -726,9 +767,9 @@ namespace YAT.Domain.Test
 				}
 
 				sb = new StringBuilder("Waiting for transmission, ");
-				sb.AppendFormat("{0}/{1} bytes/lines expected, {2}/{3} sent, {4}/{5} received, ", expectedTotalByteCount, expectedTotalLineCount, txByteCount, txLineCount, rxByteCount, rxLineCount);
+				sb.AppendFormat(CultureInfo.CurrentCulture, "{0}/{1} bytes/lines expected, {2}/{3} sent, {4}/{5} received, ", expectedTotalByteCount, expectedTotalLineCount, txByteCount, txLineCount, rxByteCount, rxLineCount);
 				if (timeout != IgnoreTimeout) {
-					sb.AppendFormat("{0} ms have passed, timeout is {1} ms...", waitTime, timeout);
+					sb.AppendFormat(CultureInfo.CurrentCulture, "{0} ms have passed, timeout is {1} ms...", waitTime, timeout);
 				}
 				Trace.WriteLine(sb.ToString());
 
@@ -765,6 +806,7 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Reverification", Justification = "'Reverification' is a correct English term.")]
 		public static void WaitForReverification()
 		{
 			Thread.Sleep(2 * WaitTimeoutForLineTransmission);
@@ -778,6 +820,10 @@ namespace YAT.Domain.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "endianness", Justification = "'Endianness' is a correct English term.")]
 		public static void AssertMatchingParserSettingsForSendText(TerminalSettings settingsA, TerminalSettings settingsB, out Encoding encoding, out Endianness endianness, out Domain.Parser.Mode mode)
 		{
 			var terminalTypeA = settingsA.TerminalType;
@@ -814,6 +860,8 @@ namespace YAT.Domain.Test
 		/// <remarks>
 		/// <see cref="WaitForSendingAndAssertCounts"/> further above.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static void AssertTxCounts(Domain.Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount)
 		{
 			WaitForSendingAndAssertCounts(terminalTx, expectedTotalByteCount, expectedTotalLineCount, IgnoreTimeout); // Simply forward (yet).
@@ -822,6 +870,8 @@ namespace YAT.Domain.Test
 		/// <remarks>
 		/// <see cref="WaitForReceivingAndAssertCounts"/> further above.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static void AssertRxCounts(Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount)
 		{
 			WaitForReceivingAndAssertCounts(terminalRx, expectedTotalByteCount, expectedTotalLineCount, IgnoreTimeout); // Simply forward (yet).
@@ -830,12 +880,15 @@ namespace YAT.Domain.Test
 		/// <remarks>
 		/// <see cref="WaitForTransmissionAndAssertCounts"/> further above.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static void AssertCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount)
 		{
 			WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount, IgnoreTimeout); // Simply forward (yet).
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for modifying the total content.")]
 		public static void AddAndAssertTxContent(Domain.Terminal terminal, string contentToAdd, ref List<string> expectedContent)
 		{
 			expectedContent.Add(contentToAdd);
@@ -846,6 +899,7 @@ namespace YAT.Domain.Test
 		/// <remarks>
 		/// Assertion will be based on <see cref="Regex"/> patterns.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for modifying the total content.")]
 		public static void AddAndAssertTxContentPattern(Domain.Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
 		{
 			expectedContentPattern.Add(contentPatternToAdd);
@@ -854,6 +908,7 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for modifying the total content.")]
 		public static void AddAndAssertBidirContent(Domain.Terminal terminal, string contentToAdd, ref List<string> expectedContent)
 		{
 			expectedContent.Add(contentToAdd);
@@ -867,6 +922,8 @@ namespace YAT.Domain.Test
 		/// <remarks>
 		/// Using "1" / "2" since neither related to "A" / "B" nor "Tx" / "Rx" terminology.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Required for modifying the total content.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for modifying the total content.")]
 		public static void AddAndAssertBidirContent(Domain.Terminal terminal1, Domain.Terminal terminal2, string contentToAdd, ref List<string> expectedContent1, ref List<string> expectedContent2)
 		{
 			AddAndAssertBidirContent(terminal1, terminal2, contentToAdd, contentToAdd, ref expectedContent1, ref expectedContent2);
@@ -878,6 +935,8 @@ namespace YAT.Domain.Test
 		/// <remarks>
 		/// Using "1" / "2" since neither related to "A" / "B" nor "Tx" / "Rx" terminology.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Required for modifying the total content.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Required for modifying the total content.")]
 		public static void AddAndAssertBidirContent(Domain.Terminal terminal1, Domain.Terminal terminal2, string contentToAdd1, string contentToAdd2, ref List<string> expectedContent1, ref List<string> expectedContent2)
 		{
 			AddAndAssertBidirContent(terminal1, contentToAdd1, ref expectedContent1);
@@ -887,6 +946,7 @@ namespace YAT.Domain.Test
 		/// <remarks>
 		/// Assertion will be based on <see cref="Regex"/> patterns.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for modifying the total content.")]
 		public static void AddAndAssertBidirContentPattern(Domain.Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
 		{
 			expectedContentPattern.Add(contentPatternToAdd);
@@ -895,6 +955,7 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for modifying the total content.")]
 		public static void AddAndAssertRxContent(Domain.Terminal terminal, string contentToAdd, ref List<string> expectedContent)
 		{
 			expectedContent.Add(contentToAdd);
@@ -905,6 +966,7 @@ namespace YAT.Domain.Test
 		/// <remarks>
 		/// Assertion will be based on <see cref="Regex"/> patterns.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for modifying the total content.")]
 		public static void AddAndAssertRxContentPattern(Domain.Terminal terminal, string contentPatternToAdd, ref List<string> expectedContentPattern)
 		{
 			expectedContentPattern.Add(contentPatternToAdd);

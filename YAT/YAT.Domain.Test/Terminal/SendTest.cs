@@ -101,6 +101,7 @@ namespace YAT.Domain.Test.Terminal
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
 		public static IEnumerable<Tuple<StressFile, SendMethod>> TextFilePairs
 		{
 			get
@@ -122,6 +123,7 @@ namespace YAT.Domain.Test.Terminal
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
 		public static IEnumerable<Tuple<StressFile, SendMethod>> BinaryFilePairs
 		{
 			get
@@ -319,7 +321,6 @@ namespace YAT.Domain.Test.Terminal
 		}
 
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
 		public static IEnumerable TestCasesSerialPortLoopbackPairs
 		{
 			get
@@ -334,7 +335,6 @@ namespace YAT.Domain.Test.Terminal
 
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
 		public static IEnumerable TestCasesSerialPortLoopbackSelfs
 		{
 			get
@@ -348,7 +348,6 @@ namespace YAT.Domain.Test.Terminal
 		}
 
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
 		public static IEnumerable TestCasesIPSocketPairs
 		{
 			get
@@ -366,7 +365,6 @@ namespace YAT.Domain.Test.Terminal
 
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
 		public static IEnumerable TestCasesIPSocketSelfs
 		{
 			get
@@ -390,7 +388,7 @@ namespace YAT.Domain.Test.Terminal
 			//    settingsA, settingsB, fileInfo, sendMethod, timeout
 
 			var settingsA = (tc.Arguments[0] as TerminalSettings);
-			var settingsB = (tc.Arguments[1] as TerminalSettings);
+		////var settingsB = (tc.Arguments[1] as TerminalSettings);
 
 			if (settingsA.IO.IOType == IOType.SerialPort) // Ignore settingsB (yet).
 			{
@@ -419,8 +417,8 @@ namespace YAT.Domain.Test.Terminal
 			FileInfo fileInfo;
 			if (settingsB == null) { fileInfo = (FileInfo)(tc.Arguments[1]); }
 			else                   { fileInfo = (FileInfo)(tc.Arguments[2]); }
-			                                                                                 //// settingsB are ignored (yet).
-			var roughlyEstimatedTransmissionTime = Utilities.GetRoughtlyEstimatedTransmissionTime(settingsA, fileInfo.ByteCount, fileInfo.LineByteCount);
+			                                                                                //// settingsB are ignored (yet).
+			var roughlyEstimatedTransmissionTime = Utilities.GetRoughlyEstimatedTransmissionTime(settingsA, fileInfo.ByteCount, fileInfo.LineByteCount);
 
 			// Workaround to issue that YAT becomes really slow in case of very long lines.
 			// With FR #375 (see further below) this will be fixable for this test.
@@ -654,13 +652,11 @@ namespace YAT.Domain.Test.Terminal
 
 		private static void SendAndVerify(Domain.Terminal terminalTx, Domain.Terminal terminalRx, FileInfo fileInfo, SendMethod sendMethod, int timeout)
 		{
-			var terminalType = terminalTx.TerminalSettings.TerminalType;
-
 			// Read file content:
 			byte[] fileContentAsBytes = null;
 			string fileContentAsText = null;
 			string[] fileContentAsLines = null;
-			ReadFileContent(terminalType, fileInfo, sendMethod, out fileContentAsBytes, out fileContentAsText, out fileContentAsLines);
+			ReadFileContent(fileInfo, out fileContentAsBytes, out fileContentAsText, out fileContentAsLines);
 
 			// Send and verify counts:
 			Send(terminalTx, fileInfo, sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines);
@@ -693,13 +689,14 @@ namespace YAT.Domain.Test.Terminal
 			}
 		}
 
-		private static void ReadFileContent(TerminalType terminalType, FileInfo fileInfo, SendMethod sendMethod, out byte[] fileContentAsBytes, out string fileContentAsText, out string[] fileContentAsLines)
+		private static void ReadFileContent(FileInfo fileInfo, out byte[] fileContentAsBytes, out string fileContentAsText, out string[] fileContentAsLines)
 		{
 			fileContentAsBytes = ((fileInfo.Type == FileType.Binary) ? File.ReadAllBytes(fileInfo.Path) : null);
 			fileContentAsText  = ((fileInfo.Type == FileType.Text)   ? File.ReadAllText( fileInfo.Path) : null);
 			fileContentAsLines = ((fileInfo.Type == FileType.Text)   ? File.ReadAllLines(fileInfo.Path) : null);
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "fileContentAsBytes", Justification = "Prepared for future use.")]
 		private static void Send(Domain.Terminal terminalTx, FileInfo fileInfo, SendMethod sendMethod, byte[] fileContentAsBytes, string fileContentAsText, string[] fileContentAsLines)
 		{
 			switch (sendMethod)
@@ -720,7 +717,7 @@ namespace YAT.Domain.Test.Terminal
 			if (terminalType == TerminalType.Text)
 				GetExpectedTextContent(  terminal,           sendMethod,                     fileContentAsText, fileContentAsLines, out expectedContentPattern);
 			else
-				GetExpectedBinaryContent(terminal, fileInfo, sendMethod, fileContentAsBytes, fileContentAsText, fileContentAsLines, out expectedContentPattern);
+				GetExpectedBinaryContent(terminal, fileInfo, sendMethod, fileContentAsBytes,                    fileContentAsLines, out expectedContentPattern);
 		}
 
 		private static void GetExpectedTextContent(Domain.Terminal terminal, SendMethod sendMethod, string fileContentAsText, string[] fileContentAsLines, out string[] expectedContentPattern)
@@ -747,9 +744,8 @@ namespace YAT.Domain.Test.Terminal
 			}
 		}
 
-		private static void GetExpectedBinaryContent(Domain.Terminal terminal, FileInfo fileInfo, SendMethod sendMethod, byte[] fileContentAsBytes, string fileContentAsText, string[] fileContentAsLines, out string[] expectedContentPattern)
+		private static void GetExpectedBinaryContent(Domain.Terminal terminal, FileInfo fileInfo, SendMethod sendMethod, byte[] fileContentAsBytes, string[] fileContentAsLines, out string[] expectedContentPattern)
 		{                                                               // Just one terminal is enough, both terminals are configured the same.
-			var terminalType = terminal.TerminalSettings.TerminalType;
 			Encoding encoding = (EncodingEx)terminal.TerminalSettings.BinaryTerminal.EncodingFixed;
 
 			byte[] firstLineAsBytes;

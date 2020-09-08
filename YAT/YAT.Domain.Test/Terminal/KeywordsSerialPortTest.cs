@@ -519,6 +519,9 @@ namespace YAT.Domain.Test.Terminal
 		/// Workaround to bug #354 "Automatic hardware flow control is not supported by MCT"
 		/// for MCT based converters loopback COM1x in YAT TestLab.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TestIs", Justification = "FxCop, are you nuts? What the heck could this method have to do with 'testis'...")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "mct", Justification = "MCT is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "MCT", Justification = "MCT is a name.")]
 		protected virtual bool TestIsExcludedForMCT(TerminalSettings settings, IEnumerable<string> mctPortNamesInQuestion)
 		{
 			var mctPortCaptionInQuestion = MKY.IO.Ports.SerialPortId.CaptionMCT;

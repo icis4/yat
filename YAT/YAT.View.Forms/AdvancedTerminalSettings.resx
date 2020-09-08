@@ -208,7 +208,7 @@ This option is only available for text terminals.</value>
   <data name="textBox_MaxLineLength.ToolTip" xml:space="preserve">
     <value>Limiting the maximal number of characters/bytes per line is
 useful to improve performance. Unlimited lines could result in
-excessive processing, leading to an unresponive application, in
+excessive processing, leading to an unresponsive application, in
 case of improperly configured line breaks.</value>
   </data>
   <data name="checkBox_DeviceLineBreak.ToolTip" xml:space="preserve">

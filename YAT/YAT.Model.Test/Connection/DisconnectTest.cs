@@ -66,7 +66,7 @@ namespace YAT.Model.Test.Connection
 		}
 
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this property.")]
 		public static IEnumerable TestCasesIPSocketPairs_Text
 		{
 			get
@@ -78,7 +78,7 @@ namespace YAT.Model.Test.Connection
 
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this item.")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this property.")]
 		public static IEnumerable TestCasesIPSocketSelfs_Text
 		{
 			get
@@ -138,6 +138,7 @@ namespace YAT.Model.Test.Connection
 		}
 
 		/// <remarks>Separation into multiple tests for grouping 'by I/O' to ease test development and manual execution.</remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 		[Test, TestCaseSource(typeof(DisconnectTestData), "TestCasesIPSocketSelfs_Text")]
 		public virtual void TestIPSocketSelfs(TerminalSettings settings, char disconnectIdentifier)
 		{

@@ -39,7 +39,7 @@ namespace YAT.Domain.Parser
 		public byte[] Bytes { get; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "bytes", Justification = "Why not? 'Byte' not only is a type, but also emphasizes a purpose.")]
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "bytes", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public BytesResult(byte[] bytes)
 		{
 			Bytes = bytes;
