@@ -109,10 +109,6 @@
       <Project>{D639409C-0B93-494B-9A01-4FE79686FAD6}</Project>
       <Name>YAT.Application</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.View.Forms\YAT.View.Forms.csproj">
-      <Project>{A1060959-580E-4493-BA51-4A3A7CDE1E88}</Project>
-      <Name>YAT.View.Forms</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\YAT\Icon_YAT.ico" />
