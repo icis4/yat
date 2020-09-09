@@ -13,7 +13,6 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\RtfWriter.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
