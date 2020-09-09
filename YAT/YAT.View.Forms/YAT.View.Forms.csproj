@@ -387,11 +387,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Status\Image_Status_Grey_12x12.png" />
     <Content Include="Resources\LGPL\Image_LGPLv3_147x51.png" />
     <Content Include="Resources\LGPL\Image_LGPLv3_88x31.png" />
     <Content Include="Resources\Status\Image_Status_Red_12x12.png" />
     <Content Include="Resources\Status\Image_Status_Green_12x12.png" />
+    <Content Include="Resources\Status\Image_Status_Grey_12x12.png" />
     <Content Include="Resources\Status\Image_Status_Yellow_12x12.png" />
     <Content Include="Resources\Tool\Image_Tool_accept_button_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_accept_document_16x16.png" />
