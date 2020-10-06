@@ -166,6 +166,7 @@
 			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
 			this.button_Defaults.TabIndex = 6;
 			this.button_Defaults.Text = "&Defaults...";
+			this.button_Defaults.UseVisualStyleBackColor = true;
 			this.button_Defaults.Click += new System.EventHandler(this.button_Defaults_Click);
 			// 
 			// button_Cancel
@@ -177,6 +178,7 @@
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 5;
 			this.button_Cancel.Text = "Cancel";
+			this.button_Cancel.UseVisualStyleBackColor = true;
 			this.button_Cancel.Click += new System.EventHandler(this.button_Cancel_Click);
 			// 
 			// button_OK
@@ -188,6 +190,7 @@
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 4;
 			this.button_OK.Text = "OK";
+			this.button_OK.UseVisualStyleBackColor = true;
 			this.button_OK.Click += new System.EventHandler(this.button_OK_Click);
 			// 
 			// groupBox_User
@@ -905,6 +908,7 @@
 			this.checkBox_GlueCharsOfLine.Text = "Reduce line breaks by &glueing characters of";
 			this.toolTip.SetToolTip(this.checkBox_GlueCharsOfLine, resources.GetString("checkBox_GlueCharsOfLine.ToolTip"));
 			this.checkBox_GlueCharsOfLine.UseVisualStyleBackColor = true;
+			this.checkBox_GlueCharsOfLine.CheckedChanged += new System.EventHandler(this.checkBox_GlueCharsOfLine_CheckedChanged);
 			// 
 			// label_GlueCharsOfLineTimeoutUnit
 			// 
@@ -926,6 +930,8 @@
 			this.toolTip.SetToolTip(this.textBox_GlueCharsOfLineTimeout, "When no EOL is received within this timeout, i.e.\r\nthe line is not yet complete, " +
         "a change of direction\r\n(or I/O device) will result in a line break.\r\n\r\nSet to -1" +
         " for infinite waiting for EOL.");
+			this.textBox_GlueCharsOfLineTimeout.TextChanged += new System.EventHandler(this.textBox_GlueCharsOfLineTimeout_TextChanged);
+			this.textBox_GlueCharsOfLineTimeout.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_GlueCharsOfLineTimeout_Validating);
 			// 
 			// label_LineBreaks
 			// 
@@ -944,6 +950,8 @@
 			this.textBox_MaxLineLength.TabIndex = 12;
 			this.textBox_MaxLineLength.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.toolTip.SetToolTip(this.textBox_MaxLineLength, resources.GetString("textBox_MaxLineLength.ToolTip"));
+			this.textBox_MaxLineLength.TextChanged += new System.EventHandler(this.textBox_MaxLineLength_TextChanged);
+			this.textBox_MaxLineLength.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaxLineLength_Validating);
 			// 
 			// label_MaxLineLengthUnit
 			// 
@@ -972,6 +980,8 @@
 			this.checkBox_DeviceLineBreak.TabIndex = 3;
 			this.checkBox_DeviceLineBreak.Text = "...when I/O device changes";
 			this.toolTip.SetToolTip(this.checkBox_DeviceLineBreak, resources.GetString("checkBox_DeviceLineBreak.ToolTip"));
+			this.checkBox_DeviceLineBreak.UseVisualStyleBackColor = true;
+			this.checkBox_DeviceLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_DeviceLineBreak_CheckedChanged);
 			// 
 			// textBox_MaxLineCount
 			// 
@@ -981,6 +991,8 @@
 			this.textBox_MaxLineCount.TabIndex = 9;
 			this.textBox_MaxLineCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.toolTip.SetToolTip(this.textBox_MaxLineCount, "The maximal number of lines is limited in order to improve performance.");
+			this.textBox_MaxLineCount.TextChanged += new System.EventHandler(this.textBox_MaxLineCount_TextChanged);
+			this.textBox_MaxLineCount.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaxLineCount_Validating);
 			// 
 			// checkBox_DirectionLineBreak
 			// 
@@ -993,6 +1005,8 @@
 			this.toolTip.SetToolTip(this.checkBox_DirectionLineBreak, "When the reduce/glue option is enabled below, this\r\noption is only relevant after" +
         " the timeout has elapsed.\r\n\r\nThis option solely applies to the [Bidirectional Pa" +
         "nel].");
+			this.checkBox_DirectionLineBreak.UseVisualStyleBackColor = true;
+			this.checkBox_DirectionLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_DirectionLineBreak_CheckedChanged);
 			// 
 			// label_MaxLineCountUnit
 			// 
@@ -1079,6 +1093,7 @@
 			this.checkBox_ShowCopyOfActiveLine.Size = new System.Drawing.Size(142, 17);
 			this.checkBox_ShowCopyOfActiveLine.TabIndex = 21;
 			this.checkBox_ShowCopyOfActiveLine.Text = "Show copy of active line";
+			this.checkBox_ShowCopyOfActiveLine.UseVisualStyleBackColor = true;
 			this.checkBox_ShowCopyOfActiveLine.CheckedChanged += new System.EventHandler(this.checkBox_ShowCopyOfActiveLine_CheckedChanged);
 			// 
 			// groupBox_Display_UsbSerialHid
@@ -1328,6 +1343,7 @@
 			this.checkBox_ReplaceControlCharacters.TabIndex = 0;
 			this.checkBox_ReplaceControlCharacters.Text = "Replace by:";
 			this.toolTip.SetToolTip(this.checkBox_ReplaceControlCharacters, "Applicable to [String] and [Character] radix.");
+			this.checkBox_ReplaceControlCharacters.UseVisualStyleBackColor = true;
 			this.checkBox_ReplaceControlCharacters.CheckedChanged += new System.EventHandler(this.checkBox_ReplaceControlCharacters_CheckedChanged);
 			// 
 			// comboBox_RxRadix
@@ -1367,6 +1383,7 @@
 			this.checkBox_ShowRadix.Size = new System.Drawing.Size(78, 17);
 			this.checkBox_ShowRadix.TabIndex = 7;
 			this.checkBox_ShowRadix.Text = "S&how radix";
+			this.checkBox_ShowRadix.UseVisualStyleBackColor = true;
 			this.checkBox_ShowRadix.CheckedChanged += new System.EventHandler(this.checkBox_ShowRadix_CheckedChanged);
 			// 
 			// checkBox_ShowTimeStamp
@@ -1378,6 +1395,7 @@
 			this.checkBox_ShowTimeStamp.TabIndex = 10;
 			this.checkBox_ShowTimeStamp.Text = "Show &time stamp";
 			this.toolTip.SetToolTip(this.checkBox_ShowTimeStamp, "The absolute moment in time.\r\n\r\nFormat can be configured in [View > Format...].");
+			this.checkBox_ShowTimeStamp.UseVisualStyleBackColor = true;
 			this.checkBox_ShowTimeStamp.CheckedChanged += new System.EventHandler(this.checkBox_ShowTimeStamp_CheckedChanged);
 			// 
 			// checkBox_ShowTimeSpan
@@ -1390,6 +1408,7 @@
 			this.checkBox_ShowTimeSpan.Text = "Show time span";
 			this.toolTip.SetToolTip(this.checkBox_ShowTimeSpan, "The time that passed relative to [connect time].\r\n\r\nFormat can be configured in [" +
         "View > Format...].");
+			this.checkBox_ShowTimeSpan.UseVisualStyleBackColor = true;
 			this.checkBox_ShowTimeSpan.CheckedChanged += new System.EventHandler(this.checkBox_ShowTimeSpan_CheckedChanged);
 			// 
 			// checkBox_ShowTimeDelta
@@ -1402,6 +1421,7 @@
 			this.checkBox_ShowTimeDelta.Text = "Show time delta";
 			this.toolTip.SetToolTip(this.checkBox_ShowTimeDelta, "The time that passed relative to the last line.\r\n\r\nFormat can be configured in [V" +
         "iew > Format...].");
+			this.checkBox_ShowTimeDelta.UseVisualStyleBackColor = true;
 			this.checkBox_ShowTimeDelta.CheckedChanged += new System.EventHandler(this.checkBox_ShowTimeDelta_CheckedChanged);
 			// 
 			// checkBox_ShowConnectTime
@@ -1412,6 +1432,7 @@
 			this.checkBox_ShowConnectTime.Size = new System.Drawing.Size(117, 17);
 			this.checkBox_ShowConnectTime.TabIndex = 0;
 			this.checkBox_ShowConnectTime.Text = "&Show connect time";
+			this.checkBox_ShowConnectTime.UseVisualStyleBackColor = true;
 			this.checkBox_ShowConnectTime.CheckedChanged += new System.EventHandler(this.checkBox_ShowConnectTime_CheckedChanged);
 			// 
 			// checkBox_ShowCountAndRate
@@ -1422,6 +1443,7 @@
 			this.checkBox_ShowCountAndRate.Size = new System.Drawing.Size(125, 17);
 			this.checkBox_ShowCountAndRate.TabIndex = 1;
 			this.checkBox_ShowCountAndRate.Text = "Show count and rate";
+			this.checkBox_ShowCountAndRate.UseVisualStyleBackColor = true;
 			this.checkBox_ShowCountAndRate.CheckedChanged += new System.EventHandler(this.checkBox_ShowCountAndRate_CheckedChanged);
 			// 
 			// checkBox_ShowLength
@@ -1432,6 +1454,7 @@
 			this.checkBox_ShowLength.Size = new System.Drawing.Size(88, 17);
 			this.checkBox_ShowLength.TabIndex = 15;
 			this.checkBox_ShowLength.Text = "Show &length:";
+			this.checkBox_ShowLength.UseVisualStyleBackColor = true;
 			this.checkBox_ShowLength.CheckedChanged += new System.EventHandler(this.checkBox_ShowLength_CheckedChanged);
 			// 
 			// comboBox_TxRadix
