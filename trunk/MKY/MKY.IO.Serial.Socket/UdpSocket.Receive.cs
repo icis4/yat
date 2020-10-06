@@ -235,7 +235,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		private void ReceiveThread()
 		{
-			DebugThreadState("ReceiveThread() has started.");
+			DebugThreads("ReceiveThread() has started.");
 
 			try
 			{
@@ -333,7 +333,7 @@ namespace MKY.IO.Serial.Socket
 				Thread.ResetAbort();
 			}
 
-			DebugThreadState("ReceiveThread() has terminated.");
+			DebugThreads("ReceiveThread() has terminated.");
 		}
 
 		#endregion

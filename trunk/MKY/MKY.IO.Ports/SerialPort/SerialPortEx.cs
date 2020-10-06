@@ -81,7 +81,7 @@ namespace MKY.IO.Ports
 		// Static Fields
 		//==========================================================================================
 
-		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
+		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
 
 		#endregion
 
@@ -395,7 +395,7 @@ namespace MKY.IO.Ports
 				if (base.PortName != value.Name)
 				{
 					if (IsOpen)
-						throw (new InvalidOperationException("The serial COM port is already open, it must be stopped before changing the port ID!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+						throw (new InvalidOperationException("The serial COM port is already open, it must be stopped before changing the port ID!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 					base.PortName = value.Name;
 					OnPortChanged(EventArgs.Empty);
@@ -1510,9 +1510,9 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		/// <remarks>
-		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named 'Message' for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)

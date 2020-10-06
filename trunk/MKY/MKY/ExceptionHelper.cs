@@ -134,9 +134,9 @@ namespace MKY
 		}
 
 		/// <remarks>
-		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named 'Message' for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
@@ -146,11 +146,12 @@ namespace MKY
 				string.Format
 				(
 					CultureInfo.CurrentCulture,
-					" @ {0} @ Thread #{1} : {2} owned by {3} : {4}",
+					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
 					GetType(),
-					(!string.IsNullOrEmpty(Owner) ? Owner : "<Undefined>"),
+					"",
+					(!string.IsNullOrEmpty(Owner) ? "[" + Owner + "]" : "[Undefined]"),
 					message
 				)
 			);

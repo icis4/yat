@@ -28,8 +28,11 @@
 
 #if (DEBUG)
 
-	// Enable debugging of thread state:
-////#define DEBUG_THREAD_STATE
+	// Enable debugging of state:
+////#define DEBUG_STATE
+
+	// Enable debugging of threads:
+////#define DEBUG_THREADS
 
 #endif // DEBUG
 
@@ -495,18 +498,21 @@ namespace MKY.IO.Serial.Socket
 		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			this.eventHelper.DiscardAllEventsAndExceptions();
-
-			DebugMessage("Disposing...");
+			if (this.eventHelper != null) // Possible when called by finalizer (non-deterministic).
+				this.eventHelper.DiscardAllEventsAndExceptions();
 
 			// Dispose of managed resources:
 			if (disposing)
 			{
+				DebugMessage("Disposing...");
+
 				// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
 				DisposeSocketAndThreads();
+
+				DebugMessage("...successfully disposed.");
 			}
 
-			DebugMessage("...successfully disposed.");
+		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
 		}
 
 		#endregion
@@ -538,6 +544,18 @@ namespace MKY.IO.Serial.Socket
 
 				lock (this.socketSyncObj)
 					return (this.remoteHost);
+			}
+		}
+
+		/// <remarks>Convenience method, always returns a valid value, at least <![CDATA["<undefined>"]]>.</remarks>
+		protected virtual string RemoteHostEndpointString
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				var remoteHost = RemoteHost;
+				return ((remoteHost != null) ? (remoteHost.ToEndpointAddressString()) : "<undefined>"); // Lower case same as "localhost"
 			}
 		}
 
@@ -855,16 +873,16 @@ namespace MKY.IO.Serial.Socket
 			{
 				oldState = this.state;
 				this.state = state;
+
+			#if (DEBUG) // Inside lock to prevent potential mixup in debug output.
+				if (state != oldState)
+					DebugMessage("State has changed from {0} to {1}.", oldState, state);
+				else
+					DebugState("State already is {0}.", oldState); // State non-changes shall only be output when explicitly activated.
+			#endif
 			}
 
-		#if (DEBUG)
-			if (state != oldState)
-				DebugMessage("State has changed from {0} to {1}.", oldState, state);
-			else
-				DebugMessage("State already is {0}.", oldState);
-		#endif
-
-			if (state != oldState)
+			if (state != oldState) // Outside lock is OK, only stating change, not state.
 				OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
 		}
 
@@ -1028,7 +1046,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				if (this.sendThread != null)
 				{
-					DebugThreadState("SendThread() gets stopped...");
+					DebugThreads("SendThread() gets stopped...");
 
 					// Ensure that send thread has stopped after the stop request:
 					try
@@ -1045,19 +1063,19 @@ namespace MKY.IO.Serial.Socket
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								DebugThreadState("...failed! Aborting...");
-								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
+								DebugThreads("...failed! Aborting...");
+								DebugThreads("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
 
 								isAborting = true;       // Thread.Abort() must not be used whenever possible!
 								this.sendThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
-							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThreads("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
 						if (!isAborting)
-							DebugThreadState("...successfully stopped.");
+							DebugThreads("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -1065,7 +1083,7 @@ namespace MKY.IO.Serial.Socket
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThreads("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.sendThread = null;
@@ -1097,7 +1115,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				if (this.receiveThread != null)
 				{
-					DebugThreadState("ReceiveThread() gets stopped...");
+					DebugThreads("ReceiveThread() gets stopped...");
 
 					// Ensure that receive thread has stopped after the stop request:
 					try
@@ -1114,19 +1132,19 @@ namespace MKY.IO.Serial.Socket
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								DebugThreadState("...failed! Aborting...");
-								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
+								DebugThreads("...failed! Aborting...");
+								DebugThreads("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
 
 								isAborting = true;          // Thread.Abort() must not be used whenever possible!
 								this.receiveThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
-							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThreads("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
 						if (!isAborting)
-							DebugThreadState("...successfully stopped.");
+							DebugThreads("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -1134,7 +1152,7 @@ namespace MKY.IO.Serial.Socket
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThreads("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.receiveThread = null;
@@ -1298,16 +1316,14 @@ namespace MKY.IO.Serial.Socket
 		{
 			// AssertUndisposed() shall not be called from such basic method! Its return value is needed for debugging! All underlying fields are still valid after disposal.
 
-			var remoteHostEndpoint = ((this.remoteHost != null) ? (this.remoteHost.ToEndpointAddressString()) : "[none]"); // Required to always be available.
-
 			switch (SocketType)
 			{
 				case UdpSocketType.Server:
-					return ("Receive:" + this.localPort + " / " + remoteHostEndpoint + ":" + this.remotePort);
+					return ("Receive:" + LocalPort + " / " + RemoteHostEndpointString + ":" + RemotePort);
 
 				case UdpSocketType.Client:
 				case UdpSocketType.PairSocket:
-					return (remoteHostEndpoint + ":" + this.remotePort + " / " + "Receive:" + this.localPort);
+					return (RemoteHostEndpointString + ":" + RemotePort + " / " + "Receive:" + LocalPort);
 
 				case UdpSocketType.Unknown:
 				default:
@@ -1330,9 +1346,9 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <remarks>
-		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named 'Message' for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
@@ -1356,8 +1372,17 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
-		[Conditional("DEBUG_THREAD_STATE")]
-		private void DebugThreadState(string message)
+		[Conditional("DEBUG_STATE")]
+		private void DebugState(string format, params object[] args)
+		{
+			DebugMessage(format, args);
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_THREADS")]
+		private void DebugThreads(string message)
 		{
 			DebugMessage(message);
 		}

@@ -28,8 +28,8 @@
 
 #if (DEBUG)
 
-	// Enable debugging of thread state:
-////#define DEBUG_THREAD_STATE // Attention: Must also be activated in TcpClient.cs !!
+	// Enable debugging of threads:
+////#define DEBUG_THREADS // Attention: Must also be activated in TcpClient.cs !!
 
 	// Enable debugging of sending:
 ////#define DEBUG_SEND // Attention: Must also be activated in TcpClient.cs !!
@@ -181,7 +181,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		private void SendThread()
 		{
-			DebugThreadState("SendThread() has started.");
+			DebugThreads("SendThread() has started.");
 
 			// Based on various sources:
 			//
@@ -306,7 +306,7 @@ namespace MKY.IO.Serial.Socket
 				Thread.ResetAbort();
 			}
 
-			DebugThreadState("SendThread() has terminated.");
+			DebugThreads("SendThread() has terminated.");
 		}
 
 		/// <summary>
@@ -328,7 +328,7 @@ namespace MKY.IO.Serial.Socket
 			lock (this.socketSyncObj) // Remote end point is fixed for a TCP/IP client object.
 				remoteEndPoint = new System.Net.IPEndPoint(this.remoteHost.Address, this.remotePort);
 
-			DebugThreadState("SendThread() has started.");
+			DebugThreads("SendThread() has started.");
 
 			try
 			{
@@ -414,7 +414,7 @@ namespace MKY.IO.Serial.Socket
 				Thread.ResetAbort();
 			}
 
-			DebugThreadState("SendThread() has terminated.");
+			DebugThreads("SendThread() has terminated.");
 		}
 
 		#endregion
@@ -427,8 +427,8 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
-		[Conditional("DEBUG_THREAD_STATE")]
-		private void DebugThreadState(string message)
+		[Conditional("DEBUG_THREADS")]
+		private void DebugThreads(string message)
 		{
 			DebugMessage(message);
 		}

@@ -262,7 +262,7 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <remarks>
-		/// Named "Type" even though same as <see cref="System.Type"/>. But using this property
+		/// Named 'Type' even though same as <see cref="System.Type"/>. But using this property
 		/// as <code>Socket.Type</code> is more intuitive than <code>Socket.SocketType</code>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods", Justification = "Well, there are other types than object types...")]

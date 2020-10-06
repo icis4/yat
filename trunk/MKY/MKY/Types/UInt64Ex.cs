@@ -23,6 +23,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -38,6 +39,24 @@ namespace MKY
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class UInt64Ex
 	{
+		/// <summary>
+		/// Determines whether <paramref name="value"/> equals any of the specified <paramref name="values"/>.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <param name="values">The values to compare with.</param>
+		/// <returns>true if <paramref name="value"/> matches any of the <paramref name="values"/>; otherwise, false.</returns>
+		[CLSCompliant(false)]
+		public static bool EqualsAny(ulong value, IEnumerable<ulong> values)
+		{
+			foreach (ulong v in values)
+			{
+				if (v == value)
+					return (true); // Equals.
+			}
+
+			return (false); // Does not equal any.
+		}
+
 		/// <summary>
 		/// Converts the value into a binary string (e.g. "0000000000000000000000000000000000000000000000000000000000010100").
 		/// </summary>

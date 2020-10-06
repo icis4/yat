@@ -35,10 +35,27 @@ namespace MKY
 	/// <summary>
 	/// <see cref="Int64"/>/<see cref="long"/> utility methods.
 	/// </summary>
-	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Int32 just *is* 'int'...")]
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Int64 just *is* 'long'...")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class Int64Ex
 	{
+		/// <summary>
+		/// Determines whether <paramref name="value"/> equals any of the specified <paramref name="values"/>.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <param name="values">The values to compare with.</param>
+		/// <returns>true if <paramref name="value"/> matches any of the <paramref name="values"/>; otherwise, false.</returns>
+		public static bool EqualsAny(long value, IEnumerable<long> values)
+		{
+			foreach (long v in values)
+			{
+				if (v == value)
+					return (true); // Equals.
+			}
+
+			return (false); // Does not equal any.
+		}
+
 		/// <summary>
 		/// Limits <paramref name="value"/> to the values specified.
 		/// </summary>
@@ -48,7 +65,7 @@ namespace MKY
 		public static long Limit(long value, long min, long max)
 		{
 			if (min > max)
-				throw (new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Precondition is 'min' <= 'max', but 'min' is {0} and 'max' is {1}!", min, max))); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+				throw (new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Precondition is 'min' <= 'max', but 'min' is {0} and 'max' is {1}!", min, max))); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			if (value < min)
 				return (min);

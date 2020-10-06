@@ -98,8 +98,8 @@ namespace MKY.IO.Usb
 		private const string             ZeroTerminated_string      =   "Zero terminated (report ID + payload + zero)";
 		private static readonly string[] ZeroTerminated_stringStart = { "Zero", "<Zero", "[Zero" };
 
-		private const string             MT_SerHid_string      =   "MT Ser/HID (same as [Zero terminated])";
-		private static readonly string[] MT_SerHid_stringStart = { "MT", "METTLER TOLEDO", "Mettler-Toledo", "OH" }; // Covers "OHAUS", MT's 2nd brand.
+		private const string             MT_SerHid_string      =   "MT Ser/HID (same as [Zero terminated])";  // OHAUS is MT's 2nd brand.
+		private static readonly string[] MT_SerHid_stringStart = { "MT", "METTLER TOLEDO", "Mettler-Toledo", "OH" }; // Covers "OHAUS".
 
 		private const string             Signal11_HidApi_string      =   "Signal 11 HID API";
 		private static readonly string[] Signal11_HidApi_stringStart = { "Signal" }; // Covers "Signal11" and "Signal 11".
@@ -118,7 +118,10 @@ namespace MKY.IO.Usb
 		#region Constants
 
 		/// <summary></summary>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "An URL may spell 'ti' like this, and may contain 'slaa'...")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Underscore for improved readability.")]
+		private static readonly int[] MT_SerHid_VendorIds = { 0x0EB8 }; // Covers "OHAUS", MT's 2nd brand.
+
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Underscore for improved readability.")]
 		public const byte MT_SerHid_ReportId = 0x00;
 
@@ -126,22 +129,26 @@ namespace MKY.IO.Usb
 	////private const string MT_SerHid_LinkUri => Requested as RB DCR #4671
 
 		/// <summary></summary>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "An URL may spell 'ti' like this, and may contain 'slaa'...")]
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Underscore for improved readability.")]
 		public const byte Signal11_HidApi_DefaultReportId = 0x00;
 
 		private const string Signal11_HidApi_LinkText = "Signal 11 HID API";
-		private const string Signal11_HidApi_LinkUri = "http://www.signal11.us/oss/hidapi/";
+		private const string Signal11_HidApi_LinkUri = "https://github.com/signal11/hidapi";
 
 		/// <summary>
-		/// The TI HID API identifier is specified to 0x3F according to http://www.ti.com/lit/an/slaa453/slaa453.pdf.
+		/// According to https://www.the-sz.com/products/usbid/index.php.
+		/// </summary>
+		private static readonly int[] TI_HidApi_VendorIds = { 0x0451, 0x08BB, 0x1CBE, 0x2047 };
+
+		/// <summary>
+		/// The TI HID API identifier is specified to 0x3F according to https://www.ti.com/lit/an/slaa453/slaa453.pdf.
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "An URL may spell 'ti' like this, and may contain 'slaa'...")]
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Underscore for improved readability.")]
 		public const byte TI_HidApi_ReportId = 0x3F;
 
 		private const string TI_HidApi_LinkText = "TI Application Report SLAA453";
-		private const string TI_HidApi_LinkUri = "http://www.ti.com/lit/an/slaa453/slaa453.pdf";
+		private const string TI_HidApi_LinkUri = "https://www.ti.com/lit/an/slaa453/slaa453.pdf";
 
 		#endregion
 
@@ -377,6 +384,48 @@ namespace MKY.IO.Usb
 
 		#endregion
 
+		#region From
+		//==========================================================================================
+		// From
+		//==========================================================================================
+
+		/// <remarks>Returns <c>false</c> and <see cref="SerialHidDeviceSettingsPreset.None"/> if no matching preset has been found.</remarks>
+		public static bool TryFrom(DeviceInfo deviceInfo, out SerialHidDeviceSettingsPresetEx result)
+		{
+			SerialHidDeviceSettingsPreset enumResult;
+			if (TryFrom(deviceInfo, out enumResult))
+			{
+				result = new SerialHidDeviceSettingsPresetEx(enumResult);
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>Returns <c>false</c> and <see cref="SerialHidDeviceSettingsPreset.None"/> if no matching preset has been found.</remarks>
+		public static bool TryFrom(DeviceInfo deviceInfo, out SerialHidDeviceSettingsPreset result)
+		{
+			if      (Int32Ex.EqualsAny(deviceInfo.VendorId, MT_SerHid_VendorIds))
+			{
+				result = SerialHidDeviceSettingsPreset.MT_SerHid;
+				return (true);
+			}
+			else if (Int32Ex.EqualsAny(deviceInfo.VendorId, TI_HidApi_VendorIds))
+			{
+				result = SerialHidDeviceSettingsPreset.TI_HidApi;
+				return (true);
+			}
+			else // Vendor ID not found, try parsing string:
+			{
+				return (TryParse(deviceInfo, out result));
+			}
+		}
+
+		#endregion
+
 		#region To/From ReportFormat/RxFilterUsage
 		//==========================================================================================
 		// To/From ReportFormat/RxFilterUsage
@@ -422,23 +471,25 @@ namespace MKY.IO.Usb
 			}
 		}
 
-		/// <summary></summary>
-		public static SerialHidDeviceSettingsPreset FromReportFormatAndRxFilterUsage(SerialHidReportFormat reportFormat, SerialHidRxFilterUsage rxFilterUsage)
+		/// <remarks>Returns <c>false</c> and <see cref="SerialHidDeviceSettingsPreset.None"/> if no matching preset has been found.</remarks>
+		public static bool TryFromReportFormatAndRxFilterUsage(SerialHidReportFormat reportFormat, SerialHidRxFilterUsage rxFilterUsage, out SerialHidDeviceSettingsPreset preset)
 		{
-			foreach (var preset in GetItems())
+			foreach (var item in GetItems())
 			{
-				if (preset != SerialHidDeviceSettingsPreset.None)
+				if (item != SerialHidDeviceSettingsPreset.None)
 				{
-					if ((reportFormat  == preset.ToReportFormat()) &&
-						(rxFilterUsage == preset.ToRxFilterUsage()))
+					if ((reportFormat  == item.ToReportFormat()) &&
+						(rxFilterUsage == item.ToRxFilterUsage()))
 					{
-						return (preset);
+						preset = item;
+						return (true);
 					}
 				}
 			}
 
 			// Not found:
-			return (SerialHidDeviceSettingsPreset.None);
+			preset = SerialHidDeviceSettingsPreset.None;
+			return (false);
 		}
 
 		#endregion

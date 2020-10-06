@@ -41,22 +41,44 @@ namespace MKY.IO.Serial.Socket.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// A cycle takes around 4 seconds. 15 cycles around a minute.
+		/// A cycle takes around 2 seconds => 30 cycles for a minute.
 		/// </remarks>
 		[Test]
-		[Repeat(15)]
+		[Repeat(30)]
 		[EnduranceCategory, StandardDurationCategory.Minute1]
 		public virtual void TestConsecutiveServerClientConnectAndShutdownEndurance01Minute()
 		{
 			var t = new SimpleUdpConnectionTest();
 			t.TestServerClientConnectAndClientShutdown();
 			t.TestServerClientConnectAndServerShutdown();
-			t.TestServerClientConnectAndServerShutdown();
 			t.TestServerClientConnectAndClientShutdown();
 			t.TestServerClientConnectAndClientShutdown();
 			t.TestServerClientConnectAndServerShutdown();
 			t.TestServerClientConnectAndServerShutdown();
 			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
 		}
 
 		/// <summary></summary>
@@ -85,21 +107,43 @@ namespace MKY.IO.Serial.Socket.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// A cycle takes around 4 seconds. 15 cycles around a minute.
+		/// A cycle takes around 2 seconds => 30 cycles for a minute.
 		/// </remarks>
 		[Test]
-		[Repeat(15)]
+		[Repeat(30)]
 		[EnduranceCategory, StandardDurationCategory.Minute1]
 		public virtual void TestConsecutivePairSocketPairSocketConnectAndShutdownEndurance01Minute()
 		{
 			var t = new SimpleUdpConnectionTest();
+			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
 			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
 			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
 			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
 			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
 			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
 			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
 			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketAShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
+			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
 			t.TestPairSocketPairSocketConnectAndPairSocketBShutdown();
 		}
 

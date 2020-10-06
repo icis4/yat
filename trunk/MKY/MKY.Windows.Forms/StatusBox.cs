@@ -321,7 +321,7 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Updates the first status line of the status box.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that debug output is written in any case.")]
 		public void SetStatus1Synchronized(string status)
 		{
 			try
@@ -331,9 +331,9 @@ namespace MKY.Windows.Forms
 				{
 					if (sinkTarget.InvokeRequired)
 					{
-						var del = new StringMethodDelegate(SetStatus1);
+						var sink = new StringMethodDelegate(SetStatus1);
 						object[] args = { status };
-						sinkTarget.Invoke(del, args);
+						sinkTarget.Invoke(sink, args);
 					}
 					else
 					{
@@ -344,6 +344,8 @@ namespace MKY.Windows.Forms
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(typeof(StatusBox), ex);
+
+				throw; // Rethrow!
 			}
 		}
 
@@ -356,7 +358,7 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Updates the second status line of the status box.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that debug output is written in any case.")]
 		public void SetStatus2Synchronized(string status)
 		{
 			try
@@ -366,9 +368,9 @@ namespace MKY.Windows.Forms
 				{
 					if (sinkTarget.InvokeRequired)
 					{
-						var del = new StringMethodDelegate(SetStatus2);
+						var sink = new StringMethodDelegate(SetStatus2);
 						object[] args = { status };
-						sinkTarget.Invoke(del, args);
+						sinkTarget.Invoke(sink, args);
 					}
 					else
 					{
@@ -379,6 +381,8 @@ namespace MKY.Windows.Forms
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(typeof(StatusBox), ex);
+
+				throw; // Rethrow!
 			}
 		}
 
@@ -392,7 +396,7 @@ namespace MKY.Windows.Forms
 		/// Closes the status box.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that debug output is written in any case.")]
 		public void CloseSynchronized(DialogResult dr = DialogResult.None)
 		{
 			try
@@ -402,9 +406,9 @@ namespace MKY.Windows.Forms
 				{
 					if (sinkTarget.InvokeRequired)
 					{
-						var del = new DialogResultMethodDelegate(Close);
+						var sink = new DialogResultMethodDelegate(Close);
 						object[] args = { dr };
-						sinkTarget.Invoke(del, args);
+						sinkTarget.Invoke(sink, args);
 					}
 					else
 					{
@@ -415,6 +419,8 @@ namespace MKY.Windows.Forms
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(typeof(StatusBox), ex);
+
+				throw; // Rethrow!
 			}
 		}
 

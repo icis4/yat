@@ -160,6 +160,7 @@ namespace MKY.IO
 				if (Equals(pathA, p))
 					return (true); // Match.
 			}
+
 			return (false); // No match.
 		}
 
@@ -208,6 +209,7 @@ namespace MKY.IO
 						return (true); // Match.
 				}
 			}
+
 			return (false); // No match.
 		}
 
@@ -224,9 +226,9 @@ namespace MKY.IO
 		/// </summary>
 		/// <remarks>
 		/// Named 'IsContained' instead of 'Contains' as <paramref name="str"/> can be any string,
-		/// not just a path string..
+		/// not just a path string.
 		/// </remarks>
-		public static bool IsContained(string str, string path)
+		public static bool IsContainedInvariant(string str, string path)
 		{
 			if (string.IsNullOrEmpty(path))
 				return (false);
@@ -334,11 +336,13 @@ namespace MKY.IO
 		/// </remarks>
 		public static string Limit(string path, int length)
 		{
-			string limitedPath;
+			if (string.IsNullOrEmpty(path))            // Path string not valid at all ?
+				return (path);
 
 			if (path.Length <= length)                 // Path string too long ?
 				return (path);
 
+			string limitedPath;
 			if (path.IndexOf(Path.VolumeSeparatorChar) < 0)
 			{                                          // Local path ?
 				limitedPath = StringEx.Left(path, 3) + StringEx.Ellipsis +
@@ -977,8 +981,33 @@ namespace MKY.IO
 			if (string.IsNullOrEmpty(path))
 				return (null);
 
+			if (File.Exists(path)) // Strip file name if path refers to a file.
+				path = Path.GetDirectoryName(path);
+
 			var di = new DirectoryInfo(path);
 			return (di.Name);
+		}
+
+		#endregion
+
+		#region TryGet...()
+
+		/// <summary>
+		/// Evaluates whether the given paths share a common parent and returns the common part.
+		/// </summary>
+		public static bool TryGetCommon(string pathA, string pathB, out string common)
+		{
+			var pcr = DoCompareDirectoryPaths(pathA, pathB);
+			if (pcr.HaveCommon)
+			{
+				common = pcr.CommonPath;
+				return (true);
+			}
+			else
+			{
+				common = null;
+				return (false);
+			}
 		}
 
 		#endregion

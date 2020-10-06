@@ -517,7 +517,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 
 		private void thread_DoSomething()
 		{
-			var random = new Random(RandomEx.NextPseudoRandomSeed());
+			var random = new Random(RandomEx.NextRandomSeed());
 
 			bool isOngoing = false;
 			do

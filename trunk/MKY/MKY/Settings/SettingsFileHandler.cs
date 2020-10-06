@@ -271,7 +271,7 @@ namespace MKY.Settings
 					result = XmlSerializerEx.DeserializeFromFileInsisting(typeof(T), alternateXmlElements, filePath);
 					success = true;
 				}
-				catch (Exception)
+				catch
 				{
 					throw; // Rethrow!
 				}

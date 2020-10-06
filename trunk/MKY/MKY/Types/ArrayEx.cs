@@ -98,7 +98,7 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Appends all values of an array to a string and returns the string.
+		/// Appends all values of an array to a comma separated string and returns it.
 		/// Values that are <c>null</c> are returned as "[null]".
 		/// </summary>
 		/// <returns>
@@ -137,7 +137,7 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Appends all values of an array to a string and returns the string.
+		/// Appends all values of an array to a comma separated string and returns it.
 		/// Values that are <c>null</c> are returned as "[null]".
 		/// </summary>
 		/// <returns>

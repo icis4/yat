@@ -574,8 +574,12 @@ namespace MKY.Win32
 						// Call SetupDiGetDeviceInterfaceDetail again. This time, pass a pointer to DetailDataBuffer and the returned required buffer size:
 						if (NativeMethods.SetupDiGetDeviceInterfaceDetail(pDeviceInfoSet, ref deviceInterfaceData, pDetailDataBuffer, bufferSize, out bufferSize, IntPtr.Zero))
 						{
-							// Skip over cbsize (4 bytes) to get the address of the devicePathName:
-							IntPtr pDevicePathName = new IntPtr(pDetailDataBuffer.ToInt32() + 4);
+							// Skip over cbsize (UInt32, 4 bytes) to get the address of the devicePathName:
+							IntPtr pDevicePathName;
+							if (IntPtr.Size == 4)                                // 32-bit system
+								pDevicePathName = new IntPtr(pDetailDataBuffer.ToInt32() + Marshal.SizeOf(deviceInterfaceData.cbSize));
+							else                                                 // 64-bit system
+								pDevicePathName = new IntPtr(pDetailDataBuffer.ToInt64() + Marshal.SizeOf(deviceInterfaceData.cbSize));
 
 							// Get the String containing the devicePathName:
 							devicePaths.Add(Marshal.PtrToStringAuto(pDevicePathName));

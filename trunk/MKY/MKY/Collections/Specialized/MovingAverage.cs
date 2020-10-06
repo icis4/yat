@@ -51,7 +51,7 @@ namespace MKY.Collections.Specialized
 		protected MovingAverage(int length)
 		{
 			if (length <= 0)
-				throw (new ArgumentOutOfRangeException("length", length, "Length must be at least 1!"));
+				throw (new ArgumentOutOfRangeException("length", length, MessageHelper.InvalidExecutionPreamble + "Length must be at least 1!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			Length = length;
 

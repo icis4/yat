@@ -229,10 +229,10 @@ namespace MKY.IO.Usb
 		protected virtual void Initialize(string path, int vendorId, int productId, string manufacturer, string product, string serial)
 		{
 			if (!IsValidVendorId(vendorId))
-				throw (new ArgumentOutOfRangeException("vendorId", vendorId, "'" + vendorId + "' is an invalid vendor ID!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+				throw (new ArgumentOutOfRangeException("vendorId", vendorId, "'" + vendorId + "' is an invalid vendor ID!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			if (!IsValidProductId(productId))
-				throw (new ArgumentOutOfRangeException("productId", productId, "'" + productId + "' is an invalid product ID!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+				throw (new ArgumentOutOfRangeException("productId", productId, "'" + productId + "' is an invalid product ID!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			this.path         = path;
 
@@ -794,7 +794,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public static bool TryParse(string s, out DeviceInfo result)
 		{
-			return (TryParseConsiderately(s, true, out result));
+			return (TryParseWithOptions(s, true, out result));
 		}
 
 		/// <summary>
@@ -809,7 +809,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public static bool TryParseVidPid(string s, out DeviceInfo result)
 		{
-			return (TryParseConsiderately(s, false, out result));
+			return (TryParseWithOptions(s, false, out result));
 		}
 
 		/// <summary>
@@ -824,11 +824,11 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public static bool TryParseVidPidSerial(string s, out DeviceInfo result)
 		{
-			return (TryParseConsiderately(s, true, out result));
+			return (TryParseWithOptions(s, true, out result));
 		}
 
 		/// <summary></summary>
-		protected static bool TryParseConsiderately(string s, bool requireSerial, out DeviceInfo result)
+		protected static bool TryParseWithOptions(string s, bool requireSerial, out DeviceInfo result)
 		{
 			if (s != null)
 				s = s.Trim();

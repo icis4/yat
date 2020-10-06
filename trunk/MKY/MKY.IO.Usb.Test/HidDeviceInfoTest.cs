@@ -205,7 +205,7 @@ namespace MKY.IO.Usb.Test
 								Assert.That(info.UsagePage, Is.EqualTo(HidDeviceInfo.AnyUsagePage));
 								Assert.That(info.UsageId,   Is.EqualTo(HidDeviceInfo.AnyUsageId));
 
-							//// See explanation at HidDeviceInfo.TryParseConsiderately().
+							//// See explanation at HidDeviceInfo.TryParseWithOptions().
 							////
 							////info = HidDeviceInfo.ParseVidPidUsage(descriptor);
 							////Assert.That(info.VendorId,  Is.EqualTo(vendorId));
@@ -256,7 +256,7 @@ namespace MKY.IO.Usb.Test
 								Assert.That(info.UsagePage, Is.EqualTo(HidDeviceInfo.AnyUsagePage));
 								Assert.That(info.UsageId,   Is.EqualTo(HidDeviceInfo.AnyUsageId));
 
-							//// See explanation at HidDeviceInfo.TryParseConsiderately().
+							//// See explanation at HidDeviceInfo.TryParseWithOptions().
 							////
 							////info = HidDeviceInfo.ParseVidPidSerialUsage(descriptor);
 							////Assert.That(info.VendorId,  Is.EqualTo(vendorId));
@@ -333,7 +333,7 @@ namespace MKY.IO.Usb.Test
 							{
 								dummyInfoToForceException = HidDeviceInfo.ParseVidPid(descriptor);
 
-							//// See explanation at HidDeviceInfo.TryParseConsiderately().
+							//// See explanation at HidDeviceInfo.TryParseWithOptions().
 							////
 							////if (!matchUsage)
 							////	dummyInfoToForceException = HidDeviceInfo.ParseVidPid(descriptor);
@@ -344,7 +344,7 @@ namespace MKY.IO.Usb.Test
 							{
 								dummyInfoToForceException = HidDeviceInfo.ParseVidPidSerial(descriptor);
 
-							//// See explanation at HidDeviceInfo.TryParseConsiderately().
+							//// See explanation at HidDeviceInfo.TryParseWithOptions().
 							////
 							////if (!matchUsage)
 							////	dummyInfoToForceException = HidDeviceInfo.ParseVidPidSerial(descriptor);

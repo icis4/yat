@@ -82,7 +82,7 @@ namespace MKY.IO.Usb
 		{
 			// Ensure that report length fits:
 			if (report.Length > MaxByteLength)
-				throw (new ArgumentException("Length of input report exceeds the device's capabilities!", "report")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+				throw (new ArgumentException("Length of input report exceeds the device's capabilities!", "report")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			// If requested, get the ID which is located in the first byte of the report:
 			if (format.UseId)
@@ -102,7 +102,7 @@ namespace MKY.IO.Usb
 				for (int i = format.HeaderByteLength; i < (format.HeaderByteLength + payloadByteLength); i++)
 				{
 					if (i >= report.Length)
-						throw (new ArgumentException("The reported payload length exceeds the length of the report!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+						throw (new ArgumentException("The reported payload length exceeds the length of the report!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 					payload.Add(report[i]);
 				}

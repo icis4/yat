@@ -22,7 +22,9 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Threading;
 
 using MKY.Diagnostics;
@@ -35,6 +37,7 @@ namespace MKY
 	/// </summary>
 	/// <remarks>
 	/// Based on Brian Lambert's "A simple and totally thread-safe implementation of IDisposable".
+	/// https://docs.microsoft.com/en-us/archive/blogs/blambert/a-simple-and-totally-thread-safe-implementation-of-idisposable
 	/// </remarks>
 	public abstract class DisposableBase : IDisposable, IDisposableEx
 	{
@@ -115,11 +118,15 @@ namespace MKY
 		/// </remarks>
 		~DisposableBase()
 		{
+			DebugMessage("Finalizing...");
+
 			DebugEventManagement.DebugWriteAllEventRemains(this);
 
 			Dispose(false);
 
 			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
+
+			DebugMessage("...successfully finalized.");
 		}
 
 	#endif // DEBUG
@@ -128,7 +135,7 @@ namespace MKY
 		/// Asserts that disposal of object is neither ongoing nor has already completed.
 		/// </summary>
 		/// <remarks>
-		/// Not named "AssertIsUndisposed" as that sounds more like "check whether assert is undisposed".
+		/// Not named 'AssertIsUndisposed' as that sounds more like "check whether assert is undisposed".
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Undisposed", Justification = "See remarks at 'IsUndisposed'.")]
 		protected virtual void AssertUndisposed()
@@ -136,6 +143,44 @@ namespace MKY
 			if (!IsUndisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object is being or has already been disposed!"));
 		}
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		private void DebugMessage(string format, params object[] args)
+		{
+			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+		}
+
+		/// <remarks>
+		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named 'Message' for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
+		/// </remarks>
+		[Conditional("DEBUG")]
+		private void DebugMessage(string message)
+		{
+			Debug.WriteLine
+			(
+				string.Format
+				(
+					CultureInfo.CurrentCulture,
+					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
+					GetType(),
+					"",
+					"",
+					message
+				)
+			);
+		}
+
+		#endregion
 	}
 }
 

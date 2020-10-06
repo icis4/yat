@@ -24,6 +24,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -37,22 +38,50 @@ namespace MKY.Net
 	/// </summary>
 	public static class Local
 	{
+		/// <summary></summary>
+		private const int FindAvailableTcpPortAttempts = 7; // Should be sufficient, see 'TcpListener' remarks below.
+
+		/// <summary></summary>
+		private static string FindAvailableTcpPortAttemptsErrorMessage
+		{
+			get
+			{
+				var sb = new StringBuilder();
+
+				sb.Append(FindAvailableTcpPortAttempts);
+				sb.Append(" attempts to retrieve an available TCP port have failed");
+
+				return (sb.ToString());
+			}
+		}
+
+		/// <summary>
+		/// Finds an available TCP port chosen by the system or the system's TCP stack.
+		/// </summary>
+		public static int FindAvailableTcpPort()
+		{
+			int result;
+
+			if (TryFindAvailableTcpPort(out result))
+				return (result);
+			else
+				throw (new IOException(FindAvailableTcpPortAttemptsErrorMessage));
+		}
+
 		/// <summary>
 		/// Finds an available TCP port chosen by the system or the system's TCP stack.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public static bool TryFindAvailableTcpPort(out int result)
 		{
-			const int Attempts = 7; // Should be sufficient...
+			Exception exLast = null;
 
-			Exception exInner = null;
-
-			for (int i = 1; i <= Attempts; i++)
+			for (int i = 1; i <= FindAvailableTcpPortAttempts; i++)
 			{
 				try
-				{
-					var listener = new TcpListener(IPAddress.Loopback, 0);
-					listener.Start();
+				{                                                          // "...you can specify 0 for the port number.
+					var listener = new TcpListener(IPAddress.Loopback, 0); // "In this case, the service provider will assign
+					listener.Start();                                      //  an available port number between 1024 and 5000."
 					result = ((IPEndPoint)listener.LocalEndpoint).Port;
 					listener.Stop();
 					return (true);
@@ -65,27 +94,19 @@ namespace MKY.Net
 					sb.Append(Int32Ex.ToEnglishSuffix(i));
 					sb.Append(" attempt to retrieve an available TCP port has failed");
 
-					if (i < Attempts)
+					if (i < FindAvailableTcpPortAttempts)
 						sb.Append(", trying again...");
 
 					DebugEx.WriteException(typeof(Local), ex, sb.ToString());
 
-					exInner = ex;
+					exLast = ex;
 				}
 			}
 
-			// Local scope for dedicated 'StringBuilder':
-			{
-				var sb = new StringBuilder();
+			DebugEx.WriteException(typeof(Local), exLast, FindAvailableTcpPortAttemptsErrorMessage);
 
-				sb.Append(Attempts);
-				sb.Append(" attempt to retrieve an available TCP port have failed");
-
-				DebugEx.WriteException(typeof(Local), exInner, sb.ToString());
-
-				result = 0;
-				return (false);
-			}
+			result = 0;
+			return (false);
 		}
 	}
 }

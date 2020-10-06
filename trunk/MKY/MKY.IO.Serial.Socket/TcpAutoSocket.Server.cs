@@ -21,6 +21,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of a static list of all sockets:
+////#define DEBUG_STATIC_SOCKET_LIST // Attention: Must also be activated in TcpAutoSocket.[Client].cs !!
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -29,6 +43,7 @@
 using System;
 //// 'System.Net' as well as 'ALAZ.SystemEx.NetEx' are explicitly used for more obvious distinction.
 //// 'System.Net.Sockets' including.
+using System.Threading;
 
 using MKY.Net;
 
@@ -46,13 +61,17 @@ namespace MKY.IO.Serial.Socket
 		// Non-Public Methods
 		//==========================================================================================
 
-		private void CreateServer(IPNetworkInterfaceEx localInterface, int localPort)
+		private void CreateServerSynchronized(IPNetworkInterfaceEx localInterface, int localPort)
 		{
-			DisposeServer();
-
-			lock (this.socketSyncObj)
+			lock (this.stateSyncObj)
 			{
+				DisposeServerSynchronized();
+
 				this.server = new TcpServer(this.instanceId, localInterface, localPort);
+
+			#if DEBUG_STATIC_SOCKET_LIST
+				staticSocketList.Add(this.server);
+			#endif
 
 				this.server.IOChanged    += server_IOChanged;
 				this.server.IOWarning    += server_IOWarning;
@@ -62,9 +81,9 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
-		private void DisposeServer()
+		private void DisposeServerSynchronized()
 		{
-			lock (this.socketSyncObj)
+			lock (this.stateSyncObj)
 			{
 				if (this.server != null)
 				{
@@ -89,53 +108,93 @@ namespace MKY.IO.Serial.Socket
 
 		private void server_IOChanged(object sender, EventArgs<DateTime> e)
 		{
-			switch (GetStateSynchronized())
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
+
+			Monitor.Enter(this.stateSyncObj); // Ensure state is handled atomically. Not using
+			switch (GetStateSynchronized())   // lock() for being able to selectively release.
 			{
 				case SocketState.StartingListening:
 				{
 					bool isStarted = false;
-					lock (this.socketSyncObj)
-					{
-						if (this.server != null)
-							isStarted = this.server.IsStarted;
-					}
+					if (this.server != null)
+						isStarted = this.server.IsStarted;
 
-					if (isStarted)                    // If I/O changed during startup,
-					{                                 //   check for start and change state.
-						SetStateSynchronizedAndNotify(SocketState.Listening);
+					// If I/O changed during starting, change state if started:
+
+					if (isStarted)
+					{
+						DateTime timeStamp;
+						var stateHasChanged = SetStateSynchronized(SocketState.Listening, out timeStamp, notify: false); // Notify outside lock!
+						Monitor.Exit(this.stateSyncObj);
+						if (stateHasChanged)
+							NotifyStateHasChanged(timeStamp); // Notify outside lock!
+					}
+					else
+					{
+						Monitor.Exit(this.stateSyncObj);
 					}
 
 					break;
 				}
+
 				case SocketState.Listening:
 				{
-					int connectedClientCount = 0;
-					lock (this.socketSyncObj)
-					{
-						if (this.server != null)
-							connectedClientCount = this.server.ConnectedClientCount;
-					}
+					bool isConnected = false;
+					if (this.server != null)
+						isConnected = this.server.IsConnected;
 
-					if (connectedClientCount > 0)     // If I/O changed during listening, change state
-					{                                 //   to accepted if clients are connected.
-						SetStateSynchronizedAndNotify(SocketState.Accepted);
+					// If I/O changed during listening, change state if connected:
+
+					if (isConnected)
+					{
+						DateTime timeStamp;
+						var stateHasChanged = SetStateSynchronized(SocketState.Accepted, out timeStamp, notify: false); // Notify outside lock!
+						Monitor.Exit(this.stateSyncObj);
+						if (stateHasChanged)
+							NotifyStateHasChanged(timeStamp); // Notify outside lock!
+					}
+					else
+					{
+						Monitor.Exit(this.stateSyncObj);
+
+						// Note that state change on error is handled further below.
 					}
 
 					break;
 				}
+
 				case SocketState.Accepted:
 				{
-					int connectedClientCount = 0;
-					lock (this.socketSyncObj)
+					bool isConnected = false;
+					if (this.server != null)
+						isConnected = this.server.IsConnected;
+
+					// If I/O changed during server operation, simply forward or change state if disconnected:
+
+					if (isConnected)
 					{
-						if (this.server != null)
-							connectedClientCount = this.server.ConnectedClientCount;
+						Monitor.Exit(this.stateSyncObj);
+
+						OnIOChanged(e); // Raise outside lock!
+					}
+					else
+					{
+						DateTime timeStamp;
+						var stateHasChanged = SetStateSynchronized(SocketState.Listening, out timeStamp, notify: false); // Notify outside lock!
+						Monitor.Exit(this.stateSyncObj);
+						if (stateHasChanged)
+							NotifyStateHasChanged(timeStamp); // Notify outside lock!
+
+						// Note that state change on error is handled further below.
 					}
 
-					if (connectedClientCount <= 0)    // If I/O changed during accepted, change state
-					{                                 //   to listening if no clients are connected.
-						SetStateSynchronizedAndNotify(SocketState.Listening);
-					}
+					break;
+				}
+
+				default:
+				{
+					Monitor.Exit(this.stateSyncObj);
 
 					break;
 				}
@@ -150,11 +209,23 @@ namespace MKY.IO.Serial.Socket
 
 		private void server_IOError(object sender, IOErrorEventArgs e)
 		{
-			switch (GetStateSynchronized())
+			if (IsInDisposal) // Ensure to not handle event during closing anymore.
+				return;
+
+			Monitor.Enter(this.stateSyncObj); // Ensure state is handled atomically. Not using
+			switch (GetStateSynchronized())   // lock() for being able to selectively release.
 			{
-				case SocketState.StartingListening: // In case of error during startup,
-				{                                   //   increment start cycles and
-					RequestTryAgain();              //   continue depending on count
+				case SocketState.StartingListening:
+				{
+					DateTime timeStamp;
+					var stateHasChanged = SetStateSynchronized(SocketState.StartingConnecting, out timeStamp, notify: false); // Notify outside lock!
+					Monitor.Exit(this.stateSyncObj);
+					if (stateHasChanged)
+						NotifyStateHasChanged(timeStamp); // Notify outside lock!
+
+					// Continue depending on start cycle count:
+					TryStartConnectingAgain(); // Invoke outside lock!
+
 					break;
 				}
 
@@ -163,19 +234,33 @@ namespace MKY.IO.Serial.Socket
 				{
 					if (e.Severity == ErrorSeverity.Acceptable)
 					{
-						DisposeServer();            // In case of error during server operation,
-						StartConnecting();          //   restart AutoSocket
+						DisposeServerSynchronized();
+
+						DateTime timeStamp;
+						var stateHasChanged = SetStateSynchronized(SocketState.StartingConnecting, out timeStamp, notify: false); // Notify outside lock!
+						Monitor.Exit(this.stateSyncObj);
+						if (stateHasChanged)
+							NotifyStateHasChanged(timeStamp); // Notify outside lock!
+
+						// Restart AutoSocket:
+						StartConnecting(); // Invoke outside lock!
 					}
 					else
 					{
-						OnIOError(e);
+						Monitor.Exit(this.stateSyncObj);
+
+						OnIOError(e); // Raise outside lock!
 					}
+
 					break;
 				}
 
 				default:
 				{
-					OnIOError(e);
+					Monitor.Exit(this.stateSyncObj);
+
+					OnIOError(e); // Raise outside lock!
+
 					break;
 				}
 			}

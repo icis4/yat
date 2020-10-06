@@ -28,8 +28,11 @@
 
 #if (DEBUG)
 
-	// Enable debugging of thread state:
-////#define DEBUG_THREAD_STATE
+	// Enable debugging of state:
+////#define DEBUG_STATE
+
+	// Enable debugging of thread:
+////#define DEBUG_THREAD
 
 #endif // DEBUG
 
@@ -158,7 +161,7 @@ namespace MKY.IO.Usb
 		// Static Fields
 		//==========================================================================================
 
-		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
+		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
 
 		#endregion
 
@@ -460,16 +463,21 @@ namespace MKY.IO.Usb
 		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			this.eventHelper.DiscardAllEventsAndExceptions();
+			if (this.eventHelper != null) // Possible when called by finalizer (non-deterministic).
+				this.eventHelper.DiscardAllEventsAndExceptions();
 
 			UnregisterAndDetachStaticDeviceEventHandlers();
 
 			// Dispose of managed resources:
 			if (disposing)
 			{
+				DebugMessage("Disposing...");
+
 				// In the 'normal' case, the items have already been disposed of in Close().
 				StopReceiveThread();
 				CloseStream();
+
+				DebugMessage("...successfully disposed.");
 			}
 
 			base.Dispose(disposing);
@@ -882,7 +890,7 @@ namespace MKY.IO.Usb
 			{
 				if (this.receiveThread != null)
 				{
-					DebugThreadState("ReceiveThread() gets stopped...");
+					DebugThread("ReceiveThread() gets stopped...");
 
 					this.receiveThreadRunFlag = false;
 
@@ -901,19 +909,19 @@ namespace MKY.IO.Usb
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								DebugThreadState("...failed! Aborting...");
-								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
+								DebugThread("...failed! Aborting...");
+								DebugThread("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
 
 								isAborting = true;          // Thread.Abort() must not be used whenever possible!
 								this.receiveThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
-							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThread("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
 						if (!isAborting)
-							DebugThreadState("...successfully stopped.");
+							DebugThread("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -921,7 +929,7 @@ namespace MKY.IO.Usb
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThread("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.receiveThread = null;
@@ -1082,7 +1090,7 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		private void ReceiveThread()
 		{
-			DebugThreadState("ReceiveThread() has started.");
+			DebugThread("ReceiveThread() has started.");
 
 			try
 			{
@@ -1136,7 +1144,7 @@ namespace MKY.IO.Usb
 				Thread.ResetAbort();
 			}
 
-			DebugThreadState("ReceiveThread() has terminated.");
+			DebugThread("ReceiveThread() has terminated.");
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
@@ -1232,14 +1240,16 @@ namespace MKY.IO.Usb
 		#endif
 
 			lock (this.stateSyncObj)
+			{
 				this.state = state;
 
-		#if (DEBUG)
-			if (state != oldState)
-				DebugMessage("State has changed from {0} to {1}.", oldState, state);
-			else
-				DebugMessage("State already is {0}.", oldState);
-		#endif
+			#if (DEBUG) // Inside lock to prevent potential mixup in debug output.
+				if (state != oldState)
+					DebugMessage("State has changed from {0} to {1}.", oldState, state);
+				else
+					DebugState("State already is {0}.", oldState); // State non-changes shall only be output when explicitly activated.
+			#endif
+			}
 		}
 
 		#endregion
@@ -1378,9 +1388,9 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named 'Message' for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
@@ -1404,8 +1414,17 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
-		[Conditional("DEBUG_THREAD_STATE")]
-		private void DebugThreadState(string message)
+		[Conditional("DEBUG_STATE")]
+		private void DebugState(string format, params object[] args)
+		{
+			DebugMessage(format, args);
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_THREAD")]
+		private void DebugThread(string message)
 		{
 			DebugMessage(message);
 		}

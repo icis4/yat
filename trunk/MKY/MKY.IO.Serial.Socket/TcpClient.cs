@@ -28,11 +28,17 @@
 
 #if (DEBUG)
 
-	// Enable debugging of thread state:
-////#define DEBUG_THREAD_STATE // Attention: Must also be activated in TcpClient.Send.cs !!
+	// Enable debugging of state:
+////#define DEBUG_STATE
+
+	// Enable debugging of thread:
+////#define DEBUG_THREADS // Attention: Must also be activated in TcpClient.Send.cs !!
 
 	// Enable debugging of sending:
 ////#define DEBUG_SEND // Attention: Must also be activated in TcpClient.Send.cs !!
+
+	// Enable debugging of a static list of all sockets:
+////#define DEBUG_STATIC_SOCKET_LIST
 
 	// Enable debugging of the ALAZ socket connection:
 ////#define DEBUG_SOCKET_CONNECTION
@@ -134,6 +140,9 @@ namespace MKY.IO.Serial.Socket
 		private const int SendQueueFixedCapacity       = ALAZEx.MessageBufferSizeDefault;
 		private const int DataSentQueueInitialCapacity = ALAZEx.MessageBufferSizeDefault;
 
+		private const int DefaultConnectingTimeout = 5000; // Best guess... Same as 'MKY.IO.Serial.Socket.Test.Utilities.WaitTimeoutForStateChange'.
+		private const int DefaultStoppingTimeout = 2000; // Best guess...
+
 		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
 
 		#endregion
@@ -143,7 +152,11 @@ namespace MKY.IO.Serial.Socket
 		// Static Fields
 		//==========================================================================================
 
-		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
+		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
+
+	#if DEBUG_STATIC_SOCKET_LIST
+		private static List<ALAZ.SystemEx.NetEx.SocketsEx.SocketClient> staticSocketList = new List<ALAZ.SystemEx.NetEx.SocketsEx.SocketClient>();
+	#endif
 
 		#endregion
 
@@ -166,7 +179,8 @@ namespace MKY.IO.Serial.Socket
 
 		private SocketState state = SocketState.Reset;
 		private int stateCount; // = 0;
-		private bool stateTokenForShutdown; // = false;
+		private bool stateTokenForStopAndDispose; // = false;
+		private SocketState stateIntendedAfterStopAndDispose;
 		private object stateSyncObj = new object();
 
 		private ALAZ.SystemEx.NetEx.SocketsEx.SocketClient socket;
@@ -193,8 +207,11 @@ namespace MKY.IO.Serial.Socket
 		private Thread dataSentThread;
 		private object dataSentThreadSyncObj = new object();
 
-		private Timer reconnectTimer;
-		private object reconnectTimerSyncObj = new object();
+		private Timer connectingTimeout;
+		private object connectingTimeoutSyncObj = new object();
+
+		private Timer reconnectDelay;
+		private object reconnectDelaySyncObj = new object();
 
 		#endregion
 
@@ -230,7 +247,8 @@ namespace MKY.IO.Serial.Socket
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary>Creates a TCP/IP client socket.</summary>
+		/// <summary>Creates a TCP/IP client.</summary>
+		/// <remarks>This overload creates a TCP/IP client with <see cref="AutoReconnect"/> disabled.</remarks>
 		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
 		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
 		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
@@ -239,7 +257,8 @@ namespace MKY.IO.Serial.Socket
 		{
 		}
 
-		/// <summary>Creates a TCP/IP client socket.</summary>
+		/// <summary>Creates a TCP/IP client.</summary>
+		/// <remarks>This overload creates a TCP/IP client with <see cref="AutoReconnect"/> disabled.</remarks>
 		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
@@ -248,7 +267,8 @@ namespace MKY.IO.Serial.Socket
 		{
 		}
 
-		/// <summary>Creates a TCP/IP client socket.</summary>
+		/// <summary>Creates a TCP/IP client.</summary>
+		/// <remarks>This overload creates a TCP/IP client with <see cref="AutoReconnect"/> disabled.</remarks>
 		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
 		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
 		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
@@ -257,7 +277,8 @@ namespace MKY.IO.Serial.Socket
 		{
 		}
 
-		/// <summary>Creates a TCP/IP client socket.</summary>
+		/// <summary>Creates a TCP/IP client.</summary>
+		/// <remarks>This overload creates a TCP/IP client with <see cref="AutoReconnect"/> disabled.</remarks>
 		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
@@ -266,7 +287,7 @@ namespace MKY.IO.Serial.Socket
 		{
 		}
 
-		/// <summary>Creates a TCP/IP client socket.</summary>
+		/// <summary>Creates a TCP/IP client.</summary>
 		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
 		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
 		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
@@ -275,7 +296,7 @@ namespace MKY.IO.Serial.Socket
 		{
 		}
 
-		/// <summary>Creates a TCP/IP client socket.</summary>
+		/// <summary>Creates a TCP/IP client.</summary>
 		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
@@ -284,7 +305,7 @@ namespace MKY.IO.Serial.Socket
 		{
 		}
 
-		/// <summary>Creates a TCP/IP client socket.</summary>
+		/// <summary>Creates a TCP/IP client.</summary>
 		/// <exception cref="ArgumentException"><paramref name="remoteHost"/> is <see cref="IPHost.Explicit"/>.</exception>
 		/// <exception cref="ArgumentException"><paramref name="localInterface"/> is <see cref="IPNetworkInterface.Explicit"/>.</exception>
 		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
@@ -293,7 +314,7 @@ namespace MKY.IO.Serial.Socket
 		{
 		}
 
-		/// <summary>Creates a TCP/IP client socket.</summary>
+		/// <summary>Creates a TCP/IP client.</summary>
 		/// <exception cref="ArgumentNullException"><paramref name="remoteHost"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="localInterface"/> is <c>null</c>.</exception>
 		/// <exception cref="ArgumentException">Mismatching <see cref="System.Net.Sockets.AddressFamily"/> of <paramref name="remoteHost"/> and <paramref name="localInterface"/>.</exception>
@@ -333,13 +354,14 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "isStoppingAndDisposingLock", Justification = "See comments below.")]
 		protected override void Dispose(bool disposing)
 		{
-			this.eventHelper.DiscardAllEventsAndExceptions();
-
-			DebugMessage("Disposing...");
+			if (this.eventHelper != null) // Possible when called by finalizer (non-deterministic).
+				this.eventHelper.DiscardAllEventsAndExceptions();
 
 			// Dispose of managed resources:
 			if (disposing)
 			{
+				DebugMessage("Disposing...");
+
 				// In the 'normal' case, the items have already been disposed of, e.g. in Stop() or OnDisconnected().
 				DisposeAsyncWithoutNotify(); // Must by async when called from main thread or ALAZ event callback! See remarks of the header of this class for details.
 
@@ -347,9 +369,11 @@ namespace MKY.IO.Serial.Socket
 				// ref exceptions during closing, due to the fact that ALAZ closes/disconnects
 				// asynchronously! No better solution has been found to this issue. And, who
 				// cares if these two locks don't get disposed (except FxCop ;-).
+
+				DebugMessage("...successfully disposed.");
 			}
 
-			DebugMessage("...successfully disposed.");
+		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
 		}
 
 		#endregion
@@ -369,6 +393,17 @@ namespace MKY.IO.Serial.Socket
 			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.remoteHost);
+			}
+		}
+
+		/// <remarks>Convenience method, always returns a valid value, at least <![CDATA["<undefined>"]]>.</remarks>
+		protected virtual string RemoteHostEndpointString
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				return ((RemoteHost != null) ? (RemoteHost.ToEndpointAddressString()) : "<undefined>"); // Lower case same as "localhost"
 			}
 		}
 
@@ -514,19 +549,20 @@ namespace MKY.IO.Serial.Socket
 				DebugMessage("Resolving host address...");
 				if (this.remoteHost.TryResolve())
 				{
-					SetStateSynchronized(SocketState.Connecting, notify: false); // Notify outside lock!
+					DateTime timeStamp;
+					SetStateSynchronized(SocketState.Connecting, out timeStamp, notify: false); // Notify outside lock!
 					Monitor.Exit(this.stateSyncObj);
-					NotifyStateHasChanged(); // Notify outside lock! Has changed for sure.
+					NotifyStateHasChanged(timeStamp); // Notify outside lock! Has changed for sure.
 
 					DebugMessage("...starting...");
-					DoStart();
-					return (true);
+					return (DoStart());
 				}
 				else
 				{
-					SetStateSynchronized(SocketState.Error, notify: false); // Notify outside lock!
+					DateTime timeStamp;
+					SetStateSynchronized(SocketState.Error, out timeStamp, notify: false); // Notify outside lock!
 					Monitor.Exit(this.stateSyncObj);
-					NotifyStateHasChanged(); // Notify outside lock! Has changed for sure.
+					NotifyStateHasChanged(timeStamp); // Notify outside lock! Has changed for sure.
 
 					DebugMessage("...failed");
 					OnIOError(new IOErrorEventArgs(ErrorSeverity.Severe, "Failed to resolve host address of " + this.remoteHost.ToString() + "!"));
@@ -541,9 +577,35 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
-		private void DoStart()
+		private bool DoStart()
 		{
-			CreateAndStartSocketAndThreads();
+			if (AutoReconnectIsEnabledAndAllowed)
+			{
+				TryCreateAndStartSocketAndThreads(); // Don't care about result, success will be checked on event or timer callback.
+				return (true);
+			}
+			else
+			{
+				return (TryCreateAndStartSocketAndThreads());
+			}
+		}
+
+		private bool TryCreateAndStartSocketAndThreads()
+		{
+			try
+			{
+				CreateAndStartSocketAndThreads();
+				return (true);
+			}
+			catch (Exception ex)
+			{
+				var message = "Failed to start TCP/IP client " + ToShortEndPointString() + "! Socket error message: " + ex.Message;
+
+				DebugEx.WriteException(GetType(), ex, message);
+
+				OnIOError(new IOErrorEventArgs(ErrorSeverity.Severe, message));
+				return (false);
+			}
 		}
 
 		/// <summary></summary>
@@ -556,20 +618,21 @@ namespace MKY.IO.Serial.Socket
 			if (IsStarted)
 			{
 				// Check whether token is available:
-				if (!this.stateTokenForShutdown)
+				if (!this.stateTokenForStopAndDispose)
 				{
-					int expectedStateCount;
-					SetStateSynchronized(SocketState.Stopping, out expectedStateCount, notify: false); // Notify outside lock!
-					this.stateTokenForShutdown = true; // Take token inside lock!
+					DateTime timeStamp;
+					int stateCountExpectedOnAsyncCallback;
+					SetStateSynchronized(SocketState.Stopping, out timeStamp, out stateCountExpectedOnAsyncCallback, notify: false); // Notify outside lock!
+					this.stateTokenForStopAndDispose = true; // Take token inside lock!
 					Monitor.Exit(this.stateSyncObj);
-					NotifyStateHasChanged(); // Notify outside lock! Has changed for sure.
+					NotifyStateHasChanged(timeStamp); // Notify outside lock! Has changed for sure.
 
 					DebugMessage("Stopping...");
-					DoStopOrDisposeAsync(expectedStateCount, SocketState.Reset, notify: true); // Must by async when called from main thread or ALAZ event callback! See remarks of the header of this class for details.
+					DoStopAndDisposeAsync(stateCountExpectedOnAsyncCallback, SocketState.Reset, notify: true); // Must by async when called from main thread or ALAZ event callback! See remarks of the header of this class for details.
 				}
 				else
 				{
-					DebugMessage("Stop() requested but shutdown is already ongoing.");
+					DebugMessage("Stop() requested while shutdown is already ongoing.");
 					Monitor.Exit(this.stateSyncObj);
 				}
 			}
@@ -587,19 +650,20 @@ namespace MKY.IO.Serial.Socket
 			if (GetStateSynchronized() != SocketState.Reset)
 			{
 				// Check whether token is available:
-				if (!this.stateTokenForShutdown)
+				if (!this.stateTokenForStopAndDispose)
 				{
-					int expectedStateCount;
-					SetStateSynchronized(SocketState.Stopping, out expectedStateCount, notify: false); // Without notify!
-					this.stateTokenForShutdown = true; // Take token inside lock!
+					DateTime timeStamp;
+					int stateCountExpectedOnAsyncCallback;
+					SetStateSynchronized(SocketState.Stopping, out timeStamp, out stateCountExpectedOnAsyncCallback, notify: false); // Without notify!
+					this.stateTokenForStopAndDispose = true; // Take token inside lock!
 					Monitor.Exit(this.stateSyncObj);
 
-					DebugMessage("Disposing...");
-					DoStopOrDisposeAsync(expectedStateCount, SocketState.Reset, notify: false); // Without notify! Must by async when called from main thread or ALAZ event callback! See remarks of the header of this class for details.
+					DebugMessage("Invoking Dispose()..."); // Not outputting "Disposing..." as that message will be output by Dispose(bool).
+					DoStopAndDisposeAsync(stateCountExpectedOnAsyncCallback, SocketState.Reset, notify: false); // Without notify! Must by async when called from main thread or ALAZ event callback! See remarks of the header of this class for details.
 				}
 				else
 				{
-					DebugMessage("Dispose() requested but shutdown is already ongoing.");
+					DebugMessage("Dispose() requested while shutdown is already ongoing.");
 					Monitor.Exit(this.stateSyncObj);
 				}
 			}
@@ -610,14 +674,26 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
-		private void DoStopOrDisposeAsync(int expectedStateCount, SocketState intendedState, bool notify)
+		private void DoStopAndDisposeAsync(int stateCountExpectedOnAsyncCallback, SocketState stateIntendedAfterStopAndDispose, bool notify)
 		{
-			DebugSocketShutdown("Stopping reconnect timer...");
-			StopReconnectTimer();
+			DebugSocketShutdown("Stopping timers...");
+			StopConnectingTimeout();
+			StopReconnectDelay();
 
-			// Dispose of ALAZ socket in any case. A new socket will be created on next Start().
-			DebugSocketShutdown("...and socket and connection and threads async...");
-			ShutdownSocketAndConnectionAndThreadsAndTriggerAutoReconnectIfGivenAsync(expectedStateCount, intendedState, notify); // Must by async when called from main thread or ALAZ event callback! See remarks of the header of this class for details.
+			// Stop and dispose of ALAZ socket in any case. A new socket will be created on next Start().
+			DebugSocketShutdown("...and socket and threads async...");
+			StopAndDisposeSocketAndThreadsAsync(stateCountExpectedOnAsyncCallback, stateIntendedAfterStopAndDispose, notify); // Must by async when called from main thread or ALAZ event callback! See remarks of the header of this class for details.
+		}
+
+		private void DoStopAndDisposeSync(SocketState stateIntendedAfterStopAndDispose, bool notify)
+		{
+			DebugSocketShutdown("Stopping timers...");
+			StopConnectingTimeout();
+			StopReconnectDelay();
+
+			// Stop and dispose of ALAZ socket in any case. A new socket will be created on next Start().
+			DebugSocketShutdown("...and socket and threads sync...");
+			StopAndDisposeSocketAndThreadsSync(stateIntendedAfterStopAndDispose, notify);
 		}
 
 		#endregion
@@ -633,13 +709,13 @@ namespace MKY.IO.Serial.Socket
 				return (this.state);
 		}
 
-		private bool SetStateSynchronized(SocketState state, bool notify)
+		private bool SetStateSynchronized(SocketState state, out DateTime timeStamp, bool notify)
 		{
 			int stateCount;
-			return (SetStateSynchronized(state, out stateCount, notify));
+			return (SetStateSynchronized(state, out timeStamp, out stateCount, notify));
 		}
 
-		private bool SetStateSynchronized(SocketState state, out int stateCount, bool notify)
+		private bool SetStateSynchronized(SocketState state, out DateTime timeStamp, out int stateCount, bool notify)
 		{
 			SocketState oldState;
 
@@ -647,28 +723,30 @@ namespace MKY.IO.Serial.Socket
 			{
 				oldState = this.state;
 				this.state = state;
+				timeStamp = DateTime.Now; // Inside lock for accuracy.
+
 				unchecked {
 					this.stateCount++; // Loop-around is OK.
 				}
 				stateCount = this.stateCount;
+
+			#if (DEBUG) // Inside lock to prevent potential mixup in debug output.
+				if (state != oldState)
+					DebugMessage("State has changed from {0} to {1}.", oldState, state);
+				else
+					DebugState("State already is {0}.", oldState); // State non-changes shall only be output when explicitly activated.
+			#endif
 			}
 
-		#if (DEBUG)
-			if (state != oldState)
-				DebugMessage("State has changed from {0} to {1}.", oldState, state);
-			else
-				DebugMessage("State already is {0}.", oldState);
-		#endif
-
-			if (notify && (state != oldState))
-				NotifyStateHasChanged();
+			if (notify && (state != oldState)) // Outside lock is OK, only stating change, not state.
+				NotifyStateHasChanged(timeStamp);
 
 			return (state != oldState);
 		}
 
-		private void NotifyStateHasChanged()
+		private void NotifyStateHasChanged(DateTime timeStamp)
 		{
-			OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
+			OnIOChanged(new EventArgs<DateTime>(timeStamp));
 		}
 
 		#endregion
@@ -699,61 +777,69 @@ namespace MKY.IO.Serial.Socket
 					Timeout.Infinite
 				);
 
+			#if DEBUG_STATIC_SOCKET_LIST
+				staticSocketList.Add(this.socket);
+			#endif
+
 				this.socket.AddConnector("MKY.IO.Serial.Socket.TcpClient", new System.Net.IPEndPoint(this.remoteHost.Address, this.remotePort), new System.Net.IPEndPoint(this.localInterface.Address, 0));
 				this.socket.Start(); // The ALAZ socket will be started asynchronously.
 			}
+
+			StartConnectingTimeout(); // Good enough to start timer after invoking Start().
 		}
 
 		/// <remarks>
 		/// See remarks of the header of this class for details.
 		/// </remarks>
-		/// <remarks>
-		/// Name shall make obvious what happens in detail.
-		/// Named "shutdown" to make obvious this is not the same as <see cref="Stop"/>.
-		/// </remarks>
-		private void ShutdownSocketAndConnectionAndThreadsAndTriggerAutoReconnectIfGivenAsync(int expectedStateCount, SocketState intendedState, bool notify)
+		private void StopAndDisposeSocketAndThreadsAsync(int stateCountExpectedOnAsyncCallback, SocketState stateIntendedAfterStopAndDispose, bool notify)
 		{
-			var asyncInvoker = new Action<int, SocketState, bool>(ShutdownSocketAndConnectionAndThreadsAndTriggerAutoReconnectIfGiven);
-			asyncInvoker.BeginInvoke(expectedStateCount, intendedState, notify, null, null);
+			var asyncInvoker = new Action<int, SocketState, bool>(StopAndDisposeSocketAndThreadsAsyncCallback);
+			asyncInvoker.BeginInvoke(stateCountExpectedOnAsyncCallback, stateIntendedAfterStopAndDispose, notify, null, null);
 
 			Thread.Sleep(0); // Actively yield to other threads to prioritize async stopping.
 		}
 
-		/// <remarks>
-		/// Name shall make obvious what happens in detail.
-		/// Named "shutdown" to make obvious this is not the same as <see cref="Stop"/>.
-		/// </remarks>
-		private void ShutdownSocketAndConnectionAndThreadsAndTriggerAutoReconnectIfGiven(int expectedStateCount, SocketState intendedState, bool notify)
+		private void StopAndDisposeSocketAndThreadsAsyncCallback(int stateCountExpectedOnAsyncCallback, SocketState stateIntendedAfterStopAndDispose, bool notify)
 		{
 		////if (!IsUndisposed) must not be checked for, as this async call will also be invoked by Dispose()!
 		////	return;
 
 			lock (this.stateSyncObj) // Ensure state is handled atomically.
 			{
-				if (!this.stateTokenForShutdown)            { return; } // Skip if state no longer matches.
-				if (this.stateCount != expectedStateCount) { return; } // Skip if state count no longer matches.
+				// Skip if state no longer matches:
+				if (!this.stateTokenForStopAndDispose)
+				{
+					DebugSocketShutdown("StopAndDisposeSocketAndThreadsAsyncCallback() determined to not stop and dispose because token is no longer signalled.");
+					return;
+				}
+
+				// Skip if state count no longer matches:
+				if (this.stateCount != stateCountExpectedOnAsyncCallback)
+				{
+					DebugSocketShutdown("StopAndDisposeSocketAndThreadsAsyncCallback() determined to not stop and dispose because state count does not match.");
+					return;
+				}
+
+				this.stateIntendedAfterStopAndDispose = stateIntendedAfterStopAndDispose;
 			}
 
-			// Outside lock! Stop()/Dispose() will invoke event callbacks, potentially resulting in a deadlock!
-			ShutdownSocketAndConnectionAndThreads(notify);
+			// Outside lock! Stop() may invoke event callbacks, potentially resulting in a deadlock!
+			StopSocketAndThreadsAndDisposeSocketAndTriggerAutoReconnectOrNotifyErrorAsGiven(notify, reconnectWithDelay: true, notifyErrorIfNoReconnect: false); // OnDisconnected() and OnException() shall not immediately reconnect.
+		}
 
-			bool stateHasChanged = false;
-
+		private void StopAndDisposeSocketAndThreadsSync(SocketState stateIntendedAfterStopAndDispose, bool notify)
+		{
 			lock (this.stateSyncObj) // Ensure state is handled atomically.
 			{
-				this.stateTokenForShutdown = false;
-				stateHasChanged = SetStateSynchronized(intendedState, notify: false); // Notify outside lock!
-				DebugSocketShutdown("...shutdown completed.");
-
-				if (intendedState == SocketState.WaitingForOrTryingReconnecting)
-					StartReconnectTimer();
+				this.stateIntendedAfterStopAndDispose = stateIntendedAfterStopAndDispose;
 			}
 
-			if (stateHasChanged) { NotifyStateHasChanged(); } // Notify outside lock!
+			// Outside lock! Stop() may invoke event callbacks, potentially resulting in a deadlock!
+			StopSocketAndThreadsAndDisposeSocketAndTriggerAutoReconnectOrNotifyErrorAsGiven(notify, reconnectWithDelay: false, notifyErrorIfNoReconnect: true); // connectingTimeout_OneShot_Elapsed() has already delayed.
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private void ShutdownSocketAndConnectionAndThreads(bool notify)
+		private void StopSocketAndThreadsAndDisposeSocketAndTriggerAutoReconnectOrNotifyErrorAsGiven(bool notify, bool reconnectWithDelay, bool notifyErrorIfNoReconnect)
 		{
 			lock (this.socketSyncObj)
 			{
@@ -762,38 +848,27 @@ namespace MKY.IO.Serial.Socket
 					try
 					{
 						DebugSocketShutdown("...stopping socket...");
-						this.socket.Stop(); // Attention: ALAZ sockets don't properly stop on Dispose().
-						DebugSocketShutdown("...successfully stopped...");
+						this.socket.Stop(); // Attention: ALAZ sockets stop synchronously and don't stop on Dispose()!
 					}
 					catch (Exception ex)
 					{
 						DebugEx.WriteException(GetType(), ex, "Stopping socket of TCP/IP client failed!");
 					}
 
+					// Actively yield to other threads in an attempt to make (underlying) socket more solid on shutdown:
+					Thread.Sleep(TimeSpan.Zero);
+
 					try
 					{
 						DebugSocketShutdown("...disposing socket...");
-						this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose().
-						DebugSocketShutdown("...successfully disposed...");
+						this.socket.Dispose(); // Attention: ALAZ sockets don't stop on Dispose()!
 					}
 					catch (Exception ex)
 					{
 						DebugEx.WriteException(GetType(), ex, "Disposing socket of TCP/IP client failed!");
 					}
-					finally
-					{
-						this.socket = null;
-					}
-				}
-			}
 
-			lock (this.socketConnectionSyncObj)
-			{
-				if (this.socketConnection != null)
-				{
-					this.socketConnection = null;
-
-					DebugSocketConnection("Connection reset.");
+					// Makes no sense to yield here again, StopThreads() will wait anyway.
 				}
 			}
 
@@ -804,6 +879,44 @@ namespace MKY.IO.Serial.Socket
 			// And don't forget to clear the corresponding queues, its content would reappear in
 			// case the socket gets started again.
 			DropQueues(notify);
+
+			// Then, decide on how to continue:
+			bool stateHasChanged = false;
+			DateTime timeStamp;
+			bool tryReconnect = false;
+
+			lock (this.stateSyncObj) // Ensure state is handled atomically.
+			{
+				// Skip if state no longer matches:
+				if (!this.stateTokenForStopAndDispose)
+				{
+					DebugSocketShutdown("StopSocketAndThreadsAndDisposeSocketAndTriggerAutoReconnectOrNotifyErrorAsGiven() determined to not dispose because token is no longer signalled.");
+					return;
+				}
+
+				this.stateTokenForStopAndDispose = false; // Release token inside lock!
+				DebugSocketShutdown("...completed.");
+
+				stateHasChanged = SetStateSynchronized(this.stateIntendedAfterStopAndDispose, out timeStamp, notify: false); // Notify outside lock!
+
+				if (this.stateIntendedAfterStopAndDispose == SocketState.WaitingForOrTryingReconnecting)
+					tryReconnect = true;
+			}
+
+			if (notify && stateHasChanged)
+				NotifyStateHasChanged(timeStamp); // Notify outside lock!
+
+			if (tryReconnect)
+			{
+				if (reconnectWithDelay)
+					StartReconnectDelay();
+				else
+					TryCreateAndStartSocketAndThreads(); // Try immediately, but outside lock!
+			}
+			else if (notifyErrorIfNoReconnect)
+			{
+				OnIOError(new IOErrorEventArgs(ErrorSeverity.Severe, "Failed to connect to " + ToShortEndPointString() + "!"));
+			}
 		}
 
 		private void DropQueues(bool notify)
@@ -905,42 +1018,58 @@ namespace MKY.IO.Serial.Socket
 			if (!IsUndisposed) // Ignore async callbacks during closing.
 				return;
 
+			bool acceptConnection = false;
+			bool rejectConnection = false;
 			bool stateHasChanged = false;
+			DateTime timeStamp = DateTime.MinValue;
+
 			lock (this.stateSyncObj) // Ensure state is handled atomically.
 			{
-				bool acceptConnection = false;
-				lock (this.socketConnectionSyncObj)
+				// Ensure shutdown token is not signalled:
+				if (!this.stateTokenForStopAndDispose)
 				{
-					var state = GetStateSynchronized();
-					if ((state == SocketState.Connecting) || (state == SocketState.WaitingForOrTryingReconnecting)) // Only handle when expected.
+					lock (this.socketConnectionSyncObj)
 					{
-						if (this.socketConnection == null)
+						var state = GetStateSynchronized();
+						if ((state == SocketState.Connecting) || (state == SocketState.WaitingForOrTryingReconnecting)) // Only handle when expected.
 						{
-							this.socketConnection = e.Connection;
-							acceptConnection = true;
-							stateHasChanged = SetStateSynchronized(SocketState.Connected, notify: false); // Notify outside lock!
+							StopConnectingTimeout();
 
-							DebugSocketConnection("Connection (ID = {0}, remote endpoint = {1}) set.", e.Connection.ConnectionId, e.Connection.RemoteEndPoint);
+							if (this.socketConnection == null)
+							{
+								this.socketConnection = e.Connection;
+								acceptConnection = true;
+								stateHasChanged = SetStateSynchronized(SocketState.Connected, out timeStamp, notify: false); // Notify outside lock!
+
+								DebugSocketConnection("Connection (ID = {0}, remote endpoint = {1}) set.", e.Connection.ConnectionId, ((e.Connection.RemoteEndPoint != null) ? (e.Connection.RemoteEndPoint.ToString()) : "<undefined>"));
+							}
+							else // Such stray event callbacks may e.g. happen on 'AutoReconnect'.
+							{
+								DebugMessage("Ignoring stray 'OnConnected' event callback (connection ID = {0}, remote endpoint = {1}) as connection has already been accepted.", e.Connection.ConnectionId, ((e.Connection.RemoteEndPoint != null) ? (e.Connection.RemoteEndPoint.ToString()) : "<undefined>"));
+							}
 						}
-						else // Such stray event callbacks can happen on AutoReconnect.
+						else // Such stray event callbacks should never happen.
 						{
-							DebugMessage("Ignoring stray 'OnConnected' event callback (connection ID = {0}, remote endpoint = {1}) as connection has already been accepted.", e.Connection.ConnectionId, e.Connection.RemoteEndPoint);
+							rejectConnection = true;
+
+							DebugMessage("Rejecting stray 'OnConnected' event callback (connection ID = {0}, remote endpoint = {1}) while state was neither 'Connecting' nor 'WaitingForOrTryingReconnecting'.", e.Connection.ConnectionId, ((e.Connection.RemoteEndPoint != null) ? (e.Connection.RemoteEndPoint.ToString()) : "<undefined>"));
 						}
-					}
-					else // Such stray event callbacks should never happen.
-					{
-						DebugMessage("Ignoring stray 'OnConnected' event callback (connection ID = {0}, remote endpoint = {1}) while state was neither 'Connecting' nor 'WaitingForOrTryingReconnecting'.", e.Connection.ConnectionId, e.Connection.RemoteEndPoint);
 					}
 				}
+				else // Such event callbacks e.g. have to be expected on 'AutoReconnect' due to the async timers.
+				{
+					DebugMessage("Ignoring 'OnConnected' event callback (connection ID = {0}, remote endpoint = {1}) as shutdown is ongoing.", e.Connection.ConnectionId, ((e.Connection.RemoteEndPoint != null) ? (e.Connection.RemoteEndPoint.ToString()) : "<undefined>"));
+				}
+			}
 
-				if (acceptConnection)
-					e.Connection.BeginReceive(); // Immediately begin receiving.
-				else
-					e.Connection.BeginDisconnect(); // Immediately begin disconnecting.
-			}                                       // Silently, i.e. no OnIOWarning().
+			if (acceptConnection)
+				e.Connection.BeginReceive(); // Immediately begin receiving, outside lock!
+
+			if (rejectConnection)
+				e.Connection.BeginDisconnect(); // Immediately begin disconnecting, outside lock!
 
 			if (stateHasChanged)
-				NotifyStateHasChanged(); // Notify outside lock!
+				NotifyStateHasChanged(timeStamp); // Notify outside lock!
 		}
 
 		/// <summary>
@@ -954,11 +1083,20 @@ namespace MKY.IO.Serial.Socket
 			if (!IsUndisposed) // Ignore async callbacks during closing.
 				return;
 
+			lock (this.stateSyncObj)
+			{
+				if (this.stateTokenForStopAndDispose) // Such event callbacks e.g. have to be expected on 'AutoReconnect' due to the async timers.
+				{
+					DebugMessage("Ignoring 'OnReceived' event callback (connection ID = {0}, remote endpoint = {1}) as shutdown is ongoing.", e.Connection.ConnectionId, ((e.Connection.RemoteEndPoint != null) ? (e.Connection.RemoteEndPoint.ToString()) : "<undefined>"));
+					return;
+				}
+			}
+
 			lock (this.socketConnectionSyncObj)
 			{
-				if (e.Connection != this.socketConnection) // Stray event callbacks may e.g. happen on AutoReconnect.
+				if (e.Connection != this.socketConnection) // Such stray event callbacks may e.g. happen on 'AutoReconnect'.
 				{
-					DebugMessage("Ignoring stray 'OnReceived' event callback (connection ID = {0}, remote endpoint = {1}).", e.Connection.ConnectionId, e.Connection.RemoteEndPoint);
+					DebugMessage("Ignoring stray 'OnReceived' event callback (connection ID = {0}, remote endpoint = {1}).", e.Connection.ConnectionId, ((e.Connection.RemoteEndPoint != null) ? (e.Connection.RemoteEndPoint.ToString()) : "<undefined>"));
 					return;
 				}
 			}
@@ -995,11 +1133,20 @@ namespace MKY.IO.Serial.Socket
 			if (!IsUndisposed) // Ignore async callbacks during closing.
 				return;
 
+			lock (this.stateSyncObj)
+			{
+				if (this.stateTokenForStopAndDispose) // Such event callbacks e.g. have to be expected on 'AutoReconnect' due to the async timers.
+				{
+					DebugMessage("Ignoring 'OnSent' event callback (connection ID = {0}, remote endpoint = {1}) as shutdown is ongoing.", e.Connection.ConnectionId, ((e.Connection.RemoteEndPoint != null) ? (e.Connection.RemoteEndPoint.ToString()) : "<undefined>"));
+					return;
+				}
+			}
+
 			lock (this.socketConnectionSyncObj)
 			{
-				if (e.Connection != this.socketConnection) // Stray event callbacks may e.g. happen on AutoReconnect.
+				if (e.Connection != this.socketConnection) // Such stray event callbacks may e.g. happen on 'AutoReconnect'.
 				{
-					DebugMessage("Ignoring stray 'OnSent' event callback (connection ID = {0}, remote endpoint = {1}).", e.Connection.ConnectionId, e.Connection.RemoteEndPoint);
+					DebugMessage("Ignoring stray 'OnSent' event callback (connection ID = {0}, remote endpoint = {1}).", e.Connection.ConnectionId, ((e.Connection.RemoteEndPoint != null) ? (e.Connection.RemoteEndPoint.ToString()) : "<undefined>"));
 					return;
 				}
 			}
@@ -1036,36 +1183,46 @@ namespace MKY.IO.Serial.Socket
 
 			lock (this.socketConnectionSyncObj)
 			{
-				if (e.Connection != this.socketConnection) // Stray event callbacks may e.g. happen on AutoReconnect.
+				if (e.Connection != this.socketConnection) // Such stray event callbacks may e.g. happen on 'AutoReconnect'.
 				{
-					DebugMessage("Ignoring stray 'OnDisconnected' event callback (connection ID = {0}, remote endpoint = {1}).", e.Connection.ConnectionId, e.Connection.RemoteEndPoint);
+					DebugMessage("Ignoring stray 'OnDisconnected' event callback (connection ID = {0}, remote endpoint = {1}).", e.Connection.ConnectionId, ((e.Connection.RemoteEndPoint != null) ? (e.Connection.RemoteEndPoint.ToString()) : "<undefined>"));
 					return;
+				}
+
+				if (this.socketConnection != null)
+				{
+					this.socketConnection = null;
+
+					DebugSocketConnection("Connection reset.");
 				}
 			}
 
-			DebugSocketShutdown("Socket 'OnDisconnected' event!");
-
 			// Check whether token is available. Ensure state is handled atomically. Not using
 			Monitor.Enter(this.stateSyncObj); // lock() for being able to selectively release.
-			if (!this.stateTokenForShutdown)
+			if (!this.stateTokenForStopAndDispose)
 			{
-				// Ensure to set intended state based on current state, i.e. before setting 'Disconnected' below:
-				var intendedState = (AutoReconnectIsEnabledAndAllowed ? SocketState.WaitingForOrTryingReconnecting : SocketState.Reset);
+				DebugSocketShutdown("'OnDisconnected' event event callback determined to stop and dispose and then try reconnecting if given.");
 
-				// Token for sure is available:
-				int expectedStateCount;
-				var stateHasChanged = SetStateSynchronized(SocketState.Disconnected, out expectedStateCount, notify: false); // Notify outside lock!
-				this.stateTokenForShutdown = true; // Take token inside lock!
+				// Ensure to set the temporary and intended state based on current state, i.e. before potentially setting 'Disconnected' below:
+				var stateIntended  = (AutoReconnectIsEnabledAndAllowed ? SocketState.WaitingForOrTryingReconnecting : SocketState.Reset);
+				var stateTemporary = (AutoReconnectIsEnabledAndAllowed ? SocketState.WaitingForOrTryingReconnecting : SocketState.Disconnected); // Temporary until Stop() has completed.
+				                  // No need to change state twice, immediately set 'WaitingForOrTryingReconnecting'.
+					DateTime timeStamp;
+				int stateCountExpectedOnAsyncCallback;
+				var stateHasChanged = SetStateSynchronized(stateTemporary, out timeStamp, out stateCountExpectedOnAsyncCallback, notify: false); // Notify outside lock!
+				this.stateTokenForStopAndDispose = true; // Take token inside lock!
 				Monitor.Exit(this.stateSyncObj);
 
-				if (stateHasChanged) { NotifyStateHasChanged(); } // Notify outside lock!
+				if (stateHasChanged)
+					NotifyStateHasChanged(timeStamp); // Notify outside lock!
 
-				// Shutdown ALAZ socket in any case. A new socket will be created on 'AutoReconnect' or next Start().
-				ShutdownSocketAndConnectionAndThreadsAndTriggerAutoReconnectIfGivenAsync(expectedStateCount, intendedState, notify: true); // Must by async when called from main thread or ALAZ event callback! See remarks of the header of this class for details.
-			}                                                                                                            // Notify is OK as async and thus no longer inside lock.
+				// Stop and dispose in any case. A new socket will be created on 'AutoReconnect' or next Start().
+				DoStopAndDisposeAsync(stateCountExpectedOnAsyncCallback, stateIntended, notify: true); // Must by async when called from main thread or ALAZ event callback! See remarks of the header of this class for details.
+			}                                                                        // Notify is OK as async and no longer inside lock.
 			else
 			{
-				DebugMessage("Ignoring 'OnDisconnected' event callback as shutdown already is ongoing.");
+				DebugSocketShutdown("Ignoring 'OnDisconnected' event event callback as shutdown is already ongoing.");
+
 				Monitor.Exit(this.stateSyncObj);
 			}
 		}
@@ -1089,42 +1246,52 @@ namespace MKY.IO.Serial.Socket
 
 			lock (this.socketConnectionSyncObj)
 			{
-				if (e.Connection != this.socketConnection) // Stray event callbacks may e.g. happen on AutoReconnect.
+				if (e.Connection != this.socketConnection) // Such stray event callbacks may e.g. happen on 'AutoReconnect'.
 				{
-					DebugMessage("Ignoring stray 'OnException' event callback (connection ID = {0}, remote endpoint = {1}).", e.Connection.ConnectionId, e.Connection.RemoteEndPoint);
+					DebugMessage("Ignoring stray 'OnException' event callback (connection ID = {0}, remote endpoint = {1}).", e.Connection.ConnectionId, ((e.Connection.RemoteEndPoint != null) ? (e.Connection.RemoteEndPoint.ToString()) : "<undefined>"));
 					return;
+				}
+
+				if (this.socketConnection != null)
+				{
+					this.socketConnection = null;
+
+					DebugSocketConnection("Connection reset.");
 				}
 			}
 
-			DebugSocketShutdown("Socket 'OnException' event!");
-
 			// Check whether token is available. Ensure state is handled atomically. Not using
 			Monitor.Enter(this.stateSyncObj); // lock() for being able to selectively release.
-			if (!this.stateTokenForShutdown)
+			if (!this.stateTokenForStopAndDispose)
 			{
-				// Ensure to set intended state based on current state, i.e. before setting 'Disconnected' or 'Error' below:
-				var intendedState = (AutoReconnectIsEnabledAndAllowed ? SocketState.WaitingForOrTryingReconnecting : SocketState.Error);
+				DebugSocketShutdown("'OnException' event event callback determined to stop and dispose and then try reconnecting if given.");
 
-				// Token for sure is available:
-				int expectedStateCount;
-				var stateHasChanged = SetStateSynchronized(SocketState.Error, out expectedStateCount, notify: false); // Notify outside lock!
-				this.stateTokenForShutdown = true; // Take token inside lock!
+				// Ensure to set the intended state based on current state, i.e. before potentially setting 'Error' below:
+				var stateIntended = (AutoReconnectIsEnabledAndAllowed ? SocketState.WaitingForOrTryingReconnecting : SocketState.Error); // Immediately, a temporary 'Disconnected' makes little sense in case of an error.
+				                 // No need to change state twice, immediately set 'WaitingForOrTryingReconnecting'.
+				DateTime timeStamp;
+				int stateCountExpectedOnAsyncCallback;
+				var stateHasChanged = SetStateSynchronized(stateIntended, out timeStamp, out stateCountExpectedOnAsyncCallback, notify: false); // Notify outside lock!
+				this.stateTokenForStopAndDispose = true; // Take token inside lock!
 				Monitor.Exit(this.stateSyncObj);
 
 				// Attention, the error event must be raised before notifying the state,
 				// because e.g. in case of an AutoSocket, the state change to 'Error'
 				// will trigger disposal of this Client, thus a subsequent event would
 				// get discarded and no error would be raised anymore.
-				NotifyError(e.Exception); // Notify outside lock!
+				if (stateIntended != SocketState.WaitingForOrTryingReconnecting) // No need to notify errors that are expected.
+					NotifyError(e.Exception); // Notify outside lock!
 
-				if (stateHasChanged) { NotifyStateHasChanged(); } // Notify outside lock!
+				if (stateHasChanged)
+					NotifyStateHasChanged(timeStamp); // Notify outside lock!
 
-				// Shutdown ALAZ socket in any case. A new socket will be created on 'AutoReconnect' or next Start().
-				ShutdownSocketAndConnectionAndThreadsAndTriggerAutoReconnectIfGivenAsync(expectedStateCount, intendedState, notify: true); // Must by async when called from main thread or ALAZ event callback! See remarks of the header of this class for details.
-			}                                                                                                            // Notify is OK as async and thus no longer inside lock.
+				// Stop and dispose in any case. A new socket will be created on 'AutoReconnect' or next Start().
+				DoStopAndDisposeAsync(stateCountExpectedOnAsyncCallback, stateIntended, notify: true); // Must by async when called from main thread or ALAZ event callback! See remarks of the header of this class for details.
+			}                                                                        // Notify is OK as async and no longer inside lock.
 			else
 			{
-				DebugMessage("Ignoring 'OnDisconnected' event callback as shutdown already is ongoing.");
+				DebugSocketShutdown("Ignoring 'OnException' event event callback as shutdown is already ongoing.");
+
 				Monitor.Exit(this.stateSyncObj);
 			}
 		}
@@ -1132,8 +1299,28 @@ namespace MKY.IO.Serial.Socket
 		private void NotifyError(Exception ex)
 		{
 			if (ex is ALAZ.SystemEx.NetEx.SocketsEx.ReconnectAttemptException)
-			{                                             // Acceptable as situation may recover. And attention, the AutoSocket implementation relies on this!
-				OnIOError(new IOErrorEventArgs(ErrorSeverity.Acceptable, "Failed to connect to TCP/IP server " + this.remoteHost.Address + ":" + this.remotePort));
+			{
+				var sb = new StringBuilder();
+				sb.Append("Could not connect to TCP/IP server ");
+				sb.Append(this.remoteHost.Address);
+				sb.Append(":");
+				sb.Append(this.remotePort);
+				sb.Append("!");
+
+				// Appending "Socket error message: " + ex.Message makes no sense as it always is "Reconnect attempt".
+
+				if (ex.InnerException != null)
+				{
+					var socketException = (ex.InnerException as System.Net.Sockets.SocketException);
+					if (socketException != null)
+					{
+						sb.Append(" Socket error code: ");
+						sb.Append(socketException.NativeErrorCode);
+					}
+				}
+
+				var message = sb.ToString();              // Acceptable as situation may recover. And attention, the AutoSocket implementation relies on this!
+				OnIOError(new IOErrorEventArgs(ErrorSeverity.Acceptable, message));
 			}
 			else
 			{
@@ -1220,7 +1407,7 @@ namespace MKY.IO.Serial.Socket
 				{
 					Debug.Assert(this.sendThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
 
-					DebugThreadState("SendThread() gets stopped...");
+					DebugThreads("SendThread() gets stopped...");
 
 					// Ensure that thread has stopped after the stop request:
 					try
@@ -1235,19 +1422,19 @@ namespace MKY.IO.Serial.Socket
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								DebugThreadState("...failed! Aborting...");
-								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
+								DebugThreads("...failed! Aborting...");
+								DebugThreads("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
 
 								isAborting = true;       // Thread.Abort() must not be used whenever possible!
 								this.sendThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
-							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThreads("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
 						if (!isAborting)
-							DebugThreadState("...successfully stopped.");
+							DebugThreads("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -1255,7 +1442,7 @@ namespace MKY.IO.Serial.Socket
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThreads("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.sendThread = null;
@@ -1274,7 +1461,7 @@ namespace MKY.IO.Serial.Socket
 				{
 					Debug.Assert(this.dataSentThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId, "Attention: Tried to join itself!");
 
-					DebugThreadState("DataSentThread() gets stopped...");
+					DebugThreads("DataSentThread() gets stopped...");
 
 					// Ensure that thread has stopped after the stop request:
 					try
@@ -1289,19 +1476,19 @@ namespace MKY.IO.Serial.Socket
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								DebugThreadState("...failed! Aborting...");
-								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
+								DebugThreads("...failed! Aborting...");
+								DebugThreads("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
 
 								isAborting = true;           // Thread.Abort() must not be used whenever possible!
 								this.dataSentThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
-							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThreads("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
 						if (!isAborting)
-							DebugThreadState("...successfully stopped.");
+							DebugThreads("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -1309,7 +1496,7 @@ namespace MKY.IO.Serial.Socket
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThreads("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.dataSentThread = null;
@@ -1363,9 +1550,9 @@ namespace MKY.IO.Serial.Socket
 
 		#endregion
 
-		#region Reconnect Timer
+		#region Connecting/Reconnect Timers
 		//==========================================================================================
-		// Reconnect Timer
+		// Connecting/Reconnect Timers
 		//==========================================================================================
 
 		/// <remarks>
@@ -1440,34 +1627,34 @@ namespace MKY.IO.Serial.Socket
 		/// is no such functionality in the underlying <see cref="System.Net.Sockets.Socket"/>. No
 		/// such functionality found by searching MSDN nor Internet.
 		/// </remarks>
-		private void StartReconnectTimer()
+		private void StartConnectingTimeout()
 		{
-			lock (this.reconnectTimerSyncObj)
-			{
-				var dueTime = this.autoReconnect.Interval;
-				var period = Timeout.Infinite; // One-Shot!
+			var dueTime = ((GetStateSynchronized() == SocketState.Connecting) ? DefaultConnectingTimeout : AutoReconnect.Interval);
+			var period = Timeout.Infinite; // One-Shot!
 
-				if (this.reconnectTimer == null)
-					this.reconnectTimer = new Timer(new TimerCallback(reconnectTimer_OneShot_Elapsed), null, dueTime, period);
+			lock (this.connectingTimeoutSyncObj)
+			{
+				if (this.connectingTimeout == null)
+					this.connectingTimeout = new Timer(new TimerCallback(connectingTimeout_OneShot_Elapsed), null, dueTime, period);
 				else
-					this.reconnectTimer.Change(dueTime, period);
+					this.connectingTimeout.Change(dueTime, period);
 			}
 		}
 
-		private void StopReconnectTimer()
+		private void StopConnectingTimeout()
 		{
-			lock (this.reconnectTimerSyncObj)
+			lock (this.connectingTimeoutSyncObj)
 			{
-				if (this.reconnectTimer != null)
+				if (this.connectingTimeout != null)
 				{
-					this.reconnectTimer.Dispose(); // Simply Dispose(), no need to Change() first.
-					this.reconnectTimer = null;
+					this.connectingTimeout.Dispose(); // Simply Dispose(), no need to Change() first.
+					this.connectingTimeout = null;
 				}
 			}
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private void reconnectTimer_OneShot_Elapsed(object obj)
+		private void connectingTimeout_OneShot_Elapsed(object obj)
 		{
 			if (!IsUndisposed) // Ignore async callbacks during closing.
 				return;
@@ -1475,56 +1662,108 @@ namespace MKY.IO.Serial.Socket
 			// Non-periodic timer, only a single callback can be active at a time.
 			// There is no need to synchronize concurrent callbacks to this event handler.
 
-			lock (this.reconnectTimerSyncObj)
+			lock (this.connectingTimeoutSyncObj)
 			{
-				if (this.reconnectTimer == null)
-					return; // Handle overdue callbacks.
+				if (this.connectingTimeout == null) // Handle overdue callbacks:
+					return;
 			}
 			                                //// Ensure state is handled atomically. Not using
 			Monitor.Enter(this.stateSyncObj); // lock() for being able to selectively release.
-			{       // Check disposal state first!
-				if (IsUndisposed && IsStarted && !IsConnected) // && AutoReconnectIsEnabledAndAllowed is implicitly given.
+			if (IsStarted && !IsConnected)
+			{
+				var state = GetStateSynchronized();
+				if ((state == SocketState.Connecting) || (state == SocketState.WaitingForOrTryingReconnecting))
 				{
-					if (GetStateSynchronized() == SocketState.WaitingForOrTryingReconnecting)
+					// Check whether token is available:
+					if (!this.stateTokenForStopAndDispose)
 					{
-						// Timeout!
-						DebugAutoReconnect("reconnectTimer_OneShot_Elapsed() determined to stop and dispose and then try reconnecting.");
-						this.stateTokenForShutdown = true; // Take token inside lock!
+						DebugAutoReconnect("connectingTimeout_OneShot_Elapsed() determined to stop and dispose and then try reconnecting if given.");
+
+						// Ensure to set the intended state based on current state, i.e. before setting 'Reset' below:
+						var stateIntended  = (AutoReconnectIsEnabledAndAllowed ? SocketState.WaitingForOrTryingReconnecting : SocketState.Reset);
+						var stateTemporary = (AutoReconnectIsEnabledAndAllowed ? SocketState.WaitingForOrTryingReconnecting : SocketState.Disconnected); // Temporary until Stop() has completed.
+						                 // No need to change state twice, immediately set 'WaitingForOrTryingReconnecting'.
+						DateTime timeStamp;
+						var stateHasChanged = SetStateSynchronized(stateTemporary, out timeStamp, notify: false); // Notify outside lock!
+						this.stateTokenForStopAndDispose = true; // Take token inside lock!
 						Monitor.Exit(this.stateSyncObj);
 
-						// Outside lock! Stop()/Dispose() will invoke event callbacks, potentially resulting in a deadlock!
-						ShutdownSocketAndConnectionAndThreads(notify: false); // Sync is OK from this timer callback. See remarks of the header of this class for details.
-						                                 //// Ignore. Nothing can have been sent in the meantime.
-						// Try again, but only after checking state again!
-						lock (this.stateSyncObj) // Ensure state is handled atomically.
-						{
-							if (this.stateTokenForShutdown)
-							{
-								this.stateTokenForShutdown = false;
-								    //// Check disposal state first!
-								if (IsUndisposed && IsStarted && !IsConnected) // && AutoReconnectIsEnabledAndAllowed is implicitly given.
-								{
-									if (GetStateSynchronized() == SocketState.WaitingForOrTryingReconnecting)
-									{
-										DebugAutoReconnect("reconnectTimer_OneShot_Elapsed() is now trying reconnecting again.");
+						if (stateHasChanged)
+							NotifyStateHasChanged(timeStamp); // Notify outside lock!
 
-										CreateAndStartSocketAndThreads();
-										StartReconnectTimer();
-									}
-								}
-							}
-						}
+						// Outside lock! Stop() may invoke event callbacks, potentially resulting in a deadlock!
+						DoStopAndDisposeSync(stateIntended, notify: true); // Sync is OK from this timer callback.
 					}
 					else
 					{
-						DebugAutoReconnect("reconnectTimer_OneShot_Elapsed() determined to not try reconnecting because state no longer is 'WaitingForOrTryingReconnecting'.");
+						DebugMessage("Ignoring 'connectingTimeout_OneShot_Elapsed' callback as shutdown already is ongoing.");
 						Monitor.Exit(this.stateSyncObj);
 					}
 				}
 				else
 				{
+					DebugAutoReconnect("connectingTimeout_OneShot_Elapsed() determined to not stop and dispose and then try reconnecting because state no longer is 'Connecting' or 'WaitingForOrTryingReconnecting'.");
 					Monitor.Exit(this.stateSyncObj);
 				}
+			}
+			else
+			{
+				Monitor.Exit(this.stateSyncObj);
+			}
+		}
+
+		private void StartReconnectDelay()
+		{
+			var dueTime = AutoReconnect.Interval;
+			var period = Timeout.Infinite; // One-Shot!
+
+			lock (this.reconnectDelaySyncObj)
+			{
+				if (this.reconnectDelay == null)
+					this.reconnectDelay = new Timer(new TimerCallback(reconnectDelay_OneShot_Elapsed), null, dueTime, period);
+				else
+					this.reconnectDelay.Change(dueTime, period);
+			}
+		}
+
+		private void StopReconnectDelay()
+		{
+			lock (this.reconnectDelaySyncObj)
+			{
+				if (this.reconnectDelay != null)
+				{
+					this.reconnectDelay.Dispose(); // Simply Dispose(), no need to Change() first.
+					this.reconnectDelay = null;
+				}
+			}
+		}
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
+		private void reconnectDelay_OneShot_Elapsed(object obj)
+		{
+			if (!IsUndisposed) // Ignore async callbacks during closing.
+				return;
+
+			// Non-periodic timer, only a single callback can be active at a time.
+			// There is no need to synchronize concurrent callbacks to this event handler.
+
+			lock (this.reconnectDelaySyncObj)
+			{
+				if (this.reconnectDelay == null) // Handle overdue callbacks:
+					return;
+			}
+			                                //// Ensure state is handled atomically. Not using
+			Monitor.Enter(this.stateSyncObj); // lock() for being able to selectively release.
+			if (IsStarted && !IsConnected && AutoReconnectIsEnabledAndAllowed)
+			{
+				DebugSocketShutdown("reconnectDelay_OneShot_Elapsed() determined to try reconnecting.");
+				Monitor.Exit(this.stateSyncObj);
+
+				TryCreateAndStartSocketAndThreads(); // Don't care about result, success will be checked on event or timer callback.
+			}
+			else
+			{
+				Monitor.Exit(this.stateSyncObj);
 			}
 		}
 
@@ -1605,8 +1844,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			// AssertUndisposed() shall not be called from such basic method! Its return value is needed for debugging! All underlying fields are still valid after disposal.
 
-			var remoteHostEndpoint = ((this.remoteHost != null) ? (this.remoteHost.ToEndpointAddressString()) : "[none]"); // Required to always be available.
-			return (remoteHostEndpoint + ":" + this.remotePort);
+			return (RemoteHostEndpointString + ":" + RemotePort);
 		}
 
 		#endregion
@@ -1624,9 +1862,9 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <remarks>
-		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named 'Message' for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
@@ -1650,6 +1888,15 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
+		[Conditional("DEBUG_STATE")]
+		private void DebugState(string format, params object[] args)
+		{
+			DebugMessage(format, args);
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
 		[Conditional("DEBUG_SOCKET_CONNECTION")]
 		private void DebugSocketConnection(string format, params object[] args)
 		{
@@ -1658,6 +1905,9 @@ namespace MKY.IO.Serial.Socket
 
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		/// <remarks>
+		/// Named 'Shutdown' for separating from terms 'Stop' and 'Dispose' as well as compactness.
 		/// </remarks>
 		[Conditional("DEBUG_SOCKET_SHUTDOWN")]
 		private void DebugSocketShutdown(string message)

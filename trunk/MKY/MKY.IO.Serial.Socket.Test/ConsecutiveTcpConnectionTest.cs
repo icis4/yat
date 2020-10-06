@@ -41,7 +41,7 @@ namespace MKY.IO.Serial.Socket.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// A cycle takes around 5 seconds. 12 cycles around a minute.
+		/// A cycle takes around 5 seconds => 12 cycles for a minute.
 		/// </remarks>
 		[Test]
 		[Repeat(12)]
@@ -49,13 +49,35 @@ namespace MKY.IO.Serial.Socket.Test
 		public virtual void TestConsecutiveServerClientConnectAndShutdownEndurance01Minute()
 		{
 			var t = new SimpleTcpConnectionTest();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndClientShutdown();
 			t.TestServerClientConnectAndClientShutdown();
 			t.TestServerClientConnectAndServerShutdown();
 			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndClientShutdown();
 			t.TestServerClientConnectAndClientShutdown();
 			t.TestServerClientConnectAndClientShutdown();
 			t.TestServerClientConnectAndServerShutdown();
 			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndServerShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndClientShutdown();
+			t.TestServerClientConnectAndClientShutdown();
 			t.TestServerClientConnectAndClientShutdown();
 		}
 
@@ -85,7 +107,7 @@ namespace MKY.IO.Serial.Socket.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// A cycle takes around 20 seconds. 3 cycles around a minute.
+		/// A cycle takes around 20 seconds => 3 cycles for a minute.
 		/// </remarks>
 		[Test]
 		[Repeat(3)]
@@ -93,13 +115,17 @@ namespace MKY.IO.Serial.Socket.Test
 		public virtual void TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEndurance01Minute()
 		{
 			var t = new SimpleTcpConnectionTest();
+			t.TestAutoSocketAutoSocketConnectAndAutoSocketAShutdown();
+			t.TestAutoSocketAutoSocketConnectAndAutoSocketBShutdown();
+			t.TestAutoSocketAutoSocketConnectAndAutoSocketAShutdown();
+			t.TestAutoSocketAutoSocketConnectAndAutoSocketAShutdown();
+			t.TestAutoSocketAutoSocketConnectAndAutoSocketBShutdown();
 			t.TestAutoSocketAutoSocketConnectAndAutoSocketBShutdown();
 			t.TestAutoSocketAutoSocketConnectAndAutoSocketAShutdown();
 			t.TestAutoSocketAutoSocketConnectAndAutoSocketAShutdown();
+			t.TestAutoSocketAutoSocketConnectAndAutoSocketAShutdown();
 			t.TestAutoSocketAutoSocketConnectAndAutoSocketBShutdown();
 			t.TestAutoSocketAutoSocketConnectAndAutoSocketBShutdown();
-			t.TestAutoSocketAutoSocketConnectAndAutoSocketAShutdown();
-			t.TestAutoSocketAutoSocketConnectAndAutoSocketAShutdown();
 			t.TestAutoSocketAutoSocketConnectAndAutoSocketBShutdown();
 		}
 

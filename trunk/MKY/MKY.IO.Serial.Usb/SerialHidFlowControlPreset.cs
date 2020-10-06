@@ -31,6 +31,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
+using MKY.IO.Usb;
+
 #endregion
 
 namespace MKY.IO.Serial.Usb
@@ -84,6 +86,14 @@ namespace MKY.IO.Serial.Usb
 
 		/// <summary></summary>
 		public const string UserSummary = @"""MT"", ""OH"" and ""YAT""";
+
+		#endregion
+
+		#region Constants
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Underscore for improved readability.")]
+		private static readonly int[] MT_SerHid_VendorIds = { 0x0EB8 }; // Covers "OHAUS", MT's 2nd brand.
 
 		#endregion
 
@@ -213,6 +223,43 @@ namespace MKY.IO.Serial.Usb
 			{
 				result = new SerialHidFlowControlPresetEx(); // Default!
 				return (false);
+			}
+		}
+
+		#endregion
+
+		#region From
+		//==========================================================================================
+		// From
+		//==========================================================================================
+
+		/// <remarks>Returns <c>false</c> and <see cref="SerialHidFlowControlPreset.None"/> if no matching preset has been found.</remarks>
+		public static bool TryFrom(DeviceInfo deviceInfo, out SerialHidFlowControlPresetEx result)
+		{
+			SerialHidFlowControlPreset enumResult;
+			if (TryFrom(deviceInfo, out enumResult))
+			{
+				result = new SerialHidFlowControlPresetEx(enumResult);
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
+		}
+
+		/// <remarks>Returns <c>false</c> and <see cref="SerialHidFlowControlPreset.None"/> if no matching preset has been found.</remarks>
+		public static bool TryFrom(DeviceInfo deviceInfo, out SerialHidFlowControlPreset result)
+		{
+			if (Int32Ex.EqualsAny(deviceInfo.VendorId, MT_SerHid_VendorIds))
+			{
+				result = SerialHidFlowControlPreset.MT_SerHid;
+				return (true);
+			}
+			else // Vendor ID not found, try parsing string:
+			{
+				return (TryParse(deviceInfo, out result));
 			}
 		}
 

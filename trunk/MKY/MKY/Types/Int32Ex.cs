@@ -40,6 +40,23 @@ namespace MKY
 	public static class Int32Ex
 	{
 		/// <summary>
+		/// Determines whether <paramref name="value"/> equals any of the specified <paramref name="values"/>.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <param name="values">The values to compare with.</param>
+		/// <returns>true if <paramref name="value"/> matches any of the <paramref name="values"/>; otherwise, false.</returns>
+		public static bool EqualsAny(int value, IEnumerable<int> values)
+		{
+			foreach (int v in values)
+			{
+				if (v == value)
+					return (true); // Equals.
+			}
+
+			return (false); // Does not equal any.
+		}
+
+		/// <summary>
 		/// Limits <paramref name="value"/> to the values specified.
 		/// </summary>
 		/// <exception cref="ArgumentException">
@@ -48,7 +65,7 @@ namespace MKY
 		public static int Limit(int value, int min, int max)
 		{
 			if (min > max)
-				throw (new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Precondition is 'min' <= 'max', but 'min' is {0} and 'max' is {1}!", min, max))); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+				throw (new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Precondition is 'min' <= 'max', but 'min' is {0} and 'max' is {1}!", min, max))); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			if (value < min)
 				return (min);
