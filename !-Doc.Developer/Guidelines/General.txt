@@ -33,6 +33,9 @@ Use FxCop
 Comments
 --------
 
+Use 'Identifier' rather than "Identifier" to refer to a code identifiert.
+Rationale: Also easily useable within a quoted string, e.g. a debug or analysis suppression string.
+
 Use special tags
 \todo        :   \todo: <Description>        or   \todo (<Date> / <Author>): <Description>)
 \fixme       :   \fixme: <Description>       or   \fixme (<Date> / <Author>): <Description>)
@@ -107,121 +110,10 @@ Events
 ------
 Use "EventArgs.Empty" instead of "new EventArgs()".
 Use MKY.EventHelper.
-Use MKY.Diagnostics.EventManagementHelper.Notify...() in Dispose() or ~Finalizer.
 
-Finalization
-------------
-Use MKY.Diagnostics.FinalizationHelper
-
-Disposal
---------
-Use MKY.Diagnostics.DebugDisposal
-
-Base class
-
-		class Class : IDisposable, IDisposableEx
-
-		#region Disposal
-		//------------------------------------------------------------------------------------------
-		// Disposal
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		public bool IsDisposed { get; protected set; }
-
-		/// <summary></summary>
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary></summary>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (!IsDisposed)
-			{
-				// Dispose of managed resources:
-				if (disposing)
-				{
-					if (this.FIELD != null)
-						this.FIELD.Dispose();
-
-					// In the 'normal' case, the FIELD is CLOSED/DISPOSED in METHOD().
-				}
-
-				// Dispose of unmanaged resources:
-				if (this.FIELD != null)
-					this.FIELD.Dispose();
-
-				// Set state to disposed:
-				this.FIELD = null;
-				IsDisposed = true;
-			}
-		}
-
-#if (DEBUG)
-
-		/// <remarks>
-		/// Microsoft.Design rule CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable requests
-		/// "Types that declare disposable members should also implement IDisposable. If the type
-		///  does not own any unmanaged resources, do not implement a finalizer on it."
-		///
-		/// Well, true for best performance on finalizing. However, it's not easy to find missing
-		/// calls to <see cref="Dispose()"/>. In order to detect such missing calls, the finalizer
-		/// is kept for DEBUG, indicating missing calls.
-		///
-		/// Note that it is not possible to mark a finalizer with [Conditional("DEBUG")].
-		/// </remarks>
-		~CLASS()
-		{
-			Dispose(false);
-
-			MKY.Diagnostics.DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
-		}
-
-#endif // DEBUG
-
-		/// <summary></summary>
-		protected void AssertNotDisposed()
-		{
-			if (IsDisposed)
-				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed!"));
-		}
-
-		#endregion
-
-
-Inherited class
-
-		#region Disposal
-		//------------------------------------------------------------------------------------------
-		// Disposal
-		//------------------------------------------------------------------------------------------
-
-		protected override void Dispose(bool disposing)
-		{
-			// Finalize managed resources.
-			   - or -
-			// In any case, <CLOSE> the <ITEM>:
-
-			if (disposing)
-			{
-				// Dispose of unmanaged resources.
-				   - or -
-				// In the 'normal' case, the <ITEM> is <CLOSED> in <METHOD>().
-			}
-
-			base.Dispose(disposing);
-		}
-
-		#endregion
-
-
-Call AssertNotDisposed() in every non-private member.
-Do not call AssertNotDisposed() in a simple get-property.
-
-Also see "Implementing Finalize and Dispose to Clean Up Unmanaged Resources" in the MSDN.
+Disposal/Finalization
+---------------------
+According to 'Template.cs'.
 
 
 Equality

@@ -21,9 +21,9 @@ Takes approx. 20 minutes, plus changes in procedure.
 	 > "Copyright © 2003-2020 Matthias Kläy."  => ~481 replacements
 	 > "Copyright © 2007-2020 Matthias Kläy."  => ~147 replacements
 	 > "Copyright © 2010-2020 Matthias Kläy."  =>  ~69 replacements
-	 > "Copyright © 2008-2020 Mettler-Toledo." => ~307 replacements (=> scripting, testing)
+	 > "Copyright © 2008-2020 Mettler-Toledo." => ~291 replacements (=> scripting, testing)
 	 > "Copyright © 2014-2020 Mettler-Toledo." =>   ~6 replacements (=> scripting templates)
-	 > "Copyright © 2017-2020 Mettler-Toledo." => ~268 replacements (=> scripting examples, NUnit testing)
+	 > "Copyright © 2017-2020 Mettler-Toledo." => ~265 replacements (=> scripting examples, NUnit testing)
 	 > " and 2003-2020 Matthias Kläy."         =>    2 replacements
 	 > "2020, Matthias Kläy"                   =>    2 replacements
 
@@ -31,9 +31,9 @@ Takes approx. 20 minutes, plus changes in procedure.
 	*.*
 	...and verify that the following expressions are no more found...
 	...except within SVN, 3rd party, archives and other explainable locations:
-	 > "2019 " (<= incl. space!), where year = 2019 is the 'old' year
-	 > "-201\d " (<= incl. space!) using RegEx
-	 > "-202[^1] " (<= incl. space!) using RegEx, where year = 2021 is already the 'new' year
+	 > "2020 " (<= incl. space!), where year = 2020 is the 'old' year
+	 > "201\d " (<= incl. space!) using RegEx
+	 > "202[^1] " (<= incl. space!) using RegEx, where year = 2021 is already the 'new' year
 
 7.	Next, commit all changes, verifying that SVN properties of all files are up-to-date.
 
