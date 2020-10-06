@@ -404,8 +404,9 @@ namespace YAT/*.<TODO>*/
 			// Release of unmanaged resources:
 			this.moreToDo = null;
 
-		//	!!! When deriving from a class that implements DisposableBase, otherwise remove !!!
+		//	!!! When deriving from a class that implements DisposableBase, otherwise remove and use commented out hint instead !!!
 			base.Dispose(disposing);
+		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
 		}
 
 		#endregion
