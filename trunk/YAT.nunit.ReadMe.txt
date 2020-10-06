@@ -1,0 +1,5 @@
+﻿
+Executable projects (.exe)
+--------------------------
+
+The executable projects are excluded for NUnit as they are not relevant for testing.

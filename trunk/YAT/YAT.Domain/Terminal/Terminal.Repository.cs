@@ -267,10 +267,10 @@ namespace YAT.Domain
 			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
-				{
-					case RepositoryType.Tx:    return (this.txRepository   .ByteCount);
-					case RepositoryType.Bidir: return (this.bidirRepository.ByteCount);
-					case RepositoryType.Rx:    return (this.rxRepository   .ByteCount);
+				{                                                            // Possible during disposing.
+					case RepositoryType.Tx:    return ((this.txRepository    != null) ? (this.txRepository   .ByteCount) : (0));
+					case RepositoryType.Bidir: return ((this.bidirRepository != null) ? (this.bidirRepository.ByteCount) : (0));
+					case RepositoryType.Rx:    return ((this.rxRepository    != null) ? (this.rxRepository   .ByteCount) : (0));
 
 					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -286,10 +286,10 @@ namespace YAT.Domain
 			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
-				{
-					case RepositoryType.Tx:    return (this.txRepository   .Count);
-					case RepositoryType.Bidir: return (this.bidirRepository.Count);
-					case RepositoryType.Rx:    return (this.rxRepository   .Count);
+				{                                                            // Possible during disposing.
+					case RepositoryType.Tx:    return ((this.txRepository    != null) ? (this.txRepository   .Count) : (0));
+					case RepositoryType.Bidir: return ((this.bidirRepository != null) ? (this.bidirRepository.Count) : (0));
+					case RepositoryType.Rx:    return ((this.rxRepository    != null) ? (this.rxRepository   .Count) : (0));
 
 					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -305,10 +305,10 @@ namespace YAT.Domain
 			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
-				{
-					case RepositoryType.Tx:    return (this.txRepository   .ToElements());
-					case RepositoryType.Bidir: return (this.bidirRepository.ToElements());
-					case RepositoryType.Rx:    return (this.rxRepository   .ToElements());
+				{                                                            // Possible during disposing.
+					case RepositoryType.Tx:    return ((this.txRepository    != null) ? (this.txRepository   .ToElements()) : (null));
+					case RepositoryType.Bidir: return ((this.bidirRepository != null) ? (this.bidirRepository.ToElements()) : (null));
+					case RepositoryType.Rx:    return ((this.rxRepository    != null) ? (this.rxRepository   .ToElements()) : (null));
 
 					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -324,10 +324,10 @@ namespace YAT.Domain
 			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
-				{
-					case RepositoryType.Tx:    return (this.txRepository.   ToLines());
-					case RepositoryType.Bidir: return (this.bidirRepository.ToLines());
-					case RepositoryType.Rx:    return (this.rxRepository   .ToLines());
+				{                                                            // Possible during disposing.
+					case RepositoryType.Tx:    return ((this.txRepository    != null) ? (this.txRepository.   ToLines()) : (null));
+					case RepositoryType.Bidir: return ((this.bidirRepository != null) ? (this.bidirRepository.ToLines()) : (null));
+					case RepositoryType.Rx:    return ((this.rxRepository    != null) ? (this.rxRepository   .ToLines()) : (null));
 
 					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -343,10 +343,10 @@ namespace YAT.Domain
 			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
-				{
-					case RepositoryType.Tx:    return (this.txRepository.   LastLineAuxiliary());
-					case RepositoryType.Bidir: return (this.bidirRepository.LastLineAuxiliary());
-					case RepositoryType.Rx:    return (this.rxRepository   .LastLineAuxiliary());
+				{                                                            // Possible during disposing.
+					case RepositoryType.Tx:    return ((this.txRepository    != null) ? (this.txRepository.   LastLineAuxiliary()) : (null));
+					case RepositoryType.Bidir: return ((this.bidirRepository != null) ? (this.bidirRepository.LastLineAuxiliary()) : (null));
+					case RepositoryType.Rx:    return ((this.rxRepository    != null) ? (this.rxRepository   .LastLineAuxiliary()) : (null));
 
 					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -362,10 +362,10 @@ namespace YAT.Domain
 			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
-				{
-					case RepositoryType.Tx:    this.txRepository.   ClearLastLineAuxiliary(); break;
-					case RepositoryType.Bidir: this.bidirRepository.ClearLastLineAuxiliary(); break;
-					case RepositoryType.Rx:    this.rxRepository   .ClearLastLineAuxiliary(); break;
+				{                                                       // Possible during disposing.
+					case RepositoryType.Tx:    if (this.txRepository    != null) { this.txRepository.   ClearLastLineAuxiliary(); } break;
+					case RepositoryType.Bidir: if (this.bidirRepository != null) { this.bidirRepository.ClearLastLineAuxiliary(); } break;
+					case RepositoryType.Rx:    if (this.rxRepository    != null) { this.rxRepository   .ClearLastLineAuxiliary(); } break;
 
 					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -381,10 +381,10 @@ namespace YAT.Domain
 			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
-				{
-					case RepositoryType.Tx:    return (this.txRepository   .ToString());
-					case RepositoryType.Bidir: return (this.bidirRepository.ToString());
-					case RepositoryType.Rx:    return (this.rxRepository   .ToString());
+				{                                                            // Possible during disposing.
+					case RepositoryType.Tx:    return ((this.txRepository    != null) ? (this.txRepository   .ToString()) : (null));
+					case RepositoryType.Bidir: return ((this.bidirRepository != null) ? (this.bidirRepository.ToString()) : (null));
+					case RepositoryType.Rx:    return ((this.rxRepository    != null) ? (this.rxRepository   .ToString()) : (null));
 
 					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -406,10 +406,10 @@ namespace YAT.Domain
 			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
-				{
-					case RepositoryType.Tx:    return (this.txRepository   .ToExtendedDiagnosticsString(indent));
-					case RepositoryType.Bidir: return (this.bidirRepository.ToExtendedDiagnosticsString(indent));
-					case RepositoryType.Rx:    return (this.rxRepository   .ToExtendedDiagnosticsString(indent));
+				{                                                            // Possible during disposing.
+					case RepositoryType.Tx:    return ((this.txRepository    != null) ? (this.txRepository   .ToExtendedDiagnosticsString(indent)) : (null));
+					case RepositoryType.Bidir: return ((this.bidirRepository != null) ? (this.bidirRepository.ToExtendedDiagnosticsString(indent)) : (null));
+					case RepositoryType.Rx:    return ((this.rxRepository    != null) ? (this.rxRepository   .ToExtendedDiagnosticsString(indent)) : (null));
 
 					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -504,10 +504,10 @@ namespace YAT.Domain
 			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
-				{
-					case RepositoryType.Tx:    this.txRepository   .Enqueue(elements.Clone()); break; // Clone elements as they are needed again below.
-					case RepositoryType.Bidir: this.bidirRepository.Enqueue(elements.Clone()); break; // Clone elements as they are needed again below.
-					case RepositoryType.Rx:    this.rxRepository   .Enqueue(elements.Clone()); break; // Clone elements as they are needed again below.
+				{                                                       // Possible during disposing.
+					case RepositoryType.Tx:    if (this.txRepository    != null) { this.txRepository   .Enqueue(elements.Clone()); } break; // Clone elements as they are needed again below.
+					case RepositoryType.Bidir: if (this.bidirRepository != null) { this.bidirRepository.Enqueue(elements.Clone()); } break; // Clone elements as they are needed again below.
+					case RepositoryType.Rx:    if (this.rxRepository    != null) { this.rxRepository   .Enqueue(elements.Clone()); } break; // Clone elements as they are needed again below.
 
 					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -655,10 +655,10 @@ namespace YAT.Domain
 			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
-				{
-					case RepositoryType.Tx:    this.txRepository   .ReplaceCurrentLine(currentLineElements.Clone()); break; // Clone elements as they are needed again below.
-					case RepositoryType.Bidir: this.bidirRepository.ReplaceCurrentLine(currentLineElements.Clone()); break; // Clone elements as they are needed again below.
-					case RepositoryType.Rx:    this.rxRepository   .ReplaceCurrentLine(currentLineElements.Clone()); break; // Clone elements as they are needed again below.
+				{                                                       // Possible during disposing.
+					case RepositoryType.Tx:    if (this.txRepository    != null) { this.txRepository   .ReplaceCurrentLine(currentLineElements.Clone()); } break; // Clone elements as they are needed again below.
+					case RepositoryType.Bidir: if (this.bidirRepository != null) { this.bidirRepository.ReplaceCurrentLine(currentLineElements.Clone()); } break; // Clone elements as they are needed again below.
+					case RepositoryType.Rx:    if (this.rxRepository    != null) { this.rxRepository   .ReplaceCurrentLine(currentLineElements.Clone()); } break; // Clone elements as they are needed again below.
 
 					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -675,10 +675,10 @@ namespace YAT.Domain
 			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
-				{
-					case RepositoryType.Tx:    this.txRepository   .ClearCurrentLine(); break;
-					case RepositoryType.Bidir: this.bidirRepository.ClearCurrentLine(); break;
-					case RepositoryType.Rx:    this.rxRepository   .ClearCurrentLine(); break;
+				{                                                       // Possible during disposing.
+					case RepositoryType.Tx:    if (this.txRepository    != null) { this.txRepository   .ClearCurrentLine(); } break;
+					case RepositoryType.Bidir: if (this.bidirRepository != null) { this.bidirRepository.ClearCurrentLine(); } break;
+					case RepositoryType.Rx:    if (this.rxRepository    != null) { this.rxRepository   .ClearCurrentLine(); } break;
 
 					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -712,10 +712,10 @@ namespace YAT.Domain
 			lock (this.repositorySyncObj)
 			{
 				switch (repositoryType)
-				{
-					case RepositoryType.Tx:    this.txRepository   .Clear(); break;
-					case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
-					case RepositoryType.Rx:    this.rxRepository   .Clear(); break;
+				{                                                       // Possible during disposing.
+					case RepositoryType.Tx:    if (this.txRepository    != null) { this.txRepository   .Clear(); } break;
+					case RepositoryType.Bidir: if (this.bidirRepository != null) { this.bidirRepository.Clear(); } break;
+					case RepositoryType.Rx:    if (this.rxRepository    != null) { this.rxRepository   .Clear(); } break;
 
 					case RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					default:                   throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));

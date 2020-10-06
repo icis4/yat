@@ -45,15 +45,18 @@
 //==================================================================================================
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Threading;
 
 using MKY;
+using MKY.Collections;
 using MKY.Contracts;
 using MKY.Diagnostics;
 using MKY.Text;
@@ -139,7 +142,47 @@ namespace YAT.Domain
 		private static int staticInstanceCounter;
 
 		/// <summary></summary>
-		protected static Random StaticRandom { get; private set; } = new Random(RandomEx.NextPseudoRandomSeed());
+		protected static Random StaticRandom { get; private set; } = new Random(RandomEx.NextRandomSeed());
+
+		private static bool staticScriptingIsActive; // = false;
+		private static object staticScriptingIsActiveSyncObj = new object();
+
+		#endregion
+
+		#region Static Properties
+		//==========================================================================================
+		// Static Properties
+		//==========================================================================================
+
+	#if (WITH_SCRIPTING)
+
+		/// <summary>
+		/// Gets or sets a value indicating whether scripting is currently active,
+		/// i.e. whether the terminals shall produce received messages for scripting.
+		/// </summary>
+		/// <remarks>
+		/// Implemented as static property for two reasons:
+		/// <list type="bullet">
+		/// <item><description>State always applies to all terminals.</description></item>
+		/// <item><description>State can easier be applied to newly created terminals.</description></item>
+		/// </list>
+		/// </remarks>
+		public static bool ScriptingIsActive
+		{
+			get
+			{
+				lock (staticScriptingIsActiveSyncObj)
+					return (staticScriptingIsActive);
+			}
+
+			set
+			{
+				lock (staticScriptingIsActiveSyncObj)
+					staticScriptingIsActive = value;
+			}
+		}
+
+	#endif
 
 		#endregion
 
@@ -174,10 +217,10 @@ namespace YAT.Domain
 
 	#if (WITH_SCRIPTING)
 
-		private Queue<string> availableReceivedMessagesForScripting = new Queue<string>();
-		private string lastEnqueuedReceivedMessageForScripting; // = null;
+		private Queue<ScriptMessage> availableReceivedMessagesForScripting = new Queue<ScriptMessage>();
+		private ScriptMessage lastEnqueuedReceivedMessageForScripting; // = null;
 		private object lastEnqueuedReceivedMessageForScriptingSyncObj = new object();
-		private string lastDequeuedReceivedMessageForScripting; // = null;
+		private ScriptMessage lastDequeuedReceivedMessageForScripting; // = null;
 		private object lastDequeuedReceivedMessageForScriptingSyncObj = new object();
 
 	#endif
@@ -212,13 +255,15 @@ namespace YAT.Domain
 
 		/// <summary>
 		/// Occurs when a packet is being sent in the host application. The event args contain the
-		/// binary raw data that is being sent, including control characters, EOL,...
+		/// raw data that are being sent, including control characters, EOL,...
+		/// The event can be modified using the <see cref="ModifiablePacketEventArgs.Data"/>
+		/// property or even canceled using the <see cref="ModifiablePacketEventArgs.Cancel"/>
+		/// property. This is similar to the behavior of e.g. the 'Validating' event of WinForms
+		/// controls.
 		/// </summary>
 		/// <remarks>
-		/// Named 'Sending...' rather than '...Sent' since sending is just about to happen and
-		/// can be modified using the <see cref="ModifiablePacketEventArgs.Data"/> property or
-		/// even canceled using the <see cref="ModifiablePacketEventArgs.Cancel"/> property.
-		/// This is similar to the behavior of e.g. the 'OnValidating' event of WinForms controls.
+		/// Named 'SendingPacket' rather than 'SendingPacketByScripting' because functionality could
+		/// also be used without scripting.
 		/// </remarks>
 		public event EventHandler<ModifiablePacketEventArgs> SendingPacket;
 
@@ -230,10 +275,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public event EventHandler<EventArgs<bool>> IsSendingForSomeTimeChanged;
 
-		/// <remarks>Intentionally named "Raw" to emphasize difference to "Display".</remarks>
+		/// <remarks>Intentionally named 'Raw' to emphasize difference to 'Display'.</remarks>
 		public event EventHandler<EventArgs<RawChunk>> RawChunkSent;
 
-		/// <remarks>Intentionally named "Raw" to emphasize difference to "Display".</remarks>
+		/// <remarks>Intentionally named 'Raw' to emphasize difference to 'Display'.</remarks>
 		public event EventHandler<EventArgs<RawChunk>> RawChunkReceived;
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
@@ -305,10 +350,49 @@ namespace YAT.Domain
 	#if (WITH_SCRIPTING)
 
 		/// <summary>
-		/// Occurs when a packet has been received by the host application. The event args contain
-		/// the binary raw data that has been received, including control characters, EOL,...
+		/// Occurs when a received packet is being processed by the host application. The event args
+		/// contain the raw data that has been received, including control characters, EOL,...
+		/// Same as <see cref="SendingPacket"/>,
+		/// this event can be modified using the <see cref="ModifiablePacketEventArgs.Data"/>
+		/// property or even canceled using the <see cref="ModifiablePacketEventArgs.Cancel"/>
+		/// property. This is similar to the behavior of e.g. the 'Validating' event of WinForms
+		/// controls.
+		/// The packet will produce the args of the <see cref="MessageReceivedForScripting"/> event.
 		/// </summary>
-		public event EventHandler<PacketEventArgs> ScriptPacketReceived;
+		/// <remarks>
+		/// Processing for scripting differs from displaying processing because...
+		/// ...received data must not be affected by meta and auxiliary line content.
+		/// ...received data must not be affected by display-only line breaks, e.g. "word wrap".
+		/// ...received data must not be processed individually, only as packets/messages.
+		/// ...received data must not be reprocessed on <see cref="RefreshRepositories"/>.
+		/// </remarks>
+		/// <remarks>
+		/// Named 'ForScripting' as functionality is tied to scripting.
+		/// Named 'Packet' for orthogonality with <see cref="SendingPacket"/>,
+		/// even though argument is typically based on a line rather than a packet.
+		/// </remarks>
+		public event EventHandler<ModifiablePacketEventArgs> ReceivingPacketForScripting;
+
+		/// <summary>
+		/// Occurs when a message has been received by the host application. The event args contain
+		/// the message in formatted text representation. For text terminals, the text is composed
+		/// of the decoded characters, excluding control characters. For binary terminals, the text
+		/// represents the received data in hexadecimal notation.
+		/// In contrast, the <see cref="ReceivingPacketForScripting"/> event args contain the raw data that
+		/// has been received.
+		/// </summary>
+		/// <remarks>
+		/// Processing for scripting differs from displaying processing because...
+		/// ...received data must not be affected by meta and auxiliary line content.
+		/// ...received data must not be affected by display-only line breaks, e.g. "word wrap".
+		/// ...received data must not be processed individually, only as packets/messages.
+		/// ...received data must not be reprocessed on <see cref="RefreshRepositories"/>.
+		/// </remarks>
+		/// <remarks>
+		/// Named 'ForScripting' as functionality is tied to scripting.
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		public event EventHandler<ScriptMessageEventArgs> MessageReceivedForScripting;
 
 	#endif
 
@@ -351,7 +435,10 @@ namespace YAT.Domain
 			InitializeSend();
 			AttachRawTerminal(new RawTerminal(this.terminalSettings.IO, this.terminalSettings.Buffer));
 
-		////this.isReloading has been initialized to false.
+		#if (WITH_SCRIPTING)
+		////this.scriptingIsActive has been initialized to false.
+		#endif
+		////this.isReloading       has been initialized to false.
 		}
 
 		/// <summary></summary>
@@ -365,7 +452,7 @@ namespace YAT.Domain
 			InitializeSend();
 			AttachRawTerminal(new RawTerminal(terminal.rawTerminal, this.terminalSettings.IO, this.terminalSettings.Buffer));
 
-			this.isReloading = terminal.isReloading;
+			this.isReloading       = terminal.isReloading;
 		}
 
 		#region Disposal
@@ -379,13 +466,14 @@ namespace YAT.Domain
 		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			this.eventHelper.DiscardAllEventsAndExceptions();
-
-			DebugMessage("Disposing...");
+			if (this.eventHelper != null) // Possible when called by finalizer (non-deterministic).
+				this.eventHelper.DiscardAllEventsAndExceptions();
 
 			// Dispose of managed resources:
 			if (disposing)
 			{
+				DebugMessage("Disposing...");
+
 				// In the 'normal' case, sending will already have been stopped in Close()...
 				BreakSendThreads();
 
@@ -398,9 +486,11 @@ namespace YAT.Domain
 				DetachTerminalSettings();
 				DetachAndDisposeRawTerminal();
 				DisposeRepositories();
+
+				DebugMessage("...successfully disposed.");
 			}
 
-			DebugMessage("...successfully disposed.");
+		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
 		}
 
 		#endregion
@@ -516,11 +606,14 @@ namespace YAT.Domain
 		/// <summary>
 		/// Gets a value indicating whether the terminal has received a message that is available for scripting.
 		/// </summary>
-		public virtual bool HasAvailableReceivedMessageForScripting
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		public virtual bool HasReceivedMessageAvailableForScripting
 		{
 			get
 			{
-			////AssertUndisposed() is called by 'ReceivedLineCount' below.
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (AvailableReceivedMessageCountForScripting > 0);
 			}
@@ -529,11 +622,14 @@ namespace YAT.Domain
 		/// <summary>
 		/// Gets a value indicating the number of received messages that are available for scripting.
 		/// </summary>
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
 		public virtual int AvailableReceivedMessageCountForScripting
 		{
 			get
 			{
-				AssertUndisposed();
+			////AssertUndisposed() shall not be called from this simple get-property.
 
 				lock (this.availableReceivedMessagesForScripting)
 				{
@@ -1393,6 +1489,26 @@ namespace YAT.Domain
 		/// Currently limited to data of a single line. Refactoring would be required to format multiple lines
 		/// (<see cref="ProcessChunk(RawChunk)"/> instead of <see cref="ByteToElement(byte, DateTime, IODirection, Radix, List{byte})"/>).
 		/// </remarks>
+		/// <exception cref="InvalidOperationException">
+		/// <see cref="Settings.DisplaySettings.TxRadix"/> and
+		/// <see cref="Settings.DisplaySettings.RxRadix"/> have different values.
+		/// </exception>
+		public virtual string Format(byte[] data)
+		{
+			if (TerminalSettings.Display.TxRadix == TerminalSettings.Display.RxRadix)
+				return Format(data, IODirection.Tx); // Radix is the same for both directions, direction doesn't matter.
+
+			throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "This method requires that 'TxRadix' and 'RxRadix' are set to the same value!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		/// <summary>
+		/// Formats the specified data sequence.
+		/// </summary>
+		/// <remarks>
+		/// \remind (2017-12-11 / MKY)
+		/// Currently limited to data of a single line. Refactoring would be required to format multiple lines
+		/// (<see cref="ProcessChunk(RawChunk)"/> instead of <see cref="ByteToElement(byte, DateTime, IODirection, Radix, List{byte})"/>).
+		/// </remarks>
 		public virtual string Format(byte[] data, IODirection direction)
 		{
 			switch (direction)
@@ -1429,7 +1545,11 @@ namespace YAT.Domain
 		/// </remarks>
 		protected virtual string Format(byte[] data, IODirection direction, Radix radix)
 		{
-			var lp = new DisplayElementCollection();
+			// Attention:
+			// Similar code exists in TextTerminal.FormatMessageTextForScripting(byte[]).
+			// Changes here likely have to be applied there too.
+
+			var lp = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 
 			var pendingMultiBytesToDecode = new List<byte>(4); // Preset the required capacity to improve memory management; 4 is the maximum value for multi-byte characters.
 			foreach (byte b in data)
@@ -1441,6 +1561,48 @@ namespace YAT.Domain
 
 			return (lp.ElementsToString());
 		}
+
+	#if (WITH_SCRIPTING)
+
+		/// <summary>
+		/// Formats the specified data sequence for scripting.
+		/// </summary>
+		/// <remarks>
+		/// For text terminals, received messages are text lines, decoded with the configured encoding. Messages include control characters as configured. Messages do not include EOL.
+		/// For binary terminals, received messages are hexadecimal values, separated by spaces, without radix.
+		/// If ever needed differently, an [advanced configuration of scripting behavior] shall be added.
+		/// </remarks>
+		protected abstract string FormatMessageTextForScripting(DateTime timeStamp, byte[] data);
+
+	#endif // WITH_SCRIPTING
+
+		#endregion
+
+		#region Change
+		//------------------------------------------------------------------------------------------
+		// Change
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Removes the framing from the given data.
+		/// </summary>
+		/// <remarks>
+		/// For text terminals, framing is typically defined by EOL.
+		/// For binary terminals, framing is optionally defined by sequence before/after.
+		/// </remarks>
+		/// <exception cref="InvalidOperationException">
+		/// The Tx and Rx sequence(s) have different values.
+		/// </exception>
+		public abstract void RemoveFraming(byte[] data);
+
+		/// <summary>
+		/// Removes the framing from the given data.
+		/// </summary>
+		/// <remarks>
+		/// For text terminals, framing is typically defined by EOL.
+		/// For binary terminals, framing is optionally defined by sequence before/after.
+		/// </remarks>
+		public abstract void RemoveFraming(byte[] data, IODirection direction);
 
 		#endregion
 
@@ -1510,19 +1672,22 @@ namespace YAT.Domain
 		/// Enqueues a received message to make it available for scripting.
 		/// </summary>
 		/// <remarks>
-		/// Implemented here instead of 'Model.ScriptConnection' as a separate queue for each
-		/// terminal is required, whereas the 'Model.ScriptConnection' is a singleton.
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
 		/// </remarks>
-		protected virtual void EnqueueReceivedMessageForScripting(string value)
+		/// <remarks>
+		/// Implemented here instead of 'Model.ScriptBridge' as a separate queue for each
+		/// terminal is required, whereas the 'Model.ScriptBridge' is a singleton.
+		/// </remarks>
+		protected virtual void EnqueueReceivedMessageForScripting(ScriptMessage value)
 		{
 			lock (this.lastEnqueuedReceivedMessageForScriptingSyncObj) // Access to both must be synchronized!
 			{                                                          // Otherwise, e.g. 'LastEnqueued' could
 				lock (this.availableReceivedMessagesForScripting)      // yet be emtpy while the queue already
 				{                                                      // contains an item!
 					this.availableReceivedMessagesForScripting.Enqueue(value);
-					this.lastEnqueuedReceivedMessageForScripting = value;
+					this.lastEnqueuedReceivedMessageForScripting = value.Clone(); // Clone to ensure decoupling.
 
-					DebugScriptingPostfixedQuoted(value, "enqueued for scripting."); // Same reason as above, acceptable
+					DebugScriptingPostfixedQuoted(value.Text, "enqueued for scripting."); // Same reason as above, acceptable
 				}                                                                         // to do inside lock since debug only.
 			}
 		}
@@ -1530,7 +1695,10 @@ namespace YAT.Domain
 		/// <summary>
 		/// Returns the message that has last been enqueued into the receive queue that is available for scripting.
 		/// </summary>
-		public virtual void GetLastEnqueuedReceivedMessageForScripting(out string value)
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		public virtual void GetLastEnqueuedReceivedMessageForScripting(out ScriptMessage value)
 		{
 			AssertUndisposed();
 
@@ -1538,20 +1706,23 @@ namespace YAT.Domain
 			{
 				value = this.lastEnqueuedReceivedMessageForScripting;
 
-				DebugScriptingPostfixedQuoted(value, "retrieved as last enqueued received message for scripting.");
+				DebugScriptingPostfixedQuoted(value.Text, "retrieved as last enqueued received message for scripting.");
 			}
 		}
 
 		/// <summary>
 		/// Clears the last enqueued message that is available for scripting.
 		/// </summary>
-		public virtual void ClearLastEnqueuedReceivedMessageForScripting(out string cleared)
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		public virtual void ClearLastEnqueuedReceivedMessageForScripting(out ScriptMessage cleared)
 		{
 			AssertUndisposed();
 
 			lock (this.lastEnqueuedReceivedMessageForScriptingSyncObj)
 			{
-				DebugScriptingPostfixedQuoted(this.lastEnqueuedReceivedMessageForScripting, "cleared as last enqueued received message for scripting.");
+				DebugScriptingPostfixedQuoted(this.lastEnqueuedReceivedMessageForScripting.Text, "cleared as last enqueued received message for scripting.");
 
 				cleared = this.lastEnqueuedReceivedMessageForScripting;
 
@@ -1562,10 +1733,13 @@ namespace YAT.Domain
 		/// <summary>
 		/// Gets the next received message that is available for scripting and removes it from the queue.
 		/// </summary>
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
 		/// <exception cref="InvalidOperationException">
 		/// The underlying <see cref="Queue{T}"/> is empty.
 		/// </exception>
-		public virtual void DequeueNextAvailableReceivedMessageForScripting(out string value)
+		public virtual void DequeueNextAvailableReceivedMessageForScripting(out ScriptMessage value)
 		{
 			AssertUndisposed();
 
@@ -1574,9 +1748,9 @@ namespace YAT.Domain
 				lock (this.availableReceivedMessagesForScripting)      // yet be emtpy while the queue already
 				{                                                      // contains an item!
 					value = this.availableReceivedMessagesForScripting.Dequeue();
-					this.lastDequeuedReceivedMessageForScripting = value;
+					this.lastDequeuedReceivedMessageForScripting = value.Clone(); // Clone to ensure decoupling.
 
-					DebugScriptingPostfixedQuoted(value, "dequeued for scripting."); // Same reason as above, acceptable
+					DebugScriptingPostfixedQuoted(value.Text, "dequeued for scripting."); // Same reason as above, acceptable
 				}                                                                         // to do inside lock since debug only.
 			}
 		}
@@ -1584,7 +1758,10 @@ namespace YAT.Domain
 		/// <summary>
 		/// Returns the received message that has last been dequeued from the receive queue for scripting.
 		/// </summary>
-		public virtual void GetLastDequeuedReceivedMessageForScripting(out string value)
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		public virtual void GetLastDequeuedReceivedMessageForScripting(out ScriptMessage value)
 		{
 			AssertUndisposed();
 
@@ -1592,20 +1769,23 @@ namespace YAT.Domain
 			{
 				value = this.lastDequeuedReceivedMessageForScripting;
 
-				DebugScriptingPostfixedQuoted(value, "retrieved as last dequeued received message for scripting.");
+				DebugScriptingPostfixedQuoted(value.Text, "retrieved as last dequeued received message for scripting.");
 			}
 		}
 
 		/// <summary>
 		/// Clears the last dequeued message that is available for scripting.
 		/// </summary>
-		public virtual void ClearLastDequeuedReceivedMessageForScripting(out string cleared)
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		public virtual void ClearLastDequeuedReceivedMessageForScripting(out ScriptMessage cleared)
 		{
 			AssertUndisposed();
 
 			lock (this.lastDequeuedReceivedMessageForScriptingSyncObj)
 			{
-				DebugScriptingPostfixedQuoted(this.lastDequeuedReceivedMessageForScripting, "cleared as last dequeued received message for scripting.");
+				DebugScriptingPostfixedQuoted(this.lastDequeuedReceivedMessageForScripting.Text, "cleared as last dequeued received message for scripting.");
 
 				cleared = this.lastDequeuedReceivedMessageForScripting;
 
@@ -1614,12 +1794,16 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		/// <remarks>
 		/// \remind (2018-03-27 / MKY)
 		/// 'LastAvailable' only works properly for a terminating number of received messages, but
 		/// not for consecutive receiving. This method shall be eliminated as soon as the obsolete
 		/// GetLastReceived(), CheckLastReceived() and WaitFor() have been removed.
 		/// </remarks>
-		public virtual void GetLastAvailableReceivedMessageForScripting(out string value)
+		[Obsolete("See remarks.")]
+		public virtual void GetLastAvailableReceivedMessageForScripting(out ScriptMessage value)
 		{
 			AssertUndisposed();
 
@@ -1630,7 +1814,7 @@ namespace YAT.Domain
 					var messages = this.availableReceivedMessagesForScripting.ToArray();
 					value = messages[messages.Length - 1];
 
-					DebugScriptingPostfixedQuoted(value, "retrieved as last available received message for scripting.");
+					DebugScriptingPostfixedQuoted(value.Text, "retrieved as last available received message for scripting.");
 				}
 				else
 				{
@@ -1644,16 +1828,19 @@ namespace YAT.Domain
 		/// <summary>
 		/// Cleares all available messages in the receive queue for scripting.
 		/// </summary>
-		public void ClearAvailableReceivedMessagesForScripting(out string[] clearedMessages)
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		public void ClearAvailableReceivedMessagesForScripting(out ScriptMessage[] cleared)
 		{
 			AssertUndisposed();
 
 			lock (this.availableReceivedMessagesForScripting)
 			{
-				clearedMessages = this.availableReceivedMessagesForScripting.ToArray();
+				cleared = this.availableReceivedMessagesForScripting.ToArray();
 				this.availableReceivedMessagesForScripting.Clear();
 
-				DebugScriptingQueueCleared(clearedMessages);
+				DebugScriptingQueueCleared(cleared);
 			}
 		}
 
@@ -1716,9 +1903,9 @@ namespace YAT.Domain
 
 		private void ApplyDisplaySettings()
 		{
-			this.txRepository.Capacity    = this.terminalSettings.Display.MaxLineCount;
+			this.txRepository   .Capacity = this.terminalSettings.Display.MaxLineCount;
 			this.bidirRepository.Capacity = this.terminalSettings.Display.MaxLineCount;
-			this.rxRepository.Capacity    = this.terminalSettings.Display.MaxLineCount;
+			this.rxRepository   .Capacity = this.terminalSettings.Display.MaxLineCount;
 
 			RefreshRepositories();
 		}
@@ -1868,6 +2055,14 @@ namespace YAT.Domain
 					}
 				}
 			}
+
+////#if (WITH_SCRIPTING)
+////		if (TerminalSettings.Script.IncludeIOWarnings) \remind (2020-09-30 / MKY) make inclusion of warnings and errors configurable
+////		{
+////			var message = new ScriptMessage(e.TimeStamp, null, null, e.Message);
+////			EnqueueReceivedMessageForScripting(message);
+////		}
+////#endif
 		}
 
 		private void rawTerminal_IOError(object sender, IOErrorEventArgs e)
@@ -1910,6 +2105,14 @@ namespace YAT.Domain
 				InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, (Direction)e.Direction, e.Message));
 				OnIOError(e);
 			}
+
+////#if (WITH_SCRIPTING)
+////		if (TerminalSettings.Script.IncludeIOErrors) \remind (2020-09-30 / MKY) make inclusion of warnings and errors configurable
+////		{
+////			var message = new ScriptMessage(e.TimeStamp, null, null, e.Message);
+////			EnqueueReceivedMessageForScripting(message);
+////		}
+////#endif
 		}
 
 		/// <remarks>
@@ -1953,10 +2156,7 @@ namespace YAT.Domain
 
 			lock (ClearRefreshEmptySyncObj) // Delay processing new raw data until clearing or refreshing has completed.
 			{
-				// Reset processing:
 				ResetProcess(e.Value);
-
-				// Clear repository:
 				ClearMyRepository(e.Value);
 			}
 		}
@@ -1992,7 +2192,7 @@ namespace YAT.Domain
 		/// Named 'Sending...' rather than '...Sent' since sending is just about to happen and
 		/// can be modified using the <see cref="ModifiablePacketEventArgs.Data"/> property or
 		/// even canceled using the <see cref="ModifiablePacketEventArgs.Cancel"/> property.
-		/// This is similar to the behavior of e.g. the 'OnValidating' event of WinForms controls.
+		/// This is similar to the behavior of e.g. the 'Validating' event of WinForms controls.
 		/// </remarks>
 		protected virtual void OnSendingPacket(ModifiablePacketEventArgs e)
 		{
@@ -2210,11 +2410,26 @@ namespace YAT.Domain
 
 	#if (WITH_SCRIPTING)
 
-		/// <summary></summary>
-		protected virtual void OnScriptPacketReceived(PacketEventArgs e)
+		/// <remarks>
+		/// This plug-in event must not be raised during reload.
+		/// </remarks>
+		protected virtual void OnReceivingScriptPacket(ModifiablePacketEventArgs e)
 		{
-			if (!IsReloading) // This plug-in event must only be raised once.
-				this.eventHelper.RaiseSync<PacketEventArgs>(ScriptPacketReceived, this, e);
+			if (IsReloading)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "This plug-in event must not be raised during reload!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+			this.eventHelper.RaiseSync<ModifiablePacketEventArgs>(ReceivingPacketForScripting, this, e);
+		}
+
+		/// <remarks>
+		/// This plug-in event must not be raised during reload.
+		/// </remarks>
+		protected virtual void OnMessageReceivedForScripting(ScriptMessageEventArgs e)
+		{
+			if (IsReloading)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "This plug-in event must not be raised during reload!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+			this.eventHelper.RaiseSync<ScriptMessageEventArgs>(MessageReceivedForScripting, this, e);
 		}
 
 	#endif // WITH_SCRIPTING
@@ -2326,6 +2541,7 @@ namespace YAT.Domain
 			if (IsUndisposed) // AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging.
 			{
 				var sb = new StringBuilder();
+
 				lock (this.repositorySyncObj)
 				{
 					if (this.terminalSettings != null) // Possible during disposing.
@@ -2357,6 +2573,7 @@ namespace YAT.Domain
 						sb.Append    (this.rxRepository.ToExtendedDiagnosticsString(indent + "   ")); // Repository will add 'NewLine'.
 					}
 				}
+
 				return (sb.ToString());
 			}
 
@@ -2395,9 +2612,9 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named 'Message' for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
@@ -2419,8 +2636,8 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Name "DebugWrite" would show relation to <see cref="Debug.Write(string)"/>.
-		/// However, named "Message" for orthogonality with <see cref="DebugMessage(string)"/>.
+		/// Name 'DebugWrite' would show relation to <see cref="Debug.Write(string)"/>.
+		/// However, named 'Message' for orthogonality with <see cref="DebugMessage(string)"/>.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
 		[Conditional("DEBUG")]
@@ -2494,12 +2711,12 @@ namespace YAT.Domain
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_SCRIPTING")]
-		private void DebugScriptingQueueCleared(string[] cleared)
+		private void DebugScriptingQueueCleared(ICollection<ScriptMessage> cleared)
 		{
-			if (ArrayEx.IsNullOrEmpty(cleared))
+			if (ICollectionEx.IsNullOrEmpty((ICollection)cleared))
 				DebugScripting("Message queue for scripting cleared, contained [nothing].");
 			else
-				DebugScripting("Message queue for scripting cleared, contained { " + ArrayEx.ValuesToString(cleared, '"') + " }.");
+				DebugScripting("Message queue for scripting cleared, contained { " + ArrayEx.ValuesToString(cleared.Select(v => v.Text).ToArray(), '"') + " }.");
 		}
 
 	#endif // WITH_SCRIPTING

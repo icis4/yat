@@ -28,9 +28,12 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 using MKY;
+using MKY.Collections;
 using MKY.Text;
 
 #endregion
@@ -77,30 +80,30 @@ namespace YAT.Domain
 			{
 				// Tx states:
 				{
-					byte[] txSequenceBreakAfter;
-					if (!p.TryParse(BinaryTerminalSettings.TxDisplay.SequenceLineBreakAfter.Sequence, out txSequenceBreakAfter))
-						txSequenceBreakAfter = null;
-
 					byte[] txSequenceBreakBefore;
 					if (!p.TryParse(BinaryTerminalSettings.TxDisplay.SequenceLineBreakBefore.Sequence, out txSequenceBreakBefore))
 						txSequenceBreakBefore = null;
 
-					this.binaryTxState      = new BinaryUnidirState(txSequenceBreakAfter, txSequenceBreakBefore);
-					this.binaryBidirTxState = new BinaryUnidirState(txSequenceBreakAfter, txSequenceBreakBefore);
+					byte[] txSequenceBreakAfter;
+					if (!p.TryParse(BinaryTerminalSettings.TxDisplay.SequenceLineBreakAfter.Sequence, out txSequenceBreakAfter))
+						txSequenceBreakAfter = null;
+
+					this.binaryTxState      = new BinaryUnidirState(txSequenceBreakBefore, txSequenceBreakAfter);
+					this.binaryBidirTxState = new BinaryUnidirState(txSequenceBreakBefore, txSequenceBreakAfter);
 				}
 
 				// Rx states:
 				{
-					byte[] rxSequenceBreakAfter;
-					if (!p.TryParse(BinaryTerminalSettings.RxDisplay.SequenceLineBreakAfter.Sequence, out rxSequenceBreakAfter))
-						rxSequenceBreakAfter = null;
-
 					byte[] rxSequenceBreakBefore;
 					if (!p.TryParse(BinaryTerminalSettings.RxDisplay.SequenceLineBreakBefore.Sequence, out rxSequenceBreakBefore))
 						rxSequenceBreakBefore = null;
 
-					this.binaryBidirRxState = new BinaryUnidirState(rxSequenceBreakAfter, rxSequenceBreakBefore);
-					this.binaryRxState      = new BinaryUnidirState(rxSequenceBreakAfter, rxSequenceBreakBefore);
+					byte[] rxSequenceBreakAfter;
+					if (!p.TryParse(BinaryTerminalSettings.RxDisplay.SequenceLineBreakAfter.Sequence, out rxSequenceBreakAfter))
+						rxSequenceBreakAfter = null;
+
+					this.binaryBidirRxState = new BinaryUnidirState(rxSequenceBreakBefore, rxSequenceBreakAfter);
+					this.binaryRxState      = new BinaryUnidirState(rxSequenceBreakBefore, rxSequenceBreakAfter);
 				}
 			}
 		}
@@ -155,7 +158,10 @@ namespace YAT.Domain
 		protected override void ProcessByteOfChunk(RepositoryType repositoryType,
 		                                           byte b, DateTime ts, string dev, IODirection dir,
 		                                           bool isFirstByteOfChunk, bool isLastByteOfChunk,
-		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd,
+		                                           ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd,
+	#if (WITH_SCRIPTING)
+		                                           ref ScriptLineCollection receivedScriptLinesToAdd,
+	#endif
 		                                           out bool breakChunk)
 		{
 			breakChunk = false; // \Remind (2020-05-16 / MKK): Does 'elementsForNextLine' really work in every case?
@@ -164,6 +170,9 @@ namespace YAT.Domain
 			var lineState = processState.Line; // Convenience shortcut.
 
 			var elementsForNextLine = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+		#if (WITH_SCRIPTING)
+			var linePositionEndAppliesToScriptLines = false;
+		#endif
 
 			// The first byte of a line will sequentially trigger the [Begin] as well as [Content]
 			// condition below. In the normal case, the line will then contain the first displayed
@@ -178,24 +187,32 @@ namespace YAT.Domain
 
 			if (lineState.Position == LinePosition.Begin)
 			{
-				DoLineBegin(repositoryType, processState, ts, dev, dir, elementsToAdd);
+				DoLineBegin(repositoryType, processState, ts, dev, dir, ref elementsToAdd);
 			}
 
 			if (lineState.Position == LinePosition.Content)
 			{
-				DoLineContent(repositoryType, processState, b, ts, dev, dir, elementsToAdd, elementsForNextLine);
+			#if (WITH_SCRIPTING)
+				DoLineContent(repositoryType, processState, b, ts, dev, dir, ref elementsToAdd, ref elementsForNextLine, out linePositionEndAppliesToScriptLines);
+			#else
+				DoLineContent(repositoryType, processState, b, ts, dev, dir, ref elementsToAdd, ref elementsForNextLine);
+			#endif
 			}
 
-			if (lineState.Position == LinePosition.End)
-			{
-				DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
+			if (lineState.Position == LinePosition.End)                                             // Implicitly means 'AppliesToScriptingIfFramed' since flag will
+			{                                                                                       // only be set when sequence before/after is active and complete.
+			#if (WITH_SCRIPTING)
+				DoLineEnd(repositoryType, processState, ts, dir, ref elementsToAdd, ref linesToAdd, linePositionEndAppliesToScriptLines, ref receivedScriptLinesToAdd);
+			#else
+				DoLineEnd(repositoryType, processState, ts, dir, ref elementsToAdd, ref linesToAdd);
+			#endif
 
 				// In case of elements for next line immediately flush and start the new line:
-				if (elementsForNextLine.Count > 0)
+				if (!ICollectionEx.IsNullOrEmpty(elementsForNextLine))
 				{
 					Flush(repositoryType, elementsToAdd, linesToAdd);
 					                                         //// Potentially same time stamp as end of previous line, since time stamp belongs to chunk.
-					DoLineBegin(repositoryType, processState, ts, dev, dir, elementsToAdd);
+					DoLineBegin(repositoryType, processState, ts, dev, dir, ref elementsToAdd);
 
 					foreach (var de in elementsForNextLine)
 					{
@@ -206,7 +223,12 @@ namespace YAT.Domain
 								foreach (var originByte in origin.Value1)
 								{
 									DisplayElementCollection elementsForNextLineDummy = null;
-									DoLineContent(repositoryType, processState, originByte, ts, dev, dir, elementsToAdd, elementsForNextLineDummy);
+								#if (WITH_SCRIPTING)
+									bool linePositionEndAlsoAppliesToScriptingDummy;
+									DoLineContent(repositoryType, processState, originByte, ts, dev, dir, ref elementsToAdd, ref elementsForNextLineDummy, out linePositionEndAlsoAppliesToScriptingDummy);
+								#else
+									DoLineContent(repositoryType, processState, originByte, ts, dev, dir, ref elementsToAdd, ref elementsForNextLineDummy);
+								#endif
 								}
 							}
 						}
@@ -214,6 +236,24 @@ namespace YAT.Domain
 				} // if (has elementsForNextLine)
 			}
 		}
+
+	#if (WITH_SCRIPTING)
+
+		/// <summary>
+		/// Line breaks like length based "word wrap" only apply to scripting if the message is not framed, i.e.:
+		/// For text terminals, framing is typically defined by EOL.
+		/// For binary terminals, framing is optionally defined by sequence before/after.
+		/// </summary>
+		protected override bool IsNotFramedAndThusAppliesToScriptLines
+		{
+			get
+			{                                                                    // 'ScriptLines' only apply to Rx.
+				var binaryDisplaySettings = GetBinaryDisplaySettings(IODirection.Rx);
+				return (!(binaryDisplaySettings.SequenceLineBreakBefore.Enabled || binaryDisplaySettings.SequenceLineBreakAfter.Enabled));
+			}
+		}
+
+	#endif
 
 		/// <summary></summary>
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
@@ -235,10 +275,7 @@ namespace YAT.Domain
 				if (TerminalSettings.Display.ShowTimeDelta) { lineState.Elements.ReplaceTimeDelta(ts - processState.Overall.PreviousLineTimeStamp, TerminalSettings.Display.TimeDeltaFormat,                                           left, right); doReplace = true; }
 
 				if (doReplace)
-				{
-				////elementsToAdd.Clear() is not needed as only replace happens above.
 					FlushReplaceAlreadyBeganLine(repositoryType, lineState);
-				}
 			}
 		}
 
@@ -248,12 +285,12 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		protected override void DoLineBegin(RepositoryType repositoryType, ProcessState processState,
 		                                    DateTime ts, string dev, IODirection dir,
-		                                    DisplayElementCollection elementsToAdd)
+		                                    ref DisplayElementCollection elementsToAdd)
 		{
-			base.DoLineBegin(repositoryType, processState, ts, dev, dir, elementsToAdd);
+			base.DoLineBegin(repositoryType, processState, ts, dev, dir, ref elementsToAdd);
 
 			var lineState = processState.Line; // Convenience shortcut.
-			var lp = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
+			var lp = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 
 			lp.Add(new DisplayElement.LineStart());
 
@@ -267,6 +304,8 @@ namespace YAT.Domain
 			}
 
 			lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+
+			CreateCollectionIfIsNull(ref elementsToAdd);
 			elementsToAdd.AddRange(lp);
 		}
 
@@ -276,9 +315,21 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		private void DoLineContent(RepositoryType repositoryType, ProcessState processState,
 		                           byte b, DateTime ts, string dev, IODirection dir,
-		                           DisplayElementCollection elementsToAdd, DisplayElementCollection elementsForNextLine)
+	#if (WITH_SCRIPTING)
+		                           ref DisplayElementCollection elementsToAdd, ref DisplayElementCollection elementsForNextLine,
+		                           out bool linePositionEndAppliesToScriptLines)
+	#else
+		                           ref DisplayElementCollection elementsToAdd, ref DisplayElementCollection elementsForNextLine)
+	#endif
 		{
-			var lineState = processState.Line; // Convenience shortcut.
+		#if (WITH_SCRIPTING)
+			linePositionEndAppliesToScriptLines = false;
+		#endif
+
+			var lineState   = processState.Line;   // Convenience shortcut.
+		#if (WITH_SCRIPTING)
+			var scriptState = processState.Script; // Convenience shortcut.
+		#endif
 
 			var binaryUnidirState     = GetBinaryUnidirState(repositoryType, dir);
 			var binaryDisplaySettings = GetBinaryDisplaySettings(dir);
@@ -308,9 +359,13 @@ namespace YAT.Domain
 
 					de = null; // Indicate that element has been consumed.
 
+					CreateCollectionIfIsNull(ref elementsForNextLine);
 					ReleaseRetainedUnconfirmedHiddenSequenceBefore(lineState, binaryUnidirState, dir, elementsForNextLine);
 
 					lineState.Position = LinePosition.End;
+				#if (WITH_SCRIPTING)
+					linePositionEndAppliesToScriptLines = true;
+				#endif
 				}
 				else if (binaryUnidirState.SequenceBeforeOfGivenDevice[dev].IsPartlyMatchContinued)
 				{
@@ -349,6 +404,8 @@ namespace YAT.Domain
 				if (totalByteCount <= TerminalSettings.Display.MaxLineLength)
 				{
 					lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+
+					CreateCollectionIfIsNull(ref elementsToAdd);
 					elementsToAdd.AddRange(lp);
 				}
 				else
@@ -357,16 +414,25 @@ namespace YAT.Domain
 					                                  //// Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
 					var message = "Maximal number of bytes per line exceeded! Check the line break settings in Terminal > Settings > Binary or increase the limit in Terminal > Settings > Advanced.";
 					lineState.Elements.Add(new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true));
+
+					CreateCollectionIfIsNull(ref elementsToAdd);
 					elementsToAdd.Add(     new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true));
 				}
 			}
 
-			// Evaluate line breaks:
+		#if (WITH_SCRIPTING)
+			// Apply to scripting:
+			if (!IsReloading && ScriptingIsActive)
+			{
+				if (!IsByteToHide(b))
+					scriptState.Data.Add(b);
+			}
+		#endif
+
+			// Only continue evaluation if no line break detected yet (cannot have more than one line break):
 			//  1. Evaluate the tricky case: Sequence before.
 			//  2. Evaluate the other easy case: Sequence after.
 			//  3. Evaluate the easiest case: Length line break.
-			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
-
 			if ((lineState.Position != LinePosition.End) && (binaryDisplaySettings.SequenceLineBreakAfter.Enabled))
 			{
 				if (!binaryUnidirState.SequenceAfterOfGivenDevice.ContainsKey(dev))                                            // It is OK to only access or add to the collection,
@@ -374,13 +440,23 @@ namespace YAT.Domain
 				                                                                                                               // since there is only a given number of devices.
 				binaryUnidirState.SequenceAfterOfGivenDevice[dev].Enqueue(b);                                                  // Applies to TCP and UDP server terminals only.
 				if (binaryUnidirState.SequenceAfterOfGivenDevice[dev].IsCompleteMatch) // No need to check for partly matches.
+				{
 					lineState.Position = LinePosition.End;
+				#if (WITH_SCRIPTING)
+					linePositionEndAppliesToScriptLines = true;
+				#endif
+				}
 			}
 
 			if ((lineState.Position != LinePosition.End) && (binaryDisplaySettings.LengthLineBreak.Enabled))
 			{
 				if (lineState.Elements.ByteCount >= binaryDisplaySettings.LengthLineBreak.Length)
+				{
 					lineState.Position = LinePosition.End;
+				#if (WITH_SCRIPTING)
+					linePositionEndAppliesToScriptLines = IsNotFramedAndThusAppliesToScriptLines; // Length line breaks, i.e. "word wrap", shall not effect scripting. If ever needed, an [advanced configuration of scripting behavior] shall be added.
+				#endif
+				}
 			}
 		}
 
@@ -404,7 +480,12 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		protected override void DoLineEnd(RepositoryType repositoryType, ProcessState processState,
 		                                  DateTime ts, IODirection dir,
-		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
+	#if (WITH_SCRIPTING)
+		                                  ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd,
+		                                  bool appliesToScriptLines, ref ScriptLineCollection receivedScriptLinesToAdd)
+	#else
+		                                  ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd)
+	#endif
 		{
 			var lineState = processState.Line; // Convenience shortcut.
 
@@ -428,16 +509,50 @@ namespace YAT.Domain
 			}
 
 			lineEnd.Add(new DisplayElement.LineBreak());
+
+			CreateCollectionIfIsNull(ref elementsToAdd);
 			elementsToAdd.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
 
-			// Finalize line:                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-			var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-			l.AddRange(lineState.Elements.Clone()); // Clone to ensure decoupling!
+			// Finalize line:
+			var l = new DisplayLine(lineState.Elements.Count + lineEnd.Count); // Preset the required capacity to improve memory management.
+			l.AddRange(lineState.Elements.Clone()); // Clone to ensure decoupling.
 			l.AddRange(lineEnd);
+
+			CreateCollectionIfIsNull(ref linesToAdd);
 			linesToAdd.Add(l);
 
-			// Finalize the line:
-			base.DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
+		#if (WITH_SCRIPTING)
+			// Apply to scripting:                                                     // 'ScriptLines' only apply to Rx.
+			if (!IsReloading && ScriptingIsActive && (repositoryType == RepositoryType.Rx))
+			{
+				if (appliesToScriptLines)
+				{
+					var scriptState = processState.Script; // Convenience shortcut.
+					var data = new List<byte>(scriptState.Data); // Clone to ensure decoupling.
+
+					var removeXOnXOff = (TerminalSettings.IO.SerialPort.Communication.FlowControlUsesXOnXOff && TerminalSettings.CharHide.HideXOnXOff);
+					if (removeXOnXOff) // XOn/XOff doesn't make much sense for binary terminals, but users may still use it.
+					{
+						data.RemoveAll(b => b == MKY.IO.Serial.XOnXOff.XOnByte);
+						data.RemoveAll(b => b == MKY.IO.Serial.XOnXOff.XOffByte);
+					}
+
+					CreateCollectionIfIsNull(ref receivedScriptLinesToAdd);
+					receivedScriptLinesToAdd.Add(new ScriptLine(scriptState.TimeStamp, scriptState.Device, data.ToArray()));// No clone needed as element is no more used below.
+				}
+				else
+				{
+					// This display line end shall not result in a script line end.
+				}
+			}
+		#endif
+
+			// Notify:
+		#if (WITH_SCRIPTING)
+			base.DoLineEnd(repositoryType, processState, ts, dir, ref elementsToAdd, ref linesToAdd, appliesToScriptLines, ref receivedScriptLinesToAdd);
+		#else
+			base.DoLineEnd(repositoryType, processState, ts, dir, ref elementsToAdd, ref linesToAdd);
+		#endif
 		}
 
 		#endregion

@@ -65,16 +65,31 @@ namespace YAT.Domain
 		}
 	}
 
-	/// <summary></summary>
-	public class MessageEventArgs : EventArgs
+	/// <remarks>
+	/// Named 'ForScripting' as functionality is tied to scripting.
+	/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+	/// </remarks>
+	public class ScriptMessageEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		public string Message { get; protected set; }
+		public DateTime TimeStamp { get; protected set; }
+
+		/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
+		public string Device { get; protected set; }
 
 		/// <summary></summary>
-		public MessageEventArgs(string message)
+		public byte[] Data { get; protected set; }
+
+		/// <summary></summary>
+		public string Text { get; protected set; }
+
+		/// <summary></summary>
+		public ScriptMessageEventArgs(DateTime timeStamp, string device, byte[] data, string text)
 		{
-			Message = message;
+			TimeStamp = timeStamp;
+			Device = device;
+			Data = data;
+			Text = text;
 		}
 	}
 

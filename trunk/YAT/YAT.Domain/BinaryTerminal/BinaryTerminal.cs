@@ -28,10 +28,14 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 using MKY;
 using MKY.Text;
+
+using YAT.Domain.Utilities;
 
 #endregion
 
@@ -119,6 +123,74 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <summary>
+		/// Gets the Tx sequence before.
+		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
+		public byte[] TxSequenceBefore
+		{
+			get
+			{
+				AssertUndisposed();
+
+				if (this.binaryTxState != null)
+					return (this.binaryTxState.SequenceBefore);
+				else
+					return (null);
+			}
+		}
+
+		/// <summary>
+		/// Gets the Rx sequence before.
+		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
+		public byte[] RxSequenceBefore
+		{
+			get
+			{
+				AssertUndisposed();
+
+				if (this.binaryRxState != null)
+					return (this.binaryRxState.SequenceBefore);
+				else
+					return (null);
+			}
+		}
+
+		/// <summary>
+		/// Gets the Tx sequence after.
+		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
+		public byte[] TxSequenceAfter
+		{
+			get
+			{
+				AssertUndisposed();
+
+				if (this.binaryTxState != null)
+					return (this.binaryTxState.SequenceAfter);
+				else
+					return (null);
+			}
+		}
+
+		/// <summary>
+		/// Gets the Rx sequence after.
+		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
+		public byte[] RxSequenceAfter
+		{
+			get
+			{
+				AssertUndisposed();
+
+				if (this.binaryRxState != null)
+					return (this.binaryRxState.SequenceAfter);
+				else
+					return (null);
+			}
+		}
+
 		#endregion
 
 		#region Methods
@@ -151,6 +223,114 @@ namespace YAT.Domain
 
 			using (var p = new Parser.Parser((EncodingEx)BinaryTerminalSettings.EncodingFixed, TerminalSettings.IO.Endianness, TerminalSettings.Send.Text.ToParseMode()))
 				return (p.TryParse(s, out result, defaultRadix));
+		}
+
+		#endregion
+
+		#region Format
+		//------------------------------------------------------------------------------------------
+		// Format
+		//------------------------------------------------------------------------------------------
+
+	#if (WITH_SCRIPTING)
+
+		/// <summary>
+		/// Formats the specified data sequence for scripting.
+		/// </summary>
+		/// <remarks>
+		/// For text terminals, received messages are text lines, decoded with the configured encoding. Messages include control characters as configured. Messages do not include EOL.
+		/// For binary terminals, received messages are hexadecimal values, separated by spaces, without radix.
+		/// If ever needed differently, an [advanced configuration of scripting behavior] shall be added.
+		/// </remarks>
+		protected override string FormatMessageTextForScripting(DateTime timeStamp, byte[] data)
+		{
+			return (ByteHelper.FormatHexString(data, false)); // Format is fixed to "without radix", see remarks above.
+		}
+
+	#endif // WITH_SCRIPTING
+
+		#endregion
+
+		#region Change
+		//------------------------------------------------------------------------------------------
+		// Change
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Removes the framing from the given data.
+		/// </summary>
+		/// <remarks>
+		/// For text terminals, framing is typically defined by EOL.
+		/// For binary terminals, framing is optionally defined by sequence before/after.
+		/// </remarks>
+		/// <exception cref="InvalidOperationException">
+		/// The Tx and/or Rx <see cref="Settings.BinaryDisplaySettings.SequenceLineBreakBefore"/> and
+		/// <see cref="Settings.BinaryDisplaySettings.SequenceLineBreakAfter"/> have different values.
+		/// </exception>
+		public override void RemoveFraming(byte[] data)
+		{
+			if (ArrayEx.ValuesEqual(TxSequenceBefore, RxSequenceBefore) && ArrayEx.ValuesEqual(TxSequenceAfter, RxSequenceAfter))
+				RemoveFraming(data, BinaryTerminalSettings.TxDisplay.SequenceLineBreakBefore.Enabled, TxSequenceBefore, BinaryTerminalSettings.TxDisplay.SequenceLineBreakAfter.Enabled, TxSequenceAfter); // Sequence is the same for both directions, direction doesn't matter.
+
+			throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "This method requires that 'Tx' and 'Rx' sequences before/after are set to the same value!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		/// <summary>
+		/// Removes the framing from the given data.
+		/// </summary>
+		/// <remarks>
+		/// For text terminals, framing is typically defined by EOL.
+		/// For binary terminals, framing is optionally defined by sequence before/after.
+		/// </remarks>
+		public override void RemoveFraming(byte[] data, IODirection direction)
+		{
+			switch (direction)
+			{
+				case IODirection.Tx:    RemoveFraming(data, BinaryTerminalSettings.TxDisplay.SequenceLineBreakBefore.Enabled, TxSequenceBefore, BinaryTerminalSettings.TxDisplay.SequenceLineBreakAfter.Enabled, TxSequenceAfter); break;
+				case IODirection.Rx:    RemoveFraming(data, BinaryTerminalSettings.RxDisplay.SequenceLineBreakBefore.Enabled, RxSequenceBefore, BinaryTerminalSettings.RxDisplay.SequenceLineBreakAfter.Enabled, RxSequenceAfter); break;
+
+				case IODirection.Bidir:
+				case IODirection.None:  throw (new ArgumentOutOfRangeException("d", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("d", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary>
+		/// Removes the framing from the given data.
+		/// </summary>
+		/// <remarks>
+		/// For text terminals, framing is typically defined by EOL.
+		/// For binary terminals, framing is optionally defined by sequence before/after.
+		/// </remarks>
+		protected virtual void RemoveFraming(byte[] data, bool sequenceBeforeIsEnabled, byte[] sequenceBefore, bool sequenceAfterIsEnabled, byte[] sequenceAfter)
+		{
+			if (sequenceBeforeIsEnabled || sequenceAfterIsEnabled)
+			{
+				var l = new List<byte>(data); // Create list once.
+				var hasChanged = false;
+
+				if (sequenceBeforeIsEnabled)
+				{
+					if (l.Take(sequenceBefore.Length).SequenceEqual(sequenceBefore))
+					{
+						l.RemoveRange(0, sequenceBefore.Length); // 1st list modification.
+						hasChanged = true;
+					}
+				}
+
+				if (sequenceAfterIsEnabled)
+				{
+					var skipCount = (l.Count - sequenceAfter.Length);
+					if (l.Skip(skipCount).SequenceEqual(sequenceAfter))
+					{
+						l.RemoveRange(skipCount, sequenceAfter.Length); // 2nd list modification.
+						hasChanged = true;
+					}
+				}
+
+				if (hasChanged)
+					data = l.ToArray(); // Recreate array
+			}
 		}
 
 		#endregion
