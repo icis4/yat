@@ -214,7 +214,7 @@
 @@ -2200 +2337 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -                catch(Exception ex)
 +                catch (Exception ex)
-@@ -2628,0 +2766,36 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+@@ -2628,0 +2766,37 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 +		#region Debug
 +		//==========================================================================================
 +		// Debug
@@ -240,11 +240,12 @@
 +				string.Format
 +				(
 +					CultureInfo.CurrentCulture,
-+					" @ {0} @ Thread #{1} : {2} {3} : {4}",
++					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
 +					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
 +					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
 +					GetType(),
 +					"#" + this.FConnectionId.ToString("D2", CultureInfo.CurrentCulture),
++					"",
 +					message
 +				)
 +			);
