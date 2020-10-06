@@ -223,6 +223,27 @@ namespace MKY.IO
 		}
 
 		/// <summary>
+		/// Tries to swap two existing files.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
+		public static bool TrySwap(string filePathA, string filePathB)
+		{
+			if (!File.Exists(filePathA)) return (false);
+			if (!File.Exists(filePathB)) return (false);
+
+			// Both files exist (or at least just existed), swap them and see what happens:
+			try
+			{
+				Swap(filePathA, filePathB);
+				return (true);
+			}
+			catch
+			{
+				return (false);
+			}
+		}
+
+		/// <summary>
 		/// Swaps two existing files.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]

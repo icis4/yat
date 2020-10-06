@@ -29,8 +29,8 @@
 
 #if (DEBUG)
 
-	// Enable debugging of thread state:
-////#define DEBUG_THREAD_STATE
+	// Enable debugging of threads:
+////#define DEBUG_THREADS
 
 #endif // DEBUG
 
@@ -89,7 +89,23 @@ namespace MKY.IO.Serial.Usb
 		// Static Fields
 		//==========================================================================================
 
-		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
+		private static int staticInstanceCounter;
+		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
+
+		#endregion
+
+		#region Static Properties
+		//==========================================================================================
+		// Static Properties
+		//==========================================================================================
+
+		/// <summary>
+		/// Gets the next instance identifier.
+		/// </summary>
+		public static int NextInstanceId
+		{
+			get { return (Interlocked.Increment(ref staticInstanceCounter)); }
+		}
 
 		#endregion
 
@@ -97,6 +113,8 @@ namespace MKY.IO.Serial.Usb
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
+
+		private int instanceId;
 
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
@@ -169,6 +187,8 @@ namespace MKY.IO.Serial.Usb
 		/// <summary></summary>
 		public SerialHidDevice(SerialHidDeviceSettings settings)
 		{
+			this.instanceId = NextInstanceId;
+
 			this.settings = settings;
 		}
 
@@ -183,14 +203,21 @@ namespace MKY.IO.Serial.Usb
 		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			this.eventHelper.DiscardAllEventsAndExceptions();
+			if (this.eventHelper != null) // Possible when called by finalizer (non-deterministic).
+				this.eventHelper.DiscardAllEventsAndExceptions();
 
 			// Dispose of managed resources:
 			if (disposing)
 			{
+				DebugMessage("Disposing...");
+
 				// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
 				DisposeDeviceAndThreads();
+
+				DebugMessage("...successfully disposed.");
 			}
+
+		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
 		}
 
 		#endregion
@@ -687,7 +714,7 @@ namespace MKY.IO.Serial.Usb
 			{
 				if (this.sendThread != null)
 				{
-					DebugThreadState("SendThread() gets stopped...");
+					DebugThreads("SendThread() gets stopped...");
 
 					// Ensure that send thread has stopped after the stop request:
 					try
@@ -704,19 +731,19 @@ namespace MKY.IO.Serial.Usb
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								DebugThreadState("...failed! Aborting...");
-								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
+								DebugThreads("...failed! Aborting...");
+								DebugThreads("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
 
 								isAborting = true;       // Thread.Abort() must not be used whenever possible!
 								this.sendThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
-							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThreads("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
 						if (!isAborting)
-							DebugThreadState("...successfully stopped.");
+							DebugThreads("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -724,7 +751,7 @@ namespace MKY.IO.Serial.Usb
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThreads("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.sendThread = null;
@@ -743,7 +770,7 @@ namespace MKY.IO.Serial.Usb
 			{
 				if (this.receiveThread != null)
 				{
-					DebugThreadState("ReceiveThread() gets stopped...");
+					DebugThreads("ReceiveThread() gets stopped...");
 
 					// Ensure that receive thread has stopped after the stop request:
 					try
@@ -760,19 +787,19 @@ namespace MKY.IO.Serial.Usb
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								DebugThreadState("...failed! Aborting...");
-								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
+								DebugThreads("...failed! Aborting...");
+								DebugThreads("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
 
 								isAborting = true;          // Thread.Abort() must not be used whenever possible!
 								this.receiveThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
-							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThreads("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
 						if (!isAborting)
-							DebugThreadState("...successfully stopped.");
+							DebugThreads("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -780,7 +807,7 @@ namespace MKY.IO.Serial.Usb
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThreads("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.receiveThread = null;
@@ -1071,9 +1098,9 @@ namespace MKY.IO.Serial.Usb
 		//==========================================================================================
 
 		/// <remarks>
-		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named 'Message' for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
@@ -1087,7 +1114,7 @@ namespace MKY.IO.Serial.Usb
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
 					GetType(),
-					"",
+					"#" + this.instanceId.ToString("D2", CultureInfo.CurrentCulture),
 					"[" + ToDeviceInfoString() + "]",
 					message
 				)
@@ -1097,8 +1124,8 @@ namespace MKY.IO.Serial.Usb
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
-		[Conditional("DEBUG_THREAD_STATE")]
-		private void DebugThreadState(string message)
+		[Conditional("DEBUG_THREADS")]
+		private void DebugThreads(string message)
 		{
 			DebugMessage(message);
 		}

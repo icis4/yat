@@ -29,8 +29,8 @@
 
 #if (DEBUG)
 
-	// Enable debugging of thread state (send and receive threads):
-////#define DEBUG_THREAD_STATE // Attention: Must also be activated in SerialPort[.Receive].cs !!
+	// Enable debugging of threads (send and receive threads):
+////#define DEBUG_THREADS // Attention: Must also be activated in SerialPort[.Receive].cs !!
 
 	// Enable debugging of sending:
 ////#define DEBUG_SEND
@@ -312,7 +312,7 @@ namespace MKY.IO.Serial.SerialPort
 			bool isCtsInactiveOldAndErrorHasBeenSignaled = false;
 			bool   isXOffStateOldAndErrorHasBeenSignaled = false;
 
-			DebugThreadState("SendThread() has started.");
+			DebugThreads("SendThread() has started.");
 
 			try
 			{
@@ -699,7 +699,7 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		#endif
 
-			DebugThreadState("SendThread() has terminated.");
+			DebugThreads("SendThread() has terminated.");
 		}
 
 		private bool TryWriteXOnOrXOffAndNotify(byte b, out bool isWriteTimeout, out bool isOutputBreak)

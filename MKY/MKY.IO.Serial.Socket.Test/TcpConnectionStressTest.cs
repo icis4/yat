@@ -84,7 +84,7 @@ namespace MKY.IO.Serial.Socket.Test
 			}
 
 			// Randomly connect another large numer of AutoSockets to the existing sockets.
-			Random r = new Random(RandomEx.NextPseudoRandomSeed());
+			Random r = new Random(RandomEx.NextRandomSeed());
 			List<TcpAutoSocket> clientSockets = new List<TcpAutoSocket>(numberOfClients); // Preset the required capacity to improve memory management.
 			for (int i = 0; i < numberOfClients; i++)
 			{
@@ -94,7 +94,7 @@ namespace MKY.IO.Serial.Socket.Test
 				TcpAutoSocket c;
 				Utilities.CreateAndStartAsyncAsClient(out c, p);
 				Utilities.WaitForStart(c, "TCP/IP AutoSocket " + i + " could not be started!");
-				Utilities.WaitForConnect(c, s, "TCP/IP AutoSocket " + i + " could not be connected to AutoSocket " + s);
+				Utilities.WaitForConnection(c, s, "TCP/IP AutoSocket " + i + " could not be connected to AutoSocket " + s);
 				clientSockets.Add(c);
 			}
 

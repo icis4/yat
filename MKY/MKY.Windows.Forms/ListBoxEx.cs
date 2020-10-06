@@ -545,10 +545,10 @@ namespace MKY.Windows.Forms
 		public virtual int FindNext(string text, bool textCaseSensitive, bool textWholeWord, Regex regex, int startIndex)
 		{
 			if (startIndex < NoMatches)
-				throw (new ArgumentOutOfRangeException("startIndex", startIndex, "The start index is less than 'ListBox.NoMatches'!"));
+				throw (new ArgumentOutOfRangeException("startIndex", startIndex, "The start index is less than 'ListBox.NoMatches'!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			if (startIndex >= Items.Count)
-				throw (new ArgumentOutOfRangeException("startIndex", startIndex, "The start index is greater or equal 'Item.Count'!"));
+				throw (new ArgumentOutOfRangeException("startIndex", startIndex, "The start index is greater or equal 'Item.Count'!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			if (Items.Count > 0)
 			{
@@ -596,10 +596,10 @@ namespace MKY.Windows.Forms
 		public virtual int FindPrevious(string text, bool textCaseSensitive, bool textWholeWord, Regex regex, int startIndex)
 		{
 			if (startIndex < NoMatches)
-				throw (new ArgumentOutOfRangeException("startIndex", startIndex, "The start index is less than 'ListBox.NoMatches'!"));
+				throw (new ArgumentOutOfRangeException("startIndex", startIndex, "The start index is less than 'ListBox.NoMatches'!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			if (startIndex >= Items.Count)
-				throw (new ArgumentOutOfRangeException("startIndex", startIndex, "The start index is greater or equal 'Item.Count'!"));
+				throw (new ArgumentOutOfRangeException("startIndex", startIndex, "The start index is greater or equal 'Item.Count'!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			if (Items.Count > 0)
 			{

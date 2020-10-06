@@ -42,7 +42,7 @@ namespace MKY.IO.Serial
 		public DateTime TimeStamp { get; }
 
 		/// <summary></summary>
-		public abstract string PortStamp { get; }
+		public abstract string Device { get; }
 
 		/// <summary></summary>
 		protected DataEventArgs(byte[] data)
@@ -89,6 +89,8 @@ namespace MKY.IO.Serial
 			sb.Append(DataAsPrintableString);
 			sb.Append(" | TimeStamp = ");
 			sb.Append(TimeStamp.ToString(CultureInfo.CurrentCulture));
+			sb.Append(" | Device = ");
+			sb.Append(Device);
 
 			return (sb.ToString());
 		}
@@ -127,7 +129,7 @@ namespace MKY.IO.Serial
 	}
 
 	/// <summary></summary>
-	public class IOWarningEventArgs : EventArgs
+	public abstract class IOMessageEventArgs : EventArgs
 	{
 		/// <summary></summary>
 		public Direction Direction { get; }
@@ -139,25 +141,25 @@ namespace MKY.IO.Serial
 		public DateTime TimeStamp { get; }
 
 		/// <summary></summary>
-		public IOWarningEventArgs(string message)
+		public IOMessageEventArgs(string message)
 			: this(Direction.None, message, DateTime.Now)
 		{
 		}
 
 		/// <summary></summary>
-		public IOWarningEventArgs(string message, DateTime timeStamp)
+		public IOMessageEventArgs(string message, DateTime timeStamp)
 			: this(Direction.None, message, timeStamp)
 		{
 		}
 
 		/// <summary></summary>
-		public IOWarningEventArgs(Direction direction, string message)
+		public IOMessageEventArgs(Direction direction, string message)
 			: this(direction, message, DateTime.Now)
 		{
 		}
 
 		/// <summary></summary>
-		public IOWarningEventArgs(Direction direction, string message, DateTime timeStamp)
+		public IOMessageEventArgs(Direction direction, string message, DateTime timeStamp)
 		{
 			Direction = direction;
 			Message   = message;
@@ -201,19 +203,38 @@ namespace MKY.IO.Serial
 	}
 
 	/// <summary></summary>
-	public class IOErrorEventArgs : EventArgs
+	public class IOWarningEventArgs : IOMessageEventArgs
+	{
+		/// <summary></summary>
+		public IOWarningEventArgs(string message)
+			: this(Direction.None, message, DateTime.Now)
+		{
+		}
+
+		/// <summary></summary>
+		public IOWarningEventArgs(string message, DateTime timeStamp)
+			: this(Direction.None, message, timeStamp)
+		{
+		}
+
+		/// <summary></summary>
+		public IOWarningEventArgs(Direction direction, string message)
+			: this(direction, message, DateTime.Now)
+		{
+		}
+
+		/// <summary></summary>
+		public IOWarningEventArgs(Direction direction, string message, DateTime timeStamp)
+			: base(direction, message, timeStamp)
+		{
+		}
+	}
+
+	/// <summary></summary>
+	public class IOErrorEventArgs : IOMessageEventArgs
 	{
 		/// <summary></summary>
 		public ErrorSeverity Severity { get; }
-
-		/// <summary></summary>
-		public Direction Direction { get; }
-
-		/// <summary></summary>
-		public string Message { get; }
-
-		/// <summary></summary>
-		public DateTime TimeStamp { get; }
 
 		/// <summary></summary>
 		public IOErrorEventArgs(ErrorSeverity severity, string message)
@@ -235,35 +256,22 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		public IOErrorEventArgs(ErrorSeverity severity, Direction direction, string message, DateTime timeStamp)
+			: base(direction, message, timeStamp)
 		{
 			Severity  = severity;
-			Direction = direction;
-			Message   = message;
-			TimeStamp = timeStamp;
-		}
-
-		/// <summary>
-		/// Converts the value of this instance to its equivalent string representation.
-		/// </summary>
-		public override string ToString()
-		{
-			if (Message != null)
-				return (Message);
-			else
-				return ("");
 		}
 
 		/// <summary>
 		/// Converts the value of this instance to its equivalent string representation.
 		/// </summary>
 		/// <remarks>
-		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// Extended <see cref="IOMessageEventArgs.ToString()"/> method which can be used for trace/debug.
 		/// </remarks>
 		/// <remarks>
-		/// Limited to a single line to keep debug output compact, same as <see cref="ToString()"/>.
+		/// Limited to a single line to keep debug output compact, same as <see cref="IOMessageEventArgs.ToString()"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public virtual string ToDiagnosticsString(string indent = "")
+		public override string ToDiagnosticsString(string indent = "")
 		{
 			var sb = new StringBuilder();
 

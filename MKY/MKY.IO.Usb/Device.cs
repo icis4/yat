@@ -597,7 +597,7 @@ namespace MKY.IO.Usb
 		internal static DeviceEvent MessageToDeviceEvent(ref Message m)
 		{
 			if (m.Msg == (int)Win32.DeviceManagement.NativeConstants.WM_DEVICECHANGE)
-			{
+			{                                                                               // DBT is uint, i.e. UInt32.
 				Win32.DeviceManagement.NativeTypes.DBT e = (Win32.DeviceManagement.NativeTypes.DBT)m.WParam.ToInt32();
 				switch (e)
 				{
@@ -772,7 +772,8 @@ namespace MKY.IO.Usb
 		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			this.eventHelper.DiscardAllEventsAndExceptions();
+			if (this.eventHelper != null) // Possible when called by finalizer (non-deterministic).
+				this.eventHelper.DiscardAllEventsAndExceptions();
 
 			// In any case, ensure that the static event handlers get detached:
 			UnregisterAndDetachStaticDeviceEventHandlers();

@@ -130,26 +130,26 @@ namespace MKY.Text.RegularExpressions
 		/// </summary>
 		public static bool TryValidatePattern(string pattern)
 		{
-			string errorMessage;
-			return (TryValidatePattern(pattern, out errorMessage));
+			string messageOnFailure;
+			return (TryValidatePattern(pattern, out messageOnFailure));
 		}
 
 		/// <summary>
 		/// Validates the given regular expression pattern.
 		/// </summary>
-		public static bool TryValidatePattern(string pattern, out string errorMessage)
+		public static bool TryValidatePattern(string pattern, out string messageOnFailure)
 		{
 			try
 			{
 				var dummyRegexToProbePattern = new Regex(pattern);
 				UnusedLocal.PreventAnalysisWarning(dummyRegexToProbePattern, "Dummy variable improves code readability.");
 
-				errorMessage = null;
+				messageOnFailure = null;
 				return (true);
 			}
 			catch (ArgumentException ex)
 			{
-				errorMessage = ex.Message;
+				messageOnFailure = ex.Message;
 				return (false);
 			}
 		}
@@ -159,26 +159,26 @@ namespace MKY.Text.RegularExpressions
 		/// </summary>
 		public static bool TryValidatePattern(string pattern, RegexOptions options)
 		{
-			string errorMessage;
-			return (TryValidatePattern(pattern, options, out errorMessage));
+			string messageOnFailure;
+			return (TryValidatePattern(pattern, options, out messageOnFailure));
 		}
 
 		/// <summary>
 		/// Validates the given regular expression pattern.
 		/// </summary>
-		public static bool TryValidatePattern(string pattern, RegexOptions options, out string errorMessage)
+		public static bool TryValidatePattern(string pattern, RegexOptions options, out string messageOnFailure)
 		{
 			try
 			{
 				var dummyRegexToProbePattern = new Regex(pattern, options);
 				UnusedLocal.PreventAnalysisWarning(dummyRegexToProbePattern, "Dummy variable improves code readability.");
 
-				errorMessage = null;
+				messageOnFailure = null;
 				return (true);
 			}
 			catch (ArgumentException ex)
 			{
-				errorMessage = ex.Message;
+				messageOnFailure = ex.Message;
 				return (false);
 			}
 		}

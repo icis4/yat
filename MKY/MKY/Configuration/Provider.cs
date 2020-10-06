@@ -67,8 +67,8 @@ namespace MKY.Configuration
 	/// In addition to the mechanism described above, the configuration may contain multiple values
 	/// for each setting. Each set of values is collected in a <see cref="ConfigurationSectionGroup"/>.
 	/// The desired set can be selected using a <see cref="SelectionSection"/>. It is also possible
-	/// that one tier, e.g. (2), defines multiple sets and the next tier selects, e.g. (3), simply
-	/// selects out of the sets defined by (2).
+	/// that one tier, e.g. (2), defines multiple sets and the next tier, e.g. (3), simply selects
+	/// one of the sets defined by (2).
 	///
 	/// Example:
 	/// File 'YAT.Test.config' first announces the selector section:
@@ -154,6 +154,9 @@ namespace MKY.Configuration
 				solutionConfiguration = ConfigurationManager.OpenMappedExeConfiguration(ecfm, ConfigurationUserLevel.None);
 			}
 
+		#if (DEBUG)
+		////bool once = false;
+		#endif
 			if (solutionConfiguration != null)
 			{
 				T selectedSolutionConfiguration;
@@ -167,6 +170,8 @@ namespace MKY.Configuration
 					sb.AppendLine();
 					sb.AppendLine(solutionConfiguration.FilePath);
 					Debug.Write(sb.ToString());
+				////File.WriteAllText(IO.FileEx.GetUniqueFilePath(@"D:\Temp\YAT"), sb.ToString()); // \remind (2020-10-03 / MKY) Debugging loading in NUnit no longer works with .NET 4.0 ?!? Check when upgrading to NUnit 3.x (FR #293).
+				////if (!once) { once = true; System.Windows.Forms.MessageBox.Show("This is an intended break while loading the test configuration. Attach Visual Studio Debugger to NUnit and break execution to debug loading of test configuration."); }
 				#endif
 					// Override with and/or add user configuration where requested:
 					string userFilePath;
@@ -189,6 +194,8 @@ namespace MKY.Configuration
 								sb.AppendLine();
 								sb.AppendLine(userConfiguration.FilePath);
 								Debug.Write(sb.ToString());
+							////File.WriteAllText(IO.FileEx.GetUniqueFilePath(@"D:\Temp\YAT"), sb.ToString()); // Debugging loading in NUnit no longer works with .NET 4.0 ?!?
+							////if (!once) { once = true; System.Windows.Forms.MessageBox.Show("This is an intended break while loading the test configuration. Attach Visual Studio Debugger to NUnit and break execution to debug loading of test configuration."); }
 							#endif
 							}
 						}
@@ -200,6 +207,8 @@ namespace MKY.Configuration
 							sb.AppendLine();
 							sb.AppendLine(userFilePath);
 							Debug.Write(sb.ToString());
+						////File.WriteAllText(IO.FileEx.GetUniqueFilePath(@"D:\Temp\YAT"), sb.ToString()); // Debugging loading in NUnit no longer works with .NET 4.0 ?!?
+						////if (!once) { once = true; System.Windows.Forms.MessageBox.Show("This is an intended break while loading the test configuration. Attach Visual Studio Debugger to NUnit and break execution to debug loading of test configuration."); }
 						}
 					#endif
 					}
@@ -216,6 +225,8 @@ namespace MKY.Configuration
 					sb.AppendLine();
 					sb.AppendLine(solutionConfiguration.FilePath);
 					Debug.Write(sb.ToString());
+				////File.WriteAllText(IO.FileEx.GetUniqueFilePath(@"D:\Temp\YAT"), sb.ToString()); // Debugging loading in NUnit no longer works with .NET 4.0 ?!?
+				////if (!once) { once = true; System.Windows.Forms.MessageBox.Show("This is an intended break while loading the test configuration. Attach Visual Studio Debugger to NUnit and break execution to debug loading of test configuration."); }
 				}
 			#endif
 			}
@@ -227,6 +238,8 @@ namespace MKY.Configuration
 				sb.AppendLine();
 				sb.AppendLine(solutionFilePath);
 				Debug.Write(sb.ToString());
+			////File.WriteAllText(IO.FileEx.GetUniqueFilePath(@"D:\Temp\YAT"), sb.ToString()); // Debugging loading in NUnit no longer works with .NET 4.0 ?!?
+			////if (!once) { once = true; System.Windows.Forms.MessageBox.Show("This is an intended break while loading the test configuration. Attach Visual Studio Debugger to NUnit and break execution to debug loading of test configuration."); }
 			}
 		#endif
 			resultingConfiguration = null;

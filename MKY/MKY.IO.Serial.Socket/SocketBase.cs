@@ -35,7 +35,7 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		private static int staticInstanceCounter;
-		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
+		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
 
 		#endregion
 
@@ -47,9 +47,6 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>
 		/// Gets the next instance identifier.
 		/// </summary>
-		/// <value>
-		/// The next instance identifier.
-		/// </value>
 		public static int NextInstanceId
 		{
 			get { return (Interlocked.Increment(ref staticInstanceCounter)); }
@@ -58,9 +55,6 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>
 		/// Gets the random.
 		/// </summary>
-		/// <value>
-		/// The random.
-		/// </value>
 		public static Random Random
 		{
 			get { return (staticRandom); }

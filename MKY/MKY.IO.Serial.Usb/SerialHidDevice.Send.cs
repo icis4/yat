@@ -222,7 +222,7 @@ namespace MKY.IO.Serial.Usb
 		{
 			bool isXOffStateOldAndErrorHasBeenSignaled = false;
 
-			DebugThreadState("SendThread() has started.");
+			DebugThreads("SendThread() has started.");
 
 			try
 			{
@@ -357,7 +357,7 @@ namespace MKY.IO.Serial.Usb
 				Thread.ResetAbort();
 			}
 
-			DebugThreadState("SendThread() has terminated.");
+			DebugThreads("SendThread() has terminated.");
 		}
 
 		// Attention:

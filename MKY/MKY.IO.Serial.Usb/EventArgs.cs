@@ -52,7 +52,7 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary></summary>
-		public override string PortStamp
+		public override string Device
 		{
 			get
 			{
@@ -84,7 +84,7 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary></summary>
-		public override string PortStamp
+		public override string Device
 		{
 			get
 			{

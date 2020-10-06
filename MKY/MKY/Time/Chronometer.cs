@@ -94,6 +94,8 @@ namespace MKY.Time
 		private DateTime startTimeStamp = DateTime.Now;
 		private TimeSpan accumulatedTimeSpan = TimeSpan.Zero;
 
+		private string diagnosticsName;
+
 		#endregion
 
 		#region Events
@@ -133,21 +135,24 @@ namespace MKY.Time
 		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			this.eventHelper.DiscardAllEventsAndExceptions();
-
-			DebugMessage("Disposing...");
+			if (this.eventHelper != null) // Possible when called by finalizer (non-deterministic).
+				this.eventHelper.DiscardAllEventsAndExceptions();
 
 			// Dispose of managed resources:
 			if (disposing)
 			{
+				DebugMessage("Disposing...");
+
 				if (this.secondTicker != null) {
 					EventHandlerHelper.RemoveAllEventHandlers(this.secondTicker);
 					this.secondTicker.Dispose();
 					this.secondTicker = null;
 				}
+
+				DebugMessage("...successfully disposed.");
 			}
 
-			DebugMessage("...successfully disposed.");
+		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
 		}
 
 		#endregion
@@ -184,6 +189,13 @@ namespace MKY.Time
 		protected virtual TimeSpan CalculateTimeSpan(DateTime now)
 		{
 			return (this.accumulatedTimeSpan + (now - this.startTimeStamp));
+		}
+
+		/// <summary></summary>
+		public string DiagnosticsName
+		{
+			get { return (this.diagnosticsName); } // AssertUndisposed() shall not be called from this simple get-property.
+			set { this.diagnosticsName = value;  } // AssertUndisposed() shall not be called from this simple set-property.
 		}
 
 		#endregion
@@ -356,9 +368,9 @@ namespace MKY.Time
 		//==========================================================================================
 
 		/// <remarks>
-		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named 'Message' for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
@@ -373,7 +385,7 @@ namespace MKY.Time
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
 					GetType(),
 					"",
-					"",
+					(!string.IsNullOrEmpty(this.diagnosticsName) ? "[" + this.diagnosticsName + "]" : ""),
 					message
 				)
 			);

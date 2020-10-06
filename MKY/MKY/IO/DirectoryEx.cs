@@ -97,37 +97,37 @@ namespace MKY.IO
 		/// Tries to open the given path with the system's file browser/explorer.
 		/// </summary>
 		/// <remarks>
-		/// Named "browse" instead of "open" to emphasize that system browser/explorer is used.
+		/// Named 'Browse' instead of 'Open' to emphasize that system browser/explorer will be used.
 		/// </remarks>
 		/// <param name="path">Directory to browse.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		public static bool TryBrowse(string path)
 		{
-			Exception exception;
-			return (TryBrowse(path, out exception));
+			Exception exceptionOnFailure;
+			return (TryBrowse(path, out exceptionOnFailure));
 		}
 
 		/// <summary>
 		/// Tries to open the given path with the system's file browser/explorer.
 		/// </summary>
 		/// <remarks>
-		/// Named "browse" instead of "open" to emphasize that system browser/explorer is used.
+		/// Named 'Browse' instead of 'Open' to emphasize that system browser/explorer will be used.
 		/// </remarks>
 		/// <param name="path">Directory to browse.</param>
-		/// <param name="exception">Exception object, in case of failure.</param>
+		/// <param name="exceptionOnFailure">Exception object, in case of failure.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		public static bool TryBrowse(string path, out Exception exception)
+		public static bool TryBrowse(string path, out Exception exceptionOnFailure)
 		{
 			try
 			{
 				Process.Start(path);
-				exception = null;
+				exceptionOnFailure = null;
 				return (true);
 			}
 			catch (Exception ex)
 			{
-				exception = ex;
+				exceptionOnFailure = ex;
 				return (false);
 			}
 		}

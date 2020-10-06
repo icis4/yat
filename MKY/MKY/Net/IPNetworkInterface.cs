@@ -274,8 +274,8 @@ namespace MKY.Net
 		}
 
 		/// <remarks>
-		/// Named "Retrieve" rather than "Get" to emphasize an time consuming operation (i.e.
-		/// <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
+		/// Named 'Retrieve' rather than 'Get' to emphasize an time consuming operation
+		/// (i.e. <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
 		/// </remarks>
 		public IPAddress RetrieveIPv4Mask()
 		{
@@ -283,8 +283,8 @@ namespace MKY.Net
 		}
 
 		/// <remarks>
-		/// Named "Retrieve" rather than "Get" to emphasize an time consuming operation (i.e.
-		/// <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
+		/// Named 'Retrieve' rather than 'Get' to emphasize an time consuming operation
+		/// (i.e. <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
 		/// </remarks>
 		public static IPAddress RetrieveIPv4Mask(IPNetworkInterfaceEx networkInterface)
 		{
@@ -292,8 +292,8 @@ namespace MKY.Net
 		}
 
 		/// <remarks>
-		/// Named "Retrieve" rather than "Get" to emphasize an time consuming operation (i.e.
-		/// <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
+		/// Named 'Retrieve' rather than 'Get' to emphasize an time consuming operation
+		/// (i.e. <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
 		/// </remarks>
 		public static IPAddress RetrieveIPv4Mask(IPAddress address)
 		{
@@ -329,8 +329,8 @@ namespace MKY.Net
 		}
 
 		/// <remarks>
-		/// Named "Retrieve" rather than "Get" to emphasize an time consuming operation (i.e.
-		/// <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
+		/// Named 'Retrieve' rather than 'Get' to emphasize an time consuming operation
+		/// (i.e. <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
 		/// </remarks>
 		public IPAddress RetrieveDirectedBroadcastAddress()
 		{
@@ -338,8 +338,8 @@ namespace MKY.Net
 		}
 
 		/// <remarks>
-		/// Named "Retrieve" rather than "Get" to emphasize an time consuming operation (i.e.
-		/// <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
+		/// Named 'Retrieve' rather than 'Get' to emphasize an time consuming operation
+		/// (i.e. <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
 		/// </remarks>
 		public static IPAddress RetrieveDirectedBroadcastAddress(IPNetworkInterfaceEx networkInterface)
 		{
@@ -347,8 +347,8 @@ namespace MKY.Net
 		}
 
 		/// <remarks>
-		/// Named "Retrieve" rather than "Get" to emphasize an time consuming operation (i.e.
-		/// <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
+		/// Named 'Retrieve' rather than 'Get' to emphasize an time consuming operation
+		/// (i.e. <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
 		/// </remarks>
 		public static IPAddress RetrieveDirectedBroadcastAddress(IPAddress address)
 		{
@@ -384,8 +384,8 @@ namespace MKY.Net
 		}
 
 		/// <remarks>
-		/// Named "Retrieve" rather than "Get" to emphasize an time consuming operation (i.e.
-		/// <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
+		/// Named 'Retrieve' rather than 'Get' to emphasize an time consuming operation
+		/// (i.e. <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
 		/// </remarks>
 		public IPAddress RetrieveDirectedAnyAddress()
 		{
@@ -393,8 +393,8 @@ namespace MKY.Net
 		}
 
 		/// <remarks>
-		/// Named "Retrieve" rather than "Get" to emphasize an time consuming operation (i.e.
-		/// <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
+		/// Named 'Retrieve' rather than 'Get' to emphasize an time consuming operation
+		/// (i.e. <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
 		/// </remarks>
 		public static IPAddress RetrieveDirectedAnyAddress(IPNetworkInterfaceEx networkInterface)
 		{
@@ -402,8 +402,8 @@ namespace MKY.Net
 		}
 
 		/// <remarks>
-		/// Named "Retrieve" rather than "Get" to emphasize an time consuming operation (i.e.
-		/// <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
+		/// Named 'Retrieve' rather than 'Get' to emphasize an time consuming operation
+		/// (i.e. <see cref="NetworkInterface.GetAllNetworkInterfaces"/> is invoked underneath.
 		/// </remarks>
 		public static IPAddress RetrieveDirectedAnyAddress(IPAddress address)
 		{

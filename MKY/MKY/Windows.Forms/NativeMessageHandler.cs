@@ -94,7 +94,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <remarks>
-		/// Using the term 'MainForm' as used for the argument of the <see>Application.Run</see>
+		/// Using term 'MainForm' same as the argument of the <see cref="Application.Run(Form)"/>
 		/// method. Obviously, Windows.Forms uses the concept of a 'MainForm'.
 		/// </remarks>
 		public static void RegisterMainForm(Form mainForm)
@@ -110,7 +110,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <remarks>
-		/// Using the term 'MainForm' as used for the argument of the <see>Application.Run</see>
+		/// Using term 'MainForm' same as the argument of the <see cref="Application.Run(Form)"/>
 		/// method. Obviously, Windows.Forms uses the concept of a 'MainForm'.
 		/// </remarks>
 		public static void UnregisterMainForm()
@@ -172,39 +172,71 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <remarks>
-		/// Intentionally using the term 'Close' opposed to 'Dispose', to indicate that nothing gets
-		/// free'd but rather this handler gets closed.
+		/// Using term 'mainForm' same as the argument of the <see cref="Application.Run(Form)"/>
+		/// method. Obviously, Windows.Forms uses the concept of a 'MainForm'.
 		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		/// <paramref name="mainForm"/> is <c>null</c>.
+		/// </exception>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Just relax in the 'free'd' world...")]
 		protected void Register(Form mainForm)
 		{
-			if (mainForm.IsHandleCreated)
-				AssignHandle(mainForm.Handle);
+			if (mainForm == null)
+				throw (new ArgumentNullException("mainForm", MessageHelper.InvalidExecutionPreamble + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			this.mainForm = mainForm;
-			this.mainForm.HandleCreated   += mainForm_HandleCreated;
-			this.mainForm.HandleDestroyed += mainForm_HandleDestroyed;
+
+			if (this.mainForm.InvokeRequired)
+			{
+				var methodToSynchronize = new Action<Form>(RegisterMainFormSynchronized);
+				object[] args = { this.mainForm };
+				this.mainForm.Invoke(methodToSynchronize, args);
+			}
+			else
+			{
+				RegisterMainFormSynchronized(this.mainForm);
+			}
 
 			staticMessageHandlers.Add(this);
 		}
 
-		/// <remarks>
-		/// Intentionally using the term 'Close' opposed to 'Dispose', to indicate that nothing gets
-		/// free'd but rather this handler gets closed.
-		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Just relax in the 'free'd' world...")]
+		/// <summary></summary>
 		protected void Unregister()
 		{
 			staticMessageHandlers.Remove(this);
 
 			if (this.mainForm != null)
 			{
-				this.mainForm.HandleCreated   -= mainForm_HandleCreated;
-				this.mainForm.HandleDestroyed -= mainForm_HandleDestroyed;
+				if (this.mainForm.InvokeRequired)
+				{
+					var methodToSynchronize = new Action<Form>(UnregisterMainFormSynchronized);
+					object[] args = { mainForm };
+					this.mainForm.Invoke(methodToSynchronize, args);
+				}
+				else
+				{
+					UnregisterMainFormSynchronized(this.mainForm);
+				}
+
 				this.mainForm = null;
 			}
 
 			ReleaseHandle();
+		}
+
+		private void RegisterMainFormSynchronized(Form mainForm)
+		{
+			if (mainForm.IsHandleCreated)
+				AssignHandle(mainForm.Handle);
+
+			mainForm.HandleCreated   += mainForm_HandleCreated;
+			mainForm.HandleDestroyed += mainForm_HandleDestroyed;
+		}
+
+		private void UnregisterMainFormSynchronized(Form mainForm)
+		{
+			mainForm.HandleCreated   -= mainForm_HandleCreated;
+			mainForm.HandleDestroyed -= mainForm_HandleDestroyed;
 		}
 
 		/// <remarks>

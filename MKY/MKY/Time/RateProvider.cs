@@ -87,6 +87,8 @@ namespace MKY.Time
 		private double updateInterval;
 		private System.Timers.Timer updateTicker; // Ambiguity with 'System.Threading.Timer'.
 
+		private string diagnosticsName;
+
 		#endregion
 
 		#region Events
@@ -120,6 +122,12 @@ namespace MKY.Time
 
 		/// <summary></summary>
 		public RateProvider(double rateInterval, double rateWindow, double updateInterval)
+			: this(rateInterval, rateInterval, updateInterval, null)
+		{
+		}
+
+		/// <summary></summary>
+		public RateProvider(double rateInterval, double rateWindow, double updateInterval, string diagnosticsName)
 		{
 			this.rate = new Rate(rateInterval, rateWindow);
 
@@ -129,7 +137,8 @@ namespace MKY.Time
 			this.updateTicker.Interval = this.updateInterval;
 			this.updateTicker.AutoReset = true; // Periodic!
 			this.updateTicker.Elapsed += updateTicker_Periodic_Elapsed;
-			this.updateTicker.Start();
+
+			this.diagnosticsName = diagnosticsName;
 		}
 
 		#region Disposal
@@ -143,21 +152,24 @@ namespace MKY.Time
 		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			this.eventHelper.DiscardAllEventsAndExceptions();
-
-			DebugMessage("Disposing...");
+			if (this.eventHelper != null) // Possible when called by finalizer (non-deterministic).
+				this.eventHelper.DiscardAllEventsAndExceptions();
 
 			// Dispose of managed resources:
 			if (disposing)
 			{
+				DebugMessage("Disposing...");
+
 				if (this.updateTicker != null) {
 					EventHandlerHelper.RemoveAllEventHandlers(this.updateTicker);
 					this.updateTicker.Dispose();
 					this.updateTicker = null;
 				}
+
+				DebugMessage("...successfully disposed.");
 			}
 
-			DebugMessage("...successfully disposed.");
+		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
 		}
 
 		#endregion
@@ -196,12 +208,40 @@ namespace MKY.Time
 			get { AssertUndisposed(); return (this.rate.Value);        }
 		}
 
+		/// <summary></summary>
+		public string DiagnosticsName
+		{
+			get { return (this.diagnosticsName); } // AssertUndisposed() shall not be called from this simple get-property.
+			set { this.diagnosticsName = value;  } // AssertUndisposed() shall not be called from this simple set-property.
+		}
+
 		#endregion
 
 		#region Methods
 		//==========================================================================================
 		// Methods
 		//==========================================================================================
+
+		/// <summary></summary>
+		public virtual void Start()
+		{
+			this.updateTicker.Start();
+		}
+
+		/// <summary></summary>
+		public virtual void Stop()
+		{
+			this.updateTicker.Stop();
+		}
+
+		/// <summary></summary>
+		public virtual void StartStop()
+		{
+			if (this.updateTicker.Enabled)
+				this.updateTicker.Stop();
+			else
+				this.updateTicker.Start();
+		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
@@ -324,9 +364,9 @@ namespace MKY.Time
 		//==========================================================================================
 
 		/// <remarks>
-		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named 'Message' for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
@@ -341,7 +381,7 @@ namespace MKY.Time
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
 					GetType(),
 					"",
-					"",
+					(!string.IsNullOrEmpty(this.diagnosticsName) ? "[" + this.diagnosticsName + "]" : ""),
 					message
 				)
 			);

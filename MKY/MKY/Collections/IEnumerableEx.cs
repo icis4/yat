@@ -59,7 +59,7 @@ namespace MKY.Collections
 		}
 
 		/// <summary>
-		/// Appends all items of an enumerable object to a string and returns the string.
+		/// Appends all items of an enumerable object to a comma separated string and returns it.
 		/// Items that are <c>null</c> are returned as "[null]".
 		/// </summary>
 		/// <returns>
@@ -98,7 +98,7 @@ namespace MKY.Collections
 		}
 
 		/// <summary>
-		/// Appends all items of an enumerable object to a string and returns the string.
+		/// Appends all items of an enumerable object to a comma separated string and returns it.
 		/// Items that are <c>null</c> are returned as "[null]".
 		/// </summary>
 		/// <returns>

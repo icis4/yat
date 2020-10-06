@@ -106,6 +106,7 @@ namespace MKY
 					if (!EqualsOrdinal(strA[i], strB[i]))
 						return (false); // No match.
 				}
+
 				return (true); // Match.
 			}
 			else
@@ -135,6 +136,7 @@ namespace MKY
 					if (!EqualsOrdinal(strA.ElementAt(i), strB.ElementAt(i)))
 						return (false); // No match.
 				}
+
 				return (true); // Match.
 			}
 			else
@@ -171,6 +173,7 @@ namespace MKY
 					if (!EqualsOrdinalIgnoreCase(strA[i], strB[i]))
 						return (false); // No match.
 				}
+
 				return (true); // Match.
 			}
 			else
@@ -200,6 +203,7 @@ namespace MKY
 					if (!EqualsOrdinalIgnoreCase(strA.ElementAt(i), strB.ElementAt(i)))
 						return (false); // No match.
 				}
+
 				return (true); // Match.
 			}
 			else
@@ -226,6 +230,7 @@ namespace MKY
 				if (EqualsOrdinalIgnoreCase(strA, str))
 					return (true); // Match.
 			}
+
 			return (false); // No match.
 		}
 
@@ -498,6 +503,7 @@ namespace MKY
 				if (str.StartsWith(v, ignoreCase, culture))
 					return (true); // Match.
 			}
+
 			return (false); // No match.
 		}
 
@@ -522,6 +528,7 @@ namespace MKY
 				if (str.StartsWith(v, comparisonType))
 					return (true); // Match.
 			}
+
 			return (false); // No match.
 		}
 

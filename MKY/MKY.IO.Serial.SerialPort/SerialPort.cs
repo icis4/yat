@@ -29,8 +29,11 @@
 
 #if (DEBUG)
 
-	// Enable debugging of thread state (send and receive threads):
-////#define DEBUG_THREAD_STATE // Attention: Must also be activated in SerialPort.(Receive&Send).cs !!
+	// Enable debugging of state:
+////#define DEBUG_STATE
+
+	// Enable debugging of threads (send and receive threads):
+////#define DEBUG_THREADS // Attention: Must also be activated in SerialPort.(Receive&Send).cs !!
 
 	// Enable debugging of receiving:
 ////#define DEBUG_RECEIVE // Attention: Must also be activated in SerialPort.Receive.cs !!
@@ -119,7 +122,23 @@ namespace MKY.IO.Serial.SerialPort
 		// Static Fields
 		//==========================================================================================
 
-		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
+		private static int staticInstanceCounter;
+		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
+
+		#endregion
+
+		#region Static Properties
+		//==========================================================================================
+		// Static Properties
+		//==========================================================================================
+
+		/// <summary>
+		/// Gets the next instance identifier.
+		/// </summary>
+		public static int NextInstanceId
+		{
+			get { return (Interlocked.Increment(ref staticInstanceCounter)); }
+		}
 
 		#endregion
 
@@ -127,6 +146,8 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
+
+		private int instanceId;
 
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
@@ -229,6 +250,8 @@ namespace MKY.IO.Serial.SerialPort
 		/// </summary>
 		public SerialPort(SerialPortSettings settings)
 		{
+			this.instanceId = NextInstanceId;
+
 			this.settings = settings;
 		}
 
@@ -241,17 +264,23 @@ namespace MKY.IO.Serial.SerialPort
 		/// <c>true</c> when called from <see cref="Dispose"/>,
 		/// <c>false</c> when called from finalizer.
 		/// </param>
-		[SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "port", Justification = "Is actually disposed of asynchronously in ResetPortAndThreadsAndNotify().")]
 		protected override void Dispose(bool disposing)
 		{
-			this.eventHelper.DiscardAllEventsAndExceptions();
+			if (this.eventHelper != null) // Possible when called by finalizer (non-deterministic).
+				this.eventHelper.DiscardAllEventsAndExceptions();
 
 			// Dispose of managed resources:
 			if (disposing)
 			{
+				DebugMessage("Disposing...");
+
 				// In the 'normal' case, the items have already been disposed of in e.g. Stop().
 				ResetPortAndThreadsWithoutNotify(false); // Suppress notifications during disposal!
+
+				DebugMessage("...successfully disposed.");
 			}
+
+		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
 		}
 
 		#endregion
@@ -806,16 +835,16 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				oldState = this.state;
 				this.state = state;
+
+			#if (DEBUG) // Inside lock to prevent potential mixup in debug output.
+				if (state != oldState)
+					DebugMessage("State has changed from {0} to {1}.", oldState, state);
+				else
+					DebugState("State already is {0}.", oldState); // State non-changes shall only be output when explicitly activated.
+			#endif
 			}
 
-		#if (DEBUG)
-			if (state != oldState)
-				DebugMessage("State has changed from {0} to {1}.", oldState, state);
-			else
-				DebugMessage("State already is {0}.", oldState);
-		#endif
-
-			if (notify && (state != oldState))
+			if (notify && (state != oldState)) // Outside lock is OK, only stating change, not state.
 			{
 				// Notify asynchronously because the state will get changed from asynchronous items
 				// such as the reopen timer. In case of that timer, the port needs to be locked to
@@ -1214,7 +1243,7 @@ namespace MKY.IO.Serial.SerialPort
 					// Attention, this method may also be called from exception handler within SendThread()!
 					if (this.sendThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId)
 					{
-						DebugThreadState("SendThread() gets stopped...");
+						DebugThreads("SendThread() gets stopped...");
 
 						try
 						{
@@ -1228,19 +1257,19 @@ namespace MKY.IO.Serial.SerialPort
 								accumulatedTimeout += interval;
 								if (accumulatedTimeout >= ThreadWaitTimeout)
 								{
-									DebugThreadState("...failed! Aborting...");
-									DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
+									DebugThreads("...failed! Aborting...");
+									DebugThreads("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
 
 									isAborting = true;       // Thread.Abort() must not be used whenever possible!
 									this.sendThread.Abort(); // This is only the fall-back in case joining fails for too long.
 									break;
 								}
 
-								DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
+								DebugThreads("...trying to join at " + accumulatedTimeout + " ms...");
 							}
 
 							if (!isAborting)
-								DebugThreadState("...successfully stopped.");
+								DebugThreads("...successfully stopped.");
 						}
 						catch (ThreadStateException)
 						{
@@ -1248,7 +1277,7 @@ namespace MKY.IO.Serial.SerialPort
 							// "Thread cannot be aborted" as it just needs to be ensured that the thread
 							// has or will be terminated for sure.
 
-							DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+							DebugThreads("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 						}
 
 						this.sendThread = null;
@@ -1273,7 +1302,7 @@ namespace MKY.IO.Serial.SerialPort
 					// Attention, this method may also be called from exception handler within ReceiveThread()!
 					if (this.receiveThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId)
 					{
-						DebugThreadState("ReceiveThread() gets stopped...");
+						DebugThreads("ReceiveThread() gets stopped...");
 
 						try
 						{
@@ -1287,19 +1316,19 @@ namespace MKY.IO.Serial.SerialPort
 								accumulatedTimeout += interval;
 								if (accumulatedTimeout >= ThreadWaitTimeout)
 								{
-									DebugThreadState("...failed! Aborting...");
-									DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
+									DebugThreads("...failed! Aborting...");
+									DebugThreads("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
 
 									isAborting = true;          // Thread.Abort() must not be used whenever possible!
 									this.receiveThread.Abort(); // This is only the fall-back in case joining fails for too long.
 									break;
 								}
 
-								DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
+								DebugThreads("...trying to join at " + accumulatedTimeout + " ms...");
 							}
 
 							if (!isAborting)
-								DebugThreadState("...successfully stopped.");
+								DebugThreads("...successfully stopped.");
 						}
 						catch (ThreadStateException)
 						{
@@ -1307,7 +1336,7 @@ namespace MKY.IO.Serial.SerialPort
 							// "Thread cannot be aborted" as it just needs to be ensured that the thread
 							// has or will be terminated for sure.
 
-							DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+							DebugThreads("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 						}
 
 						this.receiveThread = null;
@@ -1592,8 +1621,8 @@ namespace MKY.IO.Serial.SerialPort
 
 			lock (this.ioControlEventTimeoutSyncObj)
 			{
-				if (this.ioControlEventTimeout == null)
-					return; // Handle overdue callbacks.
+				if (this.ioControlEventTimeout == null) // Handle overdue callbacks:
+					return;
 			}
 
 			if (IsUndisposed && IsStarted) // Check disposal state first!
@@ -1653,20 +1682,15 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "Well, any better idea on how to check whether the serial port is still alive?")]
 		private void StartAliveMonitor()
 		{
+			var dueTime = this.settings.AliveMonitor.Interval;
+			var period  = this.settings.AliveMonitor.Interval; // Periodic!
+
 			lock (this.aliveMonitorTimeoutSyncObj)
 			{
 				if (this.aliveMonitorTimeout == null)
-				{
-					var callback = new TimerCallback(aliveMonitorTimeout_Periodic_Elapsed);
-					var dueTime = this.settings.AliveMonitor.Interval;
-					var period  = this.settings.AliveMonitor.Interval; // Periodic!
-
-					this.aliveMonitorTimeout = new Timer(callback, null, dueTime, period);
-				}
+					this.aliveMonitorTimeout = new Timer(new TimerCallback(aliveMonitorTimeout_Periodic_Elapsed), null, dueTime, period);
 				else
-				{
-					// Already exists and running (periodic).
-				}
+					this.aliveMonitorTimeout.Change(dueTime, period);
 			}
 		}
 
@@ -1742,11 +1766,11 @@ namespace MKY.IO.Serial.SerialPort
 
 		private void StartReopenTimeout()
 		{
+			var dueTime = this.settings.AutoReopen.Interval;
+			var period = Timeout.Infinite; // One-Shot!
+
 			lock (this.reopenTimeoutSyncObj)
 			{
-				var dueTime = this.settings.AutoReopen.Interval;
-				var period = Timeout.Infinite; // One-Shot!
-
 				if (this.reopenTimeout == null)
 					this.reopenTimeout = new Timer(new TimerCallback(reopenTimeout_OneShot_Elapsed), null, dueTime, period);
 				else
@@ -1774,8 +1798,8 @@ namespace MKY.IO.Serial.SerialPort
 
 			lock (this.reopenTimeoutSyncObj)
 			{
-				if (this.reopenTimeout == null)
-					return; // Handle overdue callbacks.
+				if (this.reopenTimeout == null) // Handle overdue callbacks:
+					return;
 			}
 
 			if (IsUndisposed && IsStarted && !IsOpen && this.settings.AutoReopen.Enabled) // Check disposal state first!
@@ -1942,9 +1966,9 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		/// <remarks>
-		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named 'Message' for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
@@ -1958,7 +1982,7 @@ namespace MKY.IO.Serial.SerialPort
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
 					GetType(),
-					"",
+					"#" + this.instanceId.ToString("D2", CultureInfo.CurrentCulture),
 					"[" + ToPortName() + "]",
 					message
 				)
@@ -1968,8 +1992,17 @@ namespace MKY.IO.Serial.SerialPort
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
-		[Conditional("DEBUG_THREAD_STATE")]
-		private void DebugThreadState(string message)
+		[Conditional("DEBUG_STATE")]
+		private void DebugState(string format, params object[] args)
+		{
+			DebugMessage(format, args);
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_THREADS")]
+		private void DebugThreads(string message)
 		{
 			DebugMessage(message);
 		}

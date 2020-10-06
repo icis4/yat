@@ -21,6 +21,23 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of state:
+////#define DEBUG_STATE
+
+	// Enable debugging of a static list of all sockets:
+////#define DEBUG_STATIC_SOCKET_LIST // Attention: Must also be activated in TcpAutoSocket.[Client+Server].cs !!
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -83,13 +100,11 @@ namespace MKY.IO.Serial.Socket
 		private enum SocketState
 		{
 			Reset,
-			Starting,
+			StartingConnecting,
 			Connecting,
 			Connected,
-			ConnectingFailed,
 			StartingListening,
 			Listening,
-			ListeningFailed,
 			Accepted,
 		////Restarting,
 			Stopping,
@@ -103,13 +118,24 @@ namespace MKY.IO.Serial.Socket
 		// Constants
 		//==========================================================================================
 
-		private const int MaxStartCycles = 3;
+		private const int MaxStartCycles = 5;
 
 		private const int MinConnectDelay = 50;
 		private const int MaxConnectDelay = 300;
 
 		private const int MinListenDelay = 50;
 		private const int MaxListenDelay = 300;
+
+		#endregion
+
+		#region Static Fields
+		//==========================================================================================
+		// Static Fields
+		//==========================================================================================
+
+	#if DEBUG_STATIC_SOCKET_LIST
+		private static System.Collections.Generic.List<IIOProvider> staticSocketList = new System.Collections.Generic.List<IIOProvider>();
+	#endif
 
 		#endregion
 
@@ -133,12 +159,11 @@ namespace MKY.IO.Serial.Socket
 		private SocketState state = SocketState.Reset;
 		private object stateSyncObj = new object();
 
-		private int startCycleCounter; // = 0;
-		private object startCycleCounterSyncObj = new object();
-
 		private TcpClient client;
 		private TcpServer server;
-		private object socketSyncObj = new object();
+
+		private int startCycleCounter; // = 0;
+		private object startCycleCounterSyncObj = new object();
 
 		#endregion
 
@@ -218,18 +243,21 @@ namespace MKY.IO.Serial.Socket
 		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			this.eventHelper.DiscardAllEventsAndExceptions();
-
-			DebugMessage("Disposing...");
+			if (this.eventHelper != null) // Possible when called by finalizer (non-deterministic).
+				this.eventHelper.DiscardAllEventsAndExceptions();
 
 			// Dispose of managed resources:
 			if (disposing)
 			{
+				DebugMessage("Disposing...");
+
 				// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
-				DisposeSockets();
+				DisposeSocketsSynchronized(); // Opposed to the ALAZ sockets, the MKY sockets do stop on Dispose().
+
+				DebugMessage("...successfully disposed.");
 			}
 
-			DebugMessage("...successfully disposed.");
+		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
 		}
 
 		#endregion
@@ -249,6 +277,17 @@ namespace MKY.IO.Serial.Socket
 			////AssertUndisposed() shall not be called from this simple get-property.
 
 				return (this.remoteHost);
+			}
+		}
+
+		/// <remarks>Convenience method, always returns a valid value, at least <![CDATA["<undefined>"]]>.</remarks>
+		protected virtual string RemoteHostEndpointString
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				return ((RemoteHost != null) ? (RemoteHost.ToEndpointAddressString()) : "<undefined>"); // Lower case same as "localhost"
 			}
 		}
 
@@ -436,9 +475,9 @@ namespace MKY.IO.Serial.Socket
 			{
 				AssertUndisposed();
 
-				lock (this.socketSyncObj)
+				lock (this.stateSyncObj)
 				{
-					if (IsClient && (this.client != null))
+					if      (IsClient && (this.client != null))
 						return (this.client.UnderlyingIOInstance);
 					else if (IsServer && (this.server != null))
 						return (this.server.UnderlyingIOInstance);
@@ -508,9 +547,9 @@ namespace MKY.IO.Serial.Socket
 
 			if (IsTransmissive)
 			{
-				lock (this.socketSyncObj)
+				lock (this.stateSyncObj)
 				{
-					if (IsClient && (this.client != null))
+					if      (IsClient && (this.client != null))
 						return (this.client.Send(data));
 					else if (IsServer && (this.server != null))
 						return (this.server.Send(data));
@@ -529,9 +568,9 @@ namespace MKY.IO.Serial.Socket
 
 		////if (IsTransmissive) shall not be checked for, clearing the buffer shall be available in any case.
 			{
-				lock (this.socketSyncObj)
+				lock (this.stateSyncObj)
 				{
-					if (IsClient && (this.client != null))
+					if      (IsClient && (this.client != null))
 						return (this.client.ClearSendBuffer());
 					else if (IsServer && (this.server != null))
 						return (this.server.ClearSendBuffer());
@@ -554,7 +593,13 @@ namespace MKY.IO.Serial.Socket
 				return (this.state);
 		}
 
-		private void SetStateSynchronizedAndNotify(SocketState state)
+		private bool SetStateSynchronized(SocketState state, bool notify)
+		{
+			DateTime timeStamp;
+			return (SetStateSynchronized(state, out timeStamp, notify));
+		}
+
+		private bool SetStateSynchronized(SocketState state, out DateTime timeStamp, bool notify)
 		{
 			SocketState oldState;
 
@@ -562,27 +607,35 @@ namespace MKY.IO.Serial.Socket
 			{
 				oldState = this.state;
 				this.state = state;
+				timeStamp = DateTime.Now; // Inside lock for accuracy.
+
+			#if (DEBUG) // Inside lock to prevent potential mixup in debug output.
+				string isClientOrServerString;
+				if      (IsClient && IsConnected) // 'Doppel-moppel', but keep it as a check during development and debugging
+					isClientOrServerString = "connected as client";
+				else if (IsServer && IsConnected)
+					isClientOrServerString = "connected as server";
+				else if (IsServer && !IsConnected)
+					isClientOrServerString = "server and listening";
+				else
+					isClientOrServerString = "neither client nor server";
+
+				if (state != oldState)
+					DebugMessage("State has changed from {0} to {1}, is {2}.", oldState, state, isClientOrServerString);
+				else
+					DebugState("State already is {0}.", oldState); // State non-changes shall only be output when explicitly activated.
+			#endif
 			}
 
-		#if (DEBUG)
-			string isClientOrServerString;
-			if      (IsClient && IsConnected) // 'Doppel-moppel', but keep it as a check during development and debugging
-				isClientOrServerString = "connected as client";
-			else if (IsServer && IsConnected)
-				isClientOrServerString = "connected as server";
-			else if (IsServer && !IsConnected)
-				isClientOrServerString = "server and listening";
-			else
-				isClientOrServerString = "neither client nor server";
+			if (notify && (state != oldState)) // Outside lock is OK, only stating change, not state.
+				NotifyStateHasChanged(timeStamp);
 
-			if (state != oldState)
-				DebugMessage("State has changed from {0} to {1}, is {2}.", oldState, state, isClientOrServerString);
-			else
-				DebugMessage("State already is {0}.", oldState);
-		#endif
+			return (state != oldState);
+		}
 
-			if (state != oldState)
-				OnIOChanged(new EventArgs<DateTime>(DateTime.Now));
+		private void NotifyStateHasChanged(DateTime timeStamp)
+		{
+			OnIOChanged(new EventArgs<DateTime>(timeStamp));
 		}
 
 		#endregion
@@ -593,41 +646,19 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		/// <remarks>
-		/// Note that the underlying sockets perform stopping synchronously, opposed to starting
-		/// that is done asynchronously. This difference is due to the issue described in the header
-		/// of this class.
+		/// Opposed to the ALAZ sockets, the MKY sockets do stop on Dispose().
 		/// </remarks>
-		private void StopAndDisposeSockets()
+		private void DisposeSocketsSynchronized()
 		{
-			StopSockets();
-			DisposeSockets();
-		}
-
-		/// <remarks>
-		/// Note that the underlying sockets perform stopping synchronously, opposed to starting
-		/// that is done asynchronously. This difference is due to the issue described in the header
-		/// of this class.
-		/// </remarks>
-		private void StopSockets()
-		{
-			DebugMessage("Stopping sockets...");
-
-			lock (this.socketSyncObj)
+			lock (this.stateSyncObj)
 			{
-				if (this.client != null)
-					this.client.Stop();
+				DebugMessage("Disposing socket..."); // Only either or.
 
-				if (this.server != null)
-					this.server.Stop();
+				DisposeClientSynchronized();
+				DisposeServerSynchronized();
+
+				DebugMessage("...completed.");
 			}
-
-			DebugMessage("...sucessfully stopped.");
-		}
-
-		private void DisposeSockets()
-		{
-			DisposeClient();
-			DisposeServer();
 		}
 
 		#endregion
@@ -642,7 +673,7 @@ namespace MKY.IO.Serial.Socket
 			lock (this.startCycleCounterSyncObj)
 				this.startCycleCounter = 1;
 
-			SetStateSynchronizedAndNotify(SocketState.Starting);
+			SetStateSynchronized(SocketState.StartingConnecting, notify: true);
 			StartConnecting();
 		}
 
@@ -660,28 +691,51 @@ namespace MKY.IO.Serial.Socket
 			// are interconnected, and both are shut down, the sequence of the operation is not
 			// defined. It is likely that Stop() is called while the thread is delayed above. In
 			// such case, neither a client nor a server shall be created nor started.
-			if (IsUndisposed && IsStarted) // Check disposal state first!
+			Monitor.Enter(this.stateSyncObj);                             // Ensure state is handled atomically. Not using
+			if (GetStateSynchronized() == SocketState.StartingConnecting) // lock() for being able to selectively release.
 			{
-				SetStateSynchronizedAndNotify(SocketState.Connecting);
-				CreateClient(this.remoteHost, this.remotePort, this.localInterface);
+				DateTime timeStamp;
+				var stateHasChanged = SetStateSynchronized(SocketState.Connecting, out timeStamp, notify: false); // Notify outside lock!
 
-				bool startIsOngoing = false;
+				CreateClientSynchronized(this.remoteHost, this.remotePort, this.localInterface);
+				Monitor.Exit(this.stateSyncObj);
+
+				bool isStarting = false;
 				try
 				{
-					lock (this.socketSyncObj)
-					{
-						if (this.client != null)
-							startIsOngoing = this.client.Start();
-					}
+					isStarting = this.client.Start(); // Will be started asynchronously but may notify! Thus outside lock!
+				}
+				catch (NullReferenceException)
+				{
+					// A 'NullReferenceException' can occur in the unlikely case where the client has just got disposed of.
 				}
 				finally
 				{
-					if (!startIsOngoing)
+					if (!isStarting)
 					{
-						DisposeClient();
-						StartListening();
+						lock (this.stateSyncObj) // Ensure state is handled atomically.
+						{
+							DisposeClientSynchronized();
+
+							stateHasChanged = SetStateSynchronized(SocketState.StartingListening, out timeStamp, notify: false); // Notify outside lock!
+						}
+
+						if (stateHasChanged)
+							NotifyStateHasChanged(timeStamp); // Notify outside lock!
+
+						// Try to restart as server:
+						StartListening(); // Invoke outside lock!
+					}
+					else
+					{
+						if (stateHasChanged)
+							NotifyStateHasChanged(timeStamp); // Notify outside lock!
 					}
 				}
+			}
+			else
+			{
+				Monitor.Exit(this.stateSyncObj);
 			}
 		}
 
@@ -699,19 +753,16 @@ namespace MKY.IO.Serial.Socket
 			// are interconnected, and both are shut down, the sequence of the operation is not
 			// defined. It is likely that Stop() is called while the thread is delayed above. In
 			// such case, neither a client nor a server shall be created nor started.
-			if (IsUndisposed && IsStarted) // Check disposal state first!
+			Monitor.Enter(this.stateSyncObj);                            // Ensure state is handled atomically. Not using
+			if (GetStateSynchronized() == SocketState.StartingListening) // lock() for being able to selectively release.
 			{
-				SetStateSynchronizedAndNotify(SocketState.StartingListening);
-				CreateServer(this.localInterface, this.localPort);
+				CreateServerSynchronized(this.localInterface, this.localPort);
+				Monitor.Exit(this.stateSyncObj);
 
-				bool startIsOngoing = false;
+				bool isStarting = false;
 				try
 				{
-					lock (this.socketSyncObj)
-					{
-						if (this.server != null)
-							startIsOngoing = this.server.Start(); // Server will be started asynchronously.
-					}
+					isStarting = this.server.Start(); // Will be started asynchronously but may notify! Thus outside lock!
 				}
 				catch (System.Net.Sockets.SocketException)
 				{
@@ -728,31 +779,52 @@ namespace MKY.IO.Serial.Socket
 					//  > System.Net.Sockets.Socket.Bind(EndPoint localEP)
 					//  > System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
 				}
+				catch (NullReferenceException)
+				{
+					// A 'NullReferenceException' can occur in the unlikely case where the server has just got disposed of.
+				}
 				finally
 				{
-					if (!startIsOngoing)
+					if (!isStarting)
 					{
-						DisposeServer();
-						RequestTryAgain();
+						DateTime timeStamp;
+						bool stateHasChanged;
+
+						lock (this.stateSyncObj) // Ensure state is handled atomically.
+						{
+							DisposeServerSynchronized();
+
+							stateHasChanged = SetStateSynchronized(SocketState.StartingConnecting, out timeStamp, notify: false); // Notify outside lock!
+						}
+
+						if (stateHasChanged)
+							NotifyStateHasChanged(timeStamp); // Notify outside lock!
+
+						TryStartConnectingAgain(); // Invoke outside lock!
 					}
 				}
 			}
+			else
+			{
+				Monitor.Exit(this.stateSyncObj);
+			}
 		}
 
-		private void RequestTryAgain()
+		private void TryStartConnectingAgain()
 		{
 			bool tryAgain = false;
 			lock (this.startCycleCounterSyncObj)
 			{
 				this.startCycleCounter++;
 				if (this.startCycleCounter <= MaxStartCycles)
+				{
+					DebugMessage("Trying cycle #{0}.", this.startCycleCounter);
 					tryAgain = true;
+				}
 			}
 
 			if (tryAgain)
 			{
-				DebugMessage("Trying connect cycle #{0}.", this.startCycleCounter);
-
 				StartConnecting();
 			}
 			else
@@ -771,25 +843,69 @@ namespace MKY.IO.Serial.Socket
 
 	////private void RestartAutoSocket()
 	////{
-	////	SetStateSynchronizedAndNotify(SocketState.Restarting);
-	////	StopAndDisposeSockets();
+	////	StopAutoSocket();
+	////	Notify(SocketState.Restarting);
 	////	StartAutoSocket();
 	////}
 
 		private void StopAutoSocket()
 		{
-			SetStateSynchronizedAndNotify(SocketState.Stopping);
-			StopAndDisposeSockets();
-			SetStateSynchronizedAndNotify(SocketState.Reset);
+			// 1st step:
+			{
+				bool stateHasChanged;
+				DateTime timeStamp;
+
+				lock (this.stateSyncObj) // Ensure state is handled atomically.
+				{
+					if (!IsStarted)
+					{
+						DebugMessage("Stop() requested but state already is " + GetStateSynchronized() + ".");
+						return;
+					}
+
+					stateHasChanged = SetStateSynchronized(SocketState.Stopping, out timeStamp, notify: false); // Notify outside lock!
+				}
+
+				if (stateHasChanged)
+					NotifyStateHasChanged(timeStamp); // Notify outside lock!
+			}
+
+			// 2nd step:
+			Monitor.Enter(this.stateSyncObj);                   // Ensure state is handled atomically. Not using
+			if (GetStateSynchronized() == SocketState.Stopping) // lock() for being able to selectively release.
+			{
+				DisposeSocketsSynchronized(); // Opposed to the ALAZ sockets, the MKY sockets do stop on Dispose().
+
+				DateTime timeStamp;
+				var stateHasChanged = SetStateSynchronized(SocketState.Reset, out timeStamp, notify: false); // Notify outside lock!
+				Monitor.Exit(this.stateSyncObj);
+				if (stateHasChanged)
+					NotifyStateHasChanged(timeStamp); // Notify outside lock!
+			}
+			else
+			{
+				DebugMessage("Stop() requested but state already is " + GetStateSynchronized() + ".");
+				Monitor.Exit(this.stateSyncObj);
+			}
 		}
 
 		private void AutoSocketError(ErrorSeverity severity, string message)
 		{
 			DebugMessage(severity + " error in AutoSocket: " + Environment.NewLine + message);
 
-			DisposeSockets();
+			bool stateHasChanged;
+			DateTime timeStamp;
 
-			SetStateSynchronizedAndNotify(SocketState.Error);
+			lock (this.stateSyncObj)
+			{
+				DisposeSocketsSynchronized(); // Opposed to the ALAZ sockets, the MKY sockets do stop on Dispose().
+
+				stateHasChanged = SetStateSynchronized(SocketState.Error, out timeStamp, notify: false); // Notify outside lock!
+			}
+
+			if (stateHasChanged)
+				NotifyStateHasChanged(timeStamp); // Notify outside lock!
+
 			OnIOError(new IOErrorEventArgs(severity, message));
 		}
 
@@ -869,8 +985,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			// AssertUndisposed() shall not be called from such basic method! Its return value is needed for debugging! All underlying fields are still valid after disposal.
 
-			var remoteHostEndpoint = ((this.remoteHost != null) ? (this.remoteHost.ToEndpointAddressString()) : "[none]"); // Required to always be available.
-			return ("Server:" + this.localPort + " / " + remoteHostEndpoint + ":" + this.remotePort);
+			return ("Server:" + LocalPort + " / " + RemoteHostEndpointString + ":" + RemotePort);
 		}
 
 		#endregion
@@ -888,9 +1003,9 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <remarks>
-		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named 'Message' for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
@@ -909,6 +1024,15 @@ namespace MKY.IO.Serial.Socket
 					message
 				)
 			);
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_STATE")]
+		private void DebugState(string format, params object[] args)
+		{
+			DebugMessage(format, args);
 		}
 
 		#endregion

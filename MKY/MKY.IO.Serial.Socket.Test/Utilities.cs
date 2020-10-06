@@ -27,6 +27,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -49,8 +50,16 @@ namespace MKY.IO.Serial.Socket.Test
 		// Private Constants
 		//==========================================================================================
 
-		private const int WaitInterval = 100;
-		private const int WaitTimeoutForStateChange = 5000; // Same as 'YAT.Domain.Test.Utilities.WaitTimeoutForStateChange'.
+		/// <remarks>
+		/// State changes on a <see cref="TcpAutoSocket"/> are the slowest, due
+		/// to the nature of the <see cref="TcpAutoSocket"/> to try this and that.
+		/// </remarks>
+		private const int WaitTimeoutForStateChange = 5000; // Same as 'MKY.IO.Serial.Socket.TcpClient.DefaultConnectingTimeout'.
+		                                                  //// Same as 'YAT.Domain.Test.Utilities.WaitTimeoutForStateChange'.
+		/// <remarks>
+		/// Note that a shorter interval would increase debug output, spoiling the debug console.
+		/// </remarks>
+		private const int WaitIntervalForStateChange = 100; // Same as 'YAT.Domain.Test.Utilities.WaitIntervalForStateChange'.
 
 		#endregion
 
@@ -277,74 +286,128 @@ namespace MKY.IO.Serial.Socket.Test
 		// Wait
 		//==========================================================================================
 
+		/// <remarks>
+		/// There are similar utility methods in
+		/// 'YAT.Domain.Test.Utilities' and
+		/// 'YAT.Model.Test.Utilities'.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		internal static void WaitForStart(IIOProvider io, string message)
 		{
-			int timeout = 0;
-			do
-			{
-				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
+			int waitTime = 0;
 
-				if (timeout >= WaitTimeoutForStateChange)
-					Assert.Fail(message);
+			Trace.WriteLine("Waiting for start, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+
+			while (!io.IsStarted)
+			{
+				Thread.Sleep(WaitIntervalForStateChange);
+				waitTime += WaitIntervalForStateChange;
+
+				Trace.WriteLine("Waiting for start, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+
+				if (waitTime >= WaitTimeoutForStateChange)
+					Assert.Fail("Start timeout! " + message);
 			}
-			while (!io.IsStarted);
+
+			Trace.WriteLine("...done, started");
 		}
 
 		internal static void WaitForTcpAutoSocketToBeStartedAsServer(TcpAutoSocket io, string message)
 		{
-			int timeout = 0;
-			do
-			{
-				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
+			int waitTime = 0;
 
-				if (timeout >= WaitTimeoutForStateChange)
-					Assert.Fail(message);
+			Trace.WriteLine("Waiting for start as server, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+
+			while (!(io.IsStarted && io.IsServer))
+			{
+				Thread.Sleep(WaitIntervalForStateChange);
+				waitTime += WaitIntervalForStateChange;
+
+				Trace.WriteLine("Waiting for start as server, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+
+				if (waitTime >= WaitTimeoutForStateChange)
+					Assert.Fail("Start timeout! " + message);
 			}
-			while (!(io.IsStarted && io.IsServer));
+
+			Trace.WriteLine("...done, started as server");
 		}
 
-		internal static void WaitForConnect(IIOProvider ioA, IIOProvider ioB, string message)
+		/// <remarks>
+		/// There are similar utility methods in
+		/// 'YAT.Domain.Test.Utilities' and
+		/// 'YAT.Model.Test.Utilities'.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
+		internal static void WaitForConnection(IIOProvider ioA, IIOProvider ioB, string message)
 		{
-			int timeout = 0;
-			do
-			{
-				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
+			int waitTime = 0;
 
-				if (timeout >= WaitTimeoutForStateChange)
-					Assert.Fail(message);
+			Trace.WriteLine("Waiting for connection, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+
+			while (!(ioA.IsConnected && ioB.IsConnected))
+			{
+				Thread.Sleep(WaitIntervalForStateChange);
+				waitTime += WaitIntervalForStateChange;
+
+				Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+
+				if (waitTime >= WaitTimeoutForStateChange)
+					Assert.Fail("Connect timeout! " + message);
 			}
-			while (!ioA.IsConnected && !ioB.IsConnected);
+
+			Trace.WriteLine("...done, connected");
 		}
 
-		internal static void WaitForDisconnect(IIOProvider ioA, IIOProvider ioB, string message)
+		/// <remarks>
+		/// There are similar utility methods in
+		/// 'YAT.Domain.Test.Utilities' and
+		/// 'YAT.Model.Test.Utilities'.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
+		internal static void WaitForDisconnection(IIOProvider ioA, IIOProvider ioB, string message)
 		{
-			int timeout = 0;
-			do
-			{
-				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
+			int waitTime = 0;
 
-				if (timeout >= WaitTimeoutForStateChange)
-					Assert.Fail(message);
+			Trace.WriteLine("Waiting for disconnection, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+
+			while (ioA.IsConnected || ioB.IsConnected)
+			{
+				Thread.Sleep(WaitIntervalForStateChange);
+				waitTime += WaitIntervalForStateChange;
+
+				Trace.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+
+				if (waitTime >= WaitTimeoutForStateChange)
+					Assert.Fail("Disconnect timeout! " + message);
 			}
-			while (ioA.IsConnected || ioB.IsConnected);
+
+			Trace.WriteLine("...done, disconnected");
 		}
 
+		/// <remarks>
+		/// There are similar utility methods in
+		/// 'YAT.Domain.Test.Utilities' and
+		/// 'YAT.Model.Test.Utilities'.
+		/// Changes here may have to be applied there too.
+		/// </remarks>
 		internal static void WaitForStop(IIOProvider io, string message)
 		{
-			int timeout = 0;
-			do
-			{
-				Thread.Sleep(WaitInterval);
-				timeout += WaitInterval;
+			int waitTime = 0;
 
-				if (timeout >= WaitTimeoutForStateChange)
-					Assert.Fail(message);
+			Trace.WriteLine("Waiting for stop, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+
+			while (!io.IsStopped)
+			{
+				Thread.Sleep(WaitIntervalForStateChange);
+				waitTime += WaitIntervalForStateChange;
+
+				Trace.WriteLine("Waiting for stop, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+
+				if (waitTime >= WaitTimeoutForStateChange)
+					Assert.Fail("Stop timeout! " + message);
 			}
-			while (io.IsStarted);
+
+			Trace.WriteLine("...done, stopped");
 		}
 
 		#endregion

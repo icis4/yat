@@ -21,6 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 using NUnit.Framework;
@@ -115,41 +116,49 @@ namespace MKY.IO.Serial.Socket.Test
 				using (client)
 				{
 					Utilities.WaitForStart(client, "TCP/IP client could not be started!");
-					Utilities.WaitForConnect(client, server, "TCP/IP client could not be connected to server!");
+					Utilities.WaitForConnection(client, server, "TCP/IP client could not be connected to server!");
 					Utilities.AssertStartedAndTransmissive(client);
 					Utilities.AssertStartedAndTransmissive(server);
 
 					for (int minute = 0; minute < minutes; minute++) // A loop takes around 1 minute.
 					{
-						// Repeat server disconnect a few times:
+						if (minutes > 1)
+							Trace.WriteLine("Minute = " + minute);
+
+						// Repeat server disconnect several times:
 						for (int i = 0; i < 30; i++) {
+							Trace.WriteLine("Pattern = A / Iteration = " + i);
 							ServerDisconnectReconnect(server, client);
 						}
 
-						// Toggle different client/server disconnect patterns a few times:
+						// Toggle different client/server disconnect patterns several times:
 						for (int i = 0; i < 10; i++) {
+							Trace.WriteLine("Pattern = B / Iteration = " + i);
 							ClientDisconnectReconnect(client, server);
 							ServerDisconnectReconnect(server, client);
 						}
 						for (int i = 0; i < 10; i++) {
+							Trace.WriteLine("Pattern = C / Iteration = " + i);
 							ClientDisconnectReconnect(client, server);
 							ClientDisconnectReconnect(client, server);
 							ServerDisconnectReconnect(server, client);
 						}
 						for (int i = 0; i < 10; i++) {
+							Trace.WriteLine("Pattern = D / Iteration = " + i);
 							ClientDisconnectReconnect(client, server);
 							ServerDisconnectReconnect(server, client);
 							ServerDisconnectReconnect(server, client);
 						}
 
-						// Repeat client disconnect a few times:
+						// Repeat client disconnect several times:
 						for (int i = 0; i < 30; i++) {
+							Trace.WriteLine("Pattern = E / Iteration = " + i);
 							ClientDisconnectReconnect(client, server);
 						}
 					}
 
 					Utilities.StopAsync(client);
-					Utilities.WaitForDisconnect(server, client, "TCP/IP server is not disconnected!");
+					Utilities.WaitForDisconnection(server, client, "TCP/IP sockets are not disconnected!");
 					Utilities.WaitForStop(client, "TCP/IP client could not be stopped!");
 					Utilities.AssertStopped(client);
 					Utilities.StopAsync(server);
@@ -167,12 +176,12 @@ namespace MKY.IO.Serial.Socket.Test
 			Utilities.AssertStopped(server);
 			Assert.That(server.ConnectedClientCount, Is.EqualTo(0));
 
-			Utilities.WaitForDisconnect(client, server, "TCP/IP client is not disconnected from server!");
+			Utilities.WaitForDisconnection(client, server, "TCP/IP client is not disconnected from server!");
 			Utilities.AssertStartedAndDisconnected(client);
 
 			Utilities.StartAsync(server);
 			Utilities.WaitForStart(server, "TCP/IP server could not be started!");
-			Utilities.WaitForConnect(server, client, "TCP/IP server could not be reconnected to client!");
+			Utilities.WaitForConnection(server, client, "TCP/IP server could not be reconnected to client!");
 			Assert.That(server.ConnectedClientCount, Is.EqualTo(1));
 		}
 
@@ -183,13 +192,13 @@ namespace MKY.IO.Serial.Socket.Test
 			Utilities.WaitForStop(client, "TCP/IP client could not be stopped!");
 			Utilities.AssertStopped(client);
 
-			Utilities.WaitForDisconnect(server, client, "TCP/IP server is not disconnected from client!");
+			Utilities.WaitForDisconnection(server, client, "TCP/IP server is not disconnected from client!");
 			Utilities.AssertStartedAndDisconnected(server);
 			Assert.That(server.ConnectedClientCount, Is.EqualTo(0));
 
 			Utilities.StartAsync(client);
 			Utilities.WaitForStart(client, "TCP/IP client could not be started!");
-			Utilities.WaitForConnect(client, server, "TCP/IP client could not be reconnected to server!");
+			Utilities.WaitForConnection(client, server, "TCP/IP client could not be reconnected to server!");
 			Assert.That(server.ConnectedClientCount, Is.EqualTo(1));
 		}
 

@@ -42,9 +42,9 @@ namespace MKY
 		/// local <see cref="Random"/> object.
 		/// </summary>
 		/// <remarks>
-		/// This approach also solves the issue described in <see cref="NextPseudoRandomSeed"/>.
+		/// This approach also solves the issue described in <see cref="NextRandomSeed"/>.
 		/// </remarks>
-		public static Random GlobalObject { get; } = new Random(NextPseudoRandomSeed());
+		public static Random GlobalObject { get; } = new Random(NextRandomSeed());
 
 		/// <summary>
 		/// This method solves an issue described in the MSDN description of <see cref="Random"/>:
@@ -54,8 +54,7 @@ namespace MKY
 		/// will produce identical sets of random numbers. This problem can be avoided by using a
 		/// single <see cref="Random"/> object to generate the seed for all random generators.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "PseudoRandom", Justification = "What's the problem...")]
-		public static int NextPseudoRandomSeed()
+		public static int NextRandomSeed()
 		{
 			return (staticRandomSeed.Next());
 		}

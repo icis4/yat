@@ -59,7 +59,7 @@ namespace MKY.Collections.Specialized
 		protected TimedMovingAverage(int intervalMs)
 		{
 			if (intervalMs <= 0)
-				throw (new ArgumentOutOfRangeException("intervalMs", intervalMs, "Interval must be at least 1 ms!"));
+				throw (new ArgumentOutOfRangeException("intervalMs", intervalMs, MessageHelper.InvalidExecutionPreamble + "Interval must be at least 1 ms!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			IntervalMs = intervalMs;
 			IntervalTicks = TimeSpanEx.TimeToTicks(intervalMs);

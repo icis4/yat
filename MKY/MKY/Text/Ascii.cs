@@ -94,7 +94,7 @@ namespace MKY.Text
 				case 0x1F: return ("US");
 				case 0x7F: return ("DEL");
 			}
-			throw (new ArgumentOutOfRangeException("code", code, "Code hex(" + code.ToString("X2", CultureInfo.InvariantCulture) + ") is no ASCII control code!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+			throw (new ArgumentOutOfRangeException("code", code, "Code hex(" + code.ToString("X2", CultureInfo.InvariantCulture) + ") is no ASCII control code!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 		}
 
 		/// <summary>
@@ -139,7 +139,7 @@ namespace MKY.Text
 				case 0x1F: return ("Unit separator");
 				case 0x7F: return ("Delete");
 			}
-			throw (new ArgumentOutOfRangeException("code", code, "Code hex(" + code.ToString("X2", CultureInfo.InvariantCulture) + ") is no ASCII control code!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+			throw (new ArgumentOutOfRangeException("code", code, "Code hex(" + code.ToString("X2", CultureInfo.InvariantCulture) + ") is no ASCII control code!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 		}
 
 		/// <summary>

@@ -258,7 +258,7 @@ namespace MKY.Collections.Specialized
 						// Ignore.
 					}
 					else {                  // HistogramOutOfBoundsBehavior.Throw)
-						throw (new ArgumentOutOfRangeException("item", item, "The value of the item is outside 'Min'/'Max' and 'AutoAdjust' is 'false'!"));
+						throw (new ArgumentOutOfRangeException("item", item, "The value of the item is outside 'Min'/'Max' and 'AutoAdjust' is 'false'!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 					}
 				}
 			}

@@ -20,7 +20,8 @@ namespace MKY.IO.Ports
 		{
 			// Modified version of the designer generated Dispose() method:
 
-			this.eventHelper.DiscardAllEventsAndExceptions();
+			if (this.eventHelper != null) // Possible when called by finalizer (non-deterministic).
+				this.eventHelper.DiscardAllEventsAndExceptions();
 
 			// Dispose of managed resources:
 			if (disposing)
@@ -41,7 +42,9 @@ namespace MKY.IO.Ports
 				// Try to patch some of the issues described in the ".\!-Doc\*.txt" files:
 				base.Dispose(disposing);
 			}
-			catch (Exception) { } // May be 'UnauthorizedAccessException' or ...
+			catch // May be 'UnauthorizedAccessException' or ...
+			{
+			}
 		}
 
 		#region Component Designer generated code

@@ -42,29 +42,29 @@ namespace MKY.Net
 		[SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings", Justification = "Process.Start() requires a string.")]
 		public static bool TryBrowseUri(string uri)
 		{
-			Exception exception;
-			return (TryBrowseUri(uri, out exception));
+			Exception exceptionOnFailure;
+			return (TryBrowseUri(uri, out exceptionOnFailure));
 		}
 
 		/// <summary>
 		/// Tries to browse the given URI with the system's default browser.
 		/// </summary>
 		/// <param name="uri">URI to browse.</param>
-		/// <param name="exception">Exception object, in case of failure.</param>
+		/// <param name="exceptionOnFailure">Exception object, in case of failure.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		[SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "Process.Start() requires a string.")]
-		public static bool TryBrowseUri(string uri, out Exception exception)
+		public static bool TryBrowseUri(string uri, out Exception exceptionOnFailure)
 		{
 			try
 			{
 				Process.Start(uri);
-				exception = null;
+				exceptionOnFailure = null;
 				return (true);
 			}
 			catch (Exception ex)
 			{
-				exception = ex;
+				exceptionOnFailure = ex;
 				return (false);
 			}
 		}
@@ -76,19 +76,19 @@ namespace MKY.Net
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		public static bool TryBrowseUri(Uri uri)
 		{
-			Exception exception;
-			return (TryBrowseUri(uri, out exception));
+			Exception exceptionOnFailure;
+			return (TryBrowseUri(uri, out exceptionOnFailure));
 		}
 
 		/// <summary>
 		/// Tries to browse the given URI with the system's default browser.
 		/// </summary>
 		/// <param name="uri">URI to browse.</param>
-		/// <param name="exception">Exception object, in case of failure.</param>
+		/// <param name="exceptionOnFailure">Exception object, in case of failure.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-		public static bool TryBrowseUri(Uri uri, out Exception exception)
+		public static bool TryBrowseUri(Uri uri, out Exception exceptionOnFailure)
 		{
-			return (TryBrowseUri(uri.AbsoluteUri, out exception));
+			return (TryBrowseUri(uri.AbsoluteUri, out exceptionOnFailure));
 		}
 	}
 }

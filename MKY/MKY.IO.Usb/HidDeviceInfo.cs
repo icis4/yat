@@ -105,7 +105,7 @@ namespace MKY.IO.Usb
 	/////// <remarks><![CDATA["usage_00FF_0001"]]></remarks>
 	////public static readonly Regex UsageRegex = new Regex(@"USAGE[^0-9a-fA-F](?<usagePage>[0-9a-fA-F]+)[^0-9a-fA-F](?<usageId>[0-9a-fA-F]+)", Options);
 	////
-	//// See explanation at TryParseConsiderately() further below.
+	//// See explanation at TryParseWithOptions() further below.
 
 		#endregion
 
@@ -204,10 +204,10 @@ namespace MKY.IO.Usb
 		private void Initialize(int vendorId, int productId, int usagePage, int usageId)
 		{
 			if (!IsValidUsageIdOrAny(usagePage))
-				throw (new ArgumentOutOfRangeException("usagePage", usagePage, "'" + usagePage + "' is an invalid usage page!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+				throw (new ArgumentOutOfRangeException("usagePage", usagePage, "'" + usagePage + "' is an invalid usage page!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			if (!IsValidUsageIdOrAny(usageId))
-				throw (new ArgumentOutOfRangeException("usageId", usageId, "'" + usageId + "' is an invalid usage ID!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+				throw (new ArgumentOutOfRangeException("usageId", usageId, "'" + usageId + "' is an invalid usage ID!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			Initialize(vendorId, productId);
 
@@ -220,10 +220,10 @@ namespace MKY.IO.Usb
 		private void Initialize(int vendorId, int productId, string serial, int usagePage, int usageId)
 		{
 			if (!IsValidUsageIdOrAny(usagePage))
-				throw (new ArgumentOutOfRangeException("usagePage", usagePage, "'" + usagePage + "' is an invalid usage page!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+				throw (new ArgumentOutOfRangeException("usagePage", usagePage, "'" + usagePage + "' is an invalid usage page!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			if (!IsValidUsageIdOrAny(usageId))
-				throw (new ArgumentOutOfRangeException("usageId", usageId, "'" + usageId + "' is an invalid usage ID!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+				throw (new ArgumentOutOfRangeException("usageId", usageId, "'" + usageId + "' is an invalid usage ID!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			Initialize(vendorId, productId, serial);
 
@@ -235,10 +235,10 @@ namespace MKY.IO.Usb
 		private void Initialize(string path, int vendorId, int productId, string manufacturer, string product, string serial, int usagePage, int usageId)
 		{
 			if (!IsValidUsageIdOrAny(usagePage))
-				throw (new ArgumentOutOfRangeException("usagePage", usagePage, "'" + usagePage + "' is an invalid usage page!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+				throw (new ArgumentOutOfRangeException("usagePage", usagePage, "'" + usagePage + "' is an invalid usage page!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			if (!IsValidUsageIdOrAny(usageId))
-				throw (new ArgumentOutOfRangeException("usageId", usageId, "'" + usageId + "' is an invalid usage ID!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+				throw (new ArgumentOutOfRangeException("usageId", usageId, "'" + usageId + "' is an invalid usage ID!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			Initialize(path, vendorId, productId, manufacturer, product, serial);
 
@@ -669,7 +669,7 @@ namespace MKY.IO.Usb
 	////		throw (new FormatException(@"""" + s + @""" does not specify a valid USB HID device ID."));
 	////}
 	////
-	//// See explanation at TryParseConsiderately() further below.
+	//// See explanation at TryParseWithOptions() further below.
 
 		/// <summary>
 		/// Parses <paramref name="s"/> for VID/PID and returns a corresponding device ID object.
@@ -729,7 +729,7 @@ namespace MKY.IO.Usb
 	////		throw (new FormatException(@"""" + s + @""" does not specify a valid USB HID device ID."));
 	////}
 	////
-	//// See explanation at TryParseConsiderately() further below.
+	//// See explanation at TryParseWithOptions() further below.
 	////
 	/////// <summary>
 	/////// Parses <paramref name="s"/> for VID/PID/USAGE and returns a corresponding device ID object.
@@ -759,7 +759,7 @@ namespace MKY.IO.Usb
 	/////// </remarks>
 	////public static bool TryParse(string s, out HidDeviceInfo result)
 	////{
-	////	return (TryParseConsiderately(s, true, true, out result));
+	////	return (TryParseWithOptions(s, true, true, out result));
 	////}
 
 		/// <summary>
@@ -774,10 +774,10 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public static bool TryParseVidPid(string s, out HidDeviceInfo result)
 		{
-		////return (TryParseConsiderately(s, false, false, out result)); See explanation at TryParseConsiderately() further below.
+		////return (TryParseWithOptions(s, false, false, out result)); See explanation at TryParseWithOptions() further below.
 
 			DeviceInfo di;
-			if (TryParseConsiderately(s, false, out di))
+			if (TryParseWithOptions(s, false, out di))
 			{
 				result = new HidDeviceInfo(di);
 				return (true);
@@ -799,10 +799,10 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public static bool TryParseVidPidSerial(string s, out HidDeviceInfo result)
 		{
-		////return (TryParseConsiderately(s, true, false, out result)); See explanation at TryParseConsiderately() further below.
+		////return (TryParseWithOptions(s, true, false, out result)); See explanation at TryParseWithOptions() further below.
 
 			DeviceInfo di;
-			if (TryParseConsiderately(s, true, out di))
+			if (TryParseWithOptions(s, true, out di))
 			{
 				result = new HidDeviceInfo(di);
 				return (true);
@@ -825,10 +825,10 @@ namespace MKY.IO.Usb
 	/////// </remarks>
 	////public static bool TryParseVidPidSerialUsage(string s, out HidDeviceInfo result)
 	////{
-	////	return (TryParseConsiderately(s, true, true, out result));
+	////	return (TryParseWithOptions(s, true, true, out result));
 	////}
 	////
-	//// See explanation at TryParseConsiderately() further below.
+	//// See explanation at TryParseWithOptions() further below.
 	////
 	/////// <summary>
 	/////// Tries to parse <paramref name="s"/> for VID/PID/USAGE and returns a corresponding device ID object.
@@ -843,16 +843,16 @@ namespace MKY.IO.Usb
 	/////// </remarks>
 	////public static bool TryParseVidPidUsage(string s, out HidDeviceInfo result)
 	////{
-	////	return (TryParseConsiderately(s, false, true, out result));
+	////	return (TryParseWithOptions(s, false, true, out result));
 	////}
 	////
 	//// Parsing usage not implemented (yet), because SNR may be any string, thus usage would have to be located ahead...
 	////
 	/////// <summary></summary>
-	////protected static bool TryParseConsiderately(string s, bool requireSerial, bool requireUsage, out HidDeviceInfo result)
+	////protected static bool TryParseWithOptions(string s, bool requireSerial, bool requireUsage, out HidDeviceInfo result)
 	////{
 	////	DeviceInfo di;
-	////	if (TryParseConsiderately(s, requireSerial, out di))
+	////	if (TryParseWithOptions(s, requireSerial, out di))
 	////	{
 	////		// e.g. "VID:0ABC PID:1234 SNR:XYZ USAGE:00FF/0001" or "vid_0ABC&pid_1234&snr_xyz&usage_00FF_0001"
 	////		var m = UsageRegex.Match(s);
