@@ -196,7 +196,7 @@ namespace YAT.View.Utilities
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		private static bool TrySave(PredefinedCommandPage page, string filePath, out Exception exception)
+		private static bool TrySave(PredefinedCommandPage page, string filePath, out Exception exceptionOnFailure)
 		{
 			try
 			{
@@ -207,19 +207,19 @@ namespace YAT.View.Utilities
 				sh.SettingsFilePath = filePath;
 				sh.Save();
 
-				exception = null;
+				exceptionOnFailure = null;
 				return (true);
 			}
 			catch (Exception ex)
 			{
-				exception = ex;
+				exceptionOnFailure = ex;
 				return (false);
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		private static bool TrySave(PredefinedCommandPageCollection pages, string filePath, out Exception exception)
+		private static bool TrySave(PredefinedCommandPageCollection pages, string filePath, out Exception exceptionOnFailure)
 		{
 			try
 			{
@@ -230,19 +230,19 @@ namespace YAT.View.Utilities
 				sh.SettingsFilePath = filePath;
 				sh.Save();
 
-				exception = null;
+				exceptionOnFailure = null;
 				return (true);
 			}
 			catch (Exception ex)
 			{
-				exception = ex;
+				exceptionOnFailure = ex;
 				return (false);
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		private static bool TryLoad(string filePath, out PredefinedCommandPage page, out Exception exception)
+		private static bool TryLoad(string filePath, out PredefinedCommandPage page, out Exception exceptionOnFailure)
 		{
 			try
 			{
@@ -251,27 +251,27 @@ namespace YAT.View.Utilities
 				if (sh.Load())
 				{
 					page = sh.Settings.Page; // No clone needed as just loaded.
-					exception = null;
+					exceptionOnFailure = null;
 					return (true);
 				}
 				else
 				{
 					page = null;
-					exception = null;
+					exceptionOnFailure = null;
 					return (true);
 				}
 			}
 			catch (Exception ex)
 			{
 				page = null;
-				exception = ex;
+				exceptionOnFailure = ex;
 				return (false);
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		private static bool TryLoad(string filePath, out PredefinedCommandPageCollection pages, out Exception exception)
+		private static bool TryLoad(string filePath, out PredefinedCommandPageCollection pages, out Exception exceptionOnFailure)
 		{
 			try
 			{
@@ -280,27 +280,27 @@ namespace YAT.View.Utilities
 				if (sh.Load())
 				{
 					pages = sh.Settings.Pages; // No clone needed as just loaded.
-					exception = null;
+					exceptionOnFailure = null;
 					return (true);
 				}
 				else
 				{
 					pages = null;
-					exception = null;
+					exceptionOnFailure = null;
 					return (true);
 				}
 			}
 			catch (Exception ex)
 			{
 				pages = null;
-				exception = ex;
+				exceptionOnFailure = ex;
 				return (false);
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		private static bool TryLoad(string filePath, out PredefinedCommandSettings settings, out Exception exception)
+		private static bool TryLoad(string filePath, out PredefinedCommandSettings settings, out Exception exceptionOnFailure)
 		{
 			try
 			{
@@ -309,20 +309,20 @@ namespace YAT.View.Utilities
 				if (sh.Load())
 				{
 					settings = sh.Settings.PredefinedCommand; // No clone needed as just loaded.
-					exception = null;
+					exceptionOnFailure = null;
 					return (true);
 				}
 				else
 				{
 					settings = null;
-					exception = null;
+					exceptionOnFailure = null;
 					return (true);
 				}
 			}
 			catch (Exception ex)
 			{
 				settings = null;
-				exception = ex;
+				exceptionOnFailure = ex;
 				return (false);
 			}
 		}

@@ -30,6 +30,9 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+#if (WITH_SCRIPTING)
+using System.Text;
+#endif
 using System.Windows.Forms;
 
 using MKY;
@@ -48,6 +51,10 @@ namespace YAT.Model
 {
 	/// <remarks>
 	/// This partial class implements the send part of <see cref="Terminal"/>.
+	/// </remarks>
+	/// <remarks>
+	/// \remind (2020-09-16 / MKY while integrating YAT 2.2.0 into Albatros)
+	/// Could alternatively be partialized into 'N/A'/.Outgoing/.Incoming.
 	/// </remarks>
 	public partial class Terminal
 	{
@@ -108,73 +115,22 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendRaw(byte[] data)
 		{
-			AssertUndisposed();
+		////AssertUndisposed() is called by 'DoSendRaw()' below.
 
 			lock (SendSyncObj)
 			{
-				OnFixedStatusTextRequest("Sending " + data.Length + " bytes...");
-				try
-				{
-					this.terminal.Send(data);
-				}
-				catch (IOException ex)
-				{
-					OnFixedStatusTextRequest("Error sending " + data.Length + " bytes!");
-
-					string text;
-					string title;
-					ComposeSendRawErrorMessage(out text, out title);
-					OnMessageInputRequest
-					(
-						text + Environment.NewLine + Environment.NewLine +
-						"System error message:" + Environment.NewLine +
-						ex.Message,
-						title,
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-					);
-
-					OnTimedStatusTextRequest("Data not sent!");
-				}
+				DoSendRaw(data);
 			}
 		}
 
-		private void ComposeSendRawErrorMessage(out string text, out string title)
+		/// <remarks>
+		/// Separate 'DoSendRaw()' method for orthogonality with 'DoSendText...()' methods further below.
+		/// </remarks>
+		protected virtual void DoSendRaw(byte[] data)
 		{
-			StringBuilder textBuilder = new StringBuilder();
-			StringBuilder titleBuilder = new StringBuilder();
+			AssertUndisposed();
 
-			textBuilder.Append("Unable to write to ");
-			switch (this.settingsRoot.IOType)
-			{
-				case Domain.IOType.SerialPort:
-					textBuilder.Append("port");
-					titleBuilder.Append("Serial Port");
-					break;
-
-				case Domain.IOType.TcpClient:
-				case Domain.IOType.TcpServer:
-				case Domain.IOType.TcpAutoSocket:
-				case Domain.IOType.UdpClient:
-				case Domain.IOType.UdpServer:
-				case Domain.IOType.UdpPairSocket:
-					textBuilder.Append("socket");
-					titleBuilder.Append("Socket");
-					break;
-
-				case Domain.IOType.UsbSerialHid:
-					textBuilder.Append("device");
-					titleBuilder.Append("Device");
-					break;
-
-				default:
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "I/O type " + this.settingsRoot.IOType + " is not supported (yet)!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
-			textBuilder.Append(":");
-			titleBuilder.Append(" Error!");
-
-			text = textBuilder.ToString();
-			title = titleBuilder.ToString();
+			this.terminal.SendRaw(data);
 		}
 
 		#endregion
@@ -191,7 +147,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendText()
 		{
-		////AssertUndisposed() is called by 'Send...' below.
+		////AssertUndisposed() is called by 'Send...()' below.
 
 			lock (SendSyncObj)
 			{
@@ -208,7 +164,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendTextWithoutEol()
 		{
-		////AssertUndisposed() is called by 'Send...' below.
+		////AssertUndisposed() is called by 'Send...()' below.
 
 			lock (SendSyncObj)
 			{
@@ -225,7 +181,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendPartialTextEol()
 		{
-		////AssertUndisposed() is called by 'Send...' below.
+		////AssertUndisposed() is called by 'Send...()' below.
 
 			lock (SendSyncObj)
 			{
@@ -239,7 +195,7 @@ namespace YAT.Model
 		/// <param name="text">Text to be sent.</param>
 		public virtual void SendText(string text)
 		{
-		////AssertUndisposed() is called by 'Send...' below.
+		////AssertUndisposed() is called by 'Send...()' below.
 
 			lock (SendSyncObj)
 			{
@@ -253,7 +209,7 @@ namespace YAT.Model
 		/// <param name="command">Text command to be sent.</param>
 		public virtual void SendText(Command command)
 		{
-		////AssertUndisposed() is called by 'DoSend...' below.
+		////AssertUndisposed() is called by 'DoSend...()' below.
 
 			lock (SendSyncObj)
 			{
@@ -270,7 +226,7 @@ namespace YAT.Model
 		/// <param name="command">Text command to be sent.</param>
 		public virtual void SendTextWithoutEol(Command command)
 		{
-		////AssertUndisposed() is called by 'DoSend...' below.
+		////AssertUndisposed() is called by 'DoSend...()' below.
 
 			lock (SendSyncObj)
 			{
@@ -282,10 +238,10 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// Separate "Do...()" method for obvious handling of 'UseExplicitDefaultRadix'.
+		/// Separate 'DoSend...()' method for obvious handling of 'UseExplicitDefaultRadix'.
 		/// </remarks>
 		/// <remarks>
-		/// Argument of this protected method named "c" for compactness.
+		/// Argument of this protected method named 'c' for compactness.
 		/// </remarks>
 		protected virtual void DoSendText(Command c)
 		{
@@ -341,10 +297,10 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// Separate "Do...()" method for obvious handling of 'UseExplicitDefaultRadix'.
+		/// Separate 'DoSend...()' method for obvious handling of 'UseExplicitDefaultRadix'.
 		/// </remarks>
 		/// <remarks>
-		/// Argument of this protected method named "c" for compactness.
+		/// Argument of this protected method named 'c' for compactness.
 		/// </remarks>
 		protected virtual void DoSendTextWithoutEol(Command c)
 		{
@@ -386,7 +342,7 @@ namespace YAT.Model
 		/// Includes compiled partial text.
 		/// </remarks>
 		/// <remarks>
-		/// Argument of this protected method named "c" for compactness.
+		/// Argument of this protected method named 'c' for compactness.
 		/// </remarks>
 		protected virtual void CloneIntoRecentTextCommandsIfNeeded(Command c)
 		{
@@ -461,10 +417,10 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// Separate "Do...()" method for obvious handling of 'UseExplicitDefaultRadix'.
+		/// Separate 'DoSend...()' method for obvious handling of 'UseExplicitDefaultRadix'.
 		/// </remarks>
 		/// <remarks>
-		/// Argument of this protected method named "c" for compactness.
+		/// Argument of this protected method named 'c' for compactness.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'symmetricity' is a correct English term.")]
 		protected virtual void DoSendFile(Command c)
@@ -486,7 +442,7 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// Argument of this protected method named "c" for compactness.
+		/// Argument of this protected method named 'c' for compactness.
 		/// </remarks>
 		protected virtual void CloneIntoRecentFileCommands(Command c)
 		{

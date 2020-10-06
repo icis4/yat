@@ -60,6 +60,7 @@
 			this.button_Command_8.Tag = "8";
 			this.button_Command_8.Text = "<Define...>";
 			this.toolTip.SetToolTip(this.button_Command_8, "Send command");
+			this.button_Command_8.UseVisualStyleBackColor = true;
 			this.button_Command_8.Click += new System.EventHandler(this.button_Command_Click);
 			// 
 			// button_Command_7
@@ -76,6 +77,7 @@
 			this.button_Command_7.Tag = "7";
 			this.button_Command_7.Text = "<Define...>";
 			this.toolTip.SetToolTip(this.button_Command_7, "Send command");
+			this.button_Command_7.UseVisualStyleBackColor = true;
 			this.button_Command_7.Click += new System.EventHandler(this.button_Command_Click);
 			// 
 			// button_Command_6
@@ -92,6 +94,7 @@
 			this.button_Command_6.Tag = "6";
 			this.button_Command_6.Text = "<Define...>";
 			this.toolTip.SetToolTip(this.button_Command_6, "Send command");
+			this.button_Command_6.UseVisualStyleBackColor = true;
 			this.button_Command_6.Click += new System.EventHandler(this.button_Command_Click);
 			// 
 			// button_Command_5
@@ -108,6 +111,7 @@
 			this.button_Command_5.Tag = "5";
 			this.button_Command_5.Text = "<Define...>";
 			this.toolTip.SetToolTip(this.button_Command_5, "Send command");
+			this.button_Command_5.UseVisualStyleBackColor = true;
 			this.button_Command_5.Click += new System.EventHandler(this.button_Command_Click);
 			// 
 			// button_Command_4
@@ -124,6 +128,7 @@
 			this.button_Command_4.Tag = "4";
 			this.button_Command_4.Text = "<Define...>";
 			this.toolTip.SetToolTip(this.button_Command_4, "Send command");
+			this.button_Command_4.UseVisualStyleBackColor = true;
 			this.button_Command_4.Click += new System.EventHandler(this.button_Command_Click);
 			// 
 			// button_Command_3
@@ -140,6 +145,7 @@
 			this.button_Command_3.Tag = "3";
 			this.button_Command_3.Text = "<Define...>";
 			this.toolTip.SetToolTip(this.button_Command_3, "Send command");
+			this.button_Command_3.UseVisualStyleBackColor = true;
 			this.button_Command_3.Click += new System.EventHandler(this.button_Command_Click);
 			// 
 			// button_Command_2
@@ -156,6 +162,7 @@
 			this.button_Command_2.Tag = "2";
 			this.button_Command_2.Text = "<Define...>";
 			this.toolTip.SetToolTip(this.button_Command_2, "Send command");
+			this.button_Command_2.UseVisualStyleBackColor = true;
 			this.button_Command_2.Click += new System.EventHandler(this.button_Command_Click);
 			// 
 			// button_Command_1
@@ -172,6 +179,7 @@
 			this.button_Command_1.Tag = "1";
 			this.button_Command_1.Text = "<Define...>";
 			this.toolTip.SetToolTip(this.button_Command_1, "Send command");
+			this.button_Command_1.UseVisualStyleBackColor = true;
 			this.button_Command_1.Click += new System.EventHandler(this.button_Command_Click);
 			// 
 			// button_Command_9
@@ -188,6 +196,7 @@
 			this.button_Command_9.Tag = "9";
 			this.button_Command_9.Text = "<Define...>";
 			this.toolTip.SetToolTip(this.button_Command_9, "Send command");
+			this.button_Command_9.UseVisualStyleBackColor = true;
 			this.button_Command_9.Click += new System.EventHandler(this.button_Command_Click);
 			// 
 			// button_Command_10
@@ -204,6 +213,7 @@
 			this.button_Command_10.Tag = "10";
 			this.button_Command_10.Text = "<Define...>";
 			this.toolTip.SetToolTip(this.button_Command_10, "Send command");
+			this.button_Command_10.UseVisualStyleBackColor = true;
 			this.button_Command_10.Click += new System.EventHandler(this.button_Command_Click);
 			// 
 			// button_Command_11
@@ -220,6 +230,7 @@
 			this.button_Command_11.Tag = "11";
 			this.button_Command_11.Text = "<Define...>";
 			this.toolTip.SetToolTip(this.button_Command_11, "Send command");
+			this.button_Command_11.UseVisualStyleBackColor = true;
 			this.button_Command_11.Click += new System.EventHandler(this.button_Command_Click);
 			// 
 			// button_Command_12
@@ -236,6 +247,7 @@
 			this.button_Command_12.Tag = "12";
 			this.button_Command_12.Text = "<Define...>";
 			this.toolTip.SetToolTip(this.button_Command_12, "Send command");
+			this.button_Command_12.UseVisualStyleBackColor = true;
 			this.button_Command_12.Click += new System.EventHandler(this.button_Command_Click);
 			// 
 			// label_SeparatorLine

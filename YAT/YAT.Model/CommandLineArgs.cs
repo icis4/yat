@@ -92,16 +92,19 @@ namespace YAT.Model
 		public string TerminalType;
 
 		/// <remarks>
-		/// This option is intentionally called 'PortType' because it shall match the name on the 'New Terminal' and 'Terminal Settings' dialog.
+		/// This option also supports 'PortType' with 'pt' short name for backward compatibility.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "PortType", ShortName = "pt", Description =
-			"The desired port type. Valid values are:" + EnvironmentEx.NewLineConstWorkaround +
+		[CLSCompliant(false)] // Arrays as attribute arguments is not CLS-compliant.
+		[OptionArg(Names = new string[] { "IOType", "PortType" }, ShortNames = new string[] { "io", "pt" }, Description =
+			"The desired I/O type. Valid values are:" + EnvironmentEx.NewLineConstWorkaround +
 			"> 'COM' (Serial COM Port)" + EnvironmentEx.NewLineConstWorkaround +
 			"> 'TCPClient', 'TCPServer', 'TCPAutoSocket' (TCP/IP Socket)" + EnvironmentEx.NewLineConstWorkaround +
 			"> 'UDPClient', 'UDPServer', 'UDPPairSocket' (UDP/IP Socket)" + EnvironmentEx.NewLineConstWorkaround +
 			"> 'USBSerHID' (USB Ser/HID)" + EnvironmentEx.NewLineConstWorkaround +
-			"The default value is 'COM'.")]
+			"The default value is 'COM'." + EnvironmentEx.NewLineConstWorkaround +
+			EnvironmentEx.NewLineConstWorkaround +
+			"This option supports [PortType] and [pt] for backward compatibility.")]
 		public string IOType;
 
 		/// <remarks>
@@ -561,11 +564,11 @@ namespace YAT.Model
 			// TransmitText:
 			if (!string.IsNullOrEmpty(RequestedTransmitText))
 			{
-				string errorMessage;
-				if (!Domain.Utilities.ValidationHelper.ValidateText("text to send", RequestedTransmitText, out errorMessage, Domain.Parser.Mode.AllEscapes))
+				string messageOnFailure;
+				if (!Domain.Utilities.ValidationHelper.ValidateText("text to send", RequestedTransmitText, out messageOnFailure, Domain.Parser.Mode.AllEscapes))
 				{
 					RequestedTransmitText = null;
-					Invalidate(errorMessage);
+					Invalidate(messageOnFailure);
 					BooleanEx.ClearIfSet(ref isValid);
 				}
 			}
@@ -677,8 +680,8 @@ namespace YAT.Model
 				return (false);
 			}
 
-			if (OptionIsGiven("TerminalType") || OptionIsGiven("PortType")) { // Called 'PortType' because it shall match the name on the 'New Terminal' and 'Terminal Settings' dialog.
-				// IOType is either default (SerialPort) or explicitly set (by the "PortType" option).
+			if (OptionIsGiven("TerminalType") || OptionIsGiven("IOType")) {
+				// IOType is either default (SerialPort) or explicitly set (by the "IOType" option).
 				// Continue evaluation to detect additional/subsequent options.
 				isRequestedImplicitly = true;
 			}

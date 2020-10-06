@@ -67,7 +67,7 @@ namespace YAT.View.Utilities
 		/// Copies to the clipboard, prompting the user as required.
 		/// </summary>
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
-		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
+		/// <remarks>Named 'Set' same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TrySet(IWin32Window owner, PredefinedCommandSettings settings, int selectedPageId)
 		{
@@ -103,7 +103,7 @@ namespace YAT.View.Utilities
 		/// Copies all pages to the clipboard.
 		/// </summary>
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
-		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
+		/// <remarks>Named 'Set' same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TrySetAll(IWin32Window owner, PredefinedCommandSettings settings)
 		{                                                          // Specifying 'NoPageId' will copy all pages (not a single).
@@ -114,7 +114,7 @@ namespace YAT.View.Utilities
 		/// Copies the given page to the clipboard.
 		/// </summary>
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
-		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
+		/// <remarks>Named 'Set' same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TrySetOne(IWin32Window owner, PredefinedCommandSettings settings, int pageId)
 		{
@@ -125,7 +125,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
-		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
+		/// <remarks>Named 'Set' same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private static bool TrySet(IWin32Window owner, PredefinedCommandPageCollection pages, int pageId)
 		{
@@ -136,7 +136,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
-		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
+		/// <remarks>Named 'Set' same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		private static bool TrySet(IWin32Window owner, PredefinedCommandPage page)
 		{
 			try
@@ -171,7 +171,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
-		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
+		/// <remarks>Named 'Set' same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		private static bool TrySet(IWin32Window owner, PredefinedCommandPageCollection pages)
 		{
 			try
@@ -206,7 +206,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
-		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
+		/// <remarks>Named 'Get' same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Required for fallback handling.")]
 		private static bool TryGet(IWin32Window owner, out PredefinedCommandPageCollection pages)
 		{
@@ -322,7 +322,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
-		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
+		/// <remarks>Named 'Get' same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryGetAndImportAll(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{
@@ -367,7 +367,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
-		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
+		/// <remarks>Named 'Get' same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryGetAndImport(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{
@@ -431,7 +431,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
-		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
+		/// <remarks>Named 'Get' same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryGetAndInsert(IWin32Window owner, PredefinedCommandSettings settingsOld, int selectedPageId, out PredefinedCommandSettings settingsNew)
 		{
@@ -447,7 +447,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <remarks>In case of an error, a modal message box is shown to the user.</remarks>
-		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
+		/// <remarks>Named 'Get' same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static bool TryGetAndAdd(IWin32Window owner, PredefinedCommandSettings settingsOld, out PredefinedCommandSettings settingsNew)
 		{

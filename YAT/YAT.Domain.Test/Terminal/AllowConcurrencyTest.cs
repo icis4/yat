@@ -62,9 +62,8 @@ namespace YAT.Domain.Test.Terminal
 		}
 
 		/// <remarks>
-		/// Named "subsequence" rather than "subsequency" as that is the correct English term.
+		/// Named 'Subsequence' rather than 'Subsequency' as that is the correct English term.
 		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'subsequency' is a correct English term.")]
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "A public type is required for NUnit and this type really belongs to the test data only.")]
 		public enum Subsequence
 		{
@@ -123,7 +122,7 @@ namespace YAT.Domain.Test.Terminal
 							break;
 
 						case Subsequence.Random:
-							var random = new Random(RandomEx.NextPseudoRandomSeed());
+							var random = new Random(RandomEx.NextRandomSeed());
 							var minValue = (SendLineCount / 100); // 1%
 							var maxValue = (SendLineCount / 10); // 10%
 							subsequentLineCount = random.Next(minValue, maxValue);

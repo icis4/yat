@@ -443,7 +443,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <remarks>
-		/// XML element is named "UTC" instead of .NET-style "Utc" for better readability.
+		/// XML element is named 'UTC' instead of .NET-style 'Utc' for better readability.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop you are right, I don't like 'Utc' either...")]
 		[XmlElement("TimeStampUseUTC")]
@@ -520,7 +520,7 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
+		/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
 		[XmlElement("ShowDevice")]
 		public virtual bool ShowDevice
 		{
@@ -668,7 +668,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <remarks>
-		/// Named 'Device' for simplicity even though using 'I/O Device' for user.
+		/// Named 'Device' for simplicity even though using "I/O Device" for view.
 		/// </remarks>
 		/// <remarks>
 		/// Part of the text/binary independent settings to ease handling the dependency
@@ -702,7 +702,7 @@ namespace YAT.Domain.Settings
 				if (this.maxLineCount != value)
 				{
 					if (value < 1)
-						throw (new ArgumentOutOfRangeException("value", value, "Line count must at least be 1!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+						throw (new ArgumentOutOfRangeException("value", value, "Line count must at least be 1!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 					this.maxLineCount = value;
 					SetMyChanged();
@@ -716,8 +716,8 @@ namespace YAT.Domain.Settings
 		/// is a recursion within 'mscorlib.dll'.
 		/// </remarks>
 		/// <remarks>
-		/// Named "length" rather than "char count" or "byte count" because it is either or,
-		/// depending on the terminal type. Also, "length" seems the most appropriate term.
+		/// Named 'Length' rather than 'CharCount' or 'ByteCount' because it is either or,
+		/// depending on the terminal type. Also, 'Length' seems the most appropriate term.
 		/// </remarks>
 		/// <exception cref="ArgumentOutOfRangeException"> if length is below 1.</exception>
 		[XmlElement("MaxLineLength")]
@@ -729,7 +729,7 @@ namespace YAT.Domain.Settings
 				if (this.maxLineLength != value)
 				{
 					if (value < 1)
-						throw (new ArgumentOutOfRangeException("value", value, "Line length must at least be 1!")); // Do not append 'MessageHelper.InvalidExecutionPreamble' as caller could rely on this exception text.
+						throw (new ArgumentOutOfRangeException("value", value, "Line length must at least be 1!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 					this.maxLineLength = value;
 					SetMyChanged();

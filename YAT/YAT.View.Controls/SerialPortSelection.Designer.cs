@@ -45,6 +45,7 @@
 			this.button_RefreshPorts.Size = new System.Drawing.Size(24, 21);
 			this.button_RefreshPorts.TabIndex = 3;
 			this.toolTip.SetToolTip(this.button_RefreshPorts, "Refresh the list with the serial ports available on the system");
+			this.button_RefreshPorts.UseVisualStyleBackColor = true;
 			this.button_RefreshPorts.Click += new System.EventHandler(this.button_RefreshPorts_Click);
 			// 
 			// comboBox_Port

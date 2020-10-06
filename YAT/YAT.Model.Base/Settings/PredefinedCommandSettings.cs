@@ -133,7 +133,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <remarks>
-		/// Named "Hide" rather than "Show" to make default behavior more obvious.
+		/// Named 'Hide' rather than 'Show' to make default behavior more obvious.
 		/// </remarks>
 		[XmlElement("HideUndefinedCommands")]
 		public virtual bool HideUndefinedCommands

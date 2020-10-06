@@ -49,11 +49,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Media;
 using System.Text;
 using System.Threading;
 
 using MKY;
+using MKY.Collections;
 using MKY.Diagnostics;
 using MKY.Text;
 
@@ -393,9 +395,9 @@ namespace YAT.Domain
 			var bytesAsString = ByteHelper.FormatHexString(a, TerminalSettings.Display.ShowRadix);
 
 			var sb = new StringBuilder();
-			sb.Append(@"Byte sequence """);
+			sb.Append(@"Configured Unicode encoding mismatches byte sequence """);
 			sb.Append(bytesAsString);
-			sb.Append(@""" is outside the Unicode basic multilingual plane (plane 0) which is not supported by the .NET Framework but tracked as YAT feature request #329.");
+			sb.Append(@""" which is outside the Unicode basic multilingual plane (plane 0) and not supported by the .NET Framework and thus YAT (yet).");
 
 			return (new DisplayElement.ErrorInfo(ts, (Direction)dir, sb.ToString(), true));
 		}
@@ -647,11 +649,18 @@ namespace YAT.Domain
 		protected override void ProcessByteOfChunk(RepositoryType repositoryType,
 		                                           byte b, DateTime ts, string dev, IODirection dir,
 		                                           bool isFirstByteOfChunk, bool isLastByteOfChunk,
-		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd,
+		                                           ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd,
+	#if (WITH_SCRIPTING)
+		                                           ref ScriptLineCollection receivedScriptLinesToAdd,
+	#endif
 		                                           out bool breakChunk)
 		{
 			var processState = GetProcessState(repositoryType);
 			var lineState = processState.Line; // Convenience shortcut.
+
+		#if (WITH_SCRIPTING)
+			var linePositionEndAppliesToScriptLines = false;
+		#endif
 
 			// The first byte of a line will sequentially trigger the [Begin] as well as [Content]
 			// condition below. In the normal case, the line will then contain the first displayed
@@ -663,14 +672,22 @@ namespace YAT.Domain
 				DoLineContentCheck(repositoryType, processState, ts, dir);
 
 			if (lineState.Position == LinePosition.Begin)
-				DoLineBegin(repositoryType, processState, ts, dev, dir, elementsToAdd);
+				DoLineBegin(repositoryType, processState, ts, dev, dir, ref elementsToAdd);
 
 			if (lineState.Position == LinePosition.Content)
-				DoLineContent(repositoryType, processState, b, ts, dev, dir, elementsToAdd);
+			#if (WITH_SCRIPTING)
+				DoLineContent(repositoryType, processState, b, ts, dev, dir, ref elementsToAdd, out linePositionEndAppliesToScriptLines);
+			#else
+				DoLineContent(repositoryType, processState, b, ts, dev, dir, ref elementsToAdd);
+			#endif
 
-			if (lineState.Position == LinePosition.End)
-			{
-				DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
+			if (lineState.Position == LinePosition.End)                                             // Implicitly means 'AppliesToScriptingIfFramed' since flag
+			{                                                                                       // will only be set when EOL (and BOL) is active and complete.
+			#if (WITH_SCRIPTING)
+				DoLineEnd(repositoryType, processState, ts, dir, ref elementsToAdd, ref linesToAdd, linePositionEndAppliesToScriptLines, ref receivedScriptLinesToAdd);
+			#else
+				DoLineEnd(repositoryType, processState, ts, dir, ref elementsToAdd, ref linesToAdd);
+			#endif
 
 				DoLineEndPost(repositoryType, processState, ts, dir, isLastByteOfChunk, out breakChunk);
 
@@ -682,6 +699,23 @@ namespace YAT.Domain
 				breakChunk = false;
 			}
 		}
+
+	#if (WITH_SCRIPTING)
+
+		/// <summary>
+		/// Line breaks like length based "word wrap" only apply to scripting if the message is not framed, i.e.:
+		/// For text terminals, framing is typically defined by EOL.
+		/// For binary terminals, framing is optionally defined by sequence before/after.
+		/// </summary>
+		protected override bool IsNotFramedAndThusAppliesToScriptLines
+		{
+			get
+			{           // 'ScriptLines' only apply to Rx.
+				return (RxEolSequence.Length == 0); // Same result as (TextTerminalSettings.RxEol == ((EolEx)Eol.None).ToSequenceString());
+			}
+		}
+
+	#endif
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "'out' is preferred over return value in this particular case.")]
@@ -739,10 +773,7 @@ namespace YAT.Domain
 				if (TerminalSettings.Display.ShowTimeDelta) { lineState.Elements.ReplaceTimeDelta(ts - processState.Overall.PreviousLineTimeStamp, TerminalSettings.Display.TimeDeltaFormat,                                           left, right); doReplace = true; }
 
 				if (doReplace)
-				{
-				////elementsToAdd.Clear() is not needed as only replace happens above.
 					FlushReplaceAlreadyBeganLine(repositoryType, lineState);
-				}
 			}
 		}
 
@@ -752,12 +783,12 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		protected override void DoLineBegin(RepositoryType repositoryType, ProcessState processState,
 		                                    DateTime ts, string dev, IODirection dir,
-		                                    DisplayElementCollection elementsToAdd)
+		                                    ref DisplayElementCollection elementsToAdd)
 		{
-			base.DoLineBegin(repositoryType, processState, ts, dev, dir, elementsToAdd);
+			base.DoLineBegin(repositoryType, processState, ts, dev, dir, ref elementsToAdd);
 
 			var lineState = processState.Line; // Convenience shortcut.
-			var lp = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
+			var lp = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 
 			lp.Add(new DisplayElement.LineStart());
 
@@ -771,6 +802,8 @@ namespace YAT.Domain
 			}
 
 			lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+
+			CreateCollectionIfIsNull(ref elementsToAdd);
 			elementsToAdd.AddRange(lp);
 		}
 
@@ -780,9 +813,21 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		private void DoLineContent(RepositoryType repositoryType, ProcessState processState,
 		                           byte b, DateTime ts, string dev, IODirection dir,
-		                           DisplayElementCollection elementsToAdd)
+	#if (WITH_SCRIPTING)
+		                           ref DisplayElementCollection elementsToAdd,
+		                           out bool linePositionEndAppliesToScriptLines)
+	#else
+		                           ref DisplayElementCollection elementsToAdd)
+	#endif
 		{
-			var lineState = processState.Line; // Convenience shortcut.
+		#if (WITH_SCRIPTING)
+			linePositionEndAppliesToScriptLines = false;
+		#endif
+
+			var lineState   = processState.Line;   // Convenience shortcut.
+		#if (WITH_SCRIPTING)
+			var scriptState = processState.Script; // Convenience shortcut.
+		#endif
 
 			var textUnidirState     = GetTextUnidirState(repositoryType, dir);
 			var textDisplaySettings = GetTextDisplaySettings(dir);
@@ -820,6 +865,9 @@ namespace YAT.Domain
 					}
 
 					lineState.Position = LinePosition.End;
+				#if (WITH_SCRIPTING)
+					linePositionEndAppliesToScriptLines = true;
+				#endif
 
 					// This is the only location where the true EOL of a sent or received line is detected.
 					// Other locations where 'Position.End' is involved more deal with YAT's display/monitor
@@ -923,6 +971,8 @@ namespace YAT.Domain
 				{
 					textUnidirState.NotifyShownCharCount(lp.CharCount);
 					lineState.Elements.AddRange(lp.Clone()); // Clone elements because they are needed again a line below.
+
+					CreateCollectionIfIsNull(ref elementsToAdd);
 					elementsToAdd.AddRange(lp);
 				}
 				else
@@ -930,8 +980,10 @@ namespace YAT.Domain
 					lineState.Exceeded = true; // Keep in mind and notify once:
 
 					var message = "Maximal number of characters per line exceeded! Check the line break settings in Terminal > Settings > Text or increase the limit in Terminal > Settings > Advanced.";
-					lineState.Elements.Add(new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true)); // Create two separate elements
-					elementsToAdd.Add(     new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true)); //     to ensure decoupling.
+					lineState.Elements.Add(new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true)); // Create two separate elements...
+
+					CreateCollectionIfIsNull(ref elementsToAdd);
+					elementsToAdd.Add(     new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true)); // ...to ensure decoupling.
 				}
 
 				if (isBackspace)
@@ -946,16 +998,19 @@ namespace YAT.Domain
 						lineState.Elements.RemoveLastDataContentChar();
 						RemoveContentSeparatorIfNecessary(dir, lineState.Elements);
 
-						if (elementsToAdd.DataContentCharCount > 0)
+						if (!ICollectionEx.IsNullOrEmpty(elementsToAdd))
 						{
-							// ..as well as in the pending elements:
-							elementsToAdd.RemoveLastDataContentChar();
-							RemoveContentSeparatorIfNecessary(dir, elementsToAdd);
-						}
-						else
-						{
-							elementsToAdd.Clear(); // Whole line will be replaced, pending elements can be discarded.
-							FlushReplaceAlreadyBeganLine(repositoryType, lineState);
+							if (elementsToAdd.DataContentCharCount > 0)
+							{
+								// ..as well as in the pending elements:
+								elementsToAdd.RemoveLastDataContentChar();
+								RemoveContentSeparatorIfNecessary(dir, elementsToAdd);
+							}
+							else
+							{
+								elementsToAdd.Clear(); // Whole line will be replaced, pending elements can be discarded.
+								FlushReplaceAlreadyBeganLine(repositoryType, lineState);
+							}
 						}
 
 						// Don't forget to adjust state:
@@ -964,11 +1019,25 @@ namespace YAT.Domain
 				}
 			}
 
-			// Only continue evaluation if no line break detected yet (cannot have more than one line break).
+		#if (WITH_SCRIPTING)
+			// Apply to scripting:
+			if (!IsReloading && ScriptingIsActive)
+			{
+				if (!IsByteToHide(b))        // Note this must not cover show/hide EOL/BOL, as script messages shall never include EOL.
+					scriptState.Data.Add(b); // The EOL/BOL sequences are removed when processing script line/packet into script message.
+			}
+		#endif
+
+			// Only continue evaluation if no line break detected yet (cannot have more than one line break):
 			if ((lineState.Position != LinePosition.End) && (textDisplaySettings.LengthLineBreak.Enabled))
 			{
 				if (lineState.Elements.CharCount >= textDisplaySettings.LengthLineBreak.Length)
+				{
 					lineState.Position = LinePosition.End;
+				#if (WITH_SCRIPTING)
+					linePositionEndAppliesToScriptLines = IsNotFramedAndThusAppliesToScriptLines; // Length line breaks, i.e. "word wrap", shall not effect scripting. If ever needed, an [advanced configuration of scripting behavior] shall be added.
+				#endif
+				}
 
 				// Note that length line break shall be applied even when EOL has just started or is already ongoing,
 				// remaining hidden EOL elements will not result in additional lines.
@@ -1076,10 +1145,13 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		protected override void DoLineEnd(RepositoryType repositoryType, ProcessState processState,
 		                                  DateTime ts, IODirection dir,
-		                                  DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
+	#if (WITH_SCRIPTING)
+		                                  ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd,
+		                                  bool appliesToScriptLines, ref ScriptLineCollection receivedScriptLinesToAdd)
+	#else
+		                                  ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd)
+	#endif
 		{
-			// Note: The test cases of [YAT - Test.ods]::[YAT.Domain.Terminal] cover the empty line cases.
-
 			var lineState = processState.Line; // Convenience shortcut.
 
 			var textUnidirState = GetTextUnidirState(repositoryType, lineState.Direction);
@@ -1095,14 +1167,16 @@ namespace YAT.Domain
 
 			if (isEmptyLineWithHiddenNonEol) // While intended empty lines must be shown, potentially suppress
 			{                                // empty lines that only contain hidden non-EOL character(s) (e.g. hidden 0x00):
-				elementsToAdd.RemoveLastUntil(typeof(DisplayElement.LineStart));                     // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
-				                                                                                     //            All other elements must be removed as well!
+				if (!ICollectionEx.IsNullOrEmpty(elementsToAdd))
+					elementsToAdd.RemoveLastUntil(typeof(DisplayElement.LineStart));                 // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
+				                                                                                   ////            All other elements must be removed as well!
 				FlushClearAlreadyBeganLine(repositoryType, processState, elementsToAdd, linesToAdd); //            This is ensured by flushing here.
 			}
 			else if (isEmptyLineWithPendingEol && !isEmptyLineWithPendingEolToBeShown) // While intended empty lines must be shown, potentially suppress
 			{                                                                          // empty lines that only contain hidden pending EOL character(s):
-				elementsToAdd.RemoveLastUntil(typeof(DisplayElement.LineStart));                     // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
-				                                                                                     //            All other elements must be removed as well!
+				if (!ICollectionEx.IsNullOrEmpty(elementsToAdd))
+					elementsToAdd.RemoveLastUntil(typeof(DisplayElement.LineStart));                 // Attention: 'elementsToAdd' likely doesn't contain all elements since line start!
+				                                                                                   ////            All other elements must be removed as well!
 				FlushClearAlreadyBeganLine(repositoryType, processState, elementsToAdd, linesToAdd); //            This is ensured by flushing here.
 			}
 			else // Neither empty nor need to suppress:
@@ -1123,18 +1197,44 @@ namespace YAT.Domain
 				}
 
 				lineEnd.Add(new DisplayElement.LineBreak());
+
+				CreateCollectionIfIsNull(ref elementsToAdd);
 				elementsToAdd.AddRange(lineEnd.Clone()); // Clone elements because they are needed again right below.
 
-				// Finalize line:                // Using the exact type to prevent potential mismatch in case the type one day defines its own value!
-				var l = new DisplayLine(DisplayLine.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-				l.AddRange(lineState.Elements.Clone()); // Clone to ensure decoupling!
+				// Finalize line:
+				var l = new DisplayLine(lineState.Elements.Count + lineEnd.Count); // Preset the required capacity to improve memory management.
+				l.AddRange(lineState.Elements.Clone()); // Clone to ensure decoupling.
 				l.AddRange(lineEnd);
+
+				CreateCollectionIfIsNull(ref linesToAdd);
 				linesToAdd.Add(l);
+
+			#if (WITH_SCRIPTING)
+				// Apply to scripting:                                                     // 'ScriptLines' only apply to Rx.
+				if (!IsReloading && ScriptingIsActive && (repositoryType == RepositoryType.Rx))
+				{
+					if (appliesToScriptLines)
+					{
+						var scriptState = processState.Script; // Convenience shortcut.
+
+						CreateCollectionIfIsNull(ref receivedScriptLinesToAdd);
+						receivedScriptLinesToAdd.Add(new ScriptLine(scriptState.TimeStamp, scriptState.Device, scriptState.Data.ToArray()));// No clone needed as element is no more used below.
+					}
+					else
+					{
+						// This display line end shall not result in a script line end.
+					}
+				}
+			#endif
 			}
 
-			// Finalize the line:
+			// Notify:
 			textUnidirState.NotifyLineEnd(dev);
-			base.DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd);
+		#if (WITH_SCRIPTING)
+			base.DoLineEnd(repositoryType, processState, ts, dir, ref elementsToAdd, ref linesToAdd, appliesToScriptLines, ref receivedScriptLinesToAdd);
+		#else
+			base.DoLineEnd(repositoryType, processState, ts, dir, ref elementsToAdd, ref linesToAdd);
+		#endif
 		}
 
 		#endregion

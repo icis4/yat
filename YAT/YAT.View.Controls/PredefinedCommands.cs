@@ -910,7 +910,7 @@ namespace YAT.View.Controls
 
 					default:
 					{
-						throw (new ArgumentOutOfRangeException("layout", MessageHelper.InvalidExecutionPreamble + "'" + layout + "' is a page layout that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new ArgumentOutOfRangeException("layout", layout, MessageHelper.InvalidExecutionPreamble + "'" + layout + "' is a page layout that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}

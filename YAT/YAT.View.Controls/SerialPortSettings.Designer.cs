@@ -103,7 +103,7 @@
 			this.comboBox_BaudRate.Size = new System.Drawing.Size(156, 21);
 			this.comboBox_BaudRate.TabIndex = 1;
 			this.toolTip.SetToolTip(this.comboBox_BaudRate, "Either select a standard rate from the list, or enter a non-standard rate.\r\n\r\nNon" +
-        "-standard rates are not be supported by all serial port devices.");
+        "-standard rates may not be supported by all serial port devices.");
 			this.comboBox_BaudRate.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_BaudRate_Validating);
 			// 
 			// label_FlowControl

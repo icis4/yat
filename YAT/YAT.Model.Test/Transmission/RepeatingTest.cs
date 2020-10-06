@@ -400,7 +400,7 @@ namespace YAT.Model.Test.Transmission
 
 			terminalA.SendText(repeatCommand);
 
-			var random = new Random(RandomEx.NextPseudoRandomSeed());
+			var random = new Random(RandomEx.NextRandomSeed());
 			Thread.Sleep(random.Next(100, 10000)); // Something between 0.1..10 seconds to keep test execution fast.
 
 			// Break or stop:

@@ -61,6 +61,7 @@ namespace YAT.View.Forms
 			this.button_OK.Name = "button_OK";
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 1;
+			this.button_OK.UseVisualStyleBackColor = true;
 			this.button_OK.Text = "OK";
 			// 
 			// button_Cancel
@@ -71,6 +72,7 @@ namespace YAT.View.Forms
 			this.button_Cancel.Name = "button_Cancel";
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 2;
+			this.button_Cancel.UseVisualStyleBackColor = true;
 			this.button_Cancel.Text = "Cancel";
 			// 
 			// groupBox_Settings
@@ -97,6 +99,7 @@ namespace YAT.View.Forms
 			this.button_AdvancedSettings.TabIndex = 5;
 			this.button_AdvancedSettings.Text = "&Advanced Settings...";
 			this.toolTip.SetToolTip(this.button_AdvancedSettings, "Advanced display, radix, communication, send, receive and user settings.");
+			this.button_AdvancedSettings.UseVisualStyleBackColor = true;
 			this.button_AdvancedSettings.Click += new System.EventHandler(this.button_AdvancedSettings_Click);
 			// 
 			// button_TextOrBinarySettings
@@ -109,6 +112,7 @@ namespace YAT.View.Forms
 			this.button_TextOrBinarySettings.Text = "Te&xt Settings...";
 			this.toolTip.SetToolTip(this.button_TextOrBinarySettings, "Text terminal dependent settings such as encoding, EOL (end-of-line) and comments" +
         ".");
+			this.button_TextOrBinarySettings.UseVisualStyleBackColor = true;
 			this.button_TextOrBinarySettings.Click += new System.EventHandler(this.button_TextOrBinarySettings_Click);
 			// 
 			// terminalSelection
@@ -230,6 +234,7 @@ namespace YAT.View.Forms
 			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
 			this.button_Defaults.TabIndex = 3;
 			this.button_Defaults.Text = "&Defaults...";
+			this.button_Defaults.UseVisualStyleBackColor = true;
 			this.button_Defaults.Click += new System.EventHandler(this.button_Defaults_Click);
 			// 
 			// button_Help

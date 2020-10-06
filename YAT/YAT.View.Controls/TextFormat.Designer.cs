@@ -58,6 +58,7 @@
 			this.checkBox_Italic.Size = new System.Drawing.Size(32, 21);
 			this.checkBox_Italic.TabIndex = 1;
 			this.checkBox_Italic.Text = "I";
+			this.checkBox_Italic.UseVisualStyleBackColor = true;
 			this.checkBox_Italic.CheckedChanged += new System.EventHandler(this.checkBox_Italic_CheckedChanged);
 			// 
 			// checkBox_Bold
@@ -69,6 +70,7 @@
 			this.checkBox_Bold.Size = new System.Drawing.Size(32, 21);
 			this.checkBox_Bold.TabIndex = 0;
 			this.checkBox_Bold.Text = "B";
+			this.checkBox_Bold.UseVisualStyleBackColor = true;
 			this.checkBox_Bold.CheckedChanged += new System.EventHandler(this.checkBox_Bold_CheckedChanged);
 			// 
 			// button_Color
@@ -79,6 +81,7 @@
 			this.button_Color.Size = new System.Drawing.Size(75, 23);
 			this.button_Color.TabIndex = 4;
 			this.button_Color.Text = "Color...";
+			this.button_Color.UseVisualStyleBackColor = true;
 			this.button_Color.Click += new System.EventHandler(this.button_Color_Click);
 			// 
 			// checkBox_Strikeout
@@ -90,6 +93,7 @@
 			this.checkBox_Strikeout.Size = new System.Drawing.Size(32, 21);
 			this.checkBox_Strikeout.TabIndex = 3;
 			this.checkBox_Strikeout.Text = "S";
+			this.checkBox_Strikeout.UseVisualStyleBackColor = true;
 			this.checkBox_Strikeout.CheckedChanged += new System.EventHandler(this.checkBox_Strikeout_CheckedChanged);
 			// 
 			// checkBox_Underline
@@ -101,6 +105,7 @@
 			this.checkBox_Underline.Size = new System.Drawing.Size(32, 21);
 			this.checkBox_Underline.TabIndex = 2;
 			this.checkBox_Underline.Text = "U";
+			this.checkBox_Underline.UseVisualStyleBackColor = true;
 			this.checkBox_Underline.CheckedChanged += new System.EventHandler(this.checkBox_Underline_CheckedChanged);
 			// 
 			// TextFormat

@@ -47,8 +47,8 @@ namespace YAT.View.Utilities
 		{
 			int invalidTextLength;
 			int invalidTextStart;
-			string errorMessage;                                  // Empty 'description' as error message will be ignored anyway.
-			return (Domain.Utilities.ValidationHelper.ValidateText("", textToValidate, out invalidTextStart, out invalidTextLength, out errorMessage, modes, defaultRadix));
+			string messageOnFailure;                               // Empty 'description' as error message will be ignored anyway.
+			return (Domain.Utilities.ValidationHelper.ValidateText("", textToValidate, out invalidTextStart, out invalidTextLength, out messageOnFailure, modes, defaultRadix));
 		}
 
 		/// <summary></summary>
@@ -57,15 +57,15 @@ namespace YAT.View.Utilities
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static bool ValidateText(IWin32Window owner, string description, string textToValidate, out int invalidTextStart, out int invalidTextLength, Domain.Parser.Mode modes, Domain.Radix defaultRadix = Domain.Parser.Parser.DefaultRadixDefault)
 		{
-			string errorMessage;
-			if (Domain.Utilities.ValidationHelper.ValidateText(description, textToValidate, out invalidTextStart, out invalidTextLength, out errorMessage, modes, defaultRadix))
+			string messageOnFailure;
+			if (Domain.Utilities.ValidationHelper.ValidateText(description, textToValidate, out invalidTextStart, out invalidTextLength, out messageOnFailure, modes, defaultRadix))
 			{
 				return (true);
 			}
 			else
 			{
 				var errorCaption = "Invalid " + description;
-				return (ShowErrorMessageAndReturnFalse(owner, errorMessage, errorCaption));
+				return (ShowErrorMessageAndReturnFalse(owner, messageOnFailure, errorCaption));
 			}
 		}
 

@@ -72,6 +72,7 @@
 			this.checkBox_IsFile.Size = new System.Drawing.Size(15, 14);
 			this.checkBox_IsFile.TabIndex = 4;
 			this.toolTip.SetToolTip(this.checkBox_IsFile, "Tick to set file, untick to set text");
+			this.checkBox_IsFile.UseVisualStyleBackColor = true;
 			this.checkBox_IsFile.CheckedChanged += new System.EventHandler(this.checkBox_IsFile_CheckedChanged);
 			// 
 			// button_SetMultiLineText
@@ -84,6 +85,7 @@
 			this.button_SetMultiLineText.Text = "...";
 			this.toolTip.SetToolTip(this.button_SetMultiLineText, "Enter multi-line text.\r\n\r\nLines will be sent sequentially,\r\nby default, the EOL s" +
         "equence\r\nwill be appended to each line.");
+			this.button_SetMultiLineText.UseVisualStyleBackColor = true;
 			this.button_SetMultiLineText.Click += new System.EventHandler(this.button_SetMultiLineText_Click);
 			// 
 			// textBox_Description
@@ -121,6 +123,7 @@
 			this.button_SetFile.TabIndex = 3;
 			this.button_SetFile.Text = "...";
 			this.toolTip.SetToolTip(this.button_SetFile, resources.GetString("button_SetFile.ToolTip"));
+			this.button_SetFile.UseVisualStyleBackColor = true;
 			this.button_SetFile.Click += new System.EventHandler(this.button_SetFile_Click);
 			// 
 			// button_Clear
@@ -132,6 +135,7 @@
 			this.button_Clear.Size = new System.Drawing.Size(24, 21);
 			this.button_Clear.TabIndex = 6;
 			this.toolTip.SetToolTip(this.button_Clear, "Clear command");
+			this.button_Clear.UseVisualStyleBackColor = true;
 			this.button_Clear.Click += new System.EventHandler(this.button_Clear_Click);
 			// 
 			// comboBox_ExplicitDefaultRadix

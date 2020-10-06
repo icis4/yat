@@ -279,7 +279,7 @@ namespace YAT.View.Forms
 			linkLabel_BasedOn.Text += textBefore;
 			linkStart = linkLabel_BasedOn.Text.Length;
 			linkLabel_BasedOn.Text += textLink;
-			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "http://icon-king.com/?p=15");
+			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "https://web.archive.org/web/20170102220803/http://www.icon-king.com/projects/nuvola/");
 			linkLabel_BasedOn.Text += textAfter;
 			textBefore =                                               " edited in ";
 			textLink   =                                                          "GIMP";
@@ -290,7 +290,7 @@ namespace YAT.View.Forms
 			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "http://www.gimp.org/");
 			linkLabel_BasedOn.Text += textAfter;
 			linkLabel_BasedOn.Text += Environment.NewLine;
-		#endif // WITH_SCRIPTING
+		#endif
 
 			textBefore = "...";
 			textLink   =    "FatCow";
@@ -298,7 +298,7 @@ namespace YAT.View.Forms
 			linkLabel_BasedOn.Text += textBefore;
 			linkStart = linkLabel_BasedOn.Text.Length;
 			linkLabel_BasedOn.Text += textLink;
-			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "http://www.fatcow.com/free-icons/");
+			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "https://www.fatcow.com/fatcow-icons/");
 			linkLabel_BasedOn.Text += textAfter;
 			linkLabel_BasedOn.Text += Environment.NewLine;
 
@@ -400,7 +400,14 @@ namespace YAT.View.Forms
 			linkLabel_DevelopedWith.Text += textLink;
 			linkLabel_DevelopedWith.Links.Add(linkStart, textLink.Length, "https://www.documentfoundation.org/");
 			linkLabel_DevelopedWith.Text += textAfter;
-		#endif // WITH_SCRIPTING
+		#endif
+
+			// Thanks:
+		#if !(WITH_SCRIPTING)
+			linkLabel_Thanks.Text = @"And a big ""Thanks!"" to everybody who helped " + ApplicationEx.CommonName + " to become what it is today!";
+		#else
+			linkLabel_Thanks.Text = @"And a big ""Thanks!"" to everybody who helped YAT and " + ApplicationEx.CommonName + " to become what it is today!";
+		#endif
 
 			// Home:
 			linkLabel_Home.Text = "";
@@ -419,7 +426,7 @@ namespace YAT.View.Forms
 			linkLabel_Home.Text += textLink;
 			linkLabel_Home.Links.Add(linkStart, textLink.Length, "mailto:y-a-terminal@users.sourceforge.net");
 			linkLabel_Home.Text += textAfter;
-		#else // WITH_SCRIPTING
+		#else
 			textBefore = "Albatros is managed in ";
 			textLink   =                        "Quality Center";
 			linkLabel_Home.Text += textBefore;
@@ -434,7 +441,7 @@ namespace YAT.View.Forms
 			linkLabel_Home.Text += textLink;
 			linkLabel_Home.Links.Add(linkStart, textLink.Length, "mailto:matthias.klaey@mt.com");
 			linkLabel_Home.Text += textAfter;
-		#endif // WITH_SCRIPTING
+		#endif
 
 			// Author:
 			linkLabel_Author.Text = "2020, Matthias Kläy";
@@ -450,7 +457,7 @@ namespace YAT.View.Forms
 			linkLabel_License.Text += textLink;
 			linkLabel_License.Links.Add(linkStart, textLink.Length, "http://www.gnu.org/licenses/lgpl.html");
 			linkLabel_License.Text += textAfter;
-		#endif // WITH_SCRIPTING
+		#endif
 		}
 
 		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

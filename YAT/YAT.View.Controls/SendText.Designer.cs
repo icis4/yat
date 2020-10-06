@@ -74,6 +74,7 @@
 			this.button_Send.TabIndex = 0;
 			this.button_Send.Text = "Send Text [F3]";
 			this.toolTip.SetToolTip(this.button_Send, "Send text");
+			this.button_Send.UseVisualStyleBackColor = true;
 			this.button_Send.Click += new System.EventHandler(this.button_Send_Click);
 			// 
 			// comboBox_SingleLineText

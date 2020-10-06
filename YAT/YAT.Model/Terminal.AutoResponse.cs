@@ -87,8 +87,6 @@ namespace YAT.Model
 		private void CreateAutoResponse()
 		{
 			UpdateAutoResponse(); // Simply forward to general Update() method.
-
-			StartAutoResponseThread();
 		}
 
 		/// <summary>
@@ -316,7 +314,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		private void AutoResponseThread()
 		{
-			DebugThreadState("AutoResponseThread() has started.");
+			DebugThreads("AutoResponseThread() has started.");
 
 			try
 			{
@@ -377,7 +375,7 @@ namespace YAT.Model
 				Thread.ResetAbort();
 			}
 
-			DebugThreadState("AutoResponseThread() has terminated.");
+			DebugThreads("AutoResponseThread() has terminated.");
 		}
 
 		/// <summary>
@@ -542,7 +540,7 @@ namespace YAT.Model
 		{
 			lock (this.autoResponseThreadSyncObj)
 			{
-				DebugThreadState("AutoResponseThread() gets created...");
+				DebugThreads("AutoResponseThread() gets created...");
 
 				if (this.autoResponseThread == null)
 				{
@@ -552,12 +550,12 @@ namespace YAT.Model
 					this.autoResponseThread.Name = "Terminal [" + Guid + "] Auto Response Thread";
 					this.autoResponseThread.Start();
 
-					DebugThreadState("...successfully created.");
+					DebugThreads("...successfully created.");
 				}
 			#if (DEBUG)
 				else
 				{
-					DebugThreadState("...failed as it already exists.");
+					DebugThreads("...failed as it already exists.");
 				}
 			#endif
 			}
@@ -573,7 +571,7 @@ namespace YAT.Model
 			{
 				if (this.autoResponseThread != null)
 				{
-					DebugThreadState("AutoResponseThread() gets stopped...");
+					DebugThreads("AutoResponseThread() gets stopped...");
 
 					this.autoResponseThreadRunFlag = false;
 
@@ -592,19 +590,19 @@ namespace YAT.Model
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								DebugThreadState("...failed! Aborting...");
-								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
+								DebugThreads("...failed! Aborting...");
+								DebugThreads("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
 
 								isAborting = true;       // Thread.Abort() must not be used whenever possible!
 								this.autoResponseThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
-							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThreads("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
 						if (!isAborting)
-							DebugThreadState("...successfully stopped.");
+							DebugThreads("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -612,7 +610,7 @@ namespace YAT.Model
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThreads("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.autoResponseThread = null;
@@ -620,7 +618,7 @@ namespace YAT.Model
 			#if (DEBUG)
 				else // (this.autoResponseThread == null)
 				{
-					DebugThreadState("...not necessary as it doesn't exist anymore.");
+					DebugThreads("...not necessary as it doesn't exist anymore.");
 				}
 			#endif
 

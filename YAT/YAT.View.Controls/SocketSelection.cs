@@ -827,6 +827,7 @@ namespace YAT.View.Controls
 						{
 							// Get the 'NotAvailable' string BEFORE defaulting!
 							string localInterfaceNotAvailable = null;
+							if (this.localInterface != null)
 								localInterfaceNotAvailable = this.localInterface;
 
 							// Ensure that the settings item is defaulted and shown by SetControls().

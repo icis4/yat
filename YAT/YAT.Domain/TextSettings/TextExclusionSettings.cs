@@ -152,7 +152,7 @@ namespace YAT.Domain.Settings
 				}
 
 				this.regexesUpdatePatternsHashCode = IEnumerableEx.ItemsToHashCode(this.patterns); // Workaround for issue described in Patterns{set} above.
-				this.regexes = new ReadOnlyCollection<Regex>(l);                                      // Not a 100% solution but close enough to such.
+				this.regexes = new ReadOnlyCollection<Regex>(l);                                   // Not a 100% solution but close enough to such.
 			}
 		}
 
@@ -164,7 +164,7 @@ namespace YAT.Domain.Settings
 			get
 			{
 				if (this.regexesUpdatePatternsHashCode != IEnumerableEx.ItemsToHashCode(this.patterns)) // Workaround for issue described in Patterns{set} above.
-					UpdateRegexes();                                                                       // Not a 100% solution but close enough to such.
+					UpdateRegexes();                                                                    // Not a 100% solution but close enough to such.
 
 				return (this.regexes);
 			}

@@ -290,10 +290,11 @@ namespace YAT.View.Controls
 								DeviceInfo = devices[sameVidPidIndex];
 							}
 						}
-						else // devices.Count == 0
+						else
 						{
 							// Get the 'NotAvailable' string BEFORE defaulting!
 							string deviceNotAvailable = null;
+							if (this.deviceInfo != null)
 								deviceNotAvailable = this.deviceInfo;
 
 							// Ensure that the settings item is defaulted and shown by SetControls().
@@ -304,7 +305,7 @@ namespace YAT.View.Controls
 								ShowNotAvailableDefaultedMessage(deviceNotAvailable, DeviceInfo);
 						}
 					}
-					else
+					else // devices.Count == 0
 					{
 						// Ensure that the settings item is nulled and reset by SetControls().
 						// Set property instead of member to ensure that changed event is raised.

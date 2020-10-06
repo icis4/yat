@@ -48,12 +48,12 @@ namespace YAT.Domain.Test
 	/// </list>
 	/// </remarks>
 	/// <remarks>
-	/// Just named "Data" rather than "TestCaseData" for compactness.
+	/// Just named 'Data' rather than 'TestCaseData' for compactness.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public static class Data
 	{
-		/// <remarks>Explicitly using two settings for "Pair" test cases, instead of enumerable generic number of settings.</remarks>
+		/// <remarks>Explicitly using two settings for "pair" test cases, instead of enumerable generic number of settings.</remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "metaData", Justification = "Emphasize relation to 'Data' of 'TestCaseData'.")]
 		public static TestCaseData ToTestCase(TestCaseDescriptor descriptor, TestCaseData metaDataToMerge, TerminalSettings argSettingsA, TerminalSettings argSettingsB, params object[] argsTest)
 		{
@@ -74,7 +74,7 @@ namespace YAT.Domain.Test
 			return (TestCaseDataEx.ToTestCase(descriptor, metaDataToMerge, args.ToArray())); // Args must be given as a liner list of objects.
 		}
 
-		/// <remarks>Explicitly using two settings for "Pair" test cases, instead of enumerable generic number of settings.</remarks>
+		/// <remarks>Explicitly using two settings for "pair" test cases, instead of enumerable generic number of settings.</remarks>
 		public static IEnumerable<TestCaseData> ToTestCases(TestCaseDescriptor descriptor, TerminalSettings settingsA, TerminalSettings settingsB, IEnumerable<TestCaseData> tests)
 		{
 			if (tests != null)

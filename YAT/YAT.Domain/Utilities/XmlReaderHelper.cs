@@ -34,6 +34,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 
+using MKY;
 using MKY.IO;
 using MKY.Xml.Serialization;
 
@@ -119,16 +120,7 @@ namespace YAT.Domain.Utilities
 					{
 						var sb = new StringBuilder();
 						sb.Append(@"\h(");
-						bool isFirst = true;
-						foreach (byte b in rawLine.Content)
-						{
-							if (isFirst)
-								isFirst = false;
-							else
-								sb.Append(" ");
-
-							sb.Append(b.ToString("X2", CultureInfo.InvariantCulture));
-						}
+						sb.Append(ByteHelper.FormatHexString(rawLine.Content, showRadix: false));
 						sb.Append(@")\!(NoEOL)"); // Ensure not to send EOL twice!
 						l.Add(sb.ToString());
 					}

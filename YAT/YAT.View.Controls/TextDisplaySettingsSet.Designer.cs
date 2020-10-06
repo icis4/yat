@@ -71,6 +71,7 @@
 			this.toolTip.SetToolTip(this.checkBox_LengthLineBreak, "Useful to limit the number of characters displayed per line, i.e. \"word wrap\".\r\nU" +
         "seful to communicate with devices that do use text messages but no EOL sequence." +
         "");
+			this.checkBox_LengthLineBreak.UseVisualStyleBackColor = true;
 			this.checkBox_LengthLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_LengthLineBreak_CheckedChanged);
 			// 
 			// label_TimedLineBreakUnit
@@ -104,6 +105,7 @@
 			this.toolTip.SetToolTip(this.checkBox_TimedLineBreak, "If no data is received or sent for the specified amount of time, the line is brok" +
         "en.\r\n\r\nUseful to communicate with devices that do use text messages but no EOL s" +
         "equence.");
+			this.checkBox_TimedLineBreak.UseVisualStyleBackColor = true;
 			this.checkBox_TimedLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_TimedLineBreak_CheckedChanged);
 			// 
 			// checkBox_ChunkLineBreak

@@ -214,7 +214,7 @@ namespace YAT.Model.Test.Transmission
 		{
 			// \remind (2016-05-26 / MKY) should be guarded by if (isRunningFromGui) to prevent the message box in case of automatic test runs.
 			// \remind (2017-10-09 / MKY) even better to be replaced by a runtime check for availability of a weighing capable MT-SICS device.
-			// \remind (2020-09-03 / MKY) and make the behavior dependent on the [Interactive] category (possible when upgraded to NUnit 3).
+			// \remind (2020-09-03 / MKY) and make the behavior dependent on the [Interactive] category (possible when upgraded to NUnit 3.x (FR #293)).
 
 			var dr = MessageBoxEx.Show
 			(
@@ -258,6 +258,7 @@ namespace YAT.Model.Test.Transmission
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
 		[Test, TestCaseSource(typeof(MTSicsDeviceTestData), "TestCases")]
+		[InteractiveCategory] // \remind (2020-09-03 / MKY) and make the behavior dependent on the [Interactive] category (possible when upgraded to NUnit 3.x (FR #293)).
 		public virtual void Transmission(TerminalSettings settings, string stimulus, string expected, int transmissionCount)
 		{
 			if (MTSicsDeviceTestData.DeviceCount <= 0)

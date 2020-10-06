@@ -111,7 +111,7 @@ namespace YAT.Settings.Application
 		public virtual string SettingsName
 		{
 			get { return (ApplicationEx.ProductName + " Local User Settings"); } // Name shall differ for "YAT" and "YATConsole"
-			set { } // Do nothing.                                               // in order to get separate user settings.
+			set { /* Do nothing, this meta XML element is read-only. */ }        // in order to get separate user settings.
 		}
 
 		/// <summary></summary>
@@ -119,7 +119,7 @@ namespace YAT.Settings.Application
 		public virtual string SettingsVersion
 		{
 			get { return (this.settingsVersion); }
-			set { } // Do nothing.
+			set { /* Do nothing, this meta XML element is read-only. */ }
 		}
 
 		/// <summary></summary>
@@ -127,7 +127,7 @@ namespace YAT.Settings.Application
 		public virtual string ProductVersion
 		{
 			get { return (this.productVersion); }
-			set { } // Do nothing.
+			set { /* Do nothing, this meta XML element is read-only. */ }
 		}
 
 		/// <summary></summary>
@@ -135,7 +135,7 @@ namespace YAT.Settings.Application
 		public virtual string Warning
 		{
 			get { return ("Modifying structure and/or content may cause undefined behavior!"); }
-			set { } // Do nothing.
+			set { /* Do nothing, this meta XML element is read-only. */ }
 		}
 
 		/// <summary></summary>
@@ -143,7 +143,7 @@ namespace YAT.Settings.Application
 		public virtual UserTimeStamp Mark
 		{
 			get { return (new UserTimeStamp(DateTime.Now, Environment.UserName)); }
-			set { } // Do nothing.
+			set { /* Do nothing, this meta XML element is read-only. */ }
 		}
 
 		/// <summary></summary>

@@ -60,6 +60,7 @@ namespace YAT.View.Forms
 			this.button_Cancel.Name = "button_Cancel";
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 2;
+			this.button_Cancel.UseVisualStyleBackColor = true;
 			this.button_Cancel.Text = "Cancel";
 			// 
 			// button_OK
@@ -70,6 +71,7 @@ namespace YAT.View.Forms
 			this.button_OK.Name = "button_OK";
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 1;
+			this.button_OK.UseVisualStyleBackColor = true;
 			this.button_OK.Text = "OK";
 			// 
 			// groupBox_NewTerminal
@@ -208,6 +210,7 @@ namespace YAT.View.Forms
 			this.checkBox_StartTerminal.Size = new System.Drawing.Size(165, 17);
 			this.checkBox_StartTerminal.TabIndex = 2;
 			this.checkBox_StartTerminal.Text = "&Open/Start the New Terminal";
+			this.checkBox_StartTerminal.UseVisualStyleBackColor = true;
 			this.checkBox_StartTerminal.CheckedChanged += new System.EventHandler(this.checkBox_StartTerminal_CheckedChanged);
 			// 
 			// pictureBox_New
@@ -239,6 +242,7 @@ namespace YAT.View.Forms
 			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
 			this.button_Defaults.TabIndex = 41;
 			this.button_Defaults.Text = "&Defaults...";
+			this.button_Defaults.UseVisualStyleBackColor = true;
 			this.button_Defaults.Click += new System.EventHandler(this.button_Defaults_Click);
 			// 
 			// NewTerminal

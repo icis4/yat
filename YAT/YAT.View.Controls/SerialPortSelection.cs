@@ -475,6 +475,7 @@ namespace YAT.View.Controls
 						{
 							// Get the 'NotAvailable' string BEFORE defaulting!
 							string portNotAvailable = null;
+							if (this.portId != null)
 								portNotAvailable = this.portId;
 
 							SerialPortId portIdAlternate;

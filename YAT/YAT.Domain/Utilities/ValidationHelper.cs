@@ -45,18 +45,18 @@ namespace YAT.Domain.Utilities
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static bool ValidateText(string description, string textToValidate, Parser.Mode modes, Radix defaultRadix = Radix.String)
 		{
-			string errorMessage;
-			return (ValidateText(description, textToValidate, out errorMessage, modes, defaultRadix));
+			string messageOnFailure;
+			return (ValidateText(description, textToValidate, out messageOnFailure, modes, defaultRadix));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static bool ValidateText(string description, string textToValidate, out string errorMessage, Parser.Mode modes, Radix defaultRadix = Radix.String)
+		public static bool ValidateText(string description, string textToValidate, out string messageOnFailure, Parser.Mode modes, Radix defaultRadix = Radix.String)
 		{
 			int invalidTextStart;
 			int invalidTextLength;
-			return (ValidateText(description, textToValidate, out invalidTextStart, out invalidTextLength, out errorMessage, modes, defaultRadix));
+			return (ValidateText(description, textToValidate, out invalidTextStart, out invalidTextLength, out messageOnFailure, modes, defaultRadix));
 		}
 
 		/// <summary></summary>
@@ -64,10 +64,10 @@ namespace YAT.Domain.Utilities
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static bool ValidateText(string description, string textToValidate, out int invalidTextStart, out int invalidTextLength, out string errorMessage, Parser.Mode modes, Radix defaultRadix = Radix.String)
+		public static bool ValidateText(string description, string textToValidate, out int invalidTextStart, out int invalidTextLength, out string messageOnFailure, Parser.Mode modes, Radix defaultRadix = Radix.String)
 		{
 			string successfullyParsed;
-			if (ValidateText(description, textToValidate, out successfullyParsed, out errorMessage, modes, defaultRadix))
+			if (ValidateText(description, textToValidate, out successfullyParsed, out messageOnFailure, modes, defaultRadix))
 			{
 				invalidTextStart = -1;
 				invalidTextLength = 0;
@@ -86,7 +86,7 @@ namespace YAT.Domain.Utilities
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an invalid user input.")]
-		public static bool ValidateText(string description, string textToValidate, out string successfullyParsed, out string errorMessage, Parser.Mode modes, Radix defaultRadix = Radix.String)
+		public static bool ValidateText(string description, string textToValidate, out string successfullyParsed, out string messageOnFailure, Parser.Mode modes, Radix defaultRadix = Radix.String)
 		{
 			bool hasSucceeded;
 			var formatException = new Parser.FormatException("");
@@ -96,7 +96,7 @@ namespace YAT.Domain.Utilities
 
 			if (hasSucceeded)
 			{
-				errorMessage = null;
+				messageOnFailure = null;
 				return (true);
 			}
 			else
@@ -138,7 +138,7 @@ namespace YAT.Domain.Utilities
 					sb.Append(formatException.Message);
 				}
 
-				errorMessage = sb.ToString();
+				messageOnFailure = sb.ToString();
 				return (false);
 			}
 		}

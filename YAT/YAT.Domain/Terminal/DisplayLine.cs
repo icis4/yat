@@ -91,6 +91,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public DisplayElementCollection()
+			: base(TypicalNumberOfElementsPerLine)
 		{
 		}
 
@@ -648,7 +649,7 @@ namespace YAT.Domain
 			foreach (var de in this)
 			{
 				var origin = de.ToOrigin();
-				if (origin != null) // AddRainge(): "The collection itself cannot be null,..."
+				if (origin != null) // AddRange(): "The collection itself cannot be null,..."
 					l.AddRange(origin);
 			}
 
@@ -694,11 +695,17 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual string ToExtendedDiagnosticsString(string indent = "")
 		{
-			return (indent + "> Direction: " +      Direction.ToString()                           + Environment.NewLine +
-					indent + "> ElementCount: " +       Count.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
-					indent + "> CharCount: " + this.charCount.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
-					indent + "> ByteCount: " + this.byteCount.ToString(CultureInfo.CurrentCulture) + Environment.NewLine +
-					indent + "> Elements: " + Environment.NewLine + ElementsToExtendedDiagnosticsString(indent + "   "));
+			var sb = new StringBuilder();
+
+			sb.AppendLine(indent + "> TimeStamp: " +      TimeStamp.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo));
+			sb.AppendLine(indent + "> Direction: " +      Direction.ToString());
+			sb.AppendLine(indent + "> ElementCount: " +       Count.ToString(CultureInfo.CurrentCulture));
+			sb.AppendLine(indent + "> CharCount: " + this.charCount.ToString(CultureInfo.CurrentCulture));
+			sb.AppendLine(indent + "> ByteCount: " + this.byteCount.ToString(CultureInfo.CurrentCulture));
+			sb.AppendLine(indent + "> Elements:");
+			sb.AppendLine(ElementsToExtendedDiagnosticsString(indent + "   "));
+
+			return (sb.ToString());
 		}
 
 		/// <summary>
@@ -822,7 +829,7 @@ namespace YAT.Domain
 	/// </summary>
 	/// <remarks>
 	/// This class redirects to <see cref="T:List`"/>. The sole purpose of this
-	/// collection is consistency with <see cref="DisplayElementCollection"/>.
+	/// collection is orthogonality with <see cref="DisplayElementCollection"/>.
 	/// </remarks>
 	[Serializable]
 	public class DisplayLineCollection : List<DisplayLine>
@@ -834,12 +841,13 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public DisplayLineCollection()
+		////: base(TypicalNumberOfLines) makes no sense, the typical number depends on the use. For processing, the .NET default value of typically 8 is good enough.
 		{
 		}
 
 		/// <summary></summary>
-		public DisplayLineCollection(int elementCapacity)
-			: base(elementCapacity)
+		public DisplayLineCollection(int lineCapacity)
+			: base(lineCapacity)
 		{
 		}
 

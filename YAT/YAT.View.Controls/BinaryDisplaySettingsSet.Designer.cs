@@ -83,6 +83,7 @@
 			this.checkBox_SequenceLineBreakAfter.Size = new System.Drawing.Size(152, 17);
 			this.checkBox_SequenceLineBreakAfter.TabIndex = 6;
 			this.checkBox_SequenceLineBreakAfter.Text = "Break lines after sequence";
+			this.checkBox_SequenceLineBreakAfter.UseVisualStyleBackColor = true;
 			this.checkBox_SequenceLineBreakAfter.CheckedChanged += new System.EventHandler(this.checkBox_SequenceLineBreakAfter_CheckedChanged);
 			// 
 			// checkBox_LengthLineBreak
@@ -93,6 +94,7 @@
 			this.checkBox_LengthLineBreak.Size = new System.Drawing.Size(102, 17);
 			this.checkBox_LengthLineBreak.TabIndex = 1;
 			this.checkBox_LengthLineBreak.Text = "Break lines after";
+			this.checkBox_LengthLineBreak.UseVisualStyleBackColor = true;
 			this.checkBox_LengthLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_LengthLineBreak_CheckedChanged);
 			// 
 			// label_TimedLineBreakUnit
@@ -125,6 +127,7 @@
 			this.checkBox_TimedLineBreak.Text = "Break lines after timeout of";
 			this.toolTip.SetToolTip(this.checkBox_TimedLineBreak, "If no data is received or sent for the specified amount of time, the line is brok" +
         "en.");
+			this.checkBox_TimedLineBreak.UseVisualStyleBackColor = true;
 			this.checkBox_TimedLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_TimedLineBreak_CheckedChanged);
 			// 
 			// textBox_SequenceLineBreakBeforeSequence

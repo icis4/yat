@@ -290,6 +290,7 @@
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 6;
 			this.button_OK.Text = "OK";
+			this.button_OK.UseVisualStyleBackColor = true;
 			this.button_OK.Click += new System.EventHandler(this.button_OK_Click);
 			// 
 			// button_Cancel
@@ -301,6 +302,7 @@
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 7;
 			this.button_Cancel.Text = "Cancel";
+			this.button_Cancel.UseVisualStyleBackColor = true;
 			this.button_Cancel.Click += new System.EventHandler(this.button_Cancel_Click);
 			// 
 			// button_ClearPage
@@ -311,6 +313,7 @@
 			this.button_ClearPage.Size = new System.Drawing.Size(75, 23);
 			this.button_ClearPage.TabIndex = 34;
 			this.button_ClearPage.Text = "Clea&r All...";
+			this.button_ClearPage.UseVisualStyleBackColor = true;
 			this.button_ClearPage.Click += new System.EventHandler(this.button_ClearPage_Click);
 			// 
 			// groupBox_Page
@@ -2094,6 +2097,7 @@
 			this.button_Help.Size = new System.Drawing.Size(75, 23);
 			this.button_Help.TabIndex = 8;
 			this.button_Help.Text = "Help";
+			this.button_Help.UseVisualStyleBackColor = true;
 			this.button_Help.Click += new System.EventHandler(this.button_Help_Click);
 			// 
 			// groupBox_Pages
@@ -2236,6 +2240,7 @@
 			this.button_ImportAllPagesFromFile.Text = "...";
 			this.toolTip.SetToolTip(this.button_ImportAllPagesFromFile, "Import all pages from a .yacps file. The current pages are replaced.\r\n\r\nUse [Inse" +
         "rt] [...] or [Add] [...] to import additively.");
+			this.button_ImportAllPagesFromFile.UseVisualStyleBackColor = true;
 			this.button_ImportAllPagesFromFile.Click += new System.EventHandler(this.button_ImportAllPagesFromFile_Click);
 			// 
 			// button_ExportAllPagesToFile
@@ -2247,6 +2252,7 @@
 			this.button_ExportAllPagesToFile.TabIndex = 18;
 			this.button_ExportAllPagesToFile.Text = "...";
 			this.toolTip.SetToolTip(this.button_ExportAllPagesToFile, "Export all pages to a .yacps file.\r\n\r\nUse [Copy] [...] to export a single page.");
+			this.button_ExportAllPagesToFile.UseVisualStyleBackColor = true;
 			this.button_ExportAllPagesToFile.Click += new System.EventHandler(this.button_ExportAllPagesToFile_Click);
 			// 
 			// button_ExportPageToFile
@@ -2289,6 +2295,7 @@
 			this.button_DuplicatePage.Size = new System.Drawing.Size(120, 23);
 			this.button_DuplicatePage.TabIndex = 9;
 			this.button_DuplicatePage.Text = "&Copy...";
+			this.button_DuplicatePage.UseVisualStyleBackColor = true;
 			this.button_DuplicatePage.Click += new System.EventHandler(this.button_DuplicatePage_Click);
 			// 
 			// listBox_Pages
@@ -2311,6 +2318,7 @@
 			this.button_DeleteAllPages.Size = new System.Drawing.Size(120, 23);
 			this.button_DeleteAllPages.TabIndex = 22;
 			this.button_DeleteAllPages.Text = "De&lete All...";
+			this.button_DeleteAllPages.UseVisualStyleBackColor = true;
 			this.button_DeleteAllPages.Click += new System.EventHandler(this.button_DeleteAllPages_Click);
 			// 
 			// button_MovePageUp
@@ -2321,6 +2329,7 @@
 			this.button_MovePageUp.Size = new System.Drawing.Size(57, 23);
 			this.button_MovePageUp.TabIndex = 14;
 			this.button_MovePageUp.Text = "&Up";
+			this.button_MovePageUp.UseVisualStyleBackColor = true;
 			this.button_MovePageUp.Click += new System.EventHandler(this.button_MovePageUp_Click);
 			// 
 			// button_MovePageDown
@@ -2332,6 +2341,7 @@
 			this.button_MovePageDown.Size = new System.Drawing.Size(57, 23);
 			this.button_MovePageDown.TabIndex = 15;
 			this.button_MovePageDown.Text = "&Down";
+			this.button_MovePageDown.UseVisualStyleBackColor = true;
 			this.button_MovePageDown.Click += new System.EventHandler(this.button_MovePageDown_Click);
 			// 
 			// button_DeletePage
@@ -2341,6 +2351,7 @@
 			this.button_DeletePage.Size = new System.Drawing.Size(120, 23);
 			this.button_DeletePage.TabIndex = 12;
 			this.button_DeletePage.Text = "D&elete...";
+			this.button_DeletePage.UseVisualStyleBackColor = true;
 			this.button_DeletePage.Click += new System.EventHandler(this.button_DeletePage_Click);
 			// 
 			// button_InsertPage
@@ -2350,6 +2361,7 @@
 			this.button_InsertPage.Size = new System.Drawing.Size(120, 23);
 			this.button_InsertPage.TabIndex = 3;
 			this.button_InsertPage.Text = "&Insert...";
+			this.button_InsertPage.UseVisualStyleBackColor = true;
 			this.button_InsertPage.Click += new System.EventHandler(this.button_InsertPage_Click);
 			// 
 			// button_AddPage
@@ -2359,6 +2371,7 @@
 			this.button_AddPage.Size = new System.Drawing.Size(120, 23);
 			this.button_AddPage.TabIndex = 6;
 			this.button_AddPage.Text = "&Add...";
+			this.button_AddPage.UseVisualStyleBackColor = true;
 			this.button_AddPage.Click += new System.EventHandler(this.button_AddPage_Click);
 			// 
 			// button_NamePage
@@ -2368,6 +2381,7 @@
 			this.button_NamePage.Size = new System.Drawing.Size(120, 23);
 			this.button_NamePage.TabIndex = 1;
 			this.button_NamePage.Text = "&Name...";
+			this.button_NamePage.UseVisualStyleBackColor = true;
 			this.button_NamePage.Click += new System.EventHandler(this.button_NamePage_Click);
 			// 
 			// button_LinkToFile
@@ -2379,6 +2393,7 @@
 			this.button_LinkToFile.TabIndex = 3;
 			this.button_LinkToFile.Text = "Lin&k Page to File...";
 			this.toolTip.SetToolTip(this.button_LinkToFile, resources.GetString("button_LinkToFile.ToolTip"));
+			this.button_LinkToFile.UseVisualStyleBackColor = true;
 			this.button_LinkToFile.Click += new System.EventHandler(this.button_LinkToFile_Click);
 			// 
 			// button_ClearLink
@@ -2390,6 +2405,7 @@
 			this.button_ClearLink.Size = new System.Drawing.Size(24, 23);
 			this.button_ClearLink.TabIndex = 5;
 			this.toolTip.SetToolTip(this.button_ClearLink, "Clear link");
+			this.button_ClearLink.UseVisualStyleBackColor = true;
 			this.button_ClearLink.Click += new System.EventHandler(this.button_ClearLink_Click);
 			// 
 			// pathLabel_LinkedTo

@@ -92,8 +92,8 @@ namespace YAT.Model.Types
 		                                 // These strings are used for XML serialization!
 		                                 // Not ideal, but required for explicit 'AutoTrigger' and 'AutoResponse', thus here too.
 		private const string             None_string                = "[None]";
-		private const string             Highlight_string           = "[Highlight]";
-		private static readonly string[] Highlight_stringAlternatives = new string[] { "[Highlight Only]" }; // Old name, needed for backward compatibility with old settings!
+		private const string             Highlight_string           = "[Highlight]";               //// Old name, needed for backward compatibility with old settings!
+		private static readonly string[] Highlight_stringAlternatives = new string[] { "[Highlight Only]" };
 		private const string             Filter_string              = "[Filter]";
 		private const string             Suppress_string            = "[Suppress]";
 		private const string             Beep_string                = "[Beep]";
@@ -106,14 +106,14 @@ namespace YAT.Model.Types
 		private const string             ScatterPlot_string         = "[Scatter Plot]";
 		private const string             HistogramHorizontal_string = "[Histogram (Horizontal)]";
 		private const string             HistogramVertical_string   = "[Histogram (Vertical)]";
-		private const string             ClearRepositories_string   = "[Clear Monitor]"; // Translating from code to user terminology.
+		private const string             ClearRepositories_string   = "[Clear Monitor]";                           // Translating from code to user terminology.
 		private const string             ClearRepositoriesOnSubsequentRx_string = "[Clear Mon. on Subsequent Rx]"; // Translating from code to user terminology.
 		private static readonly string[] ClearRepositoriesOnSubsequentRx_stringAlternativeStarts = new string[] { "[Clear Mon. ", "[Clear Monitor " }; // Including ' ' to distinguish from [Clear Monitor]!
-		private const string             ResetCountAndRate_string   = "[Reset Count/Rate]";                                                // Old name, needed for backward compatibility with old settings!
-		private const string             SwitchLogOn_string         = "[Log On]"; // Translating from code to user terminology.
-		private const string             SwitchLogOff_string        = "[Log Off]"; // Translating from code to user terminology.
-		private const string             ToggleLogOnOrOff_string    = "[Toggle Log On/Off]"; // Translating from code to user terminology.
-		private const string             Stop_string                = "[Close/Stop I/O]"; // Translating from code to user terminology.
+		private const string             ResetCountAndRate_string   = "[Reset Count/Rate]";                                                  //// Old name, needed for backward compatibility with old settings!
+		private const string             SwitchLogOn_string         = "[Log On]";                                  // Translating from code to user terminology.
+		private const string             SwitchLogOff_string        = "[Log Off]";                                 // Translating from code to user terminology.
+		private const string             ToggleLogOnOrOff_string    = "[Toggle Log On/Off]";                       // Translating from code to user terminology.
+		private const string             Stop_string                = "[Close/Stop I/O]";                          // Translating from code to user terminology.
 		private const string             CloseTerminal_string       = "[Close Terminal]";
 		private static readonly string   ExitApplication_string     = "[Exit " + ApplicationEx.ProductName + "]"; // "YAT" or "YATConsole", as indicated in main title bar.
 		private const string             ExitApplication_stringAlternativeStart = "[Exit " + ApplicationEx.CommonName;
