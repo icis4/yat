@@ -67,7 +67,7 @@ namespace YAT.Domain
 
 		/// <remarks>
 		/// "Guidelines for Collections: Do use byte arrays instead of collections of bytes."
-		/// is overruled in order to be able to implement this class of immutable objects.
+		/// is overruled in order to be able to implement this class as immutable.
 		/// </remarks>
 		public ReadOnlyCollection<byte> Content { get; }
 
@@ -131,7 +131,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ContentToString()
 		{
-			return (Utilities.ByteHelper.FormatHexString(Content));
+			return (Utilities.ByteHelper.FormatHexString(Content, Settings.DisplaySettings.ShowRadixDefault));
 		}
 
 		#endregion
@@ -173,7 +173,7 @@ namespace YAT.Domain
 			sb.AppendLine(indent + "> TimeStamp: " + TimeStamp.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo));
 			sb.AppendLine(indent + "> Device:    " + Device);
 			sb.AppendLine(indent + "> Direction: " + Direction);
-			sb.AppendLine(indent + "> Content:   " + ContentToString()); // Content last same as ToString().
+			sb.AppendLine(indent + "> Content:   " + ContentToString()); // Content same as ToString().
 
 			return (sb.ToString());
 		}

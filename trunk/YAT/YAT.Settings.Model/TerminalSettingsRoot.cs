@@ -100,7 +100,7 @@ namespace YAT.Settings.Model
 		public virtual string SettingsName
 		{
 			get { return (ApplicationEx.CommonName + " Terminal Settings"); } // Name shall *not* differ for "YAT" and "YATConsole"
-			set { } // Do nothing.                                            // in order to allow exchanging settings.
+			set { /* Do nothing, this meta XML element is read-only. */ }     // in order to allow exchanging settings.
 		}
 
 		/// <summary></summary>
@@ -108,7 +108,7 @@ namespace YAT.Settings.Model
 		public virtual string SettingsVersion
 		{
 			get { return (this.settingsVersion); }
-			set { } // Do nothing.
+			set { /* Do nothing, this meta XML element is read-only. */ }
 		}
 
 		/// <summary></summary>
@@ -116,7 +116,7 @@ namespace YAT.Settings.Model
 		public virtual string ProductVersion
 		{
 			get { return (this.productVersion); }
-			set { } // Do nothing.
+			set { /* Do nothing, this meta XML element is read-only. */ }
 		}
 
 		/// <summary></summary>
@@ -124,7 +124,7 @@ namespace YAT.Settings.Model
 		public virtual string Warning
 		{
 			get { return ("Modifying structure and/or content may cause undefined behavior!"); }
-			set { } // Do nothing.
+			set { /* Do nothing, this meta XML element is read-only. */ }
 		}
 
 		/// <summary></summary>
@@ -132,7 +132,7 @@ namespace YAT.Settings.Model
 		public virtual UserTimeStamp Mark
 		{
 			get { return (new UserTimeStamp(DateTime.Now, Environment.UserName)); }
-			set { } // Do nothing.
+			set { /* Do nothing, this meta XML element is read-only. */ }
 		}
 
 		/// <summary>

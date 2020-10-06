@@ -103,6 +103,7 @@ namespace YAT.View.Forms
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 2;
 			this.button_Cancel.Text = "Cancel";
+			this.button_Cancel.UseVisualStyleBackColor = true;
 			this.button_Cancel.Click += new System.EventHandler(this.button_Cancel_Click);
 			// 
 			// button_OK
@@ -114,6 +115,7 @@ namespace YAT.View.Forms
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 1;
 			this.button_OK.Text = "OK";
+			this.button_OK.UseVisualStyleBackColor = true;
 			this.button_OK.Click += new System.EventHandler(this.button_OK_Click);
 			// 
 			// groupBox_Settings
@@ -283,6 +285,7 @@ namespace YAT.View.Forms
 			this.checkBox_Options_FolderType.Size = new System.Drawing.Size(133, 17);
 			this.checkBox_Options_FolderType.TabIndex = 0;
 			this.checkBox_Options_FolderType.Text = "Type (Port/Raw/Neat)";
+			this.checkBox_Options_FolderType.UseVisualStyleBackColor = true;
 			this.checkBox_Options_FolderType.CheckedChanged += new System.EventHandler(this.checkBox_Options_FolderType_CheckedChanged);
 			// 
 			// checkBox_Options_FolderDirection
@@ -293,6 +296,7 @@ namespace YAT.View.Forms
 			this.checkBox_Options_FolderDirection.Size = new System.Drawing.Size(132, 17);
 			this.checkBox_Options_FolderDirection.TabIndex = 1;
 			this.checkBox_Options_FolderDirection.Text = "Direction (Tx/Bidir/Rx)";
+			this.checkBox_Options_FolderDirection.UseVisualStyleBackColor = true;
 			this.checkBox_Options_FolderDirection.CheckedChanged += new System.EventHandler(this.checkBox_Options_FolderDirection_CheckedChanged);
 			// 
 			// groupBox_Options_Name
@@ -320,6 +324,7 @@ namespace YAT.View.Forms
 			this.checkBox_Options_NameType.Size = new System.Drawing.Size(133, 17);
 			this.checkBox_Options_NameType.TabIndex = 0;
 			this.checkBox_Options_NameType.Text = "Type (Port/Raw/Neat)";
+			this.checkBox_Options_NameType.UseVisualStyleBackColor = true;
 			this.checkBox_Options_NameType.CheckedChanged += new System.EventHandler(this.checkBox_Options_NameType_CheckedChanged);
 			// 
 			// comboBox_Options_NameSeparator
@@ -343,6 +348,7 @@ namespace YAT.View.Forms
 			this.checkBox_Options_NameDirection.Size = new System.Drawing.Size(132, 17);
 			this.checkBox_Options_NameDirection.TabIndex = 1;
 			this.checkBox_Options_NameDirection.Text = "Direction (Tx/Bidir/Rx)";
+			this.checkBox_Options_NameDirection.UseVisualStyleBackColor = true;
 			this.checkBox_Options_NameDirection.CheckedChanged += new System.EventHandler(this.checkBox_Options_NameDirection_CheckedChanged);
 			// 
 			// checkBox_Options_NameTime
@@ -353,6 +359,7 @@ namespace YAT.View.Forms
 			this.checkBox_Options_NameTime.Size = new System.Drawing.Size(96, 17);
 			this.checkBox_Options_NameTime.TabIndex = 3;
 			this.checkBox_Options_NameTime.Text = "Time (hhmmss)";
+			this.checkBox_Options_NameTime.UseVisualStyleBackColor = true;
 			this.checkBox_Options_NameTime.CheckedChanged += new System.EventHandler(this.checkBox_Options_NameTime_CheckedChanged);
 			// 
 			// checkBox_Options_NameDate
@@ -363,6 +370,7 @@ namespace YAT.View.Forms
 			this.checkBox_Options_NameDate.Size = new System.Drawing.Size(106, 17);
 			this.checkBox_Options_NameDate.TabIndex = 2;
 			this.checkBox_Options_NameDate.Text = "Date (yyyymmdd)";
+			this.checkBox_Options_NameDate.UseVisualStyleBackColor = true;
 			this.checkBox_Options_NameDate.CheckedChanged += new System.EventHandler(this.checkBox_Options_NameDate_CheckedChanged);
 			// 
 			// label_Options_NameSeparator
@@ -396,6 +404,7 @@ namespace YAT.View.Forms
 			this.radioButton_Options_ModeCreate.TabIndex = 0;
 			this.radioButton_Options_ModeCreate.TabStop = true;
 			this.radioButton_Options_ModeCreate.Text = "Create separate files";
+			this.radioButton_Options_ModeCreate.UseVisualStyleBackColor = true;
 			this.radioButton_Options_ModeCreate.CheckedChanged += new System.EventHandler(this.radioButton_Options_ModeCreate_CheckedChanged);
 			// 
 			// radioButton_Options_ModeAppend
@@ -406,6 +415,7 @@ namespace YAT.View.Forms
 			this.radioButton_Options_ModeAppend.Size = new System.Drawing.Size(115, 17);
 			this.radioButton_Options_ModeAppend.TabIndex = 1;
 			this.radioButton_Options_ModeAppend.Text = "Append if file exists";
+			this.radioButton_Options_ModeAppend.UseVisualStyleBackColor = true;
 			this.radioButton_Options_ModeAppend.CheckedChanged += new System.EventHandler(this.radioButton_Options_ModeAppend_CheckedChanged);
 			// 
 			// label_Root
@@ -425,6 +435,7 @@ namespace YAT.View.Forms
 			this.button_Root.TabIndex = 2;
 			this.button_Root.Text = "...";
 			this.toolTip.SetToolTip(this.button_Root, "Change...");
+			this.button_Root.UseVisualStyleBackColor = true;
 			this.button_Root.Click += new System.EventHandler(this.button_Root_Click);
 			// 
 			// groupBox_Raw
@@ -488,6 +499,7 @@ namespace YAT.View.Forms
 			this.checkBox_Raw_Bidir.Size = new System.Drawing.Size(156, 17);
 			this.checkBox_Raw_Bidir.TabIndex = 2;
 			this.checkBox_Raw_Bidir.Text = "Log bidirectional data (Bidir)";
+			this.checkBox_Raw_Bidir.UseVisualStyleBackColor = true;
 			this.checkBox_Raw_Bidir.CheckedChanged += new System.EventHandler(this.checkBox_Raw_Bidir_CheckedChanged);
 			// 
 			// label_Raw_Extension
@@ -519,6 +531,7 @@ namespace YAT.View.Forms
 			this.checkBox_Raw_Rx.Size = new System.Drawing.Size(134, 17);
 			this.checkBox_Raw_Rx.TabIndex = 4;
 			this.checkBox_Raw_Rx.Text = "Log received data (Rx)";
+			this.checkBox_Raw_Rx.UseVisualStyleBackColor = true;
 			this.checkBox_Raw_Rx.CheckedChanged += new System.EventHandler(this.checkBox_Raw_Rx_CheckedChanged);
 			// 
 			// checkBox_Raw_Tx
@@ -529,6 +542,7 @@ namespace YAT.View.Forms
 			this.checkBox_Raw_Tx.Size = new System.Drawing.Size(112, 17);
 			this.checkBox_Raw_Tx.TabIndex = 0;
 			this.checkBox_Raw_Tx.Text = "Log sent data (Tx)";
+			this.checkBox_Raw_Tx.UseVisualStyleBackColor = true;
 			this.checkBox_Raw_Tx.CheckedChanged += new System.EventHandler(this.checkBox_Raw_Tx_CheckedChanged);
 			// 
 			// groupBox_Neat
@@ -613,6 +627,7 @@ namespace YAT.View.Forms
 			this.checkBox_Neat_Rx.Size = new System.Drawing.Size(134, 17);
 			this.checkBox_Neat_Rx.TabIndex = 4;
 			this.checkBox_Neat_Rx.Text = "Log received data (Rx)";
+			this.checkBox_Neat_Rx.UseVisualStyleBackColor = true;
 			this.checkBox_Neat_Rx.CheckedChanged += new System.EventHandler(this.checkBox_Neat_Rx_CheckedChanged);
 			// 
 			// checkBox_Neat_Bidir
@@ -623,6 +638,7 @@ namespace YAT.View.Forms
 			this.checkBox_Neat_Bidir.Size = new System.Drawing.Size(156, 17);
 			this.checkBox_Neat_Bidir.TabIndex = 2;
 			this.checkBox_Neat_Bidir.Text = "Log bidirectional data (Bidir)";
+			this.checkBox_Neat_Bidir.UseVisualStyleBackColor = true;
 			this.checkBox_Neat_Bidir.CheckedChanged += new System.EventHandler(this.checkBox_Neat_Bidir_CheckedChanged);
 			// 
 			// checkBox_Neat_Tx
@@ -633,6 +649,7 @@ namespace YAT.View.Forms
 			this.checkBox_Neat_Tx.Size = new System.Drawing.Size(112, 17);
 			this.checkBox_Neat_Tx.TabIndex = 0;
 			this.checkBox_Neat_Tx.Text = "Log sent data (Tx)";
+			this.checkBox_Neat_Tx.UseVisualStyleBackColor = true;
 			this.checkBox_Neat_Tx.CheckedChanged += new System.EventHandler(this.checkBox_Neat_Tx_CheckedChanged);
 			// 
 			// button_Defaults
@@ -643,6 +660,7 @@ namespace YAT.View.Forms
 			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
 			this.button_Defaults.TabIndex = 3;
 			this.button_Defaults.Text = "&Defaults...";
+			this.button_Defaults.UseVisualStyleBackColor = true;
 			this.button_Defaults.Click += new System.EventHandler(this.button_Defaults_Click);
 			// 
 			// checkBox_RequestSwitchOn

@@ -75,7 +75,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		private static int staticInstanceCounter;
-		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
+		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
 
 		#endregion
 
@@ -245,13 +245,14 @@ namespace YAT.Domain
 		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			this.eventHelper.DiscardAllEventsAndExceptions();
-
-			DebugMessage("Disposing...");
+			if (this.eventHelper != null) // Possible when called by finalizer (non-deterministic).
+				this.eventHelper.DiscardAllEventsAndExceptions();
 
 			// Dispose of managed resources:
 			if (disposing)
 			{
+				DebugMessage("Disposing...");
+
 				// In the 'normal' case, I/O will already have been stopped in Stop()...
 				if (this.io != null) {
 					this.io.Stop();
@@ -262,9 +263,11 @@ namespace YAT.Domain
 				DetachIOSettings();
 				DetachBufferSettings();
 				DisposeRepositories();
+
+				DebugMessage("...successfully disposed.");
 			}
 
-			DebugMessage("...successfully disposed.");
+		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
 		}
 
 		#endregion
@@ -769,7 +772,7 @@ namespace YAT.Domain
 					{
 						DebugDataReceived(e.Data.Length);
 
-						var re = new RawChunk(e.Data, e.TimeStamp, e.PortStamp, IODirection.Rx);
+						var re = new RawChunk(e.Data, e.TimeStamp, e.Device, IODirection.Rx);
 						lock (this.repositorySyncObj)
 						{
 							this.rxRepository   .Enqueue(re); // 'RawChunk' objects are immutable, subsequent use is OK.
@@ -810,7 +813,7 @@ namespace YAT.Domain
 					{
 						DebugDataSent(e.Data.Length);
 
-						var re = new RawChunk(e.Data, e.TimeStamp, e.PortStamp, IODirection.Tx);
+						var re = new RawChunk(e.Data, e.TimeStamp, e.Device, IODirection.Tx);
 						lock (this.repositorySyncObj)
 						{
 							this.txRepository   .Enqueue(re); // 'RawChunk' objects are immutable, subsequent use is OK.

@@ -182,8 +182,7 @@ namespace YAT.Model.Utilities
 							}
 							else
 							{
-								sb.Append(" is starting to connect to ");
-								sb.Append(settings.RemoteEndPointString);
+								sb.Append(" is starting"); // "to connect to..." or "to listen on..." makes little sense as role is yet undetermined.
 							}
 						}
 						else

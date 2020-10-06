@@ -75,6 +75,7 @@
 			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
 			this.button_Defaults.TabIndex = 8;
 			this.button_Defaults.Text = "&Defaults...";
+			this.button_Defaults.UseVisualStyleBackColor = true;
 			this.button_Defaults.Click += new System.EventHandler(this.button_Defaults_Click);
 			// 
 			// button_Cancel
@@ -86,6 +87,7 @@
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 7;
 			this.button_Cancel.Text = "Cancel";
+			this.button_Cancel.UseVisualStyleBackColor = true;
 			this.button_Cancel.Click += new System.EventHandler(this.button_Cancel_Click);
 			// 
 			// button_OK
@@ -97,6 +99,7 @@
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 6;
 			this.button_OK.Text = "OK";
+			this.button_OK.UseVisualStyleBackColor = true;
 			this.button_OK.Click += new System.EventHandler(this.button_OK_Click);
 			// 
 			// groupBox_UsbDevices

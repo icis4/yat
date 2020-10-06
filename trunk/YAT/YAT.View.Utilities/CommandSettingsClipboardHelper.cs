@@ -68,7 +68,7 @@ namespace YAT.View.Utilities
 			}
 		}
 
-		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
+		/// <remarks>Named 'Set' same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		public static bool TrySet(IWin32Window owner, Command c)
 		{
 			var root = new CommandSettingsRoot();
@@ -103,7 +103,7 @@ namespace YAT.View.Utilities
 		}
 
 		/// <summary>Copies the command text or file path to the clipboard.</summary>
-		/// <remarks>Named "Set" same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
+		/// <remarks>Named 'Set' same as e.g. <see cref="Clipboard.SetText(string)"/>.</remarks>
 		public static bool TrySetTextOrFilePath(IWin32Window owner, Command c)
 		{
 			var sb = new StringBuilder();
@@ -164,7 +164,7 @@ namespace YAT.View.Utilities
 			}
 		}
 
-		/// <remarks>Named "Get" same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
+		/// <remarks>Named 'Get' same as e.g. <see cref="Clipboard.GetText()"/>.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public static bool TryGet(IWin32Window owner, out Command c)
 		{

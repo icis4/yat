@@ -609,7 +609,7 @@ namespace YAT.View.Forms
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		private bool TrySaveToFile(string filePath, OxyPlot.WindowsForms.PngExporter exporter, ImageFormat imageFormat, out Exception exception)
+		private bool TrySaveToFile(string filePath, OxyPlot.WindowsForms.PngExporter exporter, ImageFormat imageFormat, out Exception exceptionOnFailure)
 		{
 			try
 			{
@@ -619,18 +619,18 @@ namespace YAT.View.Forms
 						image.Save(stream, imageFormat);
 				}
 
-				exception = null;
+				exceptionOnFailure = null;
 				return (true);
 			}
 			catch (Exception ex)
 			{
-				exception = ex;
+				exceptionOnFailure = ex;
 				return (false);
 			}
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		private bool TrySaveToFile(string filePath, OxyPlot.IExporter exporter, out Exception exception)
+		private bool TrySaveToFile(string filePath, OxyPlot.IExporter exporter, out Exception exceptionOnFailure)
 		{
 			try
 			{
@@ -639,12 +639,12 @@ namespace YAT.View.Forms
 					exporter.Export(plotView.Model, stream);
 				}
 
-				exception = null;
+				exceptionOnFailure = null;
 				return (true);
 			}
 			catch (Exception ex)
 			{
-				exception = ex;
+				exceptionOnFailure = ex;
 				return (false);
 			}
 		}

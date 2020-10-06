@@ -15,15 +15,17 @@ namespace YAT.View.Forms
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
-			DebugMessage("Disposing..."); // Additional debug message indicating the sequence of disposal (model -vs- view).
-
-			if (disposing && (components != null))
+			if (disposing)
 			{
-				components.Dispose();
-			}
-			base.Dispose(disposing);
+				DebugMessage("Disposing..."); // Additional debug message indicating the sequence of disposal (model -vs- view).
 
-			DebugMessage("...successfully disposed."); // Additional debug message indicating the sequence of disposal (model -vs- view).
+				if (components != null)
+					components.Dispose();
+
+				DebugMessage("...successfully disposed."); // Additional debug message indicating the sequence of disposal (model -vs- view).
+			}
+
+			base.Dispose(disposing);
 		}
 
 		#region Windows Form Designer generated code
@@ -797,7 +799,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_MainMenu_Help_Separator_4,
             this.toolStripMenuItem_MainMenu_Help_Donate,
             this.toolStripMenuItem_MainMenu_Help_Separator_5,
-		#endif // WITH_SCRIPTING
+		#endif
             this.toolStripMenuItem_MainMenu_Help_About});
 			this.toolStripMenuItem_MainMenu_Help.MergeIndex = 8;
 			this.toolStripMenuItem_MainMenu_Help.Name = "toolStripMenuItem_MainMenu_Help";
@@ -890,7 +892,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_MainMenu_Help_Separator_5.Name = "toolStripMenuItem_MainMenu_Help_Separator_5";
 			this.toolStripMenuItem_MainMenu_Help_Separator_5.Size = new System.Drawing.Size(178, 6);
-		#endif // WITH_SCRIPTING
+		#endif // !WITH_SCRIPTING
 			// 
 			// toolStripMenuItem_MainMenu_Help_About
 			// 
@@ -1786,12 +1788,13 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_RequestSupport;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_RequestFeature;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_SubmitBug;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_AnyOtherFeedback;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_Help_Separator_3;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_Update;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_Help_Separator_4;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_Donate;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_Help_Separator_5;
-	#endif // WITH_SCRIPTING
+	#endif
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_About;
 		private MKY.Windows.Forms.StatusStripEx statusStrip_Main;
 		private MKY.Windows.Forms.ToolStripEx toolStrip_Main;
@@ -1903,7 +1906,6 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_9;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_MainStatus_Time;
 		private System.Windows.Forms.Timer timer_Time;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_AnyOtherFeedback;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Terminal;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Terminal_AllClear;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Terminal_AllRefresh;

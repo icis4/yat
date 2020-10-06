@@ -67,7 +67,7 @@ namespace YAT.View.Utilities
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private static bool TryLoad(string filePath, out PredefinedCommandPage page, out Exception exception)
+		private static bool TryLoad(string filePath, out PredefinedCommandPage page, out Exception exceptionOnFailure)
 		{
 			try
 			{
@@ -76,20 +76,20 @@ namespace YAT.View.Utilities
 				if (sh.Load())
 				{
 					page = sh.Settings.Page; // No clone needed as just loaded.
-					exception = null;
+					exceptionOnFailure = null;
 					return (true);
 				}
 				else
 				{
 					page = null;
-					exception = null;
+					exceptionOnFailure = null;
 					return (true);
 				}
 			}
 			catch (Exception ex)
 			{
 				page = null;
-				exception = ex;
+				exceptionOnFailure = ex;
 				return (false);
 			}
 		}
@@ -176,17 +176,17 @@ namespace YAT.View.Utilities
 				{
 					if (page.DefinedCommandCount < 1)
 					{
-						var message = new StringBuilder();
-						message.AppendLine("File contains no commands.");
-						message.AppendLine();
-						message.AppendLine("Would you like to link to");
-						message.AppendLine(@"""" + ofd.FileName + @"""");
-						message.Append    ("anyway?");
+						var question = new StringBuilder();
+						question.AppendLine("File contains no commands.");
+						question.AppendLine();
+						question.AppendLine("Would you like to link to");
+						question.AppendLine(@"""" + ofd.FileName + @"""");
+						question.Append    ("anyway?");
 
 						if (MessageBoxEx.Show
 							(
 								owner,
-								message.ToString(),
+								question.ToString(),
 								"No Commands",
 								MessageBoxButtons.YesNo,
 								MessageBoxIcon.Exclamation

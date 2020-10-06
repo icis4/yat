@@ -94,7 +94,7 @@ namespace YAT.Model.Types
 				Add(new PredefinedCommandPage(pcp));
 		}
 
-		/// <remarks>Explicitly name "Command" to clearly distinguish from list of pages.</remarks>
+		/// <remarks>Explicitly named "Command" to clearly distinguish from list of pages.</remarks>
 		public int MaxDefinedCommandCountPerPage
 		{
 			get
@@ -111,7 +111,7 @@ namespace YAT.Model.Types
 			}
 		}
 
-		/// <remarks>Explicitly name "Command" to clearly distinguish from list of pages.</remarks>
+		/// <remarks>Explicitly named "Command" to clearly distinguish from list of pages.</remarks>
 		public int TotalDefinedCommandCount
 		{
 			get

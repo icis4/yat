@@ -661,7 +661,7 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary>
-		/// Parses <paramref name="s"/> for one or more items in the specified base <paramref name="radix"/>, separated with spaces.
+		/// Parses <paramref name="s"/> for one or more items in the specified base <paramref name="radix"/>, separated by spaces.
 		/// </summary>
 		/// <param name="s">String to be parsed.</param>
 		/// <param name="radix">Numeric radix.</param>

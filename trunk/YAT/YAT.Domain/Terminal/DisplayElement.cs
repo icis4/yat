@@ -407,7 +407,7 @@ namespace YAT.Domain
 			}                                                         // Attention, slightly different than time span above!
 		}
 
-		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
+		/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class DeviceInfo : InfoElement
 		{

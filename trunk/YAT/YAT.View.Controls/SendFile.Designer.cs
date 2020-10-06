@@ -60,6 +60,7 @@
 			this.button_OpenFile.TabIndex = 1;
 			this.button_OpenFile.Text = "...";
 			this.toolTip.SetToolTip(this.button_OpenFile, resources.GetString("button_OpenFile.ToolTip"));
+			this.button_OpenFile.UseVisualStyleBackColor = true;
 			this.button_OpenFile.Click += new System.EventHandler(this.button_OpenFile_Click);
 			// 
 			// button_Send
@@ -73,6 +74,7 @@
 			this.button_Send.TabIndex = 0;
 			this.button_Send.Text = "Send File (F4)";
 			this.toolTip.SetToolTip(this.button_Send, "Send file");
+			this.button_Send.UseVisualStyleBackColor = true;
 			this.button_Send.Click += new System.EventHandler(this.button_Send_Click);
 			// 
 			// pathComboBox_FilePath

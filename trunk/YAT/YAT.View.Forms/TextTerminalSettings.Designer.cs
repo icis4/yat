@@ -97,6 +97,7 @@ namespace YAT.View.Forms
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 1;
 			this.button_OK.Text = "OK";
+			this.button_OK.UseVisualStyleBackColor = true;
 			this.button_OK.Click += new System.EventHandler(this.button_OK_Click);
 			// 
 			// button_Cancel
@@ -108,6 +109,7 @@ namespace YAT.View.Forms
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 2;
 			this.button_Cancel.Text = "Cancel";
+			this.button_Cancel.UseVisualStyleBackColor = true;
 			this.button_Cancel.Click += new System.EventHandler(this.button_Cancel_Click);
 			// 
 			// groupBox_Settings
@@ -210,6 +212,7 @@ namespace YAT.View.Forms
 			this.checkBox_ShowEol.Size = new System.Drawing.Size(127, 17);
 			this.checkBox_ShowEol.TabIndex = 5;
 			this.checkBox_ShowEol.Text = "Show EOL se&quence";
+			this.checkBox_ShowEol.UseVisualStyleBackColor = true;
 			this.checkBox_ShowEol.CheckedChanged += new System.EventHandler(this.checkBox_ShowEol_CheckedChanged);
 			// 
 			// checkBox_SeparateTxRxEol
@@ -403,6 +406,7 @@ namespace YAT.View.Forms
 			this.checkBox_Exclude.Size = new System.Drawing.Size(232, 17);
 			this.checkBox_Exclude.TabIndex = 0;
 			this.checkBox_Exclude.Text = "Do not send text with the following patterns:";
+			this.checkBox_Exclude.UseVisualStyleBackColor = true;
 			this.checkBox_Exclude.CheckedChanged += new System.EventHandler(this.checkBox_Exclude_CheckedChanged);
 			// 
 			// groupBox_Substitute
@@ -427,6 +431,7 @@ namespace YAT.View.Forms
 			this.radioButton_SubstituteToLower.Size = new System.Drawing.Size(182, 17);
 			this.radioButton_SubstituteToLower.TabIndex = 2;
 			this.radioButton_SubstituteToLower.Text = "&Lower case (e.g. \"Abc\" -> \"abc\")";
+			this.radioButton_SubstituteToLower.UseVisualStyleBackColor = true;
 			this.radioButton_SubstituteToLower.CheckedChanged += new System.EventHandler(this.radioButton_SubstituteToLower_CheckedChanged);
 			// 
 			// radioButton_SubstituteToUpper
@@ -437,6 +442,7 @@ namespace YAT.View.Forms
 			this.radioButton_SubstituteToUpper.Size = new System.Drawing.Size(185, 17);
 			this.radioButton_SubstituteToUpper.TabIndex = 1;
 			this.radioButton_SubstituteToUpper.Text = "&Upper case (e.g. \"Abc\" -> \"ABC\")";
+			this.radioButton_SubstituteToUpper.UseVisualStyleBackColor = true;
 			this.radioButton_SubstituteToUpper.CheckedChanged += new System.EventHandler(this.radioButton_SubstituteToUpper_CheckedChanged);
 			// 
 			// radioButton_SubstituteNone
@@ -447,6 +453,7 @@ namespace YAT.View.Forms
 			this.radioButton_SubstituteNone.Size = new System.Drawing.Size(149, 17);
 			this.radioButton_SubstituteNone.TabIndex = 0;
 			this.radioButton_SubstituteNone.Text = "&None (e.g. \"Abc -> \"Abc\")";
+			this.radioButton_SubstituteNone.UseVisualStyleBackColor = true;
 			this.radioButton_SubstituteNone.CheckedChanged += new System.EventHandler(this.radioButton_SubstituteNone_CheckedChanged);
 			// 
 			// checkBox_WaitForResponse
@@ -542,6 +549,7 @@ namespace YAT.View.Forms
 			this.checkBox_Delay.TabIndex = 0;
 			this.checkBox_Delay.Text = "Add dela&y of";
 			this.toolTip.SetToolTip(this.checkBox_Delay, resources.GetString("checkBox_Delay.ToolTip"));
+			this.checkBox_Delay.UseVisualStyleBackColor = true;
 			this.checkBox_Delay.CheckedChanged += new System.EventHandler(this.checkBox_Delay_CheckedChanged);
 			// 
 			// label_Encoding
@@ -561,6 +569,7 @@ namespace YAT.View.Forms
 			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
 			this.button_Defaults.TabIndex = 3;
 			this.button_Defaults.Text = "&Defaults...";
+			this.button_Defaults.UseVisualStyleBackColor = true;
 			this.button_Defaults.Click += new System.EventHandler(this.button_Defaults_Click);
 			// 
 			// label_AdvancedSettingsRemark

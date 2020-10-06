@@ -195,7 +195,7 @@
 			this.MinimumSize = new System.Drawing.Size(480, 240);
 			this.Name = "AutoActionPlot";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "YAT - [[Terminal] - Plot]";
+			this.Text = "YAT - [[Terminal] - Automatic Action Plot]";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AutoActionPlot_FormClosing);
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AutoActionPlot_FormClosed);
 			this.Shown += new System.EventHandler(this.AutoActionPlot_Shown);

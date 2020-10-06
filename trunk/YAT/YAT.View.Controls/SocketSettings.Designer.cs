@@ -28,6 +28,8 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SocketSettings));
 			this.radioButton_UdpServerSendMode_None = new System.Windows.Forms.RadioButton();
 			this.radioButton_UdpServerSendMode_First = new System.Windows.Forms.RadioButton();
 			this.radioButton_UdpServerSendMode_MostRecent = new System.Windows.Forms.RadioButton();
@@ -38,6 +40,7 @@
 			this.checkBox_TcpClientAutoReconnect = new System.Windows.Forms.CheckBox();
 			this.panel_Udp = new System.Windows.Forms.Panel();
 			this.label_UdpServerSendMode = new System.Windows.Forms.Label();
+			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.panel_Tcp.SuspendLayout();
 			this.panel_Udp.SuspendLayout();
 			this.SuspendLayout();
@@ -95,15 +98,15 @@
 			this.label_TcpClientAutoReconnectInterval.AutoSize = true;
 			this.label_TcpClientAutoReconnectInterval.Location = new System.Drawing.Point(34, 23);
 			this.label_TcpClientAutoReconnectInterval.Name = "label_TcpClientAutoReconnectInterval";
-			this.label_TcpClientAutoReconnectInterval.Size = new System.Drawing.Size(65, 13);
+			this.label_TcpClientAutoReconnectInterval.Size = new System.Drawing.Size(103, 13);
 			this.label_TcpClientAutoReconnectInterval.TabIndex = 1;
-			this.label_TcpClientAutoReconnectInterval.Text = "server every";
+			this.label_TcpClientAutoReconnectInterval.Text = "server approx. every";
 			this.label_TcpClientAutoReconnectInterval.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label_TcpClientAutoReconnectIntervalUnit
 			// 
 			this.label_TcpClientAutoReconnectIntervalUnit.AutoSize = true;
-			this.label_TcpClientAutoReconnectIntervalUnit.Location = new System.Drawing.Point(151, 23);
+			this.label_TcpClientAutoReconnectIntervalUnit.Location = new System.Drawing.Point(189, 23);
 			this.label_TcpClientAutoReconnectIntervalUnit.Name = "label_TcpClientAutoReconnectIntervalUnit";
 			this.label_TcpClientAutoReconnectIntervalUnit.Size = new System.Drawing.Size(20, 13);
 			this.label_TcpClientAutoReconnectIntervalUnit.TabIndex = 3;
@@ -113,7 +116,7 @@
 			// textBox_TcpClientAutoReconnectInterval
 			// 
 			this.textBox_TcpClientAutoReconnectInterval.Enabled = false;
-			this.textBox_TcpClientAutoReconnectInterval.Location = new System.Drawing.Point(101, 20);
+			this.textBox_TcpClientAutoReconnectInterval.Location = new System.Drawing.Point(139, 20);
 			this.textBox_TcpClientAutoReconnectInterval.Name = "textBox_TcpClientAutoReconnectInterval";
 			this.textBox_TcpClientAutoReconnectInterval.Size = new System.Drawing.Size(48, 20);
 			this.textBox_TcpClientAutoReconnectInterval.TabIndex = 2;
@@ -128,6 +131,7 @@
 			this.checkBox_TcpClientAutoReconnect.Size = new System.Drawing.Size(232, 17);
 			this.checkBox_TcpClientAutoReconnect.TabIndex = 0;
 			this.checkBox_TcpClientAutoReconnect.Text = "When connection is lost, try to reconnect to";
+			this.toolTip.SetToolTip(this.checkBox_TcpClientAutoReconnect, resources.GetString("checkBox_TcpClientAutoReconnect.ToolTip"));
 			this.checkBox_TcpClientAutoReconnect.UseVisualStyleBackColor = true;
 			this.checkBox_TcpClientAutoReconnect.CheckedChanged += new System.EventHandler(this.checkBox_TcpClientAutoReconnect_CheckedChanged);
 			// 
@@ -180,5 +184,6 @@
 		private System.Windows.Forms.Label label_TcpClientAutoReconnectIntervalUnit;
 		private MKY.Windows.Forms.TextBoxEx textBox_TcpClientAutoReconnectInterval;
 		private System.Windows.Forms.CheckBox checkBox_TcpClientAutoReconnect;
+		private System.Windows.Forms.ToolTip toolTip;
 	}
 }

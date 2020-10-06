@@ -31,7 +31,7 @@ using System.Xml.Serialization;
 namespace YAT.Domain.Settings
 {
 	/// <remarks>
-	/// Named 'SendSettingsFile.cs' instead of 'SendFileSettings' to prevent XML invalid operation
+	/// Named 'SendSettingsFile' instead of 'SendFileSettings' to prevent XML invalid operation
 	/// exception "type 'A.X' and 'B.X' use the XML type name 'X' in namespace" when reflecting the
 	/// settings.
 	/// </remarks>

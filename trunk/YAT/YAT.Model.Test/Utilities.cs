@@ -436,7 +436,9 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <remarks>
-		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// There are similar utility methods in
+		/// 'MKY.IO.Serial.Socket.Test.Utilities' and
+		/// <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		public static void WaitForStart(Terminal terminal)
@@ -460,7 +462,9 @@ namespace YAT.Model.Test
 		}
 
 		/// <remarks>
-		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// There are similar utility methods in
+		/// 'MKY.IO.Serial.Socket.Test.Utilities' and
+		/// <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		public static void WaitForOpen(Terminal terminal)
@@ -484,10 +488,11 @@ namespace YAT.Model.Test
 		}
 
 		/// <remarks>
-		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// There are similar utility methods in
+		/// 'MKY.IO.Serial.Socket.Test.Utilities' and
+		/// <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		public static void WaitForConnection(Terminal terminal)
 		{
 			int waitTime = 0;
@@ -509,7 +514,9 @@ namespace YAT.Model.Test
 		}
 
 		/// <remarks>
-		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// There are similar utility methods in
+		/// 'MKY.IO.Serial.Socket.Test.Utilities' and
+		/// <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		public static void WaitForConnection(Terminal terminalA, Terminal terminalB)
@@ -518,7 +525,7 @@ namespace YAT.Model.Test
 
 			Trace.WriteLine("Waiting for connection, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-			while (!terminalA.IsConnected && !terminalB.IsConnected)
+			while (!(terminalA.IsConnected && terminalB.IsConnected))
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
@@ -547,7 +554,9 @@ namespace YAT.Model.Test
 		}
 
 		/// <remarks>
-		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// There are similar utility methods in
+		/// 'MKY.IO.Serial.Socket.Test.Utilities' and
+		/// <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		public static void WaitForClose(Terminal terminal)
@@ -571,28 +580,29 @@ namespace YAT.Model.Test
 		}
 
 		/// <remarks>
-		/// There are similar utility methods in <see cref="Domain.Test.Utilities"/>.
+		/// There are similar utility methods in
+		/// 'MKY.IO.Serial.Socket.Test.Utilities' and
+		/// <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Prepared for future use.")]
 		public static void WaitForStop(Terminal terminal)
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for disconnection, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for stop, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 			while (!terminal.IsStopped)
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Trace.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for stop, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange)
-					Assert.Fail("Disconnect timeout!");
+					Assert.Fail("Stop timeout!");
 			}
 
-			Trace.WriteLine("...done, disconnected");
+			Trace.WriteLine("...done, stopped");
 		}
 
 		/// <remarks>

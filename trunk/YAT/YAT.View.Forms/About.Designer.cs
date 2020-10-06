@@ -76,6 +76,7 @@
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
 			this.button_Close.TabIndex = 0;
+			this.button_Close.UseVisualStyleBackColor = true;
 			this.button_Close.Text = "Close";
 			// 
 			// linkLabel_Monitoring

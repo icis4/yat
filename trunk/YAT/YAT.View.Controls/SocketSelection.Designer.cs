@@ -131,6 +131,7 @@
 			this.button_RefreshLocalInterfaces.Name = "button_RefreshLocalInterfaces";
 			this.button_RefreshLocalInterfaces.Size = new System.Drawing.Size(24, 21);
 			this.button_RefreshLocalInterfaces.TabIndex = 7;
+			this.button_RefreshLocalInterfaces.UseVisualStyleBackColor = true;
 			this.button_RefreshLocalInterfaces.Click += new System.EventHandler(this.button_RefreshLocalInterfaces_Click);
 			// 
 			// comboBox_LocalFilter

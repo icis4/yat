@@ -78,8 +78,8 @@ namespace YAT.Domain.Test
 		public const int IgnoreTimeout = 0;
 
 		/// <remarks>
-		/// State changes on a <see cref="MKY.IO.Serial.Socket.TcpAutoSocket"/> are the slowest,
-		/// due to the nature of the AutoSocket to try this and that.
+		/// State changes on a <see cref="MKY.IO.Serial.Socket.TcpAutoSocket"/> are the slowest, due
+		/// to the nature of the <see cref="MKY.IO.Serial.Socket.TcpAutoSocket"/> to try this and that.
 		/// </remarks>
 		public const int WaitTimeoutForStateChange = 5000; // Same as 'MKY.IO.Serial.Socket.Test.Utilities.WaitTimeoutForStateChange'.
 
@@ -402,7 +402,9 @@ namespace YAT.Domain.Test
 		//==========================================================================================
 
 		/// <remarks>
-		/// There are similar utility methods in 'Model.Test.Utilities'.
+		/// There are similar utility methods in
+		/// 'MKY.IO.Serial.Socket.Test.Utilities' and
+		/// 'YAT.Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		public static void WaitForConnection(Domain.Terminal terminalA, Domain.Terminal terminalB)
@@ -411,7 +413,7 @@ namespace YAT.Domain.Test
 
 			Trace.WriteLine("Waiting for connection, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
-			while (!terminalA.IsConnected && !terminalB.IsConnected)
+			while (!(terminalA.IsConnected && terminalB.IsConnected))
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
@@ -470,27 +472,29 @@ namespace YAT.Domain.Test
 		}
 
 		/// <remarks>
-		/// There are similar utility methods in 'Model.Test.Utilities'.
+		/// There are similar utility methods in
+		/// 'MKY.IO.Serial.Socket.Test.Utilities' and
+		/// 'YAT.Model.Test.Utilities'.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		public static void WaitForStop(Domain.Terminal terminal)
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for disconnection, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for stop, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 			while (!terminal.IsStopped)
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Trace.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for stop, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange)
-					Assert.Fail("Disconnect timeout!");
+					Assert.Fail("Stop timeout!");
 			}
 
-			Trace.WriteLine("...done, disconnected");
+			Trace.WriteLine("...done, stopped");
 		}
 
 		/// <summary></summary>

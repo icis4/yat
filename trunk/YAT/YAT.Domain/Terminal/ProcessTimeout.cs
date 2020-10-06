@@ -70,9 +70,8 @@ namespace YAT.Domain
 		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-		////Debug.WriteLine("Remind (2016-09-08 / MKY) 'Elapsed' event handler not yet free'd, whole timer handling should be encapsulated into the 'LineState' class.");
-		////DebugEventManagement.DebugWriteAllEventRemains(this); => Intended implementation commented out to prevent 100+ lines of debug output (Terminal.ToString()).
-			this.eventHelper.DiscardAllEventsAndExceptions();  // => Remind output also commented out to prevent 75 lines of debug output at startup.
+			if (this.eventHelper != null) // Possible when called by finalizer (non-deterministic).
+				this.eventHelper.DiscardAllEventsAndExceptions();
 
 			// Dispose of managed resources:
 			if (disposing)

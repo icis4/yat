@@ -80,7 +80,7 @@ namespace YAT.Log
 		/// <summary></summary>
 		protected Log(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode)
 		{
-			this.flushTimerRandom = new Random(RandomEx.NextPseudoRandomSeed());
+			this.flushTimerRandom = new Random(RandomEx.NextRandomSeed());
 
 			Initialize(enabled, makeFilePath, writeMode);
 		}
@@ -359,8 +359,8 @@ namespace YAT.Log
 
 			lock (this.flushTimerSyncObj)
 			{
-				if (this.flushTimer == null)
-					return; // Handle overdue callbacks.
+				if (this.flushTimer == null) // Handle overdue callbacks:
+					return;
 
 				StopAndDisposeFlushTimer(); // A new timer will get created on subsequent triggering.
 			}

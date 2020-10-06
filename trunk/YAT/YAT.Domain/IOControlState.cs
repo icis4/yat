@@ -53,13 +53,15 @@ namespace YAT.Domain
 		public SerialPortControlPinCount SerialPortControlPinCount { get; set; }
 
 		/// <summary>
-		/// Input XOn/XOff reflects the XOn/XOff state of this serial port itself, i.e. this computer.
+		/// Input XOn/XOff reflects the XOn/XOff state of this serial port itself,
+		/// i.e. the computer where this application is running.
 		/// </summary>
 		[XmlElement("InputIsXOn")]
 		public bool InputIsXOn { get; set; }
 
 		/// <summary>
-		/// Output XOn/XOff reflects the XOn/XOff state of the communication counterpart, i.e. a device.
+		/// Output XOn/XOff reflects the XOn/XOff state of the communication counterpart,
+		/// i.e. a device connected to the computer where this application is running.
 		/// </summary>
 		[XmlElement("OutputIsXOn")]
 		public bool OutputIsXOn { get; set; }

@@ -112,8 +112,6 @@ namespace YAT.Model
 		private void CreateAutoAction()
 		{
 			UpdateAutoAction(); // Simply forward to general Update() method.
-
-			StartAutoActionThread();
 		}
 
 		/// <summary>
@@ -461,7 +459,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		private void AutoActionThread()
 		{
-			DebugThreadState("AutoActionThread() has started.");
+			DebugThreads("AutoActionThread() has started.");
 
 			try
 			{
@@ -522,7 +520,7 @@ namespace YAT.Model
 				Thread.ResetAbort();
 			}
 
-			DebugThreadState("AutoActionThread() has terminated.");
+			DebugThreads("AutoActionThread() has terminated.");
 		}
 
 		/// <summary>
@@ -693,8 +691,8 @@ namespace YAT.Model
 		protected virtual void RequestAutoActionPlot(AutoAction plotAction, DateTime triggerTimeStamp, MatchCollection triggerMatches, CountsRatesTuple dataStatus)
 		{
 			AutoActionPlotItem pi;
-			string errorMessage;
-			if (TryCreateAutoActionPlotItem(plotAction, triggerTimeStamp, triggerMatches, dataStatus, out pi, out errorMessage))
+			string messageOnFailure;
+			if (TryCreateAutoActionPlotItem(plotAction, triggerTimeStamp, triggerMatches, dataStatus, out pi, out messageOnFailure))
 			{
 				lock (AutoActionPlotModelSyncObj)
 				{
@@ -710,7 +708,7 @@ namespace YAT.Model
 			}
 			else
 			{
-				this.terminal.InlineErrorMessage(Domain.Direction.Rx, errorMessage, true);
+				this.terminal.InlineErrorMessage(Domain.Direction.Rx, messageOnFailure, true);
 			}
 		}
 
@@ -719,18 +717,18 @@ namespace YAT.Model
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		protected virtual bool TryCreateAutoActionPlotItem(AutoAction plotAction, DateTime triggerTimeStamp, MatchCollection triggerMatches, CountsRatesTuple dataStatus, out AutoActionPlotItem pi, out string errorMessage)
+		protected virtual bool TryCreateAutoActionPlotItem(AutoAction plotAction, DateTime triggerTimeStamp, MatchCollection triggerMatches, CountsRatesTuple dataStatus, out AutoActionPlotItem pi, out string messageOnFailure)
 		{
 			switch (plotAction)
 			{
-				case AutoAction.PlotByteCountRate:             CreateCountRatePlotItem(  plotAction, triggerTimeStamp,                 dataStatus, out pi);    errorMessage = null; return (true);
-				case AutoAction.PlotLineCountRate:             CreateCountRatePlotItem(  plotAction, triggerTimeStamp,                 dataStatus, out pi);    errorMessage = null; return (true);
-				case AutoAction.LineChartIndex:                CreateYPlotItem(          plotAction,                   triggerMatches,             out pi);    errorMessage = null; return (true);
-				case AutoAction.LineChartTime:      return (TryCreateTimeXYPlotItem(     plotAction,                   triggerMatches,             out pi, out errorMessage));
-				case AutoAction.LineChartTimeStamp:            CreateTimeStampXYPlotItem(plotAction, triggerTimeStamp, triggerMatches,             out pi);    errorMessage = null; return (true);
-				case AutoAction.ScatterPlot:                   CreateXYPlotItem(         plotAction,                   triggerMatches,             out pi);    errorMessage = null; return (true);
-				case AutoAction.HistogramHorizontal:           CreateYPlotItem(          plotAction,                   triggerMatches,             out pi);    errorMessage = null; return (true);
-				case AutoAction.HistogramVertical:             CreateYPlotItem(          plotAction,                   triggerMatches,             out pi);    errorMessage = null; return (true);
+				case AutoAction.PlotByteCountRate:             CreateCountRatePlotItem(  plotAction, triggerTimeStamp,                 dataStatus, out pi);    messageOnFailure = null; return (true);
+				case AutoAction.PlotLineCountRate:             CreateCountRatePlotItem(  plotAction, triggerTimeStamp,                 dataStatus, out pi);    messageOnFailure = null; return (true);
+				case AutoAction.LineChartIndex:                CreateYPlotItem(          plotAction,                   triggerMatches,             out pi);    messageOnFailure = null; return (true);
+				case AutoAction.LineChartTime:      return (TryCreateTimeXYPlotItem(     plotAction,                   triggerMatches,             out pi, out messageOnFailure));
+				case AutoAction.LineChartTimeStamp:            CreateTimeStampXYPlotItem(plotAction, triggerTimeStamp, triggerMatches,             out pi);    messageOnFailure = null; return (true);
+				case AutoAction.ScatterPlot:                   CreateXYPlotItem(         plotAction,                   triggerMatches,             out pi);    messageOnFailure = null; return (true);
+				case AutoAction.HistogramHorizontal:           CreateYPlotItem(          plotAction,                   triggerMatches,             out pi);    messageOnFailure = null; return (true);
+				case AutoAction.HistogramVertical:             CreateYPlotItem(          plotAction,                   triggerMatches,             out pi);    messageOnFailure = null; return (true);
 
 				default: throw (new ArgumentOutOfRangeException("plot", plotAction, MessageHelper.InvalidExecutionPreamble + "'" + plotAction.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -788,11 +786,11 @@ namespace YAT.Model
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'x' and 'y' are common terms for identifying the axes of a plot.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		protected virtual bool TryCreateTimeXYPlotItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string errorMessage)
+		protected virtual bool TryCreateTimeXYPlotItem(AutoAction plotAction, MatchCollection triggerMatches, out AutoActionPlotItem pi, out string messageOnFailure)
 		{
 			var captures = MatchCollectionEx.UnfoldCapturesToStringArray(triggerMatches);
 			Tuple<string, double> xTimeValue;
-			if (!TryConvertToPlotTime(captures[0], out xTimeValue, out errorMessage)) {
+			if (!TryConvertToPlotTime(captures[0], out xTimeValue, out messageOnFailure)) {
 				pi = null;
 				return (false);
 			}
@@ -801,7 +799,7 @@ namespace YAT.Model
 			var yValues = new Tuple<string, double>[yLength];
 			Array.Copy(values, 1, yValues, 0, yLength);
 			pi = new AutoActionPlotItem(plotAction, xTimeValue, yValues);
-			errorMessage = null;
+			messageOnFailure = null;
 			return (true);
 		}
 
@@ -819,7 +817,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		protected virtual bool TryConvertToPlotTime(string capture, out Tuple<string, double> timeValue, out string errorMessage)
+		protected virtual bool TryConvertToPlotTime(string capture, out Tuple<string, double> timeValue, out string messageOnFailure)
 		{
 			// Try DateTime:
 			{
@@ -827,7 +825,7 @@ namespace YAT.Model
 				if (DateTime.TryParse(capture, out result)) // Always name series, even if legend is disabled
 				{                                           // currently, as user can enable it at any time.
 					timeValue = new Tuple<string, double>("Time Captures as OLE Automation Date", result.ToOADate());
-					errorMessage = null;
+					messageOnFailure = null;
 					return (true);
 				}
 			}
@@ -838,13 +836,13 @@ namespace YAT.Model
 				if (double.TryParse(capture, out result))
 				{
 					timeValue = new Tuple<string, double>("Numeric Captures as OLE Automation Date", result);
-					errorMessage = null;
+					messageOnFailure = null;
 					return (true);
 				}
 			}
 
 			timeValue = null;
-			errorMessage = string.Format(CultureInfo.CurrentCulture, "The first capture {0} could not be converted into a date/time value!", capture);
+			messageOnFailure = string.Format(CultureInfo.CurrentCulture, "The first capture {0} could not be converted into a date/time value!", capture);
 			return (false);
 		}
 
@@ -935,7 +933,7 @@ namespace YAT.Model
 		{
 			lock (this.autoActionThreadSyncObj)
 			{
-				DebugThreadState("AutoActionThread() gets created...");
+				DebugThreads("AutoActionThread() gets created...");
 
 				if (this.autoActionThread == null)
 				{
@@ -945,12 +943,12 @@ namespace YAT.Model
 					this.autoActionThread.Name = "Terminal [" + Guid + "] Auto Action Thread";
 					this.autoActionThread.Start();
 
-					DebugThreadState("...successfully created.");
+					DebugThreads("...successfully created.");
 				}
 			#if (DEBUG)
 				else
 				{
-					DebugThreadState("...failed as it already exists.");
+					DebugThreads("...failed as it already exists.");
 				}
 			#endif
 			}
@@ -966,7 +964,7 @@ namespace YAT.Model
 			{
 				if (this.autoActionThread != null)
 				{
-					DebugThreadState("AutoActionThread() gets stopped...");
+					DebugThreads("AutoActionThread() gets stopped...");
 
 					this.autoActionThreadRunFlag = false;
 
@@ -985,19 +983,19 @@ namespace YAT.Model
 							accumulatedTimeout += interval;
 							if (accumulatedTimeout >= ThreadWaitTimeout)
 							{
-								DebugThreadState("...failed! Aborting...");
-								DebugThreadState("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
+								DebugThreads("...failed! Aborting...");
+								DebugThreads("(Abort is likely required due to failed synchronization back the calling thread, which is typically the main thread.)");
 
 								isAborting = true;       // Thread.Abort() must not be used whenever possible!
 								this.autoActionThread.Abort(); // This is only the fall-back in case joining fails for too long.
 								break;
 							}
 
-							DebugThreadState("...trying to join at " + accumulatedTimeout + " ms...");
+							DebugThreads("...trying to join at " + accumulatedTimeout + " ms...");
 						}
 
 						if (!isAborting)
-							DebugThreadState("...successfully stopped.");
+							DebugThreads("...successfully stopped.");
 					}
 					catch (ThreadStateException)
 					{
@@ -1005,7 +1003,7 @@ namespace YAT.Model
 						// "Thread cannot be aborted" as it just needs to be ensured that the thread
 						// has or will be terminated for sure.
 
-						DebugThreadState("...failed too but will be exectued as soon as the calling thread gets suspended again.");
+						DebugThreads("...failed too but will be exectued as soon as the calling thread gets suspended again.");
 					}
 
 					this.autoActionThread = null;
@@ -1013,7 +1011,7 @@ namespace YAT.Model
 			#if (DEBUG)
 				else // (this.autoActionThread == null)
 				{
-					DebugThreadState("...not necessary as it doesn't exist anymore.");
+					DebugThreads("...not necessary as it doesn't exist anymore.");
 				}
 			#endif
 

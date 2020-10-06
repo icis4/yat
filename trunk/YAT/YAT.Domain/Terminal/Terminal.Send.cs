@@ -307,7 +307,7 @@ namespace YAT.Domain
 		// Methods
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>Method name and signature intentionally results in "send raw data".</remarks>
 		public virtual void SendRaw(byte[] data)
 		{
 			AssertUndisposed();
@@ -390,7 +390,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Parameter <paramref name="text"/> is not named "line" because e.g. the text EOL sequence will be appended later by the underlying terminal.
+		/// Parameter <paramref name="text"/> is not named 'line' because e.g. the text EOL sequence will be appended later by the underlying terminal.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendTextLine(string text, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
@@ -438,7 +438,7 @@ namespace YAT.Domain
 		/// Required to allow sending multi-line commands "kept together".
 		/// </remarks>
 		/// <remarks>
-		/// Parameter <paramref name="texts"/> is not named "lines" because e.g. the text EOL sequence will be appended later by the underlying terminal.
+		/// Parameter <paramref name="texts"/> is not named 'lines' because e.g. the text EOL sequence will be appended later by the underlying terminal.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendTextLines(string[] texts, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
@@ -748,10 +748,10 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Named "RawData" following "TextItem" terminology ("raw" vs. "text" and .
+		/// Named 'RawData' following 'TextItem' terminology ("raw" vs. "text").
 		/// <list type="bullet">
-		/// <item><description>"Raw" instead of "Text".</description></item>
-		/// <item><description>"Data" instead of "Item" as there is no 'RawItem'.</description></item>
+		/// <item><description>'Raw' instead of 'Text'.</description></item>
+		/// <item><description>'Data' instead of 'Item' as there is no 'RawItem'.</description></item>
 		/// </list>
 		/// </remarks>
 		/// <remarks>
@@ -1768,7 +1768,7 @@ namespace YAT.Domain
 		/// Not the best approach to require to call this method at so many locations...
 		/// </remarks>
 		/// <remarks>
-		/// Named 'packet' rather than 'chunk' to emphasize difference to <see cref="RawChunkSent"/>
+		/// Named 'Packet' rather than 'Chunk' to emphasize difference to <see cref="RawChunkSent"/>
 		/// which corresponds to the chunks effectively sent by the underlying I/O instance.
 		/// </remarks>
 		protected virtual void BreakPendingPacket(Queue<byte> conflateDataQueue)
@@ -1800,7 +1800,7 @@ namespace YAT.Domain
 		/// Not the best approach to require to call this method at so many locations...
 		/// </remarks>
 		/// <remarks>
-		/// Named 'packet' rather than 'chunk' to emphasize difference to <see cref="RawChunkSent"/>
+		/// Named 'Packet' rather than 'Chunk' to emphasize difference to <see cref="RawChunkSent"/>
 		/// which corresponds to the chunks effectively sent by the underlying I/O instance.
 		/// </remarks>
 		protected virtual void ForwardPendingPacketToRawTerminal(Queue<byte> conflateDataQueue)
@@ -1817,18 +1817,24 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Named 'packet' rather than 'chunk' to emphasize difference to <see cref="RawChunkSent"/>
+		/// Named 'Packet' rather than 'Chunk' to emphasize difference to <see cref="RawChunkSent"/>
 		/// which corresponds to the chunks effectively sent by the underlying I/O instance.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		protected virtual void ForwardPacketToRawTerminal(byte[] data)
 		{
 		#if (WITH_SCRIPTING)
+
 			// Invoke plug-in interface which potentially modifies the data or even cancels the whole packet:
 			var e = new ModifiablePacketEventArgs(data);
 			OnSendingPacket(e);
 			if (e.Cancel)
 				return;
+
+			// Note that the resulting packet will be displayed by the terminal monitor, the truly sent data
+			// shall be displayed. The same applies to receiving, the truly received data shall be displayed,
+			// the plug-in interface is invoked at a later stage and only applies to scripting.
+
 		#endif
 
 			// Forward packet to underlying terminal:
@@ -1872,7 +1878,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		protected virtual bool TryChangeSettingsOnTheFly(MKY.IO.Serial.SerialPort.SerialPortSettings settings, out Exception exception)
+		protected virtual bool TryChangeSettingsOnTheFly(MKY.IO.Serial.SerialPort.SerialPortSettings settings, out Exception exceptionOnFailure)
 		{
 			var port = (UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
 			if (port != null)
@@ -1896,7 +1902,7 @@ namespace YAT.Domain
 				}
 				catch (Exception ex)
 				{
-					exception = ex;
+					exceptionOnFailure = ex;
 					return (false);
 				}
 			}
@@ -1907,7 +1913,7 @@ namespace YAT.Domain
 
 			// Reflect the change in the settings:
 			TerminalSettings.IO.SerialPort = settings;
-			exception = null;
+			exceptionOnFailure = null;
 			return (true);
 		}
 

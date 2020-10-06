@@ -321,7 +321,7 @@ namespace YAT.Format.Settings
 			}
 		}
 
-		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
+		/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
 		[XmlElement("DeviceFormat")]
 		public TextFormat DeviceFormat
 		{

@@ -253,7 +253,7 @@ namespace YAT.Model.Utilities
 		public static void MakeUsbSerialHidStartHint(out string yatLead, out string yatText)
 		{
 			yatLead = ApplicationEx.CommonName + " hint:";
-			yatText = "Make sure the selected USB device is ready and the corresponding driver is installed.";
+			yatText = "Make sure the selected USB device is ready.";
 		}
 
 		/// <summary></summary>

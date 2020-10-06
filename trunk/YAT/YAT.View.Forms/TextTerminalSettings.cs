@@ -566,13 +566,13 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			string errorMessage;
-			if (!RegexEx.TryValidatePattern(e.Value, out errorMessage))
+			string messageOnFailure;
+			if (!RegexEx.TryValidatePattern(e.Value, out messageOnFailure))
 			{
 				MessageBoxEx.Show
 				(
 					this,
-					errorMessage,
+					messageOnFailure,
 					"Invalid Regex",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
