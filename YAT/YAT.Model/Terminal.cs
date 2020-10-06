@@ -29,8 +29,8 @@
 
 #if (DEBUG)
 
-	// Enable debugging of thread state:
-////#define DEBUG_THREAD_STATE
+	// Enable debugging of threads:
+////#define DEBUG_THREADS
 
 #endif // DEBUG
 
@@ -84,6 +84,10 @@ namespace YAT.Model
 	/// This class is implemented using partial classes separating send and automatic functionality.
 	/// Using partial classes to ease diffing code of the separated functionality.
 	/// </remarks>
+	/// <remarks>
+	/// \remind (2020-09-16 / MKY while integrating YAT 2.2.0 into Albatros)
+	/// Could alternatively be partialized into 'N/A'/.Outgoing/.Incoming.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public partial class Terminal : DisposableBase, IGuidProvider
 	{
@@ -112,7 +116,35 @@ namespace YAT.Model
 		//==========================================================================================
 
 		private static int staticSequentialIdCounter = SequentialIdCounterDefault;
-		private static Random staticRandom = new Random(RandomEx.NextPseudoRandomSeed());
+		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
+
+		#endregion
+
+		#region Static Properties
+		//==========================================================================================
+		// Static Properties
+		//==========================================================================================
+
+	#if (WITH_SCRIPTING)
+
+		/// <summary>
+		/// Gets or sets a value indicating whether scripting is currently active,
+		/// i.e. whether the terminals shall produce received messages for scripting.
+		/// </summary>
+		/// <remarks>
+		/// Implemented as static property for two reasons:
+		/// <list type="bullet">
+		/// <item><description>State always applies to all terminals.</description></item>
+		/// <item><description>State can easier be applied to newly created terminals.</description></item>
+		/// </list>
+		/// </remarks>
+		public static bool ScriptingIsActive
+		{
+			get { return (Domain.Terminal.ScriptingIsActive); }
+			set { Domain.Terminal.ScriptingIsActive = value;  }
+		}
+
+	#endif
 
 		#endregion
 
@@ -206,7 +238,7 @@ namespace YAT.Model
 		private Guid guid;
 		private int sequentialId;
 		private string sequentialName;
-		private string fileName;
+		private string userFileName;
 
 		// Initiating:
 		private bool autoIsReady; // = false;
@@ -246,7 +278,8 @@ namespace YAT.Model
 	#if (WITH_SCRIPTING)
 
 		// Scripting:
-		private string lastSentMessage; // = null;
+		private string lastSentMessageByScripting; // = null;
+		private object lastSentMessageByScriptingSyncObj = new object();
 		private bool isAutoSocket;      // = false;
 		private int receivedXOnOffsetForScripting;  // = 0;
 		private int receivedXOffOffsetForScripting; // = 0;
@@ -290,16 +323,7 @@ namespace YAT.Model
 		// Note that e.g. a 'SendingText' or 'SendingMessage' event doesn't make sense, as it would
 		// contain parseable text that may even include keyword to be processed.
 
-		/// <summary>
-		/// Occurs when a packet is being sent in the host application. The event args contain the
-		/// binary raw data that is being sent, including control characters, EOL,...
-		/// </summary>
-		/// <remarks>
-		/// Named 'Sending...' rather than '...Sent' since sending is just about to happen and can
-		/// be modified using the <see cref="Domain.ModifiablePacketEventArgs.Data"/> property or
-		/// even canceled using the <see cref="Domain.ModifiablePacketEventArgs.Cancel"/> property.
-		/// This is similar to the behavior of e.g. the 'OnValidating' event of WinForms controls.
-		/// </remarks>
+		/// <remarks>See <see cref="Domain.Terminal.SendingPacket"/>.</remarks>
 		public event EventHandler<Domain.ModifiablePacketEventArgs> SendingPacket;
 
 	#endif // WITH_SCRIPTING
@@ -313,10 +337,10 @@ namespace YAT.Model
 	#if (WITH_SCRIPTING)
 
 		/// <summary></summary>
-		public event EventHandler<Domain.RawChunkEventArgs> RawChunkSent;
+		public event EventHandler<EventArgs<Domain.RawChunk>> RawChunkSent;
 
 		/// <summary></summary>
-		public event EventHandler<Domain.RawChunkEventArgs> RawChunkReceived;
+		public event EventHandler<EventArgs<Domain.RawChunk>> RawChunkReceived;
 
 	#endif // WITH_SCRIPTING
 
@@ -358,8 +382,11 @@ namespace YAT.Model
 
 	#if (WITH_SCRIPTING)
 
-		/// <remarks>See <see cref="Domain.Terminal.ScriptPacketReceived"/>.</remarks>
-		public event EventHandler<Domain.PacketEventArgs> ScriptPacketReceived;
+		/// <remarks>See <see cref="Domain.Terminal.ReceivingPacketForScripting"/>.</remarks>
+		public event EventHandler<Domain.ModifiablePacketEventArgs> ReceivingPacketForScripting;
+
+		/// <remarks>See <see cref="Domain.Terminal.MessageReceivedForScripting"/>.</remarks>
+		public event EventHandler<Domain.ScriptMessageEventArgs> MessageReceivedForScripting;
 
 	#endif // WITH_SCRIPTING
 
@@ -454,7 +481,7 @@ namespace YAT.Model
 				else
 					this.guid = Guid.NewGuid();
 
-				// Link, override and attach to settings:
+				// Link and attach to settings:
 				this.settingsHandler = settingsHandler;
 				this.settingsRoot = this.settingsHandler.Settings;
 				this.settingsRoot.ClearChanged();
@@ -464,7 +491,7 @@ namespace YAT.Model
 				this.sequentialId = ++staticSequentialIdCounter;
 				this.sequentialName = TerminalText + this.sequentialId.ToString(CultureInfo.CurrentCulture);
 				if (!this.settingsRoot.AutoSaved && this.settingsHandler.SettingsFilePathIsValid)
-					this.fileName = Path.GetFileName(this.settingsHandler.SettingsFilePath);
+					this.userFileName = Path.GetFileName(this.settingsHandler.SettingsFilePath);
 
 				// Create underlying terminal:
 				this.terminal = Domain.TerminalFactory.CreateTerminal(this.settingsRoot.Terminal);
@@ -506,13 +533,14 @@ namespace YAT.Model
 		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			this.eventHelper.DiscardAllEventsAndExceptions();
-
-			DebugMessage("Disposing...");
+			if (this.eventHelper != null) // Possible when called by finalizer (non-deterministic).
+				this.eventHelper.DiscardAllEventsAndExceptions();
 
 			// Dispose of managed resources:
 			if (disposing)
 			{
+				DebugMessage("Disposing...");
+
 				// In the 'normal' case, terminal and log have already been closed, otherwise...
 
 				// ...detach event handlers to ensure that no more events are received...
@@ -538,9 +566,11 @@ namespace YAT.Model
 					DetachSettingsEventHandlers();
 					DetachSettingsHandler();
 				}
+
+				DebugMessage("...successfully disposed.");
 			}
 
-			DebugMessage("...successfully disposed.");
+		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
 		}
 
 		#endregion
@@ -551,6 +581,17 @@ namespace YAT.Model
 		//==========================================================================================
 		// General
 		//==========================================================================================
+
+		/// <summary></summary>
+		public virtual TerminalLaunchArgs LaunchArgs
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				return (this.launchArgs);
+			}
+		}
 
 		/// <summary></summary>
 		public virtual Guid Guid
@@ -590,14 +631,19 @@ namespace YAT.Model
 		/// <summary>
 		/// The file name if the user has saved the terminal; otherwise <see cref="string.Empty"/>.
 		/// </summary>
-		public virtual string FileName
+		/// <remarks>
+		/// Cached from <see cref="SettingsFilePath"/> for...
+		/// ...limiting to user files (i.e. not 'AutoSaved').
+		/// ...having to compose the name only once.
+		/// </remarks>
+		public virtual string UserFileName
 		{
 			get
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				if (!string.IsNullOrEmpty(this.fileName))
-					return (this.fileName);
+				if (!string.IsNullOrEmpty(this.userFileName))
+					return (this.userFileName);
 
 				return ("");
 			}
@@ -623,7 +669,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// The indicated name, i.e. either the <see cref="UserName"/>, <see cref="FileName"/>
+		/// The indicated name, i.e. either the <see cref="UserName"/>, <see cref="UserFileName"/>
 		/// or <see cref="SequentialName"/>.
 		/// </summary>
 		public virtual string IndicatedName
@@ -635,22 +681,30 @@ namespace YAT.Model
 				if (!string.IsNullOrEmpty(UserName))
 					return (UserName);
 
-				if (!string.IsNullOrEmpty(FileName))
-					return (FileName);
+				if (!string.IsNullOrEmpty(UserFileName))
+					return (UserFileName);
 
 				return (SequentialName);
 			}
 		}
 
 		/// <summary></summary>
-		public virtual TerminalLaunchArgs LaunchArgs
+		public virtual string Caption
 		{
 			get
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				return (this.launchArgs);
+				return (CaptionHelper.ComposeTerminal(this.settingsHandler, this.settingsRoot, this.terminal, IndicatedName, IsStarted, IsOpen, IsConnected));
 			}
+		}
+
+		/// <summary></summary>
+		public virtual string ComposeCaption(string info)
+		{
+		////AssertUndisposed() shall not be called from this simple get-property-style-method.
+
+			return (CaptionHelper.ComposeTerminal(IndicatedName, info));
 		}
 
 		/// <summary></summary>
@@ -885,25 +939,6 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual string Caption
-		{
-			get
-			{
-			////AssertUndisposed() shall not be called from this simple get-property.
-
-				return (CaptionHelper.Compose(this.settingsHandler, this.settingsRoot, this.terminal, IndicatedName, IsStarted, IsOpen, IsConnected));
-			}
-		}
-
-		/// <summary></summary>
-		public virtual string ComposeInvariantCaption(string info)
-		{
-		////AssertUndisposed() shall not be called from this simple get-property-style-method.
-
-			return (CaptionHelper.ComposeInvariant(IndicatedName, info));
-		}
-
-		/// <summary></summary>
 		public virtual string IOStatusText
 		{
 			get
@@ -940,62 +975,82 @@ namespace YAT.Model
 		/// Gets the last sent message.
 		/// </summary>
 		/// <remarks>
-		/// Located here in the underlying terminal (and not in the overlying
-		/// <see cref="ScriptBridge"/>) to keep the line for each terminal.
+		/// Located here in the underlying terminal (rather than in overlying <see cref="ScriptBridge"/>)
+		/// to keep the message for each terminal.
 		/// </remarks>
-		public virtual void SetLastSentMessage(string value)
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		public virtual void SetLastSentMessageByScripting(string value)
 		{
 			AssertUndisposed();
 
-			this.lastSentMessage = value;
+			lock (this.lastSentMessageByScriptingSyncObj)
+				this.lastSentMessageByScripting = value;
 		}
 
 		/// <summary>
 		/// Gets the last sent message.
 		/// </summary>
 		/// <remarks>
-		/// Located here in the underlying terminal (and not in the overlying
-		/// <see cref="ScriptBridge"/>) to keep the line for each terminal.
+		/// Located here in the underlying terminal (rather than in overlying <see cref="ScriptBridge"/>)
+		/// to keep the message for each terminal.
 		/// </remarks>
-		public virtual void GetLastSentMessage(out string value)
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		public virtual void GetLastSentMessageByScripting(out string value)
 		{
 			AssertUndisposed();
 
-			value = this.lastSentMessage;
+			lock (this.lastSentMessageByScriptingSyncObj)
+				value = this.lastSentMessageByScripting;
 		}
 
 		/// <summary>
 		/// Clears the last sent message.
 		/// </summary>
 		/// <remarks>
-		/// Located here in the underlying terminal (and not in the overlying
-		/// <see cref="ScriptBridge"/>) to keep the line for each terminal.
+		/// Located here in the underlying terminal (rather than in overlying <see cref="ScriptBridge"/>)
+		/// to keep the message for each terminal.
 		/// </remarks>
-		public virtual void ClearLastSentMessage(out string cleared)
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		public virtual void ClearLastSentMessageByScripting(out string cleared)
 		{
 			AssertUndisposed();
 
-			cleared = this.lastSentMessage;
+			lock (this.lastSentMessageByScriptingSyncObj)
+			{
+				cleared = this.lastSentMessageByScripting;
 
-			this.lastSentMessage = null;
+				this.lastSentMessageByScripting = null;
+			}
 		}
 
 		/// <summary>
 		/// Gets a value indicating whether the terminal has received a line that is available for scripting.
 		/// </summary>
-		public virtual bool HasAvailableReceivedMessageForScripting
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		public virtual bool HasReceivedMessageAvailableForScripting
 		{
 			get
 			{
 				AssertUndisposed();
 
-				return (this.terminal.HasAvailableReceivedMessageForScripting);
+				return (this.terminal.HasReceivedMessageAvailableForScripting);
 			}
 		}
 
 		/// <summary>
 		/// Gets a value indicating the number of received lines that are available for scripting.
 		/// </summary>
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
 		public int AvailableReceivedMessageCountForScripting
 		{
 			get
@@ -1009,7 +1064,10 @@ namespace YAT.Model
 		/// <summary>
 		/// Returns the line that has last been enqueued into the receive queue that is available for scripting.
 		/// </summary>
-		public virtual void GetLastEnqueuedReceivedMessageForScripting(out string value)
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		public virtual void GetLastEnqueuedReceivedMessageForScripting(out Domain.ScriptMessage value)
 		{
 			AssertUndisposed();
 
@@ -1019,7 +1077,10 @@ namespace YAT.Model
 		/// <summary>
 		/// Clears the last enqueued line that is available for scripting.
 		/// </summary>
-		public virtual void ClearLastEnqueuedReceivedMessageForScripting(out string cleared)
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		public virtual void ClearLastEnqueuedReceivedMessageForScripting(out Domain.ScriptMessage cleared)
 		{
 			AssertUndisposed();
 
@@ -1029,10 +1090,13 @@ namespace YAT.Model
 		/// <summary>
 		/// Gets the next received line that is available for scripting and removes it from the queue.
 		/// </summary>
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
 		/// <exception cref="InvalidOperationException">
 		/// The underlying <see cref="Queue{T}"/> is empty.
 		/// </exception>
-		public virtual void DequeueNextAvailableReceivedMessageForScripting(out string value)
+		public virtual void DequeueNextAvailableReceivedMessageForScripting(out Domain.ScriptMessage value)
 		{
 			AssertUndisposed();
 
@@ -1042,7 +1106,10 @@ namespace YAT.Model
 		/// <summary>
 		/// Returns the received line that has last been dequeued from the receive queue for scripting.
 		/// </summary>
-		public virtual void GetLastDequeuedReceivedMessageForScripting(out string value)
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		public virtual void GetLastDequeuedReceivedMessageForScripting(out Domain.ScriptMessage value)
 		{
 			AssertUndisposed();
 
@@ -1052,7 +1119,10 @@ namespace YAT.Model
 		/// <summary>
 		/// Clears the last dequeued line that is available for scripting.
 		/// </summary>
-		public virtual void ClearLastDequeuedReceivedMessageForScripting(out string cleared)
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		public virtual void ClearLastDequeuedReceivedMessageForScripting(out Domain.ScriptMessage cleared)
 		{
 			AssertUndisposed();
 
@@ -1060,12 +1130,16 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		/// <remarks>
 		/// \remind (2018-03-27 / MKY)
 		/// 'LastAvailable' only works properly for a terminating number of received messages, but
 		/// not for consecutive receiving. This method shall be eliminated as soon as the obsolete
 		/// GetLastReceived(), CheckLastReceived() and WaitFor() have been removed.
 		/// </remarks>
-		public virtual void GetLastAvailableReceivedMessageForScripting(out string value)
+		[Obsolete("See remarks.")]
+		public virtual void GetLastAvailableReceivedMessageForScripting(out Domain.ScriptMessage value)
 		{
 			AssertUndisposed();
 
@@ -1075,11 +1149,14 @@ namespace YAT.Model
 		/// <summary>
 		/// Cleares all available lines in the receive queue for scripting.
 		/// </summary>
-		public void ClearAvailableReceivedMessagesForScripting(out string[] clearedLines)
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		public void ClearAvailableReceivedMessagesForScripting(out Domain.ScriptMessage[] cleared)
 		{
 			AssertUndisposed();
 
-			this.terminal.ClearAvailableReceivedMessagesForScripting(out clearedLines);
+			this.terminal.ClearAvailableReceivedMessagesForScripting(out cleared);
 		}
 
 		/// <summary>
@@ -1123,6 +1200,14 @@ namespace YAT.Model
 		public virtual bool Launch()
 		{
 			AssertUndisposed();
+
+			DebugMessage("Launching...");
+
+			StartRates();
+		////StartChronos() is not needed, chronos will be started/stopped in the terminal_IOChanged event handler.
+
+			StartAutoActionThread();
+			StartAutoResponseThread();
 
 			// Switch log on if selected:
 			if (SettingsRoot.LogIsOn)
@@ -1468,7 +1553,7 @@ namespace YAT.Model
 		/// Background:
 		///  1. The workspace will create this terminal.
 		///  2. The constructor of this terminal will call CreateAuto[Action|Response]Helper() but
-		///     linked settings are not be available yet.
+		///     linked settings are not available yet.
 		///      => TryGetActiveAutoActionTrigger() will fail in case of linked commands.
 		///  3. The workspace will also called TryLoadLinkedSettings().
 		///      => TryGetActiveAutoActionTrigger() will succeed.
@@ -1602,21 +1687,27 @@ namespace YAT.Model
 		/// <summary>
 		/// Saves terminal to file, prompts for file if it doesn't exist yet.
 		/// </summary>
+		/// <remarks>
+		/// Not named "Try" same as all other "main" methods.
+		/// </remarks>
 		public virtual bool Save()
 		{
 		////AssertUndisposed() is called by 'Save(...)' below.
 
 			bool isCanceled;                               // Save even if not changed since explicitly requesting saving.
-			return (SaveConsiderately(false, true, true, true, false, out isCanceled));
+			return (SaveWithOptions(false, true, true, true, false, out isCanceled));
 		}
 
 		/// <summary>
 		/// Silently tries to save terminal to file, i.e. without any user interaction.
 		/// </summary>
-		public virtual bool TrySaveConsideratelyWithoutUserInteraction(bool isWorkspaceClose, bool autoSaveIsAllowed)
+		/// <remarks>
+		/// Not named "Try" same as all other "main" methods.
+		/// </remarks>
+		public virtual bool SaveWithOptionsWithoutUserInteraction(bool isWorkspaceClose, bool autoSaveIsAllowed)
 		{
 			bool isCanceled;
-			return (SaveConsiderately(isWorkspaceClose, autoSaveIsAllowed, false, false, false, out isCanceled));
+			return (SaveWithOptions(isWorkspaceClose, autoSaveIsAllowed, false, false, false, out isCanceled));
 		}
 
 		/// <summary>
@@ -1633,7 +1724,7 @@ namespace YAT.Model
 		/// <param name="canBeCanceled">Indicates whether save can be canceled.</param>
 		/// <param name="isCanceled">Indicates whether save has been canceled.</param>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool SaveConsiderately(bool isWorkspaceClose, bool autoSaveIsAllowed, bool userInteractionIsAllowed, bool saveEvenIfNotChanged, bool canBeCanceled, out bool isCanceled)
+		public virtual bool SaveWithOptions(bool isWorkspaceClose, bool autoSaveIsAllowed, bool userInteractionIsAllowed, bool saveEvenIfNotChanged, bool canBeCanceled, out bool isCanceled)
 		{
 			AssertUndisposed();
 
@@ -1680,7 +1771,7 @@ namespace YAT.Model
 			// -------------------------------------------------------------------------------------
 
 			// Attention:
-			// Similar code exists in TrySaveLinkedCommandPageConsiderately() further below.
+			// Similar code exists in TrySaveLinkedCommandPageWithOptions() further below.
 			// Changes here may have to be applied there too.
 
 			if (!SettingsFileIsWritable || SettingsFileNoLongerExists)
@@ -1714,7 +1805,7 @@ namespace YAT.Model
 			// Save is feasible:
 			// -------------------------------------------------------------------------------------
 
-			return (SaveToFile(autoSaveIsAllowed, null));
+			return (SaveToFile(autoSaveIsAllowed, userInteractionIsAllowed, null));
 		}
 
 		/// <summary></summary>
@@ -1967,9 +2058,36 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Saves settings to given file.
+		/// Saves terminal to given file, prompts for file as needed.
 		/// </summary>
+		/// <remarks>
+		/// Not named "Try" same as all other "main" methods.
+		/// </remarks>
 		public virtual bool SaveAs(string filePath)
+		{
+		////AssertUndisposed() is called by 'SaveAsWithOptions(...)' below.
+
+			return (SaveAsWithOptions(filePath, true));
+		}
+
+		/// <summary>
+		/// Silently tries to save terminal to given file, i.e. without any user interaction.
+		/// </summary>
+		/// <remarks>
+		/// Not named "Try" same as all other "main" methods.
+		/// </remarks>
+		public virtual bool SaveAsWithoutUserInteraction(string filePath)
+		{
+		////AssertUndisposed() is called by 'SaveAsWithOptions(...)' below.
+
+			return (SaveAsWithOptions(filePath, false));
+		}
+
+		/// <summary>
+		/// This method implements the logic that is needed when saving, opposed to the method
+		/// <see cref="SaveToFile"/> which just performs the actual save, i.e. file handling.
+		/// </summary>
+		public virtual bool SaveAsWithOptions(string filePath, bool userInteractionIsAllowed)
 		{
 			AssertUndisposed();
 
@@ -1992,19 +2110,20 @@ namespace YAT.Model
 			}
 
 			// ...and save the terminal itself:
-			return (SaveToFile(false, autoSaveFilePathToDelete));
+			return (SaveToFile(false, userInteractionIsAllowed, autoSaveFilePathToDelete));
 		}
 
 		/// <param name="isAutoSave">
 		/// Auto save means that the settings have been saved at an automatically chosen location,
 		/// without telling the user anything about it.
 		/// </param>
+		/// <param name="userInteractionIsAllowed">Indicates whether user interaction is allowed.</param>
 		/// <param name="autoSaveFilePathToDelete">
 		/// The path to the former auto saved file, it will be deleted if the file can successfully
 		/// be stored in the new location.
 		/// </param>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		protected virtual bool SaveToFile(bool isAutoSave, string autoSaveFilePathToDelete)
+		protected virtual bool SaveToFile(bool isAutoSave, bool userInteractionIsAllowed, string autoSaveFilePathToDelete)
 		{
 			OnFixedStatusTextRequest("Saving terminal...");
 
@@ -2017,7 +2136,7 @@ namespace YAT.Model
 				success = true;
 
 				if (!isAutoSave)
-					this.fileName = Path.GetFileName(this.settingsHandler.SettingsFilePath);
+					this.userFileName = Path.GetFileName(this.settingsHandler.SettingsFilePath);
 
 				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, isAutoSave));
 				OnTimedStatusTextRequest("Terminal saved.");
@@ -2037,15 +2156,18 @@ namespace YAT.Model
 			{
 				DebugEx.WriteException(GetType(), ex, "Error saving terminal!");
 
-				OnFixedStatusTextRequest("Error saving terminal!");
-				OnMessageInputRequest
-				(
-					ErrorHelper.ComposeMessage("Unable to save terminal file", this.settingsHandler.SettingsFilePath, ex),
-					"File Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
-				OnTimedStatusTextRequest("Terminal not saved!");
+				if (userInteractionIsAllowed)
+				{
+					OnFixedStatusTextRequest("Error saving terminal!");
+					OnMessageInputRequest
+					(
+						ErrorHelper.ComposeMessage("Unable to save terminal file", this.settingsHandler.SettingsFilePath, ex),
+						"File Error",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+					);
+					OnTimedStatusTextRequest("Terminal not saved!");
+				}
 
 				success = false;
 			}
@@ -2077,7 +2199,7 @@ namespace YAT.Model
 
 				// Load linked page:
 				bool linkFilePathHasChanged;
-				if (TryLoadLinkedPredefinedCommandPageConsiderately(linkedPage, false, userInteractionIsAllowed, canBeCanceled, out linkedSettingsHandler, out linkFilePathHasChanged, out isCanceled)) {
+				if (TryLoadLinkedPredefinedCommandPageWithOptions(linkedPage, false, userInteractionIsAllowed, canBeCanceled, out linkedSettingsHandler, out linkFilePathHasChanged, out isCanceled)) {
 					if (linkFilePathHasChanged)
 						this.settingsHandler.Settings.PredefinedCommand.SetChanged();
 
@@ -2097,7 +2219,7 @@ namespace YAT.Model
 				var explicitHaveChanged = !linkedSettingsHandler.Settings.Page.EqualsEffectivelyInUse(linkedPage);
 				if (explicitHaveChanged)
 				{
-					if (TrySaveLinkedCommandPageConsiderately(linkedPage, linkedSettingsHandler, userInteractionIsAllowed, out linkFilePathHasChanged, out isCanceled)) {
+					if (TrySaveLinkedCommandPageWithOptions(linkedPage, linkedSettingsHandler, userInteractionIsAllowed, out linkFilePathHasChanged, out isCanceled)) {
 						if (linkFilePathHasChanged)
 							this.settingsHandler.Settings.PredefinedCommand.SetChanged();
 
@@ -2140,17 +2262,17 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		protected virtual bool TrySaveLinkedCommandPageConsiderately(PredefinedCommandPage linkedPage,
-		                                                             DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler,
-		                                                             bool userInteractionIsAllowed,
-		                                                             out bool hasChanged, out bool isCanceled)
+		protected virtual bool TrySaveLinkedCommandPageWithOptions(PredefinedCommandPage linkedPage,
+		                                                           DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler,
+		                                                           bool userInteractionIsAllowed,
+		                                                           out bool hasChanged, out bool isCanceled)
 		{
 			// Attention:
-			// Similar code exists in SaveConsiderately() further above.
+			// Similar code exists in TrySaveWithOptions() further above.
 			// Changes here may have to be applied there too.
 
 			// Attention:
-			// Similar code exists in TryLoadLinkedPredefinedCommandPageConsiderately() below.
+			// Similar code exists in TryLoadLinkedPredefinedCommandPageWithOptions() below.
 			// Changes here may have to be applied there too.
 
 			if (!FileEx.IsWritable(linkedSettingsHandler.SettingsFilePath) || !File.Exists(linkedSettingsHandler.SettingsFilePath))
@@ -2223,17 +2345,17 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		protected virtual bool TryLoadLinkedPredefinedCommandPageConsiderately(PredefinedCommandPage linkedPage, bool doUpdateLinkedPage,
-		                                                                       bool userInteractionIsAllowed, bool canBeCanceled,
-		                                                                       out DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler,
-		                                                                       out bool linkFilePathHasChanged, out bool isCanceled)
+		protected virtual bool TryLoadLinkedPredefinedCommandPageWithOptions(PredefinedCommandPage linkedPage, bool doUpdateLinkedPage,
+		                                                                     bool userInteractionIsAllowed, bool canBeCanceled,
+		                                                                     out DocumentSettingsHandler<CommandPageSettingsRoot> linkedSettingsHandler,
+		                                                                     out bool linkFilePathHasChanged, out bool isCanceled)
 		{
 			// Attention:
-			// Similar code exists in SaveConsiderately() further above.
+			// Similar code exists in TrySaveWithOptions() further above.
 			// Changes here may have to be applied there too.
 
 			// Attention:
-			// Similar code exists in TrySaveLinkedPredefinedCommandPageConsiderately() further above.
+			// Similar code exists in TrySaveLinkedPredefinedCommandPageWithOptions() further above.
 			// Changes here may have to be applied there too.
 
 			var isFirst = true;
@@ -2341,7 +2463,7 @@ namespace YAT.Model
 
 				// Load linked page:
 				bool linkFilePathHasChanged;
-				if (TryLoadLinkedPredefinedCommandPageConsiderately(linkedPage, true, userInteractionIsAllowed, canBeCanceled, out linkedSettingsHandler, out linkFilePathHasChanged, out isCanceled)) {
+				if (TryLoadLinkedPredefinedCommandPageWithOptions(linkedPage, true, userInteractionIsAllowed, canBeCanceled, out linkedSettingsHandler, out linkFilePathHasChanged, out isCanceled)) {
 					this.settingsHandler.Settings.PredefinedCommand.SetChanged(); // Commands have changed in any case.
 
 					if (linkedPage.IsLinkedToFilePath) // = is still linked, i.e. did not get unlinked.
@@ -2379,18 +2501,32 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary>
-		/// Closes the terminal and prompts if needed if settings have changed.
+		/// Closes the terminal, prompts if needed if settings have changed.
 		/// </summary>
 		/// <remarks>
-		/// In case of a workspace close, <see cref="CloseConsiderately"/> below must be called
-		/// with the first argument set to <c>true</c>.
+		/// In case of a workspace close, <see cref="CloseWithOptions"/> further below must be
+		/// called with the first argument set to <c>true</c>.
 		///
 		/// In case of intended close of one or all terminals, the user intentionally wants to close
 		/// the terminal(s), thus, this method will not try to auto save.
 		/// </remarks>
+		/// <remarks>
+		/// Not named "Try" same as all other "main" methods.
+		/// </remarks>
 		public virtual bool Close()
 		{
-			return (CloseConsiderately(false, true, false, true)); // See remarks above.
+			return (CloseWithOptions(false, true, false, true)); // See remarks above.
+		}
+
+		/// <summary>
+		/// Silently tries to save terminal to file, i.e. without any user interaction.
+		/// </summary>
+		/// <remarks>
+		/// Not named "Try" same as all other "main" methods.
+		/// </remarks>
+		public virtual bool CloseWithOptionsWithoutSave(bool isWorkspaceClose)
+		{
+			return (CloseWithOptions(isWorkspaceClose, false, false, true));
 		}
 
 		/// <summary>
@@ -2424,7 +2560,10 @@ namespace YAT.Model
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		public virtual bool CloseConsiderately(bool isWorkspaceClose, bool doSave, bool autoSaveIsAllowed, bool autoDeleteIsRequested)
+		/// <remarks>
+		/// Not named "Try" same as all other "main" methods.
+		/// </remarks>
+		public virtual bool CloseWithOptions(bool isWorkspaceClose, bool doSave, bool autoSaveIsAllowed, bool autoDeleteIsRequested)
 		{
 			AssertUndisposed();
 
@@ -2506,7 +2645,7 @@ namespace YAT.Model
 			// -------------------------------------------------------------------------------------
 
 			if (!success && doSave)
-				success = TrySaveConsideratelyWithoutUserInteraction(isWorkspaceClose, autoSaveIsAllowed); // Try auto save.
+				success = SaveWithOptionsWithoutUserInteraction(isWorkspaceClose, autoSaveIsAllowed); // Try auto save.
 
 			// -------------------------------------------------------------------------------------
 			// If not successfully saved so far, evaluate next step according to rules above:
@@ -2582,6 +2721,9 @@ namespace YAT.Model
 			{
 				StopAutoActionThread();
 				StopAutoResponseThread();
+
+				StopRates();
+			////StopChronos() is not needed, chronos will be started/stopped in the terminal_IOChanged event handler.
 			}
 
 			if (success && this.terminal.IsStarted)
@@ -2688,7 +2830,8 @@ namespace YAT.Model
 				this.terminal.DisplayLinesBidirAdded          += terminal_DisplayLinesBidirAdded;
 				this.terminal.DisplayLinesRxAdded             += terminal_DisplayLinesRxAdded;
 			#if (WITH_SCRIPTING)
-				this.terminal.ScriptPacketReceived    += terminal_ScriptPacketReceived;
+				this.terminal.ReceivingPacketForScripting += terminal_ReceivingPacketForScripting;
+				this.terminal.MessageReceivedForScripting += terminal_MessageReceivedForScripting;
 			#endif
 				this.terminal.RepositoryTxCleared     += terminal_RepositoryTxCleared;
 				this.terminal.RepositoryBidirCleared  += terminal_RepositoryBidirCleared;
@@ -2729,7 +2872,8 @@ namespace YAT.Model
 				this.terminal.DisplayLinesBidirAdded          -= terminal_DisplayLinesBidirAdded;
 				this.terminal.DisplayLinesRxAdded             -= terminal_DisplayLinesRxAdded;
 			#if (WITH_SCRIPTING)
-				this.terminal.ScriptPacketReceived    -= terminal_ScriptPacketReceived;
+				this.terminal.ReceivingPacketForScripting -= terminal_ReceivingPacketForScripting;
+				this.terminal.MessageReceivedForScripting -= terminal_MessageReceivedForScripting;
 			#endif
 				this.terminal.RepositoryTxCleared     -= terminal_RepositoryTxCleared;
 				this.terminal.RepositoryBidirCleared  -= terminal_RepositoryBidirCleared;
@@ -2869,12 +3013,12 @@ namespace YAT.Model
 			bool hasBeenConnected = this.terminal_IOChanged_hasBeenConnected;
 			bool isConnectedNow = ((this.terminal != null) ? (this.terminal.IsConnected) : (false));
 
-			if (IsUndisposed) // Attention, the 'IOChanged' event above could trigger close = disposal of terminal!
+			if (IsUndisposed) // Attention, the 'OnIOChanged' event raise above could trigger close = disposal of terminal!
 			{
 				if      ( isConnectedNow && !hasBeenConnected)
 				{
 					this.activeConnectChrono.Restart(e.Value); // Restart, i.e. reset and start from zero.
-					this.totalConnectChrono.Start(   e.Value); // Start again, i.e. continue at last time.
+					this.totalConnectChrono .Start(  e.Value); // Start again, i.e. continue at last time.
 
 					this.terminal.TimeSpanBase = e.Value;    // The initial time stamp is used for
 					                                         // time spans. Consequently, the spans
@@ -2884,7 +3028,7 @@ namespace YAT.Model
 				else if (!isConnectedNow && hasBeenConnected)
 				{
 					this.activeConnectChrono.Stop();
-					this.totalConnectChrono.Stop();
+					this.totalConnectChrono .Stop();
 				}
 			}
 
@@ -2937,10 +3081,12 @@ namespace YAT.Model
 		}
 
 	#if (WITH_SCRIPTING)
+
 		private void terminal_SendingPacket(object sender, Domain.ModifiablePacketEventArgs e)
 		{
 			OnSendingPacket(e);
 		}
+
 	#endif
 
 		private void terminal_IsSendingChanged(object sender, EventArgs<bool> e)
@@ -3502,13 +3648,14 @@ namespace YAT.Model
 
 	#if (WITH_SCRIPTING)
 
-		/// <remarks>
-		/// This event is raised when a packet has been receined by the <see cref="Domain.Terminal"/>.
-		/// This plug-in event is not raised during reloading.
-		/// </remarks>
-		private void terminal_ScriptPacketReceived(object sender, Domain.PacketEventArgs e)
+		private void terminal_ReceivingPacketForScripting(object sender, Domain.ModifiablePacketEventArgs e)
 		{
-			OnScriptPacketReceived(e);
+			OnReceivingPacketForScripting(e);
+		}
+
+		private void terminal_MessageReceivedForScripting(object sender, Domain.ScriptMessageEventArgs e)
+		{
+			OnMessageReceivedForScripting(e);
 		}
 
 	#endif // WITH_SCRIPTING
@@ -4160,19 +4307,19 @@ namespace YAT.Model
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		public virtual bool Start()
 		{
-			string errorMessage;
-			return (Start(out errorMessage));
+			string messageOnFailure;
+			return (Start(out messageOnFailure));
 		}
 
 		/// <summary>
 		/// Starts the terminal.
 		/// </summary>
-		/// <param name="errorMessage">Message used for scripting.</param>
+		/// <param name="messageOnFailure">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool Start(out string errorMessage)
+		public virtual bool Start(out string messageOnFailure)
 		{
-			return (Start(true, out errorMessage));
+			return (Start(true, out messageOnFailure));
 		}
 
 		/// <summary>
@@ -4182,23 +4329,23 @@ namespace YAT.Model
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		private bool Start(bool saveStatus)
 		{
-			string errorMessage;
-			return (Start(saveStatus, out errorMessage));
+			string messageOnFailure;
+			return (Start(saveStatus, out messageOnFailure));
 		}
 
 		/// <summary>
 		/// Starts the terminal.
 		/// </summary>
 		/// <param name="saveStatus">Flag indicating whether status of terminal shall be saved.</param>
-		/// <param name="errorMessage">Message used for scripting.</param>
+		/// <param name="messageOnFailure">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool Start(bool saveStatus, out string errorMessage)
+		private bool Start(bool saveStatus, out string messageOnFailure)
 		{
 			bool success = false;
 
-			OnFixedStatusTextRequest("Starting terminal...");
+			OnFixedStatusTextRequest("Starting...");
 			try
 			{
 				if (this.terminal.Start())
@@ -4206,14 +4353,14 @@ namespace YAT.Model
 					if (saveStatus)
 						SettingsRoot.TerminalIsStarted = this.terminal.IsStarted;
 
-					OnTimedStatusTextRequest("Terminal successfully started.");
-					errorMessage = null;
+					OnTimedStatusTextRequest("Successfully started.");
+					messageOnFailure = null;
 					success = true;
 				}
 				else
 				{
-					errorMessage = string.Format(CultureInfo.CurrentCulture, "Terminal on '{0}' could not be started!", this.terminal.ToShortIOString());
-					OnFixedStatusTextRequest(errorMessage);
+					messageOnFailure = string.Format(CultureInfo.CurrentCulture, "Terminal on '{0}' could not be started!", this.terminal.ToShortIOString());
+					OnFixedStatusTextRequest(messageOnFailure);
 
 					if (ApplicationSettings.LocalUserSettings.General.NotifyNonAvailableIO)
 					{
@@ -4222,7 +4369,7 @@ namespace YAT.Model
 
 						OnMessageInputRequest
 						(                                            // Needed to disabmbiguate.
-							ErrorHelper.ComposeMessage(errorMessage, string.Empty, yatLead, yatText),
+							ErrorHelper.ComposeMessage(messageOnFailure, string.Empty, yatLead, yatText),
 							"Terminal Warning",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Warning
@@ -4232,18 +4379,18 @@ namespace YAT.Model
 			}
 			catch (Exception ex)
 			{
-				errorMessage = "Error on starting terminal!";
-				OnFixedStatusTextRequest(errorMessage);
+				messageOnFailure = "Error on starting terminal!";
+				OnFixedStatusTextRequest(messageOnFailure);
 
 				if (ApplicationSettings.LocalUserSettings.General.NotifyNonAvailableIO)
 				{
 					string yatLead, yatText;
 					MakeExceptionHint(out yatLead, out yatText);
 
-					errorMessage = ErrorHelper.ComposeMessage(errorMessage, ex, yatLead, yatText);
+					messageOnFailure = ErrorHelper.ComposeMessage(messageOnFailure, ex, yatLead, yatText);
 					OnMessageInputRequest
 					(
-						errorMessage,
+						messageOnFailure,
 						"Terminal Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -4361,20 +4508,20 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "'Stop' is a common term to start/stop something.")]
 		public virtual bool Stop()
 		{
-			string errorMessage;
-			return (Stop(out errorMessage));
+			string messageOnFailure;
+			return (Stop(out messageOnFailure));
 		}
 
 		/// <summary>
 		/// Stops the terminal.
 		/// </summary>
-		/// <param name="errorMessage">Message used for scripting.</param>
+		/// <param name="messageOnFailure">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "'Stop' is a common term to start/stop something.")]
-		public virtual bool Stop(out string errorMessage)
+		public virtual bool Stop(out string messageOnFailure)
 		{
-			return (Stop(true, out errorMessage));
+			return (Stop(true, out messageOnFailure));
 		}
 
 		/// <summary>
@@ -4384,19 +4531,19 @@ namespace YAT.Model
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		private bool Stop(bool saveStatus)
 		{
-			string errorMessage;
-			return (Stop(saveStatus, out errorMessage));
+			string messageOnFailure;
+			return (Stop(saveStatus, out messageOnFailure));
 		}
 
 		/// <summary>
 		/// Stops the terminal.
 		/// </summary>
 		/// <param name="saveStatus">Flag indicating whether status of terminal shall be saved.</param>
-		/// <param name="errorMessage">Message used for scripting.</param>
+		/// <param name="messageOnFailure">Message used for scripting.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool Stop(bool saveStatus, out string errorMessage)
+		private bool Stop(bool saveStatus, out string messageOnFailure)
 		{
 			bool success = false;
 
@@ -4409,17 +4556,17 @@ namespace YAT.Model
 					SettingsRoot.TerminalIsStarted = this.terminal.IsStarted;
 
 				OnTimedStatusTextRequest("Terminal stopped.");
-				errorMessage = null;
+				messageOnFailure = null;
 				success = true;
 			}
 			catch (Exception ex)
 			{
-				errorMessage = "Error on stopping terminal!";
-				OnTimedStatusTextRequest(errorMessage);
-				errorMessage = "Error on stopping terminal:" + Environment.NewLine + Environment.NewLine + ex.Message;
+				messageOnFailure = "Error on stopping terminal!";
+				OnTimedStatusTextRequest(messageOnFailure);
+				messageOnFailure = "Error on stopping terminal:" + Environment.NewLine + Environment.NewLine + ex.Message;
 				OnMessageInputRequest
 				(
-					errorMessage,
+					messageOnFailure,
 					"Terminal Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -4557,6 +4704,18 @@ namespace YAT.Model
 		/// <summary>
 		/// Formats the given data into a string, same as done by the monitor view.
 		/// </summary>
+		/// <exception cref="InvalidOperationException">
+		/// <see cref="Domain.Settings.DisplaySettings.TxRadix"/> and <see cref="Domain.Settings.DisplaySettings.RxRadix"/> have different values.
+		/// </exception>
+		public virtual string Format(byte[] data)
+		{
+			AssertUndisposed();
+			return (this.terminal.Format(data));
+		}
+
+		/// <summary>
+		/// Formats the given data into a string, same as done by the monitor view.
+		/// </summary>
 		public virtual string Format(byte[] data, Domain.IODirection direction)
 		{
 			AssertUndisposed();
@@ -4574,6 +4733,42 @@ namespace YAT.Model
 
 		#endregion
 
+		#region Domain > Change
+		//------------------------------------------------------------------------------------------
+		// Domain > Change
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Removes the framing from the given data.
+		/// </summary>
+		/// <remarks>
+		/// For text terminals, framing is typically defined by EOL.
+		/// For binary terminals, framing is optionally defined by sequence before/after.
+		/// </remarks>
+		/// <exception cref="InvalidOperationException">
+		/// The Tx and Rx sequence(s) have different values.
+		/// </exception>
+		public virtual void RemoveFraming(byte[] data)
+		{
+			AssertUndisposed();
+			this.terminal.RemoveFraming(data);
+		}
+
+		/// <summary>
+		/// Removes the framing from the given data.
+		/// </summary>
+		/// <remarks>
+		/// For text terminals, framing is typically defined by EOL.
+		/// For binary terminals, framing is optionally defined by sequence before/after.
+		/// </remarks>
+		public virtual void RemoveFraming(byte[] data, Domain.IODirection direction)
+		{
+			AssertUndisposed();
+			this.terminal.RemoveFraming(data, direction);
+		}
+
+		#endregion
+
 		#region Domain > Time Status
 		//------------------------------------------------------------------------------------------
 		// Domain > Time Status
@@ -4584,10 +4779,12 @@ namespace YAT.Model
 			this.activeConnectChrono = new Chronometer();
 			this.activeConnectChrono.Interval = 1000;
 		////this.activeConnectChrono.TimeSpanChanged shall not be used, events are invoked by 'totalConnectChrono' below.
+			this.activeConnectChrono.DiagnosticsName = string.Format(CultureInfo.CurrentCulture, "Terminal #{0:D2}::ActiveConnect", SequentialId);
 
 			this.totalConnectChrono = new Chronometer();
 			this.totalConnectChrono.Interval = 1000;
 			this.totalConnectChrono.TimeSpanChanged += totalConnectChrono_TimeSpanChanged;
+			this.totalConnectChrono.DiagnosticsName = string.Format(CultureInfo.CurrentCulture, "Terminal #{0:D2}::TotalConnect", SequentialId);
 		}
 
 		private void DisposeChronos()
@@ -4894,12 +5091,12 @@ namespace YAT.Model
 
 		////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
 			{
-				this.txByteRate    = new RateProvider(RateInterval, RateWindow, UpdateInterval);
-				this.rxByteRate    = new RateProvider(RateInterval, RateWindow, UpdateInterval);
+				this.txByteRate    = new RateProvider(RateInterval, RateWindow, UpdateInterval, string.Format(CultureInfo.CurrentCulture, "Terminal #{0:D2}.TxByte", SequentialId));
+				this.rxByteRate    = new RateProvider(RateInterval, RateWindow, UpdateInterval, string.Format(CultureInfo.CurrentCulture, "Terminal #{0:D2}.RxByte", SequentialId));
 
-				this.txLineRate    = new RateProvider(RateInterval, RateWindow, UpdateInterval);
+				this.txLineRate    = new RateProvider(RateInterval, RateWindow, UpdateInterval, string.Format(CultureInfo.CurrentCulture, "Terminal #{0:D2}.TxLine", SequentialId));
 			////this.bidirLineRate = new RateProvider(RateInterval, RateWindow, UpdateInterval) would technically be possible, but doesn't make much sense.
-				this.rxLineRate    = new RateProvider(RateInterval, RateWindow, UpdateInterval);
+				this.rxLineRate    = new RateProvider(RateInterval, RateWindow, UpdateInterval, string.Format(CultureInfo.CurrentCulture, "Terminal #{0:D2}.RxLine", SequentialId));
 
 				this.txByteRate   .Changed += rate_Changed;
 				this.rxByteRate   .Changed += rate_Changed;
@@ -4907,6 +5104,32 @@ namespace YAT.Model
 				this.txLineRate   .Changed += rate_Changed;
 			////this.bidirLineRate.Changed += rate_Changed would technically be possible, but doesn't make much sense.
 				this.rxLineRate   .Changed += rate_Changed;
+			}
+		}
+
+		private void StartRates()
+		{
+		////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
+			{
+				this.txByteRate   .Start();
+				this.rxByteRate   .Start();
+
+				this.txLineRate   .Start();
+			////this.bidirLineRate.Start() would technically be possible, but doesn't make much sense.
+				this.rxLineRate   .Start();
+			}
+		}
+
+		private void StopRates()
+		{
+		////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
+			{
+				this.txByteRate   .Stop();
+				this.rxByteRate   .Stop();
+
+				this.txLineRate   .Stop();
+			////this.bidirLineRate.Stop() would technically be possible, but doesn't make much sense.
+				this.rxLineRate   .Stop();
 			}
 		}
 
@@ -5558,7 +5781,7 @@ namespace YAT.Model
 		/// Named 'Sending...' rather than '...Sent' since sending is just about to happen and can
 		/// be modified using the <see cref="Domain.ModifiablePacketEventArgs.Data"/> property or
 		/// even canceled using the <see cref="Domain.ModifiablePacketEventArgs.Cancel"/> property.
-		/// This is similar to the behavior of e.g. the 'OnValidating' event of WinForms controls.
+		/// This is similar to the behavior of e.g. the 'Validating' event of WinForms controls.
 		/// </remarks>
 		/// <remarks>
 		/// This event is raised when a packet is send by the <see cref="Domain.Terminal"/>.
@@ -5588,13 +5811,13 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnRawChunkSent(EventArgs<Domain.RawChunk> e)
 		{
-			this.eventHelper.RaiseSync<Domain.RawChunkEventArgs>(RawChunkSent, this, e);
+			this.eventHelper.RaiseSync<EventArgs<Domain.RawChunk>>(RawChunkSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRawChunkReceived(EventArgs<Domain.RawChunk> e)
 		{
-			this.eventHelper.RaiseSync<Domain.RawChunkEventArgs>(RawChunkReceived, this, e);
+			this.eventHelper.RaiseSync<EventArgs<Domain.RawChunk>>(RawChunkReceived, this, e);
 		}
 
 	#endif // WITH_SCRIPTING
@@ -5674,9 +5897,15 @@ namespace YAT.Model
 	#if (WITH_SCRIPTING)
 
 		/// <summary></summary>
-		protected virtual void OnScriptPacketReceived(Domain.PacketEventArgs e)
+		protected virtual void OnReceivingPacketForScripting(Domain.ModifiablePacketEventArgs e)
 		{
-			this.eventHelper.RaiseSync<Domain.PacketEventArgs>(ScriptPacketReceived, this, e);
+			this.eventHelper.RaiseSync<Domain.ModifiablePacketEventArgs>(ReceivingPacketForScripting, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnMessageReceivedForScripting(Domain.ScriptMessageEventArgs e)
+		{
+			this.eventHelper.RaiseSync<Domain.ScriptMessageEventArgs>(MessageReceivedForScripting, this, e);
 		}
 
 	#endif // WITH_SCRIPTING
@@ -5918,9 +6147,9 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <remarks>
-		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named 'Message' for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
@@ -5937,7 +6166,7 @@ namespace YAT.Model
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
 					GetType(),
-					"",
+					"#" + SequentialId.ToString("D2", CultureInfo.CurrentCulture),
 					"[" + Guid + "]",
 					message
 				)
@@ -5947,8 +6176,8 @@ namespace YAT.Model
 		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
-		[Conditional("DEBUG_THREAD_STATE")]
-		private void DebugThreadState(string message)
+		[Conditional("DEBUG_THREADS")]
+		private void DebugThreads(string message)
 		{
 			DebugMessage(message);
 		}

@@ -204,7 +204,6 @@ namespace YAT.View.Forms
 			// Link and attach to main model:
 			this.main = main;
 			AttachMainEventHandlers();
-			Text = this.main.IndicatedName;
 
 			// Link and attach to user settings:
 			AttachUserSettingsEventHandlers();
@@ -485,7 +484,7 @@ namespace YAT.View.Forms
 				if (this.invokeLayout)
 				{
 					this.invokeLayout = false;
-					ResetTerminalLayout(); // Closing all terminals shall reset the layout to 'Automatic'.
+					ResetWorkspaceLayout(); // Closing all terminals shall reset the layout to 'Automatic'.
 				}
 
 			////SetTimedStatus(Status.ChildClosed) is called by 'terminalMdiChild_FormClosed()'.
@@ -680,15 +679,15 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				bool workspaceIsReady = (this.workspace != null);
+				bool workspaceIsAvailable = WorkspaceIsAvailable;
 
 				bool workspaceFileIsReadOnly = false;
-				if (workspaceIsReady)
+				if (workspaceIsAvailable)
 					workspaceFileIsReadOnly = this.workspace.SettingsFileIsReadOnly;
 
-				toolStripMenuItem_MainMenu_File_Workspace_Close.Enabled  = workspaceIsReady;
-				toolStripMenuItem_MainMenu_File_Workspace_Save.Enabled   = workspaceIsReady && !workspaceFileIsReadOnly;
-				toolStripMenuItem_MainMenu_File_Workspace_SaveAs.Enabled = workspaceIsReady;
+				toolStripMenuItem_MainMenu_File_Workspace_Close.Enabled  = workspaceIsAvailable;
+				toolStripMenuItem_MainMenu_File_Workspace_Save.Enabled   = workspaceIsAvailable && !workspaceFileIsReadOnly;
+				toolStripMenuItem_MainMenu_File_Workspace_SaveAs.Enabled = workspaceIsAvailable;
 			}
 			finally
 			{
@@ -974,32 +973,32 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_MainMenu_Window_Automatic_Click(object sender, EventArgs e)
 		{
-			SetTerminalLayout(WorkspaceLayout.Automatic);
+			SetWorkspaceLayout(WorkspaceLayout.Automatic);
 		}
 
 		private void toolStripMenuItem_MainMenu_Window_Cascade_Click(object sender, EventArgs e)
 		{
-			SetTerminalLayout(WorkspaceLayout.Cascade);
+			SetWorkspaceLayout(WorkspaceLayout.Cascade);
 		}
 
 		private void toolStripMenuItem_MainMenu_Window_TileHorizontal_Click(object sender, EventArgs e)
 		{
-			SetTerminalLayout(WorkspaceLayout.TileHorizontal);
+			SetWorkspaceLayout(WorkspaceLayout.TileHorizontal);
 		}
 
 		private void toolStripMenuItem_MainMenu_Window_TileVertical_Click(object sender, EventArgs e)
 		{
-			SetTerminalLayout(WorkspaceLayout.TileVertical);
+			SetWorkspaceLayout(WorkspaceLayout.TileVertical);
 		}
 
 		private void toolStripMenuItem_MainMenu_Window_Minimize_Click(object sender, EventArgs e)
 		{
-			SetTerminalLayout(WorkspaceLayout.Minimize);
+			SetWorkspaceLayout(WorkspaceLayout.Minimize);
 		}
 
 		private void toolStripMenuItem_MainMenu_Window_Maximize_Click(object sender, EventArgs e)
 		{
-			SetTerminalLayout(WorkspaceLayout.Maximize);
+			SetWorkspaceLayout(WorkspaceLayout.Maximize);
 		}
 
 		#endregion
@@ -1095,7 +1094,7 @@ namespace YAT.View.Forms
 			LinkHelper.TryBrowseUriAndShowErrorIfItFails(this, link);
 		}
 
-	#endif // WITH_SCRIPTING
+	#endif // !WITH_SCRIPTING
 
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_About_Click(object sender, EventArgs e)
@@ -2338,8 +2337,8 @@ namespace YAT.View.Forms
 		/// </remarks>
 		protected virtual bool ValidateFindPattern(string pattern)
 		{
-			string errorMessage;
-			if (TryValidateFindPattern(pattern, out errorMessage))
+			string messageOnFailure;
+			if (TryValidateFindPattern(pattern, out messageOnFailure))
 			{
 				return (true);
 			}
@@ -2356,7 +2355,7 @@ namespace YAT.View.Forms
 					MessageBoxEx.Show
 					(
 						this,
-						errorMessage,
+						messageOnFailure,
 						caption.ToString(),
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -2372,22 +2371,22 @@ namespace YAT.View.Forms
 		/// </remarks>
 		protected virtual bool TryValidateFindPattern(string pattern)
 		{
-			string errorMessage;
-			return (TryValidateFindPattern(pattern, out errorMessage));
+			string messageOnFailure;
+			return (TryValidateFindPattern(pattern, out messageOnFailure));
 		}
 
 		/// <remarks>
 		/// Using "pattern" instead of "textOrPattern" for simplicity.
 		/// </remarks>
-		protected virtual bool TryValidateFindPattern(string pattern, out string errorMessage)
+		protected virtual bool TryValidateFindPattern(string pattern, out string messageOnFailure)
 		{
 			if (ApplicationSettings.RoamingUserSettings.Find.Options.EnableRegex)
 			{
-				return (RegexEx.TryValidatePattern(pattern, out errorMessage));
+				return (RegexEx.TryValidatePattern(pattern, out messageOnFailure));
 			}
 			else // Not using regex:
 			{
-				errorMessage = null;
+				messageOnFailure = null;
 				return (true);
 			}
 		}
@@ -3572,17 +3571,18 @@ namespace YAT.View.Forms
 			if (this.main != null)
 			{
 			#if (WITH_SCRIPTING)
-				this.main.Started += main_Started;
+				this.main.Launched               += main_Launched;
 			#endif
-				this.main.WorkspaceOpened += main_WorkspaceOpened;
-				this.main.WorkspaceClosed += main_WorkspaceClosed;
+				this.main.WorkspaceOpened        += main_WorkspaceOpened;
+				this.main.WorkspaceSaved         += main_WorkspaceSaved;
+				this.main.WorkspaceClosed        += main_WorkspaceClosed;
 
 				this.main.FixedStatusTextRequest += main_FixedStatusTextRequest;
 				this.main.TimedStatusTextRequest += main_TimedStatusTextRequest;
 				this.main.MessageInputRequest    += main_MessageInputRequest;
 				this.main.CursorRequest          += main_CursorRequest;
 
-				this.main.Exited += main_Exited;
+				this.main.Exited                 += main_Exited;
 			}
 		}
 
@@ -3591,17 +3591,18 @@ namespace YAT.View.Forms
 			if (this.main != null)
 			{
 			#if (WITH_SCRIPTING)
-				this.main.Started -= main_Started;
+				this.main.Launched               -= main_Launched;
 			#endif
-				this.main.WorkspaceOpened -= main_WorkspaceOpened;
-				this.main.WorkspaceClosed -= main_WorkspaceClosed;
+				this.main.WorkspaceOpened        -= main_WorkspaceOpened;
+				this.main.WorkspaceSaved         -= main_WorkspaceSaved;
+				this.main.WorkspaceClosed        -= main_WorkspaceClosed;
 
 				this.main.FixedStatusTextRequest -= main_FixedStatusTextRequest;
 				this.main.TimedStatusTextRequest -= main_TimedStatusTextRequest;
 				this.main.MessageInputRequest    -= main_MessageInputRequest;
 				this.main.CursorRequest          -= main_CursorRequest;
 
-				this.main.Exited -= main_Exited;
+				this.main.Exited                 -= main_Exited;
 			}
 		}
 
@@ -3613,7 +3614,7 @@ namespace YAT.View.Forms
 		//------------------------------------------------------------------------------------------
 
 	#if (WITH_SCRIPTING)
-		private void main_Started(object sender, EventArgs e)
+		private void main_Launched(object sender, EventArgs e)
 		{
 			this.main.ScriptBridge.notifyScriptDialogOpened += new ScriptBridge.ScriptDialogOpenedDelegate(NotifyScriptDialogOpened);
 			this.main.ScriptBridge.notifyScriptDialogClosed += new ScriptBridge.ScriptDialogClosedDelegate(NotifyScriptDialogClosed);
@@ -3626,6 +3627,11 @@ namespace YAT.View.Forms
 			this.workspace = e.Value;
 			AttachWorkspaceEventHandlers();
 
+			SetWorkspaceControls();
+		}
+
+		private void main_WorkspaceSaved(object sender, EventArgs<Model.Workspace> e)
+		{
 			SetWorkspaceControls();
 		}
 
@@ -3783,6 +3789,7 @@ namespace YAT.View.Forms
 			// Shortcuts associated to menu items are only active when items are visible and enabled!
 			toolStripMenuItem_MainMenu_Window_SetMainMenuItems(); // Contains 'Main' as well as 'Window' dependent controls!
 
+			// Shortcuts associated to menu items are only active when items are visible and enabled!
 			toolStripButton_MainTool_SetControls(); // Contains 'Main' as well as 'Child' dependent controls!
 		}
 
@@ -3806,6 +3813,7 @@ namespace YAT.View.Forms
 			toolStripMenuItem_MainMenu_Log_SetChildMenuItems();
 			toolStripMenuItem_MainMenu_Window_SetChildMenuItems();
 
+			// Shortcuts associated to menu items are only active when items are visible and enabled!
 			toolStripButton_MainTool_SetControls(); // Contains 'Main' as well as 'Child' dependent controls!
 		}
 
@@ -3842,12 +3850,6 @@ namespace YAT.View.Forms
 			// Shortcuts associated to menu items are only active when items are visible and enabled!
 			toolStripMenuItem_MainMenu_File_SetRecentMenuItems();
 			contextMenuStrip_FileRecent_SetRecentMenuItems();
-		}
-
-		private void SetWorkspaceControls()
-		{
-			// Shortcuts associated to menu items are only active when items are visible and enabled!
-			toolStripMenuItem_MainMenu_File_Workspace_SetMenuItems();
 		}
 
 		private void SuspendEditShortcutsCtrlACVDelete()
@@ -3983,216 +3985,6 @@ namespace YAT.View.Forms
 		// Workspace
 		//==========================================================================================
 
-		#region Workspace > Methods
-		//------------------------------------------------------------------------------------------
-		// Workspace > Methods
-		//------------------------------------------------------------------------------------------
-
-		/// <remarks>
-		/// This method shows a 'File Open' dialog that only allows workspace files to be selected.
-		/// This is for symmetricity with 'Save Workspace' and 'Save Workspace As...'. However, it
-		/// is also possible to select a workspace file using the 'normal' 'File Open' method.
-		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
-		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void ShowOpenWorkspaceFileDialog()
-		{
-			SetFixedStatusText("Select a file...");
-
-			var ofd = new OpenFileDialog();
-			ofd.Title       = "Open Workspace";
-			ofd.Filter      = ExtensionHelper.WorkspaceFilesFilter;
-			ofd.FilterIndex = ExtensionHelper.WorkspaceFilesFilterDefault;
-			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.WorkspaceExtension);
-			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
-			if ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
-			{
-				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(ofd.FileName);
-				ApplicationSettings.SaveLocalUserSettings();
-
-				Refresh(); // Ensure that form has been refreshed before continuing.
-				this.main.OpenFromFile(ofd.FileName);
-			}
-			else
-			{
-				ResetStatusText();
-			}
-		}
-
-		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private DialogResult ShowSaveWorkspaceAsFileDialog()
-		{
-			SetFixedStatusText("Select a workspace file name...");
-
-			var sfd = new SaveFileDialog();
-			sfd.Title       = "Save Workspace As";
-			sfd.Filter      = ExtensionHelper.WorkspaceFilesFilter;
-			sfd.FilterIndex = ExtensionHelper.WorkspaceFilesFilterDefault;
-			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.WorkspaceExtension);
-			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
-
-			// Other than for terminals, workspace 'Save As' always suggests '<UserName>.yaw':
-			sfd.FileName = Environment.UserName + PathEx.NormalizeExtension(sfd.DefaultExt); // Note that 'DefaultExt' states "the returned string does not include the period".
-
-			var dr = sfd.ShowDialog(this);
-			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
-			{
-				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(sfd.FileName);
-				ApplicationSettings.SaveLocalUserSettings();
-
-				Refresh(); // Ensure that form has been refreshed before continuing.
-				this.workspace.SaveAs(sfd.FileName);
-			}
-			else
-			{
-				ResetStatusText();
-			}
-
-			return (dr);
-		}
-
-		/// <summary>
-		/// Sets the terminal layout including forwarding the setting to the workspace.
-		/// </summary>
-		private void SetTerminalLayout(WorkspaceLayout layout)
-		{
-			if (this.workspace != null)
-			{
-				// Only notify the workspace, so it can keep the setting. But layouting itself is done
-				// here as the MDI functionality is an integral part of the Windows.Forms environment.
-				this.workspace.NotifyLayout(layout);
-
-				LayoutWorkspace(layout);
-			}
-		}
-
-		private void ResetTerminalLayout()
-		{
-			SetTerminalLayout(Model.Settings.WorkspaceSettings.LayoutDefault);
-		}
-
-		private void ResizeWorkspace()
-		{
-			// Simply forward the resize request to the MDI layout engine:
-			LayoutWorkspace();
-		}
-
-		/// <summary>
-		/// Performs the layout operation on the workspace, i.e. the terminals.
-		/// </summary>
-		/// <remarks>
-		/// Uses the MDI functionality of the Windows.Forms environment to perform the layout.
-		/// </remarks>
-		private void LayoutWorkspace()
-		{
-			if (this.workspace != null)
-				LayoutWorkspace(this.workspace.SettingsRoot.Workspace.Layout);
-		}
-
-		/// <summary>
-		/// Performs the layout operation on the workspace, i.e. the terminals.
-		/// This method does not notify the workspace.
-		/// </summary>
-		/// <remarks>
-		/// Uses the MDI functionality of the Windows.Forms environment to perform the layout.
-		/// </remarks>
-		private void LayoutWorkspace(WorkspaceLayout layout)
-		{
-			switch (layout)
-			{
-				case WorkspaceLayout.Automatic:
-					int terminalCount = ((this.workspace != null) ? (this.workspace.TerminalCount) : (0));
-					if (terminalCount <= 1)
-						MaximizeActiveMdiChild();
-					else
-						LayoutMdi(MdiLayout.TileVertical);
-
-					break;
-
-				case WorkspaceLayout.Cascade:
-				case WorkspaceLayout.TileHorizontal:
-				case WorkspaceLayout.TileVertical:
-					LayoutMdi((WorkspaceLayoutEx)layout);
-					break;
-
-				case WorkspaceLayout.Manual:
-					NotifyManualLayoutingToMdi();
-					break;
-
-				case WorkspaceLayout.Minimize:
-					MinimizeActiveMdiChild();
-					break;
-
-				case WorkspaceLayout.Maximize:
-					MaximizeActiveMdiChild();
-					break;
-
-				default:
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + layout + "' is a workspace layout that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
-		}
-
-		private void NotifyManualLayoutingToMdi()
-		{
-			foreach (var f in this.MdiChildren)
-			{
-				var t = (f as Terminal);
-				if (t != null)
-					t.NotifyWindowStateChanged();
-			}
-		}
-
-		/// <summary>
-		/// Arranges the multiple-document interface (MDI) child forms within the MDI parent form.
-		/// </summary>
-		/// <param name="value">
-		/// One of the <see cref="MdiLayout"/> values that defines the layout of MDI child forms.
-		/// </param>
-		/// <remarks>
-		/// This overridden method remembers that the MDI layout is currently ongoing. This is
-		/// required when handling terminal (MDI child) layout/resize events.
-		/// </remarks>
-		protected new void LayoutMdi(MdiLayout value)
-		{
-			this.isLayoutingMdi = true;
-			NotifyIntegralMdiLayoutingToMdiChildren(true);
-			base.LayoutMdi(value);
-			NotifyIntegralMdiLayoutingToMdiChildren(false);
-			this.isLayoutingMdi = false;
-		}
-
-		private void NotifyIntegralMdiLayoutingToMdiChildren(bool isLayouting)
-		{
-			foreach (var f in this.MdiChildren)
-			{
-				var t = (f as Terminal);
-				if (t != null)
-					t.NotifyIntegralMdiLayouting(isLayouting);
-			}
-		}
-
-		private void MinimizeActiveMdiChild()
-		{
-			if (ActiveMdiChild != null)
-			{
-				this.isLayoutingMdi = true;
-				ActiveMdiChild.WindowState = FormWindowState.Minimized;
-				this.isLayoutingMdi = false;
-			}
-		}
-
-		private void MaximizeActiveMdiChild()
-		{
-			if (ActiveMdiChild != null)
-			{
-				this.isLayoutingMdi = true;
-				ActiveMdiChild.WindowState = FormWindowState.Maximized;
-				this.isLayoutingMdi = false;
-			}
-		}
-
-		#endregion
-
 		#region Workspace > Lifetime
 		//------------------------------------------------------------------------------------------
 		// Workspace > Lifetime
@@ -4242,6 +4034,11 @@ namespace YAT.View.Forms
 				if (this.workspace.SettingsRoot != null)
 					this.workspace.SettingsRoot.Changed -= workspaceSettingsRoot_Changed;
 			}
+		}
+
+		private bool WorkspaceIsAvailable
+		{
+			get { return ((this.workspace != null) && (this.workspace.IsUndisposed)); }
 		}
 
 		#endregion
@@ -4335,6 +4132,7 @@ namespace YAT.View.Forms
 			DetachWorkspaceEventHandlers();
 			this.workspace = null;
 
+			SetWorkspaceControls();
 			SetChildControls();
 		}
 
@@ -4342,6 +4140,246 @@ namespace YAT.View.Forms
 		private void workspaceSettingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
 			SetWorkspaceControls();
+		}
+
+		#endregion
+
+		#region Workspace > View
+		//------------------------------------------------------------------------------------------
+		// Workspace > View
+		//------------------------------------------------------------------------------------------
+
+		private void SetWorkspaceControls()
+		{
+			// Shortcuts associated to menu items are only active when items are visible and enabled!
+			toolStripMenuItem_MainMenu_File_Workspace_SetMenuItems(); // No dedicated methods (yet).
+
+			SetCaption(); // Only workspace dependent.
+		}
+
+		private void SetCaption()
+		{
+			if (WorkspaceIsAvailable)
+				Text = this.workspace.Caption;
+			else
+				Text = this.main.Caption;
+		}
+
+		#endregion
+
+		#region Workspace > Settings
+		//------------------------------------------------------------------------------------------
+		// Workspace > Settings
+		//------------------------------------------------------------------------------------------
+
+		/// <remarks>
+		/// This method shows a 'File Open' dialog that only allows workspace files to be selected.
+		/// This is for symmetricity with 'Save Workspace' and 'Save Workspace As...'. However, it
+		/// is also possible to select a workspace file using the 'normal' 'File Open' method.
+		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Symmetricity' is a correct English term.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void ShowOpenWorkspaceFileDialog()
+		{
+			SetFixedStatusText("Select a file...");
+
+			var ofd = new OpenFileDialog();
+			ofd.Title       = "Open Workspace";
+			ofd.Filter      = ExtensionHelper.WorkspaceFilesFilter;
+			ofd.FilterIndex = ExtensionHelper.WorkspaceFilesFilterDefault;
+			ofd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.WorkspaceExtension);
+			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
+			if ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
+			{
+				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.SaveLocalUserSettings();
+
+				Refresh(); // Ensure that form has been refreshed before continuing.
+				this.main.OpenFromFile(ofd.FileName);
+			}
+			else
+			{
+				ResetStatusText();
+			}
+		}
+
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private DialogResult ShowSaveWorkspaceAsFileDialog()
+		{
+			SetFixedStatusText("Select a workspace file name...");
+
+			var sfd = new SaveFileDialog();
+			sfd.Title       = "Save Workspace As";
+			sfd.Filter      = ExtensionHelper.WorkspaceFilesFilter;
+			sfd.FilterIndex = ExtensionHelper.WorkspaceFilesFilterDefault;
+			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.WorkspaceExtension);
+			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
+
+			// Other than for terminals, workspace 'Save As' always suggests '<UserName>.yaw':
+			sfd.FileName = Environment.UserName + PathEx.NormalizeExtension(sfd.DefaultExt); // Note that 'DefaultExt' states "the returned string does not include the period".
+
+			var dr = sfd.ShowDialog(this);
+			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
+			{
+				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.SaveLocalUserSettings();
+
+				Refresh(); // Ensure that form has been refreshed before continuing.
+				this.workspace.SaveAs(sfd.FileName);
+			}
+			else
+			{
+				ResetStatusText();
+			}
+
+			return (dr);
+		}
+
+		#endregion
+
+		#region Workspace > Layout
+		//------------------------------------------------------------------------------------------
+		// Workspace > Layout
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Sets the terminal layout including forwarding the setting to the workspace.
+		/// </summary>
+		private void SetWorkspaceLayout(WorkspaceLayout layout)
+		{
+			if (WorkspaceIsAvailable)
+			{
+				// Only notify the workspace, so it can keep the setting. But layouting itself is done
+				// here as the MDI functionality is an integral part of the Windows.Forms environment.
+				this.workspace.NotifyLayout(layout);
+
+				LayoutWorkspace(layout);
+			}
+		}
+
+		private void ResetWorkspaceLayout()
+		{
+			SetWorkspaceLayout(Model.Settings.WorkspaceSettings.LayoutDefault);
+		}
+
+		private void ResizeWorkspace()
+		{
+			// Simply forward the resize request to the MDI layout engine:
+			LayoutWorkspace();
+		}
+
+		/// <summary>
+		/// Performs the layout operation on the workspace, i.e. the terminals.
+		/// </summary>
+		/// <remarks>
+		/// Uses the MDI functionality of the Windows.Forms environment to perform the layout.
+		/// </remarks>
+		private void LayoutWorkspace()
+		{
+			if (WorkspaceIsAvailable)
+				LayoutWorkspace(this.workspace.SettingsRoot.Workspace.Layout);
+		}
+
+		/// <summary>
+		/// Performs the layout operation on the workspace, i.e. the terminals.
+		/// This method does not notify the workspace.
+		/// </summary>
+		/// <remarks>
+		/// Uses the MDI functionality of the Windows.Forms environment to perform the layout.
+		/// </remarks>
+		private void LayoutWorkspace(WorkspaceLayout layout)
+		{
+			switch (layout)
+			{
+				case WorkspaceLayout.Automatic:
+					int terminalCount = (WorkspaceIsAvailable ? (this.workspace.TerminalCount) : (0));
+					if (terminalCount <= 1)
+						MaximizeActiveMdiChild();
+					else
+						LayoutMdi(MdiLayout.TileVertical);
+
+					break;
+
+				case WorkspaceLayout.Cascade:
+				case WorkspaceLayout.TileHorizontal:
+				case WorkspaceLayout.TileVertical:
+					LayoutMdi((WorkspaceLayoutEx)layout);
+					break;
+
+				case WorkspaceLayout.Manual:
+					NotifyManualLayoutingToMdi();
+					break;
+
+				case WorkspaceLayout.Minimize:
+					MinimizeActiveMdiChild();
+					break;
+
+				case WorkspaceLayout.Maximize:
+					MaximizeActiveMdiChild();
+					break;
+
+				default:
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + layout + "' is a workspace layout that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		private void NotifyManualLayoutingToMdi()
+		{
+			foreach (var f in this.MdiChildren)
+			{
+				var t = (f as Terminal);
+				if (t != null)
+					t.NotifyWindowStateChanged();
+			}
+		}
+
+		/// <summary>
+		/// Arranges the multiple-document interface (MDI) child forms within the MDI parent form.
+		/// </summary>
+		/// <param name="value">
+		/// One of the <see cref="MdiLayout"/> values that defines the layout of MDI child forms.
+		/// </param>
+		/// <remarks>
+		/// This overridden method remembers that the MDI layout is currently ongoing. This is
+		/// required when handling terminal (MDI child) layout/resize events.
+		/// </remarks>
+		protected new void LayoutMdi(MdiLayout value)
+		{
+			this.isLayoutingMdi = true;
+			NotifyIntegralMdiLayoutingToMdiChildren(true);
+			base.LayoutMdi(value);
+			NotifyIntegralMdiLayoutingToMdiChildren(false);
+			this.isLayoutingMdi = false;
+		}
+
+		private void NotifyIntegralMdiLayoutingToMdiChildren(bool isLayouting)
+		{
+			foreach (var f in this.MdiChildren)
+			{
+				var t = (f as Terminal);
+				if (t != null)
+					t.NotifyIntegralMdiLayouting(isLayouting);
+			}
+		}
+
+		private void MinimizeActiveMdiChild()
+		{
+			if (ActiveMdiChild != null)
+			{
+				this.isLayoutingMdi = true;
+				ActiveMdiChild.WindowState = FormWindowState.Minimized;
+				this.isLayoutingMdi = false;
+			}
+		}
+
+		private void MaximizeActiveMdiChild()
+		{
+			if (ActiveMdiChild != null)
+			{
+				this.isLayoutingMdi = true;
+				ActiveMdiChild.WindowState = FormWindowState.Maximized;
+				this.isLayoutingMdi = false;
+			}
 		}
 
 		#endregion
@@ -4472,11 +4510,11 @@ namespace YAT.View.Forms
 					switch (t.WindowState)
 					{
 						case FormWindowState.Normal:
-							SetTerminalLayout(WorkspaceLayout.Manual);
+							SetWorkspaceLayout(WorkspaceLayout.Manual);
 							break;
 
 						case FormWindowState.Minimized:
-							SetTerminalLayout(WorkspaceLayout.Minimize);
+							SetWorkspaceLayout(WorkspaceLayout.Minimize);
 							break;
 
 						// There is a limitation here:
@@ -4491,7 +4529,7 @@ namespace YAT.View.Forms
 						// if (this.workspace.SettingsRoot.Workspace.Layout != WorkspaceLayout.Automatic))
 						//     Prevent change from automatic to maximize when just resizing the main form.
 						case FormWindowState.Maximized:
-							SetTerminalLayout(WorkspaceLayout.Maximize);
+							SetWorkspaceLayout(WorkspaceLayout.Maximize);
 							break;
 
 						default:
@@ -4736,9 +4774,9 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <remarks>
-		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named 'Message' for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
@@ -4747,7 +4785,7 @@ namespace YAT.View.Forms
 			if (this.main != null)
 				guid = this.main.Guid.ToString();
 			else
-				guid = "<None>";
+				guid = "N/A";
 
 			Debug.WriteLine
 			(

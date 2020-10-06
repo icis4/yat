@@ -33,6 +33,9 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+#if (WITH_SCRIPTING)
+using System.Text;
+#endif
 using System.Threading;
 using System.Windows.Forms;
 
@@ -107,6 +110,9 @@ namespace YAT.Model
 		public event EventHandler<EventArgs<Workspace>> WorkspaceOpened;
 
 		/// <summary></summary>
+		public event EventHandler<EventArgs<Workspace>> WorkspaceSaved;
+
+		/// <summary></summary>
 		public event EventHandler<ClosedEventArgs> WorkspaceClosed;
 
 		/// <summary></summary>
@@ -122,7 +128,7 @@ namespace YAT.Model
 		public event EventHandler<EventArgs<Cursor>> CursorRequest;
 
 		/// <summary></summary>
-		public event EventHandler Started;
+		public event EventHandler Launched;
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<MainResult>> Exited;
@@ -168,13 +174,14 @@ namespace YAT.Model
 		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			this.eventHelper.DiscardAllEventsAndExceptions();
-
-			DebugMessage("Disposing...");
+			if (this.eventHelper != null) // Possible when called by finalizer (non-deterministic).
+				this.eventHelper.DiscardAllEventsAndExceptions();
 
 			// Dispose of managed resources:
 			if (disposing)
 			{
+				DebugMessage("Disposing...");
+
 				StopAndDisposeOperationTimer();
 				StopAndDisposeExitTimer();
 
@@ -190,9 +197,11 @@ namespace YAT.Model
 				}
 
 				DetachStaticSerialPortCollectionEventHandlers();
+
+				DebugMessage("...successfully disposed.");
 			}
 
-			DebugMessage("...successfully disposed.");
+		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
 		}
 
 		#endregion
@@ -205,17 +214,6 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual Guid Guid
-		{
-			get
-			{
-			////AssertUndisposed() shall not be called from this simple get-property.
-
-				return (this.guid);
-			}
-		}
-
-		/// <summary></summary>
 		public virtual MainLaunchArgs LaunchArgs
 		{
 			get
@@ -226,10 +224,19 @@ namespace YAT.Model
 			}
 		}
 
+		/// <summary></summary>
+		public virtual Guid Guid
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				return (this.guid);
+			}
+		}
+
 		/// <summary>
-		/// This is the indicated main name. The name is corresponding to the indicated name of
-		/// the currently active workspace, which is corresponding to the currently active terminal;
-		/// <see cref="ApplicationEx.ProductName"/> otherwise.
+		/// The indicated name, i.e. <see cref="ApplicationEx.ProductName"/>.
 		/// </summary>
 		public virtual string IndicatedName
 		{
@@ -237,10 +244,21 @@ namespace YAT.Model
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
+				return (ApplicationEx.ProductName); // "YAT" or "YATConsole" shall be indicated in main title bar.
+			}
+		}
+
+		/// <summary></summary>
+		public virtual string Caption
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
 				if (this.workspace != null)
-					return (this.workspace.IndicatedName);
+					return (this.workspace.Caption);
 				else
-					return (ApplicationEx.ProductName); // "YAT" or "YATConsole" shall be indicated in main title bar.
+					return (IndicatedName); // "YAT" or "YATConsole" shall be indicated in main title bar.
 			}
 		}
 
@@ -319,6 +337,8 @@ namespace YAT.Model
 		public virtual MainResult Launch()
 		{
 			AssertUndisposed();
+
+			DebugMessage("Launching...");
 
 			// Process command line args into start requests:
 			if (!ProcessCommandLineArgsIntoLaunchRequests())
@@ -432,7 +452,7 @@ namespace YAT.Model
 
 			if (success)
 			{
-				OnStarted();
+				OnLaunched();
 				return (MainResult.Success);
 			}
 			else
@@ -767,7 +787,7 @@ namespace YAT.Model
 				}
 			}
 
-			if (this.commandLineArgs.OptionIsGiven("PortType")) // Called 'PortType' because it shall match the name on the 'New Terminal' and 'Terminal Settings' dialog.
+			if (this.commandLineArgs.OptionIsGiven("IOType"))
 			{
 				Domain.IOType ioType;
 				if (Domain.IOTypeEx.TryParse(this.commandLineArgs.IOType, out ioType))
@@ -1185,7 +1205,7 @@ namespace YAT.Model
 				{
 					this.workspace.LaunchAllTerminals(); // Don't care about success, workspace itself is fine.
 
-					OnStarted(); // Same as at OpenTerminalFromFile() below.
+					OnLaunched(); // Same as at OpenTerminalFromFile() below.
 					return (true);
 				}
 
@@ -1208,7 +1228,7 @@ namespace YAT.Model
 					if (this.workspace.ActiveTerminal.Launch())
 					{
 						if (signalStarted)
-							OnStarted(); // Same as at OpenWorkspaceFromFile() above.
+							OnLaunched(); // Same as at OpenWorkspaceFromFile() above.
 
 						return (true);
 					}
@@ -1310,7 +1330,7 @@ namespace YAT.Model
 
 			bool workspaceSuccess;
 			if (this.workspace != null)
-				workspaceSuccess = this.workspace.CloseConsiderately(true);
+				workspaceSuccess = this.workspace.CloseWithOptions(true);
 			else
 				workspaceSuccess = true;
 
@@ -1442,10 +1462,12 @@ namespace YAT.Model
 			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath  = e.FilePath;
 			ApplicationSettings.LocalUserSettings.AutoWorkspace.AutoSaved = e.IsAutoSave;
 			ApplicationSettings.SaveLocalUserSettings();
+
+			OnWorkspaceSaved(this.workspace);
 		}
 
 		/// <remarks>
-		/// See remarks of <see cref="Workspace.CloseConsiderately"/> for details on why this handler
+		/// See remarks of <see cref="Workspace.CloseWithOptions"/> for details on why this handler
 		/// needs to treat the event differently in case of a parent (i.e. main) close.
 		/// </remarks>
 		private void workspace_Closed(object sender, ClosedEventArgs e)
@@ -1506,8 +1528,8 @@ namespace YAT.Model
 			OnFixedStatusTextRequest("Opening workspace " + fileName + "...");
 			OnCursorRequest(Cursors.WaitCursor);
 
-			string errorMessage;
-			if (OpenWorkspaceFromFile(filePath, out errorMessage))
+			string messageOnFailure;
+			if (OpenWorkspaceFromFile(filePath, out messageOnFailure))
 			{
 				OnCursorReset();
 				return (true);
@@ -1518,7 +1540,7 @@ namespace YAT.Model
 				OnFixedStatusTextRequest("Error opening workspace!");
 				OnMessageInputRequest
 				(
-					errorMessage,
+					messageOnFailure,
 					"Workspace File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Stop
@@ -1530,7 +1552,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		private bool OpenWorkspaceFromFile(string filePath, out string errorMessage)
+		private bool OpenWorkspaceFromFile(string filePath, out string messageOnFailure)
 		{
 			string absoluteFilePath;
 			DocumentSettingsHandler<WorkspaceSettingsRoot> sh;
@@ -1540,18 +1562,18 @@ namespace YAT.Model
 			{
 				if (OpenWorkspaceFromSettings(sh, guid, out ex))
 				{
-					errorMessage = null;
+					messageOnFailure = null;
 					return (true);
 				}
 				else
 				{
-					errorMessage = ErrorHelper.ComposeMessage("Unable to open workspace", absoluteFilePath, ex);
+					messageOnFailure = ErrorHelper.ComposeMessage("Unable to open workspace", absoluteFilePath, ex);
 					return (false);
 				}
 			}
 			else
 			{
-				errorMessage = ErrorHelper.ComposeMessage("Unable to open workspace file", absoluteFilePath, ex);
+				messageOnFailure = ErrorHelper.ComposeMessage("Unable to open workspace file", absoluteFilePath, ex);
 				return (false);
 			}
 		}
@@ -1559,37 +1581,37 @@ namespace YAT.Model
 		/// <summary></summary>
 		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler)
 		{
-			Exception exception;
-			return (OpenWorkspaceFromSettings(settingsHandler, Guid.NewGuid(), out exception));
+			Exception exceptionOnFailure;
+			return (OpenWorkspaceFromSettings(settingsHandler, Guid.NewGuid(), out exceptionOnFailure));
 		}
 
 		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, int dynamicTerminalIdToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace)
 		{
-			Exception exception;
-			return (OpenWorkspaceFromSettings(settingsHandler, Guid.NewGuid(), dynamicTerminalIdToReplace, terminalSettingsToReplace, out exception));
+			Exception exceptionOnFailure;
+			return (OpenWorkspaceFromSettings(settingsHandler, Guid.NewGuid(), dynamicTerminalIdToReplace, terminalSettingsToReplace, out exceptionOnFailure));
 		}
 
-		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, Guid guid, out Exception exception)
+		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, Guid guid, out Exception exceptionOnFailure)
 		{
-			return (OpenWorkspaceFromSettings(settingsHandler, guid, TerminalIds.InvalidIndex, null, out exception));
+			return (OpenWorkspaceFromSettings(settingsHandler, guid, TerminalIds.InvalidIndex, null, out exceptionOnFailure));
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings, Guid guid, int dynamicTerminalIdToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace, out Exception exception)
+		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings, Guid guid, int dynamicTerminalIdToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace, out Exception exceptionOnFailure)
 		{
 			AssertUndisposed();
 
 			// Ensure that the workspace file is not already open:
 			if (!CheckWorkspaceFile(settings.SettingsFilePath))
 			{
-				exception = null;
+				exceptionOnFailure = null;
 				return (false);
 			}
 
 			// Close workspace, only one workspace can exist within the application:
 			if (!CloseWorkspace())
 			{
-				exception = null;
+				exceptionOnFailure = null;
 				return (false);
 			}
 
@@ -1604,7 +1626,7 @@ namespace YAT.Model
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(GetType(), ex, "Failed to open workspace from settings!");
-				exception = ex;
+				exceptionOnFailure = ex;
 				return (false);
 			}
 
@@ -1632,7 +1654,7 @@ namespace YAT.Model
 			else
 				OnTimedStatusTextRequest("Workspace contains no terminal to open.");
 
-			exception = null;
+			exceptionOnFailure = null;
 			return (true);
 		}
 
@@ -1678,14 +1700,14 @@ namespace YAT.Model
 			return (true);
 		}
 
-		private bool OpenWorkspaceFile(string filePath, out string absoluteFilePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Exception exception)
+		private bool OpenWorkspaceFile(string filePath, out string absoluteFilePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Exception exceptionOnFailure)
 		{
 			Guid guid;
-			return (OpenWorkspaceFile(filePath, out absoluteFilePath, out settingsHandler, out guid, out exception));
+			return (OpenWorkspaceFile(filePath, out absoluteFilePath, out settingsHandler, out guid, out exceptionOnFailure));
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool OpenWorkspaceFile(string filePath, out string absoluteFilePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Guid guid, out Exception exception)
+		private bool OpenWorkspaceFile(string filePath, out string absoluteFilePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Guid guid, out Exception exceptionOnFailure)
 		{
 			absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(filePath);
 
@@ -1701,14 +1723,14 @@ namespace YAT.Model
 					if (!GuidEx.TryParseTolerantly(Path.GetFileNameWithoutExtension(filePath), out guid))
 						guid = Guid.NewGuid();
 
-					exception = null;
+					exceptionOnFailure = null;
 					return (true);
 				}
 				else
 				{
 					settingsHandler = null;
 					guid = Guid.Empty;
-					exception = null;
+					exceptionOnFailure = null;
 					return (false);
 				}
 			}
@@ -1718,7 +1740,7 @@ namespace YAT.Model
 
 				settingsHandler = null;
 				guid = Guid.Empty;
-				exception = ex;
+				exceptionOnFailure = ex;
 				return (false);
 			}
 		}
@@ -1762,22 +1784,22 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>Needed for opening command line requested terminal files without yet creating a workspace.</remarks>
-		private bool OpenTerminalFile(string terminalFilePath, out string absoluteTerminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
+		private bool OpenTerminalFile(string terminalFilePath, out string absoluteTerminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exceptionOnFailure)
 		{
-			return (OpenTerminalFile("", terminalFilePath, out absoluteTerminalFilePath, out settingsHandler, out exception));
+			return (OpenTerminalFile("", terminalFilePath, out absoluteTerminalFilePath, out settingsHandler, out exceptionOnFailure));
 		}
 
 		/// <remarks>Needed for opening command line requested terminal files without yet creating a workspace.</remarks>
 		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
 			string absoluteTerminalFilePath;
-			Exception exception;
-			return (OpenTerminalFile(workspaceFilePath, terminalFilePath, out absoluteTerminalFilePath, out settingsHandler, out exception));
+			Exception exceptionOnFailure;
+			return (OpenTerminalFile(workspaceFilePath, terminalFilePath, out absoluteTerminalFilePath, out settingsHandler, out exceptionOnFailure));
 		}
 
 		/// <remarks>Needed for opening command line requested terminal files without yet creating a workspace.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out string absoluteTerminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
+		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out string absoluteTerminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exceptionOnFailure)
 		{
 			// Attention:
 			// Similar code exists in Workspace.OpenTerminalFile().
@@ -1805,13 +1827,13 @@ namespace YAT.Model
 					sh.Settings.ClearChanged(); // Overriding such setting shall not be reflected in the settings,
 					                          //// i.e. neither be indicated by a '*' nor lead to a file write.
 					settingsHandler = sh;
-					exception = null;
+					exceptionOnFailure = null;
 					return (true);
 				}
 				else
 				{
 					settingsHandler = null;
-					exception = null;
+					exceptionOnFailure = null;
 					return (false);
 				}
 			}
@@ -1820,7 +1842,7 @@ namespace YAT.Model
 				DebugEx.WriteException(GetType(), ex, "Failed to open terminal file!");
 
 				settingsHandler = null;
-				exception = ex;
+				exceptionOnFailure = ex;
 				return (false);
 			}
 		}
@@ -1836,11 +1858,11 @@ namespace YAT.Model
 
 		private void StartOperationTimer()
 		{
+			var dueTime = OperationAndExitTimerInterval;
+			var period  = OperationAndExitTimerInterval; // Periodic!
+
 			lock (this.operationTimerSyncObj)
 			{
-				var dueTime = OperationAndExitTimerInterval;
-				var period  = OperationAndExitTimerInterval; // Periodic!
-
 				if (this.operationTimer == null)
 					this.operationTimer = new System.Threading.Timer(new TimerCallback(operationTimer_Periodic_Elapsed), null, dueTime, period);
 				else
@@ -2015,11 +2037,11 @@ namespace YAT.Model
 				else
 					OnFixedStatusTextRequest("No operation performed, triggering exit...");
 
+				var dueTime = OperationAndExitTimerInterval;
+				var period  = OperationAndExitTimerInterval; // Periodic!
+
 				lock (this.exitTimerSyncObj)
 				{
-					var dueTime = OperationAndExitTimerInterval;
-					var period  = OperationAndExitTimerInterval; // Periodic!
-
 					if (this.exitTimer == null)
 						this.exitTimer = new System.Threading.Timer(new TimerCallback(exitTimer_Periodic_Elapsed), null, dueTime, period);
 					else
@@ -2129,6 +2151,12 @@ namespace YAT.Model
 			this.eventHelper.RaiseSync<EventArgs<Workspace>>(WorkspaceOpened, this, new EventArgs<Workspace>(workspace));
 		}
 
+		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>
+		protected virtual void OnWorkspaceSaved(Workspace workspace)
+		{
+			this.eventHelper.RaiseSync<EventArgs<Workspace>>(WorkspaceSaved, this, new EventArgs<Workspace>(workspace));
+		}
+
 		/// <summary></summary>
 		protected virtual void OnWorkspaceClosed(ClosedEventArgs e)
 		{
@@ -2192,9 +2220,9 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnStarted()
+		protected virtual void OnLaunched()
 		{
-			this.eventHelper.RaiseSync(Started, this, EventArgs.Empty);
+			this.eventHelper.RaiseSync(Launched, this, EventArgs.Empty);
 		}
 
 		/// <remarks>Using item parameter instead of <see cref="EventArgs"/> for simplicity.</remarks>
@@ -2205,15 +2233,33 @@ namespace YAT.Model
 
 		#endregion
 
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		public override string ToString()
+		{
+			if (IsUndisposed) // AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging.
+				return (Caption);
+			else
+				return (base.ToString());
+		}
+
+		#endregion
+
 		#region Debug
 		//==========================================================================================
 		// Debug
 		//==========================================================================================
 
 		/// <remarks>
-		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named 'Message' for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
