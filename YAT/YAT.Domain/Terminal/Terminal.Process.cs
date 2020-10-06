@@ -165,22 +165,19 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
 		protected virtual string ByteToText(byte b, DateTime ts, Radix r, out bool isControl, out bool isByteToHide, out bool isError)
 		{
-			isByteToHide = false;                                         // Notes on hiding:
-			if      (b == 0x00)                                         ////
-			{                                                             // Implementing hiding here has pros and cons:
-				if (TerminalSettings.CharHide.Hide0x00)                   //  + Obvious location
-					isByteToHide = true;                                  //  + Simple straight-forward
-			}                                                             //  - Lines only containing a hidden element yet, e.g. an initial <XOn>,
-			else if (b == 0xFF)                                           //    will a) show line start information when receiving the hidden element
-			{                                                             //    and b) initially use the time stamp of the hidden element. These facts
-				if (TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF)
-					isByteToHide = true;                                  //    have to be accepted or handled elsewhere. However, this is consistent
-			}                                                             //    with other behavior, e.g. the "Receiving..." notification in the status
-			else if (MKY.IO.Serial.XOnXOff.IsXOnOrXOffByte(b))            //    bar. Also note that most users won't notice or care.
-			{
-				if (TerminalSettings.SupportsHideXOnXOff && TerminalSettings.CharHide.HideXOnXOff)
-					isByteToHide = true;
-			}
+			isByteToHide = IsByteToHide(b);
+
+			// Notes on hiding:
+			//
+			// Implementing hiding here has pros and cons:
+			//  + Obvious location
+			//  + Simple straight-forward
+			//  - Lines only containing a hidden element yet, e.g. an initial <XOn>,
+			//    will a) show line start information when receiving the hidden element
+			//    and b) initially use the time stamp of the hidden element. These facts
+			//    have to be accepted or handled elsewhere. However, this is consistent
+			//    with other behavior, e.g. the "Receiving..." notification in the status
+			//    bar. Also note that most users won't notice or care.
 
 			isControl = Ascii.IsControl(b);
 			isError = false;
@@ -236,6 +233,30 @@ namespace YAT.Domain
 				}
 			}
 		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		protected virtual bool IsByteToHide(byte b)
+		{
+			if      (b == 0x00)
+			{
+				if (TerminalSettings.CharHide.Hide0x00)
+					return (true);
+			}
+			else if (b == 0xFF)
+			{
+				if (TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF)
+					return (true);
+			}
+			else if (MKY.IO.Serial.XOnXOff.IsXOnOrXOffByte(b))
+			{
+				if (TerminalSettings.SupportsHideXOnXOff && TerminalSettings.CharHide.HideXOnXOff)
+					return (true);
+			}
+
+			return (false);
+		}
+
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
@@ -669,6 +690,31 @@ namespace YAT.Domain
 			return ((dir != IODirection.Tx) ? (IODirection.Tx) : (IODirection.Rx));
 		}
 
+		/// <summary></summary>
+		protected static void CreateCollectionIfIsNull(ref DisplayElementCollection c)
+		{
+			if (c == null)
+				c = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+		}
+
+		/// <summary></summary>
+		protected static void CreateCollectionIfIsNull(ref DisplayLineCollection c)
+		{
+			if (c == null)
+				c = new DisplayLineCollection(); // No preset needed, the default behavior is good enough.
+		}
+
+	#if (WITH_SCRIPTING)
+
+		/// <summary></summary>
+		protected static void CreateCollectionIfIsNull(ref ScriptLineCollection c)
+		{
+			if (c == null)
+				c = new ScriptLineCollection(); // No preset needed, the default behavior is good enough.
+		}
+
+	#endif
+
 		/// <summary>
 		/// This processing method is called by the <see cref="RawTerminal.ChunkSent"/> and
 		/// <see cref="RawTerminal.ChunkReceived"/> event handlers. It sequentially updates the
@@ -1016,34 +1062,48 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
+		/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
 		protected virtual void ProcessAndSignalDeviceLineBreak(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir)
 		{
-			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
-			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
+			DisplayElementCollection elementsToAdd            = null;
+			DisplayLineCollection    linesToAdd               = null;
+		#if (WITH_SCRIPTING)
+			ScriptLineCollection     receivedScriptLinesToAdd = null;
+		#endif
 
-			ProcessDeviceLineBreak(repositoryType, ts, dev, dir, elementsToAdd, linesToAdd);
+		#if (WITH_SCRIPTING)
+			ProcessDeviceLineBreak(repositoryType, ts, dev, dir, ref elementsToAdd, ref linesToAdd, ref receivedScriptLinesToAdd);
+		#else
+			ProcessDeviceLineBreak(repositoryType, ts, dev, dir, ref elementsToAdd, ref linesToAdd);
+		#endif
 
-			if (elementsToAdd.Count > 0)
-				AddDisplayElements(repositoryType, elementsToAdd);
-
-			if (linesToAdd.Count > 0)
-				AddDisplayLines(repositoryType, linesToAdd);
+		#if (WITH_SCRIPTING)
+			Add(                   repositoryType,               ref elementsToAdd, ref linesToAdd, ref receivedScriptLinesToAdd);
+		#else
+			Add(                   repositoryType,               ref elementsToAdd, ref linesToAdd);
+		#endif
 		}
 
 		/// <summary></summary>
 		protected virtual void ProcessAndSignalDirectionLineBreak(RepositoryType repositoryType, DateTime ts, IODirection dir)
 		{
-			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
-			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
+			DisplayElementCollection elementsToAdd            = null;
+			DisplayLineCollection    linesToAdd               = null;
+		#if (WITH_SCRIPTING)
+			ScriptLineCollection     receivedScriptLinesToAdd = null;
+		#endif
 
-			ProcessDirectionLineBreak(repositoryType, ts, dir, elementsToAdd, linesToAdd);
+		#if (WITH_SCRIPTING)
+			ProcessDirectionLineBreak(repositoryType, ts, dir, ref elementsToAdd, ref linesToAdd, ref receivedScriptLinesToAdd);
+		#else
+			ProcessDirectionLineBreak(repositoryType, ts, dir, ref elementsToAdd, ref linesToAdd);
+		#endif
 
-			if (elementsToAdd.Count > 0)
-				AddDisplayElements(repositoryType, elementsToAdd);
-
-			if (linesToAdd.Count > 0)
-				AddDisplayLines(repositoryType, linesToAdd);
+		#if (WITH_SCRIPTING)
+			Add(                      repositoryType,          ref elementsToAdd, ref linesToAdd, ref receivedScriptLinesToAdd);
+		#else
+			Add(                      repositoryType,          ref elementsToAdd, ref linesToAdd);
+		#endif
 		}
 
 		/// <summary></summary>
@@ -1067,8 +1127,11 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "'out' is preferred over return value in this particular case.")]
 		protected virtual void ProcessAndSignalChunkContent(RepositoryType repositoryType, RawChunk chunk, out int byteCountProcessed)
 		{
-			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
-			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
+			DisplayElementCollection elementsToAdd            = null;
+			DisplayLineCollection    linesToAdd               = null;
+		#if (WITH_SCRIPTING)
+			ScriptLineCollection     receivedScriptLinesToAdd = null;
+		#endif
 
 			byteCountProcessed = chunk.Content.Count; // Will be adjusted in case of breaking the chunk.
 			for (int i = 0; i < chunk.Content.Count; i++)
@@ -1077,7 +1140,11 @@ namespace YAT.Domain
 				bool isLastByteOfChunk = (i == (chunk.Content.Count - 1));
 
 				bool breakChunk;
-				ProcessByteOfChunk(repositoryType, chunk.Content[i], chunk.TimeStamp, chunk.Device, chunk.Direction, isFirstByteOfChunk, isLastByteOfChunk, elementsToAdd, linesToAdd, out breakChunk);
+			#if (WITH_SCRIPTING)
+				ProcessByteOfChunk(repositoryType, chunk.Content[i], chunk.TimeStamp, chunk.Device, chunk.Direction, isFirstByteOfChunk, isLastByteOfChunk, ref elementsToAdd, ref linesToAdd, ref receivedScriptLinesToAdd, out breakChunk);
+			#else
+				ProcessByteOfChunk(repositoryType, chunk.Content[i], chunk.TimeStamp, chunk.Device, chunk.Direction, isFirstByteOfChunk, isLastByteOfChunk, ref elementsToAdd, ref linesToAdd, out breakChunk);
+			#endif
 				if (breakChunk)
 				{
 					byteCountProcessed = (i + 1); // Current byte has been processed and/or already postponed in any case.
@@ -1085,56 +1152,147 @@ namespace YAT.Domain
 				}
 			}
 
-			if (elementsToAdd.Count > 0)
-				AddDisplayElements(repositoryType, elementsToAdd);
-
-			if (linesToAdd.Count > 0)
-				AddDisplayLines(repositoryType, linesToAdd);
+		#if (WITH_SCRIPTING)
+			Add(repositoryType, ref elementsToAdd, ref linesToAdd, ref receivedScriptLinesToAdd);
+		#else
+			Add(repositoryType, ref elementsToAdd, ref linesToAdd);
+		#endif
 		}
+
+		/// <remarks>
+		/// Must be abstract/virtual because settings and behavior differ among text and binary.
+		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "9#", Justification = "'out' is preferred over return value in this particular case.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "7#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "8#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+	#if (WITH_SCRIPTING)
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "9#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+	#endif
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		protected abstract void ProcessByteOfChunk(RepositoryType repositoryType,
+		                                           byte b, DateTime ts, string dev, IODirection dir,
+		                                           bool isFirstByteOfChunk, bool isLastByteOfChunk,
+		                                           ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd,
+	#if (WITH_SCRIPTING)
+		                                           ref ScriptLineCollection receivedScriptLinesToAdd,
+	#endif
+		                                           out bool breakChunk);
+
+	#if (WITH_SCRIPTING)
+
+		/// <remarks>
+		/// Named 'ReceivedLines' rather than 'ReceivedPackages' because the origin of a package is
+		/// typically defined by a line.
+		/// </remarks>
+		/// <remarks>
+		/// Named 'ReceivedLines' rather than 'ReceivedMessages' because this method will invoke
+		/// <see cref="ReceivingPacketForScripting"/> as well as <see cref="MessageReceivedForScripting"/>.
+		/// </remarks>
+		protected virtual void HandleReceivedScriptLinesToAdd(ScriptLineCollection receivedScriptLinesToAdd)
+		{
+			foreach (var line in receivedScriptLinesToAdd)
+			{
+				// Note that the originating line will be displayed by the terminal monitor, the truly received
+				// data shall be displayed. The same applies to sending, the truly sent data shall be displayed.
+
+				// Invoke 1st plug-in interface which potentially modifies the data or even cancels the whole packet:
+				var e1 = new ModifiablePacketEventArgs(line.Data);
+				OnReceivingScriptPacket(e1);
+				if (e1.Cancel)
+					continue;
+
+				// Compose the resulting message:
+				var text = FormatMessageTextForScripting(line.TimeStamp, e1.Data);
+				var message = new ScriptMessage(line.TimeStamp, line.Device, (byte[])e1.Data.Clone(), text); // Clone to ensure decoupling.
+
+				// Invoke 2nd plug-in interface:
+				var e2 = new ScriptMessageEventArgs(message.TimeStamp, message.Device, (byte[])message.Data.Clone(), message.Text); // Clone to ensure decoupling.
+				OnMessageReceivedForScripting(e2);
+
+				// Enqeue the message for retrieval by the script:
+				EnqueueReceivedMessageForScripting(message);
+			}
+		}
+
+		/// <summary>
+		/// Line breaks like length based "word wrap" only apply to scripting if the message is not framed, i.e.:
+		/// For text terminals, framing is typically defined by EOL.
+		/// For binary terminals, framing is optionally defined by sequence before/after.
+		/// </summary>
+		/// <remarks>
+		/// Must be abstract/virtual because settings and behavior differ among text and binary.
+		/// </remarks>
+		protected abstract bool IsNotFramedAndThusAppliesToScriptLines { get; }
+
+	#endif
 
 		/// <summary></summary>
 		protected virtual void ProcessAndSignalChunkLineBreak(RepositoryType repositoryType, DateTime ts, IODirection dir)
 		{
-			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
-			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
+			DisplayElementCollection elementsToAdd            = null;
+			DisplayLineCollection    linesToAdd               = null;
+		#if (WITH_SCRIPTING)
+			ScriptLineCollection     receivedScriptLinesToAdd = null;
+		#endif
 
-			ProcessChunkLineBreak(repositoryType, ts, dir, elementsToAdd, linesToAdd);
+		#if (WITH_SCRIPTING)
+			ProcessChunkLineBreak(repositoryType, ts, dir, ref elementsToAdd, ref linesToAdd, ref receivedScriptLinesToAdd);
+		#else
+			ProcessChunkLineBreak(repositoryType, ts, dir, ref elementsToAdd, ref linesToAdd);
+		#endif
 
-			if (elementsToAdd.Count > 0)
-				AddDisplayElements(repositoryType, elementsToAdd);
-
-			if (linesToAdd.Count > 0)
-				AddDisplayLines(repositoryType, linesToAdd);
+		#if (WITH_SCRIPTING)
+			Add(                  repositoryType,          ref elementsToAdd, ref linesToAdd, ref receivedScriptLinesToAdd);
+		#else
+			Add(                  repositoryType,          ref elementsToAdd, ref linesToAdd);
+		#endif
 		}
 
 		/// <summary></summary>
 		protected virtual void ProcessAndSignalTimedLineBreak(RepositoryType repositoryType, DateTime ts, IODirection dir)
 		{
-			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
-			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
+			DisplayElementCollection elementsToAdd            = null;
+			DisplayLineCollection    linesToAdd               = null;
+		#if (WITH_SCRIPTING)
+			ScriptLineCollection     receivedScriptLinesToAdd = null;
+		#endif
 
-			ProcessTimedLineBreak(repositoryType, ts, dir, elementsToAdd, linesToAdd);
+		#if (WITH_SCRIPTING)
+			ProcessTimedLineBreak(repositoryType, ts, dir, ref elementsToAdd, ref linesToAdd, ref receivedScriptLinesToAdd);
+		#else
+			ProcessTimedLineBreak(repositoryType, ts, dir, ref elementsToAdd, ref linesToAdd);
+		#endif
 
-			if (elementsToAdd.Count > 0)
-				AddDisplayElements(repositoryType, elementsToAdd);
-
-			if (linesToAdd.Count > 0)
-				AddDisplayLines(repositoryType, linesToAdd);
+		#if (WITH_SCRIPTING)
+			Add(                  repositoryType,          ref elementsToAdd, ref linesToAdd, ref receivedScriptLinesToAdd);
+		#else
+			Add(                  repositoryType,          ref elementsToAdd, ref linesToAdd);
+		#endif
 		}
 
 		/// <summary></summary>
 		protected virtual void ProcessAndSignalTimedLineBreakOnReload(RepositoryType repositoryType, DateTime ts, IODirection dir, int timeout)
 		{
-			var elementsToAdd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
-			var linesToAdd    = new DisplayLineCollection();    // No preset needed, the default behavior is good enough.
+			DisplayElementCollection elementsToAdd            = null;
+			DisplayLineCollection    linesToAdd               = null;
+		#if (WITH_SCRIPTING)
+			ScriptLineCollection     receivedScriptLinesToAdd = null;
+		#endif
 
-			ProcessTimedLineBreakOnReload(repositoryType, ts, dir, timeout, elementsToAdd, linesToAdd);
+		#if (WITH_SCRIPTING)
+			ProcessTimedLineBreakOnReload(repositoryType, ts, dir, timeout, ref elementsToAdd, ref linesToAdd, ref receivedScriptLinesToAdd);
+		#else
+			ProcessTimedLineBreakOnReload(repositoryType, ts, dir, timeout, ref elementsToAdd, ref linesToAdd);
+		#endif
 
-			if (elementsToAdd.Count > 0)
-				AddDisplayElements(repositoryType, elementsToAdd);
-
-			if (linesToAdd.Count > 0)
-				AddDisplayLines(repositoryType, linesToAdd);
+		#if (WITH_SCRIPTING)
+			Add(                         repositoryType,                    ref elementsToAdd, ref linesToAdd, ref receivedScriptLinesToAdd);
+		#else
+			Add(                         repositoryType,                    ref elementsToAdd, ref linesToAdd);
+		#endif
 		}
 
 		/// <remarks>Nothing to signal (yet).</remarks>
@@ -1153,20 +1311,28 @@ namespace YAT.Domain
 					if (TerminalSettings.Display.ShowDirection) // Replace is only needed when containing a 'DisplayElement.DirectionInfo'.
 					{
 						lineState.Elements.ReplaceDirection((Direction)lineState.Direction, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache);
-					////elementsToAdd.Clear() is not needed as only replace happens above.
 						FlushReplaceAlreadyBeganLine(repositoryType, lineState);
 					}
 				}
 			}
 		}
 
-		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
+		/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "Separating line for improved readability.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+	#if (WITH_SCRIPTING)
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "6#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+	#endif
 		protected virtual void ProcessDeviceLineBreak(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir,
-		                                              DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
+	#if (WITH_SCRIPTING)
+		                                              ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd, ref ScriptLineCollection receivedScriptLinesToAdd)
+	#else
+		                                              ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd)
+	#endif
 		{
 			var processState = GetProcessState(repositoryType);
 			if (processState.Overall.DeviceLineBreak.IsFirstChunk)         // Not the ideal location to handle this flag and 'DeviceLineBreak.Device' further below.
@@ -1181,8 +1347,12 @@ namespace YAT.Domain
 					{
 						DebugLineBreak(repositoryType, "ProcessDeviceLineBreak => DoLineEnd()");
 
-						DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd); // Line end = line break is directly invoked,
-					}                                                                                // not indirectly by setting 'Position' to 'End'.
+					#if (WITH_SCRIPTING)
+						DoLineEnd(repositoryType, processState, ts, dir, ref elementsToAdd, ref linesToAdd, IsNotFramedAndThusAppliesToScriptLines, ref receivedScriptLinesToAdd);
+					#else
+						DoLineEnd(repositoryType, processState, ts, dir, ref elementsToAdd, ref linesToAdd);
+					#endif
+					}  // LineEnd = line break is directly invoked, not indirectly by setting 'Position' to 'End'.
 				}
 			}
 			                     //// See above!
@@ -1200,8 +1370,17 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1508:ClosingCurlyBracketsMustNotBePrecededByBlankLine", Justification = "Separating line for improved readability.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+	#if (WITH_SCRIPTING)
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+	#endif
 		protected virtual void ProcessDirectionLineBreak(RepositoryType repositoryType, DateTime ts, IODirection dir,
-		                                                 DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
+	#if (WITH_SCRIPTING)
+		                                                ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd, ref ScriptLineCollection receivedScriptLinesToAdd)
+	#else
+		                                                ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd)
+	#endif
 		{
 			var processState = GetProcessState(repositoryType);
 			if (processState.Overall.DirectionLineBreak.IsFirstChunk)         // Not the ideal location to handle this flag and 'DirectionLineBreak.Direction' further below.
@@ -1216,8 +1395,12 @@ namespace YAT.Domain
 					{
 						DebugLineBreak(repositoryType, "ProcessDirectionLineBreak => DoLineEnd()");
 
-						DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd); // Line end = line break is directly invoked,
-					}                                                                                // not indirectly by setting 'Position' to 'End'.
+					#if (WITH_SCRIPTING)
+						DoLineEnd(repositoryType, processState, ts, dir, ref elementsToAdd, ref linesToAdd, IsNotFramedAndThusAppliesToScriptLines, ref receivedScriptLinesToAdd);
+					#else
+						DoLineEnd(repositoryType, processState, ts, dir, ref elementsToAdd, ref linesToAdd);
+					#endif
+					}  // LineEnd = line break is directly invoked, not indirectly by setting 'Position' to 'End'.
 				}
 			}
 			                     //// See above!
@@ -1234,40 +1417,75 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+	#if (WITH_SCRIPTING)
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+	#endif
 		protected virtual void ProcessChunkLineBreak(RepositoryType repositoryType, DateTime ts, IODirection dir,
-		                                             DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
+	#if (WITH_SCRIPTING)
+		                                             ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd, ref ScriptLineCollection receivedScriptLinesToAdd)
+	#else
+		                                             ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd)
+	#endif
 		{
 			var processState = GetProcessState(repositoryType);
 			if (processState.Line.Position != LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
 			{
 				DebugLineBreak(repositoryType, "ProcessChunkLineBreak => DoLineEnd()");
 
-				DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd); // Line end = line break is directly invoked,
-			}                                                                                // not indirectly by setting 'Position' to 'End'.
+			#if (WITH_SCRIPTING)
+				DoLineEnd(repositoryType, processState, ts, dir, ref elementsToAdd, ref linesToAdd, IsNotFramedAndThusAppliesToScriptLines, ref receivedScriptLinesToAdd);
+			#else
+				DoLineEnd(repositoryType, processState, ts, dir, ref elementsToAdd, ref linesToAdd);
+			#endif
+			}  // LineEnd = line break is directly invoked, not indirectly by setting 'Position' to 'End'.
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+	#if (WITH_SCRIPTING)
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+	#endif
 		protected virtual void ProcessTimedLineBreak(RepositoryType repositoryType, DateTime ts, IODirection dir,
-		                                             DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
+	#if (WITH_SCRIPTING)
+		                                             ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd, ref ScriptLineCollection receivedScriptLinesToAdd)
+	#else
+		                                             ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd)
+	#endif
 		{
 			var processState = GetProcessState(repositoryType);
 			if (processState.Line.Position != LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
 			{
 				DebugLineBreak(repositoryType, "ProcessTimedLineBreak => DoLineEnd()");
 
-				DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd); // Line end = line break is directly invoked,
-			}                                                                                // not indirectly by setting 'Position' to 'End'.
+			#if (WITH_SCRIPTING)
+				DoLineEnd(repositoryType, processState, ts, dir, ref elementsToAdd, ref linesToAdd, IsNotFramedAndThusAppliesToScriptLines, ref receivedScriptLinesToAdd);
+			#else
+				DoLineEnd(repositoryType, processState, ts, dir, ref elementsToAdd, ref linesToAdd);
+			#endif
+			}  // LineEnd = line break is directly invoked, not indirectly by setting 'Position' to 'End'.
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+	#if (WITH_SCRIPTING)
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "6#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+	#endif
 		protected virtual void ProcessTimedLineBreakOnReload(RepositoryType repositoryType, DateTime ts, IODirection dir, int timeout,
-		                                                     DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
+	#if (WITH_SCRIPTING)
+		                                                     ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd, ref ScriptLineCollection receivedScriptLinesToAdd)
+	#else
+		                                                     ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd)
+	#endif
 		{
 			var processState = GetProcessState(repositoryType);
 			if (processState.Line.Position != LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
@@ -1277,24 +1495,36 @@ namespace YAT.Domain
 				{
 					DebugLineBreak(repositoryType, "ProcessTimedLineBreakOnReload => DoLineEnd()");
 
-					DoLineEnd(repositoryType, processState, ts, dir, elementsToAdd, linesToAdd); // Line end = line break is directly invoked,
-				}                                                                                // not indirectly by setting 'Position' to 'End'.
+				#if (WITH_SCRIPTING)
+					DoLineEnd(repositoryType, processState, ts, dir, ref elementsToAdd, ref linesToAdd, IsNotFramedAndThusAppliesToScriptLines, ref receivedScriptLinesToAdd);
+				#else
+					DoLineEnd(repositoryType, processState, ts, dir, ref elementsToAdd, ref linesToAdd);
+				#endif
+				}  // LineEnd = line break is directly invoked, not indirectly by setting 'Position' to 'End'.
 			}
 		}
 
-		/// <remarks>
-		/// Must be abstract/virtual because settings and behavior differ among text and binary.
-		/// </remarks>
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
-		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "9#", Justification = "'out' is preferred over return value in this particular case.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		protected abstract void ProcessByteOfChunk(RepositoryType repositoryType,
-		                                           byte b, DateTime ts, string dev, IODirection dir,
-		                                           bool isFirstByteOfChunk, bool isLastByteOfChunk,
-		                                           DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd,
-		                                           out bool breakChunk);
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "1#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+	#if (WITH_SCRIPTING)
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+		protected virtual void Add(RepositoryType repositoryType, ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd, ref ScriptLineCollection receivedScriptLinesToAdd)
+	#else
+		protected virtual void Add(RepositoryType repositoryType, ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd)
+	#endif
+		{
+			if (!ICollectionEx.IsNullOrEmpty(elementsToAdd))
+				AddDisplayElements(repositoryType, elementsToAdd);
+
+			if (!ICollectionEx.IsNullOrEmpty(linesToAdd))
+				AddDisplayLines(repositoryType, linesToAdd);
+
+		#if (WITH_SCRIPTING)
+			if (!ICollectionEx.IsNullOrEmpty(receivedScriptLinesToAdd))
+				HandleReceivedScriptLinesToAdd(receivedScriptLinesToAdd);
+		#endif
+		}
 
 		/// <remarks>
 		/// <paramref name="repositoryType"/> and <paramref name="elementsToAdd"/> are required
@@ -1305,7 +1535,7 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		protected virtual void DoLineBegin(RepositoryType repositoryType, ProcessState processState,
 		                                   DateTime ts, string dev, IODirection dir,
-		                                   DisplayElementCollection elementsToAdd)
+		                                   ref DisplayElementCollection elementsToAdd)
 		{
 			DebugLineBreak(repositoryType, string.Format("DoLineBegin() => NotifyLineBegin({0}, {1}, {2})", ts, dev, dir));
 
@@ -1320,13 +1550,27 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+	#if (WITH_SCRIPTING)
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "7#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
+	#endif
 		protected virtual void DoLineEnd(RepositoryType repositoryType, ProcessState processState,
 		                                 DateTime ts, IODirection dir,
-		                                 DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
+	#if (WITH_SCRIPTING)
+		                                 ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd,
+		                                 bool appliesToScriptLines, ref ScriptLineCollection receivedScriptLinesToAdd)
+	#else
+		                                 ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd)
+	#endif
 		{
 			DebugLineBreak(repositoryType, "DoLineEnd() => NotifyLineEnd()");
 
+		#if (WITH_SCRIPTING)
+			processState.NotifyLineEnd(appliesToScriptLines);
+		#else
 			processState.NotifyLineEnd();
+		#endif
 		}
 
 		/// <remarks>Named 'Flush' to emphasize pending elements and lines are signaled and cleared.</remarks>
@@ -1353,18 +1597,6 @@ namespace YAT.Domain
 		/// <remarks>Named 'Began' for consistency with <see cref="LinePosition.Begin"/>.</remarks>
 		protected virtual void FlushReplaceAlreadyBeganLine(RepositoryType repositoryType, LineState lineState)
 		{
-		////if (!ICollectionEx.IsNullOrEmpty(elementsToAdd)) is not needed (yet).
-		////{
-		////	AddDisplayElements(repositoryType, elementsToAdd);
-		////	elementsToAdd.Clear();
-		////}
-
-		////if (!ICollectionEx.IsNullOrEmpty(linesToAdd)) is not needed (yet).
-		////{
-		////	AddDisplayLines(repositoryType, linesToAdd);
-		////	linesToAdd.Clear();
-		////}
-
 			ReplaceCurrentDisplayLine(repositoryType, lineState.Elements.Clone()); // Clone to ensure decoupling!
 		}                                                                          // Elements will be used again!
 

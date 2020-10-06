@@ -49,30 +49,30 @@ namespace YAT.Domain
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
-		public byte[]                            SequenceAfter                                   { get; }
+		public byte[]                            SequenceBefore                                  { get; }
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
-		public byte[]                            SequenceBefore                                  { get; }
-
-		/// <remarks>
-		/// To be preserved across lines, because sequence break also applies on active chunk or timed line break.
-		/// </remarks>
-		public Dictionary<string, SequenceQueue> SequenceAfterOfGivenDevice                      { get; private set; }
+		public byte[]                            SequenceAfter                                   { get; }
 
 		/// <remarks>
 		/// To be preserved across lines, because sequence break also applies on active chunk or timed line break.
 		/// </remarks>
 		public Dictionary<string, SequenceQueue> SequenceBeforeOfGivenDevice                     { get; private set; }
 
+		/// <remarks>
+		/// To be preserved across lines, because sequence break also applies on active chunk or timed line break.
+		/// </remarks>
+		public Dictionary<string, SequenceQueue> SequenceAfterOfGivenDevice                      { get; private set; }
+
 		/// <remarks>Must not be a <see cref="DisplayElementCollection"/> to prevent elements from being appended/merged.</remarks>
 		public List<DisplayElement>              RetainedUnconfirmedHiddenSequenceBeforeElements { get; private set; }
 
 		/// <summary></summary>
-		public BinaryUnidirState(byte[] sequenceAfter, byte[] sequenceBefore)
+		public BinaryUnidirState(byte[] sequenceBefore, byte[] sequenceAfter)
 		{
-			SequenceAfter  = sequenceAfter;
 			SequenceBefore = sequenceBefore;
+			SequenceAfter  = sequenceAfter;
 
 			InitializeValues();
 		}
@@ -82,8 +82,8 @@ namespace YAT.Domain
 		/// </summary>
 		protected virtual void InitializeValues()
 		{
-			SequenceAfterOfGivenDevice  = new Dictionary<string, SequenceQueue>(); // No preset needed, the default behavior is good enough.
 			SequenceBeforeOfGivenDevice = new Dictionary<string, SequenceQueue>(); // No preset needed, the default behavior is good enough.
+			SequenceAfterOfGivenDevice  = new Dictionary<string, SequenceQueue>(); // No preset needed, the default behavior is good enough.
 
 			RetainedUnconfirmedHiddenSequenceBeforeElements = new List<DisplayElement>(); // No preset needed, the default behavior is good enough.
 		}

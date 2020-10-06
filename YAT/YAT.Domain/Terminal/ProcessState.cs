@@ -41,11 +41,19 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public LineState    Line    { get; set; }
 
+	#if (WITH_SCRIPTING)
+		/// <summary></summary>
+		public ScriptState  Script  { get; set; }
+	#endif
+
 		/// <summary></summary>
 		public ProcessState()
 		{
 			Overall = new OverallState();
 			Line    = new LineState();
+		#if (WITH_SCRIPTING)
+			Script  = new ScriptState();
+		#endif
 		}
 
 		/// <summary>
@@ -55,6 +63,9 @@ namespace YAT.Domain
 		{
 			Overall.Reset();
 			Line   .Reset();
+		#if (WITH_SCRIPTING)
+			Script .Reset();
+		#endif
 		}
 
 		/// <summary>
@@ -64,15 +75,25 @@ namespace YAT.Domain
 		{
 			Overall.NotifyLineBegin(ts);
 			Line   .NotifyLineBegin(ts, dev, dir);
+		#if (WITH_SCRIPTING)
+			Script .NotifyLineBegin(ts, dev);
+		#endif
 		}
 
 		/// <summary>
 		/// Notify the end of a line, i.e. continues processing with the next line.
 		/// </summary>
+	#if (WITH_SCRIPTING)
+		public virtual void NotifyLineEnd(bool appliesToScriptLine)
+	#else
 		public virtual void NotifyLineEnd()
+	#endif
 		{
-			Overall.NotifyLineEnd(Line.TimeStamp); // , Line.Direction);
+			Overall.NotifyLineEnd(Line.TimeStamp); ////, Line.Direction); is prepared for future use.
 			Line   .NotifyLineEnd();
+		#if (WITH_SCRIPTING)
+			Script .NotifyLineEnd(appliesToScriptLine);
+		#endif
 		}
 	}
 
@@ -86,7 +107,7 @@ namespace YAT.Domain
 		/// <remarks>Only applies to <see cref="RepositoryType.Bidir"/>, still here for simplicity.</remarks>
 		public DirectionState    DirectionLineBreak       { get; private set; }
 
-	/////// <summary></summary> is prepared for future use
+	/////// <summary></summary> is prepared for future use.
 	////public IODirection       PreviousChunkDirection   { get; private set; } // Chunks: 1. Direction 2. TimeStamp
 
 		/// <remarks><see cref="GetPreviousChunkTimeStamp()"/> shall be used to retrieve property.</remarks>
@@ -101,10 +122,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public bool              IsFirstLine              { get; private set; }
 
-		/// <remarks>"Time Stamp" implicitly means "of Beginning of Line" of the previous line.</remarks>
+		/// <remarks>'TimeStamp' implicitly means 'OfBeginningOfLine' of the previous line.</remarks>
 		public DateTime          PreviousLineTimeStamp    { get; private set; }
 
-	/////// <summary></summary> is prepared for future use
+	/////// <summary></summary> is prepared for future use.
 	////public IODirection       PreviousLineDirection    { get; private set; } // Lines: 1. TimeStamp 2. Direction
 
 		/// <remarks>Only applies to <see cref="RepositoryType.Bidir"/>, still here for simplicity.</remarks>
@@ -127,14 +148,14 @@ namespace YAT.Domain
 		/// </summary>
 		protected virtual void InitializeValues()
 		{
-		////PreviousChunkDirection   = IODirection.None; is prepared for future use
+		////PreviousChunkDirection   = IODirection.None; is prepared for future use.
 			PreviousChunkTimeStamp   = DisplayElement.TimeStampDefault;
 			PreviousTxChunkTimeStamp = DisplayElement.TimeStampDefault;
 			PreviousRxChunkTimeStamp = DisplayElement.TimeStampDefault;
 
 			IsFirstLine              = true;
 			PreviousLineTimeStamp    = DisplayElement.TimeStampDefault;
-		////PreviousLineDirection    = IODirection.None; is prepared for future use
+		////PreviousLineDirection    = IODirection.None; is prepared for future use.
 
 			PostponedTxChunks        = new List<RawChunk>(); // No preset needed, the default behavior is good enough.
 			PostponedRxChunks        = new List<RawChunk>(); // No preset needed, the default behavior is good enough.
@@ -156,7 +177,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void NotifyChunk(RawChunk chunk)
 		{
-		////PreviousChunkDirection = chunk.Direction; is prepared for future use
+		////PreviousChunkDirection = chunk.Direction; is prepared for future use.
 			PreviousChunkTimeStamp = chunk.TimeStamp;
 
 			switch (chunk.Direction)
@@ -200,11 +221,11 @@ namespace YAT.Domain
 		/// <summary>
 		/// Notify the end of a line, i.e. continues processing with the next line.
 		/// </summary>
-		public virtual void NotifyLineEnd(DateTime lineTimeStamp) // , IODirection lineDirection)
+		public virtual void NotifyLineEnd(DateTime lineTimeStamp) ////, IODirection lineDirection) is prepared for future use.
 		{
 			IsFirstLine = false;
 			PreviousLineTimeStamp = lineTimeStamp;
-		////PreviousLineDirection = lineDirection; is prepared for future use
+		////PreviousLineDirection = lineDirection; is prepared for future use.
 		}
 
 		/// <summary></summary>
@@ -312,13 +333,13 @@ namespace YAT.Domain
 		}
 	}
 
-	/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
+	/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
 	public class DeviceState
 	{
 		/// <summary></summary>
 		public bool   IsFirstChunk { get; set; } // Not 'protected set' as commented at 'IsFirstChunk = false'.
 
-		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
+		/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
 		public string Device       { get; set; } // Not 'protected set' as commented at 'Device = dev'.
 
 		/// <summary></summary>
@@ -345,7 +366,7 @@ namespace YAT.Domain
 		}
 	}
 
-	/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
+	/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
 	public class DirectionState
 	{
 		/// <summary></summary>
@@ -384,10 +405,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public LinePosition             Position  { get; set; }
 
-		/// <remarks>"Time Stamp" implicitly means "of Beginning of Line".</remarks>
+		/// <remarks>'TimeStamp' implicitly means 'OfBeginningOfLine'.</remarks>
 		public DateTime                 TimeStamp { get; set; }
 
-		/// <remarks>Named 'Device' for simplicity even though using 'I/O Device' for user.</remarks>
+		/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
 		public string                   Device    { get; set; }
 
 		/// <summary></summary>
@@ -403,7 +424,7 @@ namespace YAT.Domain
 		public LineState()
 		{
 			InitializeValues();
-			Elements = new DisplayElementCollection(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
+			Elements = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 		}
 
 		/// <summary>
@@ -454,6 +475,70 @@ namespace YAT.Domain
 			Reset(); // Important to reset the state, as the line state is e.g. used for evaluation line breaks.
 		}
 	}
+
+#if (WITH_SCRIPTING)
+
+	/// <summary></summary>
+	public class ScriptState
+	{
+		/// <remarks>'TimeStamp' implicitly means 'OfBeginningOfLine'.</remarks>
+		public DateTime   TimeStamp { get; set; }
+
+		/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
+		public string     Device    { get; set; }
+
+		/// <summary></summary>
+		public List<byte> Data      { get; }
+
+		/// <summary></summary>
+		public ScriptState()
+		{
+			InitializeValues();
+			Data = new List<byte>(); // No preset needed, the default behavior is good enough.
+		}
+
+		/// <summary>
+		/// Initializes the state.
+		/// </summary>
+		protected virtual void InitializeValues()
+		{
+			TimeStamp = DisplayElement.TimeStampDefault;
+			Device    = null;
+		}
+
+		/// <summary>
+		/// Resets the state, i.e. restarts processing with an empty line.
+		/// </summary>
+		public virtual void Reset()
+		{
+			InitializeValues();
+			Data.Clear(); // The collection will already have enlarged to the effectively typical line length.
+		}                 // Thus, for performance reasons, clearing rather than recreating the collection.
+
+		/// <summary>
+		/// Notify the begin of a line, i.e. start processing of a line.
+		/// </summary>
+		public virtual void NotifyLineBegin(DateTime ts, string dev)
+		{
+			if (Data.Count > 0)
+				return; // Skip begin if script line has not ended yet.
+
+			TimeStamp = ts;
+			Device    = dev;
+		}
+
+		/// <summary>
+		/// Notify the end of a line, i.e. continues processing with the next line.
+		/// </summary>
+		public virtual void NotifyLineEnd(bool appliesToScriptLines)
+		{
+			if (appliesToScriptLines)
+				Reset(); // Important to reset the state, as the line state is e.g. used for evaluation whether a new line shall be started.
+		}
+	}
+
+#endif // (WITH_SCRIPTING)
+
 }
 
 //==================================================================================================

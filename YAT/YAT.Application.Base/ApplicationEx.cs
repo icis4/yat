@@ -66,8 +66,12 @@ namespace YAT
 		public static readonly string ProductName = System.Windows.Forms.Application.ProductName;
 
 		/// <summary>The build designation.</summary>
+	#if !(WITH_SCRIPTING)
 	////public const string ProductBuildDesignation = "";
 		public const string ProductBuildDesignation = " 2.2.0 Beta Version";
+	#else
+		public const string ProductBuildDesignation = "";
+	#endif
 
 		/// <summary>The product caption that combines product name and build designation.</summary>
 		public static readonly string ProductCaption = ProductName + ProductBuildDesignation;

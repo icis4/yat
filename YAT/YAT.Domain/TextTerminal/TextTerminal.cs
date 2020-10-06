@@ -30,15 +30,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Media;
-using System.Text;
+using System.Linq;
 
 using MKY;
-using MKY.Diagnostics;
 using MKY.Text;
-
-using YAT.Domain.Utilities;
 
 #endregion
 
@@ -258,6 +253,131 @@ namespace YAT.Domain
 
 			using (var p = new Parser.SubstitutionParser(TextTerminalSettings.CharSubstitution, (EncodingEx)TextTerminalSettings.Encoding, TerminalSettings.IO.Endianness, TerminalSettings.Send.Text.ToParseMode()))
 				return (p.TryParse(s, out result, defaultRadix));
+		}
+
+		#endregion
+
+		#region Format
+		//------------------------------------------------------------------------------------------
+		// Format
+		//------------------------------------------------------------------------------------------
+
+	#if (WITH_SCRIPTING)
+
+		/// <summary>
+		/// Formats the specified data sequence for scripting.
+		/// </summary>
+		/// <remarks>
+		/// For text terminals, received messages are text lines, decoded with the configured encoding. Messages include control characters as configured. Messages do not include EOL.
+		/// For binary terminals, received messages are hexadecimal values, separated by spaces, without radix.
+		/// If ever needed differently, an [advanced configuration of scripting behavior] shall be added.
+		/// </remarks>
+		protected override string FormatMessageTextForScripting(DateTime timeStamp, byte[] data)
+		{
+			// Attention:
+			// Similar code exists in RemoveFraming(byte[], byte[]).
+			// Changes here likely have to be applied there too.
+			// Code is duplicated rather than encapsulated for performance reasons (no need to create a list and recreate an array).
+
+			var n = data.Length;
+
+			var rxEolSequence = RxEolSequence;
+			if (rxEolSequence.Length > 0) // "Messages do not include EOL."
+			{
+				var contentLength = (data.Length - rxEolSequence.Length);
+				if (data.Skip(contentLength).SequenceEqual(rxEolSequence))
+					n = contentLength;
+			}
+
+			// Attention:
+			// Similar code exists in Terminal.Format(byte[], direction, radix).
+			// Changes here likely have to be applied there too.
+
+			var lp = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+
+			var pendingMultiBytesToDecode = new List<byte>(4); // Preset the required capacity to improve memory management; 4 is the maximum value for multi-byte characters.
+			foreach (byte b in data.Take(n))
+			{
+				var de = ByteToElement(b, timeStamp, IODirection.Rx, Radix.String, pendingMultiBytesToDecode);
+			////AddContentSeparatorIfNecessary(IODirection.Rx, lp, de) is not needed as radix is fixed to 'String'.
+				lp.Add(de);
+			}
+
+			return (lp.ElementsToString());
+		}
+
+	#endif // WITH_SCRIPTING
+
+		#endregion
+
+		#region Change
+		//------------------------------------------------------------------------------------------
+		// Change
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Removes the framing from the given data.
+		/// </summary>
+		/// <remarks>
+		/// For text terminals, framing is typically defined by EOL.
+		/// For binary terminals, framing is optionally defined by sequence before/after.
+		/// </remarks>
+		/// <exception cref="InvalidOperationException">
+		/// <see cref="Settings.TextTerminalSettings.TxEol"/> and
+		/// <see cref="Settings.TextTerminalSettings.RxEol"/> have different values.
+		/// </exception>
+		public override void RemoveFraming(byte[] data)
+		{
+			if (ArrayEx.ValuesEqual(TxEolSequence, RxEolSequence))
+				RemoveFraming(data, IODirection.Tx); // Sequence is the same for both directions, direction doesn't matter.
+
+			throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "This method requires that 'TxEOL' and 'RxEOL' are set to the same value!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+		}
+
+		/// <summary>
+		/// Removes the framing from the given data.
+		/// </summary>
+		/// <remarks>
+		/// For text terminals, framing is typically defined by EOL.
+		/// For binary terminals, framing is optionally defined by sequence before/after.
+		/// </remarks>
+		public override void RemoveFraming(byte[] data, IODirection direction)
+		{
+			switch (direction)
+			{
+				case IODirection.Tx:    RemoveFraming(data, TxEolSequence); break;
+				case IODirection.Rx:    RemoveFraming(data, RxEolSequence); break;
+
+				case IODirection.Bidir:
+				case IODirection.None:  throw (new ArgumentOutOfRangeException("d", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("d", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary>
+		/// Removes the framing from the given data.
+		/// </summary>
+		/// <remarks>
+		/// For text terminals, framing is typically defined by EOL.
+		/// For binary terminals, framing is optionally defined by sequence before/after.
+		/// </remarks>
+		protected virtual void RemoveFraming(byte[] data, byte[] eolSequence)
+		{
+			// Attention:
+			// Similar code exists in FormatMessageTextForScripting(byte[]).
+			// Changes here likely have to be applied there too.
+			// Code is duplicated rather than encapsulated for performance reasons (no need to recreate array).
+
+			if (eolSequence.Length > 0)
+			{
+				var n = (data.Length - eolSequence.Length);
+				if (data.Skip(n).SequenceEqual(eolSequence))
+					data.Take(n).ToArray();
+			}
+
+			// Note:
+			// When adding BOL, i.e. an additional operation at the beginning of the data,
+			// the implementation shall follow the one of the BinaryTerminal.
 		}
 
 		#endregion
