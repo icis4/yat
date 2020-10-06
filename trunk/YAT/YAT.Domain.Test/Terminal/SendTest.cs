@@ -168,7 +168,7 @@ namespace YAT.Domain.Test.Terminal
 			                                                // Use different settings, optimized to the capabilities of the driver.
 			switch ((string)settingsA.IO.SerialPort.PortId) // To be refined once test configuration becomes driver aware with bug #354 "Automatic...".
 			{                                               // Caption based check is excluded for improving the performance on test generation.
-				case "COM31": // Prolific => 256 kbaud, (hardware flow control), unlimited (work with these high baud rates).
+				case "COM31": // Prolific => 256 kbaud, (hardware flow control), unlimited (mostly works with these high baud rates).
 				case "COM32":
 				case "COM33":
 				case "COM34":
@@ -420,29 +420,54 @@ namespace YAT.Domain.Test.Terminal
 			                                                                                //// settingsB are ignored (yet).
 			var roughlyEstimatedTransmissionTime = Utilities.GetRoughlyEstimatedTransmissionTime(settingsA, fileInfo.ByteCount, fileInfo.LineByteCount);
 
-			// Workaround to issue that YAT becomes really slow in case of very long lines.
-			// With FR #375 (see further below) this will be fixable for this test.
-			string workaround = "";
-			if (fileInfo.Path.Contains("EnormousLine"))
-			{
-				roughlyEstimatedTransmissionTime *= 99; // Will result in a "high" enough duration category to easily let it exclude.
-				workaround = " WORKAROUND FR #375"; // \remind (2020-08-13 / MKY)
-			}
+			string restriction = "";
 
 			// Timeout:
-			var args = new List<object>(tc.Arguments.Length + 1);      // A 100% timeout margin is required to account for the inaccuracy,
-			args.AddRange(tc.Arguments);                               // of the rough estimate, as well as possible temporary hickups.
-			var timeout = Math.Max((int)(roughlyEstimatedTransmissionTime * 2), Utilities.WaitTimeoutForLineTransmission); // 'timeout' must always be at least
-			args.Add(timeout);   // int in ms is enough for ~1000 hours.                                                   // the standard line timeout.
-			var timeoutCaption = StandardDurationCategory.CaptionFrom(TimeSpan.FromMilliseconds(timeout));
+			int timeoutAsInt;                                        // A 100% timeout margin is required to account for the inaccuracy
+			                                                       //// of the rough estimate, as well as possible temporary hickups.
+			var timeoutAsDouble = (roughlyEstimatedTransmissionTime * 2);
+			if (timeoutAsDouble < int.MaxValue) // int in ms is only enough for ~1000 hours.
+			{
+				timeoutAsInt = (int)timeoutAsDouble;
+			}
+			else
+			{
+				timeoutAsInt = int.MaxValue; // Limiting is required to prevent an 'OverflowException'.
+				restriction += " EXCEEDING TIMEOUT LIMITED TO INT.MAX => TO BE REWORKED";
+			}
 
-			// Estimated time and duration category:                                  // settingsB are ignored (yet).
-			var roughlyEstimatedOverheadTime = Utilities.GetRoughlyEstimatedOverheadTime(settingsA, fileInfo.ByteCount);
-			var roughlyEstimated = TimeSpan.FromMilliseconds(roughlyEstimatedTransmissionTime + roughlyEstimatedOverheadTime);
+			// Workaround to issue that YAT becomes really slow in case of very long lines.
+			// With FR #375 (see further below) this will be fixable for this test.
+			var workaround375 = false;
+			if (fileInfo.Path.Contains("EnormousLine"))
+			{
+				workaround375 = true;
+				restriction += " WORKAROUND FR #375 => TO BE EXCLUDED"; // \remind (2020-08-13 / MKY)
+			}
+
+			timeoutAsInt = Math.Max(timeoutAsInt, Utilities.WaitTimeoutForLineTransmission); // 'timeout' must always be at least
+			                                                                               //// the standard line timeout.
+			var args = new List<object>(tc.Arguments.Length + 1);
+			args.AddRange(tc.Arguments);
+			args.Add(timeoutAsInt);
+			var timeoutCaption = StandardDurationCategory.CaptionFrom(TimeSpan.FromMilliseconds(timeoutAsInt));
+
+			// Estimated time and duration category:
+			TimeSpan roughlyEstimated;
+			if (!workaround375)
+			{                                                                             // settingsB are ignored (yet).
+				var roughlyEstimatedOverheadTime = Utilities.GetRoughlyEstimatedOverheadTime(settingsA, fileInfo.ByteCount);
+				roughlyEstimated = TimeSpan.FromMilliseconds(roughlyEstimatedTransmissionTime + roughlyEstimatedOverheadTime);
+			}
+			else
+			{
+				roughlyEstimated = TimeSpan.FromMilliseconds(int.MaxValue); // Will result in the highest possible duration category to easily let it exclude.
+			}
+
 			var roughlyEstimatedCaption = StandardDurationCategory.CaptionFrom(roughlyEstimated);
 			var cat = StandardDurationCategory.AttributeFrom(roughlyEstimated).Name;
 
-			var nameSuffix = " (" + roughlyEstimatedCaption + " roughly estimated total; " + timeoutCaption + " Tx/Rx timeout)" + workaround;
+			var nameSuffix = " (" + roughlyEstimatedCaption + " roughly estimated total; " + timeoutCaption + " Tx/Rx timeout)" + restriction;
 			var result = TestCaseDataEx.ToTestCase(tc, nameSuffix, new string[] { cat }, args.ToArray());
 		#if (DEBUG_TEST_CASE_DATA)
 			TestCaseDataHelper.WriteToTempFile(typeof(SendTestData), result); // No need to append to file, file name will differ due to suffix.
@@ -769,11 +794,11 @@ namespace YAT.Domain.Test.Terminal
 			string formattedLine;
 			if (firstLineAsBytes.Length <= terminal.TerminalSettings.Display.MaxLineLength)
 			{
-				formattedLine = ByteHelper.FormatHexString(firstLineAsBytes);
+				formattedLine = ByteHelper.FormatHexString(firstLineAsBytes, DisplaySettings.ShowRadixDefault);
 			}
 			else
 			{
-				formattedLine = ByteHelper.FormatHexString(firstLineAsBytes.Take(terminal.TerminalSettings.Display.MaxLineLength));
+				formattedLine = ByteHelper.FormatHexString(firstLineAsBytes.Take(terminal.TerminalSettings.Display.MaxLineLength), DisplaySettings.ShowRadixDefault);
 				formattedLine += Utilities.LineExceededWarningPattern;
 			}
 
