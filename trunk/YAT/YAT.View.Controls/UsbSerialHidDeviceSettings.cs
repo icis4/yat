@@ -152,19 +152,24 @@ namespace YAT.View.Controls
 			{
 				this.deviceInfo = value;
 
-				// Try to automatically select one of the report format presets:
+				// Attention:
+				// Similar code exists in YAT.Model.Settings.ScriptUSBSettingsHelper.UpdateFrom(IOSettings, ref USBSerHIDSettings).
+				// Changes likely have to be applied there too.
+				// Code is duplicated rather than encapsulated as resulting method and usage would not result in less code.
+
+				// Try to automatically select one of the settings presets:
 				if (this.deviceInfo != null)
 				{
 					SerialHidDeviceSettingsPresetEx preset;
-					if (SerialHidDeviceSettingsPresetEx.TryParse(deviceInfo, out preset))
+					if (SerialHidDeviceSettingsPresetEx.TryFrom(deviceInfo, out preset))
 						Preset = preset;
 				}
 
-				// Also try to automatically select the flow control preset:
+				// Also try to automatically set flow control based on that preset:
 				if (this.deviceInfo != null)
 				{
 					SerialHidFlowControlPresetEx preset;
-					if (SerialHidFlowControlPresetEx.TryParse(deviceInfo, out preset))
+					if (SerialHidFlowControlPresetEx.TryFrom(deviceInfo, out preset))
 						FlowControl = preset.ToFlowControl();
 				}
 			}
@@ -193,8 +198,9 @@ namespace YAT.View.Controls
 						OnPresetChanged(EventArgs.Empty);
 
 						// Update dependent settings:
-						ReportFormat  = ((SerialHidDeviceSettingsPresetEx)value).ToReportFormat();
-						RxFilterUsage = ((SerialHidDeviceSettingsPresetEx)value).ToRxFilterUsage();
+						var presetEx = new SerialHidDeviceSettingsPresetEx(Preset);
+						ReportFormat  = presetEx.ToReportFormat();
+						RxFilterUsage = presetEx.ToRxFilterUsage();
 
 						// Sequence above may lead to up to three invocations of SetControls().
 						// However, not assigning to the 'ReportFormat' and 'RxFilterUsage'
@@ -670,8 +676,11 @@ namespace YAT.View.Controls
 				}
 				else
 				{
-					var presetFromReportFormat = SerialHidDeviceSettingsPresetEx.FromReportFormatAndRxFilterUsage(ReportFormat, RxFilterUsage);
-					Preset = presetFromReportFormat;
+					SerialHidDeviceSettingsPreset presetFromReportFormatAndRxFilterUsage;
+					if (SerialHidDeviceSettingsPresetEx.TryFromReportFormatAndRxFilterUsage(ReportFormat, RxFilterUsage, out presetFromReportFormatAndRxFilterUsage))
+						Preset = presetFromReportFormatAndRxFilterUsage;
+					else
+						Preset = SerialHidDeviceSettingsPreset.None;
 				}
 			}
 
@@ -699,8 +708,11 @@ namespace YAT.View.Controls
 				}
 				else
 				{
-					var presetFromReportFormat = SerialHidDeviceSettingsPresetEx.FromReportFormatAndRxFilterUsage(ReportFormat, RxFilterUsage);
-					Preset = presetFromReportFormat;
+					SerialHidDeviceSettingsPreset presetFromReportFormatAndRxFilterUsage;
+					if (SerialHidDeviceSettingsPresetEx.TryFromReportFormatAndRxFilterUsage(ReportFormat, RxFilterUsage, out presetFromReportFormatAndRxFilterUsage))
+						Preset = presetFromReportFormatAndRxFilterUsage;
+					else
+						Preset = SerialHidDeviceSettingsPreset.None;
 				}
 			}
 
