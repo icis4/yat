@@ -35,13 +35,13 @@ namespace NUnitEx
 	/// <remarks>
 	/// Useful to encapsulate information where <see cref="TestCaseData"/> objects are
 	/// not suitable or suboptimal, e.g. where named and typed arguments shall be used rather than
-	/// just an array of <see cref="object"/> named "arg1", "arg2",...
+	/// just an array of <see cref="object"/> named 'arg1', 'arg2',...
 	/// </remarks>
 	/// <remarks>
 	/// Simply derive from this class and add arguments as needed.
 	/// </remarks>
 	/// <remarks>
-	/// Name "TestCaseDescriptor" rather than e.g. "TestCaseDataHelper" for better distinguishing
+	/// Named 'TestCaseDescriptor' rather than e.g. 'TestCaseDataHelper' for better distinguishing
 	/// from <see cref="TestCaseData"/>.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'argI' just happens to be an 'arg'...")]
