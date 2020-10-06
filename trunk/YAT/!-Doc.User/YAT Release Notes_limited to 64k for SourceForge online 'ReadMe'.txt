@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.2.0 :: 2020-0x-xx
+YAT 2.2.0 :: 2020-1x-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -134,6 +134,7 @@ Important changes:
 - [Monitor Context Menu > Clear] no longer clears all panels (Tx/Bidir/Rx), just the selected. Use
   [Main Menu > Terminal > Clear [All]] or [Ctrl+L] to clear all panels (related to change above).
   [Main Menu > Terminal > All Terminals Clear] or [Ctrl+E] to clear all terminals (feat. req. #392).
+- User saved workspace file name is indicated in title bar (feature request #416).
 - Binary terminals: Lines are no longer broken each 16 bytes by default, they now by default are
   broken on every chunk (related to bug #477).
 - Consequently, chunk line break settings are now located in the text/binary specific dialog.
@@ -737,7 +738,7 @@ public around the same time as YAT. And, 4.0 buzzes more anyway (industry 4.0 an
 ----------------------------------------------------------------------------------------------------
 
 
-YAT 4 with Scripting :: Expected in late 2020 or early 2021
+YAT 4 with Scripting :: Expected in 2021
 ----------------------------------------------------------------------------------------------------
 YAT 4.0 will feature the integration of a scripting environment, based on the CSScript engine.
 Scripting will allow you to script YAT and automate repetitive tasks, use it for test automation,
