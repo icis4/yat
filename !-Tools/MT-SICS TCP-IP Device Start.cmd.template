@@ -43,13 +43,13 @@
 :: 1. Copy this helper batch template into the directory where the test executable resides.
 :: 2. Remove the ".template" suffix from the file name.
 :: 3. Adapt the file meta information ($$ tags).
-:: 4. Adapt the below line to the desired executable.
+:: 4. Adapt the below <DEVICE> placeholder to the desired executable name.
 :: 5. Add the directory to the system's PATH.
 ::==================================================================================================
 
 SETLOCAL
 
-SET MT_SICS_EXE=ExampleBalance_RB_Evalboard_LPC1769.exe
+SET MT_SICS_EXE=<DEVICE>.exe
 
 START /MIN "MT-SICS TCP-IP Device" %MT_SICS_EXE%
 

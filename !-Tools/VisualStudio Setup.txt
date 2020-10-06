@@ -41,7 +41,8 @@ Tools > Options...
          > Advanced > Place 'System' usings first
                     > Separate using directive groups
   > Debugging
-    > General > Step over properties and operators = no
+    > General > Break when exceptions cross AppDomain or managed/native boundaries = yes
+              > Step over properties and operators = no
               > Require source files to excatly match the original version = no
 
 Edit > Advanced
