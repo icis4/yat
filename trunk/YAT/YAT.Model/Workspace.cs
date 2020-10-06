@@ -107,6 +107,7 @@ namespace YAT.Model
 
 		private WorkspaceLaunchArgs launchArgs;
 		private Guid guid;
+		private string userFileName;
 
 		// Settings.
 		private DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler;
@@ -200,6 +201,10 @@ namespace YAT.Model
 				this.settingsRoot.ClearChanged();
 				AttachSettingsEventHandlers();
 
+				// Set ID and name(s):
+				if (!this.settingsRoot.AutoSaved && this.settingsHandler.SettingsFilePathIsValid)
+					this.userFileName = Path.GetFileName(this.settingsHandler.SettingsFilePath);
+
 				DebugMessage("...successfully created.");
 			}
 			catch (Exception ex)
@@ -223,13 +228,14 @@ namespace YAT.Model
 		/// </param>
 		protected override void Dispose(bool disposing)
 		{
-			this.eventHelper.DiscardAllEventsAndExceptions();
-
-			DebugMessage("Disposing...");
+			if (this.eventHelper != null) // Possible when called by finalizer (non-deterministic).
+				this.eventHelper.DiscardAllEventsAndExceptions();
 
 			// Dispose of managed resources:
 			if (disposing)
 			{
+				DebugMessage("Disposing...");
+
 				// In the 'normal' case, the terminals have already been closed, otherwise...
 
 				// ...detach event handlers to ensure that no more events are received...
@@ -251,9 +257,11 @@ namespace YAT.Model
 					DetachSettingsEventHandlers();
 					DetachSettingsHandler();
 				}
+
+				DebugMessage("...successfully disposed.");
 			}
 
-			DebugMessage("...successfully disposed.");
+		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
 		}
 
 		#endregion
@@ -264,6 +272,17 @@ namespace YAT.Model
 		//==========================================================================================
 		// General
 		//==========================================================================================
+
+		/// <summary></summary>
+		public virtual WorkspaceLaunchArgs LaunchArgs
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				return (this.launchArgs);
+			}
+		}
 
 		/// <summary></summary>
 		public virtual Guid Guid
@@ -277,8 +296,28 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// This is the indicated workspace name. The name is corresponding to the
-		/// indicated name of the currently active terminal.
+		/// The file name if the user has saved the terminal; otherwise <see cref="string.Empty"/>.
+		/// </summary>
+		/// <remarks>
+		/// Cached from <see cref="SettingsFilePath"/> for...
+		/// ...limiting to user files (i.e. not 'AutoSaved').
+		/// ...having to compose the name only once.
+		/// </remarks>
+		public virtual string UserFileName
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				if (!string.IsNullOrEmpty(this.userFileName))
+					return (this.userFileName);
+
+				return ("");
+			}
+		}
+
+		/// <summary>
+		/// The indicated name, i.e. either the <see cref="UserFileName"/> or <see cref="string.Empty"/>.
 		/// </summary>
 		public virtual string IndicatedName
 		{
@@ -286,21 +325,21 @@ namespace YAT.Model
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				if (this.activeTerminal != null)
-					return (this.activeTerminal.IndicatedName);
-				else
-					return (ApplicationEx.ProductName); // "YAT" or "YATConsole" shall be indicated in main title bar.
+				if (!string.IsNullOrEmpty(UserFileName))
+					return (UserFileName);
+
+				return ("");
 			}
 		}
 
 		/// <summary></summary>
-		public virtual WorkspaceLaunchArgs LaunchArgs
+		public virtual string Caption
 		{
 			get
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				return (this.launchArgs);
+				return (CaptionHelper.ComposeMain(IndicatedName));
 			}
 		}
 
@@ -494,9 +533,8 @@ namespace YAT.Model
 					var sb = new StringBuilder();
 
 					// Attention:
-					// Similar "[IndicatedName] - Info - Info - Info" as in...
-					// ...Terminal.Caption{get}.
-					// ...Terminal.InvariantCaption{get}.
+					// Same "[IndicatedName] - Info - Info - Info" as in...
+					// ...CaptionHelper.Compose().
 					// Changes here may have to be applied there too.
 
 					sb.Append("[");
@@ -638,7 +676,7 @@ namespace YAT.Model
 			bool success = false;
 
 			if (this.settingsHandler.SettingsFileSuccessfullyLoaded && this.settingsRoot.AutoSaved)
-				success = TrySaveConsideratelyWithoutUserInteraction(true);
+				success = TrySaveWithOptionsWithoutUserInteraction(true);
 
 			return (success);
 		}
@@ -656,16 +694,16 @@ namespace YAT.Model
 
 			// Then, save the workspace itself:
 			bool isCanceled;                       // Save even if not changed since explicitly requesting saving.
-			return (SaveConsiderately(true, true, true, false, out isCanceled));
+			return (SaveWithOptions(true, true, true, false, out isCanceled));
 		}
 
 		/// <summary>
 		/// Silently tries to save terminal to file, i.e. without any user interaction.
 		/// </summary>
-		public virtual bool TrySaveConsideratelyWithoutUserInteraction(bool autoSaveIsAllowed)
+		public virtual bool TrySaveWithOptionsWithoutUserInteraction(bool autoSaveIsAllowed)
 		{
 			bool isCanceled;
-			return (SaveConsiderately(autoSaveIsAllowed, false, false, false, out isCanceled));
+			return (SaveWithOptions(autoSaveIsAllowed, false, false, false, out isCanceled));
 		}
 
 		/// <summary>
@@ -681,7 +719,7 @@ namespace YAT.Model
 		/// <param name="canBeCanceled">Indicates whether save can be canceled.</param>
 		/// <param name="isCanceled">Indicates whether save has been canceled.</param>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public virtual bool SaveConsiderately(bool autoSaveIsAllowed, bool userInteractionIsAllowed, bool saveEvenIfNotChanged, bool canBeCanceled, out bool isCanceled)
+		public virtual bool SaveWithOptions(bool autoSaveIsAllowed, bool userInteractionIsAllowed, bool saveEvenIfNotChanged, bool canBeCanceled, out bool isCanceled)
 		{
 			AssertUndisposed();
 
@@ -917,6 +955,9 @@ namespace YAT.Model
 				this.settingsHandler.Save();
 				success = true;
 
+				if (!isAutoSave)
+					this.userFileName = Path.GetFileName(this.settingsHandler.SettingsFilePath);
+
 				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, isAutoSave));
 				OnTimedStatusTextRequest("Workspace saved.");
 
@@ -960,12 +1001,12 @@ namespace YAT.Model
 		/// Closes the workspace and prompts if the settings have changed.
 		/// </summary>
 		/// <remarks>
-		/// In case of a main close, <see cref="CloseConsiderately"/> below must be called
+		/// In case of a main close, <see cref="CloseWithOptions"/> below must be called
 		/// with the first argument set to <c>true</c>.
 		/// </remarks>
 		public virtual bool Close()
 		{
-			return (CloseConsiderately(false)); // See remarks above.
+			return (CloseWithOptions(false)); // See remarks above.
 		}
 
 		/// <summary>
@@ -1002,7 +1043,7 @@ namespace YAT.Model
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		public virtual bool CloseConsiderately(bool isMainExit)
+		public virtual bool CloseWithOptions(bool isMainExit)
 		{
 			AssertUndisposed();
 
@@ -1140,7 +1181,7 @@ namespace YAT.Model
 			// -------------------------------------------------------------------------------------
 
 			if (successWithTerminals && !successWithWorkspace && doSaveWorkspace)
-				successWithWorkspace = TrySaveConsideratelyWithoutUserInteraction(autoSaveIsAllowedForWorkspace); // Try auto save.
+				successWithWorkspace = TrySaveWithOptionsWithoutUserInteraction(autoSaveIsAllowedForWorkspace); // Try auto save.
 
 			// -------------------------------------------------------------------------------------
 			// If not successfully saved so far, evaluate next step according to rules above:
@@ -1351,7 +1392,7 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// See remarks of <see cref="Terminal.CloseConsiderately"/> for details on why this handler
+		/// See remarks of <see cref="Terminal.CloseWithOptions"/> for details on why this handler
 		/// needs to treat the event differently in case of a parent (i.e. workspace) close.
 		/// </remarks>
 		private void terminal_Closed(object sender, ClosedEventArgs e)
@@ -1472,9 +1513,9 @@ namespace YAT.Model
 			////OnTimedStatusTextRequest("Linked settings loaded."); is done within TryLoadLinkedSettings().
 			}
 
-			t.Launch(); // Errors are handled within Launch().
+			t.Launch(); // Errors during launch are handled there.
 
-			return (true);
+			return (true); // Return success even in case of errors since terminal successfully got created.
 		}
 
 		/// <summary>
@@ -1494,9 +1535,9 @@ namespace YAT.Model
 
 			int requestedTerminalCount = this.settingsRoot.TerminalSettings.Count;
 			if (requestedTerminalCount == 1)
-				OnFixedStatusTextRequest("Opening workspace terminal...");
+				OnFixedStatusTextRequest("Opening workspace's terminal...");
 			else if (requestedTerminalCount > 1)
-				OnFixedStatusTextRequest("Opening workspace terminals...");
+				OnFixedStatusTextRequest("Opening workspace's terminals...");
 
 			OnCursorRequest(Cursors.WaitCursor);
 
@@ -1516,7 +1557,7 @@ namespace YAT.Model
 				if (item.IsDefined)
 				{
 					bool success = false;
-					string errorMessage = null;
+					string messageOnFailure = null;
 
 					// Replace the desired terminal settings if requested:
 					bool isToReplace = false;
@@ -1542,14 +1583,14 @@ namespace YAT.Model
 						else
 						{
 							if (!string.IsNullOrEmpty(item.FilePath))
-								errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal", item.FilePath, ex);
+								messageOnFailure = ErrorHelper.ComposeMessage("Unable to open terminal", item.FilePath, ex);
 							else
-								errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal!", ex);
+								messageOnFailure = ErrorHelper.ComposeMessage("Unable to open terminal!", ex);
 						}
 					}
 					else // In all other cases, 'normally' open the terminal from the given file:
 					{
-						if (OpenTerminalFromFile(item.FilePath, item.Guid, item.FixedId, item.Window, out errorMessage))
+						if (OpenTerminalFromFile(item.FilePath, item.Guid, item.FixedId, item.Window, out messageOnFailure))
 						{                                   // Error must be handled here because of looping over terminals.
 							openedTerminalCount++;
 							success = true;
@@ -1561,12 +1602,12 @@ namespace YAT.Model
 						this.settingsRoot.TerminalSettings.Remove(item);
 						this.settingsRoot.SetChanged(); // Has to be called explicitly because a 'normal' list is being modified.
 
-						if (string.IsNullOrEmpty(errorMessage))
+						if (string.IsNullOrEmpty(messageOnFailure))
 						{
 							if (!string.IsNullOrEmpty(item.FilePath))
-								errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal file", item.FilePath);
+								messageOnFailure = ErrorHelper.ComposeMessage("Unable to open terminal file", item.FilePath);
 							else
-								errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal!");
+								messageOnFailure = ErrorHelper.ComposeMessage("Unable to open terminal!");
 						}
 
 						string caption;
@@ -1579,7 +1620,7 @@ namespace YAT.Model
 						OnFixedStatusTextRequest("Error opening terminal!");
 						var dr = OnMessageInputRequest
 						(
-							errorMessage + Environment.NewLine + Environment.NewLine + "Continue loading workspace?",
+							messageOnFailure + Environment.NewLine + Environment.NewLine + "Continue loading workspace?",
 							caption,
 							MessageBoxButtons.YesNo,
 							MessageBoxIcon.Error
@@ -1629,8 +1670,8 @@ namespace YAT.Model
 			OnFixedStatusTextRequest("Opening terminal " + fileName + "...");
 			OnCursorRequest(Cursors.WaitCursor);
 
-			string errorMessage;
-			if (OpenTerminalFromFile(filePath, Guid.Empty, TerminalIds.ActiveFixedId, null, out errorMessage))
+			string messageOnFailure;
+			if (OpenTerminalFromFile(filePath, Guid.Empty, TerminalIds.ActiveFixedId, null, out messageOnFailure))
 			{
 				OnCursorReset();
 				return (true);
@@ -1641,7 +1682,7 @@ namespace YAT.Model
 				OnFixedStatusTextRequest("Error opening terminal!");
 				OnMessageInputRequest
 				(
-					errorMessage,
+					messageOnFailure,
 					"Terminal File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Stop
@@ -1652,7 +1693,7 @@ namespace YAT.Model
 			}
 		}
 
-		private bool OpenTerminalFromFile(string filePath, Guid guid, int fixedId, WindowSettings windowSettings, out string errorMessage)
+		private bool OpenTerminalFromFile(string filePath, Guid guid, int fixedId, WindowSettings windowSettings, out string messageOnFailure)
 		{
 			string absoluteFilePath;
 			DocumentSettingsHandler<TerminalSettingsRoot> sh;
@@ -1661,18 +1702,18 @@ namespace YAT.Model
 			{
 				if (OpenTerminalFromSettings(sh, guid, fixedId, windowSettings, out ex))
 				{
-					errorMessage = null;
+					messageOnFailure = null;
 					return (true);
 				}
 				else
 				{
-					errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal", absoluteFilePath, ex);
+					messageOnFailure = ErrorHelper.ComposeMessage("Unable to open terminal", absoluteFilePath, ex);
 					return (false);
 				}
 			}
 			else
 			{
-				errorMessage = ErrorHelper.ComposeMessage("Unable to open terminal file", absoluteFilePath, ex);
+				messageOnFailure = ErrorHelper.ComposeMessage("Unable to open terminal file", absoluteFilePath, ex);
 				return (false);
 			}
 		}
@@ -1680,19 +1721,19 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
-			Exception exception;
-			return (OpenTerminalFromSettings(settingsHandler, Guid.Empty, TerminalIds.ActiveFixedId, null, out exception));
+			Exception exceptionOnFailure;
+			return (OpenTerminalFromSettings(settingsHandler, Guid.Empty, TerminalIds.ActiveFixedId, null, out exceptionOnFailure));
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid, int fixedId, WindowSettings windowSettings, out Exception exception)
+		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid, int fixedId, WindowSettings windowSettings, out Exception exceptionOnFailure)
 		{
 			AssertUndisposed();
 
 			// Ensure that the terminal file is not already open:
 			if (!CheckTerminalFiles(settingsHandler.SettingsFilePath))
 			{
-				exception = null;
+				exceptionOnFailure = null;
 				return (false);
 			}
 
@@ -1724,7 +1765,7 @@ namespace YAT.Model
 			catch (Exception ex)
 			{
 				DebugEx.WriteException(GetType(), ex, "Failed to create/open terminal from settings!");
-				exception = ex;
+				exceptionOnFailure = ex;
 				return (false);
 			}
 
@@ -1757,7 +1798,7 @@ namespace YAT.Model
 
 		////t.Start(); is done by StartAllTerminals() below.
 
-			exception = null;
+			exceptionOnFailure = null;
 			return (true);
 		}
 
@@ -1813,7 +1854,7 @@ namespace YAT.Model
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool OpenTerminalFile(string filePath, out string absoluteFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exception)
+		private bool OpenTerminalFile(string filePath, out string absoluteFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exceptionOnFailure)
 		{
 			// Attention:
 			// Similar code exists in Main.OpenTerminalFile().
@@ -1841,13 +1882,13 @@ namespace YAT.Model
 					sh.Settings.ClearChanged(); // Overriding such setting shall not be reflected in the settings,
 					                          //// i.e. neither be indicated by a '*' nor lead to a file write.
 					settingsHandler = sh;
-					exception = null;
+					exceptionOnFailure = null;
 					return (true);
 				}
 				else
 				{
 					settingsHandler = null;
-					exception = null;
+					exceptionOnFailure = null;
 					return (false);
 				}
 			}
@@ -1856,7 +1897,7 @@ namespace YAT.Model
 				DebugEx.WriteException(GetType(), ex, "Failed to open terminal file!");
 
 				settingsHandler = null;
-				exception = ex;
+				exceptionOnFailure = ex;
 				return (false);
 			}
 		}
@@ -2122,22 +2163,22 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual bool SaveAllTerminalsEvenIfNotChanged(bool autoSaveIsAllowed)
 		{
-			return (SaveAllTerminalsConsiderately(false, autoSaveIsAllowed, true));
+			return (SaveAllTerminalsWithOptions(false, autoSaveIsAllowed, true));
 		}
 
 		/// <summary></summary>
 		protected virtual bool SaveAllTerminalsNormally(bool autoSaveIsAllowed)
 		{
-			return (SaveAllTerminalsConsiderately(false, autoSaveIsAllowed, false));
+			return (SaveAllTerminalsWithOptions(false, autoSaveIsAllowed, false));
 		}
 
 		/// <summary></summary>
 		protected virtual bool SaveAllTerminalsOnClose(bool autoSaveIsAllowed)
 		{
-			return (SaveAllTerminalsConsiderately(true, autoSaveIsAllowed, false));
+			return (SaveAllTerminalsWithOptions(true, autoSaveIsAllowed, false));
 		}
 
-		private bool SaveAllTerminalsConsiderately(bool isWorkspaceClose, bool autoSaveIsAllowed, bool saveEvenIfNotChanged)
+		private bool SaveAllTerminalsWithOptions(bool isWorkspaceClose, bool autoSaveIsAllowed, bool saveEvenIfNotChanged)
 		{
 			bool success = true;
 
@@ -2152,7 +2193,7 @@ namespace YAT.Model
 			foreach (var t in clonedTerminalCollection)
 			{
 				bool isCanceled;
-				if (!t.SaveConsiderately(isWorkspaceClose, autoSaveIsAllowedOnTerminals, true, saveEvenIfNotChanged, true, out isCanceled))
+				if (!t.SaveWithOptions(isWorkspaceClose, autoSaveIsAllowedOnTerminals, true, saveEvenIfNotChanged, true, out isCanceled))
 				{
 					success = false;
 
@@ -2177,7 +2218,7 @@ namespace YAT.Model
 				if (t.SettingsFileHasAlreadyBeenNormallySaved)
 				{
 					bool isCanceled;                 // 'false' since "where file has already been *normally* saved"!
-					if (!t.SaveConsiderately(true, false, true, false, true, out isCanceled))
+					if (!t.SaveWithOptions(true, false, true, false, true, out isCanceled))
 					{
 						success = false;
 
@@ -2192,7 +2233,7 @@ namespace YAT.Model
 
 		/// <remarks>
 		/// In case of a workspace close, <see cref="CloseAllTerminals(bool, bool, bool, bool)"/>
-		/// below must be called with the first argument set to <c>true</c>.
+		/// further below must be called with the first argument set to <c>true</c>.
 		///
 		/// In case of intended close of one or all terminals, the user intentionally wants to close
 		/// the terminal(s), thus, this method will not try to auto save.
@@ -2205,7 +2246,7 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// See remarks of <see cref="Terminal.CloseConsiderately"/> for details on 'WorkspaceClose'.
+		/// See remarks of <see cref="Terminal.CloseWithOptions"/> for details on 'WorkspaceClose'.
 		/// </remarks>
 		private bool CloseAllTerminals(bool isWorkspaceClose, bool doSave, bool autoSaveIsAllowed, bool autoDeleteIsRequested)
 		{
@@ -2221,7 +2262,7 @@ namespace YAT.Model
 			var clonedTerminalCollection = new List<Terminal>(this.terminals);
 			foreach (var t in clonedTerminalCollection)
 			{
-				if (!t.CloseConsiderately(isWorkspaceClose, doSave, autoSaveIsAllowedOnTerminals, autoDeleteIsRequested))
+				if (!t.CloseWithOptions(isWorkspaceClose, doSave, autoSaveIsAllowedOnTerminals, autoDeleteIsRequested))
 					success = false;
 			}
 
@@ -2341,7 +2382,9 @@ namespace YAT.Model
 				this.activeTerminal = null;
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Not named "Try" same as all other "main" methods.
+		/// </remarks>
 		public virtual bool SaveActiveTerminal()
 		{
 			AssertUndisposed();
@@ -2352,7 +2395,9 @@ namespace YAT.Model
 				return (false);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Not named "Try" same as all other "main" methods.
+		/// </remarks>
 		public virtual bool CloseActiveTerminal()
 		{
 			AssertUndisposed();
@@ -2363,7 +2408,9 @@ namespace YAT.Model
 				return (false);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Not named "Try" same as all other "main" methods.
+		/// </remarks>
 		public virtual bool StartActiveTerminal()
 		{
 			AssertUndisposed();
@@ -2374,7 +2421,9 @@ namespace YAT.Model
 				return (false);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Not named "Try" same as all other "main" methods.
+		/// </remarks>
 		public virtual bool StopActiveTerminal()
 		{
 			AssertUndisposed();
@@ -2571,15 +2620,33 @@ namespace YAT.Model
 
 		#endregion
 
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		public override string ToString()
+		{
+			if (IsUndisposed) // AssertUndisposed() shall not be called from such basic method! Its return value may be needed for debugging.
+				return (Caption);
+			else
+				return (base.ToString());
+		}
+
+		#endregion
+
 		#region Debug
 		//==========================================================================================
 		// Debug
 		//==========================================================================================
 
 		/// <remarks>
-		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named 'Message' for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)

@@ -90,7 +90,15 @@ using YAT.View.Utilities;
 
 namespace YAT.View.Forms
 {
-	/// <summary></summary>
+	/// <summary>
+	/// The most important form of this application.
+	/// </summary>
+	/// <remarks>
+	/// #if (WITH_SCRIPTING)
+	/// The icon of this form is fixed to the YAT icon because the Albatros icon is very large
+	/// (~ 500x500 pixels) and would result in a super-enlarged title bar! Looks really funny...
+	/// #endif
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public partial class Terminal : Form, IOnFormDeactivateWorkaround
 	{
@@ -237,7 +245,7 @@ namespace YAT.View.Forms
 		{
 			DebugMessage("Creating...");
 
-			InitializeComponent();
+			InitializeComponent(); // Takes quite a while with the complexity this form has gotten...
 			FixContextMenus();
 			InitializeControls();
 
@@ -1700,14 +1708,14 @@ namespace YAT.View.Forms
 					isSerialPort = (this.settingsRoot.IOType       == Domain.IOType.SerialPort);
 				}
 
-				// Layout, disable monitor item if the other monitors are hidden:
-				toolStripMenuItem_TerminalMenu_View_Panels_Tx.Enabled    = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
-				toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Enabled = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
-				toolStripMenuItem_TerminalMenu_View_Panels_Rx.Enabled    = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.BidirMonitorPanelIsVisible);
-
-				toolStripMenuItem_TerminalMenu_View_Panels_Tx.Checked    = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
+				toolStripMenuItem_TerminalMenu_View_Panels_Tx   .Checked = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
 				toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Checked = this.settingsRoot.Layout.BidirMonitorPanelIsVisible;
-				toolStripMenuItem_TerminalMenu_View_Panels_Rx.Checked    = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
+				toolStripMenuItem_TerminalMenu_View_Panels_Rx   .Checked = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
+
+				// A panel must not be hideable if it is the only one:
+				toolStripMenuItem_TerminalMenu_View_Panels_Tx   .Enabled = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
+				toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Enabled = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
+				toolStripMenuItem_TerminalMenu_View_Panels_Rx   .Enabled = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.BidirMonitorPanelIsVisible);
 
 				ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_View_Panels_MonitorOrientation, (OrientationEx)this.settingsRoot.Layout.MonitorOrientation);
 
@@ -2083,16 +2091,22 @@ namespace YAT.View.Forms
 				var monitorType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
 				var isMonitor = (monitorType != Domain.RepositoryType.None);
 
-				toolStripMenuItem_MonitorContextMenu_Panels_Tx.Checked    = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
+				toolStripMenuItem_MonitorContextMenu_Panels_Tx   .Checked = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
 				toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Checked = this.settingsRoot.Layout.BidirMonitorPanelIsVisible;
-				toolStripMenuItem_MonitorContextMenu_Panels_Rx.Checked    = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
+				toolStripMenuItem_MonitorContextMenu_Panels_Rx   .Checked = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
 
-				// Disable "Monitor" item if the other monitors are hidden
-				toolStripMenuItem_MonitorContextMenu_Panels_Tx.Enabled    = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
+				// A panel must not be hideable if it is the only one:
+				toolStripMenuItem_MonitorContextMenu_Panels_Tx   .Enabled = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
 				toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Enabled = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
-				toolStripMenuItem_MonitorContextMenu_Panels_Rx.Enabled    = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.BidirMonitorPanelIsVisible);
+				toolStripMenuItem_MonitorContextMenu_Panels_Rx   .Enabled = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.BidirMonitorPanelIsVisible);
 
 				ToolStripComboBoxHelper.Select(toolStripComboBox_MonitorContextMenu_Panels_Orientation, (OrientationEx)this.settingsRoot.Layout.MonitorOrientation);
+
+				// In order to not necessarily having to use the main menu (longer mouse path), non-monitor panels shall also be manageable in the monitor context menu:
+				toolStripMenuItem_MonitorContextMenu_Panels_Predefined.Checked = this.settingsRoot.Layout.PredefinedPanelIsVisible;
+
+				toolStripMenuItem_MonitorContextMenu_Panels_SendText.Checked = this.settingsRoot.Layout.SendTextPanelIsVisible;
+				toolStripMenuItem_MonitorContextMenu_Panels_SendFile.Checked = this.settingsRoot.Layout.SendFilePanelIsVisible;
 
 				bool isShowable = (this.settingsRoot.Display.TxRadixIsShowable ||
 				                   this.settingsRoot.Display.RxRadixIsShowable);
@@ -2177,6 +2191,38 @@ namespace YAT.View.Forms
 				return;
 
 			SetMonitorOrientation((OrientationEx)toolStripComboBox_MonitorContextMenu_Panels_Orientation.SelectedItem);
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_Panels_Predefined_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.settingsRoot.Layout.PredefinedPanelIsVisible = !this.settingsRoot.Layout.PredefinedPanelIsVisible;
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_Panels_SendText_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.settingsRoot.Layout.SendTextPanelIsVisible = !this.settingsRoot.Layout.SendTextPanelIsVisible;
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_Panels_SendFile_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.settingsRoot.Layout.SendFilePanelIsVisible = !this.settingsRoot.Layout.SendFilePanelIsVisible;
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_Panels_Rearrange_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			ViewRearrange();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Format_Click(object sender, EventArgs e)
@@ -6724,7 +6770,7 @@ namespace YAT.View.Forms
 
 		private void settingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
-			SetTerminalCaption();
+			SetCaption();
 
 			if (e.Inner == null)
 			{
@@ -7546,93 +7592,6 @@ namespace YAT.View.Forms
 
 		#endregion
 
-		#region Terminal > Methods
-		//------------------------------------------------------------------------------------------
-		// Terminal > Methods
-		//------------------------------------------------------------------------------------------
-
-		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private DialogResult ShowSaveTerminalAsFileDialog()
-		{
-			SetFixedStatusText("Saving terminal as...");
-
-			var sfd = new SaveFileDialog();
-			sfd.Title       = "Save " + IndicatedName + " As";
-			sfd.Filter      = ExtensionHelper.TerminalFilesFilter;
-			sfd.FilterIndex = ExtensionHelper.TerminalFilesFilterDefault;
-			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.TerminalExtension);
-			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
-
-			// Check whether the terminal has already been saved as a .yat file:
-			if (StringEx.EndsWithOrdinalIgnoreCase(IndicatedName, ExtensionHelper.TerminalExtension))
-				sfd.FileName = IndicatedName;
-			else
-				sfd.FileName = IndicatedName + PathEx.NormalizeExtension(sfd.DefaultExt); // Note that 'DefaultExt' states "the returned string does not include the period".
-
-			var dr = sfd.ShowDialog(this);
-			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
-			{
-				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(sfd.FileName);
-				ApplicationSettings.SaveLocalUserSettings();
-
-				Refresh(); // Ensure that form has been refreshed before continuing.
-				this.terminal.SaveAs(sfd.FileName);
-			}
-			else
-			{
-				ResetStatusText();
-			}
-
-			return (dr);
-		}
-
-		#endregion
-
-		#region Terminal > Settings
-		//------------------------------------------------------------------------------------------
-		// Terminal > Settings
-		//------------------------------------------------------------------------------------------
-
-		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void ShowTerminalSettings()
-		{
-			SetFixedStatusText("Terminal settings...");
-
-			var f = new TerminalSettings(this.settingsRoot.Explicit);
-
-			// Meta information needed for e.g. "(in use by this terminal)":
-			f.TerminalId             = this.terminal.SequentialId;
-			f.TerminalIsOpen         = this.terminal.IsOpen;
-			f.TerminalSerialPortName = this.terminal.IOSerialPortName;
-
-			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
-			{
-				var fsr = f.SettingsResult;
-				if (fsr.HaveChanged)
-				{
-					SuspendHandlingTerminalSettings();
-					try
-					{
-						this.terminal.ApplyTerminalSettings(fsr); // \ToDo: Not a good solution, should be called in Model.Terminal.HandleTerminalSettings(), but that gets called too often => FR #309.
-					}
-					finally
-					{
-						ResumeHandlingTerminalSettings();
-					}
-				}
-				else
-				{
-					SetTimedStatusText("Terminal settings not changed.");
-				}
-			}
-			else
-			{
-				ResetStatusText();
-			}
-		}
-
-		#endregion
-
 		#region Terminal > View
 		//------------------------------------------------------------------------------------------
 		// Terminal > View
@@ -7645,7 +7604,7 @@ namespace YAT.View.Forms
 			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems(); // No dedicated methods (yet).
 
 			// Terminal panel:
-			SetTerminalCaption();
+			SetCaption(); // Only terminal dependent.
 			SetIOStatus();
 			SetIOControlControls();
 			SetMonitorIOStatus();
@@ -7663,7 +7622,7 @@ namespace YAT.View.Forms
 			SetAutoActionPlotCaption();
 		}
 
-		private void SetTerminalCaption()
+		private void SetCaption()
 		{
 			if (TerminalIsAvailable)
 				Text = this.terminal.Caption;
@@ -8191,6 +8150,86 @@ namespace YAT.View.Forms
 
 		#endregion
 
+		#region Terminal > Settings
+		//------------------------------------------------------------------------------------------
+		// Terminal > Settings
+		//------------------------------------------------------------------------------------------
+
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private DialogResult ShowSaveTerminalAsFileDialog()
+		{
+			SetFixedStatusText("Saving terminal as...");
+
+			var sfd = new SaveFileDialog();
+			sfd.Title       = "Save " + IndicatedName + " As";
+			sfd.Filter      = ExtensionHelper.TerminalFilesFilter;
+			sfd.FilterIndex = ExtensionHelper.TerminalFilesFilterDefault;
+			sfd.DefaultExt  = PathEx.DenormalizeExtension(ExtensionHelper.TerminalExtension);
+			sfd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
+
+			// Check whether the terminal has already been saved as a .yat file:
+			if (StringEx.EndsWithOrdinalIgnoreCase(IndicatedName, ExtensionHelper.TerminalExtension))
+				sfd.FileName = IndicatedName;
+			else
+				sfd.FileName = IndicatedName + PathEx.NormalizeExtension(sfd.DefaultExt); // Note that 'DefaultExt' states "the returned string does not include the period".
+
+			var dr = sfd.ShowDialog(this);
+			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
+			{
+				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.SaveLocalUserSettings();
+
+				Refresh(); // Ensure that form has been refreshed before continuing.
+				this.terminal.SaveAs(sfd.FileName);
+			}
+			else
+			{
+				ResetStatusText();
+			}
+
+			return (dr);
+		}
+
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void ShowTerminalSettings()
+		{
+			SetFixedStatusText("Terminal settings...");
+
+			var f = new TerminalSettings(this.settingsRoot.Explicit);
+
+			// Meta information needed for e.g. "(in use by this terminal)":
+			f.TerminalId             = this.terminal.SequentialId;
+			f.TerminalIsOpen         = this.terminal.IsOpen;
+			f.TerminalSerialPortName = this.terminal.IOSerialPortName;
+
+			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
+			{
+				var fsr = f.SettingsResult;
+				if (fsr.HaveChanged)
+				{
+					SuspendHandlingTerminalSettings();
+					try
+					{
+						this.terminal.ApplyTerminalSettings(fsr); // \ToDo: Not a good solution, should be called in Model.Terminal.HandleTerminalSettings(), but that gets called too often => FR #309.
+					}
+					finally
+					{
+						ResumeHandlingTerminalSettings();
+					}
+				}
+				else
+				{
+					SetTimedStatusText("Terminal settings not changed.");
+				}
+			}
+			else
+			{
+				ResetStatusText();
+			}
+		}
+
+		#endregion
+
 		#region Terminal > AutoActionPlot
 		//------------------------------------------------------------------------------------------
 		// Terminal > AutoActionPlot
@@ -8207,21 +8246,21 @@ namespace YAT.View.Forms
 				DeactivateAutoActionPlotRequestEvent(); // See method remarks!
 
 				this.autoActionPlotForm = new AutoActionPlot(this.terminal);
-				this.autoActionPlotForm.Text = ComposeAutoActionPlotFormText();
+				this.autoActionPlotForm.Text = ComposeAutoActionPlotFormCaption();
 				this.autoActionPlotForm.DeactivateAutoAction += AutoActionPlotForm_DeactivateAutoAction;
 				this.autoActionPlotForm.FormClosing += AutoActionPlotForm_FormClosing;
 				this.autoActionPlotForm.Show(this);
 			}
 			else
 			{
-				this.autoActionPlotForm.Text = ComposeAutoActionPlotFormText();
+				this.autoActionPlotForm.Text = ComposeAutoActionPlotFormCaption();
 			}
 		}
 
 		private void SetAutoActionPlotCaption()
 		{
 			if (this.autoActionPlotForm != null)
-				this.autoActionPlotForm.Text = ComposeAutoActionPlotFormText();
+				this.autoActionPlotForm.Text = ComposeAutoActionPlotFormCaption();
 		}
 
 		private void SetAutoActionPlotFormat()
@@ -8234,21 +8273,14 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		protected virtual string ComposeAutoActionPlotFormText()
+		protected virtual string ComposeAutoActionPlotFormCaption()
 		{
-			// Note:
-			// Same "YAT - [Caption]" as for MDI main form.
+			// "YAT - [IndicatedName]" same as for MDI main form:
+			string indicatedName = null;
+			if (this.terminal != null) // Name becomes a modified terminal caption.
+				indicatedName = this.terminal.ComposeCaption("Automatic Action Plot");
 
-			var sb = new StringBuilder(ApplicationEx.ProductName); // "YAT" or "YATConsole" shall be indicated in main title bar.
-
-			if (this.terminal != null)
-			{
-				sb.Append(" - [");
-				sb.Append(this.terminal.ComposeInvariantCaption("Automatic Action Plot"));
-				sb.Append("]");
-			}
-
-			return (sb.ToString());
+			return (Model.Utilities.CaptionHelper.ComposeMain(indicatedName));
 		}
 
 		private void AutoActionPlotForm_DeactivateAutoAction(object sender, EventArgs e)
@@ -8445,18 +8477,24 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <remarks>
-		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named "Message" for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named 'Message' for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
 		{
+			string id;
+			if (this.terminal != null)
+				id = "#" + this.terminal.SequentialId.ToString("D2", CultureInfo.CurrentCulture);
+			else
+				id = "N/A";
+
 			string guid;
 			if (this.terminal != null)
 				guid = this.terminal.Guid.ToString();
 			else
-				guid = "<None>";
+				guid = "N/A";
 
 			Debug.WriteLine
 			(
@@ -8467,7 +8505,7 @@ namespace YAT.View.Forms
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
 					GetType(),
-					"",
+					id,
 					"[" + guid + "]",
 					message
 				)

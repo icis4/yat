@@ -39,20 +39,43 @@ namespace YAT.Model.Utilities
 	public static class CaptionHelper
 	{
 		/// <summary></summary>
-		public static string ComposeInvariant(string indicatedName, string info)
+		public static string ComposeMain(string indicatedName)
 		{
-			return (ComposeInvariant(indicatedName, new string[] { info }));
+			var sb = new StringBuilder(ApplicationEx.ProductName); // "YAT" or "YATConsole" shall be indicated in main title bar.
+
+			// Attention:
+			// Similar "YAT - [IndicatedName]" as in...
+			// ...ComposeTerminal() below.
+			// ...Workspace.ActiveTerminalInfoText{get}.
+			// Changes here may have to be applied there too.
+
+			if (!string.IsNullOrEmpty(indicatedName))
+			{
+				sb.Append(" - [");
+				sb.Append(indicatedName);
+				sb.Append("]");
+			}
+
+			return (sb.ToString());
+		}
+
+
+		/// <summary></summary>
+		public static string ComposeTerminal(string indicatedName, string info)
+		{
+			return (ComposeTerminal(indicatedName, new string[] { info }));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "infos", Justification = "Plural of 'info'.")]
-		public static string ComposeInvariant(string indicatedName, IEnumerable<string> infos)
+		public static string ComposeTerminal(string indicatedName, IEnumerable<string> infos)
 		{
 			var sb = new StringBuilder();
 
 			// Attention:
 			// Similar "[IndicatedName] - Info - Info - Info" as in...
-			// ...Compose() below.
+			// ...ComposeMain() above.
+			// ...ComposeTerminal() below.
 			// ...Workspace.ActiveTerminalInfoText{get}.
 			// Changes here may have to be applied there too.
 
@@ -60,10 +83,13 @@ namespace YAT.Model.Utilities
 			sb.Append(indicatedName);
 			sb.Append("]");
 
-			foreach (var info in infos)
+			if (infos != null)
 			{
-				sb.Append(" - ");
-				sb.Append(info);
+				foreach (var info in infos)
+				{
+					sb.Append(" - ");
+					sb.Append(info);
+				}
 			}
 
 			return (sb.ToString());
@@ -73,14 +99,15 @@ namespace YAT.Model.Utilities
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
-		public static string Compose(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, TerminalSettingsRoot settingsRoot, Domain.Terminal terminal,
+		public static string ComposeTerminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, TerminalSettingsRoot settingsRoot, Domain.Terminal terminal,
 		                             string indicatedName, bool isStarted, bool isOpen, bool isConnected)
 		{
 			var sb = new StringBuilder();
 
 			// Attention:
-			// Similar "[IndicatedName] - Info - Info - Info" as in...
-			// ...ComposeInvariant() above.
+			// Same "[IndicatedName] - Info - Info - Info" as in...
+			// ...ComposeMain() above.
+			// ...ComposeTerminal() above.
 			// ...Workspace.ActiveTerminalInfoText{get}.
 			// Changes here may have to be applied there too.
 
@@ -102,10 +129,10 @@ namespace YAT.Model.Utilities
 					if (settingsHandler.SettingsFileIsReadOnly)
 						sb.Append("#");
 
-					if (settingsRoot.ExplicitHaveChanged)
-						sb.Append(" *");
-				}
-				sb.Append("]");
+					if (settingsRoot.ExplicitHaveChanged) // Notes on indication:
+						sb.Append(" *");                  //  > Visual Studio without space,             e.g. [Main.cs*]
+				}                                         //  > Programmer's Notepad and IAR with space, e.g. [Main.cs *] => YAT's choice
+				sb.Append("]");                           //  > Notepad++ with leading space,            e.g. [*Main.cs]
 
 				switch (settingsRoot.IOType)
 				{
@@ -225,8 +252,7 @@ namespace YAT.Model.Utilities
 							else
 							{
 								sb.Append(" - ");
-								sb.Append("Starting on port ");
-								sb.Append(settings.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+								sb.Append("Starting"); // "to connect to..." or "to listen on..." makes little sense as role is yet undetermined.
 							}
 						}
 						else
