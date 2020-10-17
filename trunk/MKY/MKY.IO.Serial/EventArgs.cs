@@ -141,25 +141,25 @@ namespace MKY.IO.Serial
 		public DateTime TimeStamp { get; }
 
 		/// <summary></summary>
-		public IOMessageEventArgs(string message)
+		protected IOMessageEventArgs(string message)
 			: this(Direction.None, message, DateTime.Now)
 		{
 		}
 
 		/// <summary></summary>
-		public IOMessageEventArgs(string message, DateTime timeStamp)
+		protected IOMessageEventArgs(string message, DateTime timeStamp)
 			: this(Direction.None, message, timeStamp)
 		{
 		}
 
 		/// <summary></summary>
-		public IOMessageEventArgs(Direction direction, string message)
+		protected IOMessageEventArgs(Direction direction, string message)
 			: this(direction, message, DateTime.Now)
 		{
 		}
 
 		/// <summary></summary>
-		public IOMessageEventArgs(Direction direction, string message, DateTime timeStamp)
+		protected IOMessageEventArgs(Direction direction, string message, DateTime timeStamp)
 		{
 			Direction = direction;
 			Message   = message;
