@@ -39,7 +39,7 @@ using MKY.Collections;
 using MKY.IO.Ports;
 using MKY.Windows.Forms;
 
-using YAT.Model.Utilities;
+//// 'YAT.Model.Utilities' is explicitly used due to ambiguity of 'MessageHelper'.
 using YAT.Settings.Application;
 
 #endregion
@@ -435,7 +435,7 @@ namespace YAT.View.Controls
 							scanSuccess = false;
 
 							errorMessageLead = "Timeout while scanning the ports!";
-							errorMessageHint = "If the issue cannot be solved, tell YAT to differently scan the ports by going to 'File > Preferences...' and change the port related settings.";
+							errorMessageHint = "If the issue cannot be solved, tell " + ApplicationEx.CommonName + " to differently scan the ports by going to 'File > Preferences...' and change the port related settings.";
 						}
 						else
 						{
@@ -611,7 +611,7 @@ namespace YAT.View.Controls
 
 		private void ShowErrorMessage(Exception ex, string info, string hint)
 		{
-			var sb = new StringBuilder(ErrorHelper.ComposeMessage(info, ex));
+			var sb = new StringBuilder(Model.Utilities.MessageHelper.ComposeMessage(info, ex));
 
 			if (sb.Length > 0)
 			{

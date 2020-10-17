@@ -43,7 +43,7 @@ using MKY.Diagnostics;
 using MKY.Text.RegularExpressions;
 
 using YAT.Model.Types;
-using YAT.Model.Utilities;
+//// 'YAT.Model.Utilities' is explicitly used due to ambiguity of 'MessageHelper'.
 
 #endregion
 
@@ -60,7 +60,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		private int autoActionCount;
-		private AutoTriggerHelper autoActionTriggerHelper;
+		private Utilities.AutoTriggerHelper autoActionTriggerHelper;
 		private object autoActionTriggerHelperSyncObj = new object();
 
 		private bool autoActionClearRepositoriesOnSubsequentRxIsArmed; // = false;
@@ -135,7 +135,7 @@ namespace YAT.Model
 							if (TryParseCommand(triggerCommand, out triggerSequence))
 							{
 								lock (this.autoActionTriggerHelperSyncObj)
-									this.autoActionTriggerHelper = new AutoTriggerHelper(triggerSequence);
+									this.autoActionTriggerHelper = new Utilities.AutoTriggerHelper(triggerSequence);
 							}
 							else
 							{
@@ -144,7 +144,7 @@ namespace YAT.Model
 
 								OnMessageInputRequest
 								(
-									"Failed to parse the automatic action trigger! The trigger does not specify valid YAT command text! Automatic action has been disabled!" + Environment.NewLine + Environment.NewLine +
+									"Failed to parse the automatic action trigger! The trigger does not specify valid " + ApplicationEx.CommonName + " command text! Automatic action has been disabled!" + Environment.NewLine + Environment.NewLine +
 									"To enable again, re-configure the automatic action.",
 									"Automatic Action Error",
 									MessageBoxButtons.OK,
@@ -155,7 +155,7 @@ namespace YAT.Model
 						else // IsTextTriggered
 						{
 							lock (this.autoActionTriggerHelperSyncObj)
-								this.autoActionTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, SettingsRoot.AutoAction.TriggerOptions.CaseSensitive, SettingsRoot.AutoAction.TriggerOptions.WholeWord, triggerRegex);
+								this.autoActionTriggerHelper = new Utilities.AutoTriggerHelper(triggerTextOrRegexPattern, SettingsRoot.AutoAction.TriggerOptions.CaseSensitive, SettingsRoot.AutoAction.TriggerOptions.WholeWord, triggerRegex);
 						}
 					}
 					else if (this.autoIsReady) // See remarks of 'Terminal.NotifyAutoIsReady()' for background.
@@ -382,7 +382,7 @@ namespace YAT.Model
 						case AutoAction.Filter:   if ( isTriggered) { lines.Add(dl); } break;
 						case AutoAction.Suppress: if (!isTriggered) { lines.Add(dl); } break;
 
-						default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Only 'Filter' and 'Suppress' are evaluated here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						default: throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "Only 'Filter' and 'Suppress' are evaluated here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 					}
 				} // if (direction != Tx)
 			} // foreach (linesInitially)
@@ -459,7 +459,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		private void AutoActionThread()
 		{
-			DebugThreads("AutoActionThread() has started.");
+			DebugThreads("...AutoActionThread() has started.");
 
 			try
 			{
@@ -608,7 +608,7 @@ namespace YAT.Model
 
 				default:
 				{
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + action + "' is an automatic action that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "'" + action + "' is an automatic action that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -654,7 +654,7 @@ namespace YAT.Model
 					return (true);
 
 				default:
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + action + "' is an automatic action that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "'" + action + "' is an automatic action that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 			}
 		}
 
@@ -730,7 +730,7 @@ namespace YAT.Model
 				case AutoAction.HistogramHorizontal:           CreateYPlotItem(          plotAction,                   triggerMatches,             out pi);    messageOnFailure = null; return (true);
 				case AutoAction.HistogramVertical:             CreateYPlotItem(          plotAction,                   triggerMatches,             out pi);    messageOnFailure = null; return (true);
 
-				default: throw (new ArgumentOutOfRangeException("plot", plotAction, MessageHelper.InvalidExecutionPreamble + "'" + plotAction.ToString() + "' is a plot type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("plot", plotAction, MKY.MessageHelper.InvalidExecutionPreamble + "'" + plotAction.ToString() + "' is a plot type that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 			}
 		}
 
@@ -746,7 +746,7 @@ namespace YAT.Model
 				case (AutoAction.PlotByteCountRate): label = "bytes"; txCount = dataStatus.Counts.TxBytes; txRate = dataStatus.Rates.TxBytes; rxCount = dataStatus.Counts.RxBytes; rxRate = dataStatus.Rates.RxBytes; break;
 				case (AutoAction.PlotLineCountRate): label = "lines"; txCount = dataStatus.Counts.TxLines; txRate = dataStatus.Rates.TxLines; rxCount = dataStatus.Counts.RxLines; rxRate = dataStatus.Rates.RxLines; break;
 
-				default: throw (new ArgumentOutOfRangeException("plotAction", plotAction, MessageHelper.InvalidExecutionPreamble + "'" + plotAction + "' is a plot action that is not (yet) supported for counts/rates!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("plotAction", plotAction, MKY.MessageHelper.InvalidExecutionPreamble + "'" + plotAction + "' is a plot action that is not (yet) supported for counts/rates!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 			}
 
 			var xValue = new Tuple<string, double>("Time Stamp", triggerTimeStamp.ToOADate());
@@ -933,22 +933,20 @@ namespace YAT.Model
 		{
 			lock (this.autoActionThreadSyncObj)
 			{
-				DebugThreads("AutoActionThread() gets created...");
-
 				if (this.autoActionThread == null)
 				{
+					DebugThreads("AutoActionThread() gets started...");
+
 					this.autoActionThreadRunFlag = true;
 					this.autoActionThreadEvent = new AutoResetEvent(false);
 					this.autoActionThread = new Thread(new ThreadStart(AutoActionThread));
 					this.autoActionThread.Name = "Terminal [" + Guid + "] Auto Action Thread";
 					this.autoActionThread.Start();
-
-					DebugThreads("...successfully created.");
 				}
 			#if (DEBUG)
 				else
 				{
-					DebugThreads("...failed as it already exists.");
+					DebugThreads("AutoActionThread() does not get started as it already exists.");
 				}
 			#endif
 			}

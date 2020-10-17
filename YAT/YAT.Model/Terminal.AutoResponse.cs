@@ -40,7 +40,7 @@ using MKY.Diagnostics;
 using MKY.Text.RegularExpressions;
 
 using YAT.Model.Types;
-using YAT.Model.Utilities;
+//// 'YAT.Model.Utilities' is explicitly used due to ambiguity of 'MessageHelper'.
 
 #endregion
 
@@ -57,7 +57,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		private int autoResponseCount;
-		private AutoTriggerHelper autoResponseTriggerHelper;
+		private Utilities.AutoTriggerHelper autoResponseTriggerHelper;
 		private object autoResponseTriggerHelperSyncObj = new object();
 
 		private Queue<Tuple<byte[], string, MatchCollection>> autoResponseQueue = new Queue<Tuple<byte[], string, MatchCollection>>();
@@ -110,7 +110,7 @@ namespace YAT.Model
 							if (TryParseCommand(triggerCommand, out triggerSequence))
 							{
 								lock (this.autoResponseTriggerHelperSyncObj)
-									this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerSequence);
+									this.autoResponseTriggerHelper = new Utilities.AutoTriggerHelper(triggerSequence);
 							}
 							else
 							{
@@ -119,7 +119,7 @@ namespace YAT.Model
 
 								OnMessageInputRequest
 								(
-									"Failed to parse the automatic response trigger! The trigger does not specify valid YAT command text! Automatic response has been disabled!" + Environment.NewLine + Environment.NewLine +
+									"Failed to parse the automatic response trigger! The trigger does not specify valid " + ApplicationEx.CommonName + " command text! Automatic response has been disabled!" + Environment.NewLine + Environment.NewLine +
 									"To enable again, re-configure the automatic response.",
 									"Automatic Response Error",
 									MessageBoxButtons.OK,
@@ -130,7 +130,7 @@ namespace YAT.Model
 						else // IsTextTriggered
 						{
 							lock (this.autoResponseTriggerHelperSyncObj)
-								this.autoResponseTriggerHelper = new AutoTriggerHelper(triggerTextOrRegexPattern, SettingsRoot.AutoResponse.TriggerOptions.CaseSensitive, SettingsRoot.AutoResponse.TriggerOptions.WholeWord, triggerRegex);
+								this.autoResponseTriggerHelper = new Utilities.AutoTriggerHelper(triggerTextOrRegexPattern, SettingsRoot.AutoResponse.TriggerOptions.CaseSensitive, SettingsRoot.AutoResponse.TriggerOptions.WholeWord, triggerRegex);
 						}
 					}
 					else if (this.autoIsReady) // See remarks of 'Terminal.NotifyAutoIsReady()' for background.
@@ -314,7 +314,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		private void AutoResponseThread()
 		{
-			DebugThreads("AutoResponseThread() has started.");
+			DebugThreads("...AutoResponseThread() has started.");
 
 			try
 			{
@@ -437,7 +437,7 @@ namespace YAT.Model
 
 				default:
 				{
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + response + "' is an automatic response that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "'" + response + "' is an automatic response that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -540,22 +540,20 @@ namespace YAT.Model
 		{
 			lock (this.autoResponseThreadSyncObj)
 			{
-				DebugThreads("AutoResponseThread() gets created...");
-
 				if (this.autoResponseThread == null)
 				{
+					DebugThreads("AutoResponseThread() gets started...");
+
 					this.autoResponseThreadRunFlag = true;
 					this.autoResponseThreadEvent = new AutoResetEvent(false);
 					this.autoResponseThread = new Thread(new ThreadStart(AutoResponseThread));
 					this.autoResponseThread.Name = "Terminal [" + Guid + "] Auto Response Thread";
 					this.autoResponseThread.Start();
-
-					DebugThreads("...successfully created.");
 				}
 			#if (DEBUG)
 				else
 				{
-					DebugThreads("...failed as it already exists.");
+					DebugThreads("AutoResponseThread() does not get started as it already exists.");
 				}
 			#endif
 			}

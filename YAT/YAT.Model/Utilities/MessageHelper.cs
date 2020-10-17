@@ -40,7 +40,7 @@ using MKY.IO;
 namespace YAT.Model.Utilities
 {
 	/// <summary></summary>
-	public static class ErrorHelper
+	public static class MessageHelper
 	{
 		/// <remarks>Provides [str] and [str, str] and [str, str, str] and [str, str, str, str].</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]

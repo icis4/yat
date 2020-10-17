@@ -580,9 +580,9 @@ namespace YAT.View.Forms
 
 				string errorMessage;
 				if (!string.IsNullOrEmpty(sfd.FileName))
-					errorMessage = ErrorHelper.ComposeMessage("Unable to save", sfd.FileName, ex);
+					errorMessage = Model.Utilities.MessageHelper.ComposeMessage("Unable to save", sfd.FileName, ex);
 				else
-					errorMessage = ErrorHelper.ComposeMessage("Unable to save file!", ex);
+					errorMessage = Model.Utilities.MessageHelper.ComposeMessage("Unable to save file!", ex);
 
 				MessageBoxEx.Show
 				(
