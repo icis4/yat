@@ -113,13 +113,13 @@ namespace YAT.Model.Test.FileHandling
 			workspace = main.Workspace;
 			Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 			Assert.That(workspace.TerminalCount, Is.EqualTo(0), step + "Workspace doesn't contain 0 terminals!");
-			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
 			success = workspace.CreateNewTerminal(GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 			Assert.That(success, Is.True, step + "Terminal could not be created!");
 			terminal = workspace.ActiveTerminal;
 			Assert.That(terminal, Is.Not.Null, step + "Terminal could not be created!");
-			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
 			bool terminalAutoSaved = true;
 			if (!string.IsNullOrEmpty(terminalFilePath))
@@ -156,11 +156,11 @@ namespace YAT.Model.Test.FileHandling
 			workspace = main.Workspace;
 			Assert.That(workspace, Is.Not.Null, step + "Workspace not created!");
 			Assert.That(workspace.TerminalCount, Is.EqualTo(1), step + "Workspace doesn't contain 1 terminal!");
-			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
 			terminal = workspace.ActiveTerminal;
 			Assert.That(terminal, Is.Not.Null, step + "Terminal not opened from file!");
-			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 		}
 
 		#endregion

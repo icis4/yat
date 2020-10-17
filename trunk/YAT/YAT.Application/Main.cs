@@ -98,13 +98,22 @@ namespace YAT.Application
 		{
 			"Return values:",
 			"",
-			"   0      Successful exit",
+		#if (WITH_SCRIPTING)
+			">= 4      Any other user defined script result",
+			"   3      Script result (e.g. 'Auxiliaries.StandardResult.User')",
+			"   2      Script result (e.g. 'Auxiliaries.StandardResult.Failure')",
+			"   1      Script result (e.g. 'Auxiliaries.StandardResult.Cancel')",
+			"   0      Success       (e.g. 'Auxiliaries.StandardResult.Success')",
+		#else
+			"   0      Success",
+		#endif
 			"  -1      Command line error",
 			"  -2      Application settings error",
 			"  -3      Application start error",
 			"  -4      Application run error",
 			"  -5      Application exit error",
 			"  -6      Unhandled exception",
+			"  -7      Undetermined issue",
 		#if (WITH_SCRIPTING)
 			"-100      Script invalid content",
 			"-101      Script stop on error",
@@ -122,11 +131,11 @@ namespace YAT.Application
 
 		private static readonly string ObjectDisposedExceptionInMscorlibOrSystemMessage =
 			"Such 'ObjectDisposedException' in the underlying system is an exeption " +
-			"that YAT is aware of but cannot properly handle. " + ExceptionBackground;
+			"that " + ApplicationEx.CommonName + " is aware of but cannot properly handle. " + ExceptionBackground;
 
 		private static readonly string UnauthorizedAccessExceptionInEventLoopRunnerMessage =
 			"Such 'UnauthorizedAccessException' in 'SerialStream.EventLoopRunner' is an exeption " +
-			"that YAT is aware of but cannot properly handle. " + ExceptionBackground;
+			"that " + ApplicationEx.CommonName + " is aware of but cannot properly handle. " + ExceptionBackground;
 
 		private static readonly string ExceptionBackground =
 			"It can happen when a serial COM port gets physically disconnected while it is open. " +
@@ -134,9 +143,9 @@ namespace YAT.Application
 			"vague plans fixing. The issue is known for internal ports using the Microsoft " +
 			"serial COM port driver, external USB/COM ports using the Microsoft USB CDC/ACM " +
 			"(virtual serial port) driver as well as Microchip MCP2221 USB-to-UART/I2C bridges. " +
-			"The issue is referred to by dozens of online blogs and articles. YAT is applying " +
-			"several patches to try working around the issue, but apparently none of them has " +
-			"succeeded in the current situation." +
+			"The issue is referred to by dozens of online blogs and articles. " +
+			ApplicationEx.CommonName + " is applying several patches to try working around the " +
+			"issue, but apparently none of them has succeeded in the current situation." +
 			Environment.NewLine + Environment.NewLine +
 			"To prevent this issue, refrain from disconnecting a device while its port is open. " +
 			"Or, manually close the port after the device got disconnected.";
@@ -186,8 +195,8 @@ namespace YAT.Application
 		// could also be requested by some other means than the command line, e.g. by a config file.
 
 		/// <remarks>
-		/// Until the command line has been validated by <see cref="PrepareRun"/>,
-		/// this property returns <c>false</c>.
+		/// Until the command line has been validated by <see cref="PrepareRun_ForTestOnly()"/> or
+		/// <see cref="Run(bool)"/>, this property returns <c>false</c>.
 		/// </remarks>
 		public virtual bool CommandLineIsValid
 		{
@@ -216,7 +225,7 @@ namespace YAT.Application
 		/// <summary>
 		/// This method is used to test the command line argument processing.
 		/// </summary>
-		public virtual MainResult PrepareRun()
+		public virtual MainResult PrepareRun_ForTestOnly()
 		{
 			if (this.commandLineArgs != null)
 			{
@@ -228,10 +237,10 @@ namespace YAT.Application
 
 				// Note that this is the location where the command line arguments are processed
 				// and validated in case of automated testing. In normal operation, they will be
-				// processed and validated in Run() further below.
+				// processed and validated in 'Run()' further below.
 				//
 				// Calling ProcessAndValidate() multiple times doesn't matter, this use case is
-				// covered by 'ArgsHandler'.
+				// supported by 'MKY.CommandLine.ArgsHandler'.
 			}
 			else
 			{
@@ -274,13 +283,13 @@ namespace YAT.Application
 			// processed and validated for a first time, even BEFORE the application settings have
 			// been created/loaded. Then they will be processed and validated for a second time
 			// AFTER the application settings were created/loaded. This second processing happens
-			// in YAT.Model.Main.ProcessCommandLineArgsIntoLaunchRequests().
+			// in 'YAT.Model.Main.ProcessCommandLineArgsIntoLaunchRequests()'.
 			//
 			// In case of automated testing, the command line arguments will be processed and
-			// validated in PrepareRun() above, and also in YAT.Model.Main.
+			// validated in 'PrepareRun_ForTestOnly()' above, and also in YAT.Model.Main.
 			//
-			// Calling ProcessAndValidate() multiple times doesn't matter, this use case is covered
-			// by 'ArgsHandler'.
+			// Calling ProcessAndValidate() multiple times doesn't matter, this use case is
+			// supported by 'MKY.CommandLine.ArgsHandler'.
 
 			// Prio 0 = None:
 			if (this.commandLineArgs == null || this.commandLineArgs.HasNoArgs)
@@ -1158,12 +1167,29 @@ namespace YAT.Application
 		{
 			switch (result)
 			{
-				case Model.MainResult.Success:               return (MainResult.Success);
-				case Model.MainResult.CommandLineError:      return (MainResult.CommandLineError);
-				case Model.MainResult.ApplicationStartError: return (MainResult.ApplicationStartError);
-				case Model.MainResult.ApplicationRunError:   return (MainResult.ApplicationRunError);
-				case Model.MainResult.ApplicationExitError:  return (MainResult.ApplicationExitError);
-				default:                                     return (MainResult.UnhandledException); // Covers 'Model.MainResult.UnhandledException'.
+				case Model.MainResult.Success:                  return (MainResult.Success);
+				case Model.MainResult.CommandLineError:         return (MainResult.CommandLineError);
+				case Model.MainResult.ApplicationStartError:    return (MainResult.ApplicationStartError);
+				case Model.MainResult.ApplicationRunError:      return (MainResult.ApplicationRunError);
+				case Model.MainResult.ApplicationExitError:     return (MainResult.ApplicationExitError);
+				case Model.MainResult.UnhandledException:       return (MainResult.UnhandledException);
+			#if (!WITH_SCRIPTING)
+				default:                                        return (MainResult.UndeterminedIssue); // Covers 'Model.MainResult.UndeterminedIssue'.
+			#else
+				case Model.MainResult.UndeterminedIssue:        return (MainResult.UndeterminedIssue);
+
+				case Model.MainResult.ScriptInvalidContent:     return (MainResult.ScriptInvalidContent);
+				case Model.MainResult.ScriptStopOnError:        return (MainResult.ScriptStopOnError);
+				case Model.MainResult.ScriptExit:               return (MainResult.ScriptExit);
+				case Model.MainResult.ScriptUserBreak:          return (MainResult.ScriptUserBreak);
+				case Model.MainResult.ScriptUnhandledException: return (MainResult.ScriptUnhandledException);
+			////case Model.MainResult.ScriptInvalidReturnValue: return (MainResult.ScriptInvalidReturnValue); \fixme (2017-02-14 / MKY) legacy...
+				case Model.MainResult.ScriptThreadAbort:        return (MainResult.ScriptThreadAbort);
+				case Model.MainResult.ScriptRemotingException:  return (MainResult.ScriptRemotingException);
+				case Model.MainResult.ScriptInvalidOperation:   return (MainResult.ScriptInvalidOperation);
+
+				default:                                        return ((MainResult)result); // Any 'undefined' value might be returned by a script,
+			#endif                                                                           // even though only positive values should be returned.
 			}
 		}
 

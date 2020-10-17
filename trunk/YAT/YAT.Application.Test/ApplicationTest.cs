@@ -144,7 +144,7 @@ namespace YAT.Application.Test
 		{
 			var main = new Main(EmptyArgs);
 
-			PrepareMainAndVerifyResult(main, MainResult.Success);
+			PrepareRunAndVerifyResult(main, MainResult.Success);
 
 			Assert.That(main.CommandLineIsValid,         Is.True);
 			Assert.That(main.CommandLineHelpIsRequested, Is.False);
@@ -164,7 +164,7 @@ namespace YAT.Application.Test
 			var terminalFilePathForTest = CloneForTest(TerminalFilePath_TestCase03, "03 - *.*");
 			var main = new Main(new string[] { terminalFilePathForTest });
 
-			PrepareMainAndVerifyResult(main, MainResult.Success);
+			PrepareRunAndVerifyResult(main, MainResult.Success);
 
 			Assert.That(main.CommandLineIsValid,         Is.True);
 			Assert.That(main.CommandLineHelpIsRequested, Is.False);
@@ -184,7 +184,7 @@ namespace YAT.Application.Test
 			var workspaceFilePathForTest = CloneForTest(WorkspaceFilePath_TestCase04, "04 - *.*");
 			var main = new Main(new string[] { workspaceFilePathForTest });
 
-			PrepareMainAndVerifyResult(main, MainResult.Success);
+			PrepareRunAndVerifyResult(main, MainResult.Success);
 
 			Assert.That(main.CommandLineIsValid,         Is.True);
 			Assert.That(main.CommandLineHelpIsRequested, Is.False);
@@ -203,7 +203,7 @@ namespace YAT.Application.Test
 		{
 			var main = new Main(SerialPortArgs);
 
-			PrepareMainAndVerifyResult(main, MainResult.Success);
+			PrepareRunAndVerifyResult(main, MainResult.Success);
 
 			Assert.That(main.CommandLineIsValid,         Is.True);
 			Assert.That(main.CommandLineHelpIsRequested, Is.False);
@@ -468,7 +468,7 @@ namespace YAT.Application.Test
 		{
 			var main = new Main(null);
 
-			PrepareMainAndVerifyResult(main, MainResult.Success);
+			PrepareRunAndVerifyResult(main, MainResult.Success);
 
 			Assert.That(main.CommandLineIsValid,         Is.True);
 			Assert.That(main.CommandLineHelpIsRequested, Is.False);
@@ -488,7 +488,7 @@ namespace YAT.Application.Test
 		{
 			var main = new Main(new string[] { "--NoLogo" });
 
-			PrepareMainAndVerifyResult(main, MainResult.Success);
+			PrepareRunAndVerifyResult(main, MainResult.Success);
 
 			Assert.That(main.CommandLineIsValid,         Is.True);
 			Assert.That(main.CommandLineLogoIsRequested, Is.False);
@@ -539,9 +539,9 @@ namespace YAT.Application.Test
 			//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.
 		}
 
-		private static void PrepareMainAndVerifyResult(Main main, MainResult expectedMainResult)
+		private static void PrepareRunAndVerifyResult(Main main, MainResult expectedMainResult)
 		{
-			var mainResult = main.PrepareRun();
+			var mainResult = main.PrepareRun_ForTestOnly();
 			Assert.That(mainResult, Is.EqualTo(expectedMainResult));
 		}
 
