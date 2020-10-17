@@ -27,7 +27,7 @@ namespace NUnitEx
 {
 	/// <summary></summary>
 	[TestFixture]
-	public class StandardCategoriesDummyInstance
+	public class StandardDurationCategoriesDummyInstance
 	{
 		/// <remarks>
 		/// Dummy instance to ensure every standard instance is instantiated and can thus be

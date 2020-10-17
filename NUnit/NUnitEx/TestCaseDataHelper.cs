@@ -41,7 +41,7 @@ namespace NUnitEx
 			var filePath = Temp.MakeTempFilePath(test, data.TestName, ".log", acceptExistingFile: append);
 
 			using (var sw = new StreamWriter(filePath, append: append))
-			{
+			{                           // Values start at position 10.
 				sw.WriteLine("Args:     {0}", data.Arguments.Length);
 
 				for (int i = 0; i < data.Arguments.Length; i++)
@@ -51,13 +51,13 @@ namespace NUnitEx
 					var arg = data.Arguments[i];
 					if (arg != null)
 						argAsString = arg.ToString();
-
-					if (argAsString == null)
-						sw.WriteLine("    #{0}    [null]", i);
+					                         //// Indices get placed at position 5..8 (more than 9999 args are very unlikely).
+					if (argAsString == null) //  // Values start at position 10.
+						sw.WriteLine("    #{0,4} (null)", i);
 					else if (argAsString.Length <= 0)
-						sw.WriteLine("    #{0}    [empty]", i);
+						sw.WriteLine("    #{0,4} (empty)", i);
 					else
-						sw.WriteLine("    #{0}    {1}", i, argAsString);
+						sw.WriteLine("    #{0,4} {1}", i, argAsString);
 				}
 
 				// Note that the above format is the same as used in a YAT script log file.

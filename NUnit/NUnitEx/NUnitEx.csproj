@@ -84,8 +84,8 @@
     <Compile Include="..\NUnitEx.Version.cs">
       <Link>Properties\NUnitEx.Version.cs</Link>
     </Compile>
-    <Compile Include="StandardCategories.cs" />
-    <Compile Include="StandardCategoriesDummyInstance.cs" />
+    <Compile Include="StandardDurationCategories.cs" />
+    <Compile Include="StandardDurationCategoriesDummyInstance.cs" />
     <Compile Include="TestExecutionContextInformation.cs" />
     <Compile Include="ContextDetectorTest.cs" />
     <Compile Include="ContextDetector.cs" />
