@@ -1,7 +1,4 @@
-@@ -175,7 +175,34 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
-                 FieldInfo f = t.GetField("m_Completed", BindingFlags.Instance | BindingFlags.NonPublic);
-                 f.SetValue(FReadOV, null);
- 
+@@ -178 +178,28 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -                FReadOV.SetBuffer(null, 0, 0);
 +                // ----- \remind BEGIN -----
 +                // 2010-05-14 / Matthias Klaey
@@ -31,13 +28,7 @@
 +
 +                // ----- \remind  END  -----
 +
-                 FReadOV.Dispose();
-                 FReadOV = null;
- 
-@@ -189,7 +216,16 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
-                 FieldInfo f = t.GetField("m_Completed", BindingFlags.Instance | BindingFlags.NonPublic);
-                 f.SetValue(FWriteOV, null);
- 
+@@ -192 +219,10 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -                FWriteOV.SetBuffer(null, 0, 0);
 +                // ----- \remind BEGIN -----
 +                // 2015-06-01 / Matthias Klaey
@@ -49,13 +40,7 @@
 +
 +                // ----- \remind  END  -----
 +
-                 FWriteOV.Dispose();
-                 FWriteOV = null;
- 
-@@ -283,10 +319,17 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
-                     return false;
-                 }
- 
+@@ -286,2 +322,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -                lock (FSyncActive)
 -                {
 +                // ----- \remind BEGIN -----
@@ -65,11 +50,26 @@
 +
 +//              lock (FSyncActive)
 +//              {
-                     return FActive;
+@@ -289 +330,3 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 -                }
 +//              }
 +
 +                // ----- \remind  END  -----
-             }
- 
-             set 
+@@ -454,0 +498,5 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
++        // ----- \remind BEGIN -----
++
++        // 2020-10-08 :-) / Matthias Klaey
++        // Added checks (FSocket != null) for being able to retrieve underlying information also during debugging of shutdown.
++
+@@ -457 +505 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+-            get { return (IPEndPoint)FSocket.LocalEndPoint; }
++            get { return (FSocket != null) ? ((IPEndPoint)FSocket.LocalEndPoint) : (null); }
+@@ -462 +510 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+-            get { return (IPEndPoint)FSocket.RemoteEndPoint; }
++            get { return (FSocket != null) ? ((IPEndPoint)FSocket.RemoteEndPoint) : (null); }
+@@ -467 +515 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+-            get { return FSocket.Handle; }
++            get { return (FSocket != null) ? (FSocket.Handle) : (IntPtr.Zero); }
+@@ -469,0 +518,2 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
++        // ----- \remind  END  -----
++

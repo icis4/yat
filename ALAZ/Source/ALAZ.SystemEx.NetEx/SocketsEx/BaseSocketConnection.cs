@@ -495,20 +495,27 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
             set { FUserData = value; }
         }
 
+        // ----- \remind BEGIN -----
+
+        // 2020-10-08 :-) / Matthias Klaey
+        // Added checks (FSocket != null) for being able to retrieve underlying information also during debugging of shutdown.
+
         public IPEndPoint LocalEndPoint
         {
-            get { return (IPEndPoint)FSocket.LocalEndPoint; }
+            get { return (FSocket != null) ? ((IPEndPoint)FSocket.LocalEndPoint) : (null); }
         }
 
         public IPEndPoint RemoteEndPoint
         {
-            get { return (IPEndPoint)FSocket.RemoteEndPoint; }
+            get { return (FSocket != null) ? ((IPEndPoint)FSocket.RemoteEndPoint) : (null); }
         }
 
         public IntPtr SocketHandle
         {
-            get { return FSocket.Handle; }
+            get { return (FSocket != null) ? (FSocket.Handle) : (IntPtr.Zero); }
         }
+
+        // ----- \remind  END  -----
 
         public long ConnectionId
         {
