@@ -225,6 +225,7 @@ namespace YAT.Application
 		/// <summary>
 		/// This method is used to test the command line argument processing.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
 		public virtual MainResult PrepareRun_ForTestOnly()
 		{
 			if (this.commandLineArgs != null)

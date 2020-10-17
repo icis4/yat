@@ -144,8 +144,12 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected static Random StaticRandom { get; private set; } = new Random(RandomEx.NextRandomSeed());
 
+	#if (WITH_SCRIPTING)
+
 		private static bool staticScriptingIsActive; // = false;
 		private static object staticScriptingIsActiveSyncObj = new object();
+
+	#endif
 
 		#endregion
 

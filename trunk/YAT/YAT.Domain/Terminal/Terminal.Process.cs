@@ -690,6 +690,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
 		protected static void CreateCollectionIfIsNull(ref DisplayElementCollection c)
 		{
 			if (c == null)
@@ -697,6 +698,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
 		protected static void CreateCollectionIfIsNull(ref DisplayLineCollection c)
 		{
 			if (c == null)
@@ -706,6 +708,7 @@ namespace YAT.Domain
 	#if (WITH_SCRIPTING)
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
 		protected static void CreateCollectionIfIsNull(ref ScriptLineCollection c)
 		{
 			if (c == null)
@@ -1538,6 +1541,7 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
 		protected virtual void DoLineBegin(RepositoryType repositoryType, ProcessState processState,
 		                                   DateTime ts, string dev, IODirection dir,
 		                                   ref DisplayElementCollection elementsToAdd)
