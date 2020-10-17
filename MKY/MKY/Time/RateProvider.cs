@@ -122,7 +122,7 @@ namespace MKY.Time
 
 		/// <summary></summary>
 		public RateProvider(double rateInterval, double rateWindow, double updateInterval)
-			: this(rateInterval, rateInterval, updateInterval, null)
+			: this(rateInterval, rateWindow, updateInterval, null)
 		{
 		}
 
@@ -229,6 +229,7 @@ namespace MKY.Time
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "'Stop' is a common term to start/stop something.")]
 		public virtual void Stop()
 		{
 			this.updateTicker.Stop();

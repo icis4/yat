@@ -790,6 +790,7 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Note that ALAZ sockets start asynchronously, same as stopping.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool TryCreateAndStartSocketAndThreads()
 		{
 			StartThreads();
@@ -1988,7 +1989,7 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
-		protected string ToDebugString(System.Net.IPEndPoint ep)
+		protected static string ToDebugString(System.Net.IPEndPoint ep)
 		{
 			return ((ep != null) ? (ep.ToString()) : "<undefined>");
 		}
