@@ -65,23 +65,32 @@ namespace MKY.IO.Serial.Socket
 		{
 			lock (this.stateSyncObj)
 			{
-				DisposeClientSynchronized();
-
 				this.client = new TcpClient(this.instanceId, remoteHost, remotePort, localInterface);
 
 			#if DEBUG_STATIC_SOCKET_LIST
 				staticSocketList.Add(this.client);
 			#endif
 
-				this.client.IOChanged    += client_IOChanged;
-				this.client.IOWarning    += client_IOWarning;
-				this.client.IOError      += client_IOError;
-				this.client.DataReceived += client_DataReceived;
-				this.client.DataSent     += client_DataSent;
+				AttachClientSynchronized();
 			}
 		}
 
-		private void DisposeClientSynchronized()
+		private void AttachClientSynchronized()
+		{
+			lock (this.stateSyncObj)
+			{
+				if (this.client != null)
+				{
+					this.client.IOChanged    += client_IOChanged;
+					this.client.IOWarning    += client_IOWarning;
+					this.client.IOError      += client_IOError;
+					this.client.DataReceived += client_DataReceived;
+					this.client.DataSent     += client_DataSent;
+				}
+			}
+		}
+
+		private void DetachClientSynchronized()
 		{
 			lock (this.stateSyncObj)
 			{
@@ -92,6 +101,49 @@ namespace MKY.IO.Serial.Socket
 					this.client.IOError      -= client_IOError;
 					this.client.DataReceived -= client_DataReceived;
 					this.client.DataSent     -= client_DataSent;
+				}
+			}
+		}
+
+		private void DisposeClientSynchronized()
+		{
+			lock (this.stateSyncObj)
+			{
+				if (this.client != null)
+				{
+					DetachClientSynchronized();
+
+					this.client.Dispose();
+					this.client = null;
+				}
+			}
+		}
+
+		/// <remarks>
+		/// Opposed to the ALAZ sockets, the MKY sockets stop asynchronously. However, ALAZ sockets
+		/// sometimes deadlock on Stop(). Therefore, this method waits until the server indeed is
+		/// stopped and then disposes of it. A timeout in the MKY sockets guarantee stopping.
+		/// </remarks>
+		private void StopClientSyncAndDisposeSynchronized()
+		{
+			lock (this.stateSyncObj)
+			{
+				if (this.client != null)
+				{
+					DetachClientSynchronized(); // Stop() may invoke event callbacks, potentially leading to a deadlock!
+
+					if (this.client.IsStarted)
+						this.client.Stop();
+
+					int waitTime = 0;
+					while (!this.client.IsStopped)
+					{
+						Thread.Sleep(SocketStopInterval);
+						waitTime += SocketStopInterval;
+
+						if (waitTime >= SocketStopTimeout)
+							break;
+					}
 
 					this.client.Dispose();
 					this.client = null;
@@ -156,7 +208,7 @@ namespace MKY.IO.Serial.Socket
 					}
 					else
 					{
-						DisposeClientSynchronized();
+						DisposeClientSynchronized(); // Not started at all, no need for two-stage stop-dispose.
 
 						DateTime timeStamp;
 						var stateHasChanged = SetStateSynchronized(SocketState.StartingListening, out timeStamp, notify: false); // Notify outside lock!
@@ -164,8 +216,8 @@ namespace MKY.IO.Serial.Socket
 						if (stateHasChanged)
 							NotifyStateHasChanged(timeStamp); // Notify outside lock!
 
-						// Try to restart as server:
-						StartListening(); // Invoke outside lock!
+						// Restart AutoSocket, first try as server:
+						DelayAndStartListeningAsync(); // Invoke outside lock!
 					}
 
 					break;
@@ -194,9 +246,10 @@ namespace MKY.IO.Serial.Socket
 			Monitor.Enter(this.stateSyncObj); // Ensure state is handled atomically. Not using
 			switch (GetStateSynchronized())   // lock() for being able to selectively release.
 			{
+				case SocketState.StartingConnecting:
 				case SocketState.Connecting:
-				{
-					DisposeClientSynchronized();
+				{                                           // Even though yet 'Connecting', the underlying socket may already have started,
+					StopClientSyncAndDisposeSynchronized(); // thus always doing two-stage stop-dispose for reason described in remarks of method.
 
 					DateTime timeStamp;
 					var stateHasChanged = SetStateSynchronized(SocketState.StartingListening, out timeStamp, notify: false); // Notify outside lock!
@@ -204,37 +257,29 @@ namespace MKY.IO.Serial.Socket
 					if (stateHasChanged)
 						NotifyStateHasChanged(timeStamp); // Notify outside lock!
 
-					// Try to restart as server:
-					StartListening(); // Invoke outside lock!
+					// Continue starting AutoSocket by trying as server:
+					DelayAndStartListeningAsync(); // Invoke outside lock!
+
 					break;
 				}
 
 				case SocketState.Connected:
 				{
-					if (e.Severity == ErrorSeverity.Acceptable)
-					{
-						DisposeClientSynchronized();
+					StopClientSyncAndDisposeSynchronized(); // Doing two-stage stop-dispose for reason described in remarks of method.
 
-						DateTime timeStamp;
-						var stateHasChanged = SetStateSynchronized(SocketState.StartingConnecting, out timeStamp, notify: false); // Notify outside lock!
-						Monitor.Exit(this.stateSyncObj);
-						if (stateHasChanged)
-							NotifyStateHasChanged(timeStamp); // Notify outside lock!
+					DateTime timeStamp;
+					var stateHasChanged = SetStateSynchronized(SocketState.StartingListening, out timeStamp, notify: false); // Notify outside lock!
+					Monitor.Exit(this.stateSyncObj);
+					if (stateHasChanged)
+						NotifyStateHasChanged(timeStamp); // Notify outside lock!
 
-						// Restart AutoSocket:
-						StartConnecting(); // Invoke outside lock!
-					}
-					else
-					{
-						Monitor.Exit(this.stateSyncObj);
-
-						OnIOError(e); // Raise outside lock!
-					}
+					// Restart AutoSocket, first try as server:
+					RestartWithDelayAndStartListeningAsync(); // Invoke outside lock!
 
 					break;
 				}
 
-				default:
+				default: // incl. e.g. SocketState.Stopping:
 				{
 					Monitor.Exit(this.stateSyncObj);
 

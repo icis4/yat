@@ -174,7 +174,7 @@ namespace MKY.IO.Serial.Socket.Test
 			Utilities.StopAsync(server);
 			Utilities.WaitForStop(server, "TCP/IP server could not be stopped!");
 			Utilities.AssertStopped(server);
-			Assert.That(server.ConnectedClientCount, Is.EqualTo(0));
+			Assert.That(server.ConnectionCount, Is.EqualTo(0));
 
 			Utilities.WaitForDisconnection(client, server, "TCP/IP client is not disconnected from server!");
 			Utilities.AssertStartedAndDisconnected(client);
@@ -182,7 +182,7 @@ namespace MKY.IO.Serial.Socket.Test
 			Utilities.StartAsync(server);
 			Utilities.WaitForStart(server, "TCP/IP server could not be started!");
 			Utilities.WaitForConnection(server, client, "TCP/IP server could not be reconnected to client!");
-			Assert.That(server.ConnectedClientCount, Is.EqualTo(1));
+			Assert.That(server.ConnectionCount, Is.EqualTo(1));
 		}
 
 		/// <summary></summary>
@@ -194,12 +194,12 @@ namespace MKY.IO.Serial.Socket.Test
 
 			Utilities.WaitForDisconnection(server, client, "TCP/IP server is not disconnected from client!");
 			Utilities.AssertStartedAndDisconnected(server);
-			Assert.That(server.ConnectedClientCount, Is.EqualTo(0));
+			Assert.That(server.ConnectionCount, Is.EqualTo(0));
 
 			Utilities.StartAsync(client);
 			Utilities.WaitForStart(client, "TCP/IP client could not be started!");
 			Utilities.WaitForConnection(client, server, "TCP/IP client could not be reconnected to server!");
-			Assert.That(server.ConnectedClientCount, Is.EqualTo(1));
+			Assert.That(server.ConnectionCount, Is.EqualTo(1));
 		}
 
 		#endregion

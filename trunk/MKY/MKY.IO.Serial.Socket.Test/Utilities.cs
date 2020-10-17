@@ -51,6 +51,17 @@ namespace MKY.IO.Serial.Socket.Test
 		//==========================================================================================
 
 		/// <remarks>
+		/// The start default value of 10000 corresponds to the YAT's default value.
+		/// </remarks>
+		internal const int StartOfPortRange = 10000;
+
+		/// <remarks>
+		/// The end default value of 49151 is the last port before the dynamic port range defined
+		/// e.g. at https://docs.microsoft.com/en-us/troubleshoot/windows-server/networking/service-overview-and-network-port-requirements.
+		/// </remarks>
+		internal const int EndOfPortRange = 49151;
+
+		/// <remarks>
 		/// State changes on a <see cref="TcpAutoSocket"/> are the slowest, due
 		/// to the nature of the <see cref="TcpAutoSocket"/> to try this and that.
 		/// </remarks>
@@ -68,64 +79,70 @@ namespace MKY.IO.Serial.Socket.Test
 		// Available Ports
 		//==========================================================================================
 
-		internal static int AvailableLocalTcpPort
+		/// <summary>
+		/// Gets an available local TCP port in the given range.
+		/// </summary>
+		/// <exception cref="OverflowException">
+		/// No local TCP port available within given range!
+		/// </exception>
+		internal static int GetAvailableLocalTcpPort(int startAt = StartOfPortRange, int endAt = EndOfPortRange)
 		{
-			get
+			IPGlobalProperties properties = IPGlobalProperties.GetIPGlobalProperties();
+			IPEndPoint[] listeners = properties.GetActiveTcpListeners();
+
+			int port;
+			for (port = startAt; port <= endAt; port++)
 			{
-				IPGlobalProperties properties = IPGlobalProperties.GetIPGlobalProperties();
-				IPEndPoint[] listeners = properties.GetActiveTcpListeners();
-
-				int port;
-				for (port = 10000; port <= IPEndPoint.MaxPort; port++)
+				bool isActive = false;
+				foreach (IPEndPoint ep in listeners)
 				{
-					bool found = false;
-					foreach (IPEndPoint ep in listeners)
+					if (ep.Port == port)
 					{
-						if (ep.Port == port)
-						{
-							found = true;
-							break;
-						}
+						isActive = true;
+						break;
 					}
-
-					if (!found)
-						return (port);
 				}
 
-				throw (new OverflowException("No local TCP port available within range of 10000 through " + IPEndPoint.MaxPort + "!"));
+				if (!isActive)
+					return (port);
 			}
+
+			throw (new OverflowException("No local TCP port available within range of " + startAt + " through " + endAt + "!"));
 		}
 
-		internal static int AvailableLocalUdpPort
+		/// <summary>
+		/// Gets an available local TCP port in the given range.
+		/// </summary>
+		/// <exception cref="OverflowException">
+		/// No local TCP port available within given range!
+		/// </exception>
+		internal static int GetAvailableLocalUdpPort(int startAt = StartOfPortRange, int endAt = EndOfPortRange)
 		{
-			get
+			IPGlobalProperties properties = IPGlobalProperties.GetIPGlobalProperties();
+			IPEndPoint[] listeners = properties.GetActiveUdpListeners();
+
+			int port;
+			for (port = startAt; port <= endAt; port++)
 			{
-				IPGlobalProperties properties = IPGlobalProperties.GetIPGlobalProperties();
-				IPEndPoint[] listeners = properties.GetActiveUdpListeners();
-
-				int port;
-				for (port = 10000; port <= IPEndPoint.MaxPort; port++)
+				bool isActive = false;
+				foreach (IPEndPoint ep in listeners)
 				{
-					bool found = false;
-					foreach (IPEndPoint ep in listeners)
+					if (ep.Port == port)
 					{
-						if (ep.Port == port)
-						{
-							found = true;
-							break;
-						}
+						isActive = true;
+						break; // foreach (listeners)
 					}
-
-					if (!found)
-						return (port);
 				}
 
-				throw (new OverflowException("No local UDP ports available within range of 10000 through " + IPEndPoint.MaxPort + "!"));
+				if (!isActive)
+					return (port);
 			}
+
+			throw (new OverflowException("No local UDP port available within range of " + startAt + " through " + endAt + "!"));
 		}
 
-		/// <remarks>Separate method needed to ensure that two separate ports are found.</remarks>
-		internal static void GetAvailableLocalUdpPorts(out int portA, out int portB)
+		/// <remarks>Separate method needed to ensure that two independent ports are found.</remarks>
+		internal static void GetAvailableLocalUdpPorts(out int portA, out int portB, int startAt = StartOfPortRange, int endAt = EndOfPortRange)
 		{
 			portA = 0;
 			portB = 0;
@@ -134,19 +151,19 @@ namespace MKY.IO.Serial.Socket.Test
 			IPEndPoint[] listeners = properties.GetActiveUdpListeners();
 
 			int port;
-			for (port = 10000; port <= IPEndPoint.MaxPort; port++)
+			for (port = startAt; port <= endAt; port++)
 			{
-				bool found = false;
+				bool isActive = false;
 				foreach (IPEndPoint ep in listeners)
 				{
 					if (ep.Port == port)
 					{
-						found = true;
-						break;
+						isActive = true;
+						break; // foreach (listeners)
 					}
 				}
 
-				if (!found)
+				if (!isActive)
 				{
 					if (portA == 0)
 					{
@@ -160,7 +177,7 @@ namespace MKY.IO.Serial.Socket.Test
 				}
 			}
 
-			throw (new OverflowException("No local UDP ports available within range of 10000 through " + IPEndPoint.MaxPort + "!"));
+			throw (new OverflowException("No local UDP ports available within range of " + startAt + " through " + endAt + "!"));
 		}
 
 		#endregion
@@ -171,9 +188,9 @@ namespace MKY.IO.Serial.Socket.Test
 		//==========================================================================================
 
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		internal static void CreateAndStartAsync(out TcpServer server, out int localPort, int connectionAllowance = TcpServer.ConnectionAllowanceDefault)
+		internal static void CreateAndStartAsync(out TcpServer server, out int localPort, int connectionAllowance = TcpServer.ConnectionAllowanceDefault, int startAt = StartOfPortRange, int endAt = EndOfPortRange)
 		{
-			localPort = AvailableLocalTcpPort;
+			localPort = GetAvailableLocalTcpPort(startAt, endAt);
 			server = new TcpServer(IPNetworkInterface.Any, localPort, connectionAllowance);
 
 			StartAsync(server);
@@ -205,9 +222,9 @@ namespace MKY.IO.Serial.Socket.Test
 				Assert.Fail("TCP/IP client could not be started!");
 		}
 
-		internal static void CreateAndStartAsyncAsServer(out TcpAutoSocket autoSocket, out int localPort)
+		internal static void CreateAndStartAsyncAsServer(out TcpAutoSocket autoSocket, out int localPort, int startAt = StartOfPortRange, int endAt = EndOfPortRange)
 		{
-			localPort = AvailableLocalTcpPort;
+			localPort = GetAvailableLocalTcpPort(startAt, endAt);
 			autoSocket = new TcpAutoSocket(IPHost.Localhost, localPort, IPNetworkInterface.Any, localPort);
 
 			StartAsyncAsServer(autoSocket);
