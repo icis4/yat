@@ -99,19 +99,19 @@ namespace YAT.Domain
 			@"For serial COM ports, if one of the following error conditions occurs, the according error indication will be shown in the terminal window:" + Environment.NewLine +
 			Environment.NewLine +
 			@"[" + RxFramingErrorString + "]" + Environment.NewLine +
-			@"An input framing error occurs when the last bit received is not a stop bit. This may occur due to a timing error. You will most commonly encounter a framing error when the speed at which the data is being sent is different to that of what you have YAT set to receive it at." + Environment.NewLine +
+			@"An input framing error occurs when the last bit received is not a stop bit. This may occur due to a timing error. You will most commonly encounter a framing error when the speed at which the data is being sent is different to that of what you have " + ApplicationEx.CommonName + " set to receive it at." + Environment.NewLine +
 			Environment.NewLine +
 			@"[" + RxBufferOverrunErrorString + "]" + Environment.NewLine +
 			@"An input overrun error occurs when the input gets out of synch. The next character will be lost and the input will be re-synch'd." + Environment.NewLine +
 			Environment.NewLine +
 			@"[" + RxBufferOverflowErrorString + "]" + Environment.NewLine +
-			@"An input overflow occurs when there is no more space in the input buffer, i.e. the serial driver, the operating system or YAT doesn't manage to process the incoming data fast enough." + Environment.NewLine +
+			@"An input overflow occurs when there is no more space in the input buffer, i.e. the serial driver, the operating system or " + ApplicationEx.CommonName + " doesn't manage to process the incoming data fast enough." + Environment.NewLine +
 			Environment.NewLine +
 			@"[" + RxParityErrorString + "]" + Environment.NewLine +
-			@"An input parity error occurs when a parity check is enabled but the parity bit mismatches. You will most commonly encounter a parity error when the parity setting at which the data is being sent is different to that of what you have YAT set to receive it at." + Environment.NewLine +
+			@"An input parity error occurs when a parity check is enabled but the parity bit mismatches. You will most commonly encounter a parity error when the parity setting at which the data is being sent is different to that of what you have " + ApplicationEx.CommonName + " set to receive it at." + Environment.NewLine +
 			Environment.NewLine +
 			@"[" + TxBufferFullErrorString + "]" + Environment.NewLine +
-			@"An output buffer full error occurs when there is no more space in the output buffer, i.e. the serial driver, the operating system or YAT doesn't manage to send the data fast enough.";
+			@"An output buffer full error occurs when there is no more space in the output buffer, i.e. the serial driver, the operating system or " + ApplicationEx.CommonName + " doesn't manage to send the data fast enough.";
 
 		#endregion
 
@@ -1443,11 +1443,7 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Inline' is a correct English term in programming.")]
 		public virtual void InlineErrorMessage(Direction direction, string message, bool isWarningOnly)
 		{
-			var ioDirection = (IODirection)direction;
-			if (ioDirection == IODirection.None)
-				ioDirection = IODirection.Bidir; // Inlining requires a direction other than 'None'.
-
-			InlineDisplayElement(ioDirection, new DisplayElement.ErrorInfo(direction, message, isWarningOnly));
+			InlineDisplayElement((IODirection)direction, new DisplayElement.ErrorInfo(direction, message, isWarningOnly));
 		}
 
 		#endregion
@@ -2044,15 +2040,7 @@ namespace YAT.Domain
 				// Do not lock (ClearRefreshEmptySyncObj)! That would lead to deadlocks if close/dispose
 				// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread!
 				{
-					switch (e.Direction) // Warnings are only shown as terminal text:
-					{                                                            // Inlining requires a direction!
-						case IODirection.None:  InlineDisplayElement(IODirection.Bidir, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.None,  e.Message, true)); break;
-						case IODirection.Rx:    InlineDisplayElement(e.Direction,       new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx,    e.Message, true)); break;
-						case IODirection.Bidir: InlineDisplayElement(e.Direction,       new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Bidir, e.Message, true)); break;
-						case IODirection.Tx:    InlineDisplayElement(e.Direction,       new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Tx,    e.Message, true)); break;
-
-						default: throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + e.Direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "e"));
-					}
+					InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, (Direction)e.Direction, e.Message, true));
 				}
 			}
 
@@ -2070,46 +2058,43 @@ namespace YAT.Domain
 			if (IsInDisposal) // Ensure to not handle event during closing anymore.
 				return;
 
+			string errorMessage;
+
 			// Do not lock (ClearRefreshEmptySyncObj)! That would lead to deadlocks if close/dispose
 			// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread!
 			{
+				IODirection direction;
+
 				var spe = (e as SerialPortErrorEventArgs);
 				if (spe != null)
 				{
 					switch (spe.SerialPortError) // Handle serial port errors where known:
-					{                                                                               // Same as 'spe.Direction'.
-						case System.IO.Ports.SerialError.Frame:    InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx, RxFramingErrorString));        return;
-						case System.IO.Ports.SerialError.Overrun:  InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx, RxBufferOverrunErrorString));  return;
-						case System.IO.Ports.SerialError.RXOver:   InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx, RxBufferOverflowErrorString)); return;
-						case System.IO.Ports.SerialError.RXParity: InlineDisplayElement(IODirection.Rx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx, RxParityErrorString));         return;
-						case System.IO.Ports.SerialError.TXFull:   InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Tx, TxBufferFullErrorString));     return;
+					{
+						case System.IO.Ports.SerialError.Frame:    direction = spe.Direction; errorMessage = RxFramingErrorString;        break;
+						case System.IO.Ports.SerialError.Overrun:  direction = spe.Direction; errorMessage = RxBufferOverrunErrorString;  break;
+						case System.IO.Ports.SerialError.RXOver:   direction = spe.Direction; errorMessage = RxBufferOverflowErrorString; break;
+						case System.IO.Ports.SerialError.RXParity: direction = spe.Direction; errorMessage = RxParityErrorString;         break;
+						case System.IO.Ports.SerialError.TXFull:   direction = spe.Direction; errorMessage = TxBufferFullErrorString;     break;
 
-						default: break; // Fall-through to default behavior.
+						default:                                   direction = spe.Direction; errorMessage = e.Message;                   break;
 					}
 				}
-				else if (e.Severity == IOErrorSeverity.Acceptable) // Acceptable errors are only shown as terminal text:
+				else
 				{
-					switch (e.Direction)
-					{                                                            // Inlining requires a direction!
-						case IODirection.None:  InlineDisplayElement(IODirection.Bidir, new DisplayElement.ErrorInfo(e.TimeStamp, Direction.None,  e.Message, true)); return;
-						case IODirection.Rx:    InlineDisplayElement(e.Direction,       new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Rx,    e.Message, true)); return;
-						case IODirection.Bidir: InlineDisplayElement(e.Direction,       new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Bidir, e.Message, true)); return;
-						case IODirection.Tx:    InlineDisplayElement(e.Direction,       new DisplayElement.ErrorInfo(e.TimeStamp, Direction.Tx,    e.Message, true)); return;
-
-						default: throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + e.Direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "e"));
-					}
+					direction = e.Direction;
+					errorMessage = e.Message;
 				}
 
-				// Default behavior = show in terminal text and forward event:
-
-				InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, (Direction)e.Direction, e.Message));
-				OnIOError(e);
+				var isWarningOnly = (e.Severity == IOErrorSeverity.Acceptable); // Acceptable errors are only shown as terminal text.
+				InlineDisplayElement(direction, new DisplayElement.ErrorInfo(e.TimeStamp, (Direction)direction, errorMessage, isWarningOnly));
+				if (!isWarningOnly)
+					OnIOError(e); // Default behavior = show in terminal text and forward event.
 			}
 
 ////#if (WITH_SCRIPTING)
 ////		if (TerminalSettings.Script.IncludeIOErrors) \remind (2020-09-30 / MKY) make inclusion of warnings and errors configurable
 ////		{
-////			var message = new ScriptMessage(e.TimeStamp, null, null, e.Message);
+////			var message = new ScriptMessage(e.TimeStamp, null, null, errorMessage);
 ////			EnqueueReceivedMessageForScripting(message);
 ////		}
 ////#endif

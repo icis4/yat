@@ -128,7 +128,7 @@ namespace YAT.Model.Settings
 				if (!string.IsNullOrEmpty(this.filePath) && (this.guid == Guid.Empty))
 				{
 					Guid guid;
-					if (GuidEx.TryParseTolerantly(Path.GetFileNameWithoutExtension(this.filePath), out guid))
+					if (GuidEx.TryParseCommonTolerantly(Path.GetFileNameWithoutExtension(this.filePath), out guid))
 						this.guid = guid;
 					else
 						this.guid = Guid.NewGuid();

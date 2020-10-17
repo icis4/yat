@@ -48,7 +48,7 @@ using YAT.Application.Settings;
 using YAT.Application.Utilities;
 using YAT.Model.Settings;
 using YAT.Model.Types;
-using YAT.Model.Utilities;
+//// 'YAT.Model.Utilities' is explicitly used due to ambiguity of 'MessageHelper'.
 using YAT.Settings.Application;
 using YAT.Settings.Model;
 
@@ -98,7 +98,8 @@ namespace YAT.Model
 		/// <remarks>
 		/// Note that it is not possible to mark a property with [Conditional("TEST")].
 		/// </remarks>
-		public bool DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification { get; set; }
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize purpose of this property.")]
+		public bool DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly { get; set; }
 
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
@@ -252,7 +253,7 @@ namespace YAT.Model
 				}
 
 				// ...and finally detach the settings:
-				if (!DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification)
+				if (!DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly)
 				{
 					DetachSettingsEventHandlers();
 					DetachSettingsHandler();
@@ -339,7 +340,7 @@ namespace YAT.Model
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				return (CaptionHelper.ComposeMain(IndicatedName));
+				return (Utilities.CaptionHelper.ComposeMain(IndicatedName));
 			}
 		}
 
@@ -858,7 +859,7 @@ namespace YAT.Model
 			else if (!SettingsFileIsWritable)
 				reason = "The file is write-protected.";
 			else
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'SaveAs'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'SaveAs'!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 
 			var message = new StringBuilder();
 			message.AppendLine("Unable to save");
@@ -977,9 +978,9 @@ namespace YAT.Model
 				DebugEx.WriteException(GetType(), ex, "Error saving workspace!");
 
 				OnFixedStatusTextRequest("Error saving workspace!");
-				OnMessageInputRequest
+				this.OnMessageInputRequest
 				(
-					ErrorHelper.ComposeMessage("Unable to save workspace file", this.settingsHandler.SettingsFilePath, ex),
+					Utilities.MessageHelper.ComposeMessage("Unable to save workspace file", this.settingsHandler.SettingsFilePath, ex),
 					"File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -1472,7 +1473,7 @@ namespace YAT.Model
 			{
 				DebugEx.WriteException(GetType(), ex, "Failed to create/open new terminal!");
 
-				var errorMessage = ErrorHelper.ComposeMessage("Unable to create terminal!", ex);
+				var errorMessage = Utilities.MessageHelper.ComposeMessage("Unable to create terminal!", ex);
 
 				OnCursorReset();
 				OnFixedStatusTextRequest("Error creating terminal!");
@@ -1583,9 +1584,9 @@ namespace YAT.Model
 						else
 						{
 							if (!string.IsNullOrEmpty(item.FilePath))
-								messageOnFailure = ErrorHelper.ComposeMessage("Unable to open terminal", item.FilePath, ex);
+								messageOnFailure = Utilities.MessageHelper.ComposeMessage("Unable to open terminal", item.FilePath, ex);
 							else
-								messageOnFailure = ErrorHelper.ComposeMessage("Unable to open terminal!", ex);
+								messageOnFailure = Utilities.MessageHelper.ComposeMessage("Unable to open terminal!", ex);
 						}
 					}
 					else // In all other cases, 'normally' open the terminal from the given file:
@@ -1605,9 +1606,9 @@ namespace YAT.Model
 						if (string.IsNullOrEmpty(messageOnFailure))
 						{
 							if (!string.IsNullOrEmpty(item.FilePath))
-								messageOnFailure = ErrorHelper.ComposeMessage("Unable to open terminal file", item.FilePath);
+								messageOnFailure = Utilities.MessageHelper.ComposeMessage("Unable to open terminal file", item.FilePath);
 							else
-								messageOnFailure = ErrorHelper.ComposeMessage("Unable to open terminal!");
+								messageOnFailure = Utilities.MessageHelper.ComposeMessage("Unable to open terminal!");
 						}
 
 						string caption;
@@ -1707,13 +1708,13 @@ namespace YAT.Model
 				}
 				else
 				{
-					messageOnFailure = ErrorHelper.ComposeMessage("Unable to open terminal", absoluteFilePath, ex);
+					messageOnFailure = Utilities.MessageHelper.ComposeMessage("Unable to open terminal", absoluteFilePath, ex);
 					return (false);
 				}
 			}
 			else
 			{
-				messageOnFailure = ErrorHelper.ComposeMessage("Unable to open terminal file", absoluteFilePath, ex);
+				messageOnFailure = Utilities.MessageHelper.ComposeMessage("Unable to open terminal file", absoluteFilePath, ex);
 				return (false);
 			}
 		}
@@ -2026,7 +2027,7 @@ namespace YAT.Model
 					return (kvp.Key);
 			}
 
-			throw (new ArgumentOutOfRangeException("terminal", terminal, MessageHelper.InvalidExecutionPreamble + "Terminal'" + terminal + "'not found in ID table!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new ArgumentOutOfRangeException("terminal", terminal, MKY.MessageHelper.InvalidExecutionPreamble + "Terminal'" + terminal + "'not found in ID table!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 		}
 
 		/// <summary>

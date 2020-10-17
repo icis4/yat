@@ -137,7 +137,7 @@ namespace YAT.Domain
 				case TimeStampFormatPreset.DateAndTime_Iso8601:             return (DateAndTime_Iso8601_format);
 				case TimeStampFormatPreset.DateAndTimeWithTimeZone_Iso8601: return (DateAndTimeWithTimeZone_Iso8601_format);
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -157,7 +157,7 @@ namespace YAT.Domain
 				case TimeStampFormatPreset.DateAndTime_Iso8601:             return (DateAndTime_Iso8601_description);
 				case TimeStampFormatPreset.DateAndTimeWithTimeZone_Iso8601: return (DateAndTimeWithTimeZone_Iso8601_description);
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

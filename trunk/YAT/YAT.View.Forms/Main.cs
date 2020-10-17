@@ -137,10 +137,10 @@ namespace YAT.View.Forms
 		// Initiating/Update/Closing:
 		private bool isInitiating = true;
 		private SettingControlsHelper isSettingControls;
-		private bool isLayoutingMdi = false;
-		private bool invokeLayout = false;
-		private ClosingState closingState = ClosingState.None;
-		private Model.MainResult result = Model.MainResult.Success;
+		private bool isLayoutingMdi;       // = false;
+		private bool invokeLayout;         // = false;
+		private ClosingState closingState; // = ClosingState.None;
+		private Model.MainResult result;   // = Model.MainResult.Success;
 
 		// MDI:
 		private ContextMenuStripShortcutTargetWorkaround contextMenuStripShortcutTargetWorkaround;
@@ -346,11 +346,11 @@ namespace YAT.View.Forms
 							sb.Append(ApplicationEx.ProductName); // "YAT" or "YATConsole", as indicated in main title bar.
 							sb.Append(" could not be started with the given settings!");
 
-							if (!string.IsNullOrEmpty(this.main.LaunchArgs.ErrorMessage))
+							if (!string.IsNullOrEmpty(this.main.LaunchArgs.MessageOnError))
 							{
 								sb.AppendLine();
 								sb.AppendLine();
-								sb.Append(this.main.LaunchArgs.ErrorMessage);
+								sb.Append(this.main.LaunchArgs.MessageOnError);
 							}
 
 							MessageBoxEx.Show
@@ -397,10 +397,16 @@ namespace YAT.View.Forms
 					// Do nothing in the following cases:
 					case Model.MainResult.ApplicationExitError:
 					case Model.MainResult.UnhandledException:
+					case Model.MainResult.UndeterminedIssue:
 					default:
 					{
 						break;
 					}
+
+				#if (WITH_SCRIPTING)
+					// Note that the above switch/case deals with the result of 'Launch()'
+					// and thus does not need to deal with the script result (> 0).
+				#endif
 				}
 
 				if (!keepOpenOnError)
@@ -1407,7 +1413,7 @@ namespace YAT.View.Forms
 						break;
 
 					default:
-						throw (new ArgumentOutOfRangeException("state", state, MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new ArgumentOutOfRangeException("state", state, MKY.MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 				}
 			}
 			finally
@@ -1646,7 +1652,7 @@ namespace YAT.View.Forms
 						break;
 
 					default:
-						throw (new ArgumentOutOfRangeException("state", state, MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new ArgumentOutOfRangeException("state", state, MKY.MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 				}
 			}
 			finally
@@ -1673,7 +1679,7 @@ namespace YAT.View.Forms
 						break;
 
 					default:
-						throw (new ArgumentOutOfRangeException("state", state, MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new ArgumentOutOfRangeException("state", state, MKY.MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 				}
 			}
 			finally
@@ -2199,7 +2205,7 @@ namespace YAT.View.Forms
 					break;
 
 				default:
-					throw (new ArgumentOutOfRangeException("result", result, MessageHelper.InvalidExecutionPreamble + "'" + result + "' is a find result that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("result", result, MKY.MessageHelper.InvalidExecutionPreamble + "'" + result + "' is a find result that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2515,7 +2521,7 @@ namespace YAT.View.Forms
 				MessageBoxEx.Show
 				(
 					this,
-					ErrorHelper.ComposeMessage("Unable to open log folder", rootPath, exBrowse),
+					Model.Utilities.MessageHelper.ComposeMessage("Unable to open log folder", rootPath, exBrowse),
 					"Log Folder Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -3669,8 +3675,8 @@ namespace YAT.View.Forms
 
 		private void main_Exited(object sender, EventArgs<Model.MainResult> e)
 		{
-			if (this.result == Model.MainResult.Success) // Otherwise, keep the previous result, e.g. 'ApplicationStartError'.
-				this.result = e.Value;
+			if (this.result == Model.MainResult.Success) // Use provided 'Exited' result if previously not failed,
+				this.result = e.Value;                   // otherwise, keep the previous result, e.g. 'ApplicationStartError'.
 
 		#if (WITH_SCRIPTING)
 			this.main.ScriptBridge.notifyScriptDialogOpened -= new ScriptBridge.ScriptDialogOpenedDelegate(NotifyScriptDialogOpened);
@@ -4319,7 +4325,7 @@ namespace YAT.View.Forms
 					break;
 
 				default:
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + layout + "' is a workspace layout that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new NotSupportedException(MKY.MessageHelper.InvalidExecutionPreamble + "'" + layout + "' is a workspace layout that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 			}
 		}
 
@@ -4533,7 +4539,7 @@ namespace YAT.View.Forms
 							break;
 
 						default:
-							throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + t.WindowState.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							throw (new NotSupportedException(MKY.MessageHelper.InvalidExecutionPreamble + "'" + t.WindowState.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 					}
 				}
 			}

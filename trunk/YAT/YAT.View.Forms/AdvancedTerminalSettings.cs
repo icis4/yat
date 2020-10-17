@@ -619,7 +619,7 @@ namespace YAT.View.Forms
 			{
 				string message =
 					"The endianness is currently fixed to 'Big-Endian (Network, Motorola)'. " +
-					"It was used by former versions of YAT but is currently not used anymore. " +
+					"It was used by former versions of " + ApplicationEx.CommonName + " but is currently not used anymore. " +
 					"Still, the setting is kept for future enhancements as documented in bug #343.";
 
 				MessageBoxEx.Show

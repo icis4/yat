@@ -139,7 +139,10 @@ namespace YAT.Model.Utilities
 			}                                                                               // does not allow controlling culture and case.
 			else // Regex enabled:
 			{
-				return (TriggerRegex.Match(input).Success);
+				if (!string.IsNullOrEmpty(input))
+					return (TriggerRegex.Match(input).Success);
+				else
+					return (false);
 			}
 		}
 

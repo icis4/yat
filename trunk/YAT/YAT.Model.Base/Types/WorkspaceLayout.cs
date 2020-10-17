@@ -149,7 +149,7 @@ namespace YAT.Model.Types
 				case WorkspaceLayout.Minimize:       return (Minimize_string);
 				case WorkspaceLayout.Maximize:       return (Maximize_string);
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -324,7 +324,7 @@ namespace YAT.Model.Types
 				case WorkspaceLayout.Minimize:       throw (new NotSupportedException(                        MessageHelper.InvalidExecutionPreamble + "'Minimize' is not supported by 'Windows.Forms.MdiLayout'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				case WorkspaceLayout.Maximize:       throw (new NotSupportedException(                        MessageHelper.InvalidExecutionPreamble + "'Maximize' is not supported by 'Windows.Forms.MdiLayout'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
-				default:                             throw (new ArgumentOutOfRangeException("layout", layout, MessageHelper.InvalidExecutionPreamble + "'" + (WorkspaceLayout)layout.UnderlyingEnum + "' is a workspace layout that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                             throw (new ArgumentOutOfRangeException("layout", layout, MessageHelper.InvalidExecutionPreamble + "'" + (WorkspaceLayout)layout.UnderlyingEnum + "' is a workspace layout that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -339,7 +339,7 @@ namespace YAT.Model.Types
 				case MdiLayout.TileVertical:   return (new WorkspaceLayoutEx(WorkspaceLayout.TileVertical));
 
 				case MdiLayout.ArrangeIcons:
-				default:                       throw (new ArgumentOutOfRangeException("layout", layout, MessageHelper.InvalidExecutionPreamble + "'" + layout + "' is a workspace layout that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                       throw (new ArgumentOutOfRangeException("layout", layout, MessageHelper.InvalidExecutionPreamble + "'" + layout + "' is a workspace layout that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

@@ -425,7 +425,7 @@ namespace YAT.View.Controls
 						break;
 
 					default:
-						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + SubpageId.ToString(CultureInfo.CurrentCulture) + "' is an ID that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + SubpageId.ToString(CultureInfo.CurrentCulture) + "' is an ID that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				SetCommandControls();

@@ -506,25 +506,29 @@ namespace YAT.Model
 					RequestedFilePath = ValueArgs[0];
 			}
 
-			// RequestedFilePath:
+			// RequestedFilePath which may be absolute or relative to current directory:
 			if (!string.IsNullOrEmpty(RequestedFilePath))
 			{
 				string filePath = Environment.ExpandEnvironmentVariables(RequestedFilePath);
-				if (File.Exists(filePath)) // May be absolute or relative to current directory.
+				if (!File.Exists(filePath))
 				{
+					RequestedFilePath = null;
+					Invalidate("Requested file does not exist");
+					BooleanEx.ClearIfSet(ref isValid);
+				}
+				else
+				{
+				#if (!WITH_SCRIPTING)
 					if (!ExtensionHelper.IsWorkspaceFile(filePath) &&
-						!ExtensionHelper.IsTerminalFile (filePath))
+					    !ExtensionHelper.IsTerminalFile (filePath))
 					{
 						RequestedFilePath = null;
 						Invalidate("Requested file is neither a workspace nor a terminal file");
 						BooleanEx.ClearIfSet(ref isValid);
 					}
-				}
-				else
-				{
-					RequestedFilePath = null;
-					Invalidate("Requested file does not exist");
-					BooleanEx.ClearIfSet(ref isValid);
+				#else
+					// Any extension shall be usable as a script file.
+				#endif
 				}
 			}
 
@@ -542,15 +546,17 @@ namespace YAT.Model
 						if (File.Exists(mostRecent))
 						{
 							if (ExtensionHelper.IsWorkspaceFile(mostRecent) ||
-								ExtensionHelper.IsTerminalFile(mostRecent))
+							    ExtensionHelper.IsTerminalFile(mostRecent))
 							{
 								MostRecentFilePath = mostRecent;
 							}
 							else
 							{
-								Invalidate("Requested file is no workspace nor terminal file");
+								Invalidate("Requested file is neither a workspace nor a terminal file");
 								BooleanEx.ClearIfSet(ref isValid);
 							}
+
+							// Note that script files are not contained in recents.
 						}
 						else
 						{

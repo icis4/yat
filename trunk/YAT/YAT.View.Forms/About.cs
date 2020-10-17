@@ -106,7 +106,7 @@ namespace YAT.View.Forms
 		#else
 			textBefore = "YAT copyright © 2003-2004 ";
 			textLink   =                           "HSR Hochschule für Technik Rapperswil";
-			textAfter  =                                                                " and 2003-2020 Matthias Kläy." + Environment.NewLine +
+			textAfter  =                                                                " and © 2003-2020 Matthias Kläy." + Environment.NewLine +
 			             "Albatros copyright © 2008-2020 Mettler-Toledo.";
 		#endif
 			linkLabel_Copyright.Text += textBefore;
@@ -477,11 +477,11 @@ namespace YAT.View.Forms
 		private void label_ExecuteManualTest1_Click(object sender, EventArgs e)
 		{
 			string message =
-				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
+				"You have clicked on a hidden button that is used for " + ApplicationEx.ProductName + " internal testing." + Environment.NewLine + Environment.NewLine +
 				"Would you like to immediately throw an exception to test that unhandled synchronous exceptions are handled properly?";
 
 			if (TestExecutionIsIntended(message) &&
-				TestPreconditionIsGiven(typeof(Exception)))
+			    TestPreconditionIsGiven(typeof(Exception)))
 			{
 				Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
 
@@ -497,11 +497,11 @@ namespace YAT.View.Forms
 		private void label_ExecuteManualTest2_Click(object sender, EventArgs e)
 		{
 			string message =
-				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
+				"You have clicked on a hidden button that is used for " + ApplicationEx.ProductName + " internal testing." + Environment.NewLine + Environment.NewLine +
 				"Would you like to start a Windows.Forms timer throwing an exception to test that unhandled asynchronous synchronized exceptions are handled properly?";
 
 			if (TestExecutionIsIntended(message) &&
-				TestPreconditionIsGiven(typeof(Exception)))
+			    TestPreconditionIsGiven(typeof(Exception)))
 			{
 				Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
 
@@ -537,11 +537,11 @@ namespace YAT.View.Forms
 		private void label_ExecuteManualTest3_Click(object sender, EventArgs e)
 		{
 			string message =
-				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
+				"You have clicked on a hidden button that is used for " + ApplicationEx.ProductName + " internal testing." + Environment.NewLine + Environment.NewLine +
 				"Would you like to start a System.Threading timer throwing an exception to test that unhandled asynchronous non-synchronized exceptions are handled properly?";
 
 			if (TestExecutionIsIntended(message) &&
-				TestPreconditionIsGiven(typeof(Exception)))
+			    TestPreconditionIsGiven(typeof(Exception)))
 			{
 				Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
 
@@ -588,7 +588,7 @@ namespace YAT.View.Forms
 			(
 				this,
 				message,
-				"Execute Manual 'Release' Test?",
+				"Execute " + ApplicationEx.CommonName + " Internal Test?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,
 				MessageBoxDefaultButton.Button2

@@ -252,7 +252,7 @@ namespace YAT.Log
 
 				default:
 				{
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.writeMode + "' is a write mode that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.writeMode + "' is a write mode that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 

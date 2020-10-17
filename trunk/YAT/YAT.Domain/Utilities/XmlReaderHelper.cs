@@ -77,7 +77,7 @@ namespace YAT.Domain.Utilities
 				if (LinesFromRawFile(filePath, out lines) > 0)
 					return (lines.Length);
 
-				sb.AppendLine("File does not match the YAT raw XML transfer schema.");
+				sb.AppendLine("File does not match the " + ApplicationEx.CommonName + " raw XML transfer schema.");
 				sb.AppendLine();
 			}
 			catch (Exception exRaw)
@@ -92,7 +92,7 @@ namespace YAT.Domain.Utilities
 				if (LinesFromTextFile(filePath, out lines) > 0)
 					return (lines.Length);
 
-				sb.AppendLine("File does not match the YAT text XML transfer schema.");
+				sb.AppendLine("File does not match the " + ApplicationEx.CommonName + " text XML transfer schema.");
 				sb.AppendLine();
 			}
 			catch (Exception exText)

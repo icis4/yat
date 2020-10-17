@@ -62,7 +62,7 @@ namespace YAT.Domain
 			string textToParse = item.Text;
 
 			// Check for text exclusion patterns:
-			if (TextTerminalSettings.TextExclusion.Enabled)
+			if (TextTerminalSettings.TextExclusion.Enabled && !string.IsNullOrEmpty(textToParse))
 			{
 				foreach (var r in TextTerminalSettings.TextExclusion.Regexes)
 				{

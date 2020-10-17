@@ -41,8 +41,8 @@ using MKY.Text;
 
 using NUnit.Framework;
 
-//// 'YAT.Domain'        is not used due to ambiguity with 'YAT.Domain.Test.Terminal'.
-//// 'YAT.Domain.Parser' is not used due to ambiguity with 'YAT.Domain.Test.Parser'.
+//// 'YAT.Domain'        is explicitly used due to ambiguity with 'YAT.Domain.Test.Terminal'.
+//// 'YAT.Domain.Parser' is explicitly used due to ambiguity with 'YAT.Domain.Test.Parser'.
 using YAT.Domain.Settings;
 
 #endregion
@@ -176,7 +176,7 @@ namespace YAT.Domain.Test
 			// Account for the longer initial delay when transmitting long lines:
 			transmissionTime += (Math.Log10(lineByteCount) * 100); // Results in += ~300 ms for 'Long' and += ~400 ms for 'VeryLong'.
 
-			// [Binary] takes a bit longer because formatting hex values is more time consuming:
+			// 'Binary' takes a bit longer because formatting hex values is more time consuming:
 			if (settings.TerminalType == TerminalType.Binary)
 				transmissionTime *= 1.1;
 
@@ -1078,7 +1078,7 @@ namespace YAT.Domain.Test
 
 					default:
 					{
-						throw (new ArgumentOutOfRangeException("comparisonType", comparisonType, MessageHelper.InvalidExecutionPreamble + "'" + comparisonType.ToString() + "' is a comparison type that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new ArgumentOutOfRangeException("comparisonType", comparisonType, MessageHelper.InvalidExecutionPreamble + "'" + comparisonType.ToString() + "' is a comparison type that is not (yet) supported here!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 
