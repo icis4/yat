@@ -38,7 +38,7 @@ using MKY.IO.Usb;
 namespace MKY.IO.Serial.Usb
 {
 	/// <summary></summary>
-	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Semantic of readonly fields is constant.")]
 	[Serializable]
 	public class SerialHidDeviceSettings : Settings.SettingsItem, IEquatable<SerialHidDeviceSettings>
 	{

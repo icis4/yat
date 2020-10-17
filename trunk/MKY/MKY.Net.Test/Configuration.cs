@@ -78,11 +78,11 @@ namespace MKY.Net.Test
 		public virtual bool IPv6SpecificInterfaceIsAvailable { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		public virtual bool MTSicsDeviceIsAvailable { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "int", Justification = "Work around naming conflict.")]
 		public virtual int MTSicsDeviceTcpPortAsInt { get; set; }
 
@@ -146,7 +146,7 @@ namespace MKY.Net.Test
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		public virtual string MTSicsDeviceTcpPort
 		{
 			get { return ((string)this["MTSicsDeviceTcpPort"]); }
@@ -268,7 +268,7 @@ namespace MKY.Net.Test
 		/// <remarks>
 		/// "MT-SICS" is no valid NUnit category string as it contains an '-'.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
 		public static readonly string MTSicsDeviceIsAvailable = "MT SICS device is " + (ConfigurationProvider.Configuration.MTSicsDeviceIsAvailable ? "" : "*NOT* ") + "available on TCP port " + ConfigurationProvider.Configuration.MTSicsDeviceTcpPort + (ConfigurationProvider.Configuration.MTSicsDeviceIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 	}
@@ -338,7 +338,7 @@ namespace MKY.Net.Test
 	/// <remarks>
 	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
 	/// </remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class MTSicsDeviceIsAvailableCategoryAttribute : CategoryAttribute
 	{
@@ -411,7 +411,7 @@ namespace MKY.Net.Test
 		/// and shall probe for it during test execution. Alternatively, tests can apply the
 		/// category attribute to the test and can then get excluded by the tester.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		[Test, MTSicsDeviceIsAvailableCategory]
 		public virtual void TestMTSicsDeviceIsAvailableCategory()
 		{

@@ -43,7 +43,7 @@ using MKY.Windows.Forms;
 namespace YAT.View.Controls
 {
 	/// <remarks>The preview control is not scalable to simplify implementation.</remarks>
-	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Semantic of readonly fields is constant.")]
 	[DefaultEvent("ReportFormatChanged")]
 	public partial class UsbSerialHidDeviceSettings : UserControl
 	{

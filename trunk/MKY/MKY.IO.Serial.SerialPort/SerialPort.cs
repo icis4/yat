@@ -77,6 +77,7 @@ namespace MKY.IO.Serial.SerialPort
 	/// <remarks>
 	/// This class is implemented using partial classes separating sending/receiving functionality.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Semantic of readonly fields is constant.")]
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Different root namespace.")]
 	public partial class SerialPort : DisposableBase, IIOProvider, IXOnXOffHandler

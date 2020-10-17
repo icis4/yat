@@ -79,8 +79,8 @@ namespace YAT.Domain.Test
 		}
 
 		/// <remarks>"MTSics" prepended (instead of inserted as "*MTSicsDevices") for grouping and easier lookup.</remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'MT-SICS' is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		public static IEnumerable<SerialPortDescriptor> MTSicsSerialPortDevices
 		{
 			get
@@ -246,8 +246,8 @@ namespace YAT.Domain.Test
 
 		/// <remarks>"MTSics" prepended (instead of inserted as "*MTSicsDevices") for grouping and easier lookup.</remarks>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'v4'/'v6' to distiguish variant.")]
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'MT-SICS' is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		public static IEnumerable<IPSocketDescriptor> MTSicsIPDevices
 		{
 			get
@@ -272,8 +272,8 @@ namespace YAT.Domain.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>"MTSics" prepended (instead of inserted as "*MTSicsDevices") for grouping and easier lookup.</remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'MT-SICS' is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		public static IEnumerable<UsbSerialHidDescriptor> MTSicsUsbDevices
 		{
 			get

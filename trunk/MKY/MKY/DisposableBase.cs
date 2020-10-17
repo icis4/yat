@@ -38,7 +38,10 @@ namespace MKY
 	/// <remarks>
 	/// Based on Brian Lambert's "A simple and totally thread-safe implementation of IDisposable".
 	/// https://docs.microsoft.com/en-us/archive/blogs/blambert/a-simple-and-totally-thread-safe-implementation-of-idisposable
+	///
+	/// Saying hello to StyleCop ;-.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 	public abstract class DisposableBase : IDisposable, IDisposableEx
 	{
 		/// <summary>

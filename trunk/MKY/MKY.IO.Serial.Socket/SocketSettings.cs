@@ -38,7 +38,7 @@ using MKY.Net;
 namespace MKY.IO.Serial.Socket
 {
 	/// <summary></summary>
-	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Semantic of readonly fields is constant.")]
 	public class SocketSettings : Settings.SettingsItem, IEquatable<SocketSettings>
 	{
 		#region Constants

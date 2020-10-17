@@ -59,7 +59,6 @@ namespace YAT.Model.Utilities
 			return (sb.ToString());
 		}
 
-
 		/// <summary></summary>
 		public static string ComposeTerminal(string indicatedName, string info)
 		{

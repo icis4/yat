@@ -241,6 +241,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>Method instead of property for orthogonality with <see cref="GetPostponedChunkCount(IODirection)"/> below.</remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
 		public virtual int GetPostponedChunkCount()
 		{
 			return (PostponedTxChunks.Count + PostponedRxChunks.Count);
@@ -538,7 +539,6 @@ namespace YAT.Domain
 	}
 
 #endif // (WITH_SCRIPTING)
-
 }
 
 //==================================================================================================

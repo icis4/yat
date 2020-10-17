@@ -76,7 +76,7 @@ namespace MKY.IO.Usb
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
 	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>
-	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Semantic of readonly fields is constant.")]
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public class SerialHidDeviceSettingsPresetEx : EnumEx
@@ -138,6 +138,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// According to https://www.the-sz.com/products/usbid/index.php.
 		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "An URL may contain 'sz' and 'usbip and...")]
 		private static readonly int[] TI_HidApi_VendorIds = { 0x0451, 0x08BB, 0x1CBE, 0x2047 };
 
 		/// <summary>

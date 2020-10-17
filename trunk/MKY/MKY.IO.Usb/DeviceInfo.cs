@@ -53,7 +53,7 @@ namespace MKY.IO.Usb
 	/// because XML default serialization requires public setters. Split into mutable settings tuple
 	/// and immutable runtime container should be done.
 	/// </remarks>
-	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Semantic of readonly fields is constant.")]
 	[Serializable]
 	public class DeviceInfo : IEquatable<DeviceInfo>, IComparable
 	{

@@ -308,6 +308,9 @@ namespace YAT.Model.Test.Transmission
 				TransmitAndVerifyRandom(terminalA, terminalB, executeBreak); // Yet limited to one-way.
 		}
 
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
+		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		private static void TransmitAndVerifySpecific(Terminal terminalA, Terminal terminalB, int repeatCount, bool doTwoWay)
 		{
 			var repeatCommand = new Types.Command(RepeatingTestData.TestCommand);
