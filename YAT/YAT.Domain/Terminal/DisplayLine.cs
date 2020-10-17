@@ -831,6 +831,7 @@ namespace YAT.Domain
 	/// This class redirects to <see cref="T:List`"/>. The sole purpose of this
 	/// collection is orthogonality with <see cref="DisplayElementCollection"/>.
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
 	[Serializable]
 	public class DisplayLineCollection : List<DisplayLine>
 	{

@@ -213,7 +213,7 @@ namespace NUnitEx
 	/// </summary>
 	/// <remarks>
 	/// Useful to exclude tests that throw while a debugger is attached,
-	/// where exection of a series of tests shall not break on expected throws.
+	/// where execution of a series of tests shall not break on expected throws.
 	/// </remarks>
 	/// <remarks>
 	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.

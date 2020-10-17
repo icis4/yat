@@ -65,7 +65,7 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// Extends a USB device with serial HID capabilities.
 	/// </summary>
-	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Semantic of readonly fields is constant.")]
 	public class SerialHidDevice : HidDevice, ISerial
 	{
 		#region Types

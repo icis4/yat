@@ -37,6 +37,8 @@ namespace MKY
 		/// <paramref name="justification"/> is mandatory, same as SA1404:CSharp.Maintainability
 		/// "A Code Analysis suppression must contain a non-empty justification describing the
 		/// reason for the suppression."
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static void PreventCompilerWarning(EventHandler handler, string justification)
 		{
@@ -55,6 +57,8 @@ namespace MKY
 		/// <paramref name="justification"/> is mandatory, same as SA1404:CSharp.Maintainability
 		/// "A Code Analysis suppression must contain a non-empty justification describing the
 		/// reason for the suppression."
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <typeparam name="T">The type of the generic event handler.</typeparam>
 		public static void PreventCompilerWarning<T>(EventHandler<T> handler, string justification) where T : EventArgs
@@ -78,6 +82,8 @@ namespace MKY
 		/// <paramref name="justification"/> is mandatory, same as SA1404:CSharp.Maintainability
 		/// "A Code Analysis suppression must contain a non-empty justification describing the
 		/// reason for the suppression."
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static void PreventCompilerWarning(object obj, string justification)
@@ -125,6 +131,8 @@ namespace MKY
 		/// <paramref name="justification"/> is mandatory, same as SA1404:CSharp.Maintainability
 		/// "A Code Analysis suppression must contain a non-empty justification describing the
 		/// reason for the suppression."
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static void PreventCompilerWarning(object obj, string justification)
@@ -171,6 +179,8 @@ namespace MKY
 		/// <paramref name="justification"/> is mandatory, same as SA1404:CSharp.Maintainability
 		/// "A Code Analysis suppression must contain a non-empty justification describing the
 		/// reason for the suppression."
+		/// 
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <typeparam name="T">The type of the object.</typeparam>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "It is the goal of this method to modify a variable outside this method, and 'out' is better suited than 'ref' as it doesn't require the variable to be initialized.")]

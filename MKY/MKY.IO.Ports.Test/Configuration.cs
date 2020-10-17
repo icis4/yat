@@ -84,12 +84,12 @@ namespace MKY.IO.Ports.Test
 		public bool PortBIsAvailable { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
 		public bool MTSicsDeviceAIsAvailable { get; set; }
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
 		public bool MTSicsDeviceBIsAvailable { get; set; }
 
@@ -167,14 +167,14 @@ namespace MKY.IO.Ports.Test
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		public virtual string MTSicsDeviceA
 		{
 			get { return ((string)this["MTSicsDeviceA"]); }
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		public virtual string MTSicsDeviceB
 		{
 			get { return ((string)this["MTSicsDeviceB"]); }
@@ -338,14 +338,14 @@ namespace MKY.IO.Ports.Test
 		/// <remarks>
 		/// "MT-SICS" is no valid NUnit category string as it contains an '-'.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
 		public static readonly string MTSicsDeviceAIsAvailable = "Serial port MT SICS device A is " + (ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable ? "" : "*NOT* ") + "available on '" + ConfigurationProvider.Configuration.MTSicsDeviceA + "'" + (ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <remarks>
 		/// "MT-SICS" is no valid NUnit category string as it contains an '-'.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
 		public static readonly string MTSicsDeviceBIsAvailable = "Serial port MT SICS device B is " + (ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable ? "" : "*NOT* ") + "available on '" + ConfigurationProvider.Configuration.MTSicsDeviceB + "'" + (ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
@@ -400,7 +400,7 @@ namespace MKY.IO.Ports.Test
 	/// <remarks>
 	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
 	/// </remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Device is named with a single letter.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class MTSicsDeviceAIsAvailableCategoryAttribute : CategoryAttribute
@@ -415,7 +415,7 @@ namespace MKY.IO.Ports.Test
 	/// <remarks>
 	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
 	/// </remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Device is named with a single letter.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class MTSicsDeviceBIsAvailableCategoryAttribute : CategoryAttribute
@@ -536,7 +536,7 @@ namespace MKY.IO.Ports.Test
 		/// and shall probe for it during test execution. Alternatively, tests can apply the
 		/// category attribute to the test and can then get excluded by the tester.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		[Test, MTSicsDeviceAIsAvailableCategory, MTSicsDeviceBIsAvailableCategory]
 		public virtual void TestMTSicsDeviceIsAvailableCategories()
 		{

@@ -94,6 +94,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// This option also supports 'PortType' with 'pt' short name for backward compatibility.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'pt' is a corresponding short name.")]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[CLSCompliant(false)] // Arrays as attribute arguments is not CLS-compliant.
 		[OptionArg(Names = new string[] { "IOType", "PortType" }, ShortNames = new string[] { "io", "pt" }, Description =

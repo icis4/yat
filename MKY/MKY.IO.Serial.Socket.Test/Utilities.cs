@@ -64,9 +64,9 @@ namespace MKY.IO.Serial.Socket.Test
 		/// <remarks>
 		/// State changes on a <see cref="TcpAutoSocket"/> are the slowest, due
 		/// to the nature of the <see cref="TcpAutoSocket"/> to try this and that.
-		/// </remarks>
-		private const int WaitTimeoutForStateChange = 5000; // Same as 'MKY.IO.Serial.Socket.TcpClient.DefaultConnectingTimeout'.
-		                                                  //// Same as 'YAT.Domain.Test.Utilities.WaitTimeoutForStateChange'.
+		/// </remarks>                                      // Same as 'MKY.IO.Serial.Socket.TcpClient.DefaultConnectingTimeout'.
+		private const int WaitTimeoutForStateChange = 5000; // Same as 'YAT.Domain.Test.Utilities.WaitTimeoutForStateChange'.
+
 		/// <remarks>
 		/// Note that a shorter interval would increase debug output, spoiling the debug console.
 		/// </remarks>
@@ -83,7 +83,7 @@ namespace MKY.IO.Serial.Socket.Test
 		/// Gets an available local TCP port in the given range.
 		/// </summary>
 		/// <exception cref="OverflowException">
-		/// No local TCP port available within given range!
+		/// No local TCP port available within given range.
 		/// </exception>
 		internal static int GetAvailableLocalTcpPort(int startAt = StartOfPortRange, int endAt = EndOfPortRange)
 		{
@@ -114,7 +114,7 @@ namespace MKY.IO.Serial.Socket.Test
 		/// Gets an available local TCP port in the given range.
 		/// </summary>
 		/// <exception cref="OverflowException">
-		/// No local TCP port available within given range!
+		/// No local TCP port available within given range.
 		/// </exception>
 		internal static int GetAvailableLocalUdpPort(int startAt = StartOfPortRange, int endAt = EndOfPortRange)
 		{

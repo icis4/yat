@@ -84,7 +84,7 @@ namespace YAT.Application
 	/// This class is separated into its own project for those who want to use YAT components within
 	/// their own context.
 	/// </remarks>
-	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Semantic of readonly fields is constant.")]
 	public class Main
 	{
 		#region Constants

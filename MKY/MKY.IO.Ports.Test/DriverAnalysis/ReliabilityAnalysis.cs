@@ -271,7 +271,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		[Test, TestCaseSource(typeof(AnalysisTestData), "TestCases")]
 		public virtual void PerformSubsequentTransmissionOfMTSicsEcho(string portName, int linesToTransmit)
 		{
@@ -365,7 +365,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		[Test, TestCaseSource(typeof(AnalysisTestData), "TestCases")]
 		public virtual void PerformContinuousReceivingOfMTSicsEcho(string portName, int linesToReceive)
 		{

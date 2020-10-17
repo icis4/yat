@@ -63,9 +63,9 @@ namespace YAT.Model.Test
 
 		/// <remarks>Method instead of property same as <see cref="Domain.Test.Settings.GetMTSicsSerialPortDeviceASettings()"/>.</remarks>
 		/// <remarks>"MTSics" prepended (instead of inserted as "*MTSicsDevices") for grouping and easier lookup.</remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'MT-SICS' is a name.")]
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remarks.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		public static TerminalSettingsRoot GetMTSicsSerialPortDeviceASettings()
 		{
 			return (Create(Domain.Test.Settings.GetMTSicsSerialPortDeviceASettings()));
@@ -73,9 +73,9 @@ namespace YAT.Model.Test
 
 		/// <remarks>Method instead of property same as <see cref="Domain.Test.Settings.GetMTSicsSerialPortDeviceBSettings()"/>.</remarks>
 		/// <remarks>"MTSics" prepended (instead of inserted as "*MTSicsDevices") for grouping and easier lookup.</remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'MT-SICS' is a name.")]
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remarks.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		public static TerminalSettingsRoot GetMTSicsSerialPortDeviceBSettings()
 		{
 			return (Create(Domain.Test.Settings.GetMTSicsSerialPortDeviceBSettings()));
@@ -104,9 +104,9 @@ namespace YAT.Model.Test
 
 		/// <remarks>Method instead of property same as <see cref="Domain.Test.Settings.GetMTSicsIPDeviceSettings()"/>.</remarks>
 		/// <remarks>"MTSics" prepended (instead of inserted as "*MTSicsDevices") for grouping and easier lookup.</remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'MT-SICS' is a name.")]
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remarks.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		public static TerminalSettingsRoot GetMTSicsIPDeviceSettings()
 		{
 			return (Create(Domain.Test.Settings.GetMTSicsIPDeviceSettings()));
@@ -121,9 +121,9 @@ namespace YAT.Model.Test
 
 		/// <remarks>Method instead of property same as <see cref="Domain.Test.Settings.GetMTSicsUsbSerialHidDeviceASettings()"/>.</remarks>
 		/// <remarks>"MTSics" prepended (instead of inserted as "*MTSicsDevices") for grouping and easier lookup.</remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'MT-SICS' is a name.")]
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remarks.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		public static TerminalSettingsRoot GetMTSicsUsbSerialHidDeviceASettings()
 		{
 			return (Create(Domain.Test.Settings.GetMTSicsUsbSerialHidDeviceASettings()));
@@ -131,9 +131,9 @@ namespace YAT.Model.Test
 
 		/// <remarks>Method instead of property same as <see cref="Domain.Test.Settings.GetMTSicsUsbSerialHidDeviceBSettings()"/>.</remarks>
 		/// <remarks>"MTSics" prepended (instead of inserted as "*MTSicsDevices") for grouping and easier lookup.</remarks>
-		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'MT-SICS' is a name.")]
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remarks.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		public static TerminalSettingsRoot GetMTSicsUsbSerialHidDeviceBSettings()
 		{
 			return (Create(Domain.Test.Settings.GetMTSicsUsbSerialHidDeviceBSettings()));

@@ -94,11 +94,12 @@ namespace YAT.View.Forms
 	/// The most important form of this application.
 	/// </summary>
 	/// <remarks>
-	/// #if (WITH_SCRIPTING)
+	/// <code>#if (WITH_SCRIPTING)</code>
 	/// The icon of this form is fixed to the YAT icon because the Albatros icon is very large
 	/// (~ 500x500 pixels) and would result in a super-enlarged title bar! Looks really funny...
-	/// #endif
+	/// <code>#endif</code>
 	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Albatros' is a name.")]
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public partial class Terminal : Form, IOnFormDeactivateWorkaround
 	{

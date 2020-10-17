@@ -275,7 +275,7 @@ namespace MKY.IO.Serial.Socket
 				DebugMessage("Disposing...");
 
 				// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
-				DisposeSocketSynchronized(); // Opposed to the ALAZ sockets, the MKY sockets do stop on Dispose(), but both is done asynchronously!
+				DisposeSocketSynchronized();
 
 				DebugMessage("...successfully disposed.");
 			}
@@ -739,6 +739,8 @@ namespace MKY.IO.Serial.Socket
 
 		/// <remarks>
 		/// Opposed to the ALAZ sockets, the MKY sockets do stop on Dispose(), but both is done asynchronously!
+		///
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		private void DisposeSocketSynchronized() // Only either client or server.
 		{
