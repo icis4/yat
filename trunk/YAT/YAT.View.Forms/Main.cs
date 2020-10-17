@@ -397,7 +397,6 @@ namespace YAT.View.Forms
 					// Do nothing in the following cases:
 					case Model.MainResult.ApplicationExitError:
 					case Model.MainResult.UnhandledException:
-					case Model.MainResult.UndeterminedIssue:
 					default:
 					{
 						break;
