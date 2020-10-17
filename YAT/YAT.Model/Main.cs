@@ -312,6 +312,7 @@ namespace YAT.Model
 		/// <summary>
 		/// This method is used to test the command line argument processing.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
 		public virtual MainResult PrepareLaunch_ForTestOnly()
 		{
 			AssertUndisposed();
