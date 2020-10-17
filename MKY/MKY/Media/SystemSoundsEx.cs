@@ -130,7 +130,7 @@ namespace MKY.Media
 				case SystemSounds.Hand:        return (Hand_string);
 				case SystemSounds.Question:    return (Question_string);
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is a system sound that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is a system sound that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -302,7 +302,7 @@ namespace MKY.Media
 				case SystemSounds.Hand:        return (System.Media.SystemSounds.Hand);
 				case SystemSounds.Question:    return (System.Media.SystemSounds.Question);
 
-				default: throw (new ArgumentOutOfRangeException("sound", sound, MessageHelper.InvalidExecutionPreamble + "'" + sound.ToString() + "' is a system sound that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("sound", sound, MessageHelper.InvalidExecutionPreamble + "'" + sound.ToString() + "' is a system sound that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -321,7 +321,7 @@ namespace MKY.Media
 			else if (sound == System.Media.SystemSounds.Question)
 				return (SystemSounds.Question);
 			else
-				throw (new ArgumentOutOfRangeException("sound", sound, MessageHelper.InvalidExecutionPreamble + "'" + sound.ToString() + "' is a system sound that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new ArgumentOutOfRangeException("sound", sound, MessageHelper.InvalidExecutionPreamble + "'" + sound.ToString() + "' is a system sound that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

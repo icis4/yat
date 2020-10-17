@@ -584,7 +584,7 @@ namespace MKY.IO.Usb
 				string usagePageValue = "0x" + Info.UsagePage.ToString("X4", CultureInfo.InvariantCulture);
 				string usageIdValue   = "0x" + Info.UsageId  .ToString("X4", CultureInfo.InvariantCulture);
 
-				string usagePageName = "<Unknown>";
+				string usagePageName = "(unknown)";
 				try
 				{
 					HidUsagePage page = (HidUsagePageEx)(Info.UsagePage);
@@ -600,7 +600,7 @@ namespace MKY.IO.Usb
 					DebugEx.WriteException(GetType(), ex, "Exception while retrieving usage page!");
 				}
 
-				string usageIdName = "<Unknown>";
+				string usageIdName = "(unknown)";
 				try
 				{
 					HidUsageId id = (HidUsageIdEx)(Info.UsageId);

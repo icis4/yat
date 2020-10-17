@@ -38,6 +38,7 @@ using MKY.Collections.Generic;
 using MKY.CommandLine;
 
 using NUnit.Framework;
+using NUnitEx;
 
 #endregion
 
@@ -901,6 +902,7 @@ namespace MKY.Test.CommandLine
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(DevelopmentValidationTestData), "TestCases")]
+		[AssertThrowsCategory]
 		public virtual void TestDevelopmentValidation(bool isValid, Type type)
 		{
 			TestDevelopmentValidation_type = type;

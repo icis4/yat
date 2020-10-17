@@ -312,7 +312,7 @@ namespace MKY.IO.Serial.SerialPort
 			bool isCtsInactiveOldAndErrorHasBeenSignaled = false;
 			bool   isXOffStateOldAndErrorHasBeenSignaled = false;
 
-			DebugThreads("SendThread() has started.");
+			DebugThreads("...SendThread() has started.");
 
 			try
 			{

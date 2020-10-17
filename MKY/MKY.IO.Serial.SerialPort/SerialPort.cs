@@ -102,8 +102,6 @@ namespace MKY.IO.Serial.SerialPort
 		// Constants
 		//==========================================================================================
 
-		private const string Undefined = "<Undefined>";
-
 		private const int SendQueueInitialCapacity    = Ports.SerialPortEx.WriteBufferSizeDefault;
 		private const int ReceiveQueueInitialCapacity = Ports.SerialPortEx.ReadBufferSizeDefault;
 
@@ -114,6 +112,8 @@ namespace MKY.IO.Serial.SerialPort
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private readonly long IOControlChangedTickInterval = StopwatchEx.TimeToTicks(IOControlChangedTimeout);
+
+		private const string Undefined = "(undefined)";
 
 		#endregion
 
@@ -800,7 +800,7 @@ namespace MKY.IO.Serial.SerialPort
 					case SerialControlPinState.Enabled:   this.port.RtsEnable = true;  break;
 					case SerialControlPinState.Disabled:  this.port.RtsEnable = false; break;
 
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + scs.RtsPin.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + scs.RtsPin.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
 				switch (scs.DtrPin)
@@ -809,7 +809,7 @@ namespace MKY.IO.Serial.SerialPort
 					case SerialControlPinState.Enabled:   this.port.DtrEnable = true;  break;
 					case SerialControlPinState.Disabled:  this.port.DtrEnable = false; break;
 
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + scs.DtrPin.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + scs.DtrPin.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -1147,6 +1147,8 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		private void StartThreads()
 		{
+			DebugThreads("SendThread() gets started...");
+
 			lock (this.sendThreadSyncObj)
 			{
 				if (this.sendThread == null)
@@ -1158,6 +1160,8 @@ namespace MKY.IO.Serial.SerialPort
 					this.sendThread.Start();
 				}
 			}
+
+			DebugThreads("ReceiveThread() gets started...");
 
 			lock (this.receiveThreadSyncObj)
 			{

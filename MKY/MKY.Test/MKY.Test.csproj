@@ -157,6 +157,10 @@
     <Compile Include="Xml\Serialization\XmlSerializerTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\NUnit\NUnitEx\NUnitEx.csproj">
+      <Project>{f7bff679-5389-434c-81e4-7ee8530df954}</Project>
+      <Name>NUnitEx</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY</Name>

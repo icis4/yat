@@ -26,7 +26,6 @@
 // Using
 //==================================================================================================
 
-using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
@@ -67,18 +66,18 @@ namespace MKY.Test.Guid
 		// Tests
 		//==========================================================================================
 
-		#region Tests > TryCreateGuidFromFilePath
+		#region Tests > TestTryParseCommonTolerantly
 		//------------------------------------------------------------------------------------------
-		// Tests > TryCreateGuidFromFilePath
+		// Tests > TestTryParseCommonTolerantly
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "Why not? 'Guid' not only is a type, but also emphasizes a purpose.")]
 		[Test, TestCaseSource(typeof(GuidExTestData), "TestCases")]
-		public virtual void TestTryParseTolerantly(bool isValid, string s, System.Guid expectedGuid)
+		public virtual void TestTryParseCommonTolerantly(bool isValid, string s, System.Guid expectedGuid)
 		{
 			System.Guid actualGuid;
-			if (GuidEx.TryParseTolerantly(s, out actualGuid))
+			if (GuidEx.TryParseCommonTolerantly(s, out actualGuid))
 			{
 				Assert.That(isValid);
 				Assert.That(actualGuid, Is.EqualTo(expectedGuid));

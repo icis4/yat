@@ -448,7 +448,7 @@ namespace MKY.Test.Devices
 				case UsbHubDevices.Hub1: return (ConfigurationProvider.Configuration.UsbHub1);
 				case UsbHubDevices.Hub2: return (ConfigurationProvider.Configuration.UsbHub2);
 
-				default: throw (new ArgumentOutOfRangeException("device", device, MessageHelper.InvalidExecutionPreamble + "'" + device + "' identifies a device that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("device", device, MessageHelper.InvalidExecutionPreamble + "'" + device + "' identifies a device that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

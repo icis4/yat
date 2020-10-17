@@ -43,48 +43,30 @@ namespace MKY
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class GuidEx
 	{
-		private const RegexOptions Options = RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase;
+		private const RegexOptions Options = RegexOptions.Compiled | RegexOptions.CultureInvariant; // 'IgnoreCase' is not needed, "a-f" is explicitly stated for obviousness.
 
 		/// <summary>
-		/// A compiled <see cref="Regex"/> that can be used for parsing a GUID from a string.
-		/// </summary>
-		public static readonly Regex Regex = new Regex(@"[0-9A-F]{8}[-]?([0-9A-F]{4}[-]?){3}[0-9A-F]{12}", Options);
-
-		/// <summary>
-		/// Tries to create and return a <see cref="Guid"/> object from the string specified.
+		/// A compiled <see cref="CommonRegexPattern"/> that can be used for parsing a GUID from a string.
 		/// </summary>
 		/// <remarks>
-		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// This regular expression works for the common "N", "D", "B" and "P" formats of
+		/// <see cref="Guid.ToString(string)"/> or <see cref="Guid.ToString(string, IFormatProvider)"/>,
+		/// but not for the uncommon "X" format (hexadecimal values enclosed in braces, fourth value enclosed in additional braces).
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		public static bool TryParse(string s, out Guid guid)
-		{
-			try
-			{
-				guid = new Guid(s.Trim());
-				return (true);
-			}
-			catch
-			{
-				guid = Guid.Empty;
-				return (false);
-			}
-		}
+		public static readonly Regex CommonRegexPattern = new Regex(@"[({]?[0-9A-Fa-f]{8}[-]?([0-9A-Fa-f]{4}[-]?){3}[0-9A-Fa-f]{12}[})]?", Options);
 
 		/// <summary>
-		/// Tries to create and return a <see cref="Guid"/> object from the string specified.
+		/// Tries to create and return a <see cref="Guid"/> object from the string specified,
+		/// using <see cref="CommonRegexPattern"/> to parse <paramref name="s"/> tolerantly.
 		/// </summary>
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
-		/// <remarks>
-		/// To be replaced by .NET 4+ "Guid.TryParse()" after upgrading to .NET 4+.
-		/// </remarks>
-		public static bool TryParseTolerantly(string s, out Guid guid)
+		public static bool TryParseCommonTolerantly(string s, out Guid guid)
 		{
-			var m = Regex.Match(s.Trim());
+			var m = CommonRegexPattern.Match(s.Trim());
 			if (m.Success)
-				return (TryParse(m.Value, out guid));
+				return (Guid.TryParse(m.Value, out guid));
 
 			guid = Guid.Empty;
 			return (false);

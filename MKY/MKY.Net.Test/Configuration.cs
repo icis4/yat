@@ -265,13 +265,17 @@ namespace MKY.Net.Test
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 		public static readonly string IPv6SpecificInterfaceIsAvailable = "IPv6 specific interface '" + ConfigurationProvider.Configuration.IPv6SpecificInterface + "' is " + (ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable ? "" : "*NOT* ") + "available" + (ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
-		/// <remarks>"MT-SICS" is no valid NUnit category string as it contains an '-'.</remarks>
+		/// <remarks>
+		/// "MT-SICS" is no valid NUnit category string as it contains an '-'.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
 		public static readonly string MTSicsDeviceIsAvailable = "MT SICS device is " + (ConfigurationProvider.Configuration.MTSicsDeviceIsAvailable ? "" : "*NOT* ") + "available on TCP port " + ConfigurationProvider.Configuration.MTSicsDeviceTcpPort + (ConfigurationProvider.Configuration.MTSicsDeviceIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 	}
 
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class IPv4LoopbackIsAvailableCategoryAttribute : CategoryAttribute
@@ -283,7 +287,9 @@ namespace MKY.Net.Test
 		}
 	}
 
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class IPv6LoopbackIsAvailableCategoryAttribute : CategoryAttribute
@@ -295,8 +301,12 @@ namespace MKY.Net.Test
 		}
 	}
 
-	/// <remarks>Currently limited to a single specific interface.</remarks>
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	/// <remarks>
+	/// Currently limited to a single specific interface.
+	/// </remarks>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class IPv4SpecificInterfaceIsAvailableCategoryAttribute : CategoryAttribute
@@ -308,8 +318,12 @@ namespace MKY.Net.Test
 		}
 	}
 
-	/// <remarks>Currently limited to a single specific interface.</remarks>
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	/// <remarks>
+	/// Currently limited to a single specific interface.
+	/// </remarks>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class IPv6SpecificInterfaceIsAvailableCategoryAttribute : CategoryAttribute
@@ -321,7 +335,9 @@ namespace MKY.Net.Test
 		}
 	}
 
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class MTSicsDeviceIsAvailableCategoryAttribute : CategoryAttribute

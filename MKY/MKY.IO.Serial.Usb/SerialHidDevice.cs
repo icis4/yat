@@ -80,7 +80,7 @@ namespace MKY.IO.Serial.Usb
 
 		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
 
-		private const string Undefined = "<Undefined>";
+		private const string Undefined = "(undefined)";
 
 		#endregion
 
@@ -630,6 +630,8 @@ namespace MKY.IO.Serial.Usb
 
 		private void StartThreads()
 		{
+			DebugThreads("SendThread() gets started...");
+
 			lock (this.sendThreadSyncObj)
 			{
 				if (this.sendThread == null)
@@ -641,6 +643,8 @@ namespace MKY.IO.Serial.Usb
 					this.sendThread.Start();
 				}
 			}
+
+			DebugThreads("ReceiveThread() gets started...");
 
 			lock (this.receiveThreadSyncObj)
 			{

@@ -47,7 +47,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
-//// 'System.IO.Ports' is not used due to ambiguity of event args type names.
+//// 'System.IO.Ports' is explicitly used due to ambiguity of event args type names.
 using System.Reflection;
 using System.Threading;
 
@@ -108,13 +108,13 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public const int ReadBufferSizeDefault = 4096;
 
-		private const string Undefined = "<Undefined>";
-
 		/// <remarks>Must be constant (and not a readonly) to be usable as attribute argument.</remarks>
 		private const string PortNameDefault = SerialPortId.FirstStandardPortName;
 		private const int    PortIdDefault   = SerialPortId.FirstStandardPortNumber;
 
 		private const string PortSettingsDefault = "9600, 8, None, 1, None";
+
+		private const string Undefined = "(undefined)";
 
 		#endregion
 

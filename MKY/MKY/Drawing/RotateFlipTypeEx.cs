@@ -139,7 +139,7 @@ namespace MKY.Drawing
 														return (RotateType.Rotate270);
 			}
 
-			throw (new ArgumentOutOfRangeException("rotateFlip", rotateFlip, MessageHelper.InvalidExecutionPreamble + "'" + rotateFlip + "' is a rotate/flip type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new ArgumentOutOfRangeException("rotateFlip", rotateFlip, MessageHelper.InvalidExecutionPreamble + "'" + rotateFlip + "' is a rotate/flip type that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion
@@ -211,7 +211,7 @@ namespace MKY.Drawing
 														return (FlipType.FlipY);
 			}
 
-			throw (new ArgumentOutOfRangeException("rotateFlip", rotateFlip, MessageHelper.InvalidExecutionPreamble + "'" + rotateFlip + "' is a rotate/flip type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new ArgumentOutOfRangeException("rotateFlip", rotateFlip, MessageHelper.InvalidExecutionPreamble + "'" + rotateFlip + "' is a rotate/flip type that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

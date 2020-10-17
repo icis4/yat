@@ -81,8 +81,6 @@ namespace MKY.IO.Serial.Usb
 		// Fields
 		//==========================================================================================
 
-		private const string Undefined = "<Undefined>";
-
 		private HidDeviceInfo deviceInfo;
 		private bool matchSerial;
 
@@ -96,6 +94,8 @@ namespace MKY.IO.Serial.Usb
 		private bool enableRetainingWarnings;
 
 		private bool includeNonPayloadData;
+
+		private const string Undefined = "(undefined)";
 
 		#endregion
 

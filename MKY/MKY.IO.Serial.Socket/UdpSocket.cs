@@ -110,6 +110,8 @@ namespace MKY.IO.Serial.Socket
 
 		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
 
+		private const string Undefined = "(undefined)"; // Lower case same as "localhost".
+
 		#endregion
 
 		#region Fields
@@ -547,7 +549,7 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
-		/// <remarks>Convenience method, always returns a valid value, at least <![CDATA["<undefined>"]]>.</remarks>
+		/// <remarks>Convenience method, always returns a valid value, at least "(undefined)".</remarks>
 		protected virtual string RemoteHostEndpointString
 		{
 			get
@@ -555,7 +557,7 @@ namespace MKY.IO.Serial.Socket
 			////AssertUndisposed() shall not be called from this simple get-property.
 
 				var remoteHost = RemoteHost;
-				return ((remoteHost != null) ? (remoteHost.ToEndpointAddressString()) : "<undefined>"); // Lower case same as "localhost"
+				return ((remoteHost != null) ? (remoteHost.ToEndpointAddressString()) : Undefined);
 			}
 		}
 
@@ -906,6 +908,7 @@ namespace MKY.IO.Serial.Socket
 			}
 
 			// First, create and start receive thread to be ready when socket first receives data:
+
 			lock (this.receiveThreadSyncObj)
 			{
 				if (this.receiveThread == null)
@@ -919,6 +922,7 @@ namespace MKY.IO.Serial.Socket
 			}
 
 			// Then, create socket:
+
 			lock (this.socketSyncObj)
 			{
 				// Address family must be set in order to support IPv6. Otherwise, socket is fixed to IPv4.
@@ -978,6 +982,9 @@ namespace MKY.IO.Serial.Socket
 			}
 
 			// Finally, create and start send thread:
+
+			DebugThreads("SendThread() gets started...");
+
 			lock (this.sendThreadSyncObj)
 			{
 				if (this.sendThread == null)

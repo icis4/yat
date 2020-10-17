@@ -200,7 +200,9 @@ namespace MKY.Test
 		public static readonly string UsbHub2IsAvailable = "USB hub 2 '" + ConfigurationProvider.Configuration.UsbHub2 + "' is " + (ConfigurationProvider.Configuration.UsbHub2IsAvailable ? "" : "*NOT* ") + "available" + (ConfigurationProvider.Configuration.UsbHub2IsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 	}
 
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "1Is", Justification = "Device is named with a single digit.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class UsbHub1IsAvailableCategoryAttribute : CategoryAttribute
@@ -212,7 +214,9 @@ namespace MKY.Test
 		}
 	}
 
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "2Is", Justification = "Device is named with a single digit.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class UsbHub2IsAvailableCategoryAttribute : CategoryAttribute

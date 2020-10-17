@@ -122,7 +122,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary></summary>
 		public const bool NoSendOnInputBreakDefault = false;
 
-		private const string Undefined = "<Undefined>";
+		private const string Undefined = "(undefined)";
 
 		#endregion
 
