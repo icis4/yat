@@ -110,10 +110,10 @@ namespace YAT.Application
 			"  -1      Command line error",
 			"  -2      Application settings error",
 			"  -3      Application start error",
-			"  -4      Application run error",
-			"  -5      Application exit error",
-			"  -6      Unhandled exception",
-			"  -7      Undetermined issue",
+			"  -4      Application start cancel",
+			"  -5      Application run error",
+			"  -6      Application exit error",
+			"  -7      Unhandled exception",
 		#if (WITH_SCRIPTING)
 			"-100      Script invalid content",
 			"-101      Script stop on error",
@@ -1170,14 +1170,13 @@ namespace YAT.Application
 				case Model.MainResult.Success:                  return (MainResult.Success);
 				case Model.MainResult.CommandLineError:         return (MainResult.CommandLineError);
 				case Model.MainResult.ApplicationStartError:    return (MainResult.ApplicationStartError);
+				case Model.MainResult.ApplicationStartCancel:   return (MainResult.ApplicationStartCancel);
 				case Model.MainResult.ApplicationRunError:      return (MainResult.ApplicationRunError);
 				case Model.MainResult.ApplicationExitError:     return (MainResult.ApplicationExitError);
 				case Model.MainResult.UnhandledException:       return (MainResult.UnhandledException);
 			#if (!WITH_SCRIPTING)
-				default:                                        return (MainResult.UndeterminedIssue); // Covers 'Model.MainResult.UndeterminedIssue'.
+				default: throw (new ArgumentOutOfRangeException("result", result, MessageHelper.InvalidExecutionPreamble + "'" + result + "' is a result that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			#else
-				case Model.MainResult.UndeterminedIssue:        return (MainResult.UndeterminedIssue);
-
 				case Model.MainResult.ScriptInvalidContent:     return (MainResult.ScriptInvalidContent);
 				case Model.MainResult.ScriptStopOnError:        return (MainResult.ScriptStopOnError);
 				case Model.MainResult.ScriptExit:               return (MainResult.ScriptExit);

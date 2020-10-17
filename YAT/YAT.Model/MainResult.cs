@@ -45,7 +45,6 @@ namespace YAT.Model
 		ApplicationRunError      = -4,
 		ApplicationExitError     = -5,
 		UnhandledException       = -6,
-		UndeterminedIssue        = -7,
 	#if (WITH_SCRIPTING)
 		ScriptInvalidContent     = MT.Albatros.Core.RunResult.ScriptInvalidContent,
 		ScriptStopOnError        = MT.Albatros.Core.RunResult.ScriptStopOnError,
