@@ -188,7 +188,7 @@ namespace MKY.IO.Serial.Socket
 							case UdpServerSendMode.None:                                                                   /* Do nothing. */     break;
 							case UdpServerSendMode.First:      if (IPAddressEx.EqualsNone(this.remoteHost.Address)) updateRemoteEndPoint = true; break;
 							case UdpServerSendMode.MostRecent:                                                      updateRemoteEndPoint = true; break;
-							default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.serverSendMode.ToString() + "' is a UDP/IP server send mode that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+							default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.serverSendMode.ToString() + "' is a UDP/IP server send mode that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 						}
 
 						if (updateRemoteEndPoint)
@@ -235,7 +235,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		private void ReceiveThread()
 		{
-			DebugThreads("ReceiveThread() has started.");
+			DebugThreads("...ReceiveThread() has started.");
 
 			try
 			{

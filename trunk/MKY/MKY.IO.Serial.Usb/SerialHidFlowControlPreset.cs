@@ -129,7 +129,7 @@ namespace MKY.IO.Serial.Usb
 				case SerialHidFlowControlPreset.MT_SerHid: return (MT_SerHid_string);
 				case SerialHidFlowControlPreset.YAT:       return (YAT_string);
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -280,7 +280,7 @@ namespace MKY.IO.Serial.Usb
 				case SerialHidFlowControlPreset.MT_SerHid:       return (SerialHidFlowControl.Software);
 				case SerialHidFlowControlPreset.YAT:             return (SerialHidFlowControl.None); // = None.
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

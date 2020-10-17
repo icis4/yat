@@ -99,7 +99,7 @@ namespace MKY
 
 		/// <summary>
 		/// Appends all values of an array to a comma separated string and returns it.
-		/// Values that are <c>null</c> are returned as "[null]".
+		/// Values that are <c>null</c> are returned as "(null)".
 		/// </summary>
 		/// <returns>
 		/// String containing values of all items.
@@ -127,7 +127,7 @@ namespace MKY
 				if (value != null)
 					sb.Append(value.ToString());
 				else
-					sb.Append("[null]");
+					sb.Append("(null)");
 
 				if (!string.IsNullOrEmpty(enclosure))
 					sb.Append(enclosure);
@@ -138,7 +138,7 @@ namespace MKY
 
 		/// <summary>
 		/// Appends all values of an array to a comma separated string and returns it.
-		/// Values that are <c>null</c> are returned as "[null]".
+		/// Values that are <c>null</c> are returned as "(null)".
 		/// </summary>
 		/// <returns>
 		/// String containing values of all items.

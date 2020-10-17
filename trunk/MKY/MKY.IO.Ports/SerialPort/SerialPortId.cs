@@ -155,7 +155,7 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				SerialPortCollection l = new SerialPortCollection();
+				var l = new SerialPortCollection();
 				l.FillWithAvailablePorts(false); // Explicitly not getting captions, thus faster.
 
 				if (l.Count > 0)
@@ -612,12 +612,22 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Tries to parse <paramref name="s"/> for the first integer number and returns the corresponding port.
 		/// </summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
 		public static bool TryParseStandardPortName(string s, out SerialPortId result)
 		{
-			Match m;
+			if (s != null)
+				s = s.Trim();
+
+			if (string.IsNullOrEmpty(s))
+			{
+				result = null;
+				return (false);
+			}
 
 			// e.g. "COM2"
-			m = StandardPortNameOnlyRegex.Match(s);
+			var m = StandardPortNameOnlyRegex.Match(s);
 			if (m.Success)
 			{
 				int portNumber;  // m.Value is e.g. "COM2 thus [1] is "2".

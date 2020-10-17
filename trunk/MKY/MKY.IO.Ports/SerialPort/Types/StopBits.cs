@@ -87,7 +87,7 @@ namespace MKY.IO.Ports
 				case StopBits.OnePointFive: return (OnePointFive_double.ToString(CultureInfo.InvariantCulture));
 				case StopBits.Two:          return (Two_double         .ToString(CultureInfo.InvariantCulture));
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -237,7 +237,7 @@ namespace MKY.IO.Ports
 				case StopBits.OnePointFive: return (OnePointFive_double);
 				case StopBits.Two:          return (Two_double);
 
-				default: throw (new ArgumentOutOfRangeException("bits", bits, MessageHelper.InvalidExecutionPreamble + "'" + bits.UnderlyingEnum.ToString() + "' is a stop bit value that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("bits", bits, MessageHelper.InvalidExecutionPreamble + "'" + bits.UnderlyingEnum.ToString() + "' is a stop bit value that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -254,7 +254,7 @@ namespace MKY.IO.Ports
 			}
 			else
 			{
-				throw (new ArgumentOutOfRangeException("bits", bits, MessageHelper.InvalidExecutionPreamble + "'" + bits.ToString(CultureInfo.InvariantCulture) + "' is a stop bit value that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new ArgumentOutOfRangeException("bits", bits, MessageHelper.InvalidExecutionPreamble + "'" + bits.ToString(CultureInfo.InvariantCulture) + "' is a stop bit value that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

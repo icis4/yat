@@ -25,7 +25,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-//// 'System.Threading' is not used due to ambiguity with 'System.Windows.Forms.Timer' and 'StatusBox.Timeout'.
+//// 'System.Threading' is explicitly used due to ambiguity among 'System.Windows.Forms.Timer' and 'StatusBox.Timeout'.
 using System.Windows.Forms;
 
 using MKY.Diagnostics;

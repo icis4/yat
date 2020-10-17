@@ -96,7 +96,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		public const UdpServerSendMode UdpServerSendModeDefault = UdpServerSendMode.MostRecent;
 
-		private const string Undefined = "<Undefined>";
+		private const string Undefined = "(undefined)";
 
 		#endregion
 

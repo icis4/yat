@@ -21,6 +21,28 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Debugging loading in NUnit no longer works with .NET 4.0.
+	// Check again when upgrading to NUnit 3.x (FR #293).
+	// For the moment, this is the workaround:
+////#define DEBUGGER_BREAK_HOOK
+
+#endif
+
+#endregion
+
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
+using System;
 using System.Configuration;
 #if (DEBUG)
 using System.Diagnostics;
@@ -28,7 +50,12 @@ using System.Diagnostics;
 using System.IO;
 #if (DEBUG)
 using System.Text;
+#if (DEBUGGER_BREAK_HOOK)
+using System.Windows.Forms;
 #endif
+#endif
+
+#endregion
 
 namespace MKY.Configuration
 {
@@ -95,17 +122,34 @@ namespace MKY.Configuration
 	/// </summary>
 	/// <remarks>
 	/// Debugging this configuration infrastructure may be a bit trickier than normal debugging.
-	/// E.g. if the configuration is used to parameterize NUnit test cases, the follow steps need
-	/// to be taken:
+	/// E.g. if the configuration is used to parameterize NUnit test cases, the follow steps worked
+	/// with .NET 3.5:
 	/// 1. Build the solution
 	/// 2. Start NUnit
 	/// 3. 'Debug > Attach' Visual Studio to NUnit
 	/// 4. Set a breakpoint a the desired location below
 	/// 5. Reload the project in NUnit
 	///    => Breakpoint is hit.
+	///
+	/// However, with .NET 4.0 this no longer works, thus the workaround below.
+	/// Check again when upgrading to NUnit 3.x (FR #293).
 	/// </remarks>
 	public static class Provider
 	{
+	#if (DEBUGGER_BREAK_HOOK)
+		private static readonly string staticDebuggerBreakHookMessage =
+			"This is an intended break while loading configuration files." + Environment.NewLine +
+			Environment.NewLine +
+			"It as a workaround to e.g. allow debugging of NUnit test generation:" + Environment.NewLine +
+			Environment.NewLine +
+			"    1. Attach the Visual Studio Debugger to NUnit [Ctrl+Alt+P]." + Environment.NewLine +
+			"    2. [Debug > Break All] or [Ctrl+Alt+Break]." + Environment.NewLine +
+			"    3. Set breakpoints as needed." + Environment.NewLine +
+			"    4. [Debug > Continue] or [F5]." + Environment.NewLine +
+			"    5. Confirm this message with [OK].";
+
+		private static bool staticDebuggerBreakHookOnce; // = false;
+	#endif
 		/// <summary>
 		/// Tries the open and merge configurations.
 		/// </summary>
@@ -154,9 +198,6 @@ namespace MKY.Configuration
 				solutionConfiguration = ConfigurationManager.OpenMappedExeConfiguration(ecfm, ConfigurationUserLevel.None);
 			}
 
-		#if (DEBUG)
-		////bool once = false;
-		#endif
 			if (solutionConfiguration != null)
 			{
 				T selectedSolutionConfiguration;
@@ -170,8 +211,13 @@ namespace MKY.Configuration
 					sb.AppendLine();
 					sb.AppendLine(solutionConfiguration.FilePath);
 					Debug.Write(sb.ToString());
-				////File.WriteAllText(IO.FileEx.GetUniqueFilePath(@"D:\Temp\YAT"), sb.ToString()); // \remind (2020-10-03 / MKY) Debugging loading in NUnit no longer works with .NET 4.0 ?!? Check when upgrading to NUnit 3.x (FR #293).
-				////if (!once) { once = true; System.Windows.Forms.MessageBox.Show("This is an intended break while loading the test configuration. Attach Visual Studio Debugger to NUnit and break execution to debug loading of test configuration."); }
+				#if (DEBUGGER_BREAK_HOOK)
+					if (!staticDebuggerBreakHookOnce)
+					{
+						staticDebuggerBreakHookOnce = true;
+						MessageBox.Show(staticDebuggerBreakHookMessage, typeof(Provider).FullName);
+					}
+				#endif
 				#endif
 					// Override with and/or add user configuration where requested:
 					string userFilePath;
@@ -194,8 +240,13 @@ namespace MKY.Configuration
 								sb.AppendLine();
 								sb.AppendLine(userConfiguration.FilePath);
 								Debug.Write(sb.ToString());
-							////File.WriteAllText(IO.FileEx.GetUniqueFilePath(@"D:\Temp\YAT"), sb.ToString()); // Debugging loading in NUnit no longer works with .NET 4.0 ?!?
-							////if (!once) { once = true; System.Windows.Forms.MessageBox.Show("This is an intended break while loading the test configuration. Attach Visual Studio Debugger to NUnit and break execution to debug loading of test configuration."); }
+							#if (DEBUGGER_BREAK_HOOK)
+								if (!staticDebuggerBreakHookOnce)
+								{
+									staticDebuggerBreakHookOnce = true;
+									MessageBox.Show(staticDebuggerBreakHookMessage, typeof(Provider).FullName);
+								}
+							#endif
 							#endif
 							}
 						}
@@ -207,8 +258,13 @@ namespace MKY.Configuration
 							sb.AppendLine();
 							sb.AppendLine(userFilePath);
 							Debug.Write(sb.ToString());
-						////File.WriteAllText(IO.FileEx.GetUniqueFilePath(@"D:\Temp\YAT"), sb.ToString()); // Debugging loading in NUnit no longer works with .NET 4.0 ?!?
-						////if (!once) { once = true; System.Windows.Forms.MessageBox.Show("This is an intended break while loading the test configuration. Attach Visual Studio Debugger to NUnit and break execution to debug loading of test configuration."); }
+						#if (DEBUGGER_BREAK_HOOK)
+							if (!staticDebuggerBreakHookOnce)
+							{
+								staticDebuggerBreakHookOnce = true;
+								MessageBox.Show(staticDebuggerBreakHookMessage, typeof(Provider).FullName);
+							}
+						#endif
 						}
 					#endif
 					}
@@ -225,8 +281,13 @@ namespace MKY.Configuration
 					sb.AppendLine();
 					sb.AppendLine(solutionConfiguration.FilePath);
 					Debug.Write(sb.ToString());
-				////File.WriteAllText(IO.FileEx.GetUniqueFilePath(@"D:\Temp\YAT"), sb.ToString()); // Debugging loading in NUnit no longer works with .NET 4.0 ?!?
-				////if (!once) { once = true; System.Windows.Forms.MessageBox.Show("This is an intended break while loading the test configuration. Attach Visual Studio Debugger to NUnit and break execution to debug loading of test configuration."); }
+				#if (DEBUGGER_BREAK_HOOK)
+					if (!staticDebuggerBreakHookOnce)
+					{
+						staticDebuggerBreakHookOnce = true;
+						MessageBox.Show(staticDebuggerBreakHookMessage, typeof(Provider).FullName);
+					}
+				#endif
 				}
 			#endif
 			}
@@ -238,8 +299,13 @@ namespace MKY.Configuration
 				sb.AppendLine();
 				sb.AppendLine(solutionFilePath);
 				Debug.Write(sb.ToString());
-			////File.WriteAllText(IO.FileEx.GetUniqueFilePath(@"D:\Temp\YAT"), sb.ToString()); // Debugging loading in NUnit no longer works with .NET 4.0 ?!?
-			////if (!once) { once = true; System.Windows.Forms.MessageBox.Show("This is an intended break while loading the test configuration. Attach Visual Studio Debugger to NUnit and break execution to debug loading of test configuration."); }
+			#if (DEBUGGER_BREAK_HOOK)
+				if (!staticDebuggerBreakHookOnce)
+				{
+					staticDebuggerBreakHookOnce = true;
+					MessageBox.Show(staticDebuggerBreakHookMessage, typeof(Provider).FullName);
+				}
+			#endif
 			}
 		#endif
 			resultingConfiguration = null;

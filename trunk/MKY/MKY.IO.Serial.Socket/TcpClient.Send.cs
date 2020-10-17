@@ -44,7 +44,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -181,7 +180,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		private void SendThread()
 		{
-			DebugThreads("SendThread() has started.");
+			DebugThreads("...SendThread() has started.");
 
 			// Based on various sources:
 			//
@@ -200,7 +199,7 @@ namespace MKY.IO.Serial.Socket
 				case System.Net.Sockets.AddressFamily.InterNetwork:   maxChunkLength = SafePayloadLengthOnIPv4; break;
 				case System.Net.Sockets.AddressFamily.InterNetworkV6: maxChunkLength = SafePayloadLengthOnIPv6; break;
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.localInterface.Address.AddressFamily.ToString() + "' is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.localInterface.Address.AddressFamily.ToString() + "' is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			try
@@ -328,7 +327,7 @@ namespace MKY.IO.Serial.Socket
 			lock (this.socketSyncObj) // Remote end point is fixed for a TCP/IP client object.
 				remoteEndPoint = new System.Net.IPEndPoint(this.remoteHost.Address, this.remotePort);
 
-			DebugThreads("SendThread() has started.");
+			DebugThreads("...DataSentThread() has started.");
 
 			try
 			{

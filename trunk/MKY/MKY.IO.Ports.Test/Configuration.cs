@@ -335,12 +335,16 @@ namespace MKY.IO.Ports.Test
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
 		public static readonly string PortBIsAvailable = "Serial port B '" + ConfigurationProvider.Configuration.PortB + "' is " + (ConfigurationProvider.Configuration.PortBIsAvailable ? "" : "*NOT* ") + "available" + (ConfigurationProvider.Configuration.PortBIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
-		/// <remarks>"MT-SICS" is no valid NUnit category string as it contains an '-'.</remarks>
+		/// <remarks>
+		/// "MT-SICS" is no valid NUnit category string as it contains an '-'.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
 		public static readonly string MTSicsDeviceAIsAvailable = "Serial port MT SICS device A is " + (ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable ? "" : "*NOT* ") + "available on '" + ConfigurationProvider.Configuration.MTSicsDeviceA + "'" + (ConfigurationProvider.Configuration.MTSicsDeviceAIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
-		/// <remarks>"MT-SICS" is no valid NUnit category string as it contains an '-'.</remarks>
+		/// <remarks>
+		/// "MT-SICS" is no valid NUnit category string as it contains an '-'.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
 		public static readonly string MTSicsDeviceBIsAvailable = "Serial port MT SICS device B is " + (ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable ? "" : "*NOT* ") + "available on '" + ConfigurationProvider.Configuration.MTSicsDeviceB + "'" + (ConfigurationProvider.Configuration.MTSicsDeviceBIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
@@ -365,7 +369,9 @@ namespace MKY.IO.Ports.Test
 		public static readonly string LoopbacksAreAvailable = "Serial port loopback" + ((ConfigurationProvider.Configuration.LoopbacksAreAvailable) ? ((ConfigurationProvider.Configuration.LoopbackCount > 1) ? "s are " : " is ") : "*NOT* ") + "available" + ((ConfigurationProvider.Configuration.LoopbacksAreAvailable) ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 	}
 
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class PortAIsAvailableCategoryAttribute : CategoryAttribute
@@ -377,7 +383,9 @@ namespace MKY.IO.Ports.Test
 		}
 	}
 
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Port is named with a single letter.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class PortBIsAvailableCategoryAttribute : CategoryAttribute
@@ -389,7 +397,9 @@ namespace MKY.IO.Ports.Test
 		}
 	}
 
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Device is named with a single letter.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
@@ -402,7 +412,9 @@ namespace MKY.IO.Ports.Test
 		}
 	}
 
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "MT-SICS is a name.")]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Device is named with a single letter.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
@@ -415,7 +427,9 @@ namespace MKY.IO.Ports.Test
 		}
 	}
 
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Device is named with a single letter.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class TILaunchPadDeviceAIsAvailableCategoryAttribute : CategoryAttribute
@@ -427,7 +441,9 @@ namespace MKY.IO.Ports.Test
 		}
 	}
 
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "Device is named with a single letter.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class TILaunchPadDeviceBIsAvailableCategoryAttribute : CategoryAttribute
@@ -439,7 +455,9 @@ namespace MKY.IO.Ports.Test
 		}
 	}
 
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class LoopbackPairsAreAvailableCategoryAttribute : CategoryAttribute
 	{
@@ -450,7 +468,9 @@ namespace MKY.IO.Ports.Test
 		}
 	}
 
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Selfs", Justification = "Multiple items, same as 'Pairs'.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class LoopbackSelfsAreAvailableCategoryAttribute : CategoryAttribute
@@ -462,7 +482,9 @@ namespace MKY.IO.Ports.Test
 		}
 	}
 
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class LoopbacksAreAvailableCategoryAttribute : CategoryAttribute
 	{

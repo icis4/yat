@@ -827,7 +827,9 @@ namespace MKY.IO.Usb
 			return (TryParseWithOptions(s, true, out result));
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
+		/// </remarks>
 		protected static bool TryParseWithOptions(string s, bool requireSerial, out DeviceInfo result)
 		{
 			if (s != null)

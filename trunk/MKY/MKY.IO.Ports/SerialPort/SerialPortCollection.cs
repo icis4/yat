@@ -137,8 +137,11 @@ namespace MKY.IO.Ports
 				DebugVerboseIndent("Retrieving ports of local machine...");
 				foreach (string portName in System.IO.Ports.SerialPort.GetPortNames())
 				{
-					DebugVerboseIndent(portName);
-					Add(new SerialPortId(portName));
+					DebugVerboseIndent((portName != null) ? portName : "(null)");
+
+					if (!string.IsNullOrEmpty(portName)) // "If the registry contains stale or otherwise incorrect data then the GetPortNames method will return incorrect data."
+						Add(new SerialPortId(portName));
+
 					DebugVerboseUnindent();
 				}
 				DebugVerboseUnindent("...done");
@@ -157,7 +160,7 @@ namespace MKY.IO.Ports
 		{
 			if (!string.IsNullOrEmpty(portName))
 			{
-				SerialPortCollection c = new SerialPortCollection();
+				var c = new SerialPortCollection();
 				c.FillWithAvailablePorts(false);
 
 				return (c.Contains(portName));
@@ -199,13 +202,13 @@ namespace MKY.IO.Ports
 			{
 				if (staticPortNamesCache == null)
 				{
-					staticPortNamesCache = System.IO.Ports.SerialPort.GetPortNames();
+					staticPortNamesCache = System.IO.Ports.SerialPort.GetPortNames(); // "If the registry contains stale or otherwise incorrect data then the GetPortNames method will return incorrect data."
 					useCaptionsFromCache = false;
 				}
 				else
 				{
 					string[] formerCache = (string[])staticPortNamesCache.Clone();
-					staticPortNamesCache = System.IO.Ports.SerialPort.GetPortNames();
+					staticPortNamesCache = System.IO.Ports.SerialPort.GetPortNames(); // "If the registry contains stale or otherwise incorrect data then the GetPortNames method will return incorrect data."
 					useCaptionsFromCache = ArrayEx.ValuesEqual(staticPortNamesCache, formerCache);
 				}
 			}
@@ -457,7 +460,7 @@ namespace MKY.IO.Ports
 		[Conditional("DEBUG_VERBOSE")]
 		private static void DebugVerbose(string message = null)
 		{
-			if (!string.IsNullOrEmpty(message))
+			if (message != null)
 				Debug.WriteLine(message);
 		}
 

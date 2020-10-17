@@ -33,6 +33,7 @@ using MKY.Threading;
 using MKY.Time;
 
 using NUnit.Framework;
+using NUnitEx;
 
 #endregion
 
@@ -78,7 +79,7 @@ namespace MKY.Test.Time
 		}
 
 		/// <summary></summary>
-		[Test]
+		[Test, AssertThrowsCategory]
 		public virtual void TestCreateIntervalLargerThanWindow()
 		{
 			Assert.That(CreateIntervalLargerThanWindow1us, Throws.TypeOf<ArgumentOutOfRangeException>());

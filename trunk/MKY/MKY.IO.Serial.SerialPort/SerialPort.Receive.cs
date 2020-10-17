@@ -74,7 +74,7 @@ namespace MKY.IO.Serial.SerialPort
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		private void ReceiveThread()
 		{
-			DebugThreads("ReceiveThread() has started.");
+			DebugThreads("...ReceiveThread() has started.");
 
 			try
 			{

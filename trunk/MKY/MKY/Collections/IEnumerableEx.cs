@@ -60,7 +60,7 @@ namespace MKY.Collections
 
 		/// <summary>
 		/// Appends all items of an enumerable object to a comma separated string and returns it.
-		/// Items that are <c>null</c> are returned as "[null]".
+		/// Items that are <c>null</c> are returned as "(null)".
 		/// </summary>
 		/// <returns>
 		/// String containing values of all items.
@@ -88,7 +88,7 @@ namespace MKY.Collections
 				if (item != null)
 					sb.Append(item.ToString());
 				else
-					sb.Append("[null]");
+					sb.Append("(null)");
 
 				if (!string.IsNullOrEmpty(enclosure))
 					sb.Append(enclosure);
@@ -99,7 +99,7 @@ namespace MKY.Collections
 
 		/// <summary>
 		/// Appends all items of an enumerable object to a comma separated string and returns it.
-		/// Items that are <c>null</c> are returned as "[null]".
+		/// Items that are <c>null</c> are returned as "(null)".
 		/// </summary>
 		/// <returns>
 		/// String containing values of all items.

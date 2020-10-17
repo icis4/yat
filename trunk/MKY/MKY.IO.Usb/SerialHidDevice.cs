@@ -1090,7 +1090,7 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		private void ReceiveThread()
 		{
-			DebugThread("ReceiveThread() has started.");
+			DebugThread("...ReceiveThread() has started.");
 
 			try
 			{

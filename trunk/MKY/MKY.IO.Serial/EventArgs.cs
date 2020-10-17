@@ -192,7 +192,7 @@ namespace MKY.IO.Serial
 			var sb = new StringBuilder();
 
 			sb.Append(indent);
-			sb.Append((Message != null) ? Message : "<None>");
+			sb.Append((Message != null) ? Message : "(none)");
 			sb.Append(" | Direction = ");
 			sb.Append(Direction.ToString());
 			sb.Append(" | TimeStamp = ");
@@ -276,7 +276,7 @@ namespace MKY.IO.Serial
 			var sb = new StringBuilder();
 
 			sb.Append(indent);
-			sb.Append((Message != null) ? Message : "<None>");
+			sb.Append((Message != null) ? Message : "(none)");
 			sb.Append(" | Severity = ");
 			sb.Append(Severity.ToString());
 			sb.Append(" | Direction = ");

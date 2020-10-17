@@ -176,7 +176,7 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		private void SendThread()
 		{
-			DebugThreads("SendThread() has started.");
+			DebugThreads("...SendThread() has started.");
 
 			// Based on experiments:
 			//
@@ -199,7 +199,7 @@ namespace MKY.IO.Serial.Socket
 				case System.Net.Sockets.AddressFamily.InterNetwork:   maxChunkLength = SafePayloadLengthOnIPv4; break;
 				case System.Net.Sockets.AddressFamily.InterNetworkV6: maxChunkLength = SafePayloadLengthOnIPv6; break;
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.localInterface.Address.AddressFamily.ToString() + "' is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.localInterface.Address.AddressFamily.ToString() + "' is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			try
