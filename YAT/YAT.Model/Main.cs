@@ -50,7 +50,7 @@ using MT.Albatros.Core;
 
 using YAT.Application.Utilities;
 using YAT.Model.Types;
-using YAT.Model.Utilities;
+//// 'YAT.Model.Utilities' is explicitly used due to ambiguity of 'MessageHelper'.
 using YAT.Settings.Application;
 using YAT.Settings.Model;
 
@@ -312,7 +312,7 @@ namespace YAT.Model
 		/// <summary>
 		/// This method is used to test the command line argument processing.
 		/// </summary>
-		public virtual MainResult PrepareLaunch()
+		public virtual MainResult PrepareLaunch_ForTestOnly()
 		{
 			AssertUndisposed();
 
@@ -394,7 +394,7 @@ namespace YAT.Model
 						{
 							OnFixedStatusTextRequest("Error opening workspace!");
 
-							var errorMessage = ErrorHelper.ComposeMessage
+							var errorMessage = Utilities.MessageHelper.ComposeMessage
 							(
 								"Unable to open the previous workspace file",
 								filePath,
@@ -571,7 +571,7 @@ namespace YAT.Model
 					}
 					else
 					{
-						this.launchArgs.ErrorMessage = ErrorHelper.ComposeMessage("Unable to open workspace file", absoluteFilePath, ex);
+						this.launchArgs.MessageOnError = Utilities.MessageHelper.ComposeMessage("Unable to open workspace file", absoluteFilePath, ex);
 						return (false);
 					}
 				}
@@ -586,14 +586,38 @@ namespace YAT.Model
 					}
 					else
 					{
-						this.launchArgs.ErrorMessage = ErrorHelper.ComposeMessage("Unable to open terminal file", absoluteFilePath, ex);
+						this.launchArgs.MessageOnError = Utilities.MessageHelper.ComposeMessage("Unable to open terminal file", absoluteFilePath, ex);
 						return (false);
 					}
 				}
+			#if (!WITH_SCRIPTING)
 				else
 				{
 					return (false);
 				}
+			#else
+				else //            incl. IsScriptFile(requestedFilePath)) but not limited to, any extension shall be usable as a script file.
+				{
+					string absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(requestedFilePath);
+					if (File.Exists(absoluteFilePath))
+					{
+						this.launchArgs.RequestedScriptFilePath = absoluteFilePath;
+						this.launchArgs.ScriptRunIsRequested = true;
+
+						string messageOnError;
+						if (!ProcessCommandLineArgsIntoScriptLaunchOptions(out messageOnError))
+						{
+							this.launchArgs.MessageOnError = messageOnError;
+							return (false);
+						}
+					}
+					else
+					{
+						this.launchArgs.MessageOnError = Utilities.MessageHelper.ComposeMessage("Script file does not exist", absoluteFilePath);
+						return (false);
+					}
+				}
+			#endif
 			}
 
 			// Prio 7 = Retrieve the requested terminal within the workspace and validate it:
@@ -711,22 +735,14 @@ namespace YAT.Model
 			if (this.commandLineArgs.OptionIsGiven("Script"))
 			{
 				this.launchArgs.RequestedScriptFilePath = this.commandLineArgs.RequestedScriptFilePath;
-
-				if (this.commandLineArgs.OptionIsGiven("ScriptLog"))
-				{
-					if (PathEx.IsValid(this.commandLineArgs.RequestedScriptLogFilePath))
-						this.launchArgs.RequestedScriptLogFilePath = this.commandLineArgs.RequestedScriptLogFilePath;
-					else
-						return (false);
-				}
-
-				if (this.commandLineArgs.OptionIsGiven("ScriptLogTimeStamp"))
-					this.launchArgs.AppendTimeStampToScriptLogFileName = true;
-
-				if (this.commandLineArgs.OptionIsGiven("ScriptArgs"))
-					this.launchArgs.RequestedScriptArgs = this.commandLineArgs.RequestedScriptArgs;
-
 				this.launchArgs.ScriptRunIsRequested = true;
+
+				string messageOnError;
+				if (!ProcessCommandLineArgsIntoScriptLaunchOptions(out messageOnError))
+				{
+					this.launchArgs.MessageOnError = messageOnError;
+					return (false);
+				}
 			}
 		#endif
 
@@ -758,6 +774,33 @@ namespace YAT.Model
 
 			return (true);
 		}
+
+	#if (WITH_SCRIPTING)
+
+		private bool ProcessCommandLineArgsIntoScriptLaunchOptions(out string messageOnError)
+		{
+			if (this.commandLineArgs.OptionIsGiven("ScriptLog"))
+			{
+				if (!PathEx.IsValid(this.commandLineArgs.RequestedScriptLogFilePath))
+				{
+					messageOnError = Utilities.MessageHelper.ComposeMessage("Invalid script file path", this.commandLineArgs.RequestedScriptLogFilePath);
+					return (false);
+				}
+
+				this.launchArgs.RequestedScriptLogFilePath = this.commandLineArgs.RequestedScriptLogFilePath;
+			}
+
+			if (this.commandLineArgs.OptionIsGiven("ScriptLogTimeStamp"))
+				this.launchArgs.AppendTimeStampToScriptLogFileName = true;
+
+			if (this.commandLineArgs.OptionIsGiven("ScriptArgs"))
+				this.launchArgs.RequestedScriptArgs = this.commandLineArgs.RequestedScriptArgs;
+
+			messageOnError = null;
+			return (true);
+		}
+
+	#endif
 
 		/// <summary>
 		/// This method takes existing terminal settings and modifies/overrides those settings that
@@ -1198,8 +1241,7 @@ namespace YAT.Model
 		{
 			AssertUndisposed();
 
-			string extension = Path.GetExtension(filePath);
-			if (ExtensionHelper.IsWorkspaceFile(extension))
+			if (ExtensionHelper.IsWorkspaceFile(filePath))
 			{
 				if (OpenWorkspaceFromFile(filePath))
 				{
@@ -1211,7 +1253,7 @@ namespace YAT.Model
 
 				return (false);
 			}
-			else if (ExtensionHelper.IsTerminalFile(extension))
+			else if (ExtensionHelper.IsTerminalFile(filePath))
 			{
 				// Create workspace if it doesn't exist yet.
 				bool signalStarted = false;
@@ -1567,13 +1609,13 @@ namespace YAT.Model
 				}
 				else
 				{
-					messageOnFailure = ErrorHelper.ComposeMessage("Unable to open workspace", absoluteFilePath, ex);
+					messageOnFailure = Utilities.MessageHelper.ComposeMessage("Unable to open workspace", absoluteFilePath, ex);
 					return (false);
 				}
 			}
 			else
 			{
-				messageOnFailure = ErrorHelper.ComposeMessage("Unable to open workspace file", absoluteFilePath, ex);
+				messageOnFailure = Utilities.MessageHelper.ComposeMessage("Unable to open workspace file", absoluteFilePath, ex);
 				return (false);
 			}
 		}
@@ -1720,7 +1762,7 @@ namespace YAT.Model
 					settingsHandler = sh;
 
 					// Try to retrieve GUID from file path (in case of auto saved workspace files):
-					if (!GuidEx.TryParseTolerantly(Path.GetFileNameWithoutExtension(filePath), out guid))
+					if (!GuidEx.TryParseCommonTolerantly(Path.GetFileNameWithoutExtension(filePath), out guid))
 						guid = Guid.NewGuid();
 
 					exceptionOnFailure = null;
@@ -1903,8 +1945,8 @@ namespace YAT.Model
 						OnFixedStatusTextRequest("Invalid program operation!");
 						OnMessageInputRequest
 						(
-							MessageHelper.InvalidExecutionPreamble + "workspace is 'null' while attempting to perform the operation!" + Environment.NewLine + Environment.NewLine +
-							MessageHelper.SubmitBug,
+							MKY.MessageHelper.InvalidExecutionPreamble + "workspace is 'null' while attempting to perform the operation!" + Environment.NewLine + Environment.NewLine +
+							MKY.MessageHelper.SubmitBug,
 							"Invalid Program Operation",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Stop
@@ -1978,7 +2020,7 @@ namespace YAT.Model
 							OnFixedStatusTextRequest("Unable to transmit text!");
 							OnMessageInputRequest
 							(
-								ErrorHelper.ComposeMessage("Unable to transmit text", text, ex),
+								Utilities.MessageHelper.ComposeMessage("Unable to transmit text", text, ex),
 								"Transmission Error",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Stop
@@ -2006,7 +2048,7 @@ namespace YAT.Model
 							OnFixedStatusTextRequest("Unable to transmit file!");
 							OnMessageInputRequest
 							(
-								ErrorHelper.ComposeMessage("Unable to transmit file", filePath, ex),
+								Utilities.MessageHelper.ComposeMessage("Unable to transmit file", filePath, ex),
 								"Transmission Error",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Stop
@@ -2120,7 +2162,7 @@ namespace YAT.Model
 						OnFixedStatusTextRequest("Unable to exit!");
 						OnMessageInputRequest
 						(
-							ErrorHelper.ComposeMessage("Unable to exit!", ex),
+							Utilities.MessageHelper.ComposeMessage("Unable to exit!", ex),
 							"Exit Error",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Stop
@@ -2195,7 +2237,7 @@ namespace YAT.Model
 				#if (DEBUG)
 					Debugger.Break();
 				#else
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Message Input' request by main has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "A 'Message Input' request by main has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 				#endif
 				}
 

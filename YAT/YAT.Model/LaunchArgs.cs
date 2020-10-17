@@ -245,7 +245,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		public string ErrorMessage;
+		public string MessageOnError;
 
 		/// <summary></summary>
 		public WorkspaceLaunchArgs ToWorkspaceLaunchArgs()

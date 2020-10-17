@@ -532,13 +532,14 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Inline' is a correct English term in programming.")]
 		protected virtual void InlineDisplayElement(IODirection direction, DisplayElement.InlineElement element)
 		{
-			switch (direction)
-			{                                                                                   // Clone element as it is needed right again.
+			switch (direction)   // I/O direction shall no restrict inlining, e.g.
+			{                    // I/O state changes shall also be inlineable.                   // Clone element as it is needed right again.
+				case IODirection.None:  InlineDisplayElement(RepositoryType.Tx, direction, element.Clone()); InlineDisplayElement(RepositoryType.Bidir, direction, element.Clone()); InlineDisplayElement(RepositoryType.Rx, direction, element); break;
 				case IODirection.Tx:    InlineDisplayElement(RepositoryType.Tx, direction, element.Clone()); InlineDisplayElement(RepositoryType.Bidir, direction, element);                                                                      break;
 				case IODirection.Bidir: InlineDisplayElement(RepositoryType.Tx, direction, element.Clone()); InlineDisplayElement(RepositoryType.Bidir, direction, element.Clone()); InlineDisplayElement(RepositoryType.Rx, direction, element); break;
 				case IODirection.Rx:                                                                         InlineDisplayElement(RepositoryType.Bidir, direction, element.Clone()); InlineDisplayElement(RepositoryType.Rx, direction, element); break;
 				                                                                                                                                                      //// Clone element as it is needed right again.
-				default:                throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is an invalid I/O direction here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -561,13 +562,14 @@ namespace YAT.Domain
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Inline' is a correct English term in programming.")]
 		protected virtual void InlineDisplayElements(IODirection direction, DisplayElementCollection elements)
 		{
-			switch (direction)
-			{                                                                                     // Clone elements as they are needed right again.
+			switch (direction)   // I/O direction shall no restrict inlining, e.g.
+			{                    // I/O state changes shall also be inlineable.                   // Clone element as it is needed right again.
+				case IODirection.None:  InlineDisplayElements(RepositoryType.Tx, direction, elements.Clone()); InlineDisplayElements(RepositoryType.Bidir, direction, elements);                                                                        break;
 				case IODirection.Tx:    InlineDisplayElements(RepositoryType.Tx, direction, elements.Clone()); InlineDisplayElements(RepositoryType.Bidir, direction, elements);                                                                        break;
 				case IODirection.Bidir: InlineDisplayElements(RepositoryType.Tx, direction, elements.Clone()); InlineDisplayElements(RepositoryType.Bidir, direction, elements.Clone()); InlineDisplayElements(RepositoryType.Rx, direction, elements); break;
 				case IODirection.Rx:                                                                           InlineDisplayElements(RepositoryType.Bidir, direction, elements.Clone()); InlineDisplayElements(RepositoryType.Rx, direction, elements); break;
 				                                                                                                                                                          //// Clone elements as they are needed right again
-				default:                throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("direction", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is an invalid I/O direction here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

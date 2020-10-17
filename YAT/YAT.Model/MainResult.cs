@@ -35,16 +35,9 @@ namespace YAT.Model
 	/// </summary>
 	public enum MainResult
 	{
-	#if !(WITH_SCRIPTING)
-		Success,
-		CommandLineError,
-		ApplicationStartError,
-		ApplicationStartCancel,
-		ApplicationRunError,
-		ApplicationExitError,
-		UnhandledException
-	#else
-		// Positive values are reserved for the script result!
+	#if (WITH_SCRIPTING)
+		// Positive values are reserved for script result!
+	#endif
 		Success                  =  0,
 		CommandLineError         = -1,
 		ApplicationStartError    = -2,
@@ -52,6 +45,8 @@ namespace YAT.Model
 		ApplicationRunError      = -4,
 		ApplicationExitError     = -5,
 		UnhandledException       = -6,
+		UndeterminedIssue        = -7,
+	#if (WITH_SCRIPTING)
 		ScriptInvalidContent     = MT.Albatros.Core.RunResult.ScriptInvalidContent,
 		ScriptStopOnError        = MT.Albatros.Core.RunResult.ScriptStopOnError,
 		ScriptExit               = MT.Albatros.Core.RunResult.ScriptExit,

@@ -963,7 +963,7 @@ namespace YAT.Domain
 			else if (this is LineBreak)        clone = new LineBreak();
 			else if (this is IOControlInfo)    clone = new IOControlInfo();
 			else if (this is ErrorInfo)        clone = new ErrorInfo();
-			else throw (new TypeLoadException(MessageHelper.InvalidExecutionPreamble + "'" + GetType() + "' is a display element that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			else throw (new TypeLoadException(MessageHelper.InvalidExecutionPreamble + "'" + GetType() + "' is a display element that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			clone.timeStamp  = this.timeStamp;
 			clone.direction  = this.direction;
@@ -1216,13 +1216,13 @@ namespace YAT.Domain
 			var sb = new StringBuilder();
 
 			sb.Append(indent);
-			sb.Append((Text != null) ? (@"""" + StringEx.ConvertToPrintableString(Text) + @"""") : "<None>");
+			sb.Append((Text != null) ? (@"""" + StringEx.ConvertToPrintableString(Text) + @"""") : "(none)");
 			sb.Append(" | CharCount = ");
 			sb.Append(CharCount.ToString(CultureInfo.CurrentCulture));
 			sb.Append(" | ByteCount = ");
 			sb.Append(ByteCount.ToString(CultureInfo.CurrentCulture));
 			sb.Append(" | OriginCount = ");
-			sb.Append((Origin != null) ? Origin.Count.ToString(CultureInfo.CurrentCulture) : "<None>");
+			sb.Append((Origin != null) ? Origin.Count.ToString(CultureInfo.CurrentCulture) : "(none)");
 			sb.Append(" | Type = ");
 			sb.Append(GetType().Name);
 			sb.Append(" | Direction = ");

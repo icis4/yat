@@ -809,7 +809,7 @@ namespace YAT.Model.Types
 			sb.Append(" | IsDefined = ");
 			sb.Append(IsDefined.ToString(CultureInfo.CurrentCulture));
 			sb.Append(" | Description = ");
-			sb.Append((Description != null) ? Description : "<None>");
+			sb.Append((Description != null) ? Description : "(none)");
 			sb.Append(" | DefaultRadix = ");
 			sb.Append(DefaultRadix.ToString());
 			sb.Append(" | ");
@@ -817,7 +817,7 @@ namespace YAT.Model.Types
 			sb.Append(" TextLines | IsFilePath = ");
 			sb.Append(IsFilePath.ToString(CultureInfo.CurrentCulture));
 			sb.Append(" | FilePath = ");
-			sb.Append((FilePath != null) ? FilePath : "<None>");
+			sb.Append((FilePath != null) ? FilePath : "(none)");
 
 			return (sb.ToString());
 		}

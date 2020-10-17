@@ -139,7 +139,7 @@ namespace YAT.Model.Types
 				case PredefinedCommandPageLayout.TwoByThree:   return (TwoByThree_string);
 				case PredefinedCommandPageLayout.ThreeByThree: return (ThreeByThree_string);
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -301,7 +301,7 @@ namespace YAT.Model.Types
 					case PredefinedCommandPageLayout.TwoByThree:
 					case PredefinedCommandPageLayout.ThreeByThree: return (3);
 
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -324,7 +324,7 @@ namespace YAT.Model.Types
 					case PredefinedCommandPageLayout.ThreeByTwo:
 					case PredefinedCommandPageLayout.ThreeByThree: return (3);
 
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -347,7 +347,7 @@ namespace YAT.Model.Types
 					case PredefinedCommandPageLayout.TwoByThree:   return ( 72);
 					case PredefinedCommandPageLayout.ThreeByThree: return (108);
 
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + UnderlyingEnum.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -369,7 +369,7 @@ namespace YAT.Model.Types
 			else if (commandCount <=  48) return (PredefinedCommandPageLayout.TwoByTwo);
 			else if (commandCount <=  72) return (PredefinedCommandPageLayout.TwoByThree);
 			else if (commandCount <= 108) return (PredefinedCommandPageLayout.ThreeByThree);
-			else throw (new ArgumentOutOfRangeException("count", commandCount, MessageHelper.InvalidExecutionPreamble + "'" + commandCount.ToString(CultureInfo.InvariantCulture) + "' is a count that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			else throw (new ArgumentOutOfRangeException("count", commandCount, MessageHelper.InvalidExecutionPreamble + "'" + commandCount.ToString(CultureInfo.InvariantCulture) + "' is a count that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion

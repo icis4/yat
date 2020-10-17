@@ -281,7 +281,7 @@ namespace YAT.Domain
 
 				default:
 				{
-					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' is a radix that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' is a radix that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -397,7 +397,7 @@ namespace YAT.Domain
 			var sb = new StringBuilder();
 			sb.Append(@"Configured Unicode encoding mismatches byte sequence """);
 			sb.Append(bytesAsString);
-			sb.Append(@""" which is outside the Unicode basic multilingual plane (plane 0) and not supported by the .NET Framework and thus YAT (yet).");
+			sb.Append(@""" which is outside the Unicode basic multilingual plane (plane 0) and not supported by the .NET Framework and thus " + ApplicationEx.CommonName + " (yet).");
 
 			return (new DisplayElement.ErrorInfo(ts, (Direction)dir, sb.ToString(), true));
 		}

@@ -2417,7 +2417,7 @@
 			this.pathLabel_LinkedTo.Name = "pathLabel_LinkedTo";
 			this.pathLabel_LinkedTo.Size = new System.Drawing.Size(453, 23);
 			this.pathLabel_LinkedTo.TabIndex = 4;
-			this.pathLabel_LinkedTo.Text = "<Undefined>";
+			this.pathLabel_LinkedTo.Text = "<Link a file...>";
 			this.pathLabel_LinkedTo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.pathLabel_LinkedTo.Click += new System.EventHandler(this.pathLabel_LinkedTo_Click);
 			// 

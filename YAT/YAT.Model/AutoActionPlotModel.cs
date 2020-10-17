@@ -161,7 +161,7 @@ namespace YAT.Model
 					case 2: /* RxCount */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Rx Count [" + content + "]",       YAxisKey = "Count", Color = OxyPlotEx.ConvertTo(rxColor)                                                         }); break;
 					case 3: /* RxRate  */ OxyModel.Series.Add(new OxyPlot.Series.LineSeries { Title = "Rx Rate [" + content + "/s" + "]", YAxisKey = "Rate",  Color = OxyPlotEx.ConvertTo(rxColor), LineStyle = OxyPlot.LineStyle.Dot, StrokeThickness = 1 }); break;
 
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Index " + i.ToString(CultureInfo.InvariantCulture) + " is a count/rate that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "Index " + i.ToString(CultureInfo.InvariantCulture) + " is a count/rate that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 

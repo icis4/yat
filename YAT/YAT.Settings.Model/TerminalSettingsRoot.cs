@@ -534,7 +534,7 @@ namespace YAT.Settings.Model
 
 					default:
 					{
-						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + (AutoTrigger)trigger + "' is an automatic trigger that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + (AutoTrigger)trigger + "' is an automatic trigger that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}
@@ -642,7 +642,7 @@ namespace YAT.Settings.Model
 
 					default:
 					{
-						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + (AutoResponse)response + "' is an automatic response that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + (AutoResponse)response + "' is an automatic response that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}
@@ -832,7 +832,7 @@ namespace YAT.Settings.Model
 
 				default:
 				{
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + (AutoTrigger)trigger + "' is an automatic trigger that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + (AutoTrigger)trigger + "' is an automatic trigger that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 

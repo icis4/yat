@@ -77,7 +77,7 @@ namespace YAT.Domain.Test
 				case TerminalType.Text:   return (GetTextSettings());
 				case TerminalType.Binary: return (GetBinarySettings());
 			}
-			throw (new ArgumentOutOfRangeException("terminalType", terminalType, MessageHelper.InvalidExecutionPreamble + "'" + terminalType + "' is a terminal type that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new ArgumentOutOfRangeException("terminalType", terminalType, MessageHelper.InvalidExecutionPreamble + "'" + terminalType + "' is a terminal type that is not (yet) supported here!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#region SerialPort

@@ -93,9 +93,9 @@ namespace YAT.Domain.Test.Terminal
 		/// <summary></summary>
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Well... Better? Really?")]
 		[Test, Combinatorial] // Test is mandatory, it shall not be excludable. 'IPv4LoopbackIsAvailable' is probed below.
-		public virtual void TestCombinatorial([Values(false, true)] bool allowConcurrency,
-		                                      [Values(Stimulus.SendTextRepeating, Stimulus.SendFile)] Stimulus stimulus,
-		                                      [Values(Subsequence.One, Subsequence.Random)] Subsequence subsequence)
+		public virtual void TestCombinatorial([Values(false, true)] bool allowConcurrency,                               // [Values(bool)] to be simplified when upgrading to NUnit 3.x (FR #293).
+		                                      [Values(Stimulus.SendTextRepeating, Stimulus.SendFile)] Stimulus stimulus, // [Values(enum)] to be simplified when upgrading to NUnit 3.x (FR #293).
+		                                      [Values(Subsequence.One, Subsequence.Random)] Subsequence subsequence)     // [Values(enum)] to be simplified when upgrading to NUnit 3.x (FR #293).
 		{
 			if (!ConfigurationProvider.Configuration.IPv4LoopbackIsAvailable)
 				Assert.Ignore("No IPv4 loopback is available, therefore this test is excluded. Ensure that IPv4 loopback is properly configured and available if passing this test is required.");

@@ -122,18 +122,15 @@ namespace YAT.Model.Utilities
 						{
 							if (isConnected)
 							{
+								sb.Append(" is connected");
+
 								int count = 0;
 
 								var server = (terminal.UnderlyingIOProvider as MKY.IO.Serial.Socket.TcpServer);
 								if (server != null)
-									count = server.ConnectedClientCount;
+									count = server.ConnectionCount;
 
-								sb.Append(" is connected");
-								if (count == 1)
-								{
-									sb.Append(" to a client");
-								}
-								else
+								if (count > 1) // Do not append "to 1 client" or "to a client" as that is more confusing than informative.
 								{
 									sb.Append(" to ");
 									sb.Append(count.ToString(CultureInfo.CurrentCulture));
@@ -178,7 +175,23 @@ namespace YAT.Model.Utilities
 							{
 								sb.Append(" on local port ");
 								sb.Append(settings.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
-								sb.Append(isConnected ? " is connected" : " is listening");
+
+								if (isConnected)
+								{
+									sb.Append(" is connected");
+
+									var count = socket.ConnectionCount;
+									if (count > 1) // Do not append "to 1 client" or "to a client" as that is more confusing than informative.
+									{
+										sb.Append(" to ");
+										sb.Append(count.ToString(CultureInfo.CurrentCulture));
+										sb.Append(" clients");
+									}
+								}
+								else
+								{
+									sb.Append(" is listening");
+								}
 							}
 							else
 							{

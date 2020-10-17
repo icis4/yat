@@ -857,7 +857,7 @@ namespace YAT.View.Forms
 						break;
 
 					default:
-						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.autoResponseTriggerState + "' is an automatic content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.autoResponseTriggerState + "' is an automatic content state that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 			finally
@@ -884,7 +884,7 @@ namespace YAT.View.Forms
 						break;
 
 					default:
-						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.autoResponseResponseState + "' is an automatic content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.autoResponseResponseState + "' is an automatic content state that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 			finally
@@ -1385,7 +1385,7 @@ namespace YAT.View.Forms
 						break;
 
 					default:
-						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.autoActionTriggerState + "' is an automatic content state that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.autoActionTriggerState + "' is an automatic content state that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 			finally
@@ -4239,7 +4239,7 @@ namespace YAT.View.Forms
 					case SendTextOption.Normal:     this.terminal.SendText();           break;
 					case SendTextOption.WithoutEol: this.terminal.SendTextWithoutEol(); break;
 
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + e.Value.ToString() + "' is an option that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + e.Value.ToString() + "' is an option that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -6030,7 +6030,7 @@ namespace YAT.View.Forms
 				case 7: presetString = "115200, 8, None, 1, None";     break;
 				case 8: presetString = "115200, 8, None, 1, Software"; break;
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + preset + "' is a preset that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + preset + "' is a preset that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			SuspendHandlingTerminalSettings();

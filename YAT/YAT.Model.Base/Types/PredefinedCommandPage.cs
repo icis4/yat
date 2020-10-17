@@ -350,7 +350,7 @@ namespace YAT.Model.Types
 				case 8: return ("85..96" );
 				case 9: return ("97..108");
 
-				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + subpageId.ToString(CultureInfo.InvariantCulture) + "' is a subpage ID that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + subpageId.ToString(CultureInfo.InvariantCulture) + "' is a subpage ID that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

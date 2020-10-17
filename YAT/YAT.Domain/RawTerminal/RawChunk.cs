@@ -51,15 +51,6 @@ namespace YAT.Domain
 	[ImmutableContract(true)]
 	public class RawChunk
 	{
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const string Undefined = "<Undefined>";
-
-		#endregion
-
 		#region Properties
 		//==========================================================================================
 		// Properties
@@ -86,12 +77,6 @@ namespace YAT.Domain
 		//==========================================================================================
 		// Object Lifetime
 		//==========================================================================================
-
-		/// <summary></summary>
-		public RawChunk(byte[] content, IODirection direction)
-			: this(content, Undefined, direction)
-		{
-		}
 
 		/// <summary></summary>
 		public RawChunk(byte[] content, string device, IODirection direction)

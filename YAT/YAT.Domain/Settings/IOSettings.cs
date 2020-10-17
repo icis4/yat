@@ -46,8 +46,6 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const bool SerialPortOutputBreakIsModifiableDefault = false;
 
-		private const string Undefined = "<Undefined>";
-
 		private IOType ioType;
 		private MKY.IO.Serial.SerialPort.SerialPortSettings serialPort;
 		private MKY.IO.Serial.Socket.SocketSettings socket;
@@ -346,7 +344,7 @@ namespace YAT.Domain.Settings
 
 					default:
 					{
-						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + IOType + "' is an item that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + IOType + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}
@@ -653,7 +651,7 @@ namespace YAT.Domain.Settings
 					return (this.usbSerialHidDevice.ToShortDeviceInfoString());
 
 				default:
-					return (Undefined);
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + ioType + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

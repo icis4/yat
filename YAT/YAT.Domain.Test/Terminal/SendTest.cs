@@ -259,7 +259,7 @@ namespace YAT.Domain.Test.Terminal
 							case TerminalType.Text:   filePairs = TextFilePairs;   break;
 							case TerminalType.Binary: filePairs = BinaryFilePairs; break;
 
-							default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + tt + "' is a terminal type that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
+							default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + tt + "' is a terminal type that is not (yet) supported here!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
 						}
 
 						foreach (var fp in filePairs)
@@ -301,7 +301,7 @@ namespace YAT.Domain.Test.Terminal
 						case TerminalType.Text:   return (Files.TextSendText  .Item[fileKey]);
 						case TerminalType.Binary: return (Files.BinarySendText.Item[fileKey]);
 
-						default: throw (new ArgumentOutOfRangeException("terminalType", terminalType, MessageHelper.InvalidExecutionPreamble + "'" + terminalType + "' is a terminal type that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
+						default: throw (new ArgumentOutOfRangeException("terminalType", terminalType, MessageHelper.InvalidExecutionPreamble + "'" + terminalType + "' is a terminal type that is not (yet) supported here!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 
@@ -312,11 +312,11 @@ namespace YAT.Domain.Test.Terminal
 						case TerminalType.Text:   return (Files.TextSendFile  .Item[fileKey]);
 						case TerminalType.Binary: return (Files.BinarySendFile.Item[fileKey]);
 
-						default: throw (new ArgumentOutOfRangeException("terminalType", terminalType, MessageHelper.InvalidExecutionPreamble + "'" + terminalType + "' is a terminal type that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
+						default: throw (new ArgumentOutOfRangeException("terminalType", terminalType, MessageHelper.InvalidExecutionPreamble + "'" + terminalType + "' is a terminal type that is not (yet) supported here!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 
-				default: throw (new ArgumentOutOfRangeException("sendMethod", sendMethod, MessageHelper.InvalidExecutionPreamble + "'" + sendMethod + "' is a send method that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("sendMethod", sendMethod, MessageHelper.InvalidExecutionPreamble + "'" + sendMethod + "' is a send method that is not (yet) supported here!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -732,7 +732,7 @@ namespace YAT.Domain.Test.Terminal
 				case SendMethod.TextLines: terminalTx.SendTextLines(fileContentAsLines); return;
 				case SendMethod.File:      terminalTx.SendFile(     fileInfo.Path);      return;
 
-				default: throw (new ArgumentOutOfRangeException("sendMethod", sendMethod, MessageHelper.InvalidExecutionPreamble + "'" + sendMethod + "' is a send method that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("sendMethod", sendMethod, MessageHelper.InvalidExecutionPreamble + "'" + sendMethod + "' is a send method that is not (yet) supported here!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -756,7 +756,7 @@ namespace YAT.Domain.Test.Terminal
 				case SendMethod.TextLines:
 				case SendMethod.File:      expectedContentPattern =                fileContentAsLines.Select(line => line + Eol).ToArray(); break;
 
-				default: throw (new ArgumentOutOfRangeException("sendMethod", sendMethod, MessageHelper.InvalidExecutionPreamble + "'" + sendMethod + "' is a send method that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("sendMethod", sendMethod, MessageHelper.InvalidExecutionPreamble + "'" + sendMethod + "' is a send method that is not (yet) supported here!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			// Limit the expected content to the maximum line length in order to also test with 'Exceeded' warning message:
@@ -788,7 +788,7 @@ namespace YAT.Domain.Test.Terminal
 			}
 			else
 			{
-				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Argument combination is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Argument combination is not (yet) supported here!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			string formattedLine;
@@ -813,7 +813,7 @@ namespace YAT.Domain.Test.Terminal
 				case SendMethod.TextLines:
 				case SendMethod.File:      expectedContentPattern = ArrayEx.CreateAndInitializeInstance(expectedLineCount, formattedLine); return;
 
-				default: throw (new ArgumentOutOfRangeException("sendMethod", sendMethod, MessageHelper.InvalidExecutionPreamble + "'" + sendMethod + "' is a send method that is not (yet) supported!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("sendMethod", sendMethod, MessageHelper.InvalidExecutionPreamble + "'" + sendMethod + "' is a send method that is not (yet) supported here!" + System.Environment.NewLine + System.Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

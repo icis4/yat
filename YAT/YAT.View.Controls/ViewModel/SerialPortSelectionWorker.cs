@@ -162,7 +162,7 @@ namespace YAT.View.Controls
 				{
 					this.exception = ex;
 					this.exceptionLead = "There was an error while retrieving the serial COM port captions from the system!";
-					this.exceptionHint = "If the issue cannot be solved, tell YAT to no longer retrieve port captions by going to 'File > Preferences...' and disable 'retrieve port captions from system'.";
+					this.exceptionHint = "If the issue cannot be solved, tell " + ApplicationEx.CommonName + " to no longer retrieve port captions by going to 'File > Preferences...' and disable 'retrieve port captions from system'.";
 
 					return (DialogResult.Abort);
 				}
@@ -180,7 +180,7 @@ namespace YAT.View.Controls
 				{
 					this.exception = ex;
 					this.exceptionLead = "There was an error while trying to detect the serial COM ports that are in use!";
-					this.exceptionHint = "If the issue cannot be solved, tell YAT to no longer detect ports that are in use by going to 'File > Preferences...' and disable 'detect ports that are in use'.";
+					this.exceptionHint = "If the issue cannot be solved, tell " + ApplicationEx.CommonName + " to no longer detect ports that are in use by going to 'File > Preferences...' and disable 'detect ports that are in use'.";
 
 					return (DialogResult.Abort);
 				}

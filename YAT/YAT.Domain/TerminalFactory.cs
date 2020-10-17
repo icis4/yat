@@ -39,7 +39,7 @@ namespace YAT.Domain
 				case TerminalType.Text:   return (new TextTerminal  (settings));
 				case TerminalType.Binary: return (new BinaryTerminal(settings));
 			}
-			throw (new TypeLoadException(MessageHelper.InvalidExecutionPreamble + "'" + settings.TerminalType + "' is a terminal type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new TypeLoadException(MessageHelper.InvalidExecutionPreamble + "'" + settings.TerminalType + "' is a terminal type that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -50,7 +50,7 @@ namespace YAT.Domain
 				case TerminalType.Text:   return (new TextTerminal  (settings, terminal));
 				case TerminalType.Binary: return (new BinaryTerminal(settings, terminal));
 			}
-			throw (new ArgumentOutOfRangeException("settings", settings, MessageHelper.InvalidExecutionPreamble + "'" + settings.TerminalType + "' is a terminal type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			throw (new ArgumentOutOfRangeException("settings", settings, MessageHelper.InvalidExecutionPreamble + "'" + settings.TerminalType + "' is a terminal type that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 	}
 }

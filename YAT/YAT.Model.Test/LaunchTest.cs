@@ -224,7 +224,7 @@ namespace YAT.Model.Test
 
 			using (var m = new Main(EmptyTerminalFilePath))
 			{
-				PrepareMainAndVerifyResult(m, MainResult.CommandLineError);
+				PrepareLaunchAndVerifyResult(m, MainResult.CommandLineError);
 
 				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler, Is.Null);
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler, Is.Null);
@@ -233,7 +233,7 @@ namespace YAT.Model.Test
 
 			using (var m = new Main(new CommandLineArgs(new string[] { EmptyTerminalFilePath })))
 			{
-				PrepareMainAndVerifyResult(m, MainResult.CommandLineError);
+				PrepareLaunchAndVerifyResult(m, MainResult.CommandLineError);
 
 				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler, Is.Null);
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler, Is.Null);
@@ -258,7 +258,7 @@ namespace YAT.Model.Test
 
 			using (var m = new Main(EmptyWorkspaceFilePath))
 			{
-				PrepareMainAndVerifyResult(m, MainResult.CommandLineError);
+				PrepareLaunchAndVerifyResult(m, MainResult.CommandLineError);
 
 				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler, Is.Null);
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler, Is.Null);
@@ -267,7 +267,7 @@ namespace YAT.Model.Test
 
 			using (var m = new Main(new CommandLineArgs(new string[] { EmptyWorkspaceFilePath })))
 			{
-				PrepareMainAndVerifyResult(m, MainResult.CommandLineError);
+				PrepareLaunchAndVerifyResult(m, MainResult.CommandLineError);
 
 				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler, Is.Null);
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler, Is.Null);
@@ -347,7 +347,7 @@ namespace YAT.Model.Test
 			string invalidFilePath = "MyFile.txt";
 			using (var m = new Main(new CommandLineArgs(new string[] { "--Open=" + invalidFilePath })))
 			{
-				PrepareMainAndVerifyResult(m, MainResult.CommandLineError);
+				PrepareLaunchAndVerifyResult(m, MainResult.CommandLineError);
 
 				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler, Is.Null);
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler,  Is.Null);
@@ -780,7 +780,7 @@ namespace YAT.Model.Test
 
 			using (var m = new Main(new CommandLineArgs(new string[] { "--TileHorizontal", "--TileVertical" })))
 			{
-				PrepareMainAndVerifyResult(m, MainResult.CommandLineError);
+				PrepareLaunchAndVerifyResult(m, MainResult.CommandLineError);
 
 				Assert.That(m.LaunchArgs.TileHorizontal, Is.False);
 				Assert.That(m.LaunchArgs.TileVertical,   Is.False);
@@ -800,22 +800,22 @@ namespace YAT.Model.Test
 		{
 			using (var m = new Main(new CommandLineArgs(new string[] { "--Blablabla" })))
 			{
-				PrepareMainAndVerifyResult(m, MainResult.CommandLineError);
+				PrepareLaunchAndVerifyResult(m, MainResult.CommandLineError);
 			}
 
 			using (var m = new Main(new CommandLineArgs(new string[] { "+r" })))
 			{
-				PrepareMainAndVerifyResult(m, MainResult.CommandLineError);
+				PrepareLaunchAndVerifyResult(m, MainResult.CommandLineError);
 			}
 
 			using (var m = new Main(new CommandLineArgs(new string[] { "-+Recent" })))
 			{
-				PrepareMainAndVerifyResult(m, MainResult.CommandLineError);
+				PrepareLaunchAndVerifyResult(m, MainResult.CommandLineError);
 			}
 
 			using (var m = new Main(new CommandLineArgs(new string[] { "+-Recent" })))
 			{
-				PrepareMainAndVerifyResult(m, MainResult.CommandLineError);
+				PrepareLaunchAndVerifyResult(m, MainResult.CommandLineError);
 			}
 		}
 
@@ -830,12 +830,12 @@ namespace YAT.Model.Test
 
 		private static void PrepareMainAndVerifyResult(Main main)
 		{
-			PrepareMainAndVerifyResult(main, MainResult.Success);
+			PrepareLaunchAndVerifyResult(main, MainResult.Success);
 		}
 
-		private static void PrepareMainAndVerifyResult(Main main, MainResult expectedMainResult)
+		private static void PrepareLaunchAndVerifyResult(Main main, MainResult expectedMainResult)
 		{
-			var mainResult = main.PrepareLaunch();
+			var mainResult = main.PrepareLaunch_ForTestOnly();
 			Assert.That(mainResult, Is.EqualTo(expectedMainResult));
 		}
 

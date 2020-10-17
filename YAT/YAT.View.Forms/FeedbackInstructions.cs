@@ -121,7 +121,7 @@ namespace YAT.View.Forms
 			// Links:
 			string link = "";
 			switch (feedbackType)
-			{                                                                // No idea why SF uses "projects" instead of "p" here...
+			{                                       // No idea why SF uses "projects" instead of "p" here...
 				case FeedbackType.Support:  link = "https://sourceforge.net/projects/y-a-terminal/support";       break;
 				case FeedbackType.Feature:  link = "https://sourceforge.net/p/y-a-terminal/feature-requests/";    break;
 				case FeedbackType.Bug:      link = "https://sourceforge.net/p/y-a-terminal/bugs/";                break;
@@ -175,7 +175,7 @@ namespace YAT.View.Forms
 				case FeedbackType.AnyOther:
 				default:
 				{
-					sb.AppendLine("Thanks for taking your time to make YAT even better.");
+					sb.AppendLine("Thanks for taking your time to make " + ApplicationEx.CommonName + " even better.");
 					sb.AppendLine("Any kind of feedback is highly appreciated!");
 					sb.AppendLine("");
 					sb.AppendLine("Don't forget to describe your environment");

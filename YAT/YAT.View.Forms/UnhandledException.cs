@@ -57,6 +57,12 @@ namespace YAT.View.Forms
 			// Set form title/caption:
 			Text = title;
 
+			// Adapt explanation text:
+			label_Explanation.Text =
+				"An unhandled exception occurred while running " + ApplicationEx.CommonName + ". " +
+				"Please report this exception according to [Instructions on Bug Submission] below " +
+				"to give valuable feedback to continuously improve " + ApplicationEx.CommonName + ".";
+
 			// Compose exception text:
 			using (var sw = new StringWriter(CultureInfo.CurrentCulture))
 			{
