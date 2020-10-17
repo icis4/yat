@@ -86,12 +86,6 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
         private HostType FHostType;
         private long FConnectionId;
 
-        // ----- \remind BEGIN -----
-        // 2020-08-27 / Matthias Klaey
-        // Moved increment to constructor using a static field.
-        private static long StaticConnectionId = 1000;
-        // ----- \remind  END  -----
-
         private DelimiterType FDelimiterType;
         private CallbackThreadType FCallbackThreadType;
 
@@ -130,12 +124,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
         {
 
             FHostType = hostType;
-
-            // ----- \remind BEGIN -----
-            // 2020-08-27 / Matthias Klaey
-            // Moved increment to constructor using a static field.
-            FConnectionId = Interlocked.Increment(ref StaticConnectionId);
-            // ----- \remind  END  -----
+            FConnectionId = 1000;
 
             FSocketConnectionsSync = new ReaderWriterLockSlim();
 
@@ -228,7 +217,6 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
             // ----- \remind  END  -----
 
             FSocketConnectionsSync = null;
-
             FSocketService = null;
             FDelimiter = null;
             FDelimiterEncrypt = null;
@@ -386,7 +374,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                     DebugShutdown("Resetting 'FWaitConnectionsDisposing'...");
                     FWaitConnectionsDisposing.Reset();
                     DebugShutdown("...'FWaitConnectionsDisposing' reset.");
-
+                    
                     int loopSleep = 0;
 
                     foreach (BaseSocketConnection connection in connections)
@@ -1743,13 +1731,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
         internal long GetConnectionId()
         {
-            // ----- \remind BEGIN -----
-            // 2020-08-27 / Matthias Klaey
-            // Moved increment to constructor using a static field.
-
-            return FConnectionId;
-
-            // ----- \remind  END  -----
+            return Interlocked.Increment(ref FConnectionId);
         }
 
         #endregion
@@ -1805,6 +1787,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
               if ((socketConnection != null)  && (FSocketConnectionsSync != null))
               {
 
+
                   FSocketConnectionsSync.EnterWriteLock();
 
                   try
@@ -1820,6 +1803,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                   }
                   finally
                   {
+
                       try
                       {
                           if (FSocketConnections.Count <= 0)
@@ -1849,7 +1833,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
               // ----- \remind  END  -----
 
-          }
+        }
 
         }
 
@@ -2334,7 +2318,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                     }
 
                 }
-                catch (Exception ex)
+                catch(Exception ex)
                 {
                     FireOnException(connection, ex);
                 }
