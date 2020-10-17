@@ -252,8 +252,8 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                         {
 
                             // ----- \remind BEGIN -----
-                            // 2017-06-03 / Matthias Klaey
-                            // Handling exceptions.
+                            // 2017-06-03 / Matthias Klaey / Handling 'ObjectDisposedException' exceptions.
+                            // 2020-10-14 / Matthias Klaey / Handling 'NullReferenceException' exceptions.
 
                             try
                             {
@@ -263,6 +263,21 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                             catch (ObjectDisposedException exInner)
                             {
                                 DebugException(exInner);
+                            }
+                            catch (NullReferenceException exInner)
+                            {
+                                DebugException(exInner);
+
+                                // Can happen when a socket gets disconnected. Stack:
+                                //
+                                // at ALAZ.SystemEx.NetEx.SocketsEx.SocketConnector.BeginConnectCallbackAsync(Object sender, SocketAsyncEventArgs e)
+                                //at System.Net.Sockets.SocketAsyncEventArgs.OnCompleted(SocketAsyncEventArgs e)
+                                //at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+                                //at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+                                //at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+                                //at System.Net.Sockets.SocketAsyncEventArgs.FinishOperationSuccess(SocketError socketError, Int32 bytesTransferred, SocketFlags flags)
+                                //at System.Net.Sockets.SocketAsyncEventArgs.CompletionPortCallback(UInt32 errorCode, UInt32 numBytes, NativeOverlapped* nativeOverlapped)
+                                //at System.Threading._IOCompletionCallback.PerformIOCompletionCallback(UInt32 errorCode, UInt32 numBytes, NativeOverlapped* pOVERLAP)
                             }
 
                             connection = null;
