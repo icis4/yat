@@ -164,8 +164,8 @@ namespace YAT.Model.Test.FileHandling
 
 			Utilities.LaunchAndCreateDefaultTerminal(out main, out workspace, out terminal);
 
-			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
-			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
 			using (main)
 			{
@@ -191,8 +191,8 @@ namespace YAT.Model.Test.FileHandling
 
 			Utilities.LaunchAndCreateDefaultTerminal(out main, out workspace, out terminal);
 
-			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
-			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
 			using (main)
 			{
@@ -223,8 +223,8 @@ namespace YAT.Model.Test.FileHandling
 
 			Utilities.LaunchAndCreateDefaultTerminal(out main, out workspace, out terminal);
 
-			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
-			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
 			using (main)
 			{
@@ -255,8 +255,8 @@ namespace YAT.Model.Test.FileHandling
 
 			Utilities.LaunchAndCreateDefaultTerminal(out main, out workspace, out terminal);
 
-			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
-			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
 			using (main)
 			{
@@ -484,8 +484,8 @@ namespace YAT.Model.Test.FileHandling
 
 			Utilities.LaunchAndCreateDefaultTerminal(out main, out workspace, out terminal);
 
-			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
-			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
 			using (main)
 			{
@@ -558,14 +558,14 @@ namespace YAT.Model.Test.FileHandling
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, step + "Workspace not created!");
 				Assert.That(w.TerminalCount, Is.EqualTo(0), step + "Workspace doesn't contain 0 terminals!");
-				w.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+				w.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
 				success = w.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True, step + "Terminal could not be created!");
 
 				var t = w.ActiveTerminal;
 				Assert.That(t, Is.Not.Null, step + "Terminal could not be created!");
-				t.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
 				success = (m.Exit() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
@@ -612,13 +612,13 @@ namespace YAT.Model.Test.FileHandling
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, step + "Workspace not created!");
 				Assert.That(w.TerminalCount, Is.EqualTo(0), step + "Workspace doesn't contain 0 terminals!");
-				w.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+				w.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
 				success = w.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True, step + "Terminal 1 could not be created!");
 				var t = w.ActiveTerminal;
 				Assert.That(t, Is.Not.Null, step + "Terminal 1 could not be created!");
-				t.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
 				success = t.SaveAs(this.normalTerminalFilePath);
 				Assert.That(success, Is.True, step + "Terminal 1 could not be saved as!");
@@ -646,13 +646,13 @@ namespace YAT.Model.Test.FileHandling
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, step + "Workspace not created!");
 				Assert.That(w.TerminalCount, Is.EqualTo(0), step + "Workspace doesn't contain 0 terminals!");
-				w.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+				w.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
 				success = m.OpenRecent(1);
 				Assert.That(success, Is.True, step + "Recent terminal could not be opened!");
 				var t = w.ActiveTerminal;
 				Assert.That(t, Is.Not.Null, step + "Recent terminal could not be opened!");
-				t.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
 				Utilities.VerifyFiles(step, w, false, t, true, false);
 
@@ -696,13 +696,13 @@ namespace YAT.Model.Test.FileHandling
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, step + "Workspace not created!");
 				Assert.That(w.TerminalCount, Is.EqualTo(0), step + "Workspace doesn't contain 0 terminals!");
-				w.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+				w.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
 				success = w.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True, step + "Terminal could not be created!");
 				var t = w.ActiveTerminal;
 				Assert.That(t, Is.Not.Null, step + "Terminal could not be created!");
-				t.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
 				success = t.SaveAs(this.normalTerminalFilePath);
 				Assert.That(success, Is.True, step + "Terminal could not be saved as!");
@@ -739,7 +739,7 @@ namespace YAT.Model.Test.FileHandling
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, step + "Workspace not created!");
 				Assert.That(w.TerminalCount, Is.EqualTo(0), step + "Workspace doesn't contain 0 terminals!");
-				w.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+				w.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 				w.MessageInputRequest -= workspace_MessageInputRequest_No; // Remaining event sink from 'AttachToWorkspace' above.
 
 				success = (m.Exit() == MainResult.Success);
@@ -781,13 +781,13 @@ namespace YAT.Model.Test.FileHandling
 				var w = m.Workspace;
 				Assert.That(w, Is.Not.Null, step + "Workspace not created!");
 				Assert.That(w.TerminalCount, Is.EqualTo(0), step + "Workspace doesn't contain 0 terminals!");
-				w.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+				w.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
 				success = w.CreateNewTerminal(Utilities.GetStartedTcpAutoSocketOnIPv4LoopbackTextSettingsHandler());
 				Assert.That(success, Is.True, step + "Terminal could not be created!");
 				var t = w.ActiveTerminal;
 				Assert.That(t, Is.Not.Null, step + "Terminal could not be created!");
-				t.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
 				success = t.SaveAs(this.normalTerminalFilePath);
 				Assert.That(success, Is.True, step + "Terminal could not be saved as!");
@@ -952,7 +952,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(success, Is.True, step + "Terminal 2 could not be created!");
 				Terminal t2 = w.ActiveTerminal;
 				Assert.That(t2, Is.Not.Null, step + "Terminal 2 could not be created!");
-				t2.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t2.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 				Assert.That(w.TerminalCount, Is.EqualTo(2), step + "Workspace doesn't contain 2 terminals!");
 
 				int workspaceCountBefore = this.workspace_MessageInputRequest_No_counter;
@@ -1056,7 +1056,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(success, Is.True, step + "Terminal 2 could not be created!");
 				Terminal t2 = w.ActiveTerminal;
 				Assert.That(t2, Is.Not.Null, step + "Terminal 2 could not be created!");
-				t2.DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification = true;
+				t2.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 				Assert.That(w.TerminalCount, Is.EqualTo(2), step + "Workspace doesn't contain 2 terminals!");
 
 				success = t2.SaveAs(this.normalTerminal2FilePath);
