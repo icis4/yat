@@ -45,7 +45,7 @@ namespace MKY.IO.Serial.Socket.Test
 		[StandardDurationCategory.Second1]
 		public virtual void TestServerClientConnectAndClientShutdown()
 		{
-			int serverPort = Utilities.AvailableLocalUdpPort;
+			int serverPort = Utilities.GetAvailableLocalUdpPort();
 
 			UdpSocket server;
 			Utilities.CreateAndStartAsServer(out server, serverPort);
@@ -83,7 +83,7 @@ namespace MKY.IO.Serial.Socket.Test
 		[StandardDurationCategory.Second1]
 		public virtual void TestServerClientConnectAndServerShutdown()
 		{
-			int serverPort = Utilities.AvailableLocalUdpPort;
+			int serverPort = Utilities.GetAvailableLocalUdpPort();
 
 			UdpSocket server;
 			Utilities.CreateAndStartAsServer(out server, serverPort);

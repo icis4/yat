@@ -111,6 +111,13 @@ namespace MKY.IO.Serial.Socket
 			Error
 		}
 
+		private enum SocketUse
+		{
+			None,
+			Client,
+			Server
+		}
+
 		#endregion
 
 		#region Constants
@@ -121,10 +128,26 @@ namespace MKY.IO.Serial.Socket
 		private const int MaxStartCycles = 5;
 
 		private const int MinConnectDelay = 50;
-		private const int MaxConnectDelay = 300;
+		private const int MaxConnectDelay = 500;
 
 		private const int MinListenDelay = 50;
-		private const int MaxListenDelay = 300;
+		private const int MaxListenDelay = 500;
+
+		/// <remarks>
+		/// Using the sum of the underlying sockets for two reasons:
+		/// <list type="bullet">
+		/// <item><description>Best guess of the underlying sockets.</description></item>
+		/// <item><description>For sure larger than the underlying timeout.</description></item>
+		/// </list>
+		/// </remarks>
+		private const int SocketStopTimeout = (TcpClient.SocketStopTimeout + TcpServer.SocketStopTimeout);
+
+		/// <remarks>
+		/// Can be quite short. A longer interval would delay stopping longer than necessary.
+		/// </remarks>
+		private const int SocketStopInterval = 10;
+
+		private const string Undefined = "(undefined)"; // Lower case same as "localhost".
 
 		#endregion
 
@@ -252,7 +275,7 @@ namespace MKY.IO.Serial.Socket
 				DebugMessage("Disposing...");
 
 				// In the 'normal' case, the items have already been disposed of, e.g. in Stop().
-				DisposeSocketsSynchronized(); // Opposed to the ALAZ sockets, the MKY sockets do stop on Dispose().
+				DisposeSocketSynchronized(); // Opposed to the ALAZ sockets, the MKY sockets do stop on Dispose(), but both is done asynchronously!
 
 				DebugMessage("...successfully disposed.");
 			}
@@ -280,14 +303,14 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
-		/// <remarks>Convenience method, always returns a valid value, at least <![CDATA["<undefined>"]]>.</remarks>
+		/// <remarks>Convenience method, always returns a valid value, at least "(undefined)".</remarks>
 		protected virtual string RemoteHostEndpointString
 		{
 			get
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				return ((RemoteHost != null) ? (RemoteHost.ToEndpointAddressString()) : "<undefined>"); // Lower case same as "localhost"
+				return ((RemoteHost != null) ? (RemoteHost.ToEndpointAddressString()) : Undefined);
 			}
 		}
 
@@ -396,6 +419,25 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary></summary>
+		public virtual int ConnectionCount
+		{
+			get
+			{
+				AssertUndisposed();
+
+				lock (this.stateSyncObj) // Directly locking the state is OK, 'ConnectionCount' cannot result in a state related deadlock.
+				{
+					if      (IsClient && (this.client != null))
+						return (this.client.ConnectionCount);
+					else if (IsServer && (this.server != null))
+						return (this.server.ConnectionCount);
+					else
+						return (0);
+				}
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool IsOpen
 		{
 			get { return (IsConnected); }
@@ -475,7 +517,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				AssertUndisposed();
 
-				lock (this.stateSyncObj)
+				lock (this.stateSyncObj) // Directly locking the state is OK, 'UnderlyingIOInstance' cannot result in a state related deadlock.
 				{
 					if      (IsClient && (this.client != null))
 						return (this.client.UnderlyingIOInstance);
@@ -547,12 +589,21 @@ namespace MKY.IO.Serial.Socket
 
 			if (IsTransmissive)
 			{
-				lock (this.stateSyncObj)
+				try
 				{
-					if      (IsClient && (this.client != null))
-						return (this.client.Send(data));
-					else if (IsServer && (this.server != null))
-						return (this.server.Send(data));
+					var socketUse = GetSocketUseSynchronized();    // Send() will notify for sure! Thus,
+					switch (socketUse)                             // to prevent potential state deadlocks,
+					{                                              // it must not be called within a lock!
+						case SocketUse.Client: return (this.client.Send(data));
+						case SocketUse.Server: return (this.server.Send(data));
+						case SocketUse.None:   return (false);
+
+						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + socketUse + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
+				}
+				catch (NullReferenceException) // Handle the unlikely but possible case where the socket
+				{                              // changes right between selecting but before accessing it.
+					return (false);
 				}
 			}
 
@@ -566,14 +617,23 @@ namespace MKY.IO.Serial.Socket
 		{
 			AssertUndisposed();
 
-		////if (IsTransmissive) shall not be checked for, clearing the buffer shall be available in any case.
+			if (IsStarted) // Clearing the buffer shall be executed also when not 'Connected'/'Open'/'Transmissive'.
 			{
-				lock (this.stateSyncObj)
+				try
 				{
-					if      (IsClient && (this.client != null))
-						return (this.client.ClearSendBuffer());
-					else if (IsServer && (this.server != null))
-						return (this.server.ClearSendBuffer());
+					var socketUse = GetSocketUseSynchronized();    // ClearSendBuffer() may notify! Thus,
+					switch (socketUse)                             // to prevent potential state deadlocks,
+					{                                              // it must not be called within a lock!
+						case SocketUse.Client: return (this.client.ClearSendBuffer());
+						case SocketUse.Server: return (this.server.ClearSendBuffer());
+						case SocketUse.None:   return (0);
+
+						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + socketUse + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
+				}
+				catch (NullReferenceException) // Handle the unlikely but possible case where the socket
+				{                              // changes right between selecting but before accessing it.
+					return (0);
 				}
 			}
 
@@ -608,6 +668,9 @@ namespace MKY.IO.Serial.Socket
 				oldState = this.state;
 				this.state = state;
 				timeStamp = DateTime.Now; // Inside lock for accuracy.
+
+				if ((oldState == SocketState.Connected) && (state == SocketState.StartingConnecting))
+					Debugger.Break();
 
 			#if (DEBUG) // Inside lock to prevent potential mixup in debug output.
 				string isClientOrServerString;
@@ -645,14 +708,43 @@ namespace MKY.IO.Serial.Socket
 		// Socket Methods
 		//==========================================================================================
 
-		/// <remarks>
-		/// Opposed to the ALAZ sockets, the MKY sockets do stop on Dispose().
-		/// </remarks>
-		private void DisposeSocketsSynchronized()
+		private SocketUse GetSocketUseSynchronized()
 		{
 			lock (this.stateSyncObj)
 			{
-				DebugMessage("Disposing socket..."); // Only either or.
+				if      (IsClient && (this.client != null))
+					return (SocketUse.Client);
+				else if (IsServer && (this.server != null))
+					return (SocketUse.Server);
+				else
+					return (SocketUse.None);
+			}
+		}
+
+		/// <remarks>
+		/// See remarks of called methods.
+		/// </remarks>
+		private void StopSocketSyncAndDisposeSynchronized() // Only either client or server.
+		{
+			lock (this.stateSyncObj)
+			{
+				DebugMessage("Stopping socket..."); // Only either client or server.
+
+				StopClientSyncAndDisposeSynchronized();
+				StopServerSyncAndDisposeSynchronized();
+
+				DebugMessage("...completed.");
+			}
+		}
+
+		/// <remarks>
+		/// Opposed to the ALAZ sockets, the MKY sockets do stop on Dispose(), but both is done asynchronously!
+		/// </remarks>
+		private void DisposeSocketSynchronized() // Only either client or server.
+		{
+			lock (this.stateSyncObj)
+			{
+				DebugMessage("Disposing socket..."); // Only either client or server.
 
 				DisposeClientSynchronized();
 				DisposeServerSynchronized();
@@ -677,20 +769,38 @@ namespace MKY.IO.Serial.Socket
 			StartConnecting();
 		}
 
-		/// <summary>
-		/// Try to start as client.
-		/// </summary>
-		private void StartConnecting()
+		private void RestartWithDelayAndStartConnectingAsync()
+		{
+			lock (this.startCycleCounterSyncObj)
+				this.startCycleCounter = 1;
+
+			DelayAndStartConnectingAsync();
+		}
+
+		private void DelayAndStartConnectingAsync()
+		{
+			var asyncInvoker = new Action(DelayAndStartConnectingAsyncCallback);
+			asyncInvoker.BeginInvoke(null, null);
+		}
+
+		private void DelayAndStartConnectingAsyncCallback()
 		{
 			int randomDelay = SocketBase.Random.Next(MinConnectDelay, MaxConnectDelay);
 			DebugMessage("Delaying connecting by random value of {0} ms.", randomDelay);
 			Thread.Sleep(randomDelay);
 
-			// Only continue if socket is still up and running after the delay! Required because
-			// re-connecting happens automatically when connection gets lost. If two AutoSockets
-			// are interconnected, and both are shut down, the sequence of the operation is not
-			// defined. It is likely that Stop() is called while the thread is delayed above. In
-			// such case, neither a client nor a server shall be created nor started.
+			StartConnecting();
+		}
+
+		private void StartConnecting()
+		{
+			// Only continue if still in expected state after the delay. Required because the
+			// sequence of the operation of an 'AutoSocket' is not defined. There are several
+			// situations where more than one trigger invokes this method, e.g.:
+			//  > StartListening() fails at Start().
+			//  > server_IOError() in case 'StartingListening'.
+			// The 'AutoSocket' must be able to deal with such situations.
+
 			Monitor.Enter(this.stateSyncObj);                             // Ensure state is handled atomically. Not using
 			if (GetStateSynchronized() == SocketState.StartingConnecting) // lock() for being able to selectively release.
 			{
@@ -707,7 +817,7 @@ namespace MKY.IO.Serial.Socket
 				}
 				catch (NullReferenceException)
 				{
-					// A 'NullReferenceException' can occur in the unlikely case where the client has just got disposed of.
+					// A 'NullReferenceException' can occur in the unlikely case where the client has just gotten disposed of.
 				}
 				finally
 				{
@@ -715,7 +825,7 @@ namespace MKY.IO.Serial.Socket
 					{
 						lock (this.stateSyncObj) // Ensure state is handled atomically.
 						{
-							DisposeClientSynchronized();
+							DisposeClientSynchronized(); // Not started at all, no need for two-stage stop-dispose.
 
 							stateHasChanged = SetStateSynchronized(SocketState.StartingListening, out timeStamp, notify: false); // Notify outside lock!
 						}
@@ -723,8 +833,8 @@ namespace MKY.IO.Serial.Socket
 						if (stateHasChanged)
 							NotifyStateHasChanged(timeStamp); // Notify outside lock!
 
-						// Try to restart as server:
-						StartListening(); // Invoke outside lock!
+						// Continue starting AutoSocket by trying again as server:
+						DelayAndStartListeningAsync(); // Invoke outside lock!
 					}
 					else
 					{
@@ -739,20 +849,38 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
-		/// <summary>
-		/// Try to start as server.
-		/// </summary>
-		private void StartListening()
+		private void RestartWithDelayAndStartListeningAsync()
+		{
+			lock (this.startCycleCounterSyncObj)
+				this.startCycleCounter = 1;
+
+			DelayAndStartListeningAsync();
+		}
+
+		private void DelayAndStartListeningAsync()
+		{
+			var asyncInvoker = new Action(DelayAndStartListeningAsyncCallback);
+			asyncInvoker.BeginInvoke(null, null);
+		}
+
+		private void DelayAndStartListeningAsyncCallback()
 		{
 			int randomDelay = SocketBase.Random.Next(MinListenDelay, MaxListenDelay);
 			DebugMessage("Delaying listening by random value of {0} ms.", randomDelay);
 			Thread.Sleep(randomDelay);
 
-			// Only continue if socket is still up and running after the delay! Required because
-			// re-connecting happens automatically when connection gets lost. If two AutoSockets
-			// are interconnected, and both are shut down, the sequence of the operation is not
-			// defined. It is likely that Stop() is called while the thread is delayed above. In
-			// such case, neither a client nor a server shall be created nor started.
+			StartListening();
+		}
+
+		private void StartListening()
+		{
+			// Only continue if still in expected state after the delay. Required because the
+			// sequence of the operation of an 'AutoSocket' is not defined. There are several
+			// situations where more than one trigger invokes this method, e.g.:
+			//  > StartConnecting() fails at Start().
+			//  > client_IOError() in case 'Connecting'.
+			// The 'AutoSocket' must be able to deal with such situations.
+
 			Monitor.Enter(this.stateSyncObj);                            // Ensure state is handled atomically. Not using
 			if (GetStateSynchronized() == SocketState.StartingListening) // lock() for being able to selectively release.
 			{
@@ -781,7 +909,7 @@ namespace MKY.IO.Serial.Socket
 				}
 				catch (NullReferenceException)
 				{
-					// A 'NullReferenceException' can occur in the unlikely case where the server has just got disposed of.
+					// A 'NullReferenceException' can occur in the unlikely case where the server has just gotten disposed of.
 				}
 				finally
 				{
@@ -792,7 +920,7 @@ namespace MKY.IO.Serial.Socket
 
 						lock (this.stateSyncObj) // Ensure state is handled atomically.
 						{
-							DisposeServerSynchronized();
+							DisposeServerSynchronized(); // Not started at all, no need for two-stage stop-dispose.
 
 							stateHasChanged = SetStateSynchronized(SocketState.StartingConnecting, out timeStamp, notify: false); // Notify outside lock!
 						}
@@ -800,7 +928,8 @@ namespace MKY.IO.Serial.Socket
 						if (stateHasChanged)
 							NotifyStateHasChanged(timeStamp); // Notify outside lock!
 
-						TryStartConnectingAgain(); // Invoke outside lock!
+						// Continue by trying again as client:
+						DelayAndStartConnectingIfCyclesPermit(); // Invoke outside lock!
 					}
 				}
 			}
@@ -810,28 +939,26 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
-		private void TryStartConnectingAgain()
+		private void DelayAndStartConnectingIfCyclesPermit()
 		{
-			bool tryAgain = false;
+			bool cyclesPermit = false;
 			lock (this.startCycleCounterSyncObj)
 			{
 				this.startCycleCounter++;
 				if (this.startCycleCounter <= MaxStartCycles)
 				{
 					DebugMessage("Trying cycle #{0}.", this.startCycleCounter);
-					tryAgain = true;
+					cyclesPermit = true;
 				}
 			}
 
-			if (tryAgain)
+			if (cyclesPermit)
 			{
-				StartConnecting();
+				DelayAndStartConnectingAsync();
 			}
 			else
 			{
-				string message =
-					"AutoSocket could neither be started as client nor server," + Environment.NewLine +
-					"TCP/IP address/port is not available.";
+				string message = "AutoSocket could neither be started as client nor server.";
 
 				AutoSocketError
 				(
@@ -840,13 +967,6 @@ namespace MKY.IO.Serial.Socket
 				);
 			}
 		}
-
-	////private void RestartAutoSocket()
-	////{
-	////	StopAutoSocket();
-	////	Notify(SocketState.Restarting);
-	////	StartAutoSocket();
-	////}
 
 		private void StopAutoSocket()
 		{
@@ -874,7 +994,7 @@ namespace MKY.IO.Serial.Socket
 			Monitor.Enter(this.stateSyncObj);                   // Ensure state is handled atomically. Not using
 			if (GetStateSynchronized() == SocketState.Stopping) // lock() for being able to selectively release.
 			{
-				DisposeSocketsSynchronized(); // Opposed to the ALAZ sockets, the MKY sockets do stop on Dispose().
+				StopSocketSyncAndDisposeSynchronized(); // Opposed to the ALAZ sockets, the MKY sockets stop asynchronously.
 
 				DateTime timeStamp;
 				var stateHasChanged = SetStateSynchronized(SocketState.Reset, out timeStamp, notify: false); // Notify outside lock!
@@ -898,7 +1018,7 @@ namespace MKY.IO.Serial.Socket
 
 			lock (this.stateSyncObj)
 			{
-				DisposeSocketsSynchronized(); // Opposed to the ALAZ sockets, the MKY sockets do stop on Dispose().
+				StopSocketSyncAndDisposeSynchronized(); // Opposed to the ALAZ sockets, the MKY sockets stop asynchronously.
 
 				stateHasChanged = SetStateSynchronized(SocketState.Error, out timeStamp, notify: false); // Notify outside lock!
 			}

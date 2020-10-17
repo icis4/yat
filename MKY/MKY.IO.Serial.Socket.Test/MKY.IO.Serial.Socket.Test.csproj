@@ -84,14 +84,15 @@
     <Compile Include="..\MKY.Version.cs">
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
-    <Compile Include="TcpClientAutoReconnectEnduranceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ConsecutiveTcpConnectionTest.cs" />
     <Compile Include="ConsecutiveUdpConnectionTest.cs" />
     <Compile Include="SimpleTcpConnectionTest.cs" />
     <Compile Include="SimpleUdpConnectionTest.cs" />
     <Compile Include="SocketSettingsTest.cs" />
-    <Compile Include="TcpConnectionStressTest.cs" />
+    <Compile Include="TcpClientAutoReconnectEnduranceTest.cs" />
+    <Compile Include="TcpConnectionStressTest.AutoSocket.cs" />
+    <Compile Include="TcpConnectionStressTest.ClientServer.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
