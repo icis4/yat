@@ -343,7 +343,7 @@ namespace YAT.Model.Utilities
 
 					default:
 					{
-						throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + settingsRoot.IOType + "' is an I/O type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						throw (new NotSupportedException(MKY.MessageHelper.InvalidExecutionPreamble + "'" + settingsRoot.IOType + "' is an I/O type that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 					}
 				} // switch (I/O type)
 			} // if (settings available)

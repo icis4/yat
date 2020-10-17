@@ -177,9 +177,9 @@ namespace YAT.View.Utilities
 
 				string errorMessage;
 				if (!string.IsNullOrEmpty(sfd.FileName))
-					errorMessage = ErrorHelper.ComposeMessage("Unable to save", sfd.FileName, ex);
+					errorMessage = Model.Utilities.MessageHelper.ComposeMessage("Unable to save", sfd.FileName, ex);
 				else
-					errorMessage = ErrorHelper.ComposeMessage("Unable to save file!", ex);
+					errorMessage = Model.Utilities.MessageHelper.ComposeMessage("Unable to save file!", ex);
 
 				MessageBoxEx.Show
 				(
@@ -451,9 +451,9 @@ namespace YAT.View.Utilities
 
 				string errorMessage;
 				if (!string.IsNullOrEmpty(ofd.FileName))
-					errorMessage = ErrorHelper.ComposeMessage("Unable to open", ofd.FileName, ex);
+					errorMessage = Model.Utilities.MessageHelper.ComposeMessage("Unable to open", ofd.FileName, ex);
 				else
-					errorMessage = ErrorHelper.ComposeMessage("Unable to open file!", ex);
+					errorMessage = Model.Utilities.MessageHelper.ComposeMessage("Unable to open file!", ex);
 
 				MessageBoxEx.Show
 				(

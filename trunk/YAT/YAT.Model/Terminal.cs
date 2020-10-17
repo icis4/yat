@@ -69,7 +69,7 @@ using MT.Albatros.Core;
 
 using YAT.Application.Utilities;
 using YAT.Model.Types;
-using YAT.Model.Utilities;
+//// 'YAT.Model.Utilities' is explicitly used due to ambiguity of 'MessageHelper'.
 using YAT.Settings.Application;
 using YAT.Settings.Model;
 
@@ -185,7 +185,8 @@ namespace YAT.Model
 		/// <remarks>
 		/// Note that it is not possible to mark a property with [Conditional("TEST")].
 		/// </remarks>
-		public bool DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification { get; set; }
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize purpose of this property.")]
+		public bool DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly { get; set; }
 
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
@@ -561,7 +562,7 @@ namespace YAT.Model
 				DisposeLog();
 
 				// ...and finally detach the settings:
-				if (!DoNotDetachSettingsBecauseTheyAreRequiredForTestVerification)
+				if (!DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly)
 				{
 					DetachSettingsEventHandlers();
 					DetachSettingsHandler();
@@ -695,7 +696,7 @@ namespace YAT.Model
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				return (CaptionHelper.ComposeTerminal(this.settingsHandler, this.settingsRoot, this.terminal, IndicatedName, IsStarted, IsOpen, IsConnected));
+				return (Utilities.CaptionHelper.ComposeTerminal(this.settingsHandler, this.settingsRoot, this.terminal, IndicatedName, IsStarted, IsOpen, IsConnected));
 			}
 		}
 
@@ -704,7 +705,7 @@ namespace YAT.Model
 		{
 		////AssertUndisposed() shall not be called from this simple get-property-style-method.
 
-			return (CaptionHelper.ComposeTerminal(IndicatedName, info));
+			return (Utilities.CaptionHelper.ComposeTerminal(IndicatedName, info));
 		}
 
 		/// <summary></summary>
@@ -945,7 +946,7 @@ namespace YAT.Model
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				return (IOStatusHelper.Compose(this.settingsRoot, this.terminal, IsStarted, IsOpen, IsConnected));
+				return (Utilities.IOStatusHelper.Compose(this.settingsRoot, this.terminal, IsStarted, IsOpen, IsConnected));
 			}
 		}
 
@@ -1227,7 +1228,7 @@ namespace YAT.Model
 					case CheckResult.Cancel: return (false);
 					case CheckResult.Ignore: return (true);
 
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + result.ToString() + "' is a result that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MKY.MessageHelper.InvalidExecutionPreamble + "'" + result.ToString() + "' is a result that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 				}
 			}
 
@@ -1902,7 +1903,7 @@ namespace YAT.Model
 			else if (!SettingsFileIsWritable)
 				reason = "The file is write-protected.";
 			else
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'SaveAs'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'SaveAs'!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 
 			var message = new StringBuilder();
 			message.AppendLine("Unable to save");
@@ -1954,7 +1955,7 @@ namespace YAT.Model
 			else if (!FileEx.IsWritable(linkFilePathRestricted))
 				reason = "The file is write-protected.";
 			else
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'LinkFilePath'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'LinkFilePath'!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 
 			var message = new StringBuilder();
 			message.AppendLine("Unable to save");
@@ -2014,7 +2015,7 @@ namespace YAT.Model
 			else if (!FileEx.IsReadable(linkFilePathRestricted))
 				reason = "The file cannot be read.";
 			else
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'LinkFilePath'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'LinkFilePath'!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 
 			var message = new StringBuilder();
 			message.AppendLine("Unable to access");
@@ -2161,7 +2162,7 @@ namespace YAT.Model
 					OnFixedStatusTextRequest("Error saving terminal!");
 					OnMessageInputRequest
 					(
-						ErrorHelper.ComposeMessage("Unable to save terminal file", this.settingsHandler.SettingsFilePath, ex),
+						Utilities.MessageHelper.ComposeMessage("Unable to save terminal file", this.settingsHandler.SettingsFilePath, ex),
 						"File Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -2323,7 +2324,7 @@ namespace YAT.Model
 					OnFixedStatusTextRequest("Error saving linked predefined command page!");
 					var dr = OnMessageInputRequest
 					(
-						ErrorHelper.ComposeMessage("Unable to save linked predefined command page file", linkedSettingsHandler.SettingsFilePath, ex),
+						Utilities.MessageHelper.ComposeMessage("Unable to save linked predefined command page file", linkedSettingsHandler.SettingsFilePath, ex),
 						"Linked File Error",
 						MessageBoxButtons.OKCancel,
 						MessageBoxIcon.Error
@@ -2426,7 +2427,7 @@ namespace YAT.Model
 					OnFixedStatusTextRequest("Error retrieving linked predefined command page!");
 					var dr = OnMessageInputRequest
 					(
-						ErrorHelper.ComposeMessage("Unable to retrieve linked predefined command page file", currentFilePath, ex),
+						Utilities.MessageHelper.ComposeMessage("Unable to retrieve linked predefined command page file", currentFilePath, ex),
 						"Linked File Error",
 						MessageBoxButtons.OKCancel,
 						MessageBoxIcon.Error
@@ -4369,7 +4370,7 @@ namespace YAT.Model
 
 						OnMessageInputRequest
 						(                                            // Needed to disabmbiguate.
-							ErrorHelper.ComposeMessage(messageOnFailure, string.Empty, yatLead, yatText),
+							Utilities.MessageHelper.ComposeMessage(messageOnFailure, string.Empty, yatLead, yatText),
 							"Terminal Warning",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Warning
@@ -4387,7 +4388,7 @@ namespace YAT.Model
 					string yatLead, yatText;
 					MakeExceptionHint(out yatLead, out yatText);
 
-					messageOnFailure = ErrorHelper.ComposeMessage(messageOnFailure, ex, yatLead, yatText);
+					messageOnFailure = Utilities.MessageHelper.ComposeMessage(messageOnFailure, ex, yatLead, yatText);
 					OnMessageInputRequest
 					(
 						messageOnFailure,
@@ -4413,40 +4414,40 @@ namespace YAT.Model
 			{
 				case Domain.IOType.SerialPort:
 				{
-					ErrorHelper.MakeSerialPortStartHint(out yatLead, out yatText);
+					Utilities.MessageHelper.MakeSerialPortStartHint(out yatLead, out yatText);
 					break;
 				}
 
 				case Domain.IOType.TcpClient:
 				case Domain.IOType.UdpClient:
 				{
-					ErrorHelper.MakeIPClientStartHint(out yatLead, out yatText);
+					Utilities.MessageHelper.MakeIPClientStartHint(out yatLead, out yatText);
 					break;
 				}
 
 				case Domain.IOType.TcpServer:
 				case Domain.IOType.TcpAutoSocket:
 				{
-					ErrorHelper.MakeUdpListenerHint(SettingsRoot.IO.Socket.LocalTcpPort, out yatLead, out yatText);
+					Utilities.MessageHelper.MakeTcpListenerHint(SettingsRoot.IO.Socket.LocalTcpPort, out yatLead, out yatText);
 					break;
 				}
 
 				case Domain.IOType.UdpServer:
 				case Domain.IOType.UdpPairSocket:
 				{
-					ErrorHelper.MakeTcpListenerHint(SettingsRoot.IO.Socket.LocalUdpPort, out yatLead, out yatText);
+					Utilities.MessageHelper.MakeUdpListenerHint(SettingsRoot.IO.Socket.LocalUdpPort, out yatLead, out yatText);
 					break;
 				}
 
 				case Domain.IOType.UsbSerialHid:
 				{
-					ErrorHelper.MakeUsbSerialHidStartHint(out yatLead, out yatText);
+					Utilities.MessageHelper.MakeUsbSerialHidStartHint(out yatLead, out yatText);
 					break;
 				}
 
 				default:
 				{
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + ioType + "' is an I/O type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new NotSupportedException(MKY.MessageHelper.InvalidExecutionPreamble + "'" + ioType + "' is an I/O type that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -4463,40 +4464,40 @@ namespace YAT.Model
 			{
 				case Domain.IOType.SerialPort:
 				{
-					ErrorHelper.MakeSerialPortExceptionHint(out yatLead, out yatText);
+					Utilities.MessageHelper.MakeSerialPortExceptionHint(out yatLead, out yatText);
 					break;
 				}
 
 				case Domain.IOType.TcpClient:
 				case Domain.IOType.UdpClient:
 				{
-					ErrorHelper.MakeIPClientExceptionHint(out yatLead, out yatText);
+					Utilities.MessageHelper.MakeIPClientExceptionHint(out yatLead, out yatText);
 					break;
 				}
 
 				case Domain.IOType.TcpServer:
 				case Domain.IOType.TcpAutoSocket:
 				{
-					ErrorHelper.MakeTcpListenerHint(SettingsRoot.IO.Socket.LocalTcpPort, out yatLead, out yatText);
+					Utilities.MessageHelper.MakeTcpListenerHint(SettingsRoot.IO.Socket.LocalTcpPort, out yatLead, out yatText);
 					break;
 				}
 
 				case Domain.IOType.UdpServer:
 				case Domain.IOType.UdpPairSocket:
 				{
-					ErrorHelper.MakeUdpListenerHint(SettingsRoot.IO.Socket.LocalUdpPort, out yatLead, out yatText);
+					Utilities.MessageHelper.MakeUdpListenerHint(SettingsRoot.IO.Socket.LocalUdpPort, out yatLead, out yatText);
 					break;
 				}
 
 				case Domain.IOType.UsbSerialHid:
 				{
-					ErrorHelper.MakeUsbSerialHidExceptionHint(out yatLead, out yatText);
+					Utilities.MessageHelper.MakeUsbSerialHidExceptionHint(out yatLead, out yatText);
 					break;
 				}
 
 				default:
 				{
-					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + ioType + "' is an I/O type that is not (yet) supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new NotSupportedException(MKY.MessageHelper.InvalidExecutionPreamble + "'" + ioType + "' is an I/O type that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -5401,7 +5402,7 @@ namespace YAT.Model
 
 			MKY.IO.Serial.SerialPort.SerialControlPinState pinState;
 			bool isSuccess = this.terminal.RequestToggleRts(out pinState);
-			this.SettingsRoot.IO.SerialPort.Communication.RtsPin = pinState;
+			SettingsRoot.IO.SerialPort.Communication.RtsPin = pinState;
 			return (isSuccess);
 
 			// Note, this user requested change of the current settings is handled here,
@@ -5427,7 +5428,7 @@ namespace YAT.Model
 
 			MKY.IO.Serial.SerialPort.SerialControlPinState pinState;
 			bool isSuccess = this.terminal.RequestToggleDtr(out pinState);
-			this.SettingsRoot.IO.SerialPort.Communication.DtrPin = pinState;
+			SettingsRoot.IO.SerialPort.Communication.DtrPin = pinState;
 			return (isSuccess);
 
 			// Note, this user requested change of the current settings is handled here,
@@ -5498,11 +5499,11 @@ namespace YAT.Model
 			catch (Exception ex)
 			{
 				string yatLead, yatText;
-				ErrorHelper.MakeLogHint(this.log, out yatLead, out yatText);
+				Utilities.MessageHelper.MakeLogHint(this.log, out yatLead, out yatText);
 
 				OnMessageInputRequest
 				(
-					ErrorHelper.ComposeMessage("Unable to switch log on!", ex, yatLead, yatText),
+					Utilities.MessageHelper.ComposeMessage("Unable to switch log on!", ex, yatLead, yatText),
 					"Log File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -5525,11 +5526,11 @@ namespace YAT.Model
 			catch (Exception ex)
 			{
 				string yatLead, yatText;
-				ErrorHelper.MakeLogHint(this.log, out yatLead, out yatText);
+				Utilities.MessageHelper.MakeLogHint(this.log, out yatLead, out yatText);
 
 				OnMessageInputRequest
 				(
-					ErrorHelper.ComposeMessage("Unable to clear log!", ex, yatLead, yatText),
+					Utilities.MessageHelper.ComposeMessage("Unable to clear log!", ex, yatLead, yatText),
 					"Log File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
@@ -5553,11 +5554,11 @@ namespace YAT.Model
 			catch (Exception ex)
 			{
 				string yatLead, yatText;
-				ErrorHelper.MakeLogHint(this.log, out yatLead, out yatText);
+				Utilities.MessageHelper.MakeLogHint(this.log, out yatLead, out yatText);
 
 				OnMessageInputRequest
 				(
-					ErrorHelper.ComposeMessage("Unable to switch log off!", ex, yatLead, yatText),
+					Utilities.MessageHelper.ComposeMessage("Unable to switch log off!", ex, yatLead, yatText),
 					"Log File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -5624,7 +5625,7 @@ namespace YAT.Model
 					{
 						var dr = OnMessageInputRequest
 						(
-							ErrorHelper.ComposeMessage("Unable to open log file", filePath, ex),
+							Utilities.MessageHelper.ComposeMessage("Unable to open log file", filePath, ex),
 							"Log File Error",
 							MessageBoxButtons.OKCancel,
 							MessageBoxIcon.Error
@@ -5696,7 +5697,7 @@ namespace YAT.Model
 				{
 					OnMessageInputRequest
 					(
-						ErrorHelper.ComposeMessage("Unable to open log folder", rootPath, exBrowse),
+						Utilities.MessageHelper.ComposeMessage("Unable to open log folder", rootPath, exBrowse),
 						"Log Folder Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -6001,7 +6002,7 @@ namespace YAT.Model
 				#if (DEBUG)
 					Debugger.Break();
 				#else
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Message Input' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "A 'Message Input' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 				#endif
 				}
 
@@ -6031,7 +6032,7 @@ namespace YAT.Model
 				#if (DEBUG)
 					Debugger.Break();
 				#else
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 				#endif
 				}
 
@@ -6061,7 +6062,7 @@ namespace YAT.Model
 				#if (DEBUG)
 					Debugger.Break();
 				#else
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 				#endif
 				}
 
@@ -6091,7 +6092,7 @@ namespace YAT.Model
 				#if (DEBUG)
 					Debugger.Break();
 				#else
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "An 'Open' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "An 'Open' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 				#endif
 				}
 

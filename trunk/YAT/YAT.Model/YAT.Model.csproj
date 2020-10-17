@@ -106,7 +106,7 @@
     <Compile Include="Utilities\AutoTriggerHelper.cs" />
     <Compile Include="Utilities\IOStatusHelper.cs" />
     <Compile Include="Utilities\CaptionHelper.cs" />
-    <Compile Include="Utilities\ErrorHelper.cs" />
+    <Compile Include="Utilities\MessageHelper.cs" />
     <Compile Include="Workspace.cs" />
   </ItemGroup>
   <ItemGroup>
