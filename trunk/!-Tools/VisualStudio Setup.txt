@@ -97,3 +97,13 @@ Customize > Commands
     > Toolbar > Standard
         > Solution Configuration > Modifiy Selection
             > Width = 360
+
+
+Hints
+=====
+
+Debugging exceptions like "Exception thrown: '...Exception' in mscorlib.dll"
+----------------------------------------------------------------------------
+Debug > Windows > Exception Settings
+    > Filter for given exception type
+    > Activate the given exception type
