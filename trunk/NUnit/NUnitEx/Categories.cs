@@ -36,7 +36,7 @@ namespace NUnitEx
 	public static class CategoryStrings
 	{
 		/// <summary></summary>
-		public static readonly string Interactive = "Interactive";
+		public static readonly string Duration = "Duration";
 
 		/// <summary></summary>
 		public static readonly string Endurance = "Endurance";
@@ -45,40 +45,10 @@ namespace NUnitEx
 		public static readonly string Stress = "Stress";
 
 		/// <summary></summary>
-		public static readonly string Duration = "Duration";
-	}
+		public static readonly string Interactive = "Interactive";
 
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-	public sealed class InteractiveCategoryAttribute : CategoryAttribute
-	{
 		/// <summary></summary>
-		public InteractiveCategoryAttribute()
-			: base(CategoryStrings.Interactive)
-		{
-		}
-	}
-
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-	public sealed class EnduranceCategoryAttribute : CategoryAttribute
-	{
-		/// <summary></summary>
-		public EnduranceCategoryAttribute()
-			: base(CategoryStrings.Endurance)
-		{
-		}
-	}
-
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
-	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-	public sealed class StressCategoryAttribute : CategoryAttribute
-	{
-		/// <summary></summary>
-		public StressCategoryAttribute()
-			: base(CategoryStrings.Stress)
-		{
-		}
+		public static readonly string AssertThrows = "AssertThrows";
 	}
 
 	/// <summary></summary>
@@ -184,7 +154,9 @@ namespace NUnitEx
 		}
 	}
 
-	/// <remarks>Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.</remarks>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
 	[CLSCompliant(false)]
 	[SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "This attribute will be derived by the standard specialization.")]
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
@@ -193,6 +165,65 @@ namespace NUnitEx
 		/// <summary></summary>
 		public InfiniteDurationCategoryAttribute()
 			: base(TimeSpan.Zero, CategoryStrings.Duration + " is infinite")
+		{
+		}
+	}
+
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+	public sealed class EnduranceCategoryAttribute : CategoryAttribute
+	{
+		/// <summary></summary>
+		public EnduranceCategoryAttribute()
+			: base(CategoryStrings.Endurance)
+		{
+		}
+	}
+
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+	public sealed class StressCategoryAttribute : CategoryAttribute
+	{
+		/// <summary></summary>
+		public StressCategoryAttribute()
+			: base(CategoryStrings.Stress)
+		{
+		}
+	}
+
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+	public sealed class InteractiveCategoryAttribute : CategoryAttribute
+	{
+		/// <summary></summary>
+		public InteractiveCategoryAttribute()
+			: base(CategoryStrings.Interactive)
+		{
+		}
+	}
+
+	/// <summary>
+	/// Shall be used to decorate tests that 'Assert.Throws()'.
+	/// </summary>
+	/// <remarks>
+	/// Useful to exclude tests that throw while a debugger is attached,
+	/// where exection of a series of tests shall not break on expected throws.
+	/// </remarks>
+	/// <remarks>
+	/// Sealed to improve performance during reflection on custom attributes according to FxCop:CA1813.
+	/// </remarks>
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+	public sealed class AssertThrowsCategoryAttribute : CategoryAttribute
+	{
+		/// <summary></summary>
+		public AssertThrowsCategoryAttribute()
+			: base(CategoryStrings.AssertThrows)
 		{
 		}
 	}
