@@ -111,6 +111,7 @@ Events
 Use "EventArgs.Empty" instead of "new EventArgs()".
 Use MKY.EventHelper.
 
+
 Disposal/Finalization
 ---------------------
 According to 'Template.cs'.
