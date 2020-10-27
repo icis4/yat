@@ -109,6 +109,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MKY", "MKY", "{41ACF768-829
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "netrtfwriter", "netrtfwriter", "{5DE02EAE-E609-4D95-9498-DC45AB2271FE}"
+	ProjectSection(SolutionItems) = preProject
+		netrtfwriter\README for YAT.txt = netrtfwriter\README for YAT.txt
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NUnit", "NUnit", "{3772E0E6-CACC-4C35-9026-60E65764BE41}"
 	ProjectSection(SolutionItems) = preProject
