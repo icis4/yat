@@ -160,6 +160,7 @@ A single capital letter: "\b([A-Z]{1})\b"
 A string of 2..4 letters: "\b([A-Za-z]{2,4})\b"
 
 Google for ".NET Regular Expression Quick Reference" for details on syntax.
+Google for "C# Regex Tester" for online tools to help creating regular expressions.
 
 Note that...
 ...[Any Line] is not available if action is [Highlight] or [Suppress], as that would otherwise result in all received lines being highlighted or suppressed.
@@ -195,7 +196,8 @@ Date with hyphens (e.g. 2000-01-01): "((?:19|20)\d\d-(?:0[1-9]|1[012])-(?:0[1-9]
 A single capital letter: "\b([A-Z]{1})\b"
 A string of 2..4 letters: "\b([A-Za-z]{2,4})\b"
 
-Google for ".NET Regular Expression Quick Reference" for details on syntax.</value>
+Google for ".NET Regular Expression Quick Reference" for details on syntax.
+Google for "C# Regex Tester" for online tools to help creating regular expressions.</value>
   </data>
   <data name="toolStripButton_MainTool_AutoResponse_Response_EnableReplace.ToolTipText" xml:space="preserve">
     <value>Enable Replace
