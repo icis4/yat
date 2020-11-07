@@ -33,6 +33,16 @@ namespace YAT.Model.Test
 	[TestFixture]
 	public class CommandTest
 	{
+		#region Tests
+		//==========================================================================================
+		// Tests
+		//==========================================================================================
+
+		#region Tests > TestEmptyThenSingleLineText
+		//------------------------------------------------------------------------------------------
+		// Tests > TestEmptyThenSingleLineText
+		//------------------------------------------------------------------------------------------
+
 		/// <summary></summary>
 		[Test]
 		public virtual void TestEmptyThenSingleLineText()
@@ -43,10 +53,42 @@ namespace YAT.Model.Test
 			c.SingleLineText = text;
 			AssertSingleLineText(c, text);
 
+			c.Description = ""; // Valid but to be ignored.
+			AssertSingleLineText(c, text);
+
 			string description = "XYZ";
 			c.Description = description;
 			AssertSingleLineText(c, text, description);
 		}
+
+		#endregion
+
+		#region Tests > TestEmptyThenDescriptionThenSingleLineText
+		//------------------------------------------------------------------------------------------
+		// Tests > TestEmptyThenDescriptionThenSingleLineText
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestEmptyThenDescriptionThenSingleLineText()
+		{
+			var c = new Command();
+
+			string description = "XYZ";
+			c.Description = description;
+			AssertDescription(c, null, description);
+
+			string text = "ABC";
+			c.SingleLineText = text;
+			AssertSingleLineText(c, text, description);
+		}
+
+		#endregion
+
+		#region Tests > TestInitialSingleLineTextThenModify
+		//------------------------------------------------------------------------------------------
+		// Tests > TestInitialSingleLineTextThenModify
+		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		[Test]
@@ -68,6 +110,9 @@ namespace YAT.Model.Test
 			c.SingleLineText = modifiedText;
 			AssertSingleLineText(c, modifiedText);
 
+			c.Description = ""; // Valid but to be ignored.
+			AssertSingleLineText(c, modifiedText);
+
 			string description = "XYZ";
 			c.Description = description;
 			AssertSingleLineText(c, modifiedText, description);
@@ -81,10 +126,126 @@ namespace YAT.Model.Test
 			AssertSingleLineText(c, modifiedText, description);
 		}
 
+		#endregion
+
+		#region Tests > TestEmptyThenMultiLineText
+		//------------------------------------------------------------------------------------------
+		// Tests > TestEmptyThenMultiLineText
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
+		public virtual void TestEmptyThenMultiLineText()
+		{
+			var c = new Command();
+
+			string[] text = new string[] { "ABC", "DEF" };
+			string singleLineText = "<2 lines...> [ABC] [DEF]";
+			c.MultiLineText = text;
+			AssertMultiLineText(c, text, singleLineText);
+
+			c.Description = ""; // Valid but to be ignored.
+			AssertMultiLineText(c, text, singleLineText);
+
+			string description = "XYZ";
+			c.Description = description;
+			AssertMultiLineText(c, text, singleLineText, description);
+		}
+
+		#endregion
+
+		#region Tests > TestEmptyThenDescriptionThenMultiLineText
+		//------------------------------------------------------------------------------------------
+		// Tests > TestEmptyThenDescriptionThenMultiLineText
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestEmptyThenDescriptionThenMultiLineText()
+		{
+			var c = new Command();
+
+			string description = "XYZ";
+			c.Description = description;
+			AssertDescription(c, null, description);
+
+			string[] text = new string[] { "ABC", "DEF" };
+			string singleLineText = "<2 lines...> [ABC] [DEF]";
+			c.MultiLineText = text;
+			AssertMultiLineText(c, text, singleLineText, description);
+		}
+
+		#endregion
+
+		#region Tests > TestInitialMultiLineTextThenModify
+		//------------------------------------------------------------------------------------------
+		// Tests > TestInitialMultiLineTextThenModify
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
+		public virtual void TestInitialMultiLineTextThenModify()
+		{
+			string[] initialMulti = new string[] { "ABC", "DEF" };
+			string initialSingle = "<2 lines...> [ABC] [DEF]";
+			var c = new Command(initialMulti);
+			AssertMultiLineText(c, initialMulti, initialSingle);
+
+			string[] modifiedMulti = new string[] { "ABC", "def" }; // Change casing.
+			string modifiedSingle = "<2 lines...> [ABC] [def]";
+			c.MultiLineText = modifiedMulti;
+			AssertMultiLineText(c, modifiedMulti, modifiedSingle);
+
+			modifiedMulti = new string[] { "ABC", "def", "ghi" }; // Add a line.
+			modifiedSingle = "<3 lines...> [ABC] [def] [ghi]";
+			c.MultiLineText = modifiedMulti;
+			AssertMultiLineText(c, modifiedMulti, modifiedSingle);
+
+			modifiedMulti = new string[] { "ABC", "ghi" }; // Remove a line.
+			modifiedSingle = "<2 lines...> [ABC] [ghi]";
+			c.MultiLineText = modifiedMulti;
+			AssertMultiLineText(c, modifiedMulti, modifiedSingle);
+
+			c.Description = ""; // Valid but to be ignored.
+			AssertMultiLineText(c, modifiedMulti, modifiedSingle);
+
+			string description = "XYZ";
+			c.Description = description;
+			AssertMultiLineText(c, modifiedMulti, modifiedSingle, description);
+
+			modifiedMulti = new string[] { "ABC", "DEF" };
+			modifiedSingle = "<2 lines...> [ABC] [DEF]";
+			c.MultiLineText = modifiedMulti;
+			AssertMultiLineText(c, modifiedMulti, modifiedSingle, description);
+		}
+
+		#endregion
+
+		#endregion
+
+		#region Assert
+		//==========================================================================================
+		// Assert
+		//==========================================================================================
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		protected virtual void AssertDescription(Command c, string text, string description, Domain.Parser.Mode modes = Domain.Parser.Mode.Default)
+		{
+			if (!string.IsNullOrEmpty(text))
+				AssertSingleLineText(c, text, description, modes);
+			else
+				Assert.That(c.Description, Is.EqualTo(description));
+		}
+
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		protected virtual void AssertSingleLineText(Command c, string text, string description = null, Domain.Parser.Mode modes = Domain.Parser.Mode.Default)
 		{
+			Assert.That((text != null) || (description != null)); // Precondition for this assertion.
+
 			Assert.That(c.IsDefined,          Is.True);
 			Assert.That(c.IsValid(modes),     Is.True);
 			Assert.That(c.Caption,            Is.EqualTo(text));
@@ -112,63 +273,13 @@ namespace YAT.Model.Test
 		}
 
 		/// <summary></summary>
-		[Test]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
-		public virtual void TestEmptyThenMultiLineText()
-		{
-			var c = new Command();
-
-			string[] text = new string[] { "ABC", "DEF" };
-			string singleLineText = "<2 lines...> [ABC] [DEF]";
-			c.MultiLineText = text;
-			AssertMultiLineText(c, text, singleLineText);
-
-			string description = "XYZ";
-			c.Description = description;
-			AssertMultiLineText(c, text, singleLineText, description);
-		}
-
-		/// <summary></summary>
-		[Test]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
-		public virtual void TestInitialMultiLineTextThenModify()
-		{
-			string[] initialMulti = new string[] { "ABC", "DEF" };
-			string initialSingle = "<2 lines...> [ABC] [DEF]";
-			var c = new Command(initialMulti);
-			AssertMultiLineText(c, initialMulti, initialSingle);
-
-			string[] modifiedMulti = new string[] { "ABC", "def" }; // Change casing.
-			string modifiedSingle = "<2 lines...> [ABC] [def]";
-			c.MultiLineText = modifiedMulti;
-			AssertMultiLineText(c, modifiedMulti, modifiedSingle);
-
-			modifiedMulti = new string[] { "ABC", "def", "ghi" }; // Add a line.
-			modifiedSingle = "<3 lines...> [ABC] [def] [ghi]";
-			c.MultiLineText = modifiedMulti;
-			AssertMultiLineText(c, modifiedMulti, modifiedSingle);
-
-			modifiedMulti = new string[] { "ABC", "ghi" }; // Remove a line.
-			modifiedSingle = "<2 lines...> [ABC] [ghi]";
-			c.MultiLineText = modifiedMulti;
-			AssertMultiLineText(c, modifiedMulti, modifiedSingle);
-
-			string description = "XYZ";
-			c.Description = description;
-			AssertMultiLineText(c, modifiedMulti, modifiedSingle, description);
-
-			modifiedMulti = new string[] { "ABC", "DEF" };
-			modifiedSingle = "<2 lines...> [ABC] [DEF]";
-			c.MultiLineText = modifiedMulti;
-			AssertMultiLineText(c, modifiedMulti, modifiedSingle, description);
-		}
-
-		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "multi", Justification = "What's wrong with 'MultiLine'?")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
 		protected virtual void AssertMultiLineText(Command c, string[] multiLineText, string singleLineText, string description = null, Domain.Parser.Mode modes = Domain.Parser.Mode.Default)
 		{
+			Assert.That(((multiLineText != null) || (singleLineText != null)) || (description != null)); // Precondition for this assertion.
+
 			Assert.That(c.IsDefined,          Is.True);
 			Assert.That(c.IsValid(modes),     Is.True);
 			Assert.That(c.Caption,            Is.EqualTo(singleLineText));
@@ -194,6 +305,8 @@ namespace YAT.Model.Test
 			else
 				Assert.That(c.Description,    Is.EqualTo(description));
 		}
+
+		#endregion
 	}
 }
 
