@@ -26,9 +26,22 @@ namespace MKY.IO.Ports
 			// Dispose of managed resources:
 			if (disposing)
 			{
-				// Try to patch some of the issues described in the ".\!-Doc\*.txt" files:
+				// --------------------------------------------------------------------------------
+				// Begin of patches to the issues described in ".\!-Doc\*.txt".
+				// --------------------------------------------------------------------------------
+				// With .NET 4.7.1 and above the .NET Framework itself contains workarounds for the
+				// documented 'ObjectDisposedException' and 'UnauthorizedAccssException' issues.
+				// However, as those workarounds do not really solve the issues, only workaround
+				// them and the patches applied by this 'SerialPortEx' class should not interfere
+				// with those workarounds, it has been decided to keep the patches for the moment.
+				// --------------------------------------------------------------------------------
+
 				TryToApplyEventLoopHandlerPatchAndCloseBaseStreamSafely(this.baseStreamReferenceForCloseSafely);
 				this.baseStreamReferenceForCloseSafely = null;
+
+				// --------------------------------------------------------------------------------
+				// End of patches to the issues described in ".\!-Doc\*.txt".
+				// --------------------------------------------------------------------------------
 			}
 
 			// Dispose of designer generated managed resources:
@@ -36,6 +49,16 @@ namespace MKY.IO.Ports
 			{
 				components.Dispose();
 			}
+
+			// ------------------------------------------------------------------------------------
+			// Begin of patches to the issues described in ".\!-Doc\*.txt".
+			// ------------------------------------------------------------------------------------
+			// With .NET 4.7.1 and above the .NET Framework itself contains workarounds for the
+			// documented 'ObjectDisposedException' and 'UnauthorizedAccssException' issues.
+			// However, as those workarounds do not really solve the issues, only workaround
+			// them and the patches applied by this 'SerialPortEx' class should not interfere
+			// with those workarounds, it has been decided to keep the patches for the moment.
+			// ------------------------------------------------------------------------------------
 
 			try
 			{
@@ -45,6 +68,10 @@ namespace MKY.IO.Ports
 			catch // May be 'UnauthorizedAccessException' or ...
 			{
 			}
+
+			// ------------------------------------------------------------------------------------
+			// End of patches to the issues described in ".\!-Doc\*.txt".
+			// ------------------------------------------------------------------------------------
 		}
 
 		#region Component Designer generated code
