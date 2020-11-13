@@ -980,8 +980,9 @@ namespace YAT.View.Forms
 			this.comboBox_TimeSpanFormatPreset.Name = "comboBox_TimeSpanFormatPreset";
 			this.comboBox_TimeSpanFormatPreset.Size = new System.Drawing.Size(232, 21);
 			this.comboBox_TimeSpanFormatPreset.TabIndex = 13;
-			this.toolTip.SetToolTip(this.comboBox_TimeSpanFormatPreset, "Currently limited to the standard format. Will become available as soon as update" +
-        "d to .NET 4+ which supports time span formats.");
+			this.toolTip.SetToolTip(this.comboBox_TimeSpanFormatPreset, "Format is yet limited to a few typical presets. Contact YAT\r\nvia \"Help > Request " +
+        "Feature\" to request additional presets.\r\n\r\nCustom format will become available w" +
+        "ith feature request #377.");
 			this.comboBox_TimeSpanFormatPreset.SelectedIndexChanged += new System.EventHandler(this.comboBox_TimeSpanFormatPreset_SelectedIndexChanged);
 			// 
 			// textBox_TimeSpanFormat
@@ -1016,8 +1017,9 @@ namespace YAT.View.Forms
 			this.comboBox_TimeDeltaFormatPreset.Name = "comboBox_TimeDeltaFormatPreset";
 			this.comboBox_TimeDeltaFormatPreset.Size = new System.Drawing.Size(232, 21);
 			this.comboBox_TimeDeltaFormatPreset.TabIndex = 16;
-			this.toolTip.SetToolTip(this.comboBox_TimeDeltaFormatPreset, "Currently limited to the standard format. Will become available as soon as update" +
-        "d to .NET 4+ which supports time span formats.");
+			this.toolTip.SetToolTip(this.comboBox_TimeDeltaFormatPreset, "Format is yet limited to a few typical presets. Contact YAT\r\nvia \"Help > Request " +
+        "Feature\" to request additional presets.\r\n\r\nCustom format will become available w" +
+        "ith feature request #377.");
 			this.comboBox_TimeDeltaFormatPreset.SelectedIndexChanged += new System.EventHandler(this.comboBox_TimeDeltaFormatPreset_SelectedIndexChanged);
 			// 
 			// textBox_TimeDeltaFormat
@@ -1052,8 +1054,9 @@ namespace YAT.View.Forms
 			this.comboBox_TimeDurationFormatPreset.Name = "comboBox_TimeDurationFormatPreset";
 			this.comboBox_TimeDurationFormatPreset.Size = new System.Drawing.Size(232, 21);
 			this.comboBox_TimeDurationFormatPreset.TabIndex = 19;
-			this.toolTip.SetToolTip(this.comboBox_TimeDurationFormatPreset, "Currently limited to the standard format. Will become available as soon as update" +
-        "d to .NET 4+ which supports time span formats.");
+			this.toolTip.SetToolTip(this.comboBox_TimeDurationFormatPreset, "Format is yet limited to a few typical presets. Contact YAT\r\nvia \"Help > Request " +
+        "Feature\" to request additional presets.\r\n\r\nCustom format will become available w" +
+        "ith feature request #377.");
 			this.comboBox_TimeDurationFormatPreset.SelectedIndexChanged += new System.EventHandler(this.comboBox_TimeDurationFormatPreset_SelectedIndexChanged);
 			// 
 			// label_InfoEnclosure
