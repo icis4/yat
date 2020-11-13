@@ -161,8 +161,8 @@ namespace YAT.Domain
 	#if (WITH_SCRIPTING)
 
 		/// <summary>
-		/// Gets or sets a value indicating whether scripting is currently active,
-		/// i.e. whether the terminals shall produce received messages for scripting.
+		/// Gets or sets a value indicating whether a script run is currently active,
+		/// i.e. whether the terminals shall produce received messages for a script.
 		/// </summary>
 		/// <remarks>
 		/// Implemented as static property for two reasons:
@@ -171,18 +171,18 @@ namespace YAT.Domain
 		/// <item><description>State can easier be applied to newly created terminals.</description></item>
 		/// </list>
 		/// </remarks>
-		public static bool ScriptingIsActive
+		public static bool ScriptRunIsActive
 		{
 			get
 			{
-				lock (staticScriptingIsActiveSyncObj)
-					return (staticScriptingIsActive);
+				lock (staticScriptRunIsActiveSyncObj)
+					return (staticScriptRunIsActive);
 			}
 
 			set
 			{
-				lock (staticScriptingIsActiveSyncObj)
-					staticScriptingIsActive = value;
+				lock (staticScriptRunIsActiveSyncObj)
+					staticScriptRunIsActive = value;
 			}
 		}
 
@@ -494,7 +494,7 @@ namespace YAT.Domain
 				DebugMessage("...successfully disposed.");
 			}
 
-		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
+		////base.Dispose(disposing) of 'DisposableBase' doesn't need and cannot be called since abstract.
 		}
 
 		#endregion
@@ -2062,37 +2062,48 @@ namespace YAT.Domain
 			if (IsInDisposal) // Ensure to not handle event during closing anymore.
 				return;
 
-			string errorMessage;
-
 			// Do not lock (ClearRefreshEmptySyncObj)! That would lead to deadlocks if close/dispose
 			// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread!
 			{
+				IOErrorSeverity severity;
 				IODirection direction;
+				string message;
 
 				var spe = (e as SerialPortErrorEventArgs);
 				if (spe != null)
 				{
 					switch (spe.SerialPortError) // Handle serial port errors where known:
-					{
-						case System.IO.Ports.SerialError.Frame:    direction = spe.Direction; errorMessage = RxFramingErrorString;        break;
-						case System.IO.Ports.SerialError.Overrun:  direction = spe.Direction; errorMessage = RxBufferOverrunErrorString;  break;
-						case System.IO.Ports.SerialError.RXOver:   direction = spe.Direction; errorMessage = RxBufferOverflowErrorString; break;
-						case System.IO.Ports.SerialError.RXParity: direction = spe.Direction; errorMessage = RxParityErrorString;         break;
-						case System.IO.Ports.SerialError.TXFull:   direction = spe.Direction; errorMessage = TxBufferFullErrorString;     break;
+					{                                                         // Downgrade severity of these known errors, as they may happen on opening a port where communication is already ongoing.
+						case System.IO.Ports.SerialError.Frame:    severity = IOErrorSeverity.Acceptable; direction = spe.Direction; message = RxFramingErrorString;        break;
+						case System.IO.Ports.SerialError.Overrun:  severity = IOErrorSeverity.Acceptable; direction = spe.Direction; message = RxBufferOverrunErrorString;  break;
+						case System.IO.Ports.SerialError.RXOver:   severity = IOErrorSeverity.Acceptable; direction = spe.Direction; message = RxBufferOverflowErrorString; break;
+						case System.IO.Ports.SerialError.RXParity: severity = IOErrorSeverity.Acceptable; direction = spe.Direction; message = RxParityErrorString;         break;
+						case System.IO.Ports.SerialError.TXFull:   severity = IOErrorSeverity.Acceptable; direction = spe.Direction; message = TxBufferFullErrorString;     break;
 
-						default:                                   direction = spe.Direction; errorMessage = e.Message;                   break;
+						default:                                   severity = spe.Severity;               direction = spe.Direction; message = e.Message;                   break;
 					}
 				}
 				else
 				{
+					severity  = e.Severity;
 					direction = e.Direction;
-					errorMessage = e.Message;
+					message   = e.Message;
 				}
 
-				var isWarningOnly = (e.Severity == IOErrorSeverity.Acceptable); // Acceptable errors are only shown as terminal text.
-				InlineDisplayElement(direction, new DisplayElement.ErrorInfo(e.TimeStamp, (Direction)direction, errorMessage, isWarningOnly));
-				if (!isWarningOnly)
-					OnIOError(e); // Default behavior = show in terminal text and forward event.
+				bool isWarningOnly;
+				switch (severity)
+				{                                                    // Acceptable issues shall only be shown as terminal text.
+					case IOErrorSeverity.Acceptable: isWarningOnly = true;  break;
+					case IOErrorSeverity.Severe:     isWarningOnly = false; break;
+					case IOErrorSeverity.Fatal:      isWarningOnly = false; break;
+
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + severity + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
+
+				InlineDisplayElement(direction, new DisplayElement.ErrorInfo(e.TimeStamp, (Direction)direction, message, isWarningOnly));
+
+				if (!isWarningOnly) // Non-Acceptable issues shall be shown in terminal text and forwarded as error event.
+					OnIOError(new IOErrorEventArgs(severity, direction, message));
 			}
 
 ////#if (WITH_SCRIPTING)
