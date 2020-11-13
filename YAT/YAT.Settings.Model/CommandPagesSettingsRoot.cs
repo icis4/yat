@@ -93,8 +93,8 @@ namespace YAT.Settings.Model
 		[XmlElement("SettingsName")]
 		public virtual string SettingsName
 		{
-			get { return (ApplicationEx.CommonName + " Command Pages Definition"); } // Name shall *not* differ for "YAT" and "YATConsole"
-			set { /* Do nothing, this meta XML element is read-only. */ }            // in order to allow exchanging settings.
+			get { return (ApplicationEx.CommonName + " Command Pages Definition"); } // Name must *not* differ for "YAT" and "YATConsole"
+			set { /* Do nothing, this meta XML element is read-only. */ }            // in order to allow exchanging settings!
 		}
 
 		/// <summary></summary>

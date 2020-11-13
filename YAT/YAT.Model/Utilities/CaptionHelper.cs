@@ -22,16 +22,22 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
-using MKY;
 using MKY.Settings;
 
 using YAT.Settings.Model;
+
+#endregion
 
 namespace YAT.Model.Utilities
 {
@@ -99,7 +105,7 @@ namespace YAT.Model.Utilities
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		public static string ComposeTerminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, TerminalSettingsRoot settingsRoot, Domain.Terminal terminal,
-		                             string indicatedName, bool isStarted, bool isOpen, bool isConnected)
+		                                     string indicatedName, bool isStarted, bool isOpen, bool isConnected)
 		{
 			var sb = new StringBuilder();
 

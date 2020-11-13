@@ -32,9 +32,9 @@ namespace MKY.IO.Serial.Socket.Test
 	[TestFixture]
 	public class SimpleTcpConnectionTest
 	{
-		#region Private Constants
+		#region Constants
 		//==========================================================================================
-		// Private Constants
+		// Constants
 		//==========================================================================================
 
 		private const int AutoSocketDelay = 1500;

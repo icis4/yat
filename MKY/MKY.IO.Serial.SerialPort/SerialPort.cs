@@ -281,7 +281,7 @@ namespace MKY.IO.Serial.SerialPort
 				DebugMessage("...successfully disposed.");
 			}
 
-		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
+		////base.Dispose(disposing) of 'DisposableBase' doesn't need and cannot be called since abstract.
 		}
 
 		#endregion

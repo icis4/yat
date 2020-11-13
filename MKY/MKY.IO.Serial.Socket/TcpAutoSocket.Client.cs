@@ -67,7 +67,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				this.client = new TcpClient(this.instanceId, remoteHost, remotePort, localInterface);
 
-			#if DEBUG_STATIC_SOCKET_LIST
+			#if (DEBUG_STATIC_SOCKET_LIST)
 				staticSocketList.Add(this.client);
 			#endif
 

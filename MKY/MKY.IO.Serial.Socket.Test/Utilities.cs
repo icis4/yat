@@ -45,9 +45,9 @@ namespace MKY.IO.Serial.Socket.Test
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public static class Utilities
 	{
-		#region Private Constants
+		#region Constants
 		//==========================================================================================
-		// Private Constants
+		// Constants
 		//==========================================================================================
 
 		/// <remarks>

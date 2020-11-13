@@ -155,7 +155,7 @@ namespace MKY.IO.Serial.Socket
 
 		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
 
-	#if DEBUG_STATIC_SOCKET_LIST
+	#if (DEBUG_STATIC_SOCKET_LIST)
 		private static List<ALAZ.SystemEx.NetEx.SocketsEx.SocketServer> staticSocketList = new List<ALAZ.SystemEx.NetEx.SocketsEx.SocketServer>();
 	#endif
 
@@ -317,7 +317,7 @@ namespace MKY.IO.Serial.Socket
 				DebugMessage("...successfully disposed.");
 			}
 
-		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
+		////base.Dispose(disposing) of 'DisposableBase' doesn't need and cannot be called since abstract.
 		}
 
 		#endregion
@@ -732,7 +732,7 @@ namespace MKY.IO.Serial.Socket
 						Timeout.Infinite
 					);
 
-				#if DEBUG_STATIC_SOCKET_LIST
+				#if (DEBUG_STATIC_SOCKET_LIST)
 					staticSocketList.Add(this.socket);
 				#endif
 

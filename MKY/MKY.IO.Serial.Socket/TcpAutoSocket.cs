@@ -156,7 +156,7 @@ namespace MKY.IO.Serial.Socket
 		// Static Fields
 		//==========================================================================================
 
-	#if DEBUG_STATIC_SOCKET_LIST
+	#if (DEBUG_STATIC_SOCKET_LIST)
 		private static System.Collections.Generic.List<IIOProvider> staticSocketList = new System.Collections.Generic.List<IIOProvider>();
 	#endif
 
@@ -280,7 +280,7 @@ namespace MKY.IO.Serial.Socket
 				DebugMessage("...successfully disposed.");
 			}
 
-		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
+		////base.Dispose(disposing) of 'DisposableBase' doesn't need and cannot be called since abstract.
 		}
 
 		#endregion
