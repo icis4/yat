@@ -130,27 +130,41 @@ namespace MKY.IO.Ports
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void FillWithAvailablePorts(bool retrieveCaptions = false)
 		{
-			lock (this)
+			DebugVerboseIndent("Retrieving ports of local machine...");
+			string[] portNames = SerialPortEx.GetPortNames(); // "If the registry contains stale or otherwise incorrect data then the GetPortNames method will return incorrect data."
+			DebugVerboseUnindent("...done, {0} ports", portNames);
+
+			if (!ArrayEx.IsNullOrEmpty(portNames))
 			{
-				Clear();
-
-				DebugVerboseIndent("Retrieving ports of local machine...");
-				foreach (string portName in System.IO.Ports.SerialPort.GetPortNames())
+				lock (this)
 				{
-					DebugVerboseIndent((portName != null) ? portName : "(null)");
+					Clear();
 
-					if (!string.IsNullOrEmpty(portName)) // "If the registry contains stale or otherwise incorrect data then the GetPortNames method will return incorrect data."
-						Add(new SerialPortId(portName));
+					DebugVerboseIndent("Adding ports of local machine...");
+					foreach (string portName in portNames)
+					{
+						DebugVerboseIndent((portName != null) ? portName : "(null)");
 
-					DebugVerboseUnindent();
+						if (!string.IsNullOrEmpty(portName)) // "If the registry contains stale or otherwise incorrect data then the GetPortNames method will return incorrect data."
+							Add(new SerialPortId(portName));
+
+						DebugVerboseUnindent();
+					}
+					DebugVerboseUnindent("...done");
+
+					Sort();
 				}
-				DebugVerboseUnindent("...done");
 
-				Sort();
+				if (retrieveCaptions)
+					RetrieveCaptions();
 			}
-
-			if (retrieveCaptions)
-				RetrieveCaptions();
+			else
+			{
+				lock (this)
+				{
+					Clear();
+				}
+			}
 		}
 
 		/// <summary>
@@ -162,7 +176,6 @@ namespace MKY.IO.Ports
 			{
 				var c = new SerialPortCollection();
 				c.FillWithAvailablePorts(false);
-
 				return (c.Contains(portName));
 			}
 			else
@@ -200,16 +213,25 @@ namespace MKY.IO.Ports
 
 			lock (staticPortNamesCacheSyncObj)
 			{
-				if (staticPortNamesCache == null)
+				string[] portNames = SerialPortEx.GetPortNames(); // "If the registry contains stale or otherwise incorrect data then the GetPortNames method will return incorrect data."
+
+				if (!ArrayEx.IsNullOrEmpty(portNames))
 				{
-					staticPortNamesCache = System.IO.Ports.SerialPort.GetPortNames(); // "If the registry contains stale or otherwise incorrect data then the GetPortNames method will return incorrect data."
-					useCaptionsFromCache = false;
+					if (staticPortNamesCache == null)
+					{
+						staticPortNamesCache = portNames;
+						useCaptionsFromCache = false;
+					}
+					else
+					{
+						string[] formerCache = (string[])staticPortNamesCache.Clone();
+						staticPortNamesCache = portNames;
+						useCaptionsFromCache = ArrayEx.ValuesEqual(staticPortNamesCache, formerCache);
+					}
 				}
-				else
+				else // Use previous cache if available:
 				{
-					string[] formerCache = (string[])staticPortNamesCache.Clone();
-					staticPortNamesCache = System.IO.Ports.SerialPort.GetPortNames(); // "If the registry contains stale or otherwise incorrect data then the GetPortNames method will return incorrect data."
-					useCaptionsFromCache = ArrayEx.ValuesEqual(staticPortNamesCache, formerCache);
+					useCaptionsFromCache = !ArrayEx.IsNullOrEmpty(staticPortNamesCache);
 				}
 			}
 
@@ -468,6 +490,15 @@ namespace MKY.IO.Ports
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_VERBOSE")]
+		private static void DebugVerbose(string format, params object[] args)
+		{
+			Debug.WriteLine(format, args);
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_VERBOSE")]
 		private static void DebugVerboseIndent(string message = null)
 		{
 			DebugVerbose(message);
@@ -482,6 +513,16 @@ namespace MKY.IO.Ports
 		{
 			Debug.Unindent();
 			DebugVerbose(message);
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_VERBOSE")]
+		private static void DebugVerboseUnindent(string format, params object[] args)
+		{
+			Debug.Unindent();
+			DebugVerbose(format, args);
 		}
 
 		#endregion
