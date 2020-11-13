@@ -28,11 +28,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Forms;
 
-namespace MKY.Diagnostics
+using MKY.Diagnostics;
+
+namespace MKY
 {
 	/// <summary>
-	/// Provides static methods to write diagnostics output to <see cref="System.Console.Out"/> and
-	/// <see cref="System.Console.Error"/>.
+	/// Provides static methods to write diagnostics output to <see cref="Console.Out"/> and
+	/// <see cref="Console.Error"/>.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class ConsoleEx
