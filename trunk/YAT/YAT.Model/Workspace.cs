@@ -262,7 +262,7 @@ namespace YAT.Model
 				DebugMessage("...successfully disposed.");
 			}
 
-		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
+		////base.Dispose(disposing) of 'DisposableBase' doesn't need and cannot be called since abstract.
 		}
 
 		#endregion
@@ -551,6 +551,18 @@ namespace YAT.Model
 				#endif
 
 					return (sb.ToString());
+
+					// Note:
+					// It has been considered to include the fix ID used for scripting in the
+					// terminal caption. The idea has been discarded for various reasons:
+					//  > The user interface shall not be overloaded more than necessary.
+					//  > The user interface shall always behave the same, not only sometimes
+					//    include something, i.e. only when scripting is active.
+					//  > Most users will only deal with a single terminal, always being Fix#1.
+					//  > Most users won't need the terminal ID as they can use the implicit
+					//    methods, i.e. implicitly use 'ITerminalEx.ActiveTerminalId'.
+					//  > Advanced users can still activate this 'ActiveTerminalInfoText'.
+					//  > The terminal doesn't know its fix ID, composing the caption gets tricky.
 				}
 				else
 				{
@@ -859,7 +871,7 @@ namespace YAT.Model
 			else if (!SettingsFileIsWritable)
 				reason = "The file is write-protected.";
 			else
-				throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'SaveAs'!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'SaveAs'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			var message = new StringBuilder();
 			message.AppendLine("Unable to save");
@@ -1524,13 +1536,13 @@ namespace YAT.Model
 		/// </summary>
 		public virtual int OpenTerminals()
 		{
-			return (OpenTerminals(TerminalIds.InvalidIndex, null));
+			return (OpenTerminals(TerminalIds.InvalidDynamicId, TerminalIds. InvalidFixedId, null));
 		}
 
 		/// <summary>
 		/// Opens terminals according to workspace settings and returns number of successfully opened terminals.
 		/// </summary>
-		public virtual int OpenTerminals(int dynamicTerminalIdToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace)
+		public virtual int OpenTerminals(int dynamicTerminalIdToReplace, int fixedTerminalIdToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace)
 		{
 			AssertUndisposed();
 
@@ -1551,7 +1563,7 @@ namespace YAT.Model
 				// \remind
 				// Check whether the item is defined. Because under certain error conditions there
 				// were occasions when the item contained an empty file path and an empty GUID. That
-				// has lead to an exception in an underlying System.IO call and would have lead to
+				// has lead to an exception in an underlying 'System.IO' call and would have lead to
 				// an error message which isn't really understandable to the user. Therefore, check
 				// the item and remove it if not defined.
 
@@ -1562,14 +1574,26 @@ namespace YAT.Model
 
 					// Replace the desired terminal settings if requested:
 					bool isToReplace = false;
+
 					if (dynamicTerminalIdToReplace == TerminalIds.ActiveDynamicId)
 					{
 						if (i == (clone.Count - 1)) // The active terminal is located last in the collection.
 							isToReplace = true;
 					}
-					else
+					else if (dynamicTerminalIdToReplace != TerminalIds.InvalidDynamicId)
 					{
 						if (i == TerminalIds.DynamicIdToIndex(dynamicTerminalIdToReplace))
+							isToReplace = true;
+					}
+
+					if (fixedTerminalIdToReplace == TerminalIds.ActiveFixedId)
+					{
+						if (i == (clone.Count - 1)) // The active terminal is located last in the collection.
+							isToReplace = true;
+					}
+					else if (fixedTerminalIdToReplace != TerminalIds.InvalidFixedId)
+					{
+						if (item.FixedId == fixedTerminalIdToReplace)
 							isToReplace = true;
 					}
 
@@ -2027,7 +2051,7 @@ namespace YAT.Model
 					return (kvp.Key);
 			}
 
-			throw (new ArgumentOutOfRangeException("terminal", terminal, MKY.MessageHelper.InvalidExecutionPreamble + "Terminal'" + terminal + "'not found in ID table!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+			throw (new ArgumentOutOfRangeException("terminal", terminal, MessageHelper.InvalidExecutionPreamble + "Terminal'" + terminal + "'not found in ID table!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary>

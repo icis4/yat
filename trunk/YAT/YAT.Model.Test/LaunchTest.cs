@@ -135,7 +135,9 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,    Is.True);
 
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
+				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.InvalidDynamicId));
+				Assert.That(m.LaunchArgs.RequestedFixedTerminalId,            Is.EqualTo(TerminalIds.InvalidFixedId));
+				Assert.That(m.LaunchArgs.RequestedTransmitText,               Is.Null.Or.Empty);
 				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
 				Assert.That(m.LaunchArgs.KeepOpen,        Is.True);
@@ -434,7 +436,9 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
 
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
+				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.InvalidDynamicId));
+				Assert.That(m.LaunchArgs.RequestedFixedTerminalId,            Is.EqualTo(TerminalIds.InvalidFixedId));
+				Assert.That(m.LaunchArgs.RequestedTransmitText,               Is.Null.Or.Empty);
 				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
@@ -476,7 +480,9 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
 
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
+				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.InvalidDynamicId));
+				Assert.That(m.LaunchArgs.RequestedFixedTerminalId,            Is.EqualTo(TerminalIds.InvalidFixedId));
+				Assert.That(m.LaunchArgs.RequestedTransmitText,               Is.Null.Or.Empty);
 				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
@@ -518,7 +524,9 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
 
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
+				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.InvalidDynamicId));
+				Assert.That(m.LaunchArgs.RequestedFixedTerminalId,            Is.EqualTo(TerminalIds.InvalidFixedId));
+				Assert.That(m.LaunchArgs.RequestedTransmitText,               Is.Null.Or.Empty);
 				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
@@ -572,13 +580,14 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestReplaceTerminalSettingsInWorkspacePrepare()
 		{
-			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--DynamicTerminalId=2", "--DataBits=7" })))
+			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--DynamicTerminalId=1", "--DataBits=7" })))
 			{
 				PrepareMainAndVerifyResult(m);
 
 				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
 				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
-				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,             Is.EqualTo(2));
+				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,                Is.EqualTo(1));
+				Assert.That(m.LaunchArgs.RequestedFixedTerminalId,                  Is.EqualTo(TerminalIds.InvalidFixedId));
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Not.Null);
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.IO.SerialPort.Communication.DataBits, Is.EqualTo(MKY.IO.Ports.DataBits.Seven));
 
@@ -637,7 +646,7 @@ namespace YAT.Model.Test
 		{
 			string text = @"Send something\!(Delay)Send delayed";
 
-			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--TransmitText=" + text, "--DynamicTerminalId=2", "--KeepOpenOnError"})))
+			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--TransmitText=" + text, "--FixedTerminalId=1", "--KeepOpenOnError"})))
 			{
 				PrepareMainAndVerifyResult(m);
 
@@ -645,7 +654,8 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Not.Null);
 				Assert.That(m.LaunchArgs.RequestedTransmitText,                     Is.EqualTo(text));
-				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,             Is.EqualTo(2));
+				Assert.That(m.LaunchArgs.RequestedFixedTerminalId,                  Is.EqualTo(1));
+				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,                Is.EqualTo(TerminalIds.InvalidDynamicId));
 
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,               Is.False);
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.True);
@@ -704,7 +714,7 @@ namespace YAT.Model.Test
 			string filePath = Temp.MakeTempFilePath(GetType(), ".xyz");
 			File.Create(filePath); // File must exist!
 
-			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--TransmitFile=" + filePath, "--DynamicTerminalId=2", "--KeepOpenOnError"})))
+			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--TransmitFile=" + filePath, "--FixedTerminalId=2", "--KeepOpenOnError"})))
 			{
 				PrepareMainAndVerifyResult(m);
 
@@ -712,7 +722,8 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Not.Null);
 				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,                 Is.EqualTo(filePath));
-				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,             Is.EqualTo(2));
+				Assert.That(m.LaunchArgs.RequestedFixedTerminalId,                  Is.EqualTo(2));
+				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,                Is.EqualTo(TerminalIds.InvalidDynamicId));
 
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,               Is.False);
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.True);
