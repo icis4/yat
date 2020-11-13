@@ -408,12 +408,24 @@ namespace YAT.View.Forms
 			SetControls();
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "YAT.Domain.TimeStampFormatPresetEx.TryParse(System.String,YAT.Domain.TimeStampFormatPresetEx@)", Justification = "Result doesn't matter, it's OK to pass 'null' to 'ComboBoxHelper'.")]
 		private void textBox_TimeStampFormat_TextChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			ValidateAndUpdateTimeStampFormat(textBox_TimeStampFormat.Text);
+			Domain.TimeStampFormatPresetEx preset;
+			Domain.TimeStampFormatPresetEx.TryParse(textBox_TimeStampFormat.Text, out preset);
+
+			this.isSettingControls.Enter();
+			try
+			{
+				ComboBoxHelper.Select(comboBox_TimeStampFormatPreset, preset);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void textBox_TimeStampFormat_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -421,8 +433,12 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			if (!ValidateAndUpdateTimeStampFormat(textBox_TimeStampFormat.Text))
+			var format = textBox_TimeStampFormat.Text;
+			if (!ValidateAndUpdateTimeStampFormat(format))
 				e.Cancel = true;
+
+			this.timeStampFormat = format;
+			SetControls();
 		}
 
 		private bool ValidateAndUpdateTimeStampFormat(string format)
@@ -432,15 +448,12 @@ namespace YAT.View.Forms
 				var item = DateTime.Now;
 				item.ToString(format, CultureInfo.CurrentCulture);
 
-				this.timeStampFormat = format;
-				SetControls();
-
 				return (true);
 			}
 			catch (FormatException ex)
 			{
 				string message = "Invalid date/time format!" + Environment.NewLine + Environment.NewLine +
-				                 "System error message:" + Environment.NewLine + ex.Message;
+				                 "Framework error message:" + Environment.NewLine + ex.Message;
 
 				MessageBoxEx.Show
 				(
@@ -479,12 +492,24 @@ namespace YAT.View.Forms
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "YAT.Domain.TimeSpanFormatPresetEx.TryParse(System.String,YAT.Domain.TimeSpanFormatPresetEx@)", Justification = "Result doesn't matter, it's OK to pass 'null' to 'ComboBoxHelper'.")]
 		private void textBox_TimeSpanFormat_TextChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			ValidateAndUpdateTimeSpanFormat(textBox_TimeSpanFormat.Text);
+			Domain.TimeSpanFormatPresetEx preset;
+			Domain.TimeSpanFormatPresetEx.TryParse(textBox_TimeSpanFormat.Text, out preset);
+
+			this.isSettingControls.Enter();
+			try
+			{
+				ComboBoxHelper.Select(comboBox_TimeSpanFormatPreset, preset);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void textBox_TimeSpanFormat_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -492,26 +517,27 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			if (!ValidateAndUpdateTimeSpanFormat(textBox_TimeSpanFormat.Text))
+			var format = textBox_TimeSpanFormat.Text;
+			if (!ValidateAndUpdateTimeSpanFormat(format))
 				e.Cancel = true;
+
+			this.timeSpanFormat = format;
+			SetControls();
 		}
 
 		private bool ValidateAndUpdateTimeSpanFormat(string format)
 		{
 			try
 			{
-			////var item = TimeSpan.Zero; \remind (2017-10-02 / MKY) to be activated as soon as upgraded to .NET 4+
-			////item.ToString(format);
-
-				this.timeSpanFormat = format;
-				SetControls();
+				var item = TimeSpan.Zero;
+				item.ToString(format);
 
 				return (true);
 			}
 			catch (FormatException ex)
 			{
 				string message = "Invalid time span format!" + Environment.NewLine + Environment.NewLine +
-				                 "System error message:" + Environment.NewLine + ex.Message;
+				                 "Framework error message:" + Environment.NewLine + ex.Message;
 
 				MessageBoxEx.Show
 				(
@@ -550,12 +576,24 @@ namespace YAT.View.Forms
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "YAT.Domain.TimeDeltaFormatPresetEx.TryParse(System.String,YAT.Domain.TimeDeltaFormatPresetEx@)", Justification = "Result doesn't matter, it's OK to pass 'null' to 'ComboBoxHelper'.")]
 		private void textBox_TimeDeltaFormat_TextChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			ValidateAndUpdateTimeDeltaFormat(textBox_TimeDeltaFormat.Text);
+			Domain.TimeDeltaFormatPresetEx preset;
+			Domain.TimeDeltaFormatPresetEx.TryParse(textBox_TimeDeltaFormat.Text, out preset);
+
+			this.isSettingControls.Enter();
+			try
+			{
+				ComboBoxHelper.Select(comboBox_TimeDeltaFormatPreset, preset);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void textBox_TimeDeltaFormat_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -563,38 +601,12 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			if (!ValidateAndUpdateTimeDeltaFormat(textBox_TimeDeltaFormat.Text))
+			var format = textBox_TimeDeltaFormat.Text;
+			if (!ValidateAndUpdateTimeSpanFormat(format))
 				e.Cancel = true;
-		}
 
-		private bool ValidateAndUpdateTimeDeltaFormat(string format)
-		{
-			try
-			{
-			////var item = TimeSpan.Zero; \remind (2017-10-02 / MKY) to be activated as soon as upgraded to .NET 4+
-			////item.ToString(format);
-
-				this.timeDeltaFormat = format;
-				SetControls();
-
-				return (true);
-			}
-			catch (FormatException ex)
-			{
-				string message = "Invalid time span format!" + Environment.NewLine + Environment.NewLine +
-				                 "System error message:" + Environment.NewLine + ex.Message;
-
-				MessageBoxEx.Show
-				(
-					this,
-					message,
-					"Invalid Input",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
-
-				return (false);
-			}
+			this.timeDeltaFormat = format;
+			SetControls();
 		}
 
 		private void comboBox_TimeDeltaFormatPreset_SelectedIndexChanged(object sender, EventArgs e)
@@ -621,12 +633,24 @@ namespace YAT.View.Forms
 			}
 		}
 
+		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "YAT.Domain.TimeDeltaFormatPresetEx.TryParse(System.String,YAT.Domain.TimeDeltaFormatPresetEx@)", Justification = "Result doesn't matter, it's OK to pass 'null' to 'ComboBoxHelper'.")]
 		private void textBox_TimeDurationFormat_TextChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			ValidateAndUpdateTimeDurationFormat(textBox_TimeDurationFormat.Text);
+			Domain.TimeDeltaFormatPresetEx preset; // Using 'TimeDeltaFormatPreset' too!
+			Domain.TimeDeltaFormatPresetEx.TryParse(textBox_TimeDurationFormat.Text, out preset);
+
+			this.isSettingControls.Enter();
+			try
+			{
+				ComboBoxHelper.Select(comboBox_TimeDurationFormatPreset, preset);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void textBox_TimeDurationFormat_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -634,38 +658,12 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			if (!ValidateAndUpdateTimeDurationFormat(textBox_TimeDurationFormat.Text))
+			var format = textBox_TimeDurationFormat.Text;
+			if (!ValidateAndUpdateTimeSpanFormat(format))
 				e.Cancel = true;
-		}
 
-		private bool ValidateAndUpdateTimeDurationFormat(string format)
-		{
-			try
-			{
-			////var item = TimeSpan.Zero; \remind (2017-10-02 / MKY) to be activated as soon as upgraded to .NET 4+
-			////item.ToString(format);
-
-				this.timeDurationFormat = format;
-				SetControls();
-
-				return (true);
-			}
-			catch (FormatException ex)
-			{
-				string message = "Invalid time duration format!" + Environment.NewLine + Environment.NewLine +
-				                 "System error message:" + Environment.NewLine + ex.Message;
-
-				MessageBoxEx.Show
-				(
-					this,
-					message,
-					"Invalid Input",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-				);
-
-				return (false);
-			}
+			this.timeDurationFormat = format;
+			SetControls();
 		}
 
 		private void comboBox_TimeDurationFormatPreset_SelectedIndexChanged(object sender, EventArgs e)
@@ -673,10 +671,10 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			var preset = (comboBox_TimeDurationFormatPreset.SelectedItem as Domain.TimeDeltaFormatPresetEx); // Using TimeDelta too!
+			var preset = (comboBox_TimeDurationFormatPreset.SelectedItem as Domain.TimeDeltaFormatPresetEx); // Using 'TimeDeltaFormatPreset' too!
 			if (preset != null)
 			{
-				if (preset != Domain.TimeDeltaFormatPreset.None) // Using TimeDelta too!
+				if (preset != Domain.TimeDeltaFormatPreset.None) // Using 'TimeDeltaFormatPreset' too!
 				{
 					this.timeDurationFormat = preset.ToFormat();
 					SetControls();
@@ -795,7 +793,7 @@ namespace YAT.View.Forms
 				comboBox_TimeDeltaFormatPreset.Items.AddRange(Domain.TimeDeltaFormatPresetEx.GetItems());
 
 				comboBox_TimeDurationFormatPreset.Items.Clear();
-				comboBox_TimeDurationFormatPreset.Items.AddRange(Domain.TimeDeltaFormatPresetEx.GetItems()); // Using TimeDelta too!
+				comboBox_TimeDurationFormatPreset.Items.AddRange(Domain.TimeDeltaFormatPresetEx.GetItems()); // Using 'TimeDeltaFormatPreset' too!
 
 				var linkText = ".NET" + Environment.NewLine + "Date/Time Format";
 				var linkUri = @"https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings";
@@ -849,9 +847,9 @@ namespace YAT.View.Forms
 			this.customColors = this.textFormats[index].CustomColors;
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "YAT.Domain.TimeStampFormatPresetEx.TryParse(System.String,YAT.Domain.TimeStampFormatPresetEx@)", Justification = "Result doesn't matter, it's OK to pass 'null' to 'SelectionHelper'.")]
-		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "YAT.Domain.TimeSpanFormatPresetEx.TryParse(System.String,YAT.Domain.TimeSpanFormatPresetEx@)",   Justification = "Result doesn't matter, it's OK to pass 'null' to 'SelectionHelper'.")]
-		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "YAT.Domain.TimeDeltaFormatPresetEx.TryParse(System.String,YAT.Domain.TimeDeltaFormatPresetEx@)", Justification = "Result doesn't matter, it's OK to pass 'null' to 'SelectionHelper'.")]
+		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "YAT.Domain.TimeStampFormatPresetEx.TryParse(System.String,YAT.Domain.TimeStampFormatPresetEx@)", Justification = "Result doesn't matter, it's OK to pass 'null' to 'ComboBoxHelper'.")]
+		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "YAT.Domain.TimeSpanFormatPresetEx.TryParse(System.String,YAT.Domain.TimeSpanFormatPresetEx@)",   Justification = "Result doesn't matter, it's OK to pass 'null' to 'ComboBoxHelper'.")]
+		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "YAT.Domain.TimeDeltaFormatPresetEx.TryParse(System.String,YAT.Domain.TimeDeltaFormatPresetEx@)", Justification = "Result doesn't matter, it's OK to pass 'null' to 'ComboBoxHelper'.")]
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
@@ -891,12 +889,12 @@ namespace YAT.View.Forms
 				Domain.TimeStampFormatPresetEx timeStampFormatPreset;
 				Domain.TimeSpanFormatPresetEx  timeSpanFormatPreset;
 				Domain.TimeDeltaFormatPresetEx timeDeltaFormatPreset;
-				Domain.TimeDeltaFormatPresetEx timeDurationFormatPreset; // Using TimeDelta too!
+				Domain.TimeDeltaFormatPresetEx timeDurationFormatPreset; // Using 'TimeDeltaFormatPreset' too!
 
 				Domain.TimeStampFormatPresetEx.TryParse(this.timeStampFormat,    out timeStampFormatPreset);
 				Domain.TimeSpanFormatPresetEx. TryParse(this.timeSpanFormat,     out timeSpanFormatPreset);
 				Domain.TimeDeltaFormatPresetEx.TryParse(this.timeDeltaFormat,    out timeDeltaFormatPreset);
-				Domain.TimeDeltaFormatPresetEx.TryParse(this.timeDurationFormat, out timeDurationFormatPreset); // Using TimeDelta too!
+				Domain.TimeDeltaFormatPresetEx.TryParse(this.timeDurationFormat, out timeDurationFormatPreset); // Using 'TimeDeltaFormatPreset' too!
 
 				ComboBoxHelper.Select(comboBox_TimeStampFormatPreset,    timeStampFormatPreset);
 				ComboBoxHelper.Select(comboBox_TimeSpanFormatPreset,     timeSpanFormatPreset );
