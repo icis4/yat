@@ -148,7 +148,7 @@ namespace MKY.IO.Ports
 		/// A value which indicates the disposable state.
 		/// <list type="bullet">
 		/// <item><description>0 indicates undisposed.</description></item>
-		/// <item><description>1 indicates disposal is ongoing or completely disposed.</description></item>
+		/// <item><description>1 indicates disposal is ongoing or has completed.</description></item>
 		/// </list>
 		/// </summary>
 		/// <remarks>
@@ -864,6 +864,45 @@ namespace MKY.IO.Ports
 			// Fire the event even though just the count changed.
 			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.InputBreak));
 			OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.OutputBreak));
+		}
+
+		#endregion
+
+		#region PortNames
+		//==========================================================================================
+		// PortNames
+		//==========================================================================================
+
+		/// <summary>
+		/// Wraps <see cref="System.IO.Ports.SerialPort.GetPortNames()"/> because
+		/// that method may throw under conditions it shouldn't.
+		/// </summary>
+		/// <remarks>
+		/// If the registry contains stale or otherwise incorrect data then
+		/// <see cref="System.IO.Ports.SerialPort.GetPortNames()"/> will return incorrect data.
+		/// </remarks>
+		public static new string[] GetPortNames()
+		{
+			try
+			{
+				return (System.IO.Ports.SerialPort.GetPortNames());
+			}
+			catch
+			{
+				// Example of an exception where it shouldn't throw:
+				//
+				// Type: System.IO.IOException
+				// Message:
+				//     Es sind keine Daten mehr verfügbar.
+				// Source:
+				//     mscorlib
+				//    bei Microsoft.Win32.RegistryKey.Win32Error(Int32 errorCode, String str)
+				// Stack:
+				//    bei Microsoft.Win32.RegistryKey.GetValueNames()
+				//    bei System.IO.Ports.SerialPort.GetPortNames()
+
+				return (null);
+			}
 		}
 
 		#endregion

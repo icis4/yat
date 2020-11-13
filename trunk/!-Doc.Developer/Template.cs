@@ -406,7 +406,7 @@ namespace YAT/*.<TODO>*/
 
 		//	!!! When deriving from a class that implements DisposableBase, otherwise remove and use commented out hint instead !!!
 			base.Dispose(disposing);
-		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
+		////base.Dispose(disposing) of 'DisposableBase' doesn't need and cannot be called since abstract.
 		}
 
 		#endregion

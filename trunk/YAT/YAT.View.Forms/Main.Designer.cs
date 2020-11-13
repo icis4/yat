@@ -104,7 +104,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainMenu_Help = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Help_Contents = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Help_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
-		#if !(WITH_SCRIPTING)
+		#if (!WITH_SCRIPTING)
 			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Help_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainMenu_Help_RequestSupport = new System.Windows.Forms.ToolStripMenuItem();
@@ -787,7 +787,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainMenu_Help.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem_MainMenu_Help_Contents,
             this.toolStripMenuItem_MainMenu_Help_Separator_1,
-		#if !(WITH_SCRIPTING)
+		#if (!WITH_SCRIPTING)
             this.toolStripMenuItem_MainMenu_Help_ReleaseNotes,
             this.toolStripMenuItem_MainMenu_Help_Separator_2,
             this.toolStripMenuItem_MainMenu_Help_RequestSupport,
@@ -819,7 +819,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_MainMenu_Help_Separator_1.Name = "toolStripMenuItem_MainMenu_Help_Separator_1";
 			this.toolStripMenuItem_MainMenu_Help_Separator_1.Size = new System.Drawing.Size(178, 6);
-		#if !(WITH_SCRIPTING)
+		#if (!WITH_SCRIPTING)
 			// 
 			// toolStripMenuItem_MainMenu_Help_ReleaseNotes
 			// 
@@ -896,7 +896,7 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_MainMenu_Help_About
 			// 
-		#if !(WITH_SCRIPTING)
+		#if (!WITH_SCRIPTING)
 			this.toolStripMenuItem_MainMenu_Help_About.Image = global::YAT.View.Forms.Properties.Resources.Image_YAT_16x16;
 		#else
 			this.toolStripMenuItem_MainMenu_Help_About.Image = global::YAT.View.Forms.Properties.Resources.Image_Albatros_64x64;
@@ -1074,7 +1074,7 @@ namespace YAT.View.Forms
             this.toolStripLabel_MainTool_AutoResponse_Count,
             this.toolStripButton_MainTool_AutoResponse_Deactivate,
             this.toolStripMenuItem_MainTool_Separator_9,
-		#if !(WITH_SCRIPTING)
+		#if (!WITH_SCRIPTING)
             this.toolStripButton_MainTool_Terminal_Format});
 		#else
             this.toolStripButton_MainTool_Terminal_Format,
@@ -1083,7 +1083,7 @@ namespace YAT.View.Forms
 		#endif
 			this.toolStrip_Main.Location = new System.Drawing.Point(3, 0);
 			this.toolStrip_Main.Name = "toolStrip_Main";
-		#if !(WITH_SCRIPTING)
+		#if (!WITH_SCRIPTING)
 			this.toolStrip_Main.Size = new System.Drawing.Size(723, 25);
 		#else
 			this.toolStrip_Main.Size = new System.Drawing.Size(752, 25);
@@ -1720,7 +1720,7 @@ namespace YAT.View.Forms
 			this.IsMdiContainer = true;
 			this.MainMenuStrip = this.menuStrip_Main;
 			this.Name = "Main";
-		#if !(WITH_SCRIPTING)
+		#if (!WITH_SCRIPTING)
 			this.Text = "YAT";
 		#else
 			this.Text = "Albatros";
@@ -1782,7 +1782,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_Contents;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_Help_Separator_1;
-	#if !(WITH_SCRIPTING)
+	#if (!WITH_SCRIPTING)
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_ReleaseNotes;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_Help_Separator_2;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_RequestSupport;

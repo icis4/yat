@@ -87,7 +87,7 @@ namespace YAT.View.Controls
 			TextFormatFlags.NoPrefix
 
 			// Attention, do not use 'EndEllipsis' for the monitor! These ellipses were the root
-			// cause of issue #125 "Representation of long texts in the terminal".
+			// cause of bug #125 "Representation of long texts in the terminal".
 		);
 
 		/// <summary></summary>

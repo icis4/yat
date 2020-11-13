@@ -150,6 +150,7 @@ namespace MKY.Configuration
 
 		private static bool staticDebuggerBreakHookOnce; // = false;
 	#endif
+
 		/// <summary>
 		/// Tries the open and merge configurations.
 		/// </summary>
@@ -211,6 +212,7 @@ namespace MKY.Configuration
 					sb.AppendLine();
 					sb.AppendLine(solutionConfiguration.FilePath);
 					Debug.Write(sb.ToString());
+
 				#if (DEBUGGER_BREAK_HOOK)
 					if (!staticDebuggerBreakHookOnce)
 					{
@@ -240,6 +242,7 @@ namespace MKY.Configuration
 								sb.AppendLine();
 								sb.AppendLine(userConfiguration.FilePath);
 								Debug.Write(sb.ToString());
+
 							#if (DEBUGGER_BREAK_HOOK)
 								if (!staticDebuggerBreakHookOnce)
 								{
@@ -258,6 +261,7 @@ namespace MKY.Configuration
 							sb.AppendLine();
 							sb.AppendLine(userFilePath);
 							Debug.Write(sb.ToString());
+
 						#if (DEBUGGER_BREAK_HOOK)
 							if (!staticDebuggerBreakHookOnce)
 							{
@@ -281,6 +285,7 @@ namespace MKY.Configuration
 					sb.AppendLine();
 					sb.AppendLine(solutionConfiguration.FilePath);
 					Debug.Write(sb.ToString());
+
 				#if (DEBUGGER_BREAK_HOOK)
 					if (!staticDebuggerBreakHookOnce)
 					{
@@ -299,6 +304,7 @@ namespace MKY.Configuration
 				sb.AppendLine();
 				sb.AppendLine(solutionFilePath);
 				Debug.Write(sb.ToString());
+
 			#if (DEBUGGER_BREAK_HOOK)
 				if (!staticDebuggerBreakHookOnce)
 				{
