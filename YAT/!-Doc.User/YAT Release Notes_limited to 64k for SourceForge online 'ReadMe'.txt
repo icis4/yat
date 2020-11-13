@@ -154,9 +154,10 @@ Important changes:
 - Changes on-the-fly by keywords like \!(Port()), \!(PortSettings()), \!(Baud()),... are now
   reflected in the terminal settings, i.e. also indicated by '*' (related to reqs. #71 and #403).
 - [Terminal > Settings... > Advanced...] dialog rearranged for better fitting screen.
-- Upgrade to .NET 4.0 runtime (precondition for new automatic actions [Chart/Plot/Histogram] and
-  preparing upcoming feature request #74, part of feature request #229).
+- Upgrade to .NET 4.0 (runtime as well as framework) (precondition for new automatic actions
+  [Chart/Plot/Histogram] and preparing upcoming feature request #74, part of feature request #229).
 - Consequently, x64 distributions no longer need to be 'AnyCPU' builds (former limitation).
+- Improved error message in case the required .NET  is missing.
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
 - Test coverage of sending and processing significantly increased (related to refactorings above).
 
@@ -186,7 +187,7 @@ Fixed bugs:
 - Handling of [Preferences... > ...take serial number/string into account] fixed (rel. to bug #480).
 
 Limitations and known issues:
-- General limitations of .NET Framework:
+- General limitations of .NET framework:
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - General limitations of .NET Windows.Forms:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
@@ -208,7 +209,7 @@ Limitations and known issues:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
    > Issue with layouting when closing an MDI child (bug #399).
-- Serial COM port limitations of .NET Framework:
+- Serial COM port limitations of .NET framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
      result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
@@ -316,7 +317,7 @@ Fixed bugs:
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
-- General limitations of .NET Framework:
+- General limitations of .NET framework:
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - General limitations of .NET Windows.Forms:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
@@ -336,7 +337,7 @@ Limitations and known issues:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
    > Issue with layouting when closing an MDI child (bug #399).
-- Serial COM port limitations of .NET Framework:
+- Serial COM port limitations of .NET framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
      result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
@@ -393,7 +394,7 @@ Fixed bugs:
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
-- General limitations of .NET Framework:
+- General limitations of .NET framework:
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - General limitations of .NET Windows.Forms:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
@@ -413,7 +414,7 @@ Limitations and known issues:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
    > Issue with layouting when closing an MDI child (bug #399).
-- Serial COM port limitations of .NET Framework:
+- Serial COM port limitations of .NET framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
      result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
@@ -480,7 +481,7 @@ Fixed bugs:
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
-- General limitations of .NET Framework:
+- General limitations of .NET framework:
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - General limitations of .NET Windows.Forms:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
@@ -499,7 +500,7 @@ Limitations and known issues:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
    > Issue with layouting when closing an MDI child (bug #399).
-- Serial COM port limitations of .NET Framework:
+- Serial COM port limitations of .NET framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
      result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
@@ -582,7 +583,7 @@ Limitations and known issues:
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
-- Serial COM port limitations of .NET Framework:
+- Serial COM port limitations of .NET framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
      result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
@@ -665,7 +666,7 @@ Limitations and known issues:
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
-- Serial COM port limitations of .NET Framework:
+- Serial COM port limitations of .NET framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of USB/RS-232 converters (USB CDC) while disconnect, undock or hibernate without closing
      the serial COM port may require to reset the converters, i.e. disconnect and reconnect them,

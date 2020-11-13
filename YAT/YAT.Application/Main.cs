@@ -60,15 +60,17 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+#if (HANDLE_UNHANDLED_EXCEPTIONS)
+using System.IO;
+#endif
 using System.Text;
 using System.Threading;
-using System.Windows.Forms; // Note that several locations explicitly use 'System.Windows.Forms' to prevent naming conflicts with 'MKY.Windows.Forms' and 'YAT.Application'.
+using System.Windows.Forms; // In addition, several locations explicitly use 'System.Windows.Forms' to prevent naming conflicts with 'MKY.Windows.Forms' and 'YAT.Application'.
 
 using MKY;
-using MKY.Diagnostics;
 using MKY.Settings;
 using MKY.Threading;
-using MKY.Windows.Forms; // Note that several locations explicitly use 'MKY.Windows.Forms' to prevent naming conflicts with 'System.Windows.Forms' and 'YAT.Application'.
+using MKY.Windows.Forms; // In addition, several locations explicitly use 'MKY.Windows.Forms' to prevent naming conflicts with 'System.Windows.Forms' and 'YAT.Application'.
 
 using YAT.Settings.Application;
 //// 'YAT.View.Forms' is explicitly used to prevent naming conflicts with same-named 'YAT.Application' classes like 'Main'.
@@ -108,12 +110,13 @@ namespace YAT.Application
 			"   0      Success",
 		#endif
 			"  -1      Command line error",
-			"  -2      Application settings error",
-			"  -3      Application start error",
-			"  -4      Application start cancel",
+			"  -2      System environment error",
+			"  -3      Application settings error",
+			"  -4      Application start error",
 			"  -5      Application run error",
 			"  -6      Application exit error",
 			"  -7      Unhandled exception",
+			"  -8      Undetermined issue",
 		#if (WITH_SCRIPTING)
 			"-100      Script invalid content",
 			"-101      Script stop on error",
@@ -268,6 +271,12 @@ namespace YAT.Application
 		/// <summary>
 		/// This is the main run method.
 		/// </summary>
+		/// <remarks>
+		/// Exceptions are only handled in case of 'Release', otherwise by the debugger.
+		/// </remarks>
+	#if (HANDLE_UNHANDLED_EXCEPTIONS)
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
+	#endif
 		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1515:SingleLineCommentMustBePrecededByBlankLine", Justification = "Consistent section titles.")]
 		private MainResult Run(bool runFromConsole)
 		{
@@ -327,7 +336,28 @@ namespace YAT.Application
 			}
 			else
 			{
-				result = Run(runFromConsole, showView, ApplicationSettingsFileAccess.ReadSharedWriteIfOwned, true);
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
+				try
+			#endif
+				{
+					result = Run(runFromConsole, showView, ApplicationSettingsFileAccess.ReadSharedWriteIfOwned, true);
+				}
+			#if (HANDLE_UNHANDLED_EXCEPTIONS)
+				catch (Exception ex)
+				{
+					var message = ToSynchronousExceptionMessage(ex, "loading", out result);
+
+					if (runFromConsole)
+					{
+						Console.Error.WriteLine(message);
+						ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
+					}
+					else if (this.commandLineArgs.Interactive)
+					{
+						View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.Synchronous, false);
+					}
+				}
+			#endif
 			}
 
 			return (result);
@@ -500,7 +530,8 @@ namespace YAT.Application
 				{
 					if (this.commandLineArgs.Interactive)
 					{
-						var message = ToSynchronousExceptionMessage(ex, "preparing");
+						MainResult resultDummy;
+						var message = ToSynchronousExceptionMessage(ex, "preparing", out resultDummy);
 						if (View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.Synchronous, true) == View.Forms.UnhandledExceptionResult.ExitAndRestart)
 							System.Windows.Forms.Application.Restart(); // Is synchronous => OK to call Restart().
 
@@ -550,14 +581,16 @@ namespace YAT.Application
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
+					var result = MainResult.UnhandledException;
+
 					if (this.commandLineArgs.Interactive)
 					{
-						var message = ToSynchronousExceptionMessage(ex, "running");                                                                   // Synchronous exceptions cannot be continued as the application has already exited.
+						var message = ToSynchronousExceptionMessage(ex, "running", out result);                                                       // Synchronous exceptions cannot be continued as the application has already exited.
 						if (View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.Synchronous, false) == View.Forms.UnhandledExceptionResult.ExitAndRestart)
 							System.Windows.Forms.Application.Restart(); // Is synchronous => OK to call Restart().
 					}
 
-					return (MainResult.UnhandledException);
+					return (result);
 				}
 			#endif
 			} // Dispose of model to ensure immediate release of resources.
@@ -728,10 +761,12 @@ namespace YAT.Application
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
-					Console.Error.WriteLine(ToSynchronousExceptionMessage(ex, "preparing"));
+					MainResult result;
+
+					Console.Error.WriteLine(ToSynchronousExceptionMessage(ex, "preparing", out result));
 					ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
-					return (MainResult.UnhandledException);
+					return (result);
 				}
 
 				try
@@ -772,10 +807,12 @@ namespace YAT.Application
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
-					Console.Error.WriteLine(ToSynchronousExceptionMessage(ex, "running"));
+					MainResult result;
+
+					Console.Error.WriteLine(ToSynchronousExceptionMessage(ex, "running", out result));
 					ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
-					return (MainResult.UnhandledException);
+					return (result);
 				}
 			#endif
 			} // Dispose of model to ensure immediate release of resources.
@@ -880,10 +917,12 @@ namespace YAT.Application
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
-					Console.Error.WriteLine(ToSynchronousExceptionMessage(ex, "preparing"));
+					MainResult result;
+
+					Console.Error.WriteLine(ToSynchronousExceptionMessage(ex, "preparing", out result));
 					ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
-					return (MainResult.UnhandledException);
+					return (result);
 				}
 
 				try
@@ -900,10 +939,12 @@ namespace YAT.Application
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
-					Console.Error.WriteLine(ToSynchronousExceptionMessage(ex, "running"));
+					MainResult result;
+
+					Console.Error.WriteLine(ToSynchronousExceptionMessage(ex, "running", out result));
 					ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
 
-					return (MainResult.UnhandledException);
+					return (result);
 				}
 			#endif
 			} // Dispose of model to ensure immediate release of resources.
@@ -993,9 +1034,11 @@ namespace YAT.Application
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
-					ConsoleEx.Error.WriteException(GetType(), ex, ToSynchronousExceptionMessage(ex, "preparing"));
+					MainResult result;
 
-					return (MainResult.UnhandledException);
+					ConsoleEx.Error.WriteException(GetType(), ex, ToSynchronousExceptionMessage(ex, "preparing", out result));
+
+					return (result);
 				}
 
 				try
@@ -1012,9 +1055,11 @@ namespace YAT.Application
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
 				{
-					ConsoleEx.Error.WriteException(GetType(), ex, ToSynchronousExceptionMessage(ex, "running"));
+					MainResult result;
 
-					return (MainResult.UnhandledException);
+					ConsoleEx.Error.WriteException(GetType(), ex, ToSynchronousExceptionMessage(ex, "running", out result));
+
+					return (result);
 				}
 			#endif
 			} // Dispose of model to ensure immediate release of resources.
@@ -1202,12 +1247,29 @@ namespace YAT.Application
 
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 
-		private static string ToSynchronousExceptionMessage(Exception ex, string state)
+		private static string ToSynchronousExceptionMessage(Exception ex, string state, out MainResult result)
 		{
 			var message = new StringBuilder();
+
 			message.Append("An unhandled synchronous ");
-			message.Append(ToName(ex));           // "preparing" or "running"
+			message.Append(ToName(ex));           // "loading" or "preparing" or "running"
 			message.Append(" occurred while " + state + " " + System.Windows.Forms.Application.ProductName + ".");
+
+			// 'FileNotFoundException' message in case of a .NET version mismatch can e.g. be:
+			//                         "Could not load file or assembly 'System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=..."
+			if ((ex is FileNotFoundException) && (ex.Message.Contains(" 'System."))) // Not checking for "Version" or anything else that could be culture dependent.
+			{
+				message.Append(" This exception has most likely been caused because the required version of the .NET Framework is not available.");
+				message.Append(" " + ApplicationEx.CommonName + " requires " + ApplicationEx.PrerequisiteFramework + ".");
+				message.Append(" Either download and install the required version manually, or use the " + ApplicationEx.CommonName + " installer.");
+
+				result = MainResult.SystemEnvironmentError;
+			}
+			else
+			{
+				result = MainResult.UnhandledException;
+			}
+
 			return (message.ToString());
 		}
 
