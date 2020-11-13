@@ -40,7 +40,11 @@
 			// 
 			// pictureBox_Icon
 			// 
+		#if (!WITH_SCRIPTING)
 			this.pictureBox_Icon.Image = global::YAT.View.Forms.Properties.Resources.Image_YAT_64x64;
+		#else
+			this.pictureBox_Icon.Image = global::YAT.View.Forms.Properties.Resources.Image_Albatros_64x64;
+		#endif
 			this.pictureBox_Icon.Location = new System.Drawing.Point(12, 12);
 			this.pictureBox_Icon.Name = "pictureBox_Icon";
 			this.pictureBox_Icon.Size = new System.Drawing.Size(64, 64);

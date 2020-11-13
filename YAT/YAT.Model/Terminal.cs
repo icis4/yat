@@ -128,8 +128,8 @@ namespace YAT.Model
 	#if (WITH_SCRIPTING)
 
 		/// <summary>
-		/// Gets or sets a value indicating whether scripting is currently active,
-		/// i.e. whether the terminals shall produce received messages for scripting.
+		/// Gets or sets a value indicating whether a script run is currently active,
+		/// i.e. whether the terminals shall produce received messages for a script.
 		/// </summary>
 		/// <remarks>
 		/// Implemented as static property for two reasons:
@@ -138,10 +138,10 @@ namespace YAT.Model
 		/// <item><description>State can easier be applied to newly created terminals.</description></item>
 		/// </list>
 		/// </remarks>
-		public static bool ScriptingIsActive
+		public static bool ScriptRunIsActive
 		{
-			get { return (Domain.Terminal.ScriptingIsActive); }
-			set { Domain.Terminal.ScriptingIsActive = value;  }
+			get { return (Domain.Terminal.ScriptRunIsActive); }
+			set { Domain.Terminal.ScriptRunIsActive = value;  }
 		}
 
 	#endif
@@ -571,7 +571,7 @@ namespace YAT.Model
 				DebugMessage("...successfully disposed.");
 			}
 
-		////base.Dispose(disposing) doesn't need and cannot be called since abstract.
+		////base.Dispose(disposing) of 'DisposableBase' doesn't need and cannot be called since abstract.
 		}
 
 		#endregion
@@ -5275,7 +5275,7 @@ namespace YAT.Model
 			{
 				AssertUndisposed();
 
-			#if !(WITH_SCRIPTING)
+			#if (!WITH_SCRIPTING)
 				return (this.terminal.ReceivedXOnCount);
 			#else
 				lock (this.receivedXOnXOffForScriptingSyncObj)
@@ -5291,7 +5291,7 @@ namespace YAT.Model
 			{
 				AssertUndisposed();
 
-			#if !(WITH_SCRIPTING)
+			#if (!WITH_SCRIPTING)
 				return (this.terminal.ReceivedXOffCount);
 			#else
 				lock (this.receivedXOnXOffForScriptingSyncObj)
@@ -5339,7 +5339,7 @@ namespace YAT.Model
 		{
 			AssertUndisposed();
 
-		#if !(WITH_SCRIPTING)
+		#if (!WITH_SCRIPTING)
 			this.terminal.ResetFlowControlCount();
 		#else
 			lock (this.receivedXOnXOffForScriptingSyncObj)

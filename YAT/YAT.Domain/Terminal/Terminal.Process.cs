@@ -1202,7 +1202,7 @@ namespace YAT.Domain
 				// data shall be displayed. The same applies to sending, the truly sent data shall be displayed.
 
 				// Invoke 1st plug-in interface which potentially modifies the data or even cancels the whole packet:
-				var e1 = new ModifiablePacketEventArgs(line.Data);
+				var e1 = new ModifiablePacketEventArgs(line.TimeStamp, line.Device, line.Data);
 				OnReceivingScriptPacket(e1);
 				if (e1.Cancel)
 					continue;

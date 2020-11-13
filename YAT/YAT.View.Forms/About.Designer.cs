@@ -76,8 +76,8 @@
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
 			this.button_Close.TabIndex = 0;
-			this.button_Close.UseVisualStyleBackColor = true;
 			this.button_Close.Text = "Close";
+			this.button_Close.UseVisualStyleBackColor = true;
 			// 
 			// linkLabel_Monitoring
 			// 
@@ -104,11 +104,19 @@
 			// 
 			// pictureBox_Product
 			// 
+		#if (!WITH_SCRIPTING)
 			this.pictureBox_Product.Image = global::YAT.View.Forms.Properties.Resources.Image_YAT_48x48;
+		#else
+			this.pictureBox_Product.Image = global::YAT.View.Forms.Properties.Resources.Image_Albatros_64x64;
+		#endif
 			this.pictureBox_Product.Location = new System.Drawing.Point(12, 12);
 			this.pictureBox_Product.Name = "pictureBox_Product";
 			this.pictureBox_Product.Size = new System.Drawing.Size(48, 48);
+		#if (!WITH_SCRIPTING)
 			this.pictureBox_Product.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+		#else
+			this.pictureBox_Product.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+		#endif
 			this.pictureBox_Product.TabIndex = 14;
 			this.pictureBox_Product.TabStop = false;
 			// 
