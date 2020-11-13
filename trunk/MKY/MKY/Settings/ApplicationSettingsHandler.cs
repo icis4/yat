@@ -29,7 +29,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -91,7 +93,7 @@ namespace MKY.Settings
 		}
 
 		private class Handler<TSettings> : SettingsFileHandler, IDisposable, IDisposableEx
-			where TSettings : SettingsItem, new()
+			where TSettings : SettingsItem, new()               //// DisposableBase cannot be used as inheriting from 'SettingsFileHandler'.
 		{
 			#region Fields
 			//======================================================================================
@@ -110,7 +112,7 @@ namespace MKY.Settings
 			/// A value which indicates the disposable state.
 			/// <list type="bullet">
 			/// <item><description>0 indicates undisposed.</description></item>
-			/// <item><description>1 indicates disposal is ongoing or completely disposed.</description></item>
+			/// <item><description>1 indicates disposal is ongoing or has completed.</description></item>
 			/// </list>
 			/// </summary>
 			/// <remarks>
@@ -264,11 +266,15 @@ namespace MKY.Settings
 			/// </remarks>
 			~Handler()
 			{
+				DebugMessage("Finalizing...");
+
 				DebugEventManagement.DebugWriteAllEventRemains(this);
 
 				Dispose(false);
 
 				DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
+
+				DebugMessage("...successfully finalized.");
 			}
 
 		#endif // DEBUG
@@ -450,6 +456,44 @@ namespace MKY.Settings
 					this.mutex.Close();
 					this.mutex = null;
 				}
+			}
+
+			#endregion
+
+			#region Debug
+			//==========================================================================================
+			// Debug
+			//==========================================================================================
+
+			/// <summary></summary>
+			[Conditional("DEBUG")]
+			private void DebugMessage(string format, params object[] args)
+			{
+				DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+			}
+
+			/// <remarks>
+			/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
+			/// However, named 'Message' for compactness and more clarity that something will happen
+			/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
+			/// </remarks>
+			[Conditional("DEBUG")]
+			private void DebugMessage(string message)
+			{
+				Debug.WriteLine
+				(
+					string.Format
+					(
+						CultureInfo.CurrentCulture,
+						" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+						DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
+						Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
+						GetType(),
+						"",
+						"",
+						message
+					)
+				);
 			}
 
 			#endregion

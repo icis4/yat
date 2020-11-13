@@ -48,7 +48,7 @@ namespace MKY
 		/// A value which indicates the disposable state.
 		/// <list type="bullet">
 		/// <item><description>0 indicates undisposed.</description></item>
-		/// <item><description>1 indicates disposal is ongoing or completely disposed.</description></item>
+		/// <item><description>1 indicates disposal is ongoing or has completed.</description></item>
 		/// </list>
 		/// </summary>
 		/// <remarks>
