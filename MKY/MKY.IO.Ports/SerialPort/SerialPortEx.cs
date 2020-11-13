@@ -923,7 +923,13 @@ namespace MKY.IO.Ports
 				}
 
 				// --------------------------------------------------------------------------------
-				// Patches to the 'ObjectDisposedException' issue described in the ".\!-Doc\*.txt".
+				// Begin of patches to the issues described in ".\!-Doc\*.txt".
+				// --------------------------------------------------------------------------------
+				// With .NET 4.7.1 and above the .NET Framework itself contains workarounds for the
+				// documented 'ObjectDisposedException' and 'UnauthorizedAccssException' issues.
+				// However, as those workarounds do not really solve the issues, only workaround
+				// them and the patches applied by this 'SerialPortEx' class should not interfere
+				// with those workarounds, it has been decided to keep the patches for the moment.
 				// --------------------------------------------------------------------------------
 
 				// Immediately try to access the underlying stream:
@@ -965,7 +971,7 @@ namespace MKY.IO.Ports
 				GC.SuppressFinalize(BaseStream);
 
 				// --------------------------------------------------------------------------------
-				// End of patches to the 'ObjectDisposedException' issue.
+				// End of patches to the issues described in ".\!-Doc\*.txt".
 				// --------------------------------------------------------------------------------
 
 				// Invoke the additional events implemented by this class:
@@ -1067,7 +1073,13 @@ namespace MKY.IO.Ports
 				OnClosing(EventArgs.Empty);
 
 				// --------------------------------------------------------------------------------
-				// Patches to the 'ObjectDisposedException' issue described in the ".\!-Doc\*.txt".
+				// Begin of patches to the issues described in ".\!-Doc\*.txt".
+				// --------------------------------------------------------------------------------
+				// With .NET 4.7.1 and above the .NET Framework itself contains workarounds for the
+				// documented 'ObjectDisposedException' and 'UnauthorizedAccssException' issues.
+				// However, as those workarounds do not really solve the issues, only workaround
+				// them and the patches applied by this 'SerialPortEx' class should not interfere
+				// with those workarounds, it has been decided to keep the patches for the moment.
 				// --------------------------------------------------------------------------------
 
 				// Safely re-register finalization of the underlying stream:
@@ -1084,13 +1096,14 @@ namespace MKY.IO.Ports
 				TryToApplyEventLoopHandlerPatchAndCloseBaseStreamSafely(this.baseStreamReferenceForCloseSafely);
 				this.baseStreamReferenceForCloseSafely = null;
 
+				// --------------------------------------------------------------------------------
 				// Note that the patch must be applied in any case. Because with e.g. the Microsoft
 				// driver, a device disconnect is not detected by .NET/YAT, and the user will have
 				// to manually = intentionally close the port.
-				// Corresponds to verification # 3.2. and 4.3. in ".\!-Doc\*.txt".
-
 				// --------------------------------------------------------------------------------
-				// End of patches to the 'ObjectDisposedException' issue.
+				// Corresponds to verification # 3.2. and 4.3. described in ".\!-Doc\*.txt".
+				// --------------------------------------------------------------------------------
+				// End of patches to the issues described in ".\!-Doc\*.txt".
 				// --------------------------------------------------------------------------------
 
 				try
