@@ -181,7 +181,11 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		public int RequestedDynamicTerminalId = TerminalIds.ActiveDynamicId;
+		public int RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		public int RequestedFixedTerminalId = TerminalIds.InvalidFixedId;
 
 		/// <remarks>Using term 'Transmit' to indicate potential 'intelligence' to send + receive/verify the data.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]

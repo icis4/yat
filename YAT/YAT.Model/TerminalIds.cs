@@ -90,7 +90,7 @@ namespace YAT.Model
 		public const int InvalidFixedId = Settings.TerminalSettingsItem.InvalidFixedId;
 
 		/// <summary>
-		/// Returns the 'normal' index of the given dynamic ID.
+		/// Returns the dynamic ID of the given index.
 		/// </summary>
 		public static int IndexToDynamicId(int index)
 		{
@@ -101,7 +101,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Returns the dynamic ID of the given 'normal' index.
+		/// Returns the index of the given dynamic ID.
 		/// </summary>
 		public static int DynamicIdToIndex(int dynamicId)
 		{

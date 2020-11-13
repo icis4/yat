@@ -61,7 +61,7 @@ namespace YAT.Model
 		/// and <see cref="ExtensionHelper.TerminalExtension"/>
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-	#if !(WITH_SCRIPTING)
+	#if (!WITH_SCRIPTING)
 		[ValueArg(Description = "Open the given workspace (.yaw) or terminal (.yat).")]
 		[OptionArg(Name = "Open", ShortName = "o", Description = "Open the given workspace (.yaw) or terminal (.yat).")]
 	#else
@@ -386,7 +386,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
-		[OptionArg(Names = new string[] { "DynamicId", "DynamicTerminalId" }, ShortNames = new string[] { "di", "dti" }, Description =
+		[OptionArg(Names = new string[] { "DynamicId", "DynamicTerminalId" }, ShortNames = new string[] { "did", "dti", "dtid" }, Description =
 			"Perform any requested operation on the terminal with the given dynamic ID within the opening workspace." + EnvironmentEx.NewLineConstWorkaround +
 			"Valid values are 1, 2, 3,... up to the number of open terminals. " +
 			"0 indicates that the currently active terminal is used, which typically is the last terminal opened. " +
@@ -395,6 +395,22 @@ namespace YAT.Model
 			"In addition, -1 may be used to indicate 'none', i.e. no operation is performed at all. " +
 			"This value is useful to temporarily switch off the requested operation without having to completely edit the command line.")]
 		public int RequestedDynamicTerminalId = TerminalIds.ActiveDynamicId;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
+		[OptionArg(Names = new string[] { "FixedId", "FixedTerminalId" }, ShortNames = new string[] { "fid", "fti", "ftid" }, Description =
+			"Perform any requested operation on the terminal with the given fixed ID within the opening workspace." + EnvironmentEx.NewLineConstWorkaround +
+			"Valid values are 1, 2, 3,... up to the number of open terminals. " +
+			"0 indicates that the currently active terminal is used, which typically is the last terminal opened. " +
+		#if (WITH_SCRIPTING)
+			"The value corresponds to 'Connection.TerminalId'. " +
+		#endif
+			"The default value is 0, i.e. the currently active terminal." + EnvironmentEx.NewLineConstWorkaround +
+			"Only applies when opening a workspace that contains more than one terminal." + EnvironmentEx.NewLineConstWorkaround + EnvironmentEx.NewLineConstWorkaround +
+			"In addition, -1 may be used to indicate 'none', i.e. no operation is performed at all. " +
+			"This value is useful to temporarily switch off the requested operation without having to completely edit the command line.")]
+		public int RequestedFixedTerminalId = TerminalIds.ActiveFixedId;
 
 		/// <remarks>Using term 'Transmit' to indicate potential 'intelligence' to send + receive/verify the data.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
