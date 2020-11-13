@@ -32,7 +32,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
-using System.Reflection;
 using System.Windows.Forms;
 
 #endregion
@@ -59,7 +58,7 @@ namespace MKY.Diagnostics
 		/// <see cref="System.Console"/> available in
 		/// <see cref="MKY.Diagnostics.DebugEx"/> and
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
-		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
+		/// <see cref="MKY.ConsoleEx"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void WriteLocation(IDiagnosticsWriter writer, StackTrace st, int index, string message, bool appendLineBreak = true)
@@ -96,7 +95,7 @@ namespace MKY.Diagnostics
 		/// <see cref="System.Console"/> available in
 		/// <see cref="MKY.Diagnostics.DebugEx"/> and
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
-		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
+		/// <see cref="MKY.ConsoleEx"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void WriteTimeStamp(IDiagnosticsWriter writer, StackTrace st, int index, string message, bool appendLineBreak = true)
@@ -132,7 +131,7 @@ namespace MKY.Diagnostics
 		/// <see cref="System.Console"/> available in
 		/// <see cref="MKY.Diagnostics.DebugEx"/> and
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
-		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
+		/// <see cref="MKY.ConsoleEx"/>.
 		/// </remarks>
 		public static void WriteExceptionLines(IDiagnosticsWriter writer, Type type, Exception ex, string leadMessage)
 		{
@@ -166,7 +165,7 @@ namespace MKY.Diagnostics
 		/// <see cref="System.Console"/> available in
 		/// <see cref="MKY.Diagnostics.DebugEx"/> and
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
-		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
+		/// <see cref="MKY.ConsoleEx"/>.
 		/// </remarks>
 		public static void WriteStackLines(IDiagnosticsWriter writer, Type type, StackTrace st, string leadMessage)
 		{
@@ -200,7 +199,7 @@ namespace MKY.Diagnostics
 		/// <see cref="System.Console"/> available in
 		/// <see cref="MKY.Diagnostics.DebugEx"/> and
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
-		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
+		/// <see cref="MKY.ConsoleEx"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "m", Justification = "Naming according to parameter 'm' of NativeWindow methods.")]
 		public static void WriteWindowsFormsMessageLines(IDiagnosticsWriter writer, Type type, Message m, string leadMessage)
@@ -235,7 +234,7 @@ namespace MKY.Diagnostics
 		/// <see cref="System.Console"/> available in
 		/// <see cref="MKY.Diagnostics.DebugEx"/> and
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
-		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
+		/// <see cref="MKY.ConsoleEx"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "StreamLines", Justification = "What's the problem...")]
 		public static void WriteFileStreamLines(IDiagnosticsWriter writer, Type type, FileStream fs, string leadMessage)
@@ -262,9 +261,9 @@ namespace MKY.Diagnostics
 
 		#endregion
 
-		#region Private Static Methods
+		#region Non-Public Static Methods
 		//==========================================================================================
-		// Private Static Methods
+		// Non-Public Static Methods
 		//==========================================================================================
 
 		private static void WriteExceptionLines(IDiagnosticsWriter writer, Exception ex)
