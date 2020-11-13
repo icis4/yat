@@ -36,7 +36,7 @@ namespace YAT
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extended enum and extends the underlying enum.")]
 	public static class ApplicationEx
 	{
-	#if !(WITH_SCRIPTING)
+	#if (!WITH_SCRIPTING)
 		/// <summary>The common name, always "YAT", i.e. not "YAT" *or* "YATConsole".</summary>
 		public const string CommonName = "YAT";
 	#else
@@ -45,7 +45,7 @@ namespace YAT
 	#endif
 
 		/// <summary>The long variant of the common name.</summary>
-	#if !(WITH_SCRIPTING)
+	#if (!WITH_SCRIPTING)
 		public const string CommonNameLong = CommonName + " - Yet Another Terminal";
 	#else
 		public const string CommonNameLong = CommonName + " - YAT with Scripting";
@@ -56,7 +56,7 @@ namespace YAT
 		/// <see cref="ProductName"/> nor <see cref="System.Windows.Forms.Application.ProductName"/>
 		/// can be used, e.g. in case of attribute arguments.
 		/// </summary>
-	#if !(WITH_SCRIPTING)
+	#if (!WITH_SCRIPTING)
 		public const string ProductNameConstWorkaround = "YAT"; // Should be "YAT" or "YATConsole", but fixed for simplicity.
 	#else                       // Note that making name 'Albatros' publicly visible is doesn't matter anymore, several SourceForge tickets created by UFi contain "Albatros" anyway.
 		public const string ProductNameConstWorkaround = "Albatros"; // Should be "Albatros" or "AlbatrosConsole", but fixed for simplicity.
@@ -66,7 +66,7 @@ namespace YAT
 		public static readonly string ProductName = System.Windows.Forms.Application.ProductName;
 
 		/// <summary>The build designation.</summary>
-	#if !(WITH_SCRIPTING)
+	#if (!WITH_SCRIPTING)
 	////public const string ProductBuildDesignation = "";
 		public const string ProductBuildDesignation = " 2.2.0 Beta Version";
 	#else
@@ -146,13 +146,13 @@ namespace YAT
 	#endif
 			"",
 			"Visit YAT at https://sourceforge.net/projects/y-a-terminal.",
-	#if !(WITH_SCRIPTING)
+	#if (!WITH_SCRIPTING)
 			"Contact YAT by mailto:y-a-terminal@users.sourceforge.net.",
 	#else
 			"Contact Albatros by mailto:matthias.klaey@mt.com.",
 	#endif
 			"",
-	#if !(WITH_SCRIPTING)
+	#if (!WITH_SCRIPTING)
 			"Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.",
 			"Copyright © 2003-2020 Matthias Kläy.",
 	#else
@@ -160,7 +160,7 @@ namespace YAT
 			"Albatros copyright © 2008-2020 Mettler-Toledo.",
 	#endif
 			"All rights reserved.",
-	#if !(WITH_SCRIPTING)
+	#if (!WITH_SCRIPTING)
 			"",
 			"YAT is licensed under the GNU LGPL.", // Note that source files state "This source code is licensed under the GNU LGPL." to emphasize the context.
 			"See http://www.gnu.org/licenses/lgpl.html for license details."
@@ -171,13 +171,13 @@ namespace YAT
 		public static readonly string ExecutableNameWithoutExtension = Path.GetFileNameWithoutExtension(System.Windows.Forms.Application.ExecutablePath);
 
 		/// <summary>The .NET Framework prerequisite.</summary>
-		public static readonly string PrerequisiteFramework = ".NET Framework 4.0";
+		public static readonly string PrerequisiteFramework = ".NET Framework 4.8";
 
 		/// <summary>The Windows operating system prerequisite.</summary>
-		public static readonly string PrerequisiteWindowsOS = "Windows 2000 or later";
+		public static readonly string PrerequisiteWindows = "Windows 7 SP1 or Windows Server 2008 R2 SP1 or later";
 
-		/// <summary>The other operating system prerequisite.</summary>
-		public static readonly string PrerequisiteOtherOS = "Linux with Mono 3.12.x or later";
+		/// <summary>The Linux operating system prerequisite.</summary>
+		public static readonly string PrerequisiteLinux = "Linux with Mono 4.8.0 or later";
 	}
 }
 

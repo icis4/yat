@@ -98,7 +98,7 @@ namespace YAT.View.Forms
 
 			// Copyright:
 			linkLabel_Copyright.Text = "";
-		#if !(WITH_SCRIPTING)
+		#if (!WITH_SCRIPTING)
 			textBefore = "Copyright © 2003-2004 ";
 			textLink   =                       "HSR Hochschule für Technik Rapperswil";
 			textAfter  =                                                            "." + Environment.NewLine +
@@ -139,7 +139,7 @@ namespace YAT.View.Forms
 			linkLabel_Description.Text += textAfter;
 
 			// Platform:
-			linkLabel_Platform.Text = "For " + ApplicationEx.PrerequisiteFramework + " on " + ApplicationEx.PrerequisiteWindowsOS + /* " or " + ApplicationEx.PrerequisiteOtherOS + */ "." + Environment.NewLine +
+			linkLabel_Platform.Text = "For " + ApplicationEx.PrerequisiteFramework + " on " + ApplicationEx.PrerequisiteWindows + /* " or " + ApplicationEx.PrerequisiteLinux + */ "." + Environment.NewLine +
 			                          "Currently running on .NET Runtime " + Environment.Version + " (CLR version).";
 
 			// Serial monitoring:
@@ -272,7 +272,7 @@ namespace YAT.View.Forms
 			linkLabel_BasedOn.Text += textAfter;
 			linkLabel_BasedOn.Text += Environment.NewLine;
 
-		#if !(WITH_SCRIPTING)
+		#if (!WITH_SCRIPTING)
 			textBefore = "...YAT icons based on ";
 			textLink   =                       "Nuvola";
 			textAfter  =                             " by David Vignoni";
@@ -324,13 +324,29 @@ namespace YAT.View.Forms
 
 			textBefore = "...";
 			textLink   =    "OxyPlot";
+		#if (!WITH_SCRIPTING)
 			textAfter  =           " by Øystein Bjørke.";
+		#else
+			textAfter  =           " by Øystein Bjørke...";
+		#endif
 			linkLabel_BasedOn.Text += textBefore;
 			linkStart = linkLabel_BasedOn.Text.Length;
 			linkLabel_BasedOn.Text += textLink;
 			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "https://oxyplot.github.io/");
 			linkLabel_BasedOn.Text += textAfter;
 			linkLabel_BasedOn.Text += Environment.NewLine;
+
+		#if (WITH_SCRIPTING)
+			textBefore = "...";                 // Terminology also used at URL below. Discarded "scripting system" as
+			textLink   =    "CS-Script";        // too technical and "scripting environment" as that shall be YAT itself.
+			textAfter  =             " C# script engine by Oleg Shilo."; // Also note the "script engine specific"
+			linkLabel_BasedOn.Text += textBefore;                        // comments in the examples and test scripts.
+			linkStart = linkLabel_BasedOn.Text.Length;
+			linkLabel_BasedOn.Text += textLink;
+			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "https://github.com/oleg-shilo/cs-script");
+			linkLabel_BasedOn.Text += textAfter;
+			linkLabel_BasedOn.Text += Environment.NewLine;
+		#endif
 
 			// Developed with:
 			linkLabel_DevelopedWith.Text = ApplicationEx.CommonName + " is developed with..." + Environment.NewLine;
@@ -381,7 +397,7 @@ namespace YAT.View.Forms
 			linkLabel_DevelopedWith.Text += textAfter;
 			linkLabel_DevelopedWith.Text += Environment.NewLine;
 
-		#if !(WITH_SCRIPTING)
+		#if (!WITH_SCRIPTING)
 			textBefore = "...hosting and change management on ";
 			textLink   =                                     "SourceForge.net";
 			textAfter  =                                                    "...";
@@ -403,7 +419,7 @@ namespace YAT.View.Forms
 		#endif
 
 			// Thanks:
-		#if !(WITH_SCRIPTING)
+		#if (!WITH_SCRIPTING)
 			linkLabel_Thanks.Text = @"And a big ""Thanks!"" to everybody who helped " + ApplicationEx.CommonName + " to become what it is today!";
 		#else
 			linkLabel_Thanks.Text = @"And a big ""Thanks!"" to everybody who helped YAT and " + ApplicationEx.CommonName + " to become what it is today!";
@@ -411,7 +427,7 @@ namespace YAT.View.Forms
 
 			// Home:
 			linkLabel_Home.Text = "";
-		#if !(WITH_SCRIPTING)
+		#if (!WITH_SCRIPTING)
 			textBefore = "Visit YAT at ";
 			textLink   =              "SourceForge.net";
 			linkLabel_Home.Text += textBefore;
@@ -446,7 +462,7 @@ namespace YAT.View.Forms
 			// Author:
 			linkLabel_Author.Text = "2020, Matthias Kläy";
 
-		#if !(WITH_SCRIPTING)
+		#if (!WITH_SCRIPTING)
 			// License:
 			linkLabel_License.Text = "";
 			textBefore = "YAT is licensed under the ";
