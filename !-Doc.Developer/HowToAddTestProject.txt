@@ -9,6 +9,7 @@
 4.	Project > Properties
 	Modify assembly name if needed
 	Modify default namespace if needed
+	Append " Test" to output path (makes test nature more obvious)
 	Select all configurations
 	Enable Build > XML documentation file
 	Tick Build > Advanced > Check for under/overflow
