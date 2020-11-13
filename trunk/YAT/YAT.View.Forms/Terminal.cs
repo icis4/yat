@@ -5927,7 +5927,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Terminal_Find .Enabled = false; // Ctrl+F
 			}
 
-			this.findShortcutsCtrlFNPSuspendedCount++;
+			this.findShortcutsCtrlFNPSuspendedCount++; // No need for 'lock'/'Interlocked...()' as WinForms is synchronized on main thread.
 
 			// Could be implemented more cleverly, by iterating over all potential shortcut controls
 			// and then handle those that use one of the shortcuts in question. However, that would
@@ -5940,7 +5940,7 @@ namespace YAT.View.Forms
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "FNP", Justification = "FNP refers to these three specific keys.")]
 		public virtual void ResumeFindShortcutsCtrlFNP()
 		{
-			this.findShortcutsCtrlFNPSuspendedCount--;
+			this.findShortcutsCtrlFNPSuspendedCount--; // No need for 'lock'/'Interlocked...()' as WinForms is synchronized on main thread.
 
 			if (this.findShortcutsCtrlFNPSuspendedCount == 0)
 			{
@@ -5981,7 +5981,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = false; // Ctrl+C
 			}
 
-			this.editShortcutsCtrlACVDeleteSuspendedCount++;
+			this.editShortcutsCtrlACVDeleteSuspendedCount++; // No need for 'lock'/'Interlocked...()' as WinForms is synchronized on main thread.
 
 			// Could be implemented more cleverly, by iterating over all potential shortcut controls
 			// and then handle those that use one of the shortcuts in question. However, that would
@@ -5994,7 +5994,7 @@ namespace YAT.View.Forms
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ACV", Justification = "ACV refers to these three specific keys.")]
 		public virtual void ResumeEditShortcutsCtrlACVDelete()
 		{
-			this.editShortcutsCtrlACVDeleteSuspendedCount--;
+			this.editShortcutsCtrlACVDeleteSuspendedCount--; // No need for 'lock'/'Interlocked...()' as WinForms is synchronized on main thread.
 
 			if (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)
 			{
@@ -7170,9 +7170,8 @@ namespace YAT.View.Forms
 
 				if (showErrorModally)
 				{
-					MessageBoxEx.Show
+					terminal_IOError_MessageBoxShow
 					(
-						this,
 						e.Message,
 						"Terminal Warning",
 						MessageBoxButtons.OK,
@@ -7186,15 +7185,40 @@ namespace YAT.View.Forms
 
 				if (showErrorModally)
 				{
-					MessageBoxEx.Show
+					terminal_IOError_MessageBoxShow
 					(
-						this,
 						e.Message,
 						"Terminal Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
 					);
 				}
+			}
+		}
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private List<string> terminal_IOError_MessageBoxShowActiveMessages = new List<string>(); // No preset needed, the default behavior is good enough.
+
+		private void terminal_IOError_MessageBoxShow(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
+		{
+			// Prevent repeating errors from being repeated. In the past this has happend e.g. in
+			// case of framing errors on invalid baud rate. This has resulted message boxes across
+			// the whole screen...
+
+			if (!terminal_IOError_MessageBoxShowActiveMessages.Contains(message)) // No need for locking as WinForms is synchronized on main thread.
+			{
+				terminal_IOError_MessageBoxShowActiveMessages.Add(message); // Just checking message (and not also the icon, i.e. the severity) is considered good enough.
+
+				MessageBoxEx.Show
+				(
+					this,
+					message,
+					caption,
+					buttons,
+					icon
+				);
+
+				terminal_IOError_MessageBoxShowActiveMessages.Remove(message);
 			}
 		}
 
