@@ -43,12 +43,13 @@ namespace YAT.Application
 	#endif
 		Success                  =  0,
 		CommandLineError         = -1,
-		ApplicationSettingsError = -2,
-		ApplicationStartError    = -3,
-		ApplicationStartCancel   = -4,
+		SystemEnvironmentError   = -2,
+		ApplicationSettingsError = -3,
+		ApplicationStartError    = -4,
 		ApplicationRunError      = -5,
 		ApplicationExitError     = -6,
 		UnhandledException       = -7,
+		UndeterminedIssue        = -8,
 	#if (WITH_SCRIPTING)
 		ScriptInvalidContent     = MT.Albatros.Core.RunResult.ScriptInvalidContent,
 		ScriptStopOnError        = MT.Albatros.Core.RunResult.ScriptStopOnError,
