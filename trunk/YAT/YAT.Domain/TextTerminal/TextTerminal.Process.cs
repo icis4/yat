@@ -1023,7 +1023,7 @@ namespace YAT.Domain
 
 		#if (WITH_SCRIPTING)
 			// Apply to scripting:
-			if (!IsReloading && ScriptingIsActive)
+			if (!IsReloading && ScriptRunIsActive)
 			{
 				if (!IsByteToHide(b))        // Note this must not cover show/hide EOL/BOL, as script messages shall never include EOL.
 					scriptState.Data.Add(b); // The EOL/BOL sequences are removed when processing script line/packet into script message.
@@ -1214,7 +1214,7 @@ namespace YAT.Domain
 
 			#if (WITH_SCRIPTING)
 				// Apply to scripting:                                                     // 'ScriptLines' only apply to Rx.
-				if (!IsReloading && ScriptingIsActive && (repositoryType == RepositoryType.Rx))
+				if (!IsReloading && ScriptRunIsActive && (repositoryType == RepositoryType.Rx))
 				{
 					if (appliesToScriptLines)
 					{

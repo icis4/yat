@@ -36,12 +36,20 @@ namespace YAT.Domain
 	public class PacketEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		public DateTime TimeStamp { get; protected set; }
+
+		/// <summary></summary>
+		public string Device { get; protected set; }
+
+		/// <summary></summary>
 		public byte[] Data { get; protected set; }
 
 		/// <summary></summary>
-		public PacketEventArgs(byte[] data)
+		public PacketEventArgs(DateTime timeStamp, string device, byte[] data)
 		{
-			Data = data;
+			TimeStamp = timeStamp;
+			Device    = device;
+			Data      = data;
 		}
 	}
 
@@ -51,6 +59,12 @@ namespace YAT.Domain
 	public class ModifiablePacketEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		public DateTime TimeStamp { get; protected set; }
+
+		/// <summary></summary>
+		public string Device { get; protected set; }
+
+		/// <summary></summary>
 		public byte[] Data { get; set; }
 
 		/// <summary></summary>
@@ -58,10 +72,12 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters result in cleaner code and clearly indicate the default behavior.")]
-		public ModifiablePacketEventArgs(byte[] data, bool cancel = false)
+		public ModifiablePacketEventArgs(DateTime timeStamp, string device, byte[] data, bool cancel = false)
 		{
-			Data = data;
-			Cancel = cancel;
+			TimeStamp = timeStamp;
+			Device    = device;
+			Data      = data;
+			Cancel    = cancel;
 		}
 	}
 
@@ -87,9 +103,9 @@ namespace YAT.Domain
 		public ScriptMessageEventArgs(DateTime timeStamp, string device, byte[] data, string text)
 		{
 			TimeStamp = timeStamp;
-			Device = device;
-			Data = data;
-			Text = text;
+			Device    = device;
+			Data      = data;
+			Text      = text;
 		}
 	}
 

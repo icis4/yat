@@ -424,7 +424,7 @@ namespace YAT.Domain
 
 		#if (WITH_SCRIPTING)
 			// Apply to scripting:
-			if (!IsReloading && ScriptingIsActive)
+			if (!IsReloading && ScriptRunIsActive)
 			{
 				if (!IsByteToHide(b))
 					scriptState.Data.Add(b);
@@ -526,7 +526,7 @@ namespace YAT.Domain
 
 		#if (WITH_SCRIPTING)
 			// Apply to scripting:                                                     // 'ScriptLines' only apply to Rx.
-			if (!IsReloading && ScriptingIsActive && (repositoryType == RepositoryType.Rx))
+			if (!IsReloading && ScriptRunIsActive && (repositoryType == RepositoryType.Rx))
 			{
 				if (appliesToScriptLines)
 				{

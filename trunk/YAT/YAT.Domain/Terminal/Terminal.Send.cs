@@ -1826,8 +1826,8 @@ namespace YAT.Domain
 		#if (WITH_SCRIPTING)
 
 			// Invoke plug-in interface which potentially modifies the data or even cancels the whole packet:
-			var e = new ModifiablePacketEventArgs(data);
-			OnSendingPacket(e);
+			var e = new ModifiablePacketEventArgs(DateTime.Now, this.rawTerminal.ToShortIOString(), data);
+			OnSendingPacket(e);                                                  // Best-effort approach.
 			if (e.Cancel)
 				return;
 

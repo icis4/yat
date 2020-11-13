@@ -1038,7 +1038,7 @@ namespace YAT.View.Forms
 			f.Show(this);
 		}
 
-	#if !(WITH_SCRIPTING)
+	#if (!WITH_SCRIPTING)
 
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_ReleaseNotes_Click(object sender, EventArgs e)
@@ -3621,9 +3621,9 @@ namespace YAT.View.Forms
 	#if (WITH_SCRIPTING)
 		private void main_Launched(object sender, EventArgs e)
 		{
-			this.main.ScriptBridge.notifyScriptDialogOpened += new ScriptBridge.ScriptDialogOpenedDelegate(NotifyScriptDialogOpened);
-			this.main.ScriptBridge.notifyScriptDialogClosed += new ScriptBridge.ScriptDialogClosedDelegate(NotifyScriptDialogClosed);
-			this.main.ScriptBridge.notifyScriptEnded        += new ScriptBridge.ScriptEndedDelegate(       NotitfyScriptEnded);
+			this.main.ScriptBridge.ScriptDialogOpened += new ScriptBridge.ScriptDialogOpenedDelegate(scriptBridge_ScriptDialogOpened);
+			this.main.ScriptBridge.ScriptDialogClosed += new ScriptBridge.ScriptDialogClosedDelegate(scriptBridge_ScriptDialogClosed);
+			this.main.ScriptBridge.ScriptEnded        += new ScriptBridge.ScriptEndedDelegate(       scriptBridge_ScriptEnded);
 		}
 	#endif
 
@@ -3678,9 +3678,9 @@ namespace YAT.View.Forms
 				this.result = e.Value;                   // otherwise, keep the previous result, e.g. 'ApplicationStartError'.
 
 		#if (WITH_SCRIPTING)
-			this.main.ScriptBridge.notifyScriptDialogOpened -= new ScriptBridge.ScriptDialogOpenedDelegate(NotifyScriptDialogOpened);
-			this.main.ScriptBridge.notifyScriptDialogClosed -= new ScriptBridge.ScriptDialogClosedDelegate(NotifyScriptDialogClosed);
-			this.main.ScriptBridge.notifyScriptEnded        -= new ScriptBridge.ScriptEndedDelegate(       NotitfyScriptEnded);
+			this.main.ScriptBridge.ScriptDialogOpened -= new ScriptBridge.ScriptDialogOpenedDelegate(scriptBridge_ScriptDialogOpened);
+			this.main.ScriptBridge.ScriptDialogClosed -= new ScriptBridge.ScriptDialogClosedDelegate(scriptBridge_ScriptDialogClosed);
+			this.main.ScriptBridge.ScriptEnded        -= new ScriptBridge.ScriptEndedDelegate(       scriptBridge_ScriptEnded);
 		#endif
 
 			DetachMainEventHandlers();
@@ -4661,7 +4661,8 @@ namespace YAT.View.Forms
 			this.main.ScriptBridge.ProcessCommand("Script:CloseDialog");
 		}
 
-		private void NotifyScriptDialogOpened()
+		/// <remarks>To be migrated to <see cref="EventArgs"/>.</remarks>
+		private void scriptBridge_ScriptDialogOpened()
 		{
 			this.scriptDialogIsOpen = true;
 
@@ -4671,7 +4672,8 @@ namespace YAT.View.Forms
 			toolStripButton_MainTool_Script_ShowHide.Text = "Hide Script Panel";
 		}
 
-		private void NotifyScriptDialogClosed()
+		/// <remarks>To be migrated to <see cref="EventArgs"/>.</remarks>
+		private void scriptBridge_ScriptDialogClosed()
 		{
 			this.scriptDialogIsOpen = false;
 
@@ -4681,7 +4683,8 @@ namespace YAT.View.Forms
 			toolStripButton_MainTool_Script_ShowHide.Text = "Show Script Panel";
 		}
 
-		private void NotitfyScriptEnded(int result)
+		/// <remarks>To be migrated to <see cref="EventArgs"/>.</remarks>
+		private void scriptBridge_ScriptEnded(int result)
 		{
 			this.main.Result = (Model.MainResult)result;
 		}
