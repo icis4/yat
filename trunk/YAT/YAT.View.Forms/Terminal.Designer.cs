@@ -544,6 +544,7 @@ namespace YAT.View.Forms
 			this.timer_IOStatusIndicator = new System.Windows.Forms.Timer(this.components);
 			this.timer_AutoActionCountUpdate = new System.Windows.Forms.Timer(this.components);
 			this.timer_AutoResponseCountUpdate = new System.Windows.Forms.Timer(this.components);
+			this.toolStripStatusLabel_TerminalStatus_Separator = new System.Windows.Forms.ToolStripStatusLabel();
 			this.contextMenuStrip_Monitor.SuspendLayout();
 			this.contextMenuStrip_Radix.SuspendLayout();
 			this.contextMenuStrip_Predefined.SuspendLayout();
@@ -4588,6 +4589,7 @@ namespace YAT.View.Forms
 			this.statusStrip_Terminal.ContextMenuStrip = this.contextMenuStrip_Status;
 			this.statusStrip_Terminal.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel_TerminalStatus_Status,
+            this.toolStripStatusLabel_TerminalStatus_Separator,
             this.toolStripStatusLabel_TerminalStatus_IOStatus,
             this.toolStripStatusLabel_TerminalStatus_IOStatusIndicator,
             this.toolStripStatusLabel_TerminalStatus_Separator1,
@@ -4667,7 +4669,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripStatusLabel_TerminalStatus_Status.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripStatusLabel_TerminalStatus_Status.Name = "toolStripStatusLabel_TerminalStatus_Status";
-			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(379, 20);
+			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(308, 20);
 			this.toolStripStatusLabel_TerminalStatus_Status.Spring = true;
 			this.toolStripStatusLabel_TerminalStatus_Status.Text = "<Terminal Status>";
 			this.toolStripStatusLabel_TerminalStatus_Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -5142,6 +5144,13 @@ namespace YAT.View.Forms
 			// 
 			this.timer_AutoResponseCountUpdate.Interval = 73;
 			this.timer_AutoResponseCountUpdate.Tick += new System.EventHandler(this.timer_AutoResponseCountUpdate_Tick);
+			// 
+			// toolStripStatusLabel_TerminalStatus_Separator
+			// 
+			this.toolStripStatusLabel_TerminalStatus_Separator.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripStatusLabel_TerminalStatus_Separator.Name = "toolStripStatusLabel_TerminalStatus_Separator";
+			this.toolStripStatusLabel_TerminalStatus_Separator.Size = new System.Drawing.Size(37, 20);
+			this.toolStripStatusLabel_TerminalStatus_Separator.Text = "          ";
 			// 
 			// Terminal
 			// 
@@ -5713,5 +5722,6 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_Panels_SendFile;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MonitorContextMenu_Panels_Separator4;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_Panels_Rearrange;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_Separator;
 	}
 }
