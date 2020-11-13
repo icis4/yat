@@ -22,17 +22,24 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Security.AccessControl;
-using System.Security.Principal;
+using System.Security;
+using System.Security.Permissions;
+
+#endregion
 
 namespace MKY.IO
 {
 	/// <summary>
-	/// Utility methods for <see cref="System.IO.Directory"/>.
+	/// Utility methods for <see cref="Directory"/>.
 	/// </summary>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class DirectoryEx
@@ -43,54 +50,10 @@ namespace MKY.IO
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
 		public static bool IsWritable(string path)
 		{
-			// \remind (2018-01-05 / MKY) to be changed as soon as upgraded to .NET 4+
-		////var permissionSet = new PermissionSet(PermissionState.None);
-		////var writePermission = new FileIOPermission(FileIOPermissionAccess.Write, path);
-		////permissionSet.AddPermission(writePermission);
-		////return (permissionSet.IsSubsetOf(AppDomain.CurrentDomain.PermissionSet));
-
-			DirectorySecurity acl;
-			try {
-				acl = Directory.GetAccessControl(path);
-			}
-			catch {
-				return (false);
-			}
-
-			if (acl == null) {
-				return (false);
-			}
-
-			AuthorizationRuleCollection rules;
-			try {
-				rules = acl.GetAccessRules(true, true, typeof(SecurityIdentifier));
-			}
-			catch {
-				return (false);
-			}
-
-			if (rules == null) {
-				return (false);
-			}
-
-			bool allow = false;
-			bool deny  = false;
-
-			foreach (FileSystemAccessRule rule in rules)
-			{
-				if ((rule.FileSystemRights & FileSystemRights.Write) == 0)
-					continue; // Ignore other rules than 'Write'.
-
-				switch (rule.AccessControlType)
-				{
-					case AccessControlType.Allow: allow = true; break;
-					case AccessControlType.Deny:  deny  = true; break;
-
-					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + rule.AccessControlType.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-			}
-
-			return (allow && !deny);
+			var set = new PermissionSet(PermissionState.None);
+			var fileWritePermission = new FileIOPermission(FileIOPermissionAccess.Write, path);
+			set.AddPermission(fileWritePermission);
+			return (set.IsSubsetOf(AppDomain.CurrentDomain.PermissionSet));
 		}
 
 		/// <summary>
