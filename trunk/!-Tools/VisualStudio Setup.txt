@@ -14,6 +14,10 @@ Installation
 
 Ensure that English language pack is included
 
+Addtionally for VS2015
+ > 'Microsoft .NET Framework 4.8 Developer Pack' (ndp48-devpack-enu.exe)
+ > 'NuGet-Package-Manager' (NuGet.Tools.vsix)
+
 
 Visual Studio
 -------------
