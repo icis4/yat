@@ -2,7 +2,7 @@
 Background
 ----------
 OxyPlot 1.0.0 is used as that is the last version to support .NET 4.
-OxyPlot 2.0.0 is tied to .NET 4.5, issue #1452 "Again support .NET 4.0 for WinForms and WPF" is pending.
+OxyPlot 2.0.0 is tied to .NET 4.5, issue #1452 "Again support .NET 4.0 for WinForms and WPF" is pending for OxyPlot 2.1.0.
 
 
 Modifications
@@ -15,7 +15,7 @@ Modifications
     > \Source\Examples\ExampleLibrary\ExampleLibrary_NET40.csproj              => for verification purposes only
     > \Source\Examples\WindowsForms\ExampleBrowser\ExampleBrowser_NET40.csproj => for verification purposes only
     > \Source\Examples\WindowsForms\WindowsFormsDemo\WindowsFormsDemo.csproj   => for verification purposes only
-    > \Source\OxyPlot.WindowsForms.sln                                        => for verification purposes only
+    > \Source\OxyPlot.WindowsForms.sln                                         => for verification purposes only
 3. Minor project/solution fixes.
 
 
@@ -29,5 +29,11 @@ Disadvantage:
  > OxyPlot version has to be incremented for each YAT release (same as for ALAZ,...).
 
 
+Future
+------
+Upgrade to OxyPlot 2.1.0+ is tracked in YAT FR#420.
+
+
 ----------------
+2020-11-15 / MKY
 2020-01-14 / MKY
