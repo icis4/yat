@@ -734,14 +734,13 @@ namespace YAT.View.Forms
 					pageCount = pages.Count;
 
 				// Prepare the menu item properties based on state and settings.
+				// Main and context menu are separated as there are subtle differences between them.
 				//
 				// Attention:
 				// Similar code exists in...
 				// ...View.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
-				// ...View.Controls.SendText.SetControls()
+				// ...View.Controls.SendText.SetSendControls()
 				// Changes here may have to be applied there too.
-				//
-				// Main and context menu are separated as there are subtle differences between them.
 
 				string sendTextText = "Text";
 				bool sendTextEnabled = this.settingsRoot.SendText.Command.IsValidText(this.settingsRoot.Send.Text.ToParseMode());
@@ -756,6 +755,12 @@ namespace YAT.View.Forms
 				bool sendFileEnabled = this.settingsRoot.SendFile.Command.IsValidFilePath(Path.GetDirectoryName(this.terminal.SettingsFilePath));
 
 				// Set the menu item properties:
+				//
+				// Attention:
+				// Similar code exists in...
+				// ...View.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
+				// ...View.Forms.AdvancedTerminalSettings.SetControls()
+				// Changes here may have to be applied there too.
 
 				toolStripMenuItem_TerminalMenu_Send_Text.Text              =  sendTextText;
 				toolStripMenuItem_TerminalMenu_Send_Text.Enabled           = (sendTextEnabled && this.terminal.IsReadyToSendForSomeTime); // Using 'ForSomeTime' reduces flickering.
@@ -768,7 +773,8 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Send_KeepSendText.Enabled         =  !this.settingsRoot.Send.Text.SendImmediately;
 				toolStripMenuItem_TerminalMenu_Send_KeepSendText.Checked         = (!this.settingsRoot.Send.Text.SendImmediately && this.settingsRoot.Send.Text.KeepSendText);
 				toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked      =   this.settingsRoot.Send.Text.SendImmediately;
-				toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText.Checked =   this.settingsRoot.Send.Text.EnableEscapes;
+				toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText.Enabled =  !this.settingsRoot.Send.Text.SendImmediately;
+				toolStripMenuItem_TerminalMenu_Send_EnableEscapesForText.Checked = (!this.settingsRoot.Send.Text.SendImmediately && this.settingsRoot.Send.Text.EnableEscapes);
 
 				toolStripMenuItem_TerminalMenu_Send_ExpandMultiLineText.Enabled  = this.settingsRoot.SendText.Command.IsMultiLineText;
 
@@ -3769,14 +3775,13 @@ namespace YAT.View.Forms
 			try
 			{
 				// Prepare the menu item properties based on state and settings.
+				// Context and main menu are separated as there are subtle differences between them.
 				//
 				// Attention:
 				// Similar code exists in...
 				// ...View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
-				// ...View.Controls.SendText.SetControls()
+				// ...View.Controls.SendText.SetSendControls()
 				// Changes here may have to be applied there too.
-				//
-				// Context and main menu are separated as there are subtle differences between them.
 
 				string sendTextText = "Send Text";
 				bool sendTextEnabled = this.settingsRoot.SendText.Command.IsValidText(this.settingsRoot.Send.Text.ToParseMode());
@@ -3790,7 +3795,13 @@ namespace YAT.View.Forms
 
 				bool sendFileEnabled = this.settingsRoot.SendFile.Command.IsValidFilePath(Path.GetDirectoryName(this.terminal.SettingsFilePath));
 
-				// Set the menu item properties:
+				// Set the menu item properties
+				//
+				// Attention:
+				// Similar code exists in...
+				// ...View.Forms.Terminal.contextMenuStrip_Send_SetMenuItems()
+				// ...View.Forms.AdvancedTerminalSettings.SetControls()
+				// Changes here may have to be applied there too.
 
 				toolStripMenuItem_SendContextMenu_Panels_SendText.Checked = this.settingsRoot.Layout.SendTextPanelIsVisible;
 				toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = this.settingsRoot.Layout.SendFilePanelIsVisible;
@@ -3809,7 +3820,8 @@ namespace YAT.View.Forms
 				toolStripMenuItem_SendContextMenu_KeepSendText.Enabled         =  !this.settingsRoot.Send.Text.SendImmediately;
 				toolStripMenuItem_SendContextMenu_KeepSendText.Checked         = (!this.settingsRoot.Send.Text.SendImmediately && this.settingsRoot.Send.Text.KeepSendText);
 				toolStripMenuItem_SendContextMenu_SendImmediately.Checked      =   this.settingsRoot.Send.Text.SendImmediately;
-				toolStripMenuItem_SendContextMenu_EnableEscapesForText.Checked =   this.settingsRoot.Send.Text.EnableEscapes;
+				toolStripMenuItem_SendContextMenu_EnableEscapesForText.Enabled =  !this.settingsRoot.Send.Text.SendImmediately;
+				toolStripMenuItem_SendContextMenu_EnableEscapesForText.Checked = (!this.settingsRoot.Send.Text.SendImmediately && this.settingsRoot.Send.Text.EnableEscapes);
 
 				toolStripMenuItem_SendContextMenu_SkipEmptyLines.Checked       = this.settingsRoot.Send.File.SkipEmptyLines;
 				toolStripMenuItem_SendContextMenu_EnableEscapesForFile.Checked = this.settingsRoot.Send.File.EnableEscapes;
