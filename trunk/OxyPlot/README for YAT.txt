@@ -38,15 +38,22 @@ N/A Build the "Debug Test with Binaries Source" configuration for "YAT".
 14. Commit changes to SVN.
 
 
-is tied to .NET 4.5, issue #1452 "Again support .NET 4.0 for WinForms and WPF" is pending for OxyPlot 2.1.0.
+HowTo Use Source
+----------------
+In the past, with OxyPlot 1.0.0, it was possible to use source code debugging.
+With OxyPlot 2.0.0, which no longer contain VS2015 projects, this is no longer possible.
+YAT SVN revision #3540 removed the source code integration from the YAT solution.
+Still, the approach and modifications needed are documented here for reminding.
 
+ 1. In 'YAT.Model' and 'YAT.View.Forms', replace the references to 'OxyPlot*.dll' by 'OxyPlot*' projects.
+ 2. Debugging can then be done using the [Debug Test with Binaries Source] configuration.
+    (A separate solution configuration is required to get the 'OxyPlot*' projects built.)
+ 3. Don't forget to restore the references after debugging.
 
- > Modifications were needed to several of the '*_NET40' projects (see previous revisions of this README).
- > Minor project/solution fixes were applied.
+Issue #1452 "Again support .NET 4.0 for WinForms and WPF" is pending for OxyPlot 2.1.0.
 
+Modifications were needed to several of the '*_NET40' projects:
 
-Modifications
--------------
 1. Unnecessary references (PresentationCore, PresentationFramework, System.Xaml, WindowsBase) removed from:
     > \Source\OxyPlot\OxyPlot_NET40.csproj
 2. x64/x86 configurations added to:
@@ -57,24 +64,6 @@ Modifications
     > \Source\Examples\WindowsForms\WindowsFormsDemo\WindowsFormsDemo.csproj   => for verification purposes only
     > \Source\OxyPlot.WindowsForms.sln                                         => for verification purposes only
 3. Minor project/solution fixes.
-
-
-Integration
------------
-YAT directly uses the projects (doesn't use the released DLLs) for...
-...not having the undesired references mentioned above.
-...explicitly using x64/x86 builds.
-
-Disadvantage:
- > OxyPlot version has to be incremented for each YAT release (same as for ALAZ,...).
-
-
-HowTo Use Source
-----------------
- 1. In 'YAT.Model' and 'YAT.View.Forms', replace the references to 'OxyPlot*.dll' by 'OxyPlot*' projects.
- 2. Debugging can then be done using the [Debug Test with Binaries Source] configuration.
-    (A separate solution configuration is required to get the 'OxyPlot*' projects built.)
- 3. Don't forget to restore the references after debugging.
 
 
 Hosting
@@ -97,5 +86,5 @@ Issue Management
 
 
 ----------------
-2020-11-15 / MKY
+2020-11-16 / MKY
 2020-01-14 / MKY
