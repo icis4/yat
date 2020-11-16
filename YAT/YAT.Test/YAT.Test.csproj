@@ -99,18 +99,6 @@
     <Compile Include="DummyMain.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\AlbatrosScript\Examples\MT.AlbatrosScript.Examples.csproj">
-      <Project>{99b3b130-3d45-4325-aaff-c7b34cef4559}</Project>
-      <Name>MT.AlbatrosScript.Examples</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\AlbatrosScript\Templates\MT.AlbatrosScript.Templates.csproj">
-      <Project>{31a6837c-bbaf-43ed-bc50-adcb687f8239}</Project>
-      <Name>MT.AlbatrosScript.Templates</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\AlbatrosScript\Workspace\MT.AlbatrosScript.Workspace.csproj">
-      <Project>{a1d0f41d-97d0-4608-b3b5-74ecbb97e3c7}</Project>
-      <Name>MT.AlbatrosScript.Workspace</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\MKY\MKY.IO.Ports.Test\MKY.IO.Ports.Test.csproj">
       <Project>{82461541-B351-4913-9747-EAFEE2322768}</Project>
       <Name>MKY.IO.Ports.Test</Name>
@@ -176,7 +164,6 @@
     <Content Include="!-ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="ConfigurationTemplate\YAT.Test.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
