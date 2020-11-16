@@ -59,8 +59,11 @@ NuGet
 -----
 Using NuGet to get binaries (e.g. OxyPlot) but not in projects/solution directly:
  > Multiple projects need references (to e.g. OxyPlot).
- > Keep-It-Simple-Stupid, i.e. simple refer to a .dll rather than having solution external dependencies in the hint paths.
- > Don't like the NuGet approach.
+ > Keep-It-Simple-Stupid.
+ > Don't like the NuGet approach:
+    > Solution external dependencies in the hint paths.
+    > Dependencies are NuGet install/config, i.e. machine/developer dependent.
+    > External binaries will not be part of SVN tags, branches,...
 
 
 Installer

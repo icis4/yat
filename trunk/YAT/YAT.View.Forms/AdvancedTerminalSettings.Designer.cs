@@ -820,6 +820,7 @@
 			// 
 			this.groupBox_Display.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Display.Controls.Add(this.checkBox_ShowCountAndRate);
 			this.groupBox_Display.Controls.Add(this.checkBox_IncludeIOWarnings);
 			this.groupBox_Display.Controls.Add(this.groupBox_Line);
 			this.groupBox_Display.Controls.Add(this.comboBox_LengthSelection);
@@ -842,7 +843,6 @@
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowTimeSpan);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowTimeDelta);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowConnectTime);
-			this.groupBox_Display.Controls.Add(this.checkBox_ShowCountAndRate);
 			this.groupBox_Display.Controls.Add(this.checkBox_ShowLength);
 			this.groupBox_Display.Controls.Add(this.comboBox_TxRadix);
 			this.groupBox_Display.Controls.Add(this.label_TxRadix);
@@ -868,10 +868,10 @@
 			// groupBox_Line
 			// 
 			this.groupBox_Line.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Line.Controls.Add(this.textBox_GlueCharsOfLineTimeout);
 			this.groupBox_Line.Controls.Add(this.label_GlueCharsOfLine);
 			this.groupBox_Line.Controls.Add(this.checkBox_GlueCharsOfLine);
 			this.groupBox_Line.Controls.Add(this.label_GlueCharsOfLineTimeoutUnit);
-			this.groupBox_Line.Controls.Add(this.textBox_GlueCharsOfLineTimeout);
 			this.groupBox_Line.Controls.Add(this.label_LineBreaks);
 			this.groupBox_Line.Controls.Add(this.textBox_MaxLineLength);
 			this.groupBox_Line.Controls.Add(this.label_MaxLineLengthUnit);
@@ -1235,10 +1235,10 @@
 			// groupBox_Display_ControlChars
 			// 
 			this.groupBox_Display_ControlChars.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Display_ControlChars.Controls.Add(this.checkBox_BeepOnBell);
-			this.groupBox_Display_ControlChars.Controls.Add(this.label_ReplaceBackspace);
-			this.groupBox_Display_ControlChars.Controls.Add(this.checkBox_ReplaceBackspace);
 			this.groupBox_Display_ControlChars.Controls.Add(this.label_ReplaceTab);
+			this.groupBox_Display_ControlChars.Controls.Add(this.label_ReplaceBackspace);
+			this.groupBox_Display_ControlChars.Controls.Add(this.checkBox_BeepOnBell);
+			this.groupBox_Display_ControlChars.Controls.Add(this.checkBox_ReplaceBackspace);
 			this.groupBox_Display_ControlChars.Controls.Add(this.checkBox_HideXOnXOff);
 			this.groupBox_Display_ControlChars.Controls.Add(this.comboBox_ControlCharacterRadix);
 			this.groupBox_Display_ControlChars.Controls.Add(this.checkBox_ReplaceTab);
@@ -1248,7 +1248,7 @@
 			this.groupBox_Display_ControlChars.Size = new System.Drawing.Size(251, 137);
 			this.groupBox_Display_ControlChars.TabIndex = 23;
 			this.groupBox_Display_ControlChars.TabStop = false;
-			this.groupBox_Display_ControlChars.Text = "&ASCII Control Characters (0x00..0x1F, 0x7F)";
+			this.groupBox_Display_ControlChars.Text = "&ASCII Control Characters (0x00..1F, 0x7F)";
 			// 
 			// checkBox_BeepOnBell
 			// 
@@ -1303,9 +1303,9 @@
 			this.checkBox_HideXOnXOff.AutoSize = true;
 			this.checkBox_HideXOnXOff.Location = new System.Drawing.Point(6, 113);
 			this.checkBox_HideXOnXOff.Name = "checkBox_HideXOnXOff";
-			this.checkBox_HideXOnXOff.Size = new System.Drawing.Size(158, 17);
+			this.checkBox_HideXOnXOff.Size = new System.Drawing.Size(147, 17);
 			this.checkBox_HideXOnXOff.TabIndex = 7;
-			this.checkBox_HideXOnXOff.Text = "Hide XOn/XOff (0x11/0x13)";
+			this.checkBox_HideXOnXOff.Text = "Hide XOn/XOff (0x11/13)";
 			this.checkBox_HideXOnXOff.UseVisualStyleBackColor = true;
 			this.checkBox_HideXOnXOff.CheckedChanged += new System.EventHandler(this.checkBox_HideXOnXOff_CheckedChanged);
 			// 
