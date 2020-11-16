@@ -199,10 +199,10 @@ Limitations and known issues:
 - General limitations of .NET Windows.Forms:
    > System errors are output in local language, even though YAT is all-English (bug #66).
    > Main window status bar tooltips may flicker in case window is maximized (bug #488).
-   > Tool strip combo box slightly flickers when updating item list, e.g. 'Find Pattern' (bug #402).
+   > Tool strip combo box slightly flickers when updating item list, e.g. [Find Pattern] (bug #402).
    > Combo box cannot restore some corner-case cursor positions (bug #403).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
-     if that is contained in the item list, e.g. the recent [Send Text] or 'Find' items (bug #347).
+     if that is contained in the item list, e.g. the recent [Send Text] or [Find] items (bug #347).
    > When [Send Text] or [Send File] is hidden, resizing the panel doesn't properly work (bug #412).
    > Automatic completion for e.g. [Send Text] is not feasible to implement (feature request #227).
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
@@ -326,10 +326,10 @@ Limitations and known issues:
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
    > System errors are output in local language, even though YAT is all-English (bug #66).
-   > Tool strip combo box slightly flickers when updating item list, e.g. 'Find Pattern' (bug #402).
+   > Tool strip combo box slightly flickers when updating item list, e.g. [Find Pattern] (bug #402).
    > Combo box cannot restore some corner-case cursor positions (bug #403).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
-     if that is contained in the item list, e.g. the recent [Send Text] or 'Find' items (bug #347).
+     if that is contained in the item list, e.g. the recent [Send Text] or [Find] items (bug #347).
    > When [Send Text] or [Send File] is hidden, resizing the panel doesn't properly work (bug #412).
    > Automatic completion for e.g. [Send Text] is not feasible to implement (feature request #227).
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
@@ -403,10 +403,10 @@ Limitations and known issues:
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
    > System errors are output in local language, even though YAT is all-English (bug #66).
-   > Tool strip combo box slightly flickers when updating item list, e.g. 'Find Pattern' (bug #402).
+   > Tool strip combo box slightly flickers when updating item list, e.g. [Find Pattern] (bug #402).
    > Combo box cannot restore some corner-case cursor positions (bug #403).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
-     if that is contained in the item list, e.g. the recent [Send Text] or 'Find' items (bug #347).
+     if that is contained in the item list, e.g. the recent [Send Text] or [Find] items (bug #347).
    > When [Send Text] or [Send File] is hidden, resizing the panel doesn't properly work (bug #412).
    > Automatic completion for e.g. [Send Text] is not feasible to implement (feature request #227).
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
@@ -490,10 +490,10 @@ Limitations and known issues:
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
    > System errors are output in local language, even though YAT is all-English (bug #66).
-   > Tool strip combo box slightly flickers when updating item list, e.g. 'Find Pattern' (bug #402).
+   > Tool strip combo box slightly flickers when updating item list, e.g. [Find Pattern] (bug #402).
    > Combo box cannot restore some corner-case cursor positions (bug #403).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
-     if that is contained in the item list, e.g. the recent [Send Text] or 'Find' items (bug #347).
+     if that is contained in the item list, e.g. the recent [Send Text] or [Find] items (bug #347).
    > Automatic completion for e.g. [Send Text] is not feasible to implement (feature request #227).
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163).
    > Vertical scrolling of monitors while a lot of data is being transmitted and while items are
