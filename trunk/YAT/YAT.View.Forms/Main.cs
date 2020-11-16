@@ -477,8 +477,6 @@ namespace YAT.View.Forms
 					// Thus, layouting would take the just-about-to-be-closed terminal into account.
 					// The workaround with 'invokeLayout' unfortunately doesn't work as well, as the
 					// close form is still active when this 'MdiChildActivate' event is invoked...
-					//
-					// Keeping this limitation, shall again be checked after upgrading to .NET 4+.
 				}
 
 				SetTimedStatus(Status.ChildActivated);
@@ -4560,8 +4558,6 @@ namespace YAT.View.Forms
 			// Thus, layouting would take the just-about-to-be-closed terminal into account.
 			// The workaround with 'invokeLayout' unfortunately doesn't work as well, as the
 			// close form is still active when the 'MdiChildActivate' event is invoked...
-			//
-			// Keeping this limitation, shall again be checked after upgrading to .NET 4+.
 		}
 
 		#endregion
