@@ -48,7 +48,7 @@ namespace MKY.Windows.Forms
 		/// If <see cref="ComboBox.Text"/> is e.g. set to "aa" while <see cref="ComboBox.Items"/>
 		/// contain "AA", that item is wrongly selected.
 		///
-		/// Issue is documented as YAT bug #347. Issue shall again check after upgrade to .NET 4+.
+		/// Issue is documented as YAT bug #347.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static void Select(ToolStripComboBox control, object item, string fallbackText = null)
@@ -76,7 +76,7 @@ namespace MKY.Windows.Forms
 		/// If <see cref="ComboBox.Text"/> is e.g. set to "abc" while <see cref="ComboBox.Items"/>
 		/// contain "ABC", that item is wrongly selected.
 		///
-		/// Issue is documented as YAT bug #347. Issue shall again check after upgrade to .NET 4+.
+		/// Issue is documented as YAT bug #347.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Come on, 'abc'...")]
 		public static void UpdateTextKeepingCursorAndSelection(ToolStripComboBox control, string text)
