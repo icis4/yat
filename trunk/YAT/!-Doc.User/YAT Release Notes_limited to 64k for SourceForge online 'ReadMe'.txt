@@ -33,27 +33,27 @@ Contents
 1. Installation
 ====================================================================================================
 
-YAT uses .NET 4.0. The YAT installer ensures that .NET 4.0 is available on the target computer.
-The installer also ensures that Windows Installer 4.5 is available on the target computer.
+YAT uses .NET 4.8. The YAT installer ensures that .NET 4.8 is available on the target computer.
+The installer also ensures that Windows Installer 5.0 is available on the target computer.
 
 First, chose the most appropriate package:
  > For up-to-date systems, use the compact package "...(32-bit).zip" or "...(64-bit).zip".
    (Windows Installer and .NET are already installed on up-to-date systems.)
- > For offline installation, use a full package "..._with_.NET...zip".
+ > For outdated systems or offline installation, use a full package "..._with_.NET...zip".
    (Windows Installer and .NET are included for installation.)
- > For Windows XP, use a binary distribution.
-   (The YAT installer is no longer compatible with Windows XP.)
+ > Alternatively, use a binary distribution, but don't forget to manually install the monospaced
+   'DejaVu' font used by YAT as well as assign the .yat/.yaw file extensions to YAT.exe. 
 
-It is recommended to unzip this package to a temporary location before starting installation.
+It is recommended to unzip this package to a temporary location before starting the installation.
 
 Run the ".msi" if Windows Installer is installed, otherwise "setup.exe".
- > Installer checks prerequisites and installs what is missing.
- > Installer installs YAT. Older versions of YAT are automatically replaced.
+ 1. Installer will check prerequisites and install what is missing.
+ 2. Installer will install YAT. Older versions of YAT are automatically replaced.
 
 For installation of a binary distribution, refer to the instructions inside that package.
 
 You can also download .NET and/or Windows Installer from <https://www.microsoft.com/download>
-or by googling for "Download Microsoft .NET Framework 4.0" or "Windows Installer 4.5".
+or by googling for "Download Microsoft .NET Framework 4.8" and/or "Windows Installer 5.0".
 Installing .NET and/or Windows Installer requires administrator permissions.
 
 
@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.2.0 :: 2020-1x-xx
+YAT 2.4.0 :: 2020-1x-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -154,16 +154,23 @@ Important changes:
 - Changes on-the-fly by keywords like \!(Port()), \!(PortSettings()), \!(Baud()),... are now
   reflected in the terminal settings, i.e. also indicated by '*' (related to reqs. #71 and #403).
 - [Terminal > Settings... > Advanced...] dialog rearranged for better fitting screen.
-- Upgrade to .NET 4.0 (runtime as well as framework) (precondition for new automatic actions
-  [Chart/Plot/Histogram] and preparing upcoming feature request #74, part of feature request #229).
-- Consequently, x64 distributions no longer need to be 'AnyCPU' builds (former limitation).
-- Improved error message in case the required .NET  is missing.
+- Upgrade to .NET 4 Runtime and .NET 4.8 Framework (part of feature request #229, precondition for
+  new automatic actions [Chart/Plot/Histogram] and upcoming feature request #74 [Scripting]).
+- Consequently (former limitations):
+   > x64 distributions no longer need to be 'AnyCPU' builds.
+   > System display scaling other than 100% (96 DPI) no longer result in minor distortions on Win 7
+     (bugs #85, #235, #375) nor some blurring on Win 8 and above (feature request #310).
+   > Use of serial COM ports while disconnect, undock or hibernate without closing the port should
+     no longer result in an 'ObjectDisposedException' or 'UnauthorizedAccessException' (bugs #224,
+     #254, #293, #316, #317, #345, #382, #385, #387, #401, #442).
+- Improved error message in case the required version of .NET is missing.
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
 - Test coverage of sending and processing significantly increased (related to refactorings above).
 
 Fixed bugs:
 - Predefined command description gets updated when multi-line command gets changed (bug #481) and
-  default descriptions no longer get saved in settings file.
+  default description no longer gets saved in settings file.
+- Predefined command description is kept when filled-in before text or file path (bugs #476, #499).
 - Issue with not shown predefined commands when defining more than 12 predefined commands fixed.
 - Layout of predefined commands can now also be changed on a new terminal that doesn't contain
   commands yet (related to previous feature requests #28, #257, #365).
@@ -187,12 +194,9 @@ Fixed bugs:
 - Handling of [Preferences... > ...take serial number/string into account] fixed (rel. to bug #480).
 
 Limitations and known issues:
-- General limitations of .NET framework:
+- General limitations of .NET Framework:
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - General limitations of .NET Windows.Forms:
-   > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
-     before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
-     The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
    > System errors are output in local language, even though YAT is all-English (bug #66).
    > Main window status bar tooltips may flicker in case window is maximized (bug #488).
    > Tool strip combo box slightly flickers when updating item list, e.g. 'Find Pattern' (bug #402).
@@ -209,14 +213,8 @@ Limitations and known issues:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
    > Issue with layouting when closing an MDI child (bug #399).
-- Serial COM port limitations of .NET framework:
+- Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
-   > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
-     result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
-     a bug in the .NET 'SerialPort' class for which Microsoft only has vague plans fixing. YAT is
-     applying several patches to try working around the issue (bugs #224, #254, #293, #316, #317,
-     #345, #382, #385, #387, #401, #442). To prevent this issue, refrain from disconnecting a
-     device while its port is open. Or, manually close the port after the device got disconnected.
 - The \!(PortSettings()) keyword is yet limited to serial COM ports (feature request #71).
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
   implementation and test environment would be needed to run it on unixoids (feature request #119).
@@ -227,7 +225,11 @@ Limitations and known issues:
 - Switching log off may take several seconds, during which YAT is unresponsive (bug #459).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET runtime).
+  unknown, could even be a limitation of the memory management of the .NET Runtime).
+
+
+(Versions 2.2 and 2.3 have been skipped to emphasize update to .NET 4.x while still keeping the
+option to release the YAT 2.4.0 features (except plotting) on .NET 2.0 Runtime / 3.5 Framework.)
 
 
 YAT 2.1.0 :: 2019-10-04
@@ -317,7 +319,7 @@ Fixed bugs:
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
-- General limitations of .NET framework:
+- General limitations of .NET Framework:
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - General limitations of .NET Windows.Forms:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
@@ -337,7 +339,7 @@ Limitations and known issues:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
    > Issue with layouting when closing an MDI child (bug #399).
-- Serial COM port limitations of .NET framework:
+- Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
      result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
@@ -359,7 +361,7 @@ Limitations and known issues:
 - Switching log off may take several seconds, during which YAT is unresponsive (bug #459).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET runtime).
+  unknown, could even be a limitation of the memory management of the .NET Runtime).
 
 
 YAT 2.0 Final Version 2.0.0 :: 2018-04-13
@@ -394,7 +396,7 @@ Fixed bugs:
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
-- General limitations of .NET framework:
+- General limitations of .NET Framework:
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - General limitations of .NET Windows.Forms:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
@@ -414,7 +416,7 @@ Limitations and known issues:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
    > Issue with layouting when closing an MDI child (bug #399).
-- Serial COM port limitations of .NET framework:
+- Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
      result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
@@ -430,7 +432,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET runtime).
+  unknown, could even be a limitation of the memory management of the .NET Runtime).
 
 
 YAT 2.0 Epsilon Version 1.99.90 :: 2018-01-12
@@ -481,7 +483,7 @@ Fixed bugs:
 
 Limitations and known issues:
 - x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
-- General limitations of .NET framework:
+- General limitations of .NET Framework:
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - General limitations of .NET Windows.Forms:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
@@ -500,7 +502,7 @@ Limitations and known issues:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
    > Issue with layouting when closing an MDI child (bug #399).
-- Serial COM port limitations of .NET framework:
+- Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
      result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
@@ -514,7 +516,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET runtime).
+  unknown, could even be a limitation of the memory management of the .NET Runtime).
 
 
 YAT 2.0 Delta Version 1.99.80 :: 2017-10-15
@@ -583,7 +585,7 @@ Limitations and known issues:
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
-- Serial COM port limitations of .NET framework:
+- Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
      result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
@@ -597,7 +599,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET runtime).
+  unknown, could even be a limitation of the memory management of the .NET Runtime).
 
 
 YAT 2.0 Gamma 3 Version 1.99.70 :: 2017-07-04
@@ -666,7 +668,7 @@ Limitations and known issues:
 - MDI limitations of .NET Windows.Forms:
    > Issues with frame (bugs #29 and #30).
    > Issue with window list (bug #31).
-- Serial COM port limitations of .NET framework:
+- Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
    > Use of USB/RS-232 converters (USB CDC) while disconnect, undock or hibernate without closing
      the serial COM port may require to reset the converters, i.e. disconnect and reconnect them,
@@ -682,7 +684,7 @@ Limitations and known issues:
 - Direct send text mode does not yet support special formats and commands (feature request #10).
 - Running YAT for a long period, or creating many terminals, results in memory leaks, which result
   in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET runtime).
+  unknown, could even be a limitation of the memory management of the .NET Runtime).
 
 
 YAT 2.0 Gamma 2''          Version 1.99.52 :: 2016-09-30
@@ -734,7 +736,7 @@ YAT 2 is in maintenance mode now, i.e. focus on bug fixes and minor changes, whi
 is already ongoing.
 
 
-(YAT 3 will be skipped to prevent naming conflict with yat3 of Dieter Fauth that became
+(Version 3 will be skipped to prevent naming conflict with yat3 of Dieter Fauth that became
 public around the same time as YAT. And, 4.0 buzzes more anyway (industry 4.0 and the like ;-))
 ----------------------------------------------------------------------------------------------------
 
