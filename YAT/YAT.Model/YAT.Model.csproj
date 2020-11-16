@@ -82,6 +82,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="OxyPlot, Version=0.0.1.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\OxyPlot\Binaries\OxyPlot.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -153,10 +157,6 @@
     <ProjectReference Include="..\..\netrtfwriter\RtfWriter\RtfWriter.csproj">
       <Project>{591bceb5-6b6f-4368-be6c-f89f668f7dcb}</Project>
       <Name>RtfWriter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OxyPlot\Source\OxyPlot\OxyPlot_NET40.csproj">
-      <Project>{1c1d9807-be39-40a4-87de-3f81e7c651e5}</Project>
-      <Name>OxyPlot_NET40</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Domain\YAT.Domain.csproj">
       <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>

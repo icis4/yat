@@ -1,5 +1,0 @@
-@@ -423,0 +424 @@ namespace OxyPlot.WindowsForms
-+        ////var paintBegin = Stopwatch.GetTimestamp();
-@@ -481,0 +483,2 @@ namespace OxyPlot.WindowsForms
-+        ////var paintEnd = Stopwatch.GetTimestamp();
-+        ////Debug.WriteLine(((int)(((paintEnd - paintBegin) * 1000 / Stopwatch.Frequency) + 0.5)).ToString() + " ms");

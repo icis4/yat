@@ -82,6 +82,14 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="OxyPlot, Version=0.0.1.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\OxyPlot\Binaries\OxyPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot.WindowsForms, Version=0.0.1.0, Culture=neutral, PublicKeyToken=245eacd6b5d2d338, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\OxyPlot\Binaries\OxyPlot.WindowsForms.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -341,14 +349,6 @@
     <ProjectReference Include="..\..\MKY\MKY.Windows.Forms\MKY.Windows.Forms.csproj">
       <Project>{CB2E6173-CB9F-4FB4-8948-30D04D4BAE50}</Project>
       <Name>MKY.Windows.Forms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OxyPlot\Source\OxyPlot.WindowsForms\OxyPlot.WindowsForms_NET40.csproj">
-      <Project>{d4554296-094e-4cac-8eae-44eb250666c6}</Project>
-      <Name>OxyPlot.WindowsForms_NET40</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OxyPlot\Source\OxyPlot\OxyPlot_NET40.csproj">
-      <Project>{1c1d9807-be39-40a4-87de-3f81e7c651e5}</Project>
-      <Name>OxyPlot_NET40</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Application.Base\YAT.Application.Base.csproj">
       <Project>{A3E80010-9146-47EF-87B0-138A60406A9E}</Project>
