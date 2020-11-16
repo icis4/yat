@@ -836,8 +836,8 @@ namespace YAT.Domain
 
 			// Convert content:
 			DisplayElement de;
-			bool isBackspace;
-			if (!ControlCharacterHasBeenProcessed(b, ts, dir, out de, out isBackspace))
+			bool isBackspaceToExecute;
+			if (!ControlCharacterHasBeenProcessed(b, ts, dir, out de, out isBackspaceToExecute))
 				de = ByteToElement(b, ts, dir, textUnidirState.PendingMultiBytesToDecode); // Default conversion to value or ASCII mnemonic.
 
 			var lp = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
@@ -953,7 +953,7 @@ namespace YAT.Domain
 
 			if (!lineState.Exceeded)
 			{
-				if (isBackspace)
+				if (isBackspaceToExecute)
 				{
 					// Note that backspace must be executed after EOL since...
 					// ...unconfirmed hidden EOL elements may have to be released.
@@ -988,7 +988,7 @@ namespace YAT.Domain
 					elementsToAdd.Add(     new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true)); // ...to ensure decoupling.
 				}
 
-				if (isBackspace)
+				if (isBackspaceToExecute)
 				{
 					// Note that backspace must be executed after adding above since...
 					// ...character to be removed likely had already been contained before adding above.
@@ -1013,6 +1013,10 @@ namespace YAT.Domain
 								elementsToAdd.Clear(); // Whole line will be replaced, pending elements can be discarded.
 								FlushReplaceAlreadyBeganLine(repositoryType, lineState);
 							}
+						}
+						else
+						{
+							FlushReplaceAlreadyBeganLine(repositoryType, lineState);
 						}
 
 						// Don't forget to adjust state:
@@ -1050,9 +1054,9 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		protected virtual bool ControlCharacterHasBeenProcessed(byte b, DateTime ts, IODirection dir, out DisplayElement de, out bool isBackspace)
+		protected virtual bool ControlCharacterHasBeenProcessed(byte b, DateTime ts, IODirection dir, out DisplayElement de, out bool isBackspaceToExecute)
 		{
-			isBackspace = false;
+			isBackspaceToExecute = false;
 
 			switch (b)
 			{
@@ -1077,7 +1081,7 @@ namespace YAT.Domain
 						bool replace = (TerminalSettings.CharReplace.ReplaceControlChars && TerminalSettings.CharReplace.ReplaceBackspace);
 						if (!replace)
 						{
-							isBackspace = true;
+							isBackspaceToExecute = true;
 
 							de = new DisplayElement.Nonentity();
 							return (true);
