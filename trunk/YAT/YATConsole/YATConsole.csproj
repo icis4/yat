@@ -104,6 +104,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
+    <None Include="App.manifest" />
     <None Include="Properties\YAT.snk" />
   </ItemGroup>
   <ItemGroup>
