@@ -130,6 +130,8 @@
     <Content Include="Resources\YAT\Image_YAT_WorkspaceSettings_64x64.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
+    <None Include="App.manifest" />
     <None Include="Properties\YAT.snk" />
     <None Include="Resources\YAT.res" />
     <None Include="YAT.cd" />
