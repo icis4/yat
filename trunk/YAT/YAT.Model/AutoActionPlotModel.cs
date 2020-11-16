@@ -67,6 +67,7 @@ namespace YAT.Model
 		public HistogramDouble Histogram { get; protected set; }
 
 		/// <summary></summary>
+		[CLSCompliant(false)]
 		public OxyPlot.PlotModel OxyModel { get; protected set; }
 
 		#endregion
@@ -401,6 +402,7 @@ namespace YAT.Model
 		/// because it is not available on an <see cref="OxyPlot.Axes.CategoryAxis"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Underride", Justification = "Meant to be something like but opposite to 'override'.")]
+		[CLSCompliant(false)]
 		protected static string FormatAxisValueUnderride(double value, OxyPlot.Axes.Axis axis, CultureInfo actualCulture)
 		{
 			string format = string.Concat("{0:", axis.ActualStringFormat ?? axis.StringFormat ?? string.Empty, "}");
@@ -426,6 +428,7 @@ namespace YAT.Model
 	public static class OxyPlotEx
 	{
 		/// <summary></summary>
+		[CLSCompliant(false)]
 		public static OxyPlot.OxyColor ConvertTo(Color color)
 		{
 			return (OxyPlot.OxyColor.FromArgb(color.A, color.R, color.G, color.B));
