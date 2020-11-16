@@ -1294,7 +1294,7 @@ namespace YAT.View.Forms
 				// Send:
 				checkBox_UseExplicitDefaultRadix.Checked =   this.settingsInEdit.Terminal.Send.UseExplicitDefaultRadix;
 				checkBox_AllowConcurrency.Checked        =   this.settingsInEdit.Terminal.Send.AllowConcurrency;
-				checkBox_KeepSendText.Enabled            =  !this.settingsInEdit.Terminal.Send.Text.SendImmediately;
+				checkBox_KeepSendText.Enabled            =  !this.settingsInEdit.Terminal.Send.Text.SendImmediately; // Attention: This logic is also implemented in the text terminal!
 				checkBox_KeepSendText.Checked            = (!this.settingsInEdit.Terminal.Send.Text.SendImmediately && this.settingsInEdit.Terminal.Send.Text.KeepSendText);
 				checkBox_SendImmediately.Checked         =   this.settingsInEdit.Terminal.Send.Text.SendImmediately;
 				checkBox_SkipEmptyLines.Checked          =   this.settingsInEdit.Terminal.Send.File.SkipEmptyLines;
@@ -1326,7 +1326,8 @@ namespace YAT.View.Forms
 				checkBox_NoSendOnOutputBreak.Checked = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 				checkBox_NoSendOnInputBreak.Checked  = this.settingsInEdit.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
-				checkBox_EnableEscapesForText.Checked = this.settingsInEdit.Terminal.Send.Text.EnableEscapes;
+				checkBox_EnableEscapesForText.Enabled =  !this.settingsInEdit.Terminal.Send.Text.SendImmediately; // Attention: This logic is also implemented in the text terminal!
+				checkBox_EnableEscapesForText.Checked = (!this.settingsInEdit.Terminal.Send.Text.SendImmediately && this.settingsInEdit.Terminal.Send.Text.EnableEscapes);
 				checkBox_EnableEscapesForFile.Checked = this.settingsInEdit.Terminal.Send.File.EnableEscapes;
 
 				groupBox_Send_Keywords.Enabled   = (this.settingsInEdit.Terminal.Send.Text.EnableEscapes || this.settingsInEdit.Terminal.Send.File.EnableEscapes);
