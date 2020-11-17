@@ -156,13 +156,7 @@ Important changes:
 - [Terminal > Settings... > Advanced...] dialog rearranged for better fitting screen.
 - Upgrade to .NET 4 Runtime and .NET 4.8 Framework (part of feature request #229, precondition for
   new automatic actions [Chart/Plot/Histogram] and upcoming feature request #74 [Scripting]).
-- Consequently (former limitations):
-   > x64 distributions no longer need to be 'AnyCPU' builds.
-   > System display scaling other than 100% (96 DPI) no longer result in minor distortions on Win 7
-     (bugs #85, #235, #375) nor some blurring on Win 8 and above (feature request #310).
-   > Use of serial COM ports while disconnect, undock or hibernate without closing the port should
-     no longer result in an 'ObjectDisposedException' or 'UnauthorizedAccessException' (bugs #224,
-     #254, #293, #316, #317, #345, #382, #385, #387, #401, #442).
+  Consequently, x64 distributions no longer need to be 'AnyCPU' builds (former limitation).
 - Improved error message in case the required version of .NET is missing.
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
 - Test coverage of sending and processing significantly increased (related to refactorings above).
@@ -192,6 +186,14 @@ Fixed bugs:
 - Sending of very long lines in other terminal types (in case of e.g. serial COM ports longer than
   the software buffer, typically 2048 bytes) works again (bug #417).
 - Handling of [Preferences... > ...take serial number/string into account] fixed (rel. to bug #480).
+- Consequence of .NET upgrade (former limitations of .NET Runtime 2 and .NET Framework 3.5):
+   > System display scaling other than 100% (96 DPI) no longer result in minor distortions on Win 7
+     (bugs #85, #235, #375) nor some blurring on Win 8 and above (feature request #310).
+   > Use of serial COM ports while disconnect, undock or hibernate without closing the port should
+     no longer result in an 'ObjectDisposedException' or 'UnauthorizedAccessException' (bugs #224,
+     #254, #293, #316, #317, #345, #382, #385, #387, #401, #442).
+   > Running YAT for a long period, or creating many terminals, no longer results in memory leaks,
+     previously resulting in gradual increase of memory consumption (RAM) (bugs #243, #263, #336).
 
 Limitations and known issues:
 - General limitations of .NET Framework:
@@ -223,9 +225,6 @@ Limitations and known issues:
   text trigger are constrained to handle complete lines. Thus, individual characters incl. control
   characters like <XOn> as well as incomplete lines will not be displayed until line is complete.
 - Switching log off may take several seconds, during which YAT is unresponsive (bug #459).
-- Running YAT for a long period, or creating many terminals, results in memory leaks, which result
-  in a gradual increase of the memory consumption (RAM) (bugs #243, #263 and #336, root cause yet
-  unknown, could even be a limitation of the memory management of the .NET Runtime).
 
 
 (Versions 2.2 and 2.3 have been skipped to emphasize update to .NET 4.x while still keeping the
