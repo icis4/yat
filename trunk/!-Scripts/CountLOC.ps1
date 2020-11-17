@@ -142,11 +142,12 @@ Returns a hash table of the counts.
 function Count-LOC([Switch]$GeneratedOnly)
 {
 	# Count:
+	$Patterns = @("*.Designer.cs", "*.Generated.cs")
 	if ($GeneratedOnly) {
-		$files = Get-ChildItem -File -Include *.Designer.cs -Recurse
+		$files = Get-ChildItem -File -Include $Patterns -Recurse
 	}
 	else {
-		$files = Get-ChildItem -File -Include *.cs -Exclude *.Designer.cs -Recurse
+		$files = Get-ChildItem -File -Include *.cs -Exclude $Patterns -Recurse
 	}
 
 	$fileCount = ($files).Count
@@ -207,11 +208,12 @@ Write-Verbose "...""$ROOT_DIRECTORY"""
 # Processing
 #---------------------------------------------------------------------------------------------------
 
-$thirdPartyPaths = @("ALAZ\Source", "netrtfwriter\RtfWriter")
+$thirdPartyPaths = @("ALAZ\Source", "CSScript\Source", "netrtfwriter\RtfWriter", "OxyPlot\Source")
 $proprietaryPaths = @("MKY", "NUnit", "YAT")
 
 Write-Host ""
-Write-Host "3rd Party       (ALAZ, netrtfwriter)"
+Write-Host "3rd Party            (ALAZ, CSScript"
+Write-Host "              netrtfwriter, OxyPlot)"
 Write-Host "===================================="
 
 $thirdPartyCounts = Create-Counts
@@ -267,7 +269,7 @@ foreach ($proprietaryPath in $proprietaryPaths) {
 }
 
 Write-Host ""
-Write-Host "Generated            (*.Designer.cs)"
+Write-Host "Generated  (*.Designer|Generated.cs)"
 Write-Host "------------------------------------"
 $message = $proprietaryGeneratedCounts.GetEnumerator() | Sort Value | Out-String
 Write-Host $message

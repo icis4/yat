@@ -951,10 +951,10 @@ namespace MKY.IO.Ports
 
 				try
 				{
-					DebugOpenClose("Trying base.Open()...");
-					base.Open();
-					DebugOpenClose("...done");
-				}
+					DebugOpenClose("Trying base.Open()..."); // \remind (2020-11-17 / MKY)
+					base.Open();                             // Occasions where code crashes here have been observed,
+					DebugOpenClose("...done");               // e.g. with MCT converter at locking/unlocking computer.
+				}                                            // Consider using async/await with a timeout here.
 				catch (Exception ex)
 				{
 					DebugEx.WriteException(GetType(), ex, "...failed!");
