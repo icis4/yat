@@ -1739,7 +1739,7 @@ namespace YAT.Domain
 		/// <exception cref="InvalidOperationException">
 		/// The underlying <see cref="Queue{T}"/> is empty.
 		/// </exception>
-		public virtual void DequeueNextAvailableReceivedMessageForScripting(out ScriptMessage value)
+		public virtual void DequeueNextAvailableReceivedMessageForScripting(out ScriptMessage value, out DateTime dequeueTimeStamp)
 		{
 			AssertUndisposed();
 
@@ -1749,6 +1749,8 @@ namespace YAT.Domain
 				{                                                      // contains an item!
 					value = this.availableReceivedMessagesForScripting.Dequeue();
 					this.lastDequeuedReceivedMessageForScripting = value.Clone(); // Clone to ensure decoupling.
+
+					dequeueTimeStamp = DateTime.Now; // Taken within lock to get best accuracy.
 
 					DebugScriptingPostfixedQuoted(value.Text, "dequeued for scripting."); // Same reason as above, acceptable
 				}                                                                         // to do inside lock since debug only.
@@ -1826,12 +1828,12 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Cleares all available messages in the receive queue for scripting.
+		/// Clears all available messages in the receive queue for scripting.
 		/// </summary>
 		/// <remarks>
 		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
 		/// </remarks>
-		public void ClearAvailableReceivedMessagesForScripting(out ScriptMessage[] cleared)
+		public void ClearAvailableReceivedMessagesForScripting(out ScriptMessage[] cleared, out DateTime clearTimeStamp)
 		{
 			AssertUndisposed();
 
@@ -1839,6 +1841,8 @@ namespace YAT.Domain
 			{
 				cleared = this.availableReceivedMessagesForScripting.ToArray();
 				this.availableReceivedMessagesForScripting.Clear();
+
+				clearTimeStamp = DateTime.Now; // Taken within lock to get best accuracy.
 
 				DebugScriptingQueueCleared(cleared);
 			}

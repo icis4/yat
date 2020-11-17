@@ -1097,11 +1097,11 @@ namespace YAT.Model
 		/// <exception cref="InvalidOperationException">
 		/// The underlying <see cref="Queue{T}"/> is empty.
 		/// </exception>
-		public virtual void DequeueNextAvailableReceivedMessageForScripting(out Domain.ScriptMessage value)
+		public virtual void DequeueNextAvailableReceivedMessageForScripting(out Domain.ScriptMessage value, out DateTime dequeueTimeStamp)
 		{
 			AssertUndisposed();
 
-			this.terminal.DequeueNextAvailableReceivedMessageForScripting(out value);
+			this.terminal.DequeueNextAvailableReceivedMessageForScripting(out value, out dequeueTimeStamp);
 		}
 
 		/// <summary>
@@ -1148,16 +1148,16 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Cleares all available lines in the receive queue for scripting.
+		/// Clears all available lines in the receive queue for scripting.
 		/// </summary>
 		/// <remarks>
 		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
 		/// </remarks>
-		public void ClearAvailableReceivedMessagesForScripting(out Domain.ScriptMessage[] cleared)
+		public void ClearAvailableReceivedMessagesForScripting(out Domain.ScriptMessage[] cleared, out DateTime clearTimeStamp)
 		{
 			AssertUndisposed();
 
-			this.terminal.ClearAvailableReceivedMessagesForScripting(out cleared);
+			this.terminal.ClearAvailableReceivedMessagesForScripting(out cleared, out clearTimeStamp);
 		}
 
 		/// <summary>
