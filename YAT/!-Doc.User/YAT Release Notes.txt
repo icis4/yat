@@ -42,7 +42,7 @@ First, chose the most appropriate package:
  > For outdated systems or offline installation, use a full package "..._with_.NET...zip".
    (Windows Installer and .NET are included for installation.)
  > Alternatively, use a binary distribution, but don't forget to manually install the monospaced
-   'DejaVu' font used by YAT as well as assign the .yat/.yaw file extensions to YAT.exe. 
+   'DejaVu' font used by YAT as well as assign the .yat/.yaw file extensions to YAT.exe.
 
 It is recommended to unzip this package to a temporary location before starting the installation.
 
@@ -189,9 +189,9 @@ Fixed bugs:
 - Consequence of .NET upgrade (former limitations of .NET Runtime 2 and .NET Framework 3.5):
    > System display scaling other than 100% (96 DPI) no longer result in minor distortions on Win 7
      (bugs #85, #235, #375) nor some blurring on Win 8 and above (feature request #310).
-   > Use of serial COM ports while disconnect, undock or hibernate without closing the port should
+   > Use of serial COM ports on disconnect, undock or hibernate without closing the port should
      no longer result in an 'ObjectDisposedException' or 'UnauthorizedAccessException' (bugs #224,
-     #254, #293, #316, #317, #345, #382, #385, #387, #401, #442).
+     #254, #293, #316, #317, #345, #382, #385, #387, #401, #442). Deadlocks may still happen though.
    > Running YAT for a long period, or creating many terminals, no longer results in memory leaks,
      previously resulting in gradual increase of memory consumption (RAM) (bugs #243, #263, #336).
 
@@ -217,6 +217,10 @@ Limitations and known issues:
    > Issue with layouting when closing an MDI child (bug #399).
 - Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
+   > Use of serial COM ports on disconnect, undock or hibernate without closing the port may lead
+     to a deadlock. It happens due to a bug in the .NET 'SerialPort' class for which Microsoft has
+     no plans fixing. To prevent this issue, refrain from disconnecting a device or undocking or
+     hibernating while a port is open.
 - The \!(PortSettings()) keyword is yet limited to serial COM ports (feature request #71).
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
   implementation and test environment would be needed to run it on unixoids (feature request #119).
@@ -340,8 +344,8 @@ Limitations and known issues:
    > Issue with layouting when closing an MDI child (bug #399).
 - Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
-   > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
-     result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
+   > Use of serial COM ports on disconnect, undock or hibernate without closing the port may lead
+     to a deadlock or 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
      a bug in the .NET 'SerialPort' class for which Microsoft only has vague plans fixing. YAT is
      applying several patches to try working around the issue (bugs #224, #254, #293, #316, #317,
      #345, #382, #385, #387, #401, #442). To prevent this issue, refrain from disconnecting a
@@ -417,8 +421,8 @@ Limitations and known issues:
    > Issue with layouting when closing an MDI child (bug #399).
 - Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
-   > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
-     result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
+   > Use of serial COM ports on disconnect, undock or hibernate without closing the port may lead
+     to a deadlock or 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
      a bug in the .NET 'SerialPort' class for which Microsoft only has vague plans fixing. YAT is
      applying several patches to try working around the issue (bugs #224, #254, #293, #316, #317,
      #345, #382, #385, #387, #401). To prevent this issue, refrain from disconnecting a device
@@ -503,8 +507,8 @@ Limitations and known issues:
    > Issue with layouting when closing an MDI child (bug #399).
 - Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
-   > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
-     result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
+   > Use of serial COM ports on disconnect, undock or hibernate without closing the port may lead
+     to a deadlock or 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
      a bug in the .NET 'SerialPort' class for which Microsoft only has vague plans fixing. YAT is
      applying several patches to try working around the issue (bugs #224, #254, #293, #316, #317,
      #345, #382, #385, #387, #401). To prevent this issue, refrain from disconnecting a device
@@ -586,8 +590,8 @@ Limitations and known issues:
    > Issue with window list (bug #31).
 - Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
-   > Use of serial COM ports while disconnect, undock or hibernate without closing the port may
-     result in an 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
+   > Use of serial COM ports on disconnect, undock or hibernate without closing the port may lead
+     to a deadlock or 'ObjectDisposedException' or 'UnauthorizedAccessException'. It happens due to
      a bug in the .NET 'SerialPort' class for which Microsoft only has vague plans fixing. YAT is
      applying several patches to try working around the issue (bugs #224, #254, #293, #316, #317,
      #345, #382, #385, #387). To prevent this issue, refrain from disconnecting a device while
@@ -669,7 +673,7 @@ Limitations and known issues:
    > Issue with window list (bug #31).
 - Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
-   > Use of USB/RS-232 converters (USB CDC) while disconnect, undock or hibernate without closing
+   > Use of USB/RS-232 converters (USB CDC) on disconnect, undock or hibernate without closing
      the serial COM port may require to reset the converters, i.e. disconnect and reconnect them,
      or restart the computer. In addition, it may be required to disconnect or reset any device
      sending continuous data. Otherwise, the related serial COM ports may no longer be opened by
@@ -775,7 +779,7 @@ Important changes:
 - Test board (serial COM ports, USB devices,...) created and test cases adapted accordingly.
 
 Fixed bugs:
-- Use of USB/RS-232 converters (USB CDC) while disconnect, undock or hibernate without closing the
+- Use of USB/RS-232 converters (USB CDC) on disconnect, undock or hibernate without closing the
   serial COM port no longer leads to an 'ObjectDisposedException' or 'UnauthorizedAccessException'
   in most cases (bugs #224, #254, #293, #316, #317, #345). However, it may still be needed to reset
   the converter, i.e. disconnect and reconnect it, or restart the computer. In addition, it may be
@@ -811,7 +815,7 @@ Limitations and known issues:
    > Issue with window list (bug #31).
 - Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
-   > Use of USB/RS-232 converters (USB CDC) while disconnect, undock or hibernate without closing
+   > Use of USB/RS-232 converters (USB CDC) on disconnect, undock or hibernate without closing
      the serial COM port may require to reset the converters, i.e. disconnect and reconnect them,
      or restart the computer. In addition, it may be required to disconnect or reset any device
      sending continuous data. Otherwise, the related serial COM ports may no longer be opened by
