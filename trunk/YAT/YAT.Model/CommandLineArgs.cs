@@ -100,8 +100,8 @@ namespace YAT.Model
 		[OptionArg(Names = new string[] { "IOType", "PortType" }, ShortNames = new string[] { "io", "pt" }, Description =
 			"The desired I/O type. Valid values are:" + EnvironmentEx.NewLineConstWorkaround +
 			"> 'COM' (Serial COM Port)" + EnvironmentEx.NewLineConstWorkaround +
-			"> 'TCPClient', 'TCPServer', 'TCPAutoSocket' (TCP/IP Socket)" + EnvironmentEx.NewLineConstWorkaround +
-			"> 'UDPClient', 'UDPServer', 'UDPPairSocket' (UDP/IP Socket)" + EnvironmentEx.NewLineConstWorkaround +
+			"> 'TCPClient', 'TCPServer', 'TCPAutoSocket' (TCP/IP Socket Types)" + EnvironmentEx.NewLineConstWorkaround +
+			"> 'UDPClient', 'UDPServer', 'UDPPairSocket' (UDP/IP Socket Types)" + EnvironmentEx.NewLineConstWorkaround +
 			"> 'USBSerHID' (USB Ser/HID)" + EnvironmentEx.NewLineConstWorkaround +
 			"The default value is 'COM'." + EnvironmentEx.NewLineConstWorkaround +
 			EnvironmentEx.NewLineConstWorkaround +
@@ -388,7 +388,7 @@ namespace YAT.Model
 		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
 		[OptionArg(Names = new string[] { "DynamicId", "DynamicTerminalId" }, ShortNames = new string[] { "did", "dti", "dtid" }, Description =
 			"Perform any requested operation on the terminal with the given dynamic ID within the opening workspace." + EnvironmentEx.NewLineConstWorkaround +
-			"Valid values are 1, 2, 3,... up to the number of open terminals. " +
+			"Valid values are 1, 2, 3,... up to the number of currently available terminals. " +
 			"0 indicates that the currently active terminal is used, which typically is the last terminal opened. " +
 			"The default value is 0, i.e. the currently active terminal." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies when opening a workspace that contains more than one terminal." + EnvironmentEx.NewLineConstWorkaround + EnvironmentEx.NewLineConstWorkaround +
@@ -401,7 +401,7 @@ namespace YAT.Model
 		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
 		[OptionArg(Names = new string[] { "FixedId", "FixedTerminalId" }, ShortNames = new string[] { "fid", "fti", "ftid" }, Description =
 			"Perform any requested operation on the terminal with the given fixed ID within the opening workspace." + EnvironmentEx.NewLineConstWorkaround +
-			"Valid values are 1, 2, 3,... up to the number of open terminals. " +
+			"Valid values are any of the fixed IDs of the currently available terminals. " +
 			"0 indicates that the currently active terminal is used, which typically is the last terminal opened. " +
 		#if (WITH_SCRIPTING)
 			"The value corresponds to 'Connection.TerminalId'. " +
@@ -426,12 +426,13 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "Script", ShortName = "s", Description = "Run the given script.")]
+		[OptionArg(Name = "Script", ShortName = "s", Description = "Run the given script, optionally using the terminal specified.")]
 		public string RequestedScriptFilePath;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "ScriptLog", ShortName = "sl", Description = "The desired script log file.")]
+		[CLSCompliant(false)]                                 // Arrays as attribute arguments is not CLS-compliant.
+		[OptionArg(Name = "ScriptLog", ShortNames = new string[] { "sl", "slog" }, Description = "The desired script log file.")]
 		public string RequestedScriptLogFilePath;
 
 		/// <summary></summary>
@@ -442,7 +443,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[CLSCompliant(false)]                                  // Arrays as attribute arguments is not CLS-compliant.
-		[OptionArg(Name = "ScriptArgs", ShortNames = new string[] { "sa", "sca" }, Description = "The input arguments for the script.")]
+		[OptionArg(Name = "ScriptArgs", ShortNames = new string[] { "sa", "sca", "sargs" }, Description = "The input arguments for the script.")]
 		public string[] RequestedScriptArgs;                               // Backward compatibility "script command line args".
 
 	#endif // WITH_SCRIPTING
@@ -470,8 +471,11 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "KeepOpenOnError", ShortName = "ke", Description = "Keep " + ApplicationEx.ProductNameConstWorkaround + " open in case there is an error while performing the requested operation.")]
-		public bool KeepOpenOnError;
+		[CLSCompliant(false)] // Arrays as attribute arguments is not CLS-compliant.
+		[OptionArg(Names = new string[] { "KeepOpenOnError", "KeepOpenOnNonSuccess" }, ShortNames = new string[] { "ke", "kpe", "kpn" }, Description =
+			"Keep " + ApplicationEx.ProductNameConstWorkaround + " open in case there is an error while performing the requested operation, or the operation could not be completed successfully. " +
+			"Useful to keep the application open to analyze the cause of an error or failed operation.")]
+		public bool KeepOpenOnNonSuccess;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
@@ -480,7 +484,8 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "NonInteractive", ShortName = "ni", Description = "Run the " + ApplicationEx.ProductNameConstWorkaround + " application without any user or other interaction, even in case of errors." + EnvironmentEx.NewLineConstWorkaround +
+		[OptionArg(Name = "NonInteractive", ShortName = "ni", Description =
+			"Run the " + ApplicationEx.ProductNameConstWorkaround + " application without any user or other interaction, even in case of errors." + EnvironmentEx.NewLineConstWorkaround +
 			"For " + ApplicationEx.ProductNameConstWorkaround + "[.exe], interaction is enabled by default." + EnvironmentEx.NewLineConstWorkaround +
 			"For " + ApplicationEx.ProductNameConstWorkaround + "Console[.exe], interaction is always disabled, i.e. this option has no effect.")]
 		public bool NonInteractive;

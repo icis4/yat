@@ -85,13 +85,13 @@ namespace YAT.Model
 		/// Workaround to the following issue:
 		///
 		/// A test (e.g. 'FileHandlingTest') needs to verify the settings files after calling
-		/// <see cref="Main.Exit()"/>. But at that moment, the settings have already been disposed
-		/// of and can no longer be accessed.
+		/// <see cref="Main.Exit_ForTestOnly()"/>. But at that moment, the settings have already
+		/// been disposed of and can no longer be accessed.
 		/// The first approach was to disable disposal in <see cref="Close()"/>. But that leads to
 		/// remaining resources, resulting in significant slow-down when exiting NUnit.
 		/// The second approach was to retrieve the required information *before* exiting, i.e.
-		/// calling <see cref="Main.Exit()"/>. But that doesn't work at all, since auto-save paths
-		/// are only evaluated *at* <see cref="Main.Exit()"/>.
+		/// calling <see cref="Main.Exit_ForTestOnly()"/>. But that doesn't work at all, since
+		/// auto-save paths are only evaluated *at* <see cref="Main.Exit_ForTestOnly()"/>.
 		///
 		/// This workaround is considered the best option to solve this issue.
 		/// </summary>
@@ -160,7 +160,7 @@ namespace YAT.Model
 		public event EventHandler<ClosedEventArgs> Closed;
 
 		/// <summary></summary>
-		public event EventHandler ExitRequest;
+		public event EventHandler<EventArgs<ExitMode>> ExitRequest;
 
 		#endregion
 
@@ -1014,12 +1014,12 @@ namespace YAT.Model
 		/// Closes the workspace and prompts if the settings have changed.
 		/// </summary>
 		/// <remarks>
-		/// In case of a main close, <see cref="CloseWithOptions"/> below must be called
+		/// In case of a main exit, <see cref="CloseWithOptions"/> below must be called
 		/// with the first argument set to <c>true</c>.
 		/// </remarks>
 		public virtual bool Close()
 		{
-			return (CloseWithOptions(false)); // See remarks above.
+			return (CloseWithOptions(false, ExitMode.None)); // See remarks above.
 		}
 
 		/// <summary>
@@ -1051,12 +1051,10 @@ namespace YAT.Model
 		///   - normal, existing file, no auto save => question                           : (w4b)
 		///
 		/// Save and close must be done sequentially:
-		/// 1. Save terminals and workspace
-		/// 2. Close terminals and workspace, but only if save was successful
-		///
-		/// Saying hello to StyleCop ;-.
+		/// 1. Save terminals and workspace.
+		/// 2. Close terminals and workspace, but only if save was successful.
 		/// </remarks>
-		public virtual bool CloseWithOptions(bool isMainExit)
+		public virtual bool CloseWithOptions(bool isMainExit, ExitMode exitMode)
 		{
 			AssertUndisposed();
 
@@ -1064,6 +1062,7 @@ namespace YAT.Model
 
 			// Keep info of existing former auto file:
 			bool formerExistingAutoFileAutoSaved = this.settingsRoot.AutoSaved;
+
 			string formerExistingAutoFilePath = null;
 			if (this.settingsRoot.AutoSaved && this.settingsHandler.SettingsFileExists)
 				formerExistingAutoFilePath = this.settingsHandler.SettingsFilePath;
@@ -1073,12 +1072,24 @@ namespace YAT.Model
 			// -------------------------------------------------------------------------------------
 
 			bool doSaveWorkspace = true;
-			bool successWithWorkspace = false;
 			bool autoSaveIsAllowedForWorkspace = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
+			bool successWithWorkspace = false;
 
 			bool doSaveTerminals = true;
-			bool successWithTerminals = false;
 			bool autoSaveIsAllowedForTerminals = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
+			bool successWithTerminals = false;
+
+			// Do not save anything in case of an auto exit, e.g. an exit after a command line triggered operation.
+			if (isMainExit && (exitMode == ExitMode.Auto))
+			{
+				doSaveWorkspace = false;
+				autoSaveIsAllowedForWorkspace = false;
+				successWithWorkspace = true;
+
+				doSaveTerminals = false;
+				autoSaveIsAllowedForTerminals = false;
+				successWithTerminals = true;
+			}
 
 			// Do neither try to auto save nor manually save if there is no existing file (m1, m3)
 			// or (w1, w3), except in case of m1a, i.e. when the file has never been loaded so far.
@@ -1159,7 +1170,7 @@ namespace YAT.Model
 					}
 				}
 			}
-			else
+			else // isWorkspaceClose
 			{
 				if (!this.settingsRoot.HaveChanged)
 				{
@@ -1274,7 +1285,7 @@ namespace YAT.Model
 			{
 				// Status text request must be before closed event, closed event may close the view:
 				if (isMainExit)
-					OnTimedStatusTextRequest("Workspace successfully closed, exiting.");
+					OnTimedStatusTextRequest("Workspace successfully closed, exiting...");
 				else
 					OnTimedStatusTextRequest("Workspace successfully closed.");
 
@@ -1302,7 +1313,7 @@ namespace YAT.Model
 				if (isMainExit)
 					OnTimedStatusTextRequest("Exit canceled, workspace not closed.");
 				else
-					OnTimedStatusTextRequest("Close canceled, workspace not closed.");
+					OnTimedStatusTextRequest("Close canceled.");
 
 				return (false);
 			}
@@ -1422,7 +1433,7 @@ namespace YAT.Model
 			OnTerminalRemoved(new TerminalEventArgs(t, sequentialId, dynamicId, fixedId));
 		}
 
-		private void terminal_ExitRequest(object sender, EventArgs e)
+		private void terminal_ExitRequest(object sender, EventArgs<ExitMode> e)
 		{
 			OnExitRequest(e);
 		}
@@ -2638,7 +2649,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnExitRequest(EventArgs e)
+		protected virtual void OnExitRequest(EventArgs<ExitMode> e)
 		{
 			this.eventHelper.RaiseSync(ExitRequest, this, e);
 		}

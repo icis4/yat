@@ -368,17 +368,17 @@ namespace YAT.Model
 				{
 					success = OpenWorkspaceFromSettings(this.launchArgs.WorkspaceSettingsHandler, this.launchArgs.RequestedDynamicTerminalId, this.launchArgs.RequestedFixedTerminalId, this.launchArgs.TerminalSettingsHandler);
 				}
-				else if (workspaceIsRequested) // Workspace only.
+				else if (workspaceIsRequested) // Workspace only:
 				{
 					success = OpenWorkspaceFromSettings(this.launchArgs.WorkspaceSettingsHandler);
 				}
-				else // Terminal only.
+				else // Terminal only:
 				{
 					success = OpenTerminalFromSettings(this.launchArgs.TerminalSettingsHandler);
 				}
 
-				// Note that any existing auto workspace settings are kept as they are.
-				// Thus, they can be used again at the next 'normal' start of YAT.
+				// Note that existing auto workspace settings are kept as they are, such they can
+				// again be used at the next 'normal' (i.e. without command line args) start of YAT.
 			}
 
 			if (!success && ApplicationSettings.LocalUserSettingsAreCurrentlyOwnedByThisInstance && !this.commandLineArgs.Empty)
@@ -498,7 +498,7 @@ namespace YAT.Model
 				{
 					this.launchArgs.ShowNewTerminalDialog = true;
 					this.launchArgs.KeepOpen              = true;
-					this.launchArgs.KeepOpenOnError       = true;
+					this.launchArgs.KeepOpenOnNonSuccess  = true;
 
 					return (true);
 				}
@@ -508,7 +508,7 @@ namespace YAT.Model
 				{
 					this.launchArgs.ShowNewTerminalDialog = this.commandLineArgs.Interactive;
 					this.launchArgs.KeepOpen              = true;
-					this.launchArgs.KeepOpenOnError       = true;
+					this.launchArgs.KeepOpenOnNonSuccess  = true;
 
 					return (true);
 				}
@@ -525,7 +525,7 @@ namespace YAT.Model
 			{
 				this.launchArgs.ShowNewTerminalDialog = false;
 				this.launchArgs.KeepOpen              = this.commandLineArgs.KeepOpen;
-				this.launchArgs.KeepOpenOnError       = this.commandLineArgs.KeepOpenOnError;
+				this.launchArgs.KeepOpenOnNonSuccess  = this.commandLineArgs.KeepOpenOnNonSuccess;
 
 				return (true);
 			}
@@ -572,7 +572,7 @@ namespace YAT.Model
 					}
 					else
 					{
-						this.launchArgs.MessageOnError = Utilities.MessageHelper.ComposeMessage("Unable to open workspace file", absoluteFilePath, ex);
+						this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("Unable to open workspace file", absoluteFilePath, ex);
 						return (false);
 					}
 				}
@@ -587,7 +587,7 @@ namespace YAT.Model
 					}
 					else
 					{
-						this.launchArgs.MessageOnError = Utilities.MessageHelper.ComposeMessage("Unable to open terminal file", absoluteFilePath, ex);
+						this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("Unable to open terminal file", absoluteFilePath, ex);
 						return (false);
 					}
 				}
@@ -608,13 +608,13 @@ namespace YAT.Model
 						string messageOnError;
 						if (!ProcessCommandLineArgsIntoScriptLaunchOptions(out messageOnError))
 						{
-							this.launchArgs.MessageOnError = messageOnError;
+							this.launchArgs.MessageOnFailure = messageOnError;
 							return (false);
 						}
 					}
 					else
 					{
-						this.launchArgs.MessageOnError = Utilities.MessageHelper.ComposeMessage("Script file does not exist", absoluteFilePath);
+						this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("Script file does not exist", absoluteFilePath);
 						return (false);
 					}
 				}
@@ -628,96 +628,136 @@ namespace YAT.Model
 			{
 				if (this.launchArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count > 0)
 				{
-					string terminalFilePath = null;
+					var dynamicTerminalIdOptionIsGiven = this.commandLineArgs.OptionIsGiven("DynamicTerminalId");
+					var fixedTerminalIdOptionIsGiven   = this.commandLineArgs.OptionIsGiven("FixedTerminalId");
 
-					if (this.commandLineArgs.OptionIsGiven("DynamicTerminalId"))
+					var requestedDynamicTerminalId = this.commandLineArgs.RequestedDynamicTerminalId;
+					var requestedFixedTerminalId   = this.commandLineArgs.RequestedFixedTerminalId;
+
+					// Prevent non-matching combination:
+					if (dynamicTerminalIdOptionIsGiven && fixedTerminalIdOptionIsGiven)
 					{
-						int requestedDynamicTerminalId = this.commandLineArgs.RequestedDynamicTerminalId;
+						if      ((requestedDynamicTerminalId == TerminalIds.ActiveDynamicId) &&
+						         (requestedFixedTerminalId   == TerminalIds.ActiveDynamicId)) {
+							// OK, both refer to the active terminal.
+						}
+						else if ((requestedDynamicTerminalId == TerminalIds.InvalidDynamicId) &&
+						         (requestedFixedTerminalId   == TerminalIds.InvalidDynamicId)) {
+							// OK, both refer to no terminal, i.e. disabled the operation.
+						}
+						else {
+							this.launchArgs.MessageOnFailure = string.Format(CultureInfo.CurrentCulture, "If dynamic as well as fixed terminal ID is given, both IDs must either be 0 (active) or -1 (invalid), but dynamic ID = {0} and fixed ID = {1}", requestedDynamicTerminalId, requestedFixedTerminalId);
+							return (false);
+						}
+					}
+
+					string terminalFilePathOfGivenId = null;
+
+					if (dynamicTerminalIdOptionIsGiven)
+					{
 						int lastDynamicId = TerminalIds.IndexToDynamicId(this.launchArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1);
 
-						if     ((          requestedDynamicTerminalId >= TerminalIds.FirstDynamicId) && (requestedDynamicTerminalId <= lastDynamicId))
+						if     ((           requestedDynamicTerminalId >= TerminalIds.FirstDynamicId) && (requestedDynamicTerminalId <= lastDynamicId)) {
 							this.launchArgs.RequestedDynamicTerminalId = requestedDynamicTerminalId;
-						else if (          requestedDynamicTerminalId == TerminalIds.ActiveDynamicId)
+
+							// Invalidate 'the other':
+							                requestedFixedTerminalId = TerminalIds.InvalidFixedId; // Required to skip processing further below.
+							this.launchArgs.RequestedFixedTerminalId = TerminalIds.InvalidFixedId;
+						}
+						else if (           requestedDynamicTerminalId == TerminalIds.ActiveDynamicId) {
 							this.launchArgs.RequestedDynamicTerminalId = TerminalIds.ActiveDynamicId;
-						else if (          requestedDynamicTerminalId == TerminalIds.InvalidDynamicId)
+						}
+						else if (           requestedDynamicTerminalId == TerminalIds.InvalidDynamicId) {
 							this.launchArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
-						else
+						}
+						else {
+							this.launchArgs.MessageOnFailure = string.Format(CultureInfo.CurrentCulture, "A terminal with dynamic ID = {0} is not available", requestedDynamicTerminalId);
 							return (false);
+						}
 
 						if (this.launchArgs.RequestedDynamicTerminalId != TerminalIds.InvalidDynamicId)
 						{
 							if (this.launchArgs.RequestedDynamicTerminalId == TerminalIds.ActiveDynamicId) // The active terminal is located last in the collection:
-								terminalFilePath = this.launchArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[this.launchArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1].FilePath;
+								terminalFilePathOfGivenId = this.launchArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[this.launchArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1].FilePath;
 							else
-								terminalFilePath = this.launchArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[TerminalIds.DynamicIdToIndex(this.launchArgs.RequestedDynamicTerminalId)].FilePath;
+								terminalFilePathOfGivenId = this.launchArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[TerminalIds.DynamicIdToIndex(this.launchArgs.RequestedDynamicTerminalId)].FilePath;
 						}
-					}
-					else
-					{
-						this.launchArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId;
 					}
 
-					if (this.commandLineArgs.OptionIsGiven("FixedTerminalId"))
+					if (fixedTerminalIdOptionIsGiven)
 					{
-						int requestedFixedTerminalId = this.commandLineArgs.RequestedFixedTerminalId;
-						if (requestedFixedTerminalId == TerminalIds.InvalidFixedId)
-						{
+						if       (          requestedFixedTerminalId == TerminalIds.InvalidFixedId) {
 							this.launchArgs.RequestedFixedTerminalId = TerminalIds.InvalidFixedId; // Usable to disable the operation.
 						}
-						else if (requestedFixedTerminalId == TerminalIds.ActiveFixedId)
-						{
-							this.launchArgs.RequestedFixedTerminalId = requestedFixedTerminalId; // The active terminal is located last in the collection:
-							terminalFilePath = this.launchArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[this.launchArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1].FilePath;
+						else if (           requestedFixedTerminalId == TerminalIds.ActiveFixedId) {
+							this.launchArgs.RequestedFixedTerminalId = TerminalIds.ActiveFixedId; // The active terminal is located last in the collection:
+							terminalFilePathOfGivenId = this.launchArgs.WorkspaceSettingsHandler.Settings.TerminalSettings[this.launchArgs.WorkspaceSettingsHandler.Settings.TerminalSettings.Count - 1].FilePath;
 						}
-						else
-						{
+						else {
 							foreach (var terminal in this.launchArgs.WorkspaceSettingsHandler.Settings.TerminalSettings)
 							{
 								if (terminal.FixedId == requestedFixedTerminalId)
 								{
 									this.launchArgs.RequestedFixedTerminalId = requestedFixedTerminalId;
-									terminalFilePath = terminal.FilePath;
+									terminalFilePathOfGivenId = terminal.FilePath;
 									break;
 								}
 							}
 
-							if (string.IsNullOrEmpty(terminalFilePath))
+							if (string.IsNullOrEmpty(terminalFilePathOfGivenId))
+							{
+								this.launchArgs.MessageOnFailure = string.Format(CultureInfo.CurrentCulture, "A terminal with fixed ID = {0} is not available", requestedFixedTerminalId);
 								return (false);
+							}
+
+							// Invalidate 'the other':
+							                requestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Consistency with processing further above.
+							this.launchArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId;
 						}
 					}
-					else
-					{
-						this.launchArgs.RequestedFixedTerminalId = TerminalIds.InvalidFixedId;
-					}
 
-					if ((this.launchArgs.RequestedDynamicTerminalId != TerminalIds.InvalidDynamicId) ||
-					    (this.launchArgs.RequestedFixedTerminalId   != TerminalIds.InvalidFixedId))
+					if (!string.IsNullOrEmpty(terminalFilePathOfGivenId))
 					{
 						string workspaceFilePath = this.launchArgs.WorkspaceSettingsHandler.SettingsFilePath;
 						DocumentSettingsHandler<TerminalSettingsRoot> sh;
-						if (OpenTerminalFile(workspaceFilePath, terminalFilePath, out sh))
+						Exception exceptionOnFailure;
+						if (OpenTerminalFile(workspaceFilePath, terminalFilePathOfGivenId, out sh, out exceptionOnFailure))
+						{
 							this.launchArgs.TerminalSettingsHandler = sh;
+						}
 						else
+						{
+							this.launchArgs.MessageOnFailure = exceptionOnFailure.Message;
 							return (false);
+						}
 					}
 				}
 			}
 			else if (this.launchArgs.TerminalSettingsHandler != null) // Applies to a dedicated terminal.
 			{
 				if (this.commandLineArgs.RequestedDynamicTerminalId == TerminalIds.InvalidDynamicId)
-					this.launchArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
+					this.launchArgs     .RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
+
+				if (this.commandLineArgs.RequestedFixedTerminalId == TerminalIds.InvalidFixedId)
+					this.launchArgs     .RequestedFixedTerminalId = TerminalIds.InvalidFixedId; // Usable to disable the operation.
 			}
-			else if (this.commandLineArgs.NewIsRequested) // Applies to a new terminal.
+			else if (this.commandLineArgs.NewIsRequested) // Results in a new terminal.
 			{
 				if (this.commandLineArgs.RequestedDynamicTerminalId == TerminalIds.InvalidDynamicId)
-					this.launchArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
+					this.launchArgs     .RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
+
+				if (this.commandLineArgs.RequestedFixedTerminalId == TerminalIds.InvalidFixedId)
+					this.launchArgs     .RequestedFixedTerminalId = TerminalIds.InvalidFixedId; // Usable to disable the operation.
 
 				this.launchArgs.TerminalSettingsHandler = new DocumentSettingsHandler<TerminalSettingsRoot>();
 			}
-			else if (this.commandLineArgs.NewIsRequestedImplicitly(out implicitIOType)) // Also applies to a new terminal.
+			else if (this.commandLineArgs.NewIsRequestedImplicitly(out implicitIOType)) // Also results in a new terminal.
 			{
 				if (this.commandLineArgs.RequestedDynamicTerminalId == TerminalIds.InvalidDynamicId)
-					this.launchArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
+					this.launchArgs     .RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
+
+				if (this.commandLineArgs.RequestedFixedTerminalId == TerminalIds.InvalidFixedId)
+					this.launchArgs     .RequestedFixedTerminalId = TerminalIds.InvalidFixedId; // Usable to disable the operation.
 
 				this.launchArgs.TerminalSettingsHandler = new DocumentSettingsHandler<TerminalSettingsRoot>();
 
@@ -728,8 +768,8 @@ namespace YAT.Model
 			}                                   // dialog, dependent settings must be updated accordingly. But this
 			else                                // must happen AFTER having processed the args into the settings!
 			{
-				this.launchArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Disable the operation.
-				this.launchArgs.RequestedFixedTerminalId   = TerminalIds.InvalidFixedId;   // Disable the operation.
+				this.launchArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Disable the operation in any case.
+				this.launchArgs.RequestedFixedTerminalId   = TerminalIds.InvalidFixedId;   // Disable the operation in any case.
 			}
 
 			// Prio 8 = Override explicit settings as desired:
@@ -765,7 +805,7 @@ namespace YAT.Model
 			if ((this.launchArgs.RequestedDynamicTerminalId != TerminalIds.InvalidDynamicId) ||
 			    (this.launchArgs.RequestedFixedTerminalId   != TerminalIds.InvalidFixedId))
 			{
-				if (this.commandLineArgs.OptionIsGiven("TransmitText"))
+				if      (this.commandLineArgs.OptionIsGiven("TransmitText"))
 				{
 					this.launchArgs.RequestedTransmitText = this.commandLineArgs.RequestedTransmitText;
 					this.launchArgs.PerformOperationOnRequestedTerminal = true;
@@ -784,10 +824,10 @@ namespace YAT.Model
 				this.launchArgs.RequestedScriptFilePath = this.commandLineArgs.RequestedScriptFilePath;
 				this.launchArgs.ScriptRunIsRequested = true;
 
-				string messageOnError;
-				if (!ProcessCommandLineArgsIntoScriptLaunchOptions(out messageOnError))
+				string messageOnFailure;
+				if (!ProcessCommandLineArgsIntoScriptLaunchOptions(out messageOnFailure))
 				{
-					this.launchArgs.MessageOnError = messageOnError;
+					this.launchArgs.MessageOnFailure = messageOnFailure;
 					return (false);
 				}
 			}
@@ -806,13 +846,13 @@ namespace YAT.Model
 			if (this.launchArgs.PerformOperationOnRequestedTerminal || this.launchArgs.ScriptRunIsRequested)
 		#endif
 			{
-				this.launchArgs.KeepOpen        = this.commandLineArgs.KeepOpen;
-				this.launchArgs.KeepOpenOnError = this.commandLineArgs.KeepOpenOnError;
+				this.launchArgs.KeepOpen             = this.commandLineArgs.KeepOpen;
+				this.launchArgs.KeepOpenOnNonSuccess = this.commandLineArgs.KeepOpenOnNonSuccess;
 			}
 			else
 			{
-				this.launchArgs.KeepOpen        = true;
-				this.launchArgs.KeepOpenOnError = true;
+				this.launchArgs.KeepOpen             = true;
+				this.launchArgs.KeepOpenOnNonSuccess = true;
 			}
 
 			// Prio 13 = Set layout:
@@ -824,13 +864,13 @@ namespace YAT.Model
 
 	#if (WITH_SCRIPTING)
 
-		private bool ProcessCommandLineArgsIntoScriptLaunchOptions(out string messageOnError)
+		private bool ProcessCommandLineArgsIntoScriptLaunchOptions(out string messageOnFailure)
 		{
 			if (this.commandLineArgs.OptionIsGiven("ScriptLog"))
 			{
 				if (!PathEx.IsValid(this.commandLineArgs.RequestedScriptLogFilePath))
 				{
-					messageOnError = Utilities.MessageHelper.ComposeMessage("Invalid script file path", this.commandLineArgs.RequestedScriptLogFilePath);
+					messageOnFailure = Utilities.MessageHelper.ComposeMessage("Invalid script file path", this.commandLineArgs.RequestedScriptLogFilePath);
 					return (false);
 				}
 
@@ -843,7 +883,7 @@ namespace YAT.Model
 			if (this.commandLineArgs.OptionIsGiven("ScriptArgs"))
 				this.launchArgs.RequestedScriptArgs = this.commandLineArgs.RequestedScriptArgs;
 
-			messageOnError = null;
+			messageOnFailure = null;
 			return (true);
 		}
 
@@ -1375,18 +1415,30 @@ namespace YAT.Model
 		// Exit
 		//==========================================================================================
 
+		/// <summary>
+		/// So far, testing solely deals with <see cref="ExitMode.Manual"/>, i.e. what a user would
+		/// be doing. Thus, providing this method for simplicity and obviousness.
+		/// </summary>
+		/// <remarks>
+		/// Note that it is not possible to mark a void-method with [Conditional("TEST")].
+		/// </remarks>
+		public virtual MainResult Exit_ForTestOnly()
+		{
+			return (Exit(ExitMode.Manual));
+		}
+
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Exit", Justification = "Exit() as method name is the obvious name and should be OK for other languages, .NET itself uses it in Application.Exit().")]
-		public virtual MainResult Exit()
+		public virtual MainResult Exit(ExitMode exitMode)
 		{
 			bool cancel;
-			return (Exit(out cancel));
+			return (Exit(exitMode, out cancel));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Exit", Justification = "Exit() as method name is the obvious name and should be OK for other languages, .NET itself uses it in Application.Exit().")]
-		public virtual MainResult Exit(out bool cancel)
+		public virtual MainResult Exit(ExitMode exitMode, out bool cancel)
 		{
 		#if (WITH_SCRIPTING)
 
@@ -1419,7 +1471,7 @@ namespace YAT.Model
 
 			bool workspaceSuccess;
 			if (this.workspace != null)
-				workspaceSuccess = this.workspace.CloseWithOptions(true);
+				workspaceSuccess = this.workspace.CloseWithOptions(true, exitMode);
 			else
 				workspaceSuccess = true;
 
@@ -1572,9 +1624,9 @@ namespace YAT.Model
 			OnWorkspaceClosed(e);
 		}
 
-		private void workspace_ExitRequest(object sender, EventArgs e)
+		private void workspace_ExitRequest(object sender, EventArgs<ExitMode> e)
 		{
-			Exit();
+			Exit(e.Value);
 		}
 
 		#endregion
@@ -1879,10 +1931,9 @@ namespace YAT.Model
 		}
 
 		/// <remarks>Needed for opening command line requested terminal files without yet creating a workspace.</remarks>
-		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
+		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exceptionOnFailure)
 		{
 			string absoluteTerminalFilePath;
-			Exception exceptionOnFailure;
 			return (OpenTerminalFile(workspaceFilePath, terminalFilePath, out absoluteTerminalFilePath, out settingsHandler, out exceptionOnFailure));
 		}
 
@@ -2090,7 +2141,7 @@ namespace YAT.Model
 						try
 						{
 							OnFixedStatusTextRequest("Automatically transmitting text on terminal " + requestedTerminalIdText);
-							requestedTerminal.SendText(new Command(text)); // No explicit default radix available (yet).
+							requestedTerminal.SendText(text, addToRecents: false); // No explicit default radix available (yet).
 							success = true;
 						}
 						catch (Exception ex)
@@ -2118,7 +2169,7 @@ namespace YAT.Model
 						try
 						{
 							OnFixedStatusTextRequest("Automatically transmitting file on terminal " + requestedTerminalIdText);
-							requestedTerminal.SendFile(new Command("", true, filePath)); // No explicit default radix available (yet).
+							requestedTerminal.SendFile(filePath, addToRecents: false); // No explicit default radix available (yet).
 							success = true;
 						}
 						catch (Exception ex)
@@ -2152,7 +2203,7 @@ namespace YAT.Model
 		private void StartExitTimerIfNeeded(bool operationSuccess)
 		{
 			if ((!this.launchArgs.KeepOpen) &&
-			    (!(this.launchArgs.KeepOpenOnError && !operationSuccess)))
+			    (!(this.launchArgs.KeepOpenOnNonSuccess && !operationSuccess)))
 			{
 				if (operationSuccess)
 					OnFixedStatusTextRequest("Operation successfully performed, triggering exit...");
@@ -2244,7 +2295,7 @@ namespace YAT.Model
 					try
 					{
 						OnFixedStatusTextRequest("Automatically exiting " + ApplicationEx.ProductName + "..."); // "YAT" or "YATConsole", as indicated in main title bar.
-						Exit();
+						Exit(ExitMode.Auto);
 					}
 					catch (Exception ex)
 					{

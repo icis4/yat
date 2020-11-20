@@ -212,7 +212,7 @@ namespace YAT.View.Test
 				@"""" + workspaceSettingsFilePath + @"""",
 				@"-tf=""" + transmitFilePath + @"""",
 				@"-di=0", // DynamicId
-				@"-ke"    // KeepOpenOnError
+				@"-kpe"   // KeepOpenOn[Error|NonSuccess]
 			};
 
 			var main = new Application.Main(args);

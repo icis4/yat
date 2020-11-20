@@ -7174,7 +7174,7 @@ namespace YAT.View.Forms
 			bool showErrorModally = false;
 			var main = (this.mdiParent as Main);
 			if (main != null)
-				showErrorModally = main.UnderlyingMain.LaunchArgs.KeepOpenOnError;
+				showErrorModally = main.UnderlyingMain.LaunchArgs.KeepOpenOnNonSuccess;
 
 			if (e.Severity == Domain.IOErrorSeverity.Acceptable) // Handle acceptable issues.
 			{

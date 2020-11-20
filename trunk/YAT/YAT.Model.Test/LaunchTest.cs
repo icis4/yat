@@ -135,15 +135,15 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,    Is.True);
 
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.InvalidDynamicId));
-				Assert.That(m.LaunchArgs.RequestedFixedTerminalId,            Is.EqualTo(TerminalIds.InvalidFixedId));
+				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
+				Assert.That(m.LaunchArgs.RequestedFixedTerminalId,            Is.EqualTo(TerminalIds.ActiveFixedId));
 				Assert.That(m.LaunchArgs.RequestedTransmitText,               Is.Null.Or.Empty);
 				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
-				Assert.That(m.LaunchArgs.KeepOpen,        Is.True);
-				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
-				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,             Is.True);
+				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,       Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,         Is.False);
 			}
 		}
 
@@ -196,7 +196,7 @@ namespace YAT.Model.Test
 
 				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
 				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
-				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Not.Null); // By default the last terminal in the workspace.
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Null);
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                     Is.False);
 			}
 
@@ -206,7 +206,7 @@ namespace YAT.Model.Test
 
 				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
 				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
-				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Not.Null); // By default the last terminal in the workspace.
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Null);
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                     Is.False);
 			}
 		}
@@ -297,7 +297,7 @@ namespace YAT.Model.Test
 
 				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
 				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
-				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Not.Null); // By default the last terminal in the workspace.
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Null);
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                     Is.False);
 			}
 
@@ -330,7 +330,7 @@ namespace YAT.Model.Test
 
 				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler,                  Is.Not.Null);
 				Assert.That(m.LaunchArgs.WorkspaceSettingsHandler.SettingsFilePath, Is.EqualTo(WorkspaceFilePath));
-				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Not.Null); // By default the last terminal in the workspace.
+				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Null);
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                     Is.False);
 			}
 
@@ -436,17 +436,17 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
 
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.InvalidDynamicId));
-				Assert.That(m.LaunchArgs.RequestedFixedTerminalId,            Is.EqualTo(TerminalIds.InvalidFixedId));
+				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
+				Assert.That(m.LaunchArgs.RequestedFixedTerminalId,            Is.EqualTo(TerminalIds.ActiveFixedId));
 				Assert.That(m.LaunchArgs.RequestedTransmitText,               Is.Null.Or.Empty);
 				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 
-				Assert.That(m.LaunchArgs.KeepOpen,        Is.True);
-				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
-				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,             Is.True);
+				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,       Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,         Is.False);
 			}
 		}
 
@@ -480,17 +480,17 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
 
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.InvalidDynamicId));
-				Assert.That(m.LaunchArgs.RequestedFixedTerminalId,            Is.EqualTo(TerminalIds.InvalidFixedId));
+				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
+				Assert.That(m.LaunchArgs.RequestedFixedTerminalId,            Is.EqualTo(TerminalIds.ActiveFixedId));
 				Assert.That(m.LaunchArgs.RequestedTransmitText,               Is.Null.Or.Empty);
 				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 
-				Assert.That(m.LaunchArgs.KeepOpen,        Is.True);
-				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
-				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,             Is.True);
+				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,       Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,         Is.False);
 			}
 		}
 
@@ -524,17 +524,17 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler.Settings.LogIsOn,           Is.True);
 
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.False);
-				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.InvalidDynamicId));
-				Assert.That(m.LaunchArgs.RequestedFixedTerminalId,            Is.EqualTo(TerminalIds.InvalidFixedId));
+				Assert.That(m.LaunchArgs.RequestedDynamicTerminalId,          Is.EqualTo(TerminalIds.ActiveDynamicId));
+				Assert.That(m.LaunchArgs.RequestedFixedTerminalId,            Is.EqualTo(TerminalIds.ActiveFixedId));
 				Assert.That(m.LaunchArgs.RequestedTransmitText,               Is.Null.Or.Empty);
 				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 
-				Assert.That(m.LaunchArgs.KeepOpen,        Is.True);
-				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
-				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,             Is.True);
+				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,       Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,         Is.False);
 			}
 		}
 
@@ -562,10 +562,10 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,               Is.False);
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.False);
 
-				Assert.That(m.LaunchArgs.KeepOpen,        Is.True);
-				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
-				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,             Is.True);
+				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,       Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,         Is.False);
 			}
 		}
 
@@ -594,10 +594,10 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.False);
 
-				Assert.That(m.LaunchArgs.KeepOpen,        Is.True);
-				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
-				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,             Is.True);
+				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,       Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,         Is.False);
 			}
 		}
 
@@ -614,7 +614,7 @@ namespace YAT.Model.Test
 		{
 			string text = @"Send something\!(Delay)Send delayed";
 
-			using (var m = new Main(new CommandLineArgs(new string[] { TerminalFilePath, "--TransmitText=" + text, "--KeepOpenOnError"})))
+			using (var m = new Main(new CommandLineArgs(new string[] { TerminalFilePath, "--TransmitText=" + text, "--KeepOpenOnNonSuccess"})))
 			{
 				PrepareMainAndVerifyResult(m);
 
@@ -626,10 +626,10 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,               Is.False);
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.True);
 
-				Assert.That(m.LaunchArgs.KeepOpen,        Is.False);
-				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
-				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,             Is.False);
+				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,       Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,         Is.False);
 			}
 		}
 
@@ -646,7 +646,7 @@ namespace YAT.Model.Test
 		{
 			string text = @"Send something\!(Delay)Send delayed";
 
-			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--TransmitText=" + text, "--FixedTerminalId=1", "--KeepOpenOnError"})))
+			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--TransmitText=" + text, "--FixedTerminalId=1", "--KeepOpenOnNonSuccess"})))
 			{
 				PrepareMainAndVerifyResult(m);
 
@@ -660,10 +660,10 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,               Is.False);
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.True);
 
-				Assert.That(m.LaunchArgs.KeepOpen,        Is.False);
-				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
-				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,             Is.False);
+				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,       Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,         Is.False);
 			}
 		}
 
@@ -681,7 +681,7 @@ namespace YAT.Model.Test
 			string filePath = Temp.MakeTempFilePath(GetType(), ".xyz");
 			File.Create(filePath); // File must exist!
 
-			using (var m = new Main(new CommandLineArgs(new string[] { TerminalFilePath, "--TransmitFile=" + filePath, "--KeepOpenOnError"})))
+			using (var m = new Main(new CommandLineArgs(new string[] { TerminalFilePath, "--TransmitFile=" + filePath, "--KeepOpenOnNonSuccess"})))
 			{
 				PrepareMainAndVerifyResult(m);
 
@@ -693,10 +693,10 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,               Is.False);
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.True);
 
-				Assert.That(m.LaunchArgs.KeepOpen,        Is.False);
-				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
-				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,             Is.False);
+				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,       Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,         Is.False);
 			}
 		}
 
@@ -714,7 +714,7 @@ namespace YAT.Model.Test
 			string filePath = Temp.MakeTempFilePath(GetType(), ".xyz");
 			File.Create(filePath); // File must exist!
 
-			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--TransmitFile=" + filePath, "--FixedTerminalId=2", "--KeepOpenOnError"})))
+			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath, "--TransmitFile=" + filePath, "--FixedTerminalId=2", "--KeepOpenOnNonSuccess"})))
 			{
 				PrepareMainAndVerifyResult(m);
 
@@ -728,10 +728,10 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,               Is.False);
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.True);
 
-				Assert.That(m.LaunchArgs.KeepOpen,        Is.False);
-				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.True);
-				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
-				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,             Is.False);
+				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.True);
+				Assert.That(m.LaunchArgs.TileHorizontal,       Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,         Is.False);
 			}
 		}
 
@@ -755,10 +755,10 @@ namespace YAT.Model.Test
 
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 
-				Assert.That(m.LaunchArgs.KeepOpen,        Is.False);
-				Assert.That(m.LaunchArgs.KeepOpenOnError, Is.False);
-				Assert.That(m.LaunchArgs.TileHorizontal,  Is.False);
-				Assert.That(m.LaunchArgs.TileVertical,    Is.False);
+				Assert.That(m.LaunchArgs.KeepOpen,             Is.False);
+				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.False);
+				Assert.That(m.LaunchArgs.TileHorizontal,       Is.False);
+				Assert.That(m.LaunchArgs.TileVertical,         Is.False);
 			}
 		}
 
