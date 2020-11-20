@@ -33,6 +33,34 @@ namespace YAT.Model
 	#pragma warning disable 1591
 
 	/// <summary>
+	/// Enumeration of all the main result return codes.
+	/// </summary>
+	public enum MainResult
+	{
+	#if (WITH_SCRIPTING)
+		// Positive values are reserved for script result!
+	#endif
+		Success                  =  0,
+		CommandLineError         = -1,
+		ApplicationStartError    = -2,
+		ApplicationStartCancel   = -3,
+		ApplicationRunError      = -4,
+		ApplicationExitError     = -5,
+		UnhandledException       = -6,
+	#if (WITH_SCRIPTING)
+		ScriptInvalidContent     = MT.Albatros.Core.RunResult.ScriptInvalidContent,
+		ScriptStopOnError        = MT.Albatros.Core.RunResult.ScriptStopOnError,
+		ScriptExit               = MT.Albatros.Core.RunResult.ScriptExit,
+		ScriptUserBreak          = MT.Albatros.Core.RunResult.ScriptUserBreak,
+		ScriptUnhandledException = MT.Albatros.Core.RunResult.ScriptUnhandledException,
+	////ScriptInvalidReturnValue = MT.Albatros.Core.RunResult.ScriptInvalidReturnValue, \fixme (2017-02-14 / MKY) legacy...
+		ScriptThreadAbort        = MT.Albatros.Core.RunResult.ThreadAbort,
+		ScriptRemotingException  = MT.Albatros.Core.RunResult.RemotingException,
+		ScriptInvalidOperation   = MT.Albatros.Core.RunResult.InvalidOperation
+	#endif
+	}
+
+	/// <summary>
 	/// Enumeration of the I/O availability check results.
 	/// </summary>
 	public enum CheckResult
@@ -41,6 +69,16 @@ namespace YAT.Model
 		OK,
 		Cancel,
 		Ignore
+	}
+
+	/// <summary>
+	/// Enumeration of the I/O availability check results.
+	/// </summary>
+	public enum ExitMode
+	{
+		None,
+		Manual,
+		Auto
 	}
 
 	#pragma warning restore 1591
