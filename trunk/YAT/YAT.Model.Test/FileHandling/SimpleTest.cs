@@ -158,23 +158,23 @@ namespace YAT.Model.Test.FileHandling
 		[Test]
 		public virtual void TestInitialAutoSaveOnMainExit()
 		{
-			Main main;
-			Workspace workspace;
-			Terminal terminal;
+			Main m;
+			Workspace w;
+			Terminal t;
 
-			Utilities.LaunchAndCreateDefaultTerminal(out main, out workspace, out terminal);
+			Utilities.LaunchAndCreateDefaultTerminal(out m, out w, out t);
 
-			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
-			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+			w.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+			t.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
-			using (main)
+			using (m)
 			{
 				bool success = false;
 
-				success = (main.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, "Main could not be exited successfully!");
 
-				Utilities.VerifyFiles(workspace, true, terminal, true);
+				Utilities.VerifyFiles(w, true, t, true);
 			}
 		}
 
@@ -185,28 +185,28 @@ namespace YAT.Model.Test.FileHandling
 		[Test]
 		public virtual void TestInitialAutoSaveOnWorkspaceAndMainExit()
 		{
-			Main main;
-			Workspace workspace;
-			Terminal terminal;
+			Main m;
+			Workspace w;
+			Terminal t;
 
-			Utilities.LaunchAndCreateDefaultTerminal(out main, out workspace, out terminal);
+			Utilities.LaunchAndCreateDefaultTerminal(out m, out w, out t);
 
-			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
-			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+			w.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+			t.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
-			using (main)
+			using (m)
 			{
 				bool success = false;
 
-				success = workspace.Close();
+				success = w.Close();
 				Assert.That(success, Is.True, "Workspace could not be closed successfully!");
 
-				Utilities.VerifyFiles(workspace, false, terminal, false);
+				Utilities.VerifyFiles(w, false, t, false);
 
-				success = (main.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, "Main could not be exited successfully!");
 
-				Utilities.VerifyFiles(workspace, false, terminal, false);
+				Utilities.VerifyFiles(w, false, t, false);
 			}
 		}
 
@@ -217,28 +217,28 @@ namespace YAT.Model.Test.FileHandling
 		[Test]
 		public virtual void TestInitialAutoSaveOnTerminalAndMainExit()
 		{
-			Main main;
-			Workspace workspace;
-			Terminal terminal;
+			Main m;
+			Workspace w;
+			Terminal t;
 
-			Utilities.LaunchAndCreateDefaultTerminal(out main, out workspace, out terminal);
+			Utilities.LaunchAndCreateDefaultTerminal(out m, out w, out t);
 
-			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
-			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+			w.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+			t.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
-			using (main)
+			using (m)
 			{
 				bool success = false;
 
-				success = terminal.Close();
+				success = t.Close();
 				Assert.That(success, Is.True, "Terminal could not be closed successfully!");
 
-				Utilities.VerifyFiles(workspace, false, terminal, false);
+				Utilities.VerifyFiles(w, false, t, false);
 
-				success = (main.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, "Main could not be exited successfully!");
 
-				Utilities.VerifyFiles(workspace, true, terminal, false);
+				Utilities.VerifyFiles(w, true, t, false);
 			}
 		}
 
@@ -249,33 +249,33 @@ namespace YAT.Model.Test.FileHandling
 		[Test]
 		public virtual void TestInitialAutoSaveOnTerminalAndWorkspaceAndMainExit()
 		{
-			Main main;
-			Workspace workspace;
-			Terminal terminal;
+			Main m;
+			Workspace w;
+			Terminal t;
 
-			Utilities.LaunchAndCreateDefaultTerminal(out main, out workspace, out terminal);
+			Utilities.LaunchAndCreateDefaultTerminal(out m, out w, out t);
 
-			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
-			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+			w.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+			t.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
-			using (main)
+			using (m)
 			{
 				bool success = false;
 
-				success = terminal.Close();
+				success = t.Close();
 				Assert.That(success, Is.True, "Terminal could not be closed successfully!");
 
-				Utilities.VerifyFiles(workspace, false, terminal, false);
+				Utilities.VerifyFiles(w, false, t, false);
 
-				success = workspace.Close();
+				success = w.Close();
 				Assert.That(success, Is.True, "Workspace could not be closed successfully!");
 
-				Utilities.VerifyFiles(workspace, false, terminal, false);
+				Utilities.VerifyFiles(w, false, t, false);
 
-				success = (main.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, "Main could not be exited successfully!");
 
-				Utilities.VerifyFiles(workspace, false, terminal, false);
+				Utilities.VerifyFiles(w, false, t, false);
 			}
 		}
 
@@ -305,7 +305,7 @@ namespace YAT.Model.Test.FileHandling
 
 				terminalLastWriteTimeInitially = File.GetLastWriteTimeUtc(t.SettingsFilePath);
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(step, w, true, true, t, true, false);
@@ -329,7 +329,7 @@ namespace YAT.Model.Test.FileHandling
 				var normalTerminalLastWriteTimeAfterStart = File.GetLastWriteTimeUtc(this.normalTerminalFilePath);
 				Assert.That(normalTerminalLastWriteTimeAfterStart, Is.EqualTo(terminalLastWriteTimeInitially));
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(step, w, true, true, t, true, false);
@@ -359,7 +359,7 @@ namespace YAT.Model.Test.FileHandling
 
 				terminalLastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminalFilePath);
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(step, w, true, true, t, true, false);
@@ -389,7 +389,7 @@ namespace YAT.Model.Test.FileHandling
 				var terminalLastWriteTimeAfterChange = File.GetLastWriteTimeUtc(this.normalTerminalFilePath);
 				Assert.That(terminalLastWriteTimeAfterChange, Is.EqualTo(terminalLastWriteTimeInitially));
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(step, w, true, true, t, true, false);
@@ -419,7 +419,7 @@ namespace YAT.Model.Test.FileHandling
 
 				terminalLastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminalFilePath);
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(step, w, true, true, t, true, false);
@@ -449,7 +449,7 @@ namespace YAT.Model.Test.FileHandling
 				var terminalLastWriteTimeAfterChange = File.GetLastWriteTimeUtc(this.normalTerminalFilePath);
 				Assert.That(terminalLastWriteTimeAfterChange, Is.EqualTo(terminalLastWriteTimeInitially));
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(step, w, true, true, t, true, false);
@@ -476,50 +476,50 @@ namespace YAT.Model.Test.FileHandling
 		{
 			bool success = false;
 
-			Main main;
-			Workspace workspace;
-			Terminal terminal;
+			Main m;
+			Workspace w;
+			Terminal t;
 
 			// Initial start with auto save on exit:
 
-			Utilities.LaunchAndCreateDefaultTerminal(out main, out workspace, out terminal);
+			Utilities.LaunchAndCreateDefaultTerminal(out m, out w, out t);
 
-			workspace.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
-			terminal.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+			w.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+			t.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
-			using (main)
+			using (m)
 			{
-				success = (main.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, "Main could not be exited successfully!");
 
-				Utilities.VerifyFiles(workspace, true, terminal, true);
+				Utilities.VerifyFiles(w, true, t, true);
 			}
 
 			// Subsequent start with auto delete on close of workspace:
 
-			using (main = new Main())
+			using (m = new Main())
 			{
-				success = (main.Launch() == MainResult.Success);
+				success = (m.Launch() == MainResult.Success);
 				Assert.That(success, Is.True, "Main could not be launched!");
 
-				workspace = main.Workspace;
-				Assert.That(workspace, Is.Not.Null, "Workspace not opened from file!");
-				Assert.That(workspace.TerminalCount, Is.EqualTo(1), "Workspace doesn't contain 1 terminal!");
+				w = m.Workspace;
+				Assert.That(w, Is.Not.Null, "Workspace not opened from file!");
+				Assert.That(w.TerminalCount, Is.EqualTo(1), "Workspace doesn't contain 1 terminal!");
 
-				terminal = workspace.ActiveTerminal;
-				Assert.That(terminal, Is.Not.Null, "Terminal not opened from file!");
+				t = w.ActiveTerminal;
+				Assert.That(t, Is.Not.Null, "Terminal not opened from file!");
 
-				Utilities.VerifyFiles(workspace, true, terminal, true);
+				Utilities.VerifyFiles(w, true, t, true);
 
-				success = workspace.Close();
+				success = w.Close();
 				Assert.That(success, Is.True, "Workspace could not be closed successfully!");
 
-				Utilities.VerifyFiles(workspace, false, terminal, false);
+				Utilities.VerifyFiles(w, false, t, false);
 
-				success = (main.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, "Main could not be exited successfully!");
 
-				Utilities.VerifyFiles(workspace, false, terminal, false);
+				Utilities.VerifyFiles(w, false, t, false);
 			}
 		}
 
@@ -567,7 +567,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(t, Is.Not.Null, step + "Terminal could not be created!");
 				t.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(step, w, true, t, true);
@@ -625,7 +625,7 @@ namespace YAT.Model.Test.FileHandling
 
 				Utilities.VerifyFiles(step, w, false, t, true, false);
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(step, w, false, t, true, false);
@@ -656,7 +656,7 @@ namespace YAT.Model.Test.FileHandling
 
 				Utilities.VerifyFiles(step, w, false, t, true, false);
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(step, w, false, t, true, false);
@@ -707,7 +707,7 @@ namespace YAT.Model.Test.FileHandling
 				success = t.SaveAs(this.normalTerminalFilePath);
 				Assert.That(success, Is.True, step + "Terminal could not be saved as!");
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(step, w, true, t, true, false);
@@ -742,7 +742,7 @@ namespace YAT.Model.Test.FileHandling
 				w.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 				w.MessageInputRequest -= workspace_MessageInputRequest_No; // Remaining event sink from 'AttachToWorkspace' above.
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(step, w, true);
@@ -795,7 +795,7 @@ namespace YAT.Model.Test.FileHandling
 				success = w.SaveAs(this.normalWorkspaceFilePath);
 				Assert.That(success, Is.True, step + "Workspace could not be saved as!");
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(step, w, true, false, t, true, false);
@@ -857,7 +857,7 @@ namespace YAT.Model.Test.FileHandling
 				Terminal t1;
 				Utilities.InitialStart("Preparation: ", m, this.normalWorkspaceFilePath, out w, this.normalTerminal1FilePath, out t1);
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(step, w, true, false, t1, true, false);
@@ -897,7 +897,7 @@ namespace YAT.Model.Test.FileHandling
 				t1.SettingsRoot.SendText.Command = new Types.Command(Guid.NewGuid().ToString()); // Implicit change.
 				Assert.That(t1.SettingsRoot.ExplicitHaveChanged, Is.False, step + "Settings have explicitly changed!");
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(step, w, true, false, t1, true, false);
@@ -924,7 +924,7 @@ namespace YAT.Model.Test.FileHandling
 
 				int countBefore = this.terminal_MessageInputRequest_No_counter;
 				t1.MessageInputRequest += terminal_MessageInputRequest_No; // Ignore the "remaining event sink" message that will be output during Exit() below.
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 				int countAfter = this.terminal_MessageInputRequest_No_counter;
 				Assert.That(countAfter, Is.Not.EqualTo(countBefore), "Terminal 1 'MessageInputRequest' was not called!");
@@ -959,7 +959,7 @@ namespace YAT.Model.Test.FileHandling
 				w.MessageInputRequest += workspace_MessageInputRequest_No; // Ignore the "remaining event sink" message that will be output during Exit() below.
 				int terminalCountBefore = this.terminal_MessageInputRequest_No_counter;
 				t2.MessageInputRequest += terminal_MessageInputRequest_No; // Ignore the "remaining event sink" message that will be output during Exit() below.
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 				int terminalCountAfter = this.terminal_MessageInputRequest_No_counter;
 				Assert.That(terminalCountAfter, Is.Not.EqualTo(terminalCountBefore), "Terminal 2 'MessageInputRequest' was not called!");
@@ -1005,7 +1005,7 @@ namespace YAT.Model.Test.FileHandling
 				t1.SettingsRoot.SendText.Command = new Types.Command(Guid.NewGuid().ToString()); // Implicit change.
 				Assert.That(t1.SettingsRoot.ExplicitHaveChanged, Is.False, step + "Settings have explicitly changed!");
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(step, w, true, false, t1, true, false);
@@ -1030,7 +1030,7 @@ namespace YAT.Model.Test.FileHandling
 				t1.SettingsRoot.UserName = Guid.NewGuid().ToString(); // Explicit change.
 				Assert.That(t1.SettingsRoot.ExplicitHaveChanged, Is.True, step + "Settings have not explicitly changed!");
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(step, w, true, false, t1, true, false);
@@ -1062,7 +1062,7 @@ namespace YAT.Model.Test.FileHandling
 				success = t2.SaveAs(this.normalTerminal2FilePath);
 				Assert.That(success, Is.True, step + "Terminal could not be saved as!");
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles
@@ -1094,7 +1094,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(w, Is.Not.Null, step + "Workspace not created!");
 				Assert.That(w.TerminalCount, Is.EqualTo(2), step + "Workspace doesn't contain 2 terminals!");
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 			}
 			#endregion
@@ -1144,7 +1144,7 @@ namespace YAT.Model.Test.FileHandling
 				success = w.SaveAs(this.normalWorkspaceFilePath);
 				Assert.That(success, Is.True, step + "Workspace could not be saved as!");
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 			}
 			#endregion
@@ -1190,7 +1190,7 @@ namespace YAT.Model.Test.FileHandling
 				success = w.Save();
 				Assert.That(success, Is.True,     step + "Workspace could not be saved!");
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True,     step + "Main could not be exited successfully!");
 			}
 			#endregion
@@ -1229,7 +1229,7 @@ namespace YAT.Model.Test.FileHandling
 
 				success = w.Save();
 				Assert.That(success, Is.True, step + "Workspace could not be saved!");
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 			}
 			#endregion
@@ -1258,7 +1258,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(w.ActiveTerminalDynamicId,    Is.EqualTo(2), step + "Dynamic ID of terminal 3 isn't 2!");
 				Assert.That(w.ActiveTerminalSequentialId, Is.EqualTo(2), step + "Sequential ID of terminal 3 isn't 2!");
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, step + "Main could not be exited successfully!");
 			}
 			#endregion
