@@ -86,7 +86,13 @@ namespace YAT.Application
 	/// This class is separated into its own project for those who want to use YAT components within
 	/// their own context.
 	/// </remarks>
-	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Semantic of readonly fields is constant.")]
+	/// <remarks>
+	/// This class could have been implemented as a partial class to ease separation and diffing
+	/// among the four run variants. However, partial classes don't support preprocessor based
+	/// configuration, which is used to configure the run behavior among DEBUG and RELEASE, thus
+	/// not implemented as a partial class.
+	/// </remarks>
+	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
 	public class Main
 	{
 		#region Constants
@@ -154,6 +160,15 @@ namespace YAT.Application
 			"Or, manually close the port after the device got disconnected.";
 
 	#endif
+
+		#endregion
+
+		#region Static Fields
+		//==========================================================================================
+		// Static Fields
+		//==========================================================================================
+
+		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
 
 		#endregion
 
@@ -573,8 +588,7 @@ namespace YAT.Application
 					#endif
 					}
 
-					if (!ApplicationSettings.CloseAndDispose())
-						return (MainResult.ApplicationSettingsError);
+					ApplicationSettings.CloseAndDispose(); // Don't care about result, as upon creation in 'WelcomeScreen'.
 
 					return (Convert(viewResult));
 				}
@@ -799,8 +813,7 @@ namespace YAT.Application
 					#endif
 					}
 
-					if (!ApplicationSettings.CloseAndDispose())
-						return (MainResult.ApplicationSettingsError);
+					ApplicationSettings.CloseAndDispose(); // Don't care about result, as upon creation in 'WelcomeScreen'.
 
 					return (Convert(viewResult));
 				}
@@ -873,6 +886,9 @@ namespace YAT.Application
 		// Non-Public Methods > RunFullyFromConsole
 		//------------------------------------------------------------------------------------------
 
+		Model.MainResult RunFullyFromConsole_exitedResult;
+		AutoResetEvent RunFullyFromConsole_exitedEvent;
+
 		/// <summary>
 		/// Non-view application for automated test usage.
 		/// </summary>
@@ -903,16 +919,12 @@ namespace YAT.Application
 				try
 			#endif
 				{
-					if (ApplicationSettings.Create(applicationSettingsFileAccess))
-					{
-						ApplicationSettings.Load(); // Don't care about result, either settings have been loaded or settings have been set to defaults.
-
-						// Application settings will be closed when exiting main.
-					}
-					else
-					{
+					// Application settings must be created and closed on main thread, otherwise
+					// there will be a synchronization exception on exit (settings are closed there):
+					if (!ApplicationSettings.Create(applicationSettingsFileAccess))
 						return (MainResult.ApplicationSettingsError);
-					}
+
+					ApplicationSettings.Load(); // Don't care about result, either the settings have been loaded or they have been set to defaults.
 				}
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
@@ -930,7 +942,27 @@ namespace YAT.Application
 				{
 					var modelResult = model.Launch();
 					if (modelResult == Model.MainResult.Success)
-						modelResult = model.Exit();
+					{
+						using (this.RunFullyFromConsole_exitedEvent = new AutoResetEvent(false))
+						{
+							this.RunFullyFromConsole_exitedResult = Model.MainResult.ApplicationRunError; // Will be overridden by the 'Exited' event handler.
+							model.Exited += RunFullyFromConsole_Exited;
+
+							while (model.IsUndisposed)
+							{
+								// WaitOne() would wait forever if the model has crashed for whatever reason.
+								// Therefore, only wait for a certain period and then poll the state again.
+								// The period can be quite long, as an event signal will immediately resume.
+								if (this.RunFullyFromConsole_exitedEvent.WaitOne(staticRandom.Next(50, 200)))
+									break; // to exit.
+								else
+									continue; // to periodically check state.
+							}
+
+							model.Exited -= RunFullyFromConsole_Exited;
+							modelResult = this.RunFullyFromConsole_exitedResult;
+						}
+					}
 
 					ApplicationSettings.CloseAndDispose(); // Don't care about result, as upon creation above.
 
@@ -951,6 +983,12 @@ namespace YAT.Application
 
 			// Do not detach the handler from currentDomain.UnhandledException. In case of an
 			// exception, detaching may result in a message like "YAT.exe doesn't work anymore".
+		}
+
+		private void RunFullyFromConsole_Exited(object sender, EventArgs<Model.MainResult> e)
+		{
+			this.RunFullyFromConsole_exitedResult = e.Value;
+			this.RunFullyFromConsole_exitedEvent.Set();
 		}
 
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
@@ -990,6 +1028,9 @@ namespace YAT.Application
 		// Non-Public Methods > RunInvisible
 		//------------------------------------------------------------------------------------------
 
+		Model.MainResult RunInvisible_exitedResult;
+		AutoResetEvent RunInvisible_exitedEvent;
+
 		/// <summary>
 		/// Non-view application for automated test usage.
 		/// </summary>
@@ -1020,16 +1061,12 @@ namespace YAT.Application
 				try
 			#endif
 				{
-					if (ApplicationSettings.Create(applicationSettingsFileAccess))
-					{
-						ApplicationSettings.Load(); // Don't care about result, either settings have been loaded or settings have been set to defaults.
-
-						// Application settings will be closed when exiting main.
-					}
-					else
-					{
+					// Application settings must be created and closed on main thread, otherwise
+					// there will be a synchronization exception on exit (settings are closed there):
+					if (!ApplicationSettings.Create(applicationSettingsFileAccess))
 						return (MainResult.ApplicationSettingsError);
-					}
+
+					ApplicationSettings.Load(); // Don't care about result, either the settings have been loaded or they have been set to defaults.
 				}
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
@@ -1046,7 +1083,27 @@ namespace YAT.Application
 				{
 					var modelResult = model.Launch();
 					if (modelResult == Model.MainResult.Success)
-						modelResult = model.Exit();
+					{
+						using (this.RunInvisible_exitedEvent = new AutoResetEvent(false))
+						{
+							this.RunInvisible_exitedResult = Model.MainResult.ApplicationRunError; // Will be overridden by the 'Exited' event handler.
+							model.Exited += RunFullyFromConsole_Exited;
+
+							while (model.IsUndisposed)
+							{
+								// WaitOne() would wait forever if the model has crashed for whatever reason.
+								// Therefore, only wait for a certain period and then poll the state again.
+								// The period can be quite long, as an event signal will immediately resume.
+								if (this.RunInvisible_exitedEvent.WaitOne(staticRandom.Next(50, 200)))
+									break; // to exit.
+								else
+									continue; // to periodically check state.
+							}
+
+							model.Exited -= RunFullyFromConsole_Exited;
+							modelResult = this.RunInvisible_exitedResult;
+						}
+					}
 
 					ApplicationSettings.CloseAndDispose(); // Don't care about result, as upon creation above.
 
@@ -1066,6 +1123,12 @@ namespace YAT.Application
 
 			// Do not detach the handler from currentDomain.UnhandledException. In case of an
 			// exception, detaching may result in a message like "YAT.exe doesn't work anymore".
+		}
+
+		private void RunInvisible_Exited(object sender, EventArgs<Model.MainResult> e)
+		{
+			this.RunInvisible_exitedResult = e.Value;
+			this.RunInvisible_exitedEvent.Set();
 		}
 
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
