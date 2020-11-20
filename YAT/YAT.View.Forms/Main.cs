@@ -309,7 +309,7 @@ namespace YAT.View.Forms
 			if (this.result != Model.MainResult.Success)
 			{
 				bool showErrorModally = this.main.LaunchArgs.Interactive;
-				bool keepOpenOnError  = this.main.LaunchArgs.KeepOpenOnError;
+				bool keepOpenOnError  = this.main.LaunchArgs.KeepOpenOnNonSuccess;
 
 				switch (this.result)
 				{
@@ -346,11 +346,11 @@ namespace YAT.View.Forms
 							sb.Append(ApplicationEx.ProductName); // "YAT" or "YATConsole", as indicated in main title bar.
 							sb.Append(" could not be started with the given settings!");
 
-							if (!string.IsNullOrEmpty(this.main.LaunchArgs.MessageOnError))
+							if (!string.IsNullOrEmpty(this.main.LaunchArgs.MessageOnFailure))
 							{
 								sb.AppendLine();
 								sb.AppendLine();
-								sb.Append(this.main.LaunchArgs.MessageOnError);
+								sb.Append(this.main.LaunchArgs.MessageOnFailure);
 							}
 
 							MessageBoxEx.Show
@@ -540,8 +540,8 @@ namespace YAT.View.Forms
 				SaveWindowSettings();
 
 				bool cancel;
-				this.main.Exit(out cancel); // Only need to handle cancel on form here, no need to
-				if (cancel)                 // deal with result, that is handled in main_Exited().
+				this.main.Exit(Model.ExitMode.Manual, out cancel); // Only need to handle cancel on form here, no need to
+				if (cancel)                                        // deal with result, that is handled in main_Exited().
 				{
 					e.Cancel = true;
 
@@ -1200,11 +1200,13 @@ namespace YAT.View.Forms
 				{
 					toolStripButton_MainTool_Script_ShowHide.Checked = true;
 					toolStripButton_MainTool_Script_ShowHide.Text = "Hide Script Panel";
+					toolStripMenuItem_MainMenu_Script_Panel.Text = "&Hide Script Panel";
 				}
 				else
 				{
 					toolStripButton_MainTool_Script_ShowHide.Checked = false;
 					toolStripButton_MainTool_Script_ShowHide.Text = "Show Script Panel";
+					toolStripMenuItem_MainMenu_Script_Panel.Text = "&Show Script Panel...";
 				}
 			#endif // WITH_SCRIPTING
 
@@ -4666,6 +4668,7 @@ namespace YAT.View.Forms
 
 			toolStripButton_MainTool_Script_ShowHide.Checked = true;
 			toolStripButton_MainTool_Script_ShowHide.Text = "Hide Script Panel";
+			toolStripMenuItem_MainMenu_Script_Panel.Text = "&Hide Script Panel";
 		}
 
 		/// <remarks>To be migrated to <see cref="EventArgs"/>.</remarks>
@@ -4677,6 +4680,7 @@ namespace YAT.View.Forms
 
 			toolStripButton_MainTool_Script_ShowHide.Checked = false;
 			toolStripButton_MainTool_Script_ShowHide.Text = "Show Script Panel";
+			toolStripMenuItem_MainMenu_Script_Panel.Text = "&Show Script Panel...";
 		}
 
 		/// <remarks>To be migrated to <see cref="EventArgs"/>.</remarks>

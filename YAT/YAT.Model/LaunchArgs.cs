@@ -181,11 +181,11 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		public int RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId;
+		public int RequestedDynamicTerminalId = TerminalIds.ActiveDynamicId;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		public int RequestedFixedTerminalId = TerminalIds.InvalidFixedId;
+		public int RequestedFixedTerminalId = TerminalIds.ActiveFixedId;
 
 		/// <remarks>Using term 'Transmit' to indicate potential 'intelligence' to send + receive/verify the data.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
@@ -241,7 +241,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		public bool KeepOpenOnError;
+		public bool KeepOpenOnNonSuccess;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
@@ -249,7 +249,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		public string MessageOnError;
+		public string MessageOnFailure;
 
 		/// <summary></summary>
 		public WorkspaceLaunchArgs ToWorkspaceLaunchArgs()
@@ -258,9 +258,9 @@ namespace YAT.Model
 
 			args.Override = this.Override;
 
-			args.KeepOpen        = this.KeepOpen;
-			args.KeepOpenOnError = this.KeepOpenOnError;
-			args.NonInteractive  = this.NonInteractive;
+			args.KeepOpen             = this.KeepOpen;
+			args.KeepOpenOnNonSuccess = this.KeepOpenOnNonSuccess;
+			args.NonInteractive       = this.NonInteractive;
 
 			return (args);
 		}
@@ -292,7 +292,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		public bool KeepOpenOnError;
+		public bool KeepOpenOnNonSuccess;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
