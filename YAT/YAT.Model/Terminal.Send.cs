@@ -113,6 +113,10 @@ namespace YAT.Model
 		/// <summary>
 		/// Sends the specified raw data.
 		/// </summary>
+		/// <remarks>
+		/// Opposed to <see cref="SendText(Command, bool)"/> and <see cref="SendFile(Command, bool)"/>,
+		/// which maintain a list a recents, this method does not.
+		/// </remarks>
 		public virtual void SendRaw(byte[] data)
 		{
 		////AssertUndisposed() is called by 'DoSendRaw()' below.
@@ -193,13 +197,15 @@ namespace YAT.Model
 		/// Sends given text.
 		/// </summary>
 		/// <param name="text">Text to be sent.</param>
-		public virtual void SendText(string text)
+		/// <param name="addToRecents">Determines whether the command is added to <see cref="SendTextSettings.RecentCommands"/>.</param>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public virtual void SendText(string text, bool addToRecents = true)
 		{
 		////AssertUndisposed() is called by 'Send...()' below.
 
 			lock (SendSyncObj)
 			{
-				SendText(new Command(text));
+				SendText(new Command(text), addToRecents);
 			}
 		}
 
@@ -207,16 +213,18 @@ namespace YAT.Model
 		/// Sends given text command.
 		/// </summary>
 		/// <param name="command">Text command to be sent.</param>
-		public virtual void SendText(Command command)
+		/// <param name="addToRecents">Determines whether the command is added to <see cref="SendTextSettings.RecentCommands"/>.</param>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public virtual void SendText(Command command, bool addToRecents = true)
 		{
 		////AssertUndisposed() is called by 'DoSend...()' below.
 
 			lock (SendSyncObj)
 			{
 				if (this.settingsRoot.Terminal.Send.UseExplicitDefaultRadix)
-					DoSendText(command);
+					DoSendText(command, addToRecents);
 				else
-					DoSendText(command.ToCommandWithoutDefaultRadix());
+					DoSendText(command.ToCommandWithoutDefaultRadix(), addToRecents);
 			}
 		}
 
@@ -243,7 +251,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Argument of this protected method named 'c' for compactness.
 		/// </remarks>
-		protected virtual void DoSendText(Command c)
+		protected virtual void DoSendText(Command c, bool addToRecents)
 		{
 			AssertUndisposed();
 
@@ -266,7 +274,7 @@ namespace YAT.Model
 
 					// Compile the partial command line for later use:
 					if (string.IsNullOrEmpty(this.partialCommandLine))
-						this.partialCommandLine = string.Copy(c.PartialText);
+						this.partialCommandLine = string.Copy(c.PartialText); // Emphasize creating the base for a new string.
 					else
 						this.partialCommandLine += c.PartialText;
 				}
@@ -279,7 +287,8 @@ namespace YAT.Model
 					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' does not specify a known text command type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "c"));
 				}
 
-				CloneIntoRecentTextCommandsIfNeeded(c);
+				if (addToRecents)
+					CloneIntoRecentTextCommandsAsNeeded(c);
 			}
 			else // This indicates an invalid operation, since a command must have been validated before calling this method!
 			{
@@ -308,7 +317,7 @@ namespace YAT.Model
 
 			if (c.IsValidText(this.settingsRoot.Terminal.Send.Text.ToParseMode()))
 			{
-				if      (c.IsSingleLineText)
+				if (c.IsSingleLineText)
 				{
 					if (SendTextSettings.IsEasterEggCommand(c.SingleLineText))
 						this.terminal.EnqueueEasterEggMessage();
@@ -321,7 +330,7 @@ namespace YAT.Model
 
 					// Compile the partial command line for later use:
 					if (string.IsNullOrEmpty(this.partialCommandLine))
-						this.partialCommandLine = string.Copy(c.PartialText);
+						this.partialCommandLine = string.Copy(c.PartialText); // Emphasize creating the base for a new string.
 					else
 						this.partialCommandLine += c.PartialText;
 				}
@@ -330,7 +339,7 @@ namespace YAT.Model
 					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' does not specify a known text command type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "c"));
 				}
 
-				CloneIntoRecentTextCommandsIfNeeded(c);
+				CloneIntoRecentTextCommandsAsNeeded(c);
 			}
 			else
 			{
@@ -344,9 +353,9 @@ namespace YAT.Model
 		/// <remarks>
 		/// Argument of this protected method named 'c' for compactness.
 		/// </remarks>
-		protected virtual void CloneIntoRecentTextCommandsIfNeeded(Command c)
-		{
-			if (c.IsSingleLineText || c.IsMultiLineText /* || do not add c.IsPartialText to recents */ || c.IsPartialTextEol)
+		protected virtual void CloneIntoRecentTextCommandsAsNeeded(Command c)
+		{                                                  // Must not be added to recents, e.g. separate "A", "B", "C".
+			if (c.IsSingleLineText || c.IsMultiLineText /* || c.IsPartialText */ || c.IsPartialTextEol)
 			{
 				// Clone the command for the recent commands collection:
 				Command clone;
@@ -402,17 +411,35 @@ namespace YAT.Model
 		/// <summary>
 		/// Sends given file.
 		/// </summary>
+		/// <param name="filePath">File to be sent.</param>
+		/// <param name="addToRecents">Determines whether the command is added to <see cref="SendTextSettings.RecentCommands"/>.</param>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public virtual void SendFile(string filePath, bool addToRecents = true)
+		{
+		////AssertUndisposed() is called by 'Send...()' below.
+
+			lock (SendSyncObj)
+			{
+				SendFile(new Command("", true, filePath), addToRecents);
+			}
+		}
+
+		/// <summary>
+		/// Sends given file.
+		/// </summary>
 		/// <param name="command">File to be sent.</param>
-		public virtual void SendFile(Command command)
+		/// <param name="addToRecents">Determines whether the command is added to <see cref="SendTextSettings.RecentCommands"/>.</param>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public virtual void SendFile(Command command, bool addToRecents = true)
 		{
 		////AssertUndisposed() is called by 'DoSend...' below.
 
 			lock (SendSyncObj)
 			{
 				if (this.settingsRoot.Terminal.Send.UseExplicitDefaultRadix)
-					DoSendFile(command);
+					DoSendFile(command, addToRecents);
 				else
-					DoSendFile(command.ToCommandWithoutDefaultRadix());
+					DoSendFile(command.ToCommandWithoutDefaultRadix(), addToRecents);
 			}
 		}
 
@@ -423,7 +450,7 @@ namespace YAT.Model
 		/// Argument of this protected method named 'c' for compactness.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'symmetricity' is a correct English term.")]
-		protected virtual void DoSendFile(Command c)
+		protected virtual void DoSendFile(Command c, bool addToRecents)
 		{
 			AssertUndisposed();
 
@@ -433,7 +460,8 @@ namespace YAT.Model
 
 				this.terminal.SendFile(absoluteFilePath, c.DefaultRadix);
 
-				CloneIntoRecentFileCommands(c);
+				if (addToRecents)
+					CloneIntoRecentFileCommands(c);
 			}
 			else
 			{
