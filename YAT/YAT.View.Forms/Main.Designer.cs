@@ -776,9 +776,10 @@ namespace YAT.View.Forms
 			// 
 			// toolStripMenuItem_MainMenu_Script_Panel
 			// 
+			this.toolStripMenuItem_MainMenu_Script_Panel.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_script_16x16;
 			this.toolStripMenuItem_MainMenu_Script_Panel.Name = "toolStripMenuItem_MainMenu_Script_Panel";
-			this.toolStripMenuItem_MainMenu_Script_Panel.Size = new System.Drawing.Size(169, 22);
-			this.toolStripMenuItem_MainMenu_Script_Panel.Text = "&Show Script Panel";
+			this.toolStripMenuItem_MainMenu_Script_Panel.Size = new System.Drawing.Size(178, 22);
+			this.toolStripMenuItem_MainMenu_Script_Panel.Text = "&Show Script Panel...";
 			this.toolStripMenuItem_MainMenu_Script_Panel.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Script_Panel_Click);
 		#endif // WITH_SCRIPTING
 			// 
