@@ -186,7 +186,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(t, Is.Not.Null, uc + "Terminal could not be created!");
 				t.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(uc, w, true, t, true);
@@ -219,7 +219,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(success, Is.True, uc + "Terminal could not be saved!");
 				Assert.That(w.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(uc, w, true, t, true);
@@ -254,7 +254,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(w.TerminalCount, Is.EqualTo(1), uc + "Workspace doesn't contain 1 terminal!");
 				Assert.That(File.Exists(defaultTerminal1FilePath), Is.False, uc + "Auto terminal file not deleted!");
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(uc, w, true, t, true, false);
@@ -300,7 +300,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(t3, Is.Not.Null, uc + "Terminal 3 could not be created!");
 				t3.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles
@@ -362,7 +362,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(workspace.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
 				Assert.That(File.Exists(autoTerminal3FilePath), Is.False, uc + "Auto terminal 3 file not deleted!");
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles
@@ -420,7 +420,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(success, Is.True, uc + "Workspace could not be saved!");
 				Assert.That(w.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles
@@ -500,7 +500,7 @@ namespace YAT.Model.Test.FileHandling
 				var normalTerminal1LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal1FilePath);
 				var normalTerminal2LastWriteTimeInitially = File.GetLastWriteTimeUtc(this.normalTerminal2FilePath);
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles
@@ -565,7 +565,7 @@ namespace YAT.Model.Test.FileHandling
 
 				t3.MessageInputRequest     += terminal3_MessageInputRequest_Yes;          // Ignore the "remaining event sink" message that will be output during Exit() below.
 				t3.SaveAsFileDialogRequest += terminal3_SaveAsFileDialogRequest_SaveAsOK; // Ignore the "remaining event sink" message that will be output during Exit() below.
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles
@@ -624,7 +624,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(success, Is.True, uc + "Terminal 3 could not be closed!");
 				Assert.That(w.TerminalCount, Is.EqualTo(2), uc + "Workspace doesn't contain 2 terminals!");
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles
@@ -698,7 +698,7 @@ namespace YAT.Model.Test.FileHandling
 				success = t2.SaveAs(this.normalTerminal2FilePath);
 				Assert.That(success, Is.True, uc + "Terminal 2 could not be saved as!");
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles
@@ -762,7 +762,7 @@ namespace YAT.Model.Test.FileHandling
 				Assert.That(t2, Is.Not.Null, uc + "Terminal 2 could not be created!");
 				t2.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles
@@ -783,65 +783,65 @@ namespace YAT.Model.Test.FileHandling
 			// - Close first main, then second
 			//   => 2 auto workspaces with 1 normal terminal each
 
-			using (Main main1 = new Main(this.normalTerminal1FilePath),
-			            main2 = new Main(this.normalTerminal2FilePath))
+			using (Main m1 = new Main(this.normalTerminal1FilePath),
+			            m2 = new Main(this.normalTerminal2FilePath))
 			{
 				uc = "UC8: ";
 
-				Workspace workspace1;
-				Workspace workspace2;
+				Workspace w1;
+				Workspace w2;
 
-				Terminal terminal1;
-				Terminal terminal2;
+				Terminal t1;
+				Terminal t2;
 
 				// Main 1 start:
 				{
-					success = (main1.Launch() == MainResult.Success);
+					success = (m1.Launch() == MainResult.Success);
 					Assert.That(success, Is.True, uc + "Main 1 could not be started!");
 
-					workspace1 = main1.Workspace;
-					Assert.That(workspace1, Is.Not.Null, uc + "Workspace 1 not created!");
-					workspace1.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
-					Assert.That(workspace1.TerminalCount, Is.EqualTo(1), uc + "Workspace 1 doesn't contain 1 terminal!");
+					w1 = m1.Workspace;
+					Assert.That(w1, Is.Not.Null, uc + "Workspace 1 not created!");
+					w1.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+					Assert.That(w1.TerminalCount, Is.EqualTo(1), uc + "Workspace 1 doesn't contain 1 terminal!");
 
-					terminal1 = workspace1.ActiveTerminal;
-					Assert.That(terminal1, Is.Not.Null, uc + "Terminal 1 could not be opened!");
-					terminal1.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+					t1 = w1.ActiveTerminal;
+					Assert.That(t1, Is.Not.Null, uc + "Terminal 1 could not be opened!");
+					t1.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
-					Utilities.VerifyFiles(uc, workspace1, false, terminal1, true, false);
+					Utilities.VerifyFiles(uc, w1, false, t1, true, false);
 				}
 
 				// Main 2 start:
 				{
-					success = (main2.Launch() == MainResult.Success);
+					success = (m2.Launch() == MainResult.Success);
 					Assert.That(success, Is.True, uc + "Main 2 could not be started!");
 
-					workspace2 = main2.Workspace;
-					Assert.That(workspace2, Is.Not.Null, uc + "Workspace 2 not created!");
-					workspace2.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
-					Assert.That(workspace2.TerminalCount, Is.EqualTo(1), uc + "Workspace 2 doesn't contain 1 terminal!");
+					w2 = m2.Workspace;
+					Assert.That(w2, Is.Not.Null, uc + "Workspace 2 not created!");
+					w2.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+					Assert.That(w2.TerminalCount, Is.EqualTo(1), uc + "Workspace 2 doesn't contain 1 terminal!");
 
-					terminal2 = workspace2.ActiveTerminal;
-					Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 could not be opened!");
-					terminal2.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+					t2 = w2.ActiveTerminal;
+					Assert.That(t2, Is.Not.Null, uc + "Terminal 2 could not be opened!");
+					t2.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
-					Utilities.VerifyFiles(uc, workspace2, false, terminal2, true, false);
+					Utilities.VerifyFiles(uc, w2, false, t2, true, false);
 				}
 
 				// Main 1 exit:
 				{
-					success = (main1.Exit() == MainResult.Success);
+					success = (m1.Exit_ForTestOnly() == MainResult.Success);
 					Assert.That(success, Is.True, uc + "Main 1 could not be exited!");
 
-					Utilities.VerifyFiles(uc, workspace1, true, terminal1, true, false);
+					Utilities.VerifyFiles(uc, w1, true, t1, true, false);
 				}
 
 				// Main 2 exit:
 				{
-					success = (main2.Exit() == MainResult.Success);
+					success = (m2.Exit_ForTestOnly() == MainResult.Success);
 					Assert.That(success, Is.True, uc + "Main 2 could not be exited!");
 
-					Utilities.VerifyFiles(uc, workspace2, true, terminal2, true, false);
+					Utilities.VerifyFiles(uc, w2, true, t2, true, false);
 				}
 			}
 			#endregion
@@ -850,37 +850,37 @@ namespace YAT.Model.Test.FileHandling
 			// - Start with auto workspace that contains 1 normal terminal
 			//   => 1 auto workspaces with 1 normal terminal
 
-			using (Main main2 = new Main())
+			using (Main m2 = new Main())
 			{
 				uc = "UC9: ";
 
-				Workspace workspace2;
+				Workspace w2;
 
-				Terminal terminal2;
+				Terminal t2;
 
 				// Main 2 start:
 				{
-					success = (main2.Launch() == MainResult.Success);
+					success = (m2.Launch() == MainResult.Success);
 					Assert.That(success, Is.True, uc + "Main 2 could not be started!");
 
-					workspace2 = main2.Workspace;
-					Assert.That(workspace2, Is.Not.Null, uc + "Workspace 2 not created!");
-					workspace2.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
-					Assert.That(workspace2.TerminalCount, Is.EqualTo(1), uc + "Workspace 2 doesn't contain 1 terminal!");
+					w2 = m2.Workspace;
+					Assert.That(w2, Is.Not.Null, uc + "Workspace 2 not created!");
+					w2.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+					Assert.That(w2.TerminalCount, Is.EqualTo(1), uc + "Workspace 2 doesn't contain 1 terminal!");
 
-					terminal2 = workspace2.ActiveTerminal;
-					Assert.That(terminal2, Is.Not.Null, uc + "Terminal 2 could not be opened!");
-					terminal2.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
+					t2 = w2.ActiveTerminal;
+					Assert.That(t2, Is.Not.Null, uc + "Terminal 2 could not be opened!");
+					t2.DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly = true;
 
-					Utilities.VerifyFiles(uc, workspace2, true, terminal2, true, false);
+					Utilities.VerifyFiles(uc, w2, true, t2, true, false);
 				}
 
 				// Main 2 exit:
 				{
-					success = (main2.Exit() == MainResult.Success);
+					success = (m2.Exit_ForTestOnly() == MainResult.Success);
 					Assert.That(success, Is.True, uc + "Main 2 could not be exited!");
 
-					Utilities.VerifyFiles(uc, workspace2, true, terminal2, true, false);
+					Utilities.VerifyFiles(uc, w2, true, t2, true, false);
 				}
 			}
 			#endregion
@@ -910,7 +910,7 @@ namespace YAT.Model.Test.FileHandling
 				string formerLocalUserAutoWorkspaceFilePath = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
 				Utilities.VerifyFiles(uc, w, false, t, true, false);
 
-				success = (m.Exit() == MainResult.Success);
+				success = (m.Exit_ForTestOnly() == MainResult.Success);
 				Assert.That(success, Is.True, uc + "Main could not be exited successfully!");
 
 				Utilities.VerifyFiles(uc, w, true, t, true, false);
