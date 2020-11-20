@@ -1102,7 +1102,7 @@ namespace MKY.IO.Usb
 					// of the two loops more obvious.
 					try
 					{
-						// WaitOne() will wait forever if the underlying I/O provider has crashed, or
+						// WaitOne() would wait forever if the underlying I/O provider has crashed, or
 						// if the overlying client isn't able or forgets to call Stop() or Dispose().
 						// Therefore, only wait for a certain period and then poll the state again.
 						// The period can be quite long, as an event signal will immediately resume.
