@@ -49,11 +49,6 @@ namespace YAT.Application
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[OptionArg(Name = "NoLogo", ShortName = "nl", Description = "Do not display title and copyright.")]
-		public bool NoLogo;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "NoView", ShortName = "nv", Description = "Start " + ApplicationEx.ProductNameConstWorkaround + " on console only, without any view at all.")]
 		public bool NoView;
 
@@ -62,6 +57,16 @@ namespace YAT.Application
 		[CLSCompliant(false)]
 		[OptionArg(Names = new string[] { "Help", "HelpText" }, ShortNames = new string[] { "h", "?" }, Description = "Display this help text.")]
 		public bool HelpIsRequested;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[OptionArg(Name = "Logo", ShortName = "l", Description = "Display the application's title, description, origin and copyright.")]
+		public bool LogoIsRequested;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[OptionArg(Name = "Version", ShortName = "v", Description = "Display the application version.")]
+		public bool VersionIsRequested;
 
 		#endregion
 
@@ -82,14 +87,6 @@ namespace YAT.Application
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
-
-		/// <summary>
-		/// Returns whether logo shall be shown.
-		/// </summary>
-		public bool ShowLogo
-		{
-			get { return (!(NoLogo)); }
-		}
 
 		/// <summary>
 		/// Returns whether view shall be shown.

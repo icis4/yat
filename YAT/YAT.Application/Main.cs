@@ -230,7 +230,13 @@ namespace YAT.Application
 		/// <summary></summary>
 		public virtual bool CommandLineLogoIsRequested
 		{
-			get { return ((this.commandLineArgs != null) && (!this.commandLineArgs.NoLogo)); }
+			get { return ((this.commandLineArgs != null) && (this.commandLineArgs.LogoIsRequested)); }
+		}
+
+		/// <summary></summary>
+		public virtual bool CommandLineVersionIsRequested
+		{
+			get { return ((this.commandLineArgs != null) && (this.commandLineArgs.VersionIsRequested)); }
 		}
 
 		#endregion
@@ -296,9 +302,10 @@ namespace YAT.Application
 		private MainResult Run(bool runFromConsole)
 		{
 			MainResult result;
-			bool showLogo;
-			bool showView;
+			bool runWithView;
 			bool showHelp;
+			bool showLogo;
+			bool showVersion;
 
 			// Process and validate command line arguments:
 			if (this.commandLineArgs != null)
@@ -320,34 +327,40 @@ namespace YAT.Application
 			if (this.commandLineArgs == null || this.commandLineArgs.HasNoArgs)
 			{
 				result = MainResult.Success;
-				showLogo = true;
-				showView = true; // By default, start YAT with view.
-				showHelp = false;
+
+				runWithView = true; // By default, start YAT with view.
+				showHelp    = false;
+				showLogo    = false;
+				showVersion = false;
 			}
 			// Prio 1 = Invalid:
 			else if ((this.commandLineArgs != null) && (!this.commandLineArgs.IsValid))
 			{
 				result = MainResult.CommandLineError;
-				showLogo = true;
-				showView = false; // YAT will not be started, instead the help will be shown.
-				showHelp = true;
+
+				runWithView = false; // YAT will not be started, instead the help will be shown.
+				showHelp    = true;
+				showLogo    = false;
+				showVersion = false;
 			}
 			// Prio 2 = Valid:
 			else
 			{
 				result = MainResult.Success;
-				showLogo = this.commandLineArgs.ShowLogo;
-				showView = this.commandLineArgs.ShowView;
-				showHelp = this.commandLineArgs.HelpIsRequested;
+
+				runWithView = this.commandLineArgs.ShowView;
+				showHelp    = this.commandLineArgs.HelpIsRequested;
+				showLogo    = this.commandLineArgs.LogoIsRequested;
+				showVersion = this.commandLineArgs.VersionIsRequested;
 			}
 
-			// Show help or run application:
-			if (showHelp)
+			// Show info or run application:
+			if (showHelp || showLogo || showVersion)
 			{
 				if (runFromConsole)
-					ShowConsoleHelp(showLogo);
+					ShowConsoleInfo(showHelp, showLogo, showVersion);
 				else
-					ShowMessageBoxHelp(showLogo);
+					ShowMessageBoxInfo(showHelp, showLogo, showVersion);
 			}
 			else
 			{
@@ -355,7 +368,7 @@ namespace YAT.Application
 				try
 			#endif
 				{
-					result = Run(runFromConsole, showView, ApplicationSettingsFileAccess.ReadSharedWriteIfOwned, true);
+					result = Run(runFromConsole, runWithView, ApplicationSettingsFileAccess.ReadSharedWriteIfOwned, true);
 				}
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				catch (Exception ex)
@@ -460,10 +473,10 @@ namespace YAT.Application
 
 			if (result == MainResult.CommandLineError)
 			{
-				if (runWithView)
-					ShowMessageBoxHelp(true);
+				if (runFromConsole)
+					ShowConsoleInfo(showHelp: true, showLogo: false, showVersion: false);
 				else
-					ShowConsoleHelp(true);
+					ShowMessageBoxInfo(showHelp: true, showLogo: false, showVersion: false);
 			}
 			                                                                //// Two args required to format without leading
 			DebugMessage("Exiting with {0} (0x{1:X}).", result, (int)result); // zeros, same as Visual Studio is doing, e.g.:
@@ -1169,31 +1182,65 @@ namespace YAT.Application
 		//------------------------------------------------------------------------------------------
 
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void ShowMessageBoxHelp(bool showLogo)
+		private void ShowMessageBoxInfo(bool showHelp, bool showLogo, bool showVersion)
 		{
-			var sb = new StringBuilder();
-
-			if (showLogo)
+			if (showHelp) // Includes version and logo.
 			{
+				var sb = new StringBuilder();
+
+				sb.AppendLine(ApplicationEx.ProductCaptionAndVersionAndBuild);
+				sb.AppendLine();
+
 				foreach (string line in ApplicationEx.ProductLogo)
 					sb.AppendLine(line);
 
 				sb.AppendLine();
+				sb.Append(this.commandLineArgs.GetHelpText(DefaultTextWidth));
+				sb.AppendLine();
+
+				foreach (string line in ResultText)
+					sb.AppendLine(line);
+
+				MessageBoxEx.Show
+				(
+					sb.ToString(),
+					ApplicationEx.ProductName + " Help", // "YAT" or "YATConsole", as indicated in main title bar.
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information
+				);
 			}
+			else if (showLogo) // Includes version.
+			{
+				var sb = new StringBuilder();
 
-			sb.Append(this.commandLineArgs.GetHelpText(DefaultTextWidth));
-			sb.AppendLine();
+				sb.AppendLine(ApplicationEx.ProductCaptionAndVersionAndBuild);
+				sb.AppendLine();
 
-			foreach (string line in ResultText)
-				sb.AppendLine(line);
+				foreach (string line in ApplicationEx.ProductLogo)
+					sb.AppendLine(line);
 
-			MessageBoxEx.Show
-			(
-				sb.ToString(),
-				ApplicationEx.ProductName + " Help", // "YAT" or "YATConsole", as indicated in main title bar.
-				MessageBoxButtons.OK,
-				MessageBoxIcon.Information
-			);
+				MessageBoxEx.Show
+				(
+					sb.ToString(),
+					ApplicationEx.ProductName + " Logo", // "YAT" or "YATConsole", as indicated in main title bar.
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information
+				);
+			}
+			else if (showVersion)
+			{
+				MessageBoxEx.Show
+				(
+					ApplicationEx.ProductCaptionAndVersionAndBuild,
+					ApplicationEx.ProductName + " Version", // "YAT" or "YATConsole", as indicated in main title bar.
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information
+				);
+			}
+			else
+			{
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "This method requires that at least one of the parameter flags is set to 'true'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		#endregion
@@ -1203,13 +1250,31 @@ namespace YAT.Application
 		// Non-Public Methods > Console
 		//------------------------------------------------------------------------------------------
 
-		private void ShowConsoleHelp(bool showLogo)
+		private void ShowConsoleInfo(bool showHelp, bool showLogo, bool showVersion)
 		{
-			if (showLogo)
-				WriteLogoToConsole();
+			if (showHelp) // Includes version and logo.
+			{
+				WriteVersionAndLogoToConsole();
+				WriteHelpToConsole();
+				WriteReturnToConsole();
+			}
+			else if (showLogo) // Includes version.
+			{
+				WriteVersionAndLogoToConsole();
+			}
+			else if (showVersion)
+			{
+				WriteVersionToConsole();
+			}
+			else
+			{
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "This method requires that at least one of the parameter flags is set to 'true'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
 
-			WriteHelpToConsole();
-			WriteReturnToConsole();
+		private static void WriteVersionToConsole()
+		{
+			Console.Out.WriteLine(ApplicationEx.ProductVersion);
 		}
 
 		/// <remarks>
@@ -1217,14 +1282,14 @@ namespace YAT.Application
 		/// that exactly match the number of characters do not lead to an empty line (due to the
 		/// NewLine which is added).
 		/// </remarks>
-		private static void WriteLogoToConsole()
+		private static void WriteVersionAndLogoToConsole()
 		{
 			Console.Out.WriteLine();
 			Console.Out.WriteLine();
 			Console.Out.WriteLine(new string('=', (Console.WindowWidth - 1))); // ==========...
 			Console.Out.WriteLine();
 
-			Console.Out.WriteLine(ApplicationEx.ProductCaptionAndVersion);
+			Console.Out.WriteLine(ApplicationEx.ProductCaptionAndVersionAndBuild);
 
 			Console.Out.WriteLine();
 			Console.Out.WriteLine(new string('-', (Console.WindowWidth - 1))); // ----------...
