@@ -151,14 +151,16 @@ namespace YAT.View.Test
 
 			workspaceSettingsHandler.Settings.TerminalSettings.Add(terminalSettings1Item);
 			workspaceSettingsHandler.Settings.TerminalSettings.Add(terminalSettings2Item);
-
 			workspaceSettingsHandler.Settings.Workspace.Layout = WorkspaceLayout.TileVertical;
-
 			workspaceSettingsHandler.Save();
+
 			Trace.WriteLine("Workspace file created:");
 			Trace.Indent();
 			Trace.WriteLine(workspaceSettingsFilePath);
 			Trace.Unindent();
+
+			// An explicit temporary workspace is used instead of an implicit automatic
+			// workspace for not spoiling the local user settings with test related stuff.
 
 			string transmitFilePath = Temp.MakeTempFilePath(GetType(), Guid.NewGuid().ToString(), ".txt");
 			using (var transmitFile = new StreamWriter(transmitFilePath, false, EncodingEx.EnvironmentRecommendedUTF8Encoding))
@@ -190,9 +192,11 @@ namespace YAT.View.Test
 			Trace.Unindent();
 
 			// Run using absolute path:
+
 			RunTransmission(workspaceSettingsFilePath, transmitFilePath);
 
 			// Run using relative path:
+
 			string currentDirectoryToRestore = Environment.CurrentDirectory;
 			try
 			{
@@ -215,8 +219,8 @@ namespace YAT.View.Test
 				@"-kpe"   // KeepOpenOn[Error|NonSuccess]
 			};
 
-			var main = new Application.Main(args);
-			var result = main.Run(false, true, ApplicationSettingsFileAccess.None, false); // <= see YAT.Application.Test.TestFixtureSetUp() for background why without welcome screen.
+			var main = new Application.Main(args);                                   // See YAT.Application.ApplicationTest.TestFixtureSetUp() for background why without welcome screen.
+			var result = main.Run(false, true, ApplicationSettingsFileAccess.None, false);
 
 			Assert.That(result, Is.EqualTo(Application.MainResult.Success));
 		}
