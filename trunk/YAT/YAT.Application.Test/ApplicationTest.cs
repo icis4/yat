@@ -470,9 +470,10 @@ namespace YAT.Application.Test
 
 			PrepareRunAndVerifyResult(main, MainResult.Success);
 
-			Assert.That(main.CommandLineIsValid,         Is.True);
-			Assert.That(main.CommandLineHelpIsRequested, Is.False);
-			Assert.That(main.CommandLineLogoIsRequested, Is.True);
+			Assert.That(main.CommandLineIsValid,            Is.True);
+			Assert.That(main.CommandLineHelpIsRequested,    Is.False);
+			Assert.That(main.CommandLineLogoIsRequested,    Is.True);
+			Assert.That(main.CommandLineVersionIsRequested, Is.False);
 		}
 
 		#endregion
@@ -486,12 +487,14 @@ namespace YAT.Application.Test
 		[Test]
 		public virtual void TestSetOptions()
 		{
-			var main = new Main(new string[] { "--NoLogo" });
+			var main = new Main(new string[] { "--Version" });
 
 			PrepareRunAndVerifyResult(main, MainResult.Success);
 
-			Assert.That(main.CommandLineIsValid,         Is.True);
-			Assert.That(main.CommandLineLogoIsRequested, Is.False);
+			Assert.That(main.CommandLineIsValid,            Is.True);
+			Assert.That(main.CommandLineHelpIsRequested,    Is.False);
+			Assert.That(main.CommandLineLogoIsRequested,    Is.False);
+			Assert.That(main.CommandLineVersionIsRequested, Is.True);
 		}
 
 		#endregion

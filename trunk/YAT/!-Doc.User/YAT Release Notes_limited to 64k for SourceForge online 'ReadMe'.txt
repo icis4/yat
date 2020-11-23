@@ -158,6 +158,7 @@ Important changes:
   new automatic actions [Chart/Plot/Histogram] and upcoming feature request #74 [Scripting]).
   Consequently, x64 distributions no longer need to be 'AnyCPU' builds (former limitation).
 - Improved error message in case the required version of .NET is missing.
+- Additional command line option to solely output the version.
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
 - Test coverage of sending and processing significantly increased (related to refactorings above).
 

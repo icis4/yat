@@ -68,7 +68,7 @@ namespace YAT
 		/// <summary>The build designation.</summary>
 	#if (!WITH_SCRIPTING)
 	////public const string ProductBuildDesignation = "";
-		public const string ProductBuildDesignation = " 2.2.0 Beta Version";
+		public const string ProductBuildDesignation = " 2.4.0 Beta Version";
 	#else
 		public const string ProductBuildDesignation = "";
 	#endif
@@ -130,6 +130,11 @@ namespace YAT
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Syncovery' is a product name.")]
 		public static readonly string ProductCaptionAndVersion = ProductCaption + " " + ProductVersionWithStabilityIndication;
+
+		/// <summary>
+		/// The product caption and version including build/revision.
+		/// </summary>                                                    // Using more general term "Build" rather than .NET specific term "Revision".
+		public static readonly string ProductCaptionAndVersionAndBuild = ProductCaptionAndVersion + " Build " + ProductRevision;
 
 		/// <summary>The complete logo (text) of the product.</summary>
 		[SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly", Justification = "Nobody will modify this array, don't worry...")]
