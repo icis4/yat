@@ -86,7 +86,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)] // Arrays as attribute arguments is not CLS-compliant.      Attention, "tt" = "TransmitText"!
+		[CLSCompliant(false)]        // Arrays as attribute args are not CLS-compliant. Attention, "tt" = "TransmitText"!
 		[OptionArg(Names = new string[] { "Type", "TerminalType" }, ShortNames = new string[] { "t", "ty" }, Description =
 			"The desired terminal type. Valid values are 'Text', 'T' or 'Binary', 'B'. The default value is 'Text'.")]
 		public string TerminalType;
@@ -96,7 +96,7 @@ namespace YAT.Model
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'pt' is a corresponding short name.")]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)] // Arrays as attribute arguments is not CLS-compliant.
+		[CLSCompliant(false)]        // Arrays as attribute args are not CLS-compliant.
 		[OptionArg(Names = new string[] { "IOType", "PortType" }, ShortNames = new string[] { "io", "pt" }, Description =
 			"The desired I/O type. Valid values are:" + EnvironmentEx.NewLineConstWorkaround +
 			"> 'COM' (Serial COM Port)" + EnvironmentEx.NewLineConstWorkaround +
@@ -122,7 +122,7 @@ namespace YAT.Model
 		/// Values in descriptions correspond to <see cref="MKY.IO.Ports.BaudRateEx.GetItems"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
+		[CLSCompliant(false)]        // Arrays as attribute args are not CLS-compliant.
 		[OptionArg(Names = new string[] { "Baud", "BaudRate" }, ShortName = "br", Description =
 			"The desired baud rate. Must be a positive integral value that is supported by the selected serial COM port on the current machine. " +
 			"Typical values are 2400, 4800, 9600, 19200, 38400, 57600 and 115200. The default value is 9600." + EnvironmentEx.NewLineConstWorkaround +
@@ -301,7 +301,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
+		[CLSCompliant(false)]        // Arrays as attribute args are not CLS-compliant.
 		[OptionArg(Names = new string[] { "SerialString", "SerialNumber" }, ShortName = "SNR", Description =
 			"The desired USB device serial string -aka- serial number (SNR). The default value is the SNR of the first device currently found." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to USB Ser/HID.")]
@@ -346,13 +346,13 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
+		[CLSCompliant(false)]        // Arrays as attribute args are not CLS-compliant.
 		[OptionArg(Names = new string[] { "OpenTerminal", "StartTerminal" }, ShortNames = new string[] { "ot", "st" }, Description = "Open/start the terminal.")]
 		public bool StartTerminal;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
+		[CLSCompliant(false)]        // Arrays as attribute args are not CLS-compliant.
 		[OptionArg(Names = new string[] { "KeepTerminalClosed", "KeepTerminalStopped" }, ShortNames = new string[] { "ktc", "kts" }, Description =
 			"Keep terminal(s) closed/stopped, even if settings request to open/start." + EnvironmentEx.NewLineConstWorkaround +
 			"This option overrides the 'OpenTerminal/StartTerminal' option if both options are given.")]
@@ -360,7 +360,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
+		[CLSCompliant(false)]        // Arrays as attribute args are not CLS-compliant.
 		[OptionArg(Names = new string[] { "Log", "LogOn" }, ShortName = "ln", Description = "Switch logging on.")]
 		public bool LogOn;
 
@@ -373,20 +373,20 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
+		[CLSCompliant(false)]        // Arrays as attribute args are not CLS-compliant.
 		[OptionArg(Names = new string[] { "Horizontal", "TileHorizontal" }, ShortName = "th", Description = "Tile the terminals horizontally after having openend a workspace.")]
 		public bool TileHorizontal;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
+		[CLSCompliant(false)]        // Arrays as attribute args are not CLS-compliant.
 		[OptionArg(Names = new string[] { "Vertical", "TileVertical" }, ShortName = "tv", Description = "Tile the terminals vertically after having openend a workspace.")]
 		public bool TileVertical;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
-		[OptionArg(Names = new string[] { "DynamicId", "DynamicTerminalId" }, ShortNames = new string[] { "did", "dti", "dtid" }, Description =
+		[CLSCompliant(false)]        // Arrays as attribute args are not CLS-compliant.
+		[OptionArg(Names = new string[] { "DynamicId", "DynamicTerminalId" }, ShortNames = new string[] { "di", "dti" }, Description =
 			"Perform any requested operation on the terminal with the given dynamic ID within the opening workspace." + EnvironmentEx.NewLineConstWorkaround +
 			"Valid values are 1, 2, 3,... up to the number of currently available terminals. " +
 			"0 indicates that the currently active terminal is used, which typically is the last terminal opened. " +
@@ -398,8 +398,8 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]        // Arrays as attribute arguments is not CLS-compliant.
-		[OptionArg(Names = new string[] { "FixedId", "FixedTerminalId" }, ShortNames = new string[] { "fid", "fti", "ftid" }, Description =
+		[CLSCompliant(false)]        // Arrays as attribute args are not CLS-compliant.
+		[OptionArg(Names = new string[] { "FixedId", "FixedTerminalId" }, ShortNames = new string[] { "fi", "fti" }, Description =
 			"Perform any requested operation on the terminal with the given fixed ID within the opening workspace." + EnvironmentEx.NewLineConstWorkaround +
 			"Valid values are any of the fixed IDs of the currently available terminals. " +
 			"0 indicates that the currently active terminal is used, which typically is the last terminal opened. " +
@@ -431,7 +431,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]                                 // Arrays as attribute arguments is not CLS-compliant.
+		[CLSCompliant(false)]                                 // Arrays as attribute args are not CLS-compliant.
 		[OptionArg(Name = "ScriptLog", ShortNames = new string[] { "sl", "slog" }, Description = "The desired script log file.")]
 		public string RequestedScriptLogFilePath;
 
@@ -442,7 +442,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)]                                  // Arrays as attribute arguments is not CLS-compliant.
+		[CLSCompliant(false)]                                  // Arrays as attribute args are not CLS-compliant.
 		[OptionArg(Name = "ScriptArgs", ShortNames = new string[] { "sa", "sca", "sargs" }, Description = "The input arguments for the script.")]
 		public string[] RequestedScriptArgs;                               // Backward compatibility "script command line args".
 
@@ -469,9 +469,12 @@ namespace YAT.Model
 		[OptionArg(Name = "KeepOpen", ShortName = "kp", Description = "Keep " + ApplicationEx.ProductNameConstWorkaround + " open after performing the requested operation.")]
 		public bool KeepOpen;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Named 'NonSuccess' in code, as this related to everything but <see cref="MainResult.Success"/>.
+		/// But primary user name shall be 'Error', as that is more intuitive, especially for non-script users.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		[CLSCompliant(false)] // Arrays as attribute arguments is not CLS-compliant.
+		[CLSCompliant(false)]        // Arrays as attribute args are not CLS-compliant.
 		[OptionArg(Names = new string[] { "KeepOpenOnError", "KeepOpenOnNonSuccess" }, ShortNames = new string[] { "ke", "kpe", "kpn" }, Description =
 			"Keep " + ApplicationEx.ProductNameConstWorkaround + " open in case there is an error while performing the requested operation, or the operation could not be completed successfully. " +
 			"Useful to keep the application open to analyze the cause of an error or failed operation.")]

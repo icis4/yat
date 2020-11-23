@@ -95,7 +95,7 @@ namespace YAT.Application.Test
 			// Temporary in-memory application settings are useless for this YAT.Application based
 			// test, as YAT.Application will retrieve the application settings, that's its job...
 
-			// There is another issue when running YAT.Controller from NUnit:
+			// There is another issue when running YAT.Application from NUnit:
 			// The first test that invokes YAT, i.e. the first time the welcome screen should get
 			// shown, leads to an invalid [DialogResult] value of the welcome screen:
 			//
@@ -104,7 +104,7 @@ namespace YAT.Application.Test
 			// YAT.View.Forms.WelcomeScreen : ...loading application settings...
 			// YAT.View.Forms.WelcomeScreen : ...successfully done.
 			// YAT.Application.Forms.WelcomeScreen : Closing dialog, result is [OK].
-			// YAT.Controller.Main          : ...failed with [Cancel]!
+			// YAT.Application.Main         : ...failed with [Cancel]!
 			//
 			// The returned value is [Cancel] instead of [OK]! The root cause to this issue has
 			// not been found (yet). It could be related to the fact that the NUnit-GUI "owns" the
