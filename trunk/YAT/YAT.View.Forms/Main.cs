@@ -1364,8 +1364,8 @@ namespace YAT.View.Forms
 					toolStripLabel_MainTool_AutoAction_Count.Enabled = isActive;
 					toolStripLabel_MainTool_AutoAction_Count.Visible = true;
 
-					toolStripButton_MainTool_AutoAction_Deactivate.Enabled = (trigger.IsActive || action.IsActive);
-					toolStripButton_MainTool_AutoAction_Deactivate.Visible =  true;
+					toolStripButton_MainTool_AutoAction_Deactivate.Enabled = action.IsActive;
+					toolStripButton_MainTool_AutoAction_Deactivate.Visible = true;
 				}
 				else
 				{
@@ -1593,7 +1593,7 @@ namespace YAT.View.Forms
 					SetAutoResponseTriggerStateControls(triggerState);
 					SetAutoResponseResponseStateControls(responseState);
 
-					SetAutoResponseTriggerOptionControls(childIsReady, triggerTextIsSupported, triggerRegexIsSupported);
+					SetAutoResponseTriggerOptionControls( childIsReady, triggerTextIsSupported, triggerRegexIsSupported);
 					SetAutoResponseResponseOptionControls(childIsReady, triggerTextIsSupported, triggerRegexIsSupported, responseReplaceIsSupported);
 
 					toolStripButton_MainTool_SetAutoResponseCount();
@@ -1601,8 +1601,8 @@ namespace YAT.View.Forms
 					toolStripLabel_MainTool_AutoResponse_Count.Enabled = isActive;
 					toolStripLabel_MainTool_AutoResponse_Count.Visible = true;
 
-					toolStripButton_MainTool_AutoResponse_Deactivate.Enabled = (trigger.IsActive || response.IsActive);
-					toolStripButton_MainTool_AutoResponse_Deactivate.Visible =  true;
+					toolStripButton_MainTool_AutoResponse_Deactivate.Enabled = response.IsActive;
+					toolStripButton_MainTool_AutoResponse_Deactivate.Visible = true;
 				}
 				else
 				{
