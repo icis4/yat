@@ -179,14 +179,18 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 
 		/// <summary>
-		/// Resets the automatic action, i.e. trigger and action are reset to 'None'.
+		/// Resets the automatic action, i.e. reset to <see cref="AutoAction.None"/>.
 		/// </summary>
+		/// <remarks>
+		/// <see cref="Trigger"/> and <see cref="TriggerOptions"/> are kept. It makes no sense the
+		/// user has to set the trigger again and it makes no sense to reset more than needed.
+		/// </remarks>
 		public override void Deactivate()
 		{
 			SuspendChangeEvent();
 			try
 			{
-				base.Deactivate();
+			////base.Deactivate() shall not be called, trigger shall remain.
 
 				Action = AutoAction.None;
 			}

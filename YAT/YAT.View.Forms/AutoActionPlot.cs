@@ -333,6 +333,12 @@ namespace YAT.View.Forms
 			OnDeactivateAutoAction(EventArgs.Empty);
 		}
 
+		private void button_DeactivateAndClose_Click(object sender, EventArgs e)
+		{
+			OnDeactivateAutoAction(EventArgs.Empty);
+			Close();
+		}
+
 		private void button_Close_Click(object sender, EventArgs e)
 		{
 			Close();

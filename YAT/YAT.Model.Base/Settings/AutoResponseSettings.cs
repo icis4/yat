@@ -148,14 +148,18 @@ namespace YAT.Model.Settings
 		//==========================================================================================
 
 		/// <summary>
-		/// Resets the automatic response, i.e. trigger and response are reset to 'None'.
+		/// Resets the automatic response, i.e. reset to <see cref="AutoResponse.None"/>.
 		/// </summary>
+		/// <remarks>
+		/// <see cref="Trigger"/> and <see cref="TriggerOptions"/> are kept. It makes no sense the
+		/// user has to set the trigger again and it makes no sense to reset more than needed.
+		/// </remarks>
 		public override void Deactivate()
 		{
 			SuspendChangeEvent();
 			try
 			{
-				base.Deactivate();
+			////base.Deactivate() shall not be called, trigger shall remain.
 
 				Response = (AutoResponseEx)AutoResponse.None;
 			}
