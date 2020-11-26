@@ -27,34 +27,22 @@ using System.Windows.Forms;
 
 namespace YAT.View.Forms
 {
-	/// <summary></summary>
-	public partial class Help : Form
+	/// <remarks>
+	/// Could be generalized into an 'TextInfo' form, covering <see cref="ReleaseNotes"/>,
+	/// but is not considered worth it for the few lines of duplicated code.
+	/// </remarks>
+	public partial class CommandLineMessageBox : Form
 	{
-		/// <remarks>
-		/// \fixme:
-		/// Add a true help to YAT.
-		/// </remarks>
-		public Help()
+		/// <summary></summary>
+		public CommandLineMessageBox(string text, string caption)
 		{
 			InitializeComponent();
 
 			// Form:
-			Text = ApplicationEx.CommonName + " Help"; // Fixed to "YAT".
+			Text = caption;
 
 			// Text:
-			textBox_ParserFormat.Text        = Domain.Parser.Parser.FormatHelp;
-			textBox_ParserKeyword.Text       = Domain.Parser.Parser.KeywordHelp;
-			textBox_TextTerminalKeyword.Text = Domain.TextTerminal.KeywordHelp;
-			textBox_SerialPort.Text          = Domain.Terminal.SerialPortHelp;
-		}
-
-		private void Help_Load(object sender, EventArgs e)
-		{
-			// By default, the first cell is selected when the data grid is shown. The trick by Ravi
-			// at http://manfred-ramoser.blogspot.com/2008/01/hide-selection-in-datagridview.html
-			// deselects properly. Attention, must be here, not in the constructor!
-
-			dataGridView_AsciiTable.ClearSelection();
+			textBox_Text.Text = text;
 		}
 
 		private void button_Close_Click(object sender, EventArgs e)
