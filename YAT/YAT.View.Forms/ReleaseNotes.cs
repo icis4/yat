@@ -39,7 +39,10 @@ using MKY.IO;
 
 namespace YAT.View.Forms
 {
-	/// <summary></summary>
+	/// <remarks>
+	/// Could be generalized into an 'TextInfo' form, covering <see cref="CommandLineMessageBox"/>,
+	/// but is not considered worth it for the few lines of duplicated code.
+	/// </remarks>
 	public partial class ReleaseNotes : Form
 	{
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
@@ -77,20 +80,20 @@ namespace YAT.View.Forms
 			// Form:
 			Text = ApplicationEx.CommonName + " Release Notes"; // Fixed to "YAT" as that is contained in release notes.
 
-			// Content:
-			textBox_ReleaseNotes.Text = "";
+			// Text:
+			textBox_Text.Text = "";
 			if (File.Exists(filePath))
 			{
 				using (var sr = new StreamReader(filePath, Encoding.UTF8, true))
 				{
 					if (sr != null)
-						textBox_ReleaseNotes.Text = sr.ReadToEnd();
+						textBox_Text.Text = sr.ReadToEnd();
 				}
 			}
 
-			if (string.IsNullOrEmpty(textBox_ReleaseNotes.Text))
+			if (string.IsNullOrEmpty(textBox_Text.Text))
 			{
-				textBox_ReleaseNotes.Text = "Couldn't read release notes from" + Environment.NewLine + filePath;
+				textBox_Text.Text = "Couldn't read release notes from" + Environment.NewLine + filePath;
 			}
 		}
 

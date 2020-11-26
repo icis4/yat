@@ -118,11 +118,11 @@ namespace YAT.Application
 			"  -1      Command line error",
 			"  -2      System environment error",
 			"  -3      Application settings error",
-			"  -4      Application start error",
-			"  -5      Application run error",
-			"  -6      Application exit error",
-			"  -7      Unhandled exception",
-			"  -8      Undetermined issue",
+			"  -4      Application start cancel",
+			"  -5      Application start error",
+			"  -6      Application run error",
+			"  -7      Application exit error",
+			"  -8      Unhandled exception",
 		#if (WITH_SCRIPTING)
 			"-100      Script invalid content",
 			"-101      Script stop on error",
@@ -1188,6 +1188,9 @@ namespace YAT.Application
 			{
 				var sb = new StringBuilder();
 
+				Shall be 1:1 console help
+				Shall be 1:~1 release notes format
+
 				sb.AppendLine(ApplicationEx.ProductCaptionAndVersionAndBuild);
 				sb.AppendLine();
 
@@ -1201,13 +1204,12 @@ namespace YAT.Application
 				foreach (string line in ResultText)
 					sb.AppendLine(line);
 
-				MessageBoxEx.Show
+				var f = new View.Forms.CommandLineMessageBox
 				(
 					sb.ToString(),
-					ApplicationEx.ProductName + " Help", // "YAT" or "YATConsole", as indicated in main title bar.
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information
+					ApplicationEx.ProductName + " Command Line Help" // "YAT" or "YATConsole", corresponding to executable.
 				);
+				f.ShowDialog();
 			}
 			else if (showLogo) // Includes version.
 			{
@@ -1219,20 +1221,19 @@ namespace YAT.Application
 				foreach (string line in ApplicationEx.ProductLogo)
 					sb.AppendLine(line);
 
-				MessageBoxEx.Show
+				var f = new View.Forms.CommandLineMessageBox
 				(
 					sb.ToString(),
-					ApplicationEx.ProductName + " Logo", // "YAT" or "YATConsole", as indicated in main title bar.
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Information
+					ApplicationEx.ProductName + " Logo" // "YAT" or "YATConsole", corresponding to executable.
 				);
+				f.ShowDialog();
 			}
 			else if (showVersion)
 			{
 				MessageBoxEx.Show
 				(
 					ApplicationEx.ProductCaptionAndVersionAndBuild,
-					ApplicationEx.ProductName + " Version", // "YAT" or "YATConsole", as indicated in main title bar.
+					ApplicationEx.ProductName + " Version", // "YAT" or "YATConsole", corresponding to executable.
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Information
 				);
@@ -1343,8 +1344,8 @@ namespace YAT.Application
 			{
 				case Model.MainResult.Success:                  return (MainResult.Success);
 				case Model.MainResult.CommandLineError:         return (MainResult.CommandLineError);
-				case Model.MainResult.ApplicationStartError:    return (MainResult.ApplicationStartError);
 				case Model.MainResult.ApplicationStartCancel:   return (MainResult.ApplicationStartCancel);
+				case Model.MainResult.ApplicationStartError:    return (MainResult.ApplicationStartError);
 				case Model.MainResult.ApplicationRunError:      return (MainResult.ApplicationRunError);
 				case Model.MainResult.ApplicationExitError:     return (MainResult.ApplicationExitError);
 				case Model.MainResult.UnhandledException:       return (MainResult.UnhandledException);
