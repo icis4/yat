@@ -269,9 +269,9 @@ namespace MKY.IO.Serial.Socket
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public TcpServer(int instanceId, IPNetworkInterfaceEx localInterface, int localPort, int connectionAllowance = ConnectionAllowanceDefault)
 		{
-			// Verify by-reference arguments:
+			// Assert by-reference arguments:
 
-			if (localInterface == null) throw (new ArgumentNullException("localInterface"));
+			if (localInterface == null) throw (new ArgumentNullException("localInterface", MessageHelper.InvalidExecutionPreamble + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			// All arguments are defined!
 

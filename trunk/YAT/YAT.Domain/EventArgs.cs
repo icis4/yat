@@ -88,24 +88,28 @@ namespace YAT.Domain
 	public class ScriptMessageEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		public DateTime TimeStamp { get; protected set; }
+		public DateTime TimeStamp { get; }
 
 		/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
-		public string Device { get; protected set; }
+		public string Device { get; }
 
 		/// <summary></summary>
-		public byte[] Data { get; protected set; }
+		public byte[] Data { get; }
 
 		/// <summary></summary>
-		public string Text { get; protected set; }
+		public string Text { get; }
 
 		/// <summary></summary>
-		public ScriptMessageEventArgs(DateTime timeStamp, string device, byte[] data, string text)
+		public TimeSpan Duration { get; }
+
+		/// <summary></summary>
+		public ScriptMessageEventArgs(DateTime timeStamp, string device, byte[] data, string text, TimeSpan duration)
 		{
 			TimeStamp = timeStamp;
 			Device    = device;
 			Data      = data;
 			Text      = text;
+			Duration  = duration;
 		}
 	}
 

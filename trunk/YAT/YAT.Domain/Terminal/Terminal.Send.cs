@@ -156,7 +156,7 @@ namespace YAT.Domain
 		/// The cached <see cref="Settings.IOSettings.ApproximateTypicalNumberOfBytesPerMillisecond"/> value.
 		/// </summary>
 		/// <remarks>
-		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings.
+		/// Value is approximate! It may be off by a factor of 2..5, depending on environment and I/O related settings!
 		/// </remarks>
 		protected double ApproximateTypicalNumberOfBytesPerMillisecond { get; private set; }
 
@@ -272,6 +272,9 @@ namespace YAT.Domain
 			}
 		}
 
+		// \remind (2020-12-07 / MKY)
+		// 'IsReceiving' and 'IsReceivingForSomeTime' are yet pending.
+
 		/// <summary>
 		/// Returns the current break state.
 		/// </summary>
@@ -312,6 +315,8 @@ namespace YAT.Domain
 		{
 			AssertUndisposed();
 
+			RequestPre(); // 'IsSending' shall be active when this Send...() method returns. This is e.g. needed for the 'WaitWhileIsSending()' script methods.
+
 			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
 			var asyncInvoker = new Action<byte[], long>(DoSendRaw);
 			asyncInvoker.BeginInvoke(data, sequenceNumber, null, null);
@@ -321,8 +326,6 @@ namespace YAT.Domain
 		protected virtual void DoSendRaw(byte[] data, long sequenceNumber)
 		{
 			DebugSend("Sending of {0} byte(s) of raw data has been invoked with sequence number {1}.", data.Length, sequenceNumber);
-
-			RequestPre();
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
 			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
@@ -355,6 +358,8 @@ namespace YAT.Domain
 			var parseMode = TerminalSettings.Send.Text.ToParseMode(); // Get setting at request/invocation.
 			var item = new TextSendItem(text, defaultRadix, parseMode, SendMode.Text, false);
 
+			RequestPre(); // 'IsSending' shall be active when this Send...() method returns. This is e.g. needed for the 'WaitWhileIsSending()' script methods.
+
 			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
 			var asyncInvoker = new Action<TextSendItem, long>(DoSendText);
 			asyncInvoker.BeginInvoke(item, sequenceNumber, null, null);
@@ -364,8 +369,6 @@ namespace YAT.Domain
 		protected virtual void DoSendText(TextSendItem item, long sequenceNumber)
 		{
 			DebugSend(@"Sending of text ""{0}"" ({1} characters) has been invoked (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber);
-
-			RequestPre();
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
 			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
@@ -400,6 +403,8 @@ namespace YAT.Domain
 			var parseMode = TerminalSettings.Send.Text.ToParseMode(); // Get setting at request/invocation.
 			var item = new TextSendItem(text, defaultRadix, parseMode, SendMode.Text, true);
 
+			RequestPre(); // 'IsSending' shall be active when this Send...() method returns. This is e.g. needed for the 'WaitWhileIsSending()' script methods.
+
 			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
 			var asyncInvoker = new Action<TextSendItem, long>(DoSendTextLine);
 			asyncInvoker.BeginInvoke(item, sequenceNumber, null, null);
@@ -409,8 +414,6 @@ namespace YAT.Domain
 		protected virtual void DoSendTextLine(TextSendItem item, long sequenceNumber)
 		{
 			DebugSend(@"Sending of text line ""{0}"" ({1} characters) has been invoked (sequence number = {2}).", item.Text, item.Text.Length, sequenceNumber);
-
-			RequestPre();
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
 			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
@@ -450,6 +453,8 @@ namespace YAT.Domain
 			foreach (string line in texts)
 				items.Add(new TextSendItem(line, defaultRadix, parseMode, SendMode.Text, true));
 
+			RequestPre(); // 'IsSending' shall be active when this Send...() method returns. This is e.g. needed for the 'WaitWhileIsSending()' script methods.
+
 			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
 			var asyncInvoker = new Action<List<TextSendItem>, long>(DoSendTextLines);
 			asyncInvoker.BeginInvoke(items, sequenceNumber, null, null);
@@ -459,8 +464,6 @@ namespace YAT.Domain
 		protected virtual void DoSendTextLines(List<TextSendItem> items, long sequenceNumber)
 		{
 			DebugSend("Sending of {0} text lines has been invoked (sequence number = {1}).", items.Count, sequenceNumber);
-
-			RequestPre();
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
 			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.
@@ -495,6 +498,8 @@ namespace YAT.Domain
 
 			var item = new FileSendItem(filePath, defaultRadix);
 
+			RequestPre(); // 'IsSending' shall be active when this Send...() method returns. This is e.g. needed for the 'WaitWhileIsSending()' script methods.
+
 			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
 			var asyncInvoker = new Action<FileSendItem, long>(DoSendFile);
 			asyncInvoker.BeginInvoke(item, sequenceNumber, null, null);
@@ -504,8 +509,6 @@ namespace YAT.Domain
 		protected virtual void DoSendFile(FileSendItem item, long sequenceNumber)
 		{
 			DebugSend(@"Sending of ""{0}"" has been invoked (sequence number = {1}).", item.FilePath, sequenceNumber);
-
-			RequestPre();
 
 			var forSomeTimeEventHelper = new ForSomeTimeEventHelper(DateTime.Now);
 			if (TryEnterRequestGate(forSomeTimeEventHelper, sequenceNumber)) // Note that behavior depends on the 'AllowConcurrency' setting.

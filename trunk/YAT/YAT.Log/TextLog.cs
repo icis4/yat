@@ -203,54 +203,68 @@ namespace YAT.Log
 		{
 			switch (this.fileType)
 			{
-				case FileType.Xml:
-				{
-					if (this.xmlWriter != null)
-					{
-						if (!this.xmlWriter.IsInDisposal)
-						{
-							this.xmlWriter.Close();
-							this.xmlWriter.Dispose();
-						}
-
-						this.xmlWriter = null;
-					}
-
-					break;
-				}
-
-				case FileType.Rtf:
-				{
-					if (this.rtfWriter != null)
-					{
-						if (!this.rtfWriter.IsInDisposal)
-						{
-							this.rtfWriter.Close();
-							this.rtfWriter.Dispose();
-						}
-
-						this.rtfWriter = null;
-					}
-
-					break;
-				}
+				case FileType.Xml: CloseAndDisposeXmlWriterNotSynchronized();  break;
+				case FileType.Rtf: CloseAndDisposeRtfWriterNotSynchronized();  break;
 
 				case FileType.Text:
-				default:
+				default:           CloseAndDisposeTextWriterNotSynchronized(); break;
+			}
+		}
+
+		/// <remarks>
+		/// Separated (instead of implemented in <see cref="CloseAndDisposeWriterNotSynchronized"/> above)
+		/// for reducing the coupling to <see cref="RtfWriter"/>, i.e. prevent unnecessary loading of that
+		/// assemble when calling <see cref="CloseAndDisposeWriterNotSynchronized"/>.
+		/// </remarks>
+		private void CloseAndDisposeXmlWriterNotSynchronized()
+		{
+			if (this.xmlWriter != null)
+			{
+				if (!this.xmlWriter.IsInDisposal)
 				{
-					if (this.textWriter != null)
-					{
-						if (!this.textWriter.IsInDisposal)
-						{
-							this.textWriter.Close();
-							this.textWriter.Dispose();
-						}
-
-						this.textWriter = null;
-					}
-
-					break;
+					this.xmlWriter.Close();
+					this.xmlWriter.Dispose();
 				}
+
+				this.xmlWriter = null;
+			}
+		}
+
+		/// <remarks>
+		/// Separated (instead of implemented in <see cref="CloseAndDisposeWriterNotSynchronized"/> above)
+		/// for reducing the coupling to <see cref="RtfWriter"/>, i.e. prevent unnecessary loading of that
+		/// assemble when calling <see cref="CloseAndDisposeWriterNotSynchronized"/>.
+		/// </remarks>
+		private void CloseAndDisposeRtfWriterNotSynchronized()
+		{
+			if (this.rtfWriter != null)
+			{
+				if (!this.rtfWriter.IsInDisposal)
+				{
+					this.rtfWriter.Close();
+					this.rtfWriter.Dispose();
+				}
+
+				this.rtfWriter = null;
+			}
+		}
+
+		/// <remarks>
+		/// Separated (instead of implemented in <see cref="CloseAndDisposeWriterNotSynchronized"/> above)
+		/// for reducing the coupling to <see cref="RtfWriter"/>, i.e. prevent unnecessary loading of that
+		/// assemble when calling <see cref="CloseAndDisposeWriterNotSynchronized"/>.
+		/// </remarks>
+		private void CloseAndDisposeTextWriterNotSynchronized()
+		{
+			if (this.textWriter != null)
+			{
+				if (!this.textWriter.IsInDisposal)
+				{
+					this.textWriter.Close();
+					this.textWriter.Dispose();
+				}
+
+				this.textWriter = null;
 			}
 		}
 

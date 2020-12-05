@@ -1188,7 +1188,7 @@ namespace YAT.Domain
 			}
 			else // Neither empty nor need to suppress:
 			{
-				// Process line length:
+				// Process line length/duration:
 				var lineEnd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 				if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // Meaning: "byte count"/"char count" and "line duration".
 				{
@@ -1198,8 +1198,10 @@ namespace YAT.Domain
 					else        // incl. Display.LengthSelection == LengthSelection.ByteCount)
 						length = lineState.Elements.ByteCount;
 
+					var duration = (ts - lineState.TimeStamp);
+
 					DisplayElementCollection info;
-					PrepareLineEndInfo(length, (ts - lineState.TimeStamp), out info);
+					PrepareLineEndInfo(length, duration, out info);
 					lineEnd.AddRange(info);
 				}
 
@@ -1223,9 +1225,10 @@ namespace YAT.Domain
 					if (appliesToScriptLines)
 					{
 						var scriptState = processState.Script; // Convenience shortcut.
+						var duration = (ts - scriptState.TimeStamp); // Attention, the script state's time stamp must be taken! It may differ from the displayed time stamp!
 
-						CreateCollectionIfIsNull(ref receivedScriptLinesToAdd);
-						receivedScriptLinesToAdd.Add(new ScriptLine(scriptState.TimeStamp, scriptState.Device, scriptState.Data.ToArray()));// No clone needed as element is no more used below.
+						CreateCollectionIfIsNull(ref receivedScriptLinesToAdd);                           // No clone needed on ToArray().
+						receivedScriptLinesToAdd.Add(new ScriptLine(scriptState.TimeStamp, scriptState.Device, scriptState.Data.ToArray(), duration));
 					}
 					else
 					{

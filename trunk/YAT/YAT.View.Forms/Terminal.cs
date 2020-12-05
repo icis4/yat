@@ -7675,7 +7675,7 @@ namespace YAT.View.Forms
 
 			if (TerminalIsAvailable)
 			{
-				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Enabled =  this.terminal.IsStarted;
+				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Enabled = this.terminal.IsStarted;
 
 				if (this.terminal.IsOpen)
 				{

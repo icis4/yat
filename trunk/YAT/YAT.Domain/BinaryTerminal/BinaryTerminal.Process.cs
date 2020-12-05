@@ -413,7 +413,7 @@ namespace YAT.Domain
 				else
 				{
 					lineState.Exceeded = true; // Keep in mind and notify once:
-					                                  //// Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+					                //// Using term "bytes" rather than "octets" as that is more common, and .NET uses 'Byte' as well.
 					var message = "Maximal number of bytes per line exceeded! Check the line break settings in Terminal > Settings > Binary or increase the limit in Terminal > Settings > Advanced.";
 					lineState.Elements.Add(new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true));
 
@@ -500,14 +500,15 @@ namespace YAT.Domain
 			// Note that it is OK to release the elements above, as binary terminals always show all bytes.
 			// This is opposed to text terminals where potential EOL elements are potentially hidden.
 
-			// Process line length:
+			// Process line length/duration:
 			var lineEnd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
 			if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // Meaning: "byte count" and "line duration".
 			{
 				var length = lineState.Elements.ByteCount;
+				var duration = (ts - lineState.TimeStamp);
 
 				DisplayElementCollection info;
-				PrepareLineEndInfo(length, (ts - lineState.TimeStamp), out info);
+				PrepareLineEndInfo(length, duration, out info);
 				lineEnd.AddRange(info);
 			}
 
@@ -540,8 +541,10 @@ namespace YAT.Domain
 						data.RemoveAll(b => b == MKY.IO.Serial.XOnXOff.XOffByte);
 					}
 
+					var duration = (ts - scriptState.TimeStamp); // Attention, the script state's time stamp must be taken! It may differ from the displayed time stamp!
+
 					CreateCollectionIfIsNull(ref receivedScriptLinesToAdd);
-					receivedScriptLinesToAdd.Add(new ScriptLine(scriptState.TimeStamp, scriptState.Device, data.ToArray()));// No clone needed as element is no more used below.
+					receivedScriptLinesToAdd.Add(new ScriptLine(scriptState.TimeStamp, scriptState.Device, data.ToArray(), duration));
 				}
 				else
 				{

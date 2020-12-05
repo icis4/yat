@@ -273,10 +273,13 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <remarks>
-		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings.
+		/// Value is approximate! It may be off by a factor of 2..5, depending on environment and I/O related settings!
 		/// </remarks>
 		/// <remarks>
-		/// Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+		/// Named 'Bytes' rather than 'Octets' as that is more common, and .NET uses 'Byte' as well.
+		/// </remarks>
+		/// <remarks>
+		/// Named this long to make inaccuracy obvious.
 		/// </remarks>
 		[XmlIgnore]
 		public virtual double ApproximateTypicalNumberOfBytesPerMillisecond
@@ -351,10 +354,13 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <remarks>
-		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings.
+		/// Value is approximate! It may be off by a factor of 2..5, depending on environment and I/O related settings!
 		/// </remarks>
 		/// <remarks>
-		/// Using term "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
+		/// Named 'Bytes' rather than 'Octets' as that is more common, and .NET uses 'Byte' as well.
+		/// </remarks>
+		/// <remarks>
+		/// Named this long to make inaccuracy obvious.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the scope.")]
 		[XmlIgnore]

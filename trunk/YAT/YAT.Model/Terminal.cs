@@ -852,6 +852,9 @@ namespace YAT.Model
 			}
 		}
 
+		// \remind (2020-12-07 / MKY)
+		// 'IsReceiving' and 'IsReceivingForSomeTime' are yet pending.
+
 		/// <summary></summary>
 		public virtual bool LogIsOn
 		{
