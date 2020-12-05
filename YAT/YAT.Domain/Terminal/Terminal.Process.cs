@@ -1208,11 +1208,11 @@ namespace YAT.Domain
 					continue;
 
 				// Compose the resulting message:
-				var text = FormatMessageTextForScripting(line.TimeStamp, e1.Data);
-				var message = new ScriptMessage(line.TimeStamp, line.Device, (byte[])e1.Data.Clone(), text); // Clone to ensure decoupling.
+				var text = FormatMessageTextForScripting(line.TimeStamp, e1.Data);        // Clone to ensure decoupling.
+				var message = new ScriptMessage(line.TimeStamp, line.Device, (byte[])e1.Data.Clone(), text, line.Duration);
 
-				// Invoke 2nd plug-in interface:
-				var e2 = new ScriptMessageEventArgs(message.TimeStamp, message.Device, (byte[])message.Data.Clone(), message.Text); // Clone to ensure decoupling.
+				// Invoke 2nd plug-in interface:                                                         // Clone to ensure decoupling.
+				var e2 = new ScriptMessageEventArgs(message.TimeStamp, message.Device, (byte[])message.Data.Clone(), message.Text, line.Duration);
 				OnMessageReceivedForScripting(e2);
 
 				// Enqeue the message for retrieval by the script:

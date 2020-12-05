@@ -105,7 +105,7 @@ namespace MKY
 		/// String containing values of all items.
 		/// </returns>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static string ValuesToString(Array array, string enclosure = null)
+		public static string ValuesToString(Array array, string itemEnclosure = null)
 		{
 			// Attention:
 			// Similar code exists in IEnumerableEx.ItemsToString().
@@ -121,16 +121,16 @@ namespace MKY
 				else
 					sb.Append(", ");
 
-				if (!string.IsNullOrEmpty(enclosure))
-					sb.Append(enclosure);
+				if (!string.IsNullOrEmpty(itemEnclosure))
+					sb.Append(itemEnclosure);
 
 				if (value != null)
 					sb.Append(value.ToString());
 				else
 					sb.Append("(null)");
 
-				if (!string.IsNullOrEmpty(enclosure))
-					sb.Append(enclosure);
+				if (!string.IsNullOrEmpty(itemEnclosure))
+					sb.Append(itemEnclosure);
 			}
 
 			return (sb.ToString());
@@ -143,13 +143,13 @@ namespace MKY
 		/// <returns>
 		/// String containing values of all items.
 		/// </returns>
-		public static string ValuesToString(Array array, char enclosure)
+		public static string ValuesToString(Array array, char itemEnclosure)
 		{
 			// Attention:
 			// Similar code exists in IEnumerableEx.ItemsToString().
 			// Changes here may have to be applied there too.
 
-			return (ValuesToString(array, enclosure.ToString()));
+			return (ValuesToString(array, itemEnclosure.ToString()));
 		}
 
 		/// <summary>

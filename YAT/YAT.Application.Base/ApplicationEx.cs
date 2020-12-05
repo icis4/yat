@@ -172,8 +172,11 @@ namespace YAT
 	#endif
 		};
 
+		/// <summary>The executable path.</summary>
+		public static readonly string ExecutablePath = System.Windows.Forms.Application.ExecutablePath;
+
 		/// <summary>The executable name.</summary>
-		public static readonly string ExecutableNameWithoutExtension = Path.GetFileNameWithoutExtension(System.Windows.Forms.Application.ExecutablePath);
+		public static readonly string ExecutableNameWithoutExtension = Path.GetFileNameWithoutExtension(ExecutablePath);
 
 		/// <summary>The .NET Framework prerequisite.</summary>
 		public static readonly string PrerequisiteFramework = ".NET Framework 4.8";

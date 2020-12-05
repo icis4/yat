@@ -143,7 +143,7 @@ namespace YAT.Domain.Test
 		/// The roughly estimated transmission time in milliseconds.
 		/// </summary>
 		/// <remarks>
-		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings.
+		/// Value is approximate! It may be off by a factor of 2..5, depending on environment and I/O related settings!
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static double GetRoughlyEstimatedTransmissionTime(TerminalSettings settings, int byteCount, int lineByteCount)
@@ -187,7 +187,7 @@ namespace YAT.Domain.Test
 		/// The roughly estimated overhead (initialization, verification, reverification,...) time in milliseconds.
 		/// </summary>
 		/// <remarks>
-		/// Value is approximate! It may be off by a factor of 2 or 3, depending on the settings.
+		/// Value is approximate! It may be off by a factor of 2..5, depending on environment and I/O related settings!
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'reverification' is a correct English term.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]

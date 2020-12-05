@@ -86,7 +86,7 @@
 			this.pathComboBox_FilePath.Name = "pathComboBox_FilePath";
 			this.pathComboBox_FilePath.Size = new System.Drawing.Size(238, 21);
 			this.pathComboBox_FilePath.TabIndex = 0;
-			this.toolTip.SetToolTip(this.pathComboBox_FilePath, "<Enter> to send file,\r\ndrop down for recent files,\r\n[...] to browse for a file");
+			this.toolTip.SetToolTip(this.pathComboBox_FilePath, "[Enter] to send file,\r\ndrop down for recent files,\r\n[...] to browse for a file");
 			this.pathComboBox_FilePath.SelectedIndexChanged += new System.EventHandler(this.pathComboBox_FilePath_SelectedIndexChanged);
 			// 
 			// comboBox_ExplicitDefaultRadix

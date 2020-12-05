@@ -146,8 +146,8 @@ namespace YAT.Domain
 
 	#if (WITH_SCRIPTING)
 
-		private static bool staticScriptingIsActive; // = false;
-		private static object staticScriptingIsActiveSyncObj = new object();
+		private static bool staticScriptRunIsActive; // = false;
+		private static object staticScriptRunIsActiveSyncObj = new object();
 
 	#endif
 
@@ -1684,8 +1684,9 @@ namespace YAT.Domain
 			{                                                          // Otherwise, e.g. 'LastEnqueued' could
 				lock (this.availableReceivedMessagesForScripting)      // yet be emtpy while the queue already
 				{                                                      // contains an item!
-					this.availableReceivedMessagesForScripting.Enqueue(value);
 					this.lastEnqueuedReceivedMessageForScripting = value.Clone(); // Clone to ensure decoupling.
+
+					this.availableReceivedMessagesForScripting.Enqueue(value);
 
 					DebugScriptingPostfixedQuoted(value.Text, "enqueued for scripting."); // Same reason as above, acceptable
 				}                                                                         // to do inside lock since debug only.
@@ -1748,6 +1749,7 @@ namespace YAT.Domain
 				lock (this.availableReceivedMessagesForScripting)      // yet be emtpy while the queue already
 				{                                                      // contains an item!
 					value = this.availableReceivedMessagesForScripting.Dequeue();
+
 					this.lastDequeuedReceivedMessageForScripting = value.Clone(); // Clone to ensure decoupling.
 
 					dequeueTimeStamp = DateTime.Now; // Taken within lock to get best accuracy.
@@ -1814,7 +1816,7 @@ namespace YAT.Domain
 				if (this.availableReceivedMessagesForScripting.Count > 0)
 				{
 					var messages = this.availableReceivedMessagesForScripting.ToArray();
-					value = messages[messages.Length - 1];
+					value = messages[messages.Length - 1].Clone(); // Clone to ensure decoupling.
 
 					DebugScriptingPostfixedQuoted(value.Text, "retrieved as last available received message for scripting.");
 				}
