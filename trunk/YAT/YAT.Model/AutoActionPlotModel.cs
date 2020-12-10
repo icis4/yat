@@ -166,7 +166,8 @@ namespace YAT.Model
 				}
 			}
 
-			// Directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html.
+			// Directly adding data point is the best performing way to add items according
+			// to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html:
 			var x = pi.XValue.Item2;
 			for (int i = 0; i < pi.YValues.Length; i++)
 			{
@@ -213,7 +214,8 @@ namespace YAT.Model
 
 			int pointsTotalCount = 0;
 
-			// Directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html.
+			// Directly adding data point is the best performing way to add items according
+			// to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html:
 			for (int i = 0; i < pi.YValues.Length; i++)
 			{
 				var series = OxyModel.Series[i];
@@ -249,7 +251,8 @@ namespace YAT.Model
 
 			int pointsTotalCount = 0;
 
-			// Directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html.
+			// Directly adding data point is the best performing way to add items according
+			// to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html:
 			for (int i = 0; i < pi.YValues.Length; i++)
 			{
 				var series = OxyModel.Series[i];
@@ -285,7 +288,8 @@ namespace YAT.Model
 
 			int pointsTotalCount = 0;
 
-			// Directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html.
+			// Directly adding data point is the best performing way to add items according
+			// to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html:
 			for (int i = 0; i < pi.YValues.Length; i++)
 			{
 				var series = OxyModel.Series[i];
@@ -321,7 +325,8 @@ namespace YAT.Model
 
 			int pointsTotalCount = 0;
 
-			// Directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html.
+			// Directly adding data point is the best performing way to add items according
+			// to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html:
 			for (int i = 0; i < pi.YValues.Length; i++)
 			{
 				var series = OxyModel.Series[i];
@@ -363,18 +368,20 @@ namespace YAT.Model
 				}
 				else
 				{
-					OxyModel.Series.Add(new OxyPlot.Series.BarSeries { Title = pi.YValues[0].Item1, FillColor = OxyPlotEx.ConvertTo(color) });
+					OxyModel.Series.Add(new OxyPlot.Series.BarSeries    { Title = pi.YValues[0].Item1, FillColor = OxyPlotEx.ConvertTo(color) });
 				}
 			}
 
 			if (Histogram == null)
-				Histogram = new HistogramDouble(256);
+				Histogram = new HistogramDouble(256); // Arbitrary maximum number of bins, resulting in at least some pixels per bin.
 
 			foreach (var tuple in pi.YValues)
 				Histogram.Add(tuple.Item2);
 
-			// While directly adding data point is the best performing way to add items according to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html,
-			// this seems an overkill for the histogram, as it would have to notify about added as well as inserted bins and... Too complicated, simply recreate:
+			// While directly adding data point is the best performing way to add items according
+			// to https://oxyplot.readthedocs.io/en/latest/guidelines/performance.html, this seems
+			// an overkill for the histogram, as it would have to notify about added as well as
+			// inserted bins and...and...and... Too complicated, simply recreate:
 
 			var axis = (OxyPlot.Axes.CategoryAxis)(OxyModel.Axes[0]);
 			var labels = axis.Labels;
