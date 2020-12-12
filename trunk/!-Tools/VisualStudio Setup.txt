@@ -58,12 +58,18 @@ View > Output
 NuGet
 -----
 Using NuGet to get binaries (e.g. OxyPlot) but not in projects/solution directly:
- > Multiple projects need references (to e.g. OxyPlot).
- > Keep-It-Simple-Stupid.
+ > Keep-It-Simple-Stupid:
+    > Referencing assemblies explicitly is straight-forward.
  > Don't like the NuGet approach:
-    > Solution external dependencies in the hint paths.
-    > Dependencies are NuGet install/config, i.e. machine/developer dependent.
-    > External binaries will not be part of SVN tags, branches,...
+    > While "packages.config" properly is project endemic, the packages will get downloaded into the solution.
+       > Projects contain a relative path out of the project directory.
+       > Projects are not fully reusable, e.g. when a solution groups projects in another directory level.
+    > Package paths contain the package version.
+       > Version changes require unnecessary changes in projects.
+       > Version changes require unnecessary operations in SVN.
+    > Some projects, e.g. CS-Script, do not release NuGet packages for 'hot fixes'.
+    > Some projects, e.g. ScottPlot, load much too mcuh into NuGet packages.
+       > A total of 24 files (5.5 MiB), while only a single file (140 KiB) is needed.
 
 
 Installer
