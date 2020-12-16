@@ -6541,7 +6541,7 @@ namespace YAT.View.Forms
 
 				if (ExtensionHelper.IsXmlFile(filePath))
 				{
-				#if FALSE // Enable to use raw instead of text XML export schema, useful for development purposes of the raw XML schema.
+				#if (FALSE) // Enable to use raw instead of text XML export schema, useful for development purposes of the raw XML schema.
 					savedCount = Log.Utilities.XmlWriterHelperRaw.SaveLinesToFile(monitor.SelectedLines, filePath, true);
 				#else
 					savedCount = Log.Utilities.XmlWriterHelperText.SaveLinesToFile(monitor.SelectedLines, filePath, true);
