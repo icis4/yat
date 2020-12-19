@@ -4359,16 +4359,16 @@ namespace YAT.View.Forms
 		{
 			this.terminalStatusLabels = new List<ToolStripStatusLabel>(12); // Preset the required capacity to improve memory management.
 
-			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_Separator1);
+			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_Separator2);
 			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_RTS);
 			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_CTS);
 			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_DTR);
 			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_DSR);
 			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_DCD);
-			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_Separator2);
+			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_Separator3);
 			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_InputXOnXOff);
 			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_OutputXOnXOff);
-			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_Separator3);
+			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_Separator4);
 			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_InputBreak);
 			this.terminalStatusLabels.Add(toolStripStatusLabel_TerminalStatus_OutputBreak);
 
@@ -8017,7 +8017,7 @@ namespace YAT.View.Forms
 						if (toolStripStatusLabel_TerminalStatus_DCD.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 							toolStripStatusLabel_TerminalStatus_DCD.ForeColor = SystemColors.GrayText;
 
-						toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
+						toolStripStatusLabel_TerminalStatus_Separator3.Visible    = indicateXOnXOff;
 						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
 						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
 
@@ -8041,7 +8041,7 @@ namespace YAT.View.Forms
 						var indicateBreakStates = this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates;
 						var manualOutputBreak   = this.settingsRoot.Terminal.IO.SerialPortOutputBreakIsModifiable;
 
-						toolStripStatusLabel_TerminalStatus_Separator3.Visible  = indicateBreakStates;
+						toolStripStatusLabel_TerminalStatus_Separator4.Visible  = indicateBreakStates;
 						toolStripStatusLabel_TerminalStatus_InputBreak.Visible  = indicateBreakStates;
 						toolStripStatusLabel_TerminalStatus_OutputBreak.Visible = indicateBreakStates;
 
@@ -8084,12 +8084,12 @@ namespace YAT.View.Forms
 						// Exceptions:
 
 						var indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlManagesXOnXOffManually;
-						toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
+						toolStripStatusLabel_TerminalStatus_Separator3.Visible    = indicateXOnXOff;
 						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
 						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
 
 						var indicateBreakStates = this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates;
-						toolStripStatusLabel_TerminalStatus_Separator3.Visible  = indicateBreakStates;
+						toolStripStatusLabel_TerminalStatus_Separator4.Visible  = indicateBreakStates;
 						toolStripStatusLabel_TerminalStatus_InputBreak.Visible  = indicateBreakStates;
 						toolStripStatusLabel_TerminalStatus_OutputBreak.Visible = indicateBreakStates;
 					}
@@ -8144,7 +8144,7 @@ namespace YAT.View.Forms
 							}
 						}
 
-						toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
+						toolStripStatusLabel_TerminalStatus_Separator3.Visible    = indicateXOnXOff;
 						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
 						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
 
@@ -8174,7 +8174,7 @@ namespace YAT.View.Forms
 					else // = isClosed
 					{
 						var indicateXOnXOff = this.settingsRoot.Terminal.IO.FlowControlUsesXOnXOff;
-						toolStripStatusLabel_TerminalStatus_Separator2.Visible    = indicateXOnXOff;
+						toolStripStatusLabel_TerminalStatus_Separator3.Visible    = indicateXOnXOff;
 						toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = indicateXOnXOff;
 						toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = indicateXOnXOff;
 
