@@ -1389,6 +1389,17 @@ namespace YAT.Model
 		// Recent Files
 		//==========================================================================================
 
+		/// <summary>
+		/// Update recent entry.
+		/// </summary>
+		/// <param name="recentFile">Recent file.</param>
+		private static void SetRecent(string recentFile)
+		{
+			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Add(recentFile);
+			ApplicationSettings.LocalUserSettings.RecentFiles.SetChanged(); // Manual change required because underlying collection is modified.
+			ApplicationSettings.SaveLocalUserSettings();
+		}
+
 		/// <summary></summary>
 		public virtual bool OpenRecent(int userIndex)
 		{
@@ -1397,13 +1408,12 @@ namespace YAT.Model
 			return (OpenFromFile(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[userIndex - 1].Item));
 		}
 
-		/// <summary>
-		/// Update recent entry.
-		/// </summary>
-		/// <param name="recentFile">Recent file.</param>
-		private static void SetRecent(string recentFile)
+		/// <summary></summary>
+		public virtual void ClearRecents()
 		{
-			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Add(recentFile);
+			AssertUndisposed();
+
+			ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Clear();
 			ApplicationSettings.LocalUserSettings.RecentFiles.SetChanged(); // Manual change required because underlying collection is modified.
 			ApplicationSettings.SaveLocalUserSettings();
 		}

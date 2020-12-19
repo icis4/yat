@@ -139,8 +139,9 @@ Important changes:
   broken on every chunk (related to bug #477).
 - Consequently, chunk line break settings are now located in the text/binary specific dialog.
 - Comma and semicolon added to list of predefined EOL sequences (feature request #409).
+- Option to hide undefined predefined commands (feature request #410).
 - Option to [Copy Text / File Path to Clipboard] (bug #493).
-- Option to hide undefined commands (feature request #410).
+- Possibility to clear lists of recent files and [Send Text|File] commands.
 - Adaptive monitor update rate further improved.
 - Calculation of byte/line rates improved.
 - For Bin/Oct/Dec/Hex/Unicode radix:
@@ -192,7 +193,9 @@ Fixed bugs:
      (bugs #85, #235, #375) nor some blurring on Win 8 and above (feature request #310).
    > Use of serial COM ports on disconnect, undock or hibernate without closing the port should
      no longer result in an 'ObjectDisposedException' or 'UnauthorizedAccessException' (bugs #224,
-     #254, #293, #316, #317, #345, #382, #385, #387, #401, #442). Deadlocks may still happen though.
+     #254, #293, #316, #317, #345, #382, #385, #387, #401, #442) nor should no longer result in
+     deadlocks, though not all potential causes for this issue in the .NET 'SerialPort' class can
+     be verified.
    > Running YAT for a long period, or creating many terminals, no longer results in memory leaks,
      previously resulting in gradual increase of memory consumption (RAM) (bugs #243, #263, #336).
 
