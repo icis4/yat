@@ -3257,6 +3257,11 @@ namespace YAT.View.Forms
 					}
 					this.menuItems_recent[i].Visible = true;
 				}
+
+				// Separator/Clear:
+				bool clearIsPossible = (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count > 0);
+				toolStripMenuItem_FileRecentContextMenu_Separator.Visible = clearIsPossible;
+				toolStripMenuItem_FileRecentContextMenu_Clear.Enabled     = clearIsPossible;
 			}
 			finally
 			{
@@ -3277,6 +3282,14 @@ namespace YAT.View.Forms
 		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
 
 			this.main.OpenRecent(ToolStripMenuItemEx.TagToInt32(sender)); // Attention, 'ToolStripMenuItem' is no 'Control'!
+		}
+
+		private void toolStripMenuItem_FileRecentContextMenu_Clear_Click(object sender, EventArgs e)
+		{
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
+
+			this.main.ClearRecents();
 		}
 
 		#endregion

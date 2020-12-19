@@ -1706,6 +1706,10 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
+				// Attention:
+				// Similar code exists in 'contextMenuStrip_Monitor_SetMenuItems()' further below!
+				// Changes here must most likely be applied there too.
+
 				bool isText       = true;
 				bool isSerialPort = true;
 
@@ -1749,9 +1753,13 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_View_ShowRadix.Enabled =  isShowable; // Attention: This 'isShowable' restriction also exists further below as well as in 'View.Forms.AdvancedTerminalSettings'.
 				toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked = (isShowable && this.settingsRoot.Display.ShowRadix);
 
-				string showLineNumbersText = "&Show Line Numbers (" + (Domain.Utilities.LineNumberSelectionEx)this.settingsRoot.Display.LineNumberSelection + ")";
-				toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Text    = showLineNumbersText;
-				toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Checked = this.settingsRoot.Display.ShowLineNumbers;
+				var lineNumberSelection = this.settingsRoot.Display.LineNumberSelection;
+				string showLineNumbersText = "&Show Line Numbers (" + (Domain.Utilities.LineNumberSelectionEx)lineNumberSelection + ")";
+				bool resetLineNumbersEnabled = (lineNumberSelection == Domain.Utilities.LineNumberSelection.Total);
+				toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Text     = showLineNumbersText;
+				toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Checked  = this.settingsRoot.Display.ShowLineNumbers;
+				toolStripMenuItem_TerminalMenu_View_ResetLineNumbers.Enabled = resetLineNumbersEnabled;
+
 				toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Checked   = this.settingsRoot.Display.ShowTimeStamp;
 				toolStripMenuItem_TerminalMenu_View_ShowTimeSpan.Checked    = this.settingsRoot.Display.ShowTimeSpan;
 				toolStripMenuItem_TerminalMenu_View_ShowTimeDelta.Checked   = this.settingsRoot.Display.ShowTimeDelta;
@@ -1889,6 +1897,11 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_View_ShowLineNumbers_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Display.ShowLineNumbers = !this.settingsRoot.Display.ShowLineNumbers;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_View_ResetLineNumbers_Click(object sender, EventArgs e)
+		{
+			this.terminal.ResetLineNumbers();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowTimeStamp_Click(object sender, EventArgs e)
@@ -2094,6 +2107,10 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
+				// Attention:
+				// Similar code exists in 'toolStripMenuItem_TerminalMenu_View_SetMenuItems()' further above!
+				// Changes here must most likely be applied there too.
+
 				var terminalType = this.settingsRoot.TerminalType;
 				var monitorType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
 				var isMonitor = (monitorType != Domain.RepositoryType.None);
@@ -2120,9 +2137,13 @@ namespace YAT.View.Forms
 				toolStripMenuItem_MonitorContextMenu_ShowRadix.Enabled =  isShowable; // Attention: This 'isShowable' restriction also exists further above as well as in 'View.Forms.AdvancedTerminalSettings'.
 				toolStripMenuItem_MonitorContextMenu_ShowRadix.Checked = (isShowable && this.settingsRoot.Display.ShowRadix);
 
-				string showLineNumbersText = "Show Line Numbers (" + (Domain.Utilities.LineNumberSelectionEx)this.settingsRoot.Display.LineNumberSelection + ")";
-				toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Text    = showLineNumbersText;
-				toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Checked = this.settingsRoot.Display.ShowLineNumbers;
+				var lineNumberSelection = this.settingsRoot.Display.LineNumberSelection;
+				string showLineNumbersText = "Show Line Numbers (" + (Domain.Utilities.LineNumberSelectionEx)lineNumberSelection + ")";
+				bool resetLineNumbersEnabled = (lineNumberSelection == Domain.Utilities.LineNumberSelection.Total);
+				toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Text     = showLineNumbersText;
+				toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Checked  = this.settingsRoot.Display.ShowLineNumbers;
+				toolStripMenuItem_MonitorContextMenu_ResetLineNumbers.Enabled = resetLineNumbersEnabled;
+
 				toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Checked   = this.settingsRoot.Display.ShowTimeStamp;
 				toolStripMenuItem_MonitorContextMenu_ShowTimeSpan.Checked    = this.settingsRoot.Display.ShowTimeSpan;
 				toolStripMenuItem_MonitorContextMenu_ShowTimeDelta.Checked   = this.settingsRoot.Display.ShowTimeDelta;
@@ -2294,6 +2315,14 @@ namespace YAT.View.Forms
 				return;
 
 			this.settingsRoot.Display.ShowLineNumbers = !this.settingsRoot.Display.ShowLineNumbers;
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_ResetLineNumbers_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.terminal.ResetLineNumbers();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowTimeStamp_Click(object sender, EventArgs e)
@@ -3814,6 +3843,11 @@ namespace YAT.View.Forms
 				toolStripMenuItem_SendContextMenu_CopyTextToClipboard    .Enabled = sendTextEnabled;
 				toolStripMenuItem_SendContextMenu_CopyFilePathToClipboard.Enabled = sendFileEnabled;
 
+				toolStripMenuItem_SendContextMenu_Clear_CurrentText    .Enabled = sendTextEnabled;
+				toolStripMenuItem_SendContextMenu_Clear_RecentTexts    .Enabled = sendTextEnabled;
+				toolStripMenuItem_SendContextMenu_Clear_CurrentFilePath.Enabled = sendFileEnabled;
+				toolStripMenuItem_SendContextMenu_Clear_RecentFilePaths.Enabled = sendFileEnabled;
+
 				toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix.Checked = this.settingsRoot.Send.UseExplicitDefaultRadix;
 				toolStripMenuItem_SendContextMenu_AllowConcurrency.Checked        = this.settingsRoot.Send.AllowConcurrency;
 
@@ -3921,6 +3955,38 @@ namespace YAT.View.Forms
 				Cursor = Cursors.Default;
 				SetFixedStatusText("Copying file path to clipboard failed!");
 			}
+		}
+
+		private void toolStripMenuItem_SendContextMenu_Clear_CurrentText_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.terminal.ClearSendText();
+		}
+
+		private void toolStripMenuItem_SendContextMenu_Clear_RecentTexts_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.terminal.ClearRecentSendTexts();
+		}
+
+		private void toolStripMenuItem_SendContextMenu_Clear_CurrentFilePath_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.terminal.ClearSendFile();
+		}
+
+		private void toolStripMenuItem_SendContextMenu_Clear_RecentFilePaths_Click(object sender, EventArgs e)
+		{
+			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+				return;
+
+			this.terminal.ClearRecentSendFiles();
 		}
 
 		private void toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix_Click(object sender, EventArgs e)

@@ -315,6 +315,9 @@
 			this.checkBox_AutoSaveWorkspace.Size = new System.Drawing.Size(206, 17);
 			this.checkBox_AutoSaveWorkspace.TabIndex = 1;
 			this.checkBox_AutoSaveWorkspace.Text = "&Save current workspace automatically";
+			this.toolTip.SetToolTip(this.checkBox_AutoSaveWorkspace, "This setting applies to manual application execution only.\r\nAutomatic runs (i.e. " +
+        "/tt, /tf, /s command line options) neither\r\nautomatically open nor save workspac" +
+        "e and terminal(s).");
 			this.checkBox_AutoSaveWorkspace.UseVisualStyleBackColor = true;
 			this.checkBox_AutoSaveWorkspace.CheckedChanged += new System.EventHandler(this.checkBox_AutoSaveWorkspace_CheckedChanged);
 			// 
@@ -326,6 +329,9 @@
 			this.checkBox_AutoOpenWorkspace.Size = new System.Drawing.Size(208, 17);
 			this.checkBox_AutoOpenWorkspace.TabIndex = 0;
 			this.checkBox_AutoOpenWorkspace.Text = "&Open last active workspace on startup";
+			this.toolTip.SetToolTip(this.checkBox_AutoOpenWorkspace, "This setting applies to manual application execution only.\r\nAutomatic runs (i.e. " +
+        "/tt, /tf, /s command line options) neither\r\nautomatically open nor save workspac" +
+        "e and terminal(s).");
 			this.checkBox_AutoOpenWorkspace.UseVisualStyleBackColor = true;
 			this.checkBox_AutoOpenWorkspace.CheckedChanged += new System.EventHandler(this.checkBox_AutoOpenWorkspace_CheckedChanged);
 			// 
