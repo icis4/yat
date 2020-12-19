@@ -163,6 +163,25 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary>
+		/// Clears <see cref="Command"/>.
+		/// </summary>
+		public virtual void ClearCommand()
+		{
+			if (Command != null)
+				Command = new Command(Command.DefaultRadix);
+			else
+				Command = new Command();
+		}
+
+		/// <summary>
+		/// Clears <see cref="RecentCommands"/>.
+		/// </summary>
+		public virtual void ClearRecentCommands()
+		{
+			RecentCommands = new RecentItemCollection<Command>(MaxRecentCommands);
+		}
+
 		#endregion
 
 		#region Object Members

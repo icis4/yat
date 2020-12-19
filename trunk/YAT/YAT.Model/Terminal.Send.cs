@@ -159,7 +159,7 @@ namespace YAT.Model
 
 				// Clear command if desired:
 				if (!this.settingsRoot.Send.Text.KeepSendText)
-					this.settingsRoot.SendText.Command = new Command(this.settingsRoot.SendText.Command.DefaultRadix); // Set command to "".
+					this.settingsRoot.SendText.ClearCommand();
 			}
 		}
 
@@ -176,7 +176,7 @@ namespace YAT.Model
 
 				// Clear command if desired:
 				if (!this.settingsRoot.Send.Text.KeepSendText)
-					this.settingsRoot.SendText.Command = new Command(this.settingsRoot.SendText.Command.DefaultRadix); // Set command to "".
+					this.settingsRoot.SendText.ClearCommand();
 			}
 		}
 

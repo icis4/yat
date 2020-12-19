@@ -1755,7 +1755,7 @@ namespace YAT.View.Forms
 
 				var lineNumberSelection = this.settingsRoot.Display.LineNumberSelection;
 				string showLineNumbersText = "&Show Line Numbers (" + (Domain.Utilities.LineNumberSelectionEx)lineNumberSelection + ")";
-				bool resetLineNumbersEnabled = (lineNumberSelection == Domain.Utilities.LineNumberSelection.Total);
+				bool resetLineNumbersEnabled = ((lineNumberSelection != Domain.Utilities.LineNumberSelection.Buffer) && (MaxMonitorLineNumberOffset > 0));
 				toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Text     = showLineNumbersText;
 				toolStripMenuItem_TerminalMenu_View_ShowLineNumbers.Checked  = this.settingsRoot.Display.ShowLineNumbers;
 				toolStripMenuItem_TerminalMenu_View_ResetLineNumbers.Enabled = resetLineNumbersEnabled;
@@ -1901,7 +1901,7 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_TerminalMenu_View_ResetLineNumbers_Click(object sender, EventArgs e)
 		{
-			this.terminal.ResetLineNumbers();
+			ResetMonitorLineNumbers();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowTimeStamp_Click(object sender, EventArgs e)
@@ -2139,7 +2139,7 @@ namespace YAT.View.Forms
 
 				var lineNumberSelection = this.settingsRoot.Display.LineNumberSelection;
 				string showLineNumbersText = "Show Line Numbers (" + (Domain.Utilities.LineNumberSelectionEx)lineNumberSelection + ")";
-				bool resetLineNumbersEnabled = (lineNumberSelection == Domain.Utilities.LineNumberSelection.Total);
+				bool resetLineNumbersEnabled = ((lineNumberSelection != Domain.Utilities.LineNumberSelection.Buffer) && (MaxMonitorLineNumberOffset > 0));
 				toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Text     = showLineNumbersText;
 				toolStripMenuItem_MonitorContextMenu_ShowLineNumbers.Checked  = this.settingsRoot.Display.ShowLineNumbers;
 				toolStripMenuItem_MonitorContextMenu_ResetLineNumbers.Enabled = resetLineNumbersEnabled;
@@ -2322,7 +2322,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			this.terminal.ResetLineNumbers();
+			ResetMonitorLineNumbers();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowTimeStamp_Click(object sender, EventArgs e)
@@ -3962,7 +3962,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			this.terminal.ClearSendText();
+			this.settingsRoot.SendText.ClearCommand();
 		}
 
 		private void toolStripMenuItem_SendContextMenu_Clear_RecentTexts_Click(object sender, EventArgs e)
@@ -3970,7 +3970,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			this.terminal.ClearRecentSendTexts();
+			this.settingsRoot.SendText.ClearRecentCommands();
 		}
 
 		private void toolStripMenuItem_SendContextMenu_Clear_CurrentFilePath_Click(object sender, EventArgs e)
@@ -3978,7 +3978,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			this.terminal.ClearSendFile();
+			this.settingsRoot.SendFile.ClearCommand();
 		}
 
 		private void toolStripMenuItem_SendContextMenu_Clear_RecentFilePaths_Click(object sender, EventArgs e)
@@ -3986,7 +3986,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			this.terminal.ClearRecentSendFiles();
+			this.settingsRoot.SendFile.ClearRecentCommands();
 		}
 
 		private void toolStripMenuItem_SendContextMenu_UseExplicitDefaultRadix_Click(object sender, EventArgs e)
@@ -6351,6 +6351,29 @@ namespace YAT.View.Forms
 			monitor_Tx   .ShowDataStatus = showCountAndRate;
 			monitor_Bidir.ShowDataStatus = showCountAndRate;
 			monitor_Rx   .ShowDataStatus = showCountAndRate;
+		}
+
+		private long MaxMonitorLineNumberOffset
+		{
+			get
+			{
+				long maxOffset = this.monitor_Bidir.LineNumberOffset;
+
+				if (maxOffset < this.monitor_Tx.LineNumberOffset)
+					maxOffset = this.monitor_Tx.LineNumberOffset;
+
+				if (maxOffset < this.monitor_Rx.LineNumberOffset)
+					maxOffset = this.monitor_Rx.LineNumberOffset;
+
+				return (maxOffset);
+			}
+		}
+
+		private void ResetMonitorLineNumbers()
+		{
+			this.monitor_Tx   .ResetLineNumbers();
+			this.monitor_Bidir.ResetLineNumbers();
+			this.monitor_Rx   .ResetLineNumbers();
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]

@@ -393,6 +393,13 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		[Browsable(false)]
+		public virtual long LineNumberOffset
+		{
+			get { return (this.lineNumberOffset); }
+		}
+
+		/// <summary></summary>
 		[Category("Appearance")]
 		[Description("Show the time status.")]
 		[DefaultValue(ShowTimeStatusDefault)]
@@ -652,6 +659,17 @@ namespace YAT.View.Controls
 			ClearAndResetListBoxes();
 
 			DebugContent("Cleared");
+		}
+
+		/// <summary></summary>
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
+		public virtual void ResetLineNumbers()
+		{
+			if (this.lineNumberSelection != Domain.Utilities.LineNumberSelection.Buffer) // This option keeps the offset at 0.
+			{
+				this.lineNumberOffset = 0;
+				fastListBox_LineNumbers.Invalidate();
+			}
 		}
 
 		/// <summary></summary>
