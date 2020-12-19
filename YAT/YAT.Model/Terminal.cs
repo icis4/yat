@@ -1386,8 +1386,8 @@ namespace YAT.Model
 				if (this.settingsRoot_Changed_sendImmediatelyOld != SettingsRoot.Terminal.Send.Text.SendImmediately) {
 					this.settingsRoot_Changed_sendImmediatelyOld = SettingsRoot.Terminal.Send.Text.SendImmediately;
 
-					// Send immediately has changed, reset the command:
-					this.settingsRoot.SendText.Command = new Command(SettingsRoot.SendText.Command.DefaultRadix); // Set command to "".
+					// Send immediately has changed, clear the command:
+					this.settingsRoot.SendText.ClearCommand();
 				}
 			}
 			else if (ReferenceEquals(e.Inner.Source, SettingsRoot.Terminal.TextTerminal))
