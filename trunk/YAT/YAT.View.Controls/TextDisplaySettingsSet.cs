@@ -201,7 +201,7 @@ namespace YAT.View.Controls
 				MessageBoxEx.Show
 				(
 					this,
-					"Line break timeout must be a positive number!",
+					"Line break time-out must be a positive number!",
 					"Invalid Input",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error

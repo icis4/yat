@@ -105,7 +105,7 @@ namespace MKY.Windows.Forms
 		/// Flag whether the cancel button shall be shown.
 		/// </param>
 		/// <param name="timeout">
-		/// Optional timeout.
+		/// Optional time-out.
 		/// </param>
 		/// <returns>
 		/// One of the System.Windows.Forms.DialogResult values.

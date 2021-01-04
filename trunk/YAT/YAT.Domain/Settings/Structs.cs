@@ -127,7 +127,7 @@ namespace YAT.Domain.Settings
 		[XmlElement("Enabled")]
 		public bool Enabled { get; set; }
 
-		/// <summary>Timeout in milliseconds.</summary>
+		/// <summary>Time-out in milliseconds.</summary>
 		[XmlElement("Timeout")]
 		public int Timeout { get; set; }
 

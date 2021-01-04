@@ -139,7 +139,7 @@ namespace MKY.Test.Devices
 		/// <summary>Error message for convenience.</summary>
 		public const string ErrorMessage = @"The required """ + Executable + @""" is not available, therefore this test is excluded. Ensure that the ""MCD Conline USB HUB"" drivers are installed, and ""\Tools\CommandLine\USBHubControl.exe"" has been added to the system's PATH.";
 
-		/// <remarks>Same timeout as in "MCD Conline USB HUB 6-Port Runtime Config.cmd".</remarks>
+		/// <remarks>Same time-out as in "MCD Conline USB HUB 6-Port Runtime Config.cmd".</remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Conline' is a product name.")]
 		private const int ExecutionTimeout = 3000;
 

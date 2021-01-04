@@ -137,7 +137,7 @@ namespace MKY.IO.Serial.Socket
 		/// Using the sum of the underlying sockets for two reasons:
 		/// <list type="bullet">
 		/// <item><description>Best guess of the underlying sockets.</description></item>
-		/// <item><description>For sure larger than the underlying timeout.</description></item>
+		/// <item><description>For sure larger than the underlying time-out.</description></item>
 		/// </list>
 		/// </remarks>
 		private const int SocketStopTimeout = (TcpClient.SocketStopTimeout + TcpServer.SocketStopTimeout);

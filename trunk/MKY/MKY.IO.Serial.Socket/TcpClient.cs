@@ -626,7 +626,7 @@ namespace MKY.IO.Serial.Socket
 		private void StartConnecting()
 		{
 			if (!TryCreateAndStartSocketAndThreads())
-				StartConnectingTimeout(); // Will try again after timeout.
+				StartConnectingTimeout(); // Will try again after time-out.
 		}
 
 		/// <remarks>
@@ -1632,10 +1632,10 @@ namespace MKY.IO.Serial.Socket
 		/// 3. YAT's socket then correctly retransmits the paket:
 		///    <![CDATA[Server (Device) <= SYN <= Client (YAT)]]>
 		/// 4. Then, nothing happens for 11 seconds anymore:
-		///    YAT's socket waits for acknowledge or timeout.
+		///    YAT's socket waits for acknowledge or time-out.
 		///    The device does nothing anymore.
 		///    <![CDATA[Server (Device) <= SYN <= Client (YAT)]]>
-		/// 5. After timeout, YAT tries again:
+		/// 5. After time-out, YAT tries again:
 		///    <![CDATA[Server (Device) <= SYN <= Client (YAT)]]>
 		/// 6. Approx. 12 seconds later, YAT tries again:
 		///    <![CDATA[Server (Device) <= SYN <= Client (YAT)]]>

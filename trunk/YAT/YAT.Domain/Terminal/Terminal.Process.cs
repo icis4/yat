@@ -886,7 +886,7 @@ namespace YAT.Domain
 				var currentByteCount = overallState.GetPostponedByteCount();
 				var nothingProcessed = (currentByteCount == previousByteCount);
 				if (nothingProcessed)
-					break; // Nothing to process or postpone, e.g. due to infinite timeout.
+					break; // Nothing to process or postpone, e.g. due to infinite time-out.
 
 				previousByteCount = overallState.GetPostponedByteCount();
 			}
@@ -910,9 +910,9 @@ namespace YAT.Domain
 		protected virtual void ProcessChunkPre(RepositoryType repositoryType, RawChunk chunk)
 		{
 			// Timed line breaks are processed asynchronously, as they are only triggered
-			// after a timeout. Except on reload, then timed line breaks are calculated.
+			// after a time-out. Except on reload, then timed line breaks are calculated.
 			// Note that all bytes of a chunk have the same time stamp, thus no need to
-			// check for timeout on each byte.
+			// check for time-out on each byte.
 
 			if (IsReloading)
 				ProcessAndSignalTimedLineBreakOnReloadIfNeeded(repositoryType, chunk);
@@ -1749,7 +1749,7 @@ namespace YAT.Domain
 				{
 					case LinePosition.Begin:
 					case LinePosition.End:
-						// Nothing to do, keep timeout stopped.
+						// Nothing to do, keep time-out stopped.
 						break;
 
 					case LinePosition.Content:

@@ -231,7 +231,7 @@ namespace YAT.View.Controls
 		{
 			InitializeComponent();
 
-			timer_DataStatusUpdateTimeout.Interval = (DataStatusIntervalMs * 2); // Synchronous update shall have precedence over timeout.
+			timer_DataStatusUpdateTimeout.Interval = (DataStatusIntervalMs * 2); // Synchronous update shall have precedence over time-out.
 
 			this.timeStatusHelper = new MonitorTimeStatusHelper();
 			this.dataStatusHelper = new MonitorDataStatusHelper();
@@ -1551,7 +1551,7 @@ namespace YAT.View.Controls
 		private void TriggerMonitorUpdate()
 		{
 			// Either perform the update...
-			// ...or arm the update timeout to ensure that update will be performed later:
+			// ...or arm the update time-out to ensure that update will be performed later:
 			if (MonitorUpdateHasToBePerformed())
 			{
 				StopMonitorUpdateTimeout();
@@ -1559,7 +1559,7 @@ namespace YAT.View.Controls
 			}
 			else
 			{
-				StartMonitorUpdateTimeout(StopwatchEx.TicksToTime(this.monitorUpdateTickInterval) * 2); // Synchronous update shall have precedence over timeout.
+				StartMonitorUpdateTimeout(StopwatchEx.TicksToTime(this.monitorUpdateTickInterval) * 2); // Synchronous update shall have precedence over time-out.
 			}
 		}
 
@@ -1964,7 +1964,7 @@ namespace YAT.View.Controls
 		private void SetDataStatusText()
 		{
 			// Either perform the update...
-			// ...or arm the update timeout to ensure that update will be performed later:
+			// ...or arm the update time-out to ensure that update will be performed later:
 			if (DataStatusUpdateHasToBePerformed())
 				UpdateDataStatusText();
 			else

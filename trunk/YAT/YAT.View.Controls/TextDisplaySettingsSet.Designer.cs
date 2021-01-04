@@ -42,7 +42,7 @@
 			// label_LengthLineBreakUnit
 			// 
 			this.label_LengthLineBreakUnit.AutoSize = true;
-			this.label_LengthLineBreakUnit.Location = new System.Drawing.Point(202, 27);
+			this.label_LengthLineBreakUnit.Location = new System.Drawing.Point(203, 27);
 			this.label_LengthLineBreakUnit.Name = "label_LengthLineBreakUnit";
 			this.label_LengthLineBreakUnit.Size = new System.Drawing.Size(33, 13);
 			this.label_LengthLineBreakUnit.TabIndex = 3;
@@ -52,7 +52,7 @@
 			// textBox_LengthLineBreak
 			// 
 			this.textBox_LengthLineBreak.Enabled = false;
-			this.textBox_LengthLineBreak.Location = new System.Drawing.Point(153, 24);
+			this.textBox_LengthLineBreak.Location = new System.Drawing.Point(154, 24);
 			this.textBox_LengthLineBreak.Name = "textBox_LengthLineBreak";
 			this.textBox_LengthLineBreak.Size = new System.Drawing.Size(48, 20);
 			this.textBox_LengthLineBreak.TabIndex = 2;
@@ -77,7 +77,7 @@
 			// label_TimedLineBreakUnit
 			// 
 			this.label_TimedLineBreakUnit.AutoSize = true;
-			this.label_TimedLineBreakUnit.Location = new System.Drawing.Point(202, 50);
+			this.label_TimedLineBreakUnit.Location = new System.Drawing.Point(203, 50);
 			this.label_TimedLineBreakUnit.Name = "label_TimedLineBreakUnit";
 			this.label_TimedLineBreakUnit.Size = new System.Drawing.Size(20, 13);
 			this.label_TimedLineBreakUnit.TabIndex = 6;
@@ -87,7 +87,7 @@
 			// textBox_TimedLineBreakTimeout
 			// 
 			this.textBox_TimedLineBreakTimeout.Enabled = false;
-			this.textBox_TimedLineBreakTimeout.Location = new System.Drawing.Point(153, 47);
+			this.textBox_TimedLineBreakTimeout.Location = new System.Drawing.Point(154, 47);
 			this.textBox_TimedLineBreakTimeout.Name = "textBox_TimedLineBreakTimeout";
 			this.textBox_TimedLineBreakTimeout.Size = new System.Drawing.Size(48, 20);
 			this.textBox_TimedLineBreakTimeout.TabIndex = 5;
@@ -99,9 +99,9 @@
 			this.checkBox_TimedLineBreak.AutoSize = true;
 			this.checkBox_TimedLineBreak.Location = new System.Drawing.Point(3, 49);
 			this.checkBox_TimedLineBreak.Name = "checkBox_TimedLineBreak";
-			this.checkBox_TimedLineBreak.Size = new System.Drawing.Size(151, 17);
+			this.checkBox_TimedLineBreak.Size = new System.Drawing.Size(154, 17);
 			this.checkBox_TimedLineBreak.TabIndex = 4;
-			this.checkBox_TimedLineBreak.Text = "Break lines after timeout of";
+			this.checkBox_TimedLineBreak.Text = "Break lines after time-out of";
 			this.toolTip.SetToolTip(this.checkBox_TimedLineBreak, "If no data is received or sent for the specified amount of time, the line is brok" +
         "en.\r\n\r\nUseful to communicate with devices that do use text messages but no EOL s" +
         "equence.");

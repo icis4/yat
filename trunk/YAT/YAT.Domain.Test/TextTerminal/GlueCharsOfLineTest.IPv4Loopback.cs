@@ -141,7 +141,7 @@ namespace YAT.Domain.Test.TextTerminal
 								Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 								Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-							////expectedContentPatternA = same as before as line from B must be postponed until timeout.
+							////expectedContentPatternA = same as before as line from B must be postponed until time-out.
 								Utilities.AssertBidirContentPattern(terminalA, expectedContentPatternA);
 
 								expectedContentPatternB.Add(EscapeRegex("(<<) ABC<CR><LF>"));
@@ -166,7 +166,7 @@ namespace YAT.Domain.Test.TextTerminal
 								Utilities.AssertBidirContentPattern(terminalB, expectedContentPatternB);
 							}
 
-							// In order to detect erroneous behavior of timeout, wait for twice the timeout before...
+							// In order to detect erroneous behavior of time-out, wait for twice the time-out before...
 							Thread.Sleep(2 * settingsA.TextTerminal.GlueCharsOfLine.Timeout);
 
 							for (int i = 0; i < 2; i++) // ...twice doing...
@@ -190,13 +190,13 @@ namespace YAT.Domain.Test.TextTerminal
 
 								// ...pong...
 								//              A <= B
-								terminalB.SendTextLine(Text); // Line from B must be postponed until timeout.
+								terminalB.SendTextLine(Text); // Line from B must be postponed until time-out.
 								expectedTotalByteCountBA += LineByteCount;
 								expectedTotalLineCountBA++;
 								Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 								Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-							////expectedContentPatternA = same as before as line from B must be postponed until timeout.
+							////expectedContentPatternA = same as before as line from B must be postponed until time-out.
 								Utilities.AssertBidirContentPattern(terminalA, expectedContentPatternA);
 
 								expectedContentPatternB.Add(EscapeRegex("(<<) ABC<CR><LF>"));
@@ -339,7 +339,7 @@ namespace YAT.Domain.Test.TextTerminal
 								Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 								Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-							////expectedContentPatternA = same as before as line from B must be postponed until line from A has completed (timeout = forever).
+							////expectedContentPatternA = same as before as line from B must be postponed until line from A has completed (Timeout.Infinite).
 								Utilities.AssertBidirContentPattern(terminalA, expectedContentPatternA);
 
 								expectedContentPatternB.Add(EscapeRegex("(<<) ABC<CR><LF>"));
@@ -391,13 +391,13 @@ namespace YAT.Domain.Test.TextTerminal
 
 								// ...pong...
 								//              A <= B
-								terminalB.SendTextLine(Text); // Line from B must be postponed until line from A has completed (timeout = forever).
+								terminalB.SendTextLine(Text); // Line from B must be postponed until line from A has completed (Timeout.Infinite).
 								expectedTotalByteCountBA += LineByteCount;
 								expectedTotalLineCountBA++;
 								Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 								Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-							////expectedContentPatternA = same as before as line from B must be postponed until line from A has completed (timeout = forever).
+							////expectedContentPatternA = same as before as line from B must be postponed until line from A has completed (Timeout.Infinite).
 								Utilities.AssertBidirContentPattern(terminalA, expectedContentPatternA);
 
 								expectedContentPatternB.Add(EscapeRegex("(<<) ABC<CR><LF>"));
@@ -406,7 +406,7 @@ namespace YAT.Domain.Test.TextTerminal
 								// ...and wait for at least twice the default timeout:
 								Thread.Sleep(2 * Domain.Settings.TextTerminalSettings.GlueCharsOfLineTimeoutDefault); // No margin needed.
 
-							////expectedContentPatternA = same as before as line from B must be postponed until line from A has completed (timeout = forever).
+							////expectedContentPatternA = same as before as line from B must be postponed until line from A has completed (Timeout.Infinite).
 								Utilities.AssertBidirContentPattern(terminalA, expectedContentPatternA);
 
 							////expectedContentPatternB = same as before.

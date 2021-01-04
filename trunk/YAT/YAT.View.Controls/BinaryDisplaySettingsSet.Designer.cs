@@ -124,7 +124,7 @@
 			this.checkBox_TimedLineBreak.Name = "checkBox_TimedLineBreak";
 			this.checkBox_TimedLineBreak.Size = new System.Drawing.Size(151, 17);
 			this.checkBox_TimedLineBreak.TabIndex = 8;
-			this.checkBox_TimedLineBreak.Text = "Break lines after timeout of";
+			this.checkBox_TimedLineBreak.Text = "Break lines after time-out of";
 			this.toolTip.SetToolTip(this.checkBox_TimedLineBreak, "If no data is received or sent for the specified amount of time, the line is brok" +
         "en.");
 			this.checkBox_TimedLineBreak.UseVisualStyleBackColor = true;

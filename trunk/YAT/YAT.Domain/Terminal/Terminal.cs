@@ -127,7 +127,7 @@ namespace YAT.Domain
 		private const string TxBufferFullErrorString     = "TX BUFFER FULL";
 
 		/// <summary>
-		/// The timeout for clearing/refreshing/emptying, related to <see cref="ClearRefreshEmptySyncObj"/>.
+		/// The time-out for clearing/refreshing/emptying, related to <see cref="ClearRefreshEmptySyncObj"/>.
 		/// </summary>
 		protected const int ClearRefreshEmptyTimeout = 1000;
 

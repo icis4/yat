@@ -434,7 +434,7 @@ namespace YAT.View.Controls
 						{
 							scanSuccess = false;
 
-							errorMessageLead = "Timeout while scanning the ports!";
+							errorMessageLead = "Time-out while scanning the ports!";
 							errorMessageHint = "If the issue cannot be solved, tell " + ApplicationEx.CommonName + " to differently scan the ports by going to 'File > Preferences...' and change the port related settings.";
 						}
 						else

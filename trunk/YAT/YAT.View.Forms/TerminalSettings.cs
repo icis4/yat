@@ -584,7 +584,7 @@ namespace YAT.View.Forms
 
 					case Domain.TerminalType.Binary:
 						button += "Binary";
-						toolTipCaption = "Binary terminal dependent settings such as sequence and timeout line breaks.";
+						toolTipCaption = "Binary terminal dependent settings such as sequence and time-out line breaks.";
 						break;
 
 					default:

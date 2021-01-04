@@ -266,7 +266,7 @@ namespace MKY.Net.Test
 		public static readonly string IPv6SpecificInterfaceIsAvailable = "IPv6 specific interface '" + ConfigurationProvider.Configuration.IPv6SpecificInterface + "' is " + (ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable ? "" : "*NOT* ") + "available" + (ConfigurationProvider.Configuration.IPv6SpecificInterfaceIsAvailable ? "" : " => FIX OR EXCLUDE"); // Attention, no '!' allowed in NUnit test category strings!
 
 		/// <remarks>
-		/// "MT-SICS" is no valid NUnit category string as it contains an '-'.
+		/// "MT-SICS" would not be a valid NUnit category string as it contains an '-'.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sics", Justification = "'MT-SICS' is a name.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "Port is named with a single letter.")]

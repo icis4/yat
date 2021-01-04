@@ -313,14 +313,14 @@ namespace MKY.IO.Serial.Socket.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for start, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for start, 0 ms have passed, time-out is " + WaitTimeoutForStateChange + " ms...");
 
 			while (!io.IsStarted)
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Trace.WriteLine("Waiting for start, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for start, " + waitTime + " ms have passed, time-out is " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Start timeout! " + message);
@@ -333,14 +333,14 @@ namespace MKY.IO.Serial.Socket.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for start as server, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for start as server, 0 ms have passed, time-out is " + WaitTimeoutForStateChange + " ms...");
 
 			while (!(io.IsStarted && io.IsServer))
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Trace.WriteLine("Waiting for start as server, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for start as server, " + waitTime + " ms have passed, time-out is " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Start timeout! " + message);
@@ -359,14 +359,14 @@ namespace MKY.IO.Serial.Socket.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for connection, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for connection, 0 ms have passed, time-out is " + WaitTimeoutForStateChange + " ms...");
 
 			while (!(ioA.IsConnected && ioB.IsConnected))
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, time-out is " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Connect timeout! " + message);
@@ -385,14 +385,14 @@ namespace MKY.IO.Serial.Socket.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for disconnection, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for disconnection, 0 ms have passed, time-out is " + WaitTimeoutForStateChange + " ms...");
 
 			while (ioA.IsConnected || ioB.IsConnected)
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Trace.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for disconnection, " + waitTime + " ms have passed, time-out is " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Disconnect timeout! " + message);
@@ -411,14 +411,14 @@ namespace MKY.IO.Serial.Socket.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for stop, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for stop, 0 ms have passed, time-out is " + WaitTimeoutForStateChange + " ms...");
 
 			while (!io.IsStopped)
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Trace.WriteLine("Waiting for stop, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for stop, " + waitTime + " ms have passed, time-out is " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Stop timeout! " + message);
