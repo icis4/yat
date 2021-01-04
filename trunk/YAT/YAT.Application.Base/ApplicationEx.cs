@@ -136,40 +136,50 @@ namespace YAT
 		/// </summary>                                                    // Using more general term "Build" rather than .NET specific term "Revision".
 		public static readonly string ProductCaptionAndVersionAndBuild = ProductCaptionAndVersion + " Build " + ProductRevision;
 
-		/// <summary>The complete logo (text) of the product.</summary>
+		/// <summary>The complete logo (text line sections) of the product.</summary>
+		/// <remarks>Same content and structure as header of 'Release Notes'.</remarks>
 		[SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly", Justification = "Nobody will modify this array, don't worry...")]
-		public static readonly string[] ProductLogo =
+		public static readonly string[][] ProductLogoLineSections =
 		{
-			CommonNameLong + ".", // Fixed to "YAT - Yet Another Terminal".
-			"Engineering, testing and debugging of serial communications.",
-			"Supports RS-232/422/423/485 as well as...",
-			"...TCP/IP Client/Server/AutoSocket,...",
-			"...UDP/IP Client/Server/PairSocket and...",
-			"...USB Ser/HID.",
-	#if (WITH_SCRIPTING)
-			"Integrated C# scripting functionality.",
-	#endif
-			"",
-			"Visit YAT at https://sourceforge.net/projects/y-a-terminal.",
-	#if (!WITH_SCRIPTING)
-			"Contact YAT by mailto:y-a-terminal@users.sourceforge.net.",
-	#else
-			"Contact Albatros by mailto:matthias.klaey@mt.com.",
-	#endif
-			"",
-	#if (!WITH_SCRIPTING)
-			"Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.",
-			"Copyright © 2003-2020 Matthias Kläy.",
-	#else
-			"YAT copyright © 2003-2004 HSR Hochschule für Technik Rapperswil and © 2003-2020 Matthias Kläy.",
-			"Albatros copyright © 2008-2020 Mettler-Toledo.",
-	#endif
-			"All rights reserved.",
-	#if (!WITH_SCRIPTING)
-			"",
-			"YAT is licensed under the GNU LGPL.", // Note that source files state "This source code is licensed under the GNU LGPL." to emphasize the context.
-			"See http://www.gnu.org/licenses/lgpl.html for license details."
-	#endif
+			new string[]
+			{
+				CommonNameLong + ".", // Fixed to "YAT - Yet Another Terminal".
+				"Engineering, testing and debugging of serial communications.",
+				"Supports RS-232/422/423/485 as well as...", // Separated onto four lines to fit console widths as narrow as 80 characters,
+				"...TCP/IP Client/Server/AutoSocket,...",    // opposed to the 'Release Notes' which are fixed to a width of 100 characters.
+				"...UDP/IP Client/Server/PairSocket and...",
+				"...USB Ser/HID.",
+		#if (WITH_SCRIPTING)
+				"Integrated C# scripting functionality.",
+		#endif
+			},
+			new string[]
+			{
+				"Visit YAT at https://sourceforge.net/projects/y-a-terminal.",
+		#if (!WITH_SCRIPTING)
+				"Contact YAT by mailto:y-a-terminal@users.sourceforge.net.",
+		#else
+				"Contact Albatros by mailto:matthias.klaey@mt.com.",
+		#endif
+			},
+			new string[]
+			{
+		#if (!WITH_SCRIPTING)
+				"Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.",
+				"Copyright © 2003-2020 Matthias Kläy.",
+		#else
+				"YAT copyright © 2003-2004 HSR Hochschule für Technik Rapperswil and © 2003-2020 Matthias Kläy.",
+				"Albatros copyright © 2008-2020 Mettler-Toledo.",
+		#endif
+				"All rights reserved.",
+		#if (!WITH_SCRIPTING)
+			},
+			new string[]
+			{
+				"YAT is licensed under the GNU LGPL.", // Note that source files state "This source code is licensed under the GNU LGPL." to emphasize the context.
+				"See http://www.gnu.org/licenses/lgpl.html for license details."
+		#endif
+			}
 		};
 
 		/// <summary>The executable path.</summary>

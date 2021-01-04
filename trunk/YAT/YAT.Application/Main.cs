@@ -60,9 +60,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-#if (HANDLE_UNHANDLED_EXCEPTIONS)
 using System.IO;
-#endif
 using System.Text;
 using System.Threading;
 using System.Windows.Forms; // In addition, several locations explicitly use 'System.Windows.Forms' to prevent naming conflicts with 'MKY.Windows.Forms' and 'YAT.Application'.
@@ -102,7 +100,7 @@ namespace YAT.Application
 
 		private const int DefaultTextWidth = 80;
 
-		private static readonly string[] ResultText =
+		private static readonly string[] ResultTextLines =
 		{
 			"Return values:",
 			"",
@@ -502,7 +500,7 @@ namespace YAT.Application
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 	#endif
-		private MainResult RunFullyWithView(ApplicationSettingsFileAccess applicationSettingsFileAccess, bool loadSettingsInWelcomeScreen)
+		protected MainResult RunFullyWithView(ApplicationSettingsFileAccess applicationSettingsFileAccess, bool loadSettingsInWelcomeScreen)
 		{
 			MessageHelper.RequestSupport =      "Support may be requested as described in 'Help > Request Support'.";
 			MessageHelper.RequestFeature = "New features can be requested as described in 'Help > Request Feature'.";
@@ -734,7 +732,7 @@ namespace YAT.Application
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 	#endif
-		private MainResult RunWithViewButOutputErrorsOnConsole(ApplicationSettingsFileAccess applicationSettingsFileAccess, bool loadSettingsInWelcomeScreen)
+		protected MainResult RunWithViewButOutputErrorsOnConsole(ApplicationSettingsFileAccess applicationSettingsFileAccess, bool loadSettingsInWelcomeScreen)
 		{
 			MessageHelper.RequestSupport =      "Support may be requested as described in 'Help > Request Support'.";
 			MessageHelper.RequestFeature = "New features can be requested as described in 'Help > Request Feature'.";
@@ -911,7 +909,7 @@ namespace YAT.Application
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 	#endif
-		private MainResult RunFullyFromConsole(ApplicationSettingsFileAccess applicationSettingsFileAccess)
+		protected MainResult RunFullyFromConsole(ApplicationSettingsFileAccess applicationSettingsFileAccess)
 		{
 			MessageHelper.RequestSupport =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
 			MessageHelper.RequestFeature = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
@@ -1053,7 +1051,7 @@ namespace YAT.Application
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 	#endif
-		private MainResult RunInvisible(ApplicationSettingsFileAccess applicationSettingsFileAccess)
+		protected MainResult RunInvisible(ApplicationSettingsFileAccess applicationSettingsFileAccess)
 		{
 			MessageHelper.RequestSupport =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
 			MessageHelper.RequestFeature = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
@@ -1176,33 +1174,25 @@ namespace YAT.Application
 
 		#endregion
 
-		#region Non-Public Methods > MessageBox
+		#region Non-Public Methods > Help/Logo/Version
 		//------------------------------------------------------------------------------------------
-		// Non-Public Methods > MessageBox
+		// Non-Public Methods > Help/Logo/Version
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void ShowMessageBoxInfo(bool showHelp, bool showLogo, bool showVersion)
+		protected void ShowMessageBoxInfo(bool showHelp, bool showLogo, bool showVersion)
 		{
 			if (showHelp) // Includes version and logo.
 			{
 				var sb = new StringBuilder();
 
-				Shall be 1:1 console help
-				Shall be 1:~1 release notes format
-
-				sb.AppendLine(ApplicationEx.ProductCaptionAndVersionAndBuild);
-				sb.AppendLine();
-
-				foreach (string line in ApplicationEx.ProductLogo)
-					sb.AppendLine(line);
-
-				sb.AppendLine();
-				sb.Append(this.commandLineArgs.GetHelpText(DefaultTextWidth));
-				sb.AppendLine();
-
-				foreach (string line in ResultText)
-					sb.AppendLine(line);
+				using (var writer = new StringWriter(sb))
+				{
+					WriteVersionAndLogo(writer, DefaultTextWidth, false);
+					WriteHelp(          writer, DefaultTextWidth);
+					WriteReturn(        writer, DefaultTextWidth, false);
+				}
 
 				var f = new View.Forms.CommandLineMessageBox
 				(
@@ -1215,11 +1205,10 @@ namespace YAT.Application
 			{
 				var sb = new StringBuilder();
 
-				sb.AppendLine(ApplicationEx.ProductCaptionAndVersionAndBuild);
-				sb.AppendLine();
-
-				foreach (string line in ApplicationEx.ProductLogo)
-					sb.AppendLine(line);
+				using (var writer = new StringWriter(sb))
+				{
+					WriteVersionAndLogo(writer, DefaultTextWidth, true);
+				}
 
 				var f = new View.Forms.CommandLineMessageBox
 				(
@@ -1244,28 +1233,25 @@ namespace YAT.Application
 			}
 		}
 
-		#endregion
+		/// <summary></summary>
+		protected void ShowConsoleInfo(bool showHelp, bool showLogo, bool showVersion)
+		{                                       // Lines that exactly match the number of characters would result
+			var maxWidth = (Console.WindowWidth - 1); // in an additional empty line (due to the added line break).
+			var writer = Console.Out;
 
-		#region Non-Public Methods > Console
-		//------------------------------------------------------------------------------------------
-		// Non-Public Methods > Console
-		//------------------------------------------------------------------------------------------
-
-		private void ShowConsoleInfo(bool showHelp, bool showLogo, bool showVersion)
-		{
 			if (showHelp) // Includes version and logo.
 			{
-				WriteVersionAndLogoToConsole();
-				WriteHelpToConsole();
-				WriteReturnToConsole();
+				WriteVersionAndLogo(writer, maxWidth, false);
+				WriteHelp(          writer, maxWidth);
+				WriteReturn(        writer, maxWidth, true);
 			}
 			else if (showLogo) // Includes version.
 			{
-				WriteVersionAndLogoToConsole();
+				WriteVersionAndLogo(writer, maxWidth, true);
 			}
 			else if (showVersion)
 			{
-				WriteVersionToConsole();
+				WriteVersion(writer);
 			}
 			else
 			{
@@ -1273,61 +1259,55 @@ namespace YAT.Application
 			}
 		}
 
-		private static void WriteVersionToConsole()
+		/// <summary></summary>
+		protected static void WriteVersion(TextWriter writer)
 		{
-			Console.Out.WriteLine(ApplicationEx.ProductVersion);
+			writer.WriteLine(ApplicationEx.ProductVersion);
 		}
 
-		/// <remarks>
-		/// Output must be limited to <see cref="Console.WindowWidth"/> - 1 to ensure that lines
-		/// that exactly match the number of characters do not lead to an empty line (due to the
-		/// NewLine which is added).
-		/// </remarks>
-		private static void WriteVersionAndLogoToConsole()
+		/// <summary></summary>
+		protected static void WriteVersionAndLogo(TextWriter writer, int maxWidth, bool isComplete)
 		{
-			Console.Out.WriteLine();
-			Console.Out.WriteLine();
-			Console.Out.WriteLine(new string('=', (Console.WindowWidth - 1))); // ==========...
-			Console.Out.WriteLine();
+			var additionalIndent = "  "; // Additional spaces, similar to header of 'Release Notes' which uses a single space.
 
-			Console.Out.WriteLine(ApplicationEx.ProductCaptionAndVersionAndBuild);
+			writer.WriteLine();
+			writer.WriteLine(new string('=', maxWidth)); // ==========...
+			writer.WriteLine();
 
-			Console.Out.WriteLine();
-			Console.Out.WriteLine(new string('-', (Console.WindowWidth - 1))); // ----------...
-			Console.Out.WriteLine();
+			writer.WriteLine(ApplicationEx.ProductCaptionAndVersionAndBuild + ":"); // Same as e.g. "Usage:" of help text.
 
-			foreach (string line in ApplicationEx.ProductLogo)
-				Console.Out.WriteLine(line);
+			foreach (var section in ApplicationEx.ProductLogoLineSections)
+			{
+				writer.WriteLine();
 
-			Console.Out.WriteLine();
-			Console.Out.WriteLine(new string('-', (Console.WindowWidth - 1))); // ----------...
-			Console.Out.WriteLine();
+				foreach (string line in section)
+					writer.WriteLine(additionalIndent + line);
+			}
+
+			writer.WriteLine();
+			writer.WriteLine(new string((isComplete ? '=' : '-'), maxWidth)); // ==========... or ----------...
+			writer.WriteLine();
 		}
 
-		/// <remarks>
-		/// Output must be limited to <see cref="Console.WindowWidth"/> - 1 to ensure that lines
-		/// that exactly match the number of characters do not lead to an empty line (due to the
-		/// NewLine which is added).
-		/// </remarks>
-		private void WriteHelpToConsole()
+		/// <summary></summary>
+		protected void WriteHelp(TextWriter writer, int maxWidth)
 		{
-			Console.Out.Write(this.commandLineArgs.GetHelpText(Console.WindowWidth - 1));
+			writer.Write(this.commandLineArgs.GetHelpText(maxWidth));
 		}
 
-		/// <remarks>
-		/// Output must be limited to <see cref="Console.WindowWidth"/> - 1 to ensure that lines
-		/// that exactly match the number of characters do not lead to an empty line (due to the
-		/// NewLine which is added).
-		/// </remarks>
-		private static void WriteReturnToConsole()
+		/// <summary></summary>
+		protected static void WriteReturn(TextWriter writer, int maxWidth, bool additionalEmptyLine)
 		{
-			Console.Out.WriteLine();
+			writer.WriteLine();
 
-			foreach (string line in ResultText)
-				Console.Out.WriteLine(line);
+			foreach (var line in ResultTextLines)
+				writer.WriteLine(line);
 
-			Console.Out.WriteLine();
-			Console.Out.WriteLine(new string('=', (Console.WindowWidth - 1))); // ==========...
+			writer.WriteLine();
+			writer.WriteLine(new string('=', maxWidth)); // **********...
+
+			if (additionalEmptyLine)
+				writer.WriteLine();
 		}
 
 		#endregion
@@ -1338,7 +1318,7 @@ namespace YAT.Application
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		private static MainResult Convert(Model.MainResult result)
+		protected static MainResult Convert(Model.MainResult result)
 		{
 			switch (result)
 			{

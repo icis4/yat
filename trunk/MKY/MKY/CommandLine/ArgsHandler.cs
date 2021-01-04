@@ -1156,7 +1156,7 @@ namespace MKY.CommandLine
 		public virtual string GetHelpText(int maxWidth)
 		{
 			// Must be reduced to ensure that lines that exactly match the number of characters
-			// do not lead to an empty line (due to the NewLine which is added).
+			// do not lead to an empty line (due to the added line break).
 			maxWidth--;
 
 			var helpText = new StringBuilder();
