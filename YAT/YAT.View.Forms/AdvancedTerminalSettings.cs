@@ -437,7 +437,7 @@ namespace YAT.View.Forms
 				MessageBoxEx.Show
 				(
 					this,
-					"Timeout must be at least 1 ms! Or " + Timeout.Infinite + " for infinite waiting.",
+					"Time-out must be at least 1 ms! Or " + Timeout.Infinite + " for infinite waiting.",
 					"Invalid Input",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error

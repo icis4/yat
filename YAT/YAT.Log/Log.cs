@@ -309,7 +309,7 @@ namespace YAT.Log
 		/// </summary>
 		/// <remarks>
 		/// This flushing mechanism is needed because neither <see cref="Stream"/> nor any derived
-		/// class implements some kind of timeout controlled intelligent flushing. .NET would keep
+		/// class implements some kind of time-out controlled intelligent flushing. .NET would keep
 		/// 4096 bytes buffered. This would lead to:
 		/// <list type="bullet">
 		/// <item><description>"Slow" data would not be written to the file before 4096 got transmitted.</description></item>

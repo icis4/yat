@@ -122,7 +122,7 @@ namespace MKY.IO.Serial.Socket
 		/// <remarks>
 		/// Opposed to the ALAZ sockets, the MKY sockets stop asynchronously. However, ALAZ sockets
 		/// sometimes deadlock on Stop(). Therefore, this method waits until the server indeed is
-		/// stopped and then disposes of it. A timeout in the MKY sockets guarantee stopping.
+		/// stopped and then disposes of it. A time-out in the MKY sockets guarantee stopping.
 		/// </remarks>
 		private void StopServerSyncAndDisposeSynchronized()
 		{

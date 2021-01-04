@@ -895,7 +895,7 @@
 			this.label_GlueCharsOfLine.Name = "label_GlueCharsOfLine";
 			this.label_GlueCharsOfLine.Size = new System.Drawing.Size(141, 13);
 			this.label_GlueCharsOfLine.TabIndex = 5;
-			this.label_GlueCharsOfLine.Text = "a line together;  timeout after";
+			this.label_GlueCharsOfLine.Text = "a line together; time-out after";
 			this.label_GlueCharsOfLine.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// checkBox_GlueCharsOfLine
@@ -927,9 +927,9 @@
 			this.textBox_GlueCharsOfLineTimeout.Size = new System.Drawing.Size(48, 20);
 			this.textBox_GlueCharsOfLineTimeout.TabIndex = 6;
 			this.textBox_GlueCharsOfLineTimeout.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.toolTip.SetToolTip(this.textBox_GlueCharsOfLineTimeout, "When no EOL is received within this timeout, i.e.\r\nthe line is not yet complete, " +
-        "a change of direction\r\n(or I/O device) will result in a line break.\r\n\r\nSet to -1" +
-        " for infinite waiting for EOL.");
+			this.toolTip.SetToolTip(this.textBox_GlueCharsOfLineTimeout, "When no EOL is received within this time-out, i.e.\r\nthe line is not yet complete," +
+        " a change of direction\r\n(or I/O device) will result in a line break.\r\n\r\nSet to -" +
+        "1 for infinite waiting for EOL.");
 			this.textBox_GlueCharsOfLineTimeout.TextChanged += new System.EventHandler(this.textBox_GlueCharsOfLineTimeout_TextChanged);
 			this.textBox_GlueCharsOfLineTimeout.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_GlueCharsOfLineTimeout_Validating);
 			// 
@@ -1003,8 +1003,8 @@
 			this.checkBox_DirectionLineBreak.TabIndex = 2;
 			this.checkBox_DirectionLineBreak.Text = "...when direction changes";
 			this.toolTip.SetToolTip(this.checkBox_DirectionLineBreak, "When the reduce/glue option is enabled below, this\r\noption is only relevant after" +
-        " the timeout has elapsed.\r\n\r\nThis option solely applies to the [Bidirectional Pa" +
-        "nel].");
+        " the time-out has elapsed.\r\n\r\nThis option solely applies to the [Bidirectional P" +
+        "anel].");
 			this.checkBox_DirectionLineBreak.UseVisualStyleBackColor = true;
 			this.checkBox_DirectionLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_DirectionLineBreak_CheckedChanged);
 			// 

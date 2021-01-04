@@ -621,8 +621,8 @@ namespace MKY.IO.Serial.SerialPort
 								Thread.Sleep((intervalFourthIsAtLeastOneMillisecond ? 1 : 0));
 						}
 
-						if (isWriteTimeout) // Timeout detected while trying to call System.IO.Ports.SerialPort.Write().
-						{                   // May only be partial, some data may have been sent before timeout.
+						if (isWriteTimeout) // Time-out detected while trying to call System.IO.Ports.SerialPort.Write().
+						{                   // May only be partial, some data may have been sent before time-out.
 							if (this.settings.Communication.FlowControlUsesRtsCts && !this.port.CtsHolding)
 							{
 								if (!isCtsInactiveOldAndErrorHasBeenSignaled)
@@ -649,7 +649,7 @@ namespace MKY.IO.Serial.SerialPort
 							}
 							else
 							{
-								// Do not output a warning in case of unspecified timeouts.
+								// Do not output a warning in case of unspecified time-outs.
 								// Such may happen when too much data is sent too quickly.
 							}
 						}
@@ -772,7 +772,7 @@ namespace MKY.IO.Serial.SerialPort
 			catch (TimeoutException ex)
 			{
 			#if (DEBUG_SEND_WRITE)
-				DebugEx.WriteException(GetType(), ex, "Timeout while writing to port!");
+				DebugEx.WriteException(GetType(), ex, "Time-out while writing to port!");
 			#else
 				UnusedArg.PreventCompilerWarning(ex, "Exception object is only needed when writing debug output.");
 			#endif
@@ -884,7 +884,7 @@ namespace MKY.IO.Serial.SerialPort
 			catch (TimeoutException ex)
 			{
 			#if (DEBUG_SEND_WRITE)
-				DebugEx.WriteException(GetType(), ex, "Timeout while writing to port!");
+				DebugEx.WriteException(GetType(), ex, "Time-out while writing to port!");
 			#else
 				UnusedArg.PreventCompilerWarning(ex, "Exception object is only needed when writing debug output.");
 			#endif

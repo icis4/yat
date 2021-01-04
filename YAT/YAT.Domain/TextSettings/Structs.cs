@@ -143,7 +143,7 @@ namespace YAT.Domain.Settings
 		[XmlElement("ClearanceLineCount")]
 		public int ClearanceLineCount { get; set; }
 
-		/// <summary>Timeout in milliseconds.</summary>
+		/// <summary>Time-out in milliseconds.</summary>
 		[XmlElement("Timeout")]
 		public int Timeout { get; set; }
 

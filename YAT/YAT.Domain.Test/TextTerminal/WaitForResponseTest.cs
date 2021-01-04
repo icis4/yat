@@ -104,7 +104,7 @@ namespace YAT.Domain.Test.TextTerminal
 							Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 							Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-							terminalA.SendTextLine(Text); // Line will be retained until timeout.
+							terminalA.SendTextLine(Text); // Line will be retained until time-out.
 							Thread.Sleep(WaitTimeUntilTimeout); // Pending line of A will time out.
 							expectedTotalByteCountAB += LineByteCount; // 15 bytes
 							expectedTotalLineCountAB++;                // 3 lines
@@ -133,7 +133,7 @@ namespace YAT.Domain.Test.TextTerminal
 							Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 							Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-							terminalA.SendTextLine(Text); // Line must be retained until timeout again, even in case of pong-pong.
+							terminalA.SendTextLine(Text); // Line must be retained until time-out again, even in case of pong-pong.
 							Thread.Sleep(WaitTimeUntilTimeout); // Pending line of A will time out.
 							expectedTotalByteCountAB += LineByteCount; // 25 bytes
 							expectedTotalLineCountAB++;                // 5 lines
@@ -159,8 +159,8 @@ namespace YAT.Domain.Test.TextTerminal
 							Utilities.WaitForSendingAndAssertCounts(  terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 							Utilities.WaitForReceivingAndAssertCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 
-							terminalA.SendTextLine(Text); // Line must be retained until timeout.
-							terminalA.SendTextLine(Text); // Line must be retained until timeout.
+							terminalA.SendTextLine(Text); // Line must be retained until time-out.
+							terminalA.SendTextLine(Text); // Line must be retained until time-out.
 
 							// ...pong the 1st pending...
 							//              A <= B

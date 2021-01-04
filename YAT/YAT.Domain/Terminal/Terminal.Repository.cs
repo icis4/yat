@@ -161,7 +161,7 @@ namespace YAT.Domain
 		/// Advantages:
 		///  > Already synchronized onto main thread.
 		///  > No deadlock possible below.
-		///  > No deadlock possible with async process such as e.g. timed line breaks or glue timeout.
+		///  > No deadlock possible with async process such as e.g. timed line breaks or glue time-out.
 		///    (Currently mitigated by doing separate handling 'OnReload'.)
 		/// Disadvantages:
 		///  > User does not get immediate feedback that a time consuming operation is taking place.

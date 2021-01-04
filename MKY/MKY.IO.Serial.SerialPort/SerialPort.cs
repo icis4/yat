@@ -109,7 +109,7 @@ namespace MKY.IO.Serial.SerialPort
 		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
 		private const int AliveInterval     = 500;
 
-		private const int IOControlChangedTimeout = 47; // Timeout is fixed to 47 ms (a prime number).
+		private const int IOControlChangedTimeout = 47; // Time-out is fixed to 47 ms (a prime number).
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private readonly long IOControlChangedTickInterval = StopwatchEx.TimeToTicks(IOControlChangedTimeout);

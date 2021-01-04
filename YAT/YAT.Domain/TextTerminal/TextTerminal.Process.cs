@@ -554,10 +554,10 @@ namespace YAT.Domain
 		{
 			base.ProcessChunkPre(repositoryType, chunk);
 
-			// Glue timeouts are processed asynchronously, as they are only triggered
-			// after a timeout. Except on reload, then glue timeouts are calculated.
+			// Glue time-outs are processed asynchronously, as they are only triggered
+			// after a time-out. Except on reload, then glue time-outs are calculated.
 			// Note that all bytes of a chunk have the same time stamp, thus no need to
-			// check for timeout on each byte.
+			// check for time-out on each byte.
 
 			if (IsReloading)
 				ProcessAndSignalGlueCharsOfLineTimeoutOfTimedOutPostponedChunksOnReloadIfNeeded(chunk.TimeStamp);
@@ -933,7 +933,7 @@ namespace YAT.Domain
 						// SVN revision #2052 of this file.
 						//
 						// Nice-to-have refinement of this behavior:
-						// Retained EOL elements shall be shown after a timeout of e.g. 150 ms => FR #364.
+						// Retained EOL elements shall be shown after a time-out of e.g. 150 ms => FR #364.
 					}
 				}
 				else
@@ -1287,7 +1287,7 @@ namespace YAT.Domain
 
 		/// <remarks>
 		/// Chunk and timed processing is synchronized against <see cref="Terminal.ChunkVsTimedSyncObj"/>.
-		/// Thus, timeouts can be suspended during chunk processing.
+		/// Thus, time-outs can be suspended during chunk processing.
 		/// </remarks>
 		protected virtual void SuspendGlueCharsOfLineTimeoutIfNeeded(RepositoryType repositoryType, IODirection dir)
 		{                                         // Glueing only applies to bidirectional processing.
@@ -1299,7 +1299,7 @@ namespace YAT.Domain
 
 		/// <remarks>
 		/// Chunk and timed processing is synchronized against <see cref="Terminal.ChunkVsTimedSyncObj"/>.
-		/// Thus, timeouts can be suspended during chunk processing.
+		/// Thus, time-outs can be suspended during chunk processing.
 		/// </remarks>
 		protected virtual void ResumeGlueCharsOfLineTimeoutIfNeeded(RepositoryType repositoryType, IODirection dir)
 		{                                         // Glueing only applies to bidirectional processing.
@@ -1307,8 +1307,8 @@ namespace YAT.Domain
 			{
 				var overallState = GetOverallState(repositoryType);
 				var previousChunkTimeStamp = overallState.GetPreviousChunkTimeStamp();
-				                                                         //// Single timeout for both directions.
-				this.glueCharsOfLineTimeout.Start(previousChunkTimeStamp); // Timeout is not dependent on line position,
+				                                                         //// Single time-out for both directions.
+				this.glueCharsOfLineTimeout.Start(previousChunkTimeStamp); // Time-out is not dependent on line position,
 			}                                                              // rather on number of postponed chunks.
 		}
 
@@ -1355,8 +1355,8 @@ namespace YAT.Domain
 		private void ProcessAndSignalGlueOfCharsTimeout(DateTime instantInQuestion)
 		{
 			// Possible states that lead here:
-			//  > Async timeout timer callback, i.e. "normal" timeout during "normal" execution.
-			//  > ChunkPre() on reload, i.e. timeout inbetween chunks on reload.
+			//  > Async time-out timer callback, i.e. "normal" time-out during "normal" execution.
+			//  > ChunkPre() on reload, i.e. time-out inbetween chunks on reload.
 			//  > FinishReload(), i.e. remaining after last chunk on reload.
 
 		////if (repositoryType == RepositoryType.Bidir) is implicitly given.
@@ -1379,7 +1379,7 @@ namespace YAT.Domain
 							DebugGlueCharsOfLine(string.Format(CultureInfo.InvariantCulture, "Glueing determined to perform timed {0} line break at {1} and process postponed chunk(s) starting with {2} because line of {3} has timed out.", lineDir, firstPostponedChunkTimeStampOfOtherDir, otherDir, lineState.TimeStamp));
 
 							// Line break must be enforced, without ProcessPostponedChunks() would again determine to postpone direction or device line break.
-							// Note that accurate time stamp of first postponed chunk rather than inaccurate time stamp of elapsed event is used to calculate timeout.
+							// Note that accurate time stamp of first postponed chunk rather than inaccurate time stamp of elapsed event is used to calculate time-out.
 							ProcessAndSignalTimedLineBreak(repositoryType, firstPostponedChunkTimeStampOfOtherDir, lineDir);
 
 							ProcessPostponedChunks(repositoryType, otherDir);
@@ -1540,7 +1540,7 @@ namespace YAT.Domain
 					}
 					else { // timeoutElapsed
 
-						DebugWaitForResponse(              "...granted due to timeout.");
+						DebugWaitForResponse(              "...granted due to time-out.");
 					}
 
 					this.waitForResponseClearanceTimeStamp = now;
@@ -1569,7 +1569,7 @@ namespace YAT.Domain
 				if (duration > TextTerminalSettings.WaitForResponse.Timeout)
 					return (true);
 
-				DebugWaitForResponse("...pending for counter to increase, or timeout to elapse.");
+				DebugWaitForResponse("...pending for counter to increase, or time-out to elapse.");
 			}
 			else // Infinite:
 			{

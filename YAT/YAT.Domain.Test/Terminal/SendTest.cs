@@ -422,8 +422,8 @@ namespace YAT.Domain.Test.Terminal
 
 			string restriction = "";
 
-			// Timeout:
-			int timeoutAsInt;                                        // A 100% timeout margin is required to account for the inaccuracy
+			// Time-out:
+			int timeoutAsInt;                                        // A 100% time-out margin is required to account for the inaccuracy
 			                                                       //// of the rough estimate, as well as possible temporary hickups.
 			var timeoutAsDouble = (roughlyEstimatedTransmissionTime * 2);
 			if (timeoutAsDouble < int.MaxValue) // int in ms is only enough for ~1000 hours.
@@ -433,7 +433,7 @@ namespace YAT.Domain.Test.Terminal
 			else
 			{
 				timeoutAsInt = int.MaxValue; // Limiting is required to prevent an 'OverflowException'.
-				restriction += " EXCEEDING TIMEOUT LIMITED TO INT.MAX => TO BE REWORKED";
+				restriction += " EXCEEDING TIMEOUT LIMITED TO INT.MAX => TO BE REWORKED"; // Attention: "TIME-OUT" would not be a valid NUnit test name part as it contains an '-'.
 			}
 
 			// Workaround to issue that YAT becomes really slow in case of very long lines.
@@ -446,7 +446,7 @@ namespace YAT.Domain.Test.Terminal
 			}
 
 			timeoutAsInt = Math.Max(timeoutAsInt, Utilities.WaitTimeoutForLineTransmission); // 'timeout' must always be at least
-			                                                                               //// the standard line timeout.
+			                                                                               //// the standard line time-out.
 			var args = new List<object>(tc.Arguments.Length + 1);
 			args.AddRange(tc.Arguments);
 			args.Add(timeoutAsInt);

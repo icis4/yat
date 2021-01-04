@@ -89,10 +89,10 @@ namespace YAT.Domain.Test
 		public const int WaitIntervalForStateChange = 100;
 
 		/// <remarks>
-		/// Timeout of 200 ms is too short for serial COM ports at 9600 baud, especially when
+		/// Time-out of 200 ms is too short for serial COM ports at 9600 baud, especially when
 		/// debugger is connected. Measurements:
-		///  > TripleLine (where timeout would be 3 * 200 ms = 600 ms) takes around 500 ms.
-		///  > MultiLine (where timeout would be 26 * 200 ms = 5200 ms) takes around 5000 ms.
+		///  > TripleLine (where time-out would be 3 * 200 ms = 600 ms) takes around 500 ms.
+		///  > MultiLine (where time-out would be 26 * 200 ms = 5200 ms) takes around 5000 ms.
 		///     => 300 ms seems defensive enough while still not too long to waste time.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
@@ -411,14 +411,14 @@ namespace YAT.Domain.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for connection, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for connection, 0 ms have passed, time-out is " + WaitTimeoutForStateChange + " ms...");
 
 			while (!(terminalA.IsConnected && terminalB.IsConnected))
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, time-out is " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Connect timeout!");
@@ -433,14 +433,14 @@ namespace YAT.Domain.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for 'IsSendingForSomeTime', 0 ms have passed, timeout is " + timeout + " ms...");
+			Trace.WriteLine("Waiting for 'IsSendingForSomeTime', 0 ms have passed, time-out is " + timeout + " ms...");
 
 			while (!terminal.IsSendingForSomeTime)
 			{
 				Thread.Sleep(WaitIntervalForIsSendingForSomeTime);
 				waitTime += WaitIntervalForIsSendingForSomeTime;
 
-				Trace.WriteLine("Waiting for 'IsSendingForSomeTime', " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+				Trace.WriteLine("Waiting for 'IsSendingForSomeTime', " + waitTime + " ms have passed, time-out is " + timeout + " ms...");
 
 				if (waitTime >= timeout)
 					Assert.Fail("'IsSendingForSomeTime' timeout!");
@@ -455,14 +455,14 @@ namespace YAT.Domain.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for 'IsNoLongerSending', 0 ms have passed, timeout is " + timeout + " ms...");
+			Trace.WriteLine("Waiting for 'IsNoLongerSending', 0 ms have passed, time-out is " + timeout + " ms...");
 
 			while (terminal.IsSending)
 			{
 				Thread.Sleep(WaitIntervalForIsNoLongerSending);
 				waitTime += WaitIntervalForIsNoLongerSending;
 
-				Trace.WriteLine("Waiting for 'IsNoLongerSending', " + waitTime + " ms have passed, timeout is " + timeout + " ms...");
+				Trace.WriteLine("Waiting for 'IsNoLongerSending', " + waitTime + " ms have passed, time-out is " + timeout + " ms...");
 
 				if (waitTime >= timeout)
 					Assert.Fail("'IsNoLongerSending' timeout!");
@@ -481,14 +481,14 @@ namespace YAT.Domain.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for stop, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for stop, 0 ms have passed, time-out is " + WaitTimeoutForStateChange + " ms...");
 
 			while (!terminal.IsStopped)
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Trace.WriteLine("Waiting for stop, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for stop, " + waitTime + " ms have passed, time-out is " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Stop timeout!");
@@ -545,7 +545,7 @@ namespace YAT.Domain.Test
 
 				if ((waitTime >= timeout) && ((timeout != IgnoreTimeout) || !isFirst)) {
 					if (timeout != IgnoreTimeout) {
-						sb = new StringBuilder("Timeout! (" + timeout + " ms)");
+						sb = new StringBuilder("Time-out! (" + timeout + " ms)");
 					}
 					else {
 						sb = new StringBuilder("Mismatch!");
@@ -567,7 +567,7 @@ namespace YAT.Domain.Test
 				sb = new StringBuilder("Waiting for sending, ");
 				sb.AppendFormat(CultureInfo.CurrentCulture, "{0}/{1} bytes/lines expected, {2}/{3} sent, ", expectedTotalByteCount, expectedTotalLineCount, txByteCount, txLineCount);
 				if (timeout != IgnoreTimeout) {
-					sb.AppendFormat(CultureInfo.CurrentCulture, "{0} ms have passed, timeout is {1} ms...", waitTime, timeout);
+					sb.AppendFormat(CultureInfo.CurrentCulture, "{0} ms have passed, time-out is {1} ms...", waitTime, timeout);
 				}
 				Trace.WriteLine(sb.ToString());
 
@@ -633,7 +633,7 @@ namespace YAT.Domain.Test
 
 				if ((waitTime >= timeout) && ((timeout != IgnoreTimeout) || !isFirst)) {
 					if (timeout != IgnoreTimeout) {
-						sb = new StringBuilder("Timeout! (" + timeout + " ms)");
+						sb = new StringBuilder("Time-out! (" + timeout + " ms)");
 					}
 					else {
 						sb = new StringBuilder("Mismatch!");
@@ -655,7 +655,7 @@ namespace YAT.Domain.Test
 				sb = new StringBuilder("Waiting for receiving, ");
 				sb.AppendFormat(CultureInfo.CurrentCulture, "{0}/{1} bytes/lines expected, {2}/{3} received, ", expectedTotalByteCount, expectedTotalLineCount, rxByteCount, rxLineCount);
 				if (timeout != IgnoreTimeout) {
-					sb.AppendFormat(CultureInfo.CurrentCulture, "{0} ms have passed, timeout is {1} ms...", waitTime, timeout);
+					sb.AppendFormat(CultureInfo.CurrentCulture, "{0} ms have passed, time-out is {1} ms...", waitTime, timeout);
 				}
 				Trace.WriteLine(sb.ToString());
 
@@ -741,7 +741,7 @@ namespace YAT.Domain.Test
 
 				if ((waitTime >= timeout) && ((timeout != IgnoreTimeout) || !isFirst)) {
 					if (timeout != IgnoreTimeout) {
-						sb = new StringBuilder("Timeout! (" + timeout + " ms)");
+						sb = new StringBuilder("Time-out! (" + timeout + " ms)");
 					}
 					else {
 						sb = new StringBuilder("Mismatch!");
@@ -773,7 +773,7 @@ namespace YAT.Domain.Test
 				sb = new StringBuilder("Waiting for transmission, ");
 				sb.AppendFormat(CultureInfo.CurrentCulture, "{0}/{1} bytes/lines expected, {2}/{3} sent, {4}/{5} received, ", expectedTotalByteCount, expectedTotalLineCount, txByteCount, txLineCount, rxByteCount, rxLineCount);
 				if (timeout != IgnoreTimeout) {
-					sb.AppendFormat(CultureInfo.CurrentCulture, "{0} ms have passed, timeout is {1} ms...", waitTime, timeout);
+					sb.AppendFormat(CultureInfo.CurrentCulture, "{0} ms have passed, time-out is {1} ms...", waitTime, timeout);
 				}
 				Trace.WriteLine(sb.ToString());
 
@@ -802,7 +802,7 @@ namespace YAT.Domain.Test
 			// There shall be at least a trace output every now and then.
 			const int MaximumWaitIntervalForTransmission = 600; // Same as 2 x WaitTimeoutForLineTransmission.
 
-			// The standard timeout shall result in a typical number of updates.
+			// The standard time-out shall result in a typical number of updates.
 			const int TypicalNumberOfUpdates = (WaitTimeoutForLineTransmission / MinimumWaitIntervalForTransmission); // 15.
 
 			int interval = (timeout / TypicalNumberOfUpdates); // No need for higher accuracy (float or double), value will be limited anyway.

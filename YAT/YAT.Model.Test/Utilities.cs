@@ -445,14 +445,14 @@ namespace YAT.Model.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for start, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for start, 0 ms have passed, time-out is  " + WaitTimeoutForStateChange + " ms...");
 
 			while (!terminal.IsStarted)
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Trace.WriteLine("Waiting for start, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for start, " + waitTime + " ms have passed, time-out is  " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Start timeout!");
@@ -471,14 +471,14 @@ namespace YAT.Model.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for open, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for open, 0 ms have passed, time-out is  " + WaitTimeoutForStateChange + " ms...");
 
 			while (!terminal.IsOpen)
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Trace.WriteLine("Waiting for open, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for open, " + waitTime + " ms have passed, time-out is  " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Open timeout!");
@@ -497,14 +497,14 @@ namespace YAT.Model.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for connection, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for connection, 0 ms have passed, time-out is  " + WaitTimeoutForStateChange + " ms...");
 
 			while (!terminal.IsConnected)
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, time-out is  " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Connect timeout!");
@@ -523,14 +523,14 @@ namespace YAT.Model.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for connection, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for connection, 0 ms have passed, time-out is  " + WaitTimeoutForStateChange + " ms...");
 
 			while (!(terminalA.IsConnected && terminalB.IsConnected))
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for connection, " + waitTime + " ms have passed, time-out is  " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Connect timeout!");
@@ -563,14 +563,14 @@ namespace YAT.Model.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for close, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for close, 0 ms have passed, time-out is  " + WaitTimeoutForStateChange + " ms...");
 
 			while (terminal.IsOpen)
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Trace.WriteLine("Waiting for close, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for close, " + waitTime + " ms have passed, time-out is  " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Close timeout!");
@@ -589,14 +589,14 @@ namespace YAT.Model.Test
 		{
 			int waitTime = 0;
 
-			Trace.WriteLine("Waiting for stop, 0 ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+			Trace.WriteLine("Waiting for stop, 0 ms have passed, time-out is  " + WaitTimeoutForStateChange + " ms...");
 
 			while (!terminal.IsStopped)
 			{
 				Thread.Sleep(WaitIntervalForStateChange);
 				waitTime += WaitIntervalForStateChange;
 
-				Trace.WriteLine("Waiting for stop, " + waitTime + " ms have passed, timeout is " + WaitTimeoutForStateChange + " ms...");
+				Trace.WriteLine("Waiting for stop, " + waitTime + " ms have passed, time-out is  " + WaitTimeoutForStateChange + " ms...");
 
 				if (waitTime >= WaitTimeoutForStateChange)
 					Assert.Fail("Stop timeout!");
@@ -809,7 +809,7 @@ namespace YAT.Model.Test
 
 				if ((waitTime >= timeout) && ((timeout != IgnoreTimeout) || !isFirst)) {
 					if (timeout != IgnoreTimeout) {
-						sb = new StringBuilder("Timeout! (" + timeout + " ms)");
+						sb = new StringBuilder("Time-out! (" + timeout + " ms)");
 					}
 					else {
 						sb = new StringBuilder("Mismatch!");
@@ -841,7 +841,7 @@ namespace YAT.Model.Test
 				sb = new StringBuilder("Waiting for transmission, ");
 				sb.AppendFormat(CultureInfo.CurrentCulture, "{0}/{1} bytes/lines expected, {2}/{3} sent, {4}/{5} received, ", expectedTotalByteCount, expectedTotalLineCount, txByteCount, txLineCount, rxByteCount, rxLineCount);
 				if (timeout != IgnoreTimeout) {
-					sb.AppendFormat(CultureInfo.CurrentCulture, "{0} ms have passed, timeout is {1} ms...", waitTime, timeout);
+					sb.AppendFormat(CultureInfo.CurrentCulture, "{0} ms have passed, time-out is  {1} ms...", waitTime, timeout);
 				}
 				Trace.WriteLine(sb.ToString());
 

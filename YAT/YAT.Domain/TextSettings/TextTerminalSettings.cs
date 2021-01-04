@@ -96,7 +96,7 @@ namespace YAT.Domain.Settings
 		/// Default is <see cref="TimeoutSettingTuple.Enabled"/> = <c>true</c> for two reasons:
 		/// <list type="bullet">
 		/// <item><description>Most users don't like unnecessarily broken additional lines.</description></item>
-		/// <item><description>Dealing with partial lines is still possible with the very short timeout default.</description></item>
+		/// <item><description>Dealing with partial lines is still possible with the very short time-out default.</description></item>
 		/// </list>
 		/// </remarks>
 		public static readonly TimeoutSettingTuple GlueCharsOfLineDefault = new TimeoutSettingTuple(true, GlueCharsOfLineTimeoutDefault);
