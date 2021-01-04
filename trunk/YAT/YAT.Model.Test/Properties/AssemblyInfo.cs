@@ -14,7 +14,7 @@
 // See SVN change log for file revision details.
 // Author(s): Matthias Klaey
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2007-2020 Matthias Kläy.
+// Copyright © 2007-2021 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -34,7 +34,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("YAT")]
 [assembly: AssemblyProduct("YAT")]
-[assembly: AssemblyCopyright("Copyright © 2007-2020 Matthias Kläy. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2007-2021 Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

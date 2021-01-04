@@ -15,7 +15,7 @@
 // Author(s): Matthias Klaey
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2020 Matthias Kläy.
+// Copyright © 2003-2021 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -35,9 +35,9 @@ using System.Reflection;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")] => 'Build' will indicate number of days since 2000-01-01.
 //                                      => 'Revision' will indicate number of seconds since midnight divided by two.
-[assembly: AssemblyVersion("2.1.94.*")]
-[assembly: AssemblyFileVersion("2.1.94.0")]
-[assembly: AssemblyInformationalVersion("2.1.94")]
+[assembly: AssemblyVersion("2.3.90.*")]
+[assembly: AssemblyFileVersion("2.3.90.0")]
+[assembly: AssemblyInformationalVersion("2.3.90")]
 
 //==================================================================================================
 // End of
