@@ -580,7 +580,7 @@ namespace YAT.View.Controls
 				ConfirmDescription(textBox_Description.Text);
 
 			// Do not explicitly set description as long it did not get changed, otherwise all
-			// commands eventually get an explicit description equal than default description.
+			// commands eventually get an explicit description equal to the default description.
 			//              ^ e.g. when tabbing through dialog
 			//                     or after returning from multi-line text dialog.
 		}
@@ -786,8 +786,8 @@ namespace YAT.View.Controls
 					pathLabel_FilePath.Text = "";
 					checkBox_IsFile.Checked = false;
 
-					// Delete:
-					button_Clear.Enabled = false;
+					// Delete:                                                             // A description-only command shall also be clearable.
+					button_Clear.Enabled = ((this.command == null) ? (false) : (this.command.HasDescription));
 				}
 			}
 			finally

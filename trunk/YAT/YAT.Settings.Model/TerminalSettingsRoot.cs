@@ -509,7 +509,7 @@ namespace YAT.Settings.Model
 						int commandId = trigger.ToPredefinedCommandId();
 						if (commandId != AutoTriggerEx.InvalidPredefinedCommandId)
 						{
-							var c = PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
+							var c = PredefinedCommand.GetCommandIfDefined(pageId - 1, commandId - 1);
 							if (IsValidAutoTriggerCommand(c, isByteSequenceTriggered))
 								l.Add(trigger);
 						}
@@ -608,7 +608,7 @@ namespace YAT.Settings.Model
 						int commandId = response.ToPredefinedCommandId();
 						if (commandId != AutoResponseEx.InvalidPredefinedCommandId)
 						{
-							var c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
+							var c = this.explicit_.PredefinedCommand.GetCommandIfDefined(pageId - 1, commandId - 1);
 							if (IsValidAutoResponseCommand(c))
 								l.Add(response);
 						}
@@ -754,7 +754,7 @@ namespace YAT.Settings.Model
 					int commandId = trigger.ToPredefinedCommandId();
 					if (commandId != AutoTriggerEx.InvalidPredefinedCommandId)
 					{
-						var c = this.explicit_.PredefinedCommand.GetCommand(pageId - 1, commandId - 1);
+						var c = this.explicit_.PredefinedCommand.GetCommandIfDefined(pageId - 1, commandId - 1);
 						if (IsValidAutoTriggerCommand(c, isByteSequenceTriggered))
 						{
 							command = c;

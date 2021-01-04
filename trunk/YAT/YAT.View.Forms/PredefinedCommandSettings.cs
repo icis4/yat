@@ -1673,7 +1673,7 @@ namespace YAT.View.Forms
 
 				var p = this.settingsInEdit.Pages[SelectedPageIndex];
 				var c = this.predefinedCommandSettingsSets[relativeCommandIndex].Command;
-				if ((c != null) && (c.IsDefined)) // Filter-out "<Enter text...>" dummy commands.
+				if ((c != null) && (c.IsDefined || c.HasDescription)) // Filter-out "<Enter text...>" dummy commands.
 					p.SetCommand(absoluteCommandIndex, new Command(c)); // Clone to ensure decoupling.
 				else
 					p.ClearCommand(absoluteCommandIndex);

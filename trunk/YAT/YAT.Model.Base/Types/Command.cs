@@ -240,28 +240,21 @@ namespace YAT.Model.Types
 		{
 			get
 			{
-				if (IsDefined)
+				if (!string.IsNullOrEmpty(this.description))
 				{
-					if (!string.IsNullOrEmpty(this.description))
-					{
-						return (this.description);
-					}
-					else if (IsText)
-					{
-						var slt = SingleLineText;
-						if (!string.IsNullOrEmpty(slt))
-							return (slt);
-						else
-							return (EmptyDescription);
-					}
-					else if (IsFilePath)
-					{
-						return (Path.GetFileName(FilePath)); // Only use file name for better readability? Or better use PathEx.Limit(FilePath, <Length>) when fixing #308 "Minor issues with commands"? But what length?
-					}
+					return (this.description);
+				}
+				else if (IsText)
+				{
+					var slt = SingleLineText;
+					if (!string.IsNullOrEmpty(slt))
+						return (slt);
 					else
-					{
-						return ("");
-					}
+						return (EmptyDescription);
+				}
+				else if (IsFilePath)
+				{
+					return (Path.GetFileName(FilePath)); // Only use file name for better readability? Or better use PathEx.Limit(FilePath, <Length>) when fixing #308 "Minor issues with commands"? But what length?
 				}
 				else
 				{
@@ -340,7 +333,7 @@ namespace YAT.Model.Types
 				}
 				else
 				{
-					// Reset the own fields:
+					// Reset the "own" fields:
 					this.textLines = UndefinedTextLines;
 					this.isPartialText = false;
 				}
@@ -409,7 +402,7 @@ namespace YAT.Model.Types
 				}
 				else
 				{
-					// Reset the own field:
+					// Reset the "own" field:
 					this.isFilePath = false;
 				}
 			}
@@ -421,6 +414,13 @@ namespace YAT.Model.Types
 		//==========================================================================================
 		// Convenience Properties
 		//==========================================================================================
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual bool HasDescription
+		{
+			get { return (!string.IsNullOrWhiteSpace(this.description)); }
+		}
 
 		/// <remarks>
 		/// Similar to <see cref="Description"/>, but not taking the user defined description string
@@ -502,7 +502,7 @@ namespace YAT.Model.Types
 				}
 				else
 				{
-					// Reset the own field:
+					// Reset the "own" field:
 					this.isPartialTextEol = false;
 				}
 			}
@@ -587,7 +587,7 @@ namespace YAT.Model.Types
 				}
 				else
 				{
-					// Reset the own fields:
+					// Reset the "own" field:
 					this.textLines = UndefinedTextLines;
 				}
 			}
@@ -619,7 +619,7 @@ namespace YAT.Model.Types
 				}
 				else
 				{
-					// Reset the own fields:
+					// Reset the "own" fields:
 					this.textLines = UndefinedTextLines;
 					this.isPartialText = false;
 				}
@@ -662,7 +662,7 @@ namespace YAT.Model.Types
 				}
 				else
 				{
-					// Reset the own fields:
+					// Reset the "own" field:
 					this.textLines = UndefinedTextLines;
 				}
 			}
