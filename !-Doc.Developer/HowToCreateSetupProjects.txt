@@ -68,7 +68,7 @@ Setup project configuration
     > Icon =        Primary output #2           #3                      #4
 9. Configure 'User Interface'
     > Banner = Banner.bmp for all dialogs
-    > Copyright = YAT is licensed under the GNU LGPL.                                                                                See http://www.gnu.org/licenses/lgpl.html for license details.                                   Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.                    Copyright © 2003-2020 Matthias Kläy. All rights reserved.
+    > Copyright = YAT is licensed under the GNU LGPL.                                                                                See http://www.gnu.org/licenses/lgpl.html for license details.                                   Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.                    Copyright © 2003-2021 Matthias Kläy. All rights reserved.
 10. Configure 'Launch Conditions'
     > .NET = 3.5
 11. Project Properties
