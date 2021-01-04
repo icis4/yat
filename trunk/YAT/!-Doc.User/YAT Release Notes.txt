@@ -235,8 +235,8 @@ Limitations and known issues:
 - Switching log off may take several seconds, during which YAT is unresponsive (bug #459).
 
 
-(Versions 2.2 and 2.3 have been skipped to emphasize update to .NET 4.x while still keeping the
-option to release the YAT 2.4.0 features (except plotting) on .NET 2.0 Runtime / 3.5 Framework.)
+(Versions 2.2 and 2.3 have been skipped to emphasize the update to .NET 4.x while still keeping the
+option for releasing the 2.4+ features (except plotting) also on .NET 2.0 Runtime / 3.5 Framework.)
 
 
 YAT 2.1.0 :: 2019-10-04
