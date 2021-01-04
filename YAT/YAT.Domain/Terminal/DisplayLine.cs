@@ -217,6 +217,25 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
+		/// Appends and returns the text of the content display elements.
+		/// </summary>
+		public virtual string ContentText
+		{
+			get
+			{
+				var sb = new StringBuilder();
+
+				foreach (var de in this)
+				{
+					if (de.IsContent)
+						sb.Append(de.Text);
+				}
+
+				return (sb.ToString());
+			}
+		}
+
+		/// <summary>
 		/// The number of characters of the elements contained in the collection.
 		/// </summary>
 		/// <remarks>
