@@ -88,7 +88,7 @@ namespace YAT
 		/// </remarks>
 		public static System.Version ProductFullVersionValue
 		{
-			get { return (System.Reflection.Assembly.GetEntryAssembly().GetName().Version); }
+			get { return (System. Reflection.Assembly.GetEntryAssembly().GetName().Version); }
 		}
 
 		/// <summary>
@@ -98,12 +98,20 @@ namespace YAT
 		/// <see cref="ProductVersion"/> uses the <see cref="System.Reflection.AssemblyInformationalVersionAttribute"/>
 		/// that hides the <see cref="System.Version.Revision"/> part.
 		/// </remarks>
+		/// <remarks>
+		/// Must be 'get' rather than 'readonly' as <see cref="ProductFullVersionValue"/> is 'get'.
+		/// </remarks>
 		public static string ProductFullVersion
 		{
 			get { return (ProductFullVersionValue.ToString()); }
 		}
 
-		/// <summary>The <see cref="System.Version.Revision"/> part of the product version.</summary>
+		/// <summary>
+		/// The <see cref="System.Version.Revision"/> part of the product version.
+		/// </summary>
+		/// <remarks>
+		/// Must be 'get' rather than 'readonly' as <see cref="ProductFullVersionValue"/> is 'get'.
+		/// </remarks>
 		public static string ProductRevision
 		{
 			get { return (ProductFullVersionValue.Revision.ToString(CultureInfo.InvariantCulture)); } // Version identification is invariant.
@@ -133,8 +141,14 @@ namespace YAT
 
 		/// <summary>
 		/// The product caption and version including build/revision.
-		/// </summary>                                                    // Using more general term "Build" rather than .NET specific term "Revision".
-		public static readonly string ProductCaptionAndVersionAndBuild = ProductCaptionAndVersion + " Build " + ProductRevision;
+		/// </summary>
+		/// <remarks>
+		/// Must be 'get' rather than 'readonly' as <see cref="ProductRevision"/> is 'get'.
+		/// </remarks>
+		public static string ProductCaptionAndVersionAndBuild
+		{                  // Using more general term "Build" rather than .NET specific term "Revision".
+			get { return (ProductCaptionAndVersion + " Build " + ProductRevision); }
+		}
 
 		/// <summary>The complete logo (text line sections) of the product.</summary>
 		/// <remarks>Same content and structure as header of 'Release Notes'.</remarks>
