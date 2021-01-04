@@ -34,7 +34,7 @@ namespace MKY.IO.Ports
 	/// </summary>
 	/// <remarks>
 	/// I think flow control would be the better term, no clue why .NET uses handshake.
-	/// 
+	///
 	/// This <see cref="EnumEx"/> based type is not serializable because <see cref="Enum"/> isn't.
 	/// Use the underlying enum for serialization, or alternatively, a string representation.
 	/// </remarks>

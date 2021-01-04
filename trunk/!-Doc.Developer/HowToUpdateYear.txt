@@ -1,5 +1,5 @@
 ﻿
-Takes approx. 20 minutes if procedure remains.
+Takes approx. 20 minutes, given the procedure remains.
 Years in this file shall/will be updated along with updating the code.
 
 0.	Makes sure that all files have been committed.
