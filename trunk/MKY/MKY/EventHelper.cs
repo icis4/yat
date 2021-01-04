@@ -88,6 +88,20 @@ namespace MKY
 	/// Helper to publish events throughout an application or library. Provides the
 	/// <see cref="ExceptionHandling"/> property to configure the runtime behavior.
 	/// </summary>
+	/// <remarks>
+	/// Different patterns to handle events exist, use of such a helper may be questioned given the
+	/// simplified event handling features of modern C#. However, there are also a few goodies in
+	/// using such helper, especially when it comes to shutdown of a system.
+	/// <list type="bullet">
+	/// <item>
+	/// <description>Preventing <see cref="InvalidAsynchronousStateException"/></description>
+	/// "Fehler beim Aufrufen der Methode. Der Zielthread ist nicht mehr vorhanden." can happen when
+	/// the sink gets disposed of while an async callback is still pending. Preventing this without
+	/// such helper can be fairly tricky, as all calling back instances within a system would have
+	/// to be notified about a shutdown and then get polled for completion.
+	/// </item>
+	/// </list>
+	/// </remarks>
 	public class EventHelper
 	{
 		#region Mode
