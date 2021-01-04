@@ -37,7 +37,7 @@ namespace MKY
 		/// <paramref name="justification"/> is mandatory, same as SA1404:CSharp.Maintainability
 		/// "A Code Analysis suppression must contain a non-empty justification describing the
 		/// reason for the suppression."
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public static void PreventCompilerWarning(EventHandler handler, string justification)
@@ -57,7 +57,7 @@ namespace MKY
 		/// <paramref name="justification"/> is mandatory, same as SA1404:CSharp.Maintainability
 		/// "A Code Analysis suppression must contain a non-empty justification describing the
 		/// reason for the suppression."
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <typeparam name="T">The type of the generic event handler.</typeparam>
@@ -82,7 +82,7 @@ namespace MKY
 		/// <paramref name="justification"/> is mandatory, same as SA1404:CSharp.Maintainability
 		/// "A Code Analysis suppression must contain a non-empty justification describing the
 		/// reason for the suppression."
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
@@ -131,7 +131,7 @@ namespace MKY
 		/// <paramref name="justification"/> is mandatory, same as SA1404:CSharp.Maintainability
 		/// "A Code Analysis suppression must contain a non-empty justification describing the
 		/// reason for the suppression."
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
@@ -179,7 +179,7 @@ namespace MKY
 		/// <paramref name="justification"/> is mandatory, same as SA1404:CSharp.Maintainability
 		/// "A Code Analysis suppression must contain a non-empty justification describing the
 		/// reason for the suppression."
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <typeparam name="T">The type of the object.</typeparam>

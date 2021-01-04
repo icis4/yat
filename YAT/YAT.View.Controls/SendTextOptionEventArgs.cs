@@ -32,7 +32,7 @@ namespace YAT.View.Controls
 	/// designer cannot cope with generic event args! Findings:
 	///  > Designer cannot display the 'SendCommandRequest' of 'SendText' as well as 'Send'.
 	///  > It crashes again and again! But is this indeed the root cause?
-	/// 
+	///
 	/// \todo
 	/// Check again with VS2017+.
 	/// </remarks>

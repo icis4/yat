@@ -34,7 +34,7 @@ namespace MKY.Windows.Forms
 	/// Workaround to the Windows/WinForms requirement to first activate the application before
 	/// a menu or tool strip can be invoked. Based on:
 	/// http://stackoverflow.com/questions/3427696/windows-requires-a-click-to-activate-a-window-before-a-second-click-will-select.
-	/// 
+	///
 	/// Attention:
 	/// The same code also exists in <see cref="StatusStripEx"/> and <see cref="ToolStripEx"/>.
 	/// Changes here must be applied there too.

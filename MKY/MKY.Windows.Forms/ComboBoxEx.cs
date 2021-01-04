@@ -171,44 +171,44 @@ namespace MKY.Windows.Forms
 		/// </summary>
 		/// <remarks>
 		/// Attention: Thanks to the Microsoft guys, the implementation is trickier than necessary!
-		/// 
+		///
 		/// Event sequence on entering the control using [Tab]:
 		///  1. 'Enter'
 		///  2. 'LostFocus' !?!
 		///  3. 'GotFocus'
-		/// 
+		///
 		/// Event sequence on entering the control by mouse click within same control or form:
 		///  1. 'Enter'
 		///  2. 'GotFocus'
-		/// 
+		///
 		/// Event sequence on entering the control when switching among MDI children (e.g. using [Ctrl+Tab]):
 		///  1. 'Enter'
 		///  2. 'LostFocus' !?!
 		///  3. 'GotFocus'
-		/// 
+		///
 		/// Event sequence on entering the control when changing applications (e.g. using [Alt+Tab]):
 		///      No 'Enter' !?!
 		///  1. 'LostFocus' !?!
 		///  2. 'GotFocus'
-		/// 
+		///
 		/// (Note that this is "slightly" different to what is stated at
 		/// https://docs.microsoft.com/en-us/dotnet/framework/winforms/order-of-events-in-windows-forms...)
-		/// 
+		///
 		/// Event sequence on leaving the control using [Tab]:
 		///  1. 'Leave'     and values are OK.
 		///  2. 'LostFocus' but values already are 0/0...
-		/// 
+		///
 		/// Event sequence on leaving the control by mouse click within same control or form:
 		///  1. 'LostFocus' but values already are 0/0...
 		///  2. 'Leave'     but values invalidly are 0/0 !?!
-		/// 
+		///
 		/// Event sequence on leaving the control when switching among MDI children (e.g. using [Ctrl+Tab]):
 		///  1. 'LostFocus' but values already are 0/0...
 		///  2. 'Leave'     but values invalidly are 0/0 !?!
-		/// 
+		///
 		/// Event sequence on leaving the control when changing applications (e.g. using [Alt+Tab]):
 		///  1. 'LostFocus' but values already are 0/0...
-		/// 
+		///
 		/// Resulting constraints and solution/workaround/remaining:
 		///  a') 'LostFocus' is called just before 'GotFocus' in several cases, thus focus state would have to be kept as well.
 		///  a)  'LostFocus' cannot keep the values anyway, for whatever reason...
@@ -285,7 +285,7 @@ namespace MKY.Windows.Forms
 		/// </summary>
 		/// <remarks>
 		/// Attention: See remarks in <see cref="OnGotFocus(EventArgs)"/>!
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
@@ -315,7 +315,7 @@ namespace MKY.Windows.Forms
 		/// </summary>
 		/// <remarks>
 		/// Attention: See remarks in <see cref="OnGotFocus(EventArgs)"/>!
-		/// 
+		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		public virtual void OnFormDeactivateWorkaround()
