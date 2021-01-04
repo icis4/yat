@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.4.0 :: 2020-1x-xx
+YAT 2.4.0 :: 2021-0x-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -139,8 +139,9 @@ Important changes:
   broken on every chunk (related to bug #477).
 - Consequently, chunk line break settings are now located in the text/binary specific dialog.
 - Comma and semicolon added to list of predefined EOL sequences (feature request #409).
+- Option to hide undefined predefined commands (feature request #410).
 - Option to [Copy Text / File Path to Clipboard] (bug #493).
-- Option to hide undefined commands (feature request #410).
+- Possibility to clear lists of recent files and [Send Text|File] commands.
 - Adaptive monitor update rate further improved.
 - Calculation of byte/line rates improved.
 - For Bin/Oct/Dec/Hex/Unicode radix:
@@ -165,7 +166,7 @@ Important changes:
 Fixed bugs:
 - Predefined command description gets updated when multi-line command gets changed (bug #481) and
   default description no longer gets saved in settings file.
-- Predefined command description is kept when filled-in before text or file path (bugs #476, #499).
+- Predefined command description is kept when filled-in before command (bugs #472, #476, #499).
 - Issue with not shown predefined commands when defining more than 12 predefined commands fixed.
 - Layout of predefined commands can now also be changed on a new terminal that doesn't contain
   commands yet (related to previous feature requests #28, #257, #365).
@@ -192,7 +193,9 @@ Fixed bugs:
      (bugs #85, #235, #375) nor some blurring on Win 8 and above (feature request #310).
    > Use of serial COM ports on disconnect, undock or hibernate without closing the port should
      no longer result in an 'ObjectDisposedException' or 'UnauthorizedAccessException' (bugs #224,
-     #254, #293, #316, #317, #345, #382, #385, #387, #401, #442). Deadlocks may still happen though.
+     #254, #293, #316, #317, #345, #382, #385, #387, #401, #442) nor should no longer result in
+     deadlocks, though not all potential causes for this issue in the .NET 'SerialPort' class can
+     be verified.
    > Running YAT for a long period, or creating many terminals, no longer results in memory leaks,
      previously resulting in gradual increase of memory consumption (RAM) (bugs #243, #263, #336).
 
@@ -232,8 +235,8 @@ Limitations and known issues:
 - Switching log off may take several seconds, during which YAT is unresponsive (bug #459).
 
 
-(Versions 2.2 and 2.3 have been skipped to emphasize update to .NET 4.x while still keeping the
-option to release the YAT 2.4.0 features (except plotting) on .NET 2.0 Runtime / 3.5 Framework.)
+(Versions 2.2 and 2.3 have been skipped to emphasize the update to .NET 4.x while still keeping the
+option for releasing the 2.4+ features (except plotting) also on .NET 2.0 Runtime / 3.5 Framework.)
 
 
 YAT 2.1.0 :: 2019-10-04

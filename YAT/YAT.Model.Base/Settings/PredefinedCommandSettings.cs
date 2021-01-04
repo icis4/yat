@@ -193,11 +193,11 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary>
-		/// Gets the given predefined command.
+		/// Gets the given predefined command if the command is defined.
 		/// </summary>
 		/// <param name="pageIndex">Page index 0..(count-1).</param>
 		/// <param name="commandIndex">Command index 0..(<see cref="PredefinedCommandPage.MaxCommandCapacityPerPage"/>-1).</param>
-		public virtual Command GetCommand(int pageIndex, int commandIndex)
+		public virtual Command GetCommandIfDefined(int pageIndex, int commandIndex)
 		{
 			if (ValidateWhetherCommandIsDefined(pageIndex, commandIndex))
 				return (this.pages[pageIndex].Commands[commandIndex]);
