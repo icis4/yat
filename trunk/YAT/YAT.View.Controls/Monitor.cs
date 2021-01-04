@@ -991,6 +991,7 @@ namespace YAT.View.Controls
 				var lb = fastListBox_Monitor;
 
 				var selectedLines = new Domain.DisplayLineCollection(32); // Preset the initial capacity to improve memory management; 32 is an arbitrary value.
+
 				if (lb.SelectedItems.Count > 0)
 				{
 					foreach (int i in lb.SelectedIndices)
@@ -1931,13 +1932,15 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// Name only "Active" instead of "LastActive" for simplicity.
 		/// </remarks>
-		private void SetCopyOfActiveLine(object item)
+		private void SetCopyOfActiveLine(object selectedItem)
 		{
-			var dl = item as Domain.DisplayLine;
+			string lineText = "";
+
+			var dl = (selectedItem as Domain.DisplayLine);
 			if (dl != null)
-				textBox_CopyOfActiveLine.Text = dl.Text;
-			else
-				textBox_CopyOfActiveLine.Text = "";
+				lineText = dl.Text;
+
+			textBox_CopyOfActiveLine.Text = lineText;
 		}
 
 		/// <remarks>Separated from <see cref="SetTimeStatusText"/> to improve performance.</remarks>

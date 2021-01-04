@@ -500,15 +500,6 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary>
-		/// Select all items within the list box.
-		/// </summary>
-		public void SelectAll()
-		{
-			for (int i = 0; i < Items.Count; i++)
-				SetSelected(i, true);
-		}
-
-		/// <summary>
 		/// Gets the index of the last selected item.
 		/// </summary>
 		[Browsable(false)]
@@ -516,6 +507,15 @@ namespace MKY.Windows.Forms
 		public virtual int LastSelectedIndex
 		{
 			get { return (this.lastSelectedIndex); }
+		}
+
+		/// <summary>
+		/// Select all items within the list box.
+		/// </summary>
+		public void SelectAll()
+		{
+			for (int i = 0; i < Items.Count; i++)
+				SetSelected(i, true);
 		}
 
 		#endregion
