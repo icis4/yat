@@ -50,6 +50,7 @@ using System.Globalization;
 //// 'System.IO.Ports' is explicitly used due to ambiguity of event args type names.
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 
 using MKY.Contracts;
 using MKY.Diagnostics;
@@ -115,6 +116,8 @@ namespace MKY.IO.Ports
 		private const string PortSettingsDefault = "9600, 8, None, 1, None";
 
 		private const string Undefined = "(undefined)";
+
+		private const int PortOpenTimeout = 5000; // Best guess... Pretty long, but better than deadlocking.
 
 		#endregion
 
@@ -949,13 +952,29 @@ namespace MKY.IO.Ports
 			{
 				OnOpening(EventArgs.Empty);
 
+				DebugOpenClose("Trying base.Open()...");
+
+				var openTask = Task.Run(() =>
+				{
+					try
+					{
+						base.Open();
+					}
+					catch (Exception ex)
+					{
+						DebugEx.WriteException(GetType(), ex, "...failed!");
+						throw; // Rethrow!
+					}
+				});
+
 				try
 				{
-					DebugOpenClose("Trying base.Open()..."); // \remind (2020-11-17 / MKY)
-					base.Open();                             // Occasions where code crashes here have been observed,
-					DebugOpenClose("...done");               // e.g. with MCT converter at locking/unlocking computer.
-				}                                            // Consider using async/await with a time-out here.
-				catch (Exception ex)
+					if (openTask.Wait(PortOpenTimeout))
+						DebugOpenClose("...done");
+					else
+						DebugOpenClose("...timeout!");
+				}
+				catch (AggregateException ex)
 				{
 					DebugEx.WriteException(GetType(), ex, "...failed!");
 					throw; // Rethrow!
