@@ -56,9 +56,9 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_FileRecentContextMenu_8 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_FileRecentContextMenu_Separator = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_FileRecentContextMenu_Clear = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_MainMenu_File_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainContextMenu_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainContextMenu_File_Exit = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MainMenu_File_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip_Main = new MKY.Windows.Forms.MenuStripEx();
 			this.toolStripMenuItem_MainMenu_File = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_File_New = new System.Windows.Forms.ToolStripMenuItem();
@@ -298,14 +298,14 @@ namespace YAT.View.Forms
 			//
 			//
 			// END OF ATTENTION BLOCK
-			this.contextMenuStrip_FileRecent.Size = new System.Drawing.Size(153, 230);
+			this.contextMenuStrip_FileRecent.Size = new System.Drawing.Size(102, 208);
 			this.contextMenuStrip_FileRecent.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_FileRecent_Opening);
 			// 
 			// toolStripMenuItem_FileRecentContextMenu_1
 			// 
 			this.toolStripMenuItem_FileRecentContextMenu_1.Enabled = false;
 			this.toolStripMenuItem_FileRecentContextMenu_1.Name = "toolStripMenuItem_FileRecentContextMenu_1";
-			this.toolStripMenuItem_FileRecentContextMenu_1.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_FileRecentContextMenu_1.Size = new System.Drawing.Size(101, 22);
 			this.toolStripMenuItem_FileRecentContextMenu_1.Tag = "1";
 			this.toolStripMenuItem_FileRecentContextMenu_1.Text = "1: ";
 			this.toolStripMenuItem_FileRecentContextMenu_1.Visible = false;
@@ -315,7 +315,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_FileRecentContextMenu_2.Enabled = false;
 			this.toolStripMenuItem_FileRecentContextMenu_2.Name = "toolStripMenuItem_FileRecentContextMenu_2";
-			this.toolStripMenuItem_FileRecentContextMenu_2.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_FileRecentContextMenu_2.Size = new System.Drawing.Size(101, 22);
 			this.toolStripMenuItem_FileRecentContextMenu_2.Tag = "2";
 			this.toolStripMenuItem_FileRecentContextMenu_2.Text = "2: ";
 			this.toolStripMenuItem_FileRecentContextMenu_2.Visible = false;
@@ -325,7 +325,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_FileRecentContextMenu_3.Enabled = false;
 			this.toolStripMenuItem_FileRecentContextMenu_3.Name = "toolStripMenuItem_FileRecentContextMenu_3";
-			this.toolStripMenuItem_FileRecentContextMenu_3.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_FileRecentContextMenu_3.Size = new System.Drawing.Size(101, 22);
 			this.toolStripMenuItem_FileRecentContextMenu_3.Tag = "3";
 			this.toolStripMenuItem_FileRecentContextMenu_3.Text = "3: ";
 			this.toolStripMenuItem_FileRecentContextMenu_3.Visible = false;
@@ -335,7 +335,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_FileRecentContextMenu_4.Enabled = false;
 			this.toolStripMenuItem_FileRecentContextMenu_4.Name = "toolStripMenuItem_FileRecentContextMenu_4";
-			this.toolStripMenuItem_FileRecentContextMenu_4.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_FileRecentContextMenu_4.Size = new System.Drawing.Size(101, 22);
 			this.toolStripMenuItem_FileRecentContextMenu_4.Tag = "4";
 			this.toolStripMenuItem_FileRecentContextMenu_4.Text = "4: ";
 			this.toolStripMenuItem_FileRecentContextMenu_4.Visible = false;
@@ -345,7 +345,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_FileRecentContextMenu_5.Enabled = false;
 			this.toolStripMenuItem_FileRecentContextMenu_5.Name = "toolStripMenuItem_FileRecentContextMenu_5";
-			this.toolStripMenuItem_FileRecentContextMenu_5.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_FileRecentContextMenu_5.Size = new System.Drawing.Size(101, 22);
 			this.toolStripMenuItem_FileRecentContextMenu_5.Tag = "5";
 			this.toolStripMenuItem_FileRecentContextMenu_5.Text = "5: ";
 			this.toolStripMenuItem_FileRecentContextMenu_5.Visible = false;
@@ -355,7 +355,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_FileRecentContextMenu_6.Enabled = false;
 			this.toolStripMenuItem_FileRecentContextMenu_6.Name = "toolStripMenuItem_FileRecentContextMenu_6";
-			this.toolStripMenuItem_FileRecentContextMenu_6.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_FileRecentContextMenu_6.Size = new System.Drawing.Size(101, 22);
 			this.toolStripMenuItem_FileRecentContextMenu_6.Tag = "6";
 			this.toolStripMenuItem_FileRecentContextMenu_6.Text = "6: ";
 			this.toolStripMenuItem_FileRecentContextMenu_6.Visible = false;
@@ -365,7 +365,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_FileRecentContextMenu_7.Enabled = false;
 			this.toolStripMenuItem_FileRecentContextMenu_7.Name = "toolStripMenuItem_FileRecentContextMenu_7";
-			this.toolStripMenuItem_FileRecentContextMenu_7.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_FileRecentContextMenu_7.Size = new System.Drawing.Size(101, 22);
 			this.toolStripMenuItem_FileRecentContextMenu_7.Tag = "7";
 			this.toolStripMenuItem_FileRecentContextMenu_7.Text = "7: ";
 			this.toolStripMenuItem_FileRecentContextMenu_7.Visible = false;
@@ -375,7 +375,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_FileRecentContextMenu_8.Enabled = false;
 			this.toolStripMenuItem_FileRecentContextMenu_8.Name = "toolStripMenuItem_FileRecentContextMenu_8";
-			this.toolStripMenuItem_FileRecentContextMenu_8.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_FileRecentContextMenu_8.Size = new System.Drawing.Size(101, 22);
 			this.toolStripMenuItem_FileRecentContextMenu_8.Tag = "8";
 			this.toolStripMenuItem_FileRecentContextMenu_8.Text = "8: ";
 			this.toolStripMenuItem_FileRecentContextMenu_8.Visible = false;
@@ -384,22 +384,14 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_FileRecentContextMenu_Separator
 			// 
 			this.toolStripMenuItem_FileRecentContextMenu_Separator.Name = "toolStripMenuItem_FileRecentContextMenu_Separator";
-			this.toolStripMenuItem_FileRecentContextMenu_Separator.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem_FileRecentContextMenu_Separator.Size = new System.Drawing.Size(98, 6);
 			// 
 			// toolStripMenuItem_FileRecentContextMenu_Clear
 			// 
 			this.toolStripMenuItem_FileRecentContextMenu_Clear.Name = "toolStripMenuItem_FileRecentContextMenu_Clear";
-			this.toolStripMenuItem_FileRecentContextMenu_Clear.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_FileRecentContextMenu_Clear.Size = new System.Drawing.Size(101, 22);
 			this.toolStripMenuItem_FileRecentContextMenu_Clear.Text = "&Clear";
 			this.toolStripMenuItem_FileRecentContextMenu_Clear.Click += new System.EventHandler(this.toolStripMenuItem_FileRecentContextMenu_Clear_Click);
-			// 
-			// toolStripMenuItem_MainMenu_File_Recent
-			// 
-			this.toolStripMenuItem_MainMenu_File_Recent.DropDown = this.contextMenuStrip_FileRecent;
-			this.toolStripMenuItem_MainMenu_File_Recent.Enabled = false;
-			this.toolStripMenuItem_MainMenu_File_Recent.Name = "toolStripMenuItem_MainMenu_File_Recent";
-			this.toolStripMenuItem_MainMenu_File_Recent.Size = new System.Drawing.Size(242, 22);
-			this.toolStripMenuItem_MainMenu_File_Recent.Text = "&Recent";
 			// 
 			// toolStripMenuItem_MainContextMenu_Separator_2
 			// 
@@ -412,6 +404,14 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Size = new System.Drawing.Size(173, 22);
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Text = "Exit";
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Click += new System.EventHandler(this.toolStripMenuItem_MainContextMenu_File_Exit_Click);
+			// 
+			// toolStripMenuItem_MainMenu_File_Recent
+			// 
+			this.toolStripMenuItem_MainMenu_File_Recent.DropDown = this.contextMenuStrip_FileRecent;
+			this.toolStripMenuItem_MainMenu_File_Recent.Enabled = false;
+			this.toolStripMenuItem_MainMenu_File_Recent.Name = "toolStripMenuItem_MainMenu_File_Recent";
+			this.toolStripMenuItem_MainMenu_File_Recent.Size = new System.Drawing.Size(242, 22);
+			this.toolStripMenuItem_MainMenu_File_Recent.Text = "&Recent";
 			// 
 			// menuStrip_Main
 			// 
