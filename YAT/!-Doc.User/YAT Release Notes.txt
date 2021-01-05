@@ -194,7 +194,7 @@ Fixed bugs:
    > Use of serial COM ports on disconnect, undock or hibernate without closing the port should
      no longer result in an 'ObjectDisposedException' or 'UnauthorizedAccessException' (bugs #224,
      #254, #293, #316, #317, #345, #382, #385, #387, #401, #442) nor should no longer result in
-     deadlocks, though not all potential causes for this issue in the .NET 'SerialPort' class can
+     deadlocks, though not all potential causes for this issue in the .NET 'SerialPort' class may
      be verified.
    > Running YAT for a long period, or creating many terminals, no longer results in memory leaks,
      previously resulting in gradual increase of memory consumption (RAM) (bugs #243, #263, #336).
@@ -221,10 +221,12 @@ Limitations and known issues:
    > Issue with layouting when closing an MDI child (bug #399).
 - Serial COM port limitations of .NET Framework:
    > Support for ports named other than "COM..." isn't supported by .NET (feature request #101).
-   > Use of serial COM ports on disconnect, undock or hibernate without closing the port may lead
-     to a deadlock. It happens due to a bug in the .NET 'SerialPort' class for which Microsoft has
-     no plans fixing. To prevent this issue, refrain from disconnecting a device or undocking or
-     hibernating while a port is open.
+   > Use of serial COM ports on disconnect, undock or hibernate without closing the port may result
+     in the port no longer being usable. It happens due to a bug in the .NET 'SerialPort' class for
+     which Microsoft only has vague plans fixing. To prevent the issue, refrain from disconnecting a
+     device or undocking or hibernating while a port is open. In case the issue occurs, exiting YAT
+     should be sufficient to force the .NET Runtime to terminate the buggy piece of code. If not,
+     disconnecting the device or rebooting the computer should fix the issue.
 - The \!(PortSettings()) keyword is yet limited to serial COM ports (feature request #71).
 - USB Ser/HID only runs on Windows; use of 'LibUsb'/'LibUsbDotNet' and significant migration work of
   implementation and test environment would be needed to run it on unixoids (feature request #119).
