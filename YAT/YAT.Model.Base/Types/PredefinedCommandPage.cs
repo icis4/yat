@@ -365,7 +365,7 @@ namespace YAT.Model.Types
 			if ((index < 0) || (index >= MaxCommandCapacityPerPage))
 				throw (new ArgumentOutOfRangeException("index", index, MessageHelper.InvalidExecutionPreamble + "'" + index + "' is an invalid command index!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
-			if ((command != null) && (command.IsDefined || command.HasDescription)) // Prevent dummy commands from being added to the list.
+			if ((command != null) && (command.IsDefinedOrHasDescription)) // Prevent dummy commands from being added to the list.
 			{
 				if (index < Commands.Count)
 				{
@@ -420,7 +420,7 @@ namespace YAT.Model.Types
 		{
 			for (int i = (Commands.Count - 1); i >= 0; i--)
 			{
-				if ((Commands[i] == null) || (!Commands[i].IsDefined && !Commands[i].HasDescription))
+				if ((Commands[i] == null) || (!Commands[i].IsDefinedOrHasDescription))
 					Commands.RemoveAt(i);
 				else
 					break;
