@@ -6925,11 +6925,13 @@ namespace YAT.View.Forms
 			{
 				SetAutoActionControls();
 				OnAutoActionSettingsChanged(EventArgs.Empty);
+				OnAutoActionCountChanged(new EventArgs<int>(this.terminal.AutoActionCount)); // Needed because the 'terminal_AutoAction/ResponseCountChanged_Promptly' events are not used.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.AutoResponse))
 			{
 				SetAutoResponseControls();
 				OnAutoResponseSettingsChanged(EventArgs.Empty);
+				OnAutoResponseCountChanged(new EventArgs<int>(this.terminal.AutoResponseCount)); // Needed because the 'terminal_AutoAction/ResponseCountChanged_Promptly' events are not used.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Format))
 			{
@@ -7122,8 +7124,8 @@ namespace YAT.View.Forms
 				this.terminal.RepositoryRxReloaded            += terminal_RepositoryRxReloaded;
 
 				this.terminal.AutoActionPlotRequest_Promptly    += terminal_AutoActionPlotRequest_Promptly; // is OK to be used, only used once for opening the form.
-			////this.terminal.AutoActionCountChanged_Promptly   += terminal_AutoActionCountChanged_Promptly;   is not used, see further below for reason.
-			////this.terminal.AutoResponseCountChanged_Promptly += terminal_AutoResponseCountChanged_Promptly; is not used, see further below for reason.
+			////this.terminal.AutoActionCountChanged_Promptly   += terminal_AutoActionCountChanged_Promptly;   is not used, see 'terminal_AutoAction/ResponseCountChanged_Promptly' further below for reason.
+			////this.terminal.AutoResponseCountChanged_Promptly += terminal_AutoResponseCountChanged_Promptly; is not used, see 'terminal_AutoAction/ResponseCountChanged_Promptly' further below for reason.
 
 				this.terminal.FixedStatusTextRequest             += terminal_FixedStatusTextRequest;
 				this.terminal.TimedStatusTextRequest             += terminal_TimedStatusTextRequest;
@@ -7175,8 +7177,8 @@ namespace YAT.View.Forms
 				this.terminal.RepositoryRxReloaded            -= terminal_RepositoryRxReloaded;
 
 				this.terminal.AutoActionPlotRequest_Promptly    -= terminal_AutoActionPlotRequest_Promptly; // is OK to be used, only used once for opening the form.
-			////this.terminal.AutoActionCountChanged_Promptly   -= terminal_AutoActionCountChanged_Promptly;   is not used, see further below for reason.
-			////this.terminal.AutoResponseCountChanged_Promptly -= terminal_AutoResponseCountChanged_Promptly; is not used, see further below for reason.
+			////this.terminal.AutoActionCountChanged_Promptly   -= terminal_AutoActionCountChanged_Promptly;   is not used, see 'terminal_AutoAction/ResponseCountChanged_Promptly' further below for reason.
+			////this.terminal.AutoResponseCountChanged_Promptly -= terminal_AutoResponseCountChanged_Promptly; is not used, see 'terminal_AutoAction/ResponseCountChanged_Promptly' further below for reason.
 
 				this.terminal.FixedStatusTextRequest             -= terminal_FixedStatusTextRequest;
 				this.terminal.TimedStatusTextRequest             -= terminal_TimedStatusTextRequest;
