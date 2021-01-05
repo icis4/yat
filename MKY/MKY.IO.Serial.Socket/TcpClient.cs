@@ -903,7 +903,7 @@ namespace MKY.IO.Serial.Socket
 
 					DebugSocketShutdown("...stopping socket...");
 
-					var stopTask = Task.Factory.StartNew(() =>
+					var stopTask = Task.Run(() =>
 					{
 						try
 						{                       // Attention:
