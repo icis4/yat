@@ -417,6 +417,13 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
+		public virtual bool IsDefinedOrHasDescription
+		{
+			get { return (IsDefined || HasDescription); }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
 		public virtual bool HasDescription
 		{
 			get { return (!string.IsNullOrWhiteSpace(this.description)); }
