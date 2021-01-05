@@ -160,7 +160,7 @@ namespace YAT.Model
 		public event EventHandler<ClosedEventArgs> Closed;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<ExitMode>> ExitRequest;
+		public event EventHandler ExitRequest;
 
 		#endregion
 
@@ -1433,7 +1433,7 @@ namespace YAT.Model
 			OnTerminalRemoved(new TerminalEventArgs(t, sequentialId, dynamicId, fixedId));
 		}
 
-		private void terminal_ExitRequest(object sender, EventArgs<ExitMode> e)
+		private void terminal_ExitRequest(object sender, EventArgs e)
 		{
 			OnExitRequest(e);
 		}
@@ -2649,7 +2649,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnExitRequest(EventArgs<ExitMode> e)
+		protected virtual void OnExitRequest(EventArgs e)
 		{
 			this.eventHelper.RaiseSync(ExitRequest, this, e);
 		}

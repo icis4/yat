@@ -1634,9 +1634,9 @@ namespace YAT.Model
 			OnWorkspaceClosed(e);
 		}
 
-		private void workspace_ExitRequest(object sender, EventArgs<ExitMode> e)
+		private void workspace_ExitRequest(object sender, EventArgs e)
 		{
-			Exit(e.Value);
+			Exit(LaunchArgs.IsAutoRun ? ExitMode.Auto : ExitMode.Manual);
 		}
 
 		#endregion
