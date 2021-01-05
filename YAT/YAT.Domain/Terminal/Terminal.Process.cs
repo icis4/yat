@@ -969,7 +969,7 @@ namespace YAT.Domain
 
 			var remainingPostponed = new RawChunk
 			                         (
-			                             contentPostponed.ToArray(),
+			                             contentPostponed,
 			                             chunk.TimeStamp,
 			                             chunk.Device,
 			                             chunk.Direction
