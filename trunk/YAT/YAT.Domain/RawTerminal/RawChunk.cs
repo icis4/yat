@@ -28,6 +28,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -79,15 +80,18 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public RawChunk(byte[] content, string device, IODirection direction)
+		public RawChunk(IList<byte> content, string device, IODirection direction)
 			: this(content, DateTime.Now, device, direction)
 		{
 		}
 
 		/// <summary></summary>
-		public RawChunk(byte[] content, DateTime timeStamp, string device, IODirection direction)
+		public RawChunk(IList<byte> content, DateTime timeStamp, string device, IODirection direction)
 		{
-			Content   = new ReadOnlyCollection<byte>((byte[])content.Clone());
+			var contentCopy = new byte[content.Count];
+			content.CopyTo(contentCopy, 0); // Copy to ensure immutability.
+
+			Content   = new ReadOnlyCollection<byte>(contentCopy);
 			TimeStamp = timeStamp;
 			Device    = device;
 			Direction = direction;
