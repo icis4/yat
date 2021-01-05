@@ -466,7 +466,7 @@ namespace YAT.Application
 				else if (runFromConsole && !runWithView)
 					result = RunFullyFromConsole(applicationSettingsFileAccess);                                              // 5, 6, 7
 				else
-					result = RunInvisible(applicationSettingsFileAccess);                                                     //       7
+					result = RunInvisible_ForTestOnly(applicationSettingsFileAccess);                                         //       7
 			}
 
 			if (result == MainResult.CommandLineError)
@@ -1051,7 +1051,7 @@ namespace YAT.Application
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 	#endif
-		protected MainResult RunInvisible(ApplicationSettingsFileAccess applicationSettingsFileAccess)
+		protected MainResult RunInvisible_ForTestOnly(ApplicationSettingsFileAccess applicationSettingsFileAccess)
 		{
 			MessageHelper.RequestSupport =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
 			MessageHelper.RequestFeature = "New features can be requested at <sourceforge.net/projects/y-a-terminal/feature-requests/>.";
