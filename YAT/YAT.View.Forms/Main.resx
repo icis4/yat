@@ -145,11 +145,16 @@ Highlight color (typically blue) indicates 'not found anymore'.
 Dark control color (typically dark grey) indicates 'invalid pattern'.</value>
   </data>
   <data name="toolStripComboBox_MainTool_AutoAction_Trigger.ToolTipText" xml:space="preserve">
-    <value>Configure Automatic Action Trigger,
-either refer to one of the commands,
-or fill-in any text, optionally including a regular expression.
+    <value>Configure Automatic Action Trigger.
 
-Some useful regular expression capture patterns (use without surrounding quotes):
+Either refer to one of the commands, or fill in any sequence of bytes,
+e.g. "&lt;ETB&gt;&lt;NUL&gt;" or "\h(17 00)", or any other parseable text, e.g. ";".
+
+Optionally, [Use Text] to switch to a trigger based on text.
+
+Optionally, [Enable Regular Expression] and fill in an expression containing
+a capture pattern. Some useful patterns (use without surrounding quotes):
+
 Integral numbers: "([-+]?\d+)"
 Floating point numbers in normal format: "([-+]?(?:\d+(?:\.\d*)?|\.\d+))"
 Floating point numbers in scientific format: "([-+]?(?:\d+(?:\.\d*)?|\.\d+)[Ee][-+]?\d+)"
@@ -165,7 +170,7 @@ Google for "C# Regex Tester" for online tools to help creating regular expressio
 Note that...
 ...[Any Line] is not available if action is [Highlight] or [Suppress], as that would otherwise result in all received lines being highlighted or suppressed.
 ...same as other actions, [Filter] and [Suppress] are only applied to received data.
-...only [Plot ... Count/Rate] are also applied to sent data.</value>
+...[Plot ... Count/Rate] are applied to any trigger and to sent and received data.</value>
   </data>
   <data name="toolStripComboBox_MainTool_AutoAction_Action.ToolTipText" xml:space="preserve">
     <value>Enable / Disable Automatic Action
@@ -179,14 +184,19 @@ Note that...
 ...trigger is highlighted for every action except [Filter], [Suppress] and [Line/Scatter/Histogram].
 ...[Highlight] and [Suppress] is not available if trigger is [Any Line], as that would otherwise result in all received lines being highlighted or suppressed.
 ...same as other actions, [Filter] and [Suppress] are only applied to received data.
-...only [Plot ... Count/Rate] are also applied to sent data.</value>
+......[Plot ... Count/Rate] are applied to any trigger and to sent and received data.</value>
   </data>
   <data name="toolStripComboBox_MainTool_AutoResponse_Trigger.ToolTipText" xml:space="preserve">
-    <value>Configure Automatic Response Trigger,
-either refer to one of the commands,
-or fill-in any text, optionally including a regular expression.
+    <value>Configure Automatic Response Trigger.
 
-Some useful regular expression capture patterns (use without surrounding quotes):
+Either refer to one of the commands, or fill in any sequence of bytes,
+e.g. "&lt;ETB&gt;&lt;NUL&gt;" or "\h(17 00)", or any other parseable text, e.g. ";".
+
+Optionally, [Use Text] to switch to a trigger based on text.
+
+Optionally, [Enable Regular Expression] and fill in an expression containing
+a capture pattern. Some useful patterns (use without surrounding quotes):
+
 Integral numbers: "([-+]?\d+)"
 Floating point numbers in normal format: "([-+]?(?:\d+(?:\.\d*)?|\.\d+))"
 Floating point numbers in scientific format: "([-+]?(?:\d+(?:\.\d*)?|\.\d+)[Ee][-+]?\d+)"
