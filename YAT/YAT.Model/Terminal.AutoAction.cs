@@ -600,7 +600,7 @@ namespace YAT.Model
 						if (!this.autoActionCloseOrExitHasBeenTriggered)
 						{
 							this.autoActionCloseOrExitHasBeenTriggered = true;
-							OnExitRequest(new EventArgs<ExitMode>(ExitMode.Auto));
+							OnExitRequest(new EventArgs());
 						}
 					}
 					break;

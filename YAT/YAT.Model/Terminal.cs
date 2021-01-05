@@ -440,7 +440,7 @@ namespace YAT.Model
 		public event EventHandler<ClosedEventArgs> Closed;
 
 		/// <summary></summary>
-		public event EventHandler<EventArgs<ExitMode>> ExitRequest;
+		public event EventHandler ExitRequest;
 
 		#endregion
 
@@ -6121,7 +6121,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnExitRequest(EventArgs<ExitMode> e)
+		protected virtual void OnExitRequest(EventArgs e)
 		{
 			this.eventHelper.RaiseSync(ExitRequest, this, e);
 		}

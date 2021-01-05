@@ -272,6 +272,22 @@ namespace YAT.Model
 		{
 			get { return (!(NonInteractive)); }
 		}
+
+		/// <summary>
+		/// Returns whether the application has been launched to perform an automatic run,
+		/// i.e. an automatic operation or a script run.
+		/// </summary>
+		public bool IsAutoRun
+		{
+			get
+			{
+			#if (!WITH_SCRIPTING)
+				return (PerformOperationOnRequestedTerminal);
+			#else
+				return (PerformOperationOnRequestedTerminal || ScriptRunIsRequested);
+			#endif
+			}
+		}
 	}
 
 	/// <remarks>

@@ -72,7 +72,7 @@ namespace YAT.Model
 	}
 
 	/// <summary>
-	/// Enumeration of the I/O availability check results.
+	/// Enumeration of the applications, exit mode.
 	/// </summary>
 	public enum ExitMode
 	{
