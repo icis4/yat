@@ -291,7 +291,7 @@ namespace YAT.Domain
 
 				case IODirection.Bidir:
 				case IODirection.None:  throw (new ArgumentOutOfRangeException("d", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                throw (new ArgumentOutOfRangeException("d", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("d", direction, MessageHelper.InvalidExecutionPreamble + "'" + direction + "' is an invalid direction!"               + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -377,7 +377,7 @@ namespace YAT.Domain
 
 				case IODirection.Bidir:
 				case IODirection.None:  throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is a direction that is not valid here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				default:                throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default:                throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is an invalid direction!"               + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
