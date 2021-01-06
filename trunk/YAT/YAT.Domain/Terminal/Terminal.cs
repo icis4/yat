@@ -2243,7 +2243,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsTxAdded(DisplayElementsEventArgs e)
 		{
-			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.
 				return;
 
 			DebugContentEvents("OnDisplayElementsTxAdded " + e.Elements.ToString());
@@ -2254,7 +2254,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsBidirAdded(DisplayElementsEventArgs e)
 		{
-			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.
 				return;
 
 			DebugContentEvents("OnDisplayElementsBidirAdded " + e.Elements.ToString());
@@ -2265,7 +2265,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsRxAdded(DisplayElementsEventArgs e)
 		{
-			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.
 				return;
 
 			DebugContentEvents("OnDisplayElementsRxAdded " + e.Elements.ToString());
@@ -2290,7 +2290,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineTxReplaced(DisplayElementsEventArgs e)
 		{
-			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.
 				return;
 
 			DebugContentEvents("OnCurrentDisplayLineTxReplaced " + e.Elements.ToString());
@@ -2301,7 +2301,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineBidirReplaced(DisplayElementsEventArgs e)
 		{
-			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.
 				return;
 
 			DebugContentEvents("OnCurrentDisplayLineBidirReplaced " + e.Elements.ToString());
@@ -2312,7 +2312,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineRxReplaced(DisplayElementsEventArgs e)
 		{
-			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.
 				return;
 
 			DebugContentEvents("OnCurrentDisplayLineRxReplaced " + e.Elements.ToString());
@@ -2337,7 +2337,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineTxCleared(EventArgs e)
 		{
-			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.
 				return;
 
 			DebugContentEvents("OnCurrentDisplayLineTxCleared");
@@ -2348,7 +2348,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineBidirCleared(EventArgs e)
 		{
-			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.
 				return;
 
 			DebugContentEvents("OnCurrentDisplayLineBidirCleared");
@@ -2359,7 +2359,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnCurrentDisplayLineRxCleared(EventArgs e)
 		{
-			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.
 				return;
 
 			DebugContentEvents("OnCurrentDisplayLineRxCleared");
@@ -2384,7 +2384,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesTxAdded(DisplayLinesEventArgs e)
 		{
-			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.
 				return;
 
 			DebugContentEvents("OnDisplayLinesTxAdded " + ((e.Lines.Count == 1) ? e.Lines[0].ToString() : e.Lines.Count + " lines"));
@@ -2395,7 +2395,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesBidirAdded(DisplayLinesEventArgs e)
 		{
-			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.
 				return;
 
 			DebugContentEvents("OnDisplayLinesBidirAdded " + ((e.Lines.Count == 1) ? e.Lines[0].ToString() : e.Lines.Count + " lines"));
@@ -2406,7 +2406,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesRxAdded(DisplayLinesEventArgs e)
 		{
-			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.
+			if (IsReloading) // For performance reasons, skip 'normal' events during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.
 				return;
 
 			DebugContentEvents("OnDisplayLinesRxAdded " + ((e.Lines.Count == 1) ? e.Lines[0].ToString() : e.Lines.Count + " lines"));
