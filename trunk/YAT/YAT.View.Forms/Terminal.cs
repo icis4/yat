@@ -5818,7 +5818,7 @@ namespace YAT.View.Forms
 							break;
 						}
 
-						default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + this.lastMonitorSelection + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+						default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + this.lastMonitorSelection + "' is an invalid repository type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 
