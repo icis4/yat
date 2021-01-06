@@ -3163,7 +3163,7 @@ namespace YAT.Model
 				this.txByteCount += e.Value.Content.Count;
 
 				rateHasChanged = this.txByteRate.Update(e.Value.Content.Count, false); // Suppress the 'Changed' event, it will explicitly be raised below,
-			}                                                                          // in order to prevent duplicated events via rate_Changed.
+			}                                                                          // in order to prevent duplicated events via ioRate_Changed.
 
 			OnIOCountChanged_Promptly(EventArgs.Empty);
 
@@ -3229,7 +3229,7 @@ namespace YAT.Model
 				this.rxByteCount += e.Value.Content.Count;
 
 				rateHasChanged = this.rxByteRate.Update(e.Value.Content.Count, false); // Suppress the 'Changed' event, it will explicitly be raised below,
-			}                                                                          // in order to prevent duplicated events via rate_Changed.
+			}                                                                          // in order to prevent duplicated events via ioRate_Changed.
 
 			OnIOCountChanged_Promptly(EventArgs.Empty);
 
@@ -3250,7 +3250,7 @@ namespace YAT.Model
 		#endif
 		}
 
-		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsTxAdded(object sender, Domain.DisplayElementsEventArgs e)
@@ -3263,7 +3263,7 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
-		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsBidirAdded(object sender, Domain.DisplayElementsEventArgs e)
@@ -3275,7 +3275,7 @@ namespace YAT.Model
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
 			    SettingsRoot.AutoAction.IsByteSequenceTriggered && // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress && // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
-			    SettingsRoot.AutoAction.IsNotCountRatePlot) // Count/Rate Plot is limited to be processed in rate_Changed.
+			    SettingsRoot.AutoAction.IsNotCountRatePlot) // Count/Rate Plot is limited to be processed in ioRate_Changed.
 			{
 				EvaluateAutoActionFromElements(Domain.RepositoryType.Bidir, e.Elements, DataStatus, SettingsRoot.AutoAction.ShallHighlight); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
@@ -3292,7 +3292,7 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
-		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsRxAdded(object sender, Domain.DisplayElementsEventArgs e)
@@ -3305,7 +3305,7 @@ namespace YAT.Model
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
 			    SettingsRoot.AutoAction.IsByteSequenceTriggered && // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
 			    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress && // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
-			    SettingsRoot.AutoAction.IsNotCountRatePlot) // Count/Rate Plot is limited to be processed in rate_Changed.
+			    SettingsRoot.AutoAction.IsNotCountRatePlot) // Count/Rate Plot is limited to be processed in ioRate_Changed.
 			{
 				EvaluateAutoActionFromElements(Domain.RepositoryType.Rx, e.Elements, DataStatus, SettingsRoot.AutoAction.ShallHighlight, out autoActionTriggers); // Must be done before forward raising the event, because this method may activate 'Highlight' on one or multiple elements.
 			}
@@ -3383,7 +3383,7 @@ namespace YAT.Model
 		//
 		// The last state of the initial implementation can be found in SVN revisions #2701..#2707.
 
-		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineTxReplaced(object sender, Domain.DisplayElementsEventArgs e)
@@ -3396,7 +3396,7 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
-		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineBidirReplaced(object sender, Domain.DisplayElementsEventArgs e)
@@ -3409,7 +3409,7 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
-		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirReplaced", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineRxReplaced(object sender, Domain.DisplayElementsEventArgs e)
@@ -3422,7 +3422,7 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
-		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineTxCleared(object sender, EventArgs e)
@@ -3435,7 +3435,7 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
-		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineRxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineBidirCleared(object sender, EventArgs e)
@@ -3448,7 +3448,7 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
-		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineTxCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.CurrentDisplayLineBidirCleared", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_CurrentDisplayLineRxCleared(object sender, EventArgs e)
@@ -3461,7 +3461,7 @@ namespace YAT.Model
 			// Logging is only triggered by the 'DisplayLines[Tx|Bidir|Rx]Added' events and thus does not need to be handled here.
 		}
 
-		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesTxAdded(object sender, Domain.DisplayLinesEventArgs e)
@@ -3475,7 +3475,7 @@ namespace YAT.Model
 
 			// Rate:
 			if (this.txLineRate.Update(e.Lines.Count, false)) // Suppress the 'Changed' event, it will explicitly be raised below,
-				OnIORateChanged_Promptly(EventArgs.Empty);    // in order to prevent duplicated events via rate_Changed.
+				OnIORateChanged_Promptly(EventArgs.Empty);    // in order to prevent duplicated events via ioRate_Changed.
 
 			// Display:
 			OnDisplayLinesTxAdded(e);
@@ -3488,7 +3488,7 @@ namespace YAT.Model
 			}
 		}
 
-		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesBidirAdded(object sender, Domain.DisplayLinesEventArgs e)
@@ -3507,7 +3507,7 @@ namespace YAT.Model
 			// AutoAction:                                                           // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
 			{
-				if (SettingsRoot.AutoAction.IsNotCountRatePlot) // Count/Rate Plot is limited to be processed in rate_Changed.
+				if (SettingsRoot.AutoAction.IsNotCountRatePlot) // Count/Rate Plot is limited to be processed in ioRate_Changed.
 				{
 					if (SettingsRoot.AutoAction.IsTextTriggered && // Byte sequence based triggering is evaluated in terminal_DisplayElements[Bidir|Rx]Added.
 					    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is processed below.
@@ -3539,7 +3539,7 @@ namespace YAT.Model
 			}
 		}
 
-		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' events event will be raised after completion.</remarks>
+		/// <remarks>This 'normal' event is not raised during reloading, 'Repository[Rx|Bidir|Tx]Reloaded' event will be raised after completion.</remarks>
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesTxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesRxAdded(object sender, Domain.DisplayLinesEventArgs e)
@@ -3553,13 +3553,13 @@ namespace YAT.Model
 
 			// Rate:
 			if (this.rxLineRate.Update(e.Lines.Count, false)) // Suppress the 'Changed' event, it will explicitly be raised below,
-				OnIORateChanged_Promptly(EventArgs.Empty);    // in order to prevent duplicated events via rate_Changed.
+				OnIORateChanged_Promptly(EventArgs.Empty);    // in order to prevent duplicated events via ioRate_Changed.
 
 			// AutoAction:
 			List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> autoActionTriggers = null; // See [== AutoTrigger.AnyLine] below.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
 			{
-				if (SettingsRoot.AutoAction.IsNotCountRatePlot) // Count/Rate Plot is limited to be processed in rate_Changed.
+				if (SettingsRoot.AutoAction.IsNotCountRatePlot) // Count/Rate Plot is limited to be processed in ioRate_Changed.
 				{
 					if (SettingsRoot.AutoAction.IsTextTriggered && // Byte sequence based triggering is evaluated in terminal_DisplayElements[Bidir|Rx]Added.
 					    SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Filter/Suppress is processed below.
@@ -3697,7 +3697,7 @@ namespace YAT.Model
 			// AutoAction:                                                           // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
 			{
-				if (SettingsRoot.AutoAction.IsNotCountRatePlot) // Count/Rate Plot is limited to be processed in rate_Changed.
+				if (SettingsRoot.AutoAction.IsNotCountRatePlot) // Count/Rate Plot is limited to be processed in ioRate_Changed.
 				{
 					if (SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Highlighting is evaluated here.
 					{
@@ -3730,7 +3730,7 @@ namespace YAT.Model
 			// AutoAction:                                                           // See terminal_DisplayLinesRxAdded for background.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
 			{
-				if (SettingsRoot.AutoAction.IsNotCountRatePlot) // Count/Rate Plot is limited to be processed in rate_Changed.
+				if (SettingsRoot.AutoAction.IsNotCountRatePlot) // Count/Rate Plot is limited to be processed in ioRate_Changed.
 				{
 					if (SettingsRoot.AutoAction.IsNeitherFilterNorSuppress) // Highlighting is evaluated here.
 					{
@@ -5062,7 +5062,7 @@ namespace YAT.Model
 				this.rxLineCount    = 0;
 
 				this.txByteRate   .Reset(false); // Suppress the 'Changed' event, it will explicitly be raised below,
-				this.rxByteRate   .Reset(false); // in order to prevent duplicated events via rate_Changed.
+				this.rxByteRate   .Reset(false); // in order to prevent duplicated events via ioRate_Changed.
 
 				this.txLineRate   .Reset(false); // See above.
 			////this.bidirLineRate.Reset(false) would technically be possible, but doesn't make much sense.
@@ -5089,12 +5089,12 @@ namespace YAT.Model
 			////this.bidirLineRate = new RateProvider(RateInterval, RateWindow, UpdateInterval) would technically be possible, but doesn't make much sense.
 				this.rxLineRate    = new RateProvider(RateInterval, RateWindow, UpdateInterval, string.Format(CultureInfo.CurrentCulture, "Terminal #{0:D2}.RxLine", SequentialId));
 
-				this.txByteRate   .Changed += rate_Changed;
-				this.rxByteRate   .Changed += rate_Changed;
+				this.txByteRate   .Changed += ioRate_Changed;
+				this.rxByteRate   .Changed += ioRate_Changed;
 
-				this.txLineRate   .Changed += rate_Changed;
-			////this.bidirLineRate.Changed += rate_Changed would technically be possible, but doesn't make much sense.
-				this.rxLineRate   .Changed += rate_Changed;
+				this.txLineRate   .Changed += ioRate_Changed;
+			////this.bidirLineRate.Changed += ioRate_Changed would technically be possible, but doesn't make much sense.
+				this.rxLineRate   .Changed += ioRate_Changed;
 			}
 		}
 
@@ -5130,42 +5130,42 @@ namespace YAT.Model
 			{
 				if (this.txByteRate != null)
 				{
-					this.txByteRate.Changed -= rate_Changed;
+					this.txByteRate.Changed -= ioRate_Changed;
 					this.txByteRate.Dispose();
 					this.txByteRate = null;
 				}
 
 				if (this.rxByteRate != null)
 				{
-					this.rxByteRate.Changed -= rate_Changed;
+					this.rxByteRate.Changed -= ioRate_Changed;
 					this.rxByteRate.Dispose();
 					this.rxByteRate = null;
 				}
 
 				if (this.txLineRate != null)
 				{
-					this.txLineRate.Changed -= rate_Changed;
+					this.txLineRate.Changed -= ioRate_Changed;
 					this.txLineRate.Dispose();
 					this.txLineRate = null;
 				}
 
 			////if (this.bidirLineRate != null) would technically be possible, but doesn't make much sense.
 			////{
-			////	this.bidirLineRate.Changed -= rate_Changed;
+			////	this.bidirLineRate.Changed -= ioRate_Changed;
 			////	this.bidirLineRate.Dispose();
 			////	this.bidirLineRate = null;
 			////}
 
 				if (this.rxLineRate != null)
 				{
-					this.rxLineRate.Changed -= rate_Changed;
+					this.rxLineRate.Changed -= ioRate_Changed;
 					this.rxLineRate.Dispose();
 					this.rxLineRate = null;
 				}
 			}
 		}
 
-		private void rate_Changed(object sender, RateEventArgs e)
+		private void ioRate_Changed(object sender, RateEventArgs e)
 		{
 			if (IsInDisposal) // Ensure to not handle event during closing anymore.
 				return;
