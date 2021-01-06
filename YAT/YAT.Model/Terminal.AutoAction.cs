@@ -201,10 +201,10 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic actions from elements always are non-reloadable.
 		/// </remarks>
-		protected virtual void EvaluateAutoActionFromElements(Domain.DisplayElementCollection elements, CountsRatesTuple dataStatus, bool shallHighlight)
+		protected virtual void EvaluateAutoActionFromElements(Domain.RepositoryType repositoryType, Domain.DisplayElementCollection elements, CountsRatesTuple dataStatus, bool shallHighlight)
 		{
 			List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> triggersDummy;
-			EvaluateAutoActionFromElements(elements, dataStatus, shallHighlight, out triggersDummy);
+			EvaluateAutoActionFromElements(repositoryType, elements, dataStatus, shallHighlight, out triggersDummy);
 		}
 
 		/// <summary>
@@ -213,48 +213,51 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic actions from elements always are non-reloadable.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		protected virtual void EvaluateAutoActionFromElements(Domain.DisplayElementCollection elements, CountsRatesTuple dataStatus, bool shallHighlight, out List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> triggers)
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		protected virtual void EvaluateAutoActionFromElements(Domain.RepositoryType repositoryType, Domain.DisplayElementCollection elements, CountsRatesTuple dataStatus, bool shallHighlight, out List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> triggers)
 		{
 			triggers = new List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>>(); // No preset needed, the default behavior is good enough.
 
-			EvaluateAndEnqueueAutoActionClearRepositoriesOnSubsequentRx();
-
 			foreach (var de in elements)
 			{
-				lock (this.autoActionTriggerHelperSyncObj)
+				if (de.Direction == Domain.Direction.Rx) // Trigger by specification is only active on receive-path.
 				{
-					if (this.autoActionTriggerHelper != null)
+					EvaluateAndEnqueueAutoActionClearRepositoriesOnSubsequentRx();
+
+					lock (this.autoActionTriggerHelperSyncObj)
 					{
-						if (de.Origin != null) // Foreach element where origin exists.
+						if (this.autoActionTriggerHelper != null)
 						{
-							foreach (var origin in de.Origin)
+							if (de.Origin != null) // Foreach element where origin exists.
 							{
-								foreach (var originByte in origin.Value1)
+								foreach (var origin in de.Origin)
 								{
-									if (this.autoActionTriggerHelper.EnqueueAndMatchTrigger(originByte))
+									foreach (var originByte in origin.Value1)
 									{
-										this.autoActionTriggerHelper.Reset();
-										de.Highlight = shallHighlight;
+										if (this.autoActionTriggerHelper.EnqueueAndMatch(repositoryType, originByte))
+										{
+											this.autoActionTriggerHelper.Reset(repositoryType);
+											de.Highlight = shallHighlight;
 
-										// Signal the trigger:
-										triggers.Add(new Tuple<DateTime, string, MatchCollection, CountsRatesTuple>(de.TimeStamp, elements.Text, null, dataStatus));
+											// Signal the trigger:
+											triggers.Add(new Tuple<DateTime, string, MatchCollection, CountsRatesTuple>(de.TimeStamp, elements.Text, null, dataStatus));
 
-										// Note that 'elements.Text' is not perfect, as it could only contain parts of
-										// the trigger. However, using the trigger sequence formatted with...
-										// this.terminal.Format(triggerSequence, Domain.IODirection.Rx)
-										// ...in RequestAutoActionMessage() isn't perfect either, as it will *never*
-										// contain more than the trigger. Thus preferring 'Elements.Text'.
+											// Note that 'elements.Text' is not perfect, as it could only contain parts of
+											// the trigger. However, using the trigger sequence formatted with...
+											// this.terminal.Format(triggerSequence, Domain.IODirection.Rx)
+											// ...in RequestAutoActionMessage() isn't perfect either, as it will *never*
+											// contain more than the trigger. Thus preferring 'Elements.Text'.
+										}
 									}
 								}
 							}
 						}
-					}
-					else
-					{
-						break;     // Break the loop if action got disposed in the meantime.
-					}              // Though unlikely, it may happen when deactivating action
-				} // lock (helper) // while receiving a very large chunk.
+						else
+						{
+							break;     // Break the loop if action got disposed in the meantime.
+						}              // Though unlikely, it may happen when deactivating action
+					} // lock (helper) // while receiving a very large chunk.
+				} // if (direction == Rx)
 			} // foreach (element)
 		}
 
@@ -264,10 +267,10 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic actions from lines may be reloadable.
 		/// </remarks>
-		protected virtual void EvaluateAutoActionOtherThanFilterOrSuppressFromLines(Domain.DisplayLineCollection lines, CountsRatesTuple dataStatus, bool shallHighlight)
+		protected virtual void EvaluateAutoActionOtherThanFilterOrSuppressFromLines(Domain.RepositoryType repositoryType, Domain.DisplayLineCollection lines, CountsRatesTuple dataStatus, bool shallHighlight)
 		{
 			List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> triggersDummy;
-			EvaluateAutoActionOtherThanFilterOrSuppressFromLines(lines, dataStatus, shallHighlight, out triggersDummy);
+			EvaluateAutoActionOtherThanFilterOrSuppressFromLines(repositoryType, lines, dataStatus, shallHighlight, out triggersDummy);
 		}
 
 		/// <summary>
@@ -276,8 +279,8 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic actions from lines may be reloadable.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		protected virtual void EvaluateAutoActionOtherThanFilterOrSuppressFromLines(Domain.DisplayLineCollection lines, CountsRatesTuple dataStatus, bool shallHighlight, out List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> triggers)
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		protected virtual void EvaluateAutoActionOtherThanFilterOrSuppressFromLines(Domain.RepositoryType repositoryType, Domain.DisplayLineCollection lines, CountsRatesTuple dataStatus, bool shallHighlight, out List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> triggers)
 		{
 			EvaluateAndEnqueueAutoActionClearRepositoriesOnSubsequentRx();
 
@@ -286,7 +289,7 @@ namespace YAT.Model
 				triggers = null;
 
 				foreach (var dl in lines)
-					EvaluateAutoActionFromElements(dl, dataStatus, shallHighlight, out triggers);
+					EvaluateAutoActionFromElements(repositoryType, dl, dataStatus, shallHighlight, out triggers);
 			}
 			else // IsTextTriggered
 			{
@@ -294,27 +297,30 @@ namespace YAT.Model
 
 				foreach (var dl in lines)
 				{
-					lock (this.autoActionTriggerHelperSyncObj)
+					if (dl.Direction != Domain.Direction.Tx) // Trigger by specification is only active on receive-path, no need to further evaluate Tx-only lines.
 					{
-						if (this.autoActionTriggerHelper != null)
+						lock (this.autoActionTriggerHelperSyncObj)
 						{
-							MatchCollection triggerMatches;
-							int triggerCount = this.autoActionTriggerHelper.TextTriggerCount(dl.Text, out triggerMatches);
-							if (triggerCount > 0)
+							if (this.autoActionTriggerHelper != null)
 							{
-								this.autoActionTriggerHelper.Reset(); // Invoke shall happen as short as possible after detection.
-								dl.Highlight = shallHighlight;
+								MatchCollection triggerMatches;
+								int triggerCount = this.autoActionTriggerHelper.TextTriggerCount(dl.Text, out triggerMatches);
+								if (triggerCount > 0)
+								{
+									this.autoActionTriggerHelper.Reset(repositoryType); // Invoke shall happen as short as possible after detection.
+									dl.Highlight = shallHighlight;
 
-								// Signal the trigger(s):
-								for (int i = 0; i < triggerCount; i++)
-									triggers.Add(new Tuple<DateTime, string, MatchCollection, CountsRatesTuple>(dl.TimeStamp, dl.Text, triggerMatches, dataStatus));
+									// Signal the trigger(s):
+									for (int i = 0; i < triggerCount; i++)
+										triggers.Add(new Tuple<DateTime, string, MatchCollection, CountsRatesTuple>(dl.TimeStamp, dl.Text, triggerMatches, dataStatus));
+								}
 							}
-						}
-						else
-						{
-							break;     // Break the loop if action got disposed in the meantime.
-						}              // Though unlikely, it may happen when deactivating action
-					} // lock (helper) // while processing many lines, e.g. on reload.
+							else
+							{
+								break;     // Break the loop if action got disposed in the meantime.
+							}              // Though unlikely, it may happen when deactivating action
+						} // lock (helper) // while processing many lines, e.g. on reload.
+					} // if (direction != Tx)
 				} // foreach (line)
 			} // IsTextTriggered
 		}
@@ -331,14 +337,14 @@ namespace YAT.Model
 		/// lines at the monitors because other terminal clients would also have to suppress them.
 		/// Also, suppressing here reduces the amount of data being forwarded to the monitors.
 		/// </remarks>
-		protected virtual void ProcessAutoActionFilterAndSuppressFromLines(Domain.DisplayLineCollection lines)
+		protected virtual void ProcessAutoActionFilterAndSuppressFromLines(Domain.RepositoryType repositoryType, Domain.DisplayLineCollection lines)
 		{
 			var linesInitially = lines.Clone(); // Needed because collection will be recreated.
 			lines.Clear();
 
 			foreach (var dl in linesInitially)
 			{
-				if (dl.Direction != Domain.Direction.Tx) // By specification only active on receive-path.
+				if (dl.Direction != Domain.Direction.Tx) // Trigger by specification is only active on receive-path, no need to further evaluate Tx-only lines.
 				{
 					bool isTriggered = false;
 
@@ -350,20 +356,23 @@ namespace YAT.Model
 							{
 								foreach (var de in dl)
 								{
-									if (de.Origin != null) // Foreach element where origin exists.
+									if (de.Direction == Domain.Direction.Rx) // Trigger by specification is only active on receive-path.
 									{
-										foreach (var origin in de.Origin)
+										if (de.Origin != null) // Foreach element where origin exists.
 										{
-											foreach (var originByte in origin.Value1)
+											foreach (var origin in de.Origin)
 											{
-												if (this.autoActionTriggerHelper.EnqueueAndMatchTrigger(originByte))
+												foreach (var originByte in origin.Value1)
 												{
-													this.autoActionTriggerHelper.Reset();
-													isTriggered = true;
+													if (this.autoActionTriggerHelper.EnqueueAndMatch(repositoryType, originByte))
+													{
+														this.autoActionTriggerHelper.Reset(repositoryType);
+														isTriggered = true;
+													}
 												}
 											}
 										}
-									}
+									} // if (direction == Rx)
 								}
 							}
 							else // IsTextTriggered
@@ -914,12 +923,15 @@ namespace YAT.Model
 		/// <summary>
 		/// Deactivates the automatic action.
 		/// </summary>
+		/// <remarks>
+		/// Includes <see cref="ResetAutoActionCount"/>.
+		/// </remarks>
 		public virtual void DeactivateAutoAction()
 		{
 			AssertUndisposed();
 
+			ResetAutoActionCount(); // Must be done before raising the settings 'Changed' event because the 'terminal_AutoAction/ResponseCountChanged_Promptly' events are not used by the 'View.Forms.Terminal'.
 			SettingsRoot.AutoAction.Deactivate();
-			ResetAutoActionCount();
 		}
 
 		#endregion

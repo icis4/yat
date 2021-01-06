@@ -176,10 +176,10 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic responses always are non-reloadable.
 		/// </remarks>
-		protected virtual void EvaluateAutoResponseFromElements(Domain.DisplayElementCollection elements)
+		protected virtual void EvaluateAutoResponseFromElements(Domain.RepositoryType repositoryType, Domain.DisplayElementCollection elements)
 		{
 			List<Tuple<byte[], string, MatchCollection>> triggersDummy;
-			EvaluateAutoResponseFromElements(elements, out triggersDummy);
+			EvaluateAutoResponseFromElements(repositoryType, elements, out triggersDummy);
 		}
 
 		/// <summary>
@@ -189,39 +189,42 @@ namespace YAT.Model
 		/// Automatic responses always are non-reloadable.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		protected virtual void EvaluateAutoResponseFromElements(Domain.DisplayElementCollection elements, out List<Tuple<byte[], string, MatchCollection>> triggers)
+		protected virtual void EvaluateAutoResponseFromElements(Domain.RepositoryType repositoryType, Domain.DisplayElementCollection elements, out List<Tuple<byte[], string, MatchCollection>> triggers)
 		{
 			triggers = new List<Tuple<byte[], string, MatchCollection>>(); // No preset needed, the default behavior is good enough.
 
 			foreach (var de in elements)
 			{
-				lock (this.autoResponseTriggerHelperSyncObj)
+				if (de.Direction == Domain.Direction.Rx) // Trigger by specification is only active on receive-path.
 				{
-					if (this.autoResponseTriggerHelper != null)
+					lock (this.autoResponseTriggerHelperSyncObj)
 					{
-						if (de.Origin != null) // Foreach element where origin exists.
+						if (this.autoResponseTriggerHelper != null)
 						{
-							foreach (var origin in de.Origin)
+							if (de.Origin != null) // Foreach element where origin exists.
 							{
-								foreach (var originByte in origin.Value1)
+								foreach (var origin in de.Origin)
 								{
-									if (this.autoResponseTriggerHelper.EnqueueAndMatchTrigger(originByte))
+									foreach (var originByte in origin.Value1)
 									{
-										this.autoResponseTriggerHelper.Reset();
-										de.Highlight = true;
+										if (this.autoResponseTriggerHelper.EnqueueAndMatch(repositoryType, originByte))
+										{
+											this.autoResponseTriggerHelper.Reset(repositoryType);
+											de.Highlight = true;
 
-										// Signal the trigger:                                     // Always use sequence for [Trigger] response, since always 'IsByteSequenceTriggered' when evaluated here.
-										triggers.Add(new Tuple<byte[], string, MatchCollection>(this.autoResponseTriggerHelper.TriggerSequence, null, null));
+											// Signal the trigger:                                     // Always use sequence for [Trigger] response, since always 'IsByteSequenceTriggered' when evaluated here.
+											triggers.Add(new Tuple<byte[], string, MatchCollection>(this.autoResponseTriggerHelper.Sequence, null, null));
+										}
 									}
 								}
 							}
 						}
-					}
-					else
-					{
-						break;     // Break the loop if response got disposed in the meantime.
-					}              // Though unlikely, it may happen when deactivating response
-				} // lock (helper) // while receiving a very large chunk.
+						else
+						{
+							break;     // Break the loop if response got disposed in the meantime.
+						}              // Though unlikely, it may happen when deactivating response
+					} // lock (helper) // while receiving a very large chunk.
+				} // if (direction == Rx)
 			} // foreach (element)
 		}
 
@@ -231,10 +234,10 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic responses always are non-reloadable.
 		/// </remarks>
-		protected virtual void EvaluateAutoResponseFromLines(Domain.DisplayLineCollection lines)
+		protected virtual void EvaluateAutoResponseFromLines(Domain.RepositoryType repositoryType, Domain.DisplayLineCollection lines)
 		{
 			List<Tuple<byte[], string, MatchCollection>> triggersDummy;
-			EvaluateAutoResponseFromLines(lines, out triggersDummy);
+			EvaluateAutoResponseFromLines(repositoryType, lines, out triggersDummy);
 		}
 
 		/// <summary>
@@ -243,15 +246,15 @@ namespace YAT.Model
 		/// <remarks>
 		/// Automatic responses always are non-reloadable.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		protected virtual void EvaluateAutoResponseFromLines(Domain.DisplayLineCollection lines, out List<Tuple<byte[], string, MatchCollection>> triggers)
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		protected virtual void EvaluateAutoResponseFromLines(Domain.RepositoryType repositoryType, Domain.DisplayLineCollection lines, out List<Tuple<byte[], string, MatchCollection>> triggers)
 		{
 			if (SettingsRoot.AutoResponse.IsByteSequenceTriggered)
 			{
 				triggers = null;
 
 				foreach (var dl in lines)
-					EvaluateAutoResponseFromElements(dl, out triggers);
+					EvaluateAutoResponseFromElements(repositoryType, dl, out triggers);
 			}
 			else // IsTextTriggered
 			{
@@ -259,27 +262,30 @@ namespace YAT.Model
 
 				foreach (var dl in lines)
 				{
-					lock (this.autoResponseTriggerHelperSyncObj)
+					if (dl.Direction != Domain.Direction.Tx) // Trigger by specification is only active on receive-path, no need to further evaluate Tx-only lines.
 					{
-						if (this.autoResponseTriggerHelper != null)
+						lock (this.autoResponseTriggerHelperSyncObj)
 						{
-							MatchCollection triggerMatches;
-							int triggerCount = this.autoResponseTriggerHelper.TextTriggerCount(dl.Text, out triggerMatches);
-							if (triggerCount > 0)
+							if (this.autoResponseTriggerHelper != null)
 							{
-								this.autoResponseTriggerHelper.Reset(); // Invoke shall happen as short as possible after detection.
-								dl.Highlight = true;
+								MatchCollection triggerMatches;
+								int triggerCount = this.autoResponseTriggerHelper.TextTriggerCount(dl.Text, out triggerMatches);
+								if (triggerCount > 0)
+								{
+									this.autoResponseTriggerHelper.Reset(repositoryType); // Invoke shall happen as short as possible after detection.
+									dl.Highlight = true;
 
-								// Signal the trigger(s):
-								for (int i = 0; i < triggerCount; i++)                             // Always use text for [Trigger] response, since always 'IsTextTriggered' when evaluated here.
-									triggers.Add(new Tuple<byte[], string, MatchCollection>(null, this.autoResponseTriggerHelper.TriggerTextOrRegexPattern, triggerMatches));
+									// Signal the trigger(s):
+									for (int i = 0; i < triggerCount; i++)                             // Always use text for [Trigger] response, since always 'IsTextTriggered' when evaluated here.
+										triggers.Add(new Tuple<byte[], string, MatchCollection>(null, this.autoResponseTriggerHelper.TextOrRegexPattern, triggerMatches));
+								}
 							}
-						}
-						else
-						{
-							break;     // Break the loop if response got disposed in the meantime.
-						}              // Though unlikely, it may happen when deactivating response
-					} // lock (helper) // while processing many lines, e.g. on reload.
+							else
+							{
+								break;     // Break the loop if response got disposed in the meantime.
+							}              // Though unlikely, it may happen when deactivating response
+						} // lock (helper) // while processing many lines, e.g. on reload.
+					} // if (direction != Tx)
 				} // foreach (line)
 			} // IsTextTriggered
 		}
@@ -525,8 +531,8 @@ namespace YAT.Model
 		{
 			AssertUndisposed();
 
+			ResetAutoResponseCount(); // Must be done before raising the settings 'Changed' event because the 'terminal_AutoAction/ResponseCountChanged_Promptly' events are not used by the 'View.Forms.Terminal'.
 			SettingsRoot.AutoResponse.Deactivate();
-			ResetAutoResponseCount();
 		}
 
 		#endregion

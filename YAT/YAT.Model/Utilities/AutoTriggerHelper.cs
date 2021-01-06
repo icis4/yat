@@ -43,76 +43,99 @@ namespace YAT.Model.Utilities
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
-		public byte[] TriggerSequence { get; }
+		public byte[] Sequence { get; }
 
-		private Domain.SequenceQueue triggerSequenceQueue;
-
-		/// <summary></summary>
-		public string TriggerTextOrRegexPattern { get; }
-
-		/// <summary></summary>
-		public bool TriggerTextOrRegexCaseSensitive { get; }
+	////private Domain.SequenceQueue txSequenceQueue is not needed (yet) as trigger by specification is only active on receive-path.
+		private Domain.SequenceQueue bidirSequenceQueue;
+		private Domain.SequenceQueue rxSequenceQueue;
 
 		/// <summary></summary>
-		public bool TriggerTextOrRegexWholeWord { get; }
+		public string TextOrRegexPattern { get; }
 
 		/// <summary></summary>
-		public Regex TriggerRegex { get; }
+		public bool TextOrRegexCaseSensitive { get; }
 
 		/// <summary></summary>
-		public AutoTriggerHelper(byte[] triggerSequence)
+		public bool TextOrRegexWholeWord { get; }
+
+		/// <summary></summary>
+		public Regex Regex { get; }
+
+		/// <summary></summary>
+		public AutoTriggerHelper(byte[] sequence)
 		{
 			lock (this)
 			{
-				TriggerSequence = triggerSequence;
+				Sequence = sequence;
 
-				this.triggerSequenceQueue = new Domain.SequenceQueue(TriggerSequence);
+				this.bidirSequenceQueue = new Domain.SequenceQueue(this.Sequence);
+				this.rxSequenceQueue    = new Domain.SequenceQueue(this.Sequence);
 			}
 		}
 
 		/// <summary></summary>
-		public AutoTriggerHelper(string triggerText, bool caseSensitive, bool wholeWord)
+		public AutoTriggerHelper(string text, bool caseSensitive, bool wholeWord)
 		{
 			lock (this)
 			{
-				TriggerTextOrRegexPattern       = triggerText;
-				TriggerTextOrRegexCaseSensitive = caseSensitive;
-				TriggerTextOrRegexWholeWord     = wholeWord;
+				TextOrRegexPattern       = text;
+				TextOrRegexCaseSensitive = caseSensitive;
+				TextOrRegexWholeWord     = wholeWord;
 			}
 		}
 
 		/// <summary></summary>
-		public AutoTriggerHelper(string triggerRegexPattern, bool caseSensitive, bool wholeWord, Regex triggerRegex)
+		public AutoTriggerHelper(string regexPattern, bool caseSensitive, bool wholeWord, Regex triggerRegex)
 		{
 			lock (this)
 			{
-				TriggerTextOrRegexPattern       = triggerRegexPattern;
-				TriggerTextOrRegexCaseSensitive = caseSensitive;
-				TriggerTextOrRegexWholeWord     = wholeWord;
-				TriggerRegex                    = triggerRegex;
+				TextOrRegexPattern       = regexPattern;
+				TextOrRegexCaseSensitive = caseSensitive;
+				TextOrRegexWholeWord     = wholeWord;
+				Regex                    = triggerRegex;
+			}
+		}
+
+		private Domain.SequenceQueue GetSequenceQueue(Domain.RepositoryType repositoryType)
+		{
+			lock (this)
+			{
+				switch (repositoryType)
+				{
+					case Domain.RepositoryType.Tx:    throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MKY.MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+
+				////case Domain.RepositoryType.Tx:    return (this.txSequenceQueue) is not needed (yet) as trigger by specification is only active on receive-path.
+					case Domain.RepositoryType.Bidir: return (this.bidirSequenceQueue);
+					case Domain.RepositoryType.Rx:    return (this.rxSequenceQueue);
+
+					case Domain.RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MKY.MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+					default:                          throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MKY.MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!"               + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+				}
 			}
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
-		public byte[] TriggerSequenceQueueAsArray()
+		public virtual void Reset(Domain.RepositoryType repositoryType)
 		{
 			lock (this)
 			{
-				return (this.triggerSequenceQueue.QueueAsArray());
+				var q = GetSequenceQueue(repositoryType);
+				if (q != null)
+					q.Reset();
 			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		public virtual bool EnqueueAndMatchTrigger(byte b)
+		public virtual bool EnqueueAndMatch(Domain.RepositoryType repositoryType, byte b)
 		{
 			lock (this)
 			{
-				if (this.triggerSequenceQueue != null)
+				var q = GetSequenceQueue(repositoryType);
+				if (q != null)
 				{
-					this.triggerSequenceQueue.Enqueue(b);
-					return (this.triggerSequenceQueue.IsCompleteMatch);
+					q.Enqueue(b);
+					return (q.IsCompleteMatch);
 				}
 				else
 				{
@@ -124,23 +147,23 @@ namespace YAT.Model.Utilities
 		/// <summary></summary>
 		public virtual bool TextTriggerSuccess(string input)
 		{
-			if (TriggerRegex == null) // Text only:
+			if (Regex == null) // Text only:
 			{
 				StringComparison comparisonType;
-				if (TriggerTextOrRegexCaseSensitive)
+				if (TextOrRegexCaseSensitive)
 					comparisonType = StringComparison.CurrentCulture;
 				else
 					comparisonType = StringComparison.CurrentCultureIgnoreCase;
 
-				if (TriggerTextOrRegexWholeWord)
-					return (StringEx.IndexOfWholeWord(input, TriggerTextOrRegexPattern, comparisonType) >= 0);
+				if (TextOrRegexWholeWord)
+					return (StringEx.IndexOfWholeWord(input, TextOrRegexPattern, comparisonType) >= 0);
 				else
-					return (input.IndexOf(TriggerTextOrRegexPattern, comparisonType) >= 0); // Using string.IndexOf() because string.Contains()
+					return (input.IndexOf(TextOrRegexPattern, comparisonType) >= 0); // Using string.IndexOf() because string.Contains()
 			}                                                                               // does not allow controlling culture and case.
 			else // Regex enabled:
 			{
 				if (!string.IsNullOrEmpty(input))
-					return (TriggerRegex.Match(input).Success);
+					return (Regex.Match(input).Success);
 				else
 					return (false);
 			}
@@ -157,36 +180,26 @@ namespace YAT.Model.Utilities
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual int TextTriggerCount(string input, out MatchCollection matches)
 		{
-			if (TriggerRegex == null) // Text only:
+			if (Regex == null) // Text only:
 			{
 				matches = null;
 
 				StringComparison comparisonType;
-				if (TriggerTextOrRegexCaseSensitive)
+				if (TextOrRegexCaseSensitive)
 					comparisonType = StringComparison.CurrentCulture;
 				else
 					comparisonType = StringComparison.CurrentCultureIgnoreCase;
 
-				if (TriggerTextOrRegexWholeWord)
-					return (StringEx.ContainingWholeWordCount(input, TriggerTextOrRegexPattern, comparisonType));
+				if (TextOrRegexWholeWord)
+					return (StringEx.ContainingWholeWordCount(input, TextOrRegexPattern, comparisonType));
 				else
-					return (StringEx.ContainingCount(input, TriggerTextOrRegexPattern, comparisonType));
+					return (StringEx.ContainingCount(input, TextOrRegexPattern, comparisonType));
 			}
 			else // Regex enabled:
 			{
-				matches = TriggerRegex.Matches(input);
+				matches = Regex.Matches(input);
 
 				return (matches.Count);
-			}
-		}
-
-		/// <summary></summary>
-		public virtual void Reset()
-		{
-			lock (this)
-			{
-				if (this.triggerSequenceQueue != null)
-					this.triggerSequenceQueue.Reset();
 			}
 		}
 	}
