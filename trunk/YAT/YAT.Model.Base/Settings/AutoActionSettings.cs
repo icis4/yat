@@ -159,16 +159,16 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public virtual bool AlsoAppliesToTx
+		public virtual bool IsCountRatePlot
 		{
-			get { return (Action.AlsoAppliesToTx); }
+			get { return (Action.IsCountRatePlot); }
 		}
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public virtual bool IsCountRatePlot
+		public virtual bool IsNotCountRatePlot
 		{
-			get { return (Action.IsCountRatePlot); }
+			get { return (!Action.IsCountRatePlot); }
 		}
 
 		#endregion

@@ -174,24 +174,6 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		public bool AlsoAppliesToTx
-		{
-			get
-			{
-				switch ((AutoAction)UnderlyingEnum)
-				{
-					// Explicitly list those actions that apply...
-					case AutoAction.PlotByteCountRate:
-					case AutoAction.PlotLineCountRate:
-						return (true);
-
-					default: // ...all others don't:
-						return (false);
-				}
-			}
-		}
-
-		/// <summary></summary>
 		public bool IsCountRatePlot
 		{
 			get
