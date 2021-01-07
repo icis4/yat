@@ -1215,6 +1215,9 @@ namespace YAT.Domain
 				l.AddRange(lineState.Elements.Clone()); // Clone to ensure decoupling.
 				l.AddRange(lineEnd);
 
+				if (lineState.Highlight)
+					l.Highlight = true;
+
 				CreateCollectionIfIsNull(ref linesToAdd);
 				linesToAdd.Add(l);
 
