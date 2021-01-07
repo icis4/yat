@@ -7383,7 +7383,8 @@ namespace YAT.View.Forms
 			{
 				var autoActionCondition = (settingsRoot.AutoAction.IsActive && (settingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
 				                           settingsRoot.AutoAction.IsByteSequenceTriggered && // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
-				                           settingsRoot.AutoAction.IsNeitherFilterNorSuppress); // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
+				                           settingsRoot.AutoAction.IsNeitherFilterNorSuppress && // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
+				                           settingsRoot.AutoAction.IsNotCountRatePlot); // Count/Rate Plot is limited to be processed in Model.Termial.ioRate_Changed.
 
 				var autoResponseCondition = (settingsRoot.AutoResponse.IsActive && (settingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
 				                             settingsRoot.AutoResponse.IsByteSequenceTriggered); // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
