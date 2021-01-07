@@ -1080,9 +1080,9 @@ namespace YAT.Domain
 		#endif
 
 		#if (WITH_SCRIPTING)
-			Add(                   repositoryType,               ref elementsToAdd, ref linesToAdd, ref receivedScriptLinesToAdd);
+			Add(                   repositoryType,               elementsToAdd, linesToAdd, receivedScriptLinesToAdd);
 		#else
-			Add(                   repositoryType,               ref elementsToAdd, ref linesToAdd);
+			Add(                   repositoryType,               elementsToAdd, linesToAdd);
 		#endif
 		}
 
@@ -1102,9 +1102,9 @@ namespace YAT.Domain
 		#endif
 
 		#if (WITH_SCRIPTING)
-			Add(                      repositoryType,          ref elementsToAdd, ref linesToAdd, ref receivedScriptLinesToAdd);
+			Add(                      repositoryType,          elementsToAdd, linesToAdd, receivedScriptLinesToAdd);
 		#else
-			Add(                      repositoryType,          ref elementsToAdd, ref linesToAdd);
+			Add(                      repositoryType,          elementsToAdd, linesToAdd);
 		#endif
 		}
 
@@ -1155,9 +1155,9 @@ namespace YAT.Domain
 			}
 
 		#if (WITH_SCRIPTING)
-			Add(repositoryType, ref elementsToAdd, ref linesToAdd, ref receivedScriptLinesToAdd);
+			Add(repositoryType, elementsToAdd, linesToAdd, receivedScriptLinesToAdd);
 		#else
-			Add(repositoryType, ref elementsToAdd, ref linesToAdd);
+			Add(repositoryType, elementsToAdd, linesToAdd);
 		#endif
 		}
 
@@ -1248,9 +1248,9 @@ namespace YAT.Domain
 		#endif
 
 		#if (WITH_SCRIPTING)
-			Add(                  repositoryType,          ref elementsToAdd, ref linesToAdd, ref receivedScriptLinesToAdd);
+			Add(                  repositoryType,          elementsToAdd, linesToAdd, receivedScriptLinesToAdd);
 		#else
-			Add(                  repositoryType,          ref elementsToAdd, ref linesToAdd);
+			Add(                  repositoryType,          elementsToAdd, linesToAdd);
 		#endif
 		}
 
@@ -1270,9 +1270,9 @@ namespace YAT.Domain
 		#endif
 
 		#if (WITH_SCRIPTING)
-			Add(                  repositoryType,          ref elementsToAdd, ref linesToAdd, ref receivedScriptLinesToAdd);
+			Add(                  repositoryType,          elementsToAdd, linesToAdd, receivedScriptLinesToAdd);
 		#else
-			Add(                  repositoryType,          ref elementsToAdd, ref linesToAdd);
+			Add(                  repositoryType,          elementsToAdd, linesToAdd);
 		#endif
 		}
 
@@ -1292,9 +1292,9 @@ namespace YAT.Domain
 		#endif
 
 		#if (WITH_SCRIPTING)
-			Add(                         repositoryType,                    ref elementsToAdd, ref linesToAdd, ref receivedScriptLinesToAdd);
+			Add(                         repositoryType,                    elementsToAdd, linesToAdd, receivedScriptLinesToAdd);
 		#else
-			Add(                         repositoryType,                    ref elementsToAdd, ref linesToAdd);
+			Add(                         repositoryType,                    elementsToAdd, linesToAdd);
 		#endif
 		}
 
@@ -1513,25 +1513,51 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "1#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
 	#if (WITH_SCRIPTING)
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Allocating memory is an expensive operation, it shall only be done if needed.")]
-		protected virtual void Add(RepositoryType repositoryType, ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd, ref ScriptLineCollection receivedScriptLinesToAdd)
+		protected virtual void Add(RepositoryType repositoryType, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd, ScriptLineCollection receivedScriptLinesToAdd)
 	#else
-		protected virtual void Add(RepositoryType repositoryType, ref DisplayElementCollection elementsToAdd, ref DisplayLineCollection linesToAdd)
+		protected virtual void Add(RepositoryType repositoryType, DisplayElementCollection elementsToAdd, DisplayLineCollection linesToAdd)
 	#endif
 		{
 			if (!ICollectionEx.IsNullOrEmpty(elementsToAdd))
+			{
 				AddDisplayElements(repositoryType, elementsToAdd);
 
+				if (elementsToAdd.Highlight)
+					PropagateHighlight(repositoryType, linesToAdd);
+			}
+
 			if (!ICollectionEx.IsNullOrEmpty(linesToAdd))
+			{
 				AddDisplayLines(repositoryType, linesToAdd);
+			}
 
 		#if (WITH_SCRIPTING)
 			if (!ICollectionEx.IsNullOrEmpty(receivedScriptLinesToAdd))
+			{
 				HandleReceivedScriptLinesToAdd(receivedScriptLinesToAdd);
+			}
 		#endif
+		}
+
+		/// <summary>
+		/// E.g. a model's automatic action or response may activate the 'Highlight' state
+		/// on the elements. This state must be propageted to the corresponding line(s).
+		/// </summary>
+		/// <remarks>
+		/// This implementation is not ideal, as a feedback from the model via this domain
+		/// is included, but considered good enough.
+		/// </remarks>
+		protected virtual void PropagateHighlight(RepositoryType repositoryType, DisplayLineCollection linesToAdd)
+		{
+			// Not yet completed lines will have to be marked at completion, in 'DoLineEnd()',
+			// already completed lines can be marked immediately. In this case, propagating to
+			// the current line would mark the next line!
+
+			if (ICollectionEx.IsNullOrEmpty(linesToAdd))
+				GetLineState(repositoryType).Highlight = true;
+			else
+				linesToAdd.ForEach(l => l.Highlight = true);
 		}
 
 		/// <remarks>
@@ -1593,6 +1619,10 @@ namespace YAT.Domain
 			if (!ICollectionEx.IsNullOrEmpty(elementsToAdd))
 			{
 				AddDisplayElements(repositoryType, elementsToAdd);
+
+				if (elementsToAdd.Highlight)
+					PropagateHighlight(repositoryType, linesToAdd);
+
 				elementsToAdd.Clear();
 			}
 
@@ -1621,6 +1651,10 @@ namespace YAT.Domain
 			if (!ICollectionEx.IsNullOrEmpty(elementsToAdd))
 			{
 				AddDisplayElements(repositoryType, elementsToAdd);
+
+				if (elementsToAdd.Highlight)
+					PropagateHighlight(repositoryType, linesToAdd);
+
 				elementsToAdd.Clear();
 			}
 
