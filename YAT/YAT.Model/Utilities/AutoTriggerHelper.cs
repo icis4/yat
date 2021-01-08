@@ -24,6 +24,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using System.Text.RegularExpressions;
 
 using MKY;
@@ -43,11 +44,11 @@ namespace YAT.Model.Utilities
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Guidelines for Collections: Do use byte arrays instead of collections of bytes.")]
-		public byte[] Sequence { get; }
+		public byte[] ByteSequence { get; }
 
-	////private Domain.SequenceQueue txSequenceQueue is not needed (yet) as trigger by specification is only active on receive-path.
-		private Domain.SequenceQueue bidirSequenceQueue;
-		private Domain.SequenceQueue rxSequenceQueue;
+	////private Domain.SequenceQueue txByteSequenceQueue is not needed (yet) as trigger by specification is only active on receive-path.
+		private Domain.SequenceQueue bidirByteSequenceQueue;
+		private Domain.SequenceQueue rxByteSequenceQueue;
 
 		/// <summary></summary>
 		public string TextOrRegexPattern { get; }
@@ -62,14 +63,14 @@ namespace YAT.Model.Utilities
 		public Regex Regex { get; }
 
 		/// <summary></summary>
-		public AutoTriggerHelper(byte[] sequence)
+		public AutoTriggerHelper(byte[] byteSequence)
 		{
 			lock (this)
 			{
-				Sequence = sequence;
+				ByteSequence = byteSequence;
 
-				this.bidirSequenceQueue = new Domain.SequenceQueue(this.Sequence);
-				this.rxSequenceQueue    = new Domain.SequenceQueue(this.Sequence);
+				this.bidirByteSequenceQueue = new Domain.SequenceQueue(ByteSequence);
+				this.rxByteSequenceQueue    = new Domain.SequenceQueue(ByteSequence);
 			}
 		}
 
@@ -96,7 +97,12 @@ namespace YAT.Model.Utilities
 			}
 		}
 
-		private Domain.SequenceQueue GetSequenceQueue(Domain.RepositoryType repositoryType)
+		#region ByteSequence
+		//==========================================================================================
+		// ByteSequence
+		//==========================================================================================
+
+		private Domain.SequenceQueue GetByteSequenceQueue(Domain.RepositoryType repositoryType)
 		{
 			lock (this)
 			{
@@ -104,9 +110,9 @@ namespace YAT.Model.Utilities
 				{
 					case Domain.RepositoryType.Tx:    throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MKY.MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 
-				////case Domain.RepositoryType.Tx:    return (this.txSequenceQueue) is not needed (yet) as trigger by specification is only active on receive-path.
-					case Domain.RepositoryType.Bidir: return (this.bidirSequenceQueue);
-					case Domain.RepositoryType.Rx:    return (this.rxSequenceQueue);
+				////case Domain.RepositoryType.Tx:    return (this.txByteSequenceQueue) is not needed (yet) as trigger by specification is only active on receive-path.
+					case Domain.RepositoryType.Bidir: return (this.bidirByteSequenceQueue);
+					case Domain.RepositoryType.Rx:    return (this.rxByteSequenceQueue);
 
 					case Domain.RepositoryType.None:  throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MKY.MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is a repository type that is not valid here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
 					default:                          throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, MKY.MessageHelper.InvalidExecutionPreamble + "'" + repositoryType + "' is an invalid repository type!"               + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
@@ -115,11 +121,11 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		public virtual void Reset(Domain.RepositoryType repositoryType)
+		public virtual void ResetByteSequence(Domain.RepositoryType repositoryType)
 		{
 			lock (this)
 			{
-				var q = GetSequenceQueue(repositoryType);
+				var q = GetByteSequenceQueue(repositoryType);
 				if (q != null)
 					q.Reset();
 			}
@@ -127,11 +133,11 @@ namespace YAT.Model.Utilities
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		public virtual bool EnqueueAndMatch(Domain.RepositoryType repositoryType, byte b)
+		public virtual bool EnqueueAndMatchByteSequence(Domain.RepositoryType repositoryType, byte b)
 		{
 			lock (this)
 			{
-				var q = GetSequenceQueue(repositoryType);
+				var q = GetByteSequenceQueue(repositoryType);
 				if (q != null)
 				{
 					q.Enqueue(b);
@@ -143,6 +149,24 @@ namespace YAT.Model.Utilities
 				}
 			}
 		}
+
+		/// <summary></summary>
+		public virtual string ByteSequenceToString()
+		{
+			var str = Domain.Utilities.ByteHelper.FormatHexString(ByteSequence, Domain.Settings.DisplaySettings.ShowRadixDefault);
+
+			if (!string.IsNullOrEmpty(str))
+				return (str);
+			else
+				return ("(empty)");
+		}
+
+		#endregion
+
+		#region Text/Regex
+		//==========================================================================================
+		// Text/Regex
+		//==========================================================================================
 
 		/// <summary></summary>
 		public virtual bool TextTriggerSuccess(string input)
@@ -202,6 +226,62 @@ namespace YAT.Model.Utilities
 				return (matches.Count);
 			}
 		}
+
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		public override string ToString()
+		{
+			if (!ArrayEx.IsNullOrEmpty(ByteSequence))
+				return (ByteSequenceToString());
+			else
+				return (TextOrRegexPattern);
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
+		/// <remarks>
+		/// Limited to a single line to keep debug output compact, same as <see cref="ToString()"/>.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public virtual string ToDiagnosticsString(string indent = "")
+		{
+			var sb = new StringBuilder(indent);
+
+			if (!ArrayEx.IsNullOrEmpty(ByteSequence))
+			{
+				sb.Append("Sequence = ");
+				sb.Append(ByteSequenceToString());
+				sb.Append(" | Queue (Bidir) = ");
+				sb.Append(this.bidirByteSequenceQueue.QueueToString());
+				sb.Append(" | Queue (Rx) = ");
+				sb.Append(this.rxByteSequenceQueue.QueueToString());
+			}
+			else
+			{
+				sb.Append("TextOrRegexPattern = ");
+				sb.Append(TextOrRegexPattern);
+				sb.Append(" | CaseSensitive = ");
+				sb.Append(TextOrRegexCaseSensitive.ToString());
+				sb.Append(" | WholeWord = ");
+				sb.Append(TextOrRegexWholeWord.ToString());
+			}
+
+			return (sb.ToString());
+		}
+
+		#endregion
 	}
 }
 

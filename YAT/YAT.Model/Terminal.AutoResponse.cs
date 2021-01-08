@@ -22,6 +22,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of trigger:
+////#define DEBUG_TRIGGER
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -106,11 +120,25 @@ namespace YAT.Model
 					{
 						if (SettingsRoot.AutoResponse.IsByteSequenceTriggered)
 						{
-							byte[] triggerSequence;
-							if (TryParseCommand(triggerCommand, out triggerSequence))
+							byte[] triggerByteSequence;
+							if (TryParseCommand(triggerCommand, out triggerByteSequence))
 							{
 								lock (this.autoResponseTriggerHelperSyncObj)
-									this.autoResponseTriggerHelper = new Utilities.AutoTriggerHelper(triggerSequence);
+								{
+									var createOrRecreate = false;
+
+									if (this.autoResponseTriggerHelper == null)
+										createOrRecreate = true;
+									else if (!ArrayEx.ValuesEqual(this.autoResponseTriggerHelper.ByteSequence, triggerByteSequence))
+										createOrRecreate = true;
+
+									if (createOrRecreate)
+										this.autoResponseTriggerHelper = new Utilities.AutoTriggerHelper(triggerByteSequence);
+
+									// The helper must not be recreated if sequence has not changed, as recreation will reset the
+									// sequence queues in any case, but a change to [Send Text] will also trigger the update here!
+									// And subsequently sending some [Send Text] must only reset the queues if really needed!
+								}
 							}
 							else
 							{
@@ -207,13 +235,19 @@ namespace YAT.Model
 								{
 									foreach (var originByte in origin.Value1)
 									{
-										if (this.autoResponseTriggerHelper.EnqueueAndMatch(repositoryType, originByte))
-										{
-											this.autoResponseTriggerHelper.Reset(repositoryType);
+										if (this.autoResponseTriggerHelper.EnqueueAndMatchByteSequence(repositoryType, originByte))
+										{                                                // Same spacing as "No match." further below.
+											DebugAutoResponseTrigger("Evaluated => Match   !");
+
+											this.autoResponseTriggerHelper.ResetByteSequence(repositoryType);
 											de.Highlight = true;
 
-											// Signal the trigger:                                     // Always use sequence for [Trigger] response, since always 'IsByteSequenceTriggered' when evaluated here.
-											triggers.Add(new Tuple<byte[], string, MatchCollection>(this.autoResponseTriggerHelper.Sequence, null, null));
+											// Signal the trigger:                                   // Always use byte sequence for [Trigger] response, since always 'IsByteSequenceTriggered' when evaluated here.
+											triggers.Add(new Tuple<byte[], string, MatchCollection>(this.autoResponseTriggerHelper.ByteSequence, null, null));
+										}
+										else
+										{
+											DebugAutoResponseTrigger("Evaluated => No match.");
 										}
 									}
 								}
@@ -272,7 +306,6 @@ namespace YAT.Model
 								int triggerCount = this.autoResponseTriggerHelper.TextTriggerCount(dl.Text, out triggerMatches);
 								if (triggerCount > 0)
 								{
-									this.autoResponseTriggerHelper.Reset(repositoryType); // Invoke shall happen as short as possible after detection.
 									dl.Highlight = true;
 
 									// Signal the trigger(s):
@@ -665,6 +698,22 @@ namespace YAT.Model
 		protected virtual void OnAutoResponseCountChanged_Promptly(EventArgs<int> e)
 		{
 			this.eventHelper.RaiseSync<EventArgs<int>>(AutoResponseCountChanged_Promptly, this, e);
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_TRIGGER")]
+		private void DebugAutoResponseTrigger(string leadMessage)
+		{
+			DebugMessage("{0} {1}", leadMessage, this.autoResponseTriggerHelper.ToDiagnosticsString());
 		}
 
 		#endregion

@@ -1551,12 +1551,13 @@ namespace YAT.Domain
 		protected virtual void PropagateHighlight(RepositoryType repositoryType, DisplayLineCollection linesToAdd)
 		{
 			// Not yet completed lines will have to be marked at completion, in 'DoLineEnd()',
-			// already completed lines can be marked immediately. In this case, propagating to
-			// the current line would mark the next line!
+			// Already completed lines can be marked immediately.
 
-			if (ICollectionEx.IsNullOrEmpty(linesToAdd))
-				GetLineState(repositoryType).Highlight = true;
-			else
+			var lineState = GetLineState(repositoryType);
+			if (!lineState.IsYetEmpty)
+				lineState.Highlight = true;
+
+			if (!ICollectionEx.IsNullOrEmpty(linesToAdd))
 				linesToAdd.ForEach(l => l.Highlight = true);
 		}
 

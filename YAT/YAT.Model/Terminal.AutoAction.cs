@@ -22,6 +22,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Enable debugging of trigger:
+////#define DEBUG_TRIGGER
+
+#endif // DEBUG
+
+#endregion
+
 #region Using
 //==================================================================================================
 // Using
@@ -131,11 +145,25 @@ namespace YAT.Model
 					{
 						if (SettingsRoot.AutoAction.IsByteSequenceTriggered)
 						{
-							byte[] triggerSequence;
-							if (TryParseCommand(triggerCommand, out triggerSequence))
+							byte[] triggerByteSequence;
+							if (TryParseCommand(triggerCommand, out triggerByteSequence))
 							{
 								lock (this.autoActionTriggerHelperSyncObj)
-									this.autoActionTriggerHelper = new Utilities.AutoTriggerHelper(triggerSequence);
+								{
+									var createOrRecreate = false;
+
+									if (this.autoActionTriggerHelper == null)
+										createOrRecreate = true;
+									else if (!ArrayEx.ValuesEqual(this.autoActionTriggerHelper.ByteSequence, triggerByteSequence))
+										createOrRecreate = true;
+
+									if (createOrRecreate)
+										this.autoActionTriggerHelper = new Utilities.AutoTriggerHelper(triggerByteSequence);
+
+									// The helper must not be recreated if sequence has not changed, as recreation will reset the
+									// sequence queues in any case, but a change to [Send Text] will also trigger the update here!
+									// And subsequently sending some [Send Text] must only reset the queues if really needed!
+								}
 							}
 							else
 							{
@@ -234,9 +262,11 @@ namespace YAT.Model
 								{
 									foreach (var originByte in origin.Value1)
 									{
-										if (this.autoActionTriggerHelper.EnqueueAndMatch(repositoryType, originByte))
-										{
-											this.autoActionTriggerHelper.Reset(repositoryType);
+										if (this.autoActionTriggerHelper.EnqueueAndMatchByteSequence(repositoryType, originByte))
+										{                                              // Same spacing as "No match." further below.
+											DebugAutoActionTrigger("Evaluated => Match   !");
+
+											this.autoActionTriggerHelper.ResetByteSequence(repositoryType);
 											de.Highlight = shallHighlight;
 
 											// Signal the trigger:
@@ -247,6 +277,10 @@ namespace YAT.Model
 											// this.terminal.Format(triggerSequence, Domain.IODirection.Rx)
 											// ...in RequestAutoActionMessage() isn't perfect either, as it will *never*
 											// contain more than the trigger. Thus preferring 'Elements.Text'.
+										}
+										else
+										{
+											DebugAutoActionTrigger("Evaluated => No match.");
 										}
 									}
 								}
@@ -307,7 +341,6 @@ namespace YAT.Model
 								int triggerCount = this.autoActionTriggerHelper.TextTriggerCount(dl.Text, out triggerMatches);
 								if (triggerCount > 0)
 								{
-									this.autoActionTriggerHelper.Reset(repositoryType); // Invoke shall happen as short as possible after detection.
 									dl.Highlight = shallHighlight;
 
 									// Signal the trigger(s):
@@ -364,10 +397,16 @@ namespace YAT.Model
 											{
 												foreach (var originByte in origin.Value1)
 												{
-													if (this.autoActionTriggerHelper.EnqueueAndMatch(repositoryType, originByte))
-													{
-														this.autoActionTriggerHelper.Reset(repositoryType);
+													if (this.autoActionTriggerHelper.EnqueueAndMatchByteSequence(repositoryType, originByte))
+													{                                              // Same spacing as "No match." further below.
+														DebugAutoActionTrigger("Evaluated => Match   !");
+
+														this.autoActionTriggerHelper.ResetByteSequence(repositoryType);
 														isTriggered = true;
+													}
+													else
+													{
+														DebugAutoActionTrigger("Evaluated => No match.");
 													}
 												}
 											}
@@ -1071,6 +1110,22 @@ namespace YAT.Model
 		protected virtual void OnAutoActionCountChanged_Promptly(EventArgs<int> e)
 		{
 			this.eventHelper.RaiseSync<EventArgs<int>>(AutoActionCountChanged_Promptly, this, e);
+		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_TRIGGER")]
+		private void DebugAutoActionTrigger(string leadMessage)
+		{
+			DebugMessage("{0} {1}", leadMessage, this.autoActionTriggerHelper.ToDiagnosticsString());
 		}
 
 		#endregion
