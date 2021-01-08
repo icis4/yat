@@ -67,6 +67,9 @@ namespace YAT.Model
 		public HistogramDouble Histogram { get; protected set; }
 
 		/// <summary></summary>
+		public bool IsActive { get; protected set; } = true;
+
+		/// <summary></summary>
 		[CLSCompliant(false)]
 		public OxyPlot.PlotModel OxyModel { get; protected set; }
 
@@ -91,8 +94,23 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
+		public virtual void Suspend()
+		{
+			IsActive = false;
+		}
+
+		/// <summary></summary>
+		public virtual void Resume()
+		{
+			IsActive = true;
+		}
+
+		/// <summary></summary>
 		public void AddItem(AutoActionPlotItem pi, Color txColor, Color rxColor)
 		{
+			if (!IsActive)
+				return;
+
 			if (Action != pi.Action) {
 				Action = pi.Action;
 

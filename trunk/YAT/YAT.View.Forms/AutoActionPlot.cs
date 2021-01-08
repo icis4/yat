@@ -100,6 +100,16 @@ namespace YAT.View.Forms
 
 		/// <summary></summary>
 		[Category("Action")]
+		[Description("Event raised when the AutoAction is requested to be suspended.")]
+		public event EventHandler SuspendAutoAction;
+
+		/// <summary></summary>
+		[Category("Action")]
+		[Description("Event raised when the AutoAction is requested to be resumed.")]
+		public event EventHandler ResumeAutoAction;
+
+		/// <summary></summary>
+		[Category("Action")]
 		[Description("Event raised when the AutoAction is requested to be deactivated.")]
 		public event EventHandler DeactivateAutoAction;
 
@@ -136,8 +146,8 @@ namespace YAT.View.Forms
 			PlotAreaBackColor = this.terminal.SettingsRoot.Format.BackColor;
 
 			ApplyShowLegend();
-
 			ApplyWindowSettingsAccordingToStartupState();
+			ApplySuspendResume();
 		}
 
 		#endregion
@@ -326,6 +336,11 @@ namespace YAT.View.Forms
 		private void button_Clear_Click(object sender, EventArgs e)
 		{
 			Clear();
+		}
+
+		private void button_SuspendResume_Click(object sender, EventArgs e)
+		{
+			OnSuspendResume();
 		}
 
 		private void button_Deactivate_Click(object sender, EventArgs e)
@@ -706,6 +721,32 @@ namespace YAT.View.Forms
 				this.terminal.AutoActionPlotModel.Clear();  // automatic action requests.
 		}
 
+		private void OnSuspendResume()
+		{
+			if (this.terminal.AutoActionPlotModel.IsActive)
+				OnSuspendAutoAction(EventArgs.Empty);
+			else
+				OnResumeAutoAction(EventArgs.Empty);
+
+			ApplySuspendResume();
+		}
+
+		private void ApplySuspendResume()
+		{
+			this.isSettingControls.Enter();
+			try
+			{
+				if (this.terminal.AutoActionPlotModel.IsActive)
+					button_SuspendResume.Text = "S&uspend";
+				else
+					button_SuspendResume.Text = "Res&ume";
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
+		}
+
 		#endregion
 
 		#region Event Raising
@@ -717,6 +758,18 @@ namespace YAT.View.Forms
 		protected virtual void OnPlotAreaBackColorChanged(EventArgs e)
 		{
 			EventHelper.RaiseSync(PlotAreaBackColorChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnSuspendAutoAction(EventArgs e)
+		{
+			EventHelper.RaiseSync(SuspendAutoAction, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnResumeAutoAction(EventArgs e)
+		{
+			EventHelper.RaiseSync(ResumeAutoAction, this, e);
 		}
 
 		/// <summary></summary>

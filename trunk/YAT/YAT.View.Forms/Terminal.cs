@@ -5254,6 +5254,20 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		public virtual void RequestAutoActionSuspend()
+		{
+			if (this.terminal != null)
+				this.terminal.SuspendAutoAction();
+		}
+
+		/// <summary></summary>
+		public virtual void RequestAutoActionResume()
+		{
+			if (this.terminal != null)
+				this.terminal.ResumeAutoAction();
+		}
+
+		/// <summary></summary>
 		public virtual void RequestAutoActionDeactivate()
 		{
 			AutoActionTriggerState = AutoContentState.Neutral;
@@ -8376,8 +8390,10 @@ namespace YAT.View.Forms
 
 				this.autoActionPlotForm = new AutoActionPlot(this.terminal);
 				this.autoActionPlotForm.Text = ComposeAutoActionPlotFormCaption();
+				this.autoActionPlotForm.SuspendAutoAction    += AutoActionPlotForm_SuspendAutoAction;
+				this.autoActionPlotForm.ResumeAutoAction     += AutoActionPlotForm_ResumeAutoAction;
 				this.autoActionPlotForm.DeactivateAutoAction += AutoActionPlotForm_DeactivateAutoAction;
-				this.autoActionPlotForm.FormClosing += AutoActionPlotForm_FormClosing;
+				this.autoActionPlotForm.FormClosing          += AutoActionPlotForm_FormClosing;
 				this.autoActionPlotForm.Show(this);
 			}
 			else
@@ -8410,6 +8426,16 @@ namespace YAT.View.Forms
 				indicatedName = this.terminal.ComposeCaption("Automatic Action Plot");
 
 			return (Model.Utilities.CaptionHelper.ComposeMain(indicatedName));
+		}
+
+		private void AutoActionPlotForm_SuspendAutoAction(object sender, EventArgs e)
+		{
+			RequestAutoActionSuspend();
+		}
+
+		private void AutoActionPlotForm_ResumeAutoAction(object sender, EventArgs e)
+		{
+			RequestAutoActionResume();
 		}
 
 		private void AutoActionPlotForm_DeactivateAutoAction(object sender, EventArgs e)
