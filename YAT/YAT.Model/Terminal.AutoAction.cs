@@ -316,8 +316,6 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual void EvaluateAutoActionOtherThanFilterOrSuppressFromLines(Domain.RepositoryType repositoryType, Domain.DisplayLineCollection lines, CountsRatesTuple dataStatus, bool shallHighlight, out List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> triggers)
 		{
-			EvaluateAndEnqueueAutoActionClearRepositoriesOnSubsequentRx();
-
 			if (SettingsRoot.AutoAction.IsByteSequenceTriggered)
 			{
 				triggers = null;
@@ -333,6 +331,8 @@ namespace YAT.Model
 				{
 					if (dl.Direction != Domain.Direction.Tx) // Trigger by specification is only active on receive-path, no need to further evaluate Tx-only lines.
 					{
+						EvaluateAndEnqueueAutoActionClearRepositoriesOnSubsequentRx();
+
 						lock (this.autoActionTriggerHelperSyncObj)
 						{
 							if (this.autoActionTriggerHelper != null)
@@ -957,6 +957,26 @@ namespace YAT.Model
 
 			int count = Interlocked.Exchange(ref this.autoActionCount, 0);
 			OnAutoActionCountChanged_Promptly(new EventArgs<int>(count));
+		}
+
+		/// <summary>
+		/// Suspends the automatic action.
+		/// </summary>
+		public virtual void SuspendAutoAction()
+		{
+			AssertUndisposed();
+
+			AutoActionPlotModel.Suspend();
+		}
+
+		/// <summary>
+		/// Suspends the automatic action.
+		/// </summary>
+		public virtual void ResumeAutoAction()
+		{
+			AssertUndisposed();
+
+			AutoActionPlotModel.Resume();
 		}
 
 		/// <summary>

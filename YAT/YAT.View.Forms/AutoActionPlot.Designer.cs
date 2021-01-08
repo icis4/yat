@@ -47,6 +47,7 @@
 			this.toolStripMenuItem_Plot_Help = new System.Windows.Forms.ToolStripMenuItem();
 			this.button_ResetAxes = new System.Windows.Forms.Button();
 			this.label_Help = new System.Windows.Forms.Label();
+			this.button_SuspendResume = new System.Windows.Forms.Button();
 			this.contextMenuStrip_Plot.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -56,7 +57,7 @@
 			this.button_Close.Location = new System.Drawing.Point(767, 400);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
-			this.button_Close.TabIndex = 7;
+			this.button_Close.TabIndex = 8;
 			this.button_Close.Text = "&Close";
 			this.button_Close.UseVisualStyleBackColor = true;
 			this.button_Close.Click += new System.EventHandler(this.button_Close_Click);
@@ -64,7 +65,7 @@
 			// button_Clear
 			// 
 			this.button_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Clear.Location = new System.Drawing.Point(572, 400);
+			this.button_Clear.Location = new System.Drawing.Point(491, 400);
 			this.button_Clear.Name = "button_Clear";
 			this.button_Clear.Size = new System.Drawing.Size(75, 23);
 			this.button_Clear.TabIndex = 4;
@@ -91,7 +92,7 @@
 			this.button_Deactivate.Location = new System.Drawing.Point(653, 400);
 			this.button_Deactivate.Name = "button_Deactivate";
 			this.button_Deactivate.Size = new System.Drawing.Size(27, 23);
-			this.button_Deactivate.TabIndex = 5;
+			this.button_Deactivate.TabIndex = 6;
 			this.toolTip.SetToolTip(this.button_Deactivate, "Deactivate");
 			this.button_Deactivate.UseVisualStyleBackColor = true;
 			this.button_Deactivate.Click += new System.EventHandler(this.button_Deactivate_Click);
@@ -103,7 +104,7 @@
 			this.button_DeactivateAndClose.Location = new System.Drawing.Point(686, 400);
 			this.button_DeactivateAndClose.Name = "button_DeactivateAndClose";
 			this.button_DeactivateAndClose.Size = new System.Drawing.Size(75, 23);
-			this.button_DeactivateAndClose.TabIndex = 6;
+			this.button_DeactivateAndClose.TabIndex = 7;
 			this.button_DeactivateAndClose.Text = " + Cl&ose";
 			this.button_DeactivateAndClose.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this.toolTip.SetToolTip(this.button_DeactivateAndClose, "Deactivate and Close");
@@ -202,17 +203,29 @@
 			this.label_Help.AutoSize = true;
 			this.label_Help.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Help.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_Help.Location = new System.Drawing.Point(272, 405);
+			this.label_Help.Location = new System.Drawing.Point(231, 405);
 			this.label_Help.Name = "label_Help";
 			this.label_Help.Size = new System.Drawing.Size(241, 13);
 			this.label_Help.TabIndex = 3;
 			this.label_Help.Text = "Right-Click on plot for options and interaction help";
+			// 
+			// button_SuspendResume
+			// 
+			this.button_SuspendResume.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_SuspendResume.Location = new System.Drawing.Point(572, 400);
+			this.button_SuspendResume.Name = "button_SuspendResume";
+			this.button_SuspendResume.Size = new System.Drawing.Size(75, 23);
+			this.button_SuspendResume.TabIndex = 5;
+			this.button_SuspendResume.Text = "S&uspend";
+			this.button_SuspendResume.UseVisualStyleBackColor = true;
+			this.button_SuspendResume.Click += new System.EventHandler(this.button_SuspendResume_Click);
 			// 
 			// AutoActionPlot
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(884, 441);
+			this.Controls.Add(this.button_SuspendResume);
 			this.Controls.Add(this.button_DeactivateAndClose);
 			this.Controls.Add(this.label_Help);
 			this.Controls.Add(this.plotView);
@@ -257,5 +270,6 @@
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_Plot_Help;
 		private System.Windows.Forms.Label label_Help;
 		private System.Windows.Forms.Button button_DeactivateAndClose;
+		private System.Windows.Forms.Button button_SuspendResume;
 	}
 }
