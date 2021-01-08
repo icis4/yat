@@ -83,9 +83,8 @@ namespace MKY.IO.Serial
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual string ToDiagnosticsString(string indent = "")
 		{
-			var sb = new StringBuilder();
+			var sb = new StringBuilder(indent);
 
-			sb.Append(indent);
 			sb.Append(DataAsPrintableString);
 			sb.Append(" | TimeStamp = ");
 			sb.Append(TimeStamp.ToString(CultureInfo.CurrentCulture));
@@ -189,9 +188,8 @@ namespace MKY.IO.Serial
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual string ToDiagnosticsString(string indent = "")
 		{
-			var sb = new StringBuilder();
+			var sb = new StringBuilder(indent);
 
-			sb.Append(indent);
 			sb.Append((Message != null) ? Message : "(none)");
 			sb.Append(" | Direction = ");
 			sb.Append(Direction.ToString());
@@ -273,9 +271,8 @@ namespace MKY.IO.Serial
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public override string ToDiagnosticsString(string indent = "")
 		{
-			var sb = new StringBuilder();
+			var sb = new StringBuilder(indent);
 
-			sb.Append(indent);
 			sb.Append((Message != null) ? Message : "(none)");
 			sb.Append(" | Severity = ");
 			sb.Append(Severity.ToString());

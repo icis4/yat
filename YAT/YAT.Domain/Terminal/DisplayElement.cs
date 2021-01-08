@@ -1213,9 +1213,8 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual string ToDiagnosticsString(string indent = "")
 		{
-			var sb = new StringBuilder();
+			var sb = new StringBuilder(indent);
 
-			sb.Append(indent);
 			sb.Append((Text != null) ? (@"""" + StringEx.ConvertToPrintableString(Text) + @"""") : "(none)");
 			sb.Append(" | CharCount = ");
 			sb.Append(CharCount.ToString(CultureInfo.CurrentCulture));
@@ -1225,10 +1224,14 @@ namespace YAT.Domain
 			sb.Append((Origin != null) ? Origin.Count.ToString(CultureInfo.CurrentCulture) : "(none)");
 			sb.Append(" | Type = ");
 			sb.Append(GetType().Name);
+			sb.Append(" | TimeStamp = ");
+			sb.Append(TimeStamp.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo));
 			sb.Append(" | Direction = ");
 			sb.Append(Direction.ToString());
-			sb.Append(" | Flags = ");
+			sb.Append(" | Attributes = ");
 			sb.Append(Attributes.ToString());
+			sb.Append(" | Highlight = ");
+			sb.Append(Highlight.ToString());
 
 			return (sb.ToString());
 		}

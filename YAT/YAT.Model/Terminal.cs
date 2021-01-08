@@ -1398,8 +1398,8 @@ namespace YAT.Model
 					this.settingsRoot_Changed_encodingOld = SettingsRoot.Terminal.TextTerminal.Encoding; // Relevant for byte sequence based triggers.
 
 					// Encoding has changed, recreate Auto[Action|Response]:
-					UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 					UpdateAutoAction();   // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
+					UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 				}
 			}
 		}
@@ -1417,6 +1417,7 @@ namespace YAT.Model
 			}
 			else if (ReferenceEquals(e.Inner.Source, SettingsRoot.SendFile))
 			{
+			////UpdateAutoAction() is not needed, automatic actions do not deal with files, opposed to responses which include 'SendFile'.
 				UpdateAutoResponse(); // \ToDo: Not a good solution, manually gathering all relevant changes, better solution should be found.
 			}
 		}
@@ -3556,7 +3557,7 @@ namespace YAT.Model
 				OnIORateChanged_Promptly(EventArgs.Empty);    // in order to prevent duplicated events via ioRate_Changed.
 
 			// AutoAction:
-			List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> autoActionTriggers = null; // See [== AutoTrigger.AnyLine] below.
+			List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> autoActionTriggers = null; // See [== AutoTrigger.AnyLine] further below.
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine))
 			{
 				if (SettingsRoot.AutoAction.IsNotCountRatePlot) // Count/Rate Plot is limited to be processed in ioRate_Changed.
@@ -3574,7 +3575,7 @@ namespace YAT.Model
 			}
 
 			// AutoResponse:
-			List<Tuple<byte[], string, MatchCollection>> autoResponseTriggers = null;   // See [== AutoTrigger.AnyLine] below.
+			List<Tuple<byte[], string, MatchCollection>> autoResponseTriggers = null;                       // See [== AutoTrigger.AnyLine] further below.
 			if (SettingsRoot.AutoResponse.IsActive && (SettingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
 			    SettingsRoot.AutoResponse.IsTextTriggered) // Byte sequence based triggering is evaluated in terminal_DisplayElements[Bidir|Rx]Added.
 			{
@@ -6136,6 +6137,13 @@ namespace YAT.Model
 		//==========================================================================================
 		// Debug
 		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		protected void DebugMessage(string format, params object[] args)
+		{
+			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+		}
 
 		/// <remarks>
 		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
