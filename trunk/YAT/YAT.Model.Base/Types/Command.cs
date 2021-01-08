@@ -809,9 +809,8 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public virtual string ToDiagnosticsString(string indent)
 		{
-			var sb = new StringBuilder();
+			var sb = new StringBuilder(indent);
 
-			sb.Append(indent);
 			sb.Append(Caption);
 			sb.Append(" | IsDefined = ");
 			sb.Append(IsDefined.ToString(CultureInfo.CurrentCulture));

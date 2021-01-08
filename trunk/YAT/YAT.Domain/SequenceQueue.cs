@@ -28,8 +28,10 @@
 //==================================================================================================
 
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
+
+using MKY;
 
 #endregion
 
@@ -244,6 +246,28 @@ namespace YAT.Domain
 			return (clone);
 		}
 
+		/// <summary></summary>
+		public virtual string SequenceToString()
+		{
+			var str = Utilities.ByteHelper.FormatHexString(Sequence, Settings.DisplaySettings.ShowRadixDefault);
+
+			if (string.IsNullOrEmpty(str))
+				return (str);
+			else
+				return ("(empty)");
+		}
+
+		/// <summary></summary>
+		public virtual string QueueToString()
+		{
+			var str = Utilities.ByteHelper.FormatHexString(QueueAsArray(), Settings.DisplaySettings.ShowRadixDefault);
+
+			if (!string.IsNullOrEmpty(str))
+				return (str);
+			else
+				return ("(empty)");
+		}
+
 		#endregion
 
 		#region Non-Public Methods
@@ -302,6 +326,39 @@ namespace YAT.Domain
 				}
 			}
 			this.state = evaluatedState;
+		}
+
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		public override string ToString()
+		{
+			return (QueueToString()); 
+		}
+
+		/// <summary>
+		/// Converts the value of this instance to its equivalent string representation.
+		/// </summary>
+		/// <remarks>
+		/// Extended <see cref="ToString()"/> method which can be used for trace/debug.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public virtual string ToExtendedDiagnosticsString(string indent = "")
+		{
+			var sb = new StringBuilder();
+
+			sb.AppendLine(indent + "> Sequence: " + SequenceToString());
+			sb.AppendLine(indent + "> Queue:    " + QueueToString());
+			sb.AppendLine(indent + "> State:    " + this.state.ToString());
+
+			return (sb.ToString());
 		}
 
 		#endregion

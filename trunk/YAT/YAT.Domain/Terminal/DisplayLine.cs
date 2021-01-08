@@ -702,7 +702,7 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			return (ElementsToString()); // Opposed to ...Diagnostics...() below, this is a 'real' ToString() method.
+			return (ElementsToString());
 		}
 
 		/// <summary>
@@ -718,9 +718,10 @@ namespace YAT.Domain
 
 			sb.AppendLine(indent + "> TimeStamp: " +      TimeStamp.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo));
 			sb.AppendLine(indent + "> Direction: " +      Direction.ToString());
-			sb.AppendLine(indent + "> ElementCount: " +       Count.ToString(CultureInfo.CurrentCulture));
+			sb.AppendLine(indent + "> Highlight: " +      Highlight.ToString(CultureInfo.CurrentCulture));
 			sb.AppendLine(indent + "> CharCount: " + this.charCount.ToString(CultureInfo.CurrentCulture));
 			sb.AppendLine(indent + "> ByteCount: " + this.byteCount.ToString(CultureInfo.CurrentCulture));
+			sb.AppendLine(indent + "> ElementCount: " +       Count.ToString(CultureInfo.CurrentCulture));
 			sb.AppendLine(indent + "> Elements:");
 			sb.AppendLine(ElementsToExtendedDiagnosticsString(indent + "   "));
 

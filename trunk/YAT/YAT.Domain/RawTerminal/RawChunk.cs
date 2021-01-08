@@ -120,7 +120,12 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ContentToString()
 		{
-			return (Utilities.ByteHelper.FormatHexString(Content, Settings.DisplaySettings.ShowRadixDefault));
+			var str = Utilities.ByteHelper.FormatHexString(Content, Settings.DisplaySettings.ShowRadixDefault);
+
+			if (!string.IsNullOrEmpty(str))
+				return (str);
+			else
+				return ("(empty)");
 		}
 
 		#endregion
@@ -162,7 +167,7 @@ namespace YAT.Domain
 			sb.AppendLine(indent + "> TimeStamp: " + TimeStamp.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo));
 			sb.AppendLine(indent + "> Device:    " + Device);
 			sb.AppendLine(indent + "> Direction: " + Direction);
-			sb.AppendLine(indent + "> Content:   " + ContentToString()); // Content same as ToString().
+			sb.AppendLine(indent + "> Content:   " + ContentToString());
 
 			return (sb.ToString());
 		}

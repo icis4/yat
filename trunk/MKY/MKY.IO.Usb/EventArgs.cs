@@ -91,9 +91,8 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public virtual string ToDiagnosticsString(string indent)
 		{
-			var sb = new StringBuilder();
+			var sb = new StringBuilder(indent);
 
-			sb.Append(indent);
 			sb.Append(DataAsPrintableString);
 			sb.Append(" | TimeStamp = ");
 			sb.Append(TimeStamp.ToString(CultureInfo.CurrentCulture));

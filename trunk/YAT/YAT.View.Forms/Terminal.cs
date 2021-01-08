@@ -7398,7 +7398,7 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsTxAdded(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (UseDisplayElementsAdded) // See propery for background.
+			if (UseDisplayElementsAdded) // See property for background.
 			{
 				if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)
 					monitor_Tx.AddElements(e.Elements);
@@ -7412,7 +7412,7 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsBidirAdded(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (UseDisplayElementsAdded) // See propery for background.
+			if (UseDisplayElementsAdded) // See property for background.
 			{
 				if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
 					monitor_Bidir.AddElements(e.Elements);
@@ -7424,7 +7424,7 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsRxAdded(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (UseDisplayElementsAdded) // See propery for background.
+			if (UseDisplayElementsAdded) // See property for background.
 			{
 				if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
 					monitor_Rx.AddElements(e.Elements);
@@ -7500,7 +7500,7 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesTxAdded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (!UseDisplayElementsAdded) // See propery for background.
+			if (!UseDisplayElementsAdded) // See property for background.
 			{
 				if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)
 					monitor_Tx.AddLines(e.Lines);
@@ -7514,7 +7514,7 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesBidirAdded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (!UseDisplayElementsAdded) // See propery for background.
+			if (!UseDisplayElementsAdded) // See property for background.
 			{
 				if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
 					monitor_Bidir.AddLines(e.Lines);
@@ -7526,7 +7526,7 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesRxAdded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (!UseDisplayElementsAdded) // See propery for background.
+			if (!UseDisplayElementsAdded) // See property for background.
 			{
 				if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
 					monitor_Rx.AddLines(e.Lines);
@@ -8604,6 +8604,13 @@ namespace YAT.View.Forms
 		//==========================================================================================
 		// Debug
 		//==========================================================================================
+
+		/// <summary></summary>
+		[Conditional("DEBUG")]
+		protected void DebugMessage(string format, params object[] args)
+		{
+			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+		}
 
 		/// <remarks>
 		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
