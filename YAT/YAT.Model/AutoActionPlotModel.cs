@@ -226,8 +226,8 @@ namespace YAT.Model
 			foreach (var series in OxyModel.Series)
 			{
 				var points = ((OxyPlot.Series.LineSeries)series).Points;
-				if (x < (points.Count - 1))
-					x = (points.Count - 1);
+				if (x < points.Count) // New point is just about being added,
+					x = points.Count; // i.e. results in 0 - 1 - 2 - 3 - ...
 			}
 
 			int pointsTotalCount = 0;
