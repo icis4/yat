@@ -557,7 +557,7 @@ namespace MKY.Net
 				result = new IPHostEx(IPHost.Localhost);
 				return (true);
 			}
-			else if (StringEx.StartsWithOrdinalIgnoreCase(s, IPv4Localhost_string)) // Explicit IPv4, i.e. adress is appended in parenthesis.
+			else if (StringEx.StartsWithOrdinalIgnoreCase(s, IPv4Localhost_string)) // Explicit IPv4, i.e. adress is appended in parentheses.
 			{
 				result = new IPHostEx(IPHost.IPv4Localhost);
 				return (true);
@@ -567,12 +567,12 @@ namespace MKY.Net
 				result = new IPHostEx(IPHost.Broadcast);
 				return (true);
 			}
-			else if (StringEx.StartsWithOrdinalIgnoreCase(s, IPv4Broadcast_string)) // Explicit IPv4, i.e. adress is appended in parenthesis.
+			else if (StringEx.StartsWithOrdinalIgnoreCase(s, IPv4Broadcast_string)) // Explicit IPv4, i.e. adress is appended in parentheses.
 			{
 				result = new IPHostEx(IPHost.IPv4Broadcast);
 				return (true);
 			}
-			else if (StringEx.StartsWithOrdinalIgnoreCase(s, IPv6Localhost_string)) // Explicit IPv6, i.e. adress is appended in parenthesis.
+			else if (StringEx.StartsWithOrdinalIgnoreCase(s, IPv6Localhost_string)) // Explicit IPv6, i.e. adress is appended in parentheses.
 			{
 				result = new IPHostEx(IPHost.IPv6Localhost);
 				return (true);

@@ -672,22 +672,22 @@ namespace MKY.Net
 				result = new IPNetworkInterfaceEx(IPNetworkInterface.Loopback);
 				return (true);
 			}
-			else if (StringEx.StartsWithOrdinalIgnoreCase(s, IPv4Any_string)) // Explicit IPv4, i.e. adress is appended in parenthesis.
+			else if (StringEx.StartsWithOrdinalIgnoreCase(s, IPv4Any_string)) // Explicit IPv4, i.e. adress is appended in parentheses.
 			{
 				result = new IPNetworkInterfaceEx(IPNetworkInterface.IPv4Any);
 				return (true);
 			}
-			else if (StringEx.StartsWithOrdinalIgnoreCase(s, IPv4Loopback_string)) // Explicit IPv4, i.e. adress is appended in parenthesis.
+			else if (StringEx.StartsWithOrdinalIgnoreCase(s, IPv4Loopback_string)) // Explicit IPv4, i.e. adress is appended in parentheses.
 			{
 				result = new IPNetworkInterfaceEx(IPNetworkInterface.IPv4Loopback);
 				return (true);
 			}
-			else if (StringEx.StartsWithOrdinalIgnoreCase(s, IPv6Any_string)) // Explicit IPv4, i.e. adress is appended in parenthesis.
+			else if (StringEx.StartsWithOrdinalIgnoreCase(s, IPv6Any_string)) // Explicit IPv4, i.e. adress is appended in parentheses.
 			{
 				result = new IPNetworkInterfaceEx(IPNetworkInterface.IPv6Any);
 				return (true);
 			}
-			else if (StringEx.StartsWithOrdinalIgnoreCase(s, IPv6Loopback_string)) // Explicit IPv4, i.e. adress is appended in parenthesis.
+			else if (StringEx.StartsWithOrdinalIgnoreCase(s, IPv6Loopback_string)) // Explicit IPv4, i.e. adress is appended in parentheses.
 			{
 				result = new IPNetworkInterfaceEx(IPNetworkInterface.IPv6Loopback);
 				return (true);
