@@ -118,7 +118,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\x1A\n",		new byte[] { 0x1A, 0x0A }).SetName("Subsequent C-style escape"));
 				yield return (new TestCaseData(@"\x1A<LF>",		new byte[] { 0x1A, 0x0A }).SetName("Subsequent ASCII value"));
 				yield return (new TestCaseData(@"\x1A\h(0A)",	new byte[] { 0x1A, 0x0A }).SetName("Subsequent YAT value"));
-				yield return (new TestCaseData(@"\x1A\h(0A",	new byte[] { 0x1A, 0x0A }).SetName("Subsequent YAT value without closing parentheses"));
+				yield return (new TestCaseData(@"\x1A\h(0A",	new byte[] { 0x1A, 0x0A }).SetName("Subsequent YAT value without closing parenthesis"));
 				yield return (new TestCaseData(@"\xFFFE",		new byte[] { 0xFF, 0xFE }).SetName("C-style hexadecimal Unicode BOM"));
 
 				// ASCII:
@@ -138,7 +138,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"<ESC>",		new byte[] { 0x1B } ).SetName("ASCII <ESC>"));
 				yield return (new TestCaseData(@"<cr><lf>",		new byte[] { 0x0D, 0x0A } ).SetName("ASCII <cr><lf>"));
 				yield return (new TestCaseData(@"<cR><Lf>",		new byte[] { 0x0D, 0x0A } ).SetName("ASCII <cR><Lf>"));
-				yield return (new TestCaseData(@"<CR LF",		new byte[] { 0x0D, 0x0A } ).SetName("ASCII <CR LF> without closing parentheses"));
+				yield return (new TestCaseData(@"<CR LF",		new byte[] { 0x0D, 0x0A } ).SetName("ASCII <CR LF> without closing parenthesis"));
 
 				// Parentheses & Co:
 				yield return (new TestCaseData(@"Hello (par)",				new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x28, 0x70, 0x61, 0x72, 0x29 } ).SetName("Parentheses"));
@@ -162,9 +162,9 @@ namespace YAT.Domain.Test.Parser
 				// Char:
 				yield return (new TestCaseData(@"Single char \c(9)",				new byte[] { 0x53, 0x69, 0x6E, 0x67, 0x6C, 0x65, 0x20, 0x63, 0x68, 0x61, 0x72, 0x20, 0x39 } ).SetName("Char single '9'"));
 				yield return (new TestCaseData(@"Single char \c(.)",				new byte[] { 0x53, 0x69, 0x6E, 0x67, 0x6C, 0x65, 0x20, 0x63, 0x68, 0x61, 0x72, 0x20, 0x2E } ).SetName("Char single '.'"));
-				yield return (new TestCaseData(@"Single char \c(.",					new byte[] { 0x53, 0x69, 0x6E, 0x67, 0x6C, 0x65, 0x20, 0x63, 0x68, 0x61, 0x72, 0x20, 0x2E } ).SetName("Char single '.' without closing parentheses"));
-				yield return (new TestCaseData(@"Hello \c(()par\c()) OK",			new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x28, 0x70, 0x61, 0x72, 0x29, 0x20, 0x4F, 0x4B } ).SetName("Char parenthesis 1"));
-				yield return (new TestCaseData(@"\c(H)\c(e)llo \c(()par\c()) OK",	new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x28, 0x70, 0x61, 0x72, 0x29, 0x20, 0x4F, 0x4B } ).SetName("Char parenthesis 2"));
+				yield return (new TestCaseData(@"Single char \c(.",					new byte[] { 0x53, 0x69, 0x6E, 0x67, 0x6C, 0x65, 0x20, 0x63, 0x68, 0x61, 0x72, 0x20, 0x2E } ).SetName("Char single '.' without closing parenthesis"));
+				yield return (new TestCaseData(@"Hello \c(()par\c()) OK",			new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x28, 0x70, 0x61, 0x72, 0x29, 0x20, 0x4F, 0x4B } ).SetName("Char parentheses 1"));
+				yield return (new TestCaseData(@"\c(H)\c(e)llo \c(()par\c()) OK",	new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x28, 0x70, 0x61, 0x72, 0x29, 0x20, 0x4F, 0x4B } ).SetName("Char parentheses 2"));
 				yield return (new TestCaseData(@"Empty \c()",						new byte[] { 0x45, 0x6D, 0x70, 0x74, 0x79, 0x20 } ).SetName("Char empty"));
 
 				// Bin:
@@ -189,7 +189,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\b( 01)",							new byte[] { 0x01 } ).SetName("Bin 01 leading space"));
 				yield return (new TestCaseData(@"\b(01 )",							new byte[] { 0x01 } ).SetName("Bin 01 trailing space"));
 				yield return (new TestCaseData(@"\b(   01   )",						new byte[] { 0x01 } ).SetName("Bin 01 leading and trailing space"));
-				yield return (new TestCaseData(@"\b(   01   ",						new byte[] { 0x01 } ).SetName("Bin 01 leading and trailing space without closing parentheses"));
+				yield return (new TestCaseData(@"\b(   01   ",						new byte[] { 0x01 } ).SetName("Bin 01 leading and trailing space without closing parenthesis"));
 
 				// Oct:
 				yield return (new TestCaseData(@"\o()",								new byte[] { }).SetName("Oct empty"));
@@ -211,13 +211,13 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\o(4313544)",						new byte[] { 0x23, 0x5D, 0x24 } ).SetName("Oct sequence 2"));
 				yield return (new TestCaseData(@"\o(4313511)",						new byte[] { 0x23, 0x5D, 0x09 } ).SetName("Oct sequence 3"));
 				yield return (new TestCaseData(@"\o( 01)",							new byte[] { 0x01 } ).SetName("Oct 01 leading space"));
-				yield return (new TestCaseData(@"\o( 01",							new byte[] { 0x01 } ).SetName("Oct 01 leading space without closing parentheses"));
+				yield return (new TestCaseData(@"\o( 01",							new byte[] { 0x01 } ).SetName("Oct 01 leading space without closing parenthesis"));
 				yield return (new TestCaseData(@"\o(01 )",							new byte[] { 0x01 } ).SetName("Oct 01 trailing space"));
 				yield return (new TestCaseData(@"\o(   01   )",						new byte[] { 0x01 } ).SetName("Oct 01 leading and trailing space"));
 
 				// Dec:
 				yield return (new TestCaseData(@"\d()",								new byte[] { }).SetName("Dec empty"));
-				yield return (new TestCaseData(@"\d()",								new byte[] { }).SetName("Dec empty without closing parentheses"));
+				yield return (new TestCaseData(@"\d()",								new byte[] { }).SetName("Dec empty without closing parenthesis"));
 				yield return (new TestCaseData(@"\d(   )",							new byte[] { }).SetName("Dec still empty"));
 				yield return (new TestCaseData(@"\d(0)",							new byte[] { 0x00 } ).SetName("Dec 0"));
 				yield return (new TestCaseData(@"\d(1)",							new byte[] { 0x01 } ).SetName("Dec 1"));
@@ -253,7 +253,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\h(AA)",							new byte[] { 0xAA } ).SetName("Hex AA"));
 				yield return (new TestCaseData(@"\h(FE)",							new byte[] { 0xFE } ).SetName("Hex FE"));
 				yield return (new TestCaseData(@"\h(FF)",							new byte[] { 0xFF } ).SetName("Hex FF"));
-				yield return (new TestCaseData(@"\h(FF",							new byte[] { 0xFF } ).SetName("Hex FF without closing parentheses"));
+				yield return (new TestCaseData(@"\h(FF",							new byte[] { 0xFF } ).SetName("Hex FF without closing parenthesis"));
 				yield return (new TestCaseData(@"\h(0000)",							new byte[] { 0x00, 0x00 } ).SetName("Hex 0000"));
 				yield return (new TestCaseData(@"\h(00 00)",						new byte[] { 0x00, 0x00 } ).SetName("Hex 00 00"));
 				yield return (new TestCaseData(@"\h(0001)",							new byte[] { 0x00, 0x01 } ).SetName("Hex 0001"));
