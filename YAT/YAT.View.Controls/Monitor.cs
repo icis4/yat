@@ -1266,7 +1266,7 @@ namespace YAT.View.Controls
 						e.DrawBackground();
 
 						var dl = (lbmon.Items[e.Index] as Domain.DisplayLine);
-						MonitorRenderer.DrawAndMeasureLine(dl.Text, dl.Highlight, e.Font,
+						MonitorRenderer.DrawAndMeasureLine(dl, e.Font,
 						                                   e.Graphics, e.Bounds, e.State, e.ForeColor, e.BackColor, out requestedWidth);
 						e.DrawFocusRectangle();
 

@@ -120,13 +120,14 @@ namespace YAT.View.Controls
 		/// This overload is used if formatting is disabled.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static void DrawAndMeasureLine(string text, bool highlight, Font font,
+		public static void DrawAndMeasureLine(Domain.DisplayLine line, Font font,
 		                                      Graphics g, Rectangle bounds, DrawItemState state,
 		                                      Color foreColor, Color backColor,
 		                                      out int requestedWidth)
 		{
-			HandleSelectionAndHighlight(state, highlight, ref foreColor, ref backColor);
+			HandleSelectionAndHighlight(state, line.Highlight, ref foreColor, ref backColor);
 
+			var text = line.Text;
 			TextRenderer.DrawText(g, text, font, bounds, foreColor, backColor, staticMonitorFormat);
 
 			var requestedSize = TextRenderer.MeasureText(g, text, font, bounds.Size, staticMonitorFormat);
@@ -297,8 +298,8 @@ namespace YAT.View.Controls
 			//  (               line is selected      ) || (highlight)
 			if (((state & DrawItemState.Selected) != 0) || (highlight))
 			{
-				foreColor = SystemColors.HighlightText;
-				backColor = SystemColors.Highlight;
+				foreColor = SystemColors.HighlightText; // Note that only the text shall be highlighted, opposed to
+				backColor = SystemColors.Highlight;     // selection, where the full width of the list item is highlighted.
 			}
 		}
 
@@ -307,8 +308,8 @@ namespace YAT.View.Controls
 			//  (               line is selected      ) || (highlight)
 			if (((state & DrawItemState.Selected) != 0) || (highlight))
 			{
-				foreColor = SystemColors.HighlightText;
-				backColor = SystemColors.Highlight;
+				foreColor = SystemColors.HighlightText; // Note that only the text shall be highlighted, opposed to
+				backColor = SystemColors.Highlight;     // selection, where the full width of the list item is highlighted.
 			}
 			else
 			{
