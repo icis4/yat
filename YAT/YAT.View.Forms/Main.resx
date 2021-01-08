@@ -152,8 +152,8 @@ e.g. "&lt;ETB&gt;&lt;NUL&gt;" or "\h(17 00)", or any other parseable text, e.g. 
 
 Optionally, [Use Text] to switch to a trigger based on text.
 
-Optionally, [Enable Regular Expression] and fill in an expression containing
-a capture pattern. Some useful patterns (use without surrounding quotes):
+Optionally, [Enable Regular Expression] and fill in an expression pattern.
+Some useful patterns (use without surrounding quotes):
 
 Integral numbers: "([-+]?\d+)"
 Floating point numbers in normal format: "([-+]?(?:\d+(?:\.\d*)?|\.\d+))"
@@ -166,25 +166,35 @@ A string of 2..4 letters: "\b([A-Za-z]{2,4})\b"
 
 Google for ".NET Regular Expression Quick Reference" for details on syntax.
 Google for "C# Regex Tester" for online tools to help creating regular expressions.
+It is recommended to test regular expression patterns before applying them.
 
 Note that...
-...[Any Line] is not available if action is [Highlight] or [Suppress], as that would otherwise result in all received lines being highlighted or suppressed.
+...[Any Line] is not available if action is [Highlight] or [Suppress], as that
+      would result in all received lines being highlighted or suppressed.
 ...same as other actions, [Filter] and [Suppress] are only applied to received data.
-...[Plot ... Count/Rate] are applied to any trigger and to sent and received data.</value>
+...[Plot ... Count/Rate] are applied to any trigger and to received as well as sent data.</value>
   </data>
   <data name="toolStripComboBox_MainTool_AutoAction_Action.ToolTipText" xml:space="preserve">
     <value>Enable / Disable Automatic Action
 
-[Line/Scatter/Histogram] require that trigger is based on a regular expression, as the regular expression captures (e.g. "([-+]?\d+)") are used to retrieve the values to plot.
-All captures will be treated as Y values, unless for action stating "(X = Time)" where the first capture will be treated as the X value.
+[Line/Scatter/Histogram] require a trigger that is based on a regular expression containing at least one
+capture (i.e. a pattern in parentheses, e.g. "(\d+)") which is used to retrieve the values to plot.
+
+All captures will be treated as Y values, unless for actions stating "(X = ...)" where the first capture
+will be treated as the X value.
+
 Date/Time values are converted to "OLE Automation Date" values. Google that term for details.
-Captures that can neither be converted to an integral or floating point number, nor a date/time value, are treated as strings. Strings are converted to a value by summing the code of each character. This allows plotting elements defined by characters (e.g. A, B, C) or even whole strings.
+
+Captures that can neither be converted to an integral nor floating point number, nor a date/time value,
+are treated as strings. Strings are converted to a value by summing the code of each character.
+This allows plotting elements defined by characters (e.g. A, B, C) or even whole strings.
 
 Note that...
 ...trigger is highlighted for every action except [Filter], [Suppress] and [Line/Scatter/Histogram].
-...[Highlight] and [Suppress] is not available if trigger is [Any Line], as that would otherwise result in all received lines being highlighted or suppressed.
+...[Highlight] and [Suppress] is not available if trigger is [Any Line], as that
+      would result in all received lines being highlighted or suppressed.
 ...same as other actions, [Filter] and [Suppress] are only applied to received data.
-......[Plot ... Count/Rate] are applied to any trigger and to sent and received data.</value>
+...[Plot ... Count/Rate] are applied to any trigger and to received as well as sent data.</value>
   </data>
   <data name="toolStripComboBox_MainTool_AutoResponse_Trigger.ToolTipText" xml:space="preserve">
     <value>Configure Automatic Response Trigger.
@@ -194,8 +204,8 @@ e.g. "&lt;ETB&gt;&lt;NUL&gt;" or "\h(17 00)", or any other parseable text, e.g. 
 
 Optionally, [Use Text] to switch to a trigger based on text.
 
-Optionally, [Enable Regular Expression] and fill in an expression containing
-a capture pattern. Some useful patterns (use without surrounding quotes):
+Optionally, [Enable Regular Expression] and fill in an expression pattern.
+Some useful patterns (use without surrounding quotes):
 
 Integral numbers: "([-+]?\d+)"
 Floating point numbers in normal format: "([-+]?(?:\d+(?:\.\d*)?|\.\d+))"
@@ -207,14 +217,15 @@ A single capital letter: "\b([A-Z]{1})\b"
 A string of 2..4 letters: "\b([A-Za-z]{2,4})\b"
 
 Google for ".NET Regular Expression Quick Reference" for details on syntax.
-Google for "C# Regex Tester" for online tools to help creating regular expressions.</value>
+Google for "C# Regex Tester" for online tools to help creating regular expressions.
+It is recommended to test regular expression patterns before applying them.</value>
   </data>
   <data name="toolStripButton_MainTool_AutoResponse_Response_EnableReplace.ToolTipText" xml:space="preserve">
     <value>Enable Replace
 [Alt+R] (while editing)
 
-Requires that trigger uses text with enabled regular expression,
-because replacement is done based on regular expression captures.
+Requires a trigger that is based on a regular expression containing at least one capture (i.e. a pattern
+in parentheses, e.g. "(\d+)") because replacement is done based on regular expression captures.
 
 Example usage:
  &gt; Trigger = (\d+)ABC

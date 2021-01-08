@@ -155,7 +155,7 @@ Important changes:
 - Changes on-the-fly by keywords like \!(Port()), \!(PortSettings()), \!(Baud()),... are now
   reflected in the terminal settings, i.e. also indicated by '*' (related to reqs. #71 and #403).
 - [Terminal > Settings... > Advanced...] dialog rearranged for better fitting screen.
-- Upgrade to .NET 4 Runtime and .NET 4.8 Framework (part of feature request #229, precondition for
+- Upgrade to .NET Runtime 4 and .NET Framework 4.8 (part of feature request #229, precondition for
   new automatic actions [Chart/Plot/Histogram] and upcoming feature request #74 [Scripting]).
   Consequently, x64 distributions no longer need to be 'AnyCPU' builds (former limitation).
 - Improved error message in case the required version of .NET is missing.
@@ -193,9 +193,9 @@ Fixed bugs:
      (bugs #85, #235, #375) nor some blurring on Win 8 and above (feature request #310).
    > Use of serial COM ports on disconnect, undock or hibernate without closing the port should
      no longer result in an 'ObjectDisposedException' or 'UnauthorizedAccessException' (bugs #224,
-     #254, #293, #316, #317, #345, #382, #385, #387, #401, #442) nor should no longer result in
-     deadlocks, though not all potential causes for this issue in the .NET 'SerialPort' class may
-     be verified.
+     #254, #293, #316, #317, #345, #382, #385, #387, #401, #442) and should neither result in
+     deadlocks anymore, though not all potential causes for this issue in the .NET 'SerialPort'
+     class could be verified.
    > Running YAT for a long period, or creating many terminals, no longer results in memory leaks,
      previously resulting in gradual increase of memory consumption (RAM) (bugs #243, #263, #336).
 
@@ -238,7 +238,7 @@ Limitations and known issues:
 
 
 (Versions 2.2 and 2.3 have been skipped to emphasize the update to .NET 4.x while still keeping the
-option for releasing the 2.4+ features (except plotting) also on .NET 2.0 Runtime / 3.5 Framework.)
+option for releasing the 2.4+ features (except plotting) also on .NET Runtime 2.0 / Framework 3.5.)
 
 
 YAT 2.1.0 :: 2019-10-04
