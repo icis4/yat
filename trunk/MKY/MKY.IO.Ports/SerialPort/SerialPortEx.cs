@@ -49,6 +49,7 @@ using System.Drawing;
 using System.Globalization;
 //// 'System.IO.Ports' is explicitly used due to ambiguity of event args type names.
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -970,9 +971,19 @@ namespace MKY.IO.Ports
 				try
 				{
 					if (openTask.Wait(PortOpenTimeout))
+					{
 						DebugOpenClose("...done");
+					}
 					else
+					{
 						DebugOpenClose("...timeout!");
+
+						var sb = new StringBuilder();
+						sb.Append("Timeout when attempting to open ");
+						sb.Append(ToString());
+						sb.Append("! Timeout is likely caused by the deadlock issue documented in the release notes.");
+						throw (new System.IO.IOException(sb.ToString()));
+					}
 				}
 				catch (AggregateException ex)
 				{
