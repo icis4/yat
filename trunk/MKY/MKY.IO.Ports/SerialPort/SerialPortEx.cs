@@ -885,13 +885,14 @@ namespace MKY.IO.Ports
 		/// If the registry contains stale or otherwise incorrect data then
 		/// <see cref="System.IO.Ports.SerialPort.GetPortNames()"/> will return incorrect data.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public static new string[] GetPortNames()
 		{
 			try
 			{
 				return (System.IO.Ports.SerialPort.GetPortNames());
 			}
-			catch
+			catch // Attention, the MSDN API documentation only lists 'Win32Exception' while 'IOException' has also been observed!
 			{
 				// Example of an exception where it shouldn't throw:
 				//

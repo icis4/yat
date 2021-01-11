@@ -47,7 +47,7 @@ namespace MKY.IO
 		/// <summary>
 		/// Determines whether the given path can be written to.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
+		[SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity", Justification = "Review the imperative security demands to make sure that the state of the permission does not rely on information that can change as long as the permission is being used.")]
 		public static bool IsWritable(string path)
 		{
 			var set = new PermissionSet(PermissionState.None);
