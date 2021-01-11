@@ -354,7 +354,7 @@ namespace YAT.Application.Test
 
 			dr = MessageBoxEx.Show
 			(
-				"Did " + ApplicationEx.ProductName + " open with a serial COM port terminal?",
+				"Did " + ApplicationEx.ProductName + " open with a serial COM port terminal containing predefined commands?",
 				"Confirmation",
 				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Information,
@@ -444,7 +444,7 @@ namespace YAT.Application.Test
 
 			dr = MessageBoxEx.Show
 			(
-				"Did " + ApplicationEx.ProductName + " open a serial COM port terminal?",
+				"Did " + ApplicationEx.ProductName + " open with a serial COM port terminal?",
 				"Confirmation",
 				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Information,
@@ -457,16 +457,44 @@ namespace YAT.Application.Test
 
 		#endregion
 
-		#region Tests > ClearedOptions
+		#region Tests > NoArgs/Help/Logo/Version
 		//------------------------------------------------------------------------------------------
-		// Tests > ClearedOptions
+		// Tests > NoArgs/Help/Logo/Version
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		[Test]
-		public virtual void TestClearedOptions()
+		public virtual void TestNoArgs()
 		{
 			var main = new Main(null);
+
+			PrepareRunAndVerifyResult(main, MainResult.Success);
+
+			Assert.That(main.CommandLineIsValid,            Is.True);
+			Assert.That(main.CommandLineHelpIsRequested,    Is.False);
+			Assert.That(main.CommandLineLogoIsRequested,    Is.False);
+			Assert.That(main.CommandLineVersionIsRequested, Is.False);
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestHelp()
+		{
+			var main = new Main(new string[] { "--Help" });
+
+			PrepareRunAndVerifyResult(main, MainResult.Success);
+
+			Assert.That(main.CommandLineIsValid,            Is.True);
+			Assert.That(main.CommandLineHelpIsRequested,    Is.True);
+			Assert.That(main.CommandLineLogoIsRequested,    Is.False);
+			Assert.That(main.CommandLineVersionIsRequested, Is.False);
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestLogo()
+		{
+			var main = new Main(new string[] { "--Logo" });
 
 			PrepareRunAndVerifyResult(main, MainResult.Success);
 
@@ -476,16 +504,9 @@ namespace YAT.Application.Test
 			Assert.That(main.CommandLineVersionIsRequested, Is.False);
 		}
 
-		#endregion
-
-		#region Tests > SetOptions
-		//------------------------------------------------------------------------------------------
-		// Tests > SetOptions
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
 		[Test]
-		public virtual void TestSetOptions()
+		public virtual void TestVersion()
 		{
 			var main = new Main(new string[] { "--Version" });
 

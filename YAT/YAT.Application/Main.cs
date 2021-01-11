@@ -964,6 +964,9 @@ namespace YAT.Application
 							this.RunFullyFromConsole_exitedResult = Model.MainResult.ApplicationRunError; // Will be overridden by the 'Exited' event handler.
 							model.Exited += RunFullyFromConsole_Exited;
 
+							if (!model.LaunchArgs.IsAutoRun)     // 'AutoRun' will eventually 'Exit()', otherwise
+								model.Exit(Model.ExitMode.Auto); // (for testing purposes) 'Exit()' immediately.
+
 							while (model.IsUndisposed)
 							{
 								// WaitOne() would wait forever if the model has crashed for whatever reason.
@@ -1108,7 +1111,10 @@ namespace YAT.Application
 						using (this.RunInvisible_exitedEvent = new AutoResetEvent(false))
 						{
 							this.RunInvisible_exitedResult = Model.MainResult.ApplicationRunError; // Will be overridden by the 'Exited' event handler.
-							model.Exited += RunFullyFromConsole_Exited;
+							model.Exited += RunInvisible_Exited;
+
+							if (!model.LaunchArgs.IsAutoRun)     // 'AutoRun' will eventually 'Exit()', otherwise
+								model.Exit(Model.ExitMode.Auto); // (for testing purposes) 'Exit()' immediately.
 
 							while (model.IsUndisposed)
 							{
@@ -1121,7 +1127,7 @@ namespace YAT.Application
 									continue; // to periodically check state.
 							}
 
-							model.Exited -= RunFullyFromConsole_Exited;
+							model.Exited -= RunInvisible_Exited;
 							modelResult = this.RunInvisible_exitedResult;
 						}
 					}
