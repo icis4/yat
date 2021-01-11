@@ -1542,7 +1542,7 @@ namespace YAT.Domain
 
 		/// <summary>
 		/// E.g. a model's automatic action or response may activate the 'Highlight' state
-		/// on the elements. This state must be propageted to the corresponding line(s).
+		/// on the elements. This state must be propagated to the corresponding line(s).
 		/// </summary>
 		/// <remarks>
 		/// This implementation is not ideal, as a feedback from the model via this domain

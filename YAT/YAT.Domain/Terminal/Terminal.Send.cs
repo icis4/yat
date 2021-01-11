@@ -157,6 +157,8 @@ namespace YAT.Domain
 		/// </summary>
 		/// <remarks>
 		/// Value is approximate! It may be off by a factor of 2..5, depending on environment and I/O related settings!
+		///
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		protected double ApproximateTypicalNumberOfBytesPerMillisecond { get; private set; }
 
