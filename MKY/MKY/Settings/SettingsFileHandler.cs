@@ -311,7 +311,10 @@ namespace MKY.Settings
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public void SaveToFile<T>(T settings, string filePath)
 		{
-			string backup = PathEx.GetUniqueTempPath(); // Backup file can be located anywhere.
+			// The backup file must not be fixed to "fileName.bak" or "filePath.bak" as the
+			// file could manually have been backed up to that location/name by the user.
+			// Thus, using a globally unique location:
+			string backup = PathEx.GetUniqueTempPath();
 
 			try
 			{
