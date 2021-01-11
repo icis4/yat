@@ -897,8 +897,13 @@ namespace YAT.Application
 		// Non-Public Methods > RunFullyFromConsole
 		//------------------------------------------------------------------------------------------
 
-		Model.MainResult RunFullyFromConsole_exitedResult;
-		AutoResetEvent RunFullyFromConsole_exitedEvent;
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'exited' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private Model.MainResult RunFullyFromConsole_exitedResult;
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'exited' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private AutoResetEvent RunFullyFromConsole_exitedEvent;
 
 		/// <summary>
 		/// Non-view application for automated test usage.
@@ -1039,8 +1044,13 @@ namespace YAT.Application
 		// Non-Public Methods > RunInvisible
 		//------------------------------------------------------------------------------------------
 
-		Model.MainResult RunInvisible_exitedResult;
-		AutoResetEvent RunInvisible_exitedEvent;
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'exited' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private Model.MainResult RunInvisible_exitedResult;
+
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "'exited' does start with a lower case letter.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
+		private AutoResetEvent RunInvisible_exitedEvent;
 
 		/// <summary>
 		/// Non-view application for automated test usage.

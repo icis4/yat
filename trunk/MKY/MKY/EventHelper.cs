@@ -95,10 +95,10 @@ namespace MKY
 	/// <list type="bullet">
 	/// <item>
 	/// <description>Preventing <see cref="InvalidAsynchronousStateException"/></description>
-	/// "Fehler beim Aufrufen der Methode. Der Zielthread ist nicht mehr vorhanden." can happen when
-	/// the sink gets disposed of while an async callback is still pending. Preventing this without
-	/// such helper can be fairly tricky, as all calling back instances within a system would have
-	/// to be notified about a shutdown and then get polled for completion.
+	/// <![CDATA["Fehler beim Aufrufen der Methode. Der Zielthread ist nicht mehr vorhanden."]]> can
+	/// happen when the sink gets disposed of while an async callback is still pending. Preventing
+	/// this without such helper can be fairly tricky, as all calling back instances within a system
+	/// would have to be notified about a shutdown and then get polled for completion.
 	/// </item>
 	/// </list>
 	/// </remarks>

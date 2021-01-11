@@ -274,6 +274,8 @@ namespace YAT.Domain.Settings
 
 		/// <remarks>
 		/// Value is approximate! It may be off by a factor of 2..5, depending on environment and I/O related settings!
+		///
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <remarks>
 		/// Named 'Bytes' rather than 'Octets' as that is more common, and .NET uses 'Byte' as well.
@@ -355,6 +357,8 @@ namespace YAT.Domain.Settings
 
 		/// <remarks>
 		/// Value is approximate! It may be off by a factor of 2..5, depending on environment and I/O related settings!
+		///
+		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <remarks>
 		/// Named 'Bytes' rather than 'Octets' as that is more common, and .NET uses 'Byte' as well.
