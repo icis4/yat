@@ -534,7 +534,7 @@ namespace YAT.Domain
 				var last = this.Last();
 				if (last is DisplayElement.ContentSeparator)
 					RemoveLast();
-				else
+				else if (last.IsContent)
 					last.RemoveTrailingContentSeparator(contentSeparator);
 			}
 		}
