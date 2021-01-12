@@ -396,7 +396,7 @@ namespace YAT.Domain
 			// Add current element if it wasn't consumed above:
 			if (de != null)
 			{
-				AddContentSeparatorIfNecessary(lineState, dir, lp, de);
+				AddContentSeparatorAsNeeded(lineState, dir, lp, de);
 				lp.Add(de); // No clone needed as element has just been created further above.
 			}
 
@@ -468,7 +468,7 @@ namespace YAT.Domain
 			{
 				foreach (var de in binaryUnidirState.RetainedUnconfirmedHiddenSequenceBeforeElements)
 				{
-					AddContentSeparatorIfNecessary(lineState, dir, lp, de);
+					AddContentSeparatorAsNeeded(lineState, dir, lp, de);
 					lp.Add(de); // No clone needed as element is no more used below.
 				}
 

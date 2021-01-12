@@ -587,7 +587,7 @@ namespace YAT.Domain
 				var lp = new DisplayElementCollection(1 + 1); // Preset the maximal required capacity to improve memory management.
 				var lineState = GetLineState(repositoryType);
 
-				AddContentSeparatorIfNecessary(lineState, direction, lp, element);
+				AddContentSeparatorAsNeeded(lineState, direction, lp, element);
 				lp.Add(element); // No clone needed as elements must already have been cloned when calling this method.
 
 				AddDisplayElements(repositoryType, lp);
@@ -638,7 +638,7 @@ namespace YAT.Domain
 				var lp = new DisplayElementCollection(1 + elements.Count); // Preset the maximal required capacity to improve memory management.
 				var lineState = GetLineState(repositoryType);
 
-				AddContentSeparatorIfNecessary(lineState, direction, lp, elements.First());
+				AddContentSeparatorAsNeeded(lineState, direction, lp, elements.First());
 				lp.AddRange(elements); // No clone needed as elements must already have been cloned when calling this method.
 
 				AddDisplayElements(repositoryType, lp);

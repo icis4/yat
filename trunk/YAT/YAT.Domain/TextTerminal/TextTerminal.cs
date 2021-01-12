@@ -299,7 +299,7 @@ namespace YAT.Domain
 			foreach (byte b in data.Take(n))
 			{
 				var de = ByteToElement(b, timeStamp, IODirection.Rx, Radix.String, pendingMultiBytesToDecode);
-			////AddContentSeparatorIfNecessary(IODirection.Rx, lp, de) is not needed as radix is fixed to 'String'.
+			////AddContentSeparatorAsNeeded(IODirection.Rx, lp, de) is not needed as radix is fixed to 'String'.
 				lp.Add(de);
 			}
 
