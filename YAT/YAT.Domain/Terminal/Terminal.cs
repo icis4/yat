@@ -1555,7 +1555,7 @@ namespace YAT.Domain
 			foreach (byte b in data)
 			{                                                     // Time stamp is irrelevant for formatting.
 				var de = ByteToElement(b, DisplayElement.TimeStampDefault, direction, radix, pendingMultiBytesToDecode); // Binary terminals will ignore this,
-				AddContentSeparatorIfNecessary(direction, lp, de);                                                       // good enough for the moment, no need
+				AddContentSeparatorAsNeeded(direction, lp, de);                                                       // good enough for the moment, no need
 				lp.Add(de);                                                                                              // implement this method abstract.
 			}
 

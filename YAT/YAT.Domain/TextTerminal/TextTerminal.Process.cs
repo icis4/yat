@@ -403,7 +403,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>This text specific implementation is based on <see cref="DisplayElementCollection.CharCount"/>.</remarks>
-		protected override void AddContentSeparatorIfNecessary(LineState lineState, IODirection dir, DisplayElementCollection lp, DisplayElement de)
+		protected override void AddContentSeparatorAsNeeded(LineState lineState, IODirection dir, DisplayElementCollection lp, DisplayElement de)
 		{
 			if (RadixUsesContentSeparator(dir) && !string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache) && !string.IsNullOrEmpty(de.Text))
 			{
@@ -856,7 +856,7 @@ namespace YAT.Domain
 				{
 					if (TextTerminalSettings.ShowEol)
 					{
-						AddContentSeparatorIfNecessary(lineState, dir, lp, de);
+						AddContentSeparatorAsNeeded(lineState, dir, lp, de);
 						lp.Add(de); // No clone needed as element is no more used below.
 					}
 					else
@@ -891,7 +891,7 @@ namespace YAT.Domain
 				{                                                                  //  4. Unrelatd to EOL      (any time, further below)
 					if (TextTerminalSettings.ShowEol)
 					{
-						AddContentSeparatorIfNecessary(lineState, dir, lp, de);
+						AddContentSeparatorAsNeeded(lineState, dir, lp, de);
 						lp.Add(de); // No clone needed as element is no more used below.
 					}
 					else
@@ -913,7 +913,7 @@ namespace YAT.Domain
 				{
 					if (TextTerminalSettings.ShowEol)
 					{
-						AddContentSeparatorIfNecessary(lineState, dir, lp, de);
+						AddContentSeparatorAsNeeded(lineState, dir, lp, de);
 						lp.Add(de); // No clone needed as element is no more used below.
 					}
 					else
@@ -947,7 +947,7 @@ namespace YAT.Domain
 				ReleaseRetainedUnconfirmedHiddenEolElements(lineState, textUnidirState, dir, lp);
 
 				// Add the current element, which for sure is not related to EOL:
-				AddContentSeparatorIfNecessary(lineState, dir, lp, de);
+				AddContentSeparatorAsNeeded(lineState, dir, lp, de);
 				lp.Add(de); // No clone needed as element has just been created further above.
 			}
 
@@ -964,7 +964,7 @@ namespace YAT.Domain
 					if ((count > 0) && (lp[count - 1] is DisplayElement.Nonentity))
 					{
 						lp.RemoveLast();
-						RemoveContentSeparatorIfNecessary(dir, lp);
+						RemoveContentSeparatorAsNeeded(dir, lp);
 					}
 				}
 
@@ -998,7 +998,7 @@ namespace YAT.Domain
 					{
 						// ...remove it in the current line...
 						lineState.Elements.RemoveLastDataContentChar(TerminalSettings.Display.ContentSeparatorCache);
-						RemoveContentSeparatorIfNecessary(dir, lineState.Elements);
+						RemoveContentSeparatorAsNeeded(dir, lineState.Elements);
 
 						if (!ICollectionEx.IsNullOrEmpty(elementsToAdd))
 						{
@@ -1006,7 +1006,7 @@ namespace YAT.Domain
 							{
 								// ..as well as in the pending elements:
 								elementsToAdd.RemoveLastDataContentChar(TerminalSettings.Display.ContentSeparatorCache);
-								RemoveContentSeparatorIfNecessary(dir, elementsToAdd);
+								RemoveContentSeparatorAsNeeded(dir, elementsToAdd);
 							}
 							else
 							{
@@ -1137,7 +1137,7 @@ namespace YAT.Domain
 			{
 				foreach (var de in textUnidirState.RetainedUnconfirmedHiddenEolElements)
 				{
-					AddContentSeparatorIfNecessary(lineState, dir, lp, de);
+					AddContentSeparatorAsNeeded(lineState, dir, lp, de);
 					lp.Add(de); // No clone needed as element is no more used below.
 				}
 

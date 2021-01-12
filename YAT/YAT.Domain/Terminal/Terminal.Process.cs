@@ -462,7 +462,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether a separator is necessary.
 		/// </summary>
-		protected virtual bool ContentSeparatorIsNecessary(IODirection dir)
+		protected virtual bool ContentSeparatorIsUsedAndNotEmpty(IODirection dir)
 		{
 			return (RadixUsesContentSeparator(dir) && !string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache));
 		}
@@ -473,9 +473,9 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Non-line-state dependent implementation for e.g. <see cref="Format(byte[], IODirection, Radix)"/>.
 		/// </remarks>
-		protected virtual void AddContentSeparatorIfNecessary(IODirection dir, DisplayElementCollection lp, DisplayElement de)
+		protected virtual void AddContentSeparatorAsNeeded(IODirection dir, DisplayElementCollection lp, DisplayElement de)
 		{
-			if (ContentSeparatorIsNecessary(dir) && !string.IsNullOrEmpty(de.Text))
+			if (ContentSeparatorIsUsedAndNotEmpty(dir) && !string.IsNullOrEmpty(de.Text))
 			{
 				if (lp.ByteCount > 0)
 					lp.Add(new DisplayElement.ContentSeparator((Direction)dir, TerminalSettings.Display.ContentSeparatorCache));
@@ -488,9 +488,9 @@ namespace YAT.Domain
 		/// <remarks>
 		/// This default implementation is based on <see cref="DisplayElementCollection.ByteCount"/>.
 		/// </remarks>
-		protected virtual void AddContentSeparatorIfNecessary(LineState lineState, IODirection dir, DisplayElementCollection lp, DisplayElement de)
+		protected virtual void AddContentSeparatorAsNeeded(LineState lineState, IODirection dir, DisplayElementCollection lp, DisplayElement de)
 		{
-			if (ContentSeparatorIsNecessary(dir) && !string.IsNullOrEmpty(de.Text))
+			if (ContentSeparatorIsUsedAndNotEmpty(dir) && !string.IsNullOrEmpty(de.Text))
 			{
 				if ((lineState.Elements.ByteCount > 0) || (lp.ByteCount > 0))
 					lp.Add(new DisplayElement.ContentSeparator((Direction)dir, TerminalSettings.Display.ContentSeparatorCache));
@@ -498,9 +498,9 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void RemoveContentSeparatorIfNecessary(IODirection dir, DisplayElementCollection lp)
+		protected virtual void RemoveContentSeparatorAsNeeded(IODirection dir, DisplayElementCollection lp)
 		{
-			if (ContentSeparatorIsNecessary(dir))
+			if (ContentSeparatorIsUsedAndNotEmpty(dir))
 			{
 				if (lp.Count > 0)
 					lp.RemoveTrailingContentSeparator(TerminalSettings.Display.ContentSeparatorCache);
@@ -511,10 +511,10 @@ namespace YAT.Domain
 		/// Determines whether a separator is necessary.
 		/// </summary>
 		/// <remarks>
-		/// Method instead of property for orthogonality with <see cref="ContentSeparatorIsNecessary"/> above.
+		/// Method instead of property for orthogonality with <see cref="ContentSeparatorIsUsedAndNotEmpty"/> above.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remarks.")]
-		protected virtual bool InfoSeparatorIsNecessary()
+		protected virtual bool InfoSeparatorIsNotEmpty()
 		{
 			return (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache));
 		}
@@ -522,9 +522,9 @@ namespace YAT.Domain
 		/// <summary>
 		/// Add a separator to the given collection, depending on the given state.
 		/// </summary>
-		protected virtual void AddInfoSeparatorIfNecessary(DisplayElementCollection lp)
+		protected virtual void AddInfoSeparatorAsNeeded(DisplayElementCollection lp)
 		{
-			if (InfoSeparatorIsNecessary())
+			if (InfoSeparatorIsNotEmpty())
 				lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
 		}
 
@@ -541,31 +541,31 @@ namespace YAT.Domain
 				if (TerminalSettings.Display.ShowTimeStamp)
 				{
 					lp.Add(new DisplayElement.TimeStampInfo(stamp, TerminalSettings.Display.TimeStampFormat, TerminalSettings.Display.TimeStampUseUtc, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
-					AddInfoSeparatorIfNecessary(lp);
+					AddInfoSeparatorAsNeeded(lp);
 				}
 
 				if (TerminalSettings.Display.ShowTimeSpan)
 				{
 					lp.Add(new DisplayElement.TimeSpanInfo(span, TerminalSettings.Display.TimeSpanFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
-					AddInfoSeparatorIfNecessary(lp);
+					AddInfoSeparatorAsNeeded(lp);
 				}
 
 				if (TerminalSettings.Display.ShowTimeDelta)
 				{
 					lp.Add(new DisplayElement.TimeDeltaInfo(delta, TerminalSettings.Display.TimeDeltaFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
-					AddInfoSeparatorIfNecessary(lp);
+					AddInfoSeparatorAsNeeded(lp);
 				}
 
 				if (TerminalSettings.Display.ShowDevice)
 				{
 					lp.Add(new DisplayElement.DeviceInfo(dev, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache)); // Direction may become both!
-					AddInfoSeparatorIfNecessary(lp);
+					AddInfoSeparatorAsNeeded(lp);
 				}
 
 				if (TerminalSettings.Display.ShowDirection)
 				{
 					lp.Add(new DisplayElement.DirectionInfo((Direction)dir, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
-					AddInfoSeparatorIfNecessary(lp);
+					AddInfoSeparatorAsNeeded(lp);
 				}
 
 				// Last separator will separate info(s) from content, i.e. be the former 'LeftMargin'.
@@ -589,13 +589,13 @@ namespace YAT.Domain
 
 				if (TerminalSettings.Display.ShowLength)
 				{
-					AddInfoSeparatorIfNecessary(lp);
+					AddInfoSeparatorAsNeeded(lp);
 					lp.Add(new DisplayElement.ContentLength(length, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
 				}
 
 				if (TerminalSettings.Display.ShowDuration)
 				{
-					AddInfoSeparatorIfNecessary(lp);
+					AddInfoSeparatorAsNeeded(lp);
 					lp.Add(new DisplayElement.TimeDurationInfo(duration, TerminalSettings.Display.TimeDurationFormat, TerminalSettings.Display.InfoEnclosureLeftCache, TerminalSettings.Display.InfoEnclosureRightCache));
 				}
 			}
