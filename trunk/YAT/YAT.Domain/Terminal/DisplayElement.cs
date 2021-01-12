@@ -1109,6 +1109,30 @@ namespace YAT.Domain
 			this.byteCount -= byteCountToRemove;
 		}
 
+		/// <summary>
+		/// Remove a potential trailing content separator from the <see cref="DisplayElementCollection"/>.
+		/// </summary>
+		/// <remarks>
+		/// Needed to handle backspace, thus applies to content only.
+		/// </remarks>
+		/// <exception cref="InvalidOperationException">
+		/// The element is not content.
+		/// </exception>
+		public virtual void RemoveTrailingContentSeparator(string contentSeparator)
+		{
+			if (!IsContent)
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The element is no content!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+			if (Text.Length > 0)
+			{
+				if (Text.EndsWith(contentSeparator))
+				{
+					var textLengthWithoutContentSeparator = (Text.Length - contentSeparator.Length);
+					Text = Text.Substring(0, textLengthWithoutContentSeparator);
+				}
+			}
+		}
+
 		/// <summary></summary>
 		public virtual byte[] ToOrigin()
 		{

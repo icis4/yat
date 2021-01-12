@@ -31,10 +31,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 
 using MKY;
-using MKY.Collections.Generic;
 
 #endregion
 
@@ -474,15 +474,15 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Tries to remove the last "true" character from the <see cref="DisplayElementCollection"/>.
+		/// Removes the last "true" character from the <see cref="DisplayElementCollection"/>.
 		/// </summary>
 		/// <remarks>
 		/// Needed to handle backspace, thus applies to data content only.
 		/// </remarks>
 		/// <exception cref="InvalidOperationException">
-		/// The collection is empty.
+		/// The collection is empty - or - contains no content character.
 		/// </exception>
-		public virtual void RemoveLastDataContentChar()
+		public virtual void RemoveLastDataContentChar(string contentSeparator)
 		{
 			if (Count == 0)
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The collection is empty!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -510,6 +510,7 @@ namespace YAT.Domain
 						var formerCharCount = current.CharCount;
 						var formerByteCount = current.ByteCount;
 
+						current.RemoveTrailingContentSeparator(contentSeparator);
 						current.RemoveLastContentChar(); // A single element can be removed,
 						                               //// done after adjusting the counts.
 						this.charCount -= (formerCharCount - current.CharCount);
@@ -517,6 +518,24 @@ namespace YAT.Domain
 						break;
 					}
 				}
+			}
+		}
+
+		/// <summary>
+		/// Remove a potential trailing content separator from the <see cref="DisplayElementCollection"/>.
+		/// </summary>
+		/// <remarks>
+		/// Needed to handle backspace, thus applies to data content only.
+		/// </remarks>
+		public virtual void RemoveTrailingContentSeparator(string contentSeparator)
+		{
+			if (Count > 0)
+			{
+				var last = this.Last();
+				if (last is DisplayElement.ContentSeparator)
+					RemoveLast();
+				else
+					last.RemoveTrailingContentSeparator(contentSeparator);
 			}
 		}
 
