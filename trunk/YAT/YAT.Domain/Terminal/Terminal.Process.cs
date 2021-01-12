@@ -49,6 +49,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 
 using MKY;
@@ -424,15 +425,15 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual bool RadixSupportsSeparateElements(IODirection dir)
+		protected virtual bool RadixUsesContentSeparator(IODirection dir)
 		{
 			switch (dir)
-			{                                                                                                   // Pragmatic best-effort approach.
-				case IODirection.None:  return (RadixSupportsSeparateElements(TerminalSettings.Display.TxRadix) || RadixSupportsSeparateElements(TerminalSettings.Display.RxRadix));
-				case IODirection.Bidir: return (RadixSupportsSeparateElements(TerminalSettings.Display.TxRadix) || RadixSupportsSeparateElements(TerminalSettings.Display.RxRadix));
+			{                                                                                               // Pragmatic best-effort approach.
+				case IODirection.None:  return (RadixUsesContentSeparator(TerminalSettings.Display.TxRadix) || RadixUsesContentSeparator(TerminalSettings.Display.RxRadix));
+				case IODirection.Bidir: return (RadixUsesContentSeparator(TerminalSettings.Display.TxRadix) || RadixUsesContentSeparator(TerminalSettings.Display.RxRadix));
 
-				case IODirection.Tx:    return (RadixSupportsSeparateElements(TerminalSettings.Display.TxRadix)                                                         );
-				case IODirection.Rx:    return (                                                                   RadixSupportsSeparateElements(TerminalSettings.Display.RxRadix));
+				case IODirection.Tx:    return (RadixUsesContentSeparator(TerminalSettings.Display.TxRadix)                                                               );
+				case IODirection.Rx:    return (                                                               RadixUsesContentSeparator(TerminalSettings.Display.RxRadix));
 
 				default:                throw (new ArgumentOutOfRangeException("dir", dir, MessageHelper.InvalidExecutionPreamble + "'" + dir + "' is an invalid direction!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -440,7 +441,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		protected virtual bool RadixSupportsSeparateElements(Radix r)
+		protected virtual bool RadixUsesContentSeparator(Radix r)
 		{
 			switch (r)
 			{
@@ -466,7 +467,7 @@ namespace YAT.Domain
 		/// </remarks>
 		protected virtual void AddContentSeparatorIfNecessary(IODirection dir, DisplayElementCollection lp, DisplayElement de)
 		{
-			if (RadixSupportsSeparateElements(dir) && !string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache) && !string.IsNullOrEmpty(de.Text))
+			if (RadixUsesContentSeparator(dir) && !string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache) && !string.IsNullOrEmpty(de.Text))
 			{
 				if (lp.ByteCount > 0)
 					lp.Add(new DisplayElement.ContentSeparator((Direction)dir, TerminalSettings.Display.ContentSeparatorCache));
@@ -481,7 +482,7 @@ namespace YAT.Domain
 		/// </remarks>
 		protected virtual void AddContentSeparatorIfNecessary(LineState lineState, IODirection dir, DisplayElementCollection lp, DisplayElement de)
 		{
-			if (RadixSupportsSeparateElements(dir) && !string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache) && !string.IsNullOrEmpty(de.Text))
+			if (RadixUsesContentSeparator(dir) && !string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache) && !string.IsNullOrEmpty(de.Text))
 			{
 				if ((lineState.Elements.ByteCount > 0) || (lp.ByteCount > 0))
 					lp.Add(new DisplayElement.ContentSeparator((Direction)dir, TerminalSettings.Display.ContentSeparatorCache));
@@ -491,11 +492,22 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void RemoveContentSeparatorIfNecessary(IODirection dir, DisplayElementCollection lp)
 		{
-			if (RadixSupportsSeparateElements(dir))
+			if (RadixUsesContentSeparator(dir) && !string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache))
 			{
 				int count = lp.Count;
-				if ((count > 0) && (lp[count - 1] is DisplayElement.ContentSeparator))
-					lp.RemoveLast();
+				if (count > 0)
+				{
+					var last = lp.Last();
+					if (last is DisplayElement.ContentSeparator)
+					{
+						lp.RemoveLast();
+					}
+					else if (last.Text.EndsWith(TerminalSettings.Display.ContentSeparatorCache))
+					{
+						var textLengthWithoutContentSeparator = (last.Text.Length - TerminalSettings.Display.ContentSeparatorCache.Length);
+						last.Text = last.Text.Substring(0, textLengthWithoutContentSeparator);
+					}
+				}
 			}
 		}
 

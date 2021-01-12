@@ -498,7 +498,7 @@ namespace YAT.Domain
 					if (current.CharCount < 1)
 					{
 						RemoveAt(index);          // A preceeding whitespace content has to be removed,
-						continue;                 // but then continue searching for char.
+						continue;                 // but then continue searching for char content.
 					}
 					else if (current.CharCount == 1)
 					{
@@ -510,8 +510,8 @@ namespace YAT.Domain
 						var formerCharCount = current.CharCount;
 						var formerByteCount = current.ByteCount;
 
-						current.RemoveLastChar(); // A single element can be removed,
-						                        //// done after adjusting the counts.
+						current.RemoveLastContentChar(); // A single element can be removed,
+						                               //// done after adjusting the counts.
 						this.charCount -= (formerCharCount - current.CharCount);
 						this.byteCount -= (formerByteCount - current.ByteCount);
 						break;
