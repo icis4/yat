@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -138,7 +139,7 @@ namespace YAT.Domain
 			{                                              // ^ Elements are always created corresponding to a single shown character.
 			}                                              //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 
-			/// <remarks>This reduced signature is required for potential unfolding in <see cref="RemoveLastChar"/>.</remarks>
+			/// <remarks>This reduced signature is required for potential unfolding in <see cref="RemoveLastContentChar"/>.</remarks>
 			public TxData(byte[] origin, string text)
 				: this(TimeStampDefault, origin, text)
 			{
@@ -168,7 +169,7 @@ namespace YAT.Domain
 			{                                              // ^ Elements are always created corresponding to a single shown character.
 			}                                              //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 
-			/// <remarks>This reduced signature is required for potential unfolding in <see cref="RemoveLastChar"/>.</remarks>
+			/// <remarks>This reduced signature is required for potential unfolding in <see cref="RemoveLastContentChar"/>.</remarks>
 			public TxControl(byte[] origin, string text)
 				: this(TimeStampDefault, origin, text)
 			{
@@ -198,7 +199,7 @@ namespace YAT.Domain
 			{                                              // ^ Elements are always created corresponding to a single shown character.
 			}                                              //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 
-			/// <remarks>This reduced signature is required for potential unfolding in <see cref="RemoveLastChar"/>.</remarks>
+			/// <remarks>This reduced signature is required for potential unfolding in <see cref="RemoveLastContentChar"/>.</remarks>
 			public RxData(byte[] origin, string text)
 				: this(TimeStampDefault, origin, text)
 			{
@@ -228,7 +229,7 @@ namespace YAT.Domain
 			{                                              // ^ Elements are always created corresponding to a single shown character.
 			}                                              //   ASCII mnemonics (e.g. <CR>) also account for a single shown character.
 
-			/// <remarks>This reduced signature is required for potential unfolding in <see cref="RemoveLastChar"/>.</remarks>
+			/// <remarks>This reduced signature is required for potential unfolding in <see cref="RemoveLastContentChar"/>.</remarks>
 			public RxControl(byte[] origin, string text)
 				: this(TimeStampDefault, origin, text)
 			{
@@ -1085,7 +1086,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Needed to handle backspace; consequence of <see cref="Append(DisplayElement)"/> above.
 		/// </remarks>
-		public virtual void RemoveLastChar()
+		public virtual void RemoveLastContentChar()
 		{
 			if (!IsContent)
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The element is no content!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -1093,47 +1094,19 @@ namespace YAT.Domain
 			if (this.origin.Count == 0)
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The origin is empty!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
-			// Unfold the element:
-			var originConstructor = GetType().GetConstructor(new Type[] { typeof(byte[]), typeof(string) }); // All content elements must have such constructor.
-			var unfolded = new List<DisplayElement>(this.origin.Count); // Preset the required capacity to improve memory management.
-			foreach (var p in this.origin)
-				unfolded.Add((DisplayElement)originConstructor.Invoke(new object[] { p.Value1, p.Value2 }));
+			// Retrieve the last char:
+			var textLength = this.text.Length;
+			var charToRemove = this.text.Substring(textLength - 2, 1); // GetByteCount() further below requires a string (or char array), not a single char.
 
-			// Remove the last character:
-			for (int index = (unfolded.Count - 1); index >= 0; index--)
-			{
-				var current = unfolded[index];
-				if (current.CharCount < 1)
-				{
-					unfolded.RemoveAt(index); // A preceeding whitespace content has to be removed,
-					continue;                 // but then continue searching for char.
-				}
-				else if (current.CharCount == 1)
-				{
-					unfolded.RemoveAt(index); // A single element can be removed,
-					break;                    // done.
-				}
-				else if (current.CharCount > 1)
-				{
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A newly created element can never have a character count of '" + current.CharCount + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-				}
-			}
+			// Remove the last char:
+			this.text = this.text.Substring(0, textLength - 1);
+			this.charCount--;
 
-			// Recreate the element:
-			var emptyConstructor = GetType().GetConstructor(Type.EmptyTypes); // All content elements have such constructor.
-			var recreated = (DisplayElement)emptyConstructor.Invoke(null);
-			foreach (var de in unfolded)
-				recreated.Append(de);
-
-		////this.timeStamp can be kept.
-		////this.direction can be kept.
-			this.origin    = recreated.origin;
-			this.text      = recreated.text;
-			this.charCount = recreated.charCount;
-			this.byteCount = recreated.byteCount;
-		////this.attributes can be kept.
-
-		////this.Highlight can be kept.
+			// Remove the related origin:
+			var originToRemove = this.origin.Last();              // Simply remove the last origin item.
+			var byteCountToRemove = originToRemove.Value1.Length; // This approach covers cases where e.g.
+			this.origin.RemoveAt(this.origin.Count - 1);          // substitution is active (e.g. 'a' -> 'A').
+			this.byteCount -= byteCountToRemove;
 		}
 
 		/// <summary></summary>
@@ -1181,6 +1154,19 @@ namespace YAT.Domain
 			{
 				return (null);
 			}
+		}
+
+		private static string OriginToDiagnosticsString(Pair<byte[], string> originItem, bool showRadix)
+		{
+			var sb = new StringBuilder();
+
+			sb.Append(@"""");
+			sb.Append(originItem.Value2);
+			sb.Append(@""" (");
+			sb.Append(Utilities.ByteHelper.FormatHexString(originItem.Value1, showRadix));
+			sb.Append(@")");
+
+			return (sb.ToString());
 		}
 
 		#endregion
