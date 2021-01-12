@@ -93,7 +93,6 @@ namespace YAT.Domain.Test
 		/// debugger is connected. Measurements:
 		///  > TripleLine (where time-out would be 3 * 200 ms = 600 ms) takes around 500 ms.
 		///  > MultiLine (where time-out would be 26 * 200 ms = 5200 ms) takes around 5000 ms.
-		///     => 300 ms seems defensive enough while still not too long to waste time.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'ms' is the proper abbreviation for milliseconds but StyleCop isn't able to deal with such abbreviations...")]
 		public const int WaitTimeoutForLineTransmission = 300; // See remarks above.
@@ -113,6 +112,9 @@ namespace YAT.Domain.Test
 		/// Note that a shorter interval would increase debug output, spoiling the debug console.
 		/// </remarks>
 		public const int WaitIntervalForIsNoLongerSending = WaitIntervalForStateChange;
+
+		/// <summary></summary>
+		public const int WaitTimeoutForReverification = (2 * WaitTimeoutForLineTransmission); // 600 ms.
 
 		/// <summary></summary>
 		public const string LineExceededWarningPattern = @"\[Warning: Maximal number of (characters|bytes) per line exceeded! Check the line break settings in Terminal > Settings > (Text|Binary) or increase the limit in Terminal > Settings > Advanced.\]";
@@ -798,16 +800,16 @@ namespace YAT.Domain.Test
 
 		private static int TimeoutToInterval(int timeout)
 		{
+			// The standard time-out shall result in a typical number of updates.
+			const int TypicalNumberOfUpdates = 15;
+
 			// Note that a longer minimum interval would increase the wait time for short tests, thus
 			// increasing the test time. But also note that such short interval increases the overhead
 			// of the test, thus increasing the test time of long tests. Adaption is the solution.
-			const int MinimumWaitIntervalForTransmission = 20;
+			const int MinimumWaitIntervalForTransmission = (WaitTimeoutForLineTransmission / TypicalNumberOfUpdates); // 20 ms.
 
 			// There shall be at least a trace output every now and then.
-			const int MaximumWaitIntervalForTransmission = 600; // Same as 2 x WaitTimeoutForLineTransmission.
-
-			// The standard time-out shall result in a typical number of updates.
-			const int TypicalNumberOfUpdates = (WaitTimeoutForLineTransmission / MinimumWaitIntervalForTransmission); // 15.
+			const int MaximumWaitIntervalForTransmission = (WaitTimeoutForLineTransmission * 2); // 600 ms.
 
 			int interval = (timeout / TypicalNumberOfUpdates); // No need for higher accuracy (float or double), value will be limited anyway.
 			return (Int32Ex.Limit(interval, MinimumWaitIntervalForTransmission, MaximumWaitIntervalForTransmission));
@@ -817,7 +819,7 @@ namespace YAT.Domain.Test
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Reverification", Justification = "'Reverification' is a correct English term.")]
 		public static void WaitForReverification()
 		{
-			Thread.Sleep(2 * WaitTimeoutForLineTransmission);
+			Thread.Sleep(WaitTimeoutForReverification);
 		}
 
 		#endregion
