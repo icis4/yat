@@ -460,6 +460,14 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
+		/// Determines whether a separator is necessary.
+		/// </summary>
+		protected virtual bool ContentSeparatorIsNecessary(IODirection dir)
+		{
+			return (RadixUsesContentSeparator(dir) && !string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache));
+		}
+
+		/// <summary>
 		/// Add a separator to the given collection, depending on the given state.
 		/// </summary>
 		/// <remarks>
@@ -467,7 +475,7 @@ namespace YAT.Domain
 		/// </remarks>
 		protected virtual void AddContentSeparatorIfNecessary(IODirection dir, DisplayElementCollection lp, DisplayElement de)
 		{
-			if (RadixUsesContentSeparator(dir) && !string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache) && !string.IsNullOrEmpty(de.Text))
+			if (ContentSeparatorIsNecessary(dir) && !string.IsNullOrEmpty(de.Text))
 			{
 				if (lp.ByteCount > 0)
 					lp.Add(new DisplayElement.ContentSeparator((Direction)dir, TerminalSettings.Display.ContentSeparatorCache));
@@ -482,7 +490,7 @@ namespace YAT.Domain
 		/// </remarks>
 		protected virtual void AddContentSeparatorIfNecessary(LineState lineState, IODirection dir, DisplayElementCollection lp, DisplayElement de)
 		{
-			if (RadixUsesContentSeparator(dir) && !string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache) && !string.IsNullOrEmpty(de.Text))
+			if (ContentSeparatorIsNecessary(dir) && !string.IsNullOrEmpty(de.Text))
 			{
 				if ((lineState.Elements.ByteCount > 0) || (lp.ByteCount > 0))
 					lp.Add(new DisplayElement.ContentSeparator((Direction)dir, TerminalSettings.Display.ContentSeparatorCache));
@@ -492,23 +500,23 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void RemoveContentSeparatorIfNecessary(IODirection dir, DisplayElementCollection lp)
 		{
-			if (RadixUsesContentSeparator(dir) && !string.IsNullOrEmpty(TerminalSettings.Display.ContentSeparatorCache))
+			if (ContentSeparatorIsNecessary(dir))
 			{
-				int count = lp.Count;
-				if (count > 0)
-				{
-					var last = lp.Last();
-					if (last is DisplayElement.ContentSeparator)
-					{
-						lp.RemoveLast();
-					}
-					else if (last.Text.EndsWith(TerminalSettings.Display.ContentSeparatorCache))
-					{
-						var textLengthWithoutContentSeparator = (last.Text.Length - TerminalSettings.Display.ContentSeparatorCache.Length);
-						last.Text = last.Text.Substring(0, textLengthWithoutContentSeparator);
-					}
-				}
+				if (lp.Count > 0)
+					lp.RemoveTrailingContentSeparator(TerminalSettings.Display.ContentSeparatorCache);
 			}
+		}
+
+		/// <summary>
+		/// Determines whether a separator is necessary.
+		/// </summary>
+		/// <remarks>
+		/// Method instead of property for orthogonality with <see cref="ContentSeparatorIsNecessary"/> above.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remarks.")]
+		protected virtual bool InfoSeparatorIsNecessary()
+		{
+			return (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache));
 		}
 
 		/// <summary>
@@ -516,7 +524,7 @@ namespace YAT.Domain
 		/// </summary>
 		protected virtual void AddInfoSeparatorIfNecessary(DisplayElementCollection lp)
 		{
-			if (!string.IsNullOrEmpty(TerminalSettings.Display.InfoSeparatorCache))
+			if (InfoSeparatorIsNecessary())
 				lp.Add(new DisplayElement.InfoSeparator(TerminalSettings.Display.InfoSeparatorCache));
 		}
 

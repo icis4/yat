@@ -997,7 +997,7 @@ namespace YAT.Domain
 					if (lineState.Elements.DataContentCharCount > 0)
 					{
 						// ...remove it in the current line...
-						lineState.Elements.RemoveLastDataContentChar();
+						lineState.Elements.RemoveLastDataContentChar(TerminalSettings.Display.ContentSeparatorCache);
 						RemoveContentSeparatorIfNecessary(dir, lineState.Elements);
 
 						if (!ICollectionEx.IsNullOrEmpty(elementsToAdd))
@@ -1005,7 +1005,7 @@ namespace YAT.Domain
 							if (elementsToAdd.DataContentCharCount > 0)
 							{
 								// ..as well as in the pending elements:
-								elementsToAdd.RemoveLastDataContentChar();
+								elementsToAdd.RemoveLastDataContentChar(TerminalSettings.Display.ContentSeparatorCache);
 								RemoveContentSeparatorIfNecessary(dir, elementsToAdd);
 							}
 							else
