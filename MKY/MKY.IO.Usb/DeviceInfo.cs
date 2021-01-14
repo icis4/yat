@@ -51,7 +51,7 @@ namespace MKY.IO.Usb
 	/// Instances of this container class shall be treated as immutable objects. However, it is not
 	/// possible to assign <see cref="ImmutableObjectAttribute"/>/<see cref="ImmutableContractAttribute"/>
 	/// because XML default serialization requires public setters. Split into mutable settings tuple
-	/// and immutable runtime container should be done.
+	/// and immutable runtime container could be done.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Semantic of readonly fields is constant.")]
 	[Serializable]
@@ -161,7 +161,7 @@ namespace MKY.IO.Usb
 		{
 			int vendorId, productId;
 			string manufacturer, product, serial;
-			if (Device.GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
+			if (Device.TryGetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
 				Initialize(path, vendorId, productId, manufacturer, product, serial);
 			else
 				Initialize(path); // Initialize this info based on the available information only.
@@ -171,7 +171,7 @@ namespace MKY.IO.Usb
 		public DeviceInfo(int vendorId, int productId)
 		{
 			string path, manufacturer, product, serial;
-			if (Device.GetDeviceInfoFromVidPid(vendorId, productId, out path, out manufacturer, out product, out serial))
+			if (Device.TryGetDeviceInfoFromVidPid(vendorId, productId, out path, out manufacturer, out product, out serial))
 				Initialize(path, vendorId, productId, manufacturer, product, serial);
 			else
 				Initialize(vendorId, productId); // Initialize this info based on the available information only.
@@ -181,7 +181,7 @@ namespace MKY.IO.Usb
 		public DeviceInfo(int vendorId, int productId, string serial)
 		{
 			string path, manufacturer, product;
-			if (Device.GetDeviceInfoFromVidPidSerial(vendorId, productId, serial, out path, out manufacturer, out product))
+			if (Device.TryGetDeviceInfoFromVidPidSerial(vendorId, productId, serial, out path, out manufacturer, out product))
 				Initialize(path, vendorId, productId, manufacturer, product, serial);
 			else
 				Initialize(vendorId, productId, serial); // Initialize this info based on the available information only.
@@ -202,7 +202,7 @@ namespace MKY.IO.Usb
 		/// <remarks>Initialize this info based on defaults only.</remarks>
 		protected virtual void Initialize()
 		{
-			Initialize("");
+			Initialize(null);
 		}
 
 		/// <remarks>Initialize this info based on the available information only.</remarks>
@@ -222,7 +222,7 @@ namespace MKY.IO.Usb
 		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
 		protected virtual void Initialize(int vendorId, int productId, string serial)
 		{
-			Initialize("", vendorId, productId, "", "", serial);
+			Initialize(null, vendorId, productId, "", "", serial);
 		}
 
 		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
@@ -384,14 +384,14 @@ namespace MKY.IO.Usb
 		{
 			if (!string.IsNullOrEmpty(this.path))
 			{
-				return (Device.GetDeviceInfoFromPath(this.path, out this.vendorId, out this.productId, out this.manufacturer, out this.product, out this.serial));
+				return (Device.TryGetDeviceInfoFromPath(this.path, out this.vendorId, out this.productId, out this.manufacturer, out this.product, out this.serial));
 			}
 			else if ((this.vendorId != 0) && (this.productId != 0))
 			{
 				if (!string.IsNullOrEmpty(this.serial))
-					return (Device.GetDeviceInfoFromVidPidSerial(this.vendorId, this.productId, this.serial, out this.path, out this.manufacturer, out this.product));
+					return (Device.TryGetDeviceInfoFromVidPidSerial(this.vendorId, this.productId, this.serial, out this.path, out this.manufacturer, out this.product));
 				else
-					return (Device.GetDeviceInfoFromVidPid(this.vendorId, this.productId, out this.path, out this.manufacturer, out this.product, out this.serial));
+					return (Device.TryGetDeviceInfoFromVidPid(this.vendorId, this.productId, out this.path, out this.manufacturer, out this.product, out this.serial));
 			}
 			else
 			{

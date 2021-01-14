@@ -510,7 +510,7 @@ namespace MKY.Win32
 			/// </summary>
 			/// <remarks>
 			/// Supported under Windows XP and later only. Also applies to <see cref="HidD_SetOutputReport(SafeFileHandle, byte[])"/>.
-			/// Public via <see cref="GetInputReport"/>.
+			/// Public via <see cref="TryGetInputReport"/>.
 			/// </remarks>
 			/// <param name="HidDeviceObject">A handle to an HID.</param>
 			/// <param name="ReportBuffer">A pointer to a buffer containing the report ID and report.</param>
@@ -553,7 +553,7 @@ namespace MKY.Win32
 			/// <remarks>
 			/// Not supported by Windows 98 Standard Edition.
 			/// If the buffer is full and another report arrives, the host drops the oldest report.
-			/// Public via <see cref="GetNumberOfInputBuffers"/>.
+			/// Public via <see cref="TryGetNumberOfInputBuffers"/>.
 			/// </remarks>
 			/// <param name="HidDeviceObject">A handle to a device and an integer to hold the number of buffers.</param>
 			/// <param name="NumberBuffers"><c>true</c> on success, <c>false</c> on failure.</param>
@@ -873,48 +873,58 @@ namespace MKY.Win32
 			return (false);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// See remarks at <see cref="GetString(SafeFileHandle, GetHidStringDelegate, out string)"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 		public static bool GetManufacturerString(SafeFileHandle deviceHandle, out string manufacturer)
 		{
 			DebugStringAccessMessageBoxes("Retrieving manufacturer string via hid.dll::HidD_GetManufacturerString...");
 
-			bool success = GetString(deviceHandle, NativeMethods.HidD_GetManufacturerString, out manufacturer);
+			bool isAvailable = GetString(deviceHandle, NativeMethods.HidD_GetManufacturerString, out manufacturer);
 
-			DebugStringAccessMessageBoxes(success, @"...successfully retrieved """ + manufacturer + @""".", "...failed to retrieve manufacturer string.");
+			DebugStringAccessMessageBoxes(isAvailable, @"...successfully retrieved """ + manufacturer + @""".", "...failed to retrieve manufacturer string.");
 
-			return (success);
+			return (isAvailable);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// See remarks at <see cref="GetString(SafeFileHandle, GetHidStringDelegate, out string)"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 		public static bool GetProductString(SafeFileHandle deviceHandle, out string product)
 		{
 			DebugStringAccessMessageBoxes("Retrieving product string via hid.dll::HidD_GetProductString...");
 
-			bool success = GetString(deviceHandle, NativeMethods.HidD_GetProductString, out product);
+			bool isAvailable = GetString(deviceHandle, NativeMethods.HidD_GetProductString, out product);
 
-			DebugStringAccessMessageBoxes(success, @"...successfully retrieved """ + product + @""".", "...failed to retrieve product string.");
+			DebugStringAccessMessageBoxes(isAvailable, @"...successfully retrieved """ + product + @""".", "...failed to retrieve product string.");
 
-			return (success);
+			return (isAvailable);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// See remarks at <see cref="GetString(SafeFileHandle, GetHidStringDelegate, out string)"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 		public static bool GetSerialString(SafeFileHandle deviceHandle, out string serial)
 		{
 			DebugStringAccessMessageBoxes("Retrieving serial string via hid.dll::HidD_GetSerialString...");
 
-			bool success = GetString(deviceHandle, NativeMethods.HidD_GetSerialString, out serial);
+			bool isAvailable = GetString(deviceHandle, NativeMethods.HidD_GetSerialString, out serial);
 
-			DebugStringAccessMessageBoxes(success, @"...successfully retrieved """ + serial + @""".", "...failed to retrieve serial string.");
+			DebugStringAccessMessageBoxes(isAvailable, @"...successfully retrieved """ + serial + @""".", "...failed to retrieve serial string.");
 
-			return (success);
+			return (isAvailable);
 		}
 
 		/// <summary>
 		/// Gets one of the standard strings (manufacturer, product, serial).
 		/// </summary>
+		/// <remarks>
+		/// A device may not define any or some strings (e.g. no serial string).
+		/// Therefore, simply try to retrieve the string in best-effort manner; otherwise, return "".
+		/// </remarks>
 		/// <remarks>
 		/// \fixme (2010-03-14 / MKY):
 		/// Don't know how to retrieve culture specific strings based on language ID. Simply return "".
@@ -987,7 +997,7 @@ namespace MKY.Win32
 		/// <param name="numberOfInputBuffers">An integer to hold the returned value.</param>
 		/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool GetNumberOfInputBuffers(SafeFileHandle deviceHandle, out int numberOfInputBuffers)
+		public static bool TryGetNumberOfInputBuffers(SafeFileHandle deviceHandle, out int numberOfInputBuffers)
 		{
 			bool success = false;
 			if (!EnvironmentEx.IsWindows98Standard)
@@ -1032,12 +1042,12 @@ namespace MKY.Win32
 		/// </summary>
 		/// <remarks>
 		/// Supported under Windows XP and later only. Also applies to <see cref="SetOutputReport"/>.
-		/// Public via <see cref="GetInputReport"/>.
+		/// Public via <see cref="TryGetInputReport"/>.
 		/// </remarks>
 		/// <param name="deviceHandle">A handle to an HID.</param>
 		/// <param name="reportBuffer">A pointer to a buffer containing the report ID and report.</param>
 		/// <returns><c>true</c> on success, <c>false</c> on failure.</returns>
-		public static bool GetInputReport(SafeFileHandle deviceHandle, byte[] reportBuffer)
+		public static bool TryGetInputReport(SafeFileHandle deviceHandle, byte[] reportBuffer)
 		{
 			if (!EnvironmentEx.IsWindowsXpOrLater)
 				return (NativeMethods.HidD_GetInputReport(deviceHandle, reportBuffer));
@@ -1049,7 +1059,7 @@ namespace MKY.Win32
 		/// Attempts to send an Output report to the device using a control transfer.
 		/// </summary>
 		/// <remarks>
-		/// Requires Windows XP or later. Also applies to <see cref="GetInputReport"/>.
+		/// Requires Windows XP or later. Also applies to <see cref="TryGetInputReport"/>.
 		/// Public via <see cref="SetOutputReport"/>.
 		/// </remarks>
 		/// <param name="deviceHandle">A handle to an HID.</param>
@@ -1075,7 +1085,7 @@ namespace MKY.Win32
 		}
 
 		/// <summary>
-		/// Retrieves a structure with information about a device's capabilities.
+		/// Tries to retrieve a structure with information about a device's capabilities.
 		/// </summary>
 		/// <param name="deviceHandle">A handle to a device.</param>
 		/// <param name="capabilities">An HIDP_CAPS structure.</param>
@@ -1083,7 +1093,7 @@ namespace MKY.Win32
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Emphasize occurrence of an native pointer.")]
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "1#", Justification = "Function signature is given by the Win32 API.")]
 		[CLSCompliant(false)]
-		public static bool GetDeviceCapabilities(SafeFileHandle deviceHandle, ref NativeTypes.HIDP_CAPS capabilities)
+		public static bool TryGetDeviceCapabilities(SafeFileHandle deviceHandle, ref NativeTypes.HIDP_CAPS capabilities)
 		{
 			IntPtr pPreparsedData = new IntPtr();
 

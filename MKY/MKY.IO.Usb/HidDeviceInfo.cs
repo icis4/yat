@@ -52,7 +52,7 @@ namespace MKY.IO.Usb
 	/// Instances of this container class shall be treated as immutable objects. However, it is not
 	/// possible to assign <see cref="ImmutableObjectAttribute"/>/<see cref="ImmutableContractAttribute"/>
 	/// because XML default serialization requires public setters. Split into mutable settings tuple
-	/// and immutable runtime container should be done.
+	/// and immutable runtime container could be done.
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Semantic of readonly fields is constant.")]
 	[Serializable]
@@ -134,12 +134,15 @@ namespace MKY.IO.Usb
 			Initialize(); // Initialize this info based on defaults only.
 		}
 
-		/// <summary></summary>
+		/// <exception cref="ArgumentNullException"><paramref name="path"/> is null.</exception>
 		public HidDeviceInfo(string path)
 		{
+			if (path == null)
+				throw (new ArgumentNullException("path", "A path is required for this constructor! Without a path, use one of the other constructors."));
+
 			int vendorId, productId;
 			string manufacturer, product, serial;
-			if (HidDevice.GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial, out usagePage, out usageId))
+			if (HidDevice.TryGetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial, out usagePage, out usageId))
 				Initialize(path, vendorId, productId, manufacturer, product, serial, usagePage, usageId);
 			else
 				Initialize(path); // Initialize this info based on the available information only.
@@ -150,7 +153,7 @@ namespace MKY.IO.Usb
 		public HidDeviceInfo(int vendorId, int productId, int usagePage = AnyUsagePage, int usageId = AnyUsageId)
 		{
 			string path, manufacturer, product, serial;
-			if (HidDevice.GetDeviceInfoFromVidPidUsage(vendorId, productId, usagePage, usageId, out path, out manufacturer, out product, out serial))
+			if (HidDevice.TryGetDeviceInfoFromVidPidUsage(vendorId, productId, usagePage, usageId, out path, out manufacturer, out product, out serial))
 				Initialize(path, vendorId, productId, manufacturer, product, serial, usagePage, usageId);
 			else
 				Initialize(vendorId, productId, usagePage, usageId); // Initialize this info based on the available information only.
@@ -161,7 +164,7 @@ namespace MKY.IO.Usb
 		public HidDeviceInfo(int vendorId, int productId, string serial, int usagePage = AnyUsagePage, int usageId = AnyUsageId)
 		{
 			string path, manufacturer, product;
-			if (HidDevice.GetDeviceInfoFromVidPidSerialUsage(vendorId, productId, serial, usagePage, usageId, out path, out manufacturer, out product))
+			if (HidDevice.TryGetDeviceInfoFromVidPidSerialUsage(vendorId, productId, serial, usagePage, usageId, out path, out manufacturer, out product))
 				Initialize(path, vendorId, productId, manufacturer, product, serial, usagePage, usageId);
 			else
 				Initialize(vendorId, productId, serial, usagePage, usageId); // Initialize this info based on the available information only.

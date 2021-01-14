@@ -168,18 +168,18 @@ namespace MKY.IO.Usb
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Returns VID and PID of a given path.
+		/// Tries to return VID and PID of a given path.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool GetVidPidFromPath(string path, out int vendorId, out int productId)
+		public static bool TryGetVidPidFromPath(string path, out int vendorId, out int productId)
 		{
 			SafeFileHandle deviceHandle;
 			if (Win32.Hid.CreateSharedQueryOnlyDeviceHandle(path, out deviceHandle))
 			{
 				try
 				{
-					if (GetVidPidFromHandle(deviceHandle, out vendorId, out productId))
+					if (TryGetVidPidFromHandle(deviceHandle, out vendorId, out productId))
 						return (true);
 				}
 				finally
@@ -194,7 +194,7 @@ namespace MKY.IO.Usb
 		}
 
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
-		private static bool GetVidPidFromHandle(SafeFileHandle deviceHandle, out int vendorId, out int productId)
+		private static bool TryGetVidPidFromHandle(SafeFileHandle deviceHandle, out int vendorId, out int productId)
 		{
 			// Set the size property of attributes to the number of bytes in the structure.
 			Win32.Hid.NativeTypes.HIDD_ATTRIBUTES attributes = new Win32.Hid.NativeTypes.HIDD_ATTRIBUTES();
@@ -213,18 +213,20 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Returns manufacturer, product and serial strings of a given path.
+		/// Tries to return manufacturer, product and serial strings of a given path.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool GetStringsFromPath(string path, out string manufacturer, out string product, out string serial)
+		public static bool TryGetStringsFromPath(string path, out string manufacturer, out string product, out string serial)
 		{
 			SafeFileHandle deviceHandle;
 			if (Win32.Hid.CreateSharedQueryOnlyDeviceHandle(path, out deviceHandle))
 			{
 				try
 				{
+					// A device may not define any or some strings (e.g. no serial string).
+					// Therefore, simply try to retrieve the strings in best-effort manner.
 					GetStringsFromHandle(deviceHandle, out manufacturer, out product, out serial);
 					return (true);
 				}
@@ -242,7 +244,7 @@ namespace MKY.IO.Usb
 
 		/// <remarks>
 		/// A device may not define any or some strings (e.g. no serial string).
-		/// Therefore, simply try to retrieve the strings in best-effort manner.
+		/// Therefore, simply try to retrieve the strings in best-effort manner; otherwise, return "".
 		/// </remarks>
 		private static void GetStringsFromHandle(SafeFileHandle deviceHandle, out string manufacturer, out string product, out string serial)
 		{
@@ -263,7 +265,7 @@ namespace MKY.IO.Usb
 				int vendorId, productId;
 				string manufacturer, product, serial;
 
-				if (GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
+				if (TryGetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
 					return (new DeviceInfo(path, vendorId, productId, manufacturer, product, serial));
 				else
 					return (null);
@@ -272,7 +274,7 @@ namespace MKY.IO.Usb
 			{
 				int vendorId, productId;
 
-				if (GetDeviceInfoFromPath(path, out vendorId, out productId))
+				if (TryGetDeviceInfoFromPath(path, out vendorId, out productId))
 					return (new DeviceInfo(path, vendorId, productId));
 				else
 					return (null);
@@ -280,7 +282,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Returns the information of the device with the given path.
+		/// Tries to return the information of the device with the given path.
 		/// </summary>
 		/// <remarks>
 		/// \todo: This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
@@ -290,14 +292,14 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool GetDeviceInfoFromPath(string path, out int vendorId, out int productId)
+		public static bool TryGetDeviceInfoFromPath(string path, out int vendorId, out int productId)
 		{
 			string manufacturer, product, serial;
-			return (GetDeviceInfoFromPath(path, false, out vendorId, out productId, out manufacturer, out product, out serial));
+			return (TryGetDeviceInfoFromPath(path, false, out vendorId, out productId, out manufacturer, out product, out serial));
 		}
 
 		/// <summary>
-		/// Returns the information of the device with the given path.
+		/// Tries to return the information of the device with the given path.
 		/// </summary>
 		/// <remarks>
 		/// \todo: This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
@@ -307,28 +309,30 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool GetDeviceInfoFromPath(string path, out int vendorId, out int productId, out string manufacturer, out string product, out string serial)
+		public static bool TryGetDeviceInfoFromPath(string path, out int vendorId, out int productId, out string manufacturer, out string product, out string serial)
 		{
-			return (GetDeviceInfoFromPath(path, true, out vendorId, out productId, out manufacturer, out product, out serial));
+			return (TryGetDeviceInfoFromPath(path, true, out vendorId, out productId, out manufacturer, out product, out serial));
 		}
 
 		/// <summary>
-		/// Returns the information of the device with the given path.
+		/// Tries to return the information of the device with the given path.
 		/// </summary>
 		/// <remarks>
 		/// \todo: This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
 		/// </remarks>
-		private static bool GetDeviceInfoFromPath(string path, bool retrieveStringsFromDevice, out int vendorId, out int productId, out string manufacturer, out string product, out string serial)
+		private static bool TryGetDeviceInfoFromPath(string path, bool retrieveStringsFromDevice, out int vendorId, out int productId, out string manufacturer, out string product, out string serial)
 		{
 			SafeFileHandle deviceHandle;
 			if (Win32.Hid.CreateSharedQueryOnlyDeviceHandle(path, out deviceHandle))
 			{
 				try
 				{
-					if (GetVidPidFromHandle(deviceHandle, out vendorId, out productId))
+					if (TryGetVidPidFromHandle(deviceHandle, out vendorId, out productId))
 					{
 						if (retrieveStringsFromDevice)
 						{
+							// A device may not define any or some strings (e.g. no serial string).
+							// Therefore, simply try to retrieve the strings in best-effort manner.
 							GetStringsFromHandle(deviceHandle, out manufacturer, out product, out serial);
 							return (true);
 						}
@@ -367,14 +371,14 @@ namespace MKY.IO.Usb
 		{
 			string path, manufacturer, product, serial;
 
-			if (GetDeviceInfoFromVidPid(vendorId, productId, out path, out manufacturer, out product, out serial))
+			if (TryGetDeviceInfoFromVidPid(vendorId, productId, out path, out manufacturer, out product, out serial))
 				return (new DeviceInfo(path, vendorId, productId, manufacturer, product, serial));
 			else
 				return (null);
 		}
 
 		/// <summary>
-		/// Returns the information of the device with the given VID and PID.
+		/// Tries to return the information of the device with the given VID and PID.
 		/// </summary>
 		/// <remarks>
 		/// If multiple devices with the same VID and PID are connected to the system, the first device is returned.
@@ -389,7 +393,7 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool GetDeviceInfoFromVidPid(int vendorId, int productId, out string path, out string manufacturer, out string product, out string serial)
+		public static bool TryGetDeviceInfoFromVidPid(int vendorId, int productId, out string path, out string manufacturer, out string product, out string serial)
 		{
 			foreach (var di in GetDevicesFromClass(DeviceClass.Hid))
 			{
@@ -421,14 +425,14 @@ namespace MKY.IO.Usb
 		{
 			string path, manufacturer, product;
 
-			if (GetDeviceInfoFromVidPidSerial(vendorId, productId, serial, out path, out manufacturer, out product))
+			if (TryGetDeviceInfoFromVidPidSerial(vendorId, productId, serial, out path, out manufacturer, out product))
 				return (new DeviceInfo(path, vendorId, productId, manufacturer, product, serial));
 			else
 				return (null);
 		}
 
 		/// <summary>
-		/// Returns the information of the device with the given VID and PID and serial string.
+		/// Tries to return the information of the device with the given VID and PID and serial string.
 		/// </summary>
 		/// <param name="vendorId">Given VID.</param>
 		/// <param name="productId">Given PID.</param>
@@ -439,7 +443,7 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool GetDeviceInfoFromVidPidSerial(int vendorId, int productId, string serial, out string path, out string manufacturer, out string product)
+		public static bool TryGetDeviceInfoFromVidPidSerial(int vendorId, int productId, string serial, out string path, out string manufacturer, out string product)
 		{
 			foreach (var di in GetDevicesFromClass(DeviceClass.Hid))
 			{
@@ -626,7 +630,7 @@ namespace MKY.IO.Usb
 		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Device).FullName);
 
 		private Guid classGuid;
-		private DeviceInfo deviceInfo;
+		private DeviceInfo info;
 		private bool isConnected;
 
 		#endregion
@@ -658,39 +662,76 @@ namespace MKY.IO.Usb
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// <paramref name="path"/> must be valid; otherwise, an exception is thrown.
+		/// </remarks>
+		/// <exception cref="ArgumentNullException"><paramref name="path"/> is null.</exception>
+		/// <exception cref="ArgumentException">No device could be created for the given <paramref name="path"/>.</exception>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
 		protected Device(Guid classGuid, string path)
 		{
+			if (path == null)
+				throw (new ArgumentNullException("path", "A path is required for this constructor! Without a path, use one of the other constructors."));
+
 			this.classGuid = classGuid; // The USB class GUID arg is forseen for future use.
 
 			int vendorId, productId;
 			string manufacturer, product, serial;
-			if (GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
+			if (TryGetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
 			{
-				this.deviceInfo = new DeviceInfo(path, vendorId, productId, manufacturer, product, serial);
+				this.info = new DeviceInfo(path, vendorId, productId, manufacturer, product, serial);
+				Initialize();
+			}
+			else // Ensure that 'Info' is always defined!
+			{
+				throw (new ArgumentException("No device could be created for the given path! Make sure the path is valid or use one of the other constructors.", "path"));
+			}
+		}
+
+		/// <remarks>
+		/// If <paramref name="path"/> is valid, <see cref="Info"/> is created from it; otherwise,
+		/// <see cref="Info"/> is created from <paramref name="vendorId"/> and <paramref name="productId"/>.
+		/// </remarks>
+		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
+		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
+		protected Device(Guid classGuid, string path, int vendorId, int productId)
+		{
+			this.classGuid = classGuid; // The USB class GUID arg is forseen for future use.
+
+			string manufacturer, product, serial;
+			if (!string.IsNullOrEmpty(path) && TryGetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
+			{
+				this.info = new DeviceInfo(path, vendorId, productId, manufacturer, product, serial);
+				Initialize();
+			}
+			else
+			{
+				this.info = new DeviceInfo(vendorId, productId);
 				Initialize();
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// If <paramref name="path"/> is valid, <see cref="Info"/> is created from it; otherwise,
+		/// <see cref="Info"/> is created from <paramref name="vendorId"/>, <paramref name="productId"/> and <paramref name="serial"/>.
+		/// </remarks>
+		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
-		protected Device(Guid classGuid, int vendorId, int productId)
+		protected Device(Guid classGuid, string path, int vendorId, int productId, string serial)
 		{
 			this.classGuid = classGuid; // The USB class GUID arg is forseen for future use.
 
-			this.deviceInfo = new DeviceInfo(vendorId, productId);
-			Initialize();
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "guid", Justification = "'ClassGuid' is the official term, even WMI uses it.")]
-		protected Device(Guid classGuid, int vendorId, int productId, string serial)
-		{
-			this.classGuid = classGuid; // The USB class GUID arg is forseen for future use.
-
-			this.deviceInfo = new DeviceInfo(vendorId, productId, serial);
-			Initialize();
+			string manufacturer, product;
+			if (!string.IsNullOrEmpty(path) && TryGetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
+			{
+				this.info = new DeviceInfo(path, vendorId, productId, manufacturer, product, serial);
+				Initialize();
+			}
+			else
+			{
+				this.info = new DeviceInfo(vendorId, productId, serial);
+				Initialize();
+			}
 		}
 
 		/// <summary></summary>
@@ -699,12 +740,12 @@ namespace MKY.IO.Usb
 		{
 			this.classGuid = classGuid; // The USB class GUID arg is forseen for future use.
 
-			this.deviceInfo = new DeviceInfo(deviceInfo);
+			this.info = new DeviceInfo(deviceInfo);
 			Initialize();
 		}
 
 		/// <remarks>
-		/// Constructor above creates device info and therefore also sets system path.
+		/// Constructor creates <see cref="Info"/>.
 		/// </remarks>
 		private void Initialize()
 		{
@@ -719,18 +760,18 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Used to reinitialize the device in case of a reconnect.
 		/// </summary>
-		protected virtual void Reinitialize()
+		protected virtual void Reinitialize(DeviceInfo deviceInfo)
 		{
-			GetDeviceConnect();
+			this.info = new DeviceInfo(deviceInfo);
+			Reinitialize();
 		}
 
 		/// <summary>
 		/// Used to reinitialize the device in case of a reconnect.
 		/// </summary>
-		protected void Reinitialize(DeviceInfo deviceInfo)
+		private void Reinitialize()
 		{
-			this.deviceInfo = new DeviceInfo(deviceInfo);
-			Reinitialize();
+			GetDeviceConnect();
 		}
 
 		private void GetDeviceConnect()
@@ -799,10 +840,13 @@ namespace MKY.IO.Usb
 		/// members below.
 		/// </summary>
 		/// <remarks>
+		/// The info is always defined, i.e. not <c>null</c>, for a <see cref="Device"/> object.
+		/// </remarks>
+		/// <remarks>
 		/// \remind (2019-11-10 / MKY)
 		/// According to the class description, a <see cref="DeviceInfo"/> shall be treated as an
 		/// an immutable object. While not ideal, it is considered acceptable to return such object.
-		/// Split into mutable settings tuple and immutable runtime container should be done.
+		/// Split into mutable settings tuple and immutable runtime container could be done.
 		/// </remarks>
 		public virtual DeviceInfo Info
 		{
@@ -810,7 +854,7 @@ namespace MKY.IO.Usb
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				return (this.deviceInfo);
+				return (this.info);
 			}
 		}
 
