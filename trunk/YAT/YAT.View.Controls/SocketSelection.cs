@@ -261,8 +261,8 @@ namespace YAT.View.Controls
 			set
 			{
 				if ((this.localInterface != value) || // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-					(value.Address.Equals(IPAddress.Loopback))) // Always SetControls() to be able to
-				{	                                            //   deal with the different types of
+				    (value.Address.Equals(IPAddress.Loopback))) // Always SetControls() to be able to
+				{                                               //   deal with the different types of
 					this.localInterface = value;                //   localhost/loopback.
 					SetControls();
 					OnLocalInterfaceChanged(EventArgs.Empty);
@@ -279,8 +279,8 @@ namespace YAT.View.Controls
 			set
 			{
 				if ((this.localFilter != value)            ||
-					(value.Address.Equals(IPAddress.Any))  ||  // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
-					(value.Address.Equals(IPAddress.IPv6Any))) // Allow SetControls() to be able to
+				    (value.Address.Equals(IPAddress.Any))  ||  // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+				    (value.Address.Equals(IPAddress.IPv6Any))) // Allow SetControls() to be able to
 				{                                              //   deal with the different types of
 					this.localFilter = value;                  //   any.
 					SetControls();
