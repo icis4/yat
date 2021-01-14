@@ -169,7 +169,7 @@ namespace MKY.IO.Usb
 			foreach (var di in dis)
 			{
 				Win32.Hid.NativeTypes.HIDP_CAPS capabilities;
-				if (GetDeviceCapabilities(di.Path, out capabilities))
+				if (TryGetDeviceCapabilities(di.Path, out capabilities))
 				{                        // The Win32 HIDP_CAPS structure uses term 'Usage', not 'UsageId'.
 					l.Add(new HidDeviceInfo(di, capabilities.UsagePage, capabilities.Usage));
 				}
@@ -186,7 +186,7 @@ namespace MKY.IO.Usb
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Returns the information of the device with the given path.
+		/// Tries to return the information of the device with the given path.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
@@ -195,12 +195,12 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "7#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool GetDeviceInfoFromPath(string path, out int vendorId, out int productId, out string manufacturer, out string product, out string serial, out int usagePage, out int usageId)
+		public static bool TryGetDeviceInfoFromPath(string path, out int vendorId, out int productId, out string manufacturer, out string product, out string serial, out int usagePage, out int usageId)
 		{
-			if (GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
+			if (TryGetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial))
 			{
 				Win32.Hid.NativeTypes.HIDP_CAPS capabilities;
-				if (GetDeviceCapabilities(path, out capabilities))
+				if (TryGetDeviceCapabilities(path, out capabilities))
 				{
 					usagePage = capabilities.UsagePage;
 					usageId   = capabilities.Usage; // The Win32 HIDP_CAPS structure uses term 'Usage', not 'UsageId'.
@@ -225,14 +225,14 @@ namespace MKY.IO.Usb
 		{
 			string path, manufacturer, product, serial;
 
-			if (GetDeviceInfoFromVidPidUsage(vendorId, productId, usagePage, usageId, out path, out manufacturer, out product, out serial))
+			if (TryGetDeviceInfoFromVidPidUsage(vendorId, productId, usagePage, usageId, out path, out manufacturer, out product, out serial))
 				return (new HidDeviceInfo(path, vendorId, productId, manufacturer, product, serial, usagePage, usageId));
 			else
 				return (null);
 		}
 
 		/// <summary>
-		/// Returns the information of the device with the given VID and PID.
+		/// Tries to returns the information of the device with the given VID and PID.
 		/// </summary>
 		/// <remarks>
 		/// If multiple devices with the same VID and PID are connected to the system, the first device is returned.
@@ -249,7 +249,7 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "7#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool GetDeviceInfoFromVidPidUsage(int vendorId, int productId, int usagePage, int usageId, out string path, out string manufacturer, out string product, out string serial)
+		public static bool TryGetDeviceInfoFromVidPidUsage(int vendorId, int productId, int usagePage, int usageId, out string path, out string manufacturer, out string product, out string serial)
 		{
 			foreach (var di in GetDevicesFromClass(DeviceClass.Hid))
 			{
@@ -281,14 +281,14 @@ namespace MKY.IO.Usb
 		{
 			string path, manufacturer, product;
 
-			if (GetDeviceInfoFromVidPidSerialUsage(vendorId, productId, serial, usagePage, usageId, out path, out manufacturer, out product))
+			if (TryGetDeviceInfoFromVidPidSerialUsage(vendorId, productId, serial, usagePage, usageId, out path, out manufacturer, out product))
 				return (new HidDeviceInfo(path, vendorId, productId, manufacturer, product, serial, usagePage, usageId));
 			else
 				return (null);
 		}
 
 		/// <summary>
-		/// Returns the information of the device with the given VID and PID and serial string.
+		/// Tries to return the information of the device with the given VID and PID and serial string.
 		/// </summary>
 		/// <param name="vendorId">Given VID.</param>
 		/// <param name="productId">Given PID.</param>
@@ -301,7 +301,7 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "6#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "7#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool GetDeviceInfoFromVidPidSerialUsage(int vendorId, int productId, string serial, int usagePage, int usageId, out string path, out string manufacturer, out string product)
+		public static bool TryGetDeviceInfoFromVidPidSerialUsage(int vendorId, int productId, string serial, int usagePage, int usageId, out string path, out string manufacturer, out string product)
 		{
 			foreach (var di in GetDevicesFromClass(DeviceClass.Hid))
 			{
@@ -462,7 +462,7 @@ namespace MKY.IO.Usb
 		// Fields
 		//==========================================================================================
 
-		private HidDeviceInfo hidDeviceInfo;
+		private HidDeviceInfo info;
 
 		private int inputReportByteLength;
 		private int outputReportByteLength;
@@ -486,38 +486,39 @@ namespace MKY.IO.Usb
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <exception cref="ArgumentNullException"><paramref name="path"/> is null.</exception>
+		/// <exception cref="ArgumentException">No device could be created for the given <paramref name="path"/>.</exception>
 		public HidDevice(string path)
-			: base(HidGuid, path) // Path already is correct in respect to usage.
+			: base(HidGuid, path) // Path contains the usage info.
 		{
-			Initialize();
+			Initialize(base.Info);
 		}
 
-		/// <summary></summary>
+		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
 		public HidDevice(int vendorId, int productId, int usagePage, int usageId)
-			: base(HidGuid, GetPathUsageAware(vendorId, productId, usagePage, usageId))
+			: base(HidGuid, GetPathUsageAware(vendorId, productId, usagePage, usageId), vendorId, productId)
 		{
-			Initialize();
+			Initialize(base.Info, usagePage, usageId);
 		}
 
-		/// <summary></summary>
+		/// <exception cref="ArgumentOutOfRangeException"> if a value is invalid.</exception>
 		public HidDevice(int vendorId, int productId, string serial, int usagePage, int usageId)
-			: base(HidGuid, GetPathUsageAware(vendorId, productId, serial, usagePage, usageId))
+			: base(HidGuid, GetPathUsageAware(vendorId, productId, serial, usagePage, usageId), vendorId, productId, serial)
 		{
-			Initialize();
+			Initialize(base.Info, usagePage, usageId);
 		}
 
 		/// <summary></summary>
 		public HidDevice(HidDeviceInfo deviceInfo)
 			: base(HidGuid, (DeviceInfo)deviceInfo) // Path already is correct in respect to usage.
 		{
-			Initialize();
+			Initialize(base.Info);
 		}
 
 		private static string GetPathUsageAware(int vendorId, int productId, int usagePage, int usageId)
 		{
 			string path, manufacturer, product, serial;
-			if (GetDeviceInfoFromVidPidUsage(vendorId, productId, usagePage, usageId, out path, out manufacturer, out product, out serial))
+			if (TryGetDeviceInfoFromVidPidUsage(vendorId, productId, usagePage, usageId, out path, out manufacturer, out product, out serial))
 				return (path);
 
 			return (null);
@@ -526,18 +527,22 @@ namespace MKY.IO.Usb
 		private static string GetPathUsageAware(int vendorId, int productId, string serial, int usagePage, int usageId)
 		{
 			string path, manufacturer, product;
-			if (GetDeviceInfoFromVidPidSerialUsage(vendorId, productId, serial, usagePage, usageId, out path, out manufacturer, out product))
+			if (TryGetDeviceInfoFromVidPidSerialUsage(vendorId, productId, serial, usagePage, usageId, out path, out manufacturer, out product))
 				return (path);
 
 			return (null);
 		}
 
 		/// <remarks>
-		/// Base constructor creates device info and therefore also sets system path.
+		/// Constructor must call this method to create <see cref="Info"/>.
 		/// </remarks>
-		private void Initialize()
+		private void Initialize(DeviceInfo deviceInfo, int usagePage = HidDeviceInfo.AnyUsagePage, int usageId = HidDeviceInfo.AnyUsageId)
 		{
-			GetDeviceCapabilities();
+			HidDeviceInfo hidDeviceInfo;
+			if (TryGetDeviceCapabilities(deviceInfo, out hidDeviceInfo))
+				this.info = hidDeviceInfo;
+			else
+				this.info = new HidDeviceInfo(deviceInfo, usagePage, usageId);
 
 			// Only attach handlers if this is an instance of the USB HID device class.
 			// If this instance is e.g. an Ser/HID device, handlers must be attached there.
@@ -548,22 +553,32 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Used to reinitialize the device in case of a reconnect.
 		/// </summary>
-		protected override void Reinitialize()
+		protected override void Reinitialize(DeviceInfo deviceInfo)
 		{
-			base.Reinitialize();
+			HidDeviceInfo hidDeviceInfo;
+			if (TryGetDeviceCapabilities(deviceInfo, out hidDeviceInfo))
+				this.info = hidDeviceInfo;
+			else
+				this.info = new HidDeviceInfo(deviceInfo, UsagePage, UsageId);
 
-			GetDeviceCapabilities();
+			base.Reinitialize(deviceInfo);
 		}
 
+		/// <summary>
+		/// Tries to retrieve a structure with information about a device's capabilities.
+		/// </summary>
 		/// <remarks>
 		/// This method shall not be overridden as it accesses private members.
 		/// </remarks>
-		private void GetDeviceCapabilities()
+		private bool TryGetDeviceCapabilities(DeviceInfo deviceInfo, out HidDeviceInfo hidDeviceInfo)
 		{
 			Win32.Hid.NativeTypes.HIDP_CAPS capabilities;
-			if (GetDeviceCapabilities(Path, out capabilities))
-			{                                              // The Win32 HIDP_CAPS structure uses term 'Usage', not 'UsageId'.
-				this.hidDeviceInfo = new HidDeviceInfo(base.Info, capabilities.UsagePage, capabilities.Usage);
+			if (TryGetDeviceCapabilities(deviceInfo.Path, out capabilities))
+			{
+				var usagePage = capabilities.UsagePage;
+				var usageId   = capabilities.Usage; // The Win32 HIDP_CAPS structure uses term 'Usage', not 'UsageId'.
+
+				hidDeviceInfo = new HidDeviceInfo(deviceInfo, usagePage, usageId);
 
 				this.inputReportByteLength   = capabilities.InputReportByteLength;
 				this.outputReportByteLength  = capabilities.OutputReportByteLength;
@@ -581,18 +596,15 @@ namespace MKY.IO.Usb
 				this.featureDataIndices  = capabilities.NumberFeatureDataIndices;
 
 				// Output user-friendly usage information:
-				string usagePageValue = "0x" + Info.UsagePage.ToString("X4", CultureInfo.InvariantCulture);
-				string usageIdValue   = "0x" + Info.UsageId  .ToString("X4", CultureInfo.InvariantCulture);
-
 				string usagePageName = "(unknown)";
 				try
 				{
-					HidUsagePage page = (HidUsagePageEx)(Info.UsagePage);
+					HidUsagePage page = (HidUsagePageEx)(usagePage);
 					string name = Enum.GetName(typeof(HidUsagePage), page);
 					if (!string.IsNullOrEmpty(name))
 						usagePageName = name;
-					else if ((Info.UsagePage >= (int)(HidUsagePage.VendorDefined_First)) &&
-						     (Info.UsagePage <= (int)(HidUsagePage.VendorDefined_Last)))
+					else if ((usagePage >= (int)(HidUsagePage.VendorDefined_First)) &&
+						     (usagePage <= (int)(HidUsagePage.VendorDefined_Last)))
 						usagePageName = "VendorDefined";
 				}
 				catch (ArgumentException ex) // "...is not an Enum" or type mismatches.
@@ -603,15 +615,15 @@ namespace MKY.IO.Usb
 				string usageIdName = "(unknown)";
 				try
 				{
-					HidUsageId id = (HidUsageIdEx)(Info.UsageId);
+					HidUsageId id = (HidUsageIdEx)(usageId);
 					string name = Enum.GetName(typeof(HidUsageId), id);
 					if (!string.IsNullOrEmpty(name))
 						usageIdName = name;
-					else if ((Info.UsageId >= (int)(HidUsageId.PageDefined_First)) &&
-						     (Info.UsageId <= (int)(HidUsageId.PageDefined_Last)))
+					else if ((usageId >= (int)(HidUsageId.PageDefined_First)) &&
+						     (usageId <= (int)(HidUsageId.PageDefined_Last)))
 						usageIdName = "PageDefined";
-					else if ((Info.UsageId >= (int)(HidUsageId.VendorDefined_First)) &&
-						     (Info.UsageId <= (int)(HidUsageId.VendorDefined_Last)))
+					else if ((usageId >= (int)(HidUsageId.VendorDefined_First)) &&
+						     (usageId <= (int)(HidUsageId.VendorDefined_Last)))
 						usageIdName = "VendorDefined";
 				}
 				catch (ArgumentException ex) // "...is not an Enum" or type mismatches.
@@ -619,18 +631,32 @@ namespace MKY.IO.Usb
 					DebugEx.WriteException(GetType(), ex, "Exception while retrieving usage ID!");
 				}
 
+				string usagePageValue = "0x" + usagePage.ToString("X4", CultureInfo.InvariantCulture);
+				string usageIdValue   = "0x" + usageId  .ToString("X4", CultureInfo.InvariantCulture);
+
 				Debug.WriteLine("USB HID device usage information:");
 				Debug.Indent(); // Terms "Usage page" and "Usage ID" are given by https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf section 3.1 [HID Usage Table Conventions].
 				Debug.WriteLine("Usage page " + usagePageValue + " corresponds to '" + usagePageName + "'");
 				Debug.WriteLine("Usage ID   " + usageIdValue   + " corresponds to '" + usageIdName   + "'");
 				Debug.Unindent();
+
+				return (true);
+			}
+			else
+			{
+				hidDeviceInfo = null;
+
+				return (false);
 			}
 		}
 
+		/// <summary>
+		/// Tries to retrieve a structure with information about a device's capabilities.
+		/// </summary>
 		/// <remarks>
 		/// Private for not having to expose native Win32 types.
 		/// </remarks>
-		private static bool GetDeviceCapabilities(string path, out Win32.Hid.NativeTypes.HIDP_CAPS capabilities)
+		private static bool TryGetDeviceCapabilities(string path, out Win32.Hid.NativeTypes.HIDP_CAPS capabilities)
 		{
 			SafeFileHandle deviceHandle;
 			if (!string.IsNullOrEmpty(path) && Win32.Hid.CreateSharedQueryOnlyDeviceHandle(path, out deviceHandle))
@@ -638,7 +664,7 @@ namespace MKY.IO.Usb
 				try
 				{
 					capabilities = new Win32.Hid.NativeTypes.HIDP_CAPS();
-					return (Win32.Hid.GetDeviceCapabilities(deviceHandle, ref capabilities));
+					return (Win32.Hid.TryGetDeviceCapabilities(deviceHandle, ref capabilities));
 				}
 				finally
 				{
@@ -657,7 +683,7 @@ namespace MKY.IO.Usb
 		public static void DebugWriteDeviceCapabilities(string path)
 		{
 			Win32.Hid.NativeTypes.HIDP_CAPS capabilities;
-			GetDeviceCapabilities(path, out capabilities);
+			TryGetDeviceCapabilities(path, out capabilities);
 		}
 
 		private void AttachAndRegisterStaticDeviceEventHandlers()
@@ -712,10 +738,13 @@ namespace MKY.IO.Usb
 		/// members below.
 		/// </summary>
 		/// <remarks>
+		/// The info is always defined, i.e. not <c>null</c>, for an <see cref="HidDevice"/> object.
+		/// </remarks>
+		/// <remarks>
 		/// \remind (2019-11-10 / MKY)
 		/// According to the class description, an <see cref="HidDeviceInfo"/> shall be treated as
 		/// an immutable object. While not ideal, it is considered acceptable to return such object.
-		/// Split into mutable settings tuple and immutable runtime container should be done.
+		/// Split into mutable settings tuple and immutable runtime container could be done.
 		/// </remarks>
 		public new HidDeviceInfo Info
 		{
@@ -723,7 +752,7 @@ namespace MKY.IO.Usb
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				return (this.hidDeviceInfo);
+				return (this.info);
 			}
 		}
 

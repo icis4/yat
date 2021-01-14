@@ -110,10 +110,10 @@ namespace MKY.Win32
 		//==========================================================================================
 
 		/// <summary>
-		/// Retrieves the device handle of the HID device at the given system path.
+		/// Tries to retrieve the device handle of the HID device at the given system path.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static bool GetUsbHandle(string devicePath, out SafeFileHandle usbHandle)
+		public static bool TryGetUsbHandle(string devicePath, out SafeFileHandle usbHandle)
 		{
 			SafeFileHandle h = FileIO.NativeMethods.CreateFile
 			(
@@ -161,13 +161,13 @@ namespace MKY.Win32
 		}
 
 		/// <summary>
-		/// Returns a requested device descriptor.
+		/// Tries to retrieve a requested device descriptor.
 		/// </summary>
 		/// <remarks>
 		/// Supported under Windows Vista and later only. Applies to all methods of WinUsb.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Function signature is given by the Win32 API.")]
-		public static bool GetDeviceDescriptor(SafeFileHandle interfaceHandle, int index, int languageId, byte[] buffer, out int lengthTransferred)
+		public static bool TryGetDeviceDescriptor(SafeFileHandle interfaceHandle, int index, int languageId, byte[] buffer, out int lengthTransferred)
 		{
 			try
 			{
@@ -191,13 +191,13 @@ namespace MKY.Win32
 		}
 
 		/// <summary>
-		/// Returns a requested configuration descriptor.
+		/// Tries to retrieve a requested configuration descriptor.
 		/// </summary>
 		/// <remarks>
 		/// Supported under Windows Vista and later only. Applies to all methods of WinUsb.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Function signature is given by the Win32 API.")]
-		public static bool GetConfigurationDescriptor(SafeFileHandle interfaceHandle, int index, int languageId, byte[] buffer, out int lengthTransferred)
+		public static bool TryGetConfigurationDescriptor(SafeFileHandle interfaceHandle, int index, int languageId, byte[] buffer, out int lengthTransferred)
 		{
 			try
 			{
@@ -221,14 +221,14 @@ namespace MKY.Win32
 		}
 
 		/// <summary>
-		/// Returns a requested string descriptor.
+		/// Tries to retrieve a requested string descriptor.
 		/// </summary>
 		/// <remarks>
 		/// Supported under Windows Vista and later only. Applies to all methods of WinUsb.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Function signature is given by the Win32 API.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Function signature is given by the Win32 API.")]
-		public static bool GetStringDescriptor(SafeFileHandle interfaceHandle, int index, int languageId, out string s, out int lengthTransferred)
+		public static bool TryGetStringDescriptor(SafeFileHandle interfaceHandle, int index, int languageId, out string s, out int lengthTransferred)
 		{
 			try
 			{
@@ -265,7 +265,7 @@ namespace MKY.Win32
 			{
 				string s;
 				int lengthTransferred;
-				if (WinUsb.GetStringDescriptor(interfaceHandle, index, ci.LCID, out s, out lengthTransferred))
+				if (WinUsb.TryGetStringDescriptor(interfaceHandle, index, ci.LCID, out s, out lengthTransferred))
 					d.Add(ci, s);
 			}
 			return (d);
