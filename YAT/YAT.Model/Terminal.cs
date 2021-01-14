@@ -630,7 +630,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// The file name if the user has saved the terminal; otherwise <see cref="string.Empty"/>.
+		/// The file name if the user has saved the terminal; otherwise, <see cref="string.Empty"/>.
 		/// </summary>
 		/// <remarks>
 		/// Cached from <see cref="SettingsFilePath"/> for...
@@ -651,7 +651,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// The optional user defined terminal name; otherwise <see cref="string.Empty"/>.
+		/// The optional user defined terminal name; otherwise, <see cref="string.Empty"/>.
 		/// </summary>
 		public virtual string UserName
 		{
@@ -4360,8 +4360,8 @@ namespace YAT.Model
 						MakeStartHint(out yatLead, out yatText);
 
 						OnMessageInputRequest
-						(                                            // Needed to disabmbiguate.
-							Utilities.MessageHelper.ComposeMessage(messageOnFailure, string.Empty, yatLead, yatText),
+						(
+							Utilities.MessageHelper.ComposeMessage(messageOnFailure, leadAddOn: null, secondaryLead: yatLead, secondaryText: yatText),
 							"Terminal Warning",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Warning

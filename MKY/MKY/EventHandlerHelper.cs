@@ -96,7 +96,7 @@ namespace MKY
 		/// <param name="obj">The object.</param>
 		/// <param name="eventName">Name of the event.</param>
 		/// <returns>All event sinks for the given object.</returns>
-		/// <exception cref="System.ArgumentNullException"><paramref name="obj"/> must be an object.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="obj"/> must be an object.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
