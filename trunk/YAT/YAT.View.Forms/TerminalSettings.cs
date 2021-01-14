@@ -638,7 +638,8 @@ namespace YAT.View.Forms
 
 				usbSerialHidDeviceSelection.DeviceInfo = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
 
-				                                       ////this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.MatchSerial is defined by the LocalUserSettings.
+				usbSerialHidDeviceSettings.DeviceInfo    = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
+				                                       ////this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.MatchSerial is defined by the 'LocalUserSettings'.
 				usbSerialHidDeviceSettings.Preset        = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.Preset;
 				usbSerialHidDeviceSettings.ReportFormat  = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.ReportFormat;
 				usbSerialHidDeviceSettings.RxFilterUsage = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.RxFilterUsage;

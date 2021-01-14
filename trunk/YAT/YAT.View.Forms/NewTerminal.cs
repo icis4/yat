@@ -512,6 +512,8 @@ namespace YAT.View.Forms
 
 				terminalSelection.IOType = ioType;
 
+				var forceSerialPortListRefresh = (serialPortSelection.PortId != this.newTerminalSettingsInEdit.SerialPortId); // Required to potentially perform fallback to default other than COM1.
+
 				serialPortSelection.PortId = this.newTerminalSettingsInEdit.SerialPortId;
 			////serialPortSelection.ActivePortInUseInfo is kept at 'null' as no port is yet activated/selected.
 
@@ -520,6 +522,7 @@ namespace YAT.View.Forms
 				serialPortSettings.Parity       = this.newTerminalSettingsInEdit.SerialPortCommunication.Parity;
 				serialPortSettings.StopBits     = this.newTerminalSettingsInEdit.SerialPortCommunication.StopBits;
 				serialPortSettings.FlowControl  = this.newTerminalSettingsInEdit.SerialPortCommunication.FlowControl;
+			////serialPortSettings.SignalXOnWhenOpened is an advanced setting, i.e. not available in the [New Terminal] dialog.
 				serialPortSettings.AliveMonitor = this.newTerminalSettingsInEdit.SerialPortAliveMonitor;
 				serialPortSettings.AutoReopen   = this.newTerminalSettingsInEdit.SerialPortAutoReopen;
 
@@ -547,7 +550,9 @@ namespace YAT.View.Forms
 				usbSerialHidDeviceSettings.ReportFormat  = this.newTerminalSettingsInEdit.UsbSerialHidReportFormat;
 				usbSerialHidDeviceSettings.RxFilterUsage = this.newTerminalSettingsInEdit.UsbSerialHidRxFilterUsage;
 				usbSerialHidDeviceSettings.FlowControl   = this.newTerminalSettingsInEdit.UsbSerialHidFlowControl;
+			////usbSerialHidDeviceSettings.SignalXOnWhenOpened is an advanced setting, i.e. not available in the [New Terminal] dialog.
 				usbSerialHidDeviceSettings.AutoOpen      = this.newTerminalSettingsInEdit.UsbSerialHidAutoOpen;
+			////usbSerialHidDeviceSettings.IncludeNonPayloadData is an advanced setting, i.e. not available in the [New Terminal] dialog.
 
 				checkBox_StartTerminal.Checked = this.newTerminalSettingsInEdit.StartTerminal;
 
@@ -560,11 +565,11 @@ namespace YAT.View.Forms
 				bool wasSocket       = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsSocket;
 				bool wasUsbSerialHid = ((Domain.IOTypeEx)this.SetControls_ioTypeOld).IsUsbSerialHid;
 
-				if      (isSerialPort   && !wasSerialPort)
+				if      (isSerialPort   && (!wasSerialPort || forceSerialPortListRefresh))
 					serialPortSelection        .RefreshPortList();
-				else if (isSocket       && !wasSocket)
+				else if (isSocket       && (!wasSocket))
 					socketSelection            .RefreshLocalInterfaceList();
-				else if (isUsbSerialHid && !wasUsbSerialHid)
+				else if (isUsbSerialHid && (!wasUsbSerialHid))
 					usbSerialHidDeviceSelection.RefreshDeviceList();
 
 				this.SetControls_ioTypeOld = ioType;
