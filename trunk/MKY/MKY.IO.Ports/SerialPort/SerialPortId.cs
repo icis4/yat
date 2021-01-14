@@ -49,7 +49,7 @@ namespace MKY.IO.Ports
 	/// Instances of this container class shall be treated as immutable objects. However, it is not
 	/// possible to assign <see cref="ImmutableObjectAttribute"/>/<see cref="ImmutableContractAttribute"/>
 	/// because XML default serialization requires public setters. Split into mutable settings tuple
-	/// and immutable runtime container should be done.
+	/// and immutable runtime container could be done.
 	/// </remarks>
 	[Serializable]
 	[TypeConverter(typeof(SerialPortIdConverter))]
