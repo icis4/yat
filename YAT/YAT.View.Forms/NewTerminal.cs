@@ -202,6 +202,7 @@ namespace YAT.View.Forms
 		////if (this.isSettingControls)
 		////	return; shall not be done, as...
 		////	...the control will automatically switch the port if not or no longer available.
+		////	...the control may automatically switch the port for e.g. UDP/IP PairSocket.
 		////	...the control may automatically switch related settings such as Ser/HID presets.
 		////	...this event handler only updates the settings tree anyway.
 
@@ -273,8 +274,12 @@ namespace YAT.View.Forms
 
 		private void socketSelection_RemoteHostChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; shall not be done, as...
+		////	...the control will automatically switch the interface if not or no longer available.
+		////	...the control may automatically switch the port for e.g. UDP/IP PairSocket.
+		////	...the control may automatically switch related settings such as Ser/HID presets.
+		////	...this event handler only updates the settings tree anyway.
 
 			var host = socketSelection.RemoteHost;
 			this.newTerminalSettingsInEdit.SocketRemoteHost = host;
@@ -285,8 +290,8 @@ namespace YAT.View.Forms
 
 		private void socketSelection_RemoteTcpPortChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			var port = socketSelection.RemoteTcpPort;
 			this.newTerminalSettingsInEdit.SocketRemoteTcpPort = port;
@@ -297,8 +302,8 @@ namespace YAT.View.Forms
 
 		private void socketSelection_RemoteUdpPortChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			var port = socketSelection.RemoteUdpPort;
 			this.newTerminalSettingsInEdit.SocketRemoteUdpPort = socketSelection.RemoteUdpPort;
@@ -310,18 +315,15 @@ namespace YAT.View.Forms
 		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
 		{
 		////if (this.isSettingControls)
-		////	return; shall not be done, as...
-		////	...the control will automatically switch the interface if not or no longer available.
-		////	...the control may automatically switch related settings such as Ser/HID presets.
-		////	...this event handler only updates the settings tree anyway.
+		////	return; see above!
 
 			this.newTerminalSettingsInEdit.SocketLocalInterface = socketSelection.LocalInterface;
 		}
 
 		private void socketSelection_LocalFilterChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			var filter = socketSelection.LocalFilter;
 			this.newTerminalSettingsInEdit.SocketLocalFilter = filter;
@@ -332,8 +334,8 @@ namespace YAT.View.Forms
 
 		private void socketSelection_LocalTcpPortChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			var port = socketSelection.LocalTcpPort;
 			this.newTerminalSettingsInEdit.SocketLocalTcpPort = port;
@@ -344,8 +346,8 @@ namespace YAT.View.Forms
 
 		private void socketSelection_LocalUdpPortChanged(object sender, EventArgs e)
 		{
-			if (this.isSettingControls)
-				return;
+		////if (this.isSettingControls)
+		////	return; see above!
 
 			var port = socketSelection.LocalUdpPort;
 			this.newTerminalSettingsInEdit.SocketLocalUdpPort = port;
@@ -382,6 +384,7 @@ namespace YAT.View.Forms
 		////if (this.isSettingControls)
 		////	return; shall not be done, as...
 		////	...the control will automatically switch the device if not or no longer available.
+		////	...the control may automatically switch the port for e.g. UDP/IP PairSocket.
 		////	...the control may automatically switch related settings such as Ser/HID presets.
 		////	...this event handler only updates the settings tree anyway.
 
