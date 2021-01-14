@@ -283,7 +283,7 @@ namespace MKY.IO.Serial.Usb
 			get
 			{
 				return ((this.flowControl == SerialHidFlowControl.Software) ||
-						(this.flowControl == SerialHidFlowControl.ManualSoftware));
+				        (this.flowControl == SerialHidFlowControl.ManualSoftware));
 			}
 		}
 
@@ -292,10 +292,7 @@ namespace MKY.IO.Serial.Usb
 		/// </summary>
 		public virtual bool FlowControlManagesXOnXOffManually
 		{
-			get
-			{
-				return (this.flowControl == SerialHidFlowControl.ManualSoftware);
-			}
+			get { return (this.flowControl == SerialHidFlowControl.ManualSoftware); }
 		}
 
 		/// <remarks>Applies if <see cref="FlowControlUsesXOnXOff"/>.</remarks>
