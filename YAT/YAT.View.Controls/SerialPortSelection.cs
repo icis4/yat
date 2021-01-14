@@ -141,16 +141,19 @@ namespace YAT.View.Controls
 			get { return (this.portId); }
 			set
 			{
-				// Don't accept to set the device to null/nothing. Master is the device list. If
-				// devices are available, there is always a device selected.
-				if (value != null)
+				if (value == null)
 				{
-					if (this.portId != value)
-					{
-						this.portId = value;
-						SetPortSelection();
-						OnPortIdChanged(EventArgs.Empty);
-					}
+					// If devices are available, there shall always be a device selected,
+					// thus try to fall back to first device:
+					if (comboBox_Port.Items.Count > 0)
+						value = (comboBox_Port.Items[0] as SerialPortId);
+				}
+
+				if (this.portId != value)
+				{
+					this.portId = value;
+					SetPortSelection();
+					OnPortIdChanged(EventArgs.Empty);
 				}
 			}
 		}

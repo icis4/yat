@@ -102,16 +102,19 @@ namespace YAT.View.Controls
 			get { return (this.deviceInfo); }
 			set
 			{
-				// Don't accept to set the device to null/nothing. Master is the device list. If
-				// devices are available, there is always a device selected.
-				if (value != null)
+				if (value == null)
 				{
-					if (this.deviceInfo != value)
-					{
-						this.deviceInfo = value;
-						SetDeviceSelection();
-						OnDeviceInfoChanged(EventArgs.Empty);
-					}
+					// If devices are available, there shall always be a device selected,
+					// thus try to fall back to first device:
+					if (comboBox_Device.Items.Count > 0)
+						value = (comboBox_Device.Items[0] as HidDeviceInfo);
+				}
+
+				if (this.deviceInfo != value)
+				{
+					this.deviceInfo = value;
+					SetDeviceSelection();
+					OnDeviceInfoChanged(EventArgs.Empty);
 				}
 			}
 		}
