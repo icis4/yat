@@ -430,8 +430,10 @@ namespace YAT.View.Forms
 			var di = usbSerialHidDeviceSelection.DeviceInfo;
 			this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.DeviceInfo = di;
 
-			// Also update settings control (not via SetControls(), that would be an overkill):
-			usbSerialHidDeviceSettings.DeviceInfo = di;
+			// Also update settings control (not via SetControls(), that would be an overkill),
+			// but only if change was not triggered by setting the controls (via SetControls()):
+			if (!this.isSettingControls)
+				usbSerialHidDeviceSettings.SetDeviceInfoIncludingUpdateOfPresets(di);
 		}
 
 		private void usbSerialHidDeviceSettings_PresetChanged(object sender, EventArgs e)
@@ -636,9 +638,9 @@ namespace YAT.View.Forms
 				socketSettings.TcpClientAutoReconnect = this.settingsInEdit.Terminal.IO.Socket.TcpClientAutoReconnect;
 				socketSettings.UdpServerSendMode      = this.settingsInEdit.Terminal.IO.Socket.UdpServerSendMode;
 
-				usbSerialHidDeviceSelection.DeviceInfo = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
-
-				usbSerialHidDeviceSettings.DeviceInfo    = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
+				var di                                 = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
+				usbSerialHidDeviceSelection.DeviceInfo = di;
+				usbSerialHidDeviceSettings.SetDeviceInfoWithoutUpdateOfPresets(di);
 				                                       ////this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.MatchSerial is defined by the 'LocalUserSettings'.
 				usbSerialHidDeviceSettings.Preset        = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.Preset;
 				usbSerialHidDeviceSettings.ReportFormat  = this.settingsInEdit.Terminal.IO.UsbSerialHidDevice.ReportFormat;
