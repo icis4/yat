@@ -139,26 +139,36 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <remarks>
-		/// Used for...
+		/// Required for...
+		/// ...setting the base for <see cref="ReportFormat"/> and <see cref="RxFilterUsage"/>.
+		/// </remarks>
+		public void SetDeviceInfoWithoutUpdateOfPresets(DeviceInfo deviceInfo)
+		{
+			if (this.deviceInfo != deviceInfo)
+			{
+				this.deviceInfo = deviceInfo;
+				SetControls();
+			////OnDeviceInfoChanged does not exist as this is not a true property.
+			}
+		}
+
+		/// <remarks>
+		/// Required for...
 		/// ...initially updating <see cref="Preset"/> and <see cref="FlowControl"/>.
 		/// ...subsequently updating <see cref="Preset"/> and <see cref="FlowControl"/>.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1044:PropertiesShouldNotBeWriteOnly", Justification = "Only setter required for initialization of control.")]
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public DeviceInfo DeviceInfo
+		public void SetDeviceInfoIncludingUpdateOfPresets(DeviceInfo deviceInfo)
 		{
-			set
+			SetDeviceInfoWithoutUpdateOfPresets(deviceInfo);
+
+			// Attention:
+			// Similar code exists in YAT.Model.Settings.ScriptUSBSettingsHelper.UpdateFrom(IOSettings, ref USBSerHIDSettings).
+			// Changes likely have to be applied there too.
+			// Code is duplicated rather than encapsulated as resulting method and usage would not result in less code.
+
+			if (this.deviceInfo != null)
 			{
-				this.deviceInfo = value;
-
-				// Attention:
-				// Similar code exists in YAT.Model.Settings.ScriptUSBSettingsHelper.UpdateFrom(IOSettings, ref USBSerHIDSettings).
-				// Changes likely have to be applied there too.
-				// Code is duplicated rather than encapsulated as resulting method and usage would not result in less code.
-
 				// Try to automatically select one of the settings presets:
-				if (this.deviceInfo != null)
 				{
 					SerialHidDeviceSettingsPresetEx preset;
 					if (SerialHidDeviceSettingsPresetEx.TryFrom(deviceInfo, out preset))
@@ -166,11 +176,12 @@ namespace YAT.View.Controls
 				}
 
 				// Also try to automatically set flow control based on that preset:
-				if (this.deviceInfo != null)
 				{
 					SerialHidFlowControlPresetEx preset;
 					if (SerialHidFlowControlPresetEx.TryFrom(deviceInfo, out preset))
 						FlowControl = preset.ToFlowControl();
+					else
+						FlowControl = SerialHidFlowControl.None; // Explicitly set [None], which is the most typical case.
 				}
 			}
 		}
