@@ -7380,31 +7380,12 @@ namespace YAT.View.Forms
 			if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)    { monitor_Rx.   SetDataStatus(status); }
 		}
 
-		/// <summary>
-		/// 'Normally', the display is updated by the 'DisplayElements[Tx|Bidir|Rx]Added' events,
-		/// except for those cases where processing is limited to 'DisplayLines[Bidir|Rx][Added|Reloaded]':
-		/// <list type="bullet">
-		/// <item><description>AutoAction: Filter/Suppress.</description></item>
-		/// <item><description>AutoAction: Text based triggers.</description></item>
-		/// <item><description>AutoResponse: Text based triggers.</description></item>
-		/// </list>
-		/// Not the perfect solution, but considered good enough, although it doesn't fully work when both
-		/// automatic action and response are active. But then highlighting becomes limited anyway...
-		/// </summary>
-		private bool UseDisplayElementsAdded
+		/// <remarks>
+		/// See <see cref="Model.Terminal.AutoTriggerIsActiveButLimitedToLine"/> for backgound.
+		/// </remarks>
+		protected virtual bool UseDisplayElementsAddedEventsForAddingToMonitors
 		{
-			get
-			{
-				var autoActionCondition = (settingsRoot.AutoAction.IsActive && (settingsRoot.AutoAction.Trigger != AutoTrigger.AnyLine) &&
-				                           settingsRoot.AutoAction.IsByteSequenceTriggered && // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
-				                           settingsRoot.AutoAction.IsNeitherFilterNorSuppress && // Filter/Suppress is limited to be processed in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
-				                           settingsRoot.AutoAction.IsNotCountRatePlot); // Count/Rate Plot is limited to be processed in Model.Termial.ioRate_Changed.
-
-				var autoResponseCondition = (settingsRoot.AutoResponse.IsActive && (settingsRoot.AutoResponse.Trigger != AutoTrigger.AnyLine) &&
-				                             settingsRoot.AutoResponse.IsByteSequenceTriggered); // Text based triggering is evaluated in terminal_DisplayLines[Bidir|Rx][Added|Reloaded].
-
-				return (!(autoActionCondition || autoResponseCondition));
-			}          // Only if neither condition is given, the 'DisplayElementsAdded' events shall be used.
+			get { return (!this.terminal.AutoTriggerIsActiveButLimitedToLine); }
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -7412,7 +7393,7 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsTxAdded(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (UseDisplayElementsAdded) // See property for background.
+			if (UseDisplayElementsAddedEventsForAddingToMonitors) // See property for background.
 			{
 				if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)
 					monitor_Tx.AddElements(e.Elements);
@@ -7426,7 +7407,7 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsBidirAdded(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (UseDisplayElementsAdded) // See property for background.
+			if (UseDisplayElementsAddedEventsForAddingToMonitors) // See property for background.
 			{
 				if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
 					monitor_Bidir.AddElements(e.Elements);
@@ -7438,7 +7419,7 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayElementsBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayElementsRxAdded(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			if (UseDisplayElementsAdded) // See property for background.
+			if (UseDisplayElementsAddedEventsForAddingToMonitors) // See property for background.
 			{
 				if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
 					monitor_Rx.AddElements(e.Elements);
@@ -7514,7 +7495,7 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesTxAdded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (!UseDisplayElementsAdded) // See property for background.
+			if (!UseDisplayElementsAddedEventsForAddingToMonitors) // See property for background.
 			{
 				if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)
 					monitor_Tx.AddLines(e.Lines);
@@ -7528,7 +7509,7 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesRxAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesBidirAdded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (!UseDisplayElementsAdded) // See property for background.
+			if (!UseDisplayElementsAddedEventsForAddingToMonitors) // See property for background.
 			{
 				if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
 					monitor_Bidir.AddLines(e.Lines);
@@ -7540,7 +7521,7 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.DisplayLinesBidirAdded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_DisplayLinesRxAdded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (!UseDisplayElementsAdded) // See property for background.
+			if (!UseDisplayElementsAddedEventsForAddingToMonitors) // See property for background.
 			{
 				if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
 					monitor_Rx.AddLines(e.Lines);
