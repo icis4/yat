@@ -1470,11 +1470,12 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void ResetAutoActionTriggerOptionControls(bool childIsReady)
+		private void ResetAutoActionTriggerOptionControls()
 		{
 			bool triggerTextIsSupported  = false;
 			bool triggerRegexIsSupported = false;
 
+			var childIsReady = (ActiveMdiChild != null);
 			if (childIsReady)
 			{
 				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
@@ -1493,28 +1494,40 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoActionTriggerUseTextAndRevalidate()
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoActionTriggerUseText();
+			var childIsReady = (ActiveMdiChild != null);
+			if (childIsReady)
+				((Terminal)ActiveMdiChild).RequestToggleAutoActionTriggerUseText();
+
 			RevalidateAndRequestAutoActionTrigger();
 		}
 
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoActionTriggerCaseSensitiveAndRevalidate()
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoActionTriggerCaseSensitive();
+			var childIsReady = (ActiveMdiChild != null);
+			if (childIsReady)
+				((Terminal)ActiveMdiChild).RequestToggleAutoActionTriggerCaseSensitive();
+
 			RevalidateAndRequestAutoActionTrigger();
 		}
 
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoActionTriggerWholeWordAndRevalidate()
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoActionTriggerWholeWord();
+			var childIsReady = (ActiveMdiChild != null);
+			if (childIsReady)
+				((Terminal)ActiveMdiChild).RequestToggleAutoActionTriggerWholeWord();
+
 			RevalidateAndRequestAutoActionTrigger();
 		}
 
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoActionTriggerEnableRegexAndRevalidate()
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoActionTriggerEnableRegex();
+			var childIsReady = (ActiveMdiChild != null);
+			if (childIsReady)
+				((Terminal)ActiveMdiChild).RequestToggleAutoActionTriggerEnableRegex();
+
 			RevalidateAndRequestAutoActionTrigger();
 		}
 
@@ -1736,11 +1749,12 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void ResetAutoResponseTriggerOptionControls(bool childIsReady)
+		private void ResetAutoResponseTriggerOptionControls()
 		{
 			bool triggerTextIsSupported  = false;
 			bool triggerRegexIsSupported = false;
 
+			var childIsReady = (ActiveMdiChild != null);
 			if (childIsReady)
 			{
 				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
@@ -1759,28 +1773,40 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoResponseTriggerUseTextAndRevalidate()
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerEnableRegex();
+			var childIsReady = (ActiveMdiChild != null);
+			if (childIsReady)
+				((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerEnableRegex();
+
 			RevalidateAndRequestAutoResponseTrigger();
 		}
 
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoResponseTriggerCaseSensitiveAndRevalidate()
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerCaseSensitive();
+			var childIsReady = (ActiveMdiChild != null);
+			if (childIsReady)
+				((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerCaseSensitive();
+
 			RevalidateAndRequestAutoResponseTrigger();
 		}
 
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoResponseTriggerWholeWordAndRevalidate()
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerWholeWord();
+			var childIsReady = (ActiveMdiChild != null);
+			if (childIsReady)
+				((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerWholeWord();
+
 			RevalidateAndRequestAutoResponseTrigger();
 		}
 
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoResponseTriggerEnableRegexAndRevalidate()
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerEnableRegex();
+			var childIsReady = (ActiveMdiChild != null);
+			if (childIsReady)
+				((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerEnableRegex();
+
 			RevalidateAndRequestAutoResponseTrigger();
 		}
 
@@ -1819,12 +1845,13 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void ResetAutoResponseResponseOptionControls(bool childIsReady)
+		private void ResetAutoResponseResponseOptionControls()
 		{
 			bool triggerTextIsSupported     = false;
 			bool triggerRegexIsSupported    = false;
 			bool responseReplaceIsSupported = false;
 
+			var childIsReady = (ActiveMdiChild != null);
 			if (childIsReady)
 			{
 				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
@@ -1845,7 +1872,10 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoResponseResponseEnableReplaceAndRevalidate()
 		{
-			((Terminal)ActiveMdiChild).RequestToggleAutoResponseResponseEnableReplace();
+			var childIsReady = (ActiveMdiChild != null);
+			if (childIsReady)
+				((Terminal)ActiveMdiChild).RequestToggleAutoResponseResponseEnableReplace();
+
 			RevalidateAndRequestAutoResponseResponse();
 		}
 
@@ -2547,6 +2577,8 @@ namespace YAT.View.Forms
 			var trigger = (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
 			{
+				// Precondition: There always is an 'ActiveMdiChild' when this event gets raised.
+
 				if (((Terminal)ActiveMdiChild).RequestAutoActionValidateTrigger(trigger))
 				{
 					if (trigger.IsExplicit)
@@ -2578,7 +2610,7 @@ namespace YAT.View.Forms
 		private void toolStripComboBox_MainTool_AutoAction_Trigger_Leave(object sender, EventArgs e)
 		{
 			if (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndex != ControlEx.InvalidIndex)
-				ResetAutoActionTriggerOptionControls((ActiveMdiChild != null));
+				ResetAutoActionTriggerOptionControls();
 
 			if (!this.autoActionTriggerValidationIsOngoing) // Revalidation may already be ongoing triggered by clicking on option.
 				RevalidateAndRequestAutoActionTrigger();
@@ -2620,35 +2652,41 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void RevalidateAndRequestAutoActionTrigger()
 		{
+			var childIsReady = (ActiveMdiChild != null);
+
 			var selectedIndex = toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndex;
 			var selectedItem = (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
 			                  //// Not listed             or                            listed explicit tigger.
 			if ((selectedIndex == ControlEx.InvalidIndex) || ((selectedItem != null) && selectedItem.IsExplicit))
 			{
-				var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoAction_Trigger.Text;
-				if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
+				if (childIsReady)
 				{
-					int invalidTextStart;
-					int invalidTextLength;
-
-					this.autoActionTriggerValidationIsOngoing = true;
-					var success = ((Terminal)ActiveMdiChild).RequestAutoActionValidateTriggerText(triggerTextOrRegexPattern, out invalidTextStart, out invalidTextLength);
-					this.autoActionTriggerValidationIsOngoing = false;
-
-					if (!success)
+					var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoAction_Trigger.Text;
+					if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
 					{
-						SetAutoActionTriggerOptionControls((ActiveMdiChild != null), true, true); // Allow changing options while editing a not yet validated trigger!
-						((Terminal)ActiveMdiChild).AutoActionTriggerState = AutoContentState.Invalid;
-						toolStripComboBox_MainTool_AutoAction_Trigger.Focus();
-						toolStripComboBox_MainTool_AutoAction_Trigger.Select(invalidTextStart, invalidTextLength);
-						return;
-					}
-				}
+						int invalidTextStart;
+						int invalidTextLength;
 
-				((Terminal)ActiveMdiChild).ActivateAutoActionTrigger(triggerTextOrRegexPattern);
+						this.autoActionTriggerValidationIsOngoing = true;
+						var success = ((Terminal)ActiveMdiChild).RequestAutoActionValidateTriggerText(triggerTextOrRegexPattern, out invalidTextStart, out invalidTextLength);
+						this.autoActionTriggerValidationIsOngoing = false;
+
+						if (!success)
+						{                                       // 'childIsReady' for sure.
+							SetAutoActionTriggerOptionControls(true, true, true); // Allow changing options while editing a not yet validated trigger!
+							((Terminal)ActiveMdiChild).AutoActionTriggerState = AutoContentState.Invalid;
+							toolStripComboBox_MainTool_AutoAction_Trigger.Focus();
+							toolStripComboBox_MainTool_AutoAction_Trigger.Select(invalidTextStart, invalidTextLength);
+							return;
+						}
+					}
+
+					((Terminal)ActiveMdiChild).ActivateAutoActionTrigger(triggerTextOrRegexPattern);
+				}
 			}
 
-			((Terminal)ActiveMdiChild).AutoActionTriggerState = AutoContentState.Neutral;
+			if (childIsReady)
+				((Terminal)ActiveMdiChild).AutoActionTriggerState = AutoContentState.Neutral;
 		}
 
 		private void toolStripComboBox_MainTool_AutoAction_Trigger_KeyDown(object sender, KeyEventArgs e)
@@ -2772,6 +2810,8 @@ namespace YAT.View.Forms
 			var trigger = (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
 			{
+				// Precondition: There always is an 'ActiveMdiChild' when this event gets raised.
+
 			////if (((Terminal)ActiveMdiChild).RequestAutoResponseValidateTrigger(trigger)) is not needed (yet).
 				{
 					if (trigger.IsExplicit)
@@ -2803,7 +2843,7 @@ namespace YAT.View.Forms
 		private void toolStripComboBox_MainTool_AutoResponse_Trigger_Leave(object sender, EventArgs e)
 		{
 			if (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndex != ControlEx.InvalidIndex)
-				ResetAutoResponseTriggerOptionControls((ActiveMdiChild != null));
+				ResetAutoResponseTriggerOptionControls();
 
 			if (!this.autoResponseTriggerValidationIsOngoing) // Revalidation may already be ongoing triggered by clicking on option.
 				RevalidateAndRequestAutoResponseTrigger();
@@ -2845,35 +2885,41 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void RevalidateAndRequestAutoResponseTrigger()
 		{
+			var childIsReady = (ActiveMdiChild != null);
+
 			var selectedIndex = toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndex;
 			var selectedItem = (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
 			                  //// Not listed             or                            listed explicit tigger.
 			if ((selectedIndex == ControlEx.InvalidIndex) || ((selectedItem != null) && selectedItem.IsExplicit))
 			{
-				var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoResponse_Trigger.Text;
-				if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
+				if (childIsReady)
 				{
-					int invalidTextStart;
-					int invalidTextLength;
-
-					this.autoResponseTriggerValidationIsOngoing = true;
-					var success = ((Terminal)ActiveMdiChild).RequestAutoResponseValidateTriggerText(triggerTextOrRegexPattern, out invalidTextStart, out invalidTextLength);
-					this.autoResponseTriggerValidationIsOngoing = false;
-
-					if (!success)
+					var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoResponse_Trigger.Text;
+					if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
 					{
-						SetAutoResponseTriggerOptionControls((ActiveMdiChild != null), true, true); // Allow changing options while editing a not yet validated trigger!
-						((Terminal)ActiveMdiChild).AutoResponseTriggerState = AutoContentState.Invalid;
-						toolStripComboBox_MainTool_AutoResponse_Trigger.Focus();
-						toolStripComboBox_MainTool_AutoResponse_Trigger.Select(invalidTextStart, invalidTextLength);
-						return;
-					}
-				}
+						int invalidTextStart;
+						int invalidTextLength;
 
-				((Terminal)ActiveMdiChild).ActivateAutoResponseTrigger(triggerTextOrRegexPattern);
+						this.autoResponseTriggerValidationIsOngoing = true;
+						var success = ((Terminal)ActiveMdiChild).RequestAutoResponseValidateTriggerText(triggerTextOrRegexPattern, out invalidTextStart, out invalidTextLength);
+						this.autoResponseTriggerValidationIsOngoing = false;
+
+						if (!success)
+						{                                         // 'childIsReady' for sure.
+							SetAutoResponseTriggerOptionControls(true, true, true); // Allow changing options while editing a not yet validated trigger!
+							((Terminal)ActiveMdiChild).AutoResponseTriggerState = AutoContentState.Invalid;
+							toolStripComboBox_MainTool_AutoResponse_Trigger.Focus();
+							toolStripComboBox_MainTool_AutoResponse_Trigger.Select(invalidTextStart, invalidTextLength);
+							return;
+						}
+					}
+
+					((Terminal)ActiveMdiChild).ActivateAutoResponseTrigger(triggerTextOrRegexPattern);
+				}
 			}
 
-			((Terminal)ActiveMdiChild).AutoResponseTriggerState = AutoContentState.Neutral;
+			if (childIsReady)
+				((Terminal)ActiveMdiChild).AutoResponseTriggerState = AutoContentState.Neutral;
 		}
 
 		private void toolStripComboBox_MainTool_AutoResponse_Trigger_KeyDown(object sender, KeyEventArgs e)
@@ -2957,6 +3003,8 @@ namespace YAT.View.Forms
 			var response = (toolStripComboBox_MainTool_AutoResponse_Response.SelectedItem as AutoResponseEx);
 			if (response != null)
 			{
+				// Precondition: There always is an 'ActiveMdiChild' when this event gets raised.
+
 			////if (((Terminal)ActiveMdiChild).RequestAutoResponseValidateResponse(response)) is not needed (yet).
 				{
 					if (response.IsExplicit)
@@ -2988,7 +3036,7 @@ namespace YAT.View.Forms
 		private void toolStripComboBox_MainTool_AutoResponse_Response_Leave(object sender, EventArgs e)
 		{
 			if (toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndex != ControlEx.InvalidIndex)
-				ResetAutoResponseResponseOptionControls((ActiveMdiChild != null));
+				ResetAutoResponseResponseOptionControls();
 
 			if (!this.autoResponseResponseValidationIsOngoing) // Revalidation may already be ongoing triggered by clicking on option.
 				RevalidateAndRequestAutoResponseResponse();
@@ -3030,35 +3078,41 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void RevalidateAndRequestAutoResponseResponse()
 		{
+			var childIsReady = (ActiveMdiChild != null);
+
 			var selectedIndex = toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndex;
 			var selectedItem = (toolStripComboBox_MainTool_AutoResponse_Response.SelectedItem as AutoTriggerEx);
 			                  //// Not listed             or                            listed explicit response.
 			if ((selectedIndex == ControlEx.InvalidIndex) || ((selectedItem != null) && selectedItem.IsExplicit))
 			{
-				var responseText = toolStripComboBox_MainTool_AutoResponse_Response.Text;
-				if (!string.IsNullOrEmpty(responseText))
+				if (childIsReady)
 				{
-					int invalidTextStart;
-					int invalidTextLength;
-
-					this.autoResponseResponseValidationIsOngoing = true;
-					var success = ((Terminal)ActiveMdiChild).RequestAutoResponseValidateResponseText(responseText, out invalidTextStart, out invalidTextLength);
-					this.autoResponseResponseValidationIsOngoing = false;
-
-					if (!success)
+					var responseText = toolStripComboBox_MainTool_AutoResponse_Response.Text;
+					if (!string.IsNullOrEmpty(responseText))
 					{
-						SetAutoResponseResponseOptionControls((ActiveMdiChild != null), true, true, true); // Allow changing options while editing a not yet validated trigger!
-						((Terminal)ActiveMdiChild).AutoResponseResponseState = AutoContentState.Invalid;
-						toolStripComboBox_MainTool_AutoResponse_Response.Focus();
-						toolStripComboBox_MainTool_AutoResponse_Response.Select(invalidTextStart, invalidTextLength);
-						return;
-					}
-				}
+						int invalidTextStart;
+						int invalidTextLength;
 
-				((Terminal)ActiveMdiChild).ActivateAutoResponseResponse(responseText);
+						this.autoResponseResponseValidationIsOngoing = true;
+						var success = ((Terminal)ActiveMdiChild).RequestAutoResponseValidateResponseText(responseText, out invalidTextStart, out invalidTextLength);
+						this.autoResponseResponseValidationIsOngoing = false;
+
+						if (!success)
+						{                                          // 'childIsReady' for sure.
+							SetAutoResponseResponseOptionControls(true, true, true, true); // Allow changing options while editing a not yet validated trigger!
+							((Terminal)ActiveMdiChild).AutoResponseResponseState = AutoContentState.Invalid;
+							toolStripComboBox_MainTool_AutoResponse_Response.Focus();
+							toolStripComboBox_MainTool_AutoResponse_Response.Select(invalidTextStart, invalidTextLength);
+							return;
+						}
+					}
+
+					((Terminal)ActiveMdiChild).ActivateAutoResponseResponse(responseText);
+				}
 			}
 
-			((Terminal)ActiveMdiChild).AutoResponseResponseState = AutoContentState.Neutral;
+			if (childIsReady)
+				((Terminal)ActiveMdiChild).AutoResponseResponseState = AutoContentState.Neutral;
 		}
 
 		private void toolStripComboBox_MainTool_AutoResponse_Response_KeyDown(object sender, KeyEventArgs e)
