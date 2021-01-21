@@ -1051,6 +1051,11 @@ namespace YAT.View.Forms
 			ShowPredefinedCommandSettings(predefined.SelectedPageId, 1);
 		}
 
+		/// <remarks>
+		/// Note that the 'SelectedIndexChanged' event is not raised when changing from a listed
+		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
+		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
+		/// </remarks>
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -1079,10 +1084,11 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that this 'Leave' event also has a particular behavior:
+		/// Note that this 'Leave' event has a particular behavior:
 		/// <list type="bullet">
 		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
 		/// <item><description>Directly clicking an option with the mouse, the event is not invoked!</description></item>
+		/// <item><description>Clicking somewhere outside the toolbar, the event is invoked immediately.</description></item>
 		/// </list>
 		/// </remarks>
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_Leave(object sender, EventArgs e)
@@ -1179,6 +1185,11 @@ namespace YAT.View.Forms
 			RequestToggleAutoResponseTriggerEnableRegexAndRevalidate();
 		}
 
+		/// <remarks>
+		/// Note that the 'SelectedIndexChanged' event is not raised when changing from a listed
+		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
+		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
+		/// </remarks>
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -1207,10 +1218,11 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that this 'Leave' event also has a particular behavior:
+		/// Note that this 'Leave' event has a particular behavior:
 		/// <list type="bullet">
 		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
 		/// <item><description>Directly clicking an option with the mouse, the event is not invoked!</description></item>
+		/// <item><description>Clicking somewhere outside the toolbar, the event is invoked immediately.</description></item>
 		/// </list>
 		/// </remarks>
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_Leave(object sender, EventArgs e)
@@ -1445,6 +1457,11 @@ namespace YAT.View.Forms
 			toolStripMenuItem_TerminalMenu_Receive_SetMenuItems();
 		}
 
+		/// <remarks>
+		/// Note that the 'SelectedIndexChanged' event is not raised when changing from a listed
+		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
+		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
+		/// </remarks>
 		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -1473,10 +1490,11 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that this 'Leave' event also has a particular behavior:
+		/// Note that this 'Leave' event has a particular behavior:
 		/// <list type="bullet">
 		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
 		/// <item><description>Directly clicking an option with the mouse, the event is not invoked!</description></item>
+		/// <item><description>Clicking somewhere outside the toolbar, the event is invoked immediately.</description></item>
 		/// </list>
 		/// </remarks>
 		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_Leave(object sender, EventArgs e)
@@ -1573,6 +1591,11 @@ namespace YAT.View.Forms
 			RequestToggleAutoActionTriggerEnableRegexAndRevalidate();
 		}
 
+		/// <remarks>
+		/// Note that the 'SelectedIndexChanged' event is not raised when changing from a listed
+		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
+		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
+		/// </remarks>
 		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Action_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -5004,8 +5027,19 @@ namespace YAT.View.Forms
 			}
 		}
 
-		/// <remarks>Could also be located in <see cref="Model.Terminal"/>.</remarks>
-		/// <remarks>Always succeeds with the (yet) available options, no need to revalidate (yet).</remarks>
+		/// <remarks>
+		/// Always succeeds with the (yet) available options, no need to revalidate (yet).
+		/// </remarks>
+		/// <remarks>
+		/// There is a limitation yet: This method is only called by the 'SelectedIndexChanged' event
+		/// handlers. But that event is not raised when changing from a listed item to dedicated text,
+		/// i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change would have to be handled in the
+		/// 'TextChanged' and/or 'Enter/Leave' events, but that would interfere with option settings
+		/// explicitly done by the user. Accepting this limitation.
+		/// </remarks>
+		/// <remarks>
+		/// Could also be located in <see cref="Model.Terminal"/>.
+		/// </remarks>
 		public virtual void RequestAutoActionAdjustTriggerOptionsSilently(AutoTriggerEx trigger)
 		{
 			if (trigger.IsExplicit)
@@ -5294,8 +5328,19 @@ namespace YAT.View.Forms
 
 	////public virtual bool RequestAutoResponseValidateTrigger(AutoTriggerEx trigger) is not needed (yet)
 
-		/// <remarks>Could also be located in <see cref="Model.Terminal"/>.</remarks>
-		/// <remarks>Always succeeds with the (yet) available options, no need to revalidate (yet).</remarks>
+		/// <remarks>
+		/// Always succeeds with the (yet) available options, no need to revalidate (yet).
+		/// </remarks>
+		/// <remarks>
+		/// There is a limitation yet: This method is only called by the 'SelectedIndexChanged' event
+		/// handlers. But that event is not raised when changing from a listed item to dedicated text,
+		/// i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change would have to be handled in the
+		/// 'TextChanged' and/or 'Enter/Leave' events, but that would interfere with option settings
+		/// explicitly done by the user. Accepting this limitation.
+		/// </remarks>
+		/// <remarks>
+		/// Could also be located in <see cref="Model.Terminal"/>.
+		/// </remarks>
 		public virtual void RequestAutoResponseAdjustTriggerOptionsSilently(AutoTriggerEx trigger)
 		{
 			if (trigger.IsExplicit)
@@ -5468,8 +5513,19 @@ namespace YAT.View.Forms
 
 	////public virtual bool RequestAutoResponseValidateResponse(AutoResponseEx response) is not needed (yet)
 
-		/// <remarks>Could also be located in <see cref="Model.Terminal"/>.</remarks>
-		/// <remarks>Always succeeds with the (yet) available options, no need to revalidate (yet).</remarks>
+		/// <remarks>
+		/// Always succeeds with the (yet) available options, no need to revalidate (yet).
+		/// </remarks>
+		/// <remarks>
+		/// There is a limitation yet: This method is only called by the 'SelectedIndexChanged' event
+		/// handlers. But that event is not raised when changing from a listed item to dedicated text,
+		/// i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change would have to be handled in the
+		/// 'TextChanged' and/or 'Enter/Leave' events, but that would interfere with option settings
+		/// explicitly done by the user. Accepting this limitation.
+		/// </remarks>
+		/// <remarks>
+		/// Could also be located in <see cref="Model.Terminal"/>.
+		/// </remarks>
 		public virtual void RequestAutoResponseAdjustResponseOptionsSilently(AutoResponseEx response)
 		{
 			if (response.IsExplicit)

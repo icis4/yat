@@ -2022,6 +2022,11 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <remarks>
+		/// Note that the 'SelectedIndexChanged' event is not raised when changing from a listed
+		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
+		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
+		/// </remarks>
 		private void toolStripComboBox_MainTool_Find_Pattern_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -2569,6 +2574,11 @@ namespace YAT.View.Forms
 			SetAutoActionChildControls(); // Needed to refresh trigger validation.
 		}
 
+		/// <remarks>
+		/// Note that the 'SelectedIndexChanged' event is not raised when changing from a listed
+		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
+		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
+		/// </remarks>
 		private void toolStripComboBox_MainTool_AutoAction_Trigger_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -2601,10 +2611,11 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that this 'Leave' event also has a particular behavior:
+		/// Note that this 'Leave' event has a particular behavior:
 		/// <list type="bullet">
 		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
 		/// <item><description>Directly clicking an option with the mouse, the event is not invoked!</description></item>
+		/// <item><description>Clicking somewhere outside the toolbar, the event is invoked immediately.</description></item>
 		/// </list>
 		/// </remarks>
 		private void toolStripComboBox_MainTool_AutoAction_Trigger_Leave(object sender, EventArgs e)
@@ -2629,22 +2640,28 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
+			var childIsReady = (ActiveMdiChild != null);
+
 			if (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndex == ControlEx.InvalidIndex)
 			{
-				SetAutoActionTriggerOptionControls((ActiveMdiChild != null), true, true); // Allow changing options while editing a not yet validated trigger!
+				SetAutoActionTriggerOptionControls(childIsReady, true, true); // Allow changing options while editing a not yet validated trigger!
 
-				var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoAction_Trigger.Text;
-				if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
+				if (childIsReady)
 				{
-					if (!((Terminal)ActiveMdiChild).RequestAutoActionValidateTriggerTextSilently(triggerTextOrRegexPattern))
+					var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoAction_Trigger.Text;
+					if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
 					{
-						((Terminal)ActiveMdiChild).AutoActionTriggerState = AutoContentState.Invalid;
-						return; // Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
-					}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
+						if (!((Terminal)ActiveMdiChild).RequestAutoActionValidateTriggerTextSilently(triggerTextOrRegexPattern))
+						{
+							((Terminal)ActiveMdiChild).AutoActionTriggerState = AutoContentState.Invalid;
+							return; // Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
+						}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
+					}
 				}
 			}
 
-			((Terminal)ActiveMdiChild).AutoActionTriggerState = AutoContentState.Neutral;
+			if (childIsReady)
+				((Terminal)ActiveMdiChild).AutoActionTriggerState = AutoContentState.Neutral;
 		}
 
 		/// <remarks>
@@ -2757,6 +2774,11 @@ namespace YAT.View.Forms
 			RequestToggleAutoActionTriggerEnableRegexAndRevalidate();
 		}
 
+		/// <remarks>
+		/// Note that the 'SelectedIndexChanged' event is not raised when changing from a listed
+		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
+		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
+		/// </remarks>
 		private void toolStripComboBox_MainTool_AutoAction_Action_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -2802,6 +2824,11 @@ namespace YAT.View.Forms
 			SetAutoResponseChildControls(); // Needed to refresh trigger validation.
 		}
 
+		/// <remarks>
+		/// Note that the 'SelectedIndexChanged' event is not raised when changing from a listed
+		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
+		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
+		/// </remarks>
 		private void toolStripComboBox_MainTool_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -2834,10 +2861,11 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that this 'Leave' event also has a particular behavior:
+		/// Note that this 'Leave' event has a particular behavior:
 		/// <list type="bullet">
 		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
 		/// <item><description>Directly clicking an option with the mouse, the event is not invoked!</description></item>
+		/// <item><description>Clicking somewhere outside the tool, the event is invoked, but 'SelectedIndexChanged' isn't!</description></item>
 		/// </list>
 		/// </remarks>
 		private void toolStripComboBox_MainTool_AutoResponse_Trigger_Leave(object sender, EventArgs e)
@@ -2862,22 +2890,28 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
+			var childIsReady = (ActiveMdiChild != null);
+
 			if (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndex == ControlEx.InvalidIndex)
 			{
-				SetAutoResponseTriggerOptionControls((ActiveMdiChild != null), true, true); // Allow changing options while editing a not yet validated trigger!
+				SetAutoResponseTriggerOptionControls(childIsReady, true, true); // Allow changing options while editing a not yet validated trigger!
 
-				var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoResponse_Trigger.Text;
-				if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
+				if (childIsReady)
 				{
-					if (!((Terminal)ActiveMdiChild).RequestAutoResponseValidateTriggerTextSilently(triggerTextOrRegexPattern))
+					var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoResponse_Trigger.Text;
+					if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
 					{
-						((Terminal)ActiveMdiChild).AutoResponseTriggerState = AutoContentState.Invalid;
-						return; // Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
-					}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
+						if (!((Terminal)ActiveMdiChild).RequestAutoResponseValidateTriggerTextSilently(triggerTextOrRegexPattern))
+						{
+							((Terminal)ActiveMdiChild).AutoResponseTriggerState = AutoContentState.Invalid;
+							return; // Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
+						}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
+					}
 				}
 			}
 
-			((Terminal)ActiveMdiChild).AutoResponseTriggerState = AutoContentState.Neutral;
+			if (childIsReady)
+				((Terminal)ActiveMdiChild).AutoResponseTriggerState = AutoContentState.Neutral;
 		}
 
 		/// <remarks>
@@ -2995,6 +3029,11 @@ namespace YAT.View.Forms
 			SetAutoResponseChildControls(); // Needed to refresh response validation.
 		}
 
+		/// <remarks>
+		/// Note that the 'SelectedIndexChanged' event is not raised when changing from a listed
+		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
+		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
+		/// </remarks>
 		private void toolStripComboBox_MainTool_AutoResponse_Response_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -3021,7 +3060,7 @@ namespace YAT.View.Forms
 
 		private void toolStripComboBox_MainTool_AutoResponse_Response_Enter(object sender, EventArgs e)
 		{
-			SuspendEditShortcutsCtrlACVDelete(); // Suspend while in trigger field.
+			SuspendEditShortcutsCtrlACVDelete(); // Suspend while in response field.
 
 			this.autoResponseResponseValidationIsOngoing = false;
 		}
@@ -3031,6 +3070,7 @@ namespace YAT.View.Forms
 		/// <list type="bullet">
 		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
 		/// <item><description>Directly clicking an option with the mouse, the event is not invoked!</description></item>
+		/// <item><description>Clicking somewhere outside the toolbar, the event is invoked immediately.</description></item>
 		/// </list>
 		/// </remarks>
 		private void toolStripComboBox_MainTool_AutoResponse_Response_Leave(object sender, EventArgs e)
@@ -3055,22 +3095,28 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
+			var childIsReady = (ActiveMdiChild != null);
+
 			if (toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndex == ControlEx.InvalidIndex)
 			{
-				SetAutoResponseResponseOptionControls((ActiveMdiChild != null), true, true, true); // Allow changing options while editing a not yet validated response!
+				SetAutoResponseResponseOptionControls(childIsReady, true, true, true); // Allow changing options while editing a not yet validated response!
 
-				var responseText = toolStripComboBox_MainTool_AutoResponse_Response.Text;
-				if (!string.IsNullOrEmpty(responseText))
+				if (childIsReady)
 				{
-					if (!((Terminal)ActiveMdiChild).RequestAutoResponseValidateResponseTextSilently(responseText))
+					var responseText = toolStripComboBox_MainTool_AutoResponse_Response.Text;
+					if (!string.IsNullOrEmpty(responseText))
 					{
-						((Terminal)ActiveMdiChild).AutoResponseResponseState = AutoContentState.Invalid;
-						return; // Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
-					}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
+						if (!((Terminal)ActiveMdiChild).RequestAutoResponseValidateResponseTextSilently(responseText))
+						{
+							((Terminal)ActiveMdiChild).AutoResponseResponseState = AutoContentState.Invalid;
+							return; // Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
+						}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
+					}
 				}
 			}
 
-			((Terminal)ActiveMdiChild).AutoResponseResponseState = AutoContentState.Neutral;
+			if (childIsReady)
+				((Terminal)ActiveMdiChild).AutoResponseResponseState = AutoContentState.Neutral;
 		}
 
 		/// <remarks>
