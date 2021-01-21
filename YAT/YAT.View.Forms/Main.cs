@@ -3081,7 +3081,7 @@ namespace YAT.View.Forms
 			var childIsReady = (ActiveMdiChild != null);
 
 			var selectedIndex = toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndex;
-			var selectedItem = (toolStripComboBox_MainTool_AutoResponse_Response.SelectedItem as AutoTriggerEx);
+			var selectedItem = (toolStripComboBox_MainTool_AutoResponse_Response.SelectedItem as AutoResponseEx);
 			                  //// Not listed             or                            listed explicit response.
 			if ((selectedIndex == ControlEx.InvalidIndex) || ((selectedItem != null) && selectedItem.IsExplicit))
 			{
