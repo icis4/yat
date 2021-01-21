@@ -1775,7 +1775,7 @@ namespace YAT.View.Forms
 		{
 			var childIsReady = (ActiveMdiChild != null);
 			if (childIsReady)
-				((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerEnableRegex();
+				((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerUseText();
 
 			RevalidateAndRequestAutoResponseTrigger();
 		}
