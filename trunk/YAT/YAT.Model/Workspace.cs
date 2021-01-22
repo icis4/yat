@@ -1347,7 +1347,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Notifies the workspace about a change in the layout, so it can keep the setting. But
 		/// layouting itself is done in the form as the MDI functionality is an integral part of
-		/// the Windows.Forms environment.
+		/// the 'WinForms' environment.
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Layouting' is a correct English term.")]
 		public virtual void NotifyLayout(WorkspaceLayout layout)

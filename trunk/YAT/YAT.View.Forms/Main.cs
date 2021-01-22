@@ -4368,7 +4368,7 @@ namespace YAT.View.Forms
 			if (WorkspaceIsAvailable)
 			{
 				// Only notify the workspace, so it can keep the setting. But layouting itself is done
-				// here as the MDI functionality is an integral part of the Windows.Forms environment.
+				// here as the MDI functionality is an integral part of the 'WinForms' environment.
 				this.workspace.NotifyLayout(layout);
 
 				LayoutWorkspace(layout);
@@ -4390,7 +4390,7 @@ namespace YAT.View.Forms
 		/// Performs the layout operation on the workspace, i.e. the terminals.
 		/// </summary>
 		/// <remarks>
-		/// Uses the MDI functionality of the Windows.Forms environment to perform the layout.
+		/// Uses the MDI functionality of the 'WinForms' environment to perform the layout.
 		/// </remarks>
 		private void LayoutWorkspace()
 		{
@@ -4403,7 +4403,7 @@ namespace YAT.View.Forms
 		/// This method does not notify the workspace.
 		/// </summary>
 		/// <remarks>
-		/// Uses the MDI functionality of the Windows.Forms environment to perform the layout.
+		/// Uses the MDI functionality of the 'WinForms' environment to perform the layout.
 		/// </remarks>
 		private void LayoutWorkspace(WorkspaceLayout layout)
 		{
