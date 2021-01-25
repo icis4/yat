@@ -413,7 +413,7 @@ namespace YAT.View.Forms
 		{
 			var f = new AutoActionPlotHelp();
 			f.StartPosition = FormStartPosition.Manual;
-			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
+			f.Location = FormEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
 

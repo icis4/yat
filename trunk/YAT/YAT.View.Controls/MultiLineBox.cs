@@ -75,13 +75,9 @@ namespace YAT.View.Controls
 		/// This mini-form must be located in 'Controls' rather than 'Forms' because other controls
 		/// use it.
 		/// </remarks>
-		public MultiLineBox(Command command, Point startupLocation, Domain.Radix defaultRadix, Domain.Parser.Mode parseMode)
+		public MultiLineBox(Command command, Domain.Radix defaultRadix, Domain.Parser.Mode parseMode)
 		{
 			InitializeComponent();
-
-			SuspendLayout(); // Useful as the 'Location' property will get changed.
-			Location = startupLocation;
-			ResumeLayout(false);
 
 			this.defaultRadix = defaultRadix;
 			this.parseMode = parseMode;
@@ -163,7 +159,7 @@ namespace YAT.View.Controls
 		{
 			SetControls();
 
-			// Move cursor to the end.
+			// Move cursor to the end:
 			textBox_Lines.SelectionStart = textBox_Lines.Text.Length;
 		}
 
@@ -271,7 +267,7 @@ namespace YAT.View.Controls
 				}
 				else
 				{
-					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Command '" + c + "' does not specify a known text command type!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					// A yet to be <Define...> command is empty, i.e. nothing to do here.
 				}
 			}
 			finally

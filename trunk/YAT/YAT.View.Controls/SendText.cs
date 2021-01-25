@@ -1169,13 +1169,14 @@ namespace YAT.View.Controls
 			}
 
 			// Calculate startup location:
-			var area = requestingControl.RectangleToScreen(requestingControl.DisplayRectangle);
-			var formStartupLocation = new Point();
-			formStartupLocation.X = area.X + area.Width;
-			formStartupLocation.Y = area.Y + area.Height;
+			var requestingArea = requestingControl.RectangleToScreen(requestingControl.DisplayRectangle);
+			var requestedLocation = new Point();
+			requestedLocation.X = (requestingArea.X + requestingArea.Width);
+			requestedLocation.Y = (requestingArea.Y + requestingArea.Height);
 
 			// Show multi-line box:
-			var f = new MultiLineBox(this.command, formStartupLocation, this.command.DefaultRadix, this.parseMode);
+			var f = new MultiLineBox(this.command, this.command.DefaultRadix, this.parseMode);
+			f.Location = FormEx.CalculateWithinScreenBoundsLocation(requestedLocation, f.Size);
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
 				this.command = f.CommandResult;
