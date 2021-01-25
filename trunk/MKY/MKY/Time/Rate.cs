@@ -66,6 +66,14 @@ namespace MKY.Time
 		/// </summary>
 		public const int IntervalDefault = 1000;
 
+		/// <summary>
+		/// The number of bins per <see cref="Interval"/> to calculate the value.
+		/// </summary>
+		/// <remarks>
+		/// Required to allow odd interval-window-ratios. The value is yet fixed to 2.
+		/// </remarks>
+		public const int NumberOfBinsPerInterval = 2;
+
 		#endregion
 
 		#region Fields
@@ -76,12 +84,9 @@ namespace MKY.Time
 		private double interval;
 		private double window;
 
-		private int numberOfBins;   // The number of bins is always integral, even in case of an odd interval-window-ratio.
-		private double widthOfBins; // But the width will become less than the interval in case of an odd interval-window-ratio.
-		private double binScaling;
-		private int[] itemsPerBin;
-
 		private Queue<TimeStampItem<int>> queue;
+		private double widthOfBins; // Term 'bin' same as e.g. used for a histogram.
+		private int[] itemsPerBin;
 		private int value;
 
 		private DateTime lastItemTimeStamp; // = DateTime.MinValue;
@@ -118,14 +123,22 @@ namespace MKY.Time
 		/// <exception cref="ArgumentOutOfRangeException">
 		/// Thrown if 'window' is less than 'interval'.
 		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// Thrown if 'window' is not a multiple of 'interval / NumberOfBinsPerInterval'.
+		/// </exception>
 		public Rate(double interval, double window)
 		{
 			if (window < interval)
 				throw (new ArgumentOutOfRangeException("window", window, MessageHelper.InvalidExecutionPreamble + "'window' = '" + window + "' must be equal or larger than 'interval' = '" + interval + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
+			var binWidth = (interval / NumberOfBinsPerInterval);
+			var remainder = Math.IEEERemainder(window, binWidth);
+			if (!DoubleEx.AlmostEquals(Math.Abs(remainder), 0.0))
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'window' = '" + window + "' must be a multiple of 'interval / NumberOfBinsPerInterval' = '" + (interval / NumberOfBinsPerInterval) + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "window"));
+
 			this.interval = interval;
 			this.window   = window;
-			UpdateBins();
+			PrepareBins();
 
 			this.queue = new Queue<TimeStampItem<int>>(); // No clue how many items to expect, the default behavior must be good enough.
 		}
@@ -146,16 +159,24 @@ namespace MKY.Time
 		/// <exception cref="ArgumentOutOfRangeException">
 		/// Thrown if 'Interval' is greater than 'Window'.
 		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// Thrown if 'Window' would no longer be a multiple of 'Interval / NumberOfBinsPerInterval'.
+		/// </exception>
 		public virtual double Interval
 		{
 			get { return (this.interval); }
 			set
 			{
-				if (value > window)
-					throw (new ArgumentOutOfRangeException("value", value, MessageHelper.InvalidExecutionPreamble + "'Interval' must be equal or less than 'Window' = '" + window + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				if (value > Window)
+					throw (new ArgumentOutOfRangeException("value", value, MessageHelper.InvalidExecutionPreamble + "'Interval' must be equal or less than 'Window' = '" + Window + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+				var binWidth = (value / NumberOfBinsPerInterval);
+				var remainder = Math.IEEERemainder(Window, binWidth);
+				if (!DoubleEx.AlmostEquals(Math.Abs(remainder), 0.0))
+					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'Window' = '" + Window + "' must be a multiple of 'Interval / NumberOfBinsPerInterval' = '" + (Interval / NumberOfBinsPerInterval) + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "value"));
 
 				this.interval = value;
-				UpdateBins();
+				PrepareBins();
 			}
 		}
 
@@ -170,16 +191,24 @@ namespace MKY.Time
 		/// <exception cref="ArgumentOutOfRangeException">
 		/// Thrown if 'Window' is less than 'Interval'.
 		/// </exception>
+		/// <exception cref="ArgumentException">
+		/// Thrown if 'Window' is not a multiple of 'Interval / NumberOfBinsPerInterval'.
+		/// </exception>
 		public virtual double Window
 		{
 			get { return (this.window); }
 			set
 			{
-				if (value < interval)
+				if (value < Interval)
 					throw (new ArgumentOutOfRangeException("value", value, MessageHelper.InvalidExecutionPreamble + "'Window' must be equal or larger than 'Interval' = '" + interval + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
+				var binWidth = (Interval / NumberOfBinsPerInterval);
+				var remainder = Math.IEEERemainder(value, binWidth);
+				if (!DoubleEx.AlmostEquals(Math.Abs(remainder), 0.0))
+					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'Window' = '" + Window + "' must be a multiple of 'Interval / NumberOfBinsPerInterval' = '" + (Interval / NumberOfBinsPerInterval) + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "value"));
+
 				this.window = value;
-				UpdateBins();
+				PrepareBins();
 			}
 		}
 
@@ -341,13 +370,12 @@ namespace MKY.Time
 		// Methods > Private
 		//------------------------------------------------------------------------------------------
 
-		private void UpdateBins()
+		private void PrepareBins()
 		{
-			this.numberOfBins = (int)(Math.Ceiling(this.window / this.interval));
-			this.widthOfBins  = (this.window / this.numberOfBins); // Bins must be equally distributed across window.
-			this.binScaling   = (this.interval / this.widthOfBins); // Value must be scaled for odd-interval-window ratios.
-			this.itemsPerBin  = ArrayEx.CreateAndInitializeInstance(this.numberOfBins, 0); // Single array instance for performance optimization.
-		}                                                                                  // Makes no sense to allocate and discard on each update.
+			this.widthOfBins = (this.interval / NumberOfBinsPerInterval);
+			var numberOfBins = (int)(Math.Round(this.window / this.widthOfBins)); // It is asserted that 'Window' is a multiple of 'Interval / NumberOfBinsPerInterval'.
+			this.itemsPerBin = ArrayEx.CreateAndInitializeInstance(numberOfBins, 0); // Single array instance for performance optimization.
+		}                                                                            // Makes no sense to allocate and discard on each update.
 
 		private void ClearQueue()
 		{
@@ -385,53 +413,71 @@ namespace MKY.Time
 			lock (this.queue) // Lock is required because Queue<T> is not synchronized and whole queue is accessed via ToArray().
 				qa = this.queue.ToArray();
 
-			// Prepare calculation:
-			Array.Clear(this.itemsPerBin, 0, this.itemsPerBin.Length);
-
-			unchecked
+			if (qa.Length > 0)
 			{
-				// Count number of items within each interval bin, starting with the most recent item:
-				foreach (TimeStampItem<int> tsi in qa) // Queue will only contain items within the window.
+				// Requirements:
+				// The resulting rate value must be in items per interval calculated over the window.
+				// The rate must be calculated gradually, the least recent items must be weighted more.
+				// On a regular update of items, the rate must stabilize by the end of the window.
+				//
+				// Implementation:
+				// The requirements are met by grouping the items into weighted bins.
+				//
+				// Example:
+				// Interval = 1000, Window = 2000, UpdateInterval = 250, Items = { 1 }
+				//
+				// Intervals:
+				// ]           ]           ]
+				// 1  1  1  1  1  1  1  1  1
+				//
+				// Window:
+				// ]                       ]
+				// 1  1  1  1  1  1  1  1  1
+				//       ^ this item results in ts.TotalMilliseconds = 1500 and must be also placed into most recent bin
+				//    ^ this item results in ts.TotalMilliseconds = 1750 and must be placed into most recent bin
+				// ^ this item got dequeued as it is <= window
+				//
+				// Bins:
+				// ]  3  ]  2  ]  1  ]  0  ]
+				//    1  1  1  1  1  1  1  1
+				//        ^ 1499 must result in index 2
+				//       ^ 1500 must result in index 3
+
+				// Prepare the bins:
+				Array.Clear(this.itemsPerBin, 0, this.itemsPerBin.Length);
+
+				unchecked
 				{
-					// Example: Interval = 1000, Window = 4000, UpdateInterval = 500, Items = { 1 }
-					//
-					// Window:
-					// [     |     |     |     ]
-					// 1  1  1  1  1  1  1  1  1
-					//       ^ this item results in ts.TotalMilliseconds = 300 and must be also placed into most recent bin
-					//    ^ this item results in ts.TotalMilliseconds = 3500 and must be placed into most recent bin
-					// ^ this item got dequeued as it is <= window
-					//
-					// Intervals:
-					// ]     ]     ]     ]     ]
-					//    1  1  1  1  1  1  1  1
-					//        ^ 2999 must result in index 2
-					//       ^ 3000 must result in index 3
-					//
-					// Bins:
-					// |  3  |  2  |  1  |  0  |
+					// Count number of items within each interval bin, starting with the most recent item:
+					foreach (TimeStampItem<int> tsi in qa) // Queue will only contain items within the window.
+					{
+						TimeSpan ts = (timeStamp - tsi.TimeStamp);
+						int index = (int)(Math.Floor(ts.TotalMilliseconds / this.widthOfBins));
+						int indexSafe = Int32Ex.Limit(index, 0, (this.itemsPerBin.Length - 1));
+						this.itemsPerBin[indexSafe] += tsi.Item;
+					}
 
-					TimeSpan ts = (timeStamp - tsi.TimeStamp);
-					int index = (int)(Math.Floor(ts.TotalMilliseconds / this.widthOfBins));
-					int indexSafe = Int32Ex.Limit(index, 0, (this.itemsPerBin.Length - 1));
-					this.itemsPerBin[indexSafe] += tsi.Item;
-				}
+					// Weigh and sum up the bins:
+					int weight = this.itemsPerBin.Length;
+					double weightedSum = 0;
+					int sumOfWeights = 0;
+					foreach (int items in this.itemsPerBin)
+					{
+						weightedSum += (items * weight);
+						sumOfWeights += weight;
+						weight--;
+					}
 
-				// Weigh and sum up the interval bins:
-				int weight = this.numberOfBins;
-				double weightedSum = 0;
-				int sumOfWeights = 0;
-				foreach (int items in this.itemsPerBin)
-				{
-					weightedSum += (this.binScaling * items * weight);
-					sumOfWeights += weight;
-					weight--;
-				}
-
-				// Evaluate the rate:
-				var valueUnrounded = (weightedSum / sumOfWeights);
-				value = (int)(Math.Round(valueUnrounded));
-			} // unchecked
+					// Evaluate the rate:
+					var valuePerBinWidth = (weightedSum / sumOfWeights);
+					var valuePerInterval = (valuePerBinWidth * NumberOfBinsPerInterval);
+					value = (int)(Math.Round(valuePerInterval));
+				} // unchecked
+			}
+			else
+			{
+				value = 0;
+			}
 
 			if (this.value != value)
 			{
