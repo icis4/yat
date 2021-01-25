@@ -208,6 +208,7 @@
     <Compile Include="Types\StringEx.cs" />
     <Compile Include="Types\UInt64Ex.cs" />
     <Compile Include="Usb\Descriptors.cs" />
+    <Compile Include="Windows.Forms\FormEx.cs" />
     <Compile Include="Windows.Forms\DialogResultEx.cs" />
     <Compile Include="Windows.Forms\ApplicationEx.cs" />
     <Compile Include="Windows.Forms\ComboBoxHelper.cs" />
