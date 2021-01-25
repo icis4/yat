@@ -910,6 +910,9 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_CommandContextMenu_Cut_Click(object sender, EventArgs e)
 		{
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
+
 			// Attention:
 			// Similar code exists in...
 			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_Cut_Click()
@@ -931,6 +934,9 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_CommandContextMenu_Copy_Click(object sender, EventArgs e)
 		{
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
+
 			// Attention:
 			// Similar code exists in...
 			// ...View.Forms.Terminal.toolStripMenuItem_CommandContextMenu_Copy_Click()
@@ -948,6 +954,9 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_CommandContextMenu_Paste_Click(object sender, EventArgs e)
 		{
+		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
+		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
+
 			Command c;
 			if (CommandSettingsClipboardHelper.TryGet(this, out c))
 			{
@@ -961,7 +970,7 @@ namespace YAT.View.Forms
 		////if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 		////	return;    => see bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround"
 
-			this.settingsInEdit.ClearCommand(SelectedPageIndex, contextMenuStrip_Commands_SelectedCommandId);
+			this.settingsInEdit.ClearCommand(SelectedPageIndex, contextMenuStrip_Commands_SelectedCommandId - 1);
 			SetControls();
 		}
 
