@@ -63,8 +63,7 @@
 			this.label_Remarks.Name = "label_Remarks";
 			this.label_Remarks.Size = new System.Drawing.Size(226, 107);
 			this.label_Remarks.TabIndex = 1;
-			this.label_Remarks.Text = "Press Enter to begin a new line.\r\nPress Ctrl+Enter to confirm.\r\nPress Escape to c" +
-    "ancel.";
+			this.label_Remarks.Text = "[Enter] to begin a new line.\r\n[Ctrl+Enter] to confirm.\r\n[Escape] to cancel.";
 			this.label_Remarks.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// button_Cancel

@@ -267,7 +267,7 @@ namespace YAT.View.Controls
 				}
 				else
 				{
-					// A yet to be <Define...> command is empty, i.e. nothing to do here.
+					textBox_Lines.Text = ""; // Happens for a yet to be <Define...> command.
 				}
 			}
 			finally
