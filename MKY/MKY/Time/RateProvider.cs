@@ -63,6 +63,23 @@ namespace MKY.Time
 	/// <summary></summary>
 	public class RateProvider : DisposableBase
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		/// <summary>
+		/// The default value for <see cref="Rate.Interval"/>.
+		/// </summary>
+		public const int RateIntervalDefault = Rate.IntervalDefault;
+
+		/// <summary>
+		/// The default value for <see cref="UpdateInterval"/>.
+		/// </summary>
+		public const int UpdateIntervalDefault = 100;
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -108,27 +125,41 @@ namespace MKY.Time
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Rate"/> class setting both
+		/// <see cref="Rate.Interval"/> and <see cref="Rate.Window"/> to a second.
+		/// </summary>
 		public RateProvider()
-			: this(1000, 5000, 100)
+			: this(RateIntervalDefault, RateIntervalDefault, UpdateIntervalDefault)
 		{
 		}
 
-		/// <summary></summary>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// Thrown if 'updateInterval' is greater than half the 'rateInterval'.
+		/// </exception>
 		public RateProvider(double rateInterval, double updateInterval)
 			: this(rateInterval, rateInterval, updateInterval)
 		{
 		}
 
-		/// <summary></summary>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// Thrown if 'rateWindow' is less than 'rateInterval'.
+		/// Thrown if 'updateInterval' is greater than half the 'rateInterval'.
+		/// </exception>
 		public RateProvider(double rateInterval, double rateWindow, double updateInterval)
 			: this(rateInterval, rateWindow, updateInterval, null)
 		{
 		}
 
-		/// <summary></summary>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// Thrown if 'rateWindow' is less than 'rateInterval'.
+		/// Thrown if 'updateInterval' is greater than half the 'rateInterval'.
+		/// </exception>
 		public RateProvider(double rateInterval, double rateWindow, double updateInterval, string diagnosticsName)
 		{
+			if (updateInterval > (rateInterval / 2))
+				throw (new ArgumentOutOfRangeException("updateInterval", updateInterval, MessageHelper.InvalidExecutionPreamble + "'updateInterval' = '" + updateInterval + "' must not be greater than 'rateInterval / 2' = '" + (rateInterval / 2) + "' to fulfill the requirement of the sampling theorem!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
 			this.rate = new Rate(rateInterval, rateWindow);
 
 			this.updateInterval = updateInterval;
@@ -184,18 +215,21 @@ namespace MKY.Time
 		/// <summary></summary>
 		public double UpdateInterval
 		{
-			get { AssertUndisposed(); return (this.updateInterval);        }
-			set { AssertUndisposed();         this.updateInterval = value; }
+			get { AssertUndisposed(); return (this.updateInterval); }
 		}
 
-		/// <summary></summary>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// Thrown if 'Interval' is greater than 'Window'.
+		/// </exception>
 		public double RateInterval
 		{
 			get { AssertUndisposed(); return (this.rate.Interval);        }
 			set { AssertUndisposed();         this.rate.Interval = value; }
 		}
 
-		/// <summary></summary>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// Thrown if 'Window' is less than 'Interval'.
+		/// </exception>
 		public double RateWindow
 		{
 			get { AssertUndisposed(); return (this.rate.Window);        }

@@ -106,8 +106,6 @@ namespace YAT.Model
 
 		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
 
-		private const int RateIntervalsPerSecond = 4; // 250 ms intervals
-
 		#endregion
 
 		#region Static Fields
@@ -5033,7 +5031,7 @@ namespace YAT.Model
 				AssertUndisposed();
 
 			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
-					return (this.txByteRate.RateValue * RateIntervalsPerSecond);
+					return (this.txByteRate.RateValue);
 			}
 		}
 
@@ -5051,7 +5049,7 @@ namespace YAT.Model
 				AssertUndisposed();
 
 			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
-					return (this.rxByteRate.RateValue * RateIntervalsPerSecond);
+					return (this.rxByteRate.RateValue);
 			}
 		}
 
@@ -5068,7 +5066,7 @@ namespace YAT.Model
 				AssertUndisposed();
 
 			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
-					return (this.txLineRate.RateValue * RateIntervalsPerSecond);
+					return (this.txLineRate.RateValue);
 			}
 		}
 
@@ -5102,7 +5100,7 @@ namespace YAT.Model
 				AssertUndisposed();
 
 			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
-					return (this.rxLineRate.RateValue * RateIntervalsPerSecond);
+					return (this.rxLineRate.RateValue);
 			}
 		}
 
@@ -5123,10 +5121,10 @@ namespace YAT.Model
 
 			////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
 				{
-					counts = new BytesLinesTuple(this.txByteCount,                                   this.txLineCount,
-					                             this.rxByteCount,                                   this.rxLineCount);
-					rates  = new BytesLinesTuple(this.txByteRate.RateValue * RateIntervalsPerSecond, this.txLineRate.RateValue * RateIntervalsPerSecond,
-					                             this.rxByteRate.RateValue * RateIntervalsPerSecond, this.rxLineRate.RateValue * RateIntervalsPerSecond);
+					counts = new BytesLinesTuple(this.txByteCount,          this.txLineCount,
+					                             this.rxByteCount,          this.rxLineCount);
+					rates  = new BytesLinesTuple(this.txByteRate.RateValue, this.txLineRate.RateValue,
+					                             this.rxByteRate.RateValue, this.rxLineRate.RateValue);
 				}
 
 				return (new CountsRatesTuple(counts, rates));
@@ -5162,9 +5160,9 @@ namespace YAT.Model
 
 		private void CreateRates()
 		{
-			const int RateInterval   = (1000 / RateIntervalsPerSecond); // Resulting in 250 ms intervals.
-			const int RateWindow     =  2000; // Note that rate may drop to 0 during sending of files or even "jump" to high values at the end.
-			const int UpdateInterval =   250; // FR #375 "migrate Byte/Line Count/Rate from model to domain" will fix this.
+			const int RateInterval   = 1000; // Resulting in values per second.
+			const int RateWindow     = 2000; // Note that rate may drop to 0 during sending of files or even "jump" to high values at the end.
+			const int UpdateInterval =  250; // FR #375 "migrate Byte/Line Count/Rate from model to domain" will fix this.
 
 		////lock (this.countsRatesSyncObj) \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
 			{
