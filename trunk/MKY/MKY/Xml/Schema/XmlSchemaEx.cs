@@ -112,9 +112,9 @@ namespace MKY.Xml.Schema
 		/// <param name="intendedFileNameWithoutExtension">Name of the intended file.</param>
 		/// <param name="fileExtension">Extension of the file.</param>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static void ToFile(Type type, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
+		public static void WriteToFile(Type type, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
 		{
-			ToFile(type, EncodingEx.EnvironmentRecommendedUTF8Encoding, path, intendedFileNameWithoutExtension, fileExtension);
+			WriteToFile(type, EncodingEx.EnvironmentRecommendedUTF8Encoding, path, intendedFileNameWithoutExtension, fileExtension);
 		}
 
 		/// <summary>
@@ -129,10 +129,10 @@ namespace MKY.Xml.Schema
 		/// <param name="intendedFileNameWithoutExtension">Name of the intended file.</param>
 		/// <param name="fileExtension">Extension of the file.</param>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static void ToFile(Type type, Encoding encoding, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
+		public static void WriteToFile(Type type, Encoding encoding, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
 		{
 			var document = XmlDocumentEx.CreateDefaultDocument(type);
-			ToFile(document, encoding, path, intendedFileNameWithoutExtension, fileExtension);
+			WriteToFile(document, encoding, path, intendedFileNameWithoutExtension, fileExtension);
 		}
 
 		/// <summary>
@@ -150,9 +150,9 @@ namespace MKY.Xml.Schema
 		/// <param name="fileExtension">Extension of the file.</param>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
-		public static void ToFile(XmlDocument document, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
+		public static void WriteToFile(XmlDocument document, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
 		{
-			ToFile(document, EncodingEx.EnvironmentRecommendedUTF8Encoding, path, intendedFileNameWithoutExtension, fileExtension);
+			WriteToFile(document, EncodingEx.EnvironmentRecommendedUTF8Encoding, path, intendedFileNameWithoutExtension, fileExtension);
 		}
 
 		/// <summary>
@@ -168,13 +168,13 @@ namespace MKY.Xml.Schema
 		/// <param name="fileExtension">Extension of the file.</param>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
-		public static void ToFile(XmlDocument document, Encoding encoding, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
+		public static void WriteToFile(XmlDocument document, Encoding encoding, string path, string intendedFileNameWithoutExtension, string fileExtension = ".xsd")
 		{
 			int count = document.Schemas.Schemas().Count;
 			int index = 0;
 			foreach (XmlSchema schema in document.Schemas.Schemas())
 			{
-				ToFile(schema, encoding, path, intendedFileNameWithoutExtension, count, index, fileExtension);
+				WriteToFile(schema, encoding, path, intendedFileNameWithoutExtension, count, index, fileExtension);
 
 				index++;
 			}
@@ -197,9 +197,9 @@ namespace MKY.Xml.Schema
 		/// <param name="fileExtension">Extension of the file.</param>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'postfix' is a correct English term and 'postfixed' seems the obvious participle.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static void ToFile(XmlSchema schema, string path, string intendedFileNameWithoutExtension, int count = 1, int index = 0, string fileExtension = ".xsd")
+		public static void WriteToFile(XmlSchema schema, string path, string intendedFileNameWithoutExtension, int count = 1, int index = 0, string fileExtension = ".xsd")
 		{
-			ToFile(schema, EncodingEx.EnvironmentRecommendedUTF8Encoding, path, intendedFileNameWithoutExtension, count, index, fileExtension);
+			WriteToFile(schema, EncodingEx.EnvironmentRecommendedUTF8Encoding, path, intendedFileNameWithoutExtension, count, index, fileExtension);
 		}
 
 		/// <summary>
@@ -217,7 +217,7 @@ namespace MKY.Xml.Schema
 		/// <param name="fileExtension">Extension of the file.</param>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'postfix' is a correct English term and 'postfixed' seems the obvious participle.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static void ToFile(XmlSchema schema, Encoding encoding, string path, string intendedFileNameWithoutExtension, int count = 1, int index = 0, string fileExtension = ".xsd")
+		public static void WriteToFile(XmlSchema schema, Encoding encoding, string path, string intendedFileNameWithoutExtension, int count = 1, int index = 0, string fileExtension = ".xsd")
 		{
 			string effectiveFilePath;
 			if (count <= 1)

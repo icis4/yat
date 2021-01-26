@@ -160,6 +160,9 @@ namespace MKY.Xml
 		/// <remarks>
 		/// Using UTF-8 encoding with (Windows) or without (Unix, Linux,...) BOM.
 		/// </remarks>
+		/// <remarks>
+		/// Named 'Save' following <see cref="XmlDocument.Save(string)"/>.
+		/// </remarks>
 		/// <param name="document">The document.</param>
 		/// <param name="path">The path.</param>
 		/// <param name="fileNameWithoutExtension">Name of the intended file.</param>
@@ -174,6 +177,9 @@ namespace MKY.Xml
 		/// <summary>
 		/// Writes the given XML document to the given path and file name.
 		/// </summary>
+		/// <remarks>
+		/// Named 'Save' following <see cref="XmlDocument.Save(string)"/>.
+		/// </remarks>
 		/// <param name="document">The document.</param>
 		/// <param name="encoding">The character encoding to use.</param>
 		/// <param name="path">The path.</param>
@@ -193,6 +199,9 @@ namespace MKY.Xml
 		/// <summary>
 		/// Writes the given XML document to the given output writer.
 		/// </summary>
+		/// <remarks>
+		/// Named 'Save' following <see cref="XmlDocument.Save(string)"/>.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1059:MembersShouldNotExposeCertainConcreteTypes", MessageId = "System.Xml.XmlNode", Justification = "Well, 'XmlDocument.Schemas' is needed, 'IXPathNavigable' doesn't provide that member... Is this a bug in FxCop?")]
 		public static void SaveToWriter(XmlDocument document, TextWriter output)
 		{
