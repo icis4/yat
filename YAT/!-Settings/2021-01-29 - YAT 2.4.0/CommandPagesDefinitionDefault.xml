@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SettingsName>YAT Command Pages Definition</SettingsName>
+  <SettingsVersion>1.0.2</SettingsVersion>
+  <ProductVersion>2.4.0</ProductVersion>
+  <Warning>Modifying structure and/or content may cause undefined behavior!</Warning>
+  <Mark>
+    <TimeStamp>2021-01-26T13:27:40.9923731+01:00</TimeStamp>
+    <UserName>Matthias</UserName>
+  </Mark>
+</Settings>
