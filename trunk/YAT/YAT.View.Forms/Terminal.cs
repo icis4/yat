@@ -359,12 +359,11 @@ namespace YAT.View.Forms
 
 			this.mdiParent = MdiParent;
 
-			this.splitContainerHelper.PerformScaling(this);
+			PerformSplitContainerScalingWorkaround(); // See 'SplitContainerHelper' for background.
 
 			LayoutTerminal(); // Reapply layouting for proper behavior 'Send' panel if [Send Text | File] is hidden. \remind (2018-04-08 / MKY) bug #412 "Issue with send panel".
 
-			// Immediately set terminal controls so the terminal "looks nice" from the very start:
-			SetTerminalControls();
+			SetTerminalControls(); // Immediately set terminal controls so the terminal "looks nice" from the very start.
 		}
 
 		private void Terminal_Activated(object sender, EventArgs e)
@@ -411,13 +410,13 @@ namespace YAT.View.Forms
 
 		private void Terminal_LocationChanged(object sender, EventArgs e)
 		{
-			if (!IsInitiating && !IsIntegraMdiLayouting && !IsClosing)
+			if (!IsInitiating && !IsIntegralMdiLayouting && !IsClosing)
 				UpdateWindowSettings();
 		}
 
 		private void Terminal_SizeChanged(object sender, EventArgs e)
 		{
-			if (!IsInitiating && !IsIntegraMdiLayouting && !IsClosing)
+			if (!IsInitiating && !IsIntegralMdiLayouting && !IsClosing)
 				UpdateWindowSettings();
 		}
 
@@ -430,7 +429,7 @@ namespace YAT.View.Forms
 		/// </remarks>
 		public void NotifyWindowStateChanged()
 		{
-			if (!IsInitiating && !IsIntegraMdiLayouting && !IsClosing)
+			if (!IsInitiating && !IsIntegralMdiLayouting && !IsClosing)
 				UpdateWindowSettings();
 		}
 
@@ -4165,7 +4164,7 @@ namespace YAT.View.Forms
 
 		private void splitContainer_TxMonitor_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!IsInitiating && !this.isSettingControls && !IsIntegraMdiLayouting && !IsClosing)
+			if (!IsInitiating && !this.isSettingControls && !IsIntegralMdiLayouting && !IsClosing)
 			{
 				// No need to 'splitContainerHelper.CalculateUnscaledDistanceFromScaled()' since no
 				// panel of 'splitContainer_TxMonitor' is fixed. Code if this was the case:
@@ -4191,7 +4190,7 @@ namespace YAT.View.Forms
 
 		private void splitContainer_RxMonitor_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!IsInitiating && !this.isSettingControls && !IsIntegraMdiLayouting && !IsClosing)
+			if (!IsInitiating && !this.isSettingControls && !IsIntegralMdiLayouting && !IsClosing)
 			{
 				// No need to 'splitContainerHelper.CalculateUnscaledDistanceFromScaled()' since no
 				// panel of 'splitContainer_RxMonitor' is fixed. Code if this was the case:
@@ -4217,7 +4216,7 @@ namespace YAT.View.Forms
 
 		private void splitContainer_Predefined_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!IsInitiating && !this.isSettingControls && !IsIntegraMdiLayouting && !IsClosing)
+			if (!IsInitiating && !this.isSettingControls && !IsIntegralMdiLayouting && !IsClosing)
 			{
 				// No need to 'splitContainerHelper.CalculateUnscaledDistanceFromScaled()' since no
 				// panel of 'splitContainer_Predefined' is fixed. Code if this was the case:
@@ -4582,7 +4581,7 @@ namespace YAT.View.Forms
 			get { return (this.isInitiating); }
 		}
 
-		private bool IsIntegraMdiLayouting
+		private bool IsIntegralMdiLayouting
 		{
 			get { return (this.isIntegralMdiLayouting); }
 		}
@@ -5701,10 +5700,17 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void ViewRearrange()
+		private void PerformSplitContainerScalingWorkaround()
 		{
-			// Simply set defaults, settings event handler will then call LayoutTerminal():
-			this.settingsRoot.Layout.SetDefaults();
+			this.isSettingControls.Enter();
+			try
+			{
+				this.splitContainerHelper.PerformScaling(this);
+			}
+			finally
+			{
+				this.isSettingControls.Leave();
+			}
 		}
 
 		private void LayoutTerminal()
@@ -5735,7 +5741,7 @@ namespace YAT.View.Forms
 					#if (DEBUG)
 						else
 						{
-							Debugger.Break(); // See debug output for issue and instructions!
+							Debugger.Break(); // See debug output for issue and potential root cause.
 						}
 					#endif
 					}
@@ -5780,7 +5786,7 @@ namespace YAT.View.Forms
 						#if (DEBUG)
 							else
 							{
-								Debugger.Break(); // See debug output for issue and instructions!
+								Debugger.Break(); // See debug output for issue and potential root cause.
 							}
 						#endif
 						}
@@ -5815,7 +5821,7 @@ namespace YAT.View.Forms
 						#if (DEBUG)
 							else
 							{
-								Debugger.Break(); // See debug output for issue and instructions!
+								Debugger.Break(); // See debug output for issue and potential root cause.
 							}
 						#endif
 						}
@@ -5931,7 +5937,7 @@ namespace YAT.View.Forms
 				#if (DEBUG)
 					else
 					{
-						Debugger.Break(); // See debug output for issue and instructions!
+						Debugger.Break(); // See debug output for issue and potential root cause.
 					}
 				#endif
 				}
@@ -5953,6 +5959,12 @@ namespace YAT.View.Forms
 			int absoluteX = splitContainer_Predefined.SplitterDistance + splitContainer_Predefined.Left;
 			int relativeX = absoluteX - send.Left + PredefinedOffset;
 			send.SendSplitterDistance = Int32Ex.Limit(relativeX, 0, Math.Max((send.Width - 1), 0)); // 'max' must be 0 or above.
+		}
+
+		private void ViewRearrange()
+		{
+			// Simply set defaults, settings event handler will then call LayoutTerminal():
+			this.settingsRoot.Layout.SetDefaults();
 		}
 
 		private void SetDisplayControls()
