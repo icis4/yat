@@ -1032,7 +1032,7 @@ namespace YAT.View.Forms
 		{
 			var f = new Help();
 			f.StartPosition = FormStartPosition.Manual;
-			f.Location = FormEx.CalculateManualCenterParentLocation(this, f);
+			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
 
@@ -1043,7 +1043,7 @@ namespace YAT.View.Forms
 		{
 			var f = new ReleaseNotes();
 			f.StartPosition = FormStartPosition.Manual;
-			f.Location = FormEx.CalculateManualCenterParentLocation(this, f);
+			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
 
@@ -1052,7 +1052,7 @@ namespace YAT.View.Forms
 		{
 			var f = new FeedbackInstructions(FeedbackType.Support);
 			f.StartPosition = FormStartPosition.Manual;
-			f.Location = FormEx.CalculateManualCenterParentLocation(this, f);
+			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
 
@@ -1061,7 +1061,7 @@ namespace YAT.View.Forms
 		{
 			var f = new FeedbackInstructions(FeedbackType.Feature);
 			f.StartPosition = FormStartPosition.Manual;
-			f.Location = FormEx.CalculateManualCenterParentLocation(this, f);
+			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
 
@@ -1070,7 +1070,7 @@ namespace YAT.View.Forms
 		{
 			var f = new FeedbackInstructions(FeedbackType.Bug);
 			f.StartPosition = FormStartPosition.Manual;
-			f.Location = FormEx.CalculateManualCenterParentLocation(this, f);
+			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
 
@@ -1079,7 +1079,7 @@ namespace YAT.View.Forms
 		{
 			var f = new FeedbackInstructions(FeedbackType.AnyOther);
 			f.StartPosition = FormStartPosition.Manual;
-			f.Location = FormEx.CalculateManualCenterParentLocation(this, f);
+			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
 

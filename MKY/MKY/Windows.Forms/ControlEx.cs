@@ -24,6 +24,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 
@@ -42,6 +43,24 @@ namespace MKY.Windows.Forms
 		/// An invalid index is represented by -1 in <see cref="System.Windows.Forms"/> controls.
 		/// </summary>
 		public const int InvalidIndex = -1;
+
+		/// <summary>
+		/// Manual <see cref="FormStartPosition.CenterParent"/> because automatic doesn't work
+		/// if not shown as dialog.
+		/// </summary>
+		/// <remarks>
+		/// Located here in <see cref="ControlEx"/> rather than <see cref="FormEx"/> as this method
+		/// takes <see cref="Control"/> objects as arguments.
+		/// </remarks>
+		/// <param name="parent">Parent form.</param>
+		/// <param name="child">Child form to be placed to the center of the parent.</param>
+		/// <returns>Center parent location.</returns>
+		public static Point CalculateManualCenterParentLocation(Control parent, Control child)
+		{
+			int left = parent.Left + (parent.Width  / 2) - (child.Width  / 2);
+			int top  = parent.Top  + (parent.Height / 2) - (child.Height / 2);
+			return (new Point(left, top));
+		}
 
 		/// <summary>
 		/// Converts the tag property of <paramref name="sender"/> into an integer value.

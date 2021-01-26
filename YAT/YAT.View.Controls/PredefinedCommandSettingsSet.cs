@@ -875,7 +875,7 @@ namespace YAT.View.Controls
 
 			// Show multi-line box:
 			var f = new MultiLineBox(this.command, this.command.DefaultRadix, this.parseModeForText);
-			f.Location = FormEx.CalculateWithinScreenBoundsLocation(requestedLocation, f.Size);
+			f.Location = ScreenEx.CalculateLocationWithinBounds(requestedLocation, f.Size);
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 				ConfirmMultiLineCommand(f.CommandResult); // Command has been validated by multi-line box.
 			else
