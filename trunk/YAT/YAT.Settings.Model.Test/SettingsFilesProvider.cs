@@ -192,7 +192,10 @@ namespace YAT.Settings.Model.Test
 
 	#endregion
 
-	/// <summary></summary>
+	/// <remarks>
+	/// Located here in 'Settings.Model' rather than the overall 'YAT.Test' even though the related
+	/// settings are partly located in 'Settings.Application' as this is the top-least location.
+	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "As always, there are exceptions to the rules...")]
 	public static class SettingsFilesProvider
 	{
