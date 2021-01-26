@@ -3516,8 +3516,8 @@ namespace YAT.View.Forms
 				var savedSize          = ApplicationSettings.LocalUserSettings.MainWindow.Size;     // in SaveWindowSettings() below.
 
 				var savedBounds = new Rectangle(savedLocation, savedSize);
-				var isWithinBounds = ScreenEx.IsWithinAnyBounds(savedBounds);
-				if (isWithinBounds) // Restore saved settings if within bounds:
+				var isWithin = ScreenEx.IsWithinAnyWorkingArea(savedBounds); // 'WorkingArea' rather than 'Bounds' as e.g. Firefox, Thunderbird and LibraOffice.
+				if (isWithin) // Restore saved settings if within working area:
 				{
 					StartPosition = savedStartPosition;
 					Location      = savedLocation;

@@ -35,15 +35,17 @@ namespace MKY.Windows.Forms
 	public static class ScreenEx
 	{
 		/// <summary>
-		/// Evaluates whether the given <paramref name="bounds"/> are within the bounds of any of the screens.
+		/// Evaluates whether the given <paramref name="rect"/> is completely located within the
+		/// bounds of any of the screens.
 		/// </summary>
-		/// <param name="bounds">The bounds to be evaluated.</param>
+		/// <param name="rect">The rectangle to be evaluated.</param>
 		/// <returns><c>true</c> if within; otherwise, <c>false</c>.</returns>
-		public static bool IsWithinAnyBounds(Rectangle bounds)
+		public static bool IsWithinAnyBounds(Rectangle rect)
 		{
 			foreach (var screen in Screen.AllScreens)
 			{
-				if (screen.Bounds.Contains(bounds))
+				var bounds = screen.Bounds;
+				if (bounds.Contains(rect))
 					return (true);
 			}
 
@@ -51,37 +53,56 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary>
-		/// Fits the requested rectangle to the screen.
+		/// Evaluates whether the given <paramref name="rect"/> is completely located within the
+		/// working area of any of the screens.
+		/// </summary>
+		/// <param name="rect">The rectangle to be evaluated.</param>
+		/// <returns><c>true</c> if within; otherwise, <c>false</c>.</returns>
+		public static bool IsWithinAnyWorkingArea(Rectangle rect)
+		{
+			foreach (var screen in Screen.AllScreens)
+			{
+				var workingArea = screen.WorkingArea;
+				if (workingArea.Contains(rect))
+					return (true);
+			}
+
+			return (false);
+		}
+
+		/// <summary>
+		/// Fits the requested rectangle to the screen's working area.
 		/// </summary>
 		/// <param name="location">The location of the requested rectangle.</param>
 		/// <param name="size">The size of the requested rectangle.</param>
 		/// <returns>Location that fits screen.</returns>
-		public static Point CalculateLocationWithinBounds(Point location, Size size)
+		public static Point CalculateLocationWithinWorkingArea(Point location, Size size)
 		{
 			foreach (var screen in Screen.AllScreens)
 			{
-				if (screen.Bounds.Contains(location))
+				var workingArea = screen.WorkingArea;
+				if (workingArea.Contains(location))
 				{
 					var rect = new Rectangle(location, size);
-					if (screen.Bounds.Contains(rect))
+					if (workingArea.Contains(rect))
 					{
 						return (location); // All fine.
 					}
 					else
 					{
 						int x = location.X;
-						if ((location.X + size.Width) > screen.Bounds.Left)
-							x = (screen.Bounds.Left - size.Width);
+						if ((location.X + size.Width) > workingArea.Right)
+							x = (workingArea.Right - size.Width);
 
-						if (x < screen.Bounds.X)
-							x = screen.Bounds.X;
+						if (x < workingArea.X)
+							x = workingArea.X;
 
 						int y = location.Y;
-						if ((location.Y + size.Height) > screen.Bounds.Bottom)
-							y = (screen.Bounds.Bottom - size.Height);
+						if ((location.Y + size.Height) > workingArea.Bottom)
+							y = (workingArea.Bottom - size.Height);
 
-						if (y < screen.Bounds.Y)
-							y = screen.Bounds.Y;
+						if (y < workingArea.Y)
+							y = workingArea.Y;
 
 						return (new Point(x, y));
 					}
