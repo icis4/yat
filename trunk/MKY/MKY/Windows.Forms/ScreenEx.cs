@@ -49,6 +49,47 @@ namespace MKY.Windows.Forms
 
 			return (false);
 		}
+
+		/// <summary>
+		/// Fits the requested rectangle to the screen.
+		/// </summary>
+		/// <param name="location">The location of the requested rectangle.</param>
+		/// <param name="size">The size of the requested rectangle.</param>
+		/// <returns>Location that fits screen.</returns>
+		public static Point CalculateLocationWithinBounds(Point location, Size size)
+		{
+			foreach (var screen in Screen.AllScreens)
+			{
+				if (screen.Bounds.Contains(location))
+				{
+					var rect = new Rectangle(location, size);
+					if (screen.Bounds.Contains(rect))
+					{
+						return (location); // All fine.
+					}
+					else
+					{
+						int x = location.X;
+						if ((location.X + size.Width) > screen.Bounds.Left)
+							x = (screen.Bounds.Left - size.Width);
+
+						if (x < screen.Bounds.X)
+							x = screen.Bounds.X;
+
+						int y = location.Y;
+						if ((location.Y + size.Height) > screen.Bounds.Bottom)
+							y = (screen.Bounds.Bottom - size.Height);
+
+						if (y < screen.Bounds.Y)
+							y = screen.Bounds.Y;
+
+						return (new Point(x, y));
+					}
+				}
+			}
+
+			return (new Point(0, 0)); // Fallback.
+		}
 	}
 }
 
