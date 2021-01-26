@@ -1362,7 +1362,7 @@
 			this.label_RxRadix.Name = "label_RxRadix";
 			this.label_RxRadix.Size = new System.Drawing.Size(53, 13);
 			this.label_RxRadix.TabIndex = 5;
-			this.label_RxRadix.Text = "Rx Radix:";
+			this.label_RxRadix.Text = "&Rx Radix:";
 			// 
 			// checkBox_SeparateTxRxRadix
 			// 

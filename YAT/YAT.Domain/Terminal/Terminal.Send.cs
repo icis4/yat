@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.2.0 Development
+// YAT Version 2.4.0
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -228,7 +228,7 @@ namespace YAT.Domain
 				// as (IsTransmissive && !IsSending) and it also signalled
 				// 'EventMustBeRaisedBecauseStatusHasBeenAccessed()'. This was necessary as
 				// until YAT 2.1.0 it was not possible to run multiple commands concurrently.
-				// With YAT 2.1.1 this became possible, but keeping this property because its
+				// With YAT 2.4.0 this became possible, but keeping this property because its
 				// meaning still makes sense, e.g. send related controls can adapt to this send
 				// specific property instead of using the more general 'IsTransmissive'.
 			}

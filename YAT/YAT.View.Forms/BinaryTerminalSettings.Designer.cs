@@ -107,7 +107,7 @@ namespace YAT.View.Forms
 			this.groupBox_RxDisplay.Size = new System.Drawing.Size(290, 142);
 			this.groupBox_RxDisplay.TabIndex = 2;
 			this.groupBox_RxDisplay.TabStop = false;
-			this.groupBox_RxDisplay.Text = "&Rx";
+			this.groupBox_RxDisplay.Text = "&Rx Line Break";
 			// 
 			// binaryTerminalSettingsSet_Rx
 			// 
@@ -130,7 +130,7 @@ namespace YAT.View.Forms
 			this.groupBox_TxDisplay.Size = new System.Drawing.Size(290, 144);
 			this.groupBox_TxDisplay.TabIndex = 0;
 			this.groupBox_TxDisplay.TabStop = false;
-			this.groupBox_TxDisplay.Text = "&Tx and Rx";
+			this.groupBox_TxDisplay.Text = "&Line Break";
 			// 
 			// binaryTerminalSettingsSet_Tx
 			// 
@@ -150,7 +150,7 @@ namespace YAT.View.Forms
 			this.checkBox_SeparateTxRxDisplay.Name = "checkBox_SeparateTxRxDisplay";
 			this.checkBox_SeparateTxRxDisplay.Size = new System.Drawing.Size(175, 17);
 			this.checkBox_SeparateTxRxDisplay.TabIndex = 1;
-			this.checkBox_SeparateTxRxDisplay.Text = "Se&parate settings for Tx and Rx";
+			this.checkBox_SeparateTxRxDisplay.Text = "&Separate settings for Tx and Rx";
 			this.checkBox_SeparateTxRxDisplay.UseVisualStyleBackColor = true;
 			this.checkBox_SeparateTxRxDisplay.CheckedChanged += new System.EventHandler(this.checkBox_SeparateTxRxDisplay_CheckedChanged);
 			// 

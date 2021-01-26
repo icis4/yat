@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.2.0 Development
+// YAT Version 2.4.0
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -45,7 +45,7 @@ namespace YAT.Model.Test
 		/// </remarks>
 		/// <remarks>
 		/// Until YAT 2.1.0, a rather complicated delegate/callback mechanism was used to defer
-		/// settings creation into the test case itself. With YAT 2.2.0 the mechanism was simplified
+		/// settings creation into the test case itself. With YAT 2.4.0 the mechanism was simplified
 		/// to use domain rather than model settings where test generation is needed.
 		/// </remarks>
 		public static TerminalSettingsRoot Create(Domain.Settings.TerminalSettings terminalSettings)

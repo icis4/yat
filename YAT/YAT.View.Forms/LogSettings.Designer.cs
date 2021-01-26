@@ -455,7 +455,7 @@ namespace YAT.View.Forms
 			this.groupBox_Raw.Size = new System.Drawing.Size(495, 99);
 			this.groupBox_Raw.TabIndex = 5;
 			this.groupBox_Raw.TabStop = false;
-			this.groupBox_Raw.Text = "Raw &Data";
+			this.groupBox_Raw.Text = "Ra&w Data";
 			this.toolTip.SetToolTip(this.groupBox_Raw, "Bytes as transmitted over serial interface");
 			// 
 			// pathLabel_Raw_Rx

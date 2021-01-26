@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.2.0 Development
+// YAT Version 2.4.0
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -53,7 +53,7 @@ namespace YAT.Model
 	/// This partial class implements the send part of <see cref="Terminal"/>.
 	/// </remarks>
 	/// <remarks>
-	/// \remind (2020-09-16 / MKY while integrating YAT 2.2.0 into Albatros)
+	/// \remind (2020-09-16 / MKY while integrating YAT 2.4.0 into Albatros)
 	/// Could alternatively be partialized into 'N/A'/.Outgoing/.Incoming.
 	/// </remarks>
 	public partial class Terminal

@@ -52,6 +52,7 @@ namespace YAT.View.Forms
 			this.label_TxEol = new System.Windows.Forms.Label();
 			this.comboBox_Encoding = new MKY.Windows.Forms.ComboBoxEx();
 			this.groupBox_Send = new System.Windows.Forms.GroupBox();
+			this.textBox_WaitForResponseTimeout = new MKY.Windows.Forms.TextBoxEx();
 			this.label_WaitForResponseTimeout = new System.Windows.Forms.Label();
 			this.textBox_WaitForResponseNext = new MKY.Windows.Forms.TextBoxEx();
 			this.label_WaitForResponseNext = new System.Windows.Forms.Label();
@@ -70,7 +71,6 @@ namespace YAT.View.Forms
 			this.label_WaitForResponseNextUnit = new System.Windows.Forms.Label();
 			this.label_WaitForResponseTimeoutUnit = new System.Windows.Forms.Label();
 			this.label_DelayUnit = new System.Windows.Forms.Label();
-			this.textBox_WaitForResponseTimeout = new MKY.Windows.Forms.TextBoxEx();
 			this.textBox_Delay = new MKY.Windows.Forms.TextBoxEx();
 			this.label_DelayIntervalUnit = new System.Windows.Forms.Label();
 			this.checkBox_Delay = new System.Windows.Forms.CheckBox();
@@ -150,7 +150,7 @@ namespace YAT.View.Forms
 			this.groupBox_RxDisplay.Size = new System.Drawing.Size(260, 96);
 			this.groupBox_RxDisplay.TabIndex = 1;
 			this.groupBox_RxDisplay.TabStop = false;
-			this.groupBox_RxDisplay.Text = "&Rx";
+			this.groupBox_RxDisplay.Text = "Rx Line Break";
 			// 
 			// textTerminalSettingsSet_Rx
 			// 
@@ -168,7 +168,7 @@ namespace YAT.View.Forms
 			this.groupBox_TxDisplay.Size = new System.Drawing.Size(260, 96);
 			this.groupBox_TxDisplay.TabIndex = 0;
 			this.groupBox_TxDisplay.TabStop = false;
-			this.groupBox_TxDisplay.Text = "&Tx and Rx";
+			this.groupBox_TxDisplay.Text = "&Line Break";
 			// 
 			// textTerminalSettingsSet_Tx
 			// 
@@ -185,7 +185,7 @@ namespace YAT.View.Forms
 			this.checkBox_SeparateTxRxDisplay.Name = "checkBox_SeparateTxRxDisplay";
 			this.checkBox_SeparateTxRxDisplay.Size = new System.Drawing.Size(175, 17);
 			this.checkBox_SeparateTxRxDisplay.TabIndex = 0;
-			this.checkBox_SeparateTxRxDisplay.Text = "Se&parate settings for Tx and Rx";
+			this.checkBox_SeparateTxRxDisplay.Text = "&Separate settings for Tx and Rx";
 			this.checkBox_SeparateTxRxDisplay.UseVisualStyleBackColor = true;
 			this.checkBox_SeparateTxRxDisplay.CheckedChanged += new System.EventHandler(this.checkBox_SeparateTxRxDisplay_CheckedChanged);
 			// 
@@ -202,7 +202,7 @@ namespace YAT.View.Forms
 			this.groupBox_Eol.Size = new System.Drawing.Size(272, 119);
 			this.groupBox_Eol.TabIndex = 2;
 			this.groupBox_Eol.TabStop = false;
-			this.groupBox_Eol.Text = "E&OL (End-Of-Line)";
+			this.groupBox_Eol.Text = "EOL (End-Of-Line)";
 			// 
 			// checkBox_ShowEol
 			// 
@@ -243,9 +243,9 @@ namespace YAT.View.Forms
 			this.label_RxEol.Enabled = false;
 			this.label_RxEol.Location = new System.Drawing.Point(9, 70);
 			this.label_RxEol.Name = "label_RxEol";
-			this.label_RxEol.Size = new System.Drawing.Size(81, 13);
+			this.label_RxEol.Size = new System.Drawing.Size(97, 13);
 			this.label_RxEol.TabIndex = 3;
-			this.label_RxEol.Text = "EOL sequence:";
+			this.label_RxEol.Text = "&Rx EOL sequence:";
 			this.toolTip.SetToolTip(this.label_RxEol, resources.GetString("label_RxEol.ToolTip"));
 			// 
 			// comboBox_TxEol
@@ -265,7 +265,7 @@ namespace YAT.View.Forms
 			this.label_TxEol.Name = "label_TxEol";
 			this.label_TxEol.Size = new System.Drawing.Size(81, 13);
 			this.label_TxEol.TabIndex = 0;
-			this.label_TxEol.Text = "EOL sequence:";
+			this.label_TxEol.Text = "E&OL sequence:";
 			this.toolTip.SetToolTip(this.label_TxEol, resources.GetString("label_TxEol.ToolTip"));
 			// 
 			// comboBox_Encoding
@@ -305,6 +305,19 @@ namespace YAT.View.Forms
 			this.groupBox_Send.TabIndex = 4;
 			this.groupBox_Send.TabStop = false;
 			this.groupBox_Send.Text = "Send Settings";
+			// 
+			// textBox_WaitForResponseTimeout
+			// 
+			this.textBox_WaitForResponseTimeout.Location = new System.Drawing.Point(194, 62);
+			this.textBox_WaitForResponseTimeout.Name = "textBox_WaitForResponseTimeout";
+			this.textBox_WaitForResponseTimeout.Size = new System.Drawing.Size(48, 20);
+			this.textBox_WaitForResponseTimeout.TabIndex = 12;
+			this.textBox_WaitForResponseTimeout.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.toolTip.SetToolTip(this.textBox_WaitForResponseTimeout, "When too few lines are received within this time-out,\r\nongoing send requests will" +
+        " break and new requests\r\nwill be allowed again.\r\n\r\nSet to -1 for infinite waitin" +
+        "g for response.");
+			this.textBox_WaitForResponseTimeout.TextChanged += new System.EventHandler(this.textBox_WaitForResponseTimeout_TextChanged);
+			this.textBox_WaitForResponseTimeout.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_WaitForResponseTimeout_Validating);
 			// 
 			// label_WaitForResponseTimeout
 			// 
@@ -421,7 +434,7 @@ namespace YAT.View.Forms
 			this.groupBox_Substitute.Size = new System.Drawing.Size(285, 95);
 			this.groupBox_Substitute.TabIndex = 14;
 			this.groupBox_Substitute.TabStop = false;
-			this.groupBox_Substitute.Text = "Character Substitution";
+			this.groupBox_Substitute.Text = "&Character Substitution";
 			// 
 			// radioButton_SubstituteToLower
 			// 
@@ -430,7 +443,7 @@ namespace YAT.View.Forms
 			this.radioButton_SubstituteToLower.Name = "radioButton_SubstituteToLower";
 			this.radioButton_SubstituteToLower.Size = new System.Drawing.Size(182, 17);
 			this.radioButton_SubstituteToLower.TabIndex = 2;
-			this.radioButton_SubstituteToLower.Text = "&Lower case (e.g. \"Abc\" -> \"abc\")";
+			this.radioButton_SubstituteToLower.Text = "Lower case (e.g. \"Abc\" -> \"abc\")";
 			this.radioButton_SubstituteToLower.UseVisualStyleBackColor = true;
 			this.radioButton_SubstituteToLower.CheckedChanged += new System.EventHandler(this.radioButton_SubstituteToLower_CheckedChanged);
 			// 
@@ -441,7 +454,7 @@ namespace YAT.View.Forms
 			this.radioButton_SubstituteToUpper.Name = "radioButton_SubstituteToUpper";
 			this.radioButton_SubstituteToUpper.Size = new System.Drawing.Size(185, 17);
 			this.radioButton_SubstituteToUpper.TabIndex = 1;
-			this.radioButton_SubstituteToUpper.Text = "&Upper case (e.g. \"Abc\" -> \"ABC\")";
+			this.radioButton_SubstituteToUpper.Text = "Upper case (e.g. \"Abc\" -> \"ABC\")";
 			this.radioButton_SubstituteToUpper.UseVisualStyleBackColor = true;
 			this.radioButton_SubstituteToUpper.CheckedChanged += new System.EventHandler(this.radioButton_SubstituteToUpper_CheckedChanged);
 			// 
@@ -452,7 +465,7 @@ namespace YAT.View.Forms
 			this.radioButton_SubstituteNone.Name = "radioButton_SubstituteNone";
 			this.radioButton_SubstituteNone.Size = new System.Drawing.Size(149, 17);
 			this.radioButton_SubstituteNone.TabIndex = 0;
-			this.radioButton_SubstituteNone.Text = "&None (e.g. \"Abc -> \"Abc\")";
+			this.radioButton_SubstituteNone.Text = "None (e.g. \"Abc -> \"Abc\")";
 			this.radioButton_SubstituteNone.UseVisualStyleBackColor = true;
 			this.radioButton_SubstituteNone.CheckedChanged += new System.EventHandler(this.radioButton_SubstituteNone_CheckedChanged);
 			// 
@@ -507,19 +520,6 @@ namespace YAT.View.Forms
 			this.label_DelayUnit.TabIndex = 2;
 			this.label_DelayUnit.Text = "ms each";
 			this.label_DelayUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// textBox_WaitForResponseTimeout
-			// 
-			this.textBox_WaitForResponseTimeout.Location = new System.Drawing.Point(194, 62);
-			this.textBox_WaitForResponseTimeout.Name = "textBox_WaitForResponseTimeout";
-			this.textBox_WaitForResponseTimeout.Size = new System.Drawing.Size(48, 20);
-			this.textBox_WaitForResponseTimeout.TabIndex = 12;
-			this.textBox_WaitForResponseTimeout.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.toolTip.SetToolTip(this.textBox_WaitForResponseTimeout, "When too few lines are received within this time-out,\r\nongoing send requests will" +
-        " break and new requests\r\nwill be allowed again.\r\n\r\nSet to -1 for infinite waitin" +
-        "g for response.");
-			this.textBox_WaitForResponseTimeout.TextChanged += new System.EventHandler(this.textBox_WaitForResponseTimeout_TextChanged);
-			this.textBox_WaitForResponseTimeout.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_WaitForResponseTimeout_Validating);
 			// 
 			// textBox_Delay
 			// 

@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.2.0 Development
+// YAT Version 2.4.0
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -1187,7 +1187,7 @@ namespace YAT.View.Forms
 				// Radix:
 				bool separateRadix = this.settingsInEdit.Terminal.Display.SeparateTxRxRadix;
 				if (!separateRadix)
-					label_TxRadix.Text = "R&adix:";
+					label_TxRadix.Text = "&Radix:";
 				else
 					label_TxRadix.Text = "&Tx Radix:";
 

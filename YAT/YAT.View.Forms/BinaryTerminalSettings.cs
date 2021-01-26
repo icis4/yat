@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.2.0 Development
+// YAT Version 2.4.0
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -199,10 +199,10 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				if (this.settingsInEdit.SeparateTxRxDisplay)
-					groupBox_TxDisplay.Text = "&Tx";
+				if (!this.settingsInEdit.SeparateTxRxDisplay)
+					groupBox_TxDisplay.Text = "&Line Break";
 				else
-					groupBox_TxDisplay.Text = "&Tx and Rx";
+					groupBox_TxDisplay.Text = "&Tx Line Break";
 
 				binaryTerminalSettingsSet_Tx.Settings = this.settingsInEdit.TxDisplay;
 
