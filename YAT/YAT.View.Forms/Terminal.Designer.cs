@@ -3155,7 +3155,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_SendContextMenu_Separator_7,
             this.toolStripMenuItem_SendContextMenu_CopyPredefined});
 			this.contextMenuStrip_Send.Name = "contextMenuStrip_Send";
-			this.contextMenuStrip_Send.Size = new System.Drawing.Size(334, 420);
+			this.contextMenuStrip_Send.Size = new System.Drawing.Size(334, 398);
 			this.contextMenuStrip_Send.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Send_Opening);
 			// 
 			// toolStripMenuItem_SendContextMenu_Panels
@@ -3172,7 +3172,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_Panels_SendText.Checked = true;
 			this.toolStripMenuItem_SendContextMenu_Panels_SendText.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItem_SendContextMenu_Panels_SendText.Name = "toolStripMenuItem_SendContextMenu_Panels_SendText";
-			this.toolStripMenuItem_SendContextMenu_Panels_SendText.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_SendContextMenu_Panels_SendText.Size = new System.Drawing.Size(124, 22);
 			this.toolStripMenuItem_SendContextMenu_Panels_SendText.Text = "Send Text";
 			this.toolStripMenuItem_SendContextMenu_Panels_SendText.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_Panels_SendText_Click);
 			// 
@@ -3181,7 +3181,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = true;
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Name = "toolStripMenuItem_SendContextMenu_Panels_SendFile";
-			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Size = new System.Drawing.Size(124, 22);
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Text = "Send File";
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_Panels_SendFile_Click);
 			// 
@@ -4732,7 +4732,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripStatusLabel_TerminalStatus_Status.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripStatusLabel_TerminalStatus_Status.Name = "toolStripStatusLabel_TerminalStatus_Status";
-			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(343, 20);
+			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(333, 20);
 			this.toolStripStatusLabel_TerminalStatus_Status.Spring = true;
 			this.toolStripStatusLabel_TerminalStatus_Status.Text = "<Terminal Status>";
 			this.toolStripStatusLabel_TerminalStatus_Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -4742,8 +4742,8 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripStatusLabel_TerminalStatus_Separator1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripStatusLabel_TerminalStatus_Separator1.Name = "toolStripStatusLabel_TerminalStatus_Separator1";
-			this.toolStripStatusLabel_TerminalStatus_Separator1.Size = new System.Drawing.Size(37, 20);
-			this.toolStripStatusLabel_TerminalStatus_Separator1.Text = "          ";
+			this.toolStripStatusLabel_TerminalStatus_Separator1.Size = new System.Drawing.Size(16, 20);
+			this.toolStripStatusLabel_TerminalStatus_Separator1.Text = "   ";
 			// 
 			// toolStripStatusLabel_TerminalStatus_IOStatus
 			// 
