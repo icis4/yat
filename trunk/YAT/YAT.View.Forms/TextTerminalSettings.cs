@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.2.0 Development
+// YAT Version 2.4.0
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -666,15 +666,9 @@ namespace YAT.View.Forms
 				// EOL:
 				bool separateEol = this.settingsInEdit.SeparateTxRxEol;
 				if (!separateEol)
-				{
 					label_TxEol.Text = "E&OL sequence:";
-					label_RxEol.Text = "EOL sequence:";
-				}
 				else
-				{
 					label_TxEol.Text = "&Tx EOL sequence:";
-					label_RxEol.Text = "&Rx EOL sequence:";
-				}
 
 				checkBox_SeparateTxRxEol.Checked = separateEol;
 				label_RxEol.Enabled              = separateEol;
@@ -695,10 +689,10 @@ namespace YAT.View.Forms
 				checkBox_ShowEol.Checked = this.settingsInEdit.ShowEol;
 
 				// Display:
-				if (this.settingsInEdit.SeparateTxRxDisplay)
-					groupBox_TxDisplay.Text = "&Tx";
+				if (!this.settingsInEdit.SeparateTxRxDisplay)
+					groupBox_TxDisplay.Text = "&Line Break";
 				else
-					groupBox_TxDisplay.Text = "&Tx and Rx";
+					groupBox_TxDisplay.Text = "Tx &Line Break";
 
 				textTerminalSettingsSet_Tx.Settings  = this.settingsInEdit.TxDisplay;
 

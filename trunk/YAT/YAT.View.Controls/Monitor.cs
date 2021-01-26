@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.2.0 Development
+// YAT Version 2.4.0
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -1050,7 +1050,7 @@ namespace YAT.View.Controls
 		/// that label will not adjust to different font size, well...
 		/// </remarks>
 		/// <remarks>
-		/// From YAT 2.1.1, two separate labels are used. This prevents undesireable line breaks a
+		/// From YAT 2.4.0, two separate labels are used. This prevents undesireable line breaks a
 		/// single label containing two lines will show when size becomes too small. Both labels
 		/// have a <see cref="Control.Height"/> of 15, i.e. half the 'IconPanelHeightAvailable'.
 		/// </remarks>

@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.2.0 Development
+// YAT Version 2.4.0
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -747,7 +747,7 @@ namespace YAT.Domain
 		/// happened simultaneously byte-by-byte for both affected repositories, rather than whole
 		/// chunk for first and then second affected repository. However, glueing requires that the
 		/// part of a chunk after a line break may by postponed, and glueing only applies to bidir.
-		/// Thus, with YAT 2.2.0, processing changed to the current strategy.
+		/// Thus, with YAT 2.4.0, processing changed to the current strategy.
 		/// </remarks>
 		/// <remarks>
 		/// This method must synchronize against <see cref="ChunkVsTimedSyncObj"/>!
@@ -1139,7 +1139,7 @@ namespace YAT.Domain
 		/// happened simultaneously byte-by-byte for both affected repositories, rather than whole
 		/// chunk for first and then second affected repository. However, glueing requires that the
 		/// part of a chunk after a line break may by postponed, and glueing only applies to bidir.
-		/// Thus, with YAT 2.2.0, processing changed to the current strategy.
+		/// Thus, with YAT 2.4.0, processing changed to the current strategy.
 		/// </remarks>
 		/// <remarks>
 		/// Signaling is only done once per chunk (unless flushing is involved), in order to improve

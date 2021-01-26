@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.2.0 Development
+// YAT Version 2.4.0
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -67,9 +67,11 @@ namespace YAT
 
 		/// <summary>The build designation.</summary>
 	#if (!WITH_SCRIPTING)
-	////public const string ProductBuildDesignation = "";
-		public const string ProductBuildDesignation = " 2.4.0 Beta Version";
-	#else
+		public const string ProductBuildDesignation = ""; // This is to be used for final releases.
+	////public const string ProductBuildDesignation = " 2.x.0 Beta Version";
+	////public const string ProductBuildDesignation = " 2.x.0 Preliminary Version";
+	////public const string ProductBuildDesignation = " 2.x.0 Development Version";
+	#else                                             // Leading space!
 		public const string ProductBuildDesignation = "";
 	#endif
 
@@ -118,10 +120,11 @@ namespace YAT
 		}
 
 		/// <summary>The version designation.</summary>
-		public const string ProductVersionStabilityIndication = "";
+		public const string ProductVersionStabilityIndication = ""; // This is to be used for final releases.
+	////public const string ProductVersionStabilityIndication = " Beta";
 	////public const string ProductVersionStabilityIndication = " Preliminary";
 	////public const string ProductVersionStabilityIndication = " Development";
-
+		                                                       //// Leading space!
 		/// <summary>The product version that combines product version and version stability indication.</summary>
 		public static readonly string ProductVersionWithStabilityIndication = ProductVersion + ProductVersionStabilityIndication;
 

@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.2.0 Development
+// YAT Version 2.4.0
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -85,7 +85,7 @@ namespace YAT.Model
 	/// Using partial classes to ease diffing code of the separated functionality.
 	/// </remarks>
 	/// <remarks>
-	/// \remind (2020-09-16 / MKY while integrating YAT 2.2.0 into Albatros)
+	/// \remind (2020-09-16 / MKY while integrating YAT 2.4.0 into Albatros)
 	/// Could alternatively be partialized into 'N/A'/.Outgoing/.Incoming.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
@@ -3459,11 +3459,11 @@ namespace YAT.Model
 		//     + Possibility to filter/suppress/other in parallel.
 		//     - Further complicates the main tool bar.
 		//     - Further complicates usage.
-		// These ideas are technically possible but are considered (2019-11-21..22 / YAT 2.1.1) over the top.
+		// These ideas are technically possible but are considered (2019-11-21..22 / YAT 2.1.<development>) over the top.
 		//  > Some inconsistency for filter/suppress is considered preferable over making things more complicated.
 		//  > Limited to Rx is considered sufficient.
 		//
-		// Approach c) was chosen (2019-11-21..22 / YAT 2.1.1).
+		// Approach c) was chosen (2019-11-21..22 / YAT 2.1.<development>).
 		//
 		// The last state of the initial implementation can be found in SVN revisions #2701..#2707.
 
