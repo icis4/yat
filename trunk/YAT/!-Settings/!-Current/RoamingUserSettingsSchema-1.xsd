@@ -12,7 +12,10 @@
           <xs:element minOccurs="1" maxOccurs="1" name="Mark" type="UserTimeStamp" />
           <xs:element minOccurs="0" maxOccurs="1" name="Socket" type="SocketSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="Find" type="FindSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AutoAction" type="AutoActionSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="AutoResponse" type="AutoResponseSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="View" type="ViewSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Plot" type="PlotSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="Extensions" type="ExtensionSettings" />
         </xs:sequence>
       </xs:extension>
@@ -25,10 +28,20 @@
         <xs:sequence>
           <xs:element minOccurs="0" maxOccurs="1" name="TextSendFiles" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="BinarySendFiles" type="xs:string" />
-          <xs:element minOccurs="0" maxOccurs="1" name="PortLogFiles" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ControlLogFiles" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="RawLogFiles" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="NeatLogFiles" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="MonitorFiles" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="PlotFiles" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PlotSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="ShowLegend" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -37,9 +50,9 @@
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
         <xs:sequence>
-          <xs:element minOccurs="1" maxOccurs="1" name="FindVisible" type="xs:boolean" />
-          <xs:element minOccurs="1" maxOccurs="1" name="AutoActionVisible" type="xs:boolean" />
-          <xs:element minOccurs="1" maxOccurs="1" name="AutoResponseVisible" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="FindIsVisible" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AutoActionIsVisible" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AutoResponseIsVisible" type="xs:boolean" />
           <xs:element minOccurs="0" maxOccurs="unbounded" name="CustomColors" type="RecentItemOfString" />
         </xs:sequence>
       </xs:extension>
@@ -50,6 +63,29 @@
       <xs:element minOccurs="0" maxOccurs="1" name="Item" type="xs:string" />
       <xs:element minOccurs="1" maxOccurs="1" name="TimeStamp" type="xs:dateTime" />
     </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AutoTriggerSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="RecentExplicitTriggers" type="RecentItemOfString" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="AutoResponseSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="AutoTriggerSettings">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="RecentExplicitResponses" type="RecentItemOfString" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="AutoActionSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="AutoTriggerSettings" />
+    </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="FindSettings">
     <xs:complexContent mixed="false">
@@ -66,7 +102,7 @@
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="CaseSensitive" type="xs:boolean" />
       <xs:element minOccurs="1" maxOccurs="1" name="WholeWord" type="xs:boolean" />
-      <xs:element minOccurs="1" maxOccurs="1" name="UseRegex" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="EnableRegex" type="xs:boolean" />
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="SocketSettings">
