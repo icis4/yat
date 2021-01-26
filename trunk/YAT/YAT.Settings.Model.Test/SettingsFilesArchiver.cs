@@ -26,6 +26,7 @@
 // Using
 //==================================================================================================
 
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Xml;
@@ -43,7 +44,10 @@ using YAT.Settings.Application;
 
 namespace YAT.Settings.Model.Test
 {
-	/// <summary></summary>
+	/// <remarks>
+	/// Located here in 'Settings.Model' rather than the overall 'YAT.Test' even though the related
+	/// settings are partly located in 'Settings.Application' as this is the top-least location.
+	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Archiver", Justification = "'Archiver' is a correct English term.")]
 	[TestFixture, Explicit("This test fixture has the sole purpose to perform storing of settings schemas and defaults to the YAT settings archive")]
 	public class SettingsFilesArchiver
@@ -160,7 +164,12 @@ namespace YAT.Settings.Model.Test
 
 		private static void ArchiveSchema(XmlDocument document, string path, string intendedFileNameWithoutExtension)
 		{
-			XmlSchemaEx.ToFile(document, path, intendedFileNameWithoutExtension);
+			XmlSchemaEx.WriteToFile(document, path, intendedFileNameWithoutExtension);
+
+			Trace.WriteLine("Schema file(s) created:");
+			Trace.Indent();
+			Trace.WriteLine(path + intendedFileNameWithoutExtension);
+			Trace.Unindent();
 
 			// Attention:
 			// All YAT settings schema consists of two schemas:
@@ -190,6 +199,11 @@ namespace YAT.Settings.Model.Test
 		private static void ArchiveDefault(XmlDocument document, string path, string fileName)
 		{
 			XmlDocumentEx.SaveToFile(document, path, fileName);
+
+			Trace.WriteLine("Default file created:");
+			Trace.Indent();
+			Trace.WriteLine(path + fileName);
+			Trace.Unindent();
 		}
 
 		#endregion
