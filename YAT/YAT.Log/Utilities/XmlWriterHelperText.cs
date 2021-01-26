@@ -58,7 +58,7 @@ namespace YAT.Log.Utilities
 				XmlSerializerEx.SerializeToFile(type, transferLines, filePath);
 
 				if (addSchema)
-					XmlSchemaEx.ToFile(type, Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
+					XmlSchemaEx.WriteToFile(type, Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
 
 				return (count);
 			}

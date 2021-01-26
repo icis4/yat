@@ -305,7 +305,7 @@ namespace YAT.Log.Utilities
 				Type type = typeof(List<XmlTransferRawLine>);
 				string directory = Path.GetDirectoryName(schemaFilePath);
 				string fileName = Path.GetFileNameWithoutExtension(schemaFilePath);
-				XmlSchemaEx.ToFile(type, directory, fileName);
+				XmlSchemaEx.WriteToFile(type, directory, fileName);
 			}
 		}
 
@@ -378,7 +378,7 @@ namespace YAT.Log.Utilities
 				Type type = typeof(List<XmlTransferTextLine>);
 				string directory = Path.GetDirectoryName(schemaFilePath);
 				string fileName = Path.GetFileNameWithoutExtension(schemaFilePath);
-				XmlSchemaEx.ToFile(type, directory, fileName);
+				XmlSchemaEx.WriteToFile(type, directory, fileName);
 			}
 		}
 
