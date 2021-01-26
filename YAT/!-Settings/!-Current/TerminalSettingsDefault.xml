@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<Settings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SettingsName>YAT Terminal Settings</SettingsName>
-  <SettingsVersion>1.7.0</SettingsVersion>
-  <ProductVersion>2.1.0</ProductVersion>
+  <SettingsVersion>1.8.0</SettingsVersion>
+  <ProductVersion>2.4.0</ProductVersion>
   <Warning>Modifying structure and/or content may cause undefined behavior!</Warning>
   <Mark>
-    <TimeStamp>2019-10-01T14:00:19.5614991+02:00</TimeStamp>
+    <TimeStamp>2021-01-26T13:27:41.4132127+01:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Mark>
   <AutoSaved>false</AutoSaved>
@@ -29,6 +29,7 @@
             <RtsPin>Disabled</RtsPin>
             <DtrPin>Disabled</DtrPin>
           </Communication>
+          <SignalXOnWhenOpened>true</SignalXOnWhenOpened>
           <AliveMonitor>
             <Enabled>true</Enabled>
             <Interval>500</Interval>
@@ -52,6 +53,7 @@
             <Interval>10</Interval>
           </MaxSendRate>
           <IgnoreFramingErrors>false</IgnoreFramingErrors>
+          <EnableRetainingWarnings>true</EnableRetainingWarnings>
           <NoSendOnOutputBreak>true</NoSendOnOutputBreak>
           <NoSendOnInputBreak>false</NoSendOnInputBreak>
         </SerialPort>
@@ -78,6 +80,8 @@
             <VendorId>0</VendorId>
             <ProductId>0</ProductId>
             <SerialNumber />
+            <UsagePage>-1</UsagePage>
+            <UsageId>-1</UsageId>
           </DeviceInfo>
           <MatchSerial>true</MatchSerial>
           <Preset>None</Preset>
@@ -94,7 +98,9 @@
             <RxId>0</RxId>
           </RxFilterUsage>
           <FlowControl>None</FlowControl>
+          <SignalXOnWhenOpened>true</SignalXOnWhenOpened>
           <AutoOpen>true</AutoOpen>
+          <EnableRetainingWarnings>true</EnableRetainingWarnings>
           <IncludeNonPayloadData>false</IncludeNonPayloadData>
         </UsbSerialHidDevice>
         <Endianness>BigEndian</Endianness>
@@ -125,19 +131,20 @@
         <TimeSpanFormat>[d \days ][h][h\:][m]m\:ss\.fff</TimeSpanFormat>
         <ShowTimeDelta>false</ShowTimeDelta>
         <TimeDeltaFormat>[d \days ][h][h\:][m][m\:][s]s\.fff</TimeDeltaFormat>
-        <ShowPort>false</ShowPort>
+        <ShowDevice>false</ShowDevice>
         <ShowDirection>false</ShowDirection>
         <ShowLength>false</ShowLength>
         <LengthSelection>CharCount</LengthSelection>
         <ShowDuration>false</ShowDuration>
         <TimeDurationFormat>[d \days ][h][h\:][m][m\:][s]s\.fff</TimeDurationFormat>
-        <IncludePortControl>false</IncludePortControl>
-        <PortLineBreakEnabled>true</PortLineBreakEnabled>
+        <IncludeIOControl>false</IncludeIOControl>
+        <IncludeIOWarnings>true</IncludeIOWarnings>
         <DirectionLineBreakEnabled>true</DirectionLineBreakEnabled>
-        <ChunkLineBreakEnabled>false</ChunkLineBreakEnabled>
+        <DeviceLineBreakEnabled>true</DeviceLineBreakEnabled>
         <MaxLineCount>1000</MaxLineCount>
         <MaxLineLength>1000</MaxLineLength>
         <ShowCopyOfActiveLine>false</ShowCopyOfActiveLine>
+        <ContentSeparator> </ContentSeparator>
         <InfoSeparator> </InfoSeparator>
         <InfoEnclosure>()</InfoEnclosure>
       </Display>
@@ -158,6 +165,7 @@
       </CharAction>
       <Send>
         <UseExplicitDefaultRadix>false</UseExplicitDefaultRadix>
+        <AllowConcurrency>false</AllowConcurrency>
         <CopyPredefined>false</CopyPredefined>
         <Text>
           <KeepSendText>true</KeepSendText>
@@ -182,10 +190,11 @@
         <SeparateTxRxEol>false</SeparateTxRxEol>
         <TxEol>&lt;CR&gt;&lt;LF&gt;</TxEol>
         <RxEol>&lt;CR&gt;&lt;LF&gt;</RxEol>
-        <Encoding>1252</Encoding>
+        <Encoding>65001</Encoding>
         <ShowEol>false</ShowEol>
         <SeparateTxRxDisplay>false</SeparateTxRxDisplay>
         <TxDisplay>
+          <ChunkLineBreakEnabled>false</ChunkLineBreakEnabled>
           <LengthLineBreak>
             <Enabled>false</Enabled>
             <Length>80</Length>
@@ -196,6 +205,7 @@
           </TimedLineBreak>
         </TxDisplay>
         <RxDisplay>
+          <ChunkLineBreakEnabled>false</ChunkLineBreakEnabled>
           <LengthLineBreak>
             <Enabled>false</Enabled>
             <Length>80</Length>
@@ -205,6 +215,10 @@
             <Timeout>500</Timeout>
           </TimedLineBreak>
         </RxDisplay>
+        <GlueCharsOfLine>
+          <Enabled>true</Enabled>
+          <Timeout>500</Timeout>
+        </GlueCharsOfLine>
         <LineSendDelay>
           <Enabled>false</Enabled>
           <Delay>500</Delay>
@@ -212,6 +226,8 @@
         </LineSendDelay>
         <WaitForResponse>
           <Enabled>false</Enabled>
+          <ResponseLineCount>1</ResponseLineCount>
+          <ClearanceLineCount>1</ClearanceLineCount>
           <Timeout>500</Timeout>
         </WaitForResponse>
         <CharSubstitution>None</CharSubstitution>
@@ -229,8 +245,9 @@
       <BinaryTerminal>
         <SeparateTxRxDisplay>false</SeparateTxRxDisplay>
         <TxDisplay>
+          <ChunkLineBreakEnabled>true</ChunkLineBreakEnabled>
           <LengthLineBreak>
-            <Enabled>true</Enabled>
+            <Enabled>false</Enabled>
             <Length>16</Length>
           </LengthLineBreak>
           <SequenceLineBreakBefore>
@@ -247,8 +264,9 @@
           </TimedLineBreak>
         </TxDisplay>
         <RxDisplay>
+          <ChunkLineBreakEnabled>true</ChunkLineBreakEnabled>
           <LengthLineBreak>
-            <Enabled>true</Enabled>
+            <Enabled>false</Enabled>
             <Length>16</Length>
           </LengthLineBreak>
           <SequenceLineBreakBefore>
@@ -268,15 +286,31 @@
     </Terminal>
     <PredefinedCommand>
       <PageLayout>OneByOne</PageLayout>
+      <HideUndefinedCommands>false</HideUndefinedCommands>
     </PredefinedCommand>
-    <AutoResponse>
-      <Trigger>[None]</Trigger>
-      <Response>[None]</Response>
-    </AutoResponse>
     <AutoAction>
       <Trigger>[None]</Trigger>
+      <TriggerOptions>
+        <UseText>false</UseText>
+        <CaseSensitive>true</CaseSensitive>
+        <WholeWord>false</WholeWord>
+        <EnableRegex>false</EnableRegex>
+      </TriggerOptions>
       <Action>[None]</Action>
     </AutoAction>
+    <AutoResponse>
+      <Trigger>[None]</Trigger>
+      <TriggerOptions>
+        <UseText>false</UseText>
+        <CaseSensitive>true</CaseSensitive>
+        <WholeWord>false</WholeWord>
+        <EnableRegex>false</EnableRegex>
+      </TriggerOptions>
+      <Response>[None]</Response>
+      <ResponseOptions>
+        <EnableReplace>false</EnableReplace>
+      </ResponseOptions>
+    </AutoResponse>
     <Format>
       <Font>
         <Name>DejaVu Sans Mono</Name>
@@ -316,10 +350,10 @@
         <Color>Green</Color>
         <FontStyle>Regular</FontStyle>
       </TimeDurationFormat>
-      <PortFormat>
+      <DeviceFormat>
         <Color>Green</Color>
         <FontStyle>Regular</FontStyle>
-      </PortFormat>
+      </DeviceFormat>
       <DirectionFormat>
         <Color>Green</Color>
         <FontStyle>Regular</FontStyle>
@@ -328,10 +362,6 @@
         <Color>Green</Color>
         <FontStyle>Regular</FontStyle>
       </LengthFormat>
-      <WhiteSpacesFormat>
-        <Color>Black</Color>
-        <FontStyle>Regular</FontStyle>
-      </WhiteSpacesFormat>
       <IOControlFormat>
         <Color>Gold</Color>
         <FontStyle>Bold</FontStyle>
@@ -340,6 +370,10 @@
         <Color>DarkOrange</Color>
         <FontStyle>Bold</FontStyle>
       </ErrorFormat>
+      <WhiteSpacesFormat>
+        <Color>Black</Color>
+        <FontStyle>Regular</FontStyle>
+      </WhiteSpacesFormat>
       <BackFormat>
         <Color>window</Color>
       </BackFormat>
@@ -347,8 +381,8 @@
     <Log>
       <RootPath>C:\Users\Matthias\Documents\YAT</RootPath>
       <RootFileName>YAT-Log</RootFileName>
-      <PortLog>false</PortLog>
-      <PortExtension>.log</PortExtension>
+      <ControlLog>false</ControlLog>
+      <ControlExtension>.log</ControlExtension>
       <RawLogTx>false</RawLogTx>
       <RawLogBidir>false</RawLogBidir>
       <RawLogRx>false</RawLogRx>
@@ -393,6 +427,7 @@
     </SendFile>
     <Predefined>
       <SelectedPageId>1</SelectedPageId>
+      <HideUndefinedCommands>false</HideUndefinedCommands>
     </Predefined>
     <Window>
       <State>Maximized</State>
@@ -401,8 +436,8 @@
         <Y>0</Y>
       </Location>
       <Size>
-        <Width>900</Width>
-        <Height>675</Height>
+        <Width>854</Width>
+        <Height>600</Height>
       </Size>
     </Window>
     <Layout>

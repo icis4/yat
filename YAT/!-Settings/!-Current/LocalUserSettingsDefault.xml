@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<LocalUserSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<LocalUserSettings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SettingsName>YAT Local User Settings</SettingsName>
-  <SettingsVersion>1.7.0</SettingsVersion>
-  <ProductVersion>2.1.0</ProductVersion>
+  <SettingsVersion>1.8.0</SettingsVersion>
+  <ProductVersion>2.4.0</ProductVersion>
   <Warning>Modifying structure and/or content may cause undefined behavior!</Warning>
   <Mark>
-    <TimeStamp>2019-10-01T14:00:19.055632+02:00</TimeStamp>
+    <TimeStamp>2021-01-26T13:27:41.1319624+01:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Mark>
   <General>
@@ -26,14 +26,14 @@
     <SendFiles>C:\Users\Matthias\Documents\YAT</SendFiles>
     <LogFiles>C:\Users\Matthias\Documents\YAT</LogFiles>
     <MonitorFiles>C:\Users\Matthias\Documents\YAT</MonitorFiles>
+    <PlotFiles>C:\Users\Matthias\Documents\YAT</PlotFiles>
   </Paths>
   <AutoWorkspace>
     <FilePath />
     <AutoSaved>false</AutoSaved>
   </AutoWorkspace>
   <MainWindow>
-    <StartPosition>WindowsDefaultLocation</StartPosition>
-    <WindowState>Normal</WindowState>
+    <State>Normal</State>
     <Location>
       <X>0</X>
       <Y>0</Y>
@@ -42,6 +42,7 @@
       <Width>912</Width>
       <Height>684</Height>
     </Size>
+    <StartPosition>WindowsDefaultLocation</StartPosition>
     <AlwaysOnTop>false</AlwaysOnTop>
     <ShowTerminalInfo>false</ShowTerminalInfo>
     <ShowTime>false</ShowTime>
@@ -85,7 +86,6 @@
       <Interval>500</Interval>
     </TcpClientAutoReconnect>
     <UdpServerSendMode>MostRecent</UdpServerSendMode>
-    <UsbSerialHidMatchSerial>true</UsbSerialHidMatchSerial>
     <UsbSerialHidPreset>None</UsbSerialHidPreset>
     <UsbSerialHidReportFormat>
       <UseId>true</UseId>
@@ -106,4 +106,17 @@
   <RecentFiles>
     <FilePathsCapacity>8</FilePathsCapacity>
   </RecentFiles>
+  <PlotWindow>
+    <State>Normal</State>
+    <Location>
+      <X>0</X>
+      <Y>0</Y>
+    </Location>
+    <Size>
+      <Width>900</Width>
+      <Height>480</Height>
+    </Size>
+    <StartPosition>CenterParent</StartPosition>
+    <AlwaysOnTop>false</AlwaysOnTop>
+  </PlotWindow>
 </LocalUserSettings>
