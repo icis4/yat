@@ -110,7 +110,7 @@ namespace YAT.Settings.Application
 		[XmlElement("SettingsName")]
 		public virtual string SettingsName
 		{
-			get { return (ApplicationEx.ProductName + " Roaming User Settings"); } // Name shall differ for "YAT" and "YATConsole"
+			get { return (ApplicationEx.ProductName + " Roaming User Settings"); } // Name must differ for "YAT" and "YATConsole"
 			set { /* Do nothing, this meta XML element is read-only. */ }          // in order to get separate user settings.
 		}
 
