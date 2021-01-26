@@ -379,7 +379,7 @@ namespace YAT.View.Controls
 			#if (DEBUG)
 				else
 				{
-					Debugger.Break(); // See debug output for issue and instructions!
+					Debugger.Break(); // See debug output for issue and potential root cause.
 				}
 			#endif
 			}

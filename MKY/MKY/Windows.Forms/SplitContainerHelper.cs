@@ -58,7 +58,7 @@ namespace MKY.Windows.Forms
 				#if (DEBUG)
 					else
 					{
-						Debugger.Break(); // See debug output for issue and instructions!
+						Debugger.Break(); // See debug output for issue and potential root cause.
 					}
 				#endif
 
@@ -133,8 +133,8 @@ namespace MKY.Windows.Forms
 			int widthOrHeight = OrientationEx.SizeToWidthOrHeight(sc, sc.Orientation);
 
 			if (widthOrHeight <= 0) // Case e.g. if the form/control is hidden.
-			{                       // Needed to prevent 'ArgumentException' at Int32Ex.Limit() below.
-				Debug.WriteLine(string.Format(CultureInfo.InvariantCulture, "Size should be larger than 0, but is {0}. This may happen if '{1}' is hidden.", widthOrHeight, sc.Name));
+			{                       // Needed to prevent 'ArgumentException' at Int32Ex.Limit() further below.
+				Debug.WriteLine(string.Format(CultureInfo.InvariantCulture, "Size should be larger than 0, but is {0}. This may happen if '{1}' is hidden due to size restrictions.", widthOrHeight, sc.Name));
 				limited = 0;
 				return (false);
 			}
@@ -150,9 +150,9 @@ namespace MKY.Windows.Forms
 				limited = Int32Ex.Limit(distance, min, max);
 				return (true);
 			}
-			else // Case e.g. if there are mistakes in the layout of a form.
-			{    // Needed to prevent 'ArgumentException' at Int32Ex.Limit().
-				Debug.WriteLine(string.Format(CultureInfo.InvariantCulture, "Result should be 'min' <= 'max', but 'min' is {0} and 'max' is {1}! Check the layout and resulting size of '{2}'!", min, max, sc.Name));
+			else // Case e.g. if the form/control is partly hidden or if there are errors in the layout of a form.
+			{    // Needed to prevent 'ArgumentException' at Int32Ex.Limit() above.
+				Debug.WriteLine(string.Format(CultureInfo.InvariantCulture, "Result should be 'min' <= 'max', but 'min' is {0} and 'max' is {1}. This may happen if '{2}' is partly hidden due to size restrictions or if there are errors in the layout of a form.", min, max, sc.Name));
 				limited = 0;
 				return (false);
 			}
