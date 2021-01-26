@@ -52,7 +52,7 @@ namespace YAT.Settings.Application
 	public class RoamingUserSettingsRoot : MKY.Settings.SettingsItem, IEquatable<RoamingUserSettingsRoot>, IAlternateXmlElementProvider
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
-		private string settingsVersion = "1.2.0";
+		private string settingsVersion = "1.3.0";
 
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
 		private string productVersion = ApplicationEx.ProductVersion;
