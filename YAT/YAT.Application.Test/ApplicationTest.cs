@@ -293,10 +293,10 @@ namespace YAT.Application.Test
 		{
 			var dr = MessageBoxEx.Show
 			(
-				"This test will open " + ApplicationEx.ProductName + " and show the [New Terminal] dialog." + Environment.NewLine +
-				"(" + ApplicationEx.ProductName + " will be called [NUnit] due to the NUnit environment)." + Environment.NewLine +
+				"This test will open " + ApplicationEx.CommonName + " and show the [New Terminal] dialog." + Environment.NewLine +
+				"(" + ApplicationEx.CommonName + " will be called 'NUnit' due to the NUnit environment)." + Environment.NewLine +
 				Environment.NewLine +
-				"In the [New Terminal], simply [Cancel] and then exit " + ApplicationEx.ProductName + ".",
+				"In the [New Terminal], simply [Cancel] and then exit " + ApplicationEx.CommonName + ".",
 				"Instruction",
 				MessageBoxButtons.OKCancel,
 				MessageBoxIcon.Information
@@ -311,7 +311,7 @@ namespace YAT.Application.Test
 
 			dr = MessageBoxEx.Show
 			(
-				"Did " + ApplicationEx.ProductName + " open and showed the [New Terminal] dialog?",
+				"Did " + ApplicationEx.CommonName + " open and showed the [New Terminal] dialog?",
 				"Confirmation",
 				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Information,
@@ -335,10 +335,10 @@ namespace YAT.Application.Test
 		{
 			var dr = MessageBoxEx.Show
 			(
-				"This test will open " + ApplicationEx.ProductName + " with a serial COM port terminal." + Environment.NewLine +
-				"(" + ApplicationEx.ProductName + " will be called [NUnit] due to the NUnit environment)." + Environment.NewLine +
+				"This test will open " + ApplicationEx.CommonName + " with a serial COM port terminal." + Environment.NewLine +
+				"(" + ApplicationEx.CommonName + " will be called 'NUnit' due to the NUnit environment)." + Environment.NewLine +
 				Environment.NewLine +
-				"Observe what happens and then exit " + ApplicationEx.ProductName + ".",
+				"Observe what happens and then exit " + ApplicationEx.CommonName + ".",
 				"Instruction",
 				MessageBoxButtons.OKCancel,
 				MessageBoxIcon.Information
@@ -354,7 +354,7 @@ namespace YAT.Application.Test
 
 			dr = MessageBoxEx.Show
 			(
-				"Did " + ApplicationEx.ProductName + " open with a serial COM port terminal containing predefined commands?",
+				"Did " + ApplicationEx.CommonName + " open with a serial COM port terminal containing predefined commands?",
 				"Confirmation",
 				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Information,
@@ -383,10 +383,10 @@ namespace YAT.Application.Test
 
 			var dr = MessageBoxEx.Show
 			(
-				"This test will open " + ApplicationEx.ProductName + " with two serial COM port terminals." + Environment.NewLine +
-				"(" + ApplicationEx.ProductName + " will be called [NUnit] due to the NUnit environment)." + Environment.NewLine +
+				"This test will open " + ApplicationEx.CommonName + " with two serial COM port terminals." + Environment.NewLine +
+				"(" + ApplicationEx.CommonName + " will be called 'NUnit' due to the NUnit environment)." + Environment.NewLine +
 				Environment.NewLine +
-				"Observe what happens and then exit " + ApplicationEx.ProductName + ".",
+				"Observe what happens and then exit " + ApplicationEx.CommonName + ".",
 				"Instruction",
 				MessageBoxButtons.OKCancel,
 				MessageBoxIcon.Information
@@ -402,7 +402,7 @@ namespace YAT.Application.Test
 
 			dr = MessageBoxEx.Show
 			(
-				"Did " + ApplicationEx.ProductName + " open with two interconnected serial COM port terminals?",
+				"Did " + ApplicationEx.CommonName + " open with two interconnected serial COM port terminals?",
 				"Confirmation",
 				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Information,
@@ -426,10 +426,10 @@ namespace YAT.Application.Test
 		{
 			var dr = MessageBoxEx.Show
 			(
-				"This test will open " + ApplicationEx.ProductName + " with a serial COM port terminal." + Environment.NewLine +
-				"(" + ApplicationEx.ProductName + " will be called [NUnit] due to the NUnit environment)." + Environment.NewLine +
+				"This test will open " + ApplicationEx.CommonName + " with a serial COM port terminal." + Environment.NewLine +
+				"(" + ApplicationEx.CommonName + " will be called 'NUnit' due to the NUnit environment)." + Environment.NewLine +
 				Environment.NewLine +
-				"Observe what happens and then exit " + ApplicationEx.ProductName + ".",
+				"Observe what happens and then exit " + ApplicationEx.CommonName + ".",
 				"Instruction",
 				MessageBoxButtons.OKCancel,
 				MessageBoxIcon.Information
@@ -444,7 +444,7 @@ namespace YAT.Application.Test
 
 			dr = MessageBoxEx.Show
 			(
-				"Did " + ApplicationEx.ProductName + " open with a serial COM port terminal?",
+				"Did " + ApplicationEx.CommonName + " open with a serial COM port terminal?",
 				"Confirmation",
 				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Information,
