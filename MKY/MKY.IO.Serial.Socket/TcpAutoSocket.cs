@@ -669,9 +669,6 @@ namespace MKY.IO.Serial.Socket
 				this.state = state;
 				timeStamp = DateTime.Now; // Inside lock for accuracy.
 
-				if ((oldState == SocketState.Connected) && (state == SocketState.StartingConnecting))
-					Debugger.Break();
-
 			#if (DEBUG) // Inside lock to prevent potential mixup in debug output.
 				string isClientOrServerString;
 				if      (IsClient && IsConnected) // 'Doppel-moppel', but keep it as a check during development and debugging
