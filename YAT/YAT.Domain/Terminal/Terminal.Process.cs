@@ -513,6 +513,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Method instead of property for orthogonality with <see cref="ContentSeparatorIsUsedAndNotEmpty"/> above.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
 		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remarks.")]
 		protected virtual bool InfoSeparatorIsNotEmpty()
 		{

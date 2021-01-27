@@ -365,7 +365,7 @@ namespace MKY.Test.Time
 			var updatesPerInterval = ((int)interval / updateInterval); // 10.
 			var updatesPerWindow = ((int)window / updateInterval); // 40.
 
-			var expectedRampValues = new int[]{ 13, 27, 40, 53, 67, 73, 80, 87, 93, 100 };
+			var expectedRampValues = new int[] { 13, 27, 40, 53, 67, 73, 80, 87, 93, 100 };
 			var expectedStableValue = (updatesPerInterval * item);
 
 			// Ramp-up:
@@ -421,7 +421,7 @@ namespace MKY.Test.Time
 			var updatesPerInterval = ((int)interval / updateInterval); // 10.
 			var updatesPerWindow = ((int)window / updateInterval); // 40.
 
-			var expectedRampValues = new int[]{ 8, 16, 24, 32, 40, 46, 52, 58, 64, 70, 74, 78, 82, 86, 90, 92, 94, 96, 98, 100 };
+			var expectedRampValues = new int[] { 8, 16, 24, 32, 40, 46, 52, 58, 64, 70, 74, 78, 82, 86, 90, 92, 94, 96, 98, 100 };
 			var expectedStableValue = (updatesPerInterval * item);
 
 			// Ramp-up:
@@ -479,7 +479,7 @@ namespace MKY.Test.Time
 			var updatesPerInterval = ((int)interval / updateInterval); // 10.
 			var updatesPerWindow = ((int)window / updateInterval); // 15.
 
-			var expectedRampValues = new int[]{ 10, 20, 30, 40, 50, 57, 63, 70, 77, 83, 87, 90, 93, 97, 100 };
+			var expectedRampValues = new int[] { 10, 20, 30, 40, 50, 57, 63, 70, 77, 83, 87, 90, 93, 97, 100 };
 			var expectedStableValue = (updatesPerInterval * item);
 
 			// Ramp-up:
