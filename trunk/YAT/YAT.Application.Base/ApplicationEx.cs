@@ -66,12 +66,12 @@ namespace YAT
 		public static readonly string ProductName = System.Windows.Forms.Application.ProductName;
 
 		/// <summary>The build designation.</summary>
-	#if (!WITH_SCRIPTING)
+	#if (!WITH_SCRIPTING)                              // Leading space for non-empty strings!
 		public const string ProductBuildDesignation = ""; // This is to be used for final releases.
 	////public const string ProductBuildDesignation = " 2.x.0 Beta Version";
 	////public const string ProductBuildDesignation = " 2.x.0 Preliminary Version";
 	////public const string ProductBuildDesignation = " 2.x.0 Development Version";
-	#else                                             // Leading space!
+	#else
 		public const string ProductBuildDesignation = "";
 	#endif
 
@@ -119,12 +119,12 @@ namespace YAT
 			get { return (ProductFullVersionValue.Revision.ToString(CultureInfo.InvariantCulture)); } // Version identification is invariant.
 		}
 
-		/// <summary>The version designation.</summary>
+		/// <summary>The version designation.</summary>          // Leading space for non-empty strings!
 		public const string ProductVersionStabilityIndication = ""; // This is to be used for final releases.
 	////public const string ProductVersionStabilityIndication = " Beta";
 	////public const string ProductVersionStabilityIndication = " Preliminary";
 	////public const string ProductVersionStabilityIndication = " Development";
-		                                                       //// Leading space!
+
 		/// <summary>The product version that combines product version and version stability indication.</summary>
 		public static readonly string ProductVersionWithStabilityIndication = ProductVersion + ProductVersionStabilityIndication;
 
