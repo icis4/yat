@@ -27,18 +27,18 @@
 ::==================================================================================================
 
 :: Setup:
-SET _source=".\Setup.x64\!-ReadMe.txt"
-SET _target=".\Setup.x64 with Prerequisites\"
-COPY /Y %_source% %_target%
-SET _target=".\Setup.x86\"
-COPY /Y %_source% %_target%
-SET _target=".\Setup.x86 with Prerequisites\"
-COPY /Y %_source% %_target%
+SET _source=.\Setup.x64\!-ReadMe.txt
+SET _target=.\Setup.x64 with Prerequisites\
+COPY /Y "%_source%" "%_target%"
+SET _target=.\Setup.x86\
+COPY /Y "%_source%" "%_target%"
+SET _target=.\Setup.x86 with Prerequisites\
+COPY /Y "%_source%" "%_target%"
 
 :: Binaries:
-SET _source=".\x64 Binaries\!-ReadMe.txt"
-SET _target=".\x86 Binaries\"
-COPY /Y %_source% %_target%
+SET _source=.\x64 Binaries\!-ReadMe.txt
+SET _target=.\x86 Binaries\
+COPY /Y "%_source%" "%_target%"
 
 ::==================================================================================================
 :: End of
