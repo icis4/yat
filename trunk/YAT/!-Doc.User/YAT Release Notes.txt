@@ -34,7 +34,7 @@ Contents
 ====================================================================================================
 
 YAT uses .NET 4.8. The YAT installer ensures that .NET 4.8 is available on the target computer.
-The installer also ensures that Windows Installer 5.0 is available on the target computer.
+The installer also ensures that Windows Installer 4.5 is available on the target computer.
 
 First, chose the most appropriate package:
  > For up-to-date systems, use the compact package "...(32-bit).zip" or "...(64-bit).zip".
@@ -42,7 +42,7 @@ First, chose the most appropriate package:
  > For outdated systems or offline installation, use a full package "..._with_.NET...zip".
    (Windows Installer and .NET are included for installation.)
  > Alternatively, use a binary distribution, but don't forget to manually install the monospaced
-   'DejaVu' font used by YAT as well as assign the .yat/.yaw file extensions to YAT.exe.
+   'DejaVu' font used by YAT as well as assign the .yat/.yaw file extensions to "YAT.exe".
 
 It is recommended to unzip this package to a temporary location before starting the installation.
 
@@ -53,7 +53,7 @@ Run the ".msi" if Windows Installer is installed, otherwise "setup.exe".
 For installation of a binary distribution, refer to the instructions inside that package.
 
 You can also download .NET and/or Windows Installer from <https://www.microsoft.com/download>
-or by googling for "Download Microsoft .NET Framework 4.8" and/or "Windows Installer 5.0".
+or by googling for "Download Microsoft .NET Framework 4.8" and/or "Windows Installer 4.5".
 Installing .NET and/or Windows Installer requires administrator permissions.
 
 
@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.4.0 :: 2021-0x-xx
+YAT 2.4.0 :: 2021-01-29
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -145,9 +145,9 @@ Important changes:
 - Adaptive monitor update rate further improved.
 - Calculation of byte/line rates improved.
 - For Bin/Oct/Dec/Hex/Unicode radix:
-   > Performance significanty improved (feature request #406).
+   > Performance significantly improved (feature request #406).
    > ASCII control characters are no longer converted to mnemonics.
-- Option to not send XOn when opending a serial COM port or USB Ser/HID terminal (feat. req. #393).
+- Option to not send XOn when opening a serial COM port or USB Ser/HID terminal (feat. req. #393).
 - TCP/IP connection state management improved in terms of stress resilience.
 - TCP/IP segment payload size limited to the safe maximum of 516 (IPv4) or 1220 octets (IPv6).
 - UDP/IP datagram payload size limited to the safe maximum of 508 (IPv4) or 1212 octets (IPv6).
@@ -1684,7 +1684,7 @@ public around the same time as YAT. And, 4.0 buzzes more anyway (industry 4.0 an
 ----------------------------------------------------------------------------------------------------
 
 
-YAT 4 with Scripting :: Expected in 2021
+YAT 4 with Scripting :: Expected in late 2021 or 2022
 ----------------------------------------------------------------------------------------------------
 YAT 4.0 will feature the integration of a scripting environment, based on the CSScript engine.
 Scripting will allow you to script YAT and automate repetitive tasks, use it for test automation,
