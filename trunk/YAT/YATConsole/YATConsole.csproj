@@ -9,7 +9,7 @@
     <RootNamespace>YAT</RootNamespace>
     <AssemblyName>YATConsole</AssemblyName>
     <StartupObject>YAT.YATConsole</StartupObject>
-    <ApplicationIcon>..\YAT\Resources\YAT\Icon_YAT.ico</ApplicationIcon>
+    <Win32Resource>..\YAT\Resources\YAT.res</Win32Resource>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\YAT.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
@@ -83,9 +83,6 @@
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>App.manifest</ApplicationManifest>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
@@ -108,7 +105,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="App.manifest" />
     <None Include="Properties\YAT.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +113,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\YAT\Resources\YAT.res">
+      <Link>Resources\YAT.res</Link>
+    </Content>
     <Content Include="..\YAT\Resources\YAT\Icon_YAT.ico">
       <Link>Resources\YAT\Icon_YAT.ico</Link>
     </Content>
