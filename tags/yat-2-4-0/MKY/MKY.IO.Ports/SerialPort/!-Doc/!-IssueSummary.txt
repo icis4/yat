@@ -1,0 +1,13 @@
+﻿
+Google for...
+ > [UnauthorizedAccessException "access to the port"]
+ > [ObjectDisposedException "safe handle has been closed"]
+ > [.NET SerialPort ObjectDisposedException]
+ > [.NET SerialPort IOException]
+...for additional information and suggested workarounds.
+
+More insight in ".NET SerialPort Woes" by Zach Saw at
+http://zachsaw.blogspot.ch/2010/07/net-serialport-woes.html.
+
+Some detailed information on .NET implementation can be found at Kim Hamilton's post at
+http://www.innovatic.dk/knowledg/SerialCOM/SerialCOM.htm.

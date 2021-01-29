@@ -1,0 +1,118 @@
+﻿
+Enable Ctrl+Backspace and Ctrl+A
+--------------------------------
+
+By default, Ctrl+Backspace is not activated in...
+ ...System.Windows.Forms.TextBox
+ ...System.Windows.Forms.ComboBox
+
+By default, Ctrl+A is not activated in...
+ ...System.Windows.Forms.TextBox if Multiline = true
+
+By default, cursor position and text selection is not remembered in...
+ ...System.Windows.Forms.ComboBox and ToolStripComboBox
+
+To activate, use...
+ ...MKY.Windows.Forms.TextBoxEx
+ ...MKY.Windows.Forms.ComboBoxEx          (Attention: Requires the OnFormDeactivateWorkaround())
+ ...MKY.Windows.Forms.ToolStripComboBoxEx (Attention: Requires the OnFormDeactivateWorkaround())
+
+
+Allow proper system scaling for values other than 100%
+------------------------------------------------------
+
+For forms and user controls:
+ > Avoid setting 'MaximumSize'.
+   ('MinimumSize' won't cause problems, but may not be as restrictive as expected, but 'MaximumSize' may limit 'Size's scaling, which can cause problems.)
+
+For forms:
+ > Use the 'MKY.Windows.Forms.SplitContainerScaler' to let all contained split containers be scaled.
+
+For user controls:
+ > Set 'AutoScaleMode' to 'Inherit' (default is 'Font').
+ > Do not anchor controls 'Right' or 'Bottom', instead use a panel with 'Dock' = 'Fill'.
+
+Based on:
+ > "Resolution" @ https://support.microsoft.com/en-us/help/967578/child-controls-on-a-usercontrol-may-get-clipped-in-a-system-with-a-low
+ > "Design Guidelines" @ https://stackoverflow.com/questions/22735174/how-to-write-winforms-code-that-auto-scales-to-system-font-and-dpi-settings
+
+Additional information:
+ > Scaling behavior on Win 7 and before is leading to issues described above.
+ > Scaling behavior on Win 8 is similar to Win 10. However:
+    > Win 8:
+       > Default = normal
+       > Additional settings = smaller + larger
+       > WinForms/YAT is fully "sharp" with setting = smaller (which probably relates to 100% of Win 10), some blurring otherwise
+    > Win 10:
+       > Default = 100%
+       > Additional settings = 125%, 150%, 175%
+       > WinForms/YAT is fully "sharp" with 100%, some blurring otherwise
+ > Pendings requests:
+    > #310 "Improve high DPI scaling for Win8+" https://sourceforge.net/p/y-a-terminal/feature-requests/310/
+ > Former bugs:
+    > #375 "Some controls are difficult to click on a 1920x1200 screen on Windows 7" https://sourceforge.net/p/y-a-terminal/bugs/85/
+    > #235 "Controls clipped " https://sourceforge.net/p/y-a-terminal/bugs/235/
+    > #85 "Improper UI scaling for 120 dpi on Win Vista" https://sourceforge.net/p/y-a-terminal/bugs/85/
+
+If still issues:
+ > Check the values of 'AutoScaleDimensions', 'AutoScaleMode' and 'ClientSize' for each form.
+   'AutoScaleDimensions' and 'ClientSize' may change depending on the setup of the computer where a form gets designed.
+
+
+StatusStrip
+-----------
+
+'StatusStrip' items do not show tool tip by default, 'ShowItemToolTips' must be manually set to 'True'.
+
+
+Initial drawing
+---------------
+
+Use the 'Shown' event to initially set controls of a form:
+
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		/// <remarks>
+		/// The 'Shown' event is only raised the first time a form is displayed; subsequently
+		/// minimizing, maximizing, restoring, hiding, showing, or invalidating and repainting will
+		/// not raise this event again.
+		/// Note that the 'Shown' event is raised after the 'Load' event and will also be raised if
+		/// the application is started minimized. Also note that operations called in the 'Shown'
+		/// event can depend on a properly drawn form, as the 'Paint' event of this form and its
+		/// child controls has been raised before this 'Shown' event.
+		/// </remarks>
+		private void <Form>_Shown(object sender, EventArgs e)
+		{
+
+Use the 'StartUp-And-Properly-Show-UserControl-Controls' pattern to initially set controls of a user control:
+
+		/// <summary>
+		/// Startup flag only used in the following event handler.
+		/// </summary>
+		private bool isStartingUp = true;
+
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		/// <remarks>
+		/// Use paint event to ensure that message boxes in case of errors (e.g. validation errors)
+		/// are shown on top of a properly painted control or form.
+		/// </remarks>
+		private void <UserControl>_Paint(object sender, PaintEventArgs e)
+		{
+			if (this.isStartingUp)
+			{
+				this.isStartingUp = false;
+
+For more details on events of Windows.Forms, see the MKY > SequenceOfFormAndControlEvents demo project.
+
+
+Closing
+-------
+
+Always check for 'e.Cancel' on 'FormClosing':
+
+			// Skip if WinForms has already determined to cancel:
+			if (e.Cancel)
+				return;

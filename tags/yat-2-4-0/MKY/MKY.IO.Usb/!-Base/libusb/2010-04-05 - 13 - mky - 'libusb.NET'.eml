@@ -1,0 +1,157 @@
+X-Mozilla-Keys:                                                                                 
+Message-ID: <4BB9CC07.3070309@users.sourceforge.net>
+Date: Mon, 05 Apr 2010 13:39:51 +0200
+From: maettu_this <maettu_this@users.sourceforge.net>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; de; rv:1.9.1.9) Gecko/20100317 Thunderbird/3.0.4
+MIME-Version: 1.0
+To: Pete Batard <pbatard@gmail.com>
+CC: dsd@gentoo.org, hjelmn@users.sourceforge.net, 
+ Travis <travis_robinson@comcast.net>,
+ michael.plante@gmail.com
+Subject: Re: libusb.NET
+References: <4BB84EC0.7000104@users.sourceforge.net> <4BB9008C.80503@gmail.com>
+In-Reply-To: <4BB9008C.80503@gmail.com>
+Content-Type: text/plain; charset=ISO-8859-15; format=flowed
+Content-Transfer-Encoding: 8bit
+
+Hi Pete,
+
+This is it! An indeed nice piece of work what Travis did, looks like he 
+really understands what he's doing. And way more complete than what I've 
+seen before.
+Knowing of the existence of 'LibUsbDotNet' there is no more need for the 
+'libusb.NET' I began with. I am wondering, why neither...
+ > http://www.libusb.org/
+ > http://www.libusb.org/wiki/windows_backend
+ > http://libusb-win32.sourceforge.net/
+ > http://sourceforge.net/projects/libusb-win32/
+...mentions 'LibUsbDotNet'? I spent quite some time searching the web 
+for such library but apparently never came across 'LibUsbDotNet'. I 
+strongly recommend that either http://www.libusb.org/ or a subsite 
+prominently refers to 'LibUsbDotNet'.
+
+In respect to your questions below:
+
+ > Platform dependence for Win32/x86 and Win64/x64
+Myself, I haven't tried the Win32 DLL on x64. I refer to the Win32 and 
+x64 project and solution configurations in the original libusb 
+VS2005/VS2008 files. A platform independent solution might need to also 
+have a Win32 and x64 solution configuration. But of course you are right 
+that Win32 should work on both Win32 and Win64. Emphasizing 'should', as 
+many other applications that 'should' work on Win64...
+Also, I suggest that the libusb solution contains an example project 
+showing how a .NET based project can directly reference the libusb DLL 
+project, i.e., how the DLL is automatically built and published and 
+included in an application.
+By the way, Travis, why does "LibUsbDotNet.sln" contain separate Win32 
+configurations? I haven't found any reason for those since 
+'LibUsbDotNet' seems completely platform independent.
+
+ > HID support
+For 'YAT', I do not need a complete set of HID features but rather some 
+very particular functionality that features virtual serial communication 
+over HID. Something that people call generic HID, serial HID or Ser/HID. 
+I am capable to implement well tested full HID support within the next 
+months.
+If somebody else adds HID support to 'libusb', I recommend to take a 
+close look at 'MKY.IO.Usb' within 'YAT' for hints on how to implement 
+Ser/HID.
+
+ > Hot plug-in/out
+Hot plug-out is crucial to properly detect when a device is disconnected 
+and the serial communication port needs to be closed. Hot plug-in is a 
+nice-to-have to get the serial communication port automatically reopen 
+as soon as the device is again connected.
+Both especially come into play when a device is rebooted to whatever 
+reason, e.g. after a firmware update or configuration parameter loading.
+
+For the moment, I keep on using the Ser/HID focussed 'MKY.IO.Usb' 
+implementation that directly uses the Win32 "hid.dll". I do have some 
+higher priority tasks to fix some crucial issues within other parts of 
+'YAT' and plan to provide a new version of 'YAT' to my users within the 
+next 2 months. In case of issues with the current Ser/HID 
+implementation, or in case of a request to run 'YAT' and Ser/HID on 
+Unixoids, I may replace the "hid.dll" based implementation in 
+'MKY.IO.Usb' by 'LibUsbDotNet' for a future version of 'YAT'.
+
+Best regards,
+Matthias
+
+Am 04.04.2010 23:11, schrieb Pete Batard:
+> Hi Matthias,
+>
+> Nice work.
+>
+> But can you tell us if this is a separate project from Travis 
+> Robinson's "LibUsbDotNet":
+> http://sourceforge.net/projects/libusbdotnet/
+>
+> If not, you might want to check with Travis, as having multiple .NET 
+> versions of libusb would be a bit confusing.
+>
+> Also,
+>
+> On 2010.04.04 09:33, maettu_this wrote:
+>> - 'libusb' is implemented platform dependent and must be separately
+>> built for Win32/x86 and Win64/x64
+>
+> Have you tried running the 32 bit DLL on 64 bit? I would have thought 
+> WOW64 emulation would work there, as I don't remember using any 
+> specific ifdefs in the Windows code for 64 vs 32 bit.
+>
+> I'll try to run a test later on, but in case you did, can you report 
+> what kind of problems you saw, as we can then try looking into them.
+>
+>> - 'libusb' only provides the basic USB functions but no HID specifics
+>
+> Would you consider producing a patch to add HID specifics to libusb. I 
+> too feel that it would be nice to have better HID support, either 
+> directly into libusb, or possibly in a separate libhid that would rely 
+> on libusb.
+>
+>> - 'libusb windows_backend' doesn't yet support detection of hot 
+>> plug-in/out
+>
+> This is planned for a future release. If it is really critical to your 
+> application, I'll see what I can do to make it happen sooner rather 
+> than later, as I've already implemented that feature elsewhere (and it 
+> shouldn't be that difficult to add).
+>
+> Regards,
+>
+> /Pete
+
+-----Original Message-----
+From: maettu_this [mailto:maettu_this@users.sourceforge.net]
+Sent: Sunday, April 04, 2010 3:33 AM
+To:dsd@gentoo.org;hjelmn@users.sourceforge.net;
+michael.plante@gmail.com;pbatard@gmail.com
+Subject: libusb.NET
+
+
+Dear libusb implementers,
+
+I created a .NET adaption layer for 'libusb' which I called 'libusb.NET'. The layer is in alpha state, rather clean implemented but not fully operating yet. Is there a good spot on libusb.org to place 'libusb.NET'? Probably others are interested in such library and could further develop it.
+
+How did I start with 'libusb.NET'? For another SourceForge hosted project I was searching the web for an USB HID implementation. Of course I came across 'libusb' and 'windows_backend' and evaluted whether I could make use of it.
+The project I am working on is called 'YAT- Yet Another Terminal' and features a terminal to operate and debug serial communications. 'YAT' supports RS-232/422/423/485 as well as TCP-Client/Server/AutoSocket, UDP. Currently I am adding support for USB Ser/HID. You can find 'YAT' onhttp://sourceforge.net/projects/y-a-terminal/.
+'YAT' is implemented in C#.NET. Therefore, I searched for a .NET adaption layer for 'libusb' and found 'SharpUSBLib' by Mike Krüger onhttp://www.icsharpcode.net/OpenSource/SharpUSBLib/default.aspx.
+Unfortunately that project seems no more active and doesn't provide all the features I needed for 'YAT'. Therefore, I created 'libusb.NET' which is based on 'SharpUSBLib' but uses the March revision of 'windows_backend'.
+
+In parallel to this 'libusb' based approach I tried a pure C#.NET based approch and created a MKY.IO.Usb library based on two other libraries. Comparing the two approaches has shown that the second approach is much more promising for what I require for 'YAT':
+- The API of 'libusb' isn't a good match for a C#.NET based project
+- 'libusb' doesn't easily fit into a managed .NET solution
+- 'libusb' is implemented platform dependent and must be separately built for Win32/x86 and Win64/x64
+- 'libusb' only provides the basic USB functions but no HID specifics
+- 'libusb windows_backend' doesn't yet support detection of hot plug-in/out
+- 'libusb-win32' seems to have serious portability issues on Vista, Win7, x64
+- 'libusb-win32' is based on libusb-0.1.12 but libusb-1.0 has been available since 2008-12
+See
+https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Usb/_Doc/MKY.IO.Usb.txt
+for more details.
+
+Still, 'libusb' provides a much broader support for any kind of USB operation, not only Ser/HID like MKY.IO.Usb. Therefore I suggest to put 'libusb.NET' onto libusb.org and make it available to others. In case you have no interest in doing so I will create a separate project on SourceForge.
+
+Best regards,
+Matthias
+

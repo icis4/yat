@@ -1,0 +1,30 @@
+﻿
+Described in several locations:
+http://stackoverflow.com/questions/3808885/net-4-serial-port-objectdisposedexception-on-windows-7-only
+http://stackoverflow.com/questions/3230311/problem-with-serialport
+https://pastebin.com/KmKEVzR8
+
+Type: System.ObjectDisposedException
+Message: SafeHandle has been closed
+Source: mscorlib
+Stack:
+   at System.StubHelpers.StubHelpers.SafeHandleC2NHelper(Object pThis, IntPtr pCleanupWorkList)
+   at Microsoft.Win32.UnsafeNativeMethods.GetOverlappedResult(SafeFileHandle hFile, NativeOverlapped * lpOverlapped, Int32 & lpNumberOfBytesTransferred, Boolean bWait)
+   at System.IO.Ports.SerialStream.EventLoopRunner.WaitForCommEvent()
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+
+YAT bug reports #224, #293, #316, #317, #345, #382, #385, #387, #401,...
+
+Findings by ToriLogic in May 2019:
+"Die Behandlung des Win32 Overlapped Request in der Routine System.IO.Ports.SerialStream.EventLoopRunner.WaitForCommEvent ist unverändert, also nach wie vor fehlerhaft."
+"In 4.7.1 hat MS eine Routine "drumherum" gelegt, welche die Exception abfängt. Dazu wurde ein neues globales Config Setting eingeführt namens LocalAppContextSwitches.DoNotCatchSerialStreamThreadExceptions."
+"Wir vermuten, dass einfach die Exception abgefangen wird und ignoriert wird, so dass sich der EventLoopRunner Thread "still und heimlich" beendet."
+"Besser wäre es natürlich gewesen, WaitForCommEvent zu reparieren. Vielleicht hat MS Bedenken wegen Kompatibilität mit bestehenden Applikationen und Treibern."
+
+Information by Microsoft in August 2017:
+"There is a fix in progress that is scheduled to be included in the next version of the .NET Framework that should resolve the issue where applications using the SerialPort fail due to an unhandled ObjectDisposedException exception that is thrown when the device is disconnected."
+"There are no plans to address this issue in .NET 4.7 or earlier. The updated SerialPort code is scheduled to be included in .NET 4.7.1."
+
+Findings by ToriLogic in July 2017:
+"Unser Code Review des aktuellen .net 4.7 Codes auf github hat ergeben, dass die Implementierung des EventLoopRunners nach wie vor "kaputt" ist. Microsoft müsste das mal reparieren."

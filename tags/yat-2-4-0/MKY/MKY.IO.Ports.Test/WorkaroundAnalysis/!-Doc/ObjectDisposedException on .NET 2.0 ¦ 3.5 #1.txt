@@ -1,0 +1,39 @@
+﻿This is MKY.IO.Ports.Test.WorkaroundAnalysis.AnalysisMain
+that analyzes/demonstrates issues with the .NET 2.0.50727.8669
+System.IO.Ports.SerialPort class and known workarounds, using
+COM3 on Win Microsoft Windows NT 6.1.7601 Service Pack 1
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Successfully created and opened COM3
+
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is available, probing... Disconnect device or [Ctrl+C/Break] to terminate
+COM3 is no longer available!
+Trying to open COM3... Connect device or [Ctrl+C/Break] to terminate
+
+Unbehandelte Ausnahme: System.ObjectDisposedException: Das SafeHandle wurde gesc
+hlossen.
+   bei System.StubHelpers.StubHelpers.SafeHandleC2NHelper(Object pThis, IntPtr p
+CleanupWorkList)
+   bei Microsoft.Win32.UnsafeNativeMethods.WaitCommEvent(SafeFileHandle hFile, I
+nt32* lpEvtMask, NativeOverlapped* lpOverlapped)
+   bei System.IO.Ports.SerialStream.EventLoopRunner.WaitForCommEvent()
+   bei System.Threading.ExecutionContext.Run(ExecutionContext executionContext,
+ContextCallback callback, Object state)
+   bei System.Threading.ThreadHelper.ThreadStart()
+Drücken Sie eine beliebige Taste . . .

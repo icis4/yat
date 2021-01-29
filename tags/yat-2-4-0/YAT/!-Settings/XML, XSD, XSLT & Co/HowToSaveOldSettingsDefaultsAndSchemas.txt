@@ -1,0 +1,12 @@
+﻿
+For YAT 1.99.29 and newer versions, these files can be created using NUnit based 'test' cases in YAT.Settings.Test.SettingsFilesArchiver.
+
+For YAT 1.99.28 and before, code as implemented in YAT.Settings.Test.SettingsFilesArchiver had to be manually added to YAT.View.Forms.Main:
+
+1. Open the project of the version to serialize
+2. Select the "Debug" configuration
+3. Place the code from YAT.Settings.Test.SettingsFilesArchiver into YAT.View.Forms.Main
+4. Run YAT
+   => Files are created in the directory specified
+
+This procedure was done for all versions up to 1.99.28 on 2012-06-16.

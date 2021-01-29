@@ -1,0 +1,103 @@
+﻿
+USB Ser/HID
+===========
+
+USB Ser/HID Device is a USB profile that uses a standard HID descriptor to transfer serial data
+between a USB Ser/HID Device and a USB Host. Thus, this profile can be used as a replacement for
+serial interfaces such as RS-232 or RS-422 or even USB Ser/CDC. The main advantage is the fact
+that this profile doesn't need any driver installation if the USB Host is a personal computer.
+
+
+References
+----------
+[1] USB Implementers Forum        https://www.usb.org/
+[2] USB Specification 2.0 & 3.0   https://www.usb.org/documents ([Category] = [Specification] then [Search])
+[3] USB HID Specification 1.11    https://www.usb.org/document-library/device-class-definition-hid-111
+[4] Using V-USB and the HID Class https://hackaday.com/2012/02/09/learning-to-use-the-v-usb-avr-usb-firmware-library/
+
+
+Pros and Cons of the Ser/HID Device profile
+-------------------------------------------
++ Can replace serial COM ports
++ Does not require any driver installation
++ Is very versatile and extendable
+- Needs a Ser/HID capable middleware on the PC (e.g. MKY.IO.Usb)
+- Needs a Ser/HID implementation on the device (e.g. [4])
+- Is not an official USB HID Device profile
+
+
+Example of an HID Report Descriptor that can be handled by YAT USB Ser/HID
+--------------------------------------------------------------------------
+USB_HID_GLOBAL_USAGE_PAGE + 1,
+USB_HID_USAGE_PAGE_GENERIC_DESKTOP_CONTROLS,
+USB_HID_LOCAL_USAGE + 1,             0x00,  // <= The HID Usage Page must be 0x00
+USB_HID_MAIN_COLLECTION + 1,         USB_HID_COLLECTION_APPLICATION,
+    USB_HID_LOCAL_USAGE + 1,         0x00,
+    USB_HID_GLOBAL_LOG_MIN + 1,      0x80,  // <= The data type shall be -128..+127
+    USB_HID_GLOBAL_LOG_MAX + 1,      0x7F,  // <=   i.e. signed 8 bits or int8_t
+    USB_HID_GLOBAL_REPORT_SIZE + 1,  0x08,  // <= Each report shall be 8 bits
+    USB_HID_GLOBAL_REPORT_COUNT + 1, 0x3F,  // <= Report count, see 1) below
+    USB_HID_MAIN_INPUT + 1,          USB_HID_MAIN_VARIABLE,
+    USB_HID_LOCAL_USAGE + 1,         0x00,
+    USB_HID_GLOBAL_LOG_MIN + 1,      0x80,
+    USB_HID_GLOBAL_LOG_MAX + 1,      0x7F,
+    USB_HID_GLOBAL_REPORT_SIZE + 1,  0x08,
+    USB_HID_GLOBAL_REPORT_COUNT + 1, 0x3F,
+    USB_HID_MAIN_OUTPUT + 1,         USB_HID_MAIN_VARIABLE,
+USB_HID_MAIN_ENDCOLLECTION
+
+1)
+The report count (or report length) ideally is equal or smaller than the length of a USB pipe.
+The pipe length typically is 8 to 64 bytes, depending on the USB controller that is used.
+In the example above, the pipe length is 64 and the report length is limited to 63. A byte is
+reserved for future use, it could be used for e.g. serve as a logical channel ID.
+
+
+Requirements for USB Ser/HID Device developers
+----------------------------------------------
+Either, implement the 3 pipes that are mandatory for HID devices:
+ > Control IN
+ > Control OUT
+ > Interrupt IN
+
+Or, implement 4 pipes:
+ > Control IN
+ > Control OUT
+ > Interrupt IN
+ > Interrupt OUT
+
+MKY.IO.Usb can handle both variants since it uses the Win32 'hid.dll' which itself is capable of
+handling both variants. For details about pipes of HID devices see [3], chapter 4.4. For an example
+implementation of Ser/HID on a device, see [4].
+
+
+Constraints by the USB and HID specifications
+---------------------------------------------
+[2] section 5.7.3 [Interrupt Transfer Packet Size Constraints]
+   "support maximum data payload sizes from 0 to 64 bytes for full-speed interrupt endpoints,
+    from 0 to 8 bytes for low-speed interrupt endpoints, and from 0 to 1024 bytes for highspeed
+    interrupt endpoints"
+and
+   "The USB does not require that data packets be exactly the maximum size; i.e., if a data packet
+    is less than the maximum, it does not need to be padded to the maximum size."
+
+While this is the general USB specification, additional constraints apply to the HID class:
+
+[3] section 5.6 [Reports]
+   "but is limited in size to 8 bytes for low-speed devices and 64 bytes for high-speed devices."
+and
+   "Only Input reports are sent via the Interrupt In pipe. Feature and Output reports must be
+    initiated by the host via the Control pipe or an optional Interrupt Out pipe.
+
+[3] section 4.2 [Subclass]
+   "a HID class device identifies its data protocol and the type of data provided within its Report
+    descriptor"
+
+This statement can be interpreted as only the announced report size is valid. While quiestionably
+this interpretation makes sense, since HID reports are expected to have a specific format/content,
+so it makes sense to always having to keep the same format.
+
+
+------------------------------------------------------------------------------------
+2019-07 / Matthias Kläy, while analyzing/verifying report sizes other than 64 (63+1)
+2012-03 / Matthias Kläy, based on documentation by Adrian Rempfler

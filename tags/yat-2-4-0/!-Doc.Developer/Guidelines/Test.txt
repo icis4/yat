@@ -1,0 +1,22 @@
+﻿
+NUnit
+-----
+
+Test Naming:
+ > Only use test names potentially valid for identifiers
+   (Rationale: Automatically named tests are named with the respective method name)
+
+Text Output:
+ > If according 'Content' is active in 'Settings > Gui > Text Output',
+   'Standard (incl. Debug)|Error|Trace|Log' output is written to the 'Text Output' window.
+   i.e. Console|Debug|Trace.Write...() all work.
+ > To output test relevant tracing information, Trace.Write...() shall be used.
+
+Test Configuration:
+ > If a test is optional and may be excluded, apply the corresponding category attribute.
+ > If a test is mandatory and has infrastructure requirements, it shall not be excludable.
+   Instead, add a runtime assertion to the test, e.g.
+
+			if (!ConfigurationProvider.Configuration.PortAIsAvailable)
+				Assert.Ignore("'PortA' is not available, therefore this test is excluded. Ensure that 'PortA' is properly configured and available if passing this test is required.");
+				//// Using Ignore() instead of Inconclusive() to get a yellow bar, not just a yellow question mark.

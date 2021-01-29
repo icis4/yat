@@ -1,0 +1,130 @@
+﻿
+Edition
+-------
+
+Community Edition:
+"An unlimited number of users within an organization can use Visual Studio Community for the following scenarios:
+  > in a classroom learning environment,
+  > for academic research,
+  > or for contributing to open source projects."
+
+
+Installation
+------------
+
+Ensure that English language pack is included
+
+Addtionally for VS2015
+ > 'Microsoft .NET Framework 4.8 Developer Pack' (ndp48-devpack-enu.exe)
+ > 'NuGet-Package-Manager' (NuGet.Tools.vsix)
+
+
+Visual Studio
+-------------
+
+Help > Set Preference > Help Viewer
+  > Add content to local documentation
+    > VisualStudio Fundamentals
+    > VisualStudio VB and C#
+    > VisualStudio C++
+    > .NET 3.5
+    > .NET 4.0
+    > .NET 4.5/4.6
+    > Windows API Reference
+    > Windows Debugging
+    > Windows Desktop App Development
+
+Tools > Options...
+  > Environment
+    > International Settings > English
+  > Text Editor
+    > All Languages > General > Settings > Line numbers = yes
+    > C# > Tabs > Keep tabs
+         > Code Style > Qualify field access with 'this' = Prefer 'this.' / Suggestion
+         > Formatting > 5 x auto = no
+         > Advanced > Place 'System' usings first
+                    > Separate using directive groups
+  > Debugging
+    > General > Break when exceptions cross AppDomain or managed/native boundaries = yes
+              > Step over properties and operators = no
+              > Require source files to excatly match the original version = no
+
+Edit > Advanced
+  > View White Space = true
+
+View > Output
+
+
+NuGet
+-----
+Using NuGet to get binaries (e.g. OxyPlot) but not in projects/solution directly:
+ > Keep-It-Simple-Stupid:
+    > Referencing assemblies explicitly is straight-forward.
+ > Don't like the NuGet approach:
+    > While "packages.config" properly is project endemic, the packages will get downloaded into the solution.
+       > Projects contain a relative path out of the project directory.
+       > Projects are not fully reusable, e.g. when a solution groups projects in another directory level.
+    > Package paths contain the package version.
+       > Version changes require unnecessary changes in projects.
+       > Version changes require unnecessary operations in SVN.
+    > Some projects, e.g. CS-Script, do not release NuGet packages for 'hot fixes'.
+    > Some projects, e.g. ScottPlot, load much too mcuh into NuGet packages.
+       > A total of 24 files (5.5 MiB), while only a single file (140 KiB) is needed.
+
+
+Installer
+---------
+
+1. VSI
+2. Package patch according to
+    > http://stackoverflow.com/questions/2726696/visual-studio-2010-setup-project-problem
+    > http://stackoverflow.com/questions/3626672/how-to-bootstrap-net-3-5-sp1-with-msbuild-following-found-instructions-doesnt
+   to
+    > "C:\Program Files (x86)\Microsoft Visual Studio 14.0\SDK\Bootstrapper\Packages\DotNetFX35SP1"
+    > "C:\Program Files (x86)\Microsoft Visual Studio 14.0\SDK\Bootstrapper\Packages\WindowsInstaller4_5"
+
+
+StyleCop
+--------
+
+Place StyleCop settings into solution folder and inherit settings in each project whenever applicable.
+
+
+NUnit as external tool
+----------------------
+
+Tools > External Tools
+ > Add
+    > Title       = "NUnit"
+    > Command     = "<NUnitInstallPath>\bin\nunit.exe"
+    > Arguments   = "YAT.nunit"
+    > Initial Dir = "$(SolutionDir)"
+    > "OK"
+
+
+Shortcuts
+---------
+
+Tools > Options
+ > Environment > Keyboard
+    > Show "Tools.External"
+       > Command4 (NUnit)
+          > Alt+N (Global)
+
+
+Toolbar
+-------
+Customize > Commands
+    > Toolbar > Standard
+        > Solution Configuration > Modifiy Selection
+            > Width = 360
+
+
+Hints
+=====
+
+Debugging exceptions like "Exception thrown: '...Exception' in mscorlib.dll"
+----------------------------------------------------------------------------
+Debug > Windows > Exception Settings
+    > Filter for given exception type
+    > Activate the given exception type

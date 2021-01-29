@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RoamingUserSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SettingsName>YAT Roaming User Settings</SettingsName>
+  <SettingsVersion>1.2.0</SettingsVersion>
+  <ProductVersion>2.1.0</ProductVersion>
+  <Warning>Modifying structure and/or content may cause undefined behavior!</Warning>
+  <Mark>
+    <TimeStamp>2019-10-01T14:00:19.2367266+02:00</TimeStamp>
+    <UserName>Matthias</UserName>
+  </Mark>
+  <Socket>
+    <RecentPorts>
+      <Item>10000</Item>
+      <TimeStamp>2019-10-01T14:00:19.1055257+02:00</TimeStamp>
+    </RecentPorts>
+    <RecentPorts>
+      <Item>10001</Item>
+      <TimeStamp>2019-10-01T14:00:19.1055257+02:00</TimeStamp>
+    </RecentPorts>
+  </Socket>
+  <Find>
+    <Options>
+      <CaseSensitive>true</CaseSensitive>
+      <WholeWord>false</WholeWord>
+      <UseRegex>false</UseRegex>
+    </Options>
+  </Find>
+  <View>
+    <FindVisible>false</FindVisible>
+    <AutoActionVisible>false</AutoActionVisible>
+    <AutoResponseVisible>false</AutoResponseVisible>
+  </View>
+  <Extensions>
+    <TextSendFiles>.txt</TextSendFiles>
+    <BinarySendFiles>.dat</BinarySendFiles>
+    <PortLogFiles>.log</PortLogFiles>
+    <RawLogFiles>.dat</RawLogFiles>
+    <NeatLogFiles>.log</NeatLogFiles>
+    <MonitorFiles>.rtf</MonitorFiles>
+  </Extensions>
+</RoamingUserSettings>

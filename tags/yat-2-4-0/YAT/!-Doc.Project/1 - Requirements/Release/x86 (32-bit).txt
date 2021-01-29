@@ -1,0 +1,3 @@
+
+Use in 32-bit VMs, e.g. legacy
+(input 2020-11 via support request)

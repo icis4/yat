@@ -1,0 +1,179 @@
+Message-ID: <4BC4D204.5090804@my-mail.ch>
+Date: Tue, 13 Apr 2010 22:20:20 +0200
+From: =?ISO-8859-15?Q?Matthias_Kl=E4y?= <matthias.klaey@my-mail.ch>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; de; rv:1.9.1.9) Gecko/20100317 Thunderbird/3.0.4
+MIME-Version: 1.0
+To: Travis <travis_robinson@comcast.net>
+Subject: Re: libusb.NET
+References: <HKEDKEEGPPEOHLHHEPEDIEDBCFAA.michael.plante@gmail.com> <4BBB913F.30503@my-mail.ch> <C3CB88199BB34257A5AA550EB5140B75@TravisXP>
+In-Reply-To: <C3CB88199BB34257A5AA550EB5140B75@TravisXP>
+Content-Type: text/plain; charset=ISO-8859-15; format=flowed
+Content-Transfer-Encoding: 8bit
+
+OK, sounds reasonable. I'll let you know as soon as I have switched over 
+to LibUsbDotNet. Is definitly gonna take a while.
+
+Best regards and enjoy working on LibUsbDotNet!
+Matthias
+
+Am 13.04.2010 16:49, schrieb Travis:
+> Apologies for the late reply..
+>
+> I looked into this several days ago.  In short, I'd have to say not at 
+> this time.  However, it took a while to get back because I was having 
+> a hard time making up my mind. Your 'MKY.IO.Usb' project looks to be 
+> in good order.  If you do decide to implement it with LibUsbDotNet, 
+> please let me know, as I'd like to take another look at then.
+>
+> Regards,
+> Travis
+>
+> ----- Original Message ----- From: "Matthias Kläy" 
+> <matthias.klaey@my-mail.ch>
+> To: "Travis" <travis_robinson@comcast.net>
+> Sent: Tuesday, April 06, 2010 12:53 PM
+> Subject: Re: libusb.NET
+>
+>
+>> Hi Travis,
+>>
+>> Thanks for your response. Pete has added a link to 'LibUsbDotNet' 
+>> onto http://www.libusb.org/wiki/windows_backend in the meantime. And 
+>> you're right that I have removed 'libusb.NET' from the 'YAT' 
+>> repository in the meantime. Revision 276 is the last revision 
+>> containing it.
+>>
+>> As mentioned, for the moment, I keep on using the Ser/HID focussed 
+>> 'MKY.IO.Usb' implementation that directly uses the Win32 "hid.dll" 
+>> and focus on some other higher priority tasks. But I'd be happy to 
+>> make use of 'LibUsbDotNet' for the next version of 'YAT'. And it 
+>> would be especially nice if 'LibUsbDotNet' already comes with support 
+>> of Ser/HID. It isn't much of a deal as you can see in 'MKY.IO.Usb'. 
+>> It basically is a buffered virtual serial I/O over HID. Since USB 
+>> doesn't standardize Ser/HID, we are using usage page 0x01 (generic) 
+>> and usage 0x00 (undefined). Do you consider adding such kind of 
+>> feature into 'LibUsbDotNet' or is this out of scope?
+>>
+>> Best regards,
+>> Matthias
+>>
+>>
+>>> From: Travis [mailto:travis_robinson@comcast.net]
+>>> Sent: Monday, April 05, 2010 2:40 PM
+>>> To: maettu_this; Pete Batard
+>>> Cc: dsd@gentoo.org; hjelmn@users.sourceforge.net; 
+>>> michael.plante@gmail.com
+>>> Subject: Re: libusb.NET
+>>>
+>>>
+>>> Greetings,
+>>>
+>>>
+>>>> maettu_this Wrote:
+>>>> This is it! An indeed nice piece of work what Travis did, looks 
+>>>> like he
+>>>> really understands what he's doing. And way more complete than what 
+>>>> I've
+>>>> seen before.
+>>>>
+>>>
+>>> Travis Write:
+>>> LibUsbDotNet can use libusb-1.0 in two different ways:
+>>>   A simpler, but more restrictive higher level interface. (libusb-1.0,
+>>> libusb-win32, native WinUSB) Example: LibUsbDotNet - ShowInfo  (also 
+>>> see the
+>>> ForceLibUsbWinBack member)
+>>>   The lower-level LibUsbDotNet MonoLibUsb api. (libusb-1.0 only - 
+>>> full api
+>>> implementation) Example: MonoLibUsb - ShowInfo
+>>> Note : libusb-1.0 is progressing very fast.  It now supports 
+>>> libusb-win32 as
+>>> well.  In the future, LibUsbDotNet will implement only Libusb-1.0 
+>>> and WinUSB
+>>> support natively; the libusb-1.0 api will be used to support 
+>>> libusb-win32.
+>>>
+>>>   If you find thing something is missing in the library, please let 
+>>> me now so
+>>> I can implement it.  FYI, I could not find your libusb.net anywhere 
+>>> in the
+>>> YAT repository. (probably a non-issue now)
+>>>
+>>>
+>>>> maettu_this Wrote:
+>>>> Knowing of the existence of 'LibUsbDotNet' there is no more need 
+>>>> for the
+>>>> 'libusb.NET' I began with. I am wondering, why neither...
+>>>>
+>>>>> http://www.libusb.org/
+>>>>> http://www.libusb.org/wiki/windows_backend
+>>>>> http://libusb-win32.sourceforge.net/
+>>>>> http://sourceforge.net/projects/libusb-win32/
+>>>>>
+>>>> ...mentions 'LibUsbDotNet'? I spent quite some time searching the web
+>>>> for such library but apparently never came across 'LibUsbDotNet'. I
+>>>> strongly recommend that either http://www.libusb.org/ or a subsite
+>>>> prominently refers to 'LibUsbDotNet'.
+>>>>
+>>> Travis Write:
+>>> I thought it was.. Apologies.. Pass the word! LibUsbDotNet was 
+>>> started in
+>>> 2006. Its a multi-driver/multi-platform USB Library for .NET
+>>>
+>>>
+>>>> maettu_this Wrote:
+>>>> By the way, Travis, why does "LibUsbDotNet.sln" contain separate Win32
+>>>> configurations? I haven't found any reason for those since
+>>>> 'LibUsbDotNet' seems completely platform independent.
+>>>>
+>>> Travis Write:
+>>> LibUsbDotNet Release build are always 'Any CPU' .  LibUsbDotNet is pure
+>>> (safe) CLR code, the JIT binaries runs as native 32bit/64bit 
+>>> depending on
+>>> the platform.  In most cases this is optimal. however, a problem 
+>>> arises when
+>>> a 32bit application attempts to use LibUsbDotNet on a 64 bit 
+>>> platform. This
+>>> is why the Win32 configuration exist.  Building the Win32 
+>>> configuration will
+>>> force 32bit allowing LibUsbDotNet to work for a 32bit-only 
+>>> application on a
+>>> 64 bit platform.
+>>>
+>>>
+>>>> maettu_this Wrote:
+>>>> Hot plug-out is crucial to properly detect when a device is 
+>>>> disconnected
+>>>> and the serial communication port needs to be closed. Hot plug-in is a
+>>>> nice-to-have to get the serial communication port automatically reopen
+>>>> as soon as the device is again connected.
+>>>> Both especially come into play when a device is rebooted to whatever
+>>>> reason, e.g. after a firmware update or configuration parameter 
+>>>> loading.
+>>>>
+>>> Travis Write:
+>>> LibUsbDotNet has a device notifier that works on all platforms 
+>>> (arrival and
+>>> removal notifications).  The Linux implementation may not be as 
+>>> solid as
+>>> windows; I hope to see this implemented in the ibusb-1.0 api in the 
+>>> future.
+>>> (hint.. hint..)
+>>>
+>>> Regards,
+>>> Travis
+>>>
+>>>
+>>>
+>>
+>> -- 
+>>
+>> Matthias Kläy :: matthias.klaey@my-mail.ch
+>>
+>
+
+-- 
+
+Matthias Kläy :: matthias.klaey@my-mail.ch
+  
+

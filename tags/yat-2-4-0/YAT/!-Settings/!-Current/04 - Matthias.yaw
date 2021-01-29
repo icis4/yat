@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SettingsName>YAT Workspace Settings</SettingsName>
+  <SettingsVersion>1.2.3</SettingsVersion>
+  <ProductVersion>2.4.0</ProductVersion>
+  <Warning>Modifying structure and/or content may cause undefined behavior!</Warning>
+  <Mark>
+    <TimeStamp>2021-01-26T14:39:31.5334025+01:00</TimeStamp>
+    <UserName>Matthias</UserName>
+  </Mark>
+  <AutoSaved>false</AutoSaved>
+  <Workspace>
+    <Layout>Automatic</Layout>
+    <TerminalSettings>
+      <FilePath>.\04 - COM101 - Open.yat</FilePath>
+      <FixedId>1</FixedId>
+      <Window>
+        <State>Normal</State>
+        <Location>
+          <X>0</X>
+          <Y>0</Y>
+        </Location>
+        <Size>
+          <Width>390</Width>
+          <Height>485</Height>
+        </Size>
+      </Window>
+    </TerminalSettings>
+    <TerminalSettings>
+      <FilePath>.\04 - COM102 - Open.yat</FilePath>
+      <FixedId>2</FixedId>
+      <Window>
+        <State>Normal</State>
+        <Location>
+          <X>390</X>
+          <Y>0</Y>
+        </Location>
+        <Size>
+          <Width>390</Width>
+          <Height>485</Height>
+        </Size>
+      </Window>
+    </TerminalSettings>
+  </Workspace>
+</Settings>

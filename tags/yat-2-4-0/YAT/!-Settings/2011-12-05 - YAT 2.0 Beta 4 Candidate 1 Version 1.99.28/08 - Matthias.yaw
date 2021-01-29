@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <FileType>YAT Workspace Settings</FileType>
+  <ProductVersion>1.99.28</ProductVersion>
+  <Warning>Modifying this file may cause undefined behaviour!</Warning>
+  <Saved>
+    <TimeStamp>2011-12-04T02:19:45.9031091+01:00</TimeStamp>
+    <UserName>Matthias</UserName>
+  </Saved>
+  <AutoSaved>false</AutoSaved>
+  <Workspace>
+    <TerminalSettings>
+      <FilePath>.\08 - Predefined UTF-8 1.yat</FilePath>
+      <Window>
+        <State>Normal</State>
+        <Location>
+          <X>394</X>
+          <Y>0</Y>
+        </Location>
+        <Size>
+          <Width>394</Width>
+          <Height>496</Height>
+        </Size>
+      </Window>
+    </TerminalSettings>
+    <TerminalSettings>
+      <FilePath>.\08 - Predefined UTF-8 2.yat</FilePath>
+      <Window>
+        <State>Normal</State>
+        <Location>
+          <X>0</X>
+          <Y>0</Y>
+        </Location>
+        <Size>
+          <Width>394</Width>
+          <Height>496</Height>
+        </Size>
+      </Window>
+    </TerminalSettings>
+  </Workspace>
+</Settings>

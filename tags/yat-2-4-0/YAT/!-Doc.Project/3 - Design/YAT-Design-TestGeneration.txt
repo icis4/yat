@@ -1,0 +1,7 @@
+
+Provides environment descriptor classes.
+Provides separated environment configuration, descriptors and settings.
+Combined into data (TestCaseData) which is used to generate the test cases.
+Data is based on '*Settings*' objects to...
+...enable test generation with different kind of items (e.g. text/binary or Serial/Socket/USB).
+...simplify test case.

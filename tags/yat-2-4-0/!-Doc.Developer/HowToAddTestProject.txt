@@ -1,0 +1,44 @@
+﻿
+1.	Solution > Add > New Project...
+
+2.	Visual C# > Windows > Class Library
+	Name "<Testee>.Test"
+
+3.	Remove "Class1"
+
+4.	Project > Properties
+	Modify assembly name if needed
+	Modify default namespace if needed
+	Append " Test" to output path (makes test nature more obvious)
+	Select all configurations
+	Enable Build > XML documentation file
+	Tick Build > Advanced > Check for under/overflow
+
+	Note that there is no need to sign a test assembly
+	It's actually an advantage not signing, as there will be a warning when accidentally referencing it from a 'normal' assembly
+
+5.	Open "AssemblyInfo"
+	Update according to "AssemblyInfo" of existing test projects
+
+6.	Add reference to "nunit.framework"
+
+7.	Add reference to testee projects
+
+8.	Remove unnecessary references, typically
+	"System.Core"
+	"System.Data"
+	"System.Data.DataSetExtensions"
+	"System.Xml.Linq"
+
+9.	Update and check the solution and project configurations
+
+10.	Add test classes
+	Name "<Testee>Test"
+
+11.	Build and verify the project
+
+12.	Add tests according to the NUnit documentation
+
+13.	Add project and tests to YAT.Test test suite
+
+14.	Add project and tests to YAT.TestSettingsDefaults

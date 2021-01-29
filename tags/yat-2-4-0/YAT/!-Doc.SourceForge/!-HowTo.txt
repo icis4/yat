@@ -1,0 +1,8 @@
+﻿
+Code Access (HTTPS, SSH)
+------------------------
+
+ 1. Go to https://sourceforge.net/p/y-a-terminal/code/HEAD/tree/
+ 2. Follow instructions given by buttons
+    If not logged-in, only HTTPS and svn:// buttons are visible (read-only)
+    If logged-in, all buttons are visible (read/write)

@@ -1,0 +1,75 @@
+@@ -178 +178,28 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+-                FReadOV.SetBuffer(null, 0, 0);
++                // ----- \remind BEGIN -----
++                // 2010-05-14 / Matthias Klaey
++                // Handling System.InvalidOperationException on closing/disposing:
++                // "An asynchronous socket operation is already in progress using this SocketAsyncEventArgs instance."
++                //
++                // at System.Net.Sockets.SocketAsyncEventArgs.StartConfiguring()
++                // at System.Net.Sockets.SocketAsyncEventArgs.SetBufferInternal(Byte[] buffer, Int32 offset, Int32 count)
++                // at System.Net.Sockets.SocketAsyncEventArgs.SetBuffer(Byte[] buffer, Int32 offset, Int32 count)
++                // at ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Free(Boolean canAccessFinalizable) in <ROOT>\ALAZ\Source\ALAZ.SystemEx.NetEx\SocketsEx\BaseSocketConnection.cs:line 178
++                // at ALAZ.SystemEx.BaseDisposable.Dispose() in <ROOT>\ALAZ\Source\ALAZ.SystemEx\BaseDisposable.cs:line 108
++                // at ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.DisposeConnection(BaseSocketConnection connection) in <ROOT>\ALAZ\Source\ALAZ.SystemEx.NetEx\SocketsEx\BaseSocketConnectionHost.cs:line 1797
++                // at ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginDisconnectCallbackAsync(Object sender, SocketAsyncEventArgs e) in <ROOT>\ALAZ\Source\ALAZ.SystemEx.NetEx\SocketsEx\BaseSocketConnectionHost.cs:line 1509
++                // at System.Net.Sockets.SocketAsyncEventArgs.OnCompleted(SocketAsyncEventArgs e)
++                // at System.Net.Sockets.SocketAsyncEventArgs.ExecutionCallback(Object ignored)
++                // at System.Threading.ExecutionContext.runTryCode(Object userData)
++                // at System.Runtime.CompilerServices.RuntimeHelpers.ExecuteCodeWithGuaranteedCleanup(TryCode code, CleanupCode backoutCode, Object userData)
++                // at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
++                // at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
++                // at System.Net.Sockets.SocketAsyncEventArgs.FinishOperationSuccess(SocketError socketError, Int32 bytesTransferred, SocketFlags flags)
++                // at System.Net.Sockets.SocketAsyncEventArgs.CompletionPortCallback(UInt32 errorCode, UInt32 numBytes, NativeOverlapped* nativeOverlapped)
++                // at System.Threading._IOCompletionCallback.PerformIOCompletionCallback(UInt32 errorCode, UInt32 numBytes, NativeOverlapped* pOVERLAP)
++                //
++                // Trying to fix it by uncommenting the seemingly unnecessary SetBuffer():
++
++            ////FReadOV.SetBuffer(null, 0, 0);
++
++                // ----- \remind  END  -----
++
+@@ -192 +219,10 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+-                FWriteOV.SetBuffer(null, 0, 0);
++                // ----- \remind BEGIN -----
++                // 2015-06-01 / Matthias Klaey
++                // Handling System.InvalidOperationException on closing/disposing:
++                // "An asynchronous socket operation is already in progress using this SocketAsyncEventArgs instance."
++                // Details see above. Trying to fix it by uncommenting the seemingly unnecessary SetBuffer():
++
++            ////FWriteOV.SetBuffer(null, 0, 0);
++
++                // ----- \remind  END  -----
++
+@@ -286,2 +322,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+-                lock (FSyncActive)
+-                {
++                // ----- \remind BEGIN -----
++
++                // 2011-04-25 / Matthias Klaey
++                // Workaround to an issue described in the headers of MKY AutoSocket/TcpClient/TcpServer.
++
++//              lock (FSyncActive)
++//              {
+@@ -289 +330,3 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+-                }
++//              }
++
++                // ----- \remind  END  -----
+@@ -454,0 +498,5 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
++        // ----- \remind BEGIN -----
++
++        // 2020-10-08 :-) / Matthias Klaey
++        // Added checks (FSocket != null) for being able to retrieve underlying information also during debugging of shutdown.
++
+@@ -457 +505 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+-            get { return (IPEndPoint)FSocket.LocalEndPoint; }
++            get { return (FSocket != null) ? ((IPEndPoint)FSocket.LocalEndPoint) : (null); }
+@@ -462 +510 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+-            get { return (IPEndPoint)FSocket.RemoteEndPoint; }
++            get { return (FSocket != null) ? ((IPEndPoint)FSocket.RemoteEndPoint) : (null); }
+@@ -467 +515 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+-            get { return FSocket.Handle; }
++            get { return (FSocket != null) ? (FSocket.Handle) : (IntPtr.Zero); }
+@@ -469,0 +518,2 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
++        // ----- \remind  END  -----
++

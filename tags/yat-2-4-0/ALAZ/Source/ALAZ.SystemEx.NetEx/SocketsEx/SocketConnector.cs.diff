@@ -1,0 +1,57 @@
+@@ -41 +41 @@ using System;
+-using System.Threading;
++using System.Diagnostics;
+@@ -44 +44 @@ using System.Net.Sockets;
+-using System.Text;
++using System.Threading;
+@@ -173 +173 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+-                FSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
++                FSocket = new Socket(InternalLocalEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+@@ -254,2 +254,3 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
+-                            Host.DisposeConnection(connection);
+-                            Host.RemoveSocketConnection(connection);
++                            // ----- \remind BEGIN -----
++                            // 2017-06-03 / Matthias Klaey / Handling 'ObjectDisposedException' exceptions.
++                            // 2020-10-14 / Matthias Klaey / Handling 'NullReferenceException' exceptions.
+@@ -256,0 +258,25 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
++                            try
++                            {
++                                Host.DisposeConnection(connection);
++                                Host.RemoveSocketConnection(connection);
++                            }
++                            catch (ObjectDisposedException exInner)
++                            {
++                                DebugException(exInner);
++                            }
++                            catch (NullReferenceException exInner)
++                            {
++                                DebugException(exInner);
++
++                                // Can happen when a socket gets disconnected. Stack:
++                                //
++                                // at ALAZ.SystemEx.NetEx.SocketsEx.SocketConnector.BeginConnectCallbackAsync(Object sender, SocketAsyncEventArgs e)
++                                //at System.Net.Sockets.SocketAsyncEventArgs.OnCompleted(SocketAsyncEventArgs e)
++                                //at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
++                                //at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
++                                //at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
++                                //at System.Net.Sockets.SocketAsyncEventArgs.FinishOperationSuccess(SocketError socketError, Int32 bytesTransferred, SocketFlags flags)
++                                //at System.Net.Sockets.SocketAsyncEventArgs.CompletionPortCallback(UInt32 errorCode, UInt32 numBytes, NativeOverlapped* nativeOverlapped)
++                                //at System.Threading._IOCompletionCallback.PerformIOCompletionCallback(UInt32 errorCode, UInt32 numBytes, NativeOverlapped* pOVERLAP)
++                            }
++
+@@ -386,0 +413,15 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
++		#region Debug
++		//==========================================================================================
++		// Debug
++		//==========================================================================================
++
++		/// <remarks>
++		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
++		/// </remarks>
++		[Conditional("DEBUG_EXCEPTIONS")]
++		private void DebugException(Exception ex)
++		{
++			MKY.Diagnostics.DebugEx.WriteException(GetType(), ex, "This exception is intentionally output for debugging purposes. It indicates an issue in ALAZ.");
++		}
++
++		#endregion
