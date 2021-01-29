@@ -23,26 +23,29 @@ The perfect replacement for HyperTerminal or good ol' fashioned Windows 3.x Term
 Configurable input mode.
 Single-line text commands.
 Multi-line text commands.
-Sending files; including option to exclude comments or empty lines.
+Send files; including option to exclude empty lines, text patterns like comments and special commands.
 History of recent commands.
 Unlimited number of predefined commands.
 Reorder, cut/copy/paste, export/import and even link predefined commands.
 Escapes for bin/oct/dec/hex like "\h(4F 4B)" as well as C-style "0x4F" and "0b01001111".
 Escapes for ASCII controls like "<CR><LF>" as well as C-style "\r\n".
 Special commands like "\!(EOL)", "\!(NoEOL)", "\!(Delay(100))", "\!(LineDelay(500))", "\!(LineInterval(500))", "\!(LineRepeat(10))".
-On-the-fly change of communication settings using e.g. "\!(Baud(115200))".
+Option to concurrently send text commands or files.
+On-the-fly change of communication settings using e.g. "\!(Port(10))", "\!(Baud(115200)), "\!(PortSettings(115200, 8, 0, 1))".
+Advanced options for in-depth RS-232/422/423/485 debugging of flow control, break condition and buffering.
+Advanced options for text and binary communication.
+Support for UDP/IP broadcast.
 Option to automatically trigger an action.
 Option to automatically trigger a response.
 Filtering or suppressing lines of a given pattern.
 Versatile monitoring and logging of sent and received data.
 Formatting options for excellent readability.
+Plotting live data.
 Support for numerous single- and multi-byte character encodings (SBCS/DBCS/MBCS).
 Unicode value representation.
 Search/Find functionality, incl. regex.
-Advanced options for text and binary communication.
-Advanced options for in-depth RS-232/422/423/485 debugging of flow control, break and buffering.
-Workspace supporting multiple terminals.
 Fully keyboard operable.
+Workspace supporting multiple terminals.
 Versatile shell/PowerShell command line including head-less operation.
 
 Preferred Support Page (for users of your project):
