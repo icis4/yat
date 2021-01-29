@@ -26,36 +26,12 @@
 :: See http://www.gnu.org/licenses/lgpl.html for license details.
 ::==================================================================================================
 
-:: Release Notes:
-SET _source=..\..\..\!-Doc.User\YAT Release Notes.txt
-SET _target=.\Setup.x64\
+:: Fonts:
+SET _source=..\..\!-Fonts\DejaVu\ttf\DejaVuSansMono*.*
+SET _target=.\Distribution Template\x64 Binaries\DejaVu Fonts\
 COPY /Y "%_source%" "%_target%"
-SET _target=.\Setup.x64 with Prerequisites\
+SET _target=.\Distribution Template\x86 Binaries\DejaVu Fonts\
 COPY /Y "%_source%" "%_target%"
-SET _target=.\Setup.x86\
-COPY /Y "%_source%" "%_target%"
-SET _target=.\Setup.x86 with Prerequisites\
-COPY /Y "%_source%" "%_target%"
-SET _target=.\x64 Binaries\
-COPY /Y "%_source%" "%_target%"
-SET _target=.\x86 Binaries\
-COPY /Y "%_source%" "%_target%"
-
-:: SourceForge ReadMe:
-SET _source=..\..\..\!-Doc.User\YAT Release Notes_limited to 64k for SourceForge online 'ReadMe'.txt
-SET _targetName=YAT Release Notes - ReadMe.txt
-SET _targetPath=.\Setup.x64\%_targetName%
-COPY /Y "%_source%" "%_targetPath%"
-SET _targetPath=.\Setup.x64 with Prerequisites\%_targetName%
-COPY /Y "%_source%" "%_targetPath%"
-SET _targetPath=.\Setup.x86\%_targetName%
-COPY /Y "%_source%" "%_targetPath%"
-SET _targetPath=.\Setup.x86 with Prerequisites\%_targetName%
-COPY /Y "%_source%" "%_targetPath%"
-SET _targetPath=.\x64 Binaries\%_targetName%
-COPY /Y "%_source%" "%_targetPath%"
-SET _targetPath=.\x86 Binaries\%_targetName%
-COPY /Y "%_source%" "%_targetPath%"
 
 ::==================================================================================================
 :: End of
