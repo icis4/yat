@@ -26,19 +26,26 @@
 :: See http://www.gnu.org/licenses/lgpl.html for license details.
 ::==================================================================================================
 
-:: Setup:
-SET _source=.\Setup.x64\!-ReadMe.txt
-SET _target=.\Setup.x64 with Prerequisites\
+:: Release Notes:
+SET _source=..\..\!-Doc.User\YAT Release Notes.txt
+SET _target=.\Distribution Template\Setup.x64\
 COPY /Y "%_source%" "%_target%"
-SET _target=.\Setup.x86\
+SET _target=.\Distribution Template\Setup.x64 with Prerequisites\
 COPY /Y "%_source%" "%_target%"
-SET _target=.\Setup.x86 with Prerequisites\
+SET _target=.\Distribution Template\Setup.x86\
+COPY /Y "%_source%" "%_target%"
+SET _target=.\Distribution Template\Setup.x86 with Prerequisites\
+COPY /Y "%_source%" "%_target%"
+SET _target=.\Distribution Template\x64 Binaries\
+COPY /Y "%_source%" "%_target%"
+SET _target=.\Distribution Template\x86 Binaries\
 COPY /Y "%_source%" "%_target%"
 
-:: Binaries:
-SET _source=.\x64 Binaries\!-ReadMe.txt
-SET _target=.\x86 Binaries\
-COPY /Y "%_source%" "%_target%"
+:: SourceForge ReadMe:
+SET _source=..\..\!-Doc.User\YAT Release Notes_limited to 64k for SourceForge online 'ReadMe'.txt
+SET _targetName=YAT Release Notes - ReadMe.txt
+SET _targetPath=.\Distribution Template\%_targetName%
+COPY /Y "%_source%" "%_targetPath%"
 
 ::==================================================================================================
 :: End of
