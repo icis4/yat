@@ -719,7 +719,7 @@ YAT 2.0 Alpha 2            Version 1.99.3  :: 2007-02-07
 YAT 2.0 Alpha 1            Version 1.99.0  :: 2007-01-23
 
 Content of the above historical versions has been removed in order to compact this file such it fits
-the SourceForge limitation of 64 KB for the online release notes.
+the SourceForge limitation of 64 KiB for the online release notes.
 
 
 
@@ -732,7 +732,7 @@ XTerm232 1.0.1 :: 2003-10-30
 XTerm232 1.0.0 :: 2003-10-14
 
 Content of the above historical versions has been removed in order to compact this file such it fits
-the SourceForge limitation of 64 KB for the online release notes.
+the SourceForge limitation of 64 KiB for the online release notes.
 
 
 ====================================================================================================
