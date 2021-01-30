@@ -80,8 +80,8 @@ Setup project configuration
     > Keywords = Terminal; RS-232; RS-422; RS-423; RS-485; TCP/IP; UDP/IP; USB Ser/HID; Matthias Kläy; HSR; Mettler-Toledo; SourceForge
     > Localization = English
     > Manufacturer = YAT
-    > Manufacturer URL = http://sourceforge.net/projects/y-a-terminal/
-    > Support URL = http://sourceforge.net/projects/y-a-terminal/
+    > Manufacturer URL = https://sourceforge.net/projects/y-a-terminal/
+    > Support URL = https://sourceforge.net/projects/y-a-terminal/
     > Product = YAT
     > RemovePrevious = True
     > Subject = YAT - Yet Another Terminal

@@ -433,7 +433,7 @@ namespace YAT.View.Forms
 			linkLabel_Home.Text += textBefore;
 			linkStart = linkLabel_Home.Text.Length;
 			linkLabel_Home.Text += textLink;
-			linkLabel_Home.Links.Add(linkStart, textLink.Length, "http://sourceforge.net/projects/y-a-terminal/");
+			linkLabel_Home.Links.Add(linkStart, textLink.Length, "https://sourceforge.net/projects/y-a-terminal/");
 			textBefore =                             ", or contact ";
 			textLink   =                                          "y-a-terminal@users.sourceforge.net";
 			textAfter  =                                                                            ". Feedback is welcome.";
@@ -448,7 +448,7 @@ namespace YAT.View.Forms
 			linkLabel_Home.Text += textBefore;
 			linkStart = linkLabel_Home.Text.Length;
 			linkLabel_Home.Text += textLink;
-			linkLabel_Home.Links.Add(linkStart, textLink.Length, "http://alm.mt.com/qcbin/start_a.jsp");
+			linkLabel_Home.Links.Add(linkStart, textLink.Length, "https://alm.mt.com/qcbin/start_a.jsp");
 			textBefore =                                      ", or contact ";
 			textLink   =                                                   "matthias.klaey@mt.com";
 			textAfter  =                                                                        ". Feedback is welcome.";
