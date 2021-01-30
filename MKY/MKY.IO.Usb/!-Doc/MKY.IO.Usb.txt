@@ -54,7 +54,7 @@ However, experience has shown that this 'libusb' based approach isn't feasible:
  > 'libusb-win32' seems to have serious portability issues on Vista, Win7, x64
  > 'libusb-win32' is based on libusb-0.1.12 but libusb-1.0 has been available since 2008-12
 
-Way more promising is 'LibUsbDotNet' by Travis Robinson on <http://sourceforge.net/projects/libusbdotnet/>. 'LibUsbDotNet' is implemented very clean and features a very complete set of USB functionality. 'LibUsbDotNet' supports 'libusb windows_backend' as well as 'libusb-win32' and 'WinUSB' (also see below). 'LibUsbDotNet' is platform independent, rather big and seems to contain no Ser/HID specifics either.
+Way more promising is 'LibUsbDotNet' by Travis Robinson on <https://sourceforge.net/projects/libusbdotnet/>. 'LibUsbDotNet' is implemented very clean and features a very complete set of USB functionality. 'LibUsbDotNet' supports 'libusb windows_backend' as well as 'libusb-win32' and 'WinUSB' (also see below). 'LibUsbDotNet' is platform independent, rather big and seems to contain no Ser/HID specifics either.
 
 In the end, for YAT, it proved much more straight-forward to go for a lightweight MKY.IO.Usb focusing on Ser/HID.
 
