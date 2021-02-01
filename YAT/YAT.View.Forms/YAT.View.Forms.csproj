@@ -402,8 +402,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Albatros\Icon_Albatros.ico" />
-    <Content Include="Resources\Albatros\Image_Albatros_64x64.png" />
     <Content Include="Resources\LGPL\Image_LGPLv3_147x51.png" />
     <Content Include="Resources\LGPL\Image_LGPLv3_88x31.png" />
     <Content Include="Resources\Status\Image_Status_Red_12x12.png" />
