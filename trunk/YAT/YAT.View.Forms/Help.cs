@@ -40,6 +40,9 @@ namespace YAT.View.Forms
 
 			// Form:
 			Text = ApplicationEx.CommonName + " Help"; // Fixed to "YAT".
+		#if (WITH_SCRIPTING)
+			Icon = Properties.Resources.Icon_Albatros;
+		#endif
 
 			// Text:
 			textBox_ParserFormat.Text        = Domain.Parser.Parser.FormatHelp;
