@@ -40,6 +40,9 @@ namespace YAT.View.Forms
 
 			// Form:
 			Text = caption;
+		#if (WITH_SCRIPTING)
+			Icon = Properties.Resources.Icon_Albatros;
+		#endif
 
 			// Text:
 			textBox_Text.Text = text;
