@@ -1229,7 +1229,7 @@ namespace YAT.Model
 					case CheckResult.Cancel: return (false);
 					case CheckResult.Ignore: return (true);
 
-					default: throw (new NotSupportedException(MKY.MessageHelper.InvalidExecutionPreamble + "'" + result.ToString() + "' is a result that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + result.ToString() + "' is a result that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 
@@ -1905,7 +1905,7 @@ namespace YAT.Model
 			else if (!SettingsFileIsWritable)
 				reason = "The file is write-protected.";
 			else
-				throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'SaveAs'!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'SaveAs'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			var message = new StringBuilder();
 			message.AppendLine("Unable to save");
@@ -1957,7 +1957,7 @@ namespace YAT.Model
 			else if (!FileEx.IsWritable(linkFilePathRestricted))
 				reason = "The file is write-protected.";
 			else
-				throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'LinkFilePath'!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'LinkFilePath'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			var message = new StringBuilder();
 			message.AppendLine("Unable to save");
@@ -2017,7 +2017,7 @@ namespace YAT.Model
 			else if (!FileEx.IsReadable(linkFilePathRestricted))
 				reason = "The file cannot be read.";
 			else
-				throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'LinkFilePath'!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Invalid reason for requesting restricted 'LinkFilePath'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			var message = new StringBuilder();
 			message.AppendLine("Unable to access");
@@ -4521,7 +4521,7 @@ namespace YAT.Model
 
 				default:
 				{
-					throw (new NotSupportedException(MKY.MessageHelper.InvalidExecutionPreamble + "'" + ioType + "' is an I/O type that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + ioType + "' is an I/O type that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -4571,7 +4571,7 @@ namespace YAT.Model
 
 				default:
 				{
-					throw (new NotSupportedException(MKY.MessageHelper.InvalidExecutionPreamble + "'" + ioType + "' is an I/O type that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + ioType + "' is an I/O type that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -5352,8 +5352,14 @@ namespace YAT.Model
 			#if (!WITH_SCRIPTING)
 				return (this.terminal.ReceivedXOnCount);
 			#else
-				lock (this.receivedXOnXOffForScriptingSyncObj)
-					return (this.terminal.ReceivedXOnCount - this.receivedXOnOffsetForScripting);
+				lock (this.receivedXOnXOffForScriptingSyncObj) // Atomic for count and offset.
+				{
+					var deltaCount = (this.terminal.ReceivedXOnCount - this.receivedXOnOffsetForScripting);
+					if (deltaCount >= 0)
+						return (deltaCount);
+					else
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The 'ReceivedXOnCount' must never fall below 0 but is " + deltaCount.ToString(CultureInfo.CurrentCulture) + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 			#endif
 			}
 		}
@@ -5368,8 +5374,14 @@ namespace YAT.Model
 			#if (!WITH_SCRIPTING)
 				return (this.terminal.ReceivedXOffCount);
 			#else
-				lock (this.receivedXOnXOffForScriptingSyncObj)
-					return (this.terminal.ReceivedXOffCount - this.receivedXOffOffsetForScripting);
+				lock (this.receivedXOnXOffForScriptingSyncObj) // Atomic for count and offset.
+				{
+					var deltaCount = (this.terminal.ReceivedXOffCount - this.receivedXOffOffsetForScripting);
+					if (deltaCount >= 0)
+						return (deltaCount);
+					else
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The 'ReceivedXOffCount' must never fall below 0 but is " + deltaCount.ToString(CultureInfo.CurrentCulture) + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				}
 			#endif
 			}
 		}
@@ -5379,7 +5391,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual void ResetReceivedXOnCountForScripting()
 		{
-			lock (this.receivedXOnXOffForScriptingSyncObj)
+			lock (this.receivedXOnXOffForScriptingSyncObj) // Atomic for count and offset.
 			{
 				var totalCount = (this.receivedXOnOffsetForScripting + ReceivedXOnCount);
 				this.receivedXOnOffsetForScripting = totalCount;
@@ -5389,9 +5401,9 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual void ResetReceivedXOffCountForScripting()
 		{
-			lock (this.receivedXOnXOffForScriptingSyncObj)
+			lock (this.receivedXOnXOffForScriptingSyncObj) // Atomic for count and offset.
 			{
-				var totalCount = (this.receivedXOnOffsetForScripting + ReceivedXOffCount);
+				var totalCount = (this.receivedXOffOffsetForScripting + ReceivedXOffCount);
 				this.receivedXOffOffsetForScripting = totalCount;
 			}
 		}
@@ -5416,7 +5428,7 @@ namespace YAT.Model
 		#if (!WITH_SCRIPTING)
 			this.terminal.ResetFlowControlCount();
 		#else
-			lock (this.receivedXOnXOffForScriptingSyncObj)
+			lock (this.receivedXOnXOffForScriptingSyncObj) // Atomic for both counts and offsets.
 			{
 				this.terminal.ResetFlowControlCount();
 
@@ -6076,7 +6088,7 @@ namespace YAT.Model
 				#if (DEBUG)
 					Debugger.Break();
 				#else
-					throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "A 'Message Input' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Message Input' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				#endif
 				}
 
@@ -6106,7 +6118,7 @@ namespace YAT.Model
 				#if (DEBUG)
 					Debugger.Break();
 				#else
-					throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				#endif
 				}
 
@@ -6136,7 +6148,7 @@ namespace YAT.Model
 				#if (DEBUG)
 					Debugger.Break();
 				#else
-					throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				#endif
 				}
 
@@ -6166,7 +6178,7 @@ namespace YAT.Model
 				#if (DEBUG)
 					Debugger.Break();
 				#else
-					throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "An 'Open' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "An 'Open' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				#endif
 				}
 
