@@ -422,7 +422,7 @@ namespace YAT.View.Forms
 		#if (!WITH_SCRIPTING)
 			linkLabel_Thanks.Text = @"And a big ""Thanks!"" to everybody who helped " + ApplicationEx.CommonName + " to become what it is today!";
 		#else
-			linkLabel_Thanks.Text = @"And a big ""Thanks!"" to everybody who helped YAT and " + ApplicationEx.CommonName + " to become what it is today!";
+			linkLabel_Thanks.Text = @"And a big ""Thanks!"" to everybody who helped YAT and " + ApplicationEx.CommonName + " to become what they are today!";
 		#endif
 
 			// Home:
