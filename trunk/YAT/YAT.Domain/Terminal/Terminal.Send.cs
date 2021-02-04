@@ -1845,7 +1845,11 @@ namespace YAT.Domain
 			// Forward packet to underlying terminal:
 			try
 			{
-				this.rawTerminal.Send(data); // Forwards the potentially modified data.
+			#if (WITH_SCRIPTING)
+				this.rawTerminal.Send(e.Data); // Forward the potentially modified data.
+			#else
+				this.rawTerminal.Send(data);
+			#endif
 			}
 			catch (ThreadAbortException ex)
 			{
