@@ -185,7 +185,8 @@ namespace YAT
 				"Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.",
 				"Copyright © 2003-2021 Matthias Kläy.",
 		#else
-				"YAT copyright © 2003-2004 HSR Hochschule für Technik Rapperswil and © 2003-2021 Matthias Kläy.",
+			////"YAT copyright © 2003-2004 HSR Hochschule für Technik Rapperswil and © 2003-2021 Matthias Kläy.",
+				"YAT copyright © 2003-2004 HSR and © 2003-2021 Matthias Kläy.", // Shortended to fit standard console width of 80 characters.
 				"Albatros copyright © 2008-2021 Mettler-Toledo.",
 		#endif
 				"All rights reserved.",

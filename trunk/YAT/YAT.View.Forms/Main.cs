@@ -3791,9 +3791,12 @@ namespace YAT.View.Forms
 				this.result = e.Value;                   // otherwise, keep the previous result, e.g. 'ApplicationStartError'.
 
 		#if (WITH_SCRIPTING)
-			this.main.ScriptBridge.ScriptDialogOpened -= new ScriptBridge.ScriptDialogOpenedDelegate(scriptBridge_ScriptDialogOpened);
-			this.main.ScriptBridge.ScriptDialogClosed -= new ScriptBridge.ScriptDialogClosedDelegate(scriptBridge_ScriptDialogClosed);
-			this.main.ScriptBridge.ScriptEnded        -= new ScriptBridge.ScriptEndedDelegate(       scriptBridge_ScriptEnded);
+			if (this.main.ScriptBridge != null)
+			{
+				this.main.ScriptBridge.ScriptDialogOpened -= new ScriptBridge.ScriptDialogOpenedDelegate(scriptBridge_ScriptDialogOpened);
+				this.main.ScriptBridge.ScriptDialogClosed -= new ScriptBridge.ScriptDialogClosedDelegate(scriptBridge_ScriptDialogClosed);
+				this.main.ScriptBridge.ScriptEnded        -= new ScriptBridge.ScriptEndedDelegate(       scriptBridge_ScriptEnded);
+			}
 		#endif
 
 			DetachMainEventHandlers();
