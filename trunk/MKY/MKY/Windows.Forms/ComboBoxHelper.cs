@@ -119,7 +119,8 @@ namespace MKY.Windows.Forms
 		#endregion
 
 		/// <summary>
-		/// Selects the given item in a <see cref="ComboBox"/>.
+		/// Selects the given item in a <see cref="ComboBox"/> while staying in edit,
+		/// i.e. cursor location and text selection is kept.
 		/// </summary>
 		/// <remarks>
 		/// If <paramref name="item"/> is not contained, <see cref="ComboBox.SelectedIndex"/>
@@ -144,9 +145,7 @@ namespace MKY.Windows.Forms
 			var cursorAndSelection = new CursorAndSelection();
 
 			if (control.DropDownStyle != ComboBoxStyle.DropDownList)
-			{
 				cursorAndSelection.Remember(control);
-			}
 
 			if (control.Items.Count > 0)
 			{
@@ -188,9 +187,7 @@ namespace MKY.Windows.Forms
 			}
 
 			if (control.DropDownStyle != ComboBoxStyle.DropDownList)
-			{
 				cursorAndSelection.Restore(control);
-			}
 		}
 
 		/// <remarks>
