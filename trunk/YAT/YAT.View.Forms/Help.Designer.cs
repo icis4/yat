@@ -339,8 +339,8 @@ namespace YAT.View.Forms
 			this.Controls.Add(this.button_Close);
 			this.Controls.Add(this.groupBox_ParserHelp);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
+			this.MaximumSize = new System.Drawing.Size(796, 999999);
+			this.MinimumSize = new System.Drawing.Size(796, 590);
 			this.Name = "Help";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

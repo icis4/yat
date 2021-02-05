@@ -86,6 +86,8 @@
 			this.Controls.Add(this.groupBox_Text);
 			this.Controls.Add(this.button_Close);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MaximumSize = new System.Drawing.Size(640, 999999);
+			this.MinimumSize = new System.Drawing.Size(640, 492);
 			this.Name = "CommandLineMessageBox";
 			this.Text = "YAT Command Line Help";
 			this.groupBox_Text.ResumeLayout(false);
