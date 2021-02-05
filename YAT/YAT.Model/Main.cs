@@ -344,10 +344,7 @@ namespace YAT.Model
 			// Process command line args into start requests:
 			if (!ProcessCommandLineArgsIntoLaunchRequests())
 			{
-				if ((this.commandLineArgs == null) || (!this.commandLineArgs.IsValid))
-					return (MainResult.CommandLineError);
-				else
-					return (MainResult.ApplicationStartError);
+				return (MainResult.CommandLineError);
 			}
 
 			// Application will start, hence initialize required resources:
@@ -397,7 +394,7 @@ namespace YAT.Model
 
 							var errorMessage = Utilities.MessageHelper.ComposeMessage
 							(
-								"Unable to open the previous workspace file",
+								"Unable to open the previous workspace file", // Neither '.' nor '!' shall be appended, the file path will be.
 								filePath,
 								"Confirm with [OK] to create a new empty workspace, or [Cancel] to let you restore the workspace and try again."
 							);
@@ -571,7 +568,7 @@ namespace YAT.Model
 						this.launchArgs.WorkspaceSettingsHandler = sh;
 					}
 					else
-					{
+					{                                                                                                           // Neither '.' nor '!' shall be appended, the file path will be.
 						this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("Unable to open workspace file", absoluteFilePath, ex);
 						return (false);
 					}
@@ -586,7 +583,7 @@ namespace YAT.Model
 						this.launchArgs.TerminalSettingsHandler = sh;
 					}
 					else
-					{
+					{                                                                                                          // Neither '.' nor '!' shall be appended, the file path will be.
 						this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("Unable to open terminal file", absoluteFilePath, ex);
 						return (false);
 					}
@@ -597,7 +594,7 @@ namespace YAT.Model
 					return (false);
 				}
 			#else
-				else //            incl. IsScriptFile(requestedFilePath)) but not limited to, any extension shall be usable as a script file.
+				else //            incl. IsScriptFile(requestedFilePath) but not limited to, any extension shall be usable as a script file.
 				{
 					string absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(requestedFilePath);
 					if (File.Exists(absoluteFilePath))
@@ -613,7 +610,7 @@ namespace YAT.Model
 						}
 					}
 					else
-					{
+					{                                                                                                        // Neither '.' nor '!' shall be appended, the file path will be.
 						this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("Script file does not exist", absoluteFilePath);
 						return (false);
 					}
@@ -807,13 +804,31 @@ namespace YAT.Model
 			{
 				if      (this.commandLineArgs.OptionIsGiven("TransmitText"))
 				{
-					this.launchArgs.RequestedTransmitText = this.commandLineArgs.RequestedTransmitText;
-					this.launchArgs.PerformOperationOnRequestedTerminal = true;
+					string absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(this.commandLineArgs.RequestedTransmitText);
+					if (File.Exists(absoluteFilePath))
+					{
+						this.launchArgs.RequestedTransmitText = absoluteFilePath;
+						this.launchArgs.PerformOperationOnRequestedTerminal = true;
+					}
+					else
+					{                                                                                                             // Neither '.' nor '!' shall be appended, the file path will be.
+						this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("File to transmit does not exist", absoluteFilePath);
+						return (false);
+					}
 				}
 				else if (this.commandLineArgs.OptionIsGiven("TransmitFile"))
 				{
-					this.launchArgs.RequestedTransmitFilePath = this.commandLineArgs.RequestedTransmitFilePath;
-					this.launchArgs.PerformOperationOnRequestedTerminal = true;
+					string absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(this.commandLineArgs.RequestedTransmitFilePath);
+					if (File.Exists(absoluteFilePath))
+					{
+						this.launchArgs.RequestedTransmitFilePath = absoluteFilePath;
+						this.launchArgs.PerformOperationOnRequestedTerminal = true;
+					}
+					else
+					{                                                                                                             // Neither '.' nor '!' shall be appended, the file path will be.
+						this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("File to transmit does not exist", absoluteFilePath);
+						return (false);
+					}
 				}
 			}
 
@@ -821,13 +836,22 @@ namespace YAT.Model
 			// Prio 11 = Run script:
 			if (this.commandLineArgs.OptionIsGiven("Script"))
 			{
-				this.launchArgs.RequestedScriptFilePath = this.commandLineArgs.RequestedScriptFilePath;
-				this.launchArgs.ScriptRunIsRequested = true;
-
-				string messageOnFailure;
-				if (!ProcessCommandLineArgsIntoScriptLaunchOptions(out messageOnFailure))
+				string absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(this.commandLineArgs.RequestedScriptFilePath);
+				if (File.Exists(absoluteFilePath))
 				{
-					this.launchArgs.MessageOnFailure = messageOnFailure;
+					this.launchArgs.RequestedScriptFilePath = absoluteFilePath;
+					this.launchArgs.ScriptRunIsRequested = true;
+
+					string messageOnFailure;
+					if (!ProcessCommandLineArgsIntoScriptLaunchOptions(out messageOnFailure))
+					{
+						this.launchArgs.MessageOnFailure = messageOnFailure;
+						return (false);
+					}
+				}
+				else
+				{                                                                                                        // Neither '.' nor '!' shall be appended, the file path will be.
+					this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("Script file does not exist", absoluteFilePath);
 					return (false);
 				}
 			}
@@ -868,13 +892,14 @@ namespace YAT.Model
 		{
 			if (this.commandLineArgs.OptionIsGiven("ScriptLog"))
 			{
-				if (!PathEx.IsValid(this.commandLineArgs.RequestedScriptLogFilePath))
-				{
-					messageOnFailure = Utilities.MessageHelper.ComposeMessage("Invalid script file path", this.commandLineArgs.RequestedScriptLogFilePath);
+				string absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(this.commandLineArgs.RequestedScriptLogFilePath);
+				if (!PathEx.IsValid(absoluteFilePath))
+				{                                                                                      // Neither '.' nor '!' shall be appended, the file path will be.
+					messageOnFailure = Utilities.MessageHelper.ComposeMessage("Invalid script file path", absoluteFilePath);
 					return (false);
 				}
 
-				this.launchArgs.RequestedScriptLogFilePath = this.commandLineArgs.RequestedScriptLogFilePath;
+				this.launchArgs.RequestedScriptLogFilePath = absoluteFilePath;
 			}
 
 			if (this.commandLineArgs.OptionIsGiven("ScriptLogTimeStamp"))
@@ -1453,29 +1478,32 @@ namespace YAT.Model
 		#if (WITH_SCRIPTING)
 
 			bool scriptSuccess = true;
-			if (this.scriptBridge.ScriptRunIsOngoing)
+			if (this.scriptBridge != null)
 			{
-				var text = new StringBuilder();
+				if (this.scriptBridge.ScriptRunIsOngoing)
+				{
+					var text = new StringBuilder();
 
-				var scriptFileName = this.scriptBridge.ScriptFileName;
-				if (string.IsNullOrEmpty(scriptFileName))
-					text.AppendFormat(@"A script is still running.");
-				else
-					text.AppendFormat(@"Script ""{0}"" is still running.", scriptFileName);
+					var scriptFileName = this.scriptBridge.ScriptFileName;
+					if (string.IsNullOrEmpty(scriptFileName))
+						text.AppendFormat(@"A script is still running.");
+					else
+						text.AppendFormat(@"Script ""{0}"" is still running.", scriptFileName);
 
-				text.AppendLine();
-				text.AppendLine();
-				text.AppendFormat(@"Confirm to break the script and exit {0}; or cancel.", ApplicationEx.ProductName);
+					text.AppendLine();
+					text.AppendLine();
+					text.AppendFormat(@"Confirm to break the script and exit {0}; or cancel.", ApplicationEx.ProductName);
 
-				var dr = OnMessageInputRequest(text.ToString(), "Exiting...", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2);
-				if (dr == DialogResult.OK)
-					this.scriptBridge.BreakScript();
-				else
-					scriptSuccess = false;
+					var dr = OnMessageInputRequest(text.ToString(), "Exiting...", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2);
+					if (dr == DialogResult.OK)
+						this.scriptBridge.BreakScript();
+					else
+						scriptSuccess = false;
+				}
+
+				if (scriptSuccess)
+					this.scriptBridge.ProcessCommand("Script:CloseDialog");
 			}
-
-			if (scriptSuccess)
-				this.scriptBridge.ProcessCommand("Script:CloseDialog");
 
 		#endif // WITH_SCRIPTING
 
@@ -1717,13 +1745,13 @@ namespace YAT.Model
 					return (true);
 				}
 				else
-				{
+				{                                                                                      // Neither '.' nor '!' shall be appended, the file path will be.
 					messageOnFailure = Utilities.MessageHelper.ComposeMessage("Unable to open workspace", absoluteFilePath, ex);
 					return (false);
 				}
 			}
 			else
-			{
+			{                                                                                           // Neither '.' nor '!' shall be appended, the file path will be.
 				messageOnFailure = Utilities.MessageHelper.ComposeMessage("Unable to open workspace file", absoluteFilePath, ex);
 				return (false);
 			}
@@ -2160,7 +2188,7 @@ namespace YAT.Model
 
 							OnFixedStatusTextRequest("Unable to transmit text!");
 							OnMessageInputRequest
-							(
+							(                                                                  // Neither '.' nor '!' shall be appended, the text content will be.
 								Utilities.MessageHelper.ComposeMessage("Unable to transmit text", text, ex),
 								"Transmission Error",
 								MessageBoxButtons.OK,
@@ -2188,7 +2216,7 @@ namespace YAT.Model
 
 							OnFixedStatusTextRequest("Unable to transmit file!");
 							OnMessageInputRequest
-							(
+							(                                                                  // Neither '.' nor '!' shall be appended, the file path will be.
 								Utilities.MessageHelper.ComposeMessage("Unable to transmit file", filePath, ex),
 								"Transmission Error",
 								MessageBoxButtons.OK,
