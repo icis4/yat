@@ -31,7 +31,8 @@ namespace MKY.Windows.Forms
 	public static class ToolStripComboBoxHelper
 	{
 		/// <summary>
-		/// Selects the given item in a <see cref="ToolStripComboBox"/>.
+		/// Selects the given item in a <see cref="ToolStripComboBox"/> while staying in edit,
+		/// i.e. cursor location and text selection is kept.
 		/// </summary>
 		/// <remarks>
 		/// If <paramref name="item"/> is not contained, <see cref="ComboBox.SelectedIndex"/>
