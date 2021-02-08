@@ -1114,14 +1114,16 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndex == ControlEx.InvalidIndex)
+			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.SelectedIndex == ControlEx.InvalidIndex) // A new trigger is being added.
 			{
+				var triggerTextOrRegexPattern = toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text;
+
+				RequestAutoResponseAdjustTriggerOptionsSilently(triggerTextOrRegexPattern); // Preset with best-effort manner.
 				SetAutoResponseTriggerOptionControls(true, true); // Allow changing options while editing a not yet validated trigger!
 
-				var triggerText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text;
-				if (!string.IsNullOrEmpty(triggerText))
+				if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
 				{
-					if (!RequestAutoResponseValidateTriggerTextSilently(triggerText))
+					if (!RequestAutoResponseValidateTriggerTextSilently(triggerTextOrRegexPattern))
 					{
 						AutoResponseTriggerState = AutoContentState.Invalid;
 						return; // Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
@@ -1142,14 +1144,14 @@ namespace YAT.View.Forms
 			                  //// Not listed             or                            listed explicit tigger.
 			if ((selectedIndex == ControlEx.InvalidIndex) || ((selectedItem != null) && selectedItem.IsExplicit))
 			{
-				var triggerText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text;
-				if (!string.IsNullOrEmpty(triggerText))
+				var triggerTextOrRegexPattern = toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Text;
+				if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
 				{
 					int invalidTextStart;
 					int invalidTextLength;
 
 					this.autoResponseTriggerValidationIsOngoing = true;
-					var success = RequestAutoResponseValidateTriggerText(triggerText, out invalidTextStart, out invalidTextLength);
+					var success = RequestAutoResponseValidateTriggerText(triggerTextOrRegexPattern, out invalidTextStart, out invalidTextLength);
 					this.autoResponseTriggerValidationIsOngoing = false;
 
 					if (!success)
@@ -1162,7 +1164,7 @@ namespace YAT.View.Forms
 					}
 				}
 
-				ActivateAutoResponseTrigger(triggerText);
+				ActivateAutoResponseTrigger(triggerTextOrRegexPattern);
 			}
 
 			AutoResponseTriggerState = AutoContentState.Neutral;
@@ -1248,11 +1250,13 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndex == ControlEx.InvalidIndex)
+			if (toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.SelectedIndex == ControlEx.InvalidIndex) // A new response is being added.
 			{
+				var responseText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text;
+
+				RequestAutoResponseAdjustResponseOptionsSilently(responseText); // Preset with best-effort manner.
 				SetAutoResponseResponseOptionControls(true, true, true); // Allow changing options while editing a not yet validated response!
 
-				var responseText = toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Text;
 				if (!string.IsNullOrEmpty(responseText))
 				{
 					if (!RequestAutoResponseValidateResponseTextSilently(responseText))
@@ -1524,14 +1528,16 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			if (toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedIndex == ControlEx.InvalidIndex)
+			if (toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.SelectedIndex == ControlEx.InvalidIndex) // A new trigger is being added.
 			{
+				var triggerTextOrRegexPattern = toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Text;
+
+				RequestAutoActionAdjustTriggerOptionsSilently(triggerTextOrRegexPattern); // Preset with best-effort manner.
 				SetAutoActionTriggerOptionControls(true, true); // Allow changing options while editing a not yet validated trigger!
 
-				var triggerText = toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Text;
-				if (!string.IsNullOrEmpty(triggerText))
+				if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
 				{
-					if (!RequestAutoActionValidateTriggerTextSilently(triggerText))
+					if (!RequestAutoActionValidateTriggerTextSilently(triggerTextOrRegexPattern))
 					{
 						AutoActionTriggerState = AutoContentState.Invalid;
 						return; // Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
@@ -1552,14 +1558,14 @@ namespace YAT.View.Forms
 			                  //// Not listed             or                            listed explicit tigger.
 			if ((selectedIndex == ControlEx.InvalidIndex) || ((selectedItem != null) && selectedItem.IsExplicit))
 			{
-				var triggerText = toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Text;
-				if (!string.IsNullOrEmpty(triggerText))
+				var triggerTextOrRegexPattern = toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Text;
+				if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
 				{
 					int invalidTextStart;
 					int invalidTextLength;
 
 					this.autoActionTriggerValidationIsOngoing = true;
-					var success = RequestAutoActionValidateTriggerText(triggerText, out invalidTextStart, out invalidTextLength);
+					var success = RequestAutoActionValidateTriggerText(triggerTextOrRegexPattern, out invalidTextStart, out invalidTextLength);
 					this.autoActionTriggerValidationIsOngoing = false;
 
 					if (!success)
@@ -1572,7 +1578,7 @@ namespace YAT.View.Forms
 					}
 				}
 
-				ActivateAutoActionTrigger(triggerText);
+				ActivateAutoActionTrigger(triggerTextOrRegexPattern);
 			}
 
 			AutoActionTriggerState = AutoContentState.Neutral;
@@ -5079,11 +5085,11 @@ namespace YAT.View.Forms
 			{
 				return (ValidationHelper.ValidateTextSilently(triggerTextOrRegexPattern, Domain.Parser.Mode.RadixAndAsciiEscapes));
 			}
-			else                                          // UseText
+			else                                          // UseText:
 			{
 				if (!this.settingsRoot.AutoAction.TriggerOptions.EnableRegex) // 'CaseSensitive' and 'WholeWord' are irrelevant for validation.
 					return (!string.IsNullOrEmpty(triggerTextOrRegexPattern));
-				else                                          // EnableRegex
+				else                                          // EnableRegex:
 					return (RegexEx.TryValidatePattern(triggerTextOrRegexPattern));
 			}
 		}
@@ -5097,14 +5103,14 @@ namespace YAT.View.Forms
 			{
 				return (ValidationHelper.ValidateText(this, "trigger", triggerTextOrRegexPattern, out invalidTextStart, out invalidTextLength, Domain.Parser.Mode.RadixAndAsciiEscapes));
 			}
-			else                                          // UseText
+			else                                          // UseText:
 			{
 				invalidTextStart = 0; // Not way to detect this (yet).
 				invalidTextLength = triggerTextOrRegexPattern.Length;
 
 				if (!this.settingsRoot.AutoAction.TriggerOptions.EnableRegex) // 'CaseSensitive' and 'WholeWord' are irrelevant for validation.
 					return (!string.IsNullOrEmpty(triggerTextOrRegexPattern));
-				else                                          // EnableRegex
+				else                                          // EnableRegex:
 					return (RegexEx.TryValidatePattern(triggerTextOrRegexPattern));
 			}
 		}
@@ -5380,11 +5386,11 @@ namespace YAT.View.Forms
 			{
 				return (ValidationHelper.ValidateTextSilently(triggerTextOrRegexPattern, Domain.Parser.Mode.RadixAndAsciiEscapes));
 			}
-			else                                            // UseText
+			else                                            // UseText:
 			{
 				if (!this.settingsRoot.AutoResponse.TriggerOptions.EnableRegex) // 'CaseSensitive' and 'WholeWord' are irrelevant for validation.
 					return (!string.IsNullOrEmpty(triggerTextOrRegexPattern));
-				else                                            // EnableRegex
+				else                                            // EnableRegex:
 					return (RegexEx.TryValidatePattern(triggerTextOrRegexPattern));
 			}
 		}
@@ -5398,14 +5404,14 @@ namespace YAT.View.Forms
 			{
 				return (ValidationHelper.ValidateText(this, "trigger", triggerTextOrRegexPattern, out invalidTextStart, out invalidTextLength, Domain.Parser.Mode.RadixAndAsciiEscapes));
 			}
-			else                                            // UseText
+			else                                            // UseText:
 			{
 				invalidTextStart = 0; // Not way to detect this (yet).
 				invalidTextLength = triggerTextOrRegexPattern.Length;
 
 				if (!this.settingsRoot.AutoResponse.TriggerOptions.EnableRegex) // 'CaseSensitive' and 'WholeWord' are irrelevant for validation.
 					return (!string.IsNullOrEmpty(triggerTextOrRegexPattern));
-				else                                            // EnableRegex
+				else                                            // EnableRegex:
 					return (RegexEx.TryValidatePattern(triggerTextOrRegexPattern));
 			}
 		}
@@ -6110,14 +6116,17 @@ namespace YAT.View.Forms
 		{
 			this.findShortcutsCtrlFNPSuspendedCount--; // No need for 'lock'/'Interlocked...()' as WinForms is synchronized on main thread.
 
+			if (this.findShortcutsCtrlFNPSuspendedCount < 0) // Main form will call this method also for newly opened
+			{                                                // terminals which did not get notified about Suspend() yet!
+				this.findShortcutsCtrlFNPSuspendedCount = 0; // Simply reset (conservative implementation). Do not throw!
+			////throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Counter has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+
 			if (this.findShortcutsCtrlFNPSuspendedCount == 0)
 			{
 				toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore;
 				toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled  = toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore;
 			}
-
-			if (this.findShortcutsCtrlFNPSuspendedCount < 0)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Counter has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
@@ -6130,8 +6139,11 @@ namespace YAT.View.Forms
 		private bool toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_EnabledToRestore; // = false;
 
 		/// <summary>
-		/// Suspends the [Ctrl+A/C/V/Delete] edit shortcuts.
+		/// Suspends the [Ctrl+A/C/V/Delete] standard edit shortcuts.
 		/// </summary>
+		/// <remarks>
+		/// Named "V" even though [Ctrl+V] shortcut is not used by the form yet, for making intention more obvious.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ACV", Justification = "ACV refers to these three specific keys.")]
 		public virtual void SuspendEditShortcutsCtrlACVDelete()
 		{
@@ -6157,12 +6169,21 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary>
-		/// Resumes the [Ctrl+A/C/V/Delete] edit shortcuts.
+		/// Resumes the [Ctrl+A/C/V/Delete] standard edit shortcuts.
 		/// </summary>
+		/// <remarks>
+		/// Named "V" even though [Ctrl+V] shortcut is not used by the form yet, for making intention more obvious.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ACV", Justification = "ACV refers to these three specific keys.")]
 		public virtual void ResumeEditShortcutsCtrlACVDelete()
 		{
 			this.editShortcutsCtrlACVDeleteSuspendedCount--; // No need for 'lock'/'Interlocked...()' as WinForms is synchronized on main thread.
+
+			if (this.editShortcutsCtrlACVDeleteSuspendedCount < 0) // Main form will call this method also for newly opened
+			{                                                      // terminals which did not get notified about Suspend() yet!
+				this.editShortcutsCtrlACVDeleteSuspendedCount = 0; // Simply reset (conservative implementation). Do not throw!
+			////throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Counter has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 
 			if (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)
 			{
@@ -6170,9 +6191,6 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Terminal_SelectNone     .Enabled = toolStripMenuItem_TerminalMenu_Terminal_SelectNone_EnabledToRestore;
 				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_EnabledToRestore;
 			}
-
-			if (this.editShortcutsCtrlACVDeleteSuspendedCount < 0)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Counter has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		#endregion
