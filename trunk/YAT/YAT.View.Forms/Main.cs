@@ -459,12 +459,14 @@ namespace YAT.View.Forms
 
 		private void Main_MdiChildActivate(object sender, EventArgs e)
 		{
-			if (ActiveMdiChild != null)
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
+			if (childIsReady)
 			{
-				this.workspace.ActivateTerminal(((Terminal)ActiveMdiChild).UnderlyingTerminal);
+				this.workspace.ActivateTerminal(child.UnderlyingTerminal);
 
 				// Activate the MDI child, to ensure that shortcuts effect the desired terminal:
-				ActiveMdiChild.BringToFront();
+				child.BringToFront();
 
 				if (this.invokeLayout)
 				{
@@ -1120,25 +1122,26 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				bool childIsReady = (ActiveMdiChild != null);
+				var child = (ActiveMdiChild as Terminal);
+				var childIsReady = (child != null);
 
-				bool terminalFileIsReadOnly = false;
+				var terminalFileIsReadOnly = false;
 				if (childIsReady)
-					terminalFileIsReadOnly = ((Terminal)ActiveMdiChild).SettingsFileIsReadOnly;
+					terminalFileIsReadOnly = child.SettingsFileIsReadOnly;
 
-				bool terminalIsStopped = false;
+				var terminalIsStopped = false;
 				if (childIsReady)
-					terminalIsStopped = ((Terminal)ActiveMdiChild).IsStopped;
+					terminalIsStopped = child.IsStopped;
 
-				bool terminalIsStarted = false;
+				var terminalIsStarted = false;
 				if (childIsReady)
-					terminalIsStarted = ((Terminal)ActiveMdiChild).IsStarted;
+					terminalIsStarted = child.IsStarted;
 
-				bool radixIsReady = false;
+				var radixIsReady = false;
 				var radix = Domain.Radix.None;
 				if (childIsReady)
 				{
-					var t = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+					var t = child.UnderlyingTerminal;
 					if ((t != null) && (!t.IsInDisposal))
 					{
 						radixIsReady = !(t.SettingsRoot.Display.SeparateTxRxRadix);
@@ -1179,11 +1182,11 @@ namespace YAT.View.Forms
 
 				bool logIsOn = false;
 				if (childIsReady)
-					logIsOn = ((Terminal)ActiveMdiChild).LogIsOn;
+					logIsOn = child.LogIsOn;
 
 				bool logFileExists = false;
 				if (childIsReady)
-					logFileExists = ((Terminal)ActiveMdiChild).LogFileExists;
+					logFileExists = child.LogFileExists;
 
 				toolStripButton_MainTool_Log_Settings     .Enabled =  childIsReady;
 				toolStripButton_MainTool_Log_On           .Enabled = (childIsReady && !logIsOn);
@@ -1308,7 +1311,8 @@ namespace YAT.View.Forms
 
 				if (childIsReady)
 				{
-					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+					var child = (ActiveMdiChild as Terminal);
+					var activeTerminal = child.UnderlyingTerminal;
 					if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 					{
 						isActive                = activeTerminal.SettingsRoot.AutoAction.IsActive;
@@ -1318,7 +1322,7 @@ namespace YAT.View.Forms
 						tis.AddRange(ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitTriggers.ConvertAll(new Converter<RecentItem<string>, AutoTriggerEx>((x) => { return (x.Item); })));
 						triggerItems            = tis.ToArray();
 						trigger                 = activeTerminal.SettingsRoot.AutoAction.Trigger;
-						triggerState            = ((Terminal)ActiveMdiChild).AutoActionTriggerState;
+						triggerState            = child.AutoActionTriggerState;
 
 						triggerTextIsSupported  = trigger.TextIsSupported;
 						triggerRegexIsSupported = trigger.RegexIsSupported;
@@ -1328,7 +1332,7 @@ namespace YAT.View.Forms
 					////ais.AddRange(ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitActions.ConvertAll(new Converter<RecentItem<string>, AutoActionEx>((x) => { return (x.Item); })));
 						actionItems             = activeTerminal.SettingsRoot.GetValidAutoActionItems();
 						action                  = activeTerminal.SettingsRoot.AutoAction.Action;
-					////actionState             = ((Terminal)ActiveMdiChild).AutoActionActionState is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+					////actionState             = child.AutoActionActionState is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 					}
 				}
 
@@ -1435,7 +1439,8 @@ namespace YAT.View.Forms
 
 			if (childIsReady)
 			{
-				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+				var child = (ActiveMdiChild as Terminal);
+				var activeTerminal = child.UnderlyingTerminal;
 				if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 				{
 					triggerUseText          = activeTerminal.SettingsRoot.AutoAction.TriggerOptions.UseText;
@@ -1475,10 +1480,11 @@ namespace YAT.View.Forms
 			bool triggerTextIsSupported  = false;
 			bool triggerRegexIsSupported = false;
 
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 			if (childIsReady)
 			{
-				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+				var activeTerminal = child.UnderlyingTerminal;
 				if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 				{
 					var trigger = activeTerminal.SettingsRoot.AutoAction.Trigger;
@@ -1494,9 +1500,10 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoActionTriggerUseTextAndRevalidate()
 		{
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 			if (childIsReady)
-				((Terminal)ActiveMdiChild).RequestToggleAutoActionTriggerUseText();
+				child.RequestToggleAutoActionTriggerUseText();
 
 			RevalidateAndRequestAutoActionTrigger();
 		}
@@ -1504,9 +1511,10 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoActionTriggerCaseSensitiveAndRevalidate()
 		{
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 			if (childIsReady)
-				((Terminal)ActiveMdiChild).RequestToggleAutoActionTriggerCaseSensitive();
+				child.RequestToggleAutoActionTriggerCaseSensitive();
 
 			RevalidateAndRequestAutoActionTrigger();
 		}
@@ -1514,9 +1522,10 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoActionTriggerWholeWordAndRevalidate()
 		{
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 			if (childIsReady)
-				((Terminal)ActiveMdiChild).RequestToggleAutoActionTriggerWholeWord();
+				child.RequestToggleAutoActionTriggerWholeWord();
 
 			RevalidateAndRequestAutoActionTrigger();
 		}
@@ -1524,9 +1533,10 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoActionTriggerEnableRegexAndRevalidate()
 		{
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 			if (childIsReady)
-				((Terminal)ActiveMdiChild).RequestToggleAutoActionTriggerEnableRegex();
+				child.RequestToggleAutoActionTriggerEnableRegex();
 
 			RevalidateAndRequestAutoActionTrigger();
 		}
@@ -1556,7 +1566,8 @@ namespace YAT.View.Forms
 
 				if (childIsReady)
 				{
-					var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+					var child = (ActiveMdiChild as Terminal);
+					var activeTerminal = child.UnderlyingTerminal;
 					if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 					{
 						isActive                   = activeTerminal.SettingsRoot.AutoResponse.IsActive;
@@ -1566,7 +1577,7 @@ namespace YAT.View.Forms
 						tis.AddRange(ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitTriggers.ConvertAll(new Converter<RecentItem<string>, AutoTriggerEx>((x) => { return (x.Item); })));
 						triggerItems               = tis.ToArray();
 						trigger                    = activeTerminal.SettingsRoot.AutoResponse.Trigger;
-						triggerState               = ((Terminal)ActiveMdiChild).AutoResponseTriggerState;
+						triggerState               = child.AutoResponseTriggerState;
 
 						triggerTextIsSupported     = trigger.TextIsSupported;
 						triggerRegexIsSupported    = trigger.RegexIsSupported;
@@ -1576,7 +1587,7 @@ namespace YAT.View.Forms
 						ris.AddRange(ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitResponses.ConvertAll(new Converter<RecentItem<string>, AutoResponseEx>((x) => { return (x.Item); })));
 						responseItems              = ris.ToArray();
 						response                   = activeTerminal.SettingsRoot.AutoResponse.Response;
-						responseState              = ((Terminal)ActiveMdiChild).AutoResponseResponseState;
+						responseState              = child.AutoResponseResponseState;
 
 						responseReplaceIsSupported = response.ReplaceIsSupported;
 					}
@@ -1714,7 +1725,9 @@ namespace YAT.View.Forms
 
 			if (childIsReady)
 			{
-				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+				var child = (ActiveMdiChild as Terminal);
+
+				var activeTerminal = child.UnderlyingTerminal;
 				if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 				{
 					triggerUseText       = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.UseText;
@@ -1754,10 +1767,11 @@ namespace YAT.View.Forms
 			bool triggerTextIsSupported  = false;
 			bool triggerRegexIsSupported = false;
 
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 			if (childIsReady)
 			{
-				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+				var activeTerminal = child.UnderlyingTerminal;
 				if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 				{
 					var trigger = activeTerminal.SettingsRoot.AutoResponse.Trigger;
@@ -1773,9 +1787,10 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoResponseTriggerUseTextAndRevalidate()
 		{
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 			if (childIsReady)
-				((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerUseText();
+				child.RequestToggleAutoResponseTriggerUseText();
 
 			RevalidateAndRequestAutoResponseTrigger();
 		}
@@ -1783,9 +1798,10 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoResponseTriggerCaseSensitiveAndRevalidate()
 		{
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 			if (childIsReady)
-				((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerCaseSensitive();
+				child.RequestToggleAutoResponseTriggerCaseSensitive();
 
 			RevalidateAndRequestAutoResponseTrigger();
 		}
@@ -1793,9 +1809,10 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoResponseTriggerWholeWordAndRevalidate()
 		{
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 			if (childIsReady)
-				((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerWholeWord();
+				child.RequestToggleAutoResponseTriggerWholeWord();
 
 			RevalidateAndRequestAutoResponseTrigger();
 		}
@@ -1803,9 +1820,10 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoResponseTriggerEnableRegexAndRevalidate()
 		{
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 			if (childIsReady)
-				((Terminal)ActiveMdiChild).RequestToggleAutoResponseTriggerEnableRegex();
+				child.RequestToggleAutoResponseTriggerEnableRegex();
 
 			RevalidateAndRequestAutoResponseTrigger();
 		}
@@ -1823,7 +1841,8 @@ namespace YAT.View.Forms
 
 			if (childIsReady)
 			{
-				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+				var child = (ActiveMdiChild as Terminal);
+				var activeTerminal = child.UnderlyingTerminal;
 				if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 				{
 					triggerUseText        = activeTerminal.SettingsRoot.AutoResponse.TriggerOptions.UseText;
@@ -1851,10 +1870,11 @@ namespace YAT.View.Forms
 			bool triggerRegexIsSupported    = false;
 			bool responseReplaceIsSupported = false;
 
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 			if (childIsReady)
 			{
-				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+				var activeTerminal = child.UnderlyingTerminal;
 				if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 				{
 					var trigger  = activeTerminal.SettingsRoot.AutoResponse.Trigger;
@@ -1872,9 +1892,10 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoResponseResponseEnableReplaceAndRevalidate()
 		{
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 			if (childIsReady)
-				((Terminal)ActiveMdiChild).RequestToggleAutoResponseResponseEnableReplace();
+				child.RequestToggleAutoResponseResponseEnableReplace();
 
 			RevalidateAndRequestAutoResponseResponse();
 		}
@@ -1886,10 +1907,11 @@ namespace YAT.View.Forms
 		{
 			var count = 0;
 
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 			if (childIsReady)
 			{
-				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+				var activeTerminal = child.UnderlyingTerminal;
 				if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 					count = activeTerminal.AutoActionCount;
 			}
@@ -1904,10 +1926,11 @@ namespace YAT.View.Forms
 		{
 			int count = 0;
 
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 			if (childIsReady)
 			{
-				var activeTerminal = ((Terminal)ActiveMdiChild).UnderlyingTerminal;
+				var activeTerminal = child.UnderlyingTerminal;
 				if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 					count = activeTerminal.AutoResponseCount;
 			}
@@ -1927,7 +1950,7 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_File_Save_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestSaveFile();
+			((Terminal)ActiveMdiChild).RequestSaveFile(); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_File_SaveWorkspace_Click(object sender, EventArgs e)
@@ -1937,77 +1960,77 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Terminal_Start_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestStartTerminal();
+			((Terminal)ActiveMdiChild).RequestStartTerminal(); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Terminal_Stop_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestStopTerminal();
+			((Terminal)ActiveMdiChild).RequestStopTerminal(); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Terminal_Settings_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestEditTerminalSettings();
+			((Terminal)ActiveMdiChild).RequestEditTerminalSettings(); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Radix_String_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.String);
+			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.String); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Radix_Char_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Char);
+			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Char); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Radix_Bin_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Bin);
+			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Bin); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Radix_Oct_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Oct);
+			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Oct); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Radix_Dec_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Dec);
+			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Dec); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Radix_Hex_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Hex);
+			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Hex); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Radix_Unicode_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Unicode);
+			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Unicode); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Terminal_Clear_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestClear();
+			((Terminal)ActiveMdiChild).RequestClear(); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Terminal_Refresh_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestRefresh();
+			((Terminal)ActiveMdiChild).RequestRefresh(); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Terminal_CopyToClipboard_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestCopyToClipboard();
+			((Terminal)ActiveMdiChild).RequestCopyToClipboard(); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Terminal_SaveToFile_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestSaveToFile();
+			((Terminal)ActiveMdiChild).RequestSaveToFile(); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Terminal_Print_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestPrint();
+			((Terminal)ActiveMdiChild).RequestPrint(); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Find_ShowHide_Click(object sender, EventArgs e)
@@ -2587,14 +2610,14 @@ namespace YAT.View.Forms
 			var trigger = (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
 			{
-				// Precondition: There always is an 'ActiveMdiChild' when this event gets raised.
-
-				if (((Terminal)ActiveMdiChild).RequestAutoActionValidateTrigger(trigger))
+				var child = (ActiveMdiChild as Terminal);
+				var childIsReady = (child != null);
+				if (childIsReady && child.RequestAutoActionValidateTrigger(trigger))
 				{
 					if (trigger.IsExplicit)
-						((Terminal)ActiveMdiChild).RequestAutoActionAdjustTriggerOptionsSilently(trigger);
+						child.RequestAutoActionAdjustTriggerOptionsSilently(trigger);
 
-					((Terminal)ActiveMdiChild).ActivateAutoActionTrigger(trigger);
+					child.ActivateAutoActionTrigger(trigger);
 				}
 				else
 				{
@@ -2640,28 +2663,32 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 
-			if (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndex == ControlEx.InvalidIndex)
+			if (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndex == ControlEx.InvalidIndex) // A new trigger is being added.
 			{
+				var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoAction_Trigger.Text;
+
+				if (childIsReady && (!string.IsNullOrEmpty(triggerTextOrRegexPattern)))
+				{
+					child.RequestAutoActionAdjustTriggerOptionsSilently(triggerTextOrRegexPattern); // Preset with best-effort manner.
+				}
+
 				SetAutoActionTriggerOptionControls(childIsReady, true, true); // Allow changing options while editing a not yet validated trigger!
 
-				if (childIsReady)
+				if (childIsReady && (!string.IsNullOrEmpty(triggerTextOrRegexPattern)))
 				{
-					var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoAction_Trigger.Text;
-					if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
+					if (!child.RequestAutoActionValidateTriggerTextSilently(triggerTextOrRegexPattern))
 					{
-						if (!((Terminal)ActiveMdiChild).RequestAutoActionValidateTriggerTextSilently(triggerTextOrRegexPattern))
-						{
-							((Terminal)ActiveMdiChild).AutoActionTriggerState = AutoContentState.Invalid;
-							return; // Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
-						}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
-					}
+						child.AutoActionTriggerState = AutoContentState.Invalid;
+						return; // Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
+					}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
 				}
 			}
 
 			if (childIsReady)
-				((Terminal)ActiveMdiChild).AutoActionTriggerState = AutoContentState.Neutral;
+				child.AutoActionTriggerState = AutoContentState.Neutral;
 		}
 
 		/// <remarks>
@@ -2669,41 +2696,40 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void RevalidateAndRequestAutoActionTrigger()
 		{
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 
 			var selectedIndex = toolStripComboBox_MainTool_AutoAction_Trigger.SelectedIndex;
 			var selectedItem = (toolStripComboBox_MainTool_AutoAction_Trigger.SelectedItem as AutoTriggerEx);
 			                  //// Not listed             or                            listed explicit tigger.
 			if ((selectedIndex == ControlEx.InvalidIndex) || ((selectedItem != null) && selectedItem.IsExplicit))
 			{
-				if (childIsReady)
+				var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoAction_Trigger.Text;
+
+				if (childIsReady && (!string.IsNullOrEmpty(triggerTextOrRegexPattern)))
 				{
-					var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoAction_Trigger.Text;
-					if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
-					{
-						int invalidTextStart;
-						int invalidTextLength;
+					int invalidTextStart;
+					int invalidTextLength;
 
-						this.autoActionTriggerValidationIsOngoing = true;
-						var success = ((Terminal)ActiveMdiChild).RequestAutoActionValidateTriggerText(triggerTextOrRegexPattern, out invalidTextStart, out invalidTextLength);
-						this.autoActionTriggerValidationIsOngoing = false;
+					this.autoActionTriggerValidationIsOngoing = true;
+					var success = child.RequestAutoActionValidateTriggerText(triggerTextOrRegexPattern, out invalidTextStart, out invalidTextLength);
+					this.autoActionTriggerValidationIsOngoing = false;
 
-						if (!success)
-						{                                       // 'childIsReady' for sure.
-							SetAutoActionTriggerOptionControls(true, true, true); // Allow changing options while editing a not yet validated trigger!
-							((Terminal)ActiveMdiChild).AutoActionTriggerState = AutoContentState.Invalid;
-							toolStripComboBox_MainTool_AutoAction_Trigger.Focus();
-							toolStripComboBox_MainTool_AutoAction_Trigger.Select(invalidTextStart, invalidTextLength);
-							return;
-						}
+					if (!success)
+					{                                       // 'childIsReady' for sure.
+						SetAutoActionTriggerOptionControls(true, true, true); // Allow changing options while editing a not yet validated trigger!
+						child.AutoActionTriggerState = AutoContentState.Invalid;
+						toolStripComboBox_MainTool_AutoAction_Trigger.Focus();
+						toolStripComboBox_MainTool_AutoAction_Trigger.Select(invalidTextStart, invalidTextLength);
+						return;
 					}
 
-					((Terminal)ActiveMdiChild).ActivateAutoActionTrigger(triggerTextOrRegexPattern);
+					child.ActivateAutoActionTrigger(triggerTextOrRegexPattern);
 				}
 			}
 
 			if (childIsReady)
-				((Terminal)ActiveMdiChild).AutoActionTriggerState = AutoContentState.Neutral;
+				child.AutoActionTriggerState = AutoContentState.Neutral;
 		}
 
 		private void toolStripComboBox_MainTool_AutoAction_Trigger_KeyDown(object sender, KeyEventArgs e)
@@ -2787,8 +2813,10 @@ namespace YAT.View.Forms
 			var action = (toolStripComboBox_MainTool_AutoAction_Action.SelectedItem as AutoActionEx);
 			if (action != null)
 			{
-				if (((Terminal)ActiveMdiChild).RequestAutoActionValidateAction(action))
-					((Terminal)ActiveMdiChild).ActivateAutoActionAction(action);
+				var child = (ActiveMdiChild as Terminal);
+				var childIsReady = (child != null);
+				if (childIsReady && child.RequestAutoActionValidateAction(action))
+					child.ActivateAutoActionAction(action);
 				else
 					SetAutoActionChildControls(); // Revert action.
 			}
@@ -2837,19 +2865,19 @@ namespace YAT.View.Forms
 			var trigger = (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
 			if (trigger != null)
 			{
-				// Precondition: There always is an 'ActiveMdiChild' when this event gets raised.
-
-			////if (((Terminal)ActiveMdiChild).RequestAutoResponseValidateTrigger(trigger)) is not needed (yet).
+				var child = (ActiveMdiChild as Terminal);
+				var childIsReady = (child != null);
+				if (childIsReady) // && child.RequestAutoResponseValidateTrigger(trigger)) is not needed (yet).
 				{
 					if (trigger.IsExplicit)
-						((Terminal)ActiveMdiChild).RequestAutoResponseAdjustTriggerOptionsSilently(trigger);
+						child.RequestAutoResponseAdjustTriggerOptionsSilently(trigger);
 
-					((Terminal)ActiveMdiChild).ActivateAutoResponseTrigger(trigger);
+					child.ActivateAutoResponseTrigger(trigger);
 				}
-			////else
-			////{
-			////	SetAutoResponseChildControls(); // Revert trigger.
-			////}
+				else
+				{
+					SetAutoResponseChildControls(); // Revert trigger.
+				}
 			}
 		}
 
@@ -2890,28 +2918,32 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 
-			if (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndex == ControlEx.InvalidIndex)
+			if (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndex == ControlEx.InvalidIndex) // A new trigger is being added.
 			{
+				var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoResponse_Trigger.Text;
+
+				if (childIsReady && (!string.IsNullOrEmpty(triggerTextOrRegexPattern)))
+				{
+					child.RequestAutoResponseAdjustTriggerOptionsSilently(triggerTextOrRegexPattern); // Preset with best-effort manner.
+				}
+
 				SetAutoResponseTriggerOptionControls(childIsReady, true, true); // Allow changing options while editing a not yet validated trigger!
 
-				if (childIsReady)
+				if (childIsReady && (!string.IsNullOrEmpty(triggerTextOrRegexPattern)))
 				{
-					var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoResponse_Trigger.Text;
-					if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
+					if (!child.RequestAutoResponseValidateTriggerTextSilently(triggerTextOrRegexPattern))
 					{
-						if (!((Terminal)ActiveMdiChild).RequestAutoResponseValidateTriggerTextSilently(triggerTextOrRegexPattern))
-						{
-							((Terminal)ActiveMdiChild).AutoResponseTriggerState = AutoContentState.Invalid;
-							return; // Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
-						}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
-					}
+						child.AutoResponseTriggerState = AutoContentState.Invalid;
+						return; // Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
+					}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
 				}
 			}
 
 			if (childIsReady)
-				((Terminal)ActiveMdiChild).AutoResponseTriggerState = AutoContentState.Neutral;
+				child.AutoResponseTriggerState = AutoContentState.Neutral;
 		}
 
 		/// <remarks>
@@ -2919,41 +2951,40 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void RevalidateAndRequestAutoResponseTrigger()
 		{
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 
 			var selectedIndex = toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedIndex;
 			var selectedItem = (toolStripComboBox_MainTool_AutoResponse_Trigger.SelectedItem as AutoTriggerEx);
 			                  //// Not listed             or                            listed explicit tigger.
 			if ((selectedIndex == ControlEx.InvalidIndex) || ((selectedItem != null) && selectedItem.IsExplicit))
 			{
-				if (childIsReady)
+				var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoResponse_Trigger.Text;
+
+				if (childIsReady && (!string.IsNullOrEmpty(triggerTextOrRegexPattern)))
 				{
-					var triggerTextOrRegexPattern = toolStripComboBox_MainTool_AutoResponse_Trigger.Text;
-					if (!string.IsNullOrEmpty(triggerTextOrRegexPattern))
-					{
-						int invalidTextStart;
-						int invalidTextLength;
+					int invalidTextStart;
+					int invalidTextLength;
 
-						this.autoResponseTriggerValidationIsOngoing = true;
-						var success = ((Terminal)ActiveMdiChild).RequestAutoResponseValidateTriggerText(triggerTextOrRegexPattern, out invalidTextStart, out invalidTextLength);
-						this.autoResponseTriggerValidationIsOngoing = false;
+					this.autoResponseTriggerValidationIsOngoing = true;
+					var success = child.RequestAutoResponseValidateTriggerText(triggerTextOrRegexPattern, out invalidTextStart, out invalidTextLength);
+					this.autoResponseTriggerValidationIsOngoing = false;
 
-						if (!success)
-						{                                         // 'childIsReady' for sure.
-							SetAutoResponseTriggerOptionControls(true, true, true); // Allow changing options while editing a not yet validated trigger!
-							((Terminal)ActiveMdiChild).AutoResponseTriggerState = AutoContentState.Invalid;
-							toolStripComboBox_MainTool_AutoResponse_Trigger.Focus();
-							toolStripComboBox_MainTool_AutoResponse_Trigger.Select(invalidTextStart, invalidTextLength);
-							return;
-						}
+					if (!success)
+					{                                         // 'childIsReady' for sure.
+						SetAutoResponseTriggerOptionControls(true, true, true); // Allow changing options while editing a not yet validated trigger!
+						child.AutoResponseTriggerState = AutoContentState.Invalid;
+						toolStripComboBox_MainTool_AutoResponse_Trigger.Focus();
+						toolStripComboBox_MainTool_AutoResponse_Trigger.Select(invalidTextStart, invalidTextLength);
+						return;
 					}
-
-					((Terminal)ActiveMdiChild).ActivateAutoResponseTrigger(triggerTextOrRegexPattern);
 				}
+
+				child.ActivateAutoResponseTrigger(triggerTextOrRegexPattern);
 			}
 
 			if (childIsReady)
-				((Terminal)ActiveMdiChild).AutoResponseTriggerState = AutoContentState.Neutral;
+				child.AutoResponseTriggerState = AutoContentState.Neutral;
 		}
 
 		private void toolStripComboBox_MainTool_AutoResponse_Trigger_KeyDown(object sender, KeyEventArgs e)
@@ -3042,19 +3073,19 @@ namespace YAT.View.Forms
 			var response = (toolStripComboBox_MainTool_AutoResponse_Response.SelectedItem as AutoResponseEx);
 			if (response != null)
 			{
-				// Precondition: There always is an 'ActiveMdiChild' when this event gets raised.
-
-			////if (((Terminal)ActiveMdiChild).RequestAutoResponseValidateResponse(response)) is not needed (yet).
+				var child = (ActiveMdiChild as Terminal);
+				var childIsReady = (child != null);
+				if (childIsReady) // && child.RequestAutoResponseValidateResponse(response)) is not needed (yet).
 				{
 					if (response.IsExplicit)
-						((Terminal)ActiveMdiChild).RequestAutoResponseAdjustResponseOptionsSilently(response);
+						child.RequestAutoResponseAdjustResponseOptionsSilently(response);
 
-					((Terminal)ActiveMdiChild).ActivateAutoResponseResponse(response);
+					child.ActivateAutoResponseResponse(response);
 				}
-			////else
-			////{
-			////	SetAutoResponseChildControls(); // Revert resopnse.
-			////}
+				else
+				{
+					SetAutoResponseChildControls(); // Revert resopnse.
+				}
 			}
 		}
 
@@ -3095,20 +3126,30 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 
-			if (toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndex == ControlEx.InvalidIndex)
+			if (toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndex == ControlEx.InvalidIndex) // A new response is being added.
 			{
+				var responseText = toolStripComboBox_MainTool_AutoResponse_Response.Text;
+
+				if (childIsReady)
+				{
+					if (!string.IsNullOrEmpty(responseText))
+					{
+						child.RequestAutoResponseAdjustResponseOptionsSilently(responseText); // Preset with best-effort manner.
+					}
+				}
+
 				SetAutoResponseResponseOptionControls(childIsReady, true, true, true); // Allow changing options while editing a not yet validated response!
 
 				if (childIsReady)
 				{
-					var responseText = toolStripComboBox_MainTool_AutoResponse_Response.Text;
 					if (!string.IsNullOrEmpty(responseText))
 					{
-						if (!((Terminal)ActiveMdiChild).RequestAutoResponseValidateResponseTextSilently(responseText))
+						if (!child.RequestAutoResponseValidateResponseTextSilently(responseText))
 						{
-							((Terminal)ActiveMdiChild).AutoResponseResponseState = AutoContentState.Invalid;
+							child.AutoResponseResponseState = AutoContentState.Invalid;
 							return; // Likely only invalid temporarily (e.g. incomplete escape,...), thus indicating
 						}           // by color and using ValidateTextSilently() (instead of error message on ValidateText()).
 					}
@@ -3116,7 +3157,7 @@ namespace YAT.View.Forms
 			}
 
 			if (childIsReady)
-				((Terminal)ActiveMdiChild).AutoResponseResponseState = AutoContentState.Neutral;
+				child.AutoResponseResponseState = AutoContentState.Neutral;
 		}
 
 		/// <remarks>
@@ -3124,7 +3165,8 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void RevalidateAndRequestAutoResponseResponse()
 		{
-			var childIsReady = (ActiveMdiChild != null);
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
 
 			var selectedIndex = toolStripComboBox_MainTool_AutoResponse_Response.SelectedIndex;
 			var selectedItem = (toolStripComboBox_MainTool_AutoResponse_Response.SelectedItem as AutoResponseEx);
@@ -3140,25 +3182,25 @@ namespace YAT.View.Forms
 						int invalidTextLength;
 
 						this.autoResponseResponseValidationIsOngoing = true;
-						var success = ((Terminal)ActiveMdiChild).RequestAutoResponseValidateResponseText(responseText, out invalidTextStart, out invalidTextLength);
+						var success = child.RequestAutoResponseValidateResponseText(responseText, out invalidTextStart, out invalidTextLength);
 						this.autoResponseResponseValidationIsOngoing = false;
 
 						if (!success)
 						{                                          // 'childIsReady' for sure.
 							SetAutoResponseResponseOptionControls(true, true, true, true); // Allow changing options while editing a not yet validated trigger!
-							((Terminal)ActiveMdiChild).AutoResponseResponseState = AutoContentState.Invalid;
+							child.AutoResponseResponseState = AutoContentState.Invalid;
 							toolStripComboBox_MainTool_AutoResponse_Response.Focus();
 							toolStripComboBox_MainTool_AutoResponse_Response.Select(invalidTextStart, invalidTextLength);
 							return;
 						}
 					}
 
-					((Terminal)ActiveMdiChild).ActivateAutoResponseResponse(responseText);
+					child.ActivateAutoResponseResponse(responseText);
 				}
 			}
 
 			if (childIsReady)
-				((Terminal)ActiveMdiChild).AutoResponseResponseState = AutoContentState.Neutral;
+				child.AutoResponseResponseState = AutoContentState.Neutral;
 		}
 
 		private void toolStripComboBox_MainTool_AutoResponse_Response_KeyDown(object sender, KeyEventArgs e)
@@ -4588,7 +4630,8 @@ namespace YAT.View.Forms
 
 		private void terminalMdiChild_AutoActionTriggerStateChanged(object sender, EventArgs e)
 		{
-			var state = ((Terminal)ActiveMdiChild).AutoActionTriggerState;
+			var child = (ActiveMdiChild as Terminal);
+			var state = child.AutoActionTriggerState;
 			SetAutoActionTriggerStateControls(state);
 		}
 
@@ -4606,13 +4649,15 @@ namespace YAT.View.Forms
 
 		private void terminalMdiChild_AutoResponseTriggerStateChanged(object sender, EventArgs e)
 		{
-			var state = ((Terminal)ActiveMdiChild).AutoResponseTriggerState;
+			var child = (ActiveMdiChild as Terminal);
+			var state = child.AutoResponseTriggerState;
 			SetAutoResponseTriggerStateControls(state);
 		}
 
 		private void terminalMdiChild_AutoResponseResponseStateChanged(object sender, EventArgs e)
 		{
-			var state = ((Terminal)ActiveMdiChild).AutoResponseResponseState;
+			var child = (ActiveMdiChild as Terminal);
+			var state = child.AutoResponseResponseState;
 			SetAutoResponseResponseStateControls(state);
 		}
 
@@ -4825,9 +4870,11 @@ namespace YAT.View.Forms
 
 		private string GetStatusText(Status status)
 		{
-			if (ActiveMdiChild != null)
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
+			if (childIsReady)
 			{
-				string childText = "[" + ((Terminal)ActiveMdiChild).Text + "]";
+				string childText = "[" + child.Text + "]";
 				switch (status)
 				{
 					case Status.ChildActivated: return (childText + " activated");
