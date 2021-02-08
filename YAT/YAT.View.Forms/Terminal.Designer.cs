@@ -3976,7 +3976,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Size = new System.Drawing.Size(240, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Text = "Use &Text";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.ToolTipText = "By default, the trigger is based on the byte sequence of a command.\r\nThis option " +
-    "switches to a trigger based on text.";
+    "switches to a trigger based on the resulting text.";
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_UseText_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger_CaseSensitive
@@ -4097,7 +4097,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Size = new System.Drawing.Size(240, 22);
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Text = "Use &Text";
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.ToolTipText = "By default, the trigger is based on the byte sequence of a command.\r\nThis option " +
-    "switches to a trigger based on text.";
+    "switches to a trigger based on the resulting text.";
 			this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_UseText_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Receive_AutoAction_Trigger_CaseSensitive

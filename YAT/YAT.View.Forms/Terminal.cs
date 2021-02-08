@@ -812,22 +812,26 @@ namespace YAT.View.Forms
 				// ...View.Forms.Main.toolStripButton_MainTool_SetControls()
 				// Changes here may have to be applied there too.
 
+				var tis = new List<AutoTriggerEx>(this.settingsRoot.GetValidAutoResponseTriggerItems());            // Common and recent patterns/triggers are always shown, though they
+				tis.AddRange(AutoTriggerEx.CommonRegexCapturePatterns.Select(x => new AutoTriggerEx(x)).ToArray()); // could be limited depending on the options, but that is incomprehensive.
+				tis.AddRange(ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitTriggers.ConvertAll(new Converter<RecentItem<string>, AutoTriggerEx>((x) => { return (x.Item); })));
+
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.Clear();
-				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoResponseTriggerItems());
-				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(AutoTriggerEx.CommonRegexCapturePatterns.Select(x => new AutoTriggerEx(x)).ToArray());  // Common and recent patterns/triggers are always shown, though they
-				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitTriggers.ToArray()); // could be limited depending on the options, but that is incomprehensive.
+				toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.Items.AddRange(tis.ToArray());
 				var trigger = this.settingsRoot.AutoResponse.Trigger;
-				ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger);
+				ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger, trigger, trigger);
 
 				var triggerTextIsSupported  = trigger.TextIsSupported;
 				var triggerRegexIsSupported = trigger.RegexIsSupported;
 
+				var ris = new List<AutoResponseEx>(this.settingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(this.terminal.SettingsFilePath)));
+				ris.AddRange(AutoResponseEx.CommonRegexReplacementPatterns.Select(x => new AutoResponseEx(x)).ToArray());
+				ris.AddRange(ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitResponses.ConvertAll(new Converter<RecentItem<string>, AutoResponseEx>((x) => { return (x.Item); })));
+
 				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.Clear();
-				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(this.settingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(this.terminal.SettingsFilePath)));
-				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(AutoResponseEx.CommonRegexReplacementPatterns.Select(x => new AutoResponseEx(x)).ToArray());
-				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitResponses.ToArray());
+				toolStripComboBox_TerminalMenu_Send_AutoResponse_Response.Items.AddRange(ris.ToArray());
 				var response = this.settingsRoot.AutoResponse.Response;
-				ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response);
+				ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Send_AutoResponse_Response, response, response);
 
 				var responseReplaceIsSupported = response.ReplaceIsSupported;
 
@@ -1354,22 +1358,26 @@ namespace YAT.View.Forms
 				// ...View.Forms.Main.toolStripButton_MainTool_SetControls()
 				// Changes here may have to be applied there too.
 
+				var tis = new List<AutoTriggerEx>(this.settingsRoot.GetValidAutoActionTriggerItems());              // Common and recent patterns/triggers are always shown, though they
+				tis.AddRange(AutoTriggerEx.CommonRegexCapturePatterns.Select(x => new AutoTriggerEx(x)).ToArray()); // could be limited depending on the options, but that is incomprehensive.
+				tis.AddRange(ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitTriggers.ConvertAll(new Converter<RecentItem<string>, AutoTriggerEx>((x) => { return (x.Item); })));
+
 				toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.Clear();
-				toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(this.settingsRoot.GetValidAutoActionTriggerItems());
-				toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(AutoTriggerEx.CommonRegexCapturePatterns.Select(x => new AutoTriggerEx(x)).ToArray()); // Common and recent patterns/triggers are always shown, though they
-				toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitTriggers.ToArray());  // could be limited depending on the options, but that is incomprehensive.
+				toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.Items.AddRange(tis.ToArray());
 				var trigger = this.settingsRoot.AutoAction.Trigger;
-				ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger, trigger);
+				ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger, trigger, trigger);
 
 				var triggerTextIsSupported  = trigger.TextIsSupported;
 				var triggerRegexIsSupported = trigger.RegexIsSupported;
 
+			////var ais = new List<AutoActionEx>(this.settingsRoot.GetValidAutoActionItems()); is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
+			////ais.AddRange(AutoActionEx.CommonActions.Select(x => new AutoActionEx(x)).ToArray());
+			////ais.AddRange(ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitActions.ConvertAll(new Converter<RecentItem<string>, AutoActionEx>((x) => { return (x.Item); })));
+
 				toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.Clear();
 				toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.AddRange(this.settingsRoot.GetValidAutoActionItems());
-			////toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.AddRange(AutoActionEx.CommonActions.Select(x => new AutoActionEx(x)).ToArray());
-			////toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.Items.AddRange(ApplicationSettings.RoamingUserSettings.AutoAction.RecentExplicitAction.ToArray()); is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
 				var action = this.settingsRoot.AutoAction.Action;
-				ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Action, action, new Command(action).SingleLineText); // No explicit default radix available (yet).
+				ToolStripComboBoxHelper.Select(toolStripComboBox_TerminalMenu_Receive_AutoAction_Action, action, action);
 
 				SetAutoActionTriggerStateControls();
 			////SetAutoActionActionStateControls() is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
