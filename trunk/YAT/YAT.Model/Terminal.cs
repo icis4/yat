@@ -2066,6 +2066,9 @@ namespace YAT.Model
 		/// <remarks>
 		/// Not named "Try" same as all other "main" methods.
 		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		/// <paramref name="filePath"/> is null.
+		/// </exception>
 		public virtual bool SaveAs(string filePath)
 		{
 		////AssertUndisposed() is called by 'SaveAsWithOptions(...)' below.
@@ -2079,6 +2082,9 @@ namespace YAT.Model
 		/// <remarks>
 		/// Not named "Try" same as all other "main" methods.
 		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		/// <paramref name="filePath"/> is null.
+		/// </exception>
 		public virtual bool SaveAsWithoutUserInteraction(string filePath)
 		{
 		////AssertUndisposed() is called by 'SaveAsWithOptions(...)' below.
@@ -2090,11 +2096,14 @@ namespace YAT.Model
 		/// This method implements the logic that is needed when saving, opposed to the method
 		/// <see cref="SaveToFile"/> which just performs the actual save, i.e. file handling.
 		/// </summary>
+		/// <exception cref="ArgumentNullException">
+		/// <paramref name="filePath"/> is null.
+		/// </exception>
 		public virtual bool SaveAsWithOptions(string filePath, bool userInteractionIsAllowed)
 		{
 			AssertUndisposed();
 
-			var absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(filePath);
+			var absoluteFilePath = EnvironmentEx.ResolveNormalizedAbsolutePath(filePath);
 
 			// Request the deletion of the obsolete auto saved settings file given the new file is different:
 			string autoSaveFilePathToDelete = null;

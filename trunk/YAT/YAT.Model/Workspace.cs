@@ -921,6 +921,9 @@ namespace YAT.Model
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
+		/// <exception cref="ArgumentNullException">
+		/// <paramref name="filePath"/> is null.
+		/// </exception>
 		public virtual bool SaveAs(string filePath)
 		{
 			AssertUndisposed();
@@ -929,7 +932,7 @@ namespace YAT.Model
 			if (!SaveAllTerminalsNormally(false))
 				return (false);
 
-			var absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(filePath);
+			var absoluteFilePath = EnvironmentEx.ResolveNormalizedAbsolutePath(filePath);
 
 			// Request the deletion of the obsolete auto saved settings file given the new file is different:
 			string autoSaveFilePathToDelete = null;
@@ -1889,6 +1892,9 @@ namespace YAT.Model
 			return (true);
 		}
 
+		/// <exception cref="ArgumentNullException">
+		/// <paramref name="filePath"/> is null.
+		/// </exception>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool OpenTerminalFile(string filePath, out string absoluteFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exceptionOnFailure)
 		{
@@ -1904,7 +1910,7 @@ namespace YAT.Model
 
 			// Alternatively, try to use terminal file path only:
 			if (string.IsNullOrEmpty(absoluteFilePath))
-				absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(filePath);
+				absoluteFilePath = EnvironmentEx.ResolveNormalizedAbsolutePath(filePath);
 
 			try
 			{
