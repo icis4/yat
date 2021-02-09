@@ -484,7 +484,7 @@ namespace MKY.IO
 
 		/// <summary>
 		/// Resolves <paramref name="directoryPathB"/> relative to <paramref name="directoryPathA"/>
-		/// and returns absolute path of <paramref name="directoryPathB"/>.
+		/// and returns normalized absolute path of <paramref name="directoryPathB"/>.
 		/// </summary>
 		/// <remarks>
 		/// Returns <paramref name="directoryPathB"/> if it is absolute.
@@ -505,7 +505,7 @@ namespace MKY.IO
 
 		/// <summary>
 		/// Resolves <paramref name="filePath"/> relative to <paramref name="directoryPath"/> and
-		/// returns absolute path of file.
+		/// returns normalized absolute path of file.
 		/// </summary>
 		/// <remarks>
 		/// Returns <paramref name="filePath"/> if it is absolute.
@@ -529,7 +529,7 @@ namespace MKY.IO
 
 		/// <summary>
 		/// Resolves <paramref name="directoryPath"/> relative to <paramref name="filePath"/> and
-		/// returns absolute path of <paramref name="directoryPath"/>.
+		/// returns normalized absolute path of <paramref name="directoryPath"/>.
 		/// </summary>
 		/// <remarks>
 		/// Returns <paramref name="directoryPath"/> if it is absolute.
@@ -550,7 +550,7 @@ namespace MKY.IO
 
 		/// <summary>
 		/// Resolves <paramref name="filePathB"/> relative to <paramref name="filePathA"/> and
-		/// returns absolute path of fileB.
+		/// returns normalized absolute path of fileB.
 		/// </summary>
 		/// <remarks>
 		/// Returns <paramref name="filePathB"/> if it is absolute.

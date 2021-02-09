@@ -161,24 +161,30 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Resolves the absolute location to the given file path.
+		/// Resolves the absolute location to the given file path and normalizes it, expanding environment variables.
 		///  - If the path is rooted, simply expand environment variables.
 		///  - If the path is relative, expand environment variables and combine it with the <see cref="Environment.CurrentDirectory"/>.
 		/// </summary>
-		public static string ResolveAbsolutePath(string filePath)
+		/// <exception cref="ArgumentNullException">
+		/// <paramref name="filePath"/> is null.
+		/// </exception>
+		public static string ResolveNormalizedAbsolutePath(string filePath)
 		{
-			return (ResolveAbsolutePath(Environment.CurrentDirectory, filePath));
+			return (ResolveNormalizedAbsolutePath(Environment.CurrentDirectory, filePath));
 		}
 
 		/// <summary>
-		/// Resolves the absolute location to the given file path.
+		/// Resolves the absolute location to the given file path and normalizes it, expanding environment variables.
 		///  - If the path is rooted, simply expand environment variables.
 		///  - If the path is relative, expand environment variables and combine it with the given <paramref name="rootDirectory"/>.
 		/// </summary>
-		public static string ResolveAbsolutePath(string rootDirectory, string filePath)
+		/// <exception cref="ArgumentNullException">
+		/// <paramref name="filePath"/> is null.
+		/// </exception>
+		public static string ResolveNormalizedAbsolutePath(string rootDirectory, string filePath)
 		{
 			if (Path.IsPathRooted(filePath))
-				return (Environment.ExpandEnvironmentVariables(filePath));
+				return (Path.GetFullPath(Environment.ExpandEnvironmentVariables(filePath)));
 			else
 				return (PathEx.CombineDirectoryAndFilePaths(rootDirectory, Environment.ExpandEnvironmentVariables(filePath)));
 		}

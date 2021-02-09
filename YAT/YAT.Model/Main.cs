@@ -596,7 +596,7 @@ namespace YAT.Model
 			#else
 				else //            incl. IsScriptFile(requestedFilePath) but not limited to, any extension shall be usable as a script file.
 				{
-					var absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(requestedFilePath);
+					var absoluteFilePath = EnvironmentEx.ResolveNormalizedAbsolutePath(requestedFilePath); // !string.IsNullOrEmpty() for sure, see further above.
 					if (File.Exists(absoluteFilePath)) // Validate fully expanded absolute path...
 					{
 						this.launchArgs.RequestedScriptFilePath = requestedFilePath; // ...but keep given path for further processing, as path may e.g. be relative to the executable directory.
@@ -820,15 +820,23 @@ namespace YAT.Model
 				else if (this.commandLineArgs.OptionIsGiven("TransmitFile"))
 				{
 					var filePath = this.commandLineArgs.RequestedTransmitFilePath;
-					var absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(filePath);
-					if (File.Exists(absoluteFilePath)) // Validate fully expanded absolute path...
+					if (!string.IsNullOrEmpty(filePath))
 					{
-						this.launchArgs.RequestedTransmitFilePath = filePath; // ...but keep given path for further processing, as path may e.g. be relative to the requested terminal.
-						this.launchArgs.PerformOperationOnRequestedTerminal = true;
+						var absoluteFilePath = EnvironmentEx.ResolveNormalizedAbsolutePath(filePath);
+						if (File.Exists(absoluteFilePath)) // Validate fully expanded absolute path...
+						{
+							this.launchArgs.RequestedTransmitFilePath = filePath; // ...but keep given path for further processing, as path may e.g. be relative to the requested terminal.
+							this.launchArgs.PerformOperationOnRequestedTerminal = true;
+						}
+						else
+						{                                                                                                             // Neither '.' nor '!' shall be appended, the file path will be.
+							this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("File to transmit does not exist", absoluteFilePath);
+							return (false);
+						}
 					}
 					else
-					{                                                                                                             // Neither '.' nor '!' shall be appended, the file path will be.
-						this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("File to transmit does not exist", absoluteFilePath);
+					{
+						this.launchArgs.MessageOnFailure = "File to transmit is undefined!";
 						return (false);
 					}
 				}
@@ -838,23 +846,31 @@ namespace YAT.Model
 			// Prio 11 = Run script:
 			if (this.commandLineArgs.OptionIsGiven("Script"))
 			{
-				var requestedScriptFilePath = this.commandLineArgs.RequestedScriptFilePath;
-				var absoluteScriptFilePath = EnvironmentEx.ResolveAbsolutePath(requestedScriptFilePath);
-				if (File.Exists(absoluteScriptFilePath)) // Validate fully expanded absolute path...
+				var filePath = this.commandLineArgs.RequestedScriptFilePath;
+				if (!string.IsNullOrEmpty(filePath))
 				{
-					this.launchArgs.RequestedScriptFilePath = requestedScriptFilePath; // ...but keep given path for further processing, as path may e.g. be relative to the requested executable directory.
-					this.launchArgs.ScriptRunIsRequested = true;
-
-					string messageOnFailure;
-					if (!ProcessCommandLineArgsIntoScriptLaunchOptions(absoluteScriptFilePath, out messageOnFailure))
+					var absoluteFilePath = EnvironmentEx.ResolveNormalizedAbsolutePath(filePath);
+					if (File.Exists(absoluteFilePath)) // Validate fully expanded absolute path...
 					{
-						this.launchArgs.MessageOnFailure = messageOnFailure;
+						this.launchArgs.RequestedScriptFilePath = filePath; // ...but keep given path for further processing, as path may e.g. be relative to the requested executable directory.
+						this.launchArgs.ScriptRunIsRequested = true;
+
+						string messageOnFailure;
+						if (!ProcessCommandLineArgsIntoScriptLaunchOptions(absoluteFilePath, out messageOnFailure))
+						{
+							this.launchArgs.MessageOnFailure = messageOnFailure;
+							return (false);
+						}
+					}
+					else
+					{                                                                                                        // Neither '.' nor '!' shall be appended, the file path will be.
+						this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("Script file does not exist", absoluteFilePath);
 						return (false);
 					}
 				}
 				else
-				{                                                                                                        // Neither '.' nor '!' shall be appended, the file path will be.
-					this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("Script file does not exist", absoluteScriptFilePath);
+				{
+					this.launchArgs.MessageOnFailure = "Script file path is undefined!";
 					return (false);
 				}
 			}
@@ -897,7 +913,7 @@ namespace YAT.Model
 			{
 				var filePath = this.commandLineArgs.RequestedScriptLogFilePath;
 				var rootDirectory = Path.GetDirectoryName(absoluteScriptFilePath);
-				var absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(rootDirectory, filePath);
+				var absoluteFilePath = EnvironmentEx.ResolveNormalizedAbsolutePath(rootDirectory, filePath);
 				if (!PathEx.IsValid(absoluteFilePath)) // Validate fully expanded absolute path...
 				{                                                                                          // Neither '.' nor '!' shall be appended, the file path will be.
 					messageOnFailure = Utilities.MessageHelper.ComposeMessage("Invalid script log file path", absoluteFilePath);
@@ -1884,16 +1900,18 @@ namespace YAT.Model
 			return (true);
 		}
 
+		/// <exception cref="ArgumentNullException"><paramref name="filePath"/> is null.</exception>
 		private bool OpenWorkspaceFile(string filePath, out string absoluteFilePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Exception exceptionOnFailure)
 		{
 			Guid guid;
 			return (OpenWorkspaceFile(filePath, out absoluteFilePath, out settingsHandler, out guid, out exceptionOnFailure));
 		}
 
+		/// <exception cref="ArgumentNullException"><paramref name="filePath"/> is null.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool OpenWorkspaceFile(string filePath, out string absoluteFilePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Guid guid, out Exception exceptionOnFailure)
 		{
-			absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(filePath);
+			absoluteFilePath = EnvironmentEx.ResolveNormalizedAbsolutePath(filePath);
 
 			try
 			{
@@ -1968,12 +1986,14 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>Needed for opening command line requested terminal files without yet creating a workspace.</remarks>
+		/// <exception cref="ArgumentNullException"><paramref name="terminalFilePath"/> is null.</exception>
 		private bool OpenTerminalFile(string terminalFilePath, out string absoluteTerminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exceptionOnFailure)
 		{
 			return (OpenTerminalFile("", terminalFilePath, out absoluteTerminalFilePath, out settingsHandler, out exceptionOnFailure));
 		}
 
 		/// <remarks>Needed for opening command line requested terminal files without yet creating a workspace.</remarks>
+		/// <exception cref="ArgumentNullException"><paramref name="terminalFilePath"/> is null.</exception>
 		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exceptionOnFailure)
 		{
 			string absoluteTerminalFilePath;
@@ -1981,6 +2001,7 @@ namespace YAT.Model
 		}
 
 		/// <remarks>Needed for opening command line requested terminal files without yet creating a workspace.</remarks>
+		/// <exception cref="ArgumentNullException"><paramref name="terminalFilePath"/> is null.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool OpenTerminalFile(string workspaceFilePath, string terminalFilePath, out string absoluteTerminalFilePath, out DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, out Exception exceptionOnFailure)
 		{
@@ -1992,11 +2013,11 @@ namespace YAT.Model
 
 			// Try to combine workspace and terminal path:
 			if (!string.IsNullOrEmpty(workspaceFilePath))
-				absoluteTerminalFilePath = PathEx.CombineFilePaths(EnvironmentEx.ResolveAbsolutePath(workspaceFilePath), terminalFilePath);
+				absoluteTerminalFilePath = PathEx.CombineFilePaths(EnvironmentEx.ResolveNormalizedAbsolutePath(workspaceFilePath), terminalFilePath);
 
 			// Alternatively, try to use terminal file path only:
 			if (string.IsNullOrEmpty(absoluteTerminalFilePath))
-				absoluteTerminalFilePath = EnvironmentEx.ResolveAbsolutePath(terminalFilePath);
+				absoluteTerminalFilePath = EnvironmentEx.ResolveNormalizedAbsolutePath(terminalFilePath);
 
 			try
 			{
