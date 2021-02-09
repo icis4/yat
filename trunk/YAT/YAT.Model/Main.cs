@@ -806,7 +806,7 @@ namespace YAT.Model
 				{
 					var text = this.commandLineArgs.RequestedTransmitText;
 					string messageOnFailure;
-					if (Domain.Utilities.ValidationHelper.ValidateText("Text to transmit", text, out messageOnFailure, Domain.Parser.Mode.Default))
+					if (Domain.Utilities.ValidationHelper.ValidateText("TransmitText", text, out messageOnFailure, Domain.Parser.Mode.Default))
 					{
 						this.launchArgs.RequestedTransmitText = text;
 						this.launchArgs.PerformOperationOnRequestedTerminal = true;
@@ -897,7 +897,7 @@ namespace YAT.Model
 			{
 				var filePath = this.commandLineArgs.RequestedScriptLogFilePath;
 				var rootDirectory = Path.GetDirectoryName(absoluteScriptFilePath);
-				var absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(filePath, rootDirectory);
+				var absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(rootDirectory, filePath);
 				if (!PathEx.IsValid(absoluteFilePath)) // Validate fully expanded absolute path...
 				{                                                                                          // Neither '.' nor '!' shall be appended, the file path will be.
 					messageOnFailure = Utilities.MessageHelper.ComposeMessage("Invalid script log file path", absoluteFilePath);

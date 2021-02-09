@@ -456,7 +456,7 @@ namespace YAT.Model
 
 			if (c.IsValidFilePath(Path.GetDirectoryName(SettingsFilePath)))
 			{
-				string absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(c.FilePath, Path.GetDirectoryName(SettingsFilePath));
+				string absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(Path.GetDirectoryName(SettingsFilePath), c.FilePath);
 
 				this.terminal.SendFile(absoluteFilePath, c.DefaultRadix);
 
