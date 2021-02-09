@@ -167,7 +167,7 @@ namespace MKY
 		/// </summary>
 		public static string ResolveAbsolutePath(string filePath)
 		{
-			return (ResolveAbsolutePath(filePath, Environment.CurrentDirectory));
+			return (ResolveAbsolutePath(Environment.CurrentDirectory, filePath));
 		}
 
 		/// <summary>
@@ -175,7 +175,7 @@ namespace MKY
 		///  - If the path is rooted, simply expand environment variables.
 		///  - If the path is relative, expand environment variables and combine it with the given <paramref name="rootDirectory"/>.
 		/// </summary>
-		public static string ResolveAbsolutePath(string filePath, string rootDirectory)
+		public static string ResolveAbsolutePath(string rootDirectory, string filePath)
 		{
 			if (Path.IsPathRooted(filePath))
 				return (Environment.ExpandEnvironmentVariables(filePath));
