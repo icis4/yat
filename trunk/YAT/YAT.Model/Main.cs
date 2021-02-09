@@ -596,14 +596,14 @@ namespace YAT.Model
 			#else
 				else //            incl. IsScriptFile(requestedFilePath) but not limited to, any extension shall be usable as a script file.
 				{
-					string absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(requestedFilePath);
-					if (File.Exists(absoluteFilePath))
+					var absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(requestedFilePath);
+					if (File.Exists(absoluteFilePath)) // Validate fully expanded absolute path...
 					{
-						this.launchArgs.RequestedScriptFilePath = absoluteFilePath;
+						this.launchArgs.RequestedScriptFilePath = requestedFilePath; // ...but keep given path for further processing, as path may e.g. be relative to the executable directory.
 						this.launchArgs.ScriptRunIsRequested = true;
 
 						string messageOnError;
-						if (!ProcessCommandLineArgsIntoScriptLaunchOptions(out messageOnError))
+						if (!ProcessCommandLineArgsIntoScriptLaunchOptions(absoluteFilePath, out messageOnError))
 						{
 							this.launchArgs.MessageOnFailure = messageOnError;
 							return (false);
@@ -802,26 +802,28 @@ namespace YAT.Model
 			if ((this.launchArgs.RequestedDynamicTerminalId != TerminalIds.InvalidDynamicId) ||
 			    (this.launchArgs.RequestedFixedTerminalId   != TerminalIds.InvalidFixedId))
 			{
-				if      (this.commandLineArgs.OptionIsGiven("TransmitText"))
+				if (this.commandLineArgs.OptionIsGiven("TransmitText"))
 				{
-					string absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(this.commandLineArgs.RequestedTransmitText);
-					if (File.Exists(absoluteFilePath))
+					var text = this.commandLineArgs.RequestedTransmitText;
+					string messageOnFailure;
+					if (Domain.Utilities.ValidationHelper.ValidateText("Text to transmit", text, out messageOnFailure, Domain.Parser.Mode.Default))
 					{
-						this.launchArgs.RequestedTransmitText = absoluteFilePath;
+						this.launchArgs.RequestedTransmitText = text;
 						this.launchArgs.PerformOperationOnRequestedTerminal = true;
 					}
 					else
-					{                                                                                                             // Neither '.' nor '!' shall be appended, the file path will be.
-						this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("File to transmit does not exist", absoluteFilePath);
+					{
+						this.launchArgs.MessageOnFailure = messageOnFailure;
 						return (false);
 					}
 				}
 				else if (this.commandLineArgs.OptionIsGiven("TransmitFile"))
 				{
-					string absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(this.commandLineArgs.RequestedTransmitFilePath);
-					if (File.Exists(absoluteFilePath))
+					var filePath = this.commandLineArgs.RequestedTransmitFilePath;
+					var absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(filePath);
+					if (File.Exists(absoluteFilePath)) // Validate fully expanded absolute path...
 					{
-						this.launchArgs.RequestedTransmitFilePath = absoluteFilePath;
+						this.launchArgs.RequestedTransmitFilePath = filePath; // ...but keep given path for further processing, as path may e.g. be relative to the requested terminal.
 						this.launchArgs.PerformOperationOnRequestedTerminal = true;
 					}
 					else
@@ -836,14 +838,15 @@ namespace YAT.Model
 			// Prio 11 = Run script:
 			if (this.commandLineArgs.OptionIsGiven("Script"))
 			{
-				string absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(this.commandLineArgs.RequestedScriptFilePath);
-				if (File.Exists(absoluteFilePath))
+				var requestedScriptFilePath = this.commandLineArgs.RequestedScriptFilePath;
+				var absoluteScriptFilePath = EnvironmentEx.ResolveAbsolutePath(requestedScriptFilePath);
+				if (File.Exists(absoluteScriptFilePath)) // Validate fully expanded absolute path...
 				{
-					this.launchArgs.RequestedScriptFilePath = absoluteFilePath;
+					this.launchArgs.RequestedScriptFilePath = requestedScriptFilePath; // ...but keep given path for further processing, as path may e.g. be relative to the requested executable directory.
 					this.launchArgs.ScriptRunIsRequested = true;
 
 					string messageOnFailure;
-					if (!ProcessCommandLineArgsIntoScriptLaunchOptions(out messageOnFailure))
+					if (!ProcessCommandLineArgsIntoScriptLaunchOptions(absoluteScriptFilePath, out messageOnFailure))
 					{
 						this.launchArgs.MessageOnFailure = messageOnFailure;
 						return (false);
@@ -851,7 +854,7 @@ namespace YAT.Model
 				}
 				else
 				{                                                                                                        // Neither '.' nor '!' shall be appended, the file path will be.
-					this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("Script file does not exist", absoluteFilePath);
+					this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("Script file does not exist", absoluteScriptFilePath);
 					return (false);
 				}
 			}
@@ -888,18 +891,20 @@ namespace YAT.Model
 
 	#if (WITH_SCRIPTING)
 
-		private bool ProcessCommandLineArgsIntoScriptLaunchOptions(out string messageOnFailure)
+		private bool ProcessCommandLineArgsIntoScriptLaunchOptions(string absoluteScriptFilePath, out string messageOnFailure)
 		{
 			if (this.commandLineArgs.OptionIsGiven("ScriptLog"))
 			{
-				string absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(this.commandLineArgs.RequestedScriptLogFilePath);
-				if (!PathEx.IsValid(absoluteFilePath))
-				{                                                                                      // Neither '.' nor '!' shall be appended, the file path will be.
-					messageOnFailure = Utilities.MessageHelper.ComposeMessage("Invalid script file path", absoluteFilePath);
+				var filePath = this.commandLineArgs.RequestedScriptLogFilePath;
+				var rootDirectory = Path.GetDirectoryName(absoluteScriptFilePath);
+				var absoluteFilePath = EnvironmentEx.ResolveAbsolutePath(filePath, rootDirectory);
+				if (!PathEx.IsValid(absoluteFilePath)) // Validate fully expanded absolute path...
+				{                                                                                          // Neither '.' nor '!' shall be appended, the file path will be.
+					messageOnFailure = Utilities.MessageHelper.ComposeMessage("Invalid script log file path", absoluteFilePath);
 					return (false);
 				}
 
-				this.launchArgs.RequestedScriptLogFilePath = absoluteFilePath;
+				this.launchArgs.RequestedScriptLogFilePath = filePath; // ...but keep given path for further processing, as path may e.g. be relative to the requested executable directory.
 			}
 
 			if (this.commandLineArgs.OptionIsGiven("ScriptLogTimeStamp"))
