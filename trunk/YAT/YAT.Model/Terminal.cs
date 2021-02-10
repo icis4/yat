@@ -2103,7 +2103,7 @@ namespace YAT.Model
 		{
 			AssertUndisposed();
 
-			var absoluteFilePath = EnvironmentEx.ResolveNormalizedAbsolutePath(filePath);
+			var absoluteFilePath = PathEx.GetNormalizedRootedExpandingEnvironmentVariables(filePath);
 
 			// Request the deletion of the obsolete auto saved settings file given the new file is different:
 			string autoSaveFilePathToDelete = null;

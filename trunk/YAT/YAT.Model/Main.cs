@@ -596,7 +596,7 @@ namespace YAT.Model
 			#else
 				else //            incl. IsScriptFile(requestedFilePath) but not limited to, any extension shall be usable as a script file.
 				{
-					var absoluteFilePath = EnvironmentEx.ResolveNormalizedAbsolutePath(requestedFilePath); // !string.IsNullOrEmpty() for sure, see further above.
+					var absoluteFilePath = PathEx.GetNormalizedRootedExpandingEnvironmentVariables(requestedFilePath); // !string.IsNullOrEmpty() for sure, see further above.
 					if (File.Exists(absoluteFilePath)) // Validate fully expanded absolute path...
 					{
 						this.launchArgs.RequestedScriptFilePath = requestedFilePath; // ...but keep given path for further processing, as path may e.g. be relative to the executable directory.
@@ -822,7 +822,7 @@ namespace YAT.Model
 					var filePath = this.commandLineArgs.RequestedTransmitFilePath;
 					if (!string.IsNullOrEmpty(filePath))
 					{
-						var absoluteFilePath = EnvironmentEx.ResolveNormalizedAbsolutePath(filePath);
+						var absoluteFilePath = PathEx.GetNormalizedRootedExpandingEnvironmentVariables(filePath);
 						if (File.Exists(absoluteFilePath)) // Validate fully expanded absolute path...
 						{
 							this.launchArgs.RequestedTransmitFilePath = filePath; // ...but keep given path for further processing, as path may e.g. be relative to the requested terminal.
@@ -849,7 +849,7 @@ namespace YAT.Model
 				var filePath = this.commandLineArgs.RequestedScriptFilePath;
 				if (!string.IsNullOrEmpty(filePath))
 				{
-					var absoluteFilePath = EnvironmentEx.ResolveNormalizedAbsolutePath(filePath);
+					var absoluteFilePath = PathEx.GetNormalizedRootedExpandingEnvironmentVariables(filePath);
 					if (File.Exists(absoluteFilePath)) // Validate fully expanded absolute path...
 					{
 						this.launchArgs.RequestedScriptFilePath = filePath; // ...but keep given path for further processing, as path may e.g. be relative to the requested executable directory.
@@ -913,7 +913,7 @@ namespace YAT.Model
 			{
 				var filePath = this.commandLineArgs.RequestedScriptLogFilePath;
 				var rootDirectory = Path.GetDirectoryName(absoluteScriptFilePath);
-				var absoluteFilePath = EnvironmentEx.ResolveNormalizedAbsolutePath(rootDirectory, filePath);
+				var absoluteFilePath = PathEx.GetNormalizedRootedExpandingEnvironmentVariables(rootDirectory, filePath);
 				if (!PathEx.IsValid(absoluteFilePath)) // Validate fully expanded absolute path...
 				{                                                                                          // Neither '.' nor '!' shall be appended, the file path will be.
 					messageOnFailure = Utilities.MessageHelper.ComposeMessage("Invalid script log file path", absoluteFilePath);
@@ -1911,7 +1911,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private bool OpenWorkspaceFile(string filePath, out string absoluteFilePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, out Guid guid, out Exception exceptionOnFailure)
 		{
-			absoluteFilePath = EnvironmentEx.ResolveNormalizedAbsolutePath(filePath);
+			absoluteFilePath = PathEx.GetNormalizedRootedExpandingEnvironmentVariables(filePath);
 
 			try
 			{
@@ -2013,11 +2013,11 @@ namespace YAT.Model
 
 			// Try to combine workspace and terminal path:
 			if (!string.IsNullOrEmpty(workspaceFilePath))
-				absoluteTerminalFilePath = PathEx.CombineFilePaths(EnvironmentEx.ResolveNormalizedAbsolutePath(workspaceFilePath), terminalFilePath);
+				absoluteTerminalFilePath = PathEx.CombineFilePaths(PathEx.GetNormalizedRootedExpandingEnvironmentVariables(workspaceFilePath), terminalFilePath);
 
 			// Alternatively, try to use terminal file path only:
 			if (string.IsNullOrEmpty(absoluteTerminalFilePath))
-				absoluteTerminalFilePath = EnvironmentEx.ResolveNormalizedAbsolutePath(terminalFilePath);
+				absoluteTerminalFilePath = PathEx.GetNormalizedRootedExpandingEnvironmentVariables(terminalFilePath);
 
 			try
 			{

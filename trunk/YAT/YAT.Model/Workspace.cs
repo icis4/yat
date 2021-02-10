@@ -932,7 +932,7 @@ namespace YAT.Model
 			if (!SaveAllTerminalsNormally(false))
 				return (false);
 
-			var absoluteFilePath = EnvironmentEx.ResolveNormalizedAbsolutePath(filePath);
+			var absoluteFilePath = PathEx.GetNormalizedRootedExpandingEnvironmentVariables(filePath);
 
 			// Request the deletion of the obsolete auto saved settings file given the new file is different:
 			string autoSaveFilePathToDelete = null;
@@ -1910,7 +1910,7 @@ namespace YAT.Model
 
 			// Alternatively, try to use terminal file path only:
 			if (string.IsNullOrEmpty(absoluteFilePath))
-				absoluteFilePath = EnvironmentEx.ResolveNormalizedAbsolutePath(filePath);
+				absoluteFilePath = PathEx.GetNormalizedRootedExpandingEnvironmentVariables(filePath);
 
 			try
 			{
