@@ -36,6 +36,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.IO;
 using MKY.Collections.Specialized;
 
 #if (WITH_SCRIPTING)
@@ -456,7 +457,7 @@ namespace YAT.Model
 
 			if (c.IsValidFilePath(Path.GetDirectoryName(SettingsFilePath)))
 			{
-				string absoluteFilePath = PathEx.GetNormalizedAbsoluteExpandingEnvironmentVariables(Path.GetDirectoryName(SettingsFilePath), c.FilePath);
+				string absoluteFilePath = PathEx.GetNormalizedRootedExpandingEnvironmentVariables(Path.GetDirectoryName(SettingsFilePath), c.FilePath);
 
 				this.terminal.SendFile(absoluteFilePath, c.DefaultRadix);
 
