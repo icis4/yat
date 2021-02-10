@@ -714,7 +714,7 @@ namespace YAT.Model.Types
 			if (!IsFilePath)
 				return (false);
 
-			return (File.Exists(EnvironmentEx.ResolveNormalizedAbsolutePath(rootDirectory, this.filePath))); // May be absolute or relative to given root path.
+			return (File.Exists(PathEx.GetNormalizedRootedExpandingEnvironmentVariables(rootDirectory, this.filePath))); // May be absolute or relative to given root path.
 		}
 
 		/// <remarks>

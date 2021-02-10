@@ -988,6 +988,35 @@ namespace MKY.IO
 			return (di.Name);
 		}
 
+		/// <summary>
+		/// Resolves the absolute location to the given file path and normalizes it, expanding environment variables.
+		///  - If <see cref="Path.IsPathRooted"/>, simply expand environment variables.
+		///  - Otherwise, expand environment variables and combine it with the <see cref="Environment.CurrentDirectory"/>.
+		/// </summary>
+		/// <exception cref="ArgumentNullException">
+		/// <paramref name="filePath"/> is null.
+		/// </exception>
+		public static string GetNormalizedRootedExpandingEnvironmentVariables(string filePath)
+		{
+			return (GetNormalizedRootedExpandingEnvironmentVariables(Environment.CurrentDirectory, filePath));
+		}
+
+		/// <summary>
+		/// Resolves the absolute location to the given file path and normalizes it, expanding environment variables.
+		///  - If <see cref="Path.IsPathRooted"/>, simply expand environment variables.
+		///  - Otherwise, expand environment variables and combine it with the given <paramref name="rootDirectory"/>.
+		/// </summary>
+		/// <exception cref="ArgumentNullException">
+		/// <paramref name="filePath"/> is null.
+		/// </exception>
+		public static string GetNormalizedRootedExpandingEnvironmentVariables(string rootDirectory, string filePath)
+		{
+			if (Path.IsPathRooted(filePath))
+				return (Path.GetFullPath(Environment.ExpandEnvironmentVariables(filePath)));
+			else
+				return (CombineDirectoryAndFilePaths(rootDirectory, Environment.ExpandEnvironmentVariables(filePath)));
+		}
+
 		#endregion
 
 		#region TryGet...()

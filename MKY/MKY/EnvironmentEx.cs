@@ -161,35 +161,6 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Resolves the absolute location to the given file path and normalizes it, expanding environment variables.
-		///  - If the path is rooted, simply expand environment variables.
-		///  - If the path is relative, expand environment variables and combine it with the <see cref="Environment.CurrentDirectory"/>.
-		/// </summary>
-		/// <exception cref="ArgumentNullException">
-		/// <paramref name="filePath"/> is null.
-		/// </exception>
-		public static string ResolveNormalizedAbsolutePath(string filePath)
-		{
-			return (ResolveNormalizedAbsolutePath(Environment.CurrentDirectory, filePath));
-		}
-
-		/// <summary>
-		/// Resolves the absolute location to the given file path and normalizes it, expanding environment variables.
-		///  - If the path is rooted, simply expand environment variables.
-		///  - If the path is relative, expand environment variables and combine it with the given <paramref name="rootDirectory"/>.
-		/// </summary>
-		/// <exception cref="ArgumentNullException">
-		/// <paramref name="filePath"/> is null.
-		/// </exception>
-		public static string ResolveNormalizedAbsolutePath(string rootDirectory, string filePath)
-		{
-			if (Path.IsPathRooted(filePath))
-				return (Path.GetFullPath(Environment.ExpandEnvironmentVariables(filePath)));
-			else
-				return (PathEx.CombineDirectoryAndFilePaths(rootDirectory, Environment.ExpandEnvironmentVariables(filePath)));
-		}
-
-		/// <summary>
 		/// Tries the get value from environment variable.
 		/// </summary>
 		/// <param name="environmentVariableName">Name of the environment variable.</param>
