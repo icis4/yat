@@ -1610,6 +1610,10 @@ namespace YAT.Model
 							this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
 						}
 						AttachTerminalEventHandlers();
+
+					#if (WITH_SCRIPTING)
+						UpdateReceivedXOnXOffOffsetForScripting();
+					#endif
 					}
 					finally
 					{
@@ -1651,6 +1655,10 @@ namespace YAT.Model
 						this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, oldTerminal);
 					}
 					AttachTerminalEventHandlers();
+
+				#if (WITH_SCRIPTING)
+					UpdateReceivedXOnXOffOffsetForScripting();
+				#endif
 				}
 				finally
 				{
@@ -5398,32 +5406,30 @@ namespace YAT.Model
 	#if (WITH_SCRIPTING)
 
 		/// <summary></summary>
-		public virtual void ResetReceivedXOnCountForScripting()
+		public virtual void UpdateReceivedXOnOffsetForScripting()
 		{
 			lock (this.receivedXOnXOffForScriptingSyncObj) // Atomic for count and offset.
 			{
-				var totalCount = (this.receivedXOnOffsetForScripting + ReceivedXOnCount);
-				this.receivedXOnOffsetForScripting = totalCount;
+				this.receivedXOnOffsetForScripting = this.terminal.ReceivedXOnCount;
 			}
 		}
 
 		/// <summary></summary>
-		public virtual void ResetReceivedXOffCountForScripting()
+		public virtual void UpdateReceivedXOffOffsetForScripting()
 		{
 			lock (this.receivedXOnXOffForScriptingSyncObj) // Atomic for count and offset.
 			{
-				var totalCount = (this.receivedXOffOffsetForScripting + ReceivedXOffCount);
-				this.receivedXOffOffsetForScripting = totalCount;
+				this.receivedXOffOffsetForScripting = this.terminal.ReceivedXOffCount;
 			}
 		}
 
 		/// <summary></summary>
-		public virtual void ResetReceivedXOnXOffCountForScripting()
+		public virtual void UpdateReceivedXOnXOffOffsetForScripting()
 		{
-			lock (this.receivedXOnXOffForScriptingSyncObj) // Atomic for both counts.
+			lock (this.receivedXOnXOffForScriptingSyncObj) // Atomic for both counts and offsets.
 			{
-				ResetReceivedXOnCountForScripting();
-				ResetReceivedXOffCountForScripting();
+				UpdateReceivedXOnOffsetForScripting();
+				UpdateReceivedXOffOffsetForScripting();
 			}
 		}
 
@@ -5434,18 +5440,9 @@ namespace YAT.Model
 		{
 			AssertUndisposed();
 
-		#if (!WITH_SCRIPTING)
-			this.terminal.ResetFlowControlCount();
-		#else
-			lock (this.receivedXOnXOffForScriptingSyncObj) // Atomic for both counts and offsets.
-			{
-				this.terminal.ResetFlowControlCount();
-
-				this.receivedXOnOffsetForScripting = 0;
-				this.receivedXOffOffsetForScripting = 0;
-			}
-		#endif
-		}
+			this.terminal.ResetFlowControlCount();     // Do not lock here, method will invoke events. There
+			UpdateReceivedXOnXOffOffsetForScripting(); // is no need to lock anyway, this method atomically
+		}                                              // updates the offset, no matter on terminal counts.
 
 		/// <summary></summary>
 		public virtual int InputBreakCount
