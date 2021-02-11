@@ -439,10 +439,7 @@ namespace YAT.Domain
 			InitializeSend();
 			AttachRawTerminal(new RawTerminal(this.terminalSettings.IO, this.terminalSettings.Buffer));
 
-		#if (WITH_SCRIPTING)
-		////this.scriptingIsActive has been initialized to false.
-		#endif
-		////this.isReloading       has been initialized to false.
+		////this.isReloading has been initialized to false.
 		}
 
 		/// <summary></summary>
@@ -456,7 +453,7 @@ namespace YAT.Domain
 			InitializeSend();
 			AttachRawTerminal(new RawTerminal(terminal.rawTerminal, this.terminalSettings.IO, this.terminalSettings.Buffer));
 
-			this.isReloading       = terminal.isReloading;
+			this.isReloading = terminal.isReloading;
 		}
 
 		#region Disposal
