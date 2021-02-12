@@ -2091,8 +2091,10 @@ namespace YAT.Domain
 				}                      // signalled break condition, thus the break condition must be signalled again!
 				else
 				{
-					if (this.isSendingCount > 0) // Allow unsymmetrical decrement but
-						this.isSendingCount--;   // counter must not become negative.
+					if (this.isSendingCount <= 0)
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The 'isSendingCount' must never fall below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+					this.isSendingCount--; // Count is >= 1 for sure.
 
 					if (this.isSendingCount == 0)
 						raiseEvent = true;
@@ -2138,8 +2140,10 @@ namespace YAT.Domain
 				}                      // signalled break condition, thus the break condition must be signalled again!
 				else
 				{
-					if (this.isSendingForSomeTimeCount > 0) // Allow unsymmetrical decrement but
-						this.isSendingForSomeTimeCount--;   // counter must not become negative.
+					if (this.isSendingForSomeTimeCount <= 0)
+						throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The 'isSendingForSomeTimeCount' must never fall below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+					this.isSendingForSomeTimeCount--; // Count is >= 1 for sure.
 
 					if (this.isSendingForSomeTimeCount == 0)
 						raiseEvent = true;
