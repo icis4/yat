@@ -90,7 +90,7 @@ namespace YAT
 		/// </remarks>
 		public static System.Version ProductFullVersionValue
 		{
-			get { return (System. Reflection.Assembly.GetEntryAssembly().GetName().Version); }
+			get { return (System.Reflection.Assembly.GetEntryAssembly().GetName().Version); }
 		}
 
 		/// <summary>
@@ -149,9 +149,9 @@ namespace YAT
 		/// Must be 'get' rather than 'readonly' as <see cref="ProductRevision"/> is 'get'.
 		/// </remarks>
 		public static string ProductCaptionAndVersionAndBuild
-		{                  // Using more general term "Build" rather than .NET specific term "Revision".
-			get { return (ProductCaptionAndVersion + " Build " + ProductRevision); }
-		}
+		{                  // Using more general term "Build" rather than .NET specific term "Revision". Resulting suboptimality: .NET "Revision" indicates
+			get { return (ProductCaptionAndVersion + " Build " + ProductRevision); } // the number of seconds since midnight divided by two. Consequently
+		}                                                                            // YAT's "Build" not necessarily increases for subsequent versions.
 
 		/// <summary>The complete logo (text line sections) of the product.</summary>
 		/// <remarks>Same content and structure as header of 'Release Notes'.</remarks>
