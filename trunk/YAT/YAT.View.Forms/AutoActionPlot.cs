@@ -127,6 +127,10 @@ namespace YAT.View.Forms
 
 			InitializeComponent();
 
+		#if (WITH_SCRIPTING)
+			Icon = Properties.Resources.Icon_Albatros;
+		#endif
+
 			plotView.Model = this.terminal.AutoActionPlotModel.OxyModel;
 		////plotView.Model.DefaultFont     = Font.Name;
 		////plotView.Model.DefaultFontSize = Font.SizeInPoints;
