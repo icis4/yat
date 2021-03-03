@@ -95,11 +95,6 @@ YAT 2.4.0 :: 2021-01-29
 ----------------------------------------------------------------------------------------------------
 
 New:
-- USB Ser/HID now takes the HID usage page and ID into account, allowing working with devices that
-  implement multiple usages (e.g. a standard interface and a firmware upgrade interface) (bug #480).
-- Support for concurrent sending, i.e. multiple commands can be active simultaneously (feat. #387).
-  Useful e.g. for sending a text command while a repeating text command is already ongoing.
-  Can be enabled at [Terminal > Settings... > Advanced... > Send > Allow concurrent sending].
 - Text terminals: Option to glue characters of a line together, enabled by default, resulting in
   fewer line breaks when sending and receiving in full-duplex (related to feat. #19 and bug #176).
 - Text terminals: Option to wait for response, resulting in request and response being displayed
@@ -109,6 +104,9 @@ New:
   [Terminal > Settings... > Advanced... > Send > Buffer not more than baud rate permits] which
   limits the send rate and lets an active hardware or software flow control do its job even for
   small buffers and large amount of data.
+- Support for concurrent sending, i.e. multiple commands can be active simultaneously (feat. #387).
+  Useful e.g. for sending a text command while a repeating text command is already ongoing.
+  Can be enabled at [Terminal > Settings... > Advanced... > Send > Allow concurrent sending].
 - Content separator can now be configured. Useful for e.g. displaying or logging hex data without
   separating spaces, e.g. "414243", using [None]. Separator format can now also be configured.
 - Additional keyword \!(TimeStamp) allowing injection of current date/time (feature request #400).
@@ -119,6 +117,8 @@ New:
 - Additional keywords \!(RtsOn|Off|Toggle) and \!(DtrOn|Off|Toggle) allowing to change serial COM
   port signals on-the-fly (feature request #408). Also work with predefined commands and shortcuts.
 - Additional option to disable warnings like "XOff state, retaining data..." on sending.
+- USB Ser/HID now takes the HID usage page and ID into account, allowing working with devices that
+  implement multiple usages (e.g. a standard interface and a firmware upgrade interface) (bug #480).
 - Automatic actions and responses now support multiple triggers within a line or chunk.
 - Automatic actions and responses now support text triggers, optionally incl. regular expression.
 - Automatic actions and responses now list recent used trigger and response texts.

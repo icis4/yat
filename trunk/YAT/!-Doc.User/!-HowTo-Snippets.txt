@@ -52,6 +52,14 @@ Any other finding or feedback to YAT is also highly appreciated.
 YAT <x.y.z> is expected <<soon|within a month or two|... >>, depending on <preliminary|beta> feedback.
 
 
+Donation
+--------
+
+Thanks very much for your donation :-) Hope YAT works as expected! Let me know in case you have any kind of feedback such as suggestions or issues you run into.
+
+(Also see recent "YAT says thanks!" emails.)
+
+
 Mail Notification
 -----------------
 
@@ -59,14 +67,6 @@ In order to get a notice once YAT <x.y.z> is ready,
 Note that
 
 you can sign up for the YAT release notification at https://sourceforge.net/p/y-a-terminal/mailman/. As visible in the mail archive at https://sourceforge.net/p/y-a-terminal/mailman/y-a-terminal-users/, no spam, just one notification email per release, unless you keep the SourceForge newsletters activated.
-
-
-Donation
---------
-
-Thanks very much for your donation :-) Hope that YAT works as expected! Let me know in case you have any kind of feedback such as suggestions or issues you run into.
-
-(Also see recent "YAT says thanks!" emails.)
 
 
 Hmm

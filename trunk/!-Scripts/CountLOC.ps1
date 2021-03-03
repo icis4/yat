@@ -56,6 +56,10 @@ Alternatives:
  > https://github.com/AlDanial/cloc (quite powerful, but way more complex than needed for YAT).
  > Others as listed at https://github.com/AlDanial/cloc#Other_Counters (not evaluated).
 
+Notes:
+ > This file is named according to batch naming conventions, not PowerShell (e.g. "Count-LOC").
+ > If one day renaming this file, it shall be considered to rename the batch files as well.
+
 .OUTPUTS
 Returns a hash table of the counts of the whole YAT project, including 3rd party and generated.
 #>
@@ -132,9 +136,6 @@ function Add-Counts([HashTable]$tableA, [HashTable]$tableB)
 <#
 .SYNOPSIS
 Counts LOC (physical), SLOC (source only) and CLOC (comments only) for the current path.
-
-.PARAMETER SomeMandatoryParam
-This is a mandatory value parameter.
 
 .OUTPUTS
 Returns a hash table of the counts.
