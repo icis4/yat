@@ -74,8 +74,9 @@ namespace YAT.View.Forms
 			// 
 			// groupBox_ParserHelp
 			// 
-			this.groupBox_ParserHelp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox_ParserHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_ParserHelp.Controls.Add(this.splitContainer_Help);
 			this.groupBox_ParserHelp.Controls.Add(this.label_ParserExplanations);
 			this.groupBox_ParserHelp.Location = new System.Drawing.Point(12, 12);
@@ -104,7 +105,7 @@ namespace YAT.View.Forms
 			this.splitContainer_Help.Panel2.Controls.Add(this.splitContainer_Lower);
 			this.splitContainer_Help.Panel2MinSize = 100;
 			this.splitContainer_Help.Size = new System.Drawing.Size(443, 433);
-			this.splitContainer_Help.SplitterDistance = 265;
+			this.splitContainer_Help.SplitterDistance = 256;
 			this.splitContainer_Help.TabIndex = 5;
 			// 
 			// splitContainer_Upper
@@ -123,8 +124,8 @@ namespace YAT.View.Forms
 			// 
 			this.splitContainer_Upper.Panel2.Controls.Add(this.textBox_ParserKeyword);
 			this.splitContainer_Upper.Panel2MinSize = 48;
-			this.splitContainer_Upper.Size = new System.Drawing.Size(443, 265);
-			this.splitContainer_Upper.SplitterDistance = 181;
+			this.splitContainer_Upper.Size = new System.Drawing.Size(443, 256);
+			this.splitContainer_Upper.SplitterDistance = 168;
 			this.splitContainer_Upper.TabIndex = 0;
 			// 
 			// textBox_ParserFormat
@@ -135,7 +136,7 @@ namespace YAT.View.Forms
 			this.textBox_ParserFormat.Name = "textBox_ParserFormat";
 			this.textBox_ParserFormat.ReadOnly = true;
 			this.textBox_ParserFormat.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox_ParserFormat.Size = new System.Drawing.Size(443, 181);
+			this.textBox_ParserFormat.Size = new System.Drawing.Size(443, 168);
 			this.textBox_ParserFormat.TabIndex = 0;
 			this.textBox_ParserFormat.Text = "<PARSER FORMAT HELP>";
 			// 
@@ -147,7 +148,7 @@ namespace YAT.View.Forms
 			this.textBox_ParserKeyword.Name = "textBox_ParserKeyword";
 			this.textBox_ParserKeyword.ReadOnly = true;
 			this.textBox_ParserKeyword.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox_ParserKeyword.Size = new System.Drawing.Size(443, 80);
+			this.textBox_ParserKeyword.Size = new System.Drawing.Size(443, 84);
 			this.textBox_ParserKeyword.TabIndex = 0;
 			this.textBox_ParserKeyword.Text = "<PARSER KEYWORD HELP>";
 			// 
@@ -167,8 +168,8 @@ namespace YAT.View.Forms
 			// 
 			this.splitContainer_Lower.Panel2.Controls.Add(this.textBox_SerialPort);
 			this.splitContainer_Lower.Panel2MinSize = 48;
-			this.splitContainer_Lower.Size = new System.Drawing.Size(443, 164);
-			this.splitContainer_Lower.SplitterDistance = 80;
+			this.splitContainer_Lower.Size = new System.Drawing.Size(443, 173);
+			this.splitContainer_Lower.SplitterDistance = 81;
 			this.splitContainer_Lower.TabIndex = 0;
 			// 
 			// textBox_TextTerminalKeyword
@@ -179,7 +180,7 @@ namespace YAT.View.Forms
 			this.textBox_TextTerminalKeyword.Name = "textBox_TextTerminalKeyword";
 			this.textBox_TextTerminalKeyword.ReadOnly = true;
 			this.textBox_TextTerminalKeyword.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox_TextTerminalKeyword.Size = new System.Drawing.Size(443, 80);
+			this.textBox_TextTerminalKeyword.Size = new System.Drawing.Size(443, 81);
 			this.textBox_TextTerminalKeyword.TabIndex = 0;
 			this.textBox_TextTerminalKeyword.Text = "<TEXT TERMINAL KEYWORD HELP>";
 			// 
@@ -191,7 +192,7 @@ namespace YAT.View.Forms
 			this.textBox_SerialPort.Name = "textBox_SerialPort";
 			this.textBox_SerialPort.ReadOnly = true;
 			this.textBox_SerialPort.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox_SerialPort.Size = new System.Drawing.Size(443, 80);
+			this.textBox_SerialPort.Size = new System.Drawing.Size(443, 88);
 			this.textBox_SerialPort.TabIndex = 0;
 			this.textBox_SerialPort.Text = "<SERIAL COM PORT HELP>";
 			// 
@@ -233,8 +234,7 @@ namespace YAT.View.Forms
 			// 
 			// groupBox_AsciiTable
 			// 
-			this.groupBox_AsciiTable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this.groupBox_AsciiTable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_AsciiTable.Controls.Add(this.dataGridView_AsciiTable);
 			this.groupBox_AsciiTable.Location = new System.Drawing.Point(473, 12);
@@ -339,7 +339,6 @@ namespace YAT.View.Forms
 			this.Controls.Add(this.button_Close);
 			this.Controls.Add(this.groupBox_ParserHelp);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximumSize = new System.Drawing.Size(796, 999999);
 			this.MinimumSize = new System.Drawing.Size(796, 590);
 			this.Name = "Help";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
