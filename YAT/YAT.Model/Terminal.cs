@@ -850,8 +850,21 @@ namespace YAT.Model
 			}
 		}
 
-		// \remind (2020-12-07 / MKY)
-		// 'IsReceiving' and 'IsReceivingForSomeTime' are yet pending.
+		/// <summary></summary>
+		public virtual bool IsReceiving
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				if (this.terminal != null)
+					return (this.terminal.IsReceiving);
+				else
+					return (false);
+			}
+		}
+
+		// 'IsReceivingForSomeTime' is not needed (yet).
 
 		/// <summary></summary>
 		public virtual bool LogIsOn
@@ -1061,6 +1074,19 @@ namespace YAT.Model
 
 				return (this.terminal.AvailableReceivedMessageCountForScripting);
 			}
+		}
+
+		/// <summary>
+		/// Peeks the received messages that are available for scripting.
+		/// </summary>
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		public int PeekAvailableReceivedMessagesForScripting(out Domain.ScriptMessage[] available)
+		{
+			AssertUndisposed();
+
+			return (this.terminal.PeekAvailableReceivedMessagesForScripting(out available));
 		}
 
 		/// <summary>
@@ -5713,7 +5739,7 @@ namespace YAT.Model
 					}
 
 					Exception ex;
-					if (!Editor.TryOpenFile(filePath, out ex))
+					if (!EnvironmentEx.TryStartFile(filePath, out ex))
 					{
 						var dr = OnMessageInputRequest
 						(

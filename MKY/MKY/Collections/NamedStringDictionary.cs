@@ -145,7 +145,7 @@ namespace MKY.Collections
 		}
 
 		/// <summary>
-		/// Tries the get value.
+		/// Tries to get value.
 		/// </summary>
 		/// <param name="key">The key.</param>
 		/// <param name="value">The value.</param>

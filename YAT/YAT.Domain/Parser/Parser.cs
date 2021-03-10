@@ -85,7 +85,7 @@ namespace YAT.Domain.Parser
 			@"Formats can be nested, e.g. ""\d(79 \h(4B) 79)""" + Environment.NewLine +
 			@"Three letter radix identifiers are also allowed, e.g. ""\hex"" alternative to ""\h""" + Environment.NewLine +
 			@"+/- signs are not allowed, neither are decimal points nor separators such as the apostroph." + Environment.NewLine +
-			@"Enable ""Explicit Default Radix"" to switch default radix to a different setting than string." + Environment.NewLine +
+			@"Enable [Explicit Default Radix] to switch default radix to a different setting than string." + Environment.NewLine +
 			Environment.NewLine +
 			@"In addition, C-style escape sequences are supported:" + Environment.NewLine +
 			@"""\r\n"" alternative to ""<CR><LF>""" + Environment.NewLine +
@@ -96,9 +96,9 @@ namespace YAT.Domain.Parser
 			@"""\0b01001111"" alternative to ""\b(01001111)""" + Environment.NewLine +
 			@"""\u20AC"" alternative to ""\U+20AC"" or ""\U(20AC)""" + Environment.NewLine +
 			Environment.NewLine +
-			@"Type \\ to send a backslash." + Environment.NewLine +
-			@"Type \< to send an opening angle bracket." + Environment.NewLine +
-			@"Type \) to send a closing parenthesis.";
+			@"Use \\ to send a backslash '\'." + Environment.NewLine +
+			@"Use \< to send an opening angle bracket '<'." + Environment.NewLine +
+			@"Use \) to send a closing parenthesis ')' within an escape.";
 
 		/// <summary></summary>
 		public static readonly string KeywordHelp =

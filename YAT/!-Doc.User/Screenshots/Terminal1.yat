@@ -321,7 +321,7 @@
           <IsDefined>true</IsDefined>
           <Description>String formats</Description>
           <DefaultRadix>String</DefaultRadix>
-          <CommandLines>OK\r\n&lt;CR&gt;&lt;LF&gt;\U+20AC\U(20AC\u20AC</CommandLines>
+          <CommandLines>OK\r\n&lt;CR&gt;&lt;LF&gt;\U+20AC\U(20AC)\u20AC</CommandLines>
           <IsFilePath>false</IsFilePath>
           <FilePath />
         </Commands>

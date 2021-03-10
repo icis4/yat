@@ -274,8 +274,19 @@ namespace YAT.Domain
 			}
 		}
 
-		// \remind (2020-12-07 / MKY)
-		// 'IsReceiving' and 'IsReceivingForSomeTime' are yet pending.
+		/// <summary></summary>
+		public virtual bool IsReceiving
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+// PENDING !!!	return (IsTransmissive && (this.isReceivingCount > 0)); // No need to lock (this.isReceivingCountSyncObj), retrieving only.
+				return (IsTransmissive);
+			}
+		}
+
+		// 'IsReceivingForSomeTime' is not needed (yet).
 
 		/// <summary>
 		/// Returns the current break state.

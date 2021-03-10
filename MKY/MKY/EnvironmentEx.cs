@@ -26,8 +26,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-using MKY.IO;
-
 namespace MKY
 {
 	/// <summary></summary>
@@ -161,7 +159,7 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Tries the get value from environment variable.
+		/// Tries to get value from environment variable.
 		/// </summary>
 		/// <param name="environmentVariableName">Name of the environment variable.</param>
 		/// <param name="result">The resulting value.</param>
@@ -184,7 +182,7 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Tries the get file path from environment variable and verify.
+		/// Tries to get file path from environment variable and verify.
 		/// </summary>
 		/// <param name="environmentVariableName">Name of the environment variable.</param>
 		/// <param name="filePath">The file path.</param>
@@ -214,6 +212,45 @@ namespace MKY
 
 			filePath = null;
 			return (false);
+		}
+
+		/// <summary>
+		/// Tries to open/start the given file with the system's default application.
+		/// </summary>
+		/// <remarks>
+		/// Named 'Start' rather than 'Open' for not confusing with e.g. <see cref="File.Open(string, FileMode)"/>.
+		/// </remarks>
+		/// <param name="filePath">File to open/start.</param>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		public static bool TryStartFile(string filePath)
+		{
+			Exception exceptionOnFailure;
+			return (TryStartFile(filePath, out exceptionOnFailure));
+		}
+
+		/// <summary>
+		/// Tries to open/start the given file with the system's default application.
+		/// </summary>
+		/// <remarks>
+		/// Named 'Start' rather than 'Open' for not confusing with e.g. <see cref="File.Open(string, FileMode)"/>.
+		/// </remarks>
+		/// <param name="filePath">File to open/start.</param>
+		/// <param name="exceptionOnFailure">Exception object, in case of failure.</param>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
+		public static bool TryStartFile(string filePath, out Exception exceptionOnFailure)
+		{
+			try
+			{
+				Process.Start(filePath);
+				exceptionOnFailure = null;
+				return (true);
+			}
+			catch (Exception ex)
+			{
+				exceptionOnFailure = ex;
+				return (false);
+			}
 		}
 	}
 }

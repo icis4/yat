@@ -74,7 +74,6 @@ using MT.Albatros.Core;
 using YAT.Application.Settings;
 using YAT.Application.Utilities;
 using YAT.Model.Types;
-using YAT.Model.Utilities;
 using YAT.Settings.Application;
 using YAT.Settings.Model;
 using YAT.View.Controls;
@@ -1038,7 +1037,37 @@ namespace YAT.View.Forms
 			f.Show(this);
 		}
 
-	#if (!WITH_SCRIPTING)
+	#if (WITH_SCRIPTING)
+
+		private void toolStripMenuItem_MainMenu_Help_UserManual_Click(object sender, EventArgs e)
+		{
+			StartApplicationFile("Albatros-UserManual.pdf");
+		}
+
+	#endif
+
+		private void toolStripMenuItem_MainMenu_Help_QuickReference_Click(object sender, EventArgs e)
+		{
+		#if (!WITH_SCRIPTING)
+			StartApplicationFile("YAT Quick Reference.pdf");
+		#else
+			StartApplicationFile("Albatros-QuickReference.pdf");
+		#endif
+		}
+
+	#if (WITH_SCRIPTING)
+
+		private void toolStripMenuItem_MainMenu_Help_ScriptInterfaceReference_Click(object sender, EventArgs e)
+		{
+			StartApplicationFile("Albatros-ScriptInterfaceReference.chm");
+		}
+
+		private void toolStripMenuItem_MainMenu_Help_ReleaseNotes_Click(object sender, EventArgs e)
+		{
+			StartApplicationFile("Albatros-ReleaseNotes.pdf");
+		}
+
+	#else // !WITH_SCRIPTING
 
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void toolStripMenuItem_MainMenu_Help_ReleaseNotes_Click(object sender, EventArgs e)
@@ -4068,6 +4097,21 @@ namespace YAT.View.Forms
 				var t = (child as Terminal);
 				if (t != null)
 					t.ResumeFindShortcutsCtrlFNP();
+			}
+		}
+
+		private void StartApplicationFile(string filePath)
+		{
+			Exception ex;
+			if (!EnvironmentEx.TryStartFile(filePath, out ex))
+			{
+				MessageBox.Show
+				(
+					Model.Utilities.MessageHelper.ComposeMessage("Unable to open application file", filePath, ex),
+					"Application File Error",
+					MessageBoxButtons.OKCancel,
+					MessageBoxIcon.Error
+				);
 			}
 		}
 

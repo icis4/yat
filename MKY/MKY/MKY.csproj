@@ -182,7 +182,6 @@
     <Compile Include="Settings\SettingsItem.cs" />
     <Compile Include="Text\RegularExpressions\CommonPatterns.cs" />
     <Compile Include="Text\Ascii.cs" />
-    <Compile Include="Text\Editor.cs" />
     <Compile Include="Text\EncodingEx.cs" />
     <Compile Include="Text\Escape.cs" />
     <Compile Include="Threading\MainThreadHelper.cs" />

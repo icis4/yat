@@ -643,6 +643,33 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <summary>
+		/// Peeks the received messages that are available for scripting.
+		/// </summary>
+		/// <remarks>
+		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// </remarks>
+		public virtual int PeekAvailableReceivedMessagesForScripting(out ScriptMessage[] available)
+		{
+			AssertUndisposed();
+
+			lock (this.availableReceivedMessagesForScripting)
+			{
+				var messages = this.availableReceivedMessagesForScripting.ToArray();
+				if (messages != null)
+				{
+					var clones = messages.Select(m => m.Clone()); // Clone to ensure decoupling.
+					available = clones.ToArray();
+					return (available.Length);
+				}
+				else
+				{
+					available = null;
+					return (0);
+				}
+			}
+		}
+
 	#endif // WITH_SCRIPTING
 
 		/// <summary></summary>
@@ -1838,7 +1865,7 @@ namespace YAT.Domain
 
 			lock (this.availableReceivedMessagesForScripting)
 			{
-				cleared = this.availableReceivedMessagesForScripting.ToArray();
+				cleared = this.availableReceivedMessagesForScripting.ToArray(); // No need to clone, messages will be cleared.
 				this.availableReceivedMessagesForScripting.Clear();
 
 				clearTimeStamp = DateTime.Now; // Taken within lock to get best accuracy.
