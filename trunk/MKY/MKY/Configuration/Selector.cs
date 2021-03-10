@@ -66,7 +66,7 @@ namespace MKY.Configuration
 		}
 
 		/// <summary>
-		/// Tries the get selected configuration section.
+		/// Tries to get selected configuration section.
 		/// </summary>
 		/// <typeparam name="T">The type of the section to retrieve.</typeparam>
 		/// <param name="c">The c.</param>
@@ -96,7 +96,7 @@ namespace MKY.Configuration
 		}
 
 		/// <summary>
-		/// Tries the get selected configuration.
+		/// Tries to get selected configuration.
 		/// </summary>
 		/// <typeparam name="T">The type of the section to retrieve.</typeparam>
 		/// <param name="c">The c.</param>

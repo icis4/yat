@@ -105,10 +105,17 @@ namespace YAT.View.Forms
 		#endif
 			this.toolStripMenuItem_MainMenu_Help = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Help_Contents = new System.Windows.Forms.ToolStripMenuItem();
+		#if (WITH_SCRIPTING)
+			this.toolStripMenuItem_MainMenu_Help_UserManual = new System.Windows.Forms.ToolStripMenuItem();
+		#endif
+			this.toolStripMenuItem_MainMenu_Help_QuickReference = new System.Windows.Forms.ToolStripMenuItem();
+		#if (WITH_SCRIPTING)
+			this.toolStripMenuItem_MainMenu_Help_ScriptInterfaceReference = new System.Windows.Forms.ToolStripMenuItem();
+		#endif
 			this.toolStripMenuItem_MainMenu_Help_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
-		#if (!WITH_SCRIPTING)
 			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Help_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
+		#if (!WITH_SCRIPTING)
 			this.toolStripMenuItem_MainMenu_Help_RequestSupport = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Help_RequestFeature = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Help_SubmitBug = new System.Windows.Forms.ToolStripMenuItem();
@@ -118,7 +125,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainMenu_Help_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainMenu_Help_Donate = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_Help_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
-		#endif
+		#endif // !WITH_SCRIPTING
 			this.toolStripMenuItem_MainMenu_Help_About = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip_Main = new MKY.Windows.Forms.StatusStripEx();
 			this.contextMenuStrip_Status = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -787,14 +794,14 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_MainMenu_Script_Panel});
 			this.toolStripMenuItem_MainMenu_Script.MergeIndex = 7;
 			this.toolStripMenuItem_MainMenu_Script.Name = "toolStripMenuItem_MainMenu_Script";
-			this.toolStripMenuItem_MainMenu_Script.Size = new System.Drawing.Size(50, 20);
+			this.toolStripMenuItem_MainMenu_Script.Size = new System.Drawing.Size(49, 20);
 			this.toolStripMenuItem_MainMenu_Script.Text = "S&cript";
 			// 
 			// toolStripMenuItem_MainMenu_Script_Panel
 			// 
 			this.toolStripMenuItem_MainMenu_Script_Panel.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_script_16x16;
 			this.toolStripMenuItem_MainMenu_Script_Panel.Name = "toolStripMenuItem_MainMenu_Script_Panel";
-			this.toolStripMenuItem_MainMenu_Script_Panel.Size = new System.Drawing.Size(178, 22);
+			this.toolStripMenuItem_MainMenu_Script_Panel.Size = new System.Drawing.Size(177, 22);
 			this.toolStripMenuItem_MainMenu_Script_Panel.Text = "&Show Script Panel...";
 			this.toolStripMenuItem_MainMenu_Script_Panel.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Script_Panel_Click);
 		#endif // WITH_SCRIPTING
@@ -803,10 +810,17 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_MainMenu_Help.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem_MainMenu_Help_Contents,
+		#if (WITH_SCRIPTING)
+            this.toolStripMenuItem_MainMenu_Help_UserManual,
+		#endif
+            this.toolStripMenuItem_MainMenu_Help_QuickReference,
+		#if (WITH_SCRIPTING)
+            this.toolStripMenuItem_MainMenu_Help_ScriptInterfaceReference,
+		#endif
             this.toolStripMenuItem_MainMenu_Help_Separator_1,
-		#if (!WITH_SCRIPTING)
             this.toolStripMenuItem_MainMenu_Help_ReleaseNotes,
             this.toolStripMenuItem_MainMenu_Help_Separator_2,
+		#if (!WITH_SCRIPTING)
             this.toolStripMenuItem_MainMenu_Help_RequestSupport,
             this.toolStripMenuItem_MainMenu_Help_RequestFeature,
             this.toolStripMenuItem_MainMenu_Help_SubmitBug,
@@ -816,7 +830,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_MainMenu_Help_Separator_4,
             this.toolStripMenuItem_MainMenu_Help_Donate,
             this.toolStripMenuItem_MainMenu_Help_Separator_5,
-		#endif
+		#endif // !WITH_SCRIPTING
             this.toolStripMenuItem_MainMenu_Help_About});
 			this.toolStripMenuItem_MainMenu_Help.MergeIndex = 8;
 			this.toolStripMenuItem_MainMenu_Help.Name = "toolStripMenuItem_MainMenu_Help";
@@ -828,15 +842,41 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainMenu_Help_Contents.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_help_16x16;
 			this.toolStripMenuItem_MainMenu_Help_Contents.Name = "toolStripMenuItem_MainMenu_Help_Contents";
 			this.toolStripMenuItem_MainMenu_Help_Contents.ShortcutKeys = System.Windows.Forms.Keys.F1;
-			this.toolStripMenuItem_MainMenu_Help_Contents.Size = new System.Drawing.Size(190, 22);
+			this.toolStripMenuItem_MainMenu_Help_Contents.Size = new System.Drawing.Size(217, 22);
 			this.toolStripMenuItem_MainMenu_Help_Contents.Text = "&Contents...";
 			this.toolStripMenuItem_MainMenu_Help_Contents.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_Contents_Click);
 			// 
+		#if (WITH_SCRIPTING)
+			// toolStripMenuItem_MainMenu_Help_UserManual
+			// 
+			this.toolStripMenuItem_MainMenu_Help_UserManual.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_file_extension_pdf_16x16;
+			this.toolStripMenuItem_MainMenu_Help_UserManual.Name = "toolStripMenuItem_MainMenu_Help_UserManual";
+			this.toolStripMenuItem_MainMenu_Help_UserManual.Size = new System.Drawing.Size(255, 22);
+			this.toolStripMenuItem_MainMenu_Help_UserManual.Text = "&User Manual... (.pdf)";
+			this.toolStripMenuItem_MainMenu_Help_UserManual.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_UserManual_Click);
+		#endif // WITH_SCRIPTING
+			// 
+			// toolStripMenuItem_MainMenu_Help_QuickReference
+			// 
+			this.toolStripMenuItem_MainMenu_Help_QuickReference.Name = "toolStripMenuItem_MainMenu_Help_QuickReference";
+			this.toolStripMenuItem_MainMenu_Help_QuickReference.Size = new System.Drawing.Size(255, 22);
+			this.toolStripMenuItem_MainMenu_Help_QuickReference.Text = "&Quick Reference... (.pdf)";
+			this.toolStripMenuItem_MainMenu_Help_QuickReference.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_QuickReference_Click);
+		#if (WITH_SCRIPTING)
+			// 
+			// toolStripMenuItem_MainMenu_Help_ScriptInterfaceReference
+			// 
+			this.toolStripMenuItem_MainMenu_Help_ScriptInterfaceReference.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.toolStripMenuItem_MainMenu_Help_ScriptInterfaceReference.Name = "toolStripMenuItem_MainMenu_Help_ScriptInterfaceReference";
+			this.toolStripMenuItem_MainMenu_Help_ScriptInterfaceReference.Size = new System.Drawing.Size(255, 22);
+			this.toolStripMenuItem_MainMenu_Help_ScriptInterfaceReference.Text = "&Script Interface Reference... (.chm)";
+			this.toolStripMenuItem_MainMenu_Help_ScriptInterfaceReference.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_ScriptInterfaceReference_Click);
+			// 
+		#endif // WITH_SCRIPTING
 			// toolStripMenuItem_MainMenu_Help_Separator_1
 			// 
 			this.toolStripMenuItem_MainMenu_Help_Separator_1.Name = "toolStripMenuItem_MainMenu_Help_Separator_1";
-			this.toolStripMenuItem_MainMenu_Help_Separator_1.Size = new System.Drawing.Size(187, 6);
-		#if (!WITH_SCRIPTING)
+			this.toolStripMenuItem_MainMenu_Help_Separator_1.Size = new System.Drawing.Size(214, 6);
 			// 
 			// toolStripMenuItem_MainMenu_Help_ReleaseNotes
 			// 
@@ -849,6 +889,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_MainMenu_Help_Separator_2.Name = "toolStripMenuItem_MainMenu_Help_Separator_2";
 			this.toolStripMenuItem_MainMenu_Help_Separator_2.Size = new System.Drawing.Size(187, 6);
+		#if (!WITH_SCRIPTING)
 			// 
 			// toolStripMenuItem_MainMenu_Help_RequestSupport
 			// 
@@ -919,7 +960,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainMenu_Help_About.Image = global::YAT.View.Forms.Properties.Resources.Image_Albatros_64x64;
 		#endif
 			this.toolStripMenuItem_MainMenu_Help_About.Name = "toolStripMenuItem_MainMenu_Help_About";
-			this.toolStripMenuItem_MainMenu_Help_About.Size = new System.Drawing.Size(190, 22);
+			this.toolStripMenuItem_MainMenu_Help_About.Size = new System.Drawing.Size(217, 22);
 			this.toolStripMenuItem_MainMenu_Help_About.Text = "&About...";
 			this.toolStripMenuItem_MainMenu_Help_About.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_About_Click);
 			// 
@@ -1478,7 +1519,8 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_AutoAction_Trigger_UseText.Name = "toolStripButton_MainTool_AutoAction_Trigger_UseText";
 			this.toolStripButton_MainTool_AutoAction_Trigger_UseText.Size = new System.Drawing.Size(23, 24);
 			this.toolStripButton_MainTool_AutoAction_Trigger_UseText.ToolTipText = "Use Text\r\nBy default, the trigger is based on the byte sequence of a command.\r\nTh" +
-    "is option switches to a trigger based on the resulting text.\r\n[Alt+T] (while editing)";
+    "is option switches to a trigger based on the resulting text.\r\n[Alt+T] (while edi" +
+    "ting)";
 			this.toolStripButton_MainTool_AutoAction_Trigger_UseText.Visible = false;
 			this.toolStripButton_MainTool_AutoAction_Trigger_UseText.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoAction_Trigger_UseText_Click);
 			// 
@@ -1576,7 +1618,8 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_AutoResponse_Trigger_UseText.Name = "toolStripButton_MainTool_AutoResponse_Trigger_UseText";
 			this.toolStripButton_MainTool_AutoResponse_Trigger_UseText.Size = new System.Drawing.Size(23, 24);
 			this.toolStripButton_MainTool_AutoResponse_Trigger_UseText.ToolTipText = "Use Text\r\nBy default, the trigger is based on the byte sequence of a command.\r\nTh" +
-    "is option switches to a trigger based on the resulting text.\r\n[Alt+T] (while editing)";
+    "is option switches to a trigger based on the resulting text.\r\n[Alt+T] (while edi" +
+    "ting)";
 			this.toolStripButton_MainTool_AutoResponse_Trigger_UseText.Visible = false;
 			this.toolStripButton_MainTool_AutoResponse_Trigger_UseText.Click += new System.EventHandler(this.toolStripButton_MainTool_AutoResponse_Trigger_UseText_Click);
 			// 
@@ -1798,10 +1841,17 @@ namespace YAT.View.Forms
 	#endif
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_Contents;
+	#if (WITH_SCRIPTING)
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_UserManual;
+	#endif
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_ScriptInterfaceReference;
+	#if (WITH_SCRIPTING)
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_QuickReference;
+	#endif
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_Help_Separator_1;
-	#if (!WITH_SCRIPTING)
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_ReleaseNotes;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_Help_Separator_2;
+	#if (!WITH_SCRIPTING)
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_RequestSupport;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_RequestFeature;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_SubmitBug;
@@ -1811,7 +1861,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_Help_Separator_4;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_Donate;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainMenu_Help_Separator_5;
-	#endif
+	#endif // !WITH_SCRIPTING
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_About;
 		private MKY.Windows.Forms.StatusStripEx statusStrip_Main;
 		private MKY.Windows.Forms.ToolStripEx toolStrip_Main;
