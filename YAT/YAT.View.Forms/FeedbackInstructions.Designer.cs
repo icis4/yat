@@ -120,7 +120,7 @@
 			this.MinimizeBox = false;
 			this.Name = "FeedbackInstructions";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "YAT Support Request";
+			this.Text = "<ProductName> Support Request";
 			this.groupBox_Instructions.ResumeLayout(false);
 			this.groupBox_Instructions.PerformLayout();
 			this.ResumeLayout(false);

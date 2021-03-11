@@ -197,8 +197,9 @@ namespace YAT.View.Forms
 			FixContextMenus();
 			InitializeControls();
 
-			// Register this form as the main form:
-			NativeMessageHandler.RegisterMainForm(this);
+			// Form:
+			Text = ApplicationEx.CommonName; // Fixed to "YAT".
+			NativeMessageHandler.RegisterMainForm(this); // Register this form as the main form.
 
 			// Link and attach to main model:
 			this.main = main;

@@ -104,7 +104,7 @@ namespace YAT.View.Forms
 			textAfter  =                                                            "." + Environment.NewLine +
 			             "Copyright © 2003-2021 Matthias Kläy.";
 		#else
-			textBefore = "YAT copyright © 2003-2004 ";
+			textBefore = "YAT copyright © 2003-2004 "; // "YAT" is hardcoded rather than 'ApplicationEx.CommonName' for this the origin.
 			textLink   =                           "HSR Hochschule für Technik Rapperswil";
 			textAfter  =                                                                " and © 2003-2021 Matthias Kläy." + Environment.NewLine +
 			             "Albatros copyright © 2008-2021 Mettler-Toledo.";
@@ -120,7 +120,7 @@ namespace YAT.View.Forms
 
 			// Description:
 			linkLabel_Description.Text = "";
-			textBefore = "YAT is a by-product of the ";
+			textBefore = "YAT is a by-product of the "; // "YAT" is hardcoded rather than using 'ApplicationEx.CommonName' for this the origin.
 			textLink   =                            "Swiss federal KTI/CTI";
 			textAfter  =                                                @" project 6542.1 FHS-ET ""BBP - Balance Based Pipetting"" of HSR" + Environment.NewLine;
 			linkLabel_Description.Text += textBefore;
@@ -143,8 +143,8 @@ namespace YAT.View.Forms
 			                          "Currently running on .NET Runtime " + Environment.Version + " (CLR version).";
 
 			// Serial monitoring:
-			linkLabel_Monitoring.Text = "";
-			textBefore = "YAT is a terminal (connection endpoint). If you are looking for a tool to monitor serial data between an application and" + Environment.NewLine +
+			linkLabel_Monitoring.Text = ""; // Fixed to "YAT".
+			textBefore = ApplicationEx.CommonName + " is a terminal (connection endpoint). If you are looking for a tool to monitor serial data between an application and" + Environment.NewLine +
 			             "a device, or between two devices, check out ";
 			textLink   =                                             "HHD Monitoring Studio";
 			textAfter  =                                                                  ". It's worth the bucks. Or download the ";
@@ -212,8 +212,8 @@ namespace YAT.View.Forms
 			linkLabel_VirtualPorts.Text += textAfter;
 
 			// Terminal emulator:
-			linkLabel_TerminalEmulator.Text = "";
-			textBefore = "YAT is optimized for simple command sets of e.g. embedded systems. If you are looking for a terminal emulator," + Environment.NewLine +
+			linkLabel_TerminalEmulator.Text = ""; // Fixed to "YAT".
+			textBefore = ApplicationEx.CommonName + " is optimized for simple command sets of e.g. embedded systems. If you are looking for a terminal emulator," + Environment.NewLine +
 			             "rather go for ";
 			textLink   =               "PuTTY";
 			textAfter  =                    ", ";
@@ -465,7 +465,7 @@ namespace YAT.View.Forms
 		#if (!WITH_SCRIPTING)
 			// License:
 			linkLabel_License.Text = "";
-			textBefore = "YAT is licensed under the ";
+			textBefore = "YAT is licensed under the "; // "YAT" is hardcoded rather than 'ApplicationEx.CommonName' for this the origin.
 			textLink   =                           "GNU LGPL";
 			textAfter  =                                   ".";
 			linkLabel_License.Text += textBefore;

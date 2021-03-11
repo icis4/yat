@@ -290,7 +290,7 @@ namespace YAT.View.Forms
 			this.linkLabel_Remark.Size = new System.Drawing.Size(540, 13);
 			this.linkLabel_Remark.TabIndex = 1;
 			this.linkLabel_Remark.Tag = "";
-			this.linkLabel_Remark.Text = "YAT uses OxyPlot default interactions, except for [Pan → Left Mouse Button] and [" +
+			this.linkLabel_Remark.Text = "<ProductName> uses OxyPlot default interactions, except for [Pan → Left Mouse Button] and [" +
     "Menu → Right Mouse Button].";
 			this.linkLabel_Remark.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_Remark_LinkClicked);
 			// 

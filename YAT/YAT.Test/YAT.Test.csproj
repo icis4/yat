@@ -139,6 +139,10 @@
       <Project>{f7bff679-5389-434c-81e4-7ee8530df954}</Project>
       <Name>NUnitEx</Name>
     </ProjectReference>
+    <ProjectReference Include="..\YAT.Application.Base\YAT.Application.Base.csproj">
+      <Project>{a3e80010-9146-47ef-87b0-138a60406a9e}</Project>
+      <Name>YAT.Application.Base</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YAT.Application.Test\YAT.Application.Test.csproj">
       <Project>{7585E865-B3AA-4D73-BAC0-D0C4B25D2CF0}</Project>
       <Name>YAT.Application.Test</Name>

@@ -134,7 +134,7 @@ namespace YAT.Log.Utilities
 			// Header:
 			var header = this.document.Header.addParagraph();
 			header.Alignment = Align.Center;
-			header.setText("YAT Log");
+			header.setText(ApplicationEx.ProductName + " Log"); // File header shall differ for "YAT" and "YATConsole".
 
 			// Footer:
 			var footer = this.document.Footer.addParagraph();

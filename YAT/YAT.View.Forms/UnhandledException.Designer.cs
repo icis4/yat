@@ -148,7 +148,7 @@ namespace YAT.View.Forms
 			this.Name = "UnhandledException";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "YAT Unhandled Exception";
+			this.Text = "<Caption>";
 			this.Load += new System.EventHandler(this.UnhandledException_Load);
 			this.groupBox_Exception.ResumeLayout(false);
 			this.groupBox_Exception.PerformLayout();

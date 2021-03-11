@@ -90,7 +90,7 @@
 			this.MinimumSize = new System.Drawing.Size(780, 492);
 			this.Name = "ReleaseNotes";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "YAT Release Notes";
+			this.Text = "<ProductName> Release Notes";
 			this.groupBox_Text.ResumeLayout(false);
 			this.groupBox_Text.PerformLayout();
 			this.ResumeLayout(false);

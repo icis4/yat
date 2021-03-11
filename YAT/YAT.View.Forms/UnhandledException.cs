@@ -50,12 +50,12 @@ namespace YAT.View.Forms
 		private string multiLineText;
 
 		/// <summary></summary>
-		public UnhandledException(Exception exception, string title, string originMessage)
+		public UnhandledException(Exception exception, string caption, string originMessage)
 		{
 			InitializeComponent();
 
-			// Set form title/caption:
-			Text = title;
+			// Set form caption:
+			Text = caption;
 
 			// Adapt explanation text:
 			label_Explanation.Text =
