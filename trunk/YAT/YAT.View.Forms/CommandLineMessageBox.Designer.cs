@@ -89,7 +89,7 @@
 			this.MaximumSize = new System.Drawing.Size(640, 999999);
 			this.MinimumSize = new System.Drawing.Size(640, 492);
 			this.Name = "CommandLineMessageBox";
-			this.Text = "YAT Command Line Help";
+			this.Text = "<Caption>";
 			this.groupBox_Text.ResumeLayout(false);
 			this.groupBox_Text.PerformLayout();
 			this.ResumeLayout(false);

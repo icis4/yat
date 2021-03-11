@@ -44,7 +44,7 @@ namespace YAT.Test
 		private static void Main()
 		{
 			var sb = new StringBuilder();
-			sb.AppendLine(@"Note that this console application is only a dummy for testing purposes. Use ""YAT"" or ""YATConsole"" instead.");
+			sb.AppendLine(@"Note that this console application is only a dummy for testing purposes. Use """ + ApplicationEx.ProductName + @""" instead.");
 			sb.AppendLine();
 			sb.Append    (@"See ""!-ReadMe.txt"" for more information.");
 

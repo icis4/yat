@@ -267,20 +267,20 @@ namespace YAT.View.Forms
 		{
 			try
 			{
-				var productName = ApplicationEx.ProductName;       // "YAT" or "YATConsole", as indicated in main title bar.
-				                                                   // Note that 'ProductCaptionAndVersion' will be used when
-				var titleBuilder = new StringBuilder(productName); // composing exception text in the 'UnhandledException' form.
+				var productName = ApplicationEx.ProductName;         // "YAT" or "YATConsole", as indicated in main title bar.
+				                                                     // Note that 'ProductCaptionAndVersion' will be used when
+				var captionBuilder = new StringBuilder(productName); // composing exception text in the 'UnhandledException' form.
 				{
-					titleBuilder.Append(" Unhandled");
+					captionBuilder.Append(" Unhandled");
 					switch (exceptionType)
 					{
-						case UnhandledExceptionType.Synchronous:                 titleBuilder.Append(" Synchronous");                   break;
-						case UnhandledExceptionType.AsynchronousSynchronized:    titleBuilder.Append(" Asynchronous Synchronized");     break;
-						case UnhandledExceptionType.AsynchronousNonSynchronized: titleBuilder.Append(" Asynchronous Non-Synchronized"); break;
+						case UnhandledExceptionType.Synchronous:                 captionBuilder.Append(" Synchronous");                   break;
+						case UnhandledExceptionType.AsynchronousSynchronized:    captionBuilder.Append(" Asynchronous Synchronized");     break;
+						case UnhandledExceptionType.AsynchronousNonSynchronized: captionBuilder.Append(" Asynchronous Non-Synchronized"); break;
 					}
-					titleBuilder.Append(" Exception");
+					captionBuilder.Append(" Exception");
 				}
-				var title = titleBuilder.ToString();
+				var caption = captionBuilder.ToString();
 
 				if (exception != null)
 				{
@@ -292,13 +292,13 @@ namespace YAT.View.Forms
 						(
 						owner,
 						message,
-						title,
+						caption,
 						MessageBoxButtons.YesNo,
 						MessageBoxIcon.Error
 						)
 						== DialogResult.Yes)
 					{
-						var f = new UnhandledException(exception, title, originMessage);
+						var f = new UnhandledException(exception, caption, originMessage);
 						ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, owner);
 					}
 				}
@@ -308,7 +308,7 @@ namespace YAT.View.Forms
 					(
 						owner,
 						originMessage,
-						title,
+						caption,
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
 					);
@@ -323,7 +323,7 @@ namespace YAT.View.Forms
 						"Or would you like to continue but [Ignore] such unhandled exceptions?";
 
 					UnhandledExceptionResult result;
-					switch (MessageBoxEx.Show(owner, message, title, MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Exclamation))
+					switch (MessageBoxEx.Show(owner, message, caption, MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Exclamation))
 					{
 						case DialogResult.Retry:  result = UnhandledExceptionResult.Continue;          break;
 						case DialogResult.Ignore: result = UnhandledExceptionResult.ContinueAndIgnore; break; // Intentionally ignore further exceptions.

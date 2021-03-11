@@ -343,7 +343,7 @@ namespace YAT.View.Forms
 			this.Name = "Help";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "YAT Help";
+			this.Text = "<ProductName> Help";
 			this.Load += new System.EventHandler(this.Help_Load);
 			this.groupBox_ParserHelp.ResumeLayout(false);
 			this.splitContainer_Help.Panel1.ResumeLayout(false);

@@ -43,9 +43,9 @@ namespace YAT.View.Forms
 		private void InitializeRemark()
 		{
 			linkLabel_Remark.Text = "";
-			var textBefore = "YAT uses ";
-			var textLink   =          "OxyPlot";
-			var textAfter  =                 " default interactions, except for [Pan → Left Mouse Button] and [Menu → Right Mouse Button].";
+			var textBefore = ApplicationEx.CommonName + " uses "; // Fixed to "YAT".
+			var textLink   =                                  "OxyPlot";
+			var textAfter  =                                         " default interactions, except for [Pan → Left Mouse Button] and [Menu → Right Mouse Button].";
 			linkLabel_Remark.Text += textBefore;
 			var linkStart = linkLabel_Remark.Text.Length;
 			linkLabel_Remark.Text += textLink;

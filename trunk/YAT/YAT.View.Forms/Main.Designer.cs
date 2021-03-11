@@ -1780,11 +1780,7 @@ namespace YAT.View.Forms
 			this.IsMdiContainer = true;
 			this.MainMenuStrip = this.menuStrip_Main;
 			this.Name = "Main";
-		#if (!WITH_SCRIPTING)
-			this.Text = "YAT";
-		#else
-			this.Text = "Albatros";
-		#endif
+			this.Text = "<ProductName>";
 			this.Deactivate += new System.EventHandler(this.Main_Deactivate);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_FormClosed);
