@@ -278,9 +278,9 @@ namespace YAT.Model.Utilities
 
 			if (log != null)
 			{
-				var path = log.Settings.RootPath;
+				var directoryPath = log.Settings.RootDirectoryPath;
 
-				if (!Directory.Exists(path)) // Exists() never throws.
+				if (!Directory.Exists(directoryPath)) // Exists() never throws.
 				{
 					if (hintText.Length > 0)
 						hintText.AppendLine();
@@ -290,7 +290,7 @@ namespace YAT.Model.Utilities
 				}
 				else
 				{
-					if (!DirectoryEx.IsWritable(path)) // IsWritable() never throws.
+					if (!DirectoryEx.IsWritable(directoryPath)) // IsWritable() never throws.
 					{
 						if (hintText.Length > 0)
 							hintText.AppendLine();

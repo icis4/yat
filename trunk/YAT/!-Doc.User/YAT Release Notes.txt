@@ -91,6 +91,7 @@ New:
 - Quick reference (PDF) added. Accessible via [Windows > Start > YAT] and [YAT > Help].
 
 Important changes:
+- Log dialog now more clearly states "root directory and file name base" (part of feat. req. #435).
 - Help window is again sizeable to display more/all content (related to earlier feature req. #237).
 
 Fixed bugs:

@@ -45,8 +45,8 @@ namespace YAT.View.Forms
 			this.checkBox_Options_EmitEncodingPreamble = new System.Windows.Forms.CheckBox();
 			this.radioButton_Options_TextEncodingTerminal = new System.Windows.Forms.RadioButton();
 			this.radioButton_Options_TextEncodingUTF8 = new System.Windows.Forms.RadioButton();
-			this.button_RootOpen = new System.Windows.Forms.Button();
-			this.pathLabel_Root = new MKY.Windows.Forms.PathLabel();
+			this.button_OpenRootDirectory = new System.Windows.Forms.Button();
+			this.pathLabel_RootAndBase = new MKY.Windows.Forms.PathLabel();
 			this.groupBox_Options_Folders = new System.Windows.Forms.GroupBox();
 			this.checkBox_Options_FolderType = new System.Windows.Forms.CheckBox();
 			this.checkBox_Options_FolderDirection = new System.Windows.Forms.CheckBox();
@@ -60,8 +60,8 @@ namespace YAT.View.Forms
 			this.groupBox_Options_Mode = new System.Windows.Forms.GroupBox();
 			this.radioButton_Options_ModeCreate = new System.Windows.Forms.RadioButton();
 			this.radioButton_Options_ModeAppend = new System.Windows.Forms.RadioButton();
-			this.label_Root = new System.Windows.Forms.Label();
-			this.button_Root = new System.Windows.Forms.Button();
+			this.label_RootAndBase = new System.Windows.Forms.Label();
+			this.button_ChangeRootAndBase = new System.Windows.Forms.Button();
 			this.groupBox_Raw = new System.Windows.Forms.GroupBox();
 			this.pathLabel_Raw_Rx = new MKY.Windows.Forms.PathLabel();
 			this.pathLabel_Raw_Bidir = new MKY.Windows.Forms.PathLabel();
@@ -98,7 +98,7 @@ namespace YAT.View.Forms
 			// 
 			this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button_Cancel.Location = new System.Drawing.Point(539, 60);
+			this.button_Cancel.Location = new System.Drawing.Point(539, 73);
 			this.button_Cancel.Name = "button_Cancel";
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 2;
@@ -110,7 +110,7 @@ namespace YAT.View.Forms
 			// 
 			this.button_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_OK.Location = new System.Drawing.Point(539, 31);
+			this.button_OK.Location = new System.Drawing.Point(539, 44);
 			this.button_OK.Name = "button_OK";
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 1;
@@ -125,29 +125,29 @@ namespace YAT.View.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Settings.Controls.Add(this.groupBox_Control);
 			this.groupBox_Settings.Controls.Add(this.groupBox_Options_TextEncoding);
-			this.groupBox_Settings.Controls.Add(this.button_RootOpen);
-			this.groupBox_Settings.Controls.Add(this.pathLabel_Root);
+			this.groupBox_Settings.Controls.Add(this.button_OpenRootDirectory);
+			this.groupBox_Settings.Controls.Add(this.pathLabel_RootAndBase);
 			this.groupBox_Settings.Controls.Add(this.groupBox_Options_Folders);
 			this.groupBox_Settings.Controls.Add(this.groupBox_Options_Name);
 			this.groupBox_Settings.Controls.Add(this.groupBox_Options_Mode);
-			this.groupBox_Settings.Controls.Add(this.label_Root);
-			this.groupBox_Settings.Controls.Add(this.button_Root);
+			this.groupBox_Settings.Controls.Add(this.label_RootAndBase);
+			this.groupBox_Settings.Controls.Add(this.button_ChangeRootAndBase);
 			this.groupBox_Settings.Controls.Add(this.groupBox_Raw);
 			this.groupBox_Settings.Controls.Add(this.groupBox_Neat);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
-			this.groupBox_Settings.Size = new System.Drawing.Size(507, 489);
+			this.groupBox_Settings.Size = new System.Drawing.Size(507, 497);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
 			// groupBox_Control
 			// 
-			this.groupBox_Control.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.groupBox_Control.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Control.Controls.Add(this.comboBox_Control_Extension);
 			this.groupBox_Control.Controls.Add(this.pathLabel_Control);
 			this.groupBox_Control.Controls.Add(this.checkBox_Control);
-			this.groupBox_Control.Location = new System.Drawing.Point(6, 55);
+			this.groupBox_Control.Location = new System.Drawing.Point(6, 63);
 			this.groupBox_Control.Name = "groupBox_Control";
 			this.groupBox_Control.Size = new System.Drawing.Size(495, 55);
 			this.groupBox_Control.TabIndex = 4;
@@ -190,10 +190,11 @@ namespace YAT.View.Forms
 			// 
 			// groupBox_Options_TextEncoding
 			// 
+			this.groupBox_Options_TextEncoding.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox_Options_TextEncoding.Controls.Add(this.checkBox_Options_EmitEncodingPreamble);
 			this.groupBox_Options_TextEncoding.Controls.Add(this.radioButton_Options_TextEncodingTerminal);
 			this.groupBox_Options_TextEncoding.Controls.Add(this.radioButton_Options_TextEncodingUTF8);
-			this.groupBox_Options_TextEncoding.Location = new System.Drawing.Point(340, 408);
+			this.groupBox_Options_TextEncoding.Location = new System.Drawing.Point(340, 416);
 			this.groupBox_Options_TextEncoding.Name = "groupBox_Options_TextEncoding";
 			this.groupBox_Options_TextEncoding.Size = new System.Drawing.Size(161, 75);
 			this.groupBox_Options_TextEncoding.TabIndex = 10;
@@ -243,34 +244,38 @@ namespace YAT.View.Forms
 			this.radioButton_Options_TextEncodingUTF8.UseVisualStyleBackColor = true;
 			this.radioButton_Options_TextEncodingUTF8.CheckedChanged += new System.EventHandler(this.radioButton_Options_TextEncodingUTF8_CheckedChanged);
 			// 
-			// button_RootOpen
+			// button_OpenRootDirectory
 			// 
-			this.button_RootOpen.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_folder_explorer_16x16;
-			this.button_RootOpen.Location = new System.Drawing.Point(458, 19);
-			this.button_RootOpen.Name = "button_RootOpen";
-			this.button_RootOpen.Size = new System.Drawing.Size(31, 23);
-			this.button_RootOpen.TabIndex = 3;
-			this.toolTip.SetToolTip(this.button_RootOpen, "Open path...");
-			this.button_RootOpen.UseVisualStyleBackColor = true;
-			this.button_RootOpen.Click += new System.EventHandler(this.button_RootOpen_Click);
+			this.button_OpenRootDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_OpenRootDirectory.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_folder_explorer_16x16;
+			this.button_OpenRootDirectory.Location = new System.Drawing.Point(458, 32);
+			this.button_OpenRootDirectory.Name = "button_OpenRootDirectory";
+			this.button_OpenRootDirectory.Size = new System.Drawing.Size(31, 23);
+			this.button_OpenRootDirectory.TabIndex = 3;
+			this.toolTip.SetToolTip(this.button_OpenRootDirectory, "Open folder...");
+			this.button_OpenRootDirectory.UseVisualStyleBackColor = true;
+			this.button_OpenRootDirectory.Click += new System.EventHandler(this.button_OpenRootDirectory_Click);
 			// 
-			// pathLabel_Root
+			// pathLabel_RootAndBase
 			// 
-			this.pathLabel_Root.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_Root.Location = new System.Drawing.Point(53, 20);
-			this.pathLabel_Root.Name = "pathLabel_Root";
-			this.pathLabel_Root.Size = new System.Drawing.Size(352, 21);
-			this.pathLabel_Root.TabIndex = 1;
-			this.pathLabel_Root.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolTip.SetToolTip(this.pathLabel_Root, "The root file specifies file name and root directory for all log files. The effec" +
-        "tive file names can be seen in the boxes below.");
-			this.pathLabel_Root.Click += new System.EventHandler(this.pathLabel_Root_Click);
+			this.pathLabel_RootAndBase.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.pathLabel_RootAndBase.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.pathLabel_RootAndBase.Location = new System.Drawing.Point(18, 33);
+			this.pathLabel_RootAndBase.Name = "pathLabel_RootAndBase";
+			this.pathLabel_RootAndBase.Size = new System.Drawing.Size(387, 21);
+			this.pathLabel_RootAndBase.TabIndex = 1;
+			this.pathLabel_RootAndBase.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolTip.SetToolTip(this.pathLabel_RootAndBase, "Specifies the root directory as well as the file name base for the log files.\r\nTh" +
+        "e effectively resulting file names are indicated by the boxes below.");
+			this.pathLabel_RootAndBase.Click += new System.EventHandler(this.pathLabel_RootAndBase_Click);
 			// 
 			// groupBox_Options_Folders
 			// 
+			this.groupBox_Options_Folders.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox_Options_Folders.Controls.Add(this.checkBox_Options_FolderType);
 			this.groupBox_Options_Folders.Controls.Add(this.checkBox_Options_FolderDirection);
-			this.groupBox_Options_Folders.Location = new System.Drawing.Point(6, 408);
+			this.groupBox_Options_Folders.Location = new System.Drawing.Point(6, 416);
 			this.groupBox_Options_Folders.Name = "groupBox_Options_Folders";
 			this.groupBox_Options_Folders.Size = new System.Drawing.Size(161, 75);
 			this.groupBox_Options_Folders.TabIndex = 8;
@@ -301,7 +306,7 @@ namespace YAT.View.Forms
 			// 
 			// groupBox_Options_Name
 			// 
-			this.groupBox_Options_Name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.groupBox_Options_Name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Options_Name.Controls.Add(this.checkBox_Options_NameType);
 			this.groupBox_Options_Name.Controls.Add(this.comboBox_Options_NameSeparator);
@@ -309,7 +314,7 @@ namespace YAT.View.Forms
 			this.groupBox_Options_Name.Controls.Add(this.checkBox_Options_NameTime);
 			this.groupBox_Options_Name.Controls.Add(this.checkBox_Options_NameDate);
 			this.groupBox_Options_Name.Controls.Add(this.label_Options_NameSeparator);
-			this.groupBox_Options_Name.Location = new System.Drawing.Point(6, 326);
+			this.groupBox_Options_Name.Location = new System.Drawing.Point(6, 334);
 			this.groupBox_Options_Name.Name = "groupBox_Options_Name";
 			this.groupBox_Options_Name.Size = new System.Drawing.Size(495, 76);
 			this.groupBox_Options_Name.TabIndex = 7;
@@ -385,9 +390,10 @@ namespace YAT.View.Forms
 			// 
 			// groupBox_Options_Mode
 			// 
+			this.groupBox_Options_Mode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox_Options_Mode.Controls.Add(this.radioButton_Options_ModeCreate);
 			this.groupBox_Options_Mode.Controls.Add(this.radioButton_Options_ModeAppend);
-			this.groupBox_Options_Mode.Location = new System.Drawing.Point(173, 408);
+			this.groupBox_Options_Mode.Location = new System.Drawing.Point(173, 416);
 			this.groupBox_Options_Mode.Name = "groupBox_Options_Mode";
 			this.groupBox_Options_Mode.Size = new System.Drawing.Size(161, 75);
 			this.groupBox_Options_Mode.TabIndex = 9;
@@ -418,29 +424,30 @@ namespace YAT.View.Forms
 			this.radioButton_Options_ModeAppend.UseVisualStyleBackColor = true;
 			this.radioButton_Options_ModeAppend.CheckedChanged += new System.EventHandler(this.radioButton_Options_ModeAppend_CheckedChanged);
 			// 
-			// label_Root
+			// label_RootAndBase
 			// 
-			this.label_Root.AutoSize = true;
-			this.label_Root.Location = new System.Drawing.Point(14, 24);
-			this.label_Root.Name = "label_Root";
-			this.label_Root.Size = new System.Drawing.Size(33, 13);
-			this.label_Root.TabIndex = 0;
-			this.label_Root.Text = "&Root:";
+			this.label_RootAndBase.AutoSize = true;
+			this.label_RootAndBase.Location = new System.Drawing.Point(12, 16);
+			this.label_RootAndBase.Name = "label_RootAndBase";
+			this.label_RootAndBase.Size = new System.Drawing.Size(168, 13);
+			this.label_RootAndBase.TabIndex = 0;
+			this.label_RootAndBase.Text = "&Root directory and file name base:";
 			// 
-			// button_Root
+			// button_ChangeRootAndBase
 			// 
-			this.button_Root.Location = new System.Drawing.Point(417, 19);
-			this.button_Root.Name = "button_Root";
-			this.button_Root.Size = new System.Drawing.Size(31, 23);
-			this.button_Root.TabIndex = 2;
-			this.button_Root.Text = "...";
-			this.toolTip.SetToolTip(this.button_Root, "Change...");
-			this.button_Root.UseVisualStyleBackColor = true;
-			this.button_Root.Click += new System.EventHandler(this.button_Root_Click);
+			this.button_ChangeRootAndBase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_ChangeRootAndBase.Location = new System.Drawing.Point(417, 32);
+			this.button_ChangeRootAndBase.Name = "button_ChangeRootAndBase";
+			this.button_ChangeRootAndBase.Size = new System.Drawing.Size(31, 23);
+			this.button_ChangeRootAndBase.TabIndex = 2;
+			this.button_ChangeRootAndBase.Text = "...";
+			this.toolTip.SetToolTip(this.button_ChangeRootAndBase, "Change...");
+			this.button_ChangeRootAndBase.UseVisualStyleBackColor = true;
+			this.button_ChangeRootAndBase.Click += new System.EventHandler(this.button_ChangeRootAndBase_Click);
 			// 
 			// groupBox_Raw
 			// 
-			this.groupBox_Raw.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.groupBox_Raw.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Raw.Controls.Add(this.pathLabel_Raw_Rx);
 			this.groupBox_Raw.Controls.Add(this.pathLabel_Raw_Bidir);
@@ -450,7 +457,7 @@ namespace YAT.View.Forms
 			this.groupBox_Raw.Controls.Add(this.comboBox_Raw_Extension);
 			this.groupBox_Raw.Controls.Add(this.checkBox_Raw_Rx);
 			this.groupBox_Raw.Controls.Add(this.checkBox_Raw_Tx);
-			this.groupBox_Raw.Location = new System.Drawing.Point(6, 116);
+			this.groupBox_Raw.Location = new System.Drawing.Point(6, 124);
 			this.groupBox_Raw.Name = "groupBox_Raw";
 			this.groupBox_Raw.Size = new System.Drawing.Size(495, 99);
 			this.groupBox_Raw.TabIndex = 5;
@@ -547,7 +554,7 @@ namespace YAT.View.Forms
 			// 
 			// groupBox_Neat
 			// 
-			this.groupBox_Neat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.groupBox_Neat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Neat.Controls.Add(this.pathLabel_Neat_Rx);
 			this.groupBox_Neat.Controls.Add(this.pathLabel_Neat_Bidir);
@@ -557,7 +564,7 @@ namespace YAT.View.Forms
 			this.groupBox_Neat.Controls.Add(this.checkBox_Neat_Rx);
 			this.groupBox_Neat.Controls.Add(this.checkBox_Neat_Bidir);
 			this.groupBox_Neat.Controls.Add(this.checkBox_Neat_Tx);
-			this.groupBox_Neat.Location = new System.Drawing.Point(6, 221);
+			this.groupBox_Neat.Location = new System.Drawing.Point(6, 229);
 			this.groupBox_Neat.Name = "groupBox_Neat";
 			this.groupBox_Neat.Size = new System.Drawing.Size(495, 99);
 			this.groupBox_Neat.TabIndex = 6;
@@ -655,7 +662,7 @@ namespace YAT.View.Forms
 			// button_Defaults
 			// 
 			this.button_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Defaults.Location = new System.Drawing.Point(539, 106);
+			this.button_Defaults.Location = new System.Drawing.Point(539, 119);
 			this.button_Defaults.Name = "button_Defaults";
 			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
 			this.button_Defaults.TabIndex = 3;
@@ -665,9 +672,10 @@ namespace YAT.View.Forms
 			// 
 			// checkBox_RequestSwitchOn
 			// 
+			this.checkBox_RequestSwitchOn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.checkBox_RequestSwitchOn.CheckAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.checkBox_RequestSwitchOn.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_accept_document_16x16;
-			this.checkBox_RequestSwitchOn.Location = new System.Drawing.Point(525, 207);
+			this.checkBox_RequestSwitchOn.Location = new System.Drawing.Point(525, 215);
 			this.checkBox_RequestSwitchOn.Name = "checkBox_RequestSwitchOn";
 			this.checkBox_RequestSwitchOn.Size = new System.Drawing.Size(103, 42);
 			this.checkBox_RequestSwitchOn.TabIndex = 4;
@@ -679,9 +687,10 @@ namespace YAT.View.Forms
 			// 
 			// checkBox_IsOn
 			// 
+			this.checkBox_IsOn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.checkBox_IsOn.CheckAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.checkBox_IsOn.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_accept_document_16x16;
-			this.checkBox_IsOn.Location = new System.Drawing.Point(525, 207);
+			this.checkBox_IsOn.Location = new System.Drawing.Point(525, 215);
 			this.checkBox_IsOn.Name = "checkBox_IsOn";
 			this.checkBox_IsOn.Size = new System.Drawing.Size(103, 42);
 			this.checkBox_IsOn.TabIndex = 5;
@@ -697,7 +706,7 @@ namespace YAT.View.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(629, 513);
+			this.ClientSize = new System.Drawing.Size(629, 521);
 			this.Controls.Add(this.groupBox_Settings);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.button_Cancel);
@@ -759,13 +768,13 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.CheckBox checkBox_Neat_Tx;
 		private System.Windows.Forms.CheckBox checkBox_Neat_Bidir;
 		private System.Windows.Forms.CheckBox checkBox_Neat_Rx;
-		private System.Windows.Forms.Button button_Root;
-		private System.Windows.Forms.Label label_Root;
+		private System.Windows.Forms.Button button_ChangeRootAndBase;
+		private System.Windows.Forms.Label label_RootAndBase;
 		private System.Windows.Forms.Button button_Cancel;
 		private System.Windows.Forms.Button button_OK;
 		private System.Windows.Forms.CheckBox checkBox_Options_FolderType;
 		private System.Windows.Forms.CheckBox checkBox_Options_NameType;
-		private MKY.Windows.Forms.PathLabel pathLabel_Root;
+		private MKY.Windows.Forms.PathLabel pathLabel_RootAndBase;
 		private MKY.Windows.Forms.PathLabel pathLabel_Raw_Rx;
 		private MKY.Windows.Forms.PathLabel pathLabel_Raw_Bidir;
 		private MKY.Windows.Forms.PathLabel pathLabel_Raw_Tx;
@@ -774,7 +783,7 @@ namespace YAT.View.Forms
 		private MKY.Windows.Forms.PathLabel pathLabel_Neat_Tx;
 		private System.Windows.Forms.Button button_Defaults;
 		private System.Windows.Forms.ToolTip toolTip;
-		private System.Windows.Forms.Button button_RootOpen;
+		private System.Windows.Forms.Button button_OpenRootDirectory;
 		private System.Windows.Forms.GroupBox groupBox_Options_TextEncoding;
 		private System.Windows.Forms.RadioButton radioButton_Options_TextEncodingTerminal;
 		private System.Windows.Forms.RadioButton radioButton_Options_TextEncodingUTF8;

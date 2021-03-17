@@ -179,25 +179,25 @@ namespace YAT.View.Forms
 		// Controls Event Handlers
 		//==========================================================================================
 
-		private void pathLabel_Root_Click(object sender, EventArgs e)
+		private void pathLabel_RootAndBase_Click(object sender, EventArgs e)
 		{
 			ShowSetRootDirectoryDialog();
 		}
 
-		private void button_Root_Click(object sender, EventArgs e)
+		private void button_ChangeRootAndBase_Click(object sender, EventArgs e)
 		{
 			ShowSetRootDirectoryDialog();
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private void button_RootOpen_Click(object sender, EventArgs e)
+		private void button_OpenRootDirectory_Click(object sender, EventArgs e)
 		{
 			// Create directory if not existing yet:
-			if (!Directory.Exists(Path.GetDirectoryName(this.settingsInEdit.RootPath)))
+			if (!Directory.Exists(Path.GetDirectoryName(this.settingsInEdit.RootDirectoryPath)))
 			{
 				try
 				{
-					Directory.CreateDirectory(Path.GetDirectoryName(this.settingsInEdit.RootPath));
+					Directory.CreateDirectory(Path.GetDirectoryName(this.settingsInEdit.RootDirectoryPath));
 				}
 				catch (Exception exCreate)
 				{
@@ -219,7 +219,7 @@ namespace YAT.View.Forms
 
 			// Open directory:
 			Exception exBrowse;
-			if (!DirectoryEx.TryBrowse(this.settingsInEdit.RootPath, out exBrowse))
+			if (!DirectoryEx.TryBrowse(this.settingsInEdit.RootDirectoryPath, out exBrowse))
 			{
 				string message = "Unable to open folder." + Environment.NewLine + Environment.NewLine +
 				                 "System error message:" + Environment.NewLine + exBrowse.Message;
@@ -651,10 +651,10 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				if (!string.IsNullOrEmpty(this.settingsInEdit.RootPath))
-					pathLabel_Root.Text = this.settingsInEdit.RootPath + Path.DirectorySeparatorChar + this.settingsInEdit.RootFileName;
+				if (!string.IsNullOrEmpty(this.settingsInEdit.RootAndBase))
+					pathLabel_RootAndBase.Text = this.settingsInEdit.RootAndBase;
 				else
-					pathLabel_Root.Text = "<Set a root file...>";
+					pathLabel_RootAndBase.Text = "<Set root directory and file name base...>";
 
 				checkBox_Control.Checked = this.settingsInEdit.ControlLog;
 				checkBox_Control.Checked = this.settingsInEdit.ControlLog;
@@ -739,12 +739,12 @@ namespace YAT.View.Forms
 			ofd.Title = "Set Root";
 			ofd.Filter = ExtensionHelper.AllFilesFilter;
 
-			if (Directory.Exists(this.settingsInEdit.RootPath))
-				ofd.InitialDirectory = this.settingsInEdit.RootPath;
+			if (Directory.Exists(this.settingsInEdit.RootDirectoryPath))
+				ofd.InitialDirectory = this.settingsInEdit.RootDirectoryPath;
 			else
 				ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.LogFiles;
 
-			ofd.FileName = this.settingsInEdit.RootFileName;
+			ofd.FileName = this.settingsInEdit.FileNameBase;
 			ofd.CheckPathExists = false;
 			ofd.CheckFileExists = false;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
@@ -752,8 +752,8 @@ namespace YAT.View.Forms
 				ApplicationSettings.LocalUserSettings.Paths.LogFiles = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 
-				this.settingsInEdit.RootPath = Path.GetDirectoryName(ofd.FileName);
-				this.settingsInEdit.RootFileName = Path.GetFileNameWithoutExtension(ofd.FileName);
+				this.settingsInEdit.RootDirectoryPath = Path.GetDirectoryName(ofd.FileName);
+				this.settingsInEdit.FileNameBase = Path.GetFileNameWithoutExtension(ofd.FileName);
 			}
 		}
 

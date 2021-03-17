@@ -288,7 +288,7 @@ namespace YAT.Model.Types
 		}
 
 		/// <remarks>
-		/// XML tag is "CommandLines" for back-ward compatibility.
+		/// XML tag is "CommandLines" for backward compatibility.
 		/// May be changed to "TextLines" once bugs #232 "Issues with TolerantXmlSerializer"
 		/// and #246 "Issues with AlternateTolerantXmlSerializer" have been fixed.
 		/// </remarks>

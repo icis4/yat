@@ -5467,8 +5467,10 @@ namespace YAT.Model
 			AssertUndisposed();
 
 			this.terminal.ResetFlowControlCount();     // Do not lock here, method will invoke events. There
-			UpdateReceivedXOnXOffOffsetForScripting(); // is no need to lock anyway, this method atomically
-		}                                              // updates the offset, no matter on terminal counts.
+		#if (WITH_SCRIPTING)                           // is no need to lock anyway, this method atomically
+			UpdateReceivedXOnXOffOffsetForScripting(); // updates the offset, no matter on terminal counts.
+		#endif
+		}
 
 		/// <summary></summary>
 		public virtual int InputBreakCount
@@ -5783,14 +5785,14 @@ namespace YAT.Model
 				// Similar code exists in View.Forms.Main.OpenDefaultLogDirectory().
 				// Changes here may have to be applied there too.
 
-				string rootPath = this.log.Settings.RootPath;
+				string rootDirectoryPath = this.log.Settings.RootDirectoryPath;
 
 				// Create directory if not existing yet:
-				if (!Directory.Exists(Path.GetDirectoryName(rootPath)))
+				if (!Directory.Exists(Path.GetDirectoryName(rootDirectoryPath)))
 				{
 					try
 					{
-						Directory.CreateDirectory(Path.GetDirectoryName(rootPath));
+						Directory.CreateDirectory(Path.GetDirectoryName(rootDirectoryPath));
 					}
 					catch (Exception exCreate)
 					{
@@ -5811,11 +5813,11 @@ namespace YAT.Model
 
 				// Open directory:
 				Exception exBrowse;
-				if (!DirectoryEx.TryBrowse(rootPath, out exBrowse))
+				if (!DirectoryEx.TryBrowse(rootDirectoryPath, out exBrowse))
 				{
 					OnMessageInputRequest
 					(
-						Utilities.MessageHelper.ComposeMessage("Unable to open log folder", rootPath, exBrowse),
+						Utilities.MessageHelper.ComposeMessage("Unable to open log folder", rootDirectoryPath, exBrowse),
 						"Log Folder Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
