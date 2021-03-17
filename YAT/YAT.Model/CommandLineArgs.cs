@@ -412,12 +412,18 @@ namespace YAT.Model
 			"This value is useful to temporarily switch off the requested operation without having to completely edit the command line.")]
 		public int RequestedFixedTerminalId = TerminalIds.ActiveFixedId;
 
-		/// <remarks>Using term 'Transmit' to indicate potential 'intelligence' to send + receive/verify the data.</remarks>
+		/// <remarks>
+		/// Using term 'Transmit' to indicate potential 'intelligence' to send and wait for receiving a response.
+		/// Using term 'Transmit' to prevent short name conflict with "st" = Start Terminal.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "TransmitText", ShortName = "tt", Description = "Transmit the given text using the terminal specified.")]
 		public string RequestedTransmitText;
 
-		/// <remarks>Using term 'Transmit' to indicate potential 'intelligence' to send + receive/verify the data.</remarks>
+		/// <remarks>
+		/// Using term 'Transmit' to indicate potential 'intelligence' to send and wait for receiving a response.
+		/// Using term 'Transmit' to prevent short name conflict of "tt" with "st" = Start Terminal.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
 		[OptionArg(Name = "TransmitFile", ShortName = "tf", Description = "Transmit the given file using the terminal specified.")]
 		public string RequestedTransmitFilePath;

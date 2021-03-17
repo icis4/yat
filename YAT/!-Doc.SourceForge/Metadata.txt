@@ -27,7 +27,7 @@ Multi-line text commands.
 Send files; including option to exclude empty lines, text patterns like comments and special commands.
 History of recent commands.
 Unlimited number of predefined commands.
-Reorder, cut/copy/paste, export/import and even link predefined commands.
+Reorder, cut/copy/paste, export/import and even link predefined commands and pages thereof.
 Escapes for bin/oct/dec/hex like "\h(4F 4B)" as well as C-style "0x4F" and "0b01001111".
 Escapes for ASCII controls like "<CR><LF>" as well as C-style "\r\n".
 Special commands like "\!(EOL)", "\!(NoEOL)", "\!(Delay(100))", "\!(LineDelay(500))", "\!(LineInterval(500))", "\!(LineRepeat(10))".
