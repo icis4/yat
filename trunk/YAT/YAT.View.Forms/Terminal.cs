@@ -611,15 +611,15 @@ namespace YAT.View.Forms
 					toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh"; //   by default only bidir is visible.
 				}
 
-				toolStripMenuItem_TerminalMenu_Terminal_SelectAll .Enabled = (monitorIsDefined && textIsNotFocused && (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)); // [Ctrl+A]
-				toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Enabled = (monitorIsDefined && textIsNotFocused && (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)); // [Ctrl+Delete]
+				toolStripMenuItem_TerminalMenu_Terminal_SelectAll      .Enabled = (monitorIsDefined && textIsNotFocused && (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)); // [Ctrl+A]
+				toolStripMenuItem_TerminalMenu_Terminal_SelectNone     .Enabled = (monitorIsDefined && textIsNotFocused && (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)); // [Ctrl+Delete]
 
 				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = (monitorIsDefined && textIsNotFocused && (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)); // [Ctrl+C]
 				toolStripMenuItem_TerminalMenu_Terminal_SaveToFile     .Enabled =  monitorIsDefined;
-				toolStripMenuItem_TerminalMenu_Terminal_Print          .Enabled =  monitorIsDefined;
+				toolStripMenuItem_TerminalMenu_Terminal_Print          .Enabled = (monitorIsDefined &&                     (this.findShortcutsCtrlFNPSuspendedCount       == 0)); // [Ctrl+P]
 
-				toolStripMenuItem_TerminalMenu_Terminal_FindNext    .Enabled = (monitorIsDefined && FindNextIsFeasible);
-				toolStripMenuItem_TerminalMenu_Terminal_FindPrevious.Enabled = (monitorIsDefined && FindPreviousIsFeasible);
+				toolStripMenuItem_TerminalMenu_Terminal_FindNext       .Enabled = (monitorIsDefined && FindNextIsFeasible);
+				toolStripMenuItem_TerminalMenu_Terminal_FindPrevious   .Enabled = (monitorIsDefined && FindPreviousIsFeasible);
 			}
 			finally
 			{
@@ -8533,12 +8533,14 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void DeactivateAutoActionPlotRequestEvent()
 		{
-			this.terminal.AutoActionPlotRequest_Promptly -= terminal_AutoActionPlotRequest_Promptly;
+			if (this.terminal != null)
+				this.terminal.AutoActionPlotRequest_Promptly -= terminal_AutoActionPlotRequest_Promptly;
 		}
 
 		private void ReactivateAutoActionPlotRequestEvent()
 		{
-			this.terminal.AutoActionPlotRequest_Promptly += terminal_AutoActionPlotRequest_Promptly;
+			if (this.terminal != null)
+				this.terminal.AutoActionPlotRequest_Promptly += terminal_AutoActionPlotRequest_Promptly;
 		}
 
 		#endregion
