@@ -57,8 +57,8 @@ namespace YAT.Log.Settings
 		//==========================================================================================
 
 		// Root:
-		private string rootPath;
-		private string rootFileName;
+		private string rootDirectoryPath;
+		private string fileNameBase;
 
 		// Control:
 		private bool   controlLog;
@@ -122,32 +122,32 @@ namespace YAT.Log.Settings
 		public LogSettings(LogSettings rhs)
 			: base(rhs)
 		{
-			RootPath         = rhs.RootPath;
-			RootFileName     = rhs.RootFileName;
+			RootDirectoryPath = rhs.RootDirectoryPath;
+			FileNameBase      = rhs.FileNameBase;
 
-			ControlLog       = rhs.ControlLog;
-			ControlExtension = rhs.ControlExtension;
+			ControlLog        = rhs.ControlLog;
+			ControlExtension  = rhs.ControlExtension;
 
-			RawLogTx         = rhs.RawLogTx;
-			RawLogBidir      = rhs.RawLogBidir;
-			RawLogRx         = rhs.RawLogRx;
-			RawExtension     = rhs.RawExtension;
+			RawLogTx          = rhs.RawLogTx;
+			RawLogBidir       = rhs.RawLogBidir;
+			RawLogRx          = rhs.RawLogRx;
+			RawExtension      = rhs.RawExtension;
 
-			NeatLogTx        = rhs.NeatLogTx;
-			NeatLogBidir     = rhs.NeatLogBidir;
-			NeatLogRx        = rhs.NeatLogRx;
-			NeatExtension    = rhs.NeatExtension;
+			NeatLogTx         = rhs.NeatLogTx;
+			NeatLogBidir      = rhs.NeatLogBidir;
+			NeatLogRx         = rhs.NeatLogRx;
+			NeatExtension     = rhs.NeatExtension;
 
-			NameType         = rhs.NameType;
-			NameDirection    = rhs.NameDirection;
-			NameDate         = rhs.NameDate;
-			NameTime         = rhs.NameTime;
-			NameSeparator    = rhs.NameSeparator;
+			NameType          = rhs.NameType;
+			NameDirection     = rhs.NameDirection;
+			NameDate          = rhs.NameDate;
+			NameTime          = rhs.NameTime;
+			NameSeparator     = rhs.NameSeparator;
 
-			FolderType       = rhs.FolderType;
-			FolderDirection  = rhs.FolderDirection;
+			FolderType        = rhs.FolderType;
+			FolderDirection   = rhs.FolderDirection;
 
-			WriteMode        = rhs.WriteMode;
+			WriteMode         = rhs.WriteMode;
 
 			TextEncoding         = rhs.TextEncoding;
 			EmitEncodingPreamble = rhs.EmitEncodingPreamble;
@@ -164,32 +164,32 @@ namespace YAT.Log.Settings
 
 			ApplicationSettings.LocalUserSettings.Paths.LogFiles = Application.Settings.PathSettings.LogFilesDefault;
 
-			RootPath     = ApplicationSettings.LocalUserSettings.Paths.LogFiles;
-			RootFileName = ApplicationEx.ProductName + "-Log"; // File location shall be separate for "YAT" and "YATConsole".
+			RootDirectoryPath = ApplicationSettings.LocalUserSettings.Paths.LogFiles;
+			FileNameBase      = ApplicationEx.ProductName + "-Log"; // File name shall be separate for "YAT" and "YATConsole".
 
-			ControlLog       = false;
-			ControlExtension = ApplicationSettings.RoamingUserSettings.Extensions.ControlLogFiles;
+			ControlLog        = false;
+			ControlExtension  = ApplicationSettings.RoamingUserSettings.Extensions.ControlLogFiles;
 
-			RawLogTx         = false;
-			RawLogBidir      = false;
-			RawLogRx         = false;
-			RawExtension     = ApplicationSettings.RoamingUserSettings.Extensions.RawLogFiles;
+			RawLogTx          = false;
+			RawLogBidir       = false;
+			RawLogRx          = false;
+			RawExtension      = ApplicationSettings.RoamingUserSettings.Extensions.RawLogFiles;
 
-			NeatLogTx        = false;
-			NeatLogBidir     = true;
-			NeatLogRx        = false;
-			NeatExtension    = ApplicationSettings.RoamingUserSettings.Extensions.NeatLogFiles;
+			NeatLogTx         = false;
+			NeatLogBidir      = true;
+			NeatLogRx         = false;
+			NeatExtension     = ApplicationSettings.RoamingUserSettings.Extensions.NeatLogFiles;
 
-			NameType         = false;
-			NameDirection    = false;
-			NameDate         = true;
-			NameTime         = true;
-			NameSeparator    = (FileNameSeparatorEx)FileNameSeparator.Dash;
+			NameType          = false;
+			NameDirection     = false;
+			NameDate          = true;
+			NameTime          = true;
+			NameSeparator     = (FileNameSeparatorEx)FileNameSeparator.Dash;
 
-			FolderType       = false;
-			FolderDirection  = false;
+			FolderType        = false;
+			FolderDirection   = false;
 
-			WriteMode        = LogFileWriteMode.Create;
+			WriteMode         = LogFileWriteMode.Create;
 
 			TextEncoding         = TextEncoding.UTF8;
 			EmitEncodingPreamble = EncodingEx.EnvironmentRecommendsByteOrderMarks;
@@ -202,31 +202,40 @@ namespace YAT.Log.Settings
 		// Properties
 		//==========================================================================================
 
+		/// <remarks>
+		/// XML tag is "RootPath" for backward compatibility.
+		/// May be changed to "RootDirectoryPath" once bugs #232 "Issues with TolerantXmlSerializer"
+		/// and #246 "Issues with AlternateTolerantXmlSerializer" have been fixed.
+		/// </remarks>
 		/// <summary></summary>
 		[XmlElement("RootPath")]
-		public virtual string RootPath
+		public virtual string RootDirectoryPath
 		{
-			get { return (this.rootPath); }
+			get { return (this.rootDirectoryPath); }
 			set
 			{
-				if (this.rootPath != value)
+				if (this.rootDirectoryPath != value)
 				{
-					this.rootPath = value;
+					this.rootDirectoryPath = value;
 					SetMyChanged();
 				}
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// XML tag is "RootFileName" for backward compatibility.
+		/// May be changed to "FileNameBase" once bugs #232 "Issues with TolerantXmlSerializer"
+		/// and #246 "Issues with AlternateTolerantXmlSerializer" have been fixed.
+		/// </remarks>
 		[XmlElement("RootFileName")]
-		public virtual string RootFileName
+		public virtual string FileNameBase
 		{
-			get { return (this.rootFileName); }
+			get { return (this.fileNameBase); }
 			set
 			{
-				if (this.rootFileName != value)
+				if (this.fileNameBase != value)
 				{
-					this.rootFileName = value;
+					this.fileNameBase = value;
 					SetMyChanged();
 				}
 			}
@@ -234,9 +243,9 @@ namespace YAT.Log.Settings
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public virtual string RootFilePath
+		public virtual string RootAndBase
 		{
-			get { return (this.rootPath + Path.DirectorySeparatorChar + this.rootFileName); }
+			get { return (RootDirectoryPath + Path.DirectorySeparatorChar + FileNameBase); }
 		}
 
 		//- Control --------------------------------------------------------------------------------
@@ -263,9 +272,9 @@ namespace YAT.Log.Settings
 			get
 			{
 				return (ToDirectoryString(LogType.Control, LogDirection.None) +
-				        this.rootFileName +
+				        FileNameBase +
 				        ToFileNamePostFixString(LogType.Control, LogDirection.None) +
-				        this.controlExtension);
+				        ControlExtension);
 			}
 		}
 
@@ -274,7 +283,7 @@ namespace YAT.Log.Settings
 		/// </summary>
 		public virtual string MakeControlFilePath()
 		{
-			return (Environment.ExpandEnvironmentVariables(this.rootPath + Path.DirectorySeparatorChar + ControlRootRelativeFilePath));
+			return (Environment.ExpandEnvironmentVariables(RootDirectoryPath + Path.DirectorySeparatorChar + ControlRootRelativeFilePath));
 		}
 
 		/// <summary></summary>
@@ -316,9 +325,9 @@ namespace YAT.Log.Settings
 			get
 			{
 				return (ToDirectoryString(LogType.Raw, LogDirection.Tx) +
-				        this.rootFileName +
+				        FileNameBase +
 				        ToFileNamePostFixString(LogType.Raw, LogDirection.Tx) +
-				        this.rawExtension);
+				        RawExtension);
 			}
 		}
 
@@ -327,7 +336,7 @@ namespace YAT.Log.Settings
 		/// </summary>
 		public virtual string MakeRawTxFilePath()
 		{
-			return (Environment.ExpandEnvironmentVariables(this.rootPath + Path.DirectorySeparatorChar + RawTxRootRelativeFilePath));
+			return (Environment.ExpandEnvironmentVariables(RootDirectoryPath + Path.DirectorySeparatorChar + RawTxRootRelativeFilePath));
 		}
 
 		/// <summary></summary>
@@ -352,9 +361,9 @@ namespace YAT.Log.Settings
 			get
 			{
 				return (ToDirectoryString(LogType.Raw, LogDirection.Bidir) +
-				        this.rootFileName +
+				        FileNameBase +
 				        ToFileNamePostFixString(LogType.Raw, LogDirection.Bidir) +
-				        this.rawExtension);
+				        RawExtension);
 			}
 		}
 
@@ -363,7 +372,7 @@ namespace YAT.Log.Settings
 		/// </summary>
 		public virtual string MakeRawBidirFilePath()
 		{
-			return (Environment.ExpandEnvironmentVariables(this.rootPath + Path.DirectorySeparatorChar + RawBidirRootRelativeFilePath));
+			return (Environment.ExpandEnvironmentVariables(RootDirectoryPath + Path.DirectorySeparatorChar + RawBidirRootRelativeFilePath));
 		}
 
 		/// <summary></summary>
@@ -388,9 +397,9 @@ namespace YAT.Log.Settings
 			get
 			{
 				return (ToDirectoryString(LogType.Raw, LogDirection.Rx) +
-				        this.rootFileName +
+				        FileNameBase +
 				        ToFileNamePostFixString(LogType.Raw, LogDirection.Rx) +
-				        this.rawExtension);
+				        RawExtension);
 			}
 		}
 
@@ -399,7 +408,7 @@ namespace YAT.Log.Settings
 		/// </summary>
 		public virtual string MakeRawRxFilePath()
 		{
-			return (Environment.ExpandEnvironmentVariables(this.rootPath + Path.DirectorySeparatorChar + RawRxRootRelativeFilePath));
+			return (Environment.ExpandEnvironmentVariables(RootDirectoryPath + Path.DirectorySeparatorChar + RawRxRootRelativeFilePath));
 		}
 
 		/// <summary></summary>
@@ -441,9 +450,9 @@ namespace YAT.Log.Settings
 			get
 			{
 				return (ToDirectoryString(LogType.Neat, LogDirection.Tx) +
-				        this.rootFileName +
+				        FileNameBase +
 				        ToFileNamePostFixString(LogType.Neat, LogDirection.Tx) +
-				        this.neatExtension);
+				        NeatExtension);
 			}
 		}
 
@@ -452,7 +461,7 @@ namespace YAT.Log.Settings
 		/// </summary>
 		public virtual string MakeNeatTxFilePath()
 		{
-			return (Environment.ExpandEnvironmentVariables(this.rootPath + Path.DirectorySeparatorChar + NeatTxRootRelativeFilePath));
+			return (Environment.ExpandEnvironmentVariables(RootDirectoryPath + Path.DirectorySeparatorChar + NeatTxRootRelativeFilePath));
 		}
 
 		/// <summary></summary>
@@ -477,9 +486,9 @@ namespace YAT.Log.Settings
 			get
 			{
 				return (ToDirectoryString(LogType.Neat, LogDirection.Bidir) +
-				        this.rootFileName +
+				        FileNameBase +
 				        ToFileNamePostFixString(LogType.Neat, LogDirection.Bidir) +
-				        this.neatExtension);
+				        NeatExtension);
 			}
 		}
 
@@ -488,7 +497,7 @@ namespace YAT.Log.Settings
 		/// </summary>
 		public virtual string MakeNeatBidirFilePath()
 		{
-			return (Environment.ExpandEnvironmentVariables(this.rootPath + Path.DirectorySeparatorChar + NeatBidirRootRelativeFilePath));
+			return (Environment.ExpandEnvironmentVariables(RootDirectoryPath + Path.DirectorySeparatorChar + NeatBidirRootRelativeFilePath));
 		}
 
 		/// <summary></summary>
@@ -513,9 +522,9 @@ namespace YAT.Log.Settings
 			get
 			{
 				return (ToDirectoryString(LogType.Neat, LogDirection.Rx) +
-				        this.rootFileName +
+				        FileNameBase +
 				        ToFileNamePostFixString(LogType.Neat, LogDirection.Rx) +
-				        this.neatExtension);
+				        NeatExtension);
 			}
 		}
 
@@ -524,7 +533,7 @@ namespace YAT.Log.Settings
 		/// </summary>
 		public virtual string MakeNeatRxFilePath()
 		{
-			return (Environment.ExpandEnvironmentVariables(this.rootPath + Path.DirectorySeparatorChar + NeatRxRootRelativeFilePath));
+			return (Environment.ExpandEnvironmentVariables(RootDirectoryPath + Path.DirectorySeparatorChar + NeatRxRootRelativeFilePath));
 		}
 
 		/// <summary></summary>
@@ -1010,35 +1019,35 @@ namespace YAT.Log.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ (RootPath      != null ? RootPath           .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (RootFileName  != null ? RootFileName       .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (RootDirectoryPath != null ? RootDirectoryPath.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (FileNameBase      != null ? FileNameBase     .GetHashCode() : 0);
 
-				hashCode = (hashCode * 397) ^  ControlLog                                 .GetHashCode();
-				hashCode = (hashCode * 397) ^ (ControlExtension != null ? ControlExtension.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  ControlLog                                   .GetHashCode();
+				hashCode = (hashCode * 397) ^ (ControlExtension  != null ? ControlExtension .GetHashCode() : 0);
 
-				hashCode = (hashCode * 397) ^  RawLogTx                                   .GetHashCode();
-				hashCode = (hashCode * 397) ^  RawLogBidir                                .GetHashCode();
-				hashCode = (hashCode * 397) ^  RawLogRx                                   .GetHashCode();
-				hashCode = (hashCode * 397) ^ (RawExtension != null ? RawExtension        .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  RawLogTx                                     .GetHashCode();
+				hashCode = (hashCode * 397) ^  RawLogBidir                                  .GetHashCode();
+				hashCode = (hashCode * 397) ^  RawLogRx                                     .GetHashCode();
+				hashCode = (hashCode * 397) ^ (RawExtension      != null ? RawExtension     .GetHashCode() : 0);
 
-				hashCode = (hashCode * 397) ^  NeatLogTx                                  .GetHashCode();
-				hashCode = (hashCode * 397) ^  NeatLogBidir                               .GetHashCode();
-				hashCode = (hashCode * 397) ^  NeatLogRx                                  .GetHashCode();
-				hashCode = (hashCode * 397) ^ (NeatExtension != null ? NeatExtension      .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^  NeatLogTx                                    .GetHashCode();
+				hashCode = (hashCode * 397) ^  NeatLogBidir                                 .GetHashCode();
+				hashCode = (hashCode * 397) ^  NeatLogRx                                    .GetHashCode();
+				hashCode = (hashCode * 397) ^ (NeatExtension     != null ? NeatExtension    .GetHashCode() : 0);
 
-				hashCode = (hashCode * 397) ^  NameType                                   .GetHashCode();
-				hashCode = (hashCode * 397) ^  NameDirection                              .GetHashCode();
-				hashCode = (hashCode * 397) ^  NameDate                                   .GetHashCode();
-				hashCode = (hashCode * 397) ^  NameTime                                   .GetHashCode();
+				hashCode = (hashCode * 397) ^  NameType                                     .GetHashCode();
+				hashCode = (hashCode * 397) ^  NameDirection                                .GetHashCode();
+				hashCode = (hashCode * 397) ^  NameDate                                     .GetHashCode();
+				hashCode = (hashCode * 397) ^  NameTime                                     .GetHashCode();
 				hashCode = (hashCode * 397) ^ (NameSeparator_ForSerialization != null ? NameSeparator_ForSerialization.GetHashCode() : 0);
 
-				hashCode = (hashCode * 397) ^  FolderType                                 .GetHashCode();
-				hashCode = (hashCode * 397) ^  FolderDirection                            .GetHashCode();
+				hashCode = (hashCode * 397) ^  FolderType                                   .GetHashCode();
+				hashCode = (hashCode * 397) ^  FolderDirection                              .GetHashCode();
 
-				hashCode = (hashCode * 397) ^  WriteMode                                  .GetHashCode();
+				hashCode = (hashCode * 397) ^  WriteMode                                    .GetHashCode();
 
-				hashCode = (hashCode * 397) ^  TextEncoding                               .GetHashCode();
-				hashCode = (hashCode * 397) ^  EmitEncodingPreamble                       .GetHashCode();
+				hashCode = (hashCode * 397) ^  TextEncoding                                 .GetHashCode();
+				hashCode = (hashCode * 397) ^  EmitEncodingPreamble                         .GetHashCode();
 
 				return (hashCode);
 			}
@@ -1069,34 +1078,34 @@ namespace YAT.Log.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				PathEx.Equals(RootPath,                            other.RootPath)         &&
-				PathEx.Equals(RootFileName,                        other.RootFileName)     &&
+				PathEx.Equals(RootDirectoryPath,                   other.RootDirectoryPath) &&
+				PathEx.Equals(FileNameBase,                        other.FileNameBase)      &&
 
-				ControlLog                                 .Equals(other.ControlLog)       &&
-				StringEx.EqualsOrdinalIgnoreCase(ControlExtension, other.ControlExtension) &&
+				ControlLog                                 .Equals(other.ControlLog)        &&
+				StringEx.EqualsOrdinalIgnoreCase(ControlExtension, other.ControlExtension)  &&
 
-				RawLogTx                                   .Equals(other.RawLogTx)         &&
-				RawLogBidir                                .Equals(other.RawLogBidir)      &&
-				RawLogRx                                   .Equals(other.RawLogRx)         &&
-				StringEx.EqualsOrdinalIgnoreCase(RawExtension,     other.RawExtension)     &&
+				RawLogTx                                   .Equals(other.RawLogTx)          &&
+				RawLogBidir                                .Equals(other.RawLogBidir)       &&
+				RawLogRx                                   .Equals(other.RawLogRx)          &&
+				StringEx.EqualsOrdinalIgnoreCase(RawExtension,     other.RawExtension)      &&
 
-				NeatLogTx                                  .Equals(other.NeatLogTx)        &&
-				NeatLogBidir                               .Equals(other.NeatLogBidir)     &&
-				NeatLogRx                                  .Equals(other.NeatLogRx)        &&
-				StringEx.EqualsOrdinalIgnoreCase(NeatExtension,    other.NeatExtension)    &&
+				NeatLogTx                                  .Equals(other.NeatLogTx)         &&
+				NeatLogBidir                               .Equals(other.NeatLogBidir)      &&
+				NeatLogRx                                  .Equals(other.NeatLogRx)         &&
+				StringEx.EqualsOrdinalIgnoreCase(NeatExtension,    other.NeatExtension)     &&
 
-				NameType                                   .Equals(other.NameType)         &&
-				NameDirection                              .Equals(other.NameDirection)    &&
-				NameDate                                   .Equals(other.NameDate)         &&
-				NameTime                                   .Equals(other.NameTime)         &&
+				NameType                                   .Equals(other.NameType)          &&
+				NameDirection                              .Equals(other.NameDirection)     &&
+				NameDate                                   .Equals(other.NameDate)          &&
+				NameTime                                   .Equals(other.NameTime)          &&
 				StringEx.EqualsOrdinalIgnoreCase(NameSeparator_ForSerialization, other.NameSeparator_ForSerialization) &&
 
-				FolderType                                 .Equals(other.FolderType)       &&
-				FolderDirection                            .Equals(other.FolderDirection)  &&
+				FolderType                                 .Equals(other.FolderType)        &&
+				FolderDirection                            .Equals(other.FolderDirection)   &&
 
-				WriteMode                                  .Equals(other.WriteMode)        &&
+				WriteMode                                  .Equals(other.WriteMode)         &&
 
-				TextEncoding                               .Equals(other.TextEncoding)     &&
+				TextEncoding                               .Equals(other.TextEncoding)      &&
 				EmitEncodingPreamble                       .Equals(other.EmitEncodingPreamble)
 			);
 		}

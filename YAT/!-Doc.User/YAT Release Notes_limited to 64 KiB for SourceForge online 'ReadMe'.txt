@@ -84,8 +84,15 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.4.1 :: 2021-0x-xx
+YAT 2.4.1 :: 2021-03-xx
 ----------------------------------------------------------------------------------------------------
+
+New:
+- Quick reference (PDF) added. Accessible via [Windows > Start > YAT] and [YAT > Help].
+
+Important changes:
+- Log dialog now more clearly states "root directory and file name base" (part of feat. req. #435).
+- Help window is again sizeable to display more/all content (related to earlier feature req. #237).
 
 Fixed bugs:
 - Handling of trigger of automatic actions and responses fixed and improved (bugs #504 and #505).
