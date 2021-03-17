@@ -200,6 +200,8 @@ namespace YAT.View.Forms
 			this.groupBox_Options_TextEncoding.TabIndex = 10;
 			this.groupBox_Options_TextEncoding.TabStop = false;
 			this.groupBox_Options_TextEncoding.Text = "File &Encoding";
+			this.toolTip.SetToolTip(this.groupBox_Options_TextEncoding, "Applies to plain text files.\r\nApplies to XML files except Base64 encoded raw data" +
+        ".\r\nDoes not apply to RTF files which are limited to ASCII.");
 			// 
 			// checkBox_Options_EmitEncodingPreamble
 			// 
@@ -513,7 +515,7 @@ namespace YAT.View.Forms
 			// 
 			this.label_Raw_Extension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Raw_Extension.AutoSize = true;
-			this.label_Raw_Extension.Location = new System.Drawing.Point(408, 27);
+			this.label_Raw_Extension.Location = new System.Drawing.Point(408, 25);
 			this.label_Raw_Extension.Name = "label_Raw_Extension";
 			this.label_Raw_Extension.Size = new System.Drawing.Size(56, 13);
 			this.label_Raw_Extension.TabIndex = 6;
@@ -609,7 +611,7 @@ namespace YAT.View.Forms
 			// 
 			this.label_Neat_Extension.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Neat_Extension.AutoSize = true;
-			this.label_Neat_Extension.Location = new System.Drawing.Point(408, 27);
+			this.label_Neat_Extension.Location = new System.Drawing.Point(408, 26);
 			this.label_Neat_Extension.Name = "label_Neat_Extension";
 			this.label_Neat_Extension.Size = new System.Drawing.Size(56, 13);
 			this.label_Neat_Extension.TabIndex = 6;

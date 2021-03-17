@@ -124,6 +124,9 @@
     <value>Either select a preset from the list, or fill in any valid extension.
 \ / : * ? " &lt; &gt; | are invalid characters.
 
+".xml" will result in an XML file with a specified schema.
+Any other extension will result in a plain text file.
+
 Use "File &gt; Preferences" to reset this setting to the default of ".log".
 Contact YAT via "Help &gt; Request Feature" to request additional presets.</value>
   </data>
@@ -138,12 +141,19 @@ In addition,...
     <value>Either select a preset from the list, or fill in any valid extension.
 \ / : * ? " &lt; &gt; | are invalid characters.
 
+".xml" will result in an XML file containing Base64 encoded data.
+Any other extension will result in a binary file.
+
 Use "File &gt; Preferences" to reset this setting to the default of ".dat".
 Contact YAT via "Help &gt; Request Feature" to request additional presets.</value>
   </data>
   <data name="comboBox_Neat_Extension.ToolTip" xml:space="preserve">
     <value>Either select a preset from the list, or fill in any valid extension.
 \ / : * ? " &lt; &gt; | are invalid characters.
+
+".rtf" will result in an RTF file, maintaining the configured text format.
+".xml" will result in an XML file with a specified schema.
+Any other extension will result in a plain text file.
 
 Use "File &gt; Preferences" to reset this setting to the default of ".log".
 Contact YAT via "Help &gt; Request Feature" to request additional presets.</value>
