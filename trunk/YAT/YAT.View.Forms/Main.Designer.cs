@@ -852,7 +852,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MainMenu_Help_UserManual.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_file_extension_pdf_16x16;
 			this.toolStripMenuItem_MainMenu_Help_UserManual.Name = "toolStripMenuItem_MainMenu_Help_UserManual";
 			this.toolStripMenuItem_MainMenu_Help_UserManual.Size = new System.Drawing.Size(201, 22);
-			this.toolStripMenuItem_MainMenu_Help_UserManual.Text = "&User Manual... (.pdf)";
+			this.toolStripMenuItem_MainMenu_Help_UserManual.Text = "&User Documentation... (.pdf)";
 			this.toolStripMenuItem_MainMenu_Help_UserManual.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_UserManual_Click);
 		#endif // WITH_SCRIPTING
 			// 

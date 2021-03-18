@@ -27,6 +27,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 
+using MKY.IO;
+
 // This code is intentionally placed into the YAT namespace even though the file is located in
 // YAT.Application since the class name already contains 'Application'.
 namespace YAT
@@ -200,11 +202,54 @@ namespace YAT
 			}
 		};
 
-		/// <summary>The executable path.</summary>
-		public static readonly string ExecutablePath = System.Windows.Forms.Application.ExecutablePath;
+		/// <summary>
+		/// Gets the path for the executable file that started the application,
+		/// not including the name of the file, e.g. "C:\Program Files\YAT".
+		/// </summary>
+		/// <remarks>
+		/// The value of this property equals <see cref="System.Windows.Forms.Application.StartupPath"/>.
+		/// This dedicated property provides a more accurate name than the original property.
+		/// </remarks>
+		public static readonly string ExecutableDirectoryPath = System.Windows.Forms.Application.StartupPath;
 
-		/// <summary>The executable name.</summary>
-		public static readonly string ExecutableNameWithoutExtension = Path.GetFileNameWithoutExtension(ExecutablePath);
+		/// <summary>
+		/// Gets the path for the executable file that started the application,
+		/// including the name of the file, e.g. "C:\Program Files\YAT\YAT.exe".
+		/// </summary>
+		/// <remarks>
+		/// The value of this property equals <see cref="System.Windows.Forms.Application.ExecutablePath"/>.
+		/// This dedicated property provides a more accurate name than the original property.
+		/// </remarks>
+		public static readonly string ExecutableFilePath = System.Windows.Forms.Application.ExecutablePath;
+
+		/// <summary>
+		/// Gets the name of the executable file, without its extension, e.g. "YAT".
+		/// </summary>
+		public static readonly string ExecutableFileNameWithoutExtension = Path.GetFileNameWithoutExtension(ExecutableFilePath);
+
+		/// <summary>
+		/// Gets the absolute path of the given file, relative to and dependent on the path of the
+		/// executable file, e.g. "C:\Program Files\YAT\YAT Release Notes.txt" or for development
+		/// "D:\Workspaces\YAT\Trunk\YAT\YAT\bin\Debug\..\..\..\!-Doc.User\YAT Release Notes.txt".
+		/// </summary>
+		/// <remarks>
+		/// This method assumes "Debug" and "Release" as the paths during development and is
+		/// typically used with the generic 'Any CPU' target. Platform specific 'x64' and 'x86'
+		/// require handling by the caller of this method.
+		/// </remarks>
+		public static string ResolveExecutableRelativePath(string runtimeRelativeFilePath, string developmentRelativeFilePath)
+		{
+			var di = new DirectoryInfo(ExecutableDirectoryPath);
+			switch (di.Name) // Attention, Path.GetDirectoryName() would return the parent directory's name!
+			{
+				case "Debug":
+				case "Release":
+					return (PathEx.CombineDirectoryAndFilePaths(ExecutableDirectoryPath, developmentRelativeFilePath));
+
+				default:
+					return (PathEx.CombineDirectoryAndFilePaths(ExecutableDirectoryPath, runtimeRelativeFilePath));
+			}
+		}
 
 		/// <summary>The .NET Framework prerequisite.</summary>
 		public static readonly string PrerequisiteFramework = ".NET Framework 4.8";
