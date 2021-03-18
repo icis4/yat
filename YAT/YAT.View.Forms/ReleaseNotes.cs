@@ -46,17 +46,17 @@ namespace YAT.View.Forms
 	public partial class ReleaseNotes : Form
 	{
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
-		private const string ReleaseNotesFileName = ApplicationEx.CommonName + " Release Notes.txt";
+		private const string FileName = ApplicationEx.CommonName + " Release Notes.txt"; // Fixed to "YAT".
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
-		private static readonly string ReleaseNotesFilePath = System.Windows.Forms.Application.StartupPath + Path.DirectorySeparatorChar + ReleaseNotesFileName;
+		private static readonly string RuntimeRelativeFilePath = FileName;
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
-		private static readonly string ReleaseNotesDevelopmentRelativeFilePath =
-			".." + Path.DirectorySeparatorChar +
-			".." + Path.DirectorySeparatorChar +
-			".." + Path.DirectorySeparatorChar +
-			"!-Doc.User" + Path.DirectorySeparatorChar + ReleaseNotesFileName;
+		private static readonly string DevelopmentRelativeFilePath =
+			".."         + Path.DirectorySeparatorChar +
+			".."         + Path.DirectorySeparatorChar +
+			".."         + Path.DirectorySeparatorChar +
+			"!-Doc.User" + Path.DirectorySeparatorChar + FileName;
 
 		/// <summary></summary>
 		public ReleaseNotes()
@@ -64,18 +64,7 @@ namespace YAT.View.Forms
 			InitializeComponent();
 
 			// Get file path depending on development or installation:
-			string filePath;
-			switch (Path.GetFileName(System.Windows.Forms.Application.StartupPath))
-			{
-				case "Debug":
-				case "Release":
-					filePath = PathEx.CombineDirectoryAndFilePaths(System.Windows.Forms.Application.StartupPath, ReleaseNotesDevelopmentRelativeFilePath);
-					break;
-
-				default:
-					filePath = ReleaseNotesFilePath;
-					break;
-			}
+			string filePath = ApplicationEx.ResolveExecutableRelativePath(RuntimeRelativeFilePath, DevelopmentRelativeFilePath);
 
 			// Form:
 			Text = ApplicationEx.CommonName + " Release Notes"; // Fixed to "YAT" as that is contained in release notes.

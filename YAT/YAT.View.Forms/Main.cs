@@ -197,6 +197,10 @@ namespace YAT.View.Forms
 			FixContextMenus();
 			InitializeControls();
 
+		#if (WITH_SCRIPTING)
+			toolStripMenuItem_MainMenu_Help_ReleaseNotes.Text += " (.pdf)";
+		#endif
+
 			// Form:
 			Text = ApplicationEx.CommonName; // Fixed to "YAT".
 			NativeMessageHandler.RegisterMainForm(this); // Register this form as the main form.
@@ -317,7 +321,7 @@ namespace YAT.View.Forms
 					{
 						if (showErrorModally)
 						{
-							var name = ApplicationEx.ExecutableNameWithoutExtension;
+							var name = ApplicationEx.ExecutableFileNameWithoutExtension;
 
 							var sb = new StringBuilder();
 							sb.Append(ApplicationEx.ProductName); // "YAT" or "YATConsole", as indicated in main title bar.
@@ -1042,7 +1046,22 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_MainMenu_Help_UserManual_Click(object sender, EventArgs e)
 		{
-			StartApplicationFile("Albatros-UserManual.pdf");
+			var fileName = "Albatros-UserDocumentation.pdf";
+
+			var runtimeRelativeFilePath = fileName;
+
+			// \05-Source\Albatros\Albatros\Albatros\bin\Debug
+			// \09-UserDocumentation\Albatros-UserDocumentation.pdf
+			var developmentRelativeFilePath =
+				".."                   + Path.DirectorySeparatorChar +
+				".."                   + Path.DirectorySeparatorChar +
+				".."                   + Path.DirectorySeparatorChar +
+				".."                   + Path.DirectorySeparatorChar +
+				".."                   + Path.DirectorySeparatorChar +
+				".."                   + Path.DirectorySeparatorChar +
+				"09-UserDocumentation" + Path.DirectorySeparatorChar + fileName;
+
+			StartApplicationFile(ApplicationEx.ResolveExecutableRelativePath(runtimeRelativeFilePath, developmentRelativeFilePath));
 		}
 
 	#endif
@@ -1050,9 +1069,34 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_MainMenu_Help_QuickReference_Click(object sender, EventArgs e)
 		{
 		#if (!WITH_SCRIPTING)
-			StartApplicationFile("YAT Quick Reference.pdf");
+			var fileName = "YAT Quick Reference.pdf";
+
+			var runtimeRelativeFilePath = fileName;
+
+			// \YAT\bin\Debug
+			// \!-Doc.User\Quick Reference\YAT Quick Reference.pdf
+			var developmentRelativeFilePath =
+				".."              + Path.DirectorySeparatorChar +
+				".."              + Path.DirectorySeparatorChar +
+				".."              + Path.DirectorySeparatorChar +
+				"!-Doc.User"      + Path.DirectorySeparatorChar +
+				"Quick Reference" + Path.DirectorySeparatorChar + fileName;
+
+			StartApplicationFile(ApplicationEx.ResolveExecutableRelativePath(runtimeRelativeFilePath, developmentRelativeFilePath));
 		#else
-			StartApplicationFile("Albatros-QuickReference.pdf");
+			var fileName = "Albatros-QuickReference.pdf";
+
+			var runtimeRelativeFilePath = fileName;
+
+			// \Albatros\bin\Debug
+			// \Albatros-QuickReference\Albatros-QuickReference.pdf
+			var developmentRelativeFilePath =
+				".."                      + Path.DirectorySeparatorChar +
+				".."                      + Path.DirectorySeparatorChar +
+				".."                      + Path.DirectorySeparatorChar +
+				"Albatros-QuickReference" + Path.DirectorySeparatorChar + fileName;
+
+			StartApplicationFile(ApplicationEx.ResolveExecutableRelativePath(runtimeRelativeFilePath, developmentRelativeFilePath));
 		#endif
 		}
 
@@ -1060,12 +1104,40 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_MainMenu_Help_ScriptInterfaceReference_Click(object sender, EventArgs e)
 		{
-			StartApplicationFile("Albatros-ScriptInterfaceReference.chm");
+			var fileName = "Albatros-ScriptInterfaceReference.chm";
+
+			var runtimeRelativeFilePath = fileName;
+
+			// \Albatros\bin\Debug
+			// \Albatros-ScriptInterfaceReference\Build\Albatros-ScriptInterfaceReference.chm
+			var developmentRelativeFilePath =
+				".."                                + Path.DirectorySeparatorChar +
+				".."                                + Path.DirectorySeparatorChar +
+				".."                                + Path.DirectorySeparatorChar +
+				"Albatros-ScriptInterfaceReference" + Path.DirectorySeparatorChar +
+				"Build"                             + Path.DirectorySeparatorChar + fileName;
+
+			StartApplicationFile(ApplicationEx.ResolveExecutableRelativePath(runtimeRelativeFilePath, developmentRelativeFilePath));
 		}
 
 		private void toolStripMenuItem_MainMenu_Help_ReleaseNotes_Click(object sender, EventArgs e)
 		{
-			StartApplicationFile("Albatros-ReleaseNotes.pdf");
+			var fileName = "Albatros-ReleaseNotes.pdf";
+
+			var runtimeRelativeFilePath = fileName;
+
+			// \05-Source\Albatros\Albatros\Albatros\bin\Debug
+			// \08-Deliverables\Albatros-ReleaseNotes.pdf.pdf
+			var developmentRelativeFilePath =
+				".."              + Path.DirectorySeparatorChar +
+				".."              + Path.DirectorySeparatorChar +
+				".."              + Path.DirectorySeparatorChar +
+				".."              + Path.DirectorySeparatorChar +
+				".."              + Path.DirectorySeparatorChar +
+				".."              + Path.DirectorySeparatorChar +
+				"08-Deliverables" + Path.DirectorySeparatorChar + fileName;
+
+			StartApplicationFile(ApplicationEx.ResolveExecutableRelativePath(runtimeRelativeFilePath, developmentRelativeFilePath));
 		}
 
 	#else // !WITH_SCRIPTING
@@ -4110,7 +4182,7 @@ namespace YAT.View.Forms
 				(
 					Model.Utilities.MessageHelper.ComposeMessage("Unable to open application file", filePath, ex),
 					"Application File Error",
-					MessageBoxButtons.OKCancel,
+					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
 				);
 			}

@@ -649,8 +649,8 @@ namespace YAT.Model
 		#if (WITH_SCRIPTING)
 			var myScript    = "MyScript"    + ExtensionHelper.ScriptExtension;
 		#endif
-			var name = ApplicationEx.ExecutableNameWithoutExtension; // The executable name shall be used as *the* name, as
-			var helpText = new StringBuilder();                      // only that is relevant to the user of the command line.
+			var name = ApplicationEx.ExecutableFileNameWithoutExtension; // The executable name shall be used as *the* name, as
+			var helpText = new StringBuilder();                          // only that is relevant to the user of the command line.
 
 			helpText.AppendLine(                                 "Usage:");
 			helpText.AppendLine();

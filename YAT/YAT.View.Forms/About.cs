@@ -120,18 +120,27 @@ namespace YAT.View.Forms
 
 			// Description:
 			linkLabel_Description.Text = "";
+		#if (WITH_SCRIPTING)
+			textLink   = "YAT";                         // "YAT" is hardcoded rather than using 'ApplicationEx.CommonName' for this the origin.
+			linkStart = linkLabel_Description.Text.Length;
+			linkLabel_Description.Text += textLink;
+			linkLabel_Description.Links.Add(linkStart, textLink.Length, "https://sourceforge.net/projects/y-a-terminal/");
+
+			textBefore =    " is a by-product of the ";
+		#else
 			textBefore = "YAT is a by-product of the "; // "YAT" is hardcoded rather than using 'ApplicationEx.CommonName' for this the origin.
-			textLink   =                            "Swiss federal KTI/CTI";
-			textAfter  =                                                @" project 6542.1 FHS-ET ""BBP - Balance Based Pipetting"" of HSR" + Environment.NewLine;
+		#endif
+			textLink   =                            "Swiss federal SBFI";
+			textAfter  =                                             @" (former KTI) project 6542.1 FHS-ET ""BBP - Balance Based Pipetting""" + Environment.NewLine;
 			linkLabel_Description.Text += textBefore;
 			linkStart = linkLabel_Description.Text.Length;
 			linkLabel_Description.Text += textLink;
-			linkLabel_Description.Links.Add(linkStart, textLink.Length, "http://www.bbt.admin.ch/kti/");
+			linkLabel_Description.Links.Add(linkStart, textLink.Length, "https://www.sbfi.admin.ch/sbfi/de/home.html");
 			linkLabel_Description.Text += textAfter;
 
-			textBefore = "and ";
-			textLink   =     "Mettler-Toledo";
-			textAfter  =                   ". YAT was initially developed as XTerm232, a response to the lack of a really good RS-232 terminal.";
+			textBefore = "of HSR and ";
+			textLink   =            "Mettler-Toledo";
+			textAfter  =                          ". YAT was initiated as XTerm232, a response to the lack of an appropriate RS-232 terminal.";
 			linkLabel_Description.Text += textBefore;
 			linkStart = linkLabel_Description.Text.Length;
 			linkLabel_Description.Text += textLink;
@@ -144,7 +153,7 @@ namespace YAT.View.Forms
 
 			// Serial monitoring:
 			linkLabel_Monitoring.Text = ""; // Fixed to "YAT".
-			textBefore = ApplicationEx.CommonName + " is a terminal (connection endpoint). If you are looking for a tool to monitor serial data between an application and" + Environment.NewLine +
+			textBefore = ApplicationEx.CommonName + " is designed as a terminal (connection endpoint). For a tool to monitor serial data between an application and" + Environment.NewLine +
 			             "a device, or between two devices, check out ";
 			textLink   =                                             "HHD Monitoring Studio";
 			textAfter  =                                                                  ". It's worth the bucks. Or download the ";
