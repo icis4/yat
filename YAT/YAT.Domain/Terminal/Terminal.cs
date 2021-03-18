@@ -1731,7 +1731,10 @@ namespace YAT.Domain
 			{
 				value = this.lastEnqueuedReceivedMessageForScripting;
 
-				DebugScriptingPostfixedQuoted(value.Text, "retrieved as last enqueued received message for scripting.");
+				if (value != null)
+					DebugScriptingPostfixedQuoted(value.Text, "retrieved as last enqueued received message for scripting.");
+				else
+					DebugScripting(             "Nothing to be retrieved as last enqueued received message for scripting.");
 			}
 		}
 
@@ -1747,7 +1750,10 @@ namespace YAT.Domain
 
 			lock (this.lastEnqueuedReceivedMessageForScriptingSyncObj)
 			{
-				DebugScriptingPostfixedQuoted(this.lastEnqueuedReceivedMessageForScripting.Text, "cleared as last enqueued received message for scripting.");
+				if (this.lastEnqueuedReceivedMessageForScripting != null)
+					DebugScriptingPostfixedQuoted(this.lastEnqueuedReceivedMessageForScripting.Text, "cleared as last enqueued received message for scripting.");
+				else
+					DebugScripting(                                                    "Nothing to be cleared as last enqueued received message for scripting.");
 
 				cleared = this.lastEnqueuedReceivedMessageForScripting;
 
@@ -1772,14 +1778,25 @@ namespace YAT.Domain
 			{                                                          // Otherwise, e.g. 'NextAvailable' could
 				lock (this.availableReceivedMessagesForScripting)      // yet be emtpy while the queue already
 				{                                                      // contains an item!
-					value = this.availableReceivedMessagesForScripting.Dequeue();
+					if (this.availableReceivedMessagesForScripting.Count > 0)
+					{
+						value = this.availableReceivedMessagesForScripting.Dequeue();
 
-					this.lastDequeuedReceivedMessageForScripting = value.Clone(); // Clone to ensure decoupling.
+						this.lastDequeuedReceivedMessageForScripting = value.Clone(); // Clone to ensure decoupling.
 
-					dequeueTimeStamp = DateTime.Now; // Taken within lock to get best accuracy.
+						dequeueTimeStamp = DateTime.Now; // Taken within lock to get best accuracy.
 
-					DebugScriptingPostfixedQuoted(value.Text, "dequeued for scripting."); // Same reason as above, acceptable
-				}                                                                         // to do inside lock since debug only.
+						DebugScriptingPostfixedQuoted(value.Text, "dequeued for scripting."); // Same reason as above, acceptable
+					}                                                                         // to do inside lock since debug only.
+					else
+					{
+						value = null;
+
+						dequeueTimeStamp = DateTime.MinValue;
+
+						DebugScripting(             "Nothing to be dequeued for scripting.");
+					}
+				}
 			}
 		}
 
@@ -1797,7 +1814,10 @@ namespace YAT.Domain
 			{
 				value = this.lastDequeuedReceivedMessageForScripting;
 
-				DebugScriptingPostfixedQuoted(value.Text, "retrieved as last dequeued received message for scripting.");
+				if (value != null)
+					DebugScriptingPostfixedQuoted(value.Text, "retrieved as last dequeued received message for scripting.");
+				else
+					DebugScripting(             "Nothing to be retrieved as last dequeued received message for scripting.");
 			}
 		}
 
@@ -1813,7 +1833,10 @@ namespace YAT.Domain
 
 			lock (this.lastDequeuedReceivedMessageForScriptingSyncObj)
 			{
-				DebugScriptingPostfixedQuoted(this.lastDequeuedReceivedMessageForScripting.Text, "cleared as last dequeued received message for scripting.");
+				if (this.lastDequeuedReceivedMessageForScripting != null)
+					DebugScriptingPostfixedQuoted(this.lastDequeuedReceivedMessageForScripting.Text, "cleared as last dequeued received message for scripting.");
+				else
+					DebugScripting(                                                    "Nothing to be cleared as last dequeued received message for scripting.");
 
 				cleared = this.lastDequeuedReceivedMessageForScripting;
 
@@ -1848,7 +1871,7 @@ namespace YAT.Domain
 				{
 					value = null;
 
-					DebugScripting("[nothing] retrieved as last available received message for scripting.");
+					DebugScripting(             "Nothing to be retrieved as last available received message for scripting.");
 				}
 			}
 		}
@@ -2706,7 +2729,7 @@ namespace YAT.Domain
 		[Conditional("DEBUG_SCRIPTING")]
 		private void DebugScripting(string message)
 		{
-			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + ToShortIOString() + "': " + message);
+			DebugMessage(message);
 		}
 
 		/// <remarks>
@@ -2715,7 +2738,7 @@ namespace YAT.Domain
 		[Conditional("DEBUG_SCRIPTING")]
 		private void DebugScriptingPrefixedQuoted(string prefix, string quoted)
 		{
-			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + ToShortIOString() + "': " + prefix + @" """ + quoted + @""".");
+			DebugMessage(prefix + @" """ + quoted + @""".");
 		}
 
 		/// <remarks>
@@ -2724,7 +2747,7 @@ namespace YAT.Domain
 		[Conditional("DEBUG_SCRIPTING")]
 		private void DebugScriptingPostfixedQuoted(string quoted, string postfix)
 		{
-			Debug.WriteLine(string.Format("{0,-26}", GetType()) + " '" + ToShortIOString() + @"': """ + quoted + @""" " + postfix);
+			DebugMessage(@"""" + quoted + @""" " + postfix);
 		}
 
 		/// <remarks>
@@ -2734,7 +2757,7 @@ namespace YAT.Domain
 		private void DebugScriptingQueueCount(int count)
 		{
 			if (count > 0) // Otherwise, debug output gets spoilt...
-				DebugScripting(string.Format("{0} received messages available for scripting.", count));
+				DebugScripting(string.Format("{0} received {1} available for scripting.", count, ((count == 1) ? "message" : "messages")));
 		}
 
 		/// <remarks>
@@ -2744,7 +2767,7 @@ namespace YAT.Domain
 		private void DebugScriptingQueueCleared(ICollection<ScriptMessage> cleared)
 		{
 			if (ICollectionEx.IsNullOrEmpty((ICollection)cleared))
-				DebugScripting("Message queue for scripting cleared, contained [nothing].");
+				DebugScripting("Message queue for scripting cleared, contained nothing.");
 			else
 				DebugScripting("Message queue for scripting cleared, contained { " + ArrayEx.ValuesToString(cleared.Select(v => v.Text).ToArray(), '"') + " }.");
 		}
