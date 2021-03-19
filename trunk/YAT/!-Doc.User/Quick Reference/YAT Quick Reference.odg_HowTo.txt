@@ -12,4 +12,4 @@ YAT
 Albatros
 --------
 
-1. [File > Export As > Direct To PDF] to "..\..\..\Albatros\Albatros-QuickReference"
+1. [File > Export As > PDF > All Pages] to "..\..\..\Albatros\Albatros-QuickReference"
