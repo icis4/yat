@@ -366,17 +366,19 @@ namespace YAT.View.Controls
 					t.Start();
 
 					// Let's work for approx. 150 ms:
+					const int Timeout = 150;
 					while (worker.IsBusy)
 					{
 						System.Windows.Forms.Application.DoEvents(); // Ensure that application stays responsive!
-						Thread.Sleep(10); // Wait a short time to reduce the CPU load of this thread.
 
-						var ongoing = (DateTime.Now - started);
-						if (ongoing.TotalMilliseconds > 150)
+						Thread.Sleep(15); // Actively yield to other threads to allow work.
+
+						var span = (DateTime.Now - started);
+						if (span.TotalMilliseconds > Timeout)
 							break;
 					}
 
-					// Show status dialog since case doing work takes longer...
+					// Show status dialog in case doing work takes longer...
 					DialogResult result;
 					if (worker.IsBusy)
 					{
