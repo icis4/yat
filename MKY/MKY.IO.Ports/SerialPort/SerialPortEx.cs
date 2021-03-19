@@ -1065,11 +1065,11 @@ namespace MKY.IO.Ports
 
 			if (IsOpen)
 			{
-				var initialTimeStamp = DateTime.Now;
+				var initial = DateTime.Now;
 				while (BytesToWrite > 0)
 				{
 					// Actively yield to other threads to allow processing:
-					var span = (DateTime.Now - initialTimeStamp);
+					var span = (DateTime.Now - initial);
 					if (span.TotalMilliseconds < 4)
 						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as flush
 					else                             // a) is expected to be blocking and
@@ -1210,7 +1210,7 @@ namespace MKY.IO.Ports
 		///
 		/// 1. The eventLoopRunner is asked to stop and <see cref="System.IO.Ports.SerialPort.IsOpen"/>
 		/// returns false. Upon disposal this property is checked and closing  the internal serial
-		/// stream is skipped, thus keeping the original handle open indefinitely (until the finalizer
+		/// stream is skipped, thus keeping the original handle open infinitely (until the finalizer
 		/// runs which leads to the next problem).
 		///
 		/// The solution for this one is to manually close the internal serial stream. We can get

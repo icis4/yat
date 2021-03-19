@@ -230,11 +230,11 @@ namespace MKY.IO.Serial.SerialPort
 
 			if (IsOpen)
 			{
-				var initialTimeStamp = DateTime.Now;
+				var initial = DateTime.Now;
 				while (IsUndisposed && this.sendThreadRunFlag && IsOpen && (this.sendQueue.Count > 0))
 				{
 					// Actively yield to other threads to allow processing:
-					var span = (DateTime.Now - initialTimeStamp);
+					var span = (DateTime.Now - initial);
 					if (span.TotalMilliseconds < 4)
 						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as flush
 					else                             // a) is expected to be blocking and
