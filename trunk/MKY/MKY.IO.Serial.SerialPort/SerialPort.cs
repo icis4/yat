@@ -483,6 +483,58 @@ namespace MKY.IO.Serial.SerialPort
 			}
 		}
 
+		/// <remarks>
+		/// The value of this property reflects the state of the send queue as well as
+		/// <see cref="System.IO.Ports.SerialPort.BytesToWrite"/>.
+		/// <para>
+		/// Neither is the state of the underlying operating system object nor hardware taken into
+		/// account, as their state cannot be retrieved from within this .NET implementation by
+		/// common means.
+		/// </para></remarks>
+		public virtual bool IsSending
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				// Do not lock() infinitly in a simple get-property.
+
+				if (Monitor.TryEnter(this.portSyncObj, ThreadWaitTimeout))
+				{
+					try
+					{
+						if (IsOpen)
+						{
+							bool sendQueueContainsData;
+							lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+								sendQueueContainsData = (this.sendQueue.Count > 0);
+
+							bool portBufferContainsData = (this.port.BytesToWrite > 0);
+
+							// Note that, depending on the underlying driver, 'BytesToWrite' may not
+							// reflect the state of the underlying hardware buffer(s).
+
+							return (sendQueueContainsData || portBufferContainsData);
+						}
+						else
+						{
+							return (false);
+						}
+					}
+					finally
+					{
+						Monitor.Exit(this.portSyncObj);
+					}
+				}
+				else // Monitor.TryEnter()
+				{
+					DebugMessage("IsSending failed to synchronize access to the port object!");
+
+					return (false);
+				}
+			}
+		}
+
 		/// <summary>
 		/// Serial port control pins.
 		/// </summary>

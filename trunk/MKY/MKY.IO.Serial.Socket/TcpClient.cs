@@ -519,7 +519,7 @@ namespace MKY.IO.Serial.Socket
 
 				int count;
 
-				lock (this.socketConnectionSyncObj) // Directly locking the list is OK, it is kept throughout the lifetime of an object.
+				lock (this.socketConnectionSyncObj)
 				{
 					count = ((socketConnection != null) ? (1) : (0));
 				}
@@ -538,6 +538,38 @@ namespace MKY.IO.Serial.Socket
 		public virtual bool IsTransmissive
 		{
 			get { return (IsConnected); }
+		}
+
+		/// <remarks>
+		/// The value of this property only reflects the state of the send queue.
+		/// <para>
+		/// The state of the underlying <see cref="ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection"/>
+		/// (i.e. calls to <see cref="ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection.BeginSend"/>
+		/// and their callbacks to <see cref="ALAZ.SystemEx.NetEx.SocketsEx.ISocketService.OnSent"/>)
+		/// is not taken into account because keeping track of ongoing send requests and callbacks is
+		/// not feasible to implement in a solid way. E.g. incrementing the number of requested bytes
+		/// and decrementing them in the callback would be susceptible to inconsistencies, e.g. in
+		/// case of connection state related exceptions.
+		/// </para><para>
+		/// Neither is the state of the underlying operating system socket taken into account, as
+		/// its state cannot be retrieved from within this .NET implementation by common means.
+		/// </para></remarks>
+		public virtual bool IsSending
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				if (IsTransmissive)
+				{
+					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+						return (this.sendQueue.Count > 0);
+				}
+				else
+				{
+					return (false);
+				}
+			}
 		}
 
 		/// <summary></summary>

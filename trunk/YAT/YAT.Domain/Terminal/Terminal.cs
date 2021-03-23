@@ -602,6 +602,30 @@ namespace YAT.Domain
 			}
 		}
 
+		/// <remarks>
+		/// Opposed to <see cref="IsSending"/>, where the amount of data expected for sending is
+		/// known by the caller, there is no information on the availability and amout of data
+		/// for receiving, nor any way to determine whether data may be coming in soon. Thus, an
+		/// 'IsReceiving' property makes little sense. Instead, this time stamp may be used to
+		/// determine for how long the I/O instance has not been receiving data anymore, and can
+		/// combine this time stamp with a time-out.
+		/// <para>
+		/// <see cref="DateTime.MinValue"/> is returned if no <see cref="UnderlyingIOInstance"/>
+		/// is available.
+		/// </para></remarks>
+		public virtual DateTime LastReceivedChunkTimeStamp
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				if (this.rawTerminal != null)
+					return (this.rawTerminal.LastReceivedChunkTimeStamp);
+				else
+					return (DateTime.MinValue);
+			}
+		}
+
 	#if (WITH_SCRIPTING)
 
 		/// <summary>

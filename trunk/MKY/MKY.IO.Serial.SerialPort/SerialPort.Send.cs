@@ -854,6 +854,9 @@ namespace MKY.IO.Serial.SerialPort
 				this.port.Write(a, 0, triedChunkSize); // Do not lock, may take some time!
 				writeSuccess = true;
 
+				// Ensure not to lock the queue while potentially pending in Write(), that would
+				// result in a severe performance drop because enqueuing was no longer possible.
+
 				DebugSendWrite("...writing done");
 
 				// Finalize the write operation:
@@ -877,9 +880,6 @@ namespace MKY.IO.Serial.SerialPort
 						}
 					}
 				}
-
-				// Ensure not to lock the queue while potentially pending in Write(), that would
-				// result in a severe performance drop because enqueuing was no longer possible.
 			}
 			catch (TimeoutException ex)
 			{
