@@ -734,6 +734,33 @@ namespace MKY.IO.Serial.Socket
 			}
 		}
 
+		/// <remarks>
+		/// The value of this property only reflects the state of the send queue.
+		/// <para>
+		/// The state of the underlying <see cref="UdpSocket"/> is not taken into account, as there
+		/// is no feasible to implement this in a solid way.
+		/// </para><para>
+		/// Neither is the state of the underlying operating system socket taken into account, as
+		/// its state cannot be retrieved from within this .NET implementation by common means.
+		/// </para></remarks>
+		public virtual bool IsSending
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				if (IsTransmissive)
+				{
+					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+						return (this.sendQueue.Count > 0);
+				}
+				else
+				{
+					return (false);
+				}
+			}
+		}
+
 		/// <summary></summary>
 		public virtual object UnderlyingIOInstance
 		{

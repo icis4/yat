@@ -107,8 +107,8 @@ namespace MKY.IO.Usb
 		private const string             TI_HidApi_string      =   "TI HID API";                // Note that comparison will be done with 'OrdinalIgnoreCase'.
 		private static readonly string[] TI_HidApi_stringStart = { "TI", "Texas Instruments" }; // Also note that comparison could be improved such as e.g.
 		                                                                                        // strings "Texas" and "Instruments" are individually compared.
-		private const string             YAT_string      =   "YAT default (resulting in [Common])"; // Using "YAT" rather than "MKY" as that would be confusing to the user.
-		private static readonly string[] YAT_stringStart = { "YAT" };                               // And making this configurable seems a bit of an overkill.
+		private const string             YAT_string      =   "YAT default (resulting in [Common])"; // Using "YAT" rather than "MKY" as that is the 3rd party
+		private static readonly string[] YAT_stringStart = { "YAT" };                               // where this preset originates from, as other 3rd party.
 
 		/// <summary></summary>
 		public const string UserSummary = @"""Plain"", ""Length"", ""Zero"", ""MT"", ""OH"", ""Signal11"" , ""TI"" and ""YAT""";

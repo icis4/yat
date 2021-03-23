@@ -38,6 +38,10 @@ namespace MKY.IO.Serial
 	/// <summary>
 	/// Generic I/O interface that is usable for any kind of serial communication.
 	/// </summary>
+	/// <remarks>
+	/// While this interface is generic, it is instantiated by accompanying classes. Details on the
+	/// behavior of these classes are contained in the remarks of the interface for convenience.
+	/// </remarks>
 	public interface IIOProvider : IDisposable, IDisposableEx
 	{
 		#region Events
@@ -53,9 +57,11 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Event raised after the I/O provider's control state has changed.
 		/// </summary>
-		/// <remarks>
-		/// For serial COM ports, this event indicates a change of the serial control pins.
-		/// </remarks>
+		/// <remarks><list type="bullet">
+		/// <item><term>Serial COM Ports:</term><description>
+		/// This event indicates a change of the serial control pins.
+		/// </description></item>
+		/// </list></remarks>
 		event EventHandler<EventArgs<DateTime>> IOControlChanged;
 
 		/// <summary>
@@ -119,41 +125,45 @@ namespace MKY.IO.Serial
 		bool IsStarted { get; }
 
 		/// <summary>
-		/// Gets a value indicating whether the underlying I/O instance is open and/or
-		/// connected to a remote resource.
+		/// Gets a value indicating whether the I/O provider is started and the underlying I/O
+		/// instance is open and/or connected to a remote resource.
 		/// </summary>
-		/// <remarks>
-		/// For serial COM ports, this property indicates that the port is open and no break
-		/// state is detected (if supported by the I/O instance).
-		/// </remarks>
-		/// <remarks>
-		/// For UDP sockets, this property indicates that the socket is open.
-		/// </remarks>
-		/// <remarks>
-		/// For USB Ser/HID devices, this property indicates that the device is physically connected.
-		/// </remarks>
+		/// <remarks><list type="bullet">
+		/// <item><term>Serial COM Ports:</term><description>
+		/// This property indicates that the port is open and no break state is detected.
+		/// The latter may not be supported by the I/O instance or driver.
+		/// </description></item>
+		/// <item><term>UDP/IP Sockets:</term><description>
+		/// This property indicates that the socket is open.
+		/// </description></item>
+		/// <item><term>USB Ser/HID Devices:</term><description>
+		/// This property indicates that the device is physically connected.
+		/// </description></item>
+		/// </list></remarks>
 		/// <returns>
-		/// <c>true</c> if the underlying I/O instance is open and/or connected to a remote
-		/// resource as of the most recent operation; otherwise, <c>false</c>.
+		/// <c>true</c> if the I/O provider is started and the underlying I/O instance is open and/or
+		/// connected to a remote resource as of the most recent operation; otherwise, <c>false</c>.
 		/// </returns>
 		bool IsConnected { get; }
 
 		/// <summary>
-		/// Gets a value indicating whether the underlying I/O instance is open.
+		/// Gets a value indicating whether the I/O provider is started and the underlying I/O
+		/// instance is open.
 		/// </summary>
-		/// <remarks>
-		/// For TCP sockets, this property indicates that the underlying I/O instance is
-		/// connected to a remote resource.
-		/// </remarks>
+		/// <remarks><list type="bullet">
+		/// <item><term>TCP/IP Sockets:</term><description>
+		/// This property indicates that the underlying I/O instance is connected to a remote resource.
+		/// </description></item>
+		/// </list></remarks>
 		/// <returns>
-		/// <c>true</c> if the underlying I/O instance is open as of the most recent operation;
-		/// otherwise, <c>false</c>.
+		/// <c>true</c> if the I/O provider is started and the underlying I/O instance is open as of
+		/// the most recent operation; otherwise, <c>false</c>.
 		/// </returns>
 		bool IsOpen { get; }
 
 		/// <summary>
-		/// Gets a value indicating whether the underlying I/O instance is transmissive, i.e.
-		/// ready to send and receive data.
+		/// Gets a value indicating whether the I/O provider is started and the underlying I/O
+		/// instance is transmissive, i.e. ready to send and receive data.
 		/// </summary>
 		/// <remarks>
 		/// This property has been added since the meaning of <see cref="IsConnected"/> and
@@ -163,17 +173,45 @@ namespace MKY.IO.Serial
 		/// Additional 'IsReadyToSend' and 'IsReadyToReceive' could further refine the interface.
 		/// </remarks>
 		/// <returns>
-		/// <c>true</c> if the underlying I/O instance is transmissive, i.e. ready to send and
-		/// receive data as of the most recent operation; otherwise, <c>false</c>.
+		/// <c>true</c> if the I/O provider is started and the underlying I/O instance is
+		/// transmissive, i.e. ready to send and receive data as of the most recent operation;
+		/// otherwise, <c>false</c>.
 		/// </returns>
 		bool IsTransmissive { get; }
+
+		/// <summary>
+		/// Gets a value indicating whether the I/O provider and/or the underlying I/O instance
+		/// is currently sending data.
+		/// </summary>
+		/// <remarks><para>
+		/// The capabilities of the underlying I/O instance differ, this property may or may not
+		/// take the state of the underlying I/O instance into account.</para><para>
+		/// Same with the the state of the underlying operating system driver and hardware. In most
+		/// cases, their state cannot be retrieved from within a .NET implementation by common means.
+		/// </para><list type="bullet">
+		/// <item><term>Serial COM Ports:</term><description>
+		/// The underlying <see cref="System.IO.Ports.SerialPort.BytesToWrite"/> is taken into account.
+		/// </description></item>
+		/// </list></remarks>
+		/// <returns>
+		/// <c>true</c> if the I/O provider and/or the underlying I/O instance is sending data;
+		/// otherwise, <c>false</c>.
+		/// </returns>
+		bool IsSending { get; }
+
+		// Opposed to 'IsSending', where the amount of data expected for sending is known by the
+		// caller, there is no information on the availability and amout of data for receiving,
+		// nor any way to determine whether data may be coming in soon. Thus, an 'IsReceiving'
+		// indication makes little sense. Instead, the 'DataEventArgs.TimeStamp' value of the last
+		// 'DataReceived' event may be used to determine for how long the I/O instance has not been
+		// receiving data anymore, and can combine this time stamp with a time-out.
 
 		/// <summary>
 		/// Gets the underlying I/O instance.
 		/// </summary>
 		/// <remarks>
-		/// \ToDo: Add two methods to lock/unlock the I/O instance because the underlying logic
-		/// could change or even dispose of the instance while accessing it.
+		/// Two methods to lock/unlock the I/O instance could be added as the underlying logic could
+		/// change or even dispose of the instance while accessing it.
 		/// </remarks>
 		/// <returns>
 		/// The I/O instance.
@@ -190,30 +228,46 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Starts the I/O provider.
 		/// </summary>
-		/// <remarks>
-		/// For serial COM ports, the port gets opened.
-		/// For TCP/IP sockets, the socket gets created and starts connecting/listening.
-		/// For UDP/IP sockets, the socket gets opened.
-		/// For USB Ser/HID devices, the device gets created.
-		/// </remarks>
+		/// <remarks><list type="bullet">
+		/// <item><term>Serial COM Ports:</term><description>
+		/// The port gets opened.
+		/// </description></item>
+		/// <item><term>TCP/IP Sockets:</term><description>
+		/// The socket gets created and starts connecting/listening.
+		/// </description></item>
+		/// <item><term>UDP/IP Sockets:</term><description>
+		/// The socket gets opened.
+		/// </description></item>
+		/// <item><term>USB Ser/HID Devices:</term><description>
+		/// The device gets created.
+		/// </description></item>
+		/// </list></remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Ser/HID' just happens to contain 'Ser'...")]
 		bool Start();
 
 		/// <summary>
 		/// Stops the I/O provider.
 		/// </summary>
-		/// <remarks>
-		/// For serial COM ports, the port gets closed.
-		/// For TCP/IP sockets, the socket gets closed.
-		/// For UDP/IP sockets, the socket gets closed.
-		/// For USB Ser/HID devices, the device gets closed.
-		/// </remarks>
+		/// <remarks><list type="bullet">
+		/// <item><term>Serial COM Ports:</term><description>
+		/// The port gets closed.
+		/// </description></item>
+		/// <item><term>TCP/IP Sockets:</term><description>
+		/// The socket gets closed.
+		/// </description></item>
+		/// <item><term>UDP/IP Sockets:</term><description>
+		/// The socket gets closed.
+		/// </description></item>
+		/// <item><term>USB Ser/HID Devices:</term><description>
+		/// The device gets closed.
+		/// </description></item>
+		/// </list></remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Ser/HID' just happens to contain 'Ser'...")]
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "'Stop' is a common term to start/stop something.")]
 		void Stop();
 
 		/// <summary>
-		/// Sends data to the underlying I/O instance.
+		/// Sends data using the underlying I/O instance.
 		/// </summary>
 		/// <remarks>
 		/// If the underlying buffer has space, this method will immediately return; otherwise
@@ -229,8 +283,12 @@ namespace MKY.IO.Serial
 		bool Send(byte[] data);
 
 		/// <summary>
-		/// Clears the the send buffer of the underlying I/O instance.
+		/// Clears the send buffer of the I/O provider and the underlying I/O instance.
 		/// </summary>
+		/// <remarks>
+		/// The buffer of the underlying I/O instance can only be cleared if this functionality
+		/// is provided by the underlying I/O instance.
+		/// </remarks>
 		/// <returns>
 		/// The number of bytes cleared.
 		/// </returns>

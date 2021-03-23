@@ -327,6 +327,39 @@ namespace MKY.IO.Serial.Usb
 			get { return (IsOpen); }
 		}
 
+		/// <remarks>
+		/// The value of this property only reflects the state of the send queue.
+		/// <para>
+		/// The state of the underlying <see cref="IO.Usb.SerialHidDevice"/> (i.e. calls to
+		/// <see cref="IO.Usb.SerialHidDevice.Send(byte)"/> and
+		/// <see cref="IO.Usb.SerialHidDevice.Send(byte[])"/> and their callbacks to
+		/// <see cref="IO.Usb.SerialHidDevice.DataSent"/>) is not taken into account because keeping
+		/// track of ongoing send requests and callbacks is not feasible to implement in a solid way.
+		/// E.g. incrementing the number of requested bytes and decrementing them in the callback
+		/// would be susceptible to inconsistencies, e.g. in case of device related exceptions.
+		/// </para><para>
+		/// Neither is the state of the underlying operating system object nor hardware taken into
+		/// account, as their state cannot be retrieved from within this .NET implementation by
+		/// common means.
+		/// </para></remarks>
+		public virtual bool IsSending
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				if (IsTransmissive)
+				{
+					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+						return (this.sendQueue.Count > 0);
+				}
+				else
+				{
+					return (false);
+				}
+			}
+		}
+
 		/// <summary>
 		/// Returns <c>true</c> if XOn/XOff is in use, i.e. if one or the other kind of XOn/XOff
 		/// flow control is active.

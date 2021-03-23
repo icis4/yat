@@ -850,21 +850,31 @@ namespace YAT.Model
 			}
 		}
 
-		/// <summary></summary>
-		public virtual bool IsReceiving
+		// 'IsReceiving' makes little sense, see 'LastReceiveTimeStamp' below.
+		// 'IsReceivingForSomeTime' is not needed (yet).
+
+		/// <remarks>
+		/// Opposed to <see cref="IsSending"/>, where the amount of data expected for sending is
+		/// known by the caller, there is no information on the availability and amout of data
+		/// for receiving, nor any way to determine whether data may be coming in soon. Thus, an
+		/// 'IsReceiving' property makes little sense. Instead, this time stamp may be used to
+		/// determine for how long the I/O instance has not been receiving data anymore, and can
+		/// combine this time stamp with a time-out.
+		/// <para>
+		/// <see cref="DateTime.MinValue"/> is returned if no underlying terminal is available.
+		/// </para></remarks>
+		public virtual DateTime LastReceivedChunkTimeStamp
 		{
 			get
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
 				if (this.terminal != null)
-					return (this.terminal.IsReceiving);
+					return (this.terminal.LastReceivedChunkTimeStamp);
 				else
-					return (false);
+					return (DateTime.MinValue);
 			}
 		}
-
-		// 'IsReceivingForSomeTime' is not needed (yet).
 
 		/// <summary></summary>
 		public virtual bool LogIsOn
@@ -5467,10 +5477,8 @@ namespace YAT.Model
 			AssertUndisposed();
 
 			this.terminal.ResetFlowControlCount();     // Do not lock here, method will invoke events. There
-		#if (WITH_SCRIPTING)                           // is no need to lock anyway, this method atomically
-			UpdateReceivedXOnXOffOffsetForScripting(); // updates the offset, no matter on terminal counts.
-		#endif
-		}
+			UpdateReceivedXOnXOffOffsetForScripting(); // is no need to lock anyway, this method atomically
+		}                                              // updates the offset, no matter on terminal counts.
 
 		/// <summary></summary>
 		public virtual int InputBreakCount
@@ -5785,14 +5793,14 @@ namespace YAT.Model
 				// Similar code exists in View.Forms.Main.OpenDefaultLogDirectory().
 				// Changes here may have to be applied there too.
 
-				string rootDirectoryPath = this.log.Settings.RootDirectoryPath;
+				string rootPath = this.log.Settings.RootPath;
 
 				// Create directory if not existing yet:
-				if (!Directory.Exists(Path.GetDirectoryName(rootDirectoryPath)))
+				if (!Directory.Exists(Path.GetDirectoryName(rootPath)))
 				{
 					try
 					{
-						Directory.CreateDirectory(Path.GetDirectoryName(rootDirectoryPath));
+						Directory.CreateDirectory(Path.GetDirectoryName(rootPath));
 					}
 					catch (Exception exCreate)
 					{
@@ -5813,11 +5821,11 @@ namespace YAT.Model
 
 				// Open directory:
 				Exception exBrowse;
-				if (!DirectoryEx.TryBrowse(rootDirectoryPath, out exBrowse))
+				if (!DirectoryEx.TryBrowse(rootPath, out exBrowse))
 				{
 					OnMessageInputRequest
 					(
-						Utilities.MessageHelper.ComposeMessage("Unable to open log folder", rootDirectoryPath, exBrowse),
+						Utilities.MessageHelper.ComposeMessage("Unable to open log folder", rootPath, exBrowse),
 						"Log Folder Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error

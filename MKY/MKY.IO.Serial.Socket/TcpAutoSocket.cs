@@ -450,6 +450,38 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <remarks>
+		/// The value of this property only reflects the state of the send queue.
+		/// <para>
+		/// The state of the underlying <see cref="ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection"/>
+		/// (i.e. calls to <see cref="ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection.BeginSend"/>
+		/// and their callbacks to <see cref="ALAZ.SystemEx.NetEx.SocketsEx.ISocketService.OnSent"/>)
+		/// is not taken into account because keeping track of ongoing send requests and callbacks is
+		/// not feasible to implement in a solid way. E.g. incrementing the number of requested bytes
+		/// and decrementing them in the callback would be susceptible to inconsistencies, e.g. in
+		/// case of connection state related exceptions.
+		/// </para><para>
+		/// Neither is the state of the underlying operating system socket taken into account, as
+		/// its state cannot be retrieved from within this .NET implementation by common means.
+		/// </para></remarks>
+		public virtual bool IsSending
+		{
+			get
+			{
+				AssertUndisposed();
+
+				lock (this.stateSyncObj) // Directly locking the state is OK, 'IsSending' cannot result in a state related deadlock.
+				{
+					if      (IsClient && (this.client != null))
+						return (this.client.IsSending);
+					else if (IsServer && (this.server != null))
+						return (this.server.IsSending);
+					else
+						return (false);
+				}
+			}
+		}
+
+		/// <remarks>
 		/// The <see cref="IsClient"/> and <see cref="IsServer"/> properties only return <c>true</c>
 		/// if it is defined whether the AutoSocket indeed behaves as client or server. If it is not
 		/// yet defined, both flags are set <c>false</c>.

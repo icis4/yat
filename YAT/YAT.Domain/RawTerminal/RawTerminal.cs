@@ -169,6 +169,9 @@ namespace YAT.Domain
 		private IIOProvider io;
 		private object ioDataSyncObj = new object();
 
+		private DateTime lastReceivedChunkTimeStamp;
+		private object lastReceivedChunkTimeStampSyncObj = new object();
+
 		#endregion
 
 		#region Events
@@ -382,6 +385,39 @@ namespace YAT.Domain
 					return (this.io.IsTransmissive);
 				else
 					return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool IsSending
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				if (this.io != null)
+					return (this.io.IsSending);
+				else
+					return (false);
+			}
+		}
+
+		/// <remarks>
+		/// Opposed to <see cref="IsSending"/>, where the amount of data expected for sending is
+		/// known by the caller, there is no information on the availability and amout of data
+		/// for receiving, nor any way to determine whether data may be coming in soon. Thus, an
+		/// 'IsReceiving' property makes little sense. Instead, this time stamp may be used to
+		/// determine for how long the I/O instance has not been receiving data anymore, and can
+		/// combine this time stamp with a time-out.
+		/// </remarks>
+		public virtual DateTime LastReceivedChunkTimeStamp
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				lock (this.lastReceivedChunkTimeStampSyncObj)
+					return (this.lastReceivedChunkTimeStamp);
 			}
 		}
 
@@ -771,6 +807,9 @@ namespace YAT.Domain
 					try
 					{
 						DebugDataReceived(e.Data.Length);
+
+						lock (this.lastReceivedChunkTimeStampSyncObj)
+							this.lastReceivedChunkTimeStamp = e.TimeStamp;
 
 						var re = new RawChunk(e.Data, e.TimeStamp, e.Device, IODirection.Rx);
 						lock (this.repositorySyncObj)

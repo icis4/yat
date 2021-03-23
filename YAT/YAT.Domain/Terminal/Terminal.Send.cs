@@ -255,7 +255,15 @@ namespace YAT.Domain
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				return (IsTransmissive && (this.isSendingCount > 0)); // No need to lock (this.isSendingCountSyncObj), retrieving only.
+				var thisIsSending = (IsTransmissive && (this.isSendingCount > 0)); // No need to lock (this.isSendingCountSyncObj), retrieving only.
+
+				bool rawIsSending;
+				if (this.rawTerminal != null)
+					rawIsSending = this.rawTerminal.IsSending;
+				else
+					rawIsSending = false;
+
+				return (thisIsSending || rawIsSending); // Either or! This may already have completed while raw is still busy!
 			}
 		}
 
@@ -273,20 +281,6 @@ namespace YAT.Domain
 				return (IsSending && (this.isSendingForSomeTimeCount > 0)); // No need to lock (this.isSendingForSomeTimeCountSyncObj), retrieving only.
 			}
 		}
-
-		/// <summary></summary>
-		public virtual bool IsReceiving
-		{
-			get
-			{
-			////AssertUndisposed() shall not be called from this simple get-property.
-
-// PENDING !!!	return (IsTransmissive && (this.isReceivingCount > 0)); // No need to lock (this.isReceivingCountSyncObj), retrieving only.
-				return (IsTransmissive);
-			}
-		}
-
-		// 'IsReceivingForSomeTime' is not needed (yet).
 
 		/// <summary>
 		/// Returns the current break state.

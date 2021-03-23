@@ -81,8 +81,8 @@ namespace MKY.IO.Serial.Usb
 		private const string             MT_SerHid_string      =   "MT Ser/HID";                           // OHAUS is MT's 2nd brand.
 		private static readonly string[] MT_SerHid_stringStart = { "MT", "METTLER TOLEDO", "Mettler-Toledo", "OH" }; // Covers "OHAUS".
 
-		private const string             YAT_string      =   "YAT default"; // Using "YAT" rather than "MKY" as that would be confusing to the user.
-		private static readonly string[] YAT_stringStart = { "YAT" };       // And making this configurable seems a bit of an overkill.
+		private const string             YAT_string      =   "YAT default"; // Using "YAT" rather than "MKY" as that is the 3rd party
+		private static readonly string[] YAT_stringStart = { "YAT" };       // where this preset originates from, as other 3rd party.
 
 		/// <summary></summary>
 		public const string UserSummary = @"""MT"", ""OH"" and ""YAT""";
