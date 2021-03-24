@@ -89,6 +89,7 @@ YAT 2.4.1 :: 2021-03-xx
 
 New:
 - Quick reference (PDF) added. Accessible via [Windows > Start > YAT] and [YAT > Help].
+- [Find All] added, including live update (feature requests #424 and #434).
 
 Important changes:
 - Log dialog now more clearly states "root directory and file name base" (part of feat. req. #435).
@@ -96,6 +97,8 @@ Important changes:
 
 Fixed bugs:
 - Handling of trigger of automatic actions and responses fixed and improved (bugs #504 and #505).
+- Plot window related NullReferenceException when closing YAT fixed.
+- <<<<<<<<<<<<<<<<<<<<<NullReferenceException>>>>>>>>>>>>>>>>>>>>>> when handling backspace with preceeding spaces fixed.
 
 
 YAT 2.4.0 :: 2021-01-29
