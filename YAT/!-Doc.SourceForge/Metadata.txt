@@ -19,7 +19,7 @@ Engineering, testing and debugging of serial communication :: Supports RS-232/42
 
 Features:
 Serial terminal (connection endpoint) for engineering, testing and debugging purposes.
-The perfect replacement for HyperTerminal or good ol' fashioned Windows 3.x Terminal.
+The perfect replacement for good ol' fashioned Windows 3.x Terminal, Hyperterminal and other terminals used for device communication.
 Formatting options for excellent readability.
 Configurable input mode.
 Single-line text commands.

@@ -48,7 +48,7 @@ namespace YAT.Settings.Model
 	/// <remarks>Root name is relevant for <see cref="AlternateXmlElements"/>.</remarks>
 	/// <remarks>An explicit name makes little sense as this is the very root of the XML.</remarks>
 	[XmlRoot("Settings")]
-	public class TerminalSettingsRoot : MKY.Settings.SettingsItem, IEquatable<TerminalSettingsRoot>, MKY.Xml.IAlternateXmlElementProvider
+	public class TerminalSettingsRoot : MKY.Settings.SettingsItem, IEquatable<TerminalSettingsRoot>, IAlternateXmlElementProvider
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
 		private string settingsVersion = "1.8.0";

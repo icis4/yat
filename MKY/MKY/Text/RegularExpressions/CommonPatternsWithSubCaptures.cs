@@ -22,8 +22,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace MKY.Text.RegularExpressions
 {
 	/// <summary>
@@ -38,12 +36,12 @@ namespace MKY.Text.RegularExpressions
 
 		/// <summary>
 		/// Captures dates separated by spaces, e.g 2000 01 01, always including leading zeros.
-		/// </summary>
+		/// </summary>                                     // Grouping only, no capturing.
 		public const string DateWithSpacesDescending = @"((?:19|20)\d\d)\s(0[1-9]|1[012])\s(0[1-9]|[12]\d|3[01])";
 
 		/// <summary>
 		/// Captures dates separated by spaces, e.g 2000-01-01, always including leading zeros.
-		/// </summary>
+		/// </summary>                                      // Grouping only, no capturing.
 		public const string DateWithHyphensDescending = @"((?:19|20)\d\d)-(0[1-9]|1[012])-(0[1-9]|[12]\d|3[01])";
 
 		/// <summary>
