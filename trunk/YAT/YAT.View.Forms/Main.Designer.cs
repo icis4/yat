@@ -170,6 +170,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Find_EnableRegex = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Find_Next = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Find_Previous = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Find_All = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_Log_Settings = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Log_On = new System.Windows.Forms.ToolStripButton();
@@ -859,7 +860,7 @@ namespace YAT.View.Forms
 			// toolStripMenuItem_MainMenu_Help_QuickReference
 			// 
 			this.toolStripMenuItem_MainMenu_Help_QuickReference.Name = "toolStripMenuItem_MainMenu_Help_QuickReference";
-			this.toolStripMenuItem_MainMenu_Help_QuickReference.Size = new System.Drawing.Size(255, 22);
+			this.toolStripMenuItem_MainMenu_Help_QuickReference.Size = new System.Drawing.Size(201, 22);
 			this.toolStripMenuItem_MainMenu_Help_QuickReference.Text = "&Quick Reference... (.pdf)";
 			this.toolStripMenuItem_MainMenu_Help_QuickReference.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_QuickReference_Click);
 		#if (WITH_SCRIPTING)
@@ -1104,6 +1105,7 @@ namespace YAT.View.Forms
             this.toolStripButton_MainTool_Find_EnableRegex,
             this.toolStripButton_MainTool_Find_Next,
             this.toolStripButton_MainTool_Find_Previous,
+            this.toolStripButton_MainTool_Find_All,
             this.toolStripMenuItem_MainTool_Separator_6,
             this.toolStripButton_MainTool_Log_Settings,
             this.toolStripButton_MainTool_Log_On,
@@ -1433,6 +1435,17 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Find_Previous.ToolTipText = "Find Previous\r\n[Ctrl+P] / [Alt+P] (while in find)\r\n[Alt+Shift+P] (always)";
 			this.toolStripButton_MainTool_Find_Previous.Visible = false;
 			this.toolStripButton_MainTool_Find_Previous.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_Previous_Click);
+			// 
+			// toolStripButton_MainTool_Find_All
+			// 
+			this.toolStripButton_MainTool_Find_All.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Find_All.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_database_repeat_16x16;
+			this.toolStripButton_MainTool_Find_All.Name = "toolStripButton_MainTool_Find_All";
+			this.toolStripButton_MainTool_Find_All.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton_MainTool_Find_All.Text = "Find All";
+			this.toolStripButton_MainTool_Find_All.ToolTipText = "Find All\r\n[Ctrl+L] / [Alt+L] (while in find)\r\n[Alt+Shift+L] (always)";
+			this.toolStripButton_MainTool_Find_All.Visible = false;
+			this.toolStripButton_MainTool_Find_All.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_All_Click);
 			// 
 			// toolStripMenuItem_MainTool_Separator_6
 			// 
@@ -1952,11 +1965,12 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MainTool_Separator_8;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_ShowHide;
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_Find_Pattern;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_Next;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_Previous;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_CaseSensitive;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_WholeWord;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_EnableRegex;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_Next;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_Previous;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_All;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoAction_ShowHide;
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_AutoAction_Trigger;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoAction_Trigger_UseText;

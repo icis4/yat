@@ -4752,6 +4752,19 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		protected virtual bool FindAllIsFeasible
+		{
+			get
+			{
+				var main = (this.mdiParent as Main);
+				if (main != null)
+					return (main.FindAllIsFeasible);
+				else
+					return (false);
+			}
+		}
+
+		/// <summary></summary>
 		protected virtual void RequestFindNext()
 		{
 			var main = (this.mdiParent as Main);
@@ -4765,6 +4778,14 @@ namespace YAT.View.Forms
 			var main = (this.mdiParent as Main);
 			if (main != null)
 				main.RequestFindPrevious();
+		}
+
+		/// <summary></summary>
+		protected virtual void RequestFindAll()
+		{
+			var main = (this.mdiParent as Main);
+			if (main != null)
+				main.RequestFindAll();
 		}
 
 		/// <summary></summary>
@@ -4862,6 +4883,37 @@ namespace YAT.View.Forms
 
 			var monitor = GetMonitor(this.lastMonitorSelection);
 			if (monitor.TryFindPrevious(pattern, ApplicationSettings.RoamingUserSettings.Find.Options))
+			{
+				this.lastFindPattern = pattern;
+
+				return (FindResult.Found);
+			}
+			else
+			{
+				bool isFirst = (pattern != this.lastFindPattern);
+
+				if (messageBoxIsPermissible)
+					ShowNotFoundMessage(pattern, isFirst);
+
+				return (isFirst ? FindResult.NotFoundAtAll : FindResult.NotFoundAnymore);
+			}
+		}
+
+		/// <remarks>
+		/// Using "pattern" instead of "textOrPattern" for simplicity.
+		/// </remarks>
+		public virtual FindResult TryFindAll(string pattern, bool messageBoxIsPermissible)
+		{
+			// The active pattern wouldn't have to be saved each time, it is saved on LeaveFindOnEdit() anyway.
+			// But, the recent has to be saved each time, as the time stamp changes. Thus, saving both anyway.
+
+			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = pattern;
+			ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.Add(new RecentItem<string>(pattern));
+			ApplicationSettings.RoamingUserSettings.Find.SetChanged(); // Manual change required because underlying collection is modified.
+			ApplicationSettings.SaveRoamingUserSettings();
+
+			var monitor = GetMonitor(this.lastMonitorSelection);
+			if (monitor.TryFindAll(pattern, ApplicationSettings.RoamingUserSettings.Find.Options))
 			{
 				this.lastFindPattern = pattern;
 

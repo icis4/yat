@@ -431,6 +431,7 @@
     <Content Include="Resources\Tool\Image_Tool_control_play_blue_32x32.png" />
     <Content Include="Resources\Tool\Image_Tool_control_stop_blue_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_control_stop_blue_32x32.png" />
+    <Content Include="Resources\Tool\Image_Tool_database_repeat_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_delete_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_email_delete_16x16.png" />
     <Content Include="Resources\Tool\Image_Tool_file_extension_chm_16x16.png" />

@@ -153,6 +153,7 @@ namespace YAT.View.Forms
 		private FindResult findResult;       // = FindResult.Reset;
 		private bool findNextIsFeasible;     // = false
 		private bool findPreviousIsFeasible; // = false
+		private bool findAllIsFeasible;      // = false
 
 		// Auto:
 		private bool autoActionTriggerValidationIsOngoing;    // = false;
@@ -1364,6 +1365,8 @@ namespace YAT.View.Forms
 						toolStripButton_MainTool_Find_Next    .Visible = true;
 						toolStripButton_MainTool_Find_Previous.Enabled = childIsReady;
 						toolStripButton_MainTool_Find_Previous.Visible = true;
+						toolStripButton_MainTool_Find_All     .Enabled = childIsReady;
+						toolStripButton_MainTool_Find_All     .Visible = true;
 					}
 					else
 					{
@@ -1380,6 +1383,7 @@ namespace YAT.View.Forms
 
 						toolStripButton_MainTool_Find_Next    .Visible = false;
 						toolStripButton_MainTool_Find_Previous.Visible = false;
+						toolStripButton_MainTool_Find_All     .Visible = false;
 					}
 				}
 				DebugFindLeave();
@@ -2254,6 +2258,7 @@ namespace YAT.View.Forms
 					case Keys.F:               // Additional shortcuts shall be executable under same conditions as normal shortcuts.
 					case Keys.N: if (FindNextIsFeasible)     { ValidateAndFindNext();     } e.SuppressKeyPress = true; break;
 					case Keys.P: if (FindPreviousIsFeasible) { ValidateAndFindPrevious(); } e.SuppressKeyPress = true; break;
+					case Keys.L: if (FindAllIsFeasible)      { ValidateAndFindAll();      } e.SuppressKeyPress = true; break;
 
 					default: break;
 				}
@@ -2265,6 +2270,7 @@ namespace YAT.View.Forms
 					case Keys.F:               // Additional shortcuts shall be executable under same conditions as normal shortcuts.
 					case Keys.N: if (FindNextIsFeasible)     { ValidateAndFindNext();     } e.SuppressKeyPress = true; break;
 					case Keys.P: if (FindPreviousIsFeasible) { ValidateAndFindPrevious(); } e.SuppressKeyPress = true; break;
+					case Keys.L: if (FindAllIsFeasible)      { ValidateAndFindAll();      } e.SuppressKeyPress = true; break;
 
 					default: break;
 				}
@@ -2326,6 +2332,7 @@ namespace YAT.View.Forms
 					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.WindowText;
 					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = true;
 					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = true;
+					toolStripButton_MainTool_Find_All      .Enabled   = this.findAllIsFeasible      = true;
 					break;
 
 				case FindResult.Empty:
@@ -2333,6 +2340,7 @@ namespace YAT.View.Forms
 					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.WindowText;
 					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = false;
 					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = false;
+					toolStripButton_MainTool_Find_All      .Enabled   = this.findAllIsFeasible      = false;
 					break;
 
 				case FindResult.Found:
@@ -2340,6 +2348,7 @@ namespace YAT.View.Forms
 					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.WindowText; // 'Reset' above.
 					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = true;
 					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = true;
+					toolStripButton_MainTool_Find_All      .Enabled   = this.findAllIsFeasible      = true;
 					break;
 
 				case FindResult.NotFoundAnymore:
@@ -2347,6 +2356,7 @@ namespace YAT.View.Forms
 					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.HighlightText; // which is also 'highlighted'.
 					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = (direction != FindDirection.Forward);
 					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = (direction != FindDirection.Backward);
+					toolStripButton_MainTool_Find_All      .Enabled   = this.findAllIsFeasible      = true;
 					break;
 
 				case FindResult.NotFoundAtAll:
@@ -2354,6 +2364,7 @@ namespace YAT.View.Forms
 					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.InfoText;
 					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = false;
 					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = false;
+					toolStripButton_MainTool_Find_All      .Enabled   = this.findAllIsFeasible      = false;
 					break;
 
 				case FindResult.Invalid:
@@ -2361,6 +2372,7 @@ namespace YAT.View.Forms
 					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.ControlText;
 					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = false;
 					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = false;
+					toolStripButton_MainTool_Find_All      .Enabled   = this.findAllIsFeasible      = false;
 					break;
 
 				default:
@@ -2482,6 +2494,31 @@ namespace YAT.View.Forms
 			else
 			{
 				SetFindStateAndControls(FindDirection.Backward, FindResult.Invalid);
+			}
+		}
+
+		private void toolStripButton_MainTool_Find_All_Click(object sender, EventArgs e)
+		{
+			ValidateAndFindAll();
+		}
+
+		/// <summary></summary>
+		protected virtual void ValidateAndFindAll()
+		{
+			var pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
+			if (ValidateFindPattern(pattern))
+			{
+				var fr = FindResult.Reset;
+
+				var t = (ActiveMdiChild as Terminal);
+				if (t != null)
+					fr = t.TryFindAll(pattern, MessageBoxIsPermissible);
+
+				SetFindStateAndControls(FindDirection.All, fr);
+			}
+			else
+			{
+				SetFindStateAndControls(FindDirection.All, FindResult.Invalid);
 			}
 		}
 
@@ -4889,6 +4926,18 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary>
+		/// Gets whether the find is ready to search for all.
+		/// </summary>
+		public virtual bool FindAllIsFeasible
+		{
+			get
+			{
+				bool childIsReady = (ActiveMdiChild != null);
+				return (childIsReady && this.findAllIsFeasible);
+			}
+		}
+
+		/// <summary>
 		/// Requests find next.
 		/// </summary>
 		public virtual void RequestFindNext()
@@ -4902,6 +4951,14 @@ namespace YAT.View.Forms
 		public virtual void RequestFindPrevious()
 		{
 			ValidateAndFindPrevious();
+		}
+
+		/// <summary>
+		/// Requests find all.
+		/// </summary>
+		public virtual void RequestFindAll()
+		{
+			ValidateAndFindAll();
 		}
 
 		#endregion
