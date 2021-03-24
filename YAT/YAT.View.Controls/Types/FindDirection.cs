@@ -38,7 +38,10 @@ namespace YAT.View.Controls
 		Forward,
 
 		/// <summary>Find previous, i.e. backward.</summary>
-		Backward
+		Backward,
+
+		/// <summary>Find all.</summary>
+		All
 	}
 }
 

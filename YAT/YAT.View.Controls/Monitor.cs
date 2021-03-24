@@ -790,6 +790,18 @@ namespace YAT.View.Controls
 		/// <remarks>
 		/// Using "pattern" instead of "textOrPattern" for simplicity.
 		/// </remarks>
+		public virtual bool TryFindAll(string pattern, FindOptions options)
+		{
+			this.isFirstFindOnEdit = true;
+
+			PrepareFind(pattern, options);
+
+			return (TryFindAll());
+		}
+
+		/// <remarks>
+		/// Using "pattern" instead of "textOrPattern" for simplicity.
+		/// </remarks>
 		protected virtual void PrepareFind(string pattern, FindOptions options)
 		{
 			if (options.EnableRegex)
@@ -845,6 +857,14 @@ namespace YAT.View.Controls
 				return (false);
 
 			this.lastFindIndex = findIndex;
+			return (true);
+		}
+
+		/// <summary></summary>
+		protected virtual bool TryFindAll()
+		{
+			// PENDING
+
 			return (true);
 		}
 
