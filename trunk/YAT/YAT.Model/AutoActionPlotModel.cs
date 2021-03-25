@@ -131,27 +131,40 @@ namespace YAT.Model
 				case AutoAction.HistogramVertical:   AddItemToHistogram(         pi,          rxColor, Orientation.Vertical  ); break;
 			}
 
-			Invalidate(true); // Items have changed.
+			Invalidate(true); // Data has changed.
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Clears all data in the plot and resets the axes.
+		/// </summary>
 		public virtual void Clear()
+		{
+			ClearOrReset(doReset: false);
+		}
+
+		/// <summary>
+		/// Completely resets the plot, i.e. clears all data and removes all axes.
+		/// </summary>
+		public virtual void Reset()
+		{
+			ClearOrReset(doReset: true);
+		}
+
+		/// <remarks>
+		/// Common implementation for <see cref="Clear"/> and <see cref="Reset"/>.
+		/// </remarks>
+		protected virtual void ClearOrReset(bool doReset)
 		{
 			Histogram = null;
 
 			OxyModel.Series.Clear();
 
-			Invalidate(true); // Items have changed.
-		}
+			if (doReset)
+				OxyModel.Axes.Clear();
+			else
+				OxyModel.ResetAllAxes();
 
-		/// <summary></summary>
-		public virtual void Reset()
-		{
-			Clear();
-
-			OxyModel.Axes.Clear();
-
-			Invalidate(false); // Items have not changed.
+			Invalidate(true); // Data has changed.
 		}
 
 		#endregion
