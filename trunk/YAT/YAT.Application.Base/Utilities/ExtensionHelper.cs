@@ -57,7 +57,7 @@ namespace YAT.Application.Utilities
 		/// e.g. ".ab1" instead of ".yat".
 		/// </summary>
 		/// <remarks>
-		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsTerminalFile(string)"/>.
+		/// Intentionally replicating term "Extension" for better distinction with <see cref="IsTerminalFile(string)"/>.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to deal with file extensions such as '.ab1'...")]
 		public static string TerminalExtension
@@ -67,7 +67,7 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <remarks>
-		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsTerminalFile(string)"/>.
+		/// Intentionally replicating term "Extension" for better distinction with <see cref="IsTerminalFile(string)"/>.
 		/// </remarks>
 		public static bool IsTerminalExtension(string extension)
 		{
@@ -98,7 +98,7 @@ namespace YAT.Application.Utilities
 		/// e.g. ".ab2" instead of ".yaw".
 		/// </summary>
 		/// <remarks>
-		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsWorkspaceFile(string)"/>.
+		/// Intentionally replicating term "Extension" for better distinction with <see cref="IsWorkspaceFile(string)"/>.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to deal with file extensions such as '.ab1'...")]
 		public static string WorkspaceExtension
@@ -108,7 +108,7 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <remarks>
-		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsWorkspaceFile(string)"/>.
+		/// Intentionally replicating term "Extension" for better distinction with <see cref="IsWorkspaceFile(string)"/>.
 		/// </remarks>
 		public static bool IsWorkspaceExtension(string extension)
 		{
@@ -176,7 +176,7 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <remarks>
-		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsScriptFile(string)"/>.
+		/// Intentionally replicating term "Extension" for better distinction with <see cref="IsScriptFile(string)"/>.
 		/// </remarks>
 		public static bool IsScriptExtension(string extension)
 		{
@@ -227,7 +227,7 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <remarks>
-		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsCommandFile(string)"/>.
+		/// Intentionally replicating term "Extension" for better distinction with <see cref="IsCommandFile(string)"/>.
 		/// </remarks>
 		public static bool IsCommandExtension(string extension)
 		{
@@ -265,7 +265,7 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <remarks>
-		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsCommandPageFile(string)"/>.
+		/// Intentionally replicating term "Extension" for better distinction with <see cref="IsCommandPageFile(string)"/>.
 		/// </remarks>
 		public static bool IsCommandPageFileExtension(string extension)
 		{
@@ -303,7 +303,7 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <remarks>
-		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsCommandPagesFile(string)"/>.
+		/// Intentionally replicating term "Extension" for better distinction with <see cref="IsCommandPagesFile(string)"/>.
 		/// </remarks>
 		public static bool IsCommandPagesExtension(string extension)
 		{
@@ -381,7 +381,7 @@ namespace YAT.Application.Utilities
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsTextFile(string)"/>.
+		/// Intentionally replicating term "Extension" for better distinction with <see cref="IsTextFile(string)"/>.
 		/// </remarks>
 		public static bool IsTextExtension(string extension)
 		{
@@ -400,7 +400,7 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <remarks>
-		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsBinaryFile(string)"/>.
+		/// Intentionally replicating term "Extension" for better distinction with <see cref="IsBinaryFile(string)"/>.
 		/// </remarks>
 		public static bool IsBinaryExtension(string extension)
 		{
@@ -419,7 +419,7 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <remarks>
-		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsRtfFile(string)"/>.
+		/// Intentionally replicating term "Extension" for better distinction with <see cref="IsRtfFile(string)"/>.
 		/// </remarks>
 		public static bool IsRtfExtension(string extension)
 		{
@@ -434,7 +434,7 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <remarks>
-		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsXmlFile(string)"/>.
+		/// Intentionally replicating term "Extension" for better distinction with <see cref="IsXmlFile(string)"/>.
 		/// </remarks>
 		public static bool IsXmlExtension(string extension)
 		{
@@ -599,7 +599,7 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <remarks>
-		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsImageFile(string)"/>.
+		/// Intentionally replicating term "Extension" for better distinction with <see cref="IsImageFile(string)"/>.
 		/// </remarks>
 		public static bool IsImageExtension(string extension)
 		{
@@ -608,7 +608,7 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <remarks>
-		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsImageFile(string)"/>.
+		/// Intentionally replicating term "Extension" for better distinction with <see cref="IsImageFile(string)"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static bool IsImageExtension(string extension, out ImageFormat format)
@@ -638,7 +638,7 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <remarks>
-		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsSvgFile(string)"/>.
+		/// Intentionally replicating term "Extension" for better distinction with <see cref="IsSvgFile(string)"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Svg", Justification = "SVG is a file format.")]
 		public static bool IsSvgExtension(string extension)
@@ -655,7 +655,7 @@ namespace YAT.Application.Utilities
 		}
 
 		/// <remarks>
-		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsPdfFile(string)"/>.
+		/// Intentionally replicating term "Extension" for better distinction with <see cref="IsPdfFile(string)"/>.
 		/// </remarks>
 		public static bool IsPdfExtension(string extension)
 		{
@@ -709,7 +709,7 @@ namespace YAT.Application.Utilities
 		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
-		/// Intentionally replicating term 'Extension' for better distinction with <see cref="IsExecutableFile(string)"/>.
+		/// Intentionally replicating term "Extension" for better distinction with <see cref="IsExecutableFile(string)"/>.
 		/// </remarks>
 		public static bool IsExecutableExtension(string extension)
 		{

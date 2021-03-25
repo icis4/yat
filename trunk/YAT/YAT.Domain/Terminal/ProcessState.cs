@@ -334,13 +334,13 @@ namespace YAT.Domain
 		}
 	}
 
-	/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
+	/// <remarks>Named "Device" for simplicity even though using "I/O Device" for view.</remarks>
 	public class DeviceState
 	{
 		/// <summary></summary>
 		public bool   IsFirstChunk { get; set; } // Not 'protected set' as commented at 'IsFirstChunk = false'.
 
-		/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
+		/// <remarks>Named "Device" for simplicity even though using "I/O Device" for view.</remarks>
 		public string Device       { get; set; } // Not 'protected set' as commented at 'Device = dev'.
 
 		/// <summary></summary>
@@ -367,7 +367,7 @@ namespace YAT.Domain
 		}
 	}
 
-	/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
+	/// <remarks>Named "Device" for simplicity even though using "I/O Device" for view.</remarks>
 	public class DirectionState
 	{
 		/// <summary></summary>
@@ -409,7 +409,7 @@ namespace YAT.Domain
 		/// <remarks>'TimeStamp' implicitly means 'OfBeginningOfLine'.</remarks>
 		public DateTime                 TimeStamp { get; set; }
 
-		/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
+		/// <remarks>Named "Device" for simplicity even though using "I/O Device" for view.</remarks>
 		public string                   Device    { get; set; }
 
 		/// <summary></summary>
@@ -489,7 +489,7 @@ namespace YAT.Domain
 		/// <remarks>'TimeStamp' implicitly means 'OfBeginningOfLine'.</remarks>
 		public DateTime   TimeStamp { get; set; }
 
-		/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
+		/// <remarks>Named "Device" for simplicity even though using "I/O Device" for view.</remarks>
 		public string     Device    { get; set; }
 
 		/// <summary></summary>

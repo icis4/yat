@@ -36,12 +36,12 @@ namespace YAT.Domain
 		/// <remarks>Also usable with meaning 'Unknown' (yet).</remarks>
 		None = MKY.IO.Serial.Direction.None,
 
-		/// <remarks>YAT uses term 'Tx' instead of 'Output'.</remarks>
-		/// <remarks>YAT sorts 'Tx' before 'Rx'.</remarks>
+		/// <remarks>YAT uses term "Tx" instead of "Output".</remarks>
+		/// <remarks>YAT sorts "Tx" before "Rx".</remarks>
 		Tx = MKY.IO.Serial.Direction.Output,
 
-		/// <remarks>YAT uses term 'Rx' instead of 'Input'.</remarks>
-		/// <remarks>YAT sorts 'Rx' after 'Tx'.</remarks>
+		/// <remarks>YAT uses term "Rx" instead of "Input".</remarks>
+		/// <remarks>YAT sorts "Rx" after "Tx".</remarks>
 		Rx = MKY.IO.Serial.Direction.Input,
 
 		/// <remarks>Usable for I/O operations not tied to a direction.</remarks>

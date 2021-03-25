@@ -63,15 +63,15 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms; // In addition, several locations explicitly use 'System.Windows.Forms' to prevent naming conflicts with 'MKY.Windows.Forms' and 'YAT.Application'.
+using System.Windows.Forms; // In addition, several locations explicitly use "System.Windows.Forms" to prevent naming conflicts with "MKY.Windows.Forms" and "YAT.Application".
 
 using MKY;
 using MKY.Settings;
 using MKY.Threading;
-using MKY.Windows.Forms; // In addition, several locations explicitly use 'MKY.Windows.Forms' to prevent naming conflicts with 'System.Windows.Forms' and 'YAT.Application'.
+using MKY.Windows.Forms; // In addition, several locations explicitly use "MKY.Windows.Forms' to prevent naming conflicts with "System.Windows.Forms" and "YAT.Application".
 
 using YAT.Settings.Application;
-//// 'YAT.View.Forms' is explicitly used to prevent naming conflicts with same-named 'YAT.Application' classes like 'Main'.
+//// "YAT.View.Forms" is explicitly used to prevent naming conflicts with same-named "YAT.Application" classes like "Main".
 
 #endregion
 
@@ -411,19 +411,19 @@ namespace YAT.Application
 		///    ==> Run(false, true);
 		///
 		/// 3. 'cmd console' operation with view
-		///    > Must use 'YATConsole' to ensure that output is properly routed back to console
+		///    > Must use "YATConsole" to ensure that output is properly routed back to console
 		///    ==> Run(true, true);
 		///
 		/// 4. 'PowerShell' operation with view
-		///    > Must use 'YATConsole' to ensure that output is properly routed back to PowerShell
+		///    > Must use "YATConsole" to ensure that output is properly routed back to PowerShell
 		///    ==> Run(true, true);
 		///
 		/// 5. 'cmd console' operation with console only, no view at all
-		///    > Must use 'YATConsole' with the -NoView/-nv option
+		///    > Must use "YATConsole" with the -NoView/-nv option
 		///    ==> Run(true, false);
 		///
 		/// 6. 'PowerShell' operation with console only, no view at all
-		///    > Must use 'YATConsole' with the -NoView/-nv option
+		///    > Must use "YATConsole" with the -NoView/-nv option
 		///    ==> Run(true, false);
 		///
 		/// 7. YAT testing
@@ -1561,9 +1561,9 @@ namespace YAT.Application
 		}
 
 		/// <remarks>
-		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named 'Message' for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
+		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named "Message" for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
