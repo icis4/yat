@@ -2167,7 +2167,7 @@ namespace YAT.View.Forms
 		private void toolStripComboBox_MainTool_Find_Pattern_Enter(object sender, EventArgs e)
 		{
 			DebugFindEnter(MethodBase.GetCurrentMethod().Name);
-			SuspendFindShortcutsCtrlFNP();       // Suspend while in find field.
+			SuspendFindShortcutsCtrlFNPL();      // Suspend while in find field.
 			SuspendEditShortcutsCtrlACVDelete(); // Suspend while in find field.
 			EnterFindOnEdit();
 			DebugFindLeave();
@@ -2178,7 +2178,7 @@ namespace YAT.View.Forms
 			DebugFindEnter(MethodBase.GetCurrentMethod().Name);
 			LeaveFindOnEdit(toolStripComboBox_MainTool_Find_Pattern.Text);
 			ResumeEditShortcutsCtrlACVDelete(); // Suspended while in find field.
-			ResumeFindShortcutsCtrlFNP();       // Suspended while in find field.
+			ResumeFindShortcutsCtrlFNPL();      // Suspended while in find field.
 			DebugFindLeave();
 		}
 
@@ -2235,7 +2235,7 @@ namespace YAT.View.Forms
 			// [Severe]
 			// Only shortcuts that are not active elsewhere can be used here.
 			// Therefore, the [Ctrl+F/N/P] shortcuts are suspended while in find field.
-			//  => Suspend/ResumeCtrlFNPShortcuts() above and in terminals.
+			//  => Suspend/ResumeCtrlFNPLShortcuts() above and in terminals.
 			//
 			// [Severe]
 			// The ToolStripComboBox 'Leave' event is fired as soon as a MsgBox is shown (e.g.
@@ -4181,7 +4181,7 @@ namespace YAT.View.Forms
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
 		private bool toolStripMenuItem_MainMenu_File_New_EnabledToRestore; // = false;
 
-		private void SuspendFindShortcutsCtrlFNP()
+		private void SuspendFindShortcutsCtrlFNPL()
 		{
 			toolStripMenuItem_MainMenu_File_New_EnabledToRestore = toolStripMenuItem_MainMenu_File_New.Enabled;
 			toolStripMenuItem_MainMenu_File_New.Enabled = false; // Ctrl+N
@@ -4194,11 +4194,11 @@ namespace YAT.View.Forms
 			{
 				var t = (child as Terminal);
 				if (t != null)
-					t.SuspendFindShortcutsCtrlFNP();
+					t.SuspendFindShortcutsCtrlFNPL();
 			}
 		}
 
-		private void ResumeFindShortcutsCtrlFNP()
+		private void ResumeFindShortcutsCtrlFNPL()
 		{
 			toolStripMenuItem_MainMenu_File_New.Enabled = toolStripMenuItem_MainMenu_File_New_EnabledToRestore;
 
@@ -4206,7 +4206,7 @@ namespace YAT.View.Forms
 			{
 				var t = (child as Terminal);
 				if (t != null)
-					t.ResumeFindShortcutsCtrlFNP();
+					t.ResumeFindShortcutsCtrlFNPL();
 			}
 		}
 

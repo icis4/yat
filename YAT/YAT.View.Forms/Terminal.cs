@@ -188,7 +188,7 @@ namespace YAT.View.Forms
 		private AutoActionPlot   autoActionPlotForm;
 
 		// View:
-		private int findShortcutsCtrlFNPSuspendedCount;       // = 0;
+		private int findShortcutsCtrlFNPLSuspendedCount;      // = 0;
 		private int editShortcutsCtrlACVDeleteSuspendedCount; // = 0;
 
 		#endregion
@@ -586,11 +586,11 @@ namespace YAT.View.Forms
 					toolStripMenuItem_TerminalMenu_Terminal_Stop .Enabled =  this.terminal.IsStarted;
 
 					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled =  this.terminal.IsSendingForSomeTime;
-					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled =  monitorIsDefined;
+					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled = (monitorIsDefined && (this.findShortcutsCtrlFNPLSuspendedCount == 0)); // [Ctrl+L]
 
 					if (this.settingsRoot.Layout.VisibleMonitorPanelCount <= 1)
 					{
-						toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "Cl&ear";   // Indicating "All" for a single
+						toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "C&lear";   // Indicating "All" for a single
 						toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh"; //   panel would be confusing.
 					}
 					else
@@ -607,7 +607,7 @@ namespace YAT.View.Forms
 					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled = false;
 					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled = false;
 
-					toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "Cl&ear";   // Same as in designer generated code,
+					toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "C&lear";   // Same as in designer generated code,
 					toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh"; //   by default only bidir is visible.
 				}
 
@@ -616,10 +616,11 @@ namespace YAT.View.Forms
 
 				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = (monitorIsDefined && textIsNotFocused && (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)); // [Ctrl+C]
 				toolStripMenuItem_TerminalMenu_Terminal_SaveToFile     .Enabled =  monitorIsDefined;
-				toolStripMenuItem_TerminalMenu_Terminal_Print          .Enabled = (monitorIsDefined &&                     (this.findShortcutsCtrlFNPSuspendedCount       == 0)); // [Ctrl+P]
+				toolStripMenuItem_TerminalMenu_Terminal_Print          .Enabled = (monitorIsDefined &&                     (this.findShortcutsCtrlFNPLSuspendedCount      == 0)); // [Ctrl+P]
 
 				toolStripMenuItem_TerminalMenu_Terminal_FindNext       .Enabled = (monitorIsDefined && FindNextIsFeasible);
 				toolStripMenuItem_TerminalMenu_Terminal_FindPrevious   .Enabled = (monitorIsDefined && FindPreviousIsFeasible);
+				toolStripMenuItem_TerminalMenu_Terminal_FindAll        .Enabled = (monitorIsDefined && FindAllIsFeasible);
 			}
 			finally
 			{
@@ -701,6 +702,11 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_Terminal_FindPrevious_Click(object sender, EventArgs e)
 		{
 			RequestFindPrevious();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Terminal_FindAll_Click(object sender, EventArgs e)
+		{
+			RequestFindAll();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Settings_Click(object sender, EventArgs e)
@@ -6136,15 +6142,15 @@ namespace YAT.View.Forms
 		private bool toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore; // = false;
 
 		/// <summary>
-		/// Suspends the [Ctrl+F/N/P] find shortcuts.
+		/// Suspends the [Ctrl+F/N/P/L] find shortcuts.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "FNP", Justification = "FNP refers to these three specific keys.")]
-		public virtual void SuspendFindShortcutsCtrlFNP()
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "FNPL", Justification = "FNPL refers to these four specific keys.")]
+		public virtual void SuspendFindShortcutsCtrlFNPL()
 		{
-			if (this.findShortcutsCtrlFNPSuspendedCount < 0)
+			if (this.findShortcutsCtrlFNPLSuspendedCount < 0)
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Counter has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
-			if (this.findShortcutsCtrlFNPSuspendedCount == 0)
+			if (this.findShortcutsCtrlFNPLSuspendedCount == 0)
 			{
 				toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore = toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled;
 				toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore  = toolStripMenuItem_TerminalMenu_Terminal_Find .Enabled;
@@ -6153,7 +6159,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Terminal_Find .Enabled = false; // Ctrl+F
 			}
 
-			this.findShortcutsCtrlFNPSuspendedCount++; // No need for 'lock'/'Interlocked...()' as WinForms is synchronized on main thread.
+			this.findShortcutsCtrlFNPLSuspendedCount++; // No need for 'lock'/'Interlocked...()' as WinForms is synchronized on main thread.
 
 			// Could be implemented more cleverly, by iterating over all potential shortcut controls
 			// and then handle those that use one of the shortcuts in question. However, that would
@@ -6161,20 +6167,20 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary>
-		/// Resumes the [Ctrl+F/N/P] find shortcuts.
+		/// Resumes the [Ctrl+F/N/P/L] find shortcuts.
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "FNP", Justification = "FNP refers to these three specific keys.")]
-		public virtual void ResumeFindShortcutsCtrlFNP()
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "FNPL", Justification = "FNPL refers to these four specific keys.")]
+		public virtual void ResumeFindShortcutsCtrlFNPL()
 		{
-			this.findShortcutsCtrlFNPSuspendedCount--; // No need for 'lock'/'Interlocked...()' as WinForms is synchronized on main thread.
+			this.findShortcutsCtrlFNPLSuspendedCount--; // No need for 'lock'/'Interlocked...()' as WinForms is synchronized on main thread.
 
-			if (this.findShortcutsCtrlFNPSuspendedCount < 0) // Main form will call this method also for newly opened
-			{                                                // terminals which did not get notified about Suspend() yet!
-				this.findShortcutsCtrlFNPSuspendedCount = 0; // Simply reset (conservative implementation). Do not throw!
+			if (this.findShortcutsCtrlFNPLSuspendedCount < 0) // Main form will call this method also for newly opened
+			{                                                 // terminals which did not get notified about Suspend() yet!
+				this.findShortcutsCtrlFNPLSuspendedCount = 0; // Simply reset (conservative implementation). Do not throw!
 			////throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Counter has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
-			if (this.findShortcutsCtrlFNPSuspendedCount == 0)
+			if (this.findShortcutsCtrlFNPLSuspendedCount == 0)
 			{
 				toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore;
 				toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled  = toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore;

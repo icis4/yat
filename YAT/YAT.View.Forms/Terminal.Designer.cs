@@ -390,6 +390,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Terminal_Find = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Terminal_FindNext = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Terminal_FindPrevious = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Terminal_FindAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Terminal_Presets = new System.Windows.Forms.ToolStripMenuItem();
@@ -419,11 +420,11 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_Send_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommands = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsPage = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Send_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_7 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_AutoResponse_Trigger = new System.Windows.Forms.ToolStripMenuItem();
@@ -3454,6 +3455,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_TerminalMenu_Terminal_Find,
             this.toolStripMenuItem_TerminalMenu_Terminal_FindNext,
             this.toolStripMenuItem_TerminalMenu_Terminal_FindPrevious,
+            this.toolStripMenuItem_TerminalMenu_Terminal_FindAll,
             this.toolStripMenuItem_TerminalMenu_Terminal_Separator_6,
             this.toolStripMenuItem_TerminalMenu_Terminal_Settings,
             this.toolStripMenuItem_TerminalMenu_Terminal_Presets});
@@ -3485,7 +3487,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.C)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Size = new System.Drawing.Size(214, 22);
-			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Text = "C&lose/Stop";
+			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Text = "&Close/Stop";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Stop_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Separator_1
@@ -3520,7 +3522,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Name = "toolStripMenuItem_TerminalMenu_Terminal_Clear";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Size = new System.Drawing.Size(214, 22);
-			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Text = "Cl&ear";
+			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Text = "C&lear";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Clear.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Clear_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Refresh
@@ -3608,7 +3610,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Terminal_FindNext.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.N)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_FindNext.Size = new System.Drawing.Size(214, 22);
-			this.toolStripMenuItem_TerminalMenu_Terminal_FindNext.Text = "F&ind Next";
+			this.toolStripMenuItem_TerminalMenu_Terminal_FindNext.Text = "Find &Next";
 			this.toolStripMenuItem_TerminalMenu_Terminal_FindNext.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_FindNext_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_FindPrevious
@@ -3618,8 +3620,18 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Terminal_FindPrevious.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.P)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_FindPrevious.Size = new System.Drawing.Size(214, 22);
-			this.toolStripMenuItem_TerminalMenu_Terminal_FindPrevious.Text = "Fin&d Previous";
+			this.toolStripMenuItem_TerminalMenu_Terminal_FindPrevious.Text = "Find &Previous";
 			this.toolStripMenuItem_TerminalMenu_Terminal_FindPrevious.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_FindPrevious_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_Terminal_FindAll
+			// 
+			this.toolStripMenuItem_TerminalMenu_Terminal_FindAll.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_database_repeat_16x16;
+			this.toolStripMenuItem_TerminalMenu_Terminal_FindAll.Name = "toolStripMenuItem_TerminalMenu_Terminal_FindAll";
+			this.toolStripMenuItem_TerminalMenu_Terminal_FindAll.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.L)));
+			this.toolStripMenuItem_TerminalMenu_Terminal_FindAll.Size = new System.Drawing.Size(214, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_FindAll.Text = "Find A&ll";
+			this.toolStripMenuItem_TerminalMenu_Terminal_FindAll.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_FindAll_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Separator_6
 			// 
@@ -3893,19 +3905,6 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_5.Name = "toolStripMenuItem_TerminalMenu_Send_Separator_5";
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_5.Size = new System.Drawing.Size(330, 6);
 			// 
-			// toolStripMenuItem_TerminalMenu_Send_CopyPredefined
-			// 
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Name = "toolStripMenuItem_TerminalMenu_Send_CopyPredefined";
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.P)));
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Size = new System.Drawing.Size(333, 22);
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Text = "Copy &Predefined to [Send Text/File]";
-			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined_Click);
-			// 
-			// toolStripMenuItem_TerminalMenu_Send_Separator_6
-			// 
-			this.toolStripMenuItem_TerminalMenu_Send_Separator_6.Name = "toolStripMenuItem_TerminalMenu_Send_Separator_6";
-			this.toolStripMenuItem_TerminalMenu_Send_Separator_6.Size = new System.Drawing.Size(330, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_PredefinedCommands
 			// 
@@ -3920,7 +3919,6 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsPage.Name = "toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsPage";
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsPage.Size = new System.Drawing.Size(333, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsPage.Text = "Predefined Commands Pa&ge";
-			// 
 			// toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine.Name = "toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine";
@@ -3929,6 +3927,20 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine.Size = new System.Drawing.Size(333, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine.Text = "Predefined Commands &Define...";
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_Send_Separator_6
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_Separator_6.Name = "toolStripMenuItem_TerminalMenu_Send_Separator_6";
+			this.toolStripMenuItem_TerminalMenu_Send_Separator_6.Size = new System.Drawing.Size(330, 6);
+			// 
+			// toolStripMenuItem_TerminalMenu_Send_CopyPredefined
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Name = "toolStripMenuItem_TerminalMenu_Send_CopyPredefined";
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.P)));
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Size = new System.Drawing.Size(333, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Text = "Copy &Predefined to [Send Text/File]";
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_Separator_7
 			// 
@@ -4732,7 +4744,7 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripStatusLabel_TerminalStatus_Status.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripStatusLabel_TerminalStatus_Status.Name = "toolStripStatusLabel_TerminalStatus_Status";
-			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(333, 20);
+			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(364, 20);
 			this.toolStripStatusLabel_TerminalStatus_Status.Spring = true;
 			this.toolStripStatusLabel_TerminalStatus_Status.Text = "<Terminal Status>";
 			this.toolStripStatusLabel_TerminalStatus_Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -5527,6 +5539,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_Find;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_FindNext;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_FindPrevious;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_FindAll;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Terminal_Separator_6;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MonitorContextMenu_Separator_9;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_Find;
