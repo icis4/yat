@@ -1085,7 +1085,7 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
+		/// <remarks>Named "Device" for simplicity even though using "I/O Device" for view.</remarks>
 		protected virtual void ProcessAndSignalDeviceLineBreak(RepositoryType repositoryType, DateTime ts, string dev, IODirection dir)
 		{
 			DisplayElementCollection elementsToAdd            = null;
@@ -1341,7 +1341,7 @@ namespace YAT.Domain
 			}
 		}
 
-		/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
+		/// <remarks>Named "Device" for simplicity even though using "I/O Device" for view.</remarks>
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]

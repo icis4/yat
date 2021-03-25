@@ -2181,9 +2181,9 @@ namespace YAT.Model
 					}
 					if (!requestedTerminal.IsReadyToSend)
 					{
-						OnTimedStatusTextRequest("Operation triggered, pending until terminal is ready to send...");
-						return; // Pend!                               Using term 'Transmission' to indicate potential
-					}           //                                     'intelligence' to send + receive/verify the data.
+						OnTimedStatusTextRequest("Operation triggered, pending until terminal is ready to transmit...");
+						return; // Pend!                               Using term "Transmission" to indicate potential
+					}           //                                     "intelligence" to send + receive/verify the data.
 
 					// Preconditions fullfilled!
 					StopAndDisposeOperationTimer();
@@ -2505,9 +2505,9 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <remarks>
-		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named 'Message' for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
+		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named "Message" for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)

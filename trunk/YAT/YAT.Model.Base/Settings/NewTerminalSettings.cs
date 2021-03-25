@@ -445,7 +445,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
-		/// <remarks>Item is already named 'TcpClient', therefore no 'Socket' is prepended.</remarks>
+		/// <remarks>Item is already named "TcpClient", therefore no "Socket" is prepended.</remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "A type shall spell 'Tcp' like this...")]
 		[XmlElement("TcpClientAutoReconnect")]
 		public virtual MKY.IO.Serial.IntervalSettingTuple TcpClientAutoReconnect
@@ -461,7 +461,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
-		/// <remarks>Item is already named 'UdpServer', therefore no 'Socket' is prepended.</remarks>
+		/// <remarks>Item is already named "UdpServer", therefore no "Socket" is prepended.</remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "A type shall spell 'Udp' like this...")]
 		[XmlElement("UdpServerSendMode")]
 		public virtual MKY.IO.Serial.Socket.UdpServerSendMode UdpServerSendMode

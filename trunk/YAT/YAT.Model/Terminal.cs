@@ -1004,7 +1004,7 @@ namespace YAT.Model
 		/// to keep the message for each terminal.
 		/// </remarks>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public virtual void SetLastSentMessageByScripting(string value)
 		{
@@ -1022,7 +1022,7 @@ namespace YAT.Model
 		/// to keep the message for each terminal.
 		/// </remarks>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public virtual void GetLastSentMessageByScripting(out string value)
 		{
@@ -1040,7 +1040,7 @@ namespace YAT.Model
 		/// to keep the message for each terminal.
 		/// </remarks>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public virtual void ClearLastSentMessageByScripting(out string cleared)
 		{
@@ -1058,7 +1058,7 @@ namespace YAT.Model
 		/// Gets a value indicating whether the terminal has received a line that is available for scripting.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public virtual bool HasReceivedMessageAvailableForScripting
 		{
@@ -1074,7 +1074,7 @@ namespace YAT.Model
 		/// Gets a value indicating the number of received lines that are available for scripting.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public int AvailableReceivedMessageCountForScripting
 		{
@@ -1090,7 +1090,7 @@ namespace YAT.Model
 		/// Peeks the received messages that are available for scripting.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public int PeekAvailableReceivedMessagesForScripting(out Domain.ScriptMessage[] available)
 		{
@@ -1103,7 +1103,7 @@ namespace YAT.Model
 		/// Returns the line that has last been enqueued into the receive queue that is available for scripting.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public virtual void GetLastEnqueuedReceivedMessageForScripting(out Domain.ScriptMessage value)
 		{
@@ -1116,7 +1116,7 @@ namespace YAT.Model
 		/// Clears the last enqueued line that is available for scripting.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public virtual void ClearLastEnqueuedReceivedMessageForScripting(out Domain.ScriptMessage cleared)
 		{
@@ -1129,7 +1129,7 @@ namespace YAT.Model
 		/// Gets the next received line that is available for scripting and removes it from the queue.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		/// <exception cref="InvalidOperationException">
 		/// The underlying <see cref="Queue{T}"/> is empty.
@@ -1145,7 +1145,7 @@ namespace YAT.Model
 		/// Returns the received line that has last been dequeued from the receive queue for scripting.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public virtual void GetLastDequeuedReceivedMessageForScripting(out Domain.ScriptMessage value)
 		{
@@ -1158,7 +1158,7 @@ namespace YAT.Model
 		/// Clears the last dequeued line that is available for scripting.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public virtual void ClearLastDequeuedReceivedMessageForScripting(out Domain.ScriptMessage cleared)
 		{
@@ -1168,7 +1168,7 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		/// <remarks>
 		/// \remind (2018-03-27 / MKY)
@@ -1188,7 +1188,7 @@ namespace YAT.Model
 		/// Clears all available lines in the receive queue for scripting.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public void ClearAvailableReceivedMessagesForScripting(out Domain.ScriptMessage[] cleared, out DateTime clearTimeStamp)
 		{
@@ -6285,9 +6285,9 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named 'Message' for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
+		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named "Message" for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)

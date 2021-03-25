@@ -5104,7 +5104,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Using term 'Info' since the info contains name and IDs.
+		/// Using term "Info" since the info contains name and IDs.
 		/// </remarks>
 		private void SetTerminalInfoText(string text)
 		{
@@ -5119,9 +5119,9 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <remarks>
-		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named 'Message' for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
+		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named "Message" for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
