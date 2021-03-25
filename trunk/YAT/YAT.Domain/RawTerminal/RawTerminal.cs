@@ -809,7 +809,9 @@ namespace YAT.Domain
 						DebugDataReceived(e.Data.Length);
 
 						lock (this.lastReceivedChunkTimeStampSyncObj)
+						{
 							this.lastReceivedChunkTimeStamp = e.TimeStamp;
+						}
 
 						var re = new RawChunk(e.Data, e.TimeStamp, e.Device, IODirection.Rx);
 						lock (this.repositorySyncObj)
