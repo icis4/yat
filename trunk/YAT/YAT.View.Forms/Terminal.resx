@@ -156,15 +156,15 @@ Applies to [Send Text], [Send File] as well as [Predefined Commands].</value>
   <metadata name="menuStrip_Terminal.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>474, 17</value>
   </metadata>
-  <metadata name="contextMenuStrip_Preset.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1016, 17</value>
-  </metadata>
   <data name="toolStripMenuItem_TerminalMenu_Send_AllowConcurrency.ToolTipText" xml:space="preserve">
     <value>By default, commands are sent strictly sequentially, i.e. only one command can be active
 at a time. Enabling this option allows multiple commands being active simultaneously.
 Useful e.g. for sending a text command while a repeating text command is already ongoing.
 Applies to [Send Text], [Send File] as well as [Predefined Commands].</value>
   </data>
+  <metadata name="contextMenuStrip_Preset.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1016, 17</value>
+  </metadata>
   <data name="toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ToolTipText" xml:space="preserve">
     <value>Configure Automatic Response Trigger,
 either refer to one of the commands,
@@ -254,7 +254,7 @@ Note that...
     <value>237, 17</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>134</value>
+    <value>130</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

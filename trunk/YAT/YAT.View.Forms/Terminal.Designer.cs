@@ -119,10 +119,6 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_Separator_10 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_SaveToFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Print = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_MonitorContextMenu_Separator_11 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_MonitorContextMenu_Find = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_MonitorContextMenu_FindNext = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_MonitorContextMenu_FindPrevious = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Predefined = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_PredefinedContextMenu_Panels = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_Panels_Predefined = new System.Windows.Forms.ToolStripMenuItem();
@@ -420,8 +416,28 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_SkipEmptyLines = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_EnableEscapesForFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
+			// BEGIN OF ATTENTION BLOCK
+			//
+			//
+			//
+			// Attention block is likely to be removed by designer.
+			// Block intentionally enlarged for not missing when diffing.
+			//
+			//
+			//
+			// For whatever reason,,...
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommands = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsPage = new System.Windows.Forms.ToolStripMenuItem();
+			// ...these lines again and again get moved by the designer.
+			//
+			//
+			//
+			// Attention block is likely to be removed by designer.
+			// Block intentionally enlarged for not missing when diffing.
+			//
+			//
+			//
+			// END OF ATTENTION BLOCK
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
@@ -481,7 +497,27 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_Show = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_Reset = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
+			// BEGIN OF ATTENTION BLOCK
+			//
+			//
+			//
+			// Attention block is likely to be removed by designer.
+			// Block intentionally enlarged for not missing when diffing.
+			//
+			//
+			//
+			// For some reason, likely related to the 'OwnerItem' issue,...
 			this.toolStripMenuItem_TerminalMenu_View_Radix = new System.Windows.Forms.ToolStripMenuItem();
+			// ...this line again and again gets moved by the designer.
+			//
+			//
+			//
+			// Attention block is likely to be removed by designer.
+			// Block intentionally enlarged for not missing when diffing.
+			//
+			//
+			//
+			// END OF ATTENTION BLOCK
 			this.toolStripMenuItem_TerminalMenu_View_ShowRadix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_ShowLineNumbers = new System.Windows.Forms.ToolStripMenuItem();
@@ -631,13 +667,9 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard,
             this.toolStripMenuItem_MonitorContextMenu_Separator_10,
             this.toolStripMenuItem_MonitorContextMenu_SaveToFile,
-            this.toolStripMenuItem_MonitorContextMenu_Print,
-            this.toolStripMenuItem_MonitorContextMenu_Separator_11,
-            this.toolStripMenuItem_MonitorContextMenu_Find,
-            this.toolStripMenuItem_MonitorContextMenu_FindNext,
-            this.toolStripMenuItem_MonitorContextMenu_FindPrevious});
+            this.toolStripMenuItem_MonitorContextMenu_Print});
 			this.contextMenuStrip_Monitor.Name = "contextMenuStrip_Monitor";
-			this.contextMenuStrip_Monitor.Size = new System.Drawing.Size(267, 708);
+			this.contextMenuStrip_Monitor.Size = new System.Drawing.Size(267, 636);
 			this.contextMenuStrip_Monitor.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Monitor_Opening);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Panels
@@ -1236,35 +1268,6 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_MonitorContextMenu_Print.Size = new System.Drawing.Size(266, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Print.Text = "Print...";
 			this.toolStripMenuItem_MonitorContextMenu_Print.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Print_Click);
-			// 
-			// toolStripMenuItem_MonitorContextMenu_Separator_11
-			// 
-			this.toolStripMenuItem_MonitorContextMenu_Separator_11.Name = "toolStripMenuItem_MonitorContextMenu_Separator_11";
-			this.toolStripMenuItem_MonitorContextMenu_Separator_11.Size = new System.Drawing.Size(263, 6);
-			// 
-			// toolStripMenuItem_MonitorContextMenu_Find
-			// 
-			this.toolStripMenuItem_MonitorContextMenu_Find.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_tab_search_16x16;
-			this.toolStripMenuItem_MonitorContextMenu_Find.Name = "toolStripMenuItem_MonitorContextMenu_Find";
-			this.toolStripMenuItem_MonitorContextMenu_Find.Size = new System.Drawing.Size(266, 22);
-			this.toolStripMenuItem_MonitorContextMenu_Find.Text = "Find...";
-			this.toolStripMenuItem_MonitorContextMenu_Find.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Find_Click);
-			// 
-			// toolStripMenuItem_MonitorContextMenu_FindNext
-			// 
-			this.toolStripMenuItem_MonitorContextMenu_FindNext.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_rows_insert_below_word_16x16;
-			this.toolStripMenuItem_MonitorContextMenu_FindNext.Name = "toolStripMenuItem_MonitorContextMenu_FindNext";
-			this.toolStripMenuItem_MonitorContextMenu_FindNext.Size = new System.Drawing.Size(266, 22);
-			this.toolStripMenuItem_MonitorContextMenu_FindNext.Text = "Find Next";
-			this.toolStripMenuItem_MonitorContextMenu_FindNext.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_FindNext_Click);
-			// 
-			// toolStripMenuItem_MonitorContextMenu_FindPrevious
-			// 
-			this.toolStripMenuItem_MonitorContextMenu_FindPrevious.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_table_rows_insert_above_word_16x16;
-			this.toolStripMenuItem_MonitorContextMenu_FindPrevious.Name = "toolStripMenuItem_MonitorContextMenu_FindPrevious";
-			this.toolStripMenuItem_MonitorContextMenu_FindPrevious.Size = new System.Drawing.Size(266, 22);
-			this.toolStripMenuItem_MonitorContextMenu_FindPrevious.Text = "Find Previous";
-			this.toolStripMenuItem_MonitorContextMenu_FindPrevious.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_FindPrevious_Click);
 			// 
 			// contextMenuStrip_Predefined
 			// 
@@ -3904,7 +3907,16 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_5.Name = "toolStripMenuItem_TerminalMenu_Send_Separator_5";
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_5.Size = new System.Drawing.Size(330, 6);
-			// 
+			// BEGIN OF ATTENTION BLOCK
+			//
+			//
+			//
+			// Attention block is likely to be removed by designer.
+			// Block intentionally enlarged for not missing when diffing.
+			//
+			//
+			//
+			// For whatever reason,,...
 			// 
 			// toolStripMenuItem_TerminalMenu_Send_PredefinedCommands
 			// 
@@ -3919,6 +3931,17 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsPage.Name = "toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsPage";
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsPage.Size = new System.Drawing.Size(333, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsPage.Text = "Predefined Commands Pa&ge";
+			// ...these lines again and again get moved by the designer.
+			//
+			//
+			//
+			// Attention block is likely to be removed by designer.
+			// Block intentionally enlarged for not missing when diffing.
+			//
+			//
+			//
+			// END OF ATTENTION BLOCK
+			// 
 			// toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine.Name = "toolStripMenuItem_TerminalMenu_Send_PredefinedCommandsDefine";
@@ -4469,6 +4492,16 @@ namespace YAT.View.Forms
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Separator_3.Name = "toolStripMenuItem_TerminalMenu_View_Separator_3";
 			this.toolStripMenuItem_TerminalMenu_View_Separator_3.Size = new System.Drawing.Size(263, 6);
+			// BEGIN OF ATTENTION BLOCK
+			//
+			//
+			//
+			// Attention block is likely to be removed by designer.
+			// Block intentionally enlarged for not missing when diffing.
+			//
+			//
+			//
+			// For some reason, likely related to the 'OwnerItem' issue,...
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Radix
 			// 
@@ -4476,6 +4509,16 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
 			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(266, 22);
 			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "&Radix";
+			// ...these lines again and again get moved by the designer.
+			//
+			//
+			//
+			// Attention block is likely to be removed by designer.
+			// Block intentionally enlarged for not missing when diffing.
+			//
+			//
+			//
+			// END OF ATTENTION BLOCK
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowRadix
 			// 
@@ -5542,9 +5585,6 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_FindAll;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Terminal_Separator_6;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MonitorContextMenu_Separator_9;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_Find;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_FindNext;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_FindPrevious;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowRadix;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowTimeStamp;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowTimeSpan;
@@ -5577,7 +5617,6 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_View_Separator_7;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowLineNumbers;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_View_Separator_8;
-		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MonitorContextMenu_Separator_11;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowLineNumbers;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Panels_Predefined;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_MoveTo;
