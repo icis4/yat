@@ -227,15 +227,15 @@
 			this.ClientSize = new System.Drawing.Size(884, 441);
 			this.Controls.Add(this.button_SuspendResume);
 			this.Controls.Add(this.button_DeactivateAndClose);
-			this.Controls.Add(this.label_Help);
 			this.Controls.Add(this.plotView);
 			this.Controls.Add(this.button_Deactivate);
 			this.Controls.Add(this.button_ResetAxes);
 			this.Controls.Add(this.checkBox_ShowLegend);
 			this.Controls.Add(this.button_Clear);
 			this.Controls.Add(this.button_Close);
+			this.Controls.Add(this.label_Help);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MinimumSize = new System.Drawing.Size(480, 240);
+			this.MinimumSize = new System.Drawing.Size(624, 240);
 			this.Name = "AutoActionPlot";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "<ProductName> - [[<IndicatedName>] - Automatic Action Plot]";

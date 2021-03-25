@@ -719,6 +719,9 @@ namespace YAT.View.Forms
 			}
 		}
 
+		/// <summary>
+		/// Clears all data in the plot and resets the axes.
+		/// </summary>
 		private void Clear()
 		{
 			lock (this.terminal.AutoActionPlotModelSyncObj) // Guarantee consistency with ongoing
