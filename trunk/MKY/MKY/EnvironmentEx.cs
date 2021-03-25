@@ -33,7 +33,7 @@ namespace MKY
 	public static class EnvironmentEx
 	{
 		/// <summary>
-		/// Constant string to use 'NewLine' in places where <see cref="Environment.NewLine"/>
+		/// Constant string to use "NewLine" in places where <see cref="Environment.NewLine"/>
 		/// cannot be used, e.g. in case of attribute arguments.
 		/// </summary>
 		/// <remarks>

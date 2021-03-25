@@ -499,7 +499,7 @@ namespace MKY.Win32
 			/// Gets the result of an overlapped operation.
 			/// </summary>
 			/// <remarks>
-			/// Not named 'TryGet...' for maching the underlying Win32 function name.
+			/// Not named "TryGet..." for maching the underlying Win32 function name.
 			/// </remarks>
 			/// <param name="hFile">A device handle returned by CreateFile.</param>
 			/// <param name="lpOverlapped">A pointer to an overlapped structure.</param>

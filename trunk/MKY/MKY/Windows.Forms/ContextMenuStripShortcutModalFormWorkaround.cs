@@ -90,8 +90,8 @@ namespace MKY.Windows.Forms
 			{
 				DebugAssertIsMainThread("Property called from non-main thread!");
 
-				return (staticCounter > 0); // No need to use 'Interlocked.Read()' as access to
-			}                               // 'Windows.Forms' must be synchronized anyway.
+				return (staticCounter > 0); // No need to use "Interlocked.Read()" as access to
+			}                               // "Windows.Forms" must be synchronized anyway.
 		}
 
 		/// <summary>
@@ -106,8 +106,8 @@ namespace MKY.Windows.Forms
 		{
 			DebugAssertIsMainThread("Method called from non-main thread!");
 
-			staticCounter++; // No need to use 'Interlocked.Increment()' as access to
-		}                    // 'Windows.Forms' must be synchronized anyway.
+			staticCounter++; // No need to use "Interlocked.Increment()" as access to
+		}                    // "Windows.Forms" must be synchronized anyway.
 
 		/// <summary>
 		/// To be called each time after showing a modal dialog using <see cref="Form.ShowDialog()"/>.
@@ -121,8 +121,8 @@ namespace MKY.Windows.Forms
 		{
 			DebugAssertIsMainThread("Method called from non-main thread!");
 
-			staticCounter--; // No need to use 'Interlocked.Decrement()' as access to
-			                 // 'Windows.Forms' must be synchronized anyway.
+			staticCounter--; // No need to use "Interlocked.Decrement()" as access to
+			                 // "Windows.Forms" must be synchronized anyway.
 			if (staticCounter < 0)
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Counter has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}

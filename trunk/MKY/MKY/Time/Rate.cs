@@ -85,7 +85,7 @@ namespace MKY.Time
 		private double window;
 
 		private Queue<TimeStampItem<int>> queue;
-		private double widthOfBins; // Term 'bin' same as e.g. used for a histogram.
+		private double widthOfBins; // Term "bin" same as e.g. used for a histogram.
 		private int[] itemsPerBin;
 		private int value;
 

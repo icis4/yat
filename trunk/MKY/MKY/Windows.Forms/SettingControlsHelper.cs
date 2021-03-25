@@ -55,8 +55,8 @@ namespace MKY.Windows.Forms
 			{
 				DebugAssertIsMainThread("Property called from non-main thread!");
 
-				return (this.counter > 0); // No need to use 'Interlocked.Read()' as access to
-			}                              // 'Windows.Forms' must be synchronized anyway.
+				return (this.counter > 0); // No need to use "Interlocked.Read()" as access to
+			}                              // "Windows.Forms" must be synchronized anyway.
 		}
 
 		/// <summary>
@@ -67,8 +67,8 @@ namespace MKY.Windows.Forms
 		{
 			DebugAssertIsMainThread("Method called from non-main thread!");
 
-			this.counter++; // No need to use 'Interlocked.Increment()' as access to
-		}                   // 'Windows.Forms' must be synchronized anyway.
+			this.counter++; // No need to use "Interlocked.Increment()" as access to
+		}                   // "Windows.Forms" must be synchronized anyway.
 
 		/// <summary>
 		/// To be called each time after setting the values of the <see cref="Control"/> objects
@@ -78,8 +78,8 @@ namespace MKY.Windows.Forms
 		{
 			DebugAssertIsMainThread("Method called from non-main thread!");
 
-			this.counter--; // No need to use 'Interlocked.Decrement()' as access to
-			                // 'Windows.Forms' must be synchronized anyway.
+			this.counter--; // No need to use "Interlocked.Decrement()" as access to
+			                // "Windows.Forms" must be synchronized anyway.
 			if (this.counter < 0)
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Counter has fallen below 0!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}

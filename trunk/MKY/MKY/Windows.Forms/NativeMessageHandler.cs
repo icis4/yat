@@ -94,8 +94,8 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <remarks>
-		/// Using term 'MainForm' same as the argument of the <see cref="Application.Run(Form)"/>
-		/// method. Obviously, Windows.Forms uses the concept of a 'MainForm'.
+		/// Using term "MainForm" same as the argument of the <see cref="Application.Run(Form)"/>
+		/// method. Obviously, Windows.Forms uses the concept of a "MainForm".
 		/// </remarks>
 		public static void RegisterMainForm(Form mainForm)
 		{
@@ -110,8 +110,8 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <remarks>
-		/// Using term 'MainForm' same as the argument of the <see cref="Application.Run(Form)"/>
-		/// method. Obviously, Windows.Forms uses the concept of a 'MainForm'.
+		/// Using term "MainForm" same as the argument of the <see cref="Application.Run(Form)"/>
+		/// method. Obviously, Windows.Forms uses the concept of a "MainForm".
 		/// </remarks>
 		public static void UnregisterMainForm()
 		{
@@ -173,7 +173,7 @@ namespace MKY.Windows.Forms
 
 		/// <remarks>
 		/// Using term 'mainForm' same as the argument of the <see cref="Application.Run(Form)"/>
-		/// method. Obviously, Windows.Forms uses the concept of a 'MainForm'.
+		/// method. Obviously, Windows.Forms uses the concept of a "MainForm".
 		/// </remarks>
 		/// <exception cref="ArgumentNullException">
 		/// <paramref name="mainForm"/> is <c>null</c>.
