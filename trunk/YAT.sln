@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc.Developer", "!-Doc.De
 		!-Doc.Developer\HowToRunAndDebugNUnitTests.txt = !-Doc.Developer\HowToRunAndDebugNUnitTests.txt
 		!-Doc.Developer\HowToUpdateYear.txt = !-Doc.Developer\HowToUpdateYear.txt
 		!-Doc.Developer\ProjectSetup.txt = !-Doc.Developer\ProjectSetup.txt
+		!-Doc.Developer\Template-ReadMe.txt = !-Doc.Developer\Template-ReadMe.txt
 		!-Doc.Developer\Template.cmd = !-Doc.Developer\Template.cmd
 		!-Doc.Developer\Template.cs = !-Doc.Developer\Template.cs
 		!-Doc.Developer\Template.ps1 = !-Doc.Developer\Template.ps1
