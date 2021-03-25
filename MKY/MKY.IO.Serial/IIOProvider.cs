@@ -181,11 +181,15 @@ namespace MKY.IO.Serial
 
 		/// <summary>
 		/// Gets a value indicating whether the I/O provider and/or the underlying I/O instance
-		/// is currently sending data.
+		/// is currently sending, about to start sending, or has pending data yet waiting to be
+		/// sent (e.g. if flow control is active).
 		/// </summary>
 		/// <remarks><para>
+		/// Named "IsSending" rather than e.g. "HasDataForSending" as it sounds more natural.
+		/// </para><para>
 		/// The capabilities of the underlying I/O instance differ, this property may or may not
-		/// take the state of the underlying I/O instance into account.</para><para>
+		/// take the state of the underlying I/O instance into account.
+		/// </para><para>
 		/// Same with the the state of the underlying operating system driver and hardware. In most
 		/// cases, their state cannot be retrieved from within a .NET implementation by common means.
 		/// </para><list type="bullet">

@@ -138,7 +138,7 @@ namespace MKY
 		/// Asserts that disposal of object is neither ongoing nor has already completed.
 		/// </summary>
 		/// <remarks>
-		/// Not named 'AssertIsUndisposed' as that sounds more like "check whether assert is undisposed".
+		/// Not named "AssertIsUndisposed" as that sounds more like "check whether assert is undisposed".
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Undisposed", Justification = "See remarks at 'IsUndisposed'.")]
 		protected virtual void AssertUndisposed()
@@ -160,9 +160,9 @@ namespace MKY
 		}
 
 		/// <remarks>
-		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named 'Message' for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
+		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named "Message" for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		private void DebugMessage(string message)

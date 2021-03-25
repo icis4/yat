@@ -48,7 +48,7 @@ namespace MKY.Threading
 		/// Use <c>0</c> for maximum accuracy though at highest system load.
 		/// </remarks>
 		/// <remarks>
-		/// Explicitly named 'At' to prevent ambiguity among
+		/// Explicitly named "At" to prevent ambiguity among
 		/// <see cref="SleepUntilAt(DateTime, int)"/> and
 		/// <see cref="SleepUntilOffset(DateTime, int, int)"/> with default argument.
 		/// </remarks>
@@ -72,7 +72,7 @@ namespace MKY.Threading
 		/// Use <c>0</c> for maximum accuracy though at highest system load.
 		/// </remarks>
 		/// <remarks>
-		/// Explicitly named 'Offset' to prevent ambiguity among
+		/// Explicitly named "Offset" to prevent ambiguity among
 		/// <see cref="SleepUntilAt(DateTime, int)"/> and
 		/// <see cref="SleepUntilOffset(DateTime, int, int)"/> with default argument.
 		/// </remarks>
@@ -92,7 +92,7 @@ namespace MKY.Threading
 		/// Use <c>0</c> for maximum accuracy though at highest system load.
 		/// </remarks>
 		/// <remarks>
-		/// Explicitly named 'Offset' to prevent ambiguity among
+		/// Explicitly named "Offset" to prevent ambiguity among
 		/// <see cref="SleepUntilAt(DateTime, int)"/> and
 		/// <see cref="SleepUntilOffset(DateTime, int, int)"/> with default argument.
 		/// </remarks>

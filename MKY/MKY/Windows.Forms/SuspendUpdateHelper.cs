@@ -55,8 +55,8 @@ namespace MKY.Windows.Forms
 			{
 				DebugAssertIsMainThread("Property called from non-main thread!");
 
-				return (this.counter > 0); // No need to use 'Interlocked.Read()' as access to
-			}                              // 'Windows.Forms' must be synchronized anyway.
+				return (this.counter > 0); // No need to use "Interlocked.Read()" as access to
+			}                              // "Windows.Forms" must be synchronized anyway.
 		}
 
 		/// <summary>
@@ -69,8 +69,8 @@ namespace MKY.Windows.Forms
 			if (this.counter == 0)
 				ControlEx.SuspendUpdate(control);
 
-			this.counter++; // No need to use 'Interlocked.Increment()' as access to
-		}                   // 'Windows.Forms' must be synchronized anyway.
+			this.counter++; // No need to use "Interlocked.Increment()" as access to
+		}                   // "Windows.Forms" must be synchronized anyway.
 
 		/// <summary>
 		/// Resumes painting of the specified control.
@@ -79,8 +79,8 @@ namespace MKY.Windows.Forms
 		{
 			DebugAssertIsMainThread("Method called from non-main thread!");
 
-			this.counter--; // No need to use 'Interlocked.Decrement()' as access to
-			                // 'Windows.Forms' must be synchronized anyway.
+			this.counter--; // No need to use "Interlocked.Decrement()" as access to
+			                // "Windows.Forms" must be synchronized anyway.
 			if (this.counter == 0)
 				ControlEx.ResumeUpdate(control);
 

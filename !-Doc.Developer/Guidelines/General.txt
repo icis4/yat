@@ -33,8 +33,8 @@ Use FxCop
 Comments
 --------
 
-Use 'Identifier' rather than "Identifier" to refer to a code identifiert.
-Rationale: Also easily useable within a quoted string, e.g. a debug or analysis suppression string.
+Use "Identifier" and "Term" rather than 'Identifier' or 'Term' to refer to code or a term.
+Rationale: More natural, standard C# comments also quote identifiers.
 
 Use special tags
 \todo        :   \todo: <Description>        or   \todo (<Date> / <Author>): <Description>)

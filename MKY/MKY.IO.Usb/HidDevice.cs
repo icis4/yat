@@ -170,7 +170,7 @@ namespace MKY.IO.Usb
 			{
 				Win32.Hid.NativeTypes.HIDP_CAPS capabilities;
 				if (TryGetDeviceCapabilities(di.Path, out capabilities))
-				{                        // The Win32 HIDP_CAPS structure uses term 'Usage', not 'UsageId'.
+				{                        // The Win32 HIDP_CAPS structure uses term "Usage", not "UsageId".
 					l.Add(new HidDeviceInfo(di, capabilities.UsagePage, capabilities.Usage));
 				}
 			}
@@ -203,7 +203,7 @@ namespace MKY.IO.Usb
 				if (TryGetDeviceCapabilities(path, out capabilities))
 				{
 					usagePage = capabilities.UsagePage;
-					usageId   = capabilities.Usage; // The Win32 HIDP_CAPS structure uses term 'Usage', not 'UsageId'.
+					usageId   = capabilities.Usage; // The Win32 HIDP_CAPS structure uses term "Usage", not "UsageId".
 					return (true);
 				}
 			}
@@ -576,7 +576,7 @@ namespace MKY.IO.Usb
 			if (TryGetDeviceCapabilities(deviceInfo.Path, out capabilities))
 			{
 				var usagePage = capabilities.UsagePage;
-				var usageId   = capabilities.Usage; // The Win32 HIDP_CAPS structure uses term 'Usage', not 'UsageId'.
+				var usageId   = capabilities.Usage; // The Win32 HIDP_CAPS structure uses term "Usage", not "UsageId".
 
 				hidDeviceInfo = new HidDeviceInfo(deviceInfo, usagePage, usageId);
 
