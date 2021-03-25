@@ -788,6 +788,13 @@ namespace YAT.Log.Settings
 			set { NameSeparator = value;                }
 		}
 
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual string NameSeparatorString
+		{
+			get { return (NameSeparator.ToSeparator()); } // Use separator string only!
+		}
+
 		//- Folders --------------------------------------------------------------------------------
 
 		/// <remarks>
