@@ -43,7 +43,7 @@ namespace MKY
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class GuidEx
 	{
-		private const RegexOptions Options = RegexOptions.Compiled | RegexOptions.CultureInvariant; // 'IgnoreCase' is not needed, "a-f" is explicitly stated for obviousness.
+		private const RegexOptions Options = RegexOptions.Compiled | RegexOptions.CultureInvariant; // "IgnoreCase" is not needed, "a-f" is explicitly stated for obviousness.
 
 		/// <summary>
 		/// A compiled <see cref="CommonRegexPattern"/> that can be used for parsing a GUID from a string.
