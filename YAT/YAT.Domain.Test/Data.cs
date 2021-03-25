@@ -48,7 +48,7 @@ namespace YAT.Domain.Test
 	/// </list>
 	/// </remarks>
 	/// <remarks>
-	/// Just named 'Data' rather than 'TestCaseData' for compactness.
+	/// Just named "Data" rather than "TestCaseData" for compactness.
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public static class Data

@@ -278,7 +278,7 @@ namespace YAT.Domain.Settings
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <remarks>
-		/// Named 'Bytes' rather than 'Octets' as that is more common, and .NET uses 'Byte' as well.
+		/// Named "Bytes" rather than "Octets" as that is more common, and .NET uses "Byte" as well.
 		/// </remarks>
 		/// <remarks>
 		/// Named this long to make inaccuracy obvious.
@@ -361,7 +361,7 @@ namespace YAT.Domain.Settings
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
 		/// <remarks>
-		/// Named 'Bytes' rather than 'Octets' as that is more common, and .NET uses 'Byte' as well.
+		/// Named "Bytes" rather than "Octets" as that is more common, and .NET uses "Byte" as well.
 		/// </remarks>
 		/// <remarks>
 		/// Named this long to make inaccuracy obvious.

@@ -83,14 +83,14 @@ namespace YAT.Domain
 
 	/// <remarks>
 	/// Named 'ForScripting' as functionality is tied to scripting.
-	/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+	/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 	/// </remarks>
 	public class ScriptMessageEventArgs : EventArgs
 	{
 		/// <summary></summary>
 		public DateTime TimeStamp { get; }
 
-		/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
+		/// <remarks>Named "Device" for simplicity even though using "I/O Device" for view.</remarks>
 		public string Device { get; }
 
 		/// <summary></summary>

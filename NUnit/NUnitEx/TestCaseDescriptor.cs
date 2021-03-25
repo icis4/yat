@@ -34,7 +34,7 @@ namespace NUnitEx
 	/// <remarks>
 	/// Useful to encapsulate information where <see cref="TestCaseData"/> objects are
 	/// not suitable or suboptimal, e.g. where named and typed arguments shall be used rather than
-	/// just an array of <see cref="object"/> named 'arg1', 'arg2',...
+	/// just an array of <see cref="object"/> named "arg1", "arg2",...
 	/// </remarks>
 	/// <remarks>
 	/// Simply derive from this class and add arguments as needed.

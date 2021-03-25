@@ -68,7 +68,7 @@ namespace YAT.Application.Settings
 		{
 			base.SetMyDefaults();
 
-			FilePath  = ""; // Do not use 'null' in order to keep the item in the XML.
+			FilePath  = ""; // Do not use "null" in order to keep the item in the XML.
 			AutoSaved = false;
 		}
 
@@ -85,7 +85,7 @@ namespace YAT.Application.Settings
 			set
 			{
 				if (value == null)
-					value = ""; // Do not use 'null' in order to keep the item in the XML.
+					value = ""; // Do not use "null" in order to keep the item in the XML.
 
 				if (this.filePath != value)
 				{
@@ -98,7 +98,7 @@ namespace YAT.Application.Settings
 		/// <summary></summary>
 		public virtual void ResetFilePath()
 		{
-			FilePath = ""; // Do not use 'null' in order to keep the item in the XML.
+			FilePath = ""; // Do not use "null" in order to keep the item in the XML.
 		}
 
 		/// <summary>

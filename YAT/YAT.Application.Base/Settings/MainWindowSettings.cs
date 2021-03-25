@@ -127,7 +127,7 @@ namespace YAT.Application.Settings
 		}
 
 		/// <remarks>
-		/// Using term 'Info' since the info contains name and IDs.
+		/// Using term "Info" since the info contains name and IDs.
 		/// </remarks>
 		[XmlElement("ShowTerminalInfo")]
 		public bool ShowTerminalInfo

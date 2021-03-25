@@ -443,7 +443,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <remarks>
-		/// XML element is named 'UTC' instead of .NET-style 'Utc' for better readability.
+		/// XML element is named "UTC" instead of .NET-style "Utc" for better readability.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop you are right, I don't like 'Utc' either...")]
 		[XmlElement("TimeStampUseUTC")]
@@ -520,7 +520,7 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-		/// <remarks>Named 'Device' for simplicity even though using "I/O Device" for view.</remarks>
+		/// <remarks>Named "Device" for simplicity even though using "I/O Device" for view.</remarks>
 		[XmlElement("ShowDevice")]
 		public virtual bool ShowDevice
 		{
@@ -668,7 +668,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <remarks>
-		/// Named 'Device' for simplicity even though using "I/O Device" for view.
+		/// Named "Device" for simplicity even though using "I/O Device" for view.
 		/// </remarks>
 		/// <remarks>
 		/// Part of the text/binary independent settings to ease handling the dependency
