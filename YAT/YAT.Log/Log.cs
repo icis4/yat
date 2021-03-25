@@ -60,6 +60,7 @@ namespace YAT.Log
 
 		private bool isEnabled;
 		private Func<string> makeFilePath;
+		private string nameSeparator;
 		private LogFileWriteMode writeMode;
 
 		private bool isOn;
@@ -78,18 +79,19 @@ namespace YAT.Log
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected Log(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode)
+		protected Log(bool enabled, Func<string> makeFilePath, string nameSeparator, LogFileWriteMode writeMode)
 		{
 			this.flushTimerRandom = new Random(RandomEx.NextRandomSeed());
 
-			Initialize(enabled, makeFilePath, writeMode);
+			Initialize(enabled, makeFilePath, nameSeparator, writeMode);
 		}
 
-		private void Initialize(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode)
+		private void Initialize(bool enabled, Func<string> makeFilePath, string nameSeparator, LogFileWriteMode writeMode)
 		{
-			this.isEnabled    = enabled;
-			this.makeFilePath = makeFilePath;
-			this.writeMode    = writeMode;
+			this.isEnabled     = enabled;
+			this.makeFilePath  = makeFilePath;
+			this.nameSeparator = nameSeparator;
+			this.writeMode     = writeMode;
 		}
 
 		#region Disposal
@@ -156,7 +158,7 @@ namespace YAT.Log
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual void ApplySettings(bool enabled, bool isOn, Func<string> makeFilePath, LogFileWriteMode writeMode)
+		public virtual void ApplySettings(bool enabled, bool isOn, Func<string> makeFilePath, string nameSeparator, LogFileWriteMode writeMode)
 		{
 			if (this.isOn)
 			{
@@ -164,7 +166,7 @@ namespace YAT.Log
 				{
 					if (enabled)
 					{
-						Initialize(enabled, makeFilePath, writeMode);
+						Initialize(enabled, makeFilePath, nameSeparator, writeMode);
 
 						if (isOn)
 							Open();
@@ -173,14 +175,14 @@ namespace YAT.Log
 					{
 						Close();
 
-						Initialize(enabled, makeFilePath, writeMode);
+						Initialize(enabled, makeFilePath, nameSeparator, writeMode);
 					}
 				}
 				else if ((this.makeFilePath != makeFilePath) || (this.writeMode != writeMode))
 				{
 					Close();
 
-					Initialize(enabled, makeFilePath, writeMode);
+					Initialize(enabled, makeFilePath, nameSeparator, writeMode);
 
 					if (isOn)
 						Open();
@@ -188,7 +190,7 @@ namespace YAT.Log
 			}
 			else
 			{
-				Initialize(enabled, makeFilePath, writeMode);
+				Initialize(enabled, makeFilePath, nameSeparator, writeMode);
 
 				if (isOn)
 					Open();
@@ -205,7 +207,7 @@ namespace YAT.Log
 		protected virtual void MakeUniqueFilePath()
 		{
 			MakeFilePath();
-			this.filePath = FileEx.GetUniqueFilePath(this.filePath);
+			this.filePath = FileEx.GetUniqueFilePath(this.filePath, this.nameSeparator);
 		}
 
 		/// <summary></summary>

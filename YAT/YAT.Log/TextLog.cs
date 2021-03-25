@@ -59,8 +59,8 @@ namespace YAT.Log
 		private object writerSyncObj = new object();
 
 		/// <summary></summary>
-		public TextLog(bool enabled, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding, FormatSettings format)
-			: base(enabled, makeFilePath, writeMode)
+		public TextLog(bool enabled, Func<string> makeFilePath, string nameSeparator, LogFileWriteMode writeMode, Encoding encoding, FormatSettings format)
+			: base(enabled, makeFilePath, nameSeparator, writeMode)
 		{
 			this.encoding = encoding;
 			this.format = format;
@@ -89,7 +89,7 @@ namespace YAT.Log
 		#endregion
 
 		/// <summary></summary>
-		public virtual void ApplySettings(bool enabled, bool isOn, Func<string> makeFilePath, LogFileWriteMode writeMode, Encoding encoding, FormatSettings format)
+		public virtual void ApplySettings(bool enabled, bool isOn, Func<string> makeFilePath, string nameSeparator, LogFileWriteMode writeMode, Encoding encoding, FormatSettings format)
 		{
 			AssertUndisposed();
 
@@ -98,7 +98,7 @@ namespace YAT.Log
 
 			this.encoding = encoding;
 			this.format = format;
-			base.ApplySettings(enabled, isOn, makeFilePath, writeMode);
+			base.ApplySettings(enabled, isOn, makeFilePath, nameSeparator, writeMode);
 		}
 
 		/// <summary></summary>
