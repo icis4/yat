@@ -100,6 +100,9 @@ Fixed bugs:
 - Plot window related NullReferenceException when closing YAT fixed.
 - <<<<<<<<<<<<<<<<<<<<<NullReferenceException>>>>>>>>>>>>>>>>>>>>>> when handling backspace with preceeding spaces fixed.
 
+Limitations and known issues:
+- Same as previous release, see below.
+
 
 YAT 2.4.0 :: 2021-01-29
 ----------------------------------------------------------------------------------------------------
@@ -724,6 +727,9 @@ Fixed bugs:
 - Binary terminals: Logging in 'Neat' format fixed (bug #359).
 - Binary terminals: 'ObjectDisposedException' when changing length line break settings (bug #358).
 
+Limitations and known issues:
+- Same as previous release, see below.
+
 
 YAT 2.0 Gamma 2' Version 1.99.51 :: 2016-09-17
 ----------------------------------------------------------------------------------------------------
@@ -734,6 +740,9 @@ Important changes:
 
 Fixed bugs:
 - Binary terminals: Radix 'String' and 'Char' fixed (bug #357).
+
+Limitations and known issues:
+- Same as previous release, see below.
 
 
 YAT 2.0 Gamma 2 Version 1.99.50 :: 2016-09-16
@@ -874,6 +883,9 @@ Fixed bugs:
 - Local user settings (previous workspace/terminals, recent files, window location, preferences) are
   again loaded from the latest previous version (bug #311)
 
+Limitations and known issues:
+- Same as previous release, see below.
+
 
 YAT 2.0 Gamma 1' Version 1.99.33 :: 2015-06-07
 ----------------------------------------------------------------------------------------------------
@@ -882,6 +894,9 @@ Fixed bugs:
 - 'FormatException' when opening the terminal settings of a terminal that is based on an existing
   .yat file fixed, additional test cases added to regression testing (bugs #306 and #307)
 - Issues with [Send File] fixed, handling of recent commands and shortcuts improved (bug #304)
+
+Limitations and known issues:
+- Same as previous release, see below.
 
 
 YAT 2.0 Gamma 1 Version 1.99.32 :: 2015-06-01
@@ -1384,6 +1399,9 @@ YAT 2.0 Beta 3 Candidate 1 Version 1.99.23 :: 2009-09-10
 
 Fixed bugs:
 - Installer prerequisites fixed to .NET 3.5 (bug #2855869)
+
+Limitations and known issues:
+- Same as previous release, see below.
 
 
 YAT 2.0 Beta 3 Candidate 1 Version 1.99.22 :: 2009-09-08
