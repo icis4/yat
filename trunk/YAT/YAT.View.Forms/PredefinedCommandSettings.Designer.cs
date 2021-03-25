@@ -257,7 +257,7 @@
 			this.button_DeletePage = new System.Windows.Forms.Button();
 			this.button_InsertPage = new System.Windows.Forms.Button();
 			this.button_AddPage = new System.Windows.Forms.Button();
-			this.button_NamePage = new System.Windows.Forms.Button();
+			this.button_RenamePage = new System.Windows.Forms.Button();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.button_LinkToFile = new System.Windows.Forms.Button();
 			this.button_ClearLink = new System.Windows.Forms.Button();
@@ -2126,7 +2126,7 @@
 			this.groupBox_Pages.Controls.Add(this.button_DeletePage);
 			this.groupBox_Pages.Controls.Add(this.button_InsertPage);
 			this.groupBox_Pages.Controls.Add(this.button_AddPage);
-			this.groupBox_Pages.Controls.Add(this.button_NamePage);
+			this.groupBox_Pages.Controls.Add(this.button_RenamePage);
 			this.groupBox_Pages.Location = new System.Drawing.Point(12, 127);
 			this.groupBox_Pages.Name = "groupBox_Pages";
 			this.groupBox_Pages.Size = new System.Drawing.Size(333, 306);
@@ -2374,15 +2374,15 @@
 			this.button_AddPage.UseVisualStyleBackColor = true;
 			this.button_AddPage.Click += new System.EventHandler(this.button_AddPage_Click);
 			// 
-			// button_NamePage
+			// button_RenamePage
 			// 
-			this.button_NamePage.Location = new System.Drawing.Point(138, 18);
-			this.button_NamePage.Name = "button_NamePage";
-			this.button_NamePage.Size = new System.Drawing.Size(120, 23);
-			this.button_NamePage.TabIndex = 1;
-			this.button_NamePage.Text = "&Name...";
-			this.button_NamePage.UseVisualStyleBackColor = true;
-			this.button_NamePage.Click += new System.EventHandler(this.button_NamePage_Click);
+			this.button_RenamePage.Location = new System.Drawing.Point(138, 18);
+			this.button_RenamePage.Name = "button_RenamePage";
+			this.button_RenamePage.Size = new System.Drawing.Size(120, 23);
+			this.button_RenamePage.TabIndex = 1;
+			this.button_RenamePage.Text = "Re&name...";
+			this.button_RenamePage.UseVisualStyleBackColor = true;
+			this.button_RenamePage.Click += new System.EventHandler(this.button_RenamePage_Click);
 			// 
 			// button_LinkToFile
 			// 
@@ -2654,7 +2654,7 @@
 		private YAT.View.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_2;
 		private System.Windows.Forms.GroupBox groupBox_Pages;
 		private System.Windows.Forms.ListBox listBox_Pages;
-		private System.Windows.Forms.Button button_NamePage;
+		private System.Windows.Forms.Button button_RenamePage;
 		private System.Windows.Forms.Button button_MovePageUp;
 		private System.Windows.Forms.Button button_MovePageDown;
 		private System.Windows.Forms.Button button_DeletePage;

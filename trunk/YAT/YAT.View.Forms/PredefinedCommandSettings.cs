@@ -278,9 +278,9 @@ namespace YAT.View.Forms
 			SetPageControls();
 		}
 
-		private void button_NamePage_Click(object sender, EventArgs e)
+		private void button_RenamePage_Click(object sender, EventArgs e)
 		{
-			NamePage();
+			RenamePage();
 		}
 
 		private void button_RenumberPages_Click(object sender, EventArgs e)
@@ -1140,7 +1140,7 @@ namespace YAT.View.Forms
 				if (pageIsSelected)
 					selectedPageDefinedCommandCount = this.settingsInEdit.Pages[SelectedPageIndex].DefinedCommandCount;
 
-				button_NamePage                   .Enabled =  pageIsSelected;
+				button_RenamePage                   .Enabled =  pageIsSelected;
 				button_RenumberPages              .Enabled = (pageCount > 0);
 				button_InsertPage                 .Enabled =  pageIsSelected;
 				button_InsertPagesFromFile        .Enabled =  pageIsSelected;
@@ -1409,7 +1409,7 @@ namespace YAT.View.Forms
 		//------------------------------------------------------------------------------------------
 
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void NamePage()
+		private void RenamePage()
 		{
 			string pageName;
 			if (TextInputBox.Show
