@@ -86,7 +86,7 @@ namespace YAT.View.Controls
 			TextFormatFlags.NoPadding  |
 			TextFormatFlags.NoPrefix
 
-			// Attention, do not use 'EndEllipsis' for the monitor! These ellipses were the root
+			// Attention, do not use "EndEllipsis" for the monitor! These ellipses were the root
 			// cause of bug #125 "Representation of long texts in the terminal".
 		);
 

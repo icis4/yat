@@ -521,7 +521,7 @@ namespace YAT.Model
 		/// Gets a text containing information about the active terminal.
 		/// </summary>
 		/// <remarks>
-		/// Using term 'Info' since the info contains name and IDs.
+		/// Using term "Info" since the info contains name and IDs.
 		/// </remarks>
 		public virtual string ActiveTerminalInfoText
 		{
@@ -560,8 +560,8 @@ namespace YAT.Model
 					//    include something, i.e. only when scripting is active.
 					//  > Most users will only deal with a single terminal, always being Fix#1.
 					//  > Most users won't need the terminal ID as they can use the implicit
-					//    methods, i.e. implicitly use 'ITerminalEx.ActiveTerminalId'.
-					//  > Advanced users can still activate this 'ActiveTerminalInfoText'.
+					//    methods, i.e. implicitly use "ITerminalEx.ActiveTerminalId".
+					//  > Advanced users can still activate this "ActiveTerminalInfoText".
 					//  > The terminal doesn't know its fix ID, composing the caption gets tricky.
 				}
 				else
@@ -1219,7 +1219,7 @@ namespace YAT.Model
 			{
 				var dr = OnMessageInputRequest
 				(
-					"Save workspace?", // Do not use 'IndicatedName' as that would refer to the active terminal.
+					"Save workspace?", // Do not use "IndicatedName" as that would refer to the active terminal.
 					ApplicationEx.ProductName, // "YAT" or "YATConsole", as indicated in main title bar.
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Question
@@ -2686,9 +2686,9 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <remarks>
-		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named 'Message' for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
+		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named "Message" for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)

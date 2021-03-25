@@ -249,9 +249,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Separate 'DoSend...()' method for obvious handling of 'UseExplicitDefaultRadix'.
 		/// </remarks>
-		/// <remarks>
-		/// Argument of this protected method named 'c' for compactness.
-		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "c", Justification = "Short and compact for improved readability.")]
 		protected virtual void DoSendText(Command c, bool addToRecents)
 		{
 			AssertUndisposed();
@@ -309,9 +307,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Separate 'DoSend...()' method for obvious handling of 'UseExplicitDefaultRadix'.
 		/// </remarks>
-		/// <remarks>
-		/// Argument of this protected method named 'c' for compactness.
-		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "c", Justification = "Short and compact for improved readability.")]
 		protected virtual void DoSendTextWithoutEol(Command c)
 		{
 			AssertUndisposed();
@@ -351,9 +347,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Includes compiled partial text.
 		/// </remarks>
-		/// <remarks>
-		/// Argument of this protected method named 'c' for compactness.
-		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "c", Justification = "Short and compact for improved readability.")]
 		protected virtual void CloneIntoRecentTextCommandsAsNeeded(Command c)
 		{                                                  // Must not be added to recents, e.g. separate "A", "B", "C".
 			if (c.IsSingleLineText || c.IsMultiLineText /* || c.IsPartialText */ || c.IsPartialTextEol)
@@ -447,9 +441,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Separate 'DoSend...()' method for obvious handling of 'UseExplicitDefaultRadix'.
 		/// </remarks>
-		/// <remarks>
-		/// Argument of this protected method named 'c' for compactness.
-		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "c", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'symmetricity' is a correct English term.")]
 		protected virtual void DoSendFile(Command c, bool addToRecents)
 		{
@@ -470,9 +462,8 @@ namespace YAT.Model
 			}
 		}
 
-		/// <remarks>
-		/// Argument of this protected method named 'c' for compactness.
-		/// </remarks>
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "c", Justification = "Short and compact for improved readability.")]
 		protected virtual void CloneIntoRecentFileCommands(Command c)
 		{
 			// Clone the command for the recent commands collection:

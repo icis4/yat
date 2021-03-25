@@ -400,7 +400,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Parameter <paramref name="text"/> is not named 'line' because e.g. the text EOL sequence will be appended later by the underlying terminal.
+		/// Parameter <paramref name="text"/> is not named "line" because e.g. the text EOL sequence will be appended later by the underlying terminal.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendTextLine(string text, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
@@ -448,7 +448,7 @@ namespace YAT.Domain
 		/// Required to allow sending multi-line commands "kept together".
 		/// </remarks>
 		/// <remarks>
-		/// Parameter <paramref name="texts"/> is not named 'lines' because e.g. the text EOL sequence will be appended later by the underlying terminal.
+		/// Parameter <paramref name="texts"/> is not named "lines" because e.g. the text EOL sequence will be appended later by the underlying terminal.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendTextLines(string[] texts, Radix defaultRadix = Parser.Parser.DefaultRadixDefault)
@@ -1734,7 +1734,7 @@ namespace YAT.Domain
 			return (sb.ToString());
 		}
 
-		/// <remarks>Explicitly named 'TimeStamp' to make purpose more obvious. Could also be renamed to 'ByteResults'.</remarks>
+		/// <remarks>Explicitly named "TimeStamp" to make purpose more obvious. Could also be renamed to "ByteResults".</remarks>
 		protected virtual void AppendTimeStampToPendingPacketWithoutForwardingToRawTerminalYet(Parser.Result[] parseResult, Queue<byte> conflateDataQueue)
 		{
 			lock (conflateDataQueue)

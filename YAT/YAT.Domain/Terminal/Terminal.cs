@@ -279,10 +279,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public event EventHandler<EventArgs<bool>> IsSendingForSomeTimeChanged;
 
-		/// <remarks>Intentionally named 'Raw' to emphasize difference to 'Display'.</remarks>
+		/// <remarks>Intentionally named "Raw" to emphasize difference to "Display".</remarks>
 		public event EventHandler<EventArgs<RawChunk>> RawChunkSent;
 
-		/// <remarks>Intentionally named 'Raw' to emphasize difference to 'Display'.</remarks>
+		/// <remarks>Intentionally named "Raw" to emphasize difference to "Display".</remarks>
 		public event EventHandler<EventArgs<RawChunk>> RawChunkReceived;
 
 		/// <remarks>Intentionally using separate Tx/Bidir/Rx events: More obvious, ease of use.</remarks>
@@ -394,7 +394,7 @@ namespace YAT.Domain
 		/// </remarks>
 		/// <remarks>
 		/// Named 'ForScripting' as functionality is tied to scripting.
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public event EventHandler<ScriptMessageEventArgs> MessageReceivedForScripting;
 
@@ -632,7 +632,7 @@ namespace YAT.Domain
 		/// Gets a value indicating whether the terminal has received a message that is available for scripting.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public virtual bool HasReceivedMessageAvailableForScripting
 		{
@@ -648,7 +648,7 @@ namespace YAT.Domain
 		/// Gets a value indicating the number of received messages that are available for scripting.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public virtual int AvailableReceivedMessageCountForScripting
 		{
@@ -671,7 +671,7 @@ namespace YAT.Domain
 		/// Peeks the received messages that are available for scripting.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public virtual int PeekAvailableReceivedMessagesForScripting(out ScriptMessage[] available)
 		{
@@ -1720,7 +1720,7 @@ namespace YAT.Domain
 		/// Enqueues a received message to make it available for scripting.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		/// <remarks>
 		/// Implemented here instead of 'Model.ScriptBridge' as a separate queue for each
@@ -1745,7 +1745,7 @@ namespace YAT.Domain
 		/// Returns the message that has last been enqueued into the receive queue that is available for scripting.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public virtual void GetLastEnqueuedReceivedMessageForScripting(out ScriptMessage value)
 		{
@@ -1766,7 +1766,7 @@ namespace YAT.Domain
 		/// Clears the last enqueued message that is available for scripting.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public virtual void ClearLastEnqueuedReceivedMessageForScripting(out ScriptMessage cleared)
 		{
@@ -1789,7 +1789,7 @@ namespace YAT.Domain
 		/// Gets the next received message that is available for scripting and removes it from the queue.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		/// <exception cref="InvalidOperationException">
 		/// The underlying <see cref="Queue{T}"/> is empty.
@@ -1828,7 +1828,7 @@ namespace YAT.Domain
 		/// Returns the received message that has last been dequeued from the receive queue for scripting.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public virtual void GetLastDequeuedReceivedMessageForScripting(out ScriptMessage value)
 		{
@@ -1849,7 +1849,7 @@ namespace YAT.Domain
 		/// Clears the last dequeued message that is available for scripting.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public virtual void ClearLastDequeuedReceivedMessageForScripting(out ScriptMessage cleared)
 		{
@@ -1869,7 +1869,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		/// <remarks>
 		/// \remind (2018-03-27 / MKY)
@@ -1904,7 +1904,7 @@ namespace YAT.Domain
 		/// Clears all available messages in the receive queue for scripting.
 		/// </summary>
 		/// <remarks>
-		/// Scripting uses term 'Message' for distinction with term 'Line' which is tied to displaying.
+		/// Scripting uses term "Message" for distinction with term "Line" which is tied to displaying.
 		/// </remarks>
 		public void ClearAvailableReceivedMessagesForScripting(out ScriptMessage[] cleared, out DateTime clearTimeStamp)
 		{
@@ -2689,9 +2689,9 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Name 'DebugWriteLine' would show relation to <see cref="Debug.WriteLine(string)"/>.
-		/// However, named 'Message' for compactness and more clarity that something will happen
-		/// with <paramref name="message"/>, and rather than e.g. 'Common' for comprehensibility.
+		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named "Message" for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
 		/// </remarks>
 		[Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
@@ -2713,8 +2713,8 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// Name 'DebugWrite' would show relation to <see cref="Debug.Write(string)"/>.
-		/// However, named 'Message' for orthogonality with <see cref="DebugMessage(string)"/>.
+		/// Name "DebugWrite" would show relation to <see cref="Debug.Write(string)"/>.
+		/// However, named "Message" for orthogonality with <see cref="DebugMessage(string)"/>.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'orthogonality' is a correct English term.")]
 		[Conditional("DEBUG")]

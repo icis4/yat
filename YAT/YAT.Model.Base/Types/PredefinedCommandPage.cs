@@ -218,7 +218,7 @@ namespace YAT.Model.Types
 			}
 		}
 
-		/// <remarks>XML is named 'Commands' for simplicity/comprehensibility as well as backward compatibility.</remarks>
+		/// <remarks>XML is named "Commands" for simplicity/comprehensibility as well as backward compatibility.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
 		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
 		[XmlElement("Commands")]
