@@ -691,7 +691,9 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Find_Click(object sender, EventArgs e)
 		{
-			RequestFind();
+			string line = null;
+			TryGetSingleSelectedLineFromMonitor(out line); // Will stay "null" if not a single line is selected.
+			RequestFind(line);
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_FindNext_Click(object sender, EventArgs e)
@@ -2498,30 +2500,6 @@ namespace YAT.View.Forms
 				return;
 
 			ShowPrintMonitorDialog(GetMonitor(contextMenuStrip_Monitor.SourceControl));
-		}
-
-		private void toolStripMenuItem_MonitorContextMenu_Find_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			RequestFind();
-		}
-
-		private void toolStripMenuItem_MonitorContextMenu_FindNext_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			RequestFindNext();
-		}
-
-		private void toolStripMenuItem_MonitorContextMenu_FindPrevious_Click(object sender, EventArgs e)
-		{
-			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
-				return;
-
-			RequestFindPrevious();
 		}
 
 		#endregion
@@ -4721,11 +4699,31 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		protected virtual void RequestFind()
+		protected virtual bool TryGetSingleSelectedLineFromMonitor(out string pattern)
+		{
+			var monitor = GetMonitor(this.lastMonitorSelection);
+			if (monitor != null)
+			{
+				var selectedLines = monitor.SelectedLines;
+				if (selectedLines.Count() == 1)
+				{
+					pattern = selectedLines[0].ContentText;
+					return (true);
+				}
+			}
+
+			pattern = null;
+			return (false);
+		}
+
+		/// <summary></summary>
+		protected virtual void RequestFind(string pattern)
 		{
 			var main = (this.mdiParent as Main);
 			if (main != null)
-				main.RequestFind();
+				main.RequestFind(pattern);
+			else
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "MDI 'Terminal' requires that MDI parent is 'Main'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -4733,6 +4731,10 @@ namespace YAT.View.Forms
 		{
 			get
 			{
+				string line;
+				if (TryGetSingleSelectedLineFromMonitor(out line))
+					return (true);
+
 				var main = (this.mdiParent as Main);
 				if (main != null)
 					return (main.FindNextIsFeasible);
@@ -4746,6 +4748,10 @@ namespace YAT.View.Forms
 		{
 			get
 			{
+				string line;
+				if (TryGetSingleSelectedLineFromMonitor(out line))
+					return (true);
+
 				var main = (this.mdiParent as Main);
 				if (main != null)
 					return (main.FindPreviousIsFeasible);
@@ -4759,6 +4765,10 @@ namespace YAT.View.Forms
 		{
 			get
 			{
+				string line;
+				if (TryGetSingleSelectedLineFromMonitor(out line))
+					return (true);
+
 				var main = (this.mdiParent as Main);
 				if (main != null)
 					return (main.FindAllIsFeasible);
@@ -4770,25 +4780,40 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestFindNext()
 		{
+			string line = null;
+			TryGetSingleSelectedLineFromMonitor(out line); // Will stay "null" if not a single line is selected.
+
 			var main = (this.mdiParent as Main);
 			if (main != null)
-				main.RequestFindNext();
+				main.RequestFindNext(line);
+			else
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "MDI 'Terminal' requires that MDI parent is 'Main'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
 		protected virtual void RequestFindPrevious()
 		{
+			string line = null;
+			TryGetSingleSelectedLineFromMonitor(out line); // Will stay "null" if not a single line is selected.
+
 			var main = (this.mdiParent as Main);
 			if (main != null)
-				main.RequestFindPrevious();
+				main.RequestFindPrevious(line);
+			else
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "MDI 'Terminal' requires that MDI parent is 'Main'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
 		protected virtual void RequestFindAll()
 		{
+			string line = null;
+			TryGetSingleSelectedLineFromMonitor(out line); // Will stay "null" if not a single line is selected.
+
 			var main = (this.mdiParent as Main);
 			if (main != null)
-				main.RequestFindAll();
+				main.RequestFindAll(line);
+			else
+				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "MDI 'Terminal' requires that MDI parent is 'Main'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		/// <summary></summary>
@@ -6152,11 +6177,11 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore = toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled;
 				toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore  = toolStripMenuItem_TerminalMenu_Terminal_Find .Enabled;
 
-				toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = false; // Ctrl+P
-				toolStripMenuItem_TerminalMenu_Terminal_Find .Enabled = false; // Ctrl+F
+				toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = false; // [Ctrl+P]
+				toolStripMenuItem_TerminalMenu_Terminal_Find .Enabled = false; // [Ctrl+F]
 			}
 
-			this.findShortcutsCtrlFNPLSuspendedCount++; // No need for 'lock'/'Interlocked...()' as WinForms is synchronized on main thread.
+			this.findShortcutsCtrlFNPLSuspendedCount++; // No need for "lock"/"Interlocked...()" as WinForms is synchronized on main thread.
 
 			// Could be implemented more cleverly, by iterating over all potential shortcut controls
 			// and then handle those that use one of the shortcuts in question. However, that would
@@ -6169,7 +6194,7 @@ namespace YAT.View.Forms
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "FNPL", Justification = "FNPL refers to these four specific keys.")]
 		public virtual void ResumeFindShortcutsCtrlFNPL()
 		{
-			this.findShortcutsCtrlFNPLSuspendedCount--; // No need for 'lock'/'Interlocked...()' as WinForms is synchronized on main thread.
+			this.findShortcutsCtrlFNPLSuspendedCount--; // No need for "lock"/"Interlocked...()" as WinForms is synchronized on main thread.
 
 			if (this.findShortcutsCtrlFNPLSuspendedCount < 0) // Main form will call this method also for newly opened
 			{                                                 // terminals which did not get notified about Suspend() yet!
@@ -6211,12 +6236,12 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Terminal_SelectNone_EnabledToRestore      = toolStripMenuItem_TerminalMenu_Terminal_SelectNone     .Enabled;
 				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_EnabledToRestore = toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled;
 
-				toolStripMenuItem_TerminalMenu_Terminal_SelectAll      .Enabled = false; // Ctrl+A
-				toolStripMenuItem_TerminalMenu_Terminal_SelectNone     .Enabled = false; // Ctrl+Delete
-				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = false; // Ctrl+C
+				toolStripMenuItem_TerminalMenu_Terminal_SelectAll      .Enabled = false; // [Ctrl+A]
+				toolStripMenuItem_TerminalMenu_Terminal_SelectNone     .Enabled = false; // [Ctrl+Delete]
+				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = false; // [Ctrl+C]
 			}
 
-			this.editShortcutsCtrlACVDeleteSuspendedCount++; // No need for 'lock'/'Interlocked...()' as WinForms is synchronized on main thread.
+			this.editShortcutsCtrlACVDeleteSuspendedCount++; // No need for "lock"/"Interlocked...()" as WinForms is synchronized on main thread.
 
 			// Could be implemented more cleverly, by iterating over all potential shortcut controls
 			// and then handle those that use one of the shortcuts in question. However, that would
@@ -6232,7 +6257,7 @@ namespace YAT.View.Forms
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ACV", Justification = "ACV refers to these three specific keys.")]
 		public virtual void ResumeEditShortcutsCtrlACVDelete()
 		{
-			this.editShortcutsCtrlACVDeleteSuspendedCount--; // No need for 'lock'/'Interlocked...()' as WinForms is synchronized on main thread.
+			this.editShortcutsCtrlACVDeleteSuspendedCount--; // No need for "lock"/"Interlocked...()" as WinForms is synchronized on main thread.
 
 			if (this.editShortcutsCtrlACVDeleteSuspendedCount < 0) // Main form will call this method also for newly opened
 			{                                                      // terminals which did not get notified about Suspend() yet!
