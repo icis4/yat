@@ -101,13 +101,13 @@ namespace MKY.IO.Serial.Usb
 						// Actively yield to other threads to allow dequeuing:
 						var span = (DateTime.Now - initialTimeStamp);
 						if (span.TotalMilliseconds < 4)
-							Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as send
+							Thread.Sleep(TimeSpan.Zero); // "TimeSpan.Zero" = 100% CPU is OK as send
 						else                             // a) is expected to potentially be blocking and
 							Thread.Sleep(1);             // b) is short (max. 4 ms) yet.
 					}                                    // But sleep if longer!
 
 					// There is space for at least one byte:
-					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+					lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 					{
 						var b = data[i];
 						this.sendQueue.Enqueue(b);
@@ -255,7 +255,7 @@ namespace MKY.IO.Serial.Usb
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.
-						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as sending shall happen as fast as possible.
+						Thread.Sleep(TimeSpan.Zero); // "TimeSpan.Zero" = 100% CPU is OK as sending shall happen as fast as possible.
 
 						// Handle XOff state:
 						if (this.settings.FlowControlUsesXOnXOff && !OutputIsXOn)
@@ -269,7 +269,7 @@ namespace MKY.IO.Serial.Usb
 							{
 								SendXOnOrXOffAndNotify(XOnXOff.XOnByte);
 
-								lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+								lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 								{
 									if (this.sendQueue.Peek() == XOnXOff.XOnByte) // If XOn is upfront...
 										this.sendQueue.Dequeue();                 // ...acknowlege it's gone.
@@ -281,7 +281,7 @@ namespace MKY.IO.Serial.Usb
 							{
 								SendXOnOrXOffAndNotify(XOnXOff.XOffByte);
 
-								lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+								lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 								{
 									if (this.sendQueue.Peek() == XOnXOff.XOffByte) // If XOff is upfront...
 										this.sendQueue.Dequeue();                  // ...acknowlege it's gone.
@@ -317,7 +317,7 @@ namespace MKY.IO.Serial.Usb
 							try
 							{
 								byte[] data;
-								lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+								lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 								{
 									data = this.sendQueue.ToArray();
 									this.sendQueue.Clear();

@@ -96,14 +96,14 @@ namespace MKY.IO.Serial.Usb
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.
-						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as receiving shall happen as fast as possible.
+						Thread.Sleep(TimeSpan.Zero); // "TimeSpan.Zero" = 100% CPU is OK as receiving shall happen as fast as possible.
 
 						if (Monitor.TryEnter(this.dataEventSyncObj, 10)) // Allow a short time to enter, as sending
 						{                                                // could be busy mostly locking the object.
 							try
 							{
 								byte[] data;
-								lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+								lock (this.receiveQueue) // Lock is required because "Queue<T>" is not synchronized.
 								{
 									data = this.receiveQueue.ToArray();
 									this.receiveQueue.Clear();

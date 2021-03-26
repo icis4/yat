@@ -28,7 +28,7 @@ using System.Xml.Serialization;
 namespace MKY.IO.Ports
 {
 	/// <remarks>
-	/// 'class' instead of 'struct' to allow a parameterless constructor, i.e. initializing
+	/// <c>class</c> instead of <c>struct</c> to allow parameterless constructor, i.e. initializing
 	/// <see cref="UseId"/> and <see cref="PortName"/> to other value than 0 and "".
 	/// </remarks>
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Parameterless' is a correct English term.")]

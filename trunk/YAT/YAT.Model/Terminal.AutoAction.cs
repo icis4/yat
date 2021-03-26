@@ -57,7 +57,7 @@ using MKY.Diagnostics;
 using MKY.Text.RegularExpressions;
 
 using YAT.Model.Types;
-//// 'YAT.Model.Utilities' is explicitly used due to ambiguity of 'MessageHelper'.
+//// "YAT.Model.Utilities" is explicitly used due to ambiguity of "MessageHelper".
 
 #endregion
 
@@ -492,7 +492,7 @@ namespace YAT.Model
 		/// </summary>
 		protected virtual void EnqueueAutoAction(AutoAction action, DateTime triggerTimeStamp, string triggerText, MatchCollection triggerMatches, CountsRatesTuple dataStatus)
 		{
-			lock (this.autoActionQueue) // Lock is required because Queue<T> is not synchronized.
+			lock (this.autoActionQueue) // Lock is required because "Queue<T>" is not synchronized.
 				this.autoActionQueue.Enqueue(new Tuple<AutoAction, DateTime, string, MatchCollection, CountsRatesTuple>(action, triggerTimeStamp, triggerText, triggerMatches, dataStatus));
 
 			SignalAutoActionThreadSafely();
@@ -539,10 +539,10 @@ namespace YAT.Model
 					{                                                   // No lock required, just checking for empty.
 						// Initially, yield to other threads before starting to read the queue,
 						// since it is likely that more triggers are to be enqueued.
-						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as processing shall happen as fast as possible.
+						Thread.Sleep(TimeSpan.Zero); // "TimeSpan.Zero" = 100% CPU is OK as processing shall happen as fast as possible.
 
 						Tuple<AutoAction, DateTime, string, MatchCollection, CountsRatesTuple>[] pendingItems;
-						lock (this.autoActionQueue) // Lock is required because Queue<T> is not synchronized.
+						lock (this.autoActionQueue) // Lock is required because "Queue<T>" is not synchronized.
 						{
 							pendingItems = this.autoActionQueue.ToArray();
 							this.autoActionQueue.Clear();

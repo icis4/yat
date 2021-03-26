@@ -1684,7 +1684,7 @@ namespace YAT.View.Controls
 			else
 			{
 				// Get current line:
-				var current = (lbmon.LastItem as Domain.DisplayLine); // 'LastItem' is defined for sure after having 'Items.Count' above.
+				var current = (lbmon.LastItem as Domain.DisplayLine); // "LastItem" is defined for sure after having "Items.Count" above.
 
 				// If first element, add element to line:
 				if (current.Count <= 0)
@@ -1699,7 +1699,7 @@ namespace YAT.View.Controls
 						// Remove lines if maximum exceeded:
 						while (lbmon.Items.Count >= this.maxLineCount)
 						{
-							int adjustedTopIndex = Math.Max(0, (lbmon.TopIndex - 1)); // lbmon is master; decrement accounts for item that will be removed.
+							int adjustedTopIndex = Math.Max(0, (lbmon.TopIndex - 1)); // "bmon" is master; decrement accounts for item that will be removed.
 							DebugVerticalAutoScroll("Removing least recent line...");
 							lblin.Items.RemoveAt(0); // Remove/RemoveAt() resets 'TopIndex' to 0!
 							lbmon.Items.RemoveAt(0); // \remind (2017-11-05 / MKY) check if still needed after upgrade to .NET 4.0 or higher (FR #229)
@@ -1827,10 +1827,10 @@ namespace YAT.View.Controls
 		////var lblin = fastListBox_LineNumbers => Nothing to do (yet).
 			var lbmon = fastListBox_Monitor;
 
-			if (!ICollectionEx.IsNullOrEmpty(lbmon.Items)) // lbmon is master.
+			if (!ICollectionEx.IsNullOrEmpty(lbmon.Items)) // "bmon" is master.
 			{
 				var dl = (lbmon.Items[lbmon.Items.Count - 1] as Domain.DisplayLine);
-				if (!ICollectionEx.IsNullOrEmpty(dl) && (!dl.IsComplete)) // 'IsComplete' means that this is no longer the "current" line.
+				if (!ICollectionEx.IsNullOrEmpty(dl) && (!dl.IsComplete)) // "IsComplete" means that this is no longer the "current" line.
 				{
 					dl.Clear();
 					lbmon.Invalidate();
@@ -1843,12 +1843,12 @@ namespace YAT.View.Controls
 			var lblin = fastListBox_LineNumbers;
 			var lbmon = fastListBox_Monitor;
 
-			if (!ICollectionEx.IsNullOrEmpty(lbmon.Items)) // lbmon is master.
+			if (!ICollectionEx.IsNullOrEmpty(lbmon.Items)) // "bmon" is master.
 			{
 				var dl = (lbmon.Items[lbmon.Items.Count - 1] as Domain.DisplayLine);
-				if (!ICollectionEx.IsNullOrEmpty(dl) && (!dl.IsComplete)) // 'IsComplete' means that this is no longer the "current" line.
+				if (!ICollectionEx.IsNullOrEmpty(dl) && (!dl.IsComplete)) // "IsComplete" means that this is no longer the "current" line.
 				{
-					int adjustedTopIndex = Math.Max(0, (lbmon.TopIndex - 1)); // lbmon is master; decrement accounts for item that will be removed.
+					int adjustedTopIndex = Math.Max(0, (lbmon.TopIndex - 1)); // "bmon" is master; decrement accounts for item that will be removed.
 					DebugVerticalAutoScroll("Clearing current line...");
 					lblin.Items.RemoveAt(lblin.Items.Count - 1); // Remove/RemoveAt() resets 'TopIndex' to 0!
 					lbmon.Items.RemoveAt(lbmon.Items.Count - 1);
@@ -2068,7 +2068,7 @@ namespace YAT.View.Controls
 				int x = (processorLoadPercentage - LowerLoad); // Resulting x must be max. 75%.
 				int y = (LowerInterval + ((x * x) / 5));
 
-				y = Int32Ex.Limit(y, LowerInterval, UpperInterval); // 'min' and 'max' are fixed.
+				y = Int32Ex.Limit(y, LowerInterval, UpperInterval); // "min" and "max" are fixed.
 
 				this.monitorUpdateTickInterval = StopwatchEx.TimeToTicks(y);
 				this.performImmediateMonitorAndStatusUpdate = false;

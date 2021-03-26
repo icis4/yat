@@ -703,7 +703,7 @@ namespace MKY
 							return (true);
 					}
 
-					// Attention, the 'System.Timers.Timer' class has a very particular behavior
+					// Attention, the "System.Timers.Timer" class has a very particular behavior
 					// that impacts re-throwing above!
 					//
 					// https://msdn.microsoft.com/en-us/library/system.timers.timer.aspx
@@ -716,7 +716,7 @@ namespace MKY
 					// timer's 'Elapsed' event. Pretty particular, positively spoken...
 					// The issue doesn't happen if the timer's 'SynchronizationObject' is set, i.e.
 					// the 'Elapsed' event callback is dispatched onto the thread of the specified
-					// 'SynchronizationObject'. In that case, typically, 'InvokeSynchronized()'
+					// "SynchronizationObject". In that case, typically, "InvokeSynchronized()"
 					// will be used by the event. The issue can also be circumvented by using this
 					// helper's additional event 'UnhandledExceptionOnNonMainThread'.
 				}

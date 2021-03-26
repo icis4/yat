@@ -48,8 +48,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-//// 'System.Net' as well as 'ALAZ.SystemEx.NetEx' are explicitly used for more obvious distinction.
-//// 'System.Net.Sockets' including.
+//// "System.Net" as well as "ALAZ.SystemEx.NetEx" are explicitly used for more obvious distinction.
+//// "System.Net.Sockets" as well.
 using System.Text;
 using System.Threading;
 
@@ -122,14 +122,14 @@ namespace MKY.IO.Serial.Socket
 						// Actively yield to other threads to allow dequeuing:
 						var span = (DateTime.Now - initialTimeStamp);
 						if (span.TotalMilliseconds < 4)
-							Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as send
+							Thread.Sleep(TimeSpan.Zero); // "TimeSpan.Zero" = 100% CPU is OK as send
 						else                             // a) is expected to potentially be blocking and
 							Thread.Sleep(1);             // b) is short (max. 4 ms) yet.
 					}                                    // But sleep if longer!
 
 					// There is space for at least one byte:
 					var b = data[i];
-					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+					lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 					{
 						this.sendQueue.Enqueue(b);
 					}
@@ -236,7 +236,7 @@ namespace MKY.IO.Serial.Socket
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.
-						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as sending shall happen as fast as possible.
+						Thread.Sleep(TimeSpan.Zero); // "TimeSpan.Zero" = 100% CPU is OK as sending shall happen as fast as possible.
 
 						// Synchronize the send/receive events to prevent mix-ups at the event
 						// sinks, i.e. the send/receive operations shall be synchronized with
@@ -250,7 +250,7 @@ namespace MKY.IO.Serial.Socket
 							try
 							{
 								byte[] data;
-								lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+								lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 								{
 									if (this.sendQueue.Count <= maxChunkLength) // Easy case, simply retrieve whole queue:
 									{
@@ -360,7 +360,7 @@ namespace MKY.IO.Serial.Socket
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.
-						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as sending shall happen as fast as possible.
+						Thread.Sleep(TimeSpan.Zero); // "TimeSpan.Zero" = 100% CPU is OK as sending shall happen as fast as possible.
 
 						// Synchronize the send/receive events to prevent mix-ups at the event
 						// sinks, i.e. the send/receive operations shall be synchronized with
@@ -376,7 +376,7 @@ namespace MKY.IO.Serial.Socket
 								System.Net.IPEndPoint remoteEndPoint = null;
 								List<byte> data;
 
-								lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
+								lock (this.dataSentQueue) // Lock is required because "Queue<T>" is not synchronized.
 								{
 									data = new List<byte>(this.dataSentQueue.Count); // Preset the required capacity to improve memory management.
 

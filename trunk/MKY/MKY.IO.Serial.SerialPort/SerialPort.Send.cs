@@ -145,13 +145,13 @@ namespace MKY.IO.Serial.SerialPort
 						// Actively yield to other threads to allow dequeuing:
 						var span = (DateTime.Now - initialTimeStamp);
 						if (span.TotalMilliseconds < 4)
-							Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as send
+							Thread.Sleep(TimeSpan.Zero); // "TimeSpan.Zero" = 100% CPU is OK as send
 						else                             // a) is expected to potentially be blocking and
 							Thread.Sleep(1);             // b) is short (max. 4 ms) yet.
 					}                                    // But sleep if longer!
 
 					// There is space for at least one byte:
-					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+					lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 					{
 						var b = data[i];
 						this.sendQueue.Enqueue(b);
@@ -236,7 +236,7 @@ namespace MKY.IO.Serial.SerialPort
 					// Actively yield to other threads to allow processing:
 					var span = (DateTime.Now - initial);
 					if (span.TotalMilliseconds < 4)
-						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as flush
+						Thread.Sleep(TimeSpan.Zero); // "TimeSpan.Zero" = 100% CPU is OK as flush
 					else                             // a) is expected to be blocking and
 						Thread.Sleep(1);             // b) is short (max. 4 ms) yet.
 				}                                    // But sleep if longer!
@@ -345,13 +345,13 @@ namespace MKY.IO.Serial.SerialPort
 				#endif
 
 					// Inner loop, runs as long as there are items in the queue:
-					                                             // 'IsOpen' is used instead of 'IsTransmissive' to allow handling break further below.
+					                                             // "IsOpen" is used instead of "IsTransmissive" to allow handling break further below.
 					while (IsUndisposed && this.sendThreadRunFlag && IsOpen && (this.sendQueue.Count > 0)) // Check disposal state first!
 					{                                                       // No lock required, just checking for empty.
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.
-						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as sending shall happen as fast as possible
+						Thread.Sleep(TimeSpan.Zero); // "TimeSpan.Zero" = 100% CPU is OK as sending shall happen as fast as possible
 						                           //// and there will be 'yieldSomeMore' to reduce CPU consumption.
 						bool isWriteTimeout = false;
 						bool isOutputBreak  = false;
@@ -392,7 +392,7 @@ namespace MKY.IO.Serial.SerialPort
 							{
 								if (TryWriteXOnOrXOffAndNotify(XOnXOff.XOnByte, out isWriteTimeout, out isOutputBreak))
 								{
-									lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+									lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 									{
 										if (this.sendQueue.Peek() == XOnXOff.XOnByte) // If XOn is upfront...
 											this.sendQueue.Dequeue();                 // ...acknowlege it's gone.
@@ -404,7 +404,7 @@ namespace MKY.IO.Serial.SerialPort
 							{
 								if (TryWriteXOnOrXOffAndNotify(XOnXOff.XOffByte, out isWriteTimeout, out isOutputBreak))
 								{
-									lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+									lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 									{
 										if (this.sendQueue.Peek() == XOnXOff.XOffByte) // If XOff is upfront...
 											this.sendQueue.Dequeue();                  // ...acknowlege it's gone.
@@ -455,13 +455,13 @@ namespace MKY.IO.Serial.SerialPort
 									// http://www.sparxeng.com/blog/software/must-use-net-system-io-ports-serialport written by
 									// Ben Voigt.
 									//
-									// See 'port_DataReceived()' for more details on receiving.
+									// See "port_DataReceived()" for more details on receiving.
 									//
 									// Finally (MKy/SSt/ATo in Q3/2016), the root cause for the data loss could be tracked down
 									// to the physical limitations of the USB/COM and SPI/COM converter: If more data is sent
 									// than the baud rate permits forwarding, the converter simply discards supernumerous data!
 									// Of course, what else could it do... Actually, it could propagate the information back to
-									// 'System.IO.Ports.SerialPort.BytesToWrite'. But that apparently isn't done...
+									// "System.IO.Ports.SerialPort.BytesToWrite". But that apparently isn't done...
 									//
 									// Solution: Limit output writing to baud rate :-)
 
@@ -473,7 +473,7 @@ namespace MKY.IO.Serial.SerialPort
 										{                                                     //  > Using a single interval is better than using a sliding window (because 'older'
 											int intervalValue;                                //    numbers will not further reduce the remaining size) but inaccurate by nature.
 											maxBaudRatePerInterval.Update(out intervalValue); //  > Update will only be done after writing, i.e. after a delay.
-											int remainingSizeInInterval = Math.Max((MaxFramesPerInterval - MaxFramesSafetyMargin - intervalValue), 0); // 'remaining' must be 0 or above.
+											int remainingSizeInInterval = Math.Max(0, (MaxFramesPerInterval - MaxFramesSafetyMargin - intervalValue)); // "remaining" must be 0 or above.
 
 											if (maxChunkSize > remainingSizeInInterval) {
 												maxChunkSize = remainingSizeInInterval;
@@ -501,7 +501,7 @@ namespace MKY.IO.Serial.SerialPort
 										{                                      //  > Using a single interval is better than using a sliding window (because 'older'
 											int rateValue;                     //    numbers will not further reduce the remaining size) but inaccurate by nature.
 											maxSendRate.Update(out rateValue); //  > Update will only be done after writing, i.e. after a delay.
-											int remainingSizeInInterval = Math.Max((this.settings.MaxSendRate.Size - rateValue), 0); // 'remaining' must be 0 or above.
+											int remainingSizeInInterval = Math.Max(0, (this.settings.MaxSendRate.Size - rateValue)); // "remaining" must be 0 or above.
 
 											if (maxChunkSize > remainingSizeInInterval) {
 												maxChunkSize = remainingSizeInInterval;
@@ -524,7 +524,7 @@ namespace MKY.IO.Serial.SerialPort
 									// Further reduce chunk size if maximum is specified:
 									if ((maxChunkSize > 0) && this.settings.MaxChunkSize.Enabled)
 									{
-										int maxChunkSizeSetting = this.settings.MaxChunkSize.Size; // 'Setting' is always above 0.
+										int maxChunkSizeSetting = this.settings.MaxChunkSize.Size; // "Setting" is always above 0.
 
 										if (maxChunkSize > maxChunkSizeSetting) {
 											maxChunkSize = maxChunkSizeSetting;
@@ -840,7 +840,7 @@ namespace MKY.IO.Serial.SerialPort
 				// If sending fails, the port is either blocked by XOff or CTS, or closed.
 
 				byte[] a;
-				lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+				lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 				{
 					a = this.sendQueue.ToArray();
 				}
@@ -860,7 +860,7 @@ namespace MKY.IO.Serial.SerialPort
 				DebugSendWrite("...writing done");
 
 				// Finalize the write operation:
-				lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+				lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 				{
 					for (int i = 0; i < triedChunkSize; i++)
 					{

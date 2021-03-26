@@ -139,7 +139,7 @@ namespace MKY.Collections.Specialized
 		/// </summary>
 		/// <remarks>
 		/// Required to not have to use the dynamic keyword (which would require a reference to the
-		/// 'Microsoft.CSharp' assembly) nor <see cref="System.Linq.Expressions.Expression"/> (which
+		/// "Microsoft.CSharp" assembly) nor <see cref="System.Linq.Expressions.Expression"/> (which
 		/// has much less performance).
 		/// See e.g. https://stackoverflow.com/questions/8122611/c-sharp-adding-two-generic-values
 		/// for background and discussion.

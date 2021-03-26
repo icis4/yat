@@ -63,8 +63,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-//// 'System.Net' as well as 'ALAZ.SystemEx.NetEx' are explicitly used for more obvious distinction.
-//// 'System.Net.Sockets' including.
+//// "System.Net" as well as "ALAZ.SystemEx.NetEx" are explicitly used for more obvious distinction.
+//// "System.Net.Sockets" as well.
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -562,7 +562,7 @@ namespace MKY.IO.Serial.Socket
 
 				if (IsTransmissive)
 				{
-					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+					lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 						return (this.sendQueue.Count > 0);
 				}
 				else
@@ -1046,7 +1046,7 @@ namespace MKY.IO.Serial.Socket
 		private int DropSendQueue()
 		{
 			int droppedCount;
-			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+			lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 			{
 				droppedCount = this.sendQueue.Count;
 				this.sendQueue.Clear();
@@ -1078,7 +1078,7 @@ namespace MKY.IO.Serial.Socket
 		private int DropDataSentQueue()
 		{
 			int droppedCount;
-			lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
+			lock (this.dataSentQueue) // Lock is required because "Queue<T>" is not synchronized.
 			{
 				droppedCount = this.dataSentQueue.Count;
 				this.dataSentQueue.Clear();
@@ -1252,7 +1252,7 @@ namespace MKY.IO.Serial.Socket
 			// No clue why the 'Sent' event is raised once before actual data is being sent...
 			if ((e.Buffer != null) && (e.Buffer.Length > 0))
 			{
-				lock (this.dataSentQueue) // Lock is required because Queue<T> is not synchronized.
+				lock (this.dataSentQueue) // Lock is required because "Queue<T>" is not synchronized.
 				{
 					foreach (byte b in e.Buffer)
 						this.dataSentQueue.Enqueue(b);

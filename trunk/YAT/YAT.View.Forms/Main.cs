@@ -1522,7 +1522,7 @@ namespace YAT.View.Forms
 						break;
 
 					default:
-						throw (new ArgumentOutOfRangeException("state", state, MKY.MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+						throw (new ArgumentOutOfRangeException("state", state, MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 			finally
@@ -1533,8 +1533,8 @@ namespace YAT.View.Forms
 
 		/// <remarks>
 		/// Required to allow/disallow changing options while editing a not yet validated trigger.
-		/// The 'TextChanged' event will allow, the 'Leave' event (for explicit triggers) or the
-		/// 'SelectedIndexChanged' event (for predefined triggers) will again disallow.
+		/// The "TextChanged" event will allow, the "Leave" event (for explicit triggers) or the
+		/// "SelectedIndexChanged" event (for predefined triggers) will again disallow.
 		/// </remarks>
 		private void SetAutoActionTriggerOptionControls(bool childIsReady, bool triggerTextIsSupported, bool triggerRegexIsSupported)
 		{
@@ -1781,7 +1781,7 @@ namespace YAT.View.Forms
 						break;
 
 					default:
-						throw (new ArgumentOutOfRangeException("state", state, MKY.MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+						throw (new ArgumentOutOfRangeException("state", state, MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 			finally
@@ -1808,7 +1808,7 @@ namespace YAT.View.Forms
 						break;
 
 					default:
-						throw (new ArgumentOutOfRangeException("state", state, MKY.MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+						throw (new ArgumentOutOfRangeException("state", state, MessageHelper.InvalidExecutionPreamble + "'" + state + "' is an automatic content state that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 			finally
@@ -1819,8 +1819,8 @@ namespace YAT.View.Forms
 
 		/// <remarks>
 		/// Required to allow/disallow changing options while editing a not yet validated trigger.
-		/// The 'TextChanged' event will allow, the 'Leave' event (for explicit triggers) or the
-		/// 'SelectedIndexChanged' event (for predefined triggers) will again disallow.
+		/// The "TextChanged" event will allow, the "Leave" event (for explicit triggers) or the
+		/// "SelectedIndexChanged" event (for predefined triggers) will again disallow.
 		/// </remarks>
 		private void SetAutoResponseTriggerOptionControls(bool childIsReady, bool triggerTextIsSupported, bool triggerRegexIsSupported)
 		{
@@ -1936,8 +1936,8 @@ namespace YAT.View.Forms
 
 		/// <remarks>
 		/// Required to allow/disallow changing options while editing a not yet validated trigger.
-		/// The 'TextChanged' event will allow, the 'Leave' event (for explicit triggers) or the
-		/// 'SelectedIndexChanged' event (for predefined triggers) will again disallow.
+		/// The "TextChanged" event will allow, the "Leave" event (for explicit triggers) or the
+		/// "SelectedIndexChanged" event (for predefined triggers) will again disallow.
 		/// </remarks>
 		private void SetAutoResponseResponseOptionControls(bool childIsReady, bool triggerTextIsSupported, bool triggerRegexIsSupported, bool responseReplaceIsSupported)
 		{
@@ -2152,7 +2152,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that the 'SelectedIndexChanged' event is not raised when changing from a listed
+		/// Note that the "SelectedIndexChanged" event is not raised when changing from a listed
 		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
 		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
 		/// </remarks>
@@ -2223,8 +2223,8 @@ namespace YAT.View.Forms
 			// \remind (2017-11-22..12-16 / MKY) there are limitations in .NET WinForms (or Win32):
 			//
 			// [Severe]
-			// Setting 'e.Handled' is *not* sufficient, e.g. [Alt+W] would still activate the
-			// 'Window' menu. Only setting 'e.SuppressKeyPress' works!
+			// Setting "e.Handled" is *not* sufficient, e.g. [Alt+W] would still activate the
+			// "Window" menu. Only setting "e.SuppressKeyPress" works!
 			//
 			// [Acceptable]
 			// Even if all [Alt] events were suppressed by...
@@ -2238,7 +2238,7 @@ namespace YAT.View.Forms
 			//  => Suspend/ResumeCtrlFNPLShortcuts() above and in terminals.
 			//
 			// [Severe]
-			// The ToolStripComboBox 'Leave' event is fired as soon as a MsgBox is shown (e.g.
+			// The ToolStripComboBox "Leave" event is fired as soon as a MsgBox is shown (e.g.
 			// "no more found"). As a consequence, the other shortcuts are already active again.
 			//  => Not showing a "no more found" message box anymore.
 
@@ -2345,7 +2345,7 @@ namespace YAT.View.Forms
 
 				case FindResult.Found:
 					toolStripComboBox_MainTool_Find_Pattern.BackColor = SystemColors.Window;     // Same colors as
-					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.WindowText; // 'Reset' above.
+					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.WindowText; // "Reset" above.
 					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = true;
 					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = true;
 					toolStripButton_MainTool_Find_All      .Enabled   = this.findAllIsFeasible      = true;
@@ -2353,7 +2353,7 @@ namespace YAT.View.Forms
 
 				case FindResult.NotFoundAnymore:
 					toolStripComboBox_MainTool_Find_Pattern.BackColor = SystemColors.Highlight;     // Same color as last found line,
-					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.HighlightText; // which is also 'highlighted'.
+					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.HighlightText; // which is also "highlighted".
 					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = (direction != FindDirection.Forward);
 					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = (direction != FindDirection.Backward);
 					toolStripButton_MainTool_Find_All      .Enabled   = this.findAllIsFeasible      = true;
@@ -2376,7 +2376,7 @@ namespace YAT.View.Forms
 					break;
 
 				default:
-					throw (new ArgumentOutOfRangeException("result", result, MKY.MessageHelper.InvalidExecutionPreamble + "'" + result + "' is a find result that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException("result", result, MessageHelper.InvalidExecutionPreamble + "'" + result + "' is a find result that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -2737,7 +2737,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that the 'SelectedIndexChanged' event is not raised when changing from a listed
+		/// Note that the "SelectedIndexChanged" event is not raised when changing from a listed
 		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
 		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
 		/// </remarks>
@@ -2773,7 +2773,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that this 'Leave' event has a particular behavior:
+		/// Note that this "Leave" event has a particular behavior:
 		/// <list type="bullet">
 		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
 		/// <item><description>Directly clicking an option with the mouse, the event is not invoked!</description></item>
@@ -2855,7 +2855,7 @@ namespace YAT.View.Forms
 					this.autoActionTriggerValidationIsOngoing = false;
 
 					if (!success)
-					{                                       // 'childIsReady' for sure.
+					{                                       // "childIsReady" for sure.
 						SetAutoActionTriggerOptionControls(true, true, true); // Allow changing options while editing a not yet validated trigger!
 						child.AutoActionTriggerState = AutoContentState.Invalid;
 						toolStripComboBox_MainTool_AutoAction_Trigger.Focus();
@@ -2940,7 +2940,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that the 'SelectedIndexChanged' event is not raised when changing from a listed
+		/// Note that the "SelectedIndexChanged" event is not raised when changing from a listed
 		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
 		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
 		/// </remarks>
@@ -2992,7 +2992,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that the 'SelectedIndexChanged' event is not raised when changing from a listed
+		/// Note that the "SelectedIndexChanged" event is not raised when changing from a listed
 		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
 		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
 		/// </remarks>
@@ -3028,7 +3028,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that this 'Leave' event has a particular behavior:
+		/// Note that this "Leave" event has a particular behavior:
 		/// <list type="bullet">
 		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
 		/// <item><description>Directly clicking an option with the mouse, the event is not invoked!</description></item>
@@ -3110,7 +3110,7 @@ namespace YAT.View.Forms
 					this.autoResponseTriggerValidationIsOngoing = false;
 
 					if (!success)
-					{                                         // 'childIsReady' for sure.
+					{                                         // "childIsReady" for sure.
 						SetAutoResponseTriggerOptionControls(true, true, true); // Allow changing options while editing a not yet validated trigger!
 						child.AutoResponseTriggerState = AutoContentState.Invalid;
 						toolStripComboBox_MainTool_AutoResponse_Trigger.Focus();
@@ -3200,7 +3200,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that the 'SelectedIndexChanged' event is not raised when changing from a listed
+		/// Note that the "SelectedIndexChanged" event is not raised when changing from a listed
 		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
 		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
 		/// </remarks>
@@ -3236,7 +3236,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that this 'Leave' event also has a particular behavior:
+		/// Note that this "Leave" event also has a particular behavior:
 		/// <list type="bullet">
 		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
 		/// <item><description>Directly clicking an option with the mouse, the event is not invoked!</description></item>
@@ -3325,7 +3325,7 @@ namespace YAT.View.Forms
 						this.autoResponseResponseValidationIsOngoing = false;
 
 						if (!success)
-						{                                          // 'childIsReady' for sure.
+						{                                          // "childIsReady" for sure.
 							SetAutoResponseResponseOptionControls(true, true, true, true); // Allow changing options while editing a not yet validated trigger!
 							child.AutoResponseResponseState = AutoContentState.Invalid;
 							toolStripComboBox_MainTool_AutoResponse_Response.Focus();
@@ -3516,7 +3516,7 @@ namespace YAT.View.Forms
 				// Hide all:
 				for (int i = 0; i < RecentFileSettings.MaxFilePaths; i++)
 				{
-					string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1); // 'InvariantCulture' for prefix!
+					string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1); // "InvariantCulture" for prefix!
 					this.menuItems_recent[i].Text = "&" + prefix;
 					this.menuItems_recent[i].Visible = false;
 				}
@@ -3524,7 +3524,7 @@ namespace YAT.View.Forms
 				// Show valid:
 				for (int i = 0; i < ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths.Count; i++)
 				{
-					string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1); // 'InvariantCulture' for prefix!
+					string prefix = string.Format(CultureInfo.InvariantCulture, "{0}: ", i + 1); // "InvariantCulture" for prefix!
 					if (ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i] != null)
 					{
 						string file = PathEx.Limit(ApplicationSettings.LocalUserSettings.RecentFiles.FilePaths[i].Item, 60);
@@ -3697,7 +3697,7 @@ namespace YAT.View.Forms
 				var savedSize          = ApplicationSettings.LocalUserSettings.MainWindow.Size;     // in SaveWindowSettings() below.
 
 				var savedBounds = new Rectangle(savedLocation, savedSize);
-				var isWithin = ScreenEx.IsWithinAnyWorkingArea(savedBounds); // 'WorkingArea' rather than 'Bounds' as e.g. Firefox, Thunderbird and LibraOffice.
+				var isWithin = ScreenEx.IsWithinAnyWorkingArea(savedBounds); // "WorkingArea" rather than "Bounds" as e.g. Firefox, Thunderbird and LibraOffice.
 				if (isWithin) // Restore saved settings if within working area:
 				{
 					StartPosition = savedStartPosition;
@@ -3759,15 +3759,15 @@ namespace YAT.View.Forms
 				//      <Height>480</Height>
 				//    </Size>
 				//
-				// Location.X and Size.Width are outside the screen's dimensions even though the form is inside!
-				// As a consequence, MKY.Windows.Forms.ScreenEx.IsWithinAnyBounds() will wrongly determine that
-				// the form doesn't fit a screen and ApplyWindowSettingsAccordingToStartup() will fall back to
-				// 'FormStartPosition.WindowsDefaultBounds'.
+				// "Location.X" and "Size.Width" are outside the screen's dimensions even though the form is inside!
+				// As a consequence, "MKY.Windows.Forms.ScreenEx.IsWithinAnyBounds()" will wrongly determine that
+				// the form doesn't fit a screen and "ApplyWindowSettingsAccordingToStartup()" will fall back to
+				// "FormStartPosition.WindowsDefaultBounds".
 				//
 				// Issue/limitation is considered very acceptable, neither bug filed nor added to release notes.
 			}
 
-			// Don't save right now, see remarks of this method as well as 'SaveWindowSettings()' below.
+			// Don't save right now, see remarks of this method as well as "SaveWindowSettings()" below.
 		}
 
 		private static void SaveWindowSettings()
@@ -4067,7 +4067,7 @@ namespace YAT.View.Forms
 		private void SetWindowControls()
 		{
 			// Shortcuts associated to menu items are only active when items are visible and enabled!
-			toolStripMenuItem_MainMenu_Window_SetMainMenuItems(); // Contains 'Main' as well as 'Window' dependent controls!
+			toolStripMenuItem_MainMenu_Window_SetMainMenuItems(); // Contains "Main" as well as "Window" dependent controls!
 
 			this.isSettingControls.Enter();
 			try
@@ -4089,17 +4089,17 @@ namespace YAT.View.Forms
 		private void SetMainControls()
 		{
 			// Shortcuts associated to menu items are only active when items are visible and enabled!
-			toolStripMenuItem_MainMenu_Window_SetMainMenuItems(); // Contains 'Main' as well as 'Window' dependent controls!
+			toolStripMenuItem_MainMenu_Window_SetMainMenuItems(); // Contains "Main" as well as "Window" dependent controls!
 
 			// Shortcuts associated to menu items are only active when items are visible and enabled!
-			toolStripButton_MainTool_SetControls(); // Contains 'Main' as well as 'Child' dependent controls!
+			toolStripButton_MainTool_SetControls(); // Contains "Main" as well as "Child" dependent controls!
 		}
 
 		/// <remarks>
 		/// Separated to prevent flickering of other text/combo controls when editing the search pattern.
 		/// </remarks>
 		/// <remarks>
-		/// 'Find' belongs to 'Main' even though the child state is required below.
+		/// "Find" belongs to "Main" even though the child state is required below.
 		/// </remarks>
 		private void SetFindControls()
 		{
@@ -4116,7 +4116,7 @@ namespace YAT.View.Forms
 			toolStripMenuItem_MainMenu_Window_SetChildMenuItems();
 
 			// Shortcuts associated to menu items are only active when items are visible and enabled!
-			toolStripButton_MainTool_SetControls(); // Contains 'Main' as well as 'Child' dependent controls!
+			toolStripButton_MainTool_SetControls(); // Contains "Main" as well as "Child" dependent controls!
 		}
 
 		/// <remarks>
@@ -4636,7 +4636,7 @@ namespace YAT.View.Forms
 					break;
 
 				default:
-					throw (new NotSupportedException(MKY.MessageHelper.InvalidExecutionPreamble + "'" + layout + "' is a workspace layout that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + layout + "' is a workspace layout that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -4840,9 +4840,9 @@ namespace YAT.View.Forms
 						// There is a limitation here:
 						//
 						// Code execution also gets here if the main form is resized. Thus, if the
-						// workspace layout is 'Automatic' and there is only a single terminal in
-						// the workspace, i.e. 'Maximized', the workspace layout will be changed to
-						// 'Maximized' as well.
+						// workspace layout is "Automatic" and there is only a single terminal in
+						// the workspace, i.e. "Maximized", the workspace layout will be changed to
+						// "Maximized" as well.
 						//
 						// Note the following check doesn't work, as it eliminates the possibility
 						// to intentionally maximize terminal and thus the whole workspace:
@@ -4853,7 +4853,7 @@ namespace YAT.View.Forms
 							break;
 
 						default:
-							throw (new NotSupportedException(MKY.MessageHelper.InvalidExecutionPreamble + "'" + t.WindowState.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+							throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + t.WindowState.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				}
 			}

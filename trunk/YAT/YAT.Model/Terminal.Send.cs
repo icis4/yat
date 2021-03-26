@@ -356,7 +356,7 @@ namespace YAT.Model
 				Command clone;
 				if (c.IsSingleLineText || c.IsMultiLineText)
 				{
-					clone = new Command(c); // 'Normal' case, simply clone the command.
+					clone = new Command(c); // "Normal" case, simply clone the command.
 				}
 				else if (c.IsPartialTextEol)
 				{                                        // Create a single line text command,

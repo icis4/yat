@@ -437,7 +437,7 @@ namespace YAT.Model.Test
 
 		/// <remarks>
 		/// There are similar utility methods in
-		/// 'MKY.IO.Serial.Socket.Test.Utilities' and
+		/// "MKY.IO.Serial.Socket.Test.Utilities" and
 		/// <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
@@ -463,7 +463,7 @@ namespace YAT.Model.Test
 
 		/// <remarks>
 		/// There are similar utility methods in
-		/// 'MKY.IO.Serial.Socket.Test.Utilities' and
+		/// "MKY.IO.Serial.Socket.Test.Utilities" and
 		/// <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
@@ -489,7 +489,7 @@ namespace YAT.Model.Test
 
 		/// <remarks>
 		/// There are similar utility methods in
-		/// 'MKY.IO.Serial.Socket.Test.Utilities' and
+		/// "MKY.IO.Serial.Socket.Test.Utilities" and
 		/// <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
@@ -515,7 +515,7 @@ namespace YAT.Model.Test
 
 		/// <remarks>
 		/// There are similar utility methods in
-		/// 'MKY.IO.Serial.Socket.Test.Utilities' and
+		/// "MKY.IO.Serial.Socket.Test.Utilities" and
 		/// <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
@@ -555,7 +555,7 @@ namespace YAT.Model.Test
 
 		/// <remarks>
 		/// There are similar utility methods in
-		/// 'MKY.IO.Serial.Socket.Test.Utilities' and
+		/// "MKY.IO.Serial.Socket.Test.Utilities" and
 		/// <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
@@ -581,7 +581,7 @@ namespace YAT.Model.Test
 
 		/// <remarks>
 		/// There are similar utility methods in
-		/// 'MKY.IO.Serial.Socket.Test.Utilities' and
+		/// "MKY.IO.Serial.Socket.Test.Utilities" and
 		/// <see cref="Domain.Test.Utilities"/>.
 		/// Changes here may have to be applied there too.
 		/// </remarks>
@@ -606,8 +606,8 @@ namespace YAT.Model.Test
 		}
 
 		/// <remarks>
-		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
-		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
+		/// <paramref name="expectedTotalLineCount"/> will be compared against the number of lines in
+		/// the view, i.e. complete as well as incomplete lines, *and* the number of complete lines!
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
@@ -627,8 +627,8 @@ namespace YAT.Model.Test
 		}
 
 		/// <remarks>
-		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
-		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
+		/// <paramref name="expectedTotalLineCount"/> will be compared against the number of lines in
+		/// the view, i.e. complete as well as incomplete lines, *and* the number of complete lines!
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
@@ -651,7 +651,7 @@ namespace YAT.Model.Test
 		}
 
 		/// <remarks>
-		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
+		/// "expectedPerCycleCharCount" does not need to be considered, since bytes are transmitted.
 		/// </remarks>
 		public static void WaitForSendingCycleAndAssertCounts(Terminal terminalRx, TestSet testSet, int cycle)
 		{
@@ -665,8 +665,8 @@ namespace YAT.Model.Test
 		}
 
 		/// <remarks>
-		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
-		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
+		/// <paramref name="expectedTotalLineCount"/> will be compared against the number of lines in
+		/// the view, i.e. complete as well as incomplete lines, *and* the number of complete lines!
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
@@ -686,8 +686,8 @@ namespace YAT.Model.Test
 		}
 
 		/// <remarks>
-		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
-		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
+		/// <paramref name="expectedTotalLineCount"/> will be compared against the number of lines in
+		/// the view, i.e. complete as well as incomplete lines, *and* the number of complete lines!
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
@@ -710,7 +710,7 @@ namespace YAT.Model.Test
 		}
 
 		/// <remarks>
-		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
+		/// "expectedPerCycleCharCount" does not need to be considered, since bytes are transmitted.
 		/// </remarks>
 		public static void WaitForReceivingCycleAndAssertCounts(Terminal terminalRx, TestSet testSet, int cycle)
 		{
@@ -730,11 +730,11 @@ namespace YAT.Model.Test
 		}
 
 		/// <remarks>
-		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
+		/// "expectedPerCycleCharCount" does not need to be considered, since bytes are transmitted.
 		/// </remarks>
 		/// <remarks>
-		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
-		/// i.e. complete as well as incomplete lines, *and* the number of complete lines!
+		/// <paramref name="expectedTotalLineCount"/> will be compared against the number of lines in
+		/// the view, i.e. complete as well as incomplete lines, *and* the number of complete lines!
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
@@ -745,7 +745,7 @@ namespace YAT.Model.Test
 		}
 
 		/// <remarks>
-		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
+		/// "expectedPerCycleCharCount" does not need to be considered, since bytes are transmitted.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
@@ -856,7 +856,7 @@ namespace YAT.Model.Test
 		}
 
 		/// <remarks>
-		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
+		/// "expectedPerCycleCharCount" does not need to be considered, since bytes are transmitted.
 		/// </remarks>
 		public static void WaitForTransmissionCycleAndAssertCounts(Terminal terminalTx, Terminal terminalRx, TestSet testSet, int cycle)
 		{
@@ -1236,7 +1236,7 @@ namespace YAT.Model.Test
 			e.Result = DialogResult.OK;
 
 			// ...and signal exclusion via a flag:
-			if (e.Text.StartsWith("Unable to start terminal", StringComparison.Ordinal)) // 'Ordinal' since YAT is all-English and test is passable with this strict comparison.
+			if (e.Text.StartsWith("Unable to start terminal", StringComparison.Ordinal)) // "Ordinal" since YAT is all-English and test is passable with this strict comparison.
 			{
 				staticTerminalMessageInputRequestResultsInExclude = true;
 				staticTerminalMessageInputRequestResultsInExcludeText = e.Text;

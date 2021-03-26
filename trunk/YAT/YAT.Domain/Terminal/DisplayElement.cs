@@ -802,7 +802,7 @@ namespace YAT.Domain
 			Initialize
 			(
 				other.TimeStamp,
-				other.Direction,              // 'Pair' is a value type, thus the origin pairs will be cloned.
+				other.Direction,              // "Pair" is a value type, thus the origin pairs will be cloned.
 			  ((other.origin != null) ? (new List<Pair<byte[], string>>(other.origin)) : null),
 				other.Text,
 				other.CharCount,

@@ -423,8 +423,8 @@ namespace YAT.View.Forms
 		////	...this event handler only updates the settings tree anyway.
 
 			// Attention:
-			// Same code exists in in the following location:
-			//  > NewTerminal.usbSerialHidDeviceSelection_DeviceInfoChanged()
+			// Same code exists in...
+			// ...NewTerminal.usbSerialHidDeviceSelection_DeviceInfoChanged()
 			// Changes here must be applied there too.
 
 			var di = usbSerialHidDeviceSelection.DeviceInfo;

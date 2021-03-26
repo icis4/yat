@@ -172,12 +172,12 @@ namespace YAT.Log.Utilities
 				}
 
 				// All white-space elements do not need to be processed.
-				// 'TimeSpanInfo' is not used with 'XmlTransferRawLine'.
-				// 'TimeDeltaInfo' is not used with 'XmlTransferRawLine'.
-				// 'DirectionInfo' is handled below.
-				// 'IOControlInfo' is not used with 'XmlTransferRawLine'.
-				// 'ErrorInfo' is not used with 'XmlTransferRawLine'.
-				// 'Length' is not used with 'XmlTransferRawLine'.
+				// "TimeSpanInfo" is not used with "XmlTransferRawLine".
+				// "TimeDeltaInfo" is not used with "XmlTransferRawLine".
+				// "DirectionInfo" is handled below.
+				// "IOControlInfo" is not used with "XmlTransferRawLine".
+				// "ErrorInfo" is not used with "XmlTransferRawLine".
+				// "Length" is not used with "XmlTransferRawLine".
 			}
 
 			// In case the meta information elements are not contained (e.g. if not shown),

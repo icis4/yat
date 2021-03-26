@@ -404,7 +404,7 @@ namespace YAT.Model.Types
 				{
 					Commands[index].Clear();
 				}
-				else // 'index' is/was the last command:
+				else // "index" is/was the last command:
 				{
 					Commands.RemoveAt(index);
 					RemoveTrailingCommands();

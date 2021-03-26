@@ -248,7 +248,7 @@ namespace YAT.Domain
 		protected override bool IsNotFramedAndThusAppliesToScriptLines
 		{
 			get
-			{                                                                    // 'ScriptLines' only apply to Rx.
+			{                                                                    // "ScriptLines" only apply to Rx.
 				var binaryDisplaySettings = GetBinaryDisplaySettings(IODirection.Rx);
 				return (!(binaryDisplaySettings.SequenceLineBreakBefore.Enabled || binaryDisplaySettings.SequenceLineBreakAfter.Enabled));
 			}
@@ -529,7 +529,7 @@ namespace YAT.Domain
 			linesToAdd.Add(l);
 
 		#if (WITH_SCRIPTING)
-			// Apply to scripting:                                                     // 'ScriptLines' only apply to Rx.
+			// Apply to scripting:                                                     // "ScriptLines" only apply to Rx.
 			if (!IsReloading && ScriptRunIsActive && (repositoryType == RepositoryType.Rx))
 			{
 				if (appliesToScriptLines)

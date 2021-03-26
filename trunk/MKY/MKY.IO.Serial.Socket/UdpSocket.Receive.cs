@@ -44,8 +44,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-//// 'System.Net' as well as 'ALAZ.SystemEx.NetEx' are explicitly used for more obvious distinction.
-//// 'System.Net.Sockets' including.
+//// "System.Net" as well as "ALAZ.SystemEx.NetEx" are explicitly used for more obvious distinction.
+//// "System.Net.Sockets" as well.
 using System.Threading;
 
 using MKY.Collections.Generic;
@@ -157,7 +157,7 @@ namespace MKY.IO.Serial.Socket
 				// Handle data:
 				if ((data != null) && (!discard))
 				{
-					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+					lock (this.receiveQueue) // Lock is required because "Queue<T>" is not synchronized.
 					{
 						DebugReceive(string.Format("Enqueuing {0} byte(s)...", data.Length));
 
@@ -268,7 +268,7 @@ namespace MKY.IO.Serial.Socket
 						// Initially, yield to other threads before starting to read the queue, since it is very
 						// likely that more data is to be enqueued, thus resulting in larger chunks processed.
 						// Subsequently, yield to other threads to allow processing the data.
-						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as receiving shall happen as fast as possible.
+						Thread.Sleep(TimeSpan.Zero); // "TimeSpan.Zero" = 100% CPU is OK as receiving shall happen as fast as possible.
 
 						if (Monitor.TryEnter(this.dataEventSyncObj, 10)) // Allow a short time to enter, as sending
 						{                                                // could be busy mostly locking the object.
@@ -277,7 +277,7 @@ namespace MKY.IO.Serial.Socket
 								System.Net.IPEndPoint remoteEndPoint = null;
 								List<byte> data;
 
-								lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+								lock (this.receiveQueue) // Lock is required because "Queue<T>" is not synchronized.
 								{
 									data = new List<byte>(this.receiveQueue.Count); // Preset the required capacity to improve memory management.
 

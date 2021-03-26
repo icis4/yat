@@ -118,7 +118,7 @@ namespace MKY.Time
 		/// <summary></summary>
 		public Chronometer()
 		{
-			this.secondTicker = new System.Timers.Timer(); // 'Timers.Timer' rather than 'Threading.Timer' because 'e.SignalTime' is needed.
+			this.secondTicker = new System.Timers.Timer(); // "Timers.Timer" rather than "Threading.Timer" because "e.SignalTime" is needed.
 			this.secondTicker.Interval = 1000;
 			this.secondTicker.AutoReset = true; // Periodic!
 			this.secondTicker.Elapsed += secondTicker_Periodic_Elapsed;

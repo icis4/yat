@@ -87,10 +87,10 @@ namespace MKY.Threading
 					return (false);
 
 				// Do neither throw an exception nor output a debug message in case the ID is still
-				// 'InvalidThreadId', because of the following reasons:
+				// "InvalidThreadId", because of the following reasons:
 				//  > An application may not have any reason to use this helper, but other utilities
-				//    such as the 'EventHelper' may still access this property.
-				//  > An application may call 'SetCurrentThread()' in the "normal" case, but it
+				//    such as the "EventHelper" may still access this property.
+				//  > An application may call "SetCurrentThread()" in the "normal" case, but it
 				//    may not be called by unit or sub-system test code.
 			}
 		}

@@ -402,7 +402,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		/// <remarks>
 		/// Corresponds to calling <see cref="ToString(bool, bool)"/> with
-		/// 'appendCaption' = <c>true</c> and 'appendInUseText' = <c>true</c>.
+		/// <code>appendCaption: true</code> and <code>appendInUseText: true</code>.
 		/// </remarks>
 		public override string ToString()
 		{
@@ -414,7 +414,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		/// <remarks>
 		/// Corresponds to calling <see cref="ToString(bool, bool)"/> with
-		/// 'appendCaption' = <c>true</c> and 'appendInUseText' = <c>false</c>.
+		/// <code>appendCaption: true</code> and <code>appendInUseText: false</code>.
 		/// </remarks>
 		public virtual string ToNameAndCaptionString()
 		{

@@ -445,7 +445,7 @@ namespace YAT.Domain.Test.Terminal
 				restriction += " WORKAROUND FR #375 => TO BE EXCLUDED"; // \remind (2020-08-13 / MKY)
 			}
 
-			timeoutAsInt = Math.Max(timeoutAsInt, Utilities.WaitTimeoutForLineTransmission); // 'timeout' must always be at least
+			timeoutAsInt = Math.Max(timeoutAsInt, Utilities.WaitTimeoutForLineTransmission); // "timeout" must always be at least
 			                                                                               //// the standard line time-out.
 			var args = new List<object>(tc.Arguments.Length + 1);
 			args.AddRange(tc.Arguments);

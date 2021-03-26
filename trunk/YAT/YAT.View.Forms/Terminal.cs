@@ -911,8 +911,8 @@ namespace YAT.View.Forms
 
 		/// <remarks>
 		/// Required to allow/disallow changing options while editing a not yet validated trigger.
-		/// The 'TextChanged' event will allow, the 'Leave' event (for explicit triggers) or the
-		/// 'SelectedIndexChanged' event (for predefined triggers) will again disallow.
+		/// The "TextChanged" event will allow, the 'Leave' event (for explicit triggers) or the
+		/// "SelectedIndexChanged" event (for predefined triggers) will again disallow.
 		/// </remarks>
 		private void SetAutoResponseTriggerOptionControls(bool triggerTextIsSupported, bool triggerRegexIsSupported)
 		{
@@ -950,8 +950,8 @@ namespace YAT.View.Forms
 
 		/// <remarks>
 		/// Required to allow/disallow changing options while editing a not yet validated trigger.
-		/// The 'TextChanged' event will allow, the 'Leave' event (for explicit triggers) or the
-		/// 'SelectedIndexChanged' event (for predefined triggers) will again disallow.
+		/// The "TextChanged" event will allow, the 'Leave' event (for explicit triggers) or the
+		/// "SelectedIndexChanged" event (for predefined triggers) will again disallow.
 		/// </remarks>
 		private void SetAutoResponseResponseOptionControls(bool triggerTextIsSupported, bool triggerRegexIsSupported, bool responseReplaceIsSupported)
 		{
@@ -1061,9 +1061,9 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that the 'SelectedIndexChanged' event is not raised when changing from a listed
+		/// Note that the "SelectedIndexChanged" event is not raised when changing from a listed
 		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
-		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
+		/// be handled in the "TextChanged" and/or "Enter/Leave" events.
 		/// </remarks>
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -1110,7 +1110,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke
+		/// The "TextChanged" instead of the 'Validating' event is used because tool strip combo boxes invoke
 		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// Directly using the underlying <see cref="ToolStripComboBox.ComboBox"/>'es event doesn't help either.
 		/// </remarks>
@@ -1141,7 +1141,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// See remark at 'TextChanged' event handler above.
+		/// See remark at "TextChanged" event handler above.
 		/// </remarks>
 		private void RevalidateAndRequestAutoResponseTrigger()
 		{
@@ -1197,9 +1197,9 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that the 'SelectedIndexChanged' event is not raised when changing from a listed
+		/// Note that the "SelectedIndexChanged" event is not raised when changing from a listed
 		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
-		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
+		/// be handled in the "TextChanged" and/or "Enter/Leave" events.
 		/// </remarks>
 		private void toolStripComboBox_TerminalMenu_Send_AutoResponse_Response_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -1246,7 +1246,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke
+		/// The "TextChanged" instead of the 'Validating' event is used because tool strip combo boxes invoke
 		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// Directly using the underlying <see cref="ToolStripComboBox.ComboBox"/>'es event doesn't help either.
 		/// </remarks>
@@ -1277,7 +1277,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// See remark at 'TextChanged' event handler above.
+		/// See remark at "TextChanged" event handler above.
 		/// </remarks>
 		private void RevalidateAndRequestAutoResponseResponse()
 		{
@@ -1432,8 +1432,8 @@ namespace YAT.View.Forms
 
 		/// <remarks>
 		/// Required to allow/disallow changing options while editing a not yet validated trigger.
-		/// The 'TextChanged' event will allow, the 'Leave' event (for explicit triggers) or the
-		/// 'SelectedIndexChanged' event (for predefined triggers) will again disallow.
+		/// The "TextChanged" event will allow, the 'Leave' event (for explicit triggers) or the
+		/// "SelectedIndexChanged" event (for predefined triggers) will again disallow.
 		/// </remarks>
 		private void SetAutoActionTriggerOptionControls(bool triggerTextIsSupported, bool triggerRegexIsSupported)
 		{
@@ -1475,9 +1475,9 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that the 'SelectedIndexChanged' event is not raised when changing from a listed
+		/// Note that the "SelectedIndexChanged" event is not raised when changing from a listed
 		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
-		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
+		/// be handled in the "TextChanged" and/or "Enter/Leave" events.
 		/// </remarks>
 		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -1524,7 +1524,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke
+		/// The "TextChanged" instead of the 'Validating' event is used because tool strip combo boxes invoke
 		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// Directly using the underlying <see cref="ToolStripComboBox.ComboBox"/>'es event doesn't help either.
 		/// </remarks>
@@ -1555,7 +1555,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// See remark at 'TextChanged' event handler above.
+		/// See remark at "TextChanged" event handler above.
 		/// </remarks>
 		private void RevalidateAndRequestAutoActionTrigger()
 		{
@@ -1611,9 +1611,9 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that the 'SelectedIndexChanged' event is not raised when changing from a listed
+		/// Note that the "SelectedIndexChanged" event is not raised when changing from a listed
 		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
-		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
+		/// be handled in the "TextChanged" and/or "Enter/Leave" events.
 		/// </remarks>
 		private void toolStripComboBox_TerminalMenu_Receive_AutoAction_Action_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -1749,7 +1749,7 @@ namespace YAT.View.Forms
 			try
 			{
 				// Attention:
-				// Similar code exists in 'contextMenuStrip_Monitor_SetMenuItems()' further below!
+				// Similar code exists in contextMenuStrip_Monitor_SetMenuItems() further below!
 				// Changes here must most likely be applied there too.
 
 				bool isText       = true;
@@ -1922,10 +1922,10 @@ namespace YAT.View.Forms
 		{
 			this.terminal.ResetCountAndRate();
 
-			// The 'terminal_IOCount/RateChanged_Promptly' events are not used because of the reason
-			// described in the remarks of 'terminal_RawChunkSent/Received' of 'Model.Terminal'.
-			// Instead, the update is done by the 'terminal_DisplayElements[Tx|Bidir|Rx]Added' and
-			// 'terminal_DisplayLines[Tx|Bidir|Rx]Added' handlers. As a consequence, the update must
+			// The "terminal_IOCount/RateChanged_Promptly" events are not used because of the reason
+			// described in the remarks of "terminal_RawChunkSent/Received" of "Model.Terminal".
+			// Instead, the update is done by the "terminal_DisplayElements[Tx|Bidir|Rx]Added" and
+			// "terminal_DisplayLines[Tx|Bidir|Rx]Added" handlers. As a consequence, the update must
 			// manually be triggered here:
 
 			SetDataStatus();
@@ -1964,13 +1964,13 @@ namespace YAT.View.Forms
 		private void toolStripMenuItem_TerminalMenu_View_ShowDevice_Click(object sender, EventArgs e)
 		{
 			// Attention:
-			// Similar code exists in 'View.Forms.AdvancedTerminalSetting.checkBox_ShowDevice_CheckedChanged()'!
+			// Similar code exists in View.Forms.AdvancedTerminalSetting.checkBox_ShowDevice_CheckedChanged()!
 			// Changes here must most likely be applied there too.
 
 			if (toolStripMenuItem_TerminalMenu_View_ShowDevice.Checked && !this.settingsRoot.Display.DeviceLineBreakEnabled)
 			{
 				var isServerSocket = this.settingsRoot.IO.IOTypeIsServerSocket;
-				if (isServerSocket) // Attention: This 'isServerSocket' restriction is also implemented at other locations!
+				if (isServerSocket) // Attention: This "isServerSocket" restriction is also implemented at other locations!
 				{
 					var dr = MessageBoxEx.Show
 					(
@@ -2150,7 +2150,7 @@ namespace YAT.View.Forms
 			try
 			{
 				// Attention:
-				// Similar code exists in 'toolStripMenuItem_TerminalMenu_View_SetMenuItems()' further above!
+				// Similar code exists in toolStripMenuItem_TerminalMenu_View_SetMenuItems() further above!
 				// Changes here must most likely be applied there too.
 
 				var terminalType = this.settingsRoot.TerminalType;
@@ -2218,9 +2218,6 @@ namespace YAT.View.Forms
 				toolStripMenuItem_MonitorContextMenu_SaveToFile.Enabled      = isMonitor;
 				toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Enabled = isMonitor;
 				toolStripMenuItem_MonitorContextMenu_Print.Enabled           = isMonitor;
-
-				toolStripMenuItem_MonitorContextMenu_FindNext    .Enabled = (isMonitor && FindNextIsFeasible);
-				toolStripMenuItem_MonitorContextMenu_FindPrevious.Enabled = (isMonitor && FindPreviousIsFeasible);
 			}
 			finally
 			{
@@ -2334,10 +2331,10 @@ namespace YAT.View.Forms
 
 			this.terminal.ResetCountAndRate();
 
-			// The 'terminal_IOCount/RateChanged_Promptly' events are not used because of the reason
-			// described in the remarks of 'terminal_RawChunkSent/Received' of 'Model.Terminal'.
-			// Instead, the update is done by the 'terminal_DisplayElements[Tx|Bidir|Rx]Added' and
-			// 'terminal_DisplayLines[Tx|Bidir|Rx]Added' handlers. As a consequence, the update must
+			// The "terminal_IOCount/RateChanged_Promptly" events are not used because of the reason
+			// described in the remarks of "terminal_RawChunkSent/Received" of "Model.Terminal".
+			// Instead, the update is done by the "terminal_DisplayElements[Tx|Bidir|Rx]Added" and
+			// "terminal_DisplayLines[Tx|Bidir|Rx]Added" handlers. As a consequence, the update must
 			// manually be triggered here:
 
 			SetDataStatus();
@@ -4498,9 +4495,9 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary>
-		/// The indicated terminal name. The name is either an incrementally assigned 'Terminal1',
-		/// 'Terminal2',... or the file name once the terminal has been saved by the user, e.g.
-		/// 'MyTerminal.yat'.
+		/// The indicated terminal name. The name is either an incrementally assigned "Terminal1",
+		/// "Terminal2",... or the file name once the terminal has been saved by the user, e.g.
+		/// "MyTerminal.yat".
 		/// </summary>
 		/// <remarks>
 		/// Using term "IndicatedName" because <see cref="Control.Name"/> already exists.
@@ -5102,10 +5099,10 @@ namespace YAT.View.Forms
 		/// Always succeeds with the (yet) available options, no need to revalidate (yet).
 		/// </remarks>
 		/// <remarks>
-		/// There is a limitation yet: This method is only called by the 'SelectedIndexChanged' event
+		/// There is a limitation yet: This method is only called by the "SelectedIndexChanged" event
 		/// handlers. But that event is not raised when changing from a listed item to dedicated text,
 		/// i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change would have to be handled in the
-		/// 'TextChanged' and/or 'Enter/Leave' events, but that would interfere with option settings
+		/// "TextChanged" and/or "Enter/Leave" events, but that would interfere with option settings
 		/// explicitly done by the user. Accepting this limitation.
 		/// </remarks>
 		/// <remarks>
@@ -5145,7 +5142,7 @@ namespace YAT.View.Forms
 			}
 			else                                          // UseText:
 			{
-				if (!this.settingsRoot.AutoAction.TriggerOptions.EnableRegex) // 'CaseSensitive' and 'WholeWord' are irrelevant for validation.
+				if (!this.settingsRoot.AutoAction.TriggerOptions.EnableRegex) // "CaseSensitive" and "WholeWord" are irrelevant for validation.
 					return (!string.IsNullOrEmpty(triggerTextOrRegexPattern));
 				else                                          // EnableRegex:
 					return (RegexEx.TryValidatePattern(triggerTextOrRegexPattern));
@@ -5166,7 +5163,7 @@ namespace YAT.View.Forms
 				invalidTextStart = 0; // Not way to detect this (yet).
 				invalidTextLength = triggerTextOrRegexPattern.Length;
 
-				if (!this.settingsRoot.AutoAction.TriggerOptions.EnableRegex) // 'CaseSensitive' and 'WholeWord' are irrelevant for validation.
+				if (!this.settingsRoot.AutoAction.TriggerOptions.EnableRegex) // "CaseSensitive" and "WholeWord" are irrelevant for validation.
 					return (!string.IsNullOrEmpty(triggerTextOrRegexPattern));
 				else                                          // EnableRegex:
 					return (RegexEx.TryValidatePattern(triggerTextOrRegexPattern));
@@ -5403,10 +5400,10 @@ namespace YAT.View.Forms
 		/// Always succeeds with the (yet) available options, no need to revalidate (yet).
 		/// </remarks>
 		/// <remarks>
-		/// There is a limitation yet: This method is only called by the 'SelectedIndexChanged' event
+		/// There is a limitation yet: This method is only called by the "SelectedIndexChanged" event
 		/// handlers. But that event is not raised when changing from a listed item to dedicated text,
 		/// i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change would have to be handled in the
-		/// 'TextChanged' and/or 'Enter/Leave' events, but that would interfere with option settings
+		/// "TextChanged" and/or "Enter/Leave" events, but that would interfere with option settings
 		/// explicitly done by the user. Accepting this limitation.
 		/// </remarks>
 		/// <remarks>
@@ -5446,7 +5443,7 @@ namespace YAT.View.Forms
 			}
 			else                                            // UseText:
 			{
-				if (!this.settingsRoot.AutoResponse.TriggerOptions.EnableRegex) // 'CaseSensitive' and 'WholeWord' are irrelevant for validation.
+				if (!this.settingsRoot.AutoResponse.TriggerOptions.EnableRegex) // "CaseSensitive" and "WholeWord" are irrelevant for validation.
 					return (!string.IsNullOrEmpty(triggerTextOrRegexPattern));
 				else                                            // EnableRegex:
 					return (RegexEx.TryValidatePattern(triggerTextOrRegexPattern));
@@ -5467,7 +5464,7 @@ namespace YAT.View.Forms
 				invalidTextStart = 0; // Not way to detect this (yet).
 				invalidTextLength = triggerTextOrRegexPattern.Length;
 
-				if (!this.settingsRoot.AutoResponse.TriggerOptions.EnableRegex) // 'CaseSensitive' and 'WholeWord' are irrelevant for validation.
+				if (!this.settingsRoot.AutoResponse.TriggerOptions.EnableRegex) // "CaseSensitive" and "WholeWord" are irrelevant for validation.
 					return (!string.IsNullOrEmpty(triggerTextOrRegexPattern));
 				else                                            // EnableRegex:
 					return (RegexEx.TryValidatePattern(triggerTextOrRegexPattern));
@@ -5588,10 +5585,10 @@ namespace YAT.View.Forms
 		/// Always succeeds with the (yet) available options, no need to revalidate (yet).
 		/// </remarks>
 		/// <remarks>
-		/// There is a limitation yet: This method is only called by the 'SelectedIndexChanged' event
+		/// There is a limitation yet: This method is only called by the "SelectedIndexChanged" event
 		/// handlers. But that event is not raised when changing from a listed item to dedicated text,
 		/// i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change would have to be handled in the
-		/// 'TextChanged' and/or 'Enter/Leave' events, but that would interfere with option settings
+		/// "TextChanged" and/or "Enter/Leave" events, but that would interfere with option settings
 		/// explicitly done by the user. Accepting this limitation.
 		/// </remarks>
 		/// <remarks>
@@ -6030,7 +6027,7 @@ namespace YAT.View.Forms
 			const int PredefinedOffset = 6; // 2 x margin of 3 (frame + buttons)
 			int absoluteX = splitContainer_Predefined.SplitterDistance + splitContainer_Predefined.Left;
 			int relativeX = absoluteX - send.Left + PredefinedOffset;
-			send.SendSplitterDistance = Int32Ex.Limit(relativeX, 0, Math.Max((send.Width - 1), 0)); // 'max' must be 0 or above.
+			send.SendSplitterDistance = Int32Ex.Limit(relativeX, 0, Math.Max(0, (send.Width - 1))); // "max" must be 0 or above.
 		}
 
 		private void ViewRearrange()
@@ -7401,12 +7398,12 @@ namespace YAT.View.Forms
 			}
 		}
 
-		// The 'terminal_IOCount/RateChanged_Promptly' events are not used because of the reason
-		// described in the remarks of 'terminal_RawChunkSent/Received' of 'Model.Terminal'.
-		// Instead, the update is done by the 'terminal_DisplayElements[Tx|Bidir|Rx]Added' and
-		// 'terminal_DisplayLines[Tx|Bidir|Rx]Added' handlers.
+		// The "terminal_IOCount/RateChanged_Promptly" events are not used because of the reason
+		// described in the remarks of "terminal_RawChunkSent/Received" of "Model.Terminal".
+		// Instead, the update is done by the "terminal_DisplayElements[Tx|Bidir|Rx]Added" and
+		// "terminal_DisplayLines[Tx|Bidir|Rx]Added" handlers.
 		//
-		// 'terminal_IORateChanged_Decimated' is fine.
+		// "terminal_IORateChanged_Decimated" is fine.
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void terminal_IORateChanged_Decimated(object sender, EventArgs e)
@@ -7953,7 +7950,7 @@ namespace YAT.View.Forms
 
 				toolStripStatusLabel_TerminalStatus_IOStatus.Text = this.terminal.IOStatusText;
 			}
-			else // 'TerminalIsNotAvailable'
+			else // "TerminalIsNotAvailable"
 			{
 				toolStripStatusLabel_TerminalStatus_IOStatusIndicator.Enabled = false;
 

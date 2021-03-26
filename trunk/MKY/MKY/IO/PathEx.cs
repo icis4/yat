@@ -381,7 +381,7 @@ namespace MKY.IO
 		/// string filePath = "C:\\Temp\\MyFile.txt";
 		/// filePath = PathEx.AppendPostfixToFileName(filePath, "_ABC");
 		/// </code>
-		/// 'filePath' will now be "C:\\Temp\\MyFile_ABC.txt".
+		/// <paramref name="filePath"/> will now be "C:\\Temp\\MyFile_ABC.txt".
 		/// </example>
 		/// <param name="filePath">Path to the file.</param>
 		/// <param name="fileNamePostfix">Postfix that shall be appended to the file name.</param>

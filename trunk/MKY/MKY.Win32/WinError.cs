@@ -41,8 +41,8 @@ namespace MKY.Win32
 	/// Encapsulates parts of the Win32 error API.
 	/// </summary>
 	/// <remarks>
-	/// Intentionally called 'WinError' instead of 'Error' to prevent code analysis error due to
-	/// 'Error' keyword in certain .NET languages (e.g. Visual Basic).
+	/// Intentionally called "WinError" instead of "Error" to prevent code analysis error due to
+	/// "Error" keyword in certain .NET languages (e.g. Visual Basic).
 	/// </remarks>
 	public static class WinError
 	{

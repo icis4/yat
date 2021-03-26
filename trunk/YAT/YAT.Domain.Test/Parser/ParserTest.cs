@@ -363,9 +363,9 @@ namespace YAT.Domain.Test.Parser
 			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "čěř", new byte[] { 0x2B, 0x41, 0x51, 0x30, 0x42, 0x47, 0x77, 0x46, 0x5A, 0x2D })); // +AQ0BGwFZ-
 			////                                                                 //// yi er zhou is U+4E00 U+4E8C U+5DDE
 			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "一二州", new byte[] { 0x2B, 0x54, 0x67, 0x42, 0x4F, 0x6A, 0x46, 0x33, 0x65, 0x2D })); // +TgBOjF3e-
-			////                                                                 //// 'Vertical Horizontal Ellipsis' is U+FE19
+			////                                                                 //// "Vertical Horizontal Ellipsis" is U+FE19
 			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "︙", new byte[] { 0x2B, 0x2F, 0x68, 0x6B, 0x2D })); // +/hk-
-			////                                                                 //// 'Notenschlüssel' is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
+			////                                                                 //// "Notenschlüssel" is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
 			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "𝄞", new byte[] { 0x2B, 0x32, 0x44, 0x54, 0x64, 0x48, 0x67, 0x2D })); // +2DTdHg-
 			////
 			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, @"0\0<CR>1\n2", new byte[] { 0x30, 0x2B, 0x41, 0x41, 0x41, 0x2D, 0x0D, 0x31, 0x0A, 0x32 })); // 0+AAA-\r1\n2
@@ -378,9 +378,9 @@ namespace YAT.Domain.Test.Parser
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "čěř", new byte[] { 0xC4, 0x8D, 0xC4, 0x9B, 0xC5, 0x99 }));
 				                                                                 //// yi er zhou is U+4E00 U+4E8C U+5DDE
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "一二州", new byte[] { 0xE4, 0xB8, 0x80, 0xE4, 0xBA, 0x8C, 0xE5, 0xB7, 0x9E }));
-				                                                                 //// 'Vertical Horizontal Ellipsis' is U+FE19
+				                                                                 //// "Vertical Horizontal Ellipsis" is U+FE19
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "︙", new byte[] { 0xEF, 0xB8, 0x99 }));
-				                                                                 //// 'Notenschlüssel' is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
+				                                                                 //// "Notenschlüssel" is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "𝄞", new byte[] { 0xF0, 0x9D, 0x84, 0x9E }));
 
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 }));
@@ -393,9 +393,9 @@ namespace YAT.Domain.Test.Parser
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.Unicode, "čěř", new byte[] { 0x0D, 0x01, 0x1B, 0x01, 0x59, 0x01 }));
 				                                                                    //// yi er zhou is U+4E00 U+4E8C U+5DDE
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.Unicode, "一二州", new byte[] { 0x00, 0x4E, 0x8C, 0x4E, 0xDE, 0x5D }));
-				                                                                    //// 'Vertical Horizontal Ellipsis' is U+FE19
+				                                                                    //// "Vertical Horizontal Ellipsis" is U+FE19
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.Unicode, "︙", new byte[] { 0x19, 0xFE }));
-				                                                                    //// 'Notenschlüssel' is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
+				                                                                    //// "Notenschlüssel" is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.Unicode, "𝄞", new byte[] { 0x34, 0xD8, 0x1E, 0xDD }));
 				                                                                                          //// |           |           |           |           |           |           |
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.Unicode, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x31, 0x00, 0x0A, 0x00, 0x32, 0x00 }));
@@ -408,9 +408,9 @@ namespace YAT.Domain.Test.Parser
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.BigEndianUnicode, "čěř", new byte[] { 0x01, 0x0D, 0x01, 0x1B, 0x01, 0x59 }));
 				                                                                             //// yi er zhou is U+4E00 U+4E8C U+5DDE
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.BigEndianUnicode, "一二州", new byte[] { 0x4E, 0x00, 0x4E, 0x8C, 0x5D, 0xDE }));
-				                                                                             //// 'Vertical Horizontal Ellipsis' is U+FE19
+				                                                                             //// "Vertical Horizontal Ellipsis" is U+FE19
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.BigEndianUnicode, "︙", new byte[] { 0xFE, 0x19 }));
-				                                                                             //// 'Notenschlüssel' is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
+				                                                                             //// "Notenschlüssel" is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.BigEndianUnicode, "𝄞", new byte[] { 0xD8, 0x34, 0xDD, 0x1E }));
 				                                                                                                   //// |           |           |           |           |           |           |
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.BigEndianUnicode, @"0\0<CR>1\n2", new byte[] { 0x00, 0x30, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x31, 0x00, 0x0A, 0x00, 0x32 }));
@@ -423,9 +423,9 @@ namespace YAT.Domain.Test.Parser
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF32, "čěř", new byte[] { 0x0D, 0x01, 0x00, 0x00, 0x1B, 0x01, 0x00, 0x00, 0x59, 0x01, 0x00, 0x00 }));
 				                                                                  //// yi er zhou is U+4E00 U+4E8C U+5DDE
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF32, "一二州", new byte[] { 0x00, 0x4E, 0x00, 0x00, 0x8C, 0x4E, 0x00, 0x00, 0xDE, 0x5D, 0x00, 0x00 }));
-				                                                                  //// 'Vertical Horizontal Ellipsis' is U+FE19
+				                                                                  //// "Vertical Horizontal Ellipsis" is U+FE19
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF32, "︙", new byte[] { 0x19, 0xFE, 0x00, 0x00 }));
-				                                                                  //// 'Notenschlüssel' is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
+				                                                                  //// "Notenschlüssel" is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF32, "𝄞", new byte[] { 0x1E, 0xD1, 0x01, 0x00 }));
 				                                                                                        //// |                       |                       |                       |                       |                       |                       |
 				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF32, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x31, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x32, 0x00, 0x00, 0x00 }));
@@ -438,9 +438,9 @@ namespace YAT.Domain.Test.Parser
 				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "čěř", new byte[] { 0x00, 0x00, 0x01, 0x0D, 0x00, 0x00, 0x01, 0x1B, 0x00, 0x00, 0x01, 0x59 }));
 				                                                                                                     //// yi er zhou is U+4E00 U+4E8C U+5DDE
 				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "一二州", new byte[] { 0x00, 0x00, 0x4E, 0x00, 0x00, 0x00, 0x4E, 0x8C, 0x00, 0x00, 0x5D, 0xDE }));
-				                                                                                                     //// 'Vertical Horizontal Ellipsis' is U+FE19
+				                                                                                                     //// "Vertical Horizontal Ellipsis" is U+FE19
 				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "︙", new byte[] { 0x00, 0x00, 0xFE, 0x19 }));
-				                                                                                                     //// 'Notenschlüssel' is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
+				                                                                                                     //// "Notenschlüssel" is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
 				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "𝄞", new byte[] { 0x00, 0x01, 0xD1, 0x1E }));
 				                                                                                                                           //// |                       |                       |                       |                       |                       |                       |
 				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), @"0\0<CR>1\n2", new byte[] { 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x31, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x32 }));
@@ -881,7 +881,7 @@ namespace YAT.Domain.Test.Parser
 			// and decoding multi-byte encoded characters. However, it was always done, but of course e.g.
 			// UTF-8 is independent on endianness. The endianness would only have to be applied to single
 			// multi-byte values, not multi-byte values split into multiple fragments. However, a .NET
-			// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
+			// "Encoding" object does not tell whether the encoding is potentially endianness capable or
 			// not. Thus, it was decided to again remove the character encoding endianness awareness.
 
 			using (var p = new Domain.Parser.Parser(encoding, Endianness.LittleEndian, Domain.Parser.Mode.AllEscapesExceptKeywords))

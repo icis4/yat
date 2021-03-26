@@ -69,7 +69,7 @@ using MT.Albatros.Core;
 
 using YAT.Application.Utilities;
 using YAT.Model.Types;
-//// 'YAT.Model.Utilities' is explicitly used due to ambiguity of 'MessageHelper'.
+//// "YAT.Model.Utilities" is explicitly used due to ambiguity of "MessageHelper".
 using YAT.Settings.Application;
 using YAT.Settings.Model;
 
@@ -850,14 +850,14 @@ namespace YAT.Model
 			}
 		}
 
-		// 'IsReceiving' makes little sense, see 'LastReceiveTimeStamp' below.
-		// 'IsReceivingForSomeTime' is not needed (yet).
+		// "IsReceiving" makes little sense, see "LastReceiveTimeStamp" below.
+		// "IsReceivingForSomeTime" is not needed (yet).
 
 		/// <remarks>
 		/// Opposed to <see cref="IsSending"/>, where the amount of data expected for sending is
 		/// known by the caller, there is no information on the availability and amout of data
 		/// for receiving, nor any way to determine whether data may be coming in soon. Thus, an
-		/// 'IsReceiving' property makes little sense. Instead, this time stamp may be used to
+		/// "IsReceiving" property makes little sense. Instead, this time stamp may be used to
 		/// determine for how long the I/O instance has not been receiving data anymore, and can
 		/// combine this time stamp with a time-out.
 		/// <para>
@@ -1172,9 +1172,9 @@ namespace YAT.Model
 		/// </remarks>
 		/// <remarks>
 		/// \remind (2018-03-27 / MKY)
-		/// 'LastAvailable' only works properly for a terminating number of received messages, but
+		/// "LastAvailable" only works properly for a terminating number of received messages, but
 		/// not for consecutive receiving. This method shall be eliminated as soon as the obsolete
-		/// GetLastReceived(), CheckLastReceived() and WaitFor() have been removed.
+		/// "GetLastReceived()", "CheckLastReceived()" and "WaitFor()" have been removed.
 		/// </remarks>
 		[Obsolete("See remarks.")]
 		public virtual void GetLastAvailableReceivedMessageForScripting(out Domain.ScriptMessage value)
@@ -1900,7 +1900,7 @@ namespace YAT.Model
 			if (isWorkspaceClose && !autoSaveIsAllowed)
 			{
 				// Ask user whether to save terminal, to give user to possibility to chose 'No'.
-				// This is required since the 'Save File Dialog' only offers [OK] and [Cancel].
+				// This is required since the "SaveFileDialog" only offers [OK] and [Cancel].
 
 				var dr = OnMessageInputRequest
 				(
@@ -1926,7 +1926,7 @@ namespace YAT.Model
 				}
 			}
 
-			switch (OnSaveAsFileDialogRequest()) // 'Save File Dialog' offers [OK] and [Cancel].
+			switch (OnSaveAsFileDialogRequest()) // "SaveFileDialog" offers [OK] and [Cancel].
 			{
 				case DialogResult.OK:
 					isCanceled = false;
@@ -3004,7 +3004,7 @@ namespace YAT.Model
 
 			var c = new Domain.DisplayElementCollection(e.Texts.Count); // Preset the required capacity to improve memory management.
 			foreach (var t in e.Texts)
-			{                               // 'IOControlInfo' elements are inline elements, thus neither add info separators nor content spaces inbetween.
+			{                               // "IOControlInfo" elements are inline elements, thus neither add info separators nor content spaces inbetween.
 				c.Add(new Domain.DisplayElement.IOControlInfo(ts, (Domain.Direction)e.Direction, t));
 			}
 			virtualLine.AddRange(c);
@@ -3303,8 +3303,8 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// 'Normally', the display is updated by the 'DisplayElements[Tx|Bidir|Rx]Added' events,
-		/// except for those cases where processing is limited to 'DisplayLines[Bidir|Rx][Added|Reloaded]':
+		/// "Normally", the display is updated by the "DisplayElements[Tx|Bidir|Rx]Added" events,
+		/// except for those cases where processing is limited to "DisplayLines[Bidir|Rx][Added|Reloaded]":
 		/// <list type="bullet">
 		/// <item><description>AutoAction: Filter/Suppress.</description></item>
 		/// <item><description>AutoAction: Text based triggers.</description></item>
@@ -3347,8 +3347,8 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// 'Normally', the display is updated by the 'DisplayElements[Tx|Bidir|Rx]Added' events,
-		/// except for those cases where processing is limited to 'DisplayLines[Bidir|Rx][Added|Reloaded]':
+		/// "Normally", the display is updated by the "DisplayElements[Tx|Bidir|Rx]Added" events,
+		/// except for those cases where processing is limited to "DisplayLines[Bidir|Rx][Added|Reloaded]":
 		/// <list type="bullet">
 		/// <item><description>AutoAction: Filter/Suppress.</description></item>
 		/// <item><description>AutoAction: Text based triggers.</description></item>
@@ -3378,8 +3378,8 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// 'Normally', the display is updated by the 'DisplayElements[Tx|Bidir|Rx]Added' events,
-		/// except for those cases where processing is limited to 'DisplayLines[Bidir|Rx][Added|Reloaded]':
+		/// "Normally", the display is updated by the "DisplayElements[Tx|Bidir|Rx]Added" events,
+		/// except for those cases where processing is limited to "DisplayLines[Bidir|Rx][Added|Reloaded]":
 		/// <list type="bullet">
 		/// <item><description>AutoAction: Filter/Suppress.</description></item>
 		/// <item><description>AutoAction: Text based triggers.</description></item>

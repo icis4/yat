@@ -256,7 +256,7 @@ namespace YAT.View.Forms
 				{
 					case AutoAction.HistogramHorizontal:
 					{
-						if (yatModel.Histogram != null) // 'null' when no data yet or just cleared.
+						if (yatModel.Histogram != null) // "null" when no data yet or just cleared.
 						{
 							var oxyModel = plotView.Model;
 
@@ -275,7 +275,7 @@ namespace YAT.View.Forms
 
 					case AutoAction.HistogramVertical:
 					{
-						if (yatModel.Histogram != null) // 'null' when no data yet or just cleared.
+						if (yatModel.Histogram != null) // "null" when no data yet or just cleared.
 						{
 							var oxyModel = plotView.Model;
 
@@ -449,7 +449,7 @@ namespace YAT.View.Forms
 				var savedSize          = ApplicationSettings.LocalUserSettings.PlotWindow.Size;     // in SaveWindowSettings() below.
 
 				var savedBounds = new Rectangle(savedLocation, savedSize);
-				var isWithin = ScreenEx.IsWithinAnyWorkingArea(savedBounds); // 'WorkingArea' rather than 'Bounds' as e.g. Firefox, Thunderbird and LibraOffice.
+				var isWithin = ScreenEx.IsWithinAnyWorkingArea(savedBounds); // "WorkingArea" rather than "Bounds" as e.g. Firefox, Thunderbird and LibraOffice.
 				if (isWithin) // Restore saved settings if within working area:
 				{
 					StartPosition = savedStartPosition;
@@ -511,15 +511,15 @@ namespace YAT.View.Forms
 				//      <Height>480</Height>
 				//    </Size>
 				//
-				// Location.X and Size.Width are outside the screen's dimensions even though the form is inside!
-				// As a consequence, MKY.Windows.Forms.ScreenEx.IsWithinAnyBounds() will wrongly determine that
-				// the form doesn't fit a screen and ApplyWindowSettingsAccordingToStartup() will fall back to
-				// 'FormStartPosition.WindowsDefaultBounds'.
+				// "Location.X" and "Size.Width" are outside the screen's dimensions even though the form is inside!
+				// As a consequence, "MKY.Windows.Forms.ScreenEx.IsWithinAnyBounds()" will wrongly determine that
+				// the form doesn't fit a screen and "ApplyWindowSettingsAccordingToStartup()" will fall back to
+				// "FormStartPosition.WindowsDefaultBounds".
 				//
 				// Issue/limitation is considered very acceptable, neither bug filed nor added to release notes.
 			}
 
-			// Don't save right now, see remarks of this method as well as 'SaveWindowSettings()' below.
+			// Don't save right now, see remarks of this method as well as "SaveWindowSettings()" below.
 		}
 
 		private static void SaveWindowSettings()

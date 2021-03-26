@@ -67,7 +67,7 @@ namespace MKY.Reflection
 				{
 					PropertyInfo pi = type.GetProperty(att.PropertyName, BindingFlags.Static | BindingFlags.Public);
 					if (pi != null)
-						return ((TReturn)pi.GetValue(null, null)); // 'null' means static.
+						return ((TReturn)pi.GetValue(null, null)); // "null" means static.
 				}
 			}
 

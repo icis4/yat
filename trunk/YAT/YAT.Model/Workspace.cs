@@ -48,7 +48,7 @@ using YAT.Application.Settings;
 using YAT.Application.Utilities;
 using YAT.Model.Settings;
 using YAT.Model.Types;
-//// 'YAT.Model.Utilities' is explicitly used due to ambiguity of 'MessageHelper'.
+//// "YAT.Model.Utilities" is explicitly used due to ambiguity of "MessageHelper".
 using YAT.Settings.Application;
 using YAT.Settings.Model;
 
@@ -850,7 +850,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual bool RequestNormalSaveAsFromUser()
 		{
-			switch (OnSaveAsFileDialogRequest()) // 'Save File Dialog' offers [OK] and [Cancel].
+			switch (OnSaveAsFileDialogRequest()) // "SaveFileDialog" offers [OK] and [Cancel].
 			{
 				case DialogResult.OK:
 					return (true);
@@ -1305,8 +1305,8 @@ namespace YAT.Model
 				// The workspace shall dispose of itself to free all resources for sure. It must be
 				// done AFTER it raised the 'Closed' event and all subscribers of the event may still
 				// refer to a non-disposed object. This is especially important, as the order of the
-				// subscribers is not fixed, i.e. 'Model.Main' may dispose of the workspace before
-				// 'View.Main' receives the event callback!
+				// subscribers is not fixed, i.e. "Model.Main" may dispose of the workspace before
+				// "View.Main" receives the event callback!
 				Dispose();
 
 				return (true);
@@ -2259,7 +2259,7 @@ namespace YAT.Model
 			{
 				if (t.SettingsFileHasAlreadyBeenNormallySaved)
 				{
-					bool isCanceled;                 // 'false' since "where file has already been *normally* saved"!
+					bool isCanceled;                 // "false" since "where file has already been *normally* saved"!
 					if (!t.SaveWithOptions(true, false, true, false, true, out isCanceled))
 					{
 						success = false;

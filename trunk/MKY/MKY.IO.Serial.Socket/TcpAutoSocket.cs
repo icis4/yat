@@ -47,8 +47,8 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-//// 'System.Net' as well as 'ALAZ.SystemEx.NetEx' are explicitly used for more obvious distinction.
-//// 'System.Net.Sockets' including.
+//// "System.Net" as well as "ALAZ.SystemEx.NetEx" are explicitly used for more obvious distinction.
+//// "System.Net.Sockets" as well.
 using System.Threading;
 
 using MKY.Contracts;
@@ -703,7 +703,7 @@ namespace MKY.IO.Serial.Socket
 
 			#if (DEBUG) // Inside lock to prevent potential mixup in debug output.
 				string isClientOrServerString;
-				if      (IsClient && IsConnected) // 'Doppel-moppel', but keep it as a check during development and debugging
+				if      (IsClient && IsConnected) // "Doppel-moppel", but keep it as a check during development and debugging
 					isClientOrServerString = "connected as client";
 				else if (IsServer && IsConnected)
 					isClientOrServerString = "connected as server";

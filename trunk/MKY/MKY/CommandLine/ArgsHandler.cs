@@ -1250,7 +1250,7 @@ namespace MKY.CommandLine
 						{
 							foreach (string name in att.Names)
 							{
-								string option = name; // 'Normal' names shall be case-sensitive.
+								string option = name; // "Normal" names shall be case-sensitive.
 
 								if (names.Length > 0)
 									names.Append(", ");

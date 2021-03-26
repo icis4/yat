@@ -47,7 +47,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
-//// 'System.IO.Ports' is explicitly used due to ambiguity of event args type names.
+//// "System.IO.Ports" is explicitly used due to ambiguity of event args type names.
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -707,7 +707,7 @@ namespace MKY.IO.Ports
 				try
 				{
 					if (HandshakeIsNotUsingRts)
-						pins.Rts = RtsEnable; // 'RtsEnable' must not be accessed if it is used by the base class!
+						pins.Rts = RtsEnable; // "RtsEnable" must not be accessed if it is used by the base class!
 					else
 						pins.Rts = true;
 
@@ -1071,12 +1071,12 @@ namespace MKY.IO.Ports
 					// Actively yield to other threads to allow processing:
 					var span = (DateTime.Now - initial);
 					if (span.TotalMilliseconds < 4)
-						Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as flush
+						Thread.Sleep(TimeSpan.Zero); // "TimeSpan.Zero" = 100% CPU is OK as flush
 					else                             // a) is expected to be blocking and
 						Thread.Sleep(1);             // b) is short (max. 4 ms) yet.
 				}                                    // But sleep if longer!
 
-				// Alternatively, base.BaseStream.Flush() could be called.
+				// Alternatively, "base.BaseStream.Flush()" could be called.
 				// But that approach doesn't offer flexibility, so no-go.
 			}
 		}

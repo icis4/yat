@@ -224,13 +224,13 @@ namespace YAT.Domain
 				else
 					return (IsTransmissive && !IsSending);
 
-				// Until YAT 2.1.0, this property was implemented as 'IsReadyToSend_Internal'
+				// Until YAT 2.1.0, this property was implemented as "IsReadyToSend_Internal"
 				// as (IsTransmissive && !IsSending) and it also signalled
-				// 'EventMustBeRaisedBecauseStatusHasBeenAccessed()'. This was necessary as
+				// "EventMustBeRaisedBecauseStatusHasBeenAccessed()". This was necessary as
 				// until YAT 2.1.0 it was not possible to run multiple commands concurrently.
 				// With YAT 2.4.0 this became possible, but keeping this property because its
 				// meaning still makes sense, e.g. send related controls can adapt to this send
-				// specific property instead of using the more general 'IsTransmissive'.
+				// specific property instead of using the more general "IsTransmissive".
 			}
 		}
 
@@ -322,7 +322,7 @@ namespace YAT.Domain
 		{
 			AssertUndisposed();
 
-			RequestPre(); // 'IsSending' shall be active when this Send...() method returns. This is e.g. needed for the 'WaitWhileIsSending()' script methods.
+			RequestPre(); // "IsSending" shall be active when this Send...() method returns. This is e.g. needed for the "WaitWhileIsSending()" script methods.
 
 			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
 			var asyncInvoker = new Action<byte[], long>(DoSendRaw);
@@ -365,7 +365,7 @@ namespace YAT.Domain
 			var parseMode = TerminalSettings.Send.Text.ToParseMode(); // Get setting at request/invocation.
 			var item = new TextSendItem(text, defaultRadix, parseMode, SendMode.Text, false);
 
-			RequestPre(); // 'IsSending' shall be active when this Send...() method returns. This is e.g. needed for the 'WaitWhileIsSending()' script methods.
+			RequestPre(); // "IsSending" shall be active when this Send...() method returns. This is e.g. needed for the "WaitWhileIsSending()" script methods.
 
 			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
 			var asyncInvoker = new Action<TextSendItem, long>(DoSendText);
@@ -410,7 +410,7 @@ namespace YAT.Domain
 			var parseMode = TerminalSettings.Send.Text.ToParseMode(); // Get setting at request/invocation.
 			var item = new TextSendItem(text, defaultRadix, parseMode, SendMode.Text, true);
 
-			RequestPre(); // 'IsSending' shall be active when this Send...() method returns. This is e.g. needed for the 'WaitWhileIsSending()' script methods.
+			RequestPre(); // "IsSending" shall be active when this Send...() method returns. This is e.g. needed for the "WaitWhileIsSending()" script methods.
 
 			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
 			var asyncInvoker = new Action<TextSendItem, long>(DoSendTextLine);
@@ -460,7 +460,7 @@ namespace YAT.Domain
 			foreach (string line in texts)
 				items.Add(new TextSendItem(line, defaultRadix, parseMode, SendMode.Text, true));
 
-			RequestPre(); // 'IsSending' shall be active when this Send...() method returns. This is e.g. needed for the 'WaitWhileIsSending()' script methods.
+			RequestPre(); // "IsSending" shall be active when this Send...() method returns. This is e.g. needed for the "WaitWhileIsSending()" script methods.
 
 			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
 			var asyncInvoker = new Action<List<TextSendItem>, long>(DoSendTextLines);
@@ -505,7 +505,7 @@ namespace YAT.Domain
 
 			var item = new FileSendItem(filePath, defaultRadix);
 
-			RequestPre(); // 'IsSending' shall be active when this Send...() method returns. This is e.g. needed for the 'WaitWhileIsSending()' script methods.
+			RequestPre(); // "IsSending" shall be active when this Send...() method returns. This is e.g. needed for the "WaitWhileIsSending()" script methods.
 
 			var sequenceNumber = Interlocked.Increment(ref this.previousRequestedSequenceNumber); // Loop-around is OK, see remarks at variable definition.
 			var asyncInvoker = new Action<FileSendItem, long>(DoSendFile);
@@ -889,7 +889,7 @@ namespace YAT.Domain
 											else
 											{
 												// Actively yield to other threads to make sure app stays responsive while looping:
-												Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as sending shall happen as fast as possible.
+												Thread.Sleep(TimeSpan.Zero); // "TimeSpan.Zero" = 100% CPU is OK as sending shall happen as fast as possible.
 											}
 
 											break;
@@ -1677,7 +1677,7 @@ namespace YAT.Domain
 		{
 			int effectiveDelay = 0;
 
-			if (performLineInterval) // 'Interval' has precendence over 'Delay' as it requires more accuracy.
+			if (performLineInterval) // "Interval" has precendence over "Delay" as it requires more accuracy.
 			{
 				var elapsed = (lineEndTimeStamp - lineBeginTimeStamp);
 				effectiveDelay = lineInterval - (int)elapsed.TotalMilliseconds;
@@ -1969,7 +1969,7 @@ namespace YAT.Domain
 						break;
 
 					// Actively yield to other threads to make sure app stays responsive while looping:
-					Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as DoSendFileLine()
+					Thread.Sleep(TimeSpan.Zero); // "TimeSpan.Zero" = 100% CPU is OK as DoSendFileLine()
 				}                                // will sleep depending on state of the event helper.
 			}
 		}
@@ -1981,7 +1981,7 @@ namespace YAT.Domain
 		{
 			string[] lines;
 			XmlReaderHelper.LinesFromFile(item.FilePath, out lines); // Read file at once for simplicity. Minor limitation:
-			foreach (string line in lines)                           // 'forSomeTimeEventHelper.RaiseEventIf...' will
+			foreach (string line in lines)                           // "forSomeTimeEventHelper.RaiseEventIf..." will
 			{                                                        // only be evaluated at DoSendFileLine() below.
 				if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
 					continue;
@@ -1992,7 +1992,7 @@ namespace YAT.Domain
 					break;
 
 				// Actively yield to other threads to make sure app stays responsive while looping:
-				Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as DoSendFileLine()
+				Thread.Sleep(TimeSpan.Zero); // "TimeSpan.Zero" = 100% CPU is OK as DoSendFileLine()
 			}                                // will sleep depending on state of the event helper.
 		}
 

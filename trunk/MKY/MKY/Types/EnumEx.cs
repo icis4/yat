@@ -287,7 +287,7 @@ namespace MKY
 			(
 			////base.Equals(other) is not required when deriving from 'object'.
 
-				(UnderlyingEnum != null) && (UnderlyingEnum.Equals(other.UnderlyingEnum)) // 'Enum' is a 'ValueType' but does
+				(UnderlyingEnum != null) && (UnderlyingEnum.Equals(other.UnderlyingEnum)) // "Enum" is a "ValueType" but does
 			);                                                                            // not overload the ==/!= operators.
 		}
 
@@ -424,7 +424,7 @@ namespace MKY
 			{
 				foreach (var t in potentialEnumTypes)
 				{
-					if (enumExType.Name.StartsWith(t.Name, StringComparison.Ordinal)) // 'Ordinal' like a compiler would do.
+					if (enumExType.Name.StartsWith(t.Name, StringComparison.Ordinal)) // "Ordinal" like a compiler would do.
 						return (t);
 				}
 

@@ -1050,7 +1050,7 @@ namespace YAT.Domain
 		protected virtual void ProcessAndSignalDeviceOrDirectionLineBreakIfNeeded(RepositoryType repositoryType, RawChunk chunk)
 		{
 			var isServerSocket = TerminalSettings.IO.IOTypeIsServerSocket;
-			if (isServerSocket && TerminalSettings.Display.DeviceLineBreakEnabled) // Attention: This 'isServerSocket' restriction is also implemented at other locations!
+			if (isServerSocket && TerminalSettings.Display.DeviceLineBreakEnabled) // Attention: This "isServerSocket" restriction is also implemented at other locations!
 				ProcessAndSignalDeviceLineBreak(repositoryType, chunk.TimeStamp, chunk.Device, chunk.Direction);
 
 			if ((TerminalSettings.Display.DirectionLineBreakEnabled) && (repositoryType == RepositoryType.Bidir)) // Not needed for unidirectional repositories.
@@ -1368,7 +1368,7 @@ namespace YAT.Domain
 			{                                                  // See above!
 				if (DeviceHasChanged(dev, processState.Overall.DeviceLineBreak.Device))
 				{
-					if (processState.Line.Position != LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
+					if (processState.Line.Position != LinePosition.Begin) // "Begin" also applies if the next line has not been started yet, i.e. "LinePosition.None".
 					{
 						DebugLineBreak(repositoryType, "ProcessDeviceLineBreak => DoLineEnd()");
 
@@ -1417,7 +1417,7 @@ namespace YAT.Domain
 			{                                                     // See above!
 				if (DirectionHasChanged(dir, processState.Overall.DirectionLineBreak.Direction))
 				{
-					if (processState.Line.Position != LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
+					if (processState.Line.Position != LinePosition.Begin) // "Begin" also applies if the next line has not been started yet, i.e. "LinePosition.None".
 					{
 						DebugLineBreak(repositoryType, "ProcessDirectionLineBreak => DoLineEnd()");
 
@@ -1457,7 +1457,7 @@ namespace YAT.Domain
 	#endif
 		{
 			var processState = GetProcessState(repositoryType);
-			if (processState.Line.Position != LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
+			if (processState.Line.Position != LinePosition.Begin) // "Begin" also applies if the next line has not been started yet, i.e. "LinePosition.None".
 			{
 				DebugLineBreak(repositoryType, "ProcessChunkLineBreak => DoLineEnd()");
 
@@ -1487,7 +1487,7 @@ namespace YAT.Domain
 	#endif
 		{
 			var processState = GetProcessState(repositoryType);
-			if (processState.Line.Position != LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
+			if (processState.Line.Position != LinePosition.Begin) // "Begin" also applies if the next line has not been started yet, i.e. "LinePosition.None".
 			{
 				DebugLineBreak(repositoryType, "ProcessTimedLineBreak => DoLineEnd()");
 
@@ -1517,7 +1517,7 @@ namespace YAT.Domain
 	#endif
 		{
 			var processState = GetProcessState(repositoryType);
-			if (processState.Line.Position != LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
+			if (processState.Line.Position != LinePosition.Begin) // "Begin" also applies if the next line has not been started yet, i.e. "LinePosition.None".
 			{
 				var span = (ts - processState.Line.TimeStamp);
 				if (span.TotalMilliseconds >= timeout)
