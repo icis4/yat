@@ -124,7 +124,7 @@ namespace YAT.View.Controls
 		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			// Ctrl+Enter = Confirm the edited text and close the box.
+			// [Ctrl+Enter] = confirm the edited text and close the box.
 			if (keyData == (Keys.Control | Keys.Enter))
 			{
 				if (ValidateChildren())

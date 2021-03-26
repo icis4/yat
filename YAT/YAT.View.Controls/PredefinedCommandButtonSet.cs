@@ -291,14 +291,14 @@ namespace YAT.View.Controls
 		/// <remarks>Useful to improve performance.</remarks>
 		public virtual void SuspendCommandStateUpdate()
 		{
-			this.commandStateUpdateSuspendedCount++; // No need for 'lock'/'Interlocked...()' as WinForms is synchronized on main thread.
+			this.commandStateUpdateSuspendedCount++; // No need for "lock"/"Interlocked...()" as WinForms is synchronized on main thread.
 		}
 
 		/// <remarks>Useful to improve performance.</remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void ResumeCommandStateUpdate(bool performUpdate = true)
 		{
-			this.commandStateUpdateSuspendedCount--; // No need for 'lock'/'Interlocked...()' as WinForms is synchronized on main thread.
+			this.commandStateUpdateSuspendedCount--; // No need for "lock"/"Interlocked...()" as WinForms is synchronized on main thread.
 			if (this.commandStateUpdateSuspendedCount == 0)
 			{
 				if (performUpdate)

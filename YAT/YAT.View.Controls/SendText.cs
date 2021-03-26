@@ -735,7 +735,7 @@ namespace YAT.View.Controls
 
 				SetTextFocusState(TextFocusState.EditHasFocus);
 
-				// No need to set this.isValidated = false yet. The 'TextChanged' event will do so.
+				// No need to set this.isValidated = false yet. The "TextChanged" event will do so.
 			}
 			DebugUserInputLeave();
 		}
