@@ -60,15 +60,15 @@ namespace MKY.Windows.Forms
 	///
 	/// It doesn't matter whether the initial dialog has been opened via the context menu shortcut
 	/// workaround below or the main menu as show by the stack trace above. And it doesn't matter
-	/// which dialog is open, it can be reproduced by e.g. opening the 'PredefinedCommandSettings'
-	/// or the 'TerminalSettings', in both cases shortcuts Shift+F? or Ctrl+Shift+ArrowLeft/Right
+	/// which dialog is open, it can be reproduced by e.g. opening the "PredefinedCommandSettings"
+	/// or "TerminalSettings", in both cases shortcuts [Shift+F?] or [Ctrl+Shift+ArrowLeft/Right]
 	/// are still executed.
 	///
 	/// As a consequence:
 	///  > A workaround to this issue cannot be implemented in a simple way, e.g. inherently by
 	///    the <see cref="ContextMenuStripShortcutTargetWorkaround"/>.
 	///  > A workaround to this issue can only be implemented by setting and checking a flag at
-	///    each potentially called 'ShowDialog' and context menu handler.
+	///    each potentially called "ShowDialog" and context menu handler.
 	/// </summary>
 	/// <remarks>
 	/// Note bug #460 "Issues with ContextMenuStripShortcutModalFormWorkaround".

@@ -358,7 +358,7 @@ namespace YAT.View.Controls
 		/// <remarks>Useful to improve performance.</remarks>
 		public virtual void SuspendCommandStateUpdate()
 		{
-			this.commandStateUpdateSuspendedCount++; // No need for 'lock'/'Interlocked...()' as WinForms is synchronized on main thread.
+			this.commandStateUpdateSuspendedCount++; // No need for "lock"/"Interlocked...()" as WinForms is synchronized on main thread.
 
 			foreach (var set in this.buttonSets)
 				set.SuspendCommandStateUpdate();
@@ -371,7 +371,7 @@ namespace YAT.View.Controls
 			foreach (var set in this.buttonSets)
 				set.ResumeCommandStateUpdate(!performUpdate); // Otherwise, update will be done by SetCommandStateControls() below.
 
-			this.commandStateUpdateSuspendedCount--; // No need for 'lock'/'Interlocked...()' as WinForms is synchronized on main thread.
+			this.commandStateUpdateSuspendedCount--; // No need for "lock"/"Interlocked...()" as WinForms is synchronized on main thread.
 			if (this.commandStateUpdateSuspendedCount == 0)
 			{
 				if (performUpdate)
