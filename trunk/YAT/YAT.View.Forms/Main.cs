@@ -605,10 +605,11 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void toolStripMenuItem_MainMenu_File_SetChildMenuItems()
 		{
+			bool childIsReady = (ActiveMdiChild != null);
+
 			this.isSettingControls.Enter();
 			try
 			{
-				bool childIsReady = (ActiveMdiChild != null);
 				toolStripMenuItem_MainMenu_File_CloseAll.Enabled = childIsReady;
 				toolStripMenuItem_MainMenu_File_SaveAll.Enabled  = childIsReady;
 			}
@@ -760,11 +761,11 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void toolStripMenuItem_MainMenu_Terminal_SetChildMenuItems()
 		{
+			bool childIsReady = (ActiveMdiChild != null);
+
 			this.isSettingControls.Enter();
 			try
 			{
-				bool childIsReady = (ActiveMdiChild != null);
-
 				toolStripMenuItem_MainMenu_Terminal_AllClear.Enabled   = childIsReady;
 				toolStripMenuItem_MainMenu_Terminal_AllRefresh.Enabled = childIsReady;
 			}
@@ -814,10 +815,11 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void toolStripMenuItem_MainMenu_Log_SetChildMenuItems()
 		{
+			bool childIsReady = (ActiveMdiChild != null);
+
 			this.isSettingControls.Enter();
 			try
 			{
-				bool childIsReady = (ActiveMdiChild != null);
 				var t = (ActiveMdiChild as Terminal);
 
 				// Attention:
@@ -1295,7 +1297,7 @@ namespace YAT.View.Forms
 				toolStripButton_MainTool_Log_On           .Enabled = (childIsReady && !logIsOn);
 				toolStripButton_MainTool_Log_Off          .Enabled = (childIsReady &&  logIsOn);
 				toolStripButton_MainTool_Log_OpenFile     .Enabled = (childIsReady &&  logFileExists);
-			////toolStripButton_MainTool_Log_OpenDirectory.Enabled shall always be active, default folder can be opened even if child is inactive.
+			////toolStripButton_MainTool_Log_OpenDirectory.Enabled = true is fixed, default folder shall openable even if child is inactive.
 
 				toolStripButton_MainTool_SetAutoActionControls(  childIsReady); // See remark of that method.
 				toolStripButton_MainTool_SetAutoResponseControls(childIsReady); // See remark of that method.
@@ -1352,13 +1354,13 @@ namespace YAT.View.Forms
 						SetFindStateAndControls();
 
 						toolStripButton_MainTool_Find_CaseSensitive.Checked = ApplicationSettings.RoamingUserSettings.Find.Options.CaseSensitive;
-						toolStripButton_MainTool_Find_CaseSensitive.Enabled = childIsReady;
+						////                          CaseSensitive.Enabled = true is fixed, allow editing/changing to regex even if child is inactive.
 						toolStripButton_MainTool_Find_CaseSensitive.Visible = true;
 						toolStripButton_MainTool_Find_WholeWord    .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.WholeWord;
-						toolStripButton_MainTool_Find_WholeWord    .Enabled = childIsReady;
+						////                          WholeWord    .Enabled = true is fixed, allow editing/changing to regex even if child is inactive.
 						toolStripButton_MainTool_Find_WholeWord    .Visible = true;
 						toolStripButton_MainTool_Find_EnableRegex  .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.EnableRegex;
-						////                          EnableRegex  .Enabled = true (always true).
+						////                          EnableRegex  .Enabled = true is fixed, allow editing/changing to regex even if child is inactive.
 						toolStripButton_MainTool_Find_EnableRegex  .Visible = true;
 
 						toolStripButton_MainTool_Find_Next    .Enabled = childIsReady;
@@ -2146,15 +2148,15 @@ namespace YAT.View.Forms
 
 			if (ApplicationSettings.RoamingUserSettings.View.FindIsVisible)
 			{
-			////toolStripComboBox_MainTool_Terminal_Find_Pattern.Select();    doesn't work, 'ToolStrip'
-				toolStripComboBox_MainTool_Find_Pattern.Focus(); // seems to require calling Focus().
+			////toolStripComboBox_MainTool_Terminal_Find_Pattern.Select(); doesn't work, "ToolStrip"
+				toolStripComboBox_MainTool_Find_Pattern.Focus();        // seems to require calling Focus().
 			}
 		}
 
 		/// <remarks>
 		/// Note that the "SelectedIndexChanged" event is not raised when changing from a listed
 		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
-		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
+		/// be handled in the "TextChanged" and/or "Enter/Leave" events.
 		/// </remarks>
 		private void toolStripComboBox_MainTool_Find_Pattern_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -2183,7 +2185,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// The 'TextChanged' instead of the 'Validating' event is used because of 'FindOnEdit()'.
+		/// The "TextChanged" instead of the "Validating" event is used because of 'FindOnEdit()'.
 		/// </remarks>
 		private void toolStripComboBox_MainTool_Find_Pattern_TextChanged(object sender, EventArgs e)
 		{
@@ -2330,9 +2332,9 @@ namespace YAT.View.Forms
 				case FindResult.Reset:
 					toolStripComboBox_MainTool_Find_Pattern.BackColor = SystemColors.Window;
 					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.WindowText;
-					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = true;
-					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = true;
-					toolStripButton_MainTool_Find_All      .Enabled   = this.findAllIsFeasible      = true;
+					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = false;
+					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = false;
+					toolStripButton_MainTool_Find_All      .Enabled   = this.findAllIsFeasible      = false;
 					break;
 
 				case FindResult.Empty:
@@ -2364,7 +2366,7 @@ namespace YAT.View.Forms
 					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.InfoText;
 					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = false;
 					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = false;
-					toolStripButton_MainTool_Find_All      .Enabled   = this.findAllIsFeasible      = false;
+					toolStripButton_MainTool_Find_All      .Enabled   = this.findAllIsFeasible      = true;
 					break;
 
 				case FindResult.Invalid:
@@ -2412,14 +2414,16 @@ namespace YAT.View.Forms
 		{
 			if (!string.IsNullOrEmpty(pattern))
 			{
-				var fd = FindDirection.Undetermined;
-				var fr = FindResult.Reset;
+				var direction = FindDirection.Undetermined;
+				var result = FindResult.Reset;
 
 				var t = (ActiveMdiChild as Terminal);
 				if (t != null)
-					fr = t.TryFindOnEdit(pattern, out fd);
+					result = t.TryFindOnEdit(pattern, out direction);
+				else
+					SaveFindPatternAnyway(pattern);
 
-				SetFindStateAndControls(fd, fr);
+				SetFindStateAndControls(direction, result);
 			}
 			else
 			{
@@ -2433,6 +2437,8 @@ namespace YAT.View.Forms
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.EmptyFindOnEdit();
+			else
+				SaveFindPatternAnyway("");
 
 			SetFindStateAndControls(FindDirection.Undetermined, FindResult.Empty);
 		}
@@ -2443,6 +2449,8 @@ namespace YAT.View.Forms
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.LeaveFindOnEdit(pattern);
+			else
+				SaveFindPatternAnyway(pattern);
 
 			SetFindStateAndControls(FindDirection.Undetermined, FindResult.Reset);
 		}
@@ -2453,18 +2461,24 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		protected virtual void ValidateAndFindNext()
+		protected virtual void ValidateAndFindNext(string pattern = null)
 		{
-			var pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
+			if (pattern != null)
+				toolStripComboBox_MainTool_Find_Pattern.Text = pattern;
+			else
+				pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
+
 			if (!string.IsNullOrEmpty(pattern) && ValidateFindPattern(pattern))
 			{
-				var fr = FindResult.Reset;
+				var result = FindResult.Reset;
 
 				var t = (ActiveMdiChild as Terminal);
 				if (t != null)
-					fr = t.TryFindNext(pattern, MessageBoxIsPermissible);
+					result = t.TryFindNext(pattern, MessageBoxIsPermissible);
+				else
+					SaveFindPatternAnyway(pattern);
 
-				SetFindStateAndControls(FindDirection.Forward, fr);
+				SetFindStateAndControls(FindDirection.Forward, result);
 			}
 			else
 			{
@@ -2478,18 +2492,24 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		protected virtual void ValidateAndFindPrevious()
+		protected virtual void ValidateAndFindPrevious(string pattern = null)
 		{
-			var pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
+			if (pattern != null)
+				toolStripComboBox_MainTool_Find_Pattern.Text = pattern;
+			else
+				pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
+
 			if (ValidateFindPattern(pattern))
 			{
-				var fr = FindResult.Reset;
+				var result = FindResult.Reset;
 
 				var t = (ActiveMdiChild as Terminal);
 				if (t != null)
-					fr = t.TryFindPrevious(pattern, MessageBoxIsPermissible);
+					result = t.TryFindPrevious(pattern, MessageBoxIsPermissible);
+				else
+					SaveFindPatternAnyway(pattern);
 
-				SetFindStateAndControls(FindDirection.Backward, fr);
+				SetFindStateAndControls(FindDirection.Backward, result);
 			}
 			else
 			{
@@ -2503,23 +2523,39 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		protected virtual void ValidateAndFindAll()
+		protected virtual void ValidateAndFindAll(string pattern = null)
 		{
-			var pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
+			if (pattern != null)
+				toolStripComboBox_MainTool_Find_Pattern.Text = pattern;
+			else
+				pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
+
 			if (ValidateFindPattern(pattern))
 			{
-				var fr = FindResult.Reset;
+				var result = FindResult.Reset;
 
 				var t = (ActiveMdiChild as Terminal);
 				if (t != null)
-					fr = t.TryFindAll(pattern, MessageBoxIsPermissible);
+					result = t.TryFindAll(pattern, MessageBoxIsPermissible);
+				else
+					SaveFindPatternAnyway(pattern);
 
-				SetFindStateAndControls(FindDirection.All, fr);
+				SetFindStateAndControls(FindDirection.All, result);
 			}
 			else
 			{
 				SetFindStateAndControls(FindDirection.All, FindResult.Invalid);
 			}
+		}
+
+		/// <remarks>
+		/// When a child/terminal is available, its find logic/model will save the pattern.
+		/// Ff no child/terminal is available, the user shall still be able to change the pattern.
+		/// </remarks>
+		protected virtual void SaveFindPatternAnyway(string pattern)
+		{
+			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = pattern;
+			ApplicationSettings.SaveRoamingUserSettings();
 		}
 
 		/// <summary></summary>
@@ -2739,7 +2775,7 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// Note that the "SelectedIndexChanged" event is not raised when changing from a listed
 		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
-		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
+		/// be handled in the "TextChanged" and/or "Enter/Leave" events.
 		/// </remarks>
 		private void toolStripComboBox_MainTool_AutoAction_Trigger_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -2792,7 +2828,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke
+		/// The "TextChanged" instead of the "Validating" event is used because tool strip combo boxes invoke
 		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// Directly using the underlying <see cref="ToolStripComboBox.ComboBox"/>'es event doesn't help either.
 		/// </remarks>
@@ -2831,7 +2867,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// See remark at 'TextChanged' event handler above.
+		/// See remark at "TextChanged" event handler above.
 		/// </remarks>
 		private void RevalidateAndRequestAutoActionTrigger()
 		{
@@ -2942,7 +2978,7 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// Note that the "SelectedIndexChanged" event is not raised when changing from a listed
 		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
-		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
+		/// be handled in the "TextChanged" and/or "Enter/Leave" events.
 		/// </remarks>
 		private void toolStripComboBox_MainTool_AutoAction_Action_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -2994,7 +3030,7 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// Note that the "SelectedIndexChanged" event is not raised when changing from a listed
 		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
-		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
+		/// be handled in the "TextChanged" and/or "Enter/Leave" events.
 		/// </remarks>
 		private void toolStripComboBox_MainTool_AutoResponse_Trigger_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -3047,7 +3083,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke
+		/// The "TextChanged" instead of the "Validating" event is used because tool strip combo boxes invoke
 		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// Directly using the underlying <see cref="ToolStripComboBox.ComboBox"/>'es event doesn't help either.
 		/// </remarks>
@@ -3086,7 +3122,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// See remark at 'TextChanged' event handler above.
+		/// See remark at "TextChanged" event handler above.
 		/// </remarks>
 		private void RevalidateAndRequestAutoResponseTrigger()
 		{
@@ -3202,7 +3238,7 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// Note that the "SelectedIndexChanged" event is not raised when changing from a listed
 		/// item to dedicated text, i.e. to <see cref="ControlEx.InvalidIndex"/>. Such change must
-		/// be handled in the 'TextChanged' and/or 'Enter/Leave' events.
+		/// be handled in the "TextChanged" and/or "Enter/Leave" events.
 		/// </remarks>
 		private void toolStripComboBox_MainTool_AutoResponse_Response_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -3255,7 +3291,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// The 'TextChanged' instead of the 'Validating' event is used because tool strip combo boxes invoke
+		/// The "TextChanged" instead of the "Validating" event is used because tool strip combo boxes invoke
 		/// that event way too late, only when the hosting control (i.e. the whole tool bar) is being validated.
 		/// Directly using the underlying <see cref="ToolStripComboBox.ComboBox"/>'es event doesn't help either.
 		/// </remarks>
@@ -3300,7 +3336,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// See remark at 'TextChanged' event handler above.
+		/// See remark at "TextChanged" event handler above.
 		/// </remarks>
 		private void RevalidateAndRequestAutoResponseResponse()
 		{
@@ -4104,6 +4140,7 @@ namespace YAT.View.Forms
 		private void SetFindControls()
 		{
 			bool childIsReady = (ActiveMdiChild != null);
+
 			toolStripButton_MainTool_SetFindControls(childIsReady); // See remark above.
 		}
 
@@ -4125,6 +4162,7 @@ namespace YAT.View.Forms
 		private void SetAutoActionChildControls()
 		{
 			bool childIsReady = (ActiveMdiChild != null);
+
 			toolStripButton_MainTool_SetAutoActionControls(childIsReady);
 		}
 
@@ -4139,6 +4177,7 @@ namespace YAT.View.Forms
 		private void SetAutoResponseChildControls()
 		{
 			bool childIsReady = (ActiveMdiChild != null);
+
 			toolStripButton_MainTool_SetAutoResponseControls(childIsReady);
 		}
 
@@ -4184,7 +4223,7 @@ namespace YAT.View.Forms
 		private void SuspendFindShortcutsCtrlFNPL()
 		{
 			toolStripMenuItem_MainMenu_File_New_EnabledToRestore = toolStripMenuItem_MainMenu_File_New.Enabled;
-			toolStripMenuItem_MainMenu_File_New.Enabled = false; // Ctrl+N
+			toolStripMenuItem_MainMenu_File_New.Enabled = false; // [Ctrl+N]
 
 			// Could be implemented more cleverly, by iterating over all potential shortcut controls
 			// and then handle those that use one of the shortcuts in question. However, that would
@@ -4889,7 +4928,7 @@ namespace YAT.View.Forms
 		/// <summary>
 		/// Requests to activate the find field.
 		/// </summary>
-		public virtual void RequestFind()
+		public virtual void RequestFind(string pattern)
 		{
 			if (!ApplicationSettings.RoamingUserSettings.View.FindIsVisible)
 			{
@@ -4897,8 +4936,11 @@ namespace YAT.View.Forms
 				ApplicationSettings.SaveRoamingUserSettings();
 			}
 
-		////toolStripComboBox_MainTool_Terminal_Find_Pattern.Select()    doesn't work, 'ToolStrip'
-			toolStripComboBox_MainTool_Find_Pattern.Focus(); // seems to require Focus().
+		////toolStripComboBox_MainTool_Terminal_Find_Pattern.Select() doesn't work, "ToolStrip"
+			toolStripComboBox_MainTool_Find_Pattern.Focus();       // seems to require Focus().
+
+			if (pattern != null)
+				toolStripComboBox_MainTool_Find_Pattern.Text = pattern;
 		}
 
 		/// <summary>
@@ -4909,6 +4951,7 @@ namespace YAT.View.Forms
 			get
 			{
 				bool childIsReady = (ActiveMdiChild != null);
+
 				return (childIsReady && this.findNextIsFeasible);
 			}
 		}
@@ -4921,6 +4964,7 @@ namespace YAT.View.Forms
 			get
 			{
 				bool childIsReady = (ActiveMdiChild != null);
+
 				return (childIsReady && this.findPreviousIsFeasible);
 			}
 		}
@@ -4933,6 +4977,7 @@ namespace YAT.View.Forms
 			get
 			{
 				bool childIsReady = (ActiveMdiChild != null);
+
 				return (childIsReady && this.findAllIsFeasible);
 			}
 		}
@@ -4940,25 +4985,25 @@ namespace YAT.View.Forms
 		/// <summary>
 		/// Requests find next.
 		/// </summary>
-		public virtual void RequestFindNext()
+		public virtual void RequestFindNext(string pattern)
 		{
-			ValidateAndFindNext();
+			ValidateAndFindNext(pattern);
 		}
 
 		/// <summary>
 		/// Requests find previous.
 		/// </summary>
-		public virtual void RequestFindPrevious()
+		public virtual void RequestFindPrevious(string pattern)
 		{
-			ValidateAndFindPrevious();
+			ValidateAndFindPrevious(pattern);
 		}
 
 		/// <summary>
 		/// Requests find all.
 		/// </summary>
-		public virtual void RequestFindAll()
+		public virtual void RequestFindAll(string pattern)
 		{
-			ValidateAndFindAll();
+			ValidateAndFindAll(pattern);
 		}
 
 		#endregion

@@ -92,13 +92,14 @@ New:
 - [Find All] added, including live update (feature requests #424 and #434).
 
 Important changes:
+- Find can now be preset by selecting a line in a monitor (related to feature requests #424, #434).
 - Log dialog now more clearly states "root directory and file name base" (part of feat. req. #435).
 - Help window is again sizeable to display more/all content (related to earlier feature req. #237).
 
 Fixed bugs:
 - Handling of trigger of automatic actions and responses fixed and improved (bugs #504 and #505).
-- Plot window related NullReferenceException when closing YAT fixed.
-- <<<<<<<<<<<<<<<<<<<<<NullReferenceException>>>>>>>>>>>>>>>>>>>>>> when handling backspace with preceeding spaces fixed.
+- Plot window related 'NullReferenceException' when closing YAT fixed.
+- <<<<<<<<<<<<<<<<<<<<<'NullReferenceException'>>>>>>>>>>>>>>>>>>>>>> when handling backspace with preceeding spaces fixed.
 
 Limitations and known issues:
 - Same as previous release, see below.
