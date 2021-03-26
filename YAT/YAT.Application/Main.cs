@@ -964,8 +964,8 @@ namespace YAT.Application
 							this.RunFullyFromConsole_exitedResult = Model.MainResult.ApplicationRunError; // Will be overridden by the 'Exited' event handler.
 							model.Exited += RunFullyFromConsole_Exited;
 
-							if (!model.LaunchArgs.IsAutoRun)     // 'AutoRun' will eventually 'Exit()', otherwise
-								model.Exit(Model.ExitMode.Auto); // (for testing purposes) 'Exit()' immediately.
+							if (!model.LaunchArgs.IsAutoRun)     // "AutoRun" will eventually "Exit()", otherwise
+								model.Exit(Model.ExitMode.Auto); // (for testing purposes) "Exit()" immediately.
 
 							while (model.IsUndisposed)
 							{
@@ -1113,8 +1113,8 @@ namespace YAT.Application
 							this.RunInvisible_exitedResult = Model.MainResult.ApplicationRunError; // Will be overridden by the 'Exited' event handler.
 							model.Exited += RunInvisible_Exited;
 
-							if (!model.LaunchArgs.IsAutoRun)     // 'AutoRun' will eventually 'Exit()', otherwise
-								model.Exit(Model.ExitMode.Auto); // (for testing purposes) 'Exit()' immediately.
+							if (!model.LaunchArgs.IsAutoRun)     // "AutoRun" will eventually "Exit()", otherwise
+								model.Exit(Model.ExitMode.Auto); // (for testing purposes) "Exit()" immediately.
 
 							while (model.IsUndisposed)
 							{
@@ -1380,7 +1380,7 @@ namespace YAT.Application
 			message.Append(ToName(ex));           // "loading" or "preparing" or "running"
 			message.Append(" occurred while " + state + " " + System.Windows.Forms.Application.ProductName + ".");
 
-			// 'FileNotFoundException' message in case of a .NET version mismatch can e.g. be:
+			// "FileNotFoundException" message in case of a .NET version mismatch can e.g. be:
 			//                         "Could not load file or assembly 'System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=..."
 			if ((ex is FileNotFoundException) && (ex.Message.Contains(" 'System."))) // Not checking for "Version" or anything else that could be culture dependent.
 			{

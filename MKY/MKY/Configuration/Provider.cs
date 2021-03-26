@@ -79,12 +79,12 @@ namespace MKY.Configuration
 	///     of each file is resolved via a system variable 'TEST_PROJECT'_CONFIG_FILE.
 	///
 	/// Example:
-	/// 'MKY.IO.Ports.Test.ConfigurationSection' implements settings to select the serial COM ports
+	/// "MKY.IO.Ports.Test.ConfigurationSection" implements settings to select the serial COM ports
 	/// used in the test cases. Each setting is implemented as a <see cref="ConfigurationProperty"/>
 	/// and consists of the name, the data type and the default value (1).
-	/// 'YAT.config' contains a 'MKY.IO.Ports.Test.Configuration' configuration group that defines the
+	/// "YAT.config" contains a "MKY.IO.Ports.Test.Configuration" configuration group that defines the
 	/// typical values used for YAT testing (2).
-	/// 'MKY.IO.Ports.Test.config' located at a certain machine defines which serial COM
+	/// "MKY.IO.Ports.Test.config" located at a certain machine defines which serial COM
 	/// ports are available on that machine (3).
 	///
 	/// Whenever the test suite, e.g. NUnit based, loads the test cases, the configurations are read

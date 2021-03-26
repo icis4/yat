@@ -126,31 +126,31 @@ namespace YAT.Domain
 						// Note that the following code is similar as several time below but with subtle differences
 						// such as treatment of 0xFF, comment,...
 
-						if      ((b < 0x20) || (b == 0x7F))              // ASCII control characters.
+						if      ((b < 0x20) || (b == 0x7F))          // ASCII control characters.
 						{
 							return (base.ByteToElement(b, ts, dir, r, pendingMultiBytesToDecode));
 						}
-						else if  (b == 0x20)                             // ASCII space.
+						else if  (b == 0x20)                         // ASCII space.
 						{
 							return (base.ByteToElement(b, ts, dir, r, pendingMultiBytesToDecode));
-						}                                                // Special case.
+						}                                            // Special case.
 						else if ((b == 0xFF) && TerminalSettings.SupportsHide0xFF && TerminalSettings.CharHide.Hide0xFF)
 						{
-							return (new DisplayElement.Nonentity());     // Return nothing, ignore the character, this results in hiding.
+							return (new DisplayElement.Nonentity()); // Return nothing, ignore the character, this results in hiding.
 						}
-						else                                             // ASCII and extended ASCII printable characters.
+						else                                         // ASCII and extended ASCII printable characters.
 						{
-							return (DecodeAndCreateElement(b, ts, dir, r, e)); // 'IsSingleByte' always results in a single character per byte.
+							return (DecodeAndCreateElement(b, ts, dir, r, e)); // "IsSingleByte" always results in a single character per byte.
 						}
 					}
-					else // 'IsMultiByte':
+					else // "IsMultiByte":
 					{
 						// \remind (2017-12-09 / MKY / bug #400)
 						// YAT versions 1.99.70 and 1.99.80 used to take the endianness into account when encoding
 						// and decoding multi-byte encoded characters. However, it was always done, but of course e.g.
 						// UTF-8 is independent on endianness. The endianness would only have to be applied to single
 						// multi-byte values, not multi-byte values split into multiple fragments. However, a .NET
-						// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
+						// "Encoding" object does not tell whether the encoding is potentially endianness capable or
 						// not. Thus, it was decided to again remove the character encoding endianness awareness.
 
 						if (((EncodingEx)e).IsUnicode) // Note that UTF-7 is not a Unicode encoding.
@@ -186,7 +186,7 @@ namespace YAT.Domain
 										return (base.ByteToElement((byte)code, ts, dir, r, pendingMultiBytesToDecode));
 									}
 									else                                             // ASCII printable character.
-									{                                                            // 'effectiveCharCount' is 1 for sure.
+									{                                                              // "effectiveCharCount" is 1 for sure.
 										return (CreateDataElement(decodingArray, ts, dir, r, chars[0]));
 									}
 								}
@@ -238,7 +238,7 @@ namespace YAT.Domain
 								}
 								else                                         // ASCII printable character.
 								{
-									return (DecodeAndCreateElement(b, ts, dir, r, e)); // 'IsMultiByte' but the current byte must result in a single character here.
+									return (DecodeAndCreateElement(b, ts, dir, r, e)); // "IsMultiByte" but the current byte must result in a single character here.
 								}
 							}
 							else // (pendingMultiBytesToDecode.Count > 0) => Neither ASCII nor lead byte.
@@ -252,7 +252,7 @@ namespace YAT.Domain
 								if (effectiveCharCount == 1)
 								{
 									pendingMultiBytesToDecode.Clear();
-									                                                    //// 'effectiveCharCount' is 1 for sure.
+									                                                    //// "effectiveCharCount" is 1 for sure.
 									return (CreateDataElement(decodingArray, ts, dir, r, chars[0]));
 								}
 								else if (effectiveCharCount == 0)
@@ -296,7 +296,7 @@ namespace YAT.Domain
 			char[] chars = new char[expectedCharCount];
 			int effectiveCharCount = e.GetDecoder().GetChars(new byte[] { b }, 0, 1, chars, 0, true);
 			if (effectiveCharCount == expectedCharCount)
-			{                                                // 'effectiveCharCount' is 1 for sure.
+			{                                                  // "effectiveCharCount" is 1 for sure.
 				return (CreateDataElement(b, ts, dir, r, chars[0]));
 			}
 			else // Decoder has failed:
@@ -590,7 +590,7 @@ namespace YAT.Domain
 						var deviceOrDirectionHasChanged = false;
 
 						var isServerSocket = TerminalSettings.IO.IOTypeIsServerSocket;
-						if (isServerSocket && TerminalSettings.Display.DeviceLineBreakEnabled) // Attention: This 'isServerSocket' restriction is also implemented at other locations!
+						if (isServerSocket && TerminalSettings.Display.DeviceLineBreakEnabled) // Attention: This "isServerSocket" restriction is also implemented at other locations!
 						{
 							if (!overallState.DeviceLineBreak.IsFirstChunk)
 							{
@@ -711,7 +711,7 @@ namespace YAT.Domain
 		protected override bool IsNotFramedAndThusAppliesToScriptLines
 		{
 			get
-			{           // 'ScriptLines' only apply to Rx.
+			{           // "ScriptLines" only apply to Rx.
 				return (RxEolSequence.Length == 0); // Same result as (TextTerminalSettings.RxEol == ((EolEx)Eol.None).ToSequenceString());
 			}
 		}
@@ -1222,7 +1222,7 @@ namespace YAT.Domain
 				linesToAdd.Add(l);
 
 			#if (WITH_SCRIPTING)
-				// Apply to scripting:                                                     // 'ScriptLines' only apply to Rx.
+				// Apply to scripting:                                                     // "ScriptLines" only apply to Rx.
 				if (!IsReloading && ScriptRunIsActive && (repositoryType == RepositoryType.Rx))
 				{
 					if (appliesToScriptLines)
@@ -1370,7 +1370,7 @@ namespace YAT.Domain
 				if (overallState.GetPostponedChunkCount() > 0)
 				{
 					var lineState = processState.Line; // Convenience shortcut.
-					if (lineState.Position != LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
+					if (lineState.Position != LinePosition.Begin) // "Begin" also applies if the next line has not been started yet, i.e. "LinePosition.None".
 					{
 						var lineHasTimedOut = GlueCharsOfLineTimeoutHasElapsed(instantInQuestion, lineState.TimeStamp);
 						var lineDir = lineState.Direction;
@@ -1395,7 +1395,7 @@ namespace YAT.Domain
 							// Only timed out cases shall be handled here, other cases are handled elsewhere.
 						}
 					}
-					else // (Position == LinePosition.Begin) // 'Begin' also applies if the next line has not been started yet, i.e. 'LinePosition.None'.
+					else // (Position == LinePosition.Begin) // "Begin" also applies if the next line has not been started yet, i.e. "LinePosition.None".
 					{
 						var firstPostponedChunk = overallState.GetFirstPostponedChunk();
 						var chunkHasTimedOut = GlueCharsOfLineTimeoutHasElapsed(instantInQuestion, firstPostponedChunk.TimeStamp);

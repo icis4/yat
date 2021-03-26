@@ -49,8 +49,7 @@ using MT.Albatros.Core;
 #endif
 
 using YAT.Application.Utilities;
-using YAT.Model.Types;
-//// 'YAT.Model.Utilities' is explicitly used due to ambiguity of 'MessageHelper'.
+//// "YAT.Model.Utilities" is explicitly used due to ambiguity of "MessageHelper".
 using YAT.Settings.Application;
 using YAT.Settings.Model;
 
@@ -1555,7 +1554,7 @@ namespace YAT.Model
 				// AFTER it raised the 'Exited' event and all subscribers of the event may still
 				// refer to a non-disposed object. This is especially important, as the order of
 				// the subscribers is not fixed, i.e. a subscriber may dispose of the main before
-				// 'View.Main' receives the event callback!
+				// "View.Main" receives the event callback!
 				Dispose();
 
 				cancel = false;

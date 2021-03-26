@@ -48,8 +48,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-//// 'System.Net' as well as 'ALAZ.SystemEx.NetEx' are explicitly used for more obvious distinction.
-//// 'System.Net.Sockets' including.
+//// "System.Net" as well as "ALAZ.SystemEx.NetEx" are explicitly used for more obvious distinction.
+//// "System.Net.Sockets" as well.
 using System.Threading;
 
 using MKY.Collections.Generic;
@@ -751,7 +751,7 @@ namespace MKY.IO.Serial.Socket
 
 				if (IsTransmissive)
 				{
-					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+					lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 						return (this.sendQueue.Count > 0);
 				}
 				else
@@ -929,7 +929,7 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		private void CreateAndStartSocketAndThreads()
 		{
-			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+			lock (this.receiveQueue) // Lock is required because "Queue<T>" is not synchronized.
 			{
 				this.receiveQueue.Clear();
 			}
@@ -1003,7 +1003,7 @@ namespace MKY.IO.Serial.Socket
 			////}
 			}
 
-			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+			lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 			{
 				this.sendQueue.Clear();
 			}
@@ -1222,7 +1222,7 @@ namespace MKY.IO.Serial.Socket
 		private int DropSendQueue()
 		{
 			int droppedCount;
-			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+			lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 			{
 				droppedCount = this.sendQueue.Count;
 				this.sendQueue.Clear();
@@ -1249,7 +1249,7 @@ namespace MKY.IO.Serial.Socket
 		private int DropReceivedQueue()
 		{
 			int droppedCount;
-			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+			lock (this.receiveQueue) // Lock is required because "Queue<T>" is not synchronized.
 			{
 				droppedCount = this.receiveQueue.Count;
 				this.receiveQueue.Clear();

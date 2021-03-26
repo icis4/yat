@@ -627,7 +627,7 @@ namespace YAT.Domain.Parser
 		/// </remarks>
 		internal virtual bool IsWhiteSpace(int parseChar)
 		{
-			if (Int32Ex.IsWithin(parseChar, char.MinValue, char.MaxValue) && char.IsWhiteSpace((char)parseChar)) // 'official' whitespace.
+			if (Int32Ex.IsWithin(parseChar, char.MinValue, char.MaxValue) && char.IsWhiteSpace((char)parseChar)) // "official" whitespace.
 				return (true);
 
 			if (Int32Ex.IsWithin(parseChar, byte.MinValue, byte.MaxValue) && Ascii.IsControl((byte)parseChar)) // ASCII control.
@@ -764,7 +764,7 @@ namespace YAT.Domain.Parser
 			// and decoding multi-byte encoded characters. However, it was always done, but of course e.g.
 			// UTF-8 is independent on endianness. The endianness would only have to be applied to single
 			// multi-byte values, not multi-byte values split into multiple fragments. However, a .NET
-			// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
+			// "Encoding" object does not tell whether the encoding is potentially endianness capable or
 			// not. Thus, it was decided to again remove the character encoding endianness awareness.
 		}
 
@@ -801,7 +801,7 @@ namespace YAT.Domain.Parser
 			// and decoding multi-byte encoded characters. However, it was always done, but of course e.g.
 			// UTF-8 is independent on endianness. The endianness would only have to be applied to single
 			// multi-byte values, not multi-byte values split into multiple fragments. However, a .NET
-			// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
+			// "Encoding" object does not tell whether the encoding is potentially endianness capable or
 			// not. Thus, it was decided to again remove the character encoding endianness awareness.
 		}
 
@@ -983,7 +983,7 @@ namespace YAT.Domain.Parser
 									// and decoding multi-byte encoded characters. However, it was always done, but of course e.g.
 									// UTF-8 is independent on endianness. The endianness would only have to be applied to single
 									// multi-byte values, not multi-byte values split into multiple fragments. However, a .NET
-									// 'Encoding' object does not tell whether the encoding is potentially endianness capable or
+									// "Encoding" object does not tell whether the encoding is potentially endianness capable or
 									// not. Thus, it was decided to again remove the character encoding endianness awareness.
 
 									remaining = remaining.Remove(0, i);

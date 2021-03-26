@@ -207,7 +207,7 @@ namespace MKY.IO.Serial
 		// caller, there is no information on the availability and amout of data for receiving,
 		// nor any way to determine whether data may be coming in soon. Thus, an 'IsReceiving'
 		// indication makes little sense. Instead, the 'DataEventArgs.TimeStamp' value of the last
-		// 'DataReceived' event may be used to determine for how long the I/O instance has not been
+		// "DataReceived" event may be used to determine for how long the I/O instance has not been
 		// receiving data anymore, and can combine this time stamp with a time-out.
 
 		/// <summary>

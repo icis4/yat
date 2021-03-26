@@ -148,7 +148,7 @@ namespace YAT.Domain.Utilities
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="s"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public static LengthSelectionEx Parse(string s, TerminalType terminalType = TerminalType.Binary) // 'Default' is 'Binary' as 'BinaryDefault' of 'ByteCount' is supported by all terminal types.
+		public static LengthSelectionEx Parse(string s, TerminalType terminalType = TerminalType.Binary) // "Default" is "Binary" as "BinaryDefault" of "ByteCount" is supported by all terminal types.
 		{
 			LengthSelectionEx result;
 			if (TryParse(s, terminalType, out result)) // TryParse() trims whitespace.

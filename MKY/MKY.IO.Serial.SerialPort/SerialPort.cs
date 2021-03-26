@@ -506,7 +506,7 @@ namespace MKY.IO.Serial.SerialPort
 						if (IsOpen)
 						{
 							bool sendQueueContainsData;
-							lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+							lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 								sendQueueContainsData = (this.sendQueue.Count > 0);
 
 							bool portBufferContainsData = (this.port.BytesToWrite > 0);
@@ -1129,7 +1129,7 @@ namespace MKY.IO.Serial.SerialPort
 		private int DropSendQueue()
 		{
 			int droppedCount;
-			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+			lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 			{
 				droppedCount = this.sendQueue.Count;
 				this.sendQueue.Clear();
@@ -1156,7 +1156,7 @@ namespace MKY.IO.Serial.SerialPort
 		private int DropReceivedQueue()
 		{
 			int droppedCount;
-			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+			lock (this.receiveQueue) // Lock is required because "Queue<T>" is not synchronized.
 			{
 				droppedCount = this.receiveQueue.Count;
 				this.receiveQueue.Clear();
@@ -1433,7 +1433,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// async reading is used. Both loose the equal amount of data, this fact is also supported
 		/// be the 'DriverAnalysis'. Also, opposed to what Ben Voigt states, async reading actually
 		/// results in smaller chunks, mostly 1 byte reads. Whereas the obvious 'DataReceived' and
-		/// 'BytesToRead' mostly result in 1..4 byte reads, even up to 20..30 bytes. Thus, this
+		/// "BytesToRead" mostly result in 1..4 byte reads, even up to 20..30 bytes. Thus, this
 		/// implementation again uses the 'normal' method.
 		///
 		/// Finally (MKy/SSt/ATo in Q3/2016), the root cause for the data loss could be tracked down
@@ -1507,7 +1507,7 @@ namespace MKY.IO.Serial.SerialPort
 					bool signalXOnXOff = false;
 					bool signalXOnXOffCount = false;
 
-					lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+					lock (this.receiveQueue) // Lock is required because "Queue<T>" is not synchronized.
 					{
 						foreach (byte b in data)
 						{
@@ -1643,7 +1643,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 				if (this.ioControlEventTimeout == null)
 				{
-					this.ioControlEventTimeout = new System.Timers.Timer(); // 'Timers.Timer' rather than 'Threading.Timer' because 'e.SignalTime' is needed.
+					this.ioControlEventTimeout = new System.Timers.Timer(); // "Timers.Timer" rather than "Threading.Timer" because "e.SignalTime" is needed.
 					this.ioControlEventTimeout.Interval = (IOControlChangedTimeout * 2); // Synchronous event shall have precedence over timeout.
 					this.ioControlEventTimeout.AutoReset = false; // One-Shot!
 					this.ioControlEventTimeout.Elapsed += ioControlEventTimeout_OneShot_Elapsed;

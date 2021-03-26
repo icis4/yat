@@ -213,7 +213,7 @@ namespace YAT.Model.Utilities
 
 						sb.Append(" - ");
 						sb.Append("Server:");
-						sb.Append(settings.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+						sb.Append(settings.LocalPort.ToString(CultureInfo.InvariantCulture)); // "InvariantCulture" for TCP and UDP ports!
 						sb.Append(" - ");
 
 						if (isStarted)
@@ -250,7 +250,7 @@ namespace YAT.Model.Utilities
 							{
 								sb.Append(" - ");
 								sb.Append("Server:");
-								sb.Append(settings.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+								sb.Append(settings.LocalPort.ToString(CultureInfo.InvariantCulture)); // "InvariantCulture" for TCP and UDP ports!
 								sb.Append(" - ");
 								sb.Append(isConnected ? "Connected" : "Listening");
 							}
@@ -264,7 +264,7 @@ namespace YAT.Model.Utilities
 						{
 							sb.Append(" - ");
 							sb.Append("AutoSocket:");
-							sb.Append(settings.RemotePort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+							sb.Append(settings.RemotePort.ToString(CultureInfo.InvariantCulture)); // "InvariantCulture" for TCP and UDP ports!
 							sb.Append(" - ");
 							sb.Append("Disconnected");
 						}
@@ -287,7 +287,7 @@ namespace YAT.Model.Utilities
 						var settings = settingsRoot.IO.Socket;
 						sb.Append(" - ");
 						sb.Append("Receive:");
-						sb.Append(settings.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+						sb.Append(settings.LocalPort.ToString(CultureInfo.InvariantCulture)); // "InvariantCulture" for TCP and UDP ports!
 						sb.Append(" - ");
 						sb.Append(isOpen ? "Open" : "Closed");
 						break;
@@ -300,7 +300,7 @@ namespace YAT.Model.Utilities
 						sb.Append(settings.RemoteEndPointString);
 						sb.Append(" - ");
 						sb.Append("Receive:");
-						sb.Append(settings.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+						sb.Append(settings.LocalPort.ToString(CultureInfo.InvariantCulture)); // "InvariantCulture" for TCP and UDP ports!
 						sb.Append(" - ");
 						sb.Append(isOpen ? "Open" : "Closed");
 						break;

@@ -236,13 +236,13 @@ namespace YAT.View.Forms
 				return;
 
 			// Attention:
-			// Similar code exists in 'View.Forms.Terminal.toolStripMenuItem_TerminalMenu_View_ShowDevice_Click()'!
+			// Similar code exists in View.Forms.Terminal.toolStripMenuItem_TerminalMenu_View_ShowDevice_Click()!
 			// Changes here must most likely be applied there too.
 
 			if (checkBox_ShowDevice.Checked && !this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled)
 			{
 				var isServerSocket = this.settingsInEdit.Terminal.IO.IOTypeIsServerSocket;
-				if (isServerSocket) // Attention: This 'isServerSocket' restriction is also implemented at other locations!
+				if (isServerSocket) // Attention: This "isServerSocket" restriction is also implemented at other locations!
 				{
 					var dr = MessageBoxEx.Show
 					(
@@ -1230,7 +1230,7 @@ namespace YAT.View.Forms
 				checkBox_IncludeIOWarnings.Checked = this.settingsInEdit.Terminal.Display.IncludeIOWarnings;
 
 				checkBox_DirectionLineBreak.Checked =  this.settingsInEdit.Terminal.Display.DirectionLineBreakEnabled;
-				checkBox_DeviceLineBreak.Enabled    =  isServerSocket; // Attention: This 'isServerSocket' restriction is also implemented at other locations!
+				checkBox_DeviceLineBreak.Enabled    =  isServerSocket; // Attention: This "isServerSocket" restriction is also implemented at other locations!
 				checkBox_DeviceLineBreak.Checked    = (isServerSocket && this.settingsInEdit.Terminal.Display.DeviceLineBreakEnabled);
 				label_LineBreakRemark.Text          = "Also see" + Environment.NewLine + "[" + (!isBinary ? "Text" : "Binary") + " Settings...]";
 

@@ -350,7 +350,7 @@ namespace MKY.IO.Serial.Usb
 
 				if (IsTransmissive)
 				{
-					lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+					lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 						return (this.sendQueue.Count > 0);
 				}
 				else
@@ -880,7 +880,7 @@ namespace MKY.IO.Serial.Usb
 		private int DropSendQueue()
 		{
 			int droppedCount;
-			lock (this.sendQueue) // Lock is required because Queue<T> is not synchronized.
+			lock (this.sendQueue) // Lock is required because "Queue<T>" is not synchronized.
 			{
 				droppedCount = this.sendQueue.Count;
 				this.sendQueue.Clear();
@@ -907,7 +907,7 @@ namespace MKY.IO.Serial.Usb
 		private int DropReceivedQueue()
 		{
 			int droppedCount;
-			lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+			lock (this.receiveQueue) // Lock is required because "Queue<T>" is not synchronized.
 			{
 				droppedCount = this.receiveQueue.Count;
 				this.receiveQueue.Clear();
@@ -962,7 +962,7 @@ namespace MKY.IO.Serial.Usb
 				bool signalXOnXOff = false;
 				bool signalXOnXOffCount = false;
 
-				lock (this.receiveQueue) // Lock is required because Queue<T> is not synchronized.
+				lock (this.receiveQueue) // Lock is required because "Queue<T>" is not synchronized.
 				{
 					foreach (byte b in data)
 					{

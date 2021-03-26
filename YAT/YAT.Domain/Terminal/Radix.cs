@@ -212,7 +212,7 @@ namespace YAT.Domain
 		{
 			var a = new List<RadixEx>(7); // Preset the required capacity to improve memory management.
 
-			// 'None' shall not be listed.
+			// "None" shall not be listed.
 
 			// Alpha:
 			a.Add(new RadixEx(Radix.String));
@@ -275,7 +275,7 @@ namespace YAT.Domain
 			if (s != null)
 				s = s.Trim();
 
-			// 'None' is located at end of if-else-if.
+			// "None" is located at end of if-else-if.
 
 			if      (StringEx.EqualsOrdinalIgnoreCase(s, String_stringShort) ||
 			         StringEx.EqualsOrdinalIgnoreCase(s, String_stringValue) ||

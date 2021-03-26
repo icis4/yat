@@ -123,7 +123,7 @@ namespace YAT.Domain
 						break;
 
 					// Actively yield to other threads to make sure app stays responsive while looping:
-					Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as DoSendFileChunk()
+					Thread.Sleep(TimeSpan.Zero); // "TimeSpan.Zero" = 100% CPU is OK as DoSendFileChunk()
 				}                                // will sleep depending on state of the event helper.
 			}
 		}

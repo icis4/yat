@@ -547,7 +547,7 @@ namespace YAT.Settings.Model
 		{
 			if ((command != null) && (command.IsText))
 			{
-				if (command.IsSingleLineText || (command.IsMultiLineText && isByteSequenceTriggered)) // 'MultiLineText' is only OK for such triggers.
+				if (command.IsSingleLineText || (command.IsMultiLineText && isByteSequenceTriggered)) // "MultiLineText" is only OK for such triggers.
 				{
 					if (!command.TextLinesAreNullOrEmpty) // Empty "" is not OK for triggers.
 						return (command.IsValidText(Send.Text.ToParseMode()));
@@ -657,7 +657,7 @@ namespace YAT.Settings.Model
 			if (command != null)
 			{
 				if (command.IsText)
-					return (command.IsValidText(Send.Text.ToParseMode())); // 'MultiLineText' as well as empty "" is OK.
+					return (command.IsValidText(Send.Text.ToParseMode())); // "MultiLineText" as well as empty "" is OK.
 				else     // IsFilePath
 					return (command.IsValidFilePath(rootDirectoryForFile));
 			}

@@ -220,10 +220,10 @@ namespace YAT.View.Controls
 
 						// Also note that sequence in dependent properties as well as control
 						// event handlers may lead to up to two invocations of SetControls().
-						// However, not assigning to the 'Preset' property would require to
+						// However, not assigning to the "Preset" property would require to
 						// replicate or extract its functionality. Multiple invocations of
-						// SetControls() seems acceptable. Assigning to the 'Preset' property
-						// will not create a circular loop even if the 'Preset' again calls
+						// SetControls() seems acceptable. Assigning to the "Preset" property
+						// will not create a circular loop even if the "Preset" again calls
 						// the other properties, since the resulting value will not differ.
 					}
 					else // == SerialHidDeviceSettingsPreset.None
@@ -248,7 +248,7 @@ namespace YAT.View.Controls
 				{
 					this.reportFormat = value;
 					SetControls();
-					OnReportFormatChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
+					OnReportFormatChanged(EventArgs.Empty); // Will update the dependent "Preset" if needed.
 				}
 			}
 		}
@@ -265,7 +265,7 @@ namespace YAT.View.Controls
 				{
 					this.rxFilterUsage = value;
 					SetControls();
-					OnRxFilterUsageChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
+					OnRxFilterUsageChanged(EventArgs.Empty); // Will update the dependent "Preset" if needed.
 				}
 			}
 		}
@@ -362,7 +362,7 @@ namespace YAT.View.Controls
 
 			this.reportFormat.UseId = checkBox_UseId.Checked;
 			SetControls();
-			OnReportFormatChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
+			OnReportFormatChanged(EventArgs.Empty); // Will update the dependent "Preset" if needed.
 		}
 
 		private void textBox_Id_Validating(object sender, CancelEventArgs e)
@@ -375,7 +375,7 @@ namespace YAT.View.Controls
 			{
 				this.reportFormat.Id = id;
 				SetControls();
-				OnReportFormatChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
+				OnReportFormatChanged(EventArgs.Empty); // Will update the dependent "Preset" if needed.
 			}
 			else
 			{
@@ -399,7 +399,7 @@ namespace YAT.View.Controls
 
 			this.rxFilterUsage.SeparateRxId = checkBox_SeparateRxId.Checked;
 			SetControls();
-			OnRxFilterUsageChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
+			OnRxFilterUsageChanged(EventArgs.Empty); // Will update the dependent "Preset" if needed.
 		}
 
 		private void textBox_RxId_Validating(object sender, CancelEventArgs e)
@@ -413,7 +413,7 @@ namespace YAT.View.Controls
 				this.rxFilterUsage.AnyRxId = true;
 				this.rxFilterUsage.RxId = this.reportFormat.Id;
 				SetControls();
-				OnRxFilterUsageChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
+				OnRxFilterUsageChanged(EventArgs.Empty); // Will update the dependent "Preset" if needed.
 			}
 			else
 			{
@@ -423,7 +423,7 @@ namespace YAT.View.Controls
 					this.rxFilterUsage.AnyRxId = false;
 					this.rxFilterUsage.RxId = id;
 					SetControls();
-					OnRxFilterUsageChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
+					OnRxFilterUsageChanged(EventArgs.Empty); // Will update the dependent "Preset" if needed.
 				}
 				else
 				{
@@ -448,7 +448,7 @@ namespace YAT.View.Controls
 
 			this.reportFormat.PrependPayloadByteLength = checkBox_PrependPayloadByteLength.Checked;
 			SetControls();
-			OnReportFormatChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
+			OnReportFormatChanged(EventArgs.Empty); // Will update the dependent "Preset" if needed.
 		}
 
 		private void checkBox_AppendTerminatingZero_CheckedChanged(object sender, EventArgs e)
@@ -458,7 +458,7 @@ namespace YAT.View.Controls
 
 			this.reportFormat.AppendTerminatingZero = checkBox_AppendTerminatingZero.Checked;
 			SetControls();
-			OnReportFormatChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
+			OnReportFormatChanged(EventArgs.Empty); // Will update the dependent "Preset" if needed.
 		}
 
 		private void checkBox_FillLastReport_CheckedChanged(object sender, EventArgs e)
@@ -484,7 +484,7 @@ namespace YAT.View.Controls
 
 		////this.reportFormat.FillLastReport = checkBox_FillLastReport.Checked;
 			SetControls();
-		////OnReportFormatChanged(EventArgs.Empty); // Will update the dependent 'Preset' if needed.
+		////OnReportFormatChanged(EventArgs.Empty); // Will update the dependent "Preset" if needed.
 		}
 
 		private void comboBox_Preset_SelectedIndexChanged(object sender, EventArgs e)
@@ -567,17 +567,17 @@ namespace YAT.View.Controls
 					textBox_Id.Enabled            =  Enabled;
 					textBox_RxId.Enabled          = (Enabled ? this.rxFilterUsage.SeparateRxId : false);
 
-					textBox_Id.Text = this.reportFormat.Id.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
+					textBox_Id.Text = this.reportFormat.Id.ToString(CultureInfo.InvariantCulture); // "InvariantCulture" for report ID!
 					if (!this.rxFilterUsage.SeparateRxId) // Typical case = same ID for Tx and Rx.
 					{
-						textBox_RxId.Text = this.reportFormat.Id.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
+						textBox_RxId.Text = this.reportFormat.Id.ToString(CultureInfo.InvariantCulture); // "InvariantCulture" for report ID!
 					}
 					else // Special case = separate ID for Rx.
 					{
 						if (this.rxFilterUsage.AnyRxId)
 							textBox_RxId.Text = AnyIdIndication;
 						else
-							textBox_RxId.Text = this.rxFilterUsage.RxId.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for report ID!
+							textBox_RxId.Text = this.rxFilterUsage.RxId.ToString(CultureInfo.InvariantCulture); // "InvariantCulture" for report ID!
 					}
 				}
 				else
@@ -660,8 +660,8 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void OnPresetChanged(EventArgs e)
 		{
-			// Note that update of dependent 'ReportFormat' and 'RxFilterUsage' is done inside the
-			// 'Preset' property, as those settings shall only be updated if not 'Preset.None'.
+			// Note that update of dependent "ReportFormat" and "RxFilterUsage" is done inside the
+			// "Preset" property, as those settings shall only be updated if not "Preset.None".
 
 			EventHelper.RaiseSync(PresetChanged, this, e);
 		}
@@ -669,7 +669,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void OnReportFormatChanged(EventArgs e)
 		{
-			// Update the dependent 'Preset' if needed (done here instead of multiple locations for convenience):
+			// Update the dependent "Preset" if needed (done here instead of multiple locations for convenience):
 			if (((SerialHidDeviceSettingsPresetEx)Preset).ToReportFormat() != ReportFormat)
 			{
 				SerialHidDeviceSettingsPresetEx presetFromDeviceInfo = null;
@@ -701,7 +701,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		protected virtual void OnRxFilterUsageChanged(EventArgs e)
 		{
-			// Update the dependent 'Preset' if needed (done here instead of multiple locations for convenience):
+			// Update the dependent "Preset" if needed (done here instead of multiple locations for convenience):
 			if (((SerialHidDeviceSettingsPresetEx)Preset).ToRxFilterUsage() != RxFilterUsage)
 			{
 				SerialHidDeviceSettingsPresetEx presetFromDeviceInfo = null;

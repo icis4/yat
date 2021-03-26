@@ -116,7 +116,7 @@ namespace YAT.Model.Utilities
 					{
 						var settings = settingsRoot.IO.Socket;
 						sb.Append("TCP/IP server on local port ");
-						sb.Append(settings.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+						sb.Append(settings.LocalPort.ToString(CultureInfo.InvariantCulture)); // "InvariantCulture" for TCP and UDP ports!
 
 						if (isStarted)
 						{
@@ -174,7 +174,7 @@ namespace YAT.Model.Utilities
 							else if (isServer)
 							{
 								sb.Append(" on local port ");
-								sb.Append(settings.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+								sb.Append(settings.LocalPort.ToString(CultureInfo.InvariantCulture)); // "InvariantCulture" for TCP and UDP ports!
 
 								if (isConnected)
 								{
@@ -223,7 +223,7 @@ namespace YAT.Model.Utilities
 								if (localPort != 0)
 								{
 									sb.Append(" and receiving on local port ");
-									sb.Append(localPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+									sb.Append(localPort.ToString(CultureInfo.InvariantCulture)); // "InvariantCulture" for TCP and UDP ports!
 								}
 							}
 						}
@@ -245,7 +245,7 @@ namespace YAT.Model.Utilities
 							if ((socket != null) && (socket.SocketType == MKY.IO.Serial.Socket.UdpSocketType.Server))
 							{
 								sb.Append(" for receiving on local port ");
-								sb.Append(socket.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+								sb.Append(socket.LocalPort.ToString(CultureInfo.InvariantCulture)); // "InvariantCulture" for TCP and UDP ports!
 
 								System.Net.IPEndPoint remoteEndPoint = socket.RemoteEndPoint;
 								if ((remoteEndPoint != null) && (MKY.Net.IPAddressEx.NotEqualsNone(remoteEndPoint.Address)))
@@ -276,7 +276,7 @@ namespace YAT.Model.Utilities
 								sb.Append(" for sending to ");
 								sb.Append(socket.RemoteEndPoint.ToString());
 								sb.Append(" and receiving on local port ");
-								sb.Append(socket.LocalPort.ToString(CultureInfo.InvariantCulture)); // 'InvariantCulture' for TCP and UDP ports!
+								sb.Append(socket.LocalPort.ToString(CultureInfo.InvariantCulture)); // "InvariantCulture" for TCP and UDP ports!
 							}
 						}
 						else

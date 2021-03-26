@@ -305,8 +305,8 @@ namespace MKY.IO.Serial.Socket.Test
 
 		/// <remarks>
 		/// There are similar utility methods in
-		/// 'YAT.Domain.Test.Utilities' and
-		/// 'YAT.Model.Test.Utilities'.
+		/// "YAT.Domain.Test.Utilities" and
+		/// "YAT.Model.Test.Utilities".
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		internal static void WaitForStart(IIOProvider io, string message)
@@ -351,8 +351,8 @@ namespace MKY.IO.Serial.Socket.Test
 
 		/// <remarks>
 		/// There are similar utility methods in
-		/// 'YAT.Domain.Test.Utilities' and
-		/// 'YAT.Model.Test.Utilities'.
+		/// "YAT.Domain.Test.Utilities" and
+		/// "YAT.Model.Test.Utilities".
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		internal static void WaitForConnection(IIOProvider ioA, IIOProvider ioB, string message)
@@ -377,8 +377,8 @@ namespace MKY.IO.Serial.Socket.Test
 
 		/// <remarks>
 		/// There are similar utility methods in
-		/// 'YAT.Domain.Test.Utilities' and
-		/// 'YAT.Model.Test.Utilities'.
+		/// "YAT.Domain.Test.Utilities" and
+		/// "YAT.Model.Test.Utilities".
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		internal static void WaitForDisconnection(IIOProvider ioA, IIOProvider ioB, string message)
@@ -403,8 +403,8 @@ namespace MKY.IO.Serial.Socket.Test
 
 		/// <remarks>
 		/// There are similar utility methods in
-		/// 'YAT.Domain.Test.Utilities' and
-		/// 'YAT.Model.Test.Utilities'.
+		/// "YAT.Domain.Test.Utilities" and
+		/// "YAT.Model.Test.Utilities".
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		internal static void WaitForStop(IIOProvider io, string message)

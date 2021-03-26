@@ -606,7 +606,7 @@ namespace YAT.Domain
 		/// Opposed to <see cref="IsSending"/>, where the amount of data expected for sending is
 		/// known by the caller, there is no information on the availability and amout of data
 		/// for receiving, nor any way to determine whether data may be coming in soon. Thus, an
-		/// 'IsReceiving' property makes little sense. Instead, this time stamp may be used to
+		/// "IsReceiving" property makes little sense. Instead, this time stamp may be used to
 		/// determine for how long the I/O instance has not been receiving data anymore, and can
 		/// combine this time stamp with a time-out.
 		/// <para>
@@ -1873,9 +1873,9 @@ namespace YAT.Domain
 		/// </remarks>
 		/// <remarks>
 		/// \remind (2018-03-27 / MKY)
-		/// 'LastAvailable' only works properly for a terminating number of received messages, but
+		/// "LastAvailable" only works properly for a terminating number of received messages, but
 		/// not for consecutive receiving. This method shall be eliminated as soon as the obsolete
-		/// GetLastReceived(), CheckLastReceived() and WaitFor() have been removed.
+		/// "GetLastReceived()", "CheckLastReceived()" and "WaitFor()" have been removed.
 		/// </remarks>
 		[Obsolete("See remarks.")]
 		public virtual void GetLastAvailableReceivedMessageForScripting(out ScriptMessage value)
@@ -2091,7 +2091,7 @@ namespace YAT.Domain
 				var texts = IOControlChangeTexts();
 				var elements = new DisplayElementCollection(texts.Count); // Preset the required capacity to improve memory management.
 				foreach (var t in texts)
-				{                               // 'IOControlInfo' elements are inline elements, thus neither add info separators nor content spaces inbetween.
+				{                               // "IOControlInfo" elements are inline elements, thus neither add info separators nor content spaces inbetween.
 					elements.Add(new DisplayElement.IOControlInfo(e.Value, Direction.Bidir, t));
 				}
 
@@ -2204,8 +2204,8 @@ namespace YAT.Domain
 
 			lock (ClearRefreshEmptySyncObj) // Delay processing new raw data until clearing or refreshing has completed.
 			{
-				OnRawChunkSent(e);     // 'RawChunk' objects are immutable, subsequent use is OK.
-				ProcessChunk(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
+				OnRawChunkSent(e);     // "RawChunk" objects are immutable, subsequent use is OK.
+				ProcessChunk(e.Value); // "RawChunk" objects are immutable, subsequent use is OK.
 			}
 		}
 
@@ -2221,8 +2221,8 @@ namespace YAT.Domain
 
 			lock (ClearRefreshEmptySyncObj) // Delay processing new raw data until clearing or refreshing has completed.
 			{
-				OnRawChunkReceived(e); // 'RawChunk' objects are immutable, subsequent use is OK.
-				ProcessChunk(e.Value); // 'RawChunk' objects are immutable, subsequent use is OK.
+				OnRawChunkReceived(e); // "RawChunk" objects are immutable, subsequent use is OK.
+				ProcessChunk(e.Value); // "RawChunk" objects are immutable, subsequent use is OK.
 			}
 		}
 

@@ -72,7 +72,7 @@ namespace YAT.Application.Settings
 			base.SetMyDefaults();
 
 			State    = FormWindowState.Maximized; // Let the terminal MDI windows appear maximized!
-			Location = new Point(0, 0);    // 'Size' is non-zero as that simply makes no sense.
+			Location = new Point(0, 0);    // "Size" is non-zero as that simply makes no sense.
 			Size     = new Size(854, 600); //  > 854 corresponds to width of WVGA (NTSC).
 		}                                  //  > 600 is an arbitrary value.
 

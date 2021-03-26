@@ -41,8 +41,8 @@ using MKY.Text;
 
 using NUnit.Framework;
 
-//// 'YAT.Domain'        is explicitly used due to ambiguity with 'YAT.Domain.Test.Terminal'.
-//// 'YAT.Domain.Parser' is explicitly used due to ambiguity with 'YAT.Domain.Test.Parser'.
+//// "YAT.Domain"        is explicitly used due to ambiguity with "YAT.Domain.Test.Terminal".
+//// "YAT.Domain.Parser" is explicitly used due to ambiguity with "YAT.Domain.Test.Parser".
 using YAT.Domain.Settings;
 
 #endregion
@@ -180,7 +180,7 @@ namespace YAT.Domain.Test
 			// Account for the longer initial delay when transmitting long lines:
 			transmissionTime += (Math.Log10(lineByteCount) * 100); // Results in += ~300 ms for 'Long' and += ~400 ms for 'VeryLong'.
 
-			// 'Binary' takes a bit longer because formatting hex values is more time consuming:
+			// "Binary" takes a bit longer because formatting hex values is more time consuming:
 			if (settings.TerminalType == TerminalType.Binary)
 				transmissionTime *= 1.1;
 
@@ -409,8 +409,8 @@ namespace YAT.Domain.Test
 
 		/// <remarks>
 		/// There are similar utility methods in
-		/// 'MKY.IO.Serial.Socket.Test.Utilities' and
-		/// 'YAT.Model.Test.Utilities'.
+		/// "MKY.IO.Serial.Socket.Test.Utilities" and
+		/// "YAT.Model.Test.Utilities".
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		public static void WaitForConnection(Domain.Terminal terminalA, Domain.Terminal terminalB)
@@ -479,8 +479,8 @@ namespace YAT.Domain.Test
 
 		/// <remarks>
 		/// There are similar utility methods in
-		/// 'MKY.IO.Serial.Socket.Test.Utilities' and
-		/// 'YAT.Model.Test.Utilities'.
+		/// "MKY.IO.Serial.Socket.Test.Utilities" and
+		/// "YAT.Model.Test.Utilities".
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		public static void WaitForStop(Domain.Terminal terminal)
@@ -512,11 +512,12 @@ namespace YAT.Domain.Test
 		}
 
 		/// <remarks>
-		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
-		/// i.e. complete as well as incomplete lines.
+		/// <paramref name="expectedTotalLineCount"/> will be compared against the number of lines
+		/// in the view, i.e. complete as well as incomplete lines.
+		/// <para>
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
-		/// </remarks>
+		/// </para></remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static void WaitForSendingAndAssertCounts(Domain.Terminal terminalTx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)
@@ -600,11 +601,12 @@ namespace YAT.Domain.Test
 		}
 
 		/// <remarks>
-		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
-		/// i.e. complete as well as incomplete lines.
+		/// <paramref name="expectedTotalLineCount"/> will be compared against the number of lines
+		/// in the view, i.e. complete as well as incomplete lines.
+		/// <para>
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
-		/// </remarks>
+		/// </para></remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static void WaitForReceivingAndAssertCounts(Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)
@@ -688,15 +690,15 @@ namespace YAT.Domain.Test
 			WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, IgnoreCount, timeout);
 		}
 
-		/// <remarks>
-		/// 'expectedPerCycleCharCount' does not need to be considered, since bytes are transmitted.
-		/// </remarks>
-		/// <remarks>
-		/// 'expectedTotalLineCount' will be compared against the number of lines in the view,
-		/// i.e. complete as well as incomplete lines.
+		/// <remarks><para>
+		/// "expectedPerCycleCharCount" does not need to be considered, since bytes are transmitted.
+		/// </para><para>
+		/// <paramref name="expectedTotalLineCount"/> will be compared against the number of lines
+		/// in the view, i.e. complete as well as incomplete lines.
+		/// </para><para>
 		/// Comparison against the completed number of lines is not (yet) possible, change #375
 		/// "consider to migrate Byte/Line Count/Rate from model to domain" is required for this.
-		/// </remarks>
+		/// </para></remarks>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "byte", Justification = "'Byte' not only is a type, it also tells the semantic.")]
 		public static void WaitForTransmissionAndAssertCounts(Domain.Terminal terminalTx, Domain.Terminal terminalRx, int expectedTotalByteCount, int expectedTotalLineCount = IgnoreCount, int timeout = WaitTimeoutForLineTransmission)

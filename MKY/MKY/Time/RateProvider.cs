@@ -164,7 +164,7 @@ namespace MKY.Time
 
 			this.updateInterval = updateInterval;
 
-			this.updateTicker = new System.Timers.Timer(); // 'Timers.Timer' rather than 'Threading.Timer' because 'e.SignalTime' is needed.
+			this.updateTicker = new System.Timers.Timer(); // "Timers.Timer" rather than "Threading.Timer" because "e.SignalTime" is needed.
 			this.updateTicker.Interval = this.updateInterval;
 			this.updateTicker.AutoReset = true; // Periodic!
 			this.updateTicker.Elapsed += updateTicker_Periodic_Elapsed;

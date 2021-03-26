@@ -98,7 +98,7 @@ namespace MKY.IO.Ports.Test.DriverAnalysis
 
 	/// <remarks>
 	/// Currently, neither device/driver loses any data. However, measurements of
-	/// 'TestContinuousReceivingOfSIR' (now 'PerformContinuousReceivingOfECHO')
+	/// "TestContinuousReceivingOfSIR" (now "PerformContinuousReceivingOfECHO")
 	/// on 2008-06-15..18 resulted in the following figures:
 	///
 	/// Laptop @ Home (WinXP) with MCT U232:

@@ -222,7 +222,7 @@ namespace YAT.View.Forms
 			int pageCount = this.settingsInEdit.Pages.Count;
 			if (pageCount > 0)
 			{
-				this.selectedPageId = Int32Ex.Limit(this.startupControl.RequestedPageId, 1, pageCount); // 'Count' is 1 or above.
+				this.selectedPageId = Int32Ex.Limit(this.startupControl.RequestedPageId, 1, pageCount); // "Count" is 1 or above.
 			}
 			else // Create a page if no page exists yet, same behavior as DeleteAllPages():
 			{
@@ -1541,7 +1541,7 @@ namespace YAT.View.Forms
 				if (this.settingsInEdit.Pages.Count > 1)
 				{
 					this.settingsInEdit.Pages.RemoveAt(SelectedPageIndex);
-					this.selectedPageId = Int32Ex.Limit(this.selectedPageId, 1, Math.Max(this.settingsInEdit.Pages.Count, 1)); // 'max' must be 1 or above.
+					this.selectedPageId = Int32Ex.Limit(this.selectedPageId, 1, Math.Max(this.settingsInEdit.Pages.Count, 1)); // "max" must be 1 or above.
 					SetControls();
 				}
 				else // Same behavior as DeleteAllPages():
@@ -1692,7 +1692,7 @@ namespace YAT.View.Forms
 		/// <remarks>This class-internal method does not call <see cref="SetControls()"/>.</remarks>
 		protected virtual void ActivateSubpage(int requestedCommandId)
 		{
-			requestedCommandId = Int32Ex.Limit(requestedCommandId, 1, PredefinedCommandPage.MaxCommandCapacityPerPage); // 'Max' is 1 or above.
+			requestedCommandId = Int32Ex.Limit(requestedCommandId, 1, PredefinedCommandPage.MaxCommandCapacityPerPage); // "Max" is 1 or above.
 
 			var requestedCommandIndex = (requestedCommandId - 1);
 			var requestedSubpageIndex = (requestedCommandIndex / PredefinedCommandPage.CommandCapacityPerSubpage);
@@ -1702,7 +1702,7 @@ namespace YAT.View.Forms
 		/// <remarks>This class-internal method does not call <see cref="SetControls()"/>.</remarks>
 		protected virtual void SelectSet(int requestedCommandId)
 		{
-			requestedCommandId = Int32Ex.Limit(requestedCommandId, 1, PredefinedCommandPage.MaxCommandCapacityPerPage); // 'Max' is 1 or above.
+			requestedCommandId = Int32Ex.Limit(requestedCommandId, 1, PredefinedCommandPage.MaxCommandCapacityPerPage); // "Max" is 1 or above.
 
 			var requestedCommandIndex = (requestedCommandId - 1);
 			var requestedSetIndex = (requestedCommandIndex % PredefinedCommandPage.CommandCapacityPerSubpage);

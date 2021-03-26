@@ -46,7 +46,7 @@
 
 using System;
 using System.Collections.Generic;
-//// 'System.Diagnostics' is explicitly used for preventing ambiguity between 'MKY.IO.Serial.DataReceivedEventArgs' and 'System.Diagnostics.DataReceivedEventArgs'.
+//// "System.Diagnostics" is explicitly used for preventing ambiguity among "MKY.IO.Serial.DataReceivedEventArgs" and "System.Diagnostics.DataReceivedEventArgs".
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
@@ -406,7 +406,7 @@ namespace YAT.Domain
 		/// Opposed to <see cref="IsSending"/>, where the amount of data expected for sending is
 		/// known by the caller, there is no information on the availability and amout of data
 		/// for receiving, nor any way to determine whether data may be coming in soon. Thus, an
-		/// 'IsReceiving' property makes little sense. Instead, this time stamp may be used to
+		/// "IsReceiving" property makes little sense. Instead, this time stamp may be used to
 		/// determine for how long the I/O instance has not been receiving data anymore, and can
 		/// combine this time stamp with a time-out.
 		/// </remarks>
@@ -816,11 +816,11 @@ namespace YAT.Domain
 						var re = new RawChunk(e.Data, e.TimeStamp, e.Device, IODirection.Rx);
 						lock (this.repositorySyncObj)
 						{
-							this.rxRepository   .Enqueue(re); // 'RawChunk' objects are immutable, subsequent use is OK.
-							this.bidirRepository.Enqueue(re); // 'RawChunk' objects are immutable, subsequent use is OK.
+							this.rxRepository   .Enqueue(re); // "RawChunk" objects are immutable, subsequent use is OK.
+							this.bidirRepository.Enqueue(re); // "RawChunk" objects are immutable, subsequent use is OK.
 						}
 
-						OnChunkReceived(new EventArgs<RawChunk>(re)); // 'RawChunk' objects are immutable, subsequent use is OK.
+						OnChunkReceived(new EventArgs<RawChunk>(re)); // "RawChunk" objects are immutable, subsequent use is OK.
 					}
 					finally
 					{
@@ -857,11 +857,11 @@ namespace YAT.Domain
 						var re = new RawChunk(e.Data, e.TimeStamp, e.Device, IODirection.Tx);
 						lock (this.repositorySyncObj)
 						{
-							this.txRepository   .Enqueue(re); // 'RawChunk' objects are immutable, subsequent use is OK.
-							this.bidirRepository.Enqueue(re); // 'RawChunk' objects are immutable, subsequent use is OK.
+							this.txRepository   .Enqueue(re); // "RawChunk" objects are immutable, subsequent use is OK.
+							this.bidirRepository.Enqueue(re); // "RawChunk" objects are immutable, subsequent use is OK.
 						}
 
-						OnChunkSent(new EventArgs<RawChunk>(re)); // 'RawChunk' objects are immutable, subsequent use is OK.
+						OnChunkSent(new EventArgs<RawChunk>(re)); // "RawChunk" objects are immutable, subsequent use is OK.
 					}
 					finally
 					{

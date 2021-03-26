@@ -28,13 +28,13 @@ namespace YAT.Model
 	public static class TerminalIds
 	{
 		/// <remarks>
-		/// 'Normal' indices are 0 based.
+		/// "Normal" indices are 0 based.
 		/// </remarks>
 		public const int FirstIndex = 0;
 
 		/// <remarks>
-		/// 'Normal' indices are 0 based.
-		/// Index -1 means 'invalid'.
+		/// "Normal" indices are 0 based.
+		/// Index -1 means "invalid".
 		/// </remarks>
 		public const int InvalidIndex = -1;
 

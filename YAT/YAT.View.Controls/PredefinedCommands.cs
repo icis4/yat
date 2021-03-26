@@ -196,7 +196,7 @@ namespace YAT.View.Controls
 			{
 				int selectedPageIdNew;
 				if (!ICollectionEx.IsNullOrEmpty(this.pages))
-					selectedPageIdNew = Int32Ex.Limit(value, SelectedPageIdDefault, this.pages.Count); // 'Count' is 1 or above.
+					selectedPageIdNew = Int32Ex.Limit(value, SelectedPageIdDefault, this.pages.Count); // "Count" is 1 or above.
 				else
 					selectedPageIdNew = SelectedPageIdDefault;
 

@@ -189,17 +189,17 @@ namespace YAT.Log.Utilities
 				}
 
 				// All white-space elements do not need to be processed.
-				// 'TimeSpanInfo' is not used with 'XmlTransferTextLine'.
-				// 'TimeDeltaInfo' is not used with 'XmlTransferTextLine'.
-				// 'DirectionInfo' is handled below.
+				// "TimeSpanInfo" is not used with "XmlTransferTextLine".
+				// "TimeDeltaInfo" is not used with "XmlTransferTextLine".
+				// "DirectionInfo" is handled below.
 			}
 
 			// In case the meta information elements are not contained (e.g. if not shown),
 			// fall-back to the 'DisplayElemetColletion' property:
 			if (timeStamp == DisplayElement.TimeStampDefault) { timeStamp = displayLine.TimeStamp; }
-			if (length    == 0)                               { length    = displayLine.CharCount; } // 'CharCount' for 'Text' log.
+			if (length    == 0)                               { length    = displayLine.CharCount; } // "CharCount" for "Text" log.
 
-			// Direction could also be retrieved from 'displayLine.Direction', but that would require
+			// Direction could also be retrieved from "displayLine.Direction", but that would require
 			// another loop over the whole collection, thus evaluating here base on the flags:
 			Direction direction;
 			if (containsTx && containsRx)

@@ -601,7 +601,7 @@ namespace YAT.View.Controls
 				var sb = new StringBuilder();
 				sb.Append("Remote port is invalid, valid values are numbers from ");
 				sb.Append(IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture));
-				sb.Append(" to ");                            // 'InvariantCulture' for TCP and UDP ports!
+				sb.Append(" to ");                            // "InvariantCulture" for TCP and UDP ports!
 				sb.Append(IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture));
 				sb.Append(".");
 
@@ -689,7 +689,7 @@ namespace YAT.View.Controls
 				var sb = new StringBuilder();
 				sb.Append("Local port is invalid, valid values are numbers from ");
 				sb.Append(IPEndPoint.MinPort.ToString(CultureInfo.InvariantCulture));
-				sb.Append(" to ");                            // 'InvariantCulture' for TCP and UDP ports!
+				sb.Append(" to ");                            // "InvariantCulture" for TCP and UDP ports!
 				sb.Append(IPEndPoint.MaxPort.ToString(CultureInfo.InvariantCulture));
 				sb.Append(".");
 
@@ -943,13 +943,13 @@ namespace YAT.View.Controls
 				{
 					   label_RemotePort.Enabled = true;
 					comboBox_RemotePort.Enabled = true;
-					comboBox_RemotePort.Text = this.remoteTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
+					comboBox_RemotePort.Text = this.remoteTcpPort.ToString(CultureInfo.InvariantCulture); // "InvariantCulture" for TCP and UDP ports!
 				}
 				else if (!DesignMode && Enabled && ((this.socketType == SocketType.UdpClient) || (this.socketType == SocketType.UdpPairSocket)))
 				{
 					   label_RemotePort.Enabled = true;
 					comboBox_RemotePort.Enabled = true;
-					comboBox_RemotePort.Text = this.remoteUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
+					comboBox_RemotePort.Text = this.remoteUdpPort.ToString(CultureInfo.InvariantCulture); // "InvariantCulture" for TCP and UDP ports!
 				}
 				else
 				{
@@ -987,13 +987,13 @@ namespace YAT.View.Controls
 				{
 					   label_LocalPort.Enabled = true;
 					comboBox_LocalPort.Enabled = true;
-					comboBox_LocalPort.Text = this.localTcpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
+					comboBox_LocalPort.Text = this.localTcpPort.ToString(CultureInfo.InvariantCulture); // "InvariantCulture" for TCP and UDP ports!
 				}
 				else if (Enabled && ((this.socketType == SocketType.UdpServer) || (this.socketType == SocketType.UdpPairSocket)))
 				{
 					   label_LocalPort.Enabled = true;
 					comboBox_LocalPort.Enabled = true;
-					comboBox_LocalPort.Text = this.localUdpPort.ToString(CultureInfo.InvariantCulture); // 'InvariantCulture' for TCP and UDP ports!
+					comboBox_LocalPort.Text = this.localUdpPort.ToString(CultureInfo.InvariantCulture); // "InvariantCulture" for TCP and UDP ports!
 				}
 				else
 				{

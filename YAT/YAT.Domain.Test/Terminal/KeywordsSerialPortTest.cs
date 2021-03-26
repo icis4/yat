@@ -36,7 +36,7 @@ using MKY.IO.Serial.SerialPort;
 
 using NUnit.Framework;
 
-//// 'YAT.Domain.Parser' is explicitly used due to ambiguity with 'YAT.Domain.Test.Parser'.
+//// "YAT.Domain.Parser" is explicitly used due to ambiguity with "YAT.Domain.Test.Parser".
 using YAT.Domain.Settings;
 
 #endregion

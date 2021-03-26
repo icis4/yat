@@ -177,7 +177,7 @@ namespace YAT.Domain
 		{
 			string[] lines;
 			RtfReaderHelper.LinesFromRtfFile(item.FilePath, out lines); // Read file at once for simplicity. Minor limitation:
-			foreach (string line in lines)                              // 'forSomeTimeEventHelper.RaiseEventIf...' will
+			foreach (string line in lines)                              // "forSomeTimeEventHelper.RaiseEventIf..." will
 			{                                                           // only be evaluated at DoSendFileLine() below.
 				if (string.IsNullOrEmpty(line) && TerminalSettings.Send.File.SkipEmptyLines)
 					continue;
@@ -188,7 +188,7 @@ namespace YAT.Domain
 					break;
 
 				// Actively yield to other threads to make sure app stays responsive while looping:
-				Thread.Sleep(TimeSpan.Zero); // 'TimeSpan.Zero' = 100% CPU is OK as DoSendFileLine()
+				Thread.Sleep(TimeSpan.Zero); // "TimeSpan.Zero" = 100% CPU is OK as DoSendFileLine()
 			}                                // will sleep depending on state of the event helper.
 		}
 

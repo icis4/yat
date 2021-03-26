@@ -39,7 +39,7 @@ using MKY.Collections;
 using MKY.IO.Ports;
 using MKY.Windows.Forms;
 
-//// 'YAT.Model.Utilities' is explicitly used due to ambiguity of 'MessageHelper'.
+//// "YAT.Model.Utilities" is explicitly used due to ambiguity of "MessageHelper".
 using YAT.Settings.Application;
 
 #endregion
