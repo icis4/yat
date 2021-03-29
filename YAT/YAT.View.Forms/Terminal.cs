@@ -586,18 +586,6 @@ namespace YAT.View.Forms
 					toolStripMenuItem_TerminalMenu_Terminal_Stop .Enabled =  this.terminal.IsStarted;
 
 					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled =  this.terminal.IsSendingForSomeTime;
-					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled = (monitorIsDefined && (this.findShortcutsCtrlFNPLSuspendedCount == 0)); // [Ctrl+L]
-
-					if (this.settingsRoot.Layout.VisibleMonitorPanelCount <= 1)
-					{
-						toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "C&lear";   // Indicating "All" for a single
-						toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh"; //   panel would be confusing.
-					}
-					else
-					{
-						toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "Cl&ear All";
-						toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh All";
-					}
 				}
 				else
 				{
@@ -605,10 +593,19 @@ namespace YAT.View.Forms
 					toolStripMenuItem_TerminalMenu_Terminal_Stop .Enabled = false;
 
 					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled = false;
-					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled = false;
+				}
 
-					toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "C&lear";   // Same as in designer generated code,
-					toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh"; //   by default only bidir is visible.
+				toolStripMenuItem_TerminalMenu_Terminal_Clear          .Enabled = (monitorIsDefined &&                     (this.findShortcutsCtrlFNPLSuspendedCount == 0)); // [Ctrl+L]
+
+				if (this.settingsRoot.Layout.VisibleMonitorPanelCount <= 1)
+				{
+					toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "C&lear";   // Indicating "All" for a single
+					toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh"; //   panel would be confusing.
+				}
+				else
+				{
+					toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "Cl&ear All";
+					toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh All";
 				}
 
 				toolStripMenuItem_TerminalMenu_Terminal_SelectAll      .Enabled = (monitorIsDefined && textIsNotFocused && (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)); // [Ctrl+A]
@@ -621,6 +618,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Terminal_FindNext       .Enabled = (monitorIsDefined && FindNextIsFeasible);
 				toolStripMenuItem_TerminalMenu_Terminal_FindPrevious   .Enabled = (monitorIsDefined && FindPreviousIsFeasible);
 				toolStripMenuItem_TerminalMenu_Terminal_FindAll        .Enabled = (monitorIsDefined && FindAllIsFeasible);
+				toolStripMenuItem_TerminalMenu_Terminal_FindAll        .Checked = this.settingsRoot.Find.AllIsActive;
 			}
 			finally
 			{
@@ -691,9 +689,9 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Find_Click(object sender, EventArgs e)
 		{
-			string line = null;
-			TryGetSingleSelectedLineFromMonitor(out line); // Will stay "null" if not a single line is selected.
-			RequestFind(line);
+			string text = null;
+			TryGetFindTextFromMonitor(out text); // Will stay "null" if no text is available.
+			RequestFind(text);
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_FindNext_Click(object sender, EventArgs e)
@@ -2583,7 +2581,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			SetMonitorRadix(Domain.Radix.String);
+			SetMonitorRadix_SameTxRx(Domain.Radix.String);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Char_Click(object sender, EventArgs e)
@@ -2591,7 +2589,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			SetMonitorRadix(Domain.Radix.Char);
+			SetMonitorRadix_SameTxRx(Domain.Radix.Char);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Bin_Click(object sender, EventArgs e)
@@ -2599,7 +2597,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			SetMonitorRadix(Domain.Radix.Bin);
+			SetMonitorRadix_SameTxRx(Domain.Radix.Bin);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Oct_Click(object sender, EventArgs e)
@@ -2607,7 +2605,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			SetMonitorRadix(Domain.Radix.Oct);
+			SetMonitorRadix_SameTxRx(Domain.Radix.Oct);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Dec_Click(object sender, EventArgs e)
@@ -2615,7 +2613,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			SetMonitorRadix(Domain.Radix.Dec);
+			SetMonitorRadix_SameTxRx(Domain.Radix.Dec);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Hex_Click(object sender, EventArgs e)
@@ -2623,7 +2621,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			SetMonitorRadix(Domain.Radix.Hex);
+			SetMonitorRadix_SameTxRx(Domain.Radix.Hex);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Unicode_Click(object sender, EventArgs e)
@@ -2631,7 +2629,7 @@ namespace YAT.View.Forms
 			if (ContextMenuStripShortcutModalFormWorkaround.IsCurrentlyShowingModalForm)
 				return;
 
-			SetMonitorRadix(Domain.Radix.Unicode);
+			SetMonitorRadix_SameTxRx(Domain.Radix.Unicode);
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_SeparateTxRx_Click(object sender, EventArgs e)
@@ -4663,7 +4661,7 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void RequestRadix(Domain.Radix radix)
 		{
-			this.settingsRoot.Display.TxRadix = radix;
+			SetMonitorRadix_SameTxRx(radix);
 		}
 
 		/// <summary></summary>
@@ -4699,7 +4697,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		protected virtual bool TryGetSingleSelectedLineFromMonitor(out string pattern)
+		protected virtual bool TryGetFindTextFromMonitor(out string text)
 		{
 			var monitor = GetMonitor(this.lastMonitorSelection);
 			if (monitor != null)
@@ -4707,12 +4705,19 @@ namespace YAT.View.Forms
 				var selectedLines = monitor.SelectedLines;
 				if (selectedLines.Count() == 1)
 				{
-					pattern = selectedLines[0].ContentText;
+					text = selectedLines[0].ContentText;
+					return (true);
+				}
+
+				var selectedText = monitor.SelectedTextInCopyOfActiveLine;
+				if (!string.IsNullOrEmpty(selectedText))
+				{
+					text = selectedText;
 					return (true);
 				}
 			}
 
-			pattern = null;
+			text = null;
 			return (false);
 		}
 
@@ -4731,8 +4736,8 @@ namespace YAT.View.Forms
 		{
 			get
 			{
-				string line;
-				if (TryGetSingleSelectedLineFromMonitor(out line))
+				string text;
+				if (TryGetFindTextFromMonitor(out text))
 					return (true);
 
 				var main = (this.mdiParent as Main);
@@ -4748,8 +4753,8 @@ namespace YAT.View.Forms
 		{
 			get
 			{
-				string line;
-				if (TryGetSingleSelectedLineFromMonitor(out line))
+				string text;
+				if (TryGetFindTextFromMonitor(out text))
 					return (true);
 
 				var main = (this.mdiParent as Main);
@@ -4765,8 +4770,8 @@ namespace YAT.View.Forms
 		{
 			get
 			{
-				string line;
-				if (TryGetSingleSelectedLineFromMonitor(out line))
+				string text;
+				if (TryGetFindTextFromMonitor(out text))
 					return (true);
 
 				var main = (this.mdiParent as Main);
@@ -4778,14 +4783,38 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		public virtual void RequestActivateFindAll()
+		{
+			this.settingsRoot.Find.AllIsActive = true;
+		}
+
+		/// <summary></summary>
+		public virtual void RequestDeactivateFindAll()
+		{
+			this.settingsRoot.Find.AllIsActive = false;
+		}
+
+		/// <summary></summary>
+		public virtual bool FindAllIsActive
+		{
+			get
+			{
+				if (this.settingsRoot != null) // Such simple get-property shall also be available on e.g. closing.
+					return (this.settingsRoot.Find.AllIsActive);
+				else
+					return (false);
+			}
+		}
+
+		/// <summary></summary>
 		protected virtual void RequestFindNext()
 		{
-			string line = null;
-			TryGetSingleSelectedLineFromMonitor(out line); // Will stay "null" if not a single line is selected.
+			string text = null;
+			TryGetFindTextFromMonitor(out text); // Will stay "null" if no text is available.
 
 			var main = (this.mdiParent as Main);
 			if (main != null)
-				main.RequestFindNext(line);
+				main.RequestFindNext(text);
 			else
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "MDI 'Terminal' requires that MDI parent is 'Main'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -4793,12 +4822,12 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestFindPrevious()
 		{
-			string line = null;
-			TryGetSingleSelectedLineFromMonitor(out line); // Will stay "null" if not a single line is selected.
+			string text = null;
+			TryGetFindTextFromMonitor(out text); // Will stay "null" if no text is available.
 
 			var main = (this.mdiParent as Main);
 			if (main != null)
-				main.RequestFindPrevious(line);
+				main.RequestFindPrevious(text);
 			else
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "MDI 'Terminal' requires that MDI parent is 'Main'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -4806,12 +4835,12 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestFindAll()
 		{
-			string line = null;
-			TryGetSingleSelectedLineFromMonitor(out line); // Will stay "null" if not a single line is selected.
+			string text = null;
+			TryGetFindTextFromMonitor(out text); // Will stay "null" if no text is available.
 
 			var main = (this.mdiParent as Main);
 			if (main != null)
-				main.RequestFindAll(line);
+				main.RequestFindAll(text);
 			else
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "MDI 'Terminal' requires that MDI parent is 'Main'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -6450,11 +6479,22 @@ namespace YAT.View.Forms
 		// Monitor Panels > View
 		//------------------------------------------------------------------------------------------
 
-		private void SetMonitorRadix(Domain.Radix radix)
+		/// <summary>
+		/// Sets <see cref="Domain.Settings.DisplaySettings.TxRadix"/> and
+		/// <see cref="Domain.Settings.DisplaySettings.RxRadix"/> in case
+		/// <see cref="Domain.Settings.DisplaySettings.SeparateTxRxRadix"/> is inactive.
+		/// </summary>
+		private void SetMonitorRadix_SameTxRx(Domain.Radix radix)
 		{
-			SetMonitorRadix(Domain.IODirection.Tx, radix);
-		}
+			this.settingsRoot.Display.TxRadix = radix; // Wouldn't be necessary to set both, 'RxRadix {get}' is redirected
+			this.settingsRoot.Display.RxRadix = radix; // to 'TxRadix {get}' anyway. However, setting both is more logical
+		}                                              // and less error-prone in case 'RxRadix' would no longer redirect.
 
+		/// <summary>
+		/// Sets <see cref="Domain.Settings.DisplaySettings.TxRadix"/> or
+		/// <see cref="Domain.Settings.DisplaySettings.RxRadix"/> in case
+		/// <see cref="Domain.Settings.DisplaySettings.SeparateTxRxRadix"/> is active.
+		/// </summary>
 		private void SetMonitorRadix(Domain.IODirection direction, Domain.Radix radix)
 		{
 			switch (direction)

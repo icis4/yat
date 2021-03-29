@@ -47,6 +47,7 @@ namespace YAT.Settings.Model
 		private YAT.Model.Settings.AutoResponseSettings autoResponse;
 		private Format.Settings.FormatSettings format;
 		private Log.Settings.LogSettings log;
+		private YAT.Model.Settings.FindSettings find;
 
 		/// <summary></summary>
 		public TerminalExplicitSettings()
@@ -63,12 +64,13 @@ namespace YAT.Settings.Model
 		{
 			SetMyDefaults();
 
-			Terminal          = new Domain.Settings.TerminalSettings(SettingsType);
+			Terminal          = new Domain.Settings   .TerminalSettings(         SettingsType);
 			PredefinedCommand = new YAT.Model.Settings.PredefinedCommandSettings(SettingsType);
-			AutoAction        = new YAT.Model.Settings.AutoActionSettings(SettingsType);
-			AutoResponse      = new YAT.Model.Settings.AutoResponseSettings(SettingsType);
-			Format            = new Format.Settings.FormatSettings(SettingsType);
-			Log               = new Log.Settings.LogSettings(SettingsType);
+			AutoAction        = new YAT.Model.Settings.AutoActionSettings(       SettingsType);
+			AutoResponse      = new YAT.Model.Settings.AutoResponseSettings(     SettingsType);
+			Format            = new Format.Settings   .FormatSettings(           SettingsType);
+			Log               = new Log.Settings      .LogSettings(              SettingsType);
+			Find              = new YAT.Model.Settings.FindSettings(             SettingsType);
 
 			ClearChanged();
 		}
@@ -83,12 +85,13 @@ namespace YAT.Settings.Model
 			LogIsOn  = rhs.LogIsOn;
 			UserName = rhs.UserName;
 
-			Terminal          = new Domain.Settings.TerminalSettings(rhs.Terminal);
+			Terminal          = new Domain.Settings   .TerminalSettings(         rhs.Terminal);
 			PredefinedCommand = new YAT.Model.Settings.PredefinedCommandSettings(rhs.PredefinedCommand);
-			AutoAction        = new YAT.Model.Settings.AutoActionSettings(rhs.AutoAction);
-			AutoResponse      = new YAT.Model.Settings.AutoResponseSettings(rhs.AutoResponse);
-			Format            = new Format.Settings.FormatSettings(rhs.Format);
-			Log               = new Log.Settings.LogSettings(rhs.Log);
+			AutoAction        = new YAT.Model.Settings.AutoActionSettings(       rhs.AutoAction);
+			AutoResponse      = new YAT.Model.Settings.AutoResponseSettings(     rhs.AutoResponse);
+			Format            = new Format.Settings   .FormatSettings(           rhs.Format);
+			Log               = new Log.Settings      .LogSettings(              rhs.Log);
+			Find              = new YAT.Model.Settings.FindSettings(             rhs.Find);
 
 			ClearChanged();
 		}
@@ -246,6 +249,23 @@ namespace YAT.Settings.Model
 				{
 					var oldNode = this.log;
 					this.log = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("Find")]
+		public YAT.Model.Settings.FindSettings Find
+		{
+			get { return (this.find); }
+			set
+			{
+				if (this.find != value)
+				{
+					var oldNode = this.find;
+					this.find = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
 
 					AttachOrReplaceOrDetachNode(oldNode, value);
 				}

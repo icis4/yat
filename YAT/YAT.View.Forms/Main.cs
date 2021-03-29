@@ -1242,16 +1242,19 @@ namespace YAT.View.Forms
 				if (childIsReady)
 					terminalIsStarted = child.IsStarted;
 
-				var radixIsReady = false;
+				var radixIsSame = false;
 				var radix = Domain.Radix.None;
 				if (childIsReady)
 				{
 					var t = child.UnderlyingTerminal;
 					if ((t != null) && (!t.IsInDisposal))
 					{
-						radixIsReady = !(t.SettingsRoot.Display.SeparateTxRxRadix);
-						if (radixIsReady)
-							radix = t.SettingsRoot.Display.TxRadix;
+						if (t.SettingsRoot.Display.SeparateTxRxRadix)
+							radixIsSame = (t.SettingsRoot.Display.TxRadix == t.SettingsRoot.Display.RxRadix);
+						else
+							radixIsSame = true;
+
+						radix = t.SettingsRoot.Display.TxRadix;
 					}
 				}
 
@@ -1261,13 +1264,13 @@ namespace YAT.View.Forms
 				toolStripButton_MainTool_Terminal_Stop    .Enabled = (childIsReady && terminalIsStarted);
 				toolStripButton_MainTool_Terminal_Settings.Enabled =  childIsReady;
 
-				toolStripButton_MainTool_Radix_String .Enabled = (childIsReady && radixIsReady);
-				toolStripButton_MainTool_Radix_Char   .Enabled = (childIsReady && radixIsReady);
-				toolStripButton_MainTool_Radix_Bin    .Enabled = (childIsReady && radixIsReady);
-				toolStripButton_MainTool_Radix_Oct    .Enabled = (childIsReady && radixIsReady);
-				toolStripButton_MainTool_Radix_Dec    .Enabled = (childIsReady && radixIsReady);
-				toolStripButton_MainTool_Radix_Hex    .Enabled = (childIsReady && radixIsReady);
-				toolStripButton_MainTool_Radix_Unicode.Enabled = (childIsReady && radixIsReady);
+				toolStripButton_MainTool_Radix_String .Enabled = (childIsReady && radixIsSame);
+				toolStripButton_MainTool_Radix_Char   .Enabled = (childIsReady && radixIsSame);
+				toolStripButton_MainTool_Radix_Bin    .Enabled = (childIsReady && radixIsSame);
+				toolStripButton_MainTool_Radix_Oct    .Enabled = (childIsReady && radixIsSame);
+				toolStripButton_MainTool_Radix_Dec    .Enabled = (childIsReady && radixIsSame);
+				toolStripButton_MainTool_Radix_Hex    .Enabled = (childIsReady && radixIsSame);
+				toolStripButton_MainTool_Radix_Unicode.Enabled = (childIsReady && radixIsSame);
 
 				toolStripButton_MainTool_Radix_String .Checked = (radix == Domain.Radix.String);
 				toolStripButton_MainTool_Radix_Char   .Checked = (radix == Domain.Radix.Char);
@@ -1353,22 +1356,23 @@ namespace YAT.View.Forms
 
 						SetFindStateAndControls();
 
-						toolStripButton_MainTool_Find_CaseSensitive.Checked = ApplicationSettings.RoamingUserSettings.Find.Options.CaseSensitive;
-						////                          CaseSensitive.Enabled = true is fixed, allow editing/changing to regex even if child is inactive.
 						toolStripButton_MainTool_Find_CaseSensitive.Visible = true;
-						toolStripButton_MainTool_Find_WholeWord    .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.WholeWord;
-						////                          WholeWord    .Enabled = true is fixed, allow editing/changing to regex even if child is inactive.
+						////                          CaseSensitive.Enabled = true is fixed, allow editing/changing to regex even if child is inactive.
+						toolStripButton_MainTool_Find_CaseSensitive.Checked = ApplicationSettings.RoamingUserSettings.Find.Options.CaseSensitive;
 						toolStripButton_MainTool_Find_WholeWord    .Visible = true;
-						toolStripButton_MainTool_Find_EnableRegex  .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.EnableRegex;
-						////                          EnableRegex  .Enabled = true is fixed, allow editing/changing to regex even if child is inactive.
+						////                          WholeWord    .Enabled = true is fixed, allow editing/changing to regex even if child is inactive.
+						toolStripButton_MainTool_Find_WholeWord    .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.WholeWord;
 						toolStripButton_MainTool_Find_EnableRegex  .Visible = true;
+						////                          EnableRegex  .Enabled = true is fixed, allow editing/changing to regex even if child is inactive.
+						toolStripButton_MainTool_Find_EnableRegex  .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.EnableRegex;
 
-						toolStripButton_MainTool_Find_Next    .Enabled = childIsReady;
 						toolStripButton_MainTool_Find_Next    .Visible = true;
-						toolStripButton_MainTool_Find_Previous.Enabled = childIsReady;
+					////toolStripButton_MainTool_Find_Next    .Enabled = FindNextIsFeasible     is done by SetFindStateAndControls() above.
 						toolStripButton_MainTool_Find_Previous.Visible = true;
-						toolStripButton_MainTool_Find_All     .Enabled = childIsReady;
+					////toolStripButton_MainTool_Find_Previous.Enabled = FindPreviousIsFeasible is done by SetFindStateAndControls() above.
 						toolStripButton_MainTool_Find_All     .Visible = true;
+					////toolStripButton_MainTool_Find_All     .Enabled = FindAllIsFeasible      is done by SetFindStateAndControls() above.
+					////toolStripButton_MainTool_Find_All     .Checked = FindAllIsActive        is done by SetFindStateAndControls() above.
 					}
 					else
 					{
@@ -2327,59 +2331,75 @@ namespace YAT.View.Forms
 			this.findDirection = direction;
 			this.findResult    = result;
 
+			// First set state...
+			Color backColor;
+			Color foreColor;
 			switch (result)
 			{
-				case FindResult.Reset:
-					toolStripComboBox_MainTool_Find_Pattern.BackColor = SystemColors.Window;
-					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.WindowText;
-					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = false;
-					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = false;
-					toolStripButton_MainTool_Find_All      .Enabled   = this.findAllIsFeasible      = false;
+				case FindResult.Reset:                                          // Special case: After startup, icons shall be
+					var pattern = toolStripComboBox_MainTool_Find_Pattern.Text; // enabled without actively having to [Find...].
+					var patternIsGiven = !string.IsNullOrEmpty(pattern);
+
+					backColor = SystemColors.Window;
+					foreColor = SystemColors.WindowText;
+					this.findNextIsFeasible     = patternIsGiven;
+					this.findPreviousIsFeasible = patternIsGiven;
+					this.findAllIsFeasible      = patternIsGiven;
 					break;
 
 				case FindResult.Empty:
-					toolStripComboBox_MainTool_Find_Pattern.BackColor = SystemColors.Window;
-					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.WindowText;
-					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = false;
-					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = false;
-					toolStripButton_MainTool_Find_All      .Enabled   = this.findAllIsFeasible      = false;
+					backColor = SystemColors.Window;
+					foreColor = SystemColors.WindowText;
+					this.findNextIsFeasible     = false;
+					this.findPreviousIsFeasible = false;
+					this.findAllIsFeasible      = false;
 					break;
 
 				case FindResult.Found:
-					toolStripComboBox_MainTool_Find_Pattern.BackColor = SystemColors.Window;     // Same colors as
-					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.WindowText; // "Reset" above.
-					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = true;
-					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = true;
-					toolStripButton_MainTool_Find_All      .Enabled   = this.findAllIsFeasible      = true;
+					backColor = SystemColors.Window;     // Same colors as
+					foreColor = SystemColors.WindowText; // "Reset" above.
+					this.findNextIsFeasible     = true;
+					this.findPreviousIsFeasible = true;
+					this.findAllIsFeasible      = true;
 					break;
 
 				case FindResult.NotFoundAnymore:
-					toolStripComboBox_MainTool_Find_Pattern.BackColor = SystemColors.Highlight;     // Same color as last found line,
-					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.HighlightText; // which is also "highlighted".
-					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = (direction != FindDirection.Forward);
-					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = (direction != FindDirection.Backward);
-					toolStripButton_MainTool_Find_All      .Enabled   = this.findAllIsFeasible      = true;
+					backColor = SystemColors.Highlight;     // Same color as last found line,
+					foreColor = SystemColors.HighlightText; // which is also "highlighted".
+					this.findNextIsFeasible     = (direction != FindDirection.Forward);
+					this.findPreviousIsFeasible = (direction != FindDirection.Backward);
+					this.findAllIsFeasible      = true;
 					break;
 
 				case FindResult.NotFoundAtAll:
-					toolStripComboBox_MainTool_Find_Pattern.BackColor = SystemColors.Info;
-					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.InfoText;
-					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = false;
-					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = false;
-					toolStripButton_MainTool_Find_All      .Enabled   = this.findAllIsFeasible      = true;
+					backColor = SystemColors.Info;
+					foreColor = SystemColors.InfoText;
+					this.findNextIsFeasible     = false;
+					this.findPreviousIsFeasible = false;
+					this.findAllIsFeasible      = true;
 					break;
 
 				case FindResult.Invalid:
-					toolStripComboBox_MainTool_Find_Pattern.BackColor = SystemColors.ControlDark;
-					toolStripComboBox_MainTool_Find_Pattern.ForeColor = SystemColors.ControlText;
-					toolStripButton_MainTool_Find_Next     .Enabled   = this.findNextIsFeasible     = false;
-					toolStripButton_MainTool_Find_Previous .Enabled   = this.findPreviousIsFeasible = false;
-					toolStripButton_MainTool_Find_All      .Enabled   = this.findAllIsFeasible      = false;
+					backColor = SystemColors.ControlDark;
+					foreColor = SystemColors.ControlText;
+					this.findNextIsFeasible     = false;
+					this.findPreviousIsFeasible = false;
+					this.findAllIsFeasible      = false;
 					break;
 
 				default:
 					throw (new ArgumentOutOfRangeException("result", result, MessageHelper.InvalidExecutionPreamble + "'" + result + "' is a find result that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
+
+			// ...and then update the controls...
+			toolStripComboBox_MainTool_Find_Pattern.BackColor = backColor;
+			toolStripComboBox_MainTool_Find_Pattern.ForeColor = foreColor;
+
+			// ...taking the 'ActiveMdiChild' into account:
+			toolStripButton_MainTool_Find_Next    .Enabled = FindNextIsFeasible;
+			toolStripButton_MainTool_Find_Previous.Enabled = FindPreviousIsFeasible;
+			toolStripButton_MainTool_Find_All     .Enabled = FindAllIsFeasible;
+			toolStripButton_MainTool_Find_All     .Checked = FindAllIsActive;
 		}
 
 		/// <summary></summary>
@@ -2395,13 +2415,9 @@ namespace YAT.View.Forms
 			if (!string.IsNullOrEmpty(pattern))
 			{
 				if (ValidateFindPattern(pattern))
-				{
 					FindOnEdit(pattern);
-				}
 				else
-				{
 					SetFindStateAndControls(FindDirection.Undetermined, FindResult.Invalid);
-				}
 			}
 			else // Opposed to FindNext/Previous(), an "empty" FindOnEdit() shall result in 'Reset'.
 			{
@@ -2463,6 +2479,8 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void ValidateAndFindNext(string pattern = null)
 		{
+			DeactivateFindAll();
+
 			if (pattern != null)
 				toolStripComboBox_MainTool_Find_Pattern.Text = pattern;
 			else
@@ -2494,6 +2512,8 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void ValidateAndFindPrevious(string pattern = null)
 		{
+			DeactivateFindAll();
+
 			if (pattern != null)
 				toolStripComboBox_MainTool_Find_Pattern.Text = pattern;
 			else
@@ -2525,6 +2545,8 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void ValidateAndFindAll(string pattern = null)
 		{
+			ActivateFindAll();
+
 			if (pattern != null)
 				toolStripComboBox_MainTool_Find_Pattern.Text = pattern;
 			else
@@ -4824,8 +4846,12 @@ namespace YAT.View.Forms
 		private void terminalMdiChild_AutoActionTriggerStateChanged(object sender, EventArgs e)
 		{
 			var child = (ActiveMdiChild as Terminal);
-			var state = child.AutoActionTriggerState;
-			SetAutoActionTriggerStateControls(state);
+			var childIsReady = (child != null);
+			if (childIsReady)
+			{
+				var state = child.AutoActionTriggerState;
+				SetAutoActionTriggerStateControls(state);
+			}
 		}
 
 	////private void terminalMdiChild_AutoActionActionStateChanged(object sender, EventArgs e) is not needed (yet) because 'DropDownStyle' is 'DropDownList'.
@@ -4843,15 +4869,23 @@ namespace YAT.View.Forms
 		private void terminalMdiChild_AutoResponseTriggerStateChanged(object sender, EventArgs e)
 		{
 			var child = (ActiveMdiChild as Terminal);
-			var state = child.AutoResponseTriggerState;
-			SetAutoResponseTriggerStateControls(state);
+			var childIsReady = (child != null);
+			if (childIsReady)
+			{
+				var state = child.AutoResponseTriggerState;
+				SetAutoResponseTriggerStateControls(state);
+			}
 		}
 
 		private void terminalMdiChild_AutoResponseResponseStateChanged(object sender, EventArgs e)
 		{
 			var child = (ActiveMdiChild as Terminal);
-			var state = child.AutoResponseResponseState;
-			SetAutoResponseResponseStateControls(state);
+			var childIsReady = (child != null);
+			if (childIsReady)
+			{
+				var state = child.AutoResponseResponseState;
+				SetAutoResponseResponseStateControls(state);
+			}
 		}
 
 		private void terminalMdiChild_AutoResponseCountChanged(object sender, EventArgs<int> e)
@@ -4980,6 +5014,48 @@ namespace YAT.View.Forms
 
 				return (childIsReady && this.findAllIsFeasible);
 			}
+		}
+
+		/// <summary>
+		/// Gets whether [Find All] is currently active.
+		/// </summary>
+		public virtual bool FindAllIsActive
+		{
+			get
+			{
+				var child = (ActiveMdiChild as Terminal);
+				var childIsReady = (child != null);
+				if (childIsReady)
+					return (child.FindAllIsActive);
+				else
+					return (false);
+			}
+		}
+
+		/// <summary>
+		/// Activates [Find All] in the active terminal.
+		/// </summary>
+		public virtual void ActivateFindAll()
+		{
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
+			if (childIsReady)
+				child.RequestActivateFindAll();
+
+			SetFindStateAndControls();
+		}
+
+		/// <summary>
+		/// Deactivates [Find All] in the active terminal.
+		/// </summary>
+		public virtual void DeactivateFindAll()
+		{
+			var child = (ActiveMdiChild as Terminal);
+			var childIsReady = (child != null);
+			if (childIsReady)
+				child.RequestDeactivateFindAll();
+
+			SetFindStateAndControls();
 		}
 
 		/// <summary>

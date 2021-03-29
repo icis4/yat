@@ -497,6 +497,13 @@ namespace YAT.View.Controls
 			get { return (textBox_CopyOfActiveLine.Focused); }
 		}
 
+		/// <summary></summary>
+		[Browsable(false)]
+		public virtual string SelectedTextInCopyOfActiveLine
+		{
+			get { return (textBox_CopyOfActiveLine.SelectedText); }
+		}
+
 ////#if (DEBUG) must not be active, configuration must always be available for designer.
 
 		/// <remarks>

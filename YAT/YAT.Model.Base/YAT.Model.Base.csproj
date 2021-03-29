@@ -98,6 +98,7 @@
     <Compile Include="Settings\LayoutSettings.cs" />
     <Compile Include="Settings\NewTerminalSettings.cs" />
     <Compile Include="Settings\PredefinedCommandSettings.cs" />
+    <Compile Include="Settings\FindSettings.cs" />
     <Compile Include="Settings\PredefinedSettings.cs" />
     <Compile Include="Settings\SendFileSettings.cs" />
     <Compile Include="Settings\SendTextSettings.cs" />

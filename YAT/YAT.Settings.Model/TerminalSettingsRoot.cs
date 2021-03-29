@@ -219,7 +219,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Domain.TerminalType TerminalType
+		public virtual Domain.TerminalType TerminalType
 		{
 			get { return (this.explicit_.Terminal.TerminalType); }
 			set { this.explicit_.Terminal.TerminalType = value;  }
@@ -227,7 +227,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Domain.Settings.TerminalSettings Terminal
+		public virtual Domain.Settings.TerminalSettings Terminal
 		{
 			get { return (this.explicit_.Terminal); }
 			set { this.explicit_.Terminal = value;  }
@@ -235,7 +235,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Domain.Settings.IOSettings IO
+		public virtual Domain.Settings.IOSettings IO
 		{
 			get { return (this.explicit_.Terminal.IO); }
 			set { this.explicit_.Terminal.IO = value;  }
@@ -243,7 +243,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Domain.IOType IOType
+		public virtual Domain.IOType IOType
 		{
 			get { return (this.explicit_.Terminal.IO.IOType); }
 			set { this.explicit_.Terminal.IO.IOType = value;  }
@@ -283,7 +283,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Domain.Settings.StatusSettings Status
+		public virtual Domain.Settings.StatusSettings Status
 		{
 			get { return (this.explicit_.Terminal.Status); }
 			set { this.explicit_.Terminal.Status = value;  }
@@ -291,7 +291,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Domain.Settings.BufferSettings Buffer
+		public virtual Domain.Settings.BufferSettings Buffer
 		{
 			get { return (this.explicit_.Terminal.Buffer); }
 			set { this.explicit_.Terminal.Buffer = value;  }
@@ -299,7 +299,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Domain.Settings.DisplaySettings Display
+		public virtual Domain.Settings.DisplaySettings Display
 		{
 			get { return (this.explicit_.Terminal.Display); }
 			set { this.explicit_.Terminal.Display = value;  }
@@ -307,7 +307,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Domain.Settings.CharReplaceSettings CharReplace
+		public virtual Domain.Settings.CharReplaceSettings CharReplace
 		{
 			get { return (this.explicit_.Terminal.CharReplace); }
 			set { this.explicit_.Terminal.CharReplace = value;  }
@@ -315,7 +315,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Domain.Settings.CharHideSettings CharHide
+		public virtual Domain.Settings.CharHideSettings CharHide
 		{
 			get { return (this.explicit_.Terminal.CharHide); }
 			set { this.explicit_.Terminal.CharHide = value;  }
@@ -323,7 +323,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Domain.Settings.CharActionSettings CharAction
+		public virtual Domain.Settings.CharActionSettings CharAction
 		{
 			get { return (this.explicit_.Terminal.CharAction); }
 			set { this.explicit_.Terminal.CharAction = value;  }
@@ -331,7 +331,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Domain.Settings.SendSettings Send
+		public virtual Domain.Settings.SendSettings Send
 		{
 			get { return (this.explicit_.Terminal.Send); }
 			set { this.explicit_.Terminal.Send = value;  }
@@ -339,7 +339,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Domain.Settings.TextTerminalSettings TextTerminal
+		public virtual Domain.Settings.TextTerminalSettings TextTerminal
 		{
 			get { return (this.explicit_.Terminal.TextTerminal); }
 			set { this.explicit_.Terminal.TextTerminal = value;  }
@@ -347,7 +347,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Domain.Settings.BinaryTerminalSettings BinaryTerminal
+		public virtual Domain.Settings.BinaryTerminalSettings BinaryTerminal
 		{
 			get { return (this.explicit_.Terminal.BinaryTerminal); }
 			set { this.explicit_.Terminal.BinaryTerminal = value;  }
@@ -379,7 +379,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Format.Settings.FormatSettings Format
+		public virtual Format.Settings.FormatSettings Format
 		{
 			get { return (this.explicit_.Format); }
 			set { this.explicit_.Format = value;  }
@@ -387,10 +387,18 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Log.Settings.LogSettings Log
+		public virtual Log.Settings.LogSettings Log
 		{
 			get { return (this.explicit_.Log); }
 			set { this.explicit_.Log = value;  }
+		}
+
+		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
+		[XmlIgnore]
+		public virtual YAT.Model.Settings.FindSettings Find
+		{
+			get { return (this.explicit_.Find); }
+			set { this.explicit_.Find = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
@@ -419,7 +427,7 @@ namespace YAT.Settings.Model
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public virtual YAT.Application.Settings.WindowSettings Window
+		public virtual Application.Settings.WindowSettings Window
 		{
 			get { return (this.implicit_.Window); }
 			set { this.implicit_.Window = value;  }

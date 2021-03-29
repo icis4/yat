@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.4.1 :: 2021-03-xx
+YAT 2.4.1 :: 2021-04-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -92,7 +92,11 @@ New:
 - [Find All] added, including live update (feature requests #424 and #434).
 
 Important changes:
-- Find can now be preset by selecting a line in a monitor (related to feature requests #424, #434).
+- YAT now checks whether DejaVu fonts are installed, and whether a monospaced font is used in the
+  terminals. The user gets warned if either is not given (feature request #341).
+- <<<<<<<<<<<<<<<<<<<<<Behavior on Unicode decoding mismatch can now be configured in [Terminal > Settings... > Text... > ???????????????]>>>>>>>>>>>>>>>>>>>>>> (feature request #436).
+- Find text can now automatically be set by either selecting a line in a monitor or by selecting the
+  whole or parts of a line in [Copy of Active Line] (related to feature requests #424 and #434).
 - Log dialog now more clearly states "root directory and file name base" (part of feat. req. #435).
 - Help window is again sizeable to display more/all content (related to earlier feature req. #237).
 
