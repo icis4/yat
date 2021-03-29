@@ -54,7 +54,8 @@ namespace YAT.Model.Settings
 		public PredefinedSettings(PredefinedSettings rhs)
 			: base(rhs)
 		{
-			SelectedPageId = rhs.SelectedPageId;
+			SelectedPageId        = rhs.SelectedPageId;
+			HideUndefinedCommands = rhs.HideUndefinedCommands;
 
 			ClearChanged();
 		}
@@ -66,7 +67,8 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			SelectedPageId = 1;
+			SelectedPageId        = 1;
+			HideUndefinedCommands = false;
 		}
 
 		#region Properties
@@ -125,6 +127,7 @@ namespace YAT.Model.Settings
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
 				hashCode = (hashCode * 397) ^ SelectedPageId;
+				hashCode = (hashCode * 397) ^ HideUndefinedCommands.GetHashCode();
 
 				return (hashCode);
 			}
@@ -155,7 +158,8 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				SelectedPageId.Equals(other.SelectedPageId)
+				SelectedPageId       .Equals(other.SelectedPageId) &&
+				HideUndefinedCommands.Equals(other.HideUndefinedCommands)
 			);
 		}
 
