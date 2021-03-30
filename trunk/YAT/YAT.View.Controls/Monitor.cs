@@ -190,6 +190,9 @@ namespace YAT.View.Controls
 		private bool isFirstFindOnEdit = true;
 		private int findOnEditStartIndex = ControlEx.InvalidIndex;
 		private int lastFindIndex = ListBox.NoMatches;
+		private bool findAllIsActive; // = false;
+		private bool findAllSuccessAfterLastUpdate; // = false;
+		private bool findAllSuccessOnCurrentUpdate; // = false;
 
 		// Update:
 		private List<object> pendingElementsAndLines = new List<object>(32); // Preset the initial capacity to improve memory management, 32 is an arbitrary value.		private bool performImmediateUpdate;
@@ -215,8 +218,13 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Category("Action")]
-		[Description("Event raised when the Find has changed.")]
-		public event EventHandler FindChanged;
+		[Description("Event raised when the state of find next/previous has changed.")]
+		public event EventHandler FindItemStateChanged;
+
+		/// <summary></summary>
+		[Category("Action")]
+		[Description("Event raised when the result of find all has changed.")]
+		public event EventHandler<EventArgs<bool>> FindAllSuccessChanged;
 
 		#endregion
 
@@ -735,31 +743,51 @@ namespace YAT.View.Controls
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual bool TryFindOnEdit(string pattern, FindOptions options, out FindDirection resultingDirection)
 		{
-			if (this.isFirstFindOnEdit)
+			if (!this.findAllIsActive)
 			{
-				this.isFirstFindOnEdit = false;
+				ResetFindAll();
 
-				int nextStartIndex;
-				if (TryGetNextStartIndex(out nextStartIndex))
-					this.findOnEditStartIndex = nextStartIndex; // Find will start after current item.
-				else
-					this.findOnEditStartIndex = ControlEx.InvalidIndex; // Find will start at first item.
-			}
-
-			if (!string.IsNullOrEmpty(pattern))
-			{
-				PrepareFind(pattern, options);
-
-				if (TryFindNext(this.findOnEditStartIndex))
+				if (this.isFirstFindOnEdit)
 				{
-					resultingDirection = FindDirection.Forward;
-					return (true);
+					this.isFirstFindOnEdit = false;
+
+					int nextStartIndex;
+					if (TryGetNextStartIndex(out nextStartIndex))
+						this.findOnEditStartIndex = nextStartIndex; // Find will start after current item.
+					else
+						this.findOnEditStartIndex = ControlEx.InvalidIndex; // Find will start at first item.
 				}
 
-				if (TryFindPrevious(this.findOnEditStartIndex))
+				if (!string.IsNullOrEmpty(pattern))
 				{
-					resultingDirection = FindDirection.Backward;
-					return (true);
+					PrepareFind(pattern, options);
+
+					if (TryFindNextAnyNotify(this.findOnEditStartIndex))
+					{
+						resultingDirection = FindDirection.Forward;
+						return (true);
+					}
+
+					if (TryFindPreviousAndNotify(this.findOnEditStartIndex))
+					{
+						resultingDirection = FindDirection.Backward;
+						return (true);
+					}
+				}
+			}
+			else // this.findAllIsActive
+			{
+				ResetFindOnEdit();
+
+				if (!string.IsNullOrEmpty(pattern))
+				{
+					PrepareFind(pattern, options);
+
+					if (TryFindAllAndNotify())
+					{
+						resultingDirection = FindDirection.All;
+						return (true);
+					}
 				}
 			}
 
@@ -775,11 +803,12 @@ namespace YAT.View.Controls
 		/// </remarks>
 		public virtual bool TryFindNext(string pattern, FindOptions options)
 		{
-			this.isFirstFindOnEdit = true;
+			ResetFindOnEdit();
+			ResetFindAll();
 
 			PrepareFind(pattern, options);
 
-			return (TryFindNext());
+			return (TryFindNextAndNotify());
 		}
 
 		/// <remarks>
@@ -787,23 +816,47 @@ namespace YAT.View.Controls
 		/// </remarks>
 		public virtual bool TryFindPrevious(string pattern, FindOptions options)
 		{
-			this.isFirstFindOnEdit = true;
+			ResetFindOnEdit();
+			ResetFindAll();
 
 			PrepareFind(pattern, options);
 
-			return (TryFindPrevious());
+			return (TryFindPreviousAndNotify());
+		}
+
+		/// <summary></summary>
+		public virtual void ResetFindAll()
+		{
+			this.findAllSuccessAfterLastUpdate = false;
+			this.findAllSuccessOnCurrentUpdate = false;
 		}
 
 		/// <remarks>
 		/// Using "pattern" instead of "textOrPattern" for simplicity.
 		/// </remarks>
-		public virtual bool TryFindAll(string pattern, FindOptions options)
+		public virtual bool ActivateFindAll(string pattern, FindOptions options)
 		{
-			this.isFirstFindOnEdit = true;
+			ResetFindOnEdit();
 
 			PrepareFind(pattern, options);
 
-			return (TryFindAll());
+			this.findAllIsActive = true;
+
+			var success = TryFindAllWithoutNotify(); // Is done here for symmetricity with 'Deactivate()' below.
+			OnFindItemStateChanged(EventArgs.Empty);
+			OnFindAllSuccessChanged(new EventArgs<bool>(success));
+			return (success);
+		}
+
+		/// <summary></summary>
+		public virtual void DeactivateFindAll()
+		{
+			ResetFindAll();
+
+			this.findAllIsActive = false;
+
+			OnFindAllSuccessChanged(new EventArgs<bool>(false));
+			OnFindItemStateChanged(EventArgs.Empty);
 		}
 
 		/// <remarks>
@@ -838,14 +891,14 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		protected virtual bool TryFindNext()
+		protected virtual bool TryFindNextAndNotify()
 		{
 			int startIndex;
 			if (!TryGetNextStartIndex(out startIndex))
 				return (false);
 
 			int findIndex;
-			if (!TryFindNext(startIndex, out findIndex))
+			if (!TryFindNextAndNotify(startIndex, out findIndex))
 				return (false);
 
 			this.lastFindIndex = findIndex;
@@ -853,14 +906,14 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		protected virtual bool TryFindPrevious()
+		protected virtual bool TryFindPreviousAndNotify()
 		{
 			int startIndex;
 			if (!TryGetPreviousStartIndex(out startIndex))
 				return (false);
 
 			int findIndex;
-			if (!TryFindPrevious(startIndex, out findIndex))
+			if (!TryFindPreviousAndNotify(startIndex, out findIndex))
 				return (false);
 
 			this.lastFindIndex = findIndex;
@@ -868,22 +921,14 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		protected virtual bool TryFindAll()
-		{
-			// PENDING
-
-			return (true);
-		}
-
-		/// <summary></summary>
-		protected virtual bool TryFindNext(int startIndex)
+		protected virtual bool TryFindNextAnyNotify(int startIndex)
 		{
 			int findIndex;
-			return (TryFindNext(startIndex, out findIndex));
+			return (TryFindNextAndNotify(startIndex, out findIndex));
 		}
 
 		/// <summary></summary>
-		protected virtual bool TryFindNext(int startIndex, out int findIndex)
+		protected virtual bool TryFindNextAndNotify(int startIndex, out int findIndex)
 		{
 			var lb = fastListBox_Monitor;
 
@@ -895,24 +940,24 @@ namespace YAT.View.Controls
 				lb.TopIndex = Math.Max(i - (lb.TotalVisibleItemCount / 2), 0);
 
 				findIndex = i;
-				OnFindChanged(EventArgs.Empty);
+				OnFindItemStateChanged(EventArgs.Empty);
 				return (true);
 			}
 
 			findIndex = ListBox.NoMatches;
-			OnFindChanged(EventArgs.Empty);
+			OnFindItemStateChanged(EventArgs.Empty);
 			return (false);
 		}
 
 		/// <summary></summary>
-		protected virtual bool TryFindPrevious(int startIndex)
+		protected virtual bool TryFindPreviousAndNotify(int startIndex)
 		{
 			int findIndex;
-			return (TryFindPrevious(startIndex, out findIndex));
+			return (TryFindPreviousAndNotify(startIndex, out findIndex));
 		}
 
 		/// <summary></summary>
-		protected virtual bool TryFindPrevious(int startIndex, out int findIndex)
+		protected virtual bool TryFindPreviousAndNotify(int startIndex, out int findIndex)
 		{
 			var lb = fastListBox_Monitor;
 
@@ -924,13 +969,40 @@ namespace YAT.View.Controls
 				lb.TopIndex = Math.Max(i - (lb.TotalVisibleItemCount / 2), 0);
 
 				findIndex = i;
-				OnFindChanged(EventArgs.Empty);
+				OnFindItemStateChanged(EventArgs.Empty);
 				return (true);
 			}
 
 			findIndex = ListBox.NoMatches;
-			OnFindChanged(EventArgs.Empty);
+			OnFindItemStateChanged(EventArgs.Empty);
 			return (false);
+		}
+
+		/// <summary></summary>
+		protected virtual bool TryFindAllAndNotify()
+		{
+			var success = TryFindAllWithoutNotify();
+			OnFindItemStateChanged(EventArgs.Empty);
+			OnFindAllSuccessChanged(new EventArgs<bool>(success));
+			return (success);
+		}
+
+		/// <summary></summary>
+		protected virtual bool TryFindAllWithoutNotify()
+		{
+			var lb = fastListBox_Monitor;
+
+			for (var i = 0; i < lb.Items.Count; i++)
+			{
+				var result = lb.FindAt(this.findText, this.findTextCaseSensitive, this.findTextWholeWord, this.findRegex, i);
+				if (result == i)
+				{
+					lb.SetSelected(i, true);
+					this.findAllSuccessAfterLastUpdate = true;
+				}
+			}
+
+			return (this.findAllSuccessAfterLastUpdate);
 		}
 
 		/// <summary></summary>
@@ -1600,6 +1672,8 @@ namespace YAT.View.Controls
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void UpdateFastListBoxWithPendingElementsAndLines()
 		{
+			this.findAllSuccessOnCurrentUpdate = false;
+
 			ListBoxEx lblin = fastListBox_LineNumbers;
 			ListBoxEx lbmon = fastListBox_Monitor;
 
@@ -1668,6 +1742,12 @@ namespace YAT.View.Controls
 			lbmon.EndUpdate();
 
 			SetCopyOfActiveLine(lbmon.LastItem);
+
+			if (this.findAllSuccessAfterLastUpdate != this.findAllSuccessOnCurrentUpdate) {
+				this.findAllSuccessAfterLastUpdate = this.findAllSuccessOnCurrentUpdate;
+
+				OnFindAllSuccessChanged(new EventArgs<bool>(this.findAllSuccessOnCurrentUpdate));
+			}
 		}
 
 		/// <summary>
@@ -1723,6 +1803,21 @@ namespace YAT.View.Controls
 								unchecked
 								{
 									this.lineNumberOffset++; // Overflow is OK.
+								}
+							}
+						}
+
+						// Update find with last line:
+						if (this.findAllIsActive)
+						{
+							var index = (lbmon.Items.Count - 1);
+							if (index >= 0)
+							{
+								var result = lbmon.FindAt(this.findText, this.findTextCaseSensitive, this.findTextWholeWord, this.findRegex, index);
+								if (result == index)
+								{
+									lbmon.SetSelected(result, true);
+									this.findAllSuccessOnCurrentUpdate = true;
 								}
 							}
 						}
@@ -2169,9 +2264,15 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		protected virtual void OnFindChanged(EventArgs e)
+		protected virtual void OnFindItemStateChanged(EventArgs e)
 		{
-			EventHelper.RaiseSync(FindChanged, this, e);
+			EventHelper.RaiseSync(FindItemStateChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnFindAllSuccessChanged(EventArgs<bool> e)
+		{
+			EventHelper.RaiseSync<EventArgs<bool>>(FindAllSuccessChanged, this, e);
 		}
 
 		#endregion

@@ -386,7 +386,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Terminal_Find = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Terminal_FindNext = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Terminal_FindPrevious = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_Terminal_FindAll = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Terminal_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Terminal_Presets = new System.Windows.Forms.ToolStripMenuItem();
@@ -3458,7 +3458,7 @@ namespace YAT.View.Forms
             this.toolStripMenuItem_TerminalMenu_Terminal_Find,
             this.toolStripMenuItem_TerminalMenu_Terminal_FindNext,
             this.toolStripMenuItem_TerminalMenu_Terminal_FindPrevious,
-            this.toolStripMenuItem_TerminalMenu_Terminal_FindAll,
+            this.toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll,
             this.toolStripMenuItem_TerminalMenu_Terminal_Separator_6,
             this.toolStripMenuItem_TerminalMenu_Terminal_Settings,
             this.toolStripMenuItem_TerminalMenu_Terminal_Presets});
@@ -3626,15 +3626,15 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Terminal_FindPrevious.Text = "Find &Previous";
 			this.toolStripMenuItem_TerminalMenu_Terminal_FindPrevious.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_FindPrevious_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_Terminal_FindAll
+			// toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_FindAll.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_database_repeat_16x16;
-			this.toolStripMenuItem_TerminalMenu_Terminal_FindAll.Name = "toolStripMenuItem_TerminalMenu_Terminal_FindAll";
-			this.toolStripMenuItem_TerminalMenu_Terminal_FindAll.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
+			this.toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_database_repeat_16x16;
+			this.toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll.Name = "toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll";
+			this.toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.L)));
-			this.toolStripMenuItem_TerminalMenu_Terminal_FindAll.Size = new System.Drawing.Size(214, 22);
-			this.toolStripMenuItem_TerminalMenu_Terminal_FindAll.Text = "Find A&ll";
-			this.toolStripMenuItem_TerminalMenu_Terminal_FindAll.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_FindAll_Click);
+			this.toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll.Size = new System.Drawing.Size(214, 22);
+			this.toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll.Text = "Enable Find A&ll";
+			this.toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Separator_6
 			// 
@@ -5118,7 +5118,8 @@ namespace YAT.View.Forms
 			this.monitor_Tx.TabIndex = 0;
 			this.monitor_Tx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Tx.TextFocusedChanged += new System.EventHandler(this.monitor_TextFocusedChanged);
-			this.monitor_Tx.FindChanged += new System.EventHandler(this.monitor_FindChanged);
+			this.monitor_Tx.FindItemStateChanged += new System.EventHandler(this.monitor_FindItemStateChanged);
+			this.monitor_Tx.FindAllSuccessChanged += new System.EventHandler<EventArgs<bool>>(this.monitor_Tx_FindAllSuccessChanged);
 			this.monitor_Tx.Enter += new System.EventHandler(this.monitor_Tx_Enter);
 			// 
 			// splitContainer_RxMonitor
@@ -5165,7 +5166,8 @@ namespace YAT.View.Forms
 			this.monitor_Bidir.TabIndex = 0;
 			this.monitor_Bidir.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Bidir.TextFocusedChanged += new System.EventHandler(this.monitor_TextFocusedChanged);
-			this.monitor_Bidir.FindChanged += new System.EventHandler(this.monitor_FindChanged);
+			this.monitor_Bidir.FindItemStateChanged += new System.EventHandler(this.monitor_FindItemStateChanged);
+			this.monitor_Bidir.FindAllSuccessChanged += new System.EventHandler<EventArgs<bool>>(this.monitor_Bidir_FindAllSuccessChanged);
 			this.monitor_Bidir.Enter += new System.EventHandler(this.monitor_Bidir_Enter);
 			// 
 			// panel_Monitor_Rx
@@ -5190,7 +5192,8 @@ namespace YAT.View.Forms
 			this.monitor_Rx.TabIndex = 0;
 			this.monitor_Rx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Rx.TextFocusedChanged += new System.EventHandler(this.monitor_TextFocusedChanged);
-			this.monitor_Rx.FindChanged += new System.EventHandler(this.monitor_FindChanged);
+			this.monitor_Rx.FindItemStateChanged += new System.EventHandler(this.monitor_FindItemStateChanged);
+			this.monitor_Rx.FindAllSuccessChanged += new System.EventHandler<EventArgs<bool>>(this.monitor_Rx_FindAllSuccessChanged);
 			this.monitor_Rx.Enter += new System.EventHandler(this.monitor_Rx_Enter);
 			// 
 			// panel_Predefined
@@ -5582,7 +5585,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_Find;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_FindNext;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_FindPrevious;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_FindAll;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_Terminal_Separator_6;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MonitorContextMenu_Separator_9;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowRadix;

@@ -228,6 +228,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public event EventHandler<EventArgs<int>> AutoResponseCountChanged;
 
+		/// <summary></summary>
+		public event EventHandler<EventArgs<bool>> FindAllSuccessChanged;
+
 		#endregion
 
 		#region Object Lifetime
@@ -617,8 +620,9 @@ namespace YAT.View.Forms
 
 				toolStripMenuItem_TerminalMenu_Terminal_FindNext       .Enabled = (monitorIsDefined && FindNextIsFeasible);
 				toolStripMenuItem_TerminalMenu_Terminal_FindPrevious   .Enabled = (monitorIsDefined && FindPreviousIsFeasible);
-				toolStripMenuItem_TerminalMenu_Terminal_FindAll        .Enabled = (monitorIsDefined && FindAllIsFeasible);
-				toolStripMenuItem_TerminalMenu_Terminal_FindAll        .Checked = this.settingsRoot.Find.AllIsActive;
+				toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Enabled = (monitorIsDefined && FindAllIsFeasible);
+				toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Checked =  this.settingsRoot.Find.AllIsActive;
+				toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Text    = (this.settingsRoot.Find.AllIsActive ? "Disable" : "Enable") + " Find A&ll";
 			}
 			finally
 			{
@@ -704,9 +708,9 @@ namespace YAT.View.Forms
 			RequestFindPrevious();
 		}
 
-		private void toolStripMenuItem_TerminalMenu_Terminal_FindAll_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll_Click(object sender, EventArgs e)
 		{
-			RequestFindAll();
+			RequestToggleFindAll();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Settings_Click(object sender, EventArgs e)
@@ -4259,7 +4263,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Ensure that the edit shortcuts such as [Ctrl+A] and [Ctrl+C] are disabled while the send
+		/// Ensure the edit shortcuts such as [Ctrl+A] and [Ctrl+C] are disabled while the send
 		/// control is being edited.
 		/// </remarks>
 		private void monitor_TextFocusedChanged(object sender, EventArgs e)
@@ -4268,11 +4272,28 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Ensure that the find shortcuts [*Modifiers*+F] are enabled/disabled properly.
+		/// Ensure the find shortcuts [*Modifiers*+F] are enabled/disabled properly.
 		/// </remarks>
-		private void monitor_FindChanged(object sender, EventArgs e)
+		private void monitor_FindItemStateChanged(object sender, EventArgs e)
 		{
 			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
+		}
+
+		private void monitor_Tx_FindAllSuccessChanged(object sender, EventArgs<bool> e)
+		{
+			if (!this.settingsRoot.Layout.BidirMonitorPanelIsVisible) // Bidir monitor has precedence.
+				OnFindAllSuccessChanged(e);
+		}
+
+		private void monitor_Bidir_FindAllSuccessChanged(object sender, EventArgs<bool> e)
+		{
+			OnFindAllSuccessChanged(e); // Bidir has precedence.
+		}
+
+		private void monitor_Rx_FindAllSuccessChanged(object sender, EventArgs<bool> e)
+		{
+			if (!this.settingsRoot.Layout.BidirMonitorPanelIsVisible && !this.settingsRoot.Layout.TxMonitorPanelIsVisible) // Bidir and Tx monitors have precedence.
+				OnFindAllSuccessChanged(e);
 		}
 
 		#endregion
@@ -4765,7 +4786,9 @@ namespace YAT.View.Forms
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Not name "ToggleFindAll..." as it shall only indicate activation.
+		/// </remarks>
 		protected virtual bool FindAllIsFeasible
 		{
 			get
@@ -4777,30 +4800,6 @@ namespace YAT.View.Forms
 				var main = (this.mdiParent as Main);
 				if (main != null)
 					return (main.FindAllIsFeasible);
-				else
-					return (false);
-			}
-		}
-
-		/// <summary></summary>
-		public virtual void RequestActivateFindAll()
-		{
-			this.settingsRoot.Find.AllIsActive = true;
-		}
-
-		/// <summary></summary>
-		public virtual void RequestDeactivateFindAll()
-		{
-			this.settingsRoot.Find.AllIsActive = false;
-		}
-
-		/// <summary></summary>
-		public virtual bool FindAllIsActive
-		{
-			get
-			{
-				if (this.settingsRoot != null) // Such simple get-property shall also be available on e.g. closing.
-					return (this.settingsRoot.Find.AllIsActive);
 				else
 					return (false);
 			}
@@ -4833,14 +4832,14 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		protected virtual void RequestFindAll()
+		protected virtual void RequestToggleFindAll()
 		{
 			string text = null;
 			TryGetFindTextFromMonitor(out text); // Will stay "null" if no text is available.
 
 			var main = (this.mdiParent as Main);
 			if (main != null)
-				main.RequestFindAll(text);
+				main.RequestToggleFindAll(text);
 			else
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "MDI 'Terminal' requires that MDI parent is 'Main'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -4959,8 +4958,10 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// Using "pattern" instead of "textOrPattern" for simplicity.
 		/// </remarks>
-		public virtual FindResult TryFindAll(string pattern, bool messageBoxIsPermissible)
+		public virtual FindResult ActivateFindAll(string pattern)
 		{
+			this.settingsRoot.Find.AllIsActive = true;
+
 			// The active pattern wouldn't have to be saved each time, it is saved on LeaveFindOnEdit() anyway.
 			// But, the recent has to be saved each time, as the time stamp changes. Thus, saving both anyway.
 
@@ -4969,8 +4970,11 @@ namespace YAT.View.Forms
 			ApplicationSettings.RoamingUserSettings.Find.SetChanged(); // Manual change required because underlying collection is modified.
 			ApplicationSettings.SaveRoamingUserSettings();
 
-			var monitor = GetMonitor(this.lastMonitorSelection);
-			if (monitor.TryFindAll(pattern, ApplicationSettings.RoamingUserSettings.Find.Options))
+			bool success = true;  // Activate in all monitors in any case, monitor could be made visible later.
+			success |= monitor_Tx   .ActivateFindAll(pattern, ApplicationSettings.RoamingUserSettings.Find.Options);
+			success |= monitor_Bidir.ActivateFindAll(pattern, ApplicationSettings.RoamingUserSettings.Find.Options);
+			success |= monitor_Rx   .ActivateFindAll(pattern, ApplicationSettings.RoamingUserSettings.Find.Options);
+			if (success)
 			{
 				this.lastFindPattern = pattern;
 
@@ -4978,12 +4982,29 @@ namespace YAT.View.Forms
 			}
 			else
 			{
-				bool isFirst = (pattern != this.lastFindPattern);
+				return (FindResult.NotFoundAtAll);
+			}
+		}
 
-				if (messageBoxIsPermissible)
-					ShowNotFoundMessage(pattern, isFirst);
+		/// <summary></summary>
+		public virtual void DeactivateFindAll()
+		{
+			this.settingsRoot.Find.AllIsActive = false;
 
-				return (isFirst ? FindResult.NotFoundAtAll : FindResult.NotFoundAnymore);
+			monitor_Tx   .DeactivateFindAll();
+			monitor_Bidir.DeactivateFindAll();
+			monitor_Rx   .DeactivateFindAll();
+		}
+
+		/// <summary></summary>
+		public virtual bool FindAllIsActive
+		{
+			get
+			{
+				if (this.settingsRoot != null) // Such simple get-property shall also be available on e.g. closing.
+					return (this.settingsRoot.Find.AllIsActive);
+				else
+					return (false);
 			}
 		}
 
@@ -8758,6 +8779,12 @@ namespace YAT.View.Forms
 		protected virtual void OnAutoResponseCountChanged(EventArgs<int> e)
 		{
 			EventHelper.RaiseSync<EventArgs<int>>(AutoResponseCountChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnFindAllSuccessChanged(EventArgs<bool> e)
+		{
+			EventHelper.RaiseSync<EventArgs<bool>>(FindAllSuccessChanged, this, e);
 		}
 
 		#endregion
