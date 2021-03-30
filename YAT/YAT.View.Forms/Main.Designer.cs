@@ -170,7 +170,7 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Find_EnableRegex = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Find_Next = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Find_Previous = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Find_All = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Find_ToggleAll = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItem_MainTool_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_Log_Settings = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Log_On = new System.Windows.Forms.ToolStripButton();
@@ -1105,7 +1105,7 @@ namespace YAT.View.Forms
             this.toolStripButton_MainTool_Find_EnableRegex,
             this.toolStripButton_MainTool_Find_Next,
             this.toolStripButton_MainTool_Find_Previous,
-            this.toolStripButton_MainTool_Find_All,
+            this.toolStripButton_MainTool_Find_ToggleAll,
             this.toolStripMenuItem_MainTool_Separator_6,
             this.toolStripButton_MainTool_Log_Settings,
             this.toolStripButton_MainTool_Log_On,
@@ -1436,16 +1436,16 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Find_Previous.Visible = false;
 			this.toolStripButton_MainTool_Find_Previous.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_Previous_Click);
 			// 
-			// toolStripButton_MainTool_Find_All
+			// toolStripButton_MainTool_Find_ToggleAll
 			// 
-			this.toolStripButton_MainTool_Find_All.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Find_All.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_database_repeat_16x16;
-			this.toolStripButton_MainTool_Find_All.Name = "toolStripButton_MainTool_Find_All";
-			this.toolStripButton_MainTool_Find_All.Size = new System.Drawing.Size(23, 24);
-			this.toolStripButton_MainTool_Find_All.Text = "Find All";
-			this.toolStripButton_MainTool_Find_All.ToolTipText = "Find All\r\n[Ctrl+L] / [Alt+L] (while in find)\r\n[Alt+Shift+L] (always)";
-			this.toolStripButton_MainTool_Find_All.Visible = false;
-			this.toolStripButton_MainTool_Find_All.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_All_Click);
+			this.toolStripButton_MainTool_Find_ToggleAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Find_ToggleAll.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_database_repeat_16x16;
+			this.toolStripButton_MainTool_Find_ToggleAll.Name = "toolStripButton_MainTool_Find_ToggleAll";
+			this.toolStripButton_MainTool_Find_ToggleAll.Size = new System.Drawing.Size(23, 24);
+			this.toolStripButton_MainTool_Find_ToggleAll.Text = "Enable Find All";
+			this.toolStripButton_MainTool_Find_ToggleAll.ToolTipText = "Enable/Disable Find All\r\n[Ctrl+L] / [Alt+L] (while in find)\r\n[Alt+Shift+L] (always)";
+			this.toolStripButton_MainTool_Find_ToggleAll.Visible = false;
+			this.toolStripButton_MainTool_Find_ToggleAll.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_ToggleAll_Click);
 			// 
 			// toolStripMenuItem_MainTool_Separator_6
 			// 
@@ -1970,7 +1970,7 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_EnableRegex;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_Next;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_Previous;
-		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_All;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Find_ToggleAll;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoAction_ShowHide;
 		private MKY.Windows.Forms.ToolStripComboBoxEx toolStripComboBox_MainTool_AutoAction_Trigger;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_AutoAction_Trigger_UseText;

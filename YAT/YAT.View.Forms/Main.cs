@@ -151,9 +151,9 @@ namespace YAT.View.Forms
 		// Find:
 		private FindDirection findDirection; // = FindDirection.Undetermined;
 		private FindResult findResult;       // = FindResult.Reset;
-		private bool findNextIsFeasible;     // = false
-		private bool findPreviousIsFeasible; // = false
-		private bool findAllIsFeasible;      // = false
+		private bool findNextIsFeasible;     // = false;
+		private bool findPreviousIsFeasible; // = false;
+		private bool findAllIsFeasible;      // = false; is not named 'toggleFindAll...' as it shall only indicate activation.
 
 		// Auto:
 		private bool autoActionTriggerValidationIsOngoing;    // = false;
@@ -465,8 +465,7 @@ namespace YAT.View.Forms
 		private void Main_MdiChildActivate(object sender, EventArgs e)
 		{
 			var child = (ActiveMdiChild as Terminal);
-			var childIsReady = (child != null);
-			if (childIsReady)
+			if (child != null)
 			{
 				this.workspace.ActivateTerminal(child.UnderlyingTerminal);
 
@@ -1366,13 +1365,13 @@ namespace YAT.View.Forms
 						////                          EnableRegex  .Enabled = true is fixed, allow editing/changing to regex even if child is inactive.
 						toolStripButton_MainTool_Find_EnableRegex  .Checked = ApplicationSettings.RoamingUserSettings.Find.Options.EnableRegex;
 
-						toolStripButton_MainTool_Find_Next    .Visible = true;
-					////toolStripButton_MainTool_Find_Next    .Enabled = FindNextIsFeasible     is done by SetFindStateAndControls() above.
-						toolStripButton_MainTool_Find_Previous.Visible = true;
-					////toolStripButton_MainTool_Find_Previous.Enabled = FindPreviousIsFeasible is done by SetFindStateAndControls() above.
-						toolStripButton_MainTool_Find_All     .Visible = true;
-					////toolStripButton_MainTool_Find_All     .Enabled = FindAllIsFeasible      is done by SetFindStateAndControls() above.
-					////toolStripButton_MainTool_Find_All     .Checked = FindAllIsActive        is done by SetFindStateAndControls() above.
+						toolStripButton_MainTool_Find_Next     .Visible = true;
+					////toolStripButton_MainTool_Find_Next     .Enabled = FindNextIsFeasible     is done by SetFindStateAndControls() above.
+						toolStripButton_MainTool_Find_Previous .Visible = true;
+					////toolStripButton_MainTool_Find_Previous .Enabled = FindPreviousIsFeasible is done by SetFindStateAndControls() above.
+						toolStripButton_MainTool_Find_ToggleAll.Visible = true;
+					////toolStripButton_MainTool_Find_ToggleAll.Enabled = FindAllIsFeasible      is done by SetFindStateAndControls() above.
+					////toolStripButton_MainTool_Find_ToggleAll.Checked = FindAllIsActive        is done by SetFindStateAndControls() above.
 					}
 					else
 					{
@@ -1387,9 +1386,9 @@ namespace YAT.View.Forms
 						toolStripButton_MainTool_Find_WholeWord    .Visible = false;
 						toolStripButton_MainTool_Find_EnableRegex  .Visible = false;
 
-						toolStripButton_MainTool_Find_Next    .Visible = false;
-						toolStripButton_MainTool_Find_Previous.Visible = false;
-						toolStripButton_MainTool_Find_All     .Visible = false;
+						toolStripButton_MainTool_Find_Next     .Visible = false;
+						toolStripButton_MainTool_Find_Previous .Visible = false;
+						toolStripButton_MainTool_Find_ToggleAll.Visible = false;
 					}
 				}
 				DebugFindLeave();
@@ -1612,10 +1611,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoActionTriggerUseTextAndRevalidate()
 		{
-			var child = (ActiveMdiChild as Terminal);
-			var childIsReady = (child != null);
-			if (childIsReady)
-				child.RequestToggleAutoActionTriggerUseText();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestToggleAutoActionTriggerUseText();
 
 			RevalidateAndRequestAutoActionTrigger();
 		}
@@ -1623,10 +1621,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoActionTriggerCaseSensitiveAndRevalidate()
 		{
-			var child = (ActiveMdiChild as Terminal);
-			var childIsReady = (child != null);
-			if (childIsReady)
-				child.RequestToggleAutoActionTriggerCaseSensitive();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestToggleAutoActionTriggerCaseSensitive();
 
 			RevalidateAndRequestAutoActionTrigger();
 		}
@@ -1634,10 +1631,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoActionTriggerWholeWordAndRevalidate()
 		{
-			var child = (ActiveMdiChild as Terminal);
-			var childIsReady = (child != null);
-			if (childIsReady)
-				child.RequestToggleAutoActionTriggerWholeWord();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestToggleAutoActionTriggerWholeWord();
 
 			RevalidateAndRequestAutoActionTrigger();
 		}
@@ -1645,10 +1641,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoActionTriggerEnableRegexAndRevalidate()
 		{
-			var child = (ActiveMdiChild as Terminal);
-			var childIsReady = (child != null);
-			if (childIsReady)
-				child.RequestToggleAutoActionTriggerEnableRegex();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestToggleAutoActionTriggerEnableRegex();
 
 			RevalidateAndRequestAutoActionTrigger();
 		}
@@ -1899,10 +1894,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoResponseTriggerUseTextAndRevalidate()
 		{
-			var child = (ActiveMdiChild as Terminal);
-			var childIsReady = (child != null);
-			if (childIsReady)
-				child.RequestToggleAutoResponseTriggerUseText();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestToggleAutoResponseTriggerUseText();
 
 			RevalidateAndRequestAutoResponseTrigger();
 		}
@@ -1910,10 +1904,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoResponseTriggerCaseSensitiveAndRevalidate()
 		{
-			var child = (ActiveMdiChild as Terminal);
-			var childIsReady = (child != null);
-			if (childIsReady)
-				child.RequestToggleAutoResponseTriggerCaseSensitive();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestToggleAutoResponseTriggerCaseSensitive();
 
 			RevalidateAndRequestAutoResponseTrigger();
 		}
@@ -1921,10 +1914,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoResponseTriggerWholeWordAndRevalidate()
 		{
-			var child = (ActiveMdiChild as Terminal);
-			var childIsReady = (child != null);
-			if (childIsReady)
-				child.RequestToggleAutoResponseTriggerWholeWord();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestToggleAutoResponseTriggerWholeWord();
 
 			RevalidateAndRequestAutoResponseTrigger();
 		}
@@ -1932,10 +1924,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoResponseTriggerEnableRegexAndRevalidate()
 		{
-			var child = (ActiveMdiChild as Terminal);
-			var childIsReady = (child != null);
-			if (childIsReady)
-				child.RequestToggleAutoResponseTriggerEnableRegex();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestToggleAutoResponseTriggerEnableRegex();
 
 			RevalidateAndRequestAutoResponseTrigger();
 		}
@@ -2004,10 +1995,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void RequestToggleAutoResponseResponseEnableReplaceAndRevalidate()
 		{
-			var child = (ActiveMdiChild as Terminal);
-			var childIsReady = (child != null);
-			if (childIsReady)
-				child.RequestToggleAutoResponseResponseEnableReplace();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.RequestToggleAutoResponseResponseEnableReplace();
 
 			RevalidateAndRequestAutoResponseResponse();
 		}
@@ -2019,11 +2009,10 @@ namespace YAT.View.Forms
 		{
 			var count = 0;
 
-			var child = (ActiveMdiChild as Terminal);
-			var childIsReady = (child != null);
-			if (childIsReady)
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
 			{
-				var activeTerminal = child.UnderlyingTerminal;
+				var activeTerminal = t.UnderlyingTerminal;
 				if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 					count = activeTerminal.AutoActionCount;
 			}
@@ -2038,11 +2027,10 @@ namespace YAT.View.Forms
 		{
 			int count = 0;
 
-			var child = (ActiveMdiChild as Terminal);
-			var childIsReady = (child != null);
-			if (childIsReady)
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
 			{
-				var activeTerminal = child.UnderlyingTerminal;
+				var activeTerminal = t.UnderlyingTerminal;
 				if ((activeTerminal != null) && (!activeTerminal.IsInDisposal))
 					count = activeTerminal.AutoResponseCount;
 			}
@@ -2262,9 +2250,9 @@ namespace YAT.View.Forms
 					case Keys.E: ToggleFindEnableRegex();   e.SuppressKeyPress = true; break;
 
 					case Keys.F:               // Additional shortcuts shall be executable under same conditions as normal shortcuts.
-					case Keys.N: if (FindNextIsFeasible)     { ValidateAndFindNext();     } e.SuppressKeyPress = true; break;
-					case Keys.P: if (FindPreviousIsFeasible) { ValidateAndFindPrevious(); } e.SuppressKeyPress = true; break;
-					case Keys.L: if (FindAllIsFeasible)      { ValidateAndFindAll();      } e.SuppressKeyPress = true; break;
+					case Keys.N: if (FindNextIsFeasible)     { ValidateAndFindNext();      } e.SuppressKeyPress = true; break;
+					case Keys.P: if (FindPreviousIsFeasible) { ValidateAndFindPrevious();  } e.SuppressKeyPress = true; break;
+					case Keys.L: if (FindAllIsFeasible)      { ToggleAndValidateFindAll(); } e.SuppressKeyPress = true; break;
 
 					default: break;
 				}
@@ -2274,9 +2262,9 @@ namespace YAT.View.Forms
 				switch (e.KeyData & Keys.KeyCode)
 				{
 					case Keys.F:               // Additional shortcuts shall be executable under same conditions as normal shortcuts.
-					case Keys.N: if (FindNextIsFeasible)     { ValidateAndFindNext();     } e.SuppressKeyPress = true; break;
-					case Keys.P: if (FindPreviousIsFeasible) { ValidateAndFindPrevious(); } e.SuppressKeyPress = true; break;
-					case Keys.L: if (FindAllIsFeasible)      { ValidateAndFindAll();      } e.SuppressKeyPress = true; break;
+					case Keys.N: if (FindNextIsFeasible)     { ValidateAndFindNext();      } e.SuppressKeyPress = true; break;
+					case Keys.P: if (FindPreviousIsFeasible) { ValidateAndFindPrevious();  } e.SuppressKeyPress = true; break;
+					case Keys.L: if (FindAllIsFeasible)      { ToggleAndValidateFindAll(); } e.SuppressKeyPress = true; break;
 
 					default: break;
 				}
@@ -2336,9 +2324,9 @@ namespace YAT.View.Forms
 			Color foreColor;
 			switch (result)
 			{
-				case FindResult.Reset:                                          // Special case: After startup, icons shall be
-					var pattern = toolStripComboBox_MainTool_Find_Pattern.Text; // enabled without actively having to [Find...].
-					var patternIsGiven = !string.IsNullOrEmpty(pattern);
+				case FindResult.Reset:
+					var pattern = toolStripComboBox_MainTool_Find_Pattern.Text; // Special case: After startup, icons shall be
+					var patternIsGiven = !string.IsNullOrEmpty(pattern);        // enabled without actively having to [Find...].
 
 					backColor = SystemColors.Window;
 					foreColor = SystemColors.WindowText;
@@ -2396,10 +2384,11 @@ namespace YAT.View.Forms
 			toolStripComboBox_MainTool_Find_Pattern.ForeColor = foreColor;
 
 			// ...taking the 'ActiveMdiChild' into account:
-			toolStripButton_MainTool_Find_Next    .Enabled = FindNextIsFeasible;
-			toolStripButton_MainTool_Find_Previous.Enabled = FindPreviousIsFeasible;
-			toolStripButton_MainTool_Find_All     .Enabled = FindAllIsFeasible;
-			toolStripButton_MainTool_Find_All     .Checked = FindAllIsActive;
+			toolStripButton_MainTool_Find_Next     .Enabled = FindNextIsFeasible;
+			toolStripButton_MainTool_Find_Previous .Enabled = FindPreviousIsFeasible;
+			toolStripButton_MainTool_Find_ToggleAll.Enabled = (FindAllIsActive ? true : FindAllIsFeasible);
+			toolStripButton_MainTool_Find_ToggleAll.Checked =  FindAllIsActive;
+			toolStripButton_MainTool_Find_ToggleAll.Text    = (FindAllIsActive ? "Disable" : "Enable") + " Find All";
 		}
 
 		/// <summary></summary>
@@ -2479,7 +2468,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void ValidateAndFindNext(string pattern = null)
 		{
-			DeactivateFindAll();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.DeactivateFindAll();
 
 			if (pattern != null)
 				toolStripComboBox_MainTool_Find_Pattern.Text = pattern;
@@ -2490,7 +2481,6 @@ namespace YAT.View.Forms
 			{
 				var result = FindResult.Reset;
 
-				var t = (ActiveMdiChild as Terminal);
 				if (t != null)
 					result = t.TryFindNext(pattern, MessageBoxIsPermissible);
 				else
@@ -2512,7 +2502,9 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void ValidateAndFindPrevious(string pattern = null)
 		{
-			DeactivateFindAll();
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
+				t.DeactivateFindAll();
 
 			if (pattern != null)
 				toolStripComboBox_MainTool_Find_Pattern.Text = pattern;
@@ -2523,7 +2515,6 @@ namespace YAT.View.Forms
 			{
 				var result = FindResult.Reset;
 
-				var t = (ActiveMdiChild as Terminal);
 				if (t != null)
 					result = t.TryFindPrevious(pattern, MessageBoxIsPermissible);
 				else
@@ -2537,36 +2528,47 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void toolStripButton_MainTool_Find_All_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Find_ToggleAll_Click(object sender, EventArgs e)
 		{
-			ValidateAndFindAll();
+			ToggleAndValidateFindAll();
 		}
 
-		/// <summary></summary>
-		protected virtual void ValidateAndFindAll(string pattern = null)
+		/// <remarks>
+		/// Slightly inaccurate name. But more accurate than "ValidateAndToggleFindAll".
+		/// </remarks>
+		protected virtual void ToggleAndValidateFindAll(string pattern = null)
 		{
-			ActivateFindAll();
+			var t = (ActiveMdiChild as Terminal);
 
-			if (pattern != null)
-				toolStripComboBox_MainTool_Find_Pattern.Text = pattern;
-			else
-				pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
-
-			if (ValidateFindPattern(pattern))
+			if (FindAllIsActive)
 			{
-				var result = FindResult.Reset;
-
-				var t = (ActiveMdiChild as Terminal);
 				if (t != null)
-					result = t.TryFindAll(pattern, MessageBoxIsPermissible);
-				else
-					SaveFindPatternAnyway(pattern);
+					t.DeactivateFindAll();
 
-				SetFindStateAndControls(FindDirection.All, result);
+				SetFindStateAndControls(FindDirection.All, FindResult.Reset);
 			}
 			else
 			{
-				SetFindStateAndControls(FindDirection.All, FindResult.Invalid);
+				if (pattern != null)
+					toolStripComboBox_MainTool_Find_Pattern.Text = pattern;
+				else
+					pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
+
+				if (ValidateFindPattern(pattern))
+				{
+					var result = FindResult.Reset;
+
+					if (t != null)
+						result = t.ActivateFindAll(pattern);
+					else
+						SaveFindPatternAnyway(pattern);
+
+					SetFindStateAndControls(FindDirection.All, result);
+				}
+				else
+				{
+					SetFindStateAndControls(FindDirection.All, FindResult.Invalid);
+				}
 			}
 		}
 
@@ -4790,6 +4792,8 @@ namespace YAT.View.Forms
 			terminalMdiChild.AutoResponseResponseStateChanged += terminalMdiChild_AutoResponseResponseStateChanged;
 			terminalMdiChild.AutoResponseCountChanged         += terminalMdiChild_AutoResponseCountChanged;
 
+			terminalMdiChild.FindAllSuccessChanged            += terminalMdiChild_FindAllSuccessChanged;
+
 			terminalMdiChild.Resize                           += terminalMdiChild_Resize;
 			terminalMdiChild.FormClosed                       += terminalMdiChild_FormClosed;
 		}
@@ -4807,6 +4811,8 @@ namespace YAT.View.Forms
 			terminalMdiChild.AutoResponseTriggerStateChanged  -= terminalMdiChild_AutoResponseTriggerStateChanged;
 			terminalMdiChild.AutoResponseResponseStateChanged -= terminalMdiChild_AutoResponseResponseStateChanged;
 			terminalMdiChild.AutoResponseCountChanged         -= terminalMdiChild_AutoResponseCountChanged;
+
+			terminalMdiChild.FindAllSuccessChanged            -= terminalMdiChild_FindAllSuccessChanged;
 
 			terminalMdiChild.Resize                           -= terminalMdiChild_Resize;
 			terminalMdiChild.FormClosed                       -= terminalMdiChild_FormClosed;
@@ -4845,11 +4851,10 @@ namespace YAT.View.Forms
 
 		private void terminalMdiChild_AutoActionTriggerStateChanged(object sender, EventArgs e)
 		{
-			var child = (ActiveMdiChild as Terminal);
-			var childIsReady = (child != null);
-			if (childIsReady)
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
 			{
-				var state = child.AutoActionTriggerState;
+				var state = t.AutoActionTriggerState;
 				SetAutoActionTriggerStateControls(state);
 			}
 		}
@@ -4868,22 +4873,20 @@ namespace YAT.View.Forms
 
 		private void terminalMdiChild_AutoResponseTriggerStateChanged(object sender, EventArgs e)
 		{
-			var child = (ActiveMdiChild as Terminal);
-			var childIsReady = (child != null);
-			if (childIsReady)
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
 			{
-				var state = child.AutoResponseTriggerState;
+				var state = t.AutoResponseTriggerState;
 				SetAutoResponseTriggerStateControls(state);
 			}
 		}
 
 		private void terminalMdiChild_AutoResponseResponseStateChanged(object sender, EventArgs e)
 		{
-			var child = (ActiveMdiChild as Terminal);
-			var childIsReady = (child != null);
-			if (childIsReady)
+			var t = (ActiveMdiChild as Terminal);
+			if (t != null)
 			{
-				var state = child.AutoResponseResponseState;
+				var state = t.AutoResponseResponseState;
 				SetAutoResponseResponseStateControls(state);
 			}
 		}
@@ -4891,6 +4894,11 @@ namespace YAT.View.Forms
 		private void terminalMdiChild_AutoResponseCountChanged(object sender, EventArgs<int> e)
 		{
 			SetAutoResponseCountChildControls();
+		}
+
+		private void terminalMdiChild_FindAllSuccessChanged(object sender, EventArgs<bool> e)
+		{
+			SetFindStateAndControls(FindDirection.All, (e.Value ? FindResult.Found : FindResult.NotFoundAtAll));
 		}
 
 		private void terminalMdiChild_Resize(object sender, EventArgs e)
@@ -5006,6 +5014,9 @@ namespace YAT.View.Forms
 		/// <summary>
 		/// Gets whether the find is ready to search for all.
 		/// </summary>
+		/// <remarks>
+		/// Not name "ToggleFindAll..." as it shall only indicate activation.
+		/// </remarks>
 		public virtual bool FindAllIsFeasible
 		{
 			get
@@ -5023,39 +5034,12 @@ namespace YAT.View.Forms
 		{
 			get
 			{
-				var child = (ActiveMdiChild as Terminal);
-				var childIsReady = (child != null);
-				if (childIsReady)
-					return (child.FindAllIsActive);
+				var t = (ActiveMdiChild as Terminal);
+				if (t != null)
+					return (t.FindAllIsActive);
 				else
 					return (false);
 			}
-		}
-
-		/// <summary>
-		/// Activates [Find All] in the active terminal.
-		/// </summary>
-		public virtual void ActivateFindAll()
-		{
-			var child = (ActiveMdiChild as Terminal);
-			var childIsReady = (child != null);
-			if (childIsReady)
-				child.RequestActivateFindAll();
-
-			SetFindStateAndControls();
-		}
-
-		/// <summary>
-		/// Deactivates [Find All] in the active terminal.
-		/// </summary>
-		public virtual void DeactivateFindAll()
-		{
-			var child = (ActiveMdiChild as Terminal);
-			var childIsReady = (child != null);
-			if (childIsReady)
-				child.RequestDeactivateFindAll();
-
-			SetFindStateAndControls();
 		}
 
 		/// <summary>
@@ -5075,11 +5059,11 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary>
-		/// Requests find all.
+		/// Requests toggle find all.
 		/// </summary>
-		public virtual void RequestFindAll(string pattern)
+		public virtual void RequestToggleFindAll(string pattern)
 		{
-			ValidateAndFindAll(pattern);
+			ToggleAndValidateFindAll(pattern);
 		}
 
 		#endregion
@@ -5165,9 +5149,8 @@ namespace YAT.View.Forms
 
 		private string GetStatusText(Status status)
 		{
-			var child = (ActiveMdiChild as Terminal);
-			var childIsReady = (child != null);
-			if (childIsReady)
+			var child = ActiveMdiChild;
+			if (child != null)
 			{
 				string childText = "[" + child.Text + "]";
 				switch (status)

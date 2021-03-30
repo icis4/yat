@@ -538,9 +538,13 @@ namespace MKY.Windows.Forms
 		/// <item><description>...first item...that starts with the specified string...</description></item>
 		/// </list>
 		/// </remarks>
+		/// <returns>
+		/// The zero-based index of the first item found; returns <see cref="ListBox.NoMatches"/> if
+		/// no match is found.
+		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException">
-		/// The <paramref name="startIndex"/> parameter is less than zero or greater than or equal
-		/// to the value of the <see cref="ListBox.ObjectCollection.Count"/> property.
+		/// The <paramref name="startIndex"/> parameter is less than <see cref="ListBox.NoMatches"/> or
+		/// greater than or equal to the value of the <see cref="ListBox.ObjectCollection.Count"/> property.
 		/// </exception>
 		public virtual int FindNext(string text, bool textCaseSensitive, bool textWholeWord, Regex regex, int startIndex)
 		{
@@ -589,9 +593,13 @@ namespace MKY.Windows.Forms
 		/// <item><description>...first item...that starts with the specified string...</description></item>
 		/// </list>
 		/// </remarks>
+		/// <returns>
+		/// The zero-based index of the first item found; returns <see cref="ListBox.NoMatches"/> if
+		/// no match is found.
+		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException">
-		/// The <paramref name="startIndex"/> parameter is less than zero or greater than or equal
-		/// to the value of the <see cref="ListBox.ObjectCollection.Count"/> property.
+		/// The <paramref name="startIndex"/> parameter is less than <see cref="ListBox.NoMatches"/> or
+		/// greater than or equal to the value of the <see cref="ListBox.ObjectCollection.Count"/> property.
 		/// </exception>
 		public virtual int FindPrevious(string text, bool textCaseSensitive, bool textWholeWord, Regex regex, int startIndex)
 		{
@@ -621,6 +629,58 @@ namespace MKY.Windows.Forms
 						if (regex.IsMatch(str))
 							return (i);
 					}
+				}
+			}
+
+			return (NoMatches);
+		}
+
+		/// <summary>
+		/// Finds the previous item in the <see cref="ListBox"/> that matches the given text and/or regex.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="ListBox.FindString(string, int)"/> method seems promising at first,
+		/// but there are severe limitations:
+		/// <list type="bullet">
+		/// <item><description>Only searches simple case-sensitive matches.</description></item>
+		/// <item><description>Only searches down.</description></item>
+		/// <item><description>...when reaches the bottom...it continues searching from the top...</description></item>
+		/// <item><description>...first item...that starts with the specified string...</description></item>
+		/// </list>
+		/// </remarks>
+		/// <returns>
+		/// <paramref name="index"/> if match is found; returns <see cref="ListBox.NoMatches"/> if
+		/// no match is found.
+		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException">
+		/// The <paramref name="index"/> parameter is less than <see cref="ListBox.NoMatches"/> or
+		/// greater than or equal to the value of the <see cref="ListBox.ObjectCollection.Count"/> property.
+		/// </exception>
+		public virtual int FindAt(string text, bool textCaseSensitive, bool textWholeWord, Regex regex, int index)
+		{
+			if (index < NoMatches)
+				throw (new ArgumentOutOfRangeException("index", index, "The index is less than 'ListBox.NoMatches'!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
+
+			if (index >= Items.Count)
+				throw (new ArgumentOutOfRangeException("index", index, "The index is greater or equal 'Item.Count'!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
+
+			if (Items.Count > 0)
+			{
+				if (index == NoMatches)
+					index = 0; // Same behavior as 'ListBox.FindString(string, int)' method.
+
+				var str = Items[index].ToString();
+
+				if (!string.IsNullOrEmpty(text))
+				{
+					if (TryFind(str, text, textCaseSensitive, textWholeWord))
+						return (index);
+				}
+
+				if (regex != null)
+				{
+					if (regex.IsMatch(str))
+						return (index);
 				}
 			}
 
