@@ -28,7 +28,7 @@
 //==================================================================================================
 
 // \remind (MKY 2013-05-25) (related to feature request #163)
-// No feasible way to implement horizontal auto scroll found. There are Win32 API functions to move
+// No feasible way to implement horizontal auto-scroll found. There are Win32 API functions to move
 // the position of the scroll bar itself, and to scroll rectangles, but it is not feasible to do the
 // whole translation from .NET Windows.Forms to Win32. Giving up.
 
@@ -38,13 +38,16 @@
 #if (DEBUG)
 
 	// Enable debugging of monitor content:
-////#define DEBUG_CONTENT              // The 'DebugEnabled' property is set for the 'Bidir' monitor.
+////#define DEBUG_CONTENT              // 'DebugEnabled' is only preset for the 'Bidir' monitor.
 
 	// Enable debugging of update management (incl. CPU performance measurement):
-////#define DEBUG_UPDATE               // The 'DebugEnabled' property is set for the 'Bidir' monitor.
+////#define DEBUG_UPDATE               // 'DebugEnabled' is only preset for the 'Bidir' monitor.
 
-	// Enable debugging of vertical semi-auto scrolling:
-////#define DEBUG_VERTICAL_AUTO_SCROLL // The 'DebugEnabled' property is set for the 'Bidir' monitor.
+	// Enable debugging of vertical semi-auto-scrolling:
+////#define DEBUG_VERTICAL_AUTO_SCROLL // 'DebugEnabled' is only preset for the 'Bidir' monitor.
+
+	// Enable debugging of calls to "ListBox.[Set|Clear]Selected()":
+////#define DEBUG_SELECTION            // 'DebugEnabled' is only preset for the 'Bidir' monitor.
 
 #endif // DEBUG
 
@@ -62,7 +65,9 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
@@ -204,6 +209,10 @@ namespace YAT.View.Controls
 		// Note that 'Stopwatch' is used instead of 'DateTime.Now.Ticks' or 'Environment.TickCount'
 		// as suggested in several online resources.
 
+////#if (DEBUG) must not be active, configuration must always be available for designer.
+		private string debugCaption; // = null;
+////#endif
+
 		#endregion
 
 		#region Events
@@ -253,7 +262,8 @@ namespace YAT.View.Controls
 			// Since the line number list box will display the vertical scroll bar automatically,
 			// the line number list box is placed underneath the monitor list box and sized larger
 			// than it would have to be.
-			this.initialLineNumberWidth = EffectiveWidthToRequestedWidth(fastListBox_LineNumbers.Width);
+			var lblin = fastListBox_LineNumbers;
+			this.initialLineNumberWidth = EffectiveWidthToRequestedWidth(lblin.Width);
 			SetControls(this.initialLineNumberWidth);
 		}
 
@@ -392,7 +402,9 @@ namespace YAT.View.Controls
 					if (this.lineNumberSelection == Domain.Utilities.LineNumberSelection.Buffer) // This option keeps the offset at 0.
 					{
 						this.lineNumberOffset = 0;
-						fastListBox_LineNumbers.Invalidate();
+
+						var lblin = fastListBox_LineNumbers;
+						lblin.Invalidate();
 					}
 
 					SetControls();
@@ -525,6 +537,16 @@ namespace YAT.View.Controls
 		{
 			get { return (this.fastListBox_Monitor.DebugEnabled); }
 			set { this.fastListBox_Monitor.DebugEnabled = value;  }
+		}
+
+		/// <summary></summary>
+		[Category("Data")]
+		[Description("Caption to ease debugging multiple items.")]
+		[DefaultValue(null)]
+		public virtual string DebugCaption
+		{
+			get { return (this.debugCaption); }
+			set { this.debugCaption = value;  }
 		}
 
 ////#endif
@@ -683,7 +705,9 @@ namespace YAT.View.Controls
 			if (this.lineNumberSelection != Domain.Utilities.LineNumberSelection.Buffer) // This option keeps the offset at 0.
 			{
 				this.lineNumberOffset = 0;
-				fastListBox_LineNumbers.Invalidate();
+
+				var lblin = fastListBox_LineNumbers;
+				lblin.Invalidate();
 			}
 		}
 
@@ -716,18 +740,18 @@ namespace YAT.View.Controls
 		public virtual void SelectAll()
 		{
 			var lb = fastListBox_Monitor;
-			lb.BeginUpdate();
 			lb.SelectAll();
-			lb.EndUpdate();
+
+			DebugSetSelected(ControlEx.InvalidIndex);
 		}
 
 		/// <summary></summary>
 		public virtual void SelectNone()
 		{
 			var lb = fastListBox_Monitor;
-			lb.BeginUpdate();
 			lb.ClearSelected();
-			lb.EndUpdate();
+
+			DebugClearSelected();
 		}
 
 		/// <summary></summary>
@@ -794,6 +818,8 @@ namespace YAT.View.Controls
 			var lb = fastListBox_Monitor;
 			lb.ClearSelected();
 
+			DebugClearSelected();
+
 			resultingDirection = FindDirection.Undetermined;
 			return (false);
 		}
@@ -825,10 +851,15 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		public virtual void ResetFindAll()
+		protected virtual void ResetFindAll()
 		{
 			this.findAllSuccessAfterLastUpdate = false;
 			this.findAllSuccessOnCurrentUpdate = false;
+
+			var lb = fastListBox_Monitor;
+			lb.ClearSelected();
+
+			DebugClearSelected();
 		}
 
 		/// <remarks>
@@ -935,6 +966,9 @@ namespace YAT.View.Controls
 			var i = lb.FindNext(this.findText, this.findTextCaseSensitive, this.findTextWholeWord, this.findRegex, startIndex);
 			if (i != ListBox.NoMatches)
 			{
+				DebugClearSelected();
+				DebugSetSelected(i);
+
 				lb.ClearSelected();
 				lb.SetSelected(i, true);
 				lb.TopIndex = Math.Max(i - (lb.TotalVisibleItemCount / 2), 0);
@@ -964,6 +998,9 @@ namespace YAT.View.Controls
 			var i = lb.FindPrevious(this.findText, this.findTextCaseSensitive, this.findTextWholeWord, this.findRegex, startIndex);
 			if (i != ListBox.NoMatches)
 			{
+				DebugClearSelected();
+				DebugSetSelected(i);
+
 				lb.ClearSelected();
 				lb.SetSelected(i, true);
 				lb.TopIndex = Math.Max(i - (lb.TotalVisibleItemCount / 2), 0);
@@ -997,6 +1034,8 @@ namespace YAT.View.Controls
 				var result = lb.FindAt(this.findText, this.findTextCaseSensitive, this.findTextWholeWord, this.findRegex, i);
 				if (result == i)
 				{
+					DebugSetSelected(i);
+
 					lb.SetSelected(i, true);
 					this.findAllSuccessAfterLastUpdate = true;
 				}
@@ -1046,7 +1085,7 @@ namespace YAT.View.Controls
 			int currentStartIndex;
 			if (TryGetCurrentStartIndex(out currentStartIndex))
 			{
-				result = (currentStartIndex + 1);
+				result = (currentStartIndex + 1); // next = current + 1
 				if (result <= lb.LastIndex)
 					return (true);
 				else
@@ -1065,7 +1104,7 @@ namespace YAT.View.Controls
 			int currentStartIndex;
 			if (TryGetCurrentStartIndex(out currentStartIndex))
 			{
-				result = (currentStartIndex - 1);
+				result = (currentStartIndex - 1); // previous = current - 1
 				if (result >= lb.FirstIndex)
 					return (true);
 				else
@@ -1124,7 +1163,9 @@ namespace YAT.View.Controls
 			if ((status.Counts.TxLines <= 0) && (status.Counts.RxLines <= 0))
 			{
 				this.lineNumberOffset = 0;
-				fastListBox_LineNumbers.Invalidate();
+
+				var lblin = fastListBox_LineNumbers;
+				lblin.Invalidate();
 			}
 
 			this.dataStatusHelper.SetCountsAndRates(status);
@@ -1272,7 +1313,7 @@ namespace YAT.View.Controls
 		/// region of the control.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private int fastListBox_Monitor_DrawItem_lastTopIndex; // = 0;
+		private int lbmon_DrawItem_lastTopIndex; // = 0;
 
 		/// <remarks>
 		/// Note that the 'MeasureItem' event is not needed for 'OwnerDrawnFixed' (item height only).
@@ -1337,10 +1378,11 @@ namespace YAT.View.Controls
 			{
 				if (e.Index >= 0)
 				{
+					var lblin = fastListBox_LineNumbers;
 				#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
-					ListBoxEx lbmon = fastListBox_Monitor;
+					var lbmon = fastListBox_Monitor;
 				#else
-					ListBox lbmon = fastListBox_Monitor;
+					var lbmon = fastListBox_Monitor;
 				#endif
 					int requestedWidth;
 
@@ -1380,17 +1422,17 @@ namespace YAT.View.Controls
 						lbmon.HorizontalExtent = requestedWidth;
 
 				#if (ENABLE_HORIZONTAL_AUTO_SCROLL)
-					// Perform horizontal auto scroll, but only on the last item:
+					// Perform horizontal auto-scroll, but only on the last item:
 					if (e.Index == lbmon.LastIndex)
 						lbmon.HorizontalScrollToPosition(requestedWidth - e.Bounds.Width);
 				#endif
 
 					// Check whether the top index has changed, if so, also scroll the line numbers.
 					// Especially applies when monitor gets cleared, the top index will become 0.
-					if (fastListBox_Monitor_DrawItem_lastTopIndex != lbmon.TopIndex)
+					if (lbmon_DrawItem_lastTopIndex != lbmon.TopIndex)
 					{
-						fastListBox_Monitor_DrawItem_lastTopIndex = lbmon.TopIndex;
-						fastListBox_LineNumbers.VerticalScrollToIndex(lbmon.TopIndex);
+						lbmon_DrawItem_lastTopIndex = lbmon.TopIndex;
+						lblin.VerticalScrollToIndex(lbmon.TopIndex);
 					}
 				}
 			}
@@ -1398,7 +1440,16 @@ namespace YAT.View.Controls
 
 		private void fastListBox_Monitor_Leave(object sender, EventArgs e)
 		{
-			fastListBox_Monitor.ClearSelected();
+			// Selected lines shall be reset when leaving the control, otherwise lines among the
+			// monitors would stay highlighted. But don't clear in case [Find All] is active:
+
+			if (!this.findAllIsActive)
+			{
+				var lb = fastListBox_Monitor;
+				lb.ClearSelected();
+
+				DebugClearSelected();
+			}
 		}
 
 		/// <remarks>
@@ -1605,7 +1656,7 @@ namespace YAT.View.Controls
 		/// done when required, as the update leads to move of list box to top, and re-drawing. Both
 		/// takes time and impacts the monitor behavior. Thus, only update if really needed.
 		/// </remarks>
-		private void ApplyFont()
+		protected virtual void ApplyFont()
 		{
 			var f = this.formatSettings.Font;
 
@@ -1636,7 +1687,7 @@ namespace YAT.View.Controls
 		/// No additional synchronization or prevention of a race condition is needed.
 		/// </remarks>
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
-		private void AddElementsOrLines(object elementsOrLines)
+		protected virtual void AddElementsOrLines(object elementsOrLines)
 		{
 			this.pendingElementsAndLines.Add(elementsOrLines);
 
@@ -1674,8 +1725,8 @@ namespace YAT.View.Controls
 		{
 			this.findAllSuccessOnCurrentUpdate = false;
 
-			ListBoxEx lblin = fastListBox_LineNumbers;
-			ListBoxEx lbmon = fastListBox_Monitor;
+			var lblin = fastListBox_LineNumbers;
+			var lbmon = fastListBox_Monitor;
 
 			lblin.BeginUpdate();
 			lbmon.BeginUpdate();
@@ -1724,22 +1775,28 @@ namespace YAT.View.Controls
 				this.nextMonitorUpdateTickStamp = (Stopwatch.GetTimestamp() + this.monitorUpdateTickInterval); // Loop-around is OK.
 			}
 
-			if (!lbmon.UserIsScrolling) // Perform auto scroll.
+			// Handle auto-scrolling in any case (a condition like "if (ItemCount >= FullyVisibleItemCount)"
+			// makes little sense, as just few items will not result in an noticable drop of performance):
+			if (!lbmon.UserIsScrolling) // Perform auto-scroll.
 			{
-				if (lbmon.VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastItemsIsSelected())
+				var clearSelectionToEnsureScrollingContinues = (!this.findAllIsActive);
+				if (lbmon.VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastFewItemsIsSelected(clearSelectionToEnsureScrollingContinues))
 					lblin.VerticalScrollToBottom(); // Scroll line numbers accordingly.
 			}
-			else // UserIsScrolling => Suspend auto scroll.
+			else // UserIsScrolling => Suspend auto-scroll.
 			{
-				if (lbmon.VerticalScrollBarIsNearBottom) // Resume auto scroll.
+				if (lbmon.VerticalScrollBarIsNearBottom) // Resume auto-scroll.
 				{
-					if (lbmon.VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastItemsIsSelected())
+					var clearSelectionToEnsureScrollingContinues = (!this.findAllIsActive);
+					if (lbmon.VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastFewItemsIsSelected(clearSelectionToEnsureScrollingContinues))
 						lblin.VerticalScrollToBottom(); // Scroll line numbers accordingly.
 				}
 			}
 
 			lblin.EndUpdate();
 			lbmon.EndUpdate();
+
+			DebugSelected();
 
 			SetCopyOfActiveLine(lbmon.LastItem);
 
@@ -1757,7 +1814,7 @@ namespace YAT.View.Controls
 		/// Neither calls <see cref="ListBox.BeginUpdate()"/> nor <see cref="ListBox.EndUpdate()"/>.
 		/// If performance requires it, the calling function must do so.
 		/// </remarks>
-		private void AddElementToListBox(Domain.DisplayElement element)
+		protected virtual void AddElementToListBox(Domain.DisplayElement element)
 		{
 			var lblin = fastListBox_LineNumbers;
 			var lbmon = fastListBox_Monitor;
@@ -1767,6 +1824,8 @@ namespace YAT.View.Controls
 			{
 				lblin.Items.Add(0);
 				lbmon.Items.Add(new Domain.DisplayLine(element));
+
+				UpdateCurrentIfFindAllIsActive(lbmon);
 			}
 			else
 			{
@@ -1777,6 +1836,8 @@ namespace YAT.View.Controls
 				if (current.Count <= 0)
 				{
 					current.Add(element);
+
+					UpdateCurrentIfFindAllIsActive(lbmon);
 				}
 				else
 				{
@@ -1807,40 +1868,56 @@ namespace YAT.View.Controls
 							}
 						}
 
-						// Update find with last line:
-						if (this.findAllIsActive)
-						{
-							var index = (lbmon.Items.Count - 1);
-							if (index >= 0)
-							{
-								var result = lbmon.FindAt(this.findText, this.findTextCaseSensitive, this.findTextWholeWord, this.findRegex, index);
-								if (result == index)
-								{
-									lbmon.SetSelected(result, true);
-									this.findAllSuccessOnCurrentUpdate = true;
-								}
-							}
-						}
-
 						// Add element to a new line:
 						DebugVerticalAutoScroll("Adding new line..............");
 						lblin.Items.Add(0); // 0 = dummy value. 'null' is not valid, it would result in an 'ArgumentNullException'.
 						lbmon.Items.Add(new Domain.DisplayLine(element));
 						DebugVerticalAutoScroll(".........................done");
+
+						UpdateCurrentIfFindAllIsActive(lbmon);
 					}
 					else
 					{
 						current.Add(element);
+
+						UpdateCurrentIfFindAllIsActive(lbmon);
 					}
 				}
 			}
 		}
 
-		private static bool IsLineStart(Domain.DisplayElement element)
+		/// <summary></summary>
+		protected virtual void UpdateCurrentIfFindAllIsActive(FastListBox lb)
+		{
+			if (this.findAllIsActive)
+			{
+				var index = lb.LastIndex;
+				if (index >= 0)
+				{
+					if (!lb.GetSelected(index)) // It is very likely this method is called multiple times per line.
+					{                           // But there is no need to waste time here if line is selected already.
+						var result = lb.FindAt(this.findText, this.findTextCaseSensitive, this.findTextWholeWord, this.findRegex, index);
+						if (result == index)
+						{
+							DebugSetSelected(index);
+
+							lb.SetSelected(index, true);
+							this.findAllSuccessOnCurrentUpdate = true;
+						}
+					}
+				}
+			}
+		}
+
+		/// <summary></summary>
+		protected static bool IsLineStart(Domain.DisplayElement element)
 		{
 			return ((element as Domain.DisplayElement.LineStart) != null);
 		}
 
+		/// <remarks>
+		/// <c>private</c> because <see cref="ClearResult"/> is <c>private</c>.
+		/// </remarks>
 		private ClearResult ClearCurrentLineInPendingElementsAndLines()
 		{
 			bool hasCleared = false;
@@ -1924,7 +2001,8 @@ namespace YAT.View.Controls
 				return (ClearResult.NoElementOrLinePending);
 		}
 
-		private void ClearCurrentLineInListBoxes()
+		/// <summary></summary>
+		protected virtual void ClearCurrentLineInListBoxes()
 		{
 		////var lblin = fastListBox_LineNumbers => Nothing to do (yet).
 			var lbmon = fastListBox_Monitor;
@@ -1940,7 +2018,8 @@ namespace YAT.View.Controls
 			}
 		}
 
-		private void RemoveCurrentLineFromListBoxes()
+		/// <summary></summary>
+		protected virtual void RemoveCurrentLineFromListBoxes()
 		{
 			var lblin = fastListBox_LineNumbers;
 			var lbmon = fastListBox_Monitor;
@@ -1962,7 +2041,8 @@ namespace YAT.View.Controls
 			}
 		}
 
-		private void ClearAndResetListBoxes()
+		/// <summary></summary>
+		protected virtual void ClearAndResetListBoxes()
 		{
 			var lblin = fastListBox_LineNumbers;
 			lblin.BeginUpdate();
@@ -1986,26 +2066,29 @@ namespace YAT.View.Controls
 
 		private void ResizeAndRelocateControls(int requestedLineNumberWidth)
 		{
+			var lblin = fastListBox_LineNumbers;
+			var lbmon = fastListBox_Monitor;
+
 			// --- Width ---
 
-			fastListBox_LineNumbers.Visible = ShowLineNumbers;
+			lblin.Visible = ShowLineNumbers;
 
 			if (ShowLineNumbers)
 			{
 				int effectiveWidth = requestedLineNumberWidth + VerticalScrollBarWidth + AdditionalMargin;
-				fastListBox_LineNumbers.Width = effectiveWidth;
+				lblin.Width = effectiveWidth;
 
 				int effectiveLeft = requestedLineNumberWidth + AdditionalMargin; // Hide the vertical scroll
-				fastListBox_Monitor.Left = effectiveLeft;                        // bar of the line numbers.
-				fastListBox_Monitor.Width = (Width - effectiveLeft);
+				lbmon.Left = effectiveLeft;                                      // bar of the line numbers.
+				lbmon.Width = (Width - effectiveLeft);
 
 				textBox_CopyOfActiveLine.Left = effectiveLeft;
 				textBox_CopyOfActiveLine.Width = (Width - effectiveLeft);
 			}
 			else
 			{
-				fastListBox_Monitor.Left = 0;
-				fastListBox_Monitor.Width = Width;
+				lbmon.Left = 0;
+				lbmon.Width = Width;
 
 				textBox_CopyOfActiveLine.Left = 0;
 				textBox_CopyOfActiveLine.Width = Width;
@@ -2036,26 +2119,26 @@ namespace YAT.View.Controls
 			{
 				availableHeight -= panel_Picture.Height;
 
-				fastListBox_LineNumbers.Height = availableHeight;
-				fastListBox_LineNumbers.Top = panel_Picture.Height;
+				lblin.Height = availableHeight;
+				lblin.Top = panel_Picture.Height;
 
-				fastListBox_Monitor.Height = availableHeight;
-				fastListBox_Monitor.Top = panel_Picture.Height;
+				lbmon.Height = availableHeight;
+				lbmon.Top = panel_Picture.Height;
 			}
 			else
 			{
-				fastListBox_LineNumbers.Top = 0;
-				fastListBox_LineNumbers.Height = availableHeight;
+				lblin.Top = 0;
+				lblin.Height = availableHeight;
 
-				fastListBox_Monitor.Top = 0;
-				fastListBox_Monitor.Height = availableHeight;
+				lbmon.Top = 0;
+				lbmon.Height = availableHeight;
 			}
 		}
 
 		/// <remarks>
 		/// Name only "Active" instead of "LastActive" for simplicity.
 		/// </remarks>
-		private void SetCopyOfActiveLine(object selectedItem)
+		protected virtual void SetCopyOfActiveLine(object selectedItem)
 		{
 			string lineText = "";
 
@@ -2067,27 +2150,29 @@ namespace YAT.View.Controls
 		}
 
 		/// <remarks>Separated from <see cref="SetTimeStatusText"/> to improve performance.</remarks>
-		private void SetTimeStatusVisible()
+		protected virtual void SetTimeStatusVisible()
 		{
 			label_TimeStatus_Active.Visible = ShowTimeStatus;
 			label_TimeStatus_Total .Visible = ShowTimeStatus;
 		}
 
-		private void SetTimeStatusText()
+		/// <summary></summary>
+		protected virtual void SetTimeStatusText()
 		{
 			label_TimeStatus_Active.Text = this.timeStatusHelper.ActiveStatusText;
 			label_TimeStatus_Total .Text = this.timeStatusHelper.TotalStatusText;
 		}
 
 		/// <remarks>Separated from <see cref="SetDataStatusText"/> to improve performance.</remarks>
-		private void SetDataStatusVisible()
+		protected virtual void SetDataStatusVisible()
 		{
 			label_DataStatus_BidirTx.Visible = (ShowDataStatus && (RepositoryType == Domain.RepositoryType.Bidir));
 			label_DataStatus_Unidir .Visible = (ShowDataStatus && (RepositoryType != Domain.RepositoryType.Bidir));
 			label_DataStatus_BidirRx.Visible = (ShowDataStatus && (RepositoryType == Domain.RepositoryType.Bidir));
 		}
 
-		private void SetDataStatusText()
+		/// <summary></summary>
+		protected virtual void SetDataStatusText()
 		{
 			// Either perform the update...
 			// ...or arm the update time-out to ensure that update will be performed later:
@@ -2283,6 +2368,41 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		/// <remarks>
+		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named "Message" for compactness and more clarity that something will happen
+		/// with the formatted message, and rather than e.g. "Common" for comprehensibility.
+		/// </remarks>
+		[Conditional("DEBUG")]
+		protected virtual void DebugMessage(string format, params object[] args)
+		{
+			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
+		}
+
+		/// <remarks>
+		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named "Message" for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// </remarks>
+		[Conditional("DEBUG")]
+		protected virtual void DebugMessage(string message)
+		{
+			Debug.WriteLine
+			(
+				string.Format
+				(
+					CultureInfo.CurrentCulture,
+					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
+					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
+					GetType(),
+					DebugCaption,
+					"",
+					message
+				)
+			);
+		}
+
+		/// <remarks>
 		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
 		/// </remarks>
 		[Conditional("DEBUG_CONTENT")]
@@ -2290,7 +2410,7 @@ namespace YAT.View.Controls
 		{
 			if (DebugEnabled)
 			{
-				Debug.WriteLine(message);
+				DebugMessage(message);
 			}
 		}
 
@@ -2305,7 +2425,7 @@ namespace YAT.View.Controls
 		{
 			if (DebugEnabled)
 			{
-				Debug.Write(message);
+				DebugMessage(message);
 			}
 		}
 
@@ -2317,20 +2437,61 @@ namespace YAT.View.Controls
 		{
 			if (DebugEnabled)
 			{
-				Debug.WriteLine
+				var lbmon = fastListBox_Monitor;
+
+				DebugMessage
 				(
 					string.Format
 					(
 						CultureInfo.CurrentCulture,
 						"{0} : ItemCount = {1} | FullyVisibleItemCount = {2} | TotalVisibleItemCount = {3} | TopIndex = {4} | BottomIndex = {5}",
 						leadMessage,
-						fastListBox_Monitor.Items.Count,
-						fastListBox_Monitor.FullyVisibleItemCount,
-						fastListBox_Monitor.TotalVisibleItemCount,
-						fastListBox_Monitor.TopIndex,
-						fastListBox_Monitor.BottomIndex
+						lbmon.Items.Count,
+						lbmon.FullyVisibleItemCount,
+						lbmon.TotalVisibleItemCount,
+						lbmon.TopIndex,
+						lbmon.BottomIndex
 					)
 				);
+			}
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_SELECTION")]
+		private void DebugSetSelected(int index, [CallerMemberName] string callerMemberName = "")
+		{
+			if (DebugEnabled)
+			{
+				if (index != ControlEx.InvalidIndex)
+					DebugMessage("ListBox.SetSelected({0}) @ {1}()", index, callerMemberName);
+				else
+					DebugMessage("ListBox.SetSelected(*) @ {0}()", callerMemberName);
+			}
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_SELECTION")]
+		private void DebugClearSelected([CallerMemberName] string callerMemberName = "")
+		{
+			if (DebugEnabled)
+			{
+				DebugMessage("ListBox.ClearSelected() @ {0}()", callerMemberName);
+			}
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_SELECTION")]
+		private void DebugSelected()
+		{
+			if (DebugEnabled)
+			{
+				DebugMessage("ListBox.SelectedIndices is [{0}]", IEnumerableEx.ItemsToString(fastListBox_Monitor.SelectedIndices));
 			}
 		}
 
