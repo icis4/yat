@@ -1400,7 +1400,7 @@ namespace MKY.IO.Usb
 				string.Format
 				(
 					CultureInfo.CurrentCulture,
-					" @ {0} @ Thread #{1} : {2,36} {3,3} {4,-38} : {5}",
+					" @ {0} @ Thread#{1} : {2,36} {3,3} {4,-38} : {5}",
 					DateTime.Now.ToString("HH:mm:ss.fff", DateTimeFormatInfo.CurrentInfo),
 					Thread.CurrentThread.ManagedThreadId.ToString("D3", CultureInfo.CurrentCulture),
 					GetType(),
