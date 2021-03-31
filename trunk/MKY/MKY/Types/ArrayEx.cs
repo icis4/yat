@@ -100,6 +100,7 @@ namespace MKY
 		/// <summary>
 		/// Appends all values of an array to a comma separated string and returns it.
 		/// Values that are <c>null</c> are returned as "(null)".
+		/// An empty <paramref name="array"/> is returned as "(empty)".
 		/// </summary>
 		/// <returns>
 		/// String containing values of all items.
@@ -132,6 +133,9 @@ namespace MKY
 				if (!string.IsNullOrEmpty(itemEnclosure))
 					sb.Append(itemEnclosure);
 			}
+
+			if (isFirst) // i.e. no items.
+				sb.Append("(empty)");
 
 			return (sb.ToString());
 		}

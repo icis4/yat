@@ -61,6 +61,7 @@ namespace MKY.Collections
 		/// <summary>
 		/// Appends all items of an enumerable object to a comma separated string and returns it.
 		/// Items that are <c>null</c> are returned as "(null)".
+		/// An empty <paramref name="collection"/> is returned as "(empty)".
 		/// </summary>
 		/// <returns>
 		/// String containing values of all items.
@@ -93,6 +94,9 @@ namespace MKY.Collections
 				if (!string.IsNullOrEmpty(itemEnclosure))
 					sb.Append(itemEnclosure);
 			}
+
+			if (isFirst) // i.e. no items.
+				sb.Append("(empty)");
 
 			return (sb.ToString());
 		}
