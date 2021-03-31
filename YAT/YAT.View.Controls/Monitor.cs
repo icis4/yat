@@ -1779,17 +1779,27 @@ namespace YAT.View.Controls
 			// makes little sense, as just few items will not result in an noticable drop of performance):
 			if (!lbmon.UserIsScrolling) // Perform auto-scroll.
 			{
-				var clearSelectionToEnsureScrollingContinues = (!this.findAllIsActive);
-				if (lbmon.VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastFewItemsIsSelected(clearSelectionToEnsureScrollingContinues))
+				bool hasClearedSelection;
+
+				var clearSelection = (!this.findAllIsActive);
+				if (lbmon.VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastFewItemsIsSelected(clearSelection, out hasClearedSelection))
 					lblin.VerticalScrollToBottom(); // Scroll line numbers accordingly.
+
+				if (hasClearedSelection)
+					DebugClearSelected();
 			}
 			else // UserIsScrolling => Suspend auto-scroll.
 			{
 				if (lbmon.VerticalScrollBarIsNearBottom) // Resume auto-scroll.
 				{
-					var clearSelectionToEnsureScrollingContinues = (!this.findAllIsActive);
-					if (lbmon.VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastFewItemsIsSelected(clearSelectionToEnsureScrollingContinues))
+					bool hasClearedSelection;
+
+					var clearSelection = (!this.findAllIsActive);
+					if (lbmon.VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastFewItemsIsSelected(clearSelection, out hasClearedSelection))
 						lblin.VerticalScrollToBottom(); // Scroll line numbers accordingly.
+
+					if (hasClearedSelection)
+						DebugClearSelected();
 				}
 			}
 

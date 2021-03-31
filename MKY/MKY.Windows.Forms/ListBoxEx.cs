@@ -1038,14 +1038,31 @@ namespace MKY.Windows.Forms
 		/// <remarks>
 		/// Note that items gets deselected if another control gets the focus.
 		/// </remarks>
-		public bool VerticalScrollToBottomIfNoVisibleItemIsSelected(bool clearSelectionToEnsureScrollingContinues = true)
+		public bool VerticalScrollToBottomIfNoVisibleItemIsSelected(bool clearSelection = true)
 		{
+			bool hasClearedSelection;
+			return (VerticalScrollToBottomIfNoVisibleItemIsSelected(clearSelection, out hasClearedSelection));
+		}
+
+		/// <summary>
+		/// Vertically scroll the list to the bottom if no visible items are selected.
+		/// </summary>
+		/// <remarks>
+		/// Note that items gets deselected if another control gets the focus.
+		/// </remarks>
+		public bool VerticalScrollToBottomIfNoVisibleItemIsSelected(bool clearSelection, out bool hasClearedSelection)
+		{
+			hasClearedSelection = false;
+
 			if (!VisibleItemIsSelected) // Note that items gets deselected if another control gets the focus.
 			{
 				DebugVerticalSemiAutoScroll("VerticalScrollToBottomIfNoVisibleItemIsSelected() is being done...");
 
-				if (clearSelectionToEnsureScrollingContinues && (SelectedIndices.Count > 0)) // No need to clear if nothing is selected.
+				if (clearSelection && (SelectedIndices.Count > 0)) // No need to clear if nothing is selected.
+				{
 					SelectedIndices.Clear();
+					hasClearedSelection = true;
+				}
 
 				VerticalScrollToBottom();
 				return (true);
@@ -1061,14 +1078,23 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Vertically scroll the list to the bottom if no visible items are selected, except for the last.
 		/// </summary>
-		public bool VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastFewItemsIsSelected(bool clearSelectionToEnsureScrollingContinues = true)
+		public bool VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastFewItemsIsSelected(bool clearSelection = true)
 		{
-			if (VerticalScrollToBottomIfNoVisibleItemIsSelected(clearSelectionToEnsureScrollingContinues))
+			bool hasClearedSelection;
+			return (VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastFewItemsIsSelected(clearSelection, out hasClearedSelection));
+		}
+
+		/// <summary>
+		/// Vertically scroll the list to the bottom if no visible items are selected, except for the last.
+		/// </summary>
+		public bool VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastFewItemsIsSelected(bool clearSelection, out bool hasClearedSelection)
+		{
+			if (VerticalScrollToBottomIfNoVisibleItemIsSelected(clearSelection, out hasClearedSelection))
 				return (true);
 
 			// There are visible items!
 
-			if (VerticalScrollToBottomIfOnlyOneOfTheLastFewItemsIsSelected(clearSelectionToEnsureScrollingContinues))
+			if (VerticalScrollToBottomIfOnlyOneOfTheLastFewItemsIsSelected(clearSelection, out hasClearedSelection))
 				return (true);
 
 			return (false);
@@ -1077,14 +1103,28 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Vertically scroll the list to the bottom if only one of the last items is selected.
 		/// </summary>
-		public bool VerticalScrollToBottomIfOnlyOneOfTheLastFewItemsIsSelected(bool clearSelectionToEnsureScrollingContinues = true)
+		public bool VerticalScrollToBottomIfOnlyOneOfTheLastFewItemsIsSelected(bool clearSelection = true)
 		{
+			bool hasClearedSelection;
+			return (VerticalScrollToBottomIfOnlyOneOfTheLastFewItemsIsSelected(clearSelection, out hasClearedSelection));
+		}
+
+		/// <summary>
+		/// Vertically scroll the list to the bottom if only one of the last items is selected.
+		/// </summary>
+		public bool VerticalScrollToBottomIfOnlyOneOfTheLastFewItemsIsSelected(bool clearSelection, out bool hasClearedSelection)
+		{
+			hasClearedSelection = false;
+
 			if (OnlyOneOfTheLastFewItemsIsSelected) // Note that items gets deselected if another control gets the focus.
 			{
 				DebugVerticalSemiAutoScroll("VerticalScrollToBottomIfOnlyOneOfTheLastItemsIsSelected() is being done...");
 
-				if (clearSelectionToEnsureScrollingContinues) // One item is selected for sure.
+				if (clearSelection) // One item is selected for sure.
+				{
 					SelectedIndices.Clear();
+					hasClearedSelection = true;
+				}
 
 				VerticalScrollToBottom();
 				return (true);
