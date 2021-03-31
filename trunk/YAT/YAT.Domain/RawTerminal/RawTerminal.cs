@@ -1007,14 +1007,22 @@ namespace YAT.Domain
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Name "DebugWriteLine" would show relation to <see cref="System.Diagnostics.Debug.WriteLine(string)"/>.
+		/// However, named "Message" for compactness and more clarity that something will happen
+		/// with the formatted message, and rather than e.g. "Common" for comprehensibility.
+		/// </remarks>
 		[System.Diagnostics.Conditional("DEBUG")]
 		protected virtual void DebugMessage(string format, params object[] args)
 		{
 			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Name "DebugWriteLine" would show relation to <see cref="System.Diagnostics.Debug.WriteLine(string)"/>.
+		/// However, named "Message" for compactness and more clarity that something will happen
+		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
+		/// </remarks>
 		[System.Diagnostics.Conditional("DEBUG")]
 		protected virtual void DebugMessage(string message)
 		{
