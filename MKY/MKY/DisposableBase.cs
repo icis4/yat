@@ -152,24 +152,30 @@ namespace MKY
 		// Debug
 		//==========================================================================================
 
-		/// <remarks>
+		/// <remarks><para>
 		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
 		/// However, named "Message" for compactness and more clarity that something will happen
 		/// with the formatted message, and rather than e.g. "Common" for comprehensibility.
-		/// </remarks>
+		/// </para><para>
+		/// <c>private</c> because a derived class cannot override a method that is decorated with
+		/// the <see cref="ConditionalAttribute"/>, as that is limited to file scope.
+		/// </para></remarks>
 		[Conditional("DEBUG")]
-		protected virtual void DebugMessage(string format, params object[] args)
+		private void DebugMessage(string format, params object[] args)
 		{
 			DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
 		}
 
-		/// <remarks>
+		/// <remarks><para>
 		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
 		/// However, named "Message" for compactness and more clarity that something will happen
 		/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
-		/// </remarks>
+		/// </para><para>
+		/// <c>private</c> because a derived class cannot override a method that is decorated with
+		/// the <see cref="ConditionalAttribute"/>, as that is limited to file scope.
+		/// </para></remarks>
 		[Conditional("DEBUG")]
-		protected virtual void DebugMessage(string message)
+		private void DebugMessage(string message)
 		{
 			Debug.WriteLine
 			(
