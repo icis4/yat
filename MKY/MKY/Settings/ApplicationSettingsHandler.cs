@@ -465,9 +465,13 @@ namespace MKY.Settings
 			// Debug
 			//==========================================================================================
 
-			/// <summary></summary>
+			/// <remarks>
+			/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
+			/// However, named "Message" for compactness and more clarity that something will happen
+			/// with the formatted message, and rather than e.g. "Common" for comprehensibility.
+			/// </remarks>
 			[Conditional("DEBUG")]
-			private void DebugMessage(string format, params object[] args)
+			protected virtual void DebugMessage(string format, params object[] args)
 			{
 				DebugMessage(string.Format(CultureInfo.CurrentCulture, format, args));
 			}
@@ -478,7 +482,7 @@ namespace MKY.Settings
 			/// with <paramref name="message"/>, and rather than e.g. "Common" for comprehensibility.
 			/// </remarks>
 			[Conditional("DEBUG")]
-			private void DebugMessage(string message)
+			protected virtual void DebugMessage(string message)
 			{
 				Debug.WriteLine
 				(
