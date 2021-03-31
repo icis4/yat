@@ -2384,11 +2384,11 @@ namespace YAT.View.Forms
 			toolStripComboBox_MainTool_Find_Pattern.ForeColor = foreColor;
 
 			// ...taking the 'ActiveMdiChild' into account:
-			toolStripButton_MainTool_Find_Next     .Enabled = FindNextIsFeasible;
-			toolStripButton_MainTool_Find_Previous .Enabled = FindPreviousIsFeasible;
+			toolStripButton_MainTool_Find_Next     .Enabled =  FindNextIsFeasible;
+			toolStripButton_MainTool_Find_Previous .Enabled =  FindPreviousIsFeasible;
 			toolStripButton_MainTool_Find_ToggleAll.Enabled = (FindAllIsActive ? true : FindAllIsFeasible);
 			toolStripButton_MainTool_Find_ToggleAll.Checked =  FindAllIsActive;
-			toolStripButton_MainTool_Find_ToggleAll.Text    = (FindAllIsActive ? "Disable" : "Enable") + " Find All";
+			toolStripButton_MainTool_Find_ToggleAll.Text    = (FindAllIsActive ? "Deactivate" : "Activate") + " Find All";
 		}
 
 		/// <summary></summary>
