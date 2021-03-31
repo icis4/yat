@@ -327,8 +327,10 @@ namespace MKY.Windows.Forms
 		{
 			get
 			{
-				int result = Math.Max(ControlEx.InvalidIndex, 0);
-				return (result);
+				if (Items.Count > 0)
+					return (0);
+				else
+					return (ControlEx.InvalidIndex);
 			}
 		}
 
@@ -343,9 +345,8 @@ namespace MKY.Windows.Forms
 		public virtual int LastIndex
 		{
 			get
-			{
-				int result = Math.Max(ControlEx.InvalidIndex, (Items.Count - 1));
-				return (result);
+			{                 // (0 - 1) == (-1) == (ControlEx.InvalidIndex)
+				return (Items.Count - 1);
 			}
 		}
 
@@ -482,16 +483,24 @@ namespace MKY.Windows.Forms
 		/// </remarks>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual bool OnlyOneOfTheLastItemsIsSelected
+		public virtual bool OnlyOneOfTheLastFewItemsIsSelected
 		{
 			get
 			{
 				if (SelectedIndices.Count == 1)
 				{
-					if (SelectedIndices[0] == (Items.Count - 1))
-						return (true);
+					var selectedIndex = SelectedIndices[0];
 
-					if (SelectedIndices[0] == (Items.Count - 2))
+					// The first item must not be considered "one of the last few"! The second
+					// though may already, e.g. in the unlikely case of a very short list.
+					if (selectedIndex <= 0)
+						return (false);
+
+					// Up to the last 8 items are considered, in order to even reach the condition
+					// on update intervals (e.g. "YAT.View.Controls.Monitor.UpdateFastListBox...()")
+					// with items being added quickly. The condition shall be reachable for mouse
+					// selection as well as [Ctrl+End].
+					if (selectedIndex >= (Items.Count - 8))
 						return (true);
 				}
 
@@ -1029,21 +1038,21 @@ namespace MKY.Windows.Forms
 		/// <remarks>
 		/// Note that items gets deselected if another control gets the focus.
 		/// </remarks>
-		public bool VerticalScrollToBottomIfNoVisibleItemIsSelected()
+		public bool VerticalScrollToBottomIfNoVisibleItemIsSelected(bool clearSelectionToEnsureScrollingContinues = true)
 		{
 			if (!VisibleItemIsSelected) // Note that items gets deselected if another control gets the focus.
 			{
 				DebugVerticalSemiAutoScroll("VerticalScrollToBottomIfNoVisibleItemIsSelected() is being done...");
 
-				if (SelectedIndices.Count > 0)
-					SelectedIndices.Clear(); // Clear selection to ensure that scrolling continues.
+				if (clearSelectionToEnsureScrollingContinues && (SelectedIndices.Count > 0)) // No need to clear if nothing is selected.
+					SelectedIndices.Clear();
 
 				VerticalScrollToBottom();
 				return (true);
 			}
 			else
 			{
-				DebugVerticalSemiAutoScroll("VerticalScrollToBottomIfNoVisibleItemIsSelected() has been skipped since no visible item is selected");
+				DebugVerticalSemiAutoScroll("VerticalScrollToBottomIfNoVisibleItemIsSelected() has been skipped since a visible item is selected");
 			}
 
 			return (false);
@@ -1052,14 +1061,14 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Vertically scroll the list to the bottom if no visible items are selected, except for the last.
 		/// </summary>
-		public bool VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastItemsIsSelected()
+		public bool VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastFewItemsIsSelected(bool clearSelectionToEnsureScrollingContinues = true)
 		{
-			if (VerticalScrollToBottomIfNoVisibleItemIsSelected())
+			if (VerticalScrollToBottomIfNoVisibleItemIsSelected(clearSelectionToEnsureScrollingContinues))
 				return (true);
 
 			// There are visible items!
 
-			if (VerticalScrollToBottomIfOnlyOneOfTheLastItemsIsSelected())
+			if (VerticalScrollToBottomIfOnlyOneOfTheLastFewItemsIsSelected(clearSelectionToEnsureScrollingContinues))
 				return (true);
 
 			return (false);
@@ -1068,19 +1077,21 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Vertically scroll the list to the bottom if only one of the last items is selected.
 		/// </summary>
-		public bool VerticalScrollToBottomIfOnlyOneOfTheLastItemsIsSelected()
+		public bool VerticalScrollToBottomIfOnlyOneOfTheLastFewItemsIsSelected(bool clearSelectionToEnsureScrollingContinues = true)
 		{
-			if (OnlyOneOfTheLastItemsIsSelected) // Note that items gets deselected if another control gets the focus.
+			if (OnlyOneOfTheLastFewItemsIsSelected) // Note that items gets deselected if another control gets the focus.
 			{
 				DebugVerticalSemiAutoScroll("VerticalScrollToBottomIfOnlyOneOfTheLastItemsIsSelected() is being done...");
 
-				SelectedIndices.Clear(); // Clear selection to ensure that scrolling continues.
+				if (clearSelectionToEnsureScrollingContinues) // One item is selected for sure.
+					SelectedIndices.Clear();
+
 				VerticalScrollToBottom();
 				return (true);
 			}
 			else
 			{
-				DebugVerticalSemiAutoScroll("VerticalScrollToBottomIfOnlyOneOfTheLastItemsIsSelected() has been skipped since more than the last items is selected");
+				DebugVerticalSemiAutoScroll("VerticalScrollToBottomIfOnlyOneOfTheLastItemsIsSelected() has been skipped since none or more than just one of the last few items are selected");
 			}
 
 			return (false);
