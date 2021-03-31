@@ -1442,8 +1442,8 @@ namespace YAT.View.Forms
 			this.toolStripButton_MainTool_Find_ToggleAll.Image = global::YAT.View.Forms.Properties.Resources.Image_Tool_database_repeat_16x16;
 			this.toolStripButton_MainTool_Find_ToggleAll.Name = "toolStripButton_MainTool_Find_ToggleAll";
 			this.toolStripButton_MainTool_Find_ToggleAll.Size = new System.Drawing.Size(23, 24);
-			this.toolStripButton_MainTool_Find_ToggleAll.Text = "Enable Find All";
-			this.toolStripButton_MainTool_Find_ToggleAll.ToolTipText = "Enable/Disable Find All\r\n[Ctrl+L] / [Alt+L] (while in find)\r\n[Alt+Shift+L] (always)";
+			this.toolStripButton_MainTool_Find_ToggleAll.Text = "Activate Find All";
+			this.toolStripButton_MainTool_Find_ToggleAll.ToolTipText = "Activate/Deactivate Find All\r\n[Ctrl+L] / [Alt+L] (while in find)\r\n[Alt+Shift+L] (always)";
 			this.toolStripButton_MainTool_Find_ToggleAll.Visible = false;
 			this.toolStripButton_MainTool_Find_ToggleAll.Click += new System.EventHandler(this.toolStripButton_MainTool_Find_ToggleAll_Click);
 			// 

@@ -3633,7 +3633,7 @@ namespace YAT.View.Forms
 			this.toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.L)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll.Size = new System.Drawing.Size(214, 22);
-			this.toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll.Text = "Enable Find A&ll";
+			this.toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll.Text = "Activate Find A&ll";
 			this.toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Separator_6

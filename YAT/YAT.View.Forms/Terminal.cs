@@ -256,6 +256,7 @@ namespace YAT.View.Forms
 			// Link and attach to terminal model:
 			this.terminal = terminal;
 			AttachTerminalEventHandlers();
+			DebugDecorateControls();
 
 			// Link and attach to terminal settings:
 			this.settingsRoot = this.terminal.SettingsRoot;
@@ -367,6 +368,21 @@ namespace YAT.View.Forms
 			LayoutTerminal(); // Reapply layouting for proper behavior 'Send' panel if [Send Text | File] is hidden. \remind (2018-04-08 / MKY) bug #412 "Issue with send panel".
 
 			SetTerminalControls(); // Immediately set terminal controls so the terminal "looks nice" from the very start.
+
+			ApplyFindAllIfActive();
+		}
+
+		private void ApplyFindAllIfActive()
+		{
+			if (this.settingsRoot.Find.AllIsActive)
+			{
+				var pattern = ApplicationSettings.RoamingUserSettings.Find.ActivePattern;
+				var options = ApplicationSettings.RoamingUserSettings.Find.Options;
+
+				monitor_Tx   .ActivateFindAll(pattern, options);
+				monitor_Bidir.ActivateFindAll(pattern, options);
+				monitor_Rx   .ActivateFindAll(pattern, options);
+			}
 		}
 
 		private void Terminal_Activated(object sender, EventArgs e)
@@ -622,7 +638,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Terminal_FindPrevious   .Enabled = (monitorIsDefined && FindPreviousIsFeasible);
 				toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Enabled = (monitorIsDefined && FindAllIsFeasible);
 				toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Checked =  this.settingsRoot.Find.AllIsActive;
-				toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Text    = (this.settingsRoot.Find.AllIsActive ? "Disable" : "Enable") + " Find A&ll";
+				toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Text    = (this.settingsRoot.Find.AllIsActive ? "Deactivate" : "Activate") + " Find A&ll";
 			}
 			finally
 			{
@@ -4878,8 +4894,10 @@ namespace YAT.View.Forms
 			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = pattern;
 			ApplicationSettings.SaveRoamingUserSettings();
 
+			var options = ApplicationSettings.RoamingUserSettings.Find.Options;
+
 			var monitor = GetMonitor(this.lastMonitorSelection);
-			if (monitor.TryFindOnEdit(pattern, ApplicationSettings.RoamingUserSettings.Find.Options, out resultingDirection))
+			if (monitor.TryFindOnEdit(pattern, options, out resultingDirection))
 			{
 				this.lastFindPattern = pattern;
 
@@ -4906,8 +4924,10 @@ namespace YAT.View.Forms
 			ApplicationSettings.RoamingUserSettings.Find.SetChanged(); // Manual change required because underlying collection is modified.
 			ApplicationSettings.SaveRoamingUserSettings();
 
+			var options = ApplicationSettings.RoamingUserSettings.Find.Options;
+
 			var monitor = GetMonitor(this.lastMonitorSelection);
-			if (monitor.TryFindNext(pattern, ApplicationSettings.RoamingUserSettings.Find.Options))
+			if (monitor.TryFindNext(pattern, options))
 			{
 				this.lastFindPattern = pattern;
 
@@ -4937,8 +4957,10 @@ namespace YAT.View.Forms
 			ApplicationSettings.RoamingUserSettings.Find.SetChanged(); // Manual change required because underlying collection is modified.
 			ApplicationSettings.SaveRoamingUserSettings();
 
+			var options = ApplicationSettings.RoamingUserSettings.Find.Options;
+
 			var monitor = GetMonitor(this.lastMonitorSelection);
-			if (monitor.TryFindPrevious(pattern, ApplicationSettings.RoamingUserSettings.Find.Options))
+			if (monitor.TryFindPrevious(pattern, options))
 			{
 				this.lastFindPattern = pattern;
 
@@ -4970,10 +4992,12 @@ namespace YAT.View.Forms
 			ApplicationSettings.RoamingUserSettings.Find.SetChanged(); // Manual change required because underlying collection is modified.
 			ApplicationSettings.SaveRoamingUserSettings();
 
+			var options = ApplicationSettings.RoamingUserSettings.Find.Options;
+
 			bool success = true;  // Activate in all monitors in any case, monitor could be made visible later.
-			success |= monitor_Tx   .ActivateFindAll(pattern, ApplicationSettings.RoamingUserSettings.Find.Options);
-			success |= monitor_Bidir.ActivateFindAll(pattern, ApplicationSettings.RoamingUserSettings.Find.Options);
-			success |= monitor_Rx   .ActivateFindAll(pattern, ApplicationSettings.RoamingUserSettings.Find.Options);
+			success |= monitor_Tx   .ActivateFindAll(pattern, options);
+			success |= monitor_Bidir.ActivateFindAll(pattern, options);
+			success |= monitor_Rx   .ActivateFindAll(pattern, options);
 			if (success)
 			{
 				this.lastFindPattern = pattern;
@@ -4989,11 +5013,14 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		public virtual void DeactivateFindAll()
 		{
-			this.settingsRoot.Find.AllIsActive = false;
+			if (this.settingsRoot.Find.AllIsActive) // Required to prevent subsequent deactivation on next/previous.
+			{
+				this.settingsRoot.Find.AllIsActive = false;
 
-			monitor_Tx   .DeactivateFindAll();
-			monitor_Bidir.DeactivateFindAll();
-			monitor_Rx   .DeactivateFindAll();
+				monitor_Tx   .DeactivateFindAll();
+				monitor_Bidir.DeactivateFindAll();
+				monitor_Rx   .DeactivateFindAll();
+			}
 		}
 
 		/// <summary></summary>
@@ -5813,6 +5840,19 @@ namespace YAT.View.Forms
 		////contextMenuStrip_Status_Initialize() is not implemented/needed (yet).
 
 			toolStripStatusLabel_TerminalStatus_Initialize();
+		}
+
+		[Conditional("DEBUG")]
+		private void DebugDecorateControls()
+		{
+			var terminalCaption = "Terminal #" + this.terminal.SequentialId.ToString("D2", CultureInfo.CurrentCulture);
+
+			monitor_Tx   .DebugCaption = "[Tx]    of " + terminalCaption;
+			monitor_Bidir.DebugCaption = "[Bidir] of " + terminalCaption;
+			monitor_Rx   .DebugCaption = "[Rx]    of " + terminalCaption;
+
+			// Will result in e.g.
+			//  @ 12:34:56.789 @ Thread #001 : YAT.View.Controls.Monitor [Bidir] of Terminal #01 : ClearSelected() @ fastListBox_Monitor_Leave
 		}
 
 		private void ApplyWindowSettings()
@@ -7797,7 +7837,7 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryRxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryTxReloaded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (this.settingsRoot.Layout.TxMonitorPanelIsVisible)
+			if (this.settingsRoot.Layout.TxMonitorPanelIsVisible && (e.Lines.Count > 0)) // Reload may be triggered with an empty repository, no need to "AddLines()" then.
 				monitor_Tx.AddLines(e.Lines);
 		}
 
@@ -7806,7 +7846,7 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryRxReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryBidirReloaded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible)
+			if (this.settingsRoot.Layout.BidirMonitorPanelIsVisible && (e.Lines.Count > 0)) // Reload may be triggered with an empty repository, no need to "AddLines()" then.
 				monitor_Bidir.AddLines(e.Lines);
 		}
 
@@ -7815,7 +7855,7 @@ namespace YAT.View.Forms
 		[CallingContract(IsAlwaysSequentialIncluding = "Terminal.RepositoryBidirReloaded", Rationale = "The terminal synchronizes display element/line processing.")]
 		private void terminal_RepositoryRxReloaded(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (this.settingsRoot.Layout.RxMonitorPanelIsVisible)
+			if (this.settingsRoot.Layout.RxMonitorPanelIsVisible && (e.Lines.Count > 0)) // Reload may be triggered with an empty repository, no need to "AddLines()" then.
 				monitor_Rx.AddLines(e.Lines);
 		}
 
@@ -8855,7 +8895,11 @@ namespace YAT.View.Forms
 		// Debug
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Name "DebugWriteLine" would show relation to <see cref="Debug.WriteLine(string)"/>.
+		/// However, named "Message" for compactness and more clarity that something will happen
+		/// with the formatted message, and rather than e.g. "Common" for comprehensibility.
+		/// </remarks>
 		[Conditional("DEBUG")]
 		protected void DebugMessage(string format, params object[] args)
 		{
