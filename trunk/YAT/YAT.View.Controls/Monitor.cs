@@ -802,6 +802,7 @@ namespace YAT.View.Controls
 			else // this.findAllIsActive
 			{
 				ResetFindOnEdit();
+				ResetFindAll(); // Required to clear previous [Find All] with a different pattern.
 
 				if (!string.IsNullOrEmpty(pattern))
 				{
@@ -868,6 +869,7 @@ namespace YAT.View.Controls
 		public virtual bool ActivateFindAll(string pattern, FindOptions options)
 		{
 			ResetFindOnEdit();
+			ResetFindAll(); // Required to clear previous [Find All] with a different pattern.
 
 			PrepareFind(pattern, options);
 
