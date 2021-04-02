@@ -789,7 +789,7 @@ namespace YAT.Domain
 			base.DoLineBegin(repositoryType, processState, ts, dev, dir, ref elementsToAdd);
 
 			var lineState = processState.Line; // Convenience shortcut.
-			var lp = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+			var lp = new DisplayElementCollection(); // No preset needed, default behavior is good enough.
 
 			lp.Add(new DisplayElement.LineStart());
 
@@ -840,7 +840,7 @@ namespace YAT.Domain
 			if (!ControlCharacterHasBeenProcessed(b, ts, dir, out de, out isBackspaceToExecute))
 				de = ByteToElement(b, ts, dir, textUnidirState.PendingMultiBytesToDecode); // Default conversion to value or ASCII mnemonic.
 
-			var lp = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+			var lp = new DisplayElementCollection(); // No preset needed, default behavior is good enough.
 
 			// Prepare EOL:
 			if (!textUnidirState.EolOfGivenDevice.ContainsKey(dev))                                        // It is OK to only access or add to the collection,
@@ -1189,7 +1189,7 @@ namespace YAT.Domain
 			else // Neither empty nor need to suppress:
 			{
 				// Process line length/duration:
-				var lineEnd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+				var lineEnd = new DisplayElementCollection(); // No preset needed, default behavior is good enough.
 				if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // Meaning: "byte count"/"char count" and "line duration".
 				{
 					int length;

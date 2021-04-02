@@ -157,8 +157,8 @@ namespace YAT.Domain
 			PreviousLineTimeStamp    = DisplayElement.TimeStampDefault;
 		////PreviousLineDirection    = IODirection.None; is prepared for future use.
 
-			PostponedTxChunks        = new List<RawChunk>(); // No preset needed, the default behavior is good enough.
-			PostponedRxChunks        = new List<RawChunk>(); // No preset needed, the default behavior is good enough.
+			PostponedTxChunks        = new List<RawChunk>(); // No preset needed, default behavior is good enough.
+			PostponedRxChunks        = new List<RawChunk>(); // No preset needed, default behavior is good enough.
 		}
 
 		/// <summary>
@@ -428,7 +428,7 @@ namespace YAT.Domain
 		public LineState()
 		{
 			InitializeValues();
-			Elements = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+			Elements = new DisplayElementCollection(); // No preset needed, default behavior is good enough.
 		}
 
 		/// <summary>
@@ -499,7 +499,7 @@ namespace YAT.Domain
 		public ScriptState()
 		{
 			InitializeValues();
-			Data = new List<byte>(); // No preset needed, the default behavior is good enough.
+			Data = new List<byte>(); // No preset needed, default behavior is good enough.
 		}
 
 		/// <summary>

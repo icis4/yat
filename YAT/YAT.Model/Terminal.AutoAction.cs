@@ -244,7 +244,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual void EvaluateAutoActionFromElements(Domain.RepositoryType repositoryType, Domain.DisplayElementCollection elements, CountsRatesTuple dataStatus, bool shallHighlight, out List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>> triggers)
 		{
-			triggers = new List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>>(); // No preset needed, the default behavior is good enough.
+			triggers = new List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>>(); // No preset needed, default behavior is good enough.
 
 			foreach (var de in elements)
 			{
@@ -325,7 +325,7 @@ namespace YAT.Model
 			}
 			else // IsTextTriggered
 			{
-				triggers = new List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>>(); // No preset needed, the default behavior is good enough.
+				triggers = new List<Tuple<DateTime, string, MatchCollection, CountsRatesTuple>>(); // No preset needed, default behavior is good enough.
 
 				foreach (var dl in lines)
 				{
@@ -898,7 +898,7 @@ namespace YAT.Model
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "'x' and 'y' are common terms for identifying the axes of a plot.")]
 		protected virtual Tuple<string, double>[] ConvertToPlotValues(string[] captures)
 		{
-			var yValues = new List<Tuple<string, double>>(); // No preset needed, the default behavior is good enough.
+			var yValues = new List<Tuple<string, double>>(); // No preset needed, default behavior is good enough.
 
 			foreach (var s in captures)
 			{

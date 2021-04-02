@@ -81,8 +81,8 @@ namespace YAT.Domain
 			PendingMultiBytesToDecode            = new List<byte>(4); // Preset the required capacity to improve memory management; 4 is the maximum value for multi-byte characters.
 			ShownCharCount                       = 0;
 			HasEverShownChar                     = false;
-			EolOfGivenDevice                     = new Dictionary<string, SequenceQueue>(); // No preset needed, the default behavior is good enough.
-			RetainedUnconfirmedHiddenEolElements = new List<DisplayElement>(); // No preset needed, the default behavior is good enough.
+			EolOfGivenDevice                     = new Dictionary<string, SequenceQueue>(); // No preset needed, default behavior is good enough.
+			RetainedUnconfirmedHiddenEolElements = new List<DisplayElement>(); // No preset needed, default behavior is good enough.
 		}
 
 		/// <summary>
