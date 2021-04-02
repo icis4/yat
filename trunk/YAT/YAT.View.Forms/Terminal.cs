@@ -636,8 +636,8 @@ namespace YAT.View.Forms
 
 				toolStripMenuItem_TerminalMenu_Terminal_FindNext       .Enabled = (monitorIsDefined && FindNextIsFeasible);
 				toolStripMenuItem_TerminalMenu_Terminal_FindPrevious   .Enabled = (monitorIsDefined && FindPreviousIsFeasible);
-				toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Enabled = (monitorIsDefined && FindAllIsFeasible);
-				toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Checked =  this.settingsRoot.Find.AllIsActive;
+				toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Enabled = (this.settingsRoot.Find.AllIsActive ? true : (monitorIsDefined && FindAllIsFeasible));
+				toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Checked =  this.settingsRoot.Find.AllIsActive; // Similar code exists in View.Forms.Main.SetFindStateAndControls(). Changes here may have to be applied there too.
 				toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Text    = (this.settingsRoot.Find.AllIsActive ? "Deactivate" : "Activate") + " Find A&ll";
 			}
 			finally
@@ -4262,19 +4262,16 @@ namespace YAT.View.Forms
 
 		private void monitor_Tx_Enter(object sender, EventArgs e)
 		{
-			// Remember which monitor has been activated last.
 			this.lastMonitorSelection = Domain.RepositoryType.Tx;
 		}
 
 		private void monitor_Bidir_Enter(object sender, EventArgs e)
 		{
-			// Remember which monitor has been activated last.
 			this.lastMonitorSelection = Domain.RepositoryType.Bidir;
 		}
 
 		private void monitor_Rx_Enter(object sender, EventArgs e)
 		{
-			// Remember which monitor has been activated last.
 			this.lastMonitorSelection = Domain.RepositoryType.Rx;
 		}
 
@@ -4283,6 +4280,14 @@ namespace YAT.View.Forms
 		/// control is being edited.
 		/// </remarks>
 		private void monitor_TextFocusedChanged(object sender, EventArgs e)
+		{
+			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
+		}
+
+		/// <remarks>
+		/// Ensure the find shortcuts [Alt+Shift+N/P/L] are enabled when a single line is selected.
+		/// </remarks>
+		private void monitor_SelectedLinesChanged(object sender, EventArgs<int> e)
 		{
 			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
 		}
@@ -4740,7 +4745,7 @@ namespace YAT.View.Forms
 			if (monitor != null)
 			{
 				var selectedLines = monitor.SelectedLines;
-				if (selectedLines.Count() == 1)
+				if (selectedLines.Count == 1)
 				{
 					text = selectedLines[0].ContentText;
 					return (true);
@@ -6865,8 +6870,8 @@ namespace YAT.View.Forms
 				SetFixedStatusText("Preparing copying...");
 				Cursor = Cursors.WaitCursor;
 				Clipboard.Clear(); // Prevent handling errors in case copying takes long.
-				SetFixedStatusText("Copying selected lines to clipboard...");
-				RtfWriterHelper.CopyLinesToClipboard(monitor.SelectedLines, this.settingsRoot.Format);
+				SetFixedStatusText("Copying lines to clipboard...");
+				RtfWriterHelper.CopyLinesToClipboard(monitor.SelectedOrAllLines, this.settingsRoot.Format);
 				Cursor = Cursors.Default;
 				SetTimedStatusText("Copying done");
 			}
@@ -6911,40 +6916,40 @@ namespace YAT.View.Forms
 		[ModalBehaviorContract(ModalBehavior.OnlyInCaseOfUserInteraction, Approval = "Only shown in case of an explicit user interaction.")]
 		private void SaveMonitor(Controls.Monitor monitor, string filePath)
 		{
-			SetFixedStatusText("Saving selected lines...");
+			SetFixedStatusText("Saving lines...");
 			try
 			{
-				int requestedCount = monitor.SelectedLines.Count;
+				int requestedCount = monitor.SelectedOrAllLines.Count;
 				int savedCount;
 
 				if (ExtensionHelper.IsXmlFile(filePath))
 				{
 				#if (FALSE) // Enable to use raw instead of text XML export schema, useful for development purposes of the raw XML schema.
-					savedCount = Log.Utilities.XmlWriterHelperRaw.SaveLinesToFile(monitor.SelectedLines, filePath, true);
+					savedCount = Log.Utilities.XmlWriterHelperRaw.SaveLinesToFile(monitor.SelectedOrAllLines, filePath, true);
 				#else
-					savedCount = Log.Utilities.XmlWriterHelperText.SaveLinesToFile(monitor.SelectedLines, filePath, true);
+					savedCount = Log.Utilities.XmlWriterHelperText.SaveLinesToFile(monitor.SelectedOrAllLines, filePath, true);
 				#endif
 				}
 				else if (ExtensionHelper.IsRtfFile(filePath))
 				{
-					savedCount = RtfWriterHelper.SaveLinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
+					savedCount = RtfWriterHelper.SaveLinesToFile(monitor.SelectedOrAllLines, filePath, this.settingsRoot.Format);
 				}
 				else
 				{
-					savedCount = TextWriterHelper.SaveLinesToFile(monitor.SelectedLines, filePath, this.settingsRoot.Format);
+					savedCount = TextWriterHelper.SaveLinesToFile(monitor.SelectedOrAllLines, filePath, this.settingsRoot.Format);
 				}
 
 				if (savedCount == requestedCount)
 				{
-					SetTimedStatusText("Selected lines successfully saved");
+					SetTimedStatusText("Lines successfully saved");
 				}
 				else
 				{
-					SetFixedStatusText("Selected lines only partially saved!");
+					SetFixedStatusText("Lines only partially saved!");
 
 					var sb = new StringBuilder();
 
-					sb.Append("Selected lines only partially saved to file, only ");
+					sb.Append("Lines only partially saved to file, only ");
 					sb.Append(savedCount.ToString(CultureInfo.CurrentCulture));
 					sb.Append(" instead of ");
 					sb.Append(requestedCount.ToString(CultureInfo.CurrentCulture));
@@ -6969,10 +6974,10 @@ namespace YAT.View.Forms
 			}
 			catch (IOException e)
 			{
-				SetFixedStatusText("Selected lines not saved!");
+				SetFixedStatusText("Lines not saved!");
 
 				var sb = new StringBuilder();
-				sb.AppendLine("Unable to save selected lines to file");
+				sb.AppendLine("Unable to save lines to file");
 				sb.AppendLine(filePath);
 				sb.AppendLine();
 				sb.AppendLine("System error message:");
@@ -7016,21 +7021,21 @@ namespace YAT.View.Forms
 
 		private void PrintMonitor(Controls.Monitor monitor, System.Drawing.Printing.PrinterSettings settings)
 		{
-			SetFixedStatusText("Printing data...");
+			SetFixedStatusText("Printing lines...");
 
 			using (var printer = new RtfPrinter(settings))
 			{
 				try
 				{
-					printer.Print(monitor.SelectedLines, this.settingsRoot.Format);
-					SetTimedStatusText("Data printed");
+					printer.Print(monitor.SelectedOrAllLines, this.settingsRoot.Format);
+					SetTimedStatusText("Lines printed");
 				}
 				catch (System.Drawing.Printing.InvalidPrinterException ex)
 				{
-					SetFixedStatusText("Data not printed!");
+					SetFixedStatusText("Lines not printed!");
 
 					var sb = new StringBuilder();
-					sb.AppendLine("Unable to print data!");
+					sb.AppendLine("Unable to print lines!");
 					sb.AppendLine();
 					sb.AppendLine("System error message:");
 					sb.Append    (ex.Message);
@@ -7589,7 +7594,7 @@ namespace YAT.View.Forms
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private List<string> terminal_IOError_MessageBoxShowActiveMessages = new List<string>(); // No preset needed, the default behavior is good enough.
+		private List<string> terminal_IOError_MessageBoxShowActiveMessages = new List<string>(); // No preset needed, default behavior is good enough.
 
 		private void terminal_IOError_MessageBoxShow(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{

@@ -227,6 +227,11 @@ namespace YAT.View.Controls
 
 		/// <summary></summary>
 		[Category("Action")]
+		[Description("Event raised when the the number or selection of selected lines has changed.")]
+		public event EventHandler<EventArgs<int>> SelectedLinesChanged;
+
+		/// <summary></summary>
+		[Category("Action")]
 		[Description("Event raised when the state of find next/previous has changed.")]
 		public event EventHandler FindItemStateChanged;
 
@@ -802,7 +807,6 @@ namespace YAT.View.Controls
 			else // this.findAllIsActive
 			{
 				ResetFindOnEdit();
-				ResetFindAll(); // Required to clear previous [Find All] with a different pattern.
 
 				if (!string.IsNullOrEmpty(pattern))
 				{
@@ -869,7 +873,6 @@ namespace YAT.View.Controls
 		public virtual bool ActivateFindAll(string pattern, FindOptions options)
 		{
 			ResetFindOnEdit();
-			ResetFindAll(); // Required to clear previous [Find All] with a different pattern.
 
 			PrepareFind(pattern, options);
 
@@ -1041,6 +1044,12 @@ namespace YAT.View.Controls
 					lb.SetSelected(i, true);
 					this.findAllSuccessAfterLastUpdate = true;
 				}
+				else
+				{
+					DebugClearSelected(i);
+
+					lb.SetSelected(i, false);
+				}
 			}
 
 			return (this.findAllSuccessAfterLastUpdate);
@@ -1123,14 +1132,37 @@ namespace YAT.View.Controls
 			get { return (fastListBox_Monitor.SelectedItems.Count); }
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// If no lines are available, an empty collection is returned, never <c>null</c>.
+		/// </remarks>
 		public virtual Domain.DisplayLineCollection SelectedLines
 		{
 			get
 			{
 				var lb = fastListBox_Monitor;
 
-				var selectedLines = new Domain.DisplayLineCollection(32); // Preset the initial capacity to improve memory management; 32 is an arbitrary value.
+				var selectedLines = new Domain.DisplayLineCollection(); // No preset needed, default behavior is good enough.
+
+				if (lb.SelectedItems.Count > 0)
+				{
+					foreach (int i in lb.SelectedIndices)
+						selectedLines.Add(lb.Items[i] as Domain.DisplayLine);
+				}
+
+				return (selectedLines);
+			}
+		}
+
+		/// <remarks>
+		/// If no lines are available, an empty collection is returned, never <c>null</c>.
+		/// </remarks>
+		public virtual Domain.DisplayLineCollection SelectedOrAllLines
+		{
+			get
+			{
+				var lb = fastListBox_Monitor;
+
+				var selectedLines = new Domain.DisplayLineCollection(); // No preset needed, default behavior is good enough.
 
 				if (lb.SelectedItems.Count > 0)
 				{
@@ -1266,6 +1298,8 @@ namespace YAT.View.Controls
 
 			if (lb.SelectedItems.Count > 0)
 				SetCopyOfActiveLine(lb.SelectedItems[0]);
+
+			OnSelectedLinesChanged(new EventArgs<int>(lb.SelectedItems.Count));
 		}
 
 		/// <remarks>
@@ -1975,7 +2009,7 @@ namespace YAT.View.Controls
 						}
 						else // [LineStart] is located inside the collection, remove the correct elements and return:
 						{
-							var elementsBeforeCurrentLine = new Domain.DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+							var elementsBeforeCurrentLine = new Domain.DisplayElementCollection(); // No preset needed, default behavior is good enough.
 							elements.CloneTo(0, elementsBeforeCurrentLine, (lineStartIndex - 1));
 							this.pendingElementsAndLines[this.pendingElementsAndLines.Count - 1] = elementsBeforeCurrentLine;
 							return (ClearResult.HasClearedAndCompleted);
@@ -2361,6 +2395,12 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		protected virtual void OnSelectedLinesChanged(EventArgs<int> e)
+		{
+			EventHelper.RaiseSync<EventArgs<int>>(SelectedLinesChanged, this, e);
+		}
+
+		/// <summary></summary>
 		protected virtual void OnFindItemStateChanged(EventArgs e)
 		{
 			EventHelper.RaiseSync(FindItemStateChanged, this, e);
@@ -2480,6 +2520,21 @@ namespace YAT.View.Controls
 					DebugMessage("ListBox.SetSelected({0}) @ {1}()", index, callerMemberName);
 				else
 					DebugMessage("ListBox.SetSelected(*) @ {0}()", callerMemberName);
+			}
+		}
+
+		/// <remarks>
+		/// <c>private</c> because value of <see cref="ConditionalAttribute"/> is limited to file scope.
+		/// </remarks>
+		[Conditional("DEBUG_SELECTION")]
+		private void DebugClearSelected(int index, [CallerMemberName] string callerMemberName = "")
+		{
+			if (DebugEnabled)
+			{
+				if (index != ControlEx.InvalidIndex)
+					DebugMessage("ListBox.ClearSelected({0}) @ {1}()", index, callerMemberName);
+				else
+					DebugMessage("ListBox.ClearSelected(*) @ {0}()", callerMemberName);
 			}
 		}
 
