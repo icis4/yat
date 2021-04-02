@@ -2387,7 +2387,7 @@ namespace YAT.View.Forms
 			toolStripButton_MainTool_Find_Next     .Enabled =  FindNextIsFeasible;
 			toolStripButton_MainTool_Find_Previous .Enabled =  FindPreviousIsFeasible;
 			toolStripButton_MainTool_Find_ToggleAll.Enabled = (FindAllIsActive ? true : FindAllIsFeasible);
-			toolStripButton_MainTool_Find_ToggleAll.Checked =  FindAllIsActive;
+			toolStripButton_MainTool_Find_ToggleAll.Checked =  FindAllIsActive; // Similar code exists in View.Forms.Terminal.toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems(). Changes here may have to be applied there too.
 			toolStripButton_MainTool_Find_ToggleAll.Text    = (FindAllIsActive ? "Deactivate" : "Activate") + " Find All";
 		}
 
@@ -2466,17 +2466,13 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		protected virtual void ValidateAndFindNext(string pattern = null)
+		protected virtual void ValidateAndFindNext()
 		{
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.DeactivateFindAll();
 
-			if (pattern != null)
-				toolStripComboBox_MainTool_Find_Pattern.Text = pattern;
-			else
-				pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
-
+			var pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
 			if (!string.IsNullOrEmpty(pattern) && ValidateFindPattern(pattern))
 			{
 				var result = FindResult.Reset;
@@ -2500,17 +2496,13 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		protected virtual void ValidateAndFindPrevious(string pattern = null)
+		protected virtual void ValidateAndFindPrevious()
 		{
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.DeactivateFindAll();
 
-			if (pattern != null)
-				toolStripComboBox_MainTool_Find_Pattern.Text = pattern;
-			else
-				pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
-
+			var pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
 			if (ValidateFindPattern(pattern))
 			{
 				var result = FindResult.Reset;
@@ -2536,7 +2528,7 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// Slightly inaccurate name. But more accurate than "ValidateAndToggleFindAll".
 		/// </remarks>
-		protected virtual void ToggleAndValidateFindAll(string pattern = null)
+		protected virtual void ToggleAndValidateFindAll()
 		{
 			var t = (ActiveMdiChild as Terminal);
 
@@ -2549,11 +2541,7 @@ namespace YAT.View.Forms
 			}
 			else
 			{
-				if (pattern != null)
-					toolStripComboBox_MainTool_Find_Pattern.Text = pattern;
-				else
-					pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
-
+				var pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
 				if (ValidateFindPattern(pattern))
 				{
 					var result = FindResult.Reset;
@@ -4972,14 +4960,20 @@ namespace YAT.View.Forms
 		/// </summary>
 		public virtual void RequestFind(string pattern)
 		{
+			ShowFindAndSetPattern(pattern);
+
+		////toolStripComboBox_MainTool_Find_Pattern.Select() doesn't work, "ToolStrip" seems to require Focus().
+			toolStripComboBox_MainTool_Find_Pattern.Focus();
+		}
+
+		/// <summary></summary>
+		protected virtual void ShowFindAndSetPattern(string pattern)
+		{
 			if (!ApplicationSettings.RoamingUserSettings.View.FindIsVisible)
 			{
 				ApplicationSettings.RoamingUserSettings.View.FindIsVisible = true;
 				ApplicationSettings.SaveRoamingUserSettings();
 			}
-
-		////toolStripComboBox_MainTool_Terminal_Find_Pattern.Select() doesn't work, "ToolStrip"
-			toolStripComboBox_MainTool_Find_Pattern.Focus();       // seems to require Focus().
 
 			if (pattern != null)
 				toolStripComboBox_MainTool_Find_Pattern.Text = pattern;
@@ -5047,7 +5041,11 @@ namespace YAT.View.Forms
 		/// </summary>
 		public virtual void RequestFindNext(string pattern)
 		{
-			ValidateAndFindNext(pattern);
+			ShowFindAndSetPattern(pattern);
+
+		////toolStripComboBox_MainTool_Find_Pattern.Focus() shall never be done, pattern is either already or just given.
+
+			ValidateAndFindNext();
 		}
 
 		/// <summary>
@@ -5055,7 +5053,11 @@ namespace YAT.View.Forms
 		/// </summary>
 		public virtual void RequestFindPrevious(string pattern)
 		{
-			ValidateAndFindPrevious(pattern);
+			ShowFindAndSetPattern(pattern);
+
+		////toolStripComboBox_MainTool_Find_Pattern.Focus() shall never be done, pattern is either already or just given.
+
+			ValidateAndFindPrevious();
 		}
 
 		/// <summary>
@@ -5063,7 +5065,11 @@ namespace YAT.View.Forms
 		/// </summary>
 		public virtual void RequestToggleFindAll(string pattern)
 		{
-			ToggleAndValidateFindAll(pattern);
+			ShowFindAndSetPattern(pattern);
+
+		////toolStripComboBox_MainTool_Find_Pattern.Focus() shall never be done, pattern is either already or just given.
+
+			ToggleAndValidateFindAll();
 		}
 
 		#endregion
