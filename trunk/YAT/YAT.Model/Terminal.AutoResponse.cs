@@ -219,7 +219,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual void EvaluateAutoResponseFromElements(Domain.RepositoryType repositoryType, Domain.DisplayElementCollection elements, out List<Tuple<byte[], string, MatchCollection>> triggers)
 		{
-			triggers = new List<Tuple<byte[], string, MatchCollection>>(); // No preset needed, the default behavior is good enough.
+			triggers = new List<Tuple<byte[], string, MatchCollection>>(); // No preset needed, default behavior is good enough.
 
 			foreach (var de in elements)
 			{
@@ -292,7 +292,7 @@ namespace YAT.Model
 			}
 			else // IsTextTriggered
 			{
-				triggers = new List<Tuple<byte[], string, MatchCollection>>(); // No preset needed, the default behavior is good enough.
+				triggers = new List<Tuple<byte[], string, MatchCollection>>(); // No preset needed, default behavior is good enough.
 
 				foreach (var dl in lines)
 				{

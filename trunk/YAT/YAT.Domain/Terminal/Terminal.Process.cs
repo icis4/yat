@@ -715,7 +715,7 @@ namespace YAT.Domain
 		protected static void CreateCollectionIfIsNull(ref DisplayElementCollection c)
 		{
 			if (c == null)
-				c = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+				c = new DisplayElementCollection(); // No preset needed, default behavior is good enough.
 		}
 
 		/// <summary></summary>
@@ -723,7 +723,7 @@ namespace YAT.Domain
 		protected static void CreateCollectionIfIsNull(ref DisplayLineCollection c)
 		{
 			if (c == null)
-				c = new DisplayLineCollection(); // No preset needed, the default behavior is good enough.
+				c = new DisplayLineCollection(); // No preset needed, default behavior is good enough.
 		}
 
 	#if (WITH_SCRIPTING)
@@ -733,7 +733,7 @@ namespace YAT.Domain
 		protected static void CreateCollectionIfIsNull(ref ScriptLineCollection c)
 		{
 			if (c == null)
-				c = new ScriptLineCollection(); // No preset needed, the default behavior is good enough.
+				c = new ScriptLineCollection(); // No preset needed, default behavior is good enough.
 		}
 
 	#endif

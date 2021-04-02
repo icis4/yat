@@ -82,7 +82,7 @@ namespace MKY.Collections.Specialized
 		public T BinSize { get; protected set; } // = default(T);
 
 		/// <summary></summary>
-		protected List<T> Items { get; private set; } = new List<T>(); // No preset needed, the default behavior is good enough.
+		protected List<T> Items { get; private set; } = new List<T>(); // No preset needed, default behavior is good enough.
 
 		/// <summary></summary>
 		protected List<long> BinCounts { get; private set; } // = null;

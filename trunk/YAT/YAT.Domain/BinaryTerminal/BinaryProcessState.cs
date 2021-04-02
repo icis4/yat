@@ -82,10 +82,10 @@ namespace YAT.Domain
 		/// </summary>
 		protected virtual void InitializeValues()
 		{
-			SequenceBeforeOfGivenDevice = new Dictionary<string, SequenceQueue>(); // No preset needed, the default behavior is good enough.
-			SequenceAfterOfGivenDevice  = new Dictionary<string, SequenceQueue>(); // No preset needed, the default behavior is good enough.
+			SequenceBeforeOfGivenDevice = new Dictionary<string, SequenceQueue>(); // No preset needed, default behavior is good enough.
+			SequenceAfterOfGivenDevice  = new Dictionary<string, SequenceQueue>(); // No preset needed, default behavior is good enough.
 
-			RetainedUnconfirmedHiddenSequenceBeforeElements = new List<DisplayElement>(); // No preset needed, the default behavior is good enough.
+			RetainedUnconfirmedHiddenSequenceBeforeElements = new List<DisplayElement>(); // No preset needed, default behavior is good enough.
 		}
 
 		/// <summary>

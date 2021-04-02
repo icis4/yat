@@ -1597,7 +1597,7 @@ namespace YAT.Domain
 			// Similar code exists in TextTerminal.FormatMessageTextForScripting(byte[]).
 			// Changes here likely have to be applied there too.
 
-			var lp = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+			var lp = new DisplayElementCollection(); // No preset needed, default behavior is good enough.
 
 			var pendingMultiBytesToDecode = new List<byte>(4); // Preset the required capacity to improve memory management; 4 is the maximum value for multi-byte characters.
 			foreach (byte b in data)

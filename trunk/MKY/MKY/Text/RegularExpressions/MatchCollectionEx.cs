@@ -38,7 +38,7 @@ namespace MKY.Text.RegularExpressions
 		/// </summary>
 		public static string[] UnfoldCapturesToStringArray(MatchCollection matches)
 		{
-			var values = new List<string>(); // No preset needed, the default behavior is good enough.
+			var values = new List<string>(); // No preset needed, default behavior is good enough.
 
 			foreach (Match m in matches)
 			{
@@ -57,7 +57,7 @@ namespace MKY.Text.RegularExpressions
 		/// </summary>
 		public static Tuple<Match, Group, Capture>[] UnfoldCapturesToTupleArray(MatchCollection matches)
 		{
-			var values = new List<Tuple<Match, Group, Capture>>(); // No preset needed, the default behavior is good enough.
+			var values = new List<Tuple<Match, Group, Capture>>(); // No preset needed, default behavior is good enough.
 
 			foreach (Match m in matches)
 			{

@@ -170,7 +170,7 @@ namespace YAT.Domain
 			var processState = GetProcessState(repositoryType);
 			var lineState = processState.Line; // Convenience shortcut.
 
-			var elementsForNextLine = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+			var elementsForNextLine = new DisplayElementCollection(); // No preset needed, default behavior is good enough.
 		#if (WITH_SCRIPTING)
 			var linePositionEndAppliesToScriptLines = false;
 		#endif
@@ -291,7 +291,7 @@ namespace YAT.Domain
 			base.DoLineBegin(repositoryType, processState, ts, dev, dir, ref elementsToAdd);
 
 			var lineState = processState.Line; // Convenience shortcut.
-			var lp = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+			var lp = new DisplayElementCollection(); // No preset needed, default behavior is good enough.
 
 			lp.Add(new DisplayElement.LineStart());
 
@@ -339,7 +339,7 @@ namespace YAT.Domain
 			// Convert content:
 			var de = ByteToElement(b, ts, dir, null); // This binary terminal implementation does not implement multi-byte encodings (yet).
 
-			var lp = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+			var lp = new DisplayElementCollection(); // No preset needed, default behavior is good enough.
 
 			// Evaluate line breaks:
 			//  1. Evaluate the tricky case: Sequence before.
@@ -501,7 +501,7 @@ namespace YAT.Domain
 			// This is opposed to text terminals where potential EOL elements are potentially hidden.
 
 			// Process line length/duration:
-			var lineEnd = new DisplayElementCollection(); // No preset needed, the default behavior is good enough.
+			var lineEnd = new DisplayElementCollection(); // No preset needed, default behavior is good enough.
 			if (TerminalSettings.Display.ShowLength || TerminalSettings.Display.ShowDuration) // Meaning: "byte count" and "line duration".
 			{
 				var length = lineState.Elements.ByteCount;
