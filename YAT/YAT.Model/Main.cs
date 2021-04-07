@@ -1516,7 +1516,7 @@ namespace YAT.Model
 
 					var dr = OnMessageInputRequest(text.ToString(), "Exiting...", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2);
 					if (dr == DialogResult.OK)
-						this.scriptBridge.BreakScript(nonInteractive: false); // Interaction is OK as dialog has just been shown anyway.
+						this.scriptBridge.BreakScript(userInteractionIsAllowed: true); // Interaction is OK as dialog has just been shown anyway.
 					else
 						scriptSuccess = false;
 				}
