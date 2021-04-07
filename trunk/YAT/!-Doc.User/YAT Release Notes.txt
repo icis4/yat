@@ -89,7 +89,7 @@ YAT 2.4.1 :: 2021-04-xx
 
 New:
 - Quick reference (PDF) added. Accessible via [Windows > Start > YAT] and [YAT > Help].
-- [Find All]/[Alt+Shift+L] added, including live update (feature requests #424 and #434).
+- [Find All] added, with shortcut [Alt+Shift+L], incl. live update (feature requests #424 and #434).
 
 Important changes:
 - YAT now checks whether DejaVu fonts are installed, and whether a monospaced font is used in the
