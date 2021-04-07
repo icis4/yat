@@ -599,12 +599,37 @@ namespace YAT.View.Forms
 				                          monitor_Bidir.TextFocused ||
 				                          monitor_Rx   .TextFocused); // Required to suppress standard key shortcuts
 				                                                      // [Ctrl+A], [Ctrl+C] and [Ctrl+Delete] below.
-				if (TerminalIsAvailable)
+				if (TerminalIsAvailable) // which also means "SettingsRootIsAvailable".
 				{
 					toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = !this.terminal.IsStarted;
 					toolStripMenuItem_TerminalMenu_Terminal_Stop .Enabled =  this.terminal.IsStarted;
 
 					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled =  this.terminal.IsSendingForSomeTime;
+					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled = (monitorIsDefined &&                     (this.findShortcutsCtrlFNPLSuspendedCount == 0)); // [Ctrl+L]
+
+					if (this.settingsRoot.Layout.VisibleMonitorPanelCount <= 1)
+					{
+						toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "C&lear";   // Indicating "All" for a single
+						toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh"; //   panel would be confusing.
+					}
+					else
+					{
+						toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "Cl&ear All";
+						toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh All";
+					}
+
+					toolStripMenuItem_TerminalMenu_Terminal_SelectAll      .Enabled = (monitorIsDefined && textIsNotFocused && (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)); // [Ctrl+A]
+					toolStripMenuItem_TerminalMenu_Terminal_SelectNone     .Enabled = (monitorIsDefined && textIsNotFocused && (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)); // [Ctrl+Delete]
+
+					toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = (monitorIsDefined && textIsNotFocused && (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)); // [Ctrl+C]
+					toolStripMenuItem_TerminalMenu_Terminal_SaveToFile     .Enabled =  monitorIsDefined;
+					toolStripMenuItem_TerminalMenu_Terminal_Print          .Enabled = (monitorIsDefined &&                     (this.findShortcutsCtrlFNPLSuspendedCount      == 0)); // [Ctrl+P]
+
+					toolStripMenuItem_TerminalMenu_Terminal_FindNext       .Enabled = (monitorIsDefined && FindNextIsFeasible);
+					toolStripMenuItem_TerminalMenu_Terminal_FindPrevious   .Enabled = (monitorIsDefined && FindPreviousIsFeasible);
+					toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Enabled = (this.settingsRoot.Find.AllIsActive ? true : (monitorIsDefined && FindAllIsFeasible));
+					toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Checked =  this.settingsRoot.Find.AllIsActive; // Similar code exists in View.Forms.Main.SetFindStateAndControls(). Changes here may have to be applied there too.
+					toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Text    = (this.settingsRoot.Find.AllIsActive ? "Deactivate" : "Activate") + " Find A&ll";
 				}
 				else
 				{
@@ -612,33 +637,24 @@ namespace YAT.View.Forms
 					toolStripMenuItem_TerminalMenu_Terminal_Stop .Enabled = false;
 
 					toolStripMenuItem_TerminalMenu_Terminal_Break.Enabled = false;
-				}
+					toolStripMenuItem_TerminalMenu_Terminal_Clear.Enabled = false;
 
-				toolStripMenuItem_TerminalMenu_Terminal_Clear          .Enabled = (monitorIsDefined &&                     (this.findShortcutsCtrlFNPLSuspendedCount == 0)); // [Ctrl+L]
-
-				if (this.settingsRoot.Layout.VisibleMonitorPanelCount <= 1)
-				{
 					toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "C&lear";   // Indicating "All" for a single
 					toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh"; //   panel would be confusing.
+
+					toolStripMenuItem_TerminalMenu_Terminal_SelectAll      .Enabled = false;
+					toolStripMenuItem_TerminalMenu_Terminal_SelectNone     .Enabled = false;
+
+					toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = false;
+					toolStripMenuItem_TerminalMenu_Terminal_SaveToFile     .Enabled = false;
+					toolStripMenuItem_TerminalMenu_Terminal_Print          .Enabled = false;
+
+					toolStripMenuItem_TerminalMenu_Terminal_FindNext       .Enabled = false;
+					toolStripMenuItem_TerminalMenu_Terminal_FindPrevious   .Enabled = false;
+					toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Enabled = false;
+					toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Checked = false;
+					toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Text    = "Activate Find A&ll";
 				}
-				else
-				{
-					toolStripMenuItem_TerminalMenu_Terminal_Clear  .Text = "Cl&ear All";
-					toolStripMenuItem_TerminalMenu_Terminal_Refresh.Text = "&Refresh All";
-				}
-
-				toolStripMenuItem_TerminalMenu_Terminal_SelectAll      .Enabled = (monitorIsDefined && textIsNotFocused && (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)); // [Ctrl+A]
-				toolStripMenuItem_TerminalMenu_Terminal_SelectNone     .Enabled = (monitorIsDefined && textIsNotFocused && (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)); // [Ctrl+Delete]
-
-				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = (monitorIsDefined && textIsNotFocused && (this.editShortcutsCtrlACVDeleteSuspendedCount == 0)); // [Ctrl+C]
-				toolStripMenuItem_TerminalMenu_Terminal_SaveToFile     .Enabled =  monitorIsDefined;
-				toolStripMenuItem_TerminalMenu_Terminal_Print          .Enabled = (monitorIsDefined &&                     (this.findShortcutsCtrlFNPLSuspendedCount      == 0)); // [Ctrl+P]
-
-				toolStripMenuItem_TerminalMenu_Terminal_FindNext       .Enabled = (monitorIsDefined && FindNextIsFeasible);
-				toolStripMenuItem_TerminalMenu_Terminal_FindPrevious   .Enabled = (monitorIsDefined && FindPreviousIsFeasible);
-				toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Enabled = (this.settingsRoot.Find.AllIsActive ? true : (monitorIsDefined && FindAllIsFeasible));
-				toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Checked =  this.settingsRoot.Find.AllIsActive; // Similar code exists in View.Forms.Main.SetFindStateAndControls(). Changes here may have to be applied there too.
-				toolStripMenuItem_TerminalMenu_Terminal_ToggleFindAll  .Text    = (this.settingsRoot.Find.AllIsActive ? "Deactivate" : "Activate") + " Find A&ll";
 			}
 			finally
 			{
@@ -709,9 +725,7 @@ namespace YAT.View.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Find_Click(object sender, EventArgs e)
 		{
-			string text = null;
-			TryGetFindTextFromMonitor(out text); // Will stay "null" if no text is available.
-			RequestFind(text);
+			RequestFind();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_FindNext_Click(object sender, EventArgs e)
@@ -1113,10 +1127,10 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that this 'Leave' event has a particular behavior:
+		/// Note that this 'Leave' event has a peculiar behavior:
 		/// <list type="bullet">
 		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
-		/// <item><description>Directly clicking an option with the mouse, the event is not invoked!</description></item>
+		/// <item><description>Clicking another item of the toolbar, the event is not invoked!</description></item>
 		/// <item><description>Clicking somewhere outside the toolbar, the event is invoked immediately.</description></item>
 		/// </list>
 		/// </remarks>
@@ -1249,10 +1263,10 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that this 'Leave' event has a particular behavior:
+		/// Note that this 'Leave' event has a peculiar behavior:
 		/// <list type="bullet">
 		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
-		/// <item><description>Directly clicking an option with the mouse, the event is not invoked!</description></item>
+		/// <item><description>Clicking another item of the toolbar, the event is not invoked!</description></item>
 		/// <item><description>Clicking somewhere outside the toolbar, the event is invoked immediately.</description></item>
 		/// </list>
 		/// </remarks>
@@ -1527,10 +1541,10 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that this 'Leave' event has a particular behavior:
+		/// Note that this 'Leave' event has a peculiar behavior:
 		/// <list type="bullet">
 		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
-		/// <item><description>Directly clicking an option with the mouse, the event is not invoked!</description></item>
+		/// <item><description>Clicking another item of the toolbar, the event is not invoked!</description></item>
 		/// <item><description>Clicking somewhere outside the toolbar, the event is invoked immediately.</description></item>
 		/// </list>
 		/// </remarks>
@@ -4275,29 +4289,19 @@ namespace YAT.View.Forms
 			this.lastMonitorSelection = Domain.RepositoryType.Rx;
 		}
 
-		/// <remarks>
-		/// Ensure the edit shortcuts such as [Ctrl+A] and [Ctrl+C] are disabled while the send
-		/// control is being edited.
-		/// </remarks>
 		private void monitor_TextFocusedChanged(object sender, EventArgs e)
 		{
-			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
+			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems(); // Ensure the edit shortcuts such as [Ctrl+A] and [Ctrl+C] are disabled while the send control is being edited.
 		}
 
-		/// <remarks>
-		/// Ensure the find shortcuts [Alt+Shift+N/P/L] are enabled when a single line is selected.
-		/// </remarks>
 		private void monitor_SelectedLinesChanged(object sender, EventArgs<int> e)
 		{
-			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
+			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems(); // Ensure the find shortcuts [Alt+Shift+N/P/L] are enabled when a single line is selected.
 		}
 
-		/// <remarks>
-		/// Ensure the find shortcuts [*Modifiers*+F] are enabled/disabled properly.
-		/// </remarks>
 		private void monitor_FindItemStateChanged(object sender, EventArgs e)
 		{
-			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
+			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems(); // Ensure the find shortcuts [*Modifiers*+F] are enabled/disabled properly.
 		}
 
 		private void monitor_Tx_FindAllSuccessChanged(object sender, EventArgs<bool> e)
@@ -4315,6 +4319,39 @@ namespace YAT.View.Forms
 		{
 			if (!this.settingsRoot.Layout.BidirMonitorPanelIsVisible && !this.settingsRoot.Layout.TxMonitorPanelIsVisible) // Bidir and Tx monitors have precedence.
 				OnFindAllSuccessChanged(e);
+		}
+
+		private void monitor_Tx_FindAllDeactivatedWithinMonitor(object sender, EventArgs e)
+		{
+			if (this.settingsRoot.Find.AllIsActive)
+			{
+				this.settingsRoot.Find.AllIsActive = false;
+
+				monitor_Bidir.DeactivateFindAll();
+				monitor_Rx   .DeactivateFindAll();
+			}
+		}
+
+		private void monitor_Bidir_FindAllDeactivatedWithinMonitor(object sender, EventArgs e)
+		{
+			if (this.settingsRoot.Find.AllIsActive)
+			{
+				this.settingsRoot.Find.AllIsActive = false;
+
+				monitor_Tx   .DeactivateFindAll();
+				monitor_Rx   .DeactivateFindAll();
+			}
+		}
+
+		private void monitor_Rx_FindAllDeactivatedWithinMonitor(object sender, EventArgs e)
+		{
+			if (this.settingsRoot.Find.AllIsActive)
+			{
+				this.settingsRoot.Find.AllIsActive = false;
+
+				monitor_Tx   .DeactivateFindAll();
+				monitor_Bidir.DeactivateFindAll();
+			}
 		}
 
 		#endregion
@@ -4739,23 +4776,26 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		protected virtual bool TryGetFindTextFromMonitor(out string text)
+		protected virtual bool TryGetFindTextFromMonitorButOnlyIfNotInFind(out string text)
 		{
-			var monitor = GetMonitor(this.lastMonitorSelection);
-			if (monitor != null)
+			if (this.findShortcutsCtrlFNPLSuspendedCount == 0) // Do not preset/overwrite when already in [Find]!
 			{
-				var selectedLines = monitor.SelectedLines;
-				if (selectedLines.Count == 1)
+				var monitor = GetMonitor(this.lastMonitorSelection);
+				if (monitor != null)
 				{
-					text = selectedLines[0].ContentText;
-					return (true);
-				}
+					var selectedLines = monitor.SelectedLines;
+					if (selectedLines.Count == 1)
+					{
+						text = selectedLines[0].ContentText;
+						return (true);
+					}
 
-				var selectedText = monitor.SelectedTextInCopyOfActiveLine;
-				if (!string.IsNullOrEmpty(selectedText))
-				{
-					text = selectedText;
-					return (true);
+					var selectedText = monitor.SelectedTextInCopyOfActiveLine;
+					if (!string.IsNullOrEmpty(selectedText))
+					{
+						text = selectedText;
+						return (true);
+					}
 				}
 			}
 
@@ -4764,11 +4804,14 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		protected virtual void RequestFind(string pattern)
+		protected virtual void RequestFind()
 		{
+			string text = null;
+			TryGetFindTextFromMonitorButOnlyIfNotInFind(out text); // Will stay "null" if no text is available or if in find.
+
 			var main = (this.mdiParent as Main);
 			if (main != null)
-				main.RequestFind(pattern);
+				main.RequestFind(text);
 			else
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "MDI 'Terminal' requires that MDI parent is 'Main'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
@@ -4779,7 +4822,7 @@ namespace YAT.View.Forms
 			get
 			{
 				string text;
-				if (TryGetFindTextFromMonitor(out text))
+				if (TryGetFindTextFromMonitorButOnlyIfNotInFind(out text))
 					return (true);
 
 				var main = (this.mdiParent as Main);
@@ -4796,7 +4839,7 @@ namespace YAT.View.Forms
 			get
 			{
 				string text;
-				if (TryGetFindTextFromMonitor(out text))
+				if (TryGetFindTextFromMonitorButOnlyIfNotInFind(out text))
 					return (true);
 
 				var main = (this.mdiParent as Main);
@@ -4815,7 +4858,7 @@ namespace YAT.View.Forms
 			get
 			{
 				string text;
-				if (TryGetFindTextFromMonitor(out text))
+				if (TryGetFindTextFromMonitorButOnlyIfNotInFind(out text))
 					return (true);
 
 				var main = (this.mdiParent as Main);
@@ -4830,7 +4873,7 @@ namespace YAT.View.Forms
 		protected virtual void RequestFindNext()
 		{
 			string text = null;
-			TryGetFindTextFromMonitor(out text); // Will stay "null" if no text is available.
+			TryGetFindTextFromMonitorButOnlyIfNotInFind(out text); // Will stay "null" if no text is available or if in find.
 
 			var main = (this.mdiParent as Main);
 			if (main != null)
@@ -4843,7 +4886,7 @@ namespace YAT.View.Forms
 		protected virtual void RequestFindPrevious()
 		{
 			string text = null;
-			TryGetFindTextFromMonitor(out text); // Will stay "null" if no text is available.
+			TryGetFindTextFromMonitorButOnlyIfNotInFind(out text); // Will stay "null" if no text is available or if in find.
 
 			var main = (this.mdiParent as Main);
 			if (main != null)
@@ -4856,7 +4899,7 @@ namespace YAT.View.Forms
 		protected virtual void RequestToggleFindAll()
 		{
 			string text = null;
-			TryGetFindTextFromMonitor(out text); // Will stay "null" if no text is available.
+			TryGetFindTextFromMonitorButOnlyIfNotInFind(out text); // Will stay "null" if no text is available or if in find.
 
 			var main = (this.mdiParent as Main);
 			if (main != null)
@@ -4872,7 +4915,7 @@ namespace YAT.View.Forms
 			ApplicationSettings.SaveRoamingUserSettings();
 
 			var monitor = GetMonitor(this.lastMonitorSelection);
-			monitor.ResetFindOnEdit();
+			monitor.EmptyFindOnEdit();
 		}
 
 		/// <remarks>
@@ -4884,7 +4927,7 @@ namespace YAT.View.Forms
 			ApplicationSettings.SaveRoamingUserSettings();
 
 			var monitor = GetMonitor(this.lastMonitorSelection);
-			monitor.ResetFindOnEdit();
+			monitor.LeaveFindOnEdit();
 		}
 
 		/// <remarks>
@@ -4893,26 +4936,48 @@ namespace YAT.View.Forms
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public virtual FindResult TryFindOnEdit(string pattern, out FindDirection resultingDirection)
 		{
-			// The active pattern semms not have to be saved each time, it is saved on LeaveFindOnEdit() anyway.
+			// The active pattern seems to not have to be saved each time, it is saved on LeaveFindOnEdit().
 			// But, when anything else changes (e.g. find options, or the terminal is closed/opened) the pattern would get reset.
 
 			ApplicationSettings.RoamingUserSettings.Find.ActivePattern = pattern;
+		////ApplicationSettings.RoamingUserSettings.Find.RecentPatterns.Add(new RecentItem<string>(pattern)); // But "OnEdit" shall not update the recents,
+		////ApplicationSettings.RoamingUserSettings.Find.SetChanged();                                        // thus no manual change is required.
 			ApplicationSettings.SaveRoamingUserSettings();
 
 			var options = ApplicationSettings.RoamingUserSettings.Find.Options;
 
-			var monitor = GetMonitor(this.lastMonitorSelection);
-			if (monitor.TryFindOnEdit(pattern, options, out resultingDirection))
+			if (!FindAllIsActive) // "Normal" case:
 			{
-				this.lastFindPattern = pattern;
+				var monitor = GetMonitor(this.lastMonitorSelection);
+				if (monitor.TryFindOnEdit(pattern, options, out resultingDirection))
+				{
+					this.lastFindPattern = pattern;
 
-				return (FindResult.Found);
+					return (FindResult.Found);
+				}
+				else
+				{
+					bool isFirst = (pattern != this.lastFindPattern);
+
+					return (isFirst ? FindResult.NotFoundAtAll : FindResult.NotFoundAnymore);
+				}
 			}
-			else
+			else // FindAllIsActive:
 			{
-				bool isFirst = (pattern != this.lastFindPattern);
+				var success = true;
+				success |= monitor_Tx   .TryFindOnEdit(pattern, options, out resultingDirection);
+				success |= monitor_Bidir.TryFindOnEdit(pattern, options, out resultingDirection);
+				success |= monitor_Rx   .TryFindOnEdit(pattern, options, out resultingDirection);
+				if (success)
+				{
+					this.lastFindPattern = pattern;
 
-				return (isFirst ? FindResult.NotFoundAtAll : FindResult.NotFoundAnymore);
+					return (FindResult.Found);
+				}
+				else
+				{
+					return (FindResult.NotFoundAtAll);
+				}
 			}
 		}
 
@@ -4999,7 +5064,7 @@ namespace YAT.View.Forms
 
 			var options = ApplicationSettings.RoamingUserSettings.Find.Options;
 
-			bool success = true;  // Activate in all monitors in any case, monitor could be made visible later.
+			var success = true;  // Activate in all monitors in any case, monitor could be made visible later.
 			success |= monitor_Tx   .ActivateFindAll(pattern, options);
 			success |= monitor_Bidir.ActivateFindAll(pattern, options);
 			success |= monitor_Rx   .ActivateFindAll(pattern, options);
@@ -6253,10 +6318,10 @@ namespace YAT.View.Forms
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
-		private bool toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore; // = false;
+		private bool toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore = true; // The default value. Should be backed up first, but could not, see "not get notified" below.
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
-		private bool toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore; // = false;
+		private bool toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore = true; // The default value. Should be backed up first, but could not, see "not get notified" below.
 
 		/// <summary>
 		/// Suspends the [Ctrl+F/N/P/L] find shortcuts.
@@ -6270,13 +6335,13 @@ namespace YAT.View.Forms
 			if (this.findShortcutsCtrlFNPLSuspendedCount == 0)
 			{
 				toolStripMenuItem_TerminalMenu_Terminal_Print_EnabledToRestore = toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled;
-				toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore  = toolStripMenuItem_TerminalMenu_Terminal_Find .Enabled;
+				toolStripMenuItem_TerminalMenu_Terminal_Find_EnabledToRestore  = toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled;
 
 				toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled = false; // [Ctrl+P]
-				toolStripMenuItem_TerminalMenu_Terminal_Find .Enabled = false; // [Ctrl+F]
+				toolStripMenuItem_TerminalMenu_Terminal_Find.Enabled  = false; // [Ctrl+F]
 			}
 
-			this.findShortcutsCtrlFNPLSuspendedCount++; // No need for "lock"/"Interlocked...()" as WinForms is synchronized on main thread.
+			this.findShortcutsCtrlFNPLSuspendedCount++; // No need for "lock"/"Interlocked...()" as WinForms is synchronized onto main thread.
 
 			// Could be implemented more cleverly, by iterating over all potential shortcut controls
 			// and then handle those that use one of the shortcuts in question. However, that would
@@ -6289,7 +6354,7 @@ namespace YAT.View.Forms
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "FNPL", Justification = "FNPL refers to these four specific keys.")]
 		public virtual void ResumeFindShortcutsCtrlFNPL()
 		{
-			this.findShortcutsCtrlFNPLSuspendedCount--; // No need for "lock"/"Interlocked...()" as WinForms is synchronized on main thread.
+			this.findShortcutsCtrlFNPLSuspendedCount--; // No need for "lock"/"Interlocked...()" as WinForms is synchronized onto main thread.
 
 			if (this.findShortcutsCtrlFNPLSuspendedCount < 0) // Main form will call this method also for newly opened
 			{                                                 // terminals which did not get notified about Suspend() yet!
@@ -6305,13 +6370,13 @@ namespace YAT.View.Forms
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
-		private bool toolStripMenuItem_TerminalMenu_Terminal_SelectAll_EnabledToRestore; // = false;
+		private bool toolStripMenuItem_TerminalMenu_Terminal_SelectAll_EnabledToRestore = true; // The default value. Should be backed up first, but could not, see "not get notified" below.
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
-		private bool toolStripMenuItem_TerminalMenu_Terminal_SelectNone_EnabledToRestore; // = false;
+		private bool toolStripMenuItem_TerminalMenu_Terminal_SelectNone_EnabledToRestore = true; // The default value. Should be backed up first, but could not, see "not get notified" below.
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of item and postfix.")]
-		private bool toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_EnabledToRestore; // = false;
+		private bool toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_EnabledToRestore = true; // The default value. Should be backed up first, but could not, see "not get notified" below.
 
 		/// <summary>
 		/// Suspends the [Ctrl+A/C/V/Delete] standard edit shortcuts.
@@ -6336,7 +6401,7 @@ namespace YAT.View.Forms
 				toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = false; // [Ctrl+C]
 			}
 
-			this.editShortcutsCtrlACVDeleteSuspendedCount++; // No need for "lock"/"Interlocked...()" as WinForms is synchronized on main thread.
+			this.editShortcutsCtrlACVDeleteSuspendedCount++; // No need for "lock"/"Interlocked...()" as WinForms is synchronized onto main thread.
 
 			// Could be implemented more cleverly, by iterating over all potential shortcut controls
 			// and then handle those that use one of the shortcuts in question. However, that would
@@ -6352,7 +6417,7 @@ namespace YAT.View.Forms
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "ACV", Justification = "ACV refers to these three specific keys.")]
 		public virtual void ResumeEditShortcutsCtrlACVDelete()
 		{
-			this.editShortcutsCtrlACVDeleteSuspendedCount--; // No need for "lock"/"Interlocked...()" as WinForms is synchronized on main thread.
+			this.editShortcutsCtrlACVDeleteSuspendedCount--; // No need for "lock"/"Interlocked...()" as WinForms is synchronized onto main thread.
 
 			if (this.editShortcutsCtrlACVDeleteSuspendedCount < 0) // Main form will call this method also for newly opened
 			{                                                      // terminals which did not get notified about Suspend() yet!
@@ -7602,7 +7667,7 @@ namespace YAT.View.Forms
 			// case of framing errors on invalid baud rate. This has resulted message boxes across
 			// the whole screen...
 
-			if (!terminal_IOError_MessageBoxShowActiveMessages.Contains(message)) // No need for locking as WinForms is synchronized on main thread.
+			if (!terminal_IOError_MessageBoxShowActiveMessages.Contains(message)) // No need for locking as WinForms is synchronized onto main thread.
 			{
 				terminal_IOError_MessageBoxShowActiveMessages.Add(message); // Just checking message (and not also the icon, i.e. the severity) is considered good enough.
 

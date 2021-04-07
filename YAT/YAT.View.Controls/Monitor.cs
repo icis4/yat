@@ -198,6 +198,7 @@ namespace YAT.View.Controls
 		private bool findAllIsActive; // = false;
 		private bool findAllSuccessAfterLastUpdate; // = false;
 		private bool findAllSuccessOnCurrentUpdate; // = false;
+		private SettingControlsHelper findAllOrSelectAllOrNoneIsChangingSelection;
 
 		// Update:
 		private List<object> pendingElementsAndLines = new List<object>(32); // Preset the initial capacity to improve memory management, 32 is an arbitrary value.		private bool performImmediateUpdate;
@@ -239,6 +240,11 @@ namespace YAT.View.Controls
 		[Category("Action")]
 		[Description("Event raised when the result of find all has changed.")]
 		public event EventHandler<EventArgs<bool>> FindAllSuccessChanged;
+
+		/// <summary></summary>
+		[Category("Action")]
+		[Description("Event raised when find all has been reset, e.g. when user selects a line.")]
+		public event EventHandler FindAllDeactivatedWithinMonitor;
 
 		#endregion
 
@@ -744,26 +750,33 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		public virtual void SelectAll()
 		{
-			var lb = fastListBox_Monitor;
-			lb.SelectAll();
-
-			DebugSetSelected(ControlEx.InvalidIndex);
+			this.findAllOrSelectAllOrNoneIsChangingSelection.Enter();
+			try
+			{
+				var lb = fastListBox_Monitor;
+				lb.SelectAll();
+				DebugSetSelected(ControlEx.InvalidIndex);
+			}
+			finally
+			{
+				this.findAllOrSelectAllOrNoneIsChangingSelection.Leave();
+			}
 		}
 
 		/// <summary></summary>
 		public virtual void SelectNone()
 		{
-			var lb = fastListBox_Monitor;
-			lb.ClearSelected();
-
-			DebugClearSelected();
-		}
-
-		/// <summary></summary>
-		public virtual void ResetFindOnEdit()
-		{
-			this.isFirstFindOnEdit = true;
-			this.findOnEditStartIndex = ControlEx.InvalidIndex;
+			this.findAllOrSelectAllOrNoneIsChangingSelection.Enter();
+			try
+			{
+				var lb = fastListBox_Monitor;
+				lb.ClearSelected();
+				DebugClearSelected();
+			}
+			finally
+			{
+				this.findAllOrSelectAllOrNoneIsChangingSelection.Leave();
+			}
 		}
 
 		/// <remarks>
@@ -821,9 +834,8 @@ namespace YAT.View.Controls
 			}
 
 			var lb = fastListBox_Monitor;
-			lb.ClearSelected();
-
-			DebugClearSelected();
+			lb.ClearSelected();   // "findAllOrSelectAllOrNoneIsChangingSelection" shall not be entered/left,
+			DebugClearSelected(); // the find result shall be reflected in e.g. the copy of the active line.
 
 			resultingDirection = FindDirection.Undetermined;
 			return (false);
@@ -856,15 +868,34 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
+		public virtual void EmptyFindOnEdit()
+		{
+			ResetFindOnEdit();
+		}
+
+		/// <summary></summary>
+		public virtual void LeaveFindOnEdit()
+		{
+			ResetFindOnEdit();
+
+			// Selection shall be reset when leaving find, otherwise lines among the
+			// monitors would stay highlighted. But of course not if [Find All] is active:
+			if (!findAllIsActive)
+				SelectNone();
+		}
+
+		/// <summary></summary>
+		protected virtual void ResetFindOnEdit()
+		{
+			this.isFirstFindOnEdit = true;
+			this.findOnEditStartIndex = ControlEx.InvalidIndex;
+		}
+
+		/// <summary></summary>
 		protected virtual void ResetFindAll()
 		{
 			this.findAllSuccessAfterLastUpdate = false;
 			this.findAllSuccessOnCurrentUpdate = false;
-
-			var lb = fastListBox_Monitor;
-			lb.ClearSelected();
-
-			DebugClearSelected();
 		}
 
 		/// <remarks>
@@ -885,13 +916,29 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		public virtual void DeactivateFindAll()
+		public virtual void DeactivateFindAll(bool clearSelected = true)
 		{
 			ResetFindAll();
 
 			this.findAllIsActive = false;
 
-			OnFindAllSuccessChanged(new EventArgs<bool>(false));
+			if (clearSelected)
+			{
+				this.findAllOrSelectAllOrNoneIsChangingSelection.Enter();
+				try
+				{
+					var lb = fastListBox_Monitor;
+					lb.ClearSelected();
+					DebugClearSelected();
+				}
+				finally
+				{
+					this.findAllOrSelectAllOrNoneIsChangingSelection.Leave();
+				}
+			}
+
+		////OnFindAllSuccessChanged(new EventArgs<bool>(false)) must not be called! Success has not changed!
+		////OnFindAllDeactivatedWithinMonitor(EventArgs.Empty)  must not be called! Deactivation has been triggered outside!
 			OnFindItemStateChanged(EventArgs.Empty);
 		}
 
@@ -974,8 +1021,8 @@ namespace YAT.View.Controls
 				DebugClearSelected();
 				DebugSetSelected(i);
 
-				lb.ClearSelected();
-				lb.SetSelected(i, true);
+				lb.ClearSelected();      // "findAllOrSelectAllOrNoneIsChangingSelection" shall not be entered/left,
+				lb.SetSelected(i, true); // the find result shall be reflected in e.g. the copy of the active line.
 				lb.TopIndex = Math.Max(i - (lb.TotalVisibleItemCount / 2), 0);
 
 				findIndex = i;
@@ -1006,8 +1053,8 @@ namespace YAT.View.Controls
 				DebugClearSelected();
 				DebugSetSelected(i);
 
-				lb.ClearSelected();
-				lb.SetSelected(i, true);
+				lb.ClearSelected();      // "findAllOrSelectAllOrNoneIsChangingSelection" shall not be entered/left,
+				lb.SetSelected(i, true); // the find result shall be reflected in e.g. the copy of the active line.
 				lb.TopIndex = Math.Max(i - (lb.TotalVisibleItemCount / 2), 0);
 
 				findIndex = i;
@@ -1039,16 +1086,31 @@ namespace YAT.View.Controls
 				var result = lb.FindAt(this.findText, this.findTextCaseSensitive, this.findTextWholeWord, this.findRegex, i);
 				if (result == i)
 				{
-					DebugSetSelected(i);
+					this.findAllOrSelectAllOrNoneIsChangingSelection.Enter();
+					try
+					{
+						DebugSetSelected(i);
+						lb.SetSelected(i, true);
+					}
+					finally
+					{
+						this.findAllOrSelectAllOrNoneIsChangingSelection.Leave();
+					}
 
-					lb.SetSelected(i, true);
 					this.findAllSuccessAfterLastUpdate = true;
 				}
 				else
 				{
-					DebugClearSelected(i);
-
-					lb.SetSelected(i, false);
+					this.findAllOrSelectAllOrNoneIsChangingSelection.Enter();
+					try
+					{
+						DebugClearSelected(i);
+						lb.SetSelected(i, false);
+					}
+					finally
+					{
+						this.findAllOrSelectAllOrNoneIsChangingSelection.Leave();
+					}
 				}
 			}
 
@@ -1062,9 +1124,9 @@ namespace YAT.View.Controls
 
 			if (lb.Items.Count > 0)
 			{
-				if (lb.LastSelectedIndex != ControlEx.InvalidIndex)
+				if (lb.CurrentOrFormerFirstSelectedIndex != ControlEx.InvalidIndex)
 				{
-					result = lb.LastSelectedIndex;
+					result = lb.CurrentOrFormerFirstSelectedIndex;
 					if (result <= lb.LastIndex)
 						return (true);
 					else
@@ -1296,8 +1358,14 @@ namespace YAT.View.Controls
 		{
 			var lb = fastListBox_Monitor;
 
-			if (lb.SelectedItems.Count > 0)
-				SetCopyOfActiveLine(lb.SelectedItems[0]);
+			if (!this.findAllOrSelectAllOrNoneIsChangingSelection)  // Changes not triggered by [Find All] shall:
+			{
+				DeactivateFindAll(clearSelected: false);            // a) Deactivate [Find All] for this...
+				OnFindAllDeactivatedWithinMonitor(EventArgs.Empty); //    ...as well as other monitors.
+
+				if (lb.SelectedItems.Count > 0)                     // b) Be reflected in the copy of the active line.
+					SetCopyOfActiveLine(lb.SelectedItems[0]);
+			}
 
 			OnSelectedLinesChanged(new EventArgs<int>(lb.SelectedItems.Count));
 		}
@@ -1476,16 +1544,10 @@ namespace YAT.View.Controls
 
 		private void fastListBox_Monitor_Leave(object sender, EventArgs e)
 		{
-			// Selected lines shall be reset when leaving the control, otherwise lines among the
-			// monitors would stay highlighted. But don't clear in case [Find All] is active:
-
+			// Selection shall be reset when leaving the control, otherwise lines among the
+			// monitors would stay highlighted. But of course not if [Find All] is active:
 			if (!this.findAllIsActive)
-			{
-				var lb = fastListBox_Monitor;
-				lb.ClearSelected();
-
-				DebugClearSelected();
-			}
+				SelectNone();
 		}
 
 		/// <remarks>
@@ -1815,26 +1877,26 @@ namespace YAT.View.Controls
 			// makes little sense, as just few items will not result in an noticable drop of performance):
 			if (!lbmon.UserIsScrolling) // Perform auto-scroll.
 			{
-				bool hasClearedSelection;
+				bool hasClearedSelected;
 
-				var clearSelection = (!this.findAllIsActive);
-				if (lbmon.VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastFewItemsIsSelected(clearSelection, out hasClearedSelection))
+				var clearSelected = (!this.findAllIsActive);
+				if (lbmon.VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastFewItemsIsSelected(clearSelected, out hasClearedSelected))
 					lblin.VerticalScrollToBottom(); // Scroll line numbers accordingly.
 
-				if (hasClearedSelection)
+				if (hasClearedSelected)
 					DebugClearSelected();
 			}
 			else // UserIsScrolling => Suspend auto-scroll.
 			{
 				if (lbmon.VerticalScrollBarIsNearBottom) // Resume auto-scroll.
 				{
-					bool hasClearedSelection;
+					bool hasClearedSelected;
 
-					var clearSelection = (!this.findAllIsActive);
-					if (lbmon.VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastFewItemsIsSelected(clearSelection, out hasClearedSelection))
+					var clearSelected = (!this.findAllIsActive);
+					if (lbmon.VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastFewItemsIsSelected(clearSelected, out hasClearedSelected))
 						lblin.VerticalScrollToBottom(); // Scroll line numbers accordingly.
 
-					if (hasClearedSelection)
+					if (hasClearedSelected)
 						DebugClearSelected();
 				}
 			}
@@ -1945,9 +2007,17 @@ namespace YAT.View.Controls
 						var result = lb.FindAt(this.findText, this.findTextCaseSensitive, this.findTextWholeWord, this.findRegex, index);
 						if (result == index)
 						{
-							DebugSetSelected(index);
+							this.findAllOrSelectAllOrNoneIsChangingSelection.Enter();
+							try
+							{
+								DebugSetSelected(index);
+								lb.SetSelected(index, true);
+							}
+							finally
+							{
+								this.findAllOrSelectAllOrNoneIsChangingSelection.Leave();
+							}
 
-							lb.SetSelected(index, true);
 							this.findAllSuccessOnCurrentUpdate = true;
 						}
 					}
@@ -2410,6 +2480,12 @@ namespace YAT.View.Controls
 		protected virtual void OnFindAllSuccessChanged(EventArgs<bool> e)
 		{
 			EventHelper.RaiseSync<EventArgs<bool>>(FindAllSuccessChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnFindAllDeactivatedWithinMonitor(EventArgs e)
+		{
+			EventHelper.RaiseSync(FindAllDeactivatedWithinMonitor, this, e);
 		}
 
 		#endregion

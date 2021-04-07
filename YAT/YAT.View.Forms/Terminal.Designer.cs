@@ -5121,6 +5121,7 @@ namespace YAT.View.Forms
 			this.monitor_Tx.SelectedLinesChanged += new System.EventHandler<EventArgs<int>>(this.monitor_SelectedLinesChanged);
 			this.monitor_Tx.FindItemStateChanged += new System.EventHandler(this.monitor_FindItemStateChanged);
 			this.monitor_Tx.FindAllSuccessChanged += new System.EventHandler<EventArgs<bool>>(this.monitor_Tx_FindAllSuccessChanged);
+			this.monitor_Tx.FindAllDeactivatedWithinMonitor += new System.EventHandler(this.monitor_Tx_FindAllDeactivatedWithinMonitor);
 			this.monitor_Tx.Enter += new System.EventHandler(this.monitor_Tx_Enter);
 			// 
 			// splitContainer_RxMonitor
@@ -5170,6 +5171,7 @@ namespace YAT.View.Forms
 			this.monitor_Bidir.SelectedLinesChanged += new System.EventHandler<EventArgs<int>>(this.monitor_SelectedLinesChanged);
 			this.monitor_Bidir.FindItemStateChanged += new System.EventHandler(this.monitor_FindItemStateChanged);
 			this.monitor_Bidir.FindAllSuccessChanged += new System.EventHandler<EventArgs<bool>>(this.monitor_Bidir_FindAllSuccessChanged);
+			this.monitor_Bidir.FindAllDeactivatedWithinMonitor += new System.EventHandler(this.monitor_Bidir_FindAllDeactivatedWithinMonitor);
 			this.monitor_Bidir.Enter += new System.EventHandler(this.monitor_Bidir_Enter);
 			// 
 			// panel_Monitor_Rx
@@ -5197,6 +5199,7 @@ namespace YAT.View.Forms
 			this.monitor_Rx.SelectedLinesChanged += new System.EventHandler<EventArgs<int>>(this.monitor_SelectedLinesChanged);
 			this.monitor_Rx.FindItemStateChanged += new System.EventHandler(this.monitor_FindItemStateChanged);
 			this.monitor_Rx.FindAllSuccessChanged += new System.EventHandler<EventArgs<bool>>(this.monitor_Rx_FindAllSuccessChanged);
+			this.monitor_Rx.FindAllDeactivatedWithinMonitor += new System.EventHandler(this.monitor_Rx_FindAllDeactivatedWithinMonitor);
 			this.monitor_Rx.Enter += new System.EventHandler(this.monitor_Rx_Enter);
 			// 
 			// panel_Predefined

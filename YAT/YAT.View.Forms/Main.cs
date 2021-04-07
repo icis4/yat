@@ -154,6 +154,7 @@ namespace YAT.View.Forms
 		private bool findNextIsFeasible;     // = false;
 		private bool findPreviousIsFeasible; // = false;
 		private bool findAllIsFeasible;      // = false; is not named 'toggleFindAll...' as it shall only indicate activation.
+		private bool disarmFindOnEditOnce;   // = false;
 
 		// Auto:
 		private bool autoActionTriggerValidationIsOngoing;    // = false;
@@ -2040,101 +2041,141 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_File_New_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			ShowNewTerminalDialog();
 		}
 
 		private void toolStripButton_MainTool_File_Open_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			ShowOpenFileDialog();
 		}
 
 		private void toolStripButton_MainTool_File_Save_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			((Terminal)ActiveMdiChild).RequestSaveFile(); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_File_SaveWorkspace_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			this.workspace.Save();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Start_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			((Terminal)ActiveMdiChild).RequestStartTerminal(); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Terminal_Stop_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			((Terminal)ActiveMdiChild).RequestStopTerminal(); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Terminal_Settings_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			((Terminal)ActiveMdiChild).RequestEditTerminalSettings(); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Radix_String_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.String); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Radix_Char_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Char); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Radix_Bin_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Bin); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Radix_Oct_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Oct); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Radix_Dec_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Dec); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Radix_Hex_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Hex); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Radix_Unicode_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Unicode); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Terminal_Clear_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			((Terminal)ActiveMdiChild).RequestClear(); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Terminal_Refresh_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			((Terminal)ActiveMdiChild).RequestRefresh(); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Terminal_CopyToClipboard_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			((Terminal)ActiveMdiChild).RequestCopyToClipboard(); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Terminal_SaveToFile_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			((Terminal)ActiveMdiChild).RequestSaveToFile(); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Terminal_Print_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			((Terminal)ActiveMdiChild).RequestPrint(); // Precondition 'option only enabled when child is ready' is given.
 		}
 
 		private void toolStripButton_MainTool_Find_ShowHide_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			ApplicationSettings.RoamingUserSettings.View.FindIsVisible = !ApplicationSettings.RoamingUserSettings.View.FindIsVisible;
 			ApplicationSettings.SaveRoamingUserSettings();
 
@@ -2161,18 +2202,30 @@ namespace YAT.View.Forms
 		private void toolStripComboBox_MainTool_Find_Pattern_Enter(object sender, EventArgs e)
 		{
 			DebugFindEnter(MethodBase.GetCurrentMethod().Name);
-			SuspendFindShortcutsCtrlFNPL();      // Suspend while in find field.
-			SuspendEditShortcutsCtrlACVDelete(); // Suspend while in find field.
-			EnterFindOnEdit();
+			{
+				SuspendFindShortcutsCtrlFNPL();      // Suspend while in find field.
+				SuspendEditShortcutsCtrlACVDelete(); // Suspend while in find field.
+				EnterFindOnEdit();
+			}
 			DebugFindLeave();
 		}
 
+		/// <remarks>
+		/// Note that this 'Leave' event has a peculiar behavior:
+		/// <list type="bullet">
+		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
+		/// <item><description>Clicking another item of the toolbar, the event is not invoked!</description></item>
+		/// <item><description>Clicking somewhere outside the toolbar, the event is invoked immediately.</description></item>
+		/// </list>
+		/// </remarks>
 		private void toolStripComboBox_MainTool_Find_Pattern_Leave(object sender, EventArgs e)
 		{
 			DebugFindEnter(MethodBase.GetCurrentMethod().Name);
-			LeaveFindOnEdit(toolStripComboBox_MainTool_Find_Pattern.Text);
-			ResumeEditShortcutsCtrlACVDelete(); // Suspended while in find field.
-			ResumeFindShortcutsCtrlFNPL();      // Suspended while in find field.
+			{
+				LeaveFindOnEdit();
+				ResumeEditShortcutsCtrlACVDelete(); // Suspended while in find field.
+				ResumeFindShortcutsCtrlFNPL();      // Suspended while in find field.
+			}
 			DebugFindLeave();
 		}
 
@@ -2383,7 +2436,7 @@ namespace YAT.View.Forms
 			toolStripComboBox_MainTool_Find_Pattern.BackColor = backColor;
 			toolStripComboBox_MainTool_Find_Pattern.ForeColor = foreColor;
 
-			// ...taking the 'ActiveMdiChild' into account:
+			// ...taking the "ActiveMdiChild" into account:
 			toolStripButton_MainTool_Find_Next     .Enabled =  FindNextIsFeasible;
 			toolStripButton_MainTool_Find_Previous .Enabled =  FindPreviousIsFeasible;
 			toolStripButton_MainTool_Find_ToggleAll.Enabled = (FindAllIsActive ? true : FindAllIsFeasible);
@@ -2394,7 +2447,10 @@ namespace YAT.View.Forms
 		/// <summary></summary>
 		protected virtual void EnterFindOnEdit()
 		{
-			ValidateAndFindOnEdit();
+			if (this.disarmFindOnEditOnce)
+				this.disarmFindOnEditOnce = false;
+			else
+				ValidateAndFindOnEdit();
 		}
 
 		/// <summary></summary>
@@ -2408,7 +2464,7 @@ namespace YAT.View.Forms
 				else
 					SetFindStateAndControls(FindDirection.Undetermined, FindResult.Invalid);
 			}
-			else // Opposed to FindNext/Previous(), an "empty" FindOnEdit() shall result in 'Reset'.
+			else // Opposed to FindNext/Previous(), an "empty" FindOnEdit() shall result in "Reset".
 			{
 				EmptyFindOnEdit();
 			}
@@ -2449,8 +2505,10 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		protected virtual void LeaveFindOnEdit(string pattern)
+		protected virtual void LeaveFindOnEdit()
 		{
+			var pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
+
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.LeaveFindOnEdit(pattern);
@@ -2462,6 +2520,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Find_Next_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			ValidateAndFindNext();
 		}
 
@@ -2469,8 +2529,12 @@ namespace YAT.View.Forms
 		protected virtual void ValidateAndFindNext()
 		{
 			var t = (ActiveMdiChild as Terminal);
-			if (t != null)
-				t.DeactivateFindAll();
+
+			if (FindAllIsActive)
+			{
+				if (t != null)
+					t.DeactivateFindAll();
+			}
 
 			var pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
 			if (!string.IsNullOrEmpty(pattern) && ValidateFindPattern(pattern))
@@ -2492,6 +2556,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Find_Previous_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			ValidateAndFindPrevious();
 		}
 
@@ -2499,8 +2565,12 @@ namespace YAT.View.Forms
 		protected virtual void ValidateAndFindPrevious()
 		{
 			var t = (ActiveMdiChild as Terminal);
-			if (t != null)
-				t.DeactivateFindAll();
+
+			if (FindAllIsActive)
+			{
+				if (t != null)
+					t.DeactivateFindAll();
+			}
 
 			var pattern = toolStripComboBox_MainTool_Find_Pattern.Text;
 			if (ValidateFindPattern(pattern))
@@ -2522,6 +2592,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Find_ToggleAll_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			ToggleAndValidateFindAll();
 		}
 
@@ -2643,6 +2715,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Find_CaseSensitive_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			ToggleFindCaseSensitive();
 		}
 
@@ -2659,6 +2733,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Find_WholeWord_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			ToggleFindWholeWord();
 		}
 
@@ -2675,6 +2751,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Find_EnableRegex_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			ToggleFindEnableRegex();
 		}
 
@@ -2691,6 +2769,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Log_Settings_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestEditLogSettings();
@@ -2698,6 +2778,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Log_On_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestSwitchLogOn();
@@ -2705,6 +2787,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Log_Off_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestSwitchLogOff();
@@ -2712,6 +2796,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Log_Open_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestOpenLogFile();
@@ -2719,6 +2805,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Log_OpenDirectory_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestOpenLogDirectory();
@@ -2775,6 +2863,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_AutoAction_ShowHide_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			ApplicationSettings.RoamingUserSettings.View.AutoActionIsVisible = !ApplicationSettings.RoamingUserSettings.View.AutoActionIsVisible;
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
@@ -2821,10 +2911,10 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that this "Leave" event has a particular behavior:
+		/// Note that this 'Leave' event has a peculiar behavior:
 		/// <list type="bullet">
 		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
-		/// <item><description>Directly clicking an option with the mouse, the event is not invoked!</description></item>
+		/// <item><description>Clicking another item of the toolbar, the event is not invoked!</description></item>
 		/// <item><description>Clicking somewhere outside the toolbar, the event is invoked immediately.</description></item>
 		/// </list>
 		/// </remarks>
@@ -2969,21 +3059,29 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_AutoAction_Trigger_UseText_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			RequestToggleAutoActionTriggerUseTextAndRevalidate();
 		}
 
 		private void toolStripButton_MainTool_AutoAction_Trigger_CaseSensitive_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			RequestToggleAutoActionTriggerCaseSensitiveAndRevalidate();
 		}
 
 		private void toolStripButton_MainTool_AutoAction_Trigger_WholeWord_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			RequestToggleAutoActionTriggerWholeWordAndRevalidate();
 		}
 
 		private void toolStripButton_MainTool_AutoAction_Trigger_EnableRegex_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			RequestToggleAutoActionTriggerEnableRegexAndRevalidate();
 		}
 
@@ -3016,6 +3114,8 @@ namespace YAT.View.Forms
 
 		private void toolStripLabel_MainTool_AutoAction_Count_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestAutoActionResetCount();
@@ -3023,6 +3123,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_AutoAction_Deactivate_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestAutoActionDeactivate();
@@ -3030,6 +3132,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_AutoResponse_ShowHide_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			ApplicationSettings.RoamingUserSettings.View.AutoResponseIsVisible = !ApplicationSettings.RoamingUserSettings.View.AutoResponseIsVisible;
 			ApplicationSettings.SaveRoamingUserSettings();
 		}
@@ -3076,10 +3180,10 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that this "Leave" event has a particular behavior:
+		/// Note that this 'Leave' event has a peculiar behavior:
 		/// <list type="bullet">
 		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
-		/// <item><description>Directly clicking an option with the mouse, the event is not invoked!</description></item>
+		/// <item><description>Clicking another item of the toolbar, the event is not invoked!</description></item>
 		/// <item><description>Clicking somewhere outside the tool, the event is invoked, but 'SelectedIndexChanged' isn't!</description></item>
 		/// </list>
 		/// </remarks>
@@ -3224,21 +3328,29 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_AutoResponse_Trigger_UseText_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			RequestToggleAutoResponseTriggerUseTextAndRevalidate();
 		}
 
 		private void toolStripButton_MainTool_AutoResponse_Trigger_CaseSensitive_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			RequestToggleAutoResponseTriggerCaseSensitiveAndRevalidate();
 		}
 
 		private void toolStripButton_MainTool_AutoResponse_Trigger_WholeWord_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			RequestToggleAutoResponseTriggerWholeWordAndRevalidate();
 		}
 
 		private void toolStripButton_MainTool_AutoResponse_Trigger_EnableRegex_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			RequestToggleAutoResponseTriggerEnableRegexAndRevalidate();
 		}
 
@@ -3284,12 +3396,13 @@ namespace YAT.View.Forms
 		}
 
 		/// <remarks>
-		/// Note that this "Leave" event also has a particular behavior:
+		/// Note that this 'Leave' event has a peculiar behavior:
 		/// <list type="bullet">
 		/// <item><description>On [Tab] jumping to the first option, the event is invoked immediately.</description></item>
-		/// <item><description>Directly clicking an option with the mouse, the event is not invoked!</description></item>
+		/// <item><description>Clicking another item of the toolbar, the event is not invoked!</description></item>
 		/// <item><description>Clicking somewhere outside the toolbar, the event is invoked immediately.</description></item>
 		/// </list>
+		/// The issue is being anticipated by the <see cref="PotentiallyMissingLeaveEventWorkaround"/>.
 		/// </remarks>
 		private void toolStripComboBox_MainTool_AutoResponse_Response_Leave(object sender, EventArgs e)
 		{
@@ -3434,11 +3547,15 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_AutoResponse_Response_EnableReplace_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			RequestToggleAutoResponseResponseEnableReplaceAndRevalidate();
 		}
 
 		private void toolStripLabel_MainTool_AutoResponse_Count_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestAutoResponseResetCount();
@@ -3446,6 +3563,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_AutoResponse_Deactivate_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestAutoResponseDeactivate();
@@ -3455,6 +3574,8 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Script_ShowHide_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			ToggleScriptDialog();
 		}
 
@@ -3462,9 +3583,22 @@ namespace YAT.View.Forms
 
 		private void toolStripButton_MainTool_Terminal_Format_Click(object sender, EventArgs e)
 		{
+			PotentiallyMissingLeaveEventWorkaround();
+
 			var t = (ActiveMdiChild as Terminal);
 			if (t != null)
 				t.RequestEditFormatSettings();
+		}
+
+		private void PotentiallyMissingLeaveEventWorkaround()
+		{
+			// \fixme (2021-04-06 / MKY / bug #511)
+			// Could the "autoResponse*ValidationIsOngoing" workaround be replaced by this workaround?
+			// Call ResetAuto*OptionControls()?
+
+			LeaveFindOnEdit();
+			ResumeEditShortcutsCtrlACVDelete();
+			ResumeFindShortcutsCtrlFNPL();
 		}
 
 		#endregion
@@ -4962,8 +5096,11 @@ namespace YAT.View.Forms
 		{
 			ShowFindAndSetPattern(pattern);
 
-		////toolStripComboBox_MainTool_Find_Pattern.Select() doesn't work, "ToolStrip" seems to require Focus().
-			toolStripComboBox_MainTool_Find_Pattern.Focus();
+			if (!toolStripComboBox_MainTool_Find_Pattern.Focused)
+			{
+			////toolStripComboBox_MainTool_Find_Pattern.Select() doesn't work, "ToolStrip" requires Focus(), even though the MSDN states "Focus() is a low-level method intended primarily for custom control authors. Instead, application programmers should use the Select() method...".
+				toolStripComboBox_MainTool_Find_Pattern.Focus(); // This will trigger EnterFindOnEdit() which
+			}                                                    // will trigger ValidateAndFindOnEdit().
 		}
 
 		/// <summary></summary>
@@ -4976,7 +5113,17 @@ namespace YAT.View.Forms
 			}
 
 			if (pattern != null)
-				toolStripComboBox_MainTool_Find_Pattern.Text = pattern;
+			{
+				this.isSettingControls.Enter();
+				try
+				{
+					toolStripComboBox_MainTool_Find_Pattern.Text = pattern;
+				}
+				finally
+				{
+					this.isSettingControls.Leave();
+				}
+			}
 		}
 
 		/// <summary>
@@ -5043,8 +5190,18 @@ namespace YAT.View.Forms
 		{
 			ShowFindAndSetPattern(pattern);
 
-		////toolStripComboBox_MainTool_Find_Pattern.Focus() shall never be done, pattern is either already or just given.
+			if (!toolStripComboBox_MainTool_Find_Pattern.Focused)
+			{
+				// Focus() will trigger EnterFindOnEdit() which
+				// would trigger ValidateAndFindOnEdit(), thus disarm:
+				this.disarmFindOnEditOnce = true;
 
+			////toolStripComboBox_MainTool_Find_Pattern.Select() doesn't work, "ToolStrip" requires Focus(), even though the MSDN states "Focus() is a low-level method intended primarily for custom control authors. Instead, application programmers should use the Select() method...".
+				toolStripComboBox_MainTool_Find_Pattern.Focus();
+			}
+
+			// Only then perform find, i.e. *after* the find field has been focussed,
+			// as focus potentially left the monitor, what would result in SelectNone()!
 			ValidateAndFindNext();
 		}
 
@@ -5055,8 +5212,18 @@ namespace YAT.View.Forms
 		{
 			ShowFindAndSetPattern(pattern);
 
-		////toolStripComboBox_MainTool_Find_Pattern.Focus() shall never be done, pattern is either already or just given.
+			if (!toolStripComboBox_MainTool_Find_Pattern.Focused)
+			{
+				// Focus() will trigger EnterFindOnEdit() which
+				// would trigger ValidateAndFindOnEdit(), thus disarm:
+				this.disarmFindOnEditOnce = true;
 
+			////toolStripComboBox_MainTool_Find_Pattern.Select() doesn't work, "ToolStrip" requires Focus(), even though the MSDN states "Focus() is a low-level method intended primarily for custom control authors. Instead, application programmers should use the Select() method...".
+				toolStripComboBox_MainTool_Find_Pattern.Focus();
+			}
+
+			// Only then perform find, i.e. *after* the find field has been focussed,
+			// as focus potentially left the monitor, what would result in SelectNone()!
 			ValidateAndFindPrevious();
 		}
 
@@ -5065,11 +5232,21 @@ namespace YAT.View.Forms
 		/// </summary>
 		public virtual void RequestToggleFindAll(string pattern)
 		{
-			ShowFindAndSetPattern(pattern);
+			ShowFindAndSetPattern(pattern); // Can be done in any case.
 
-		////toolStripComboBox_MainTool_Find_Pattern.Focus() shall never be done, pattern is either already or just given.
+			ToggleAndValidateFindAll(); // Required to activate [Find All] in terminal and *all* monitors
+			if (FindAllIsActive)        // *before* find on edit gets triggered on focussing below.
+			{
+				if (!toolStripComboBox_MainTool_Find_Pattern.Focused)
+				{
+					// Focus() will trigger EnterFindOnEdit() which
+					// would trigger ValidateAndFindOnEdit(), thus disarm:
+					this.disarmFindOnEditOnce = true;
 
-			ToggleAndValidateFindAll();
+				////toolStripComboBox_MainTool_Find_Pattern.Select() doesn't work, "ToolStrip" requires Focus(), even though the MSDN states "Focus() is a low-level method intended primarily for custom control authors. Instead, application programmers should use the Select() method...".
+					toolStripComboBox_MainTool_Find_Pattern.Focus();
+				}
+			}
 		}
 
 		#endregion
