@@ -415,10 +415,10 @@ namespace YAT.Domain
 					lineState.Exceeded = true; // Keep in mind and notify once:
 					                //// Using term "bytes" rather than "octets" as that is more common, and .NET uses 'Byte' as well.
 					var message = "Maximal number of bytes per line exceeded! Check the line break settings in Terminal > Settings > Binary or increase the limit in Terminal > Settings > Advanced.";
-					lineState.Elements.Add(new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true));
+					lineState.Elements.Add(new DisplayElement.WarningInfo(ts, (Direction)dir, message));
 
 					CreateCollectionIfIsNull(ref elementsToAdd);
-					elementsToAdd.Add(     new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true));
+					elementsToAdd.Add(     new DisplayElement.WarningInfo(ts, (Direction)dir, message));
 				}
 			}
 

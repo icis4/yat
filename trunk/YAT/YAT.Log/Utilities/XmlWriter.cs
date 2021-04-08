@@ -395,7 +395,7 @@ namespace YAT.Log.Utilities
 		////AssertUndisposed() is called by WriteLine() further below.
 
 			// Example (without indentation):
-			// <XmlTransferTextLine TimeStamp="2001-12-23T12:34:56.789-01:00" Device="COM1" Direction="Tx" Text="ABCD" ErrorText="" Length="4" />
+			// <XmlTransferTextLine TimeStamp="2001-12-23T12:34:56.789-01:00" Device="COM1" Direction="Tx" Text="ABCD" Length="4" />
 
 			// Neither outputting time span nor time delta since that can be calculated from time stamp.
 
@@ -416,8 +416,6 @@ namespace YAT.Log.Utilities
 			sb.Append(transferLine.Direction.ToString()); // Default is "G".
 			sb.Append(@""" Text=""");
 			sb.Append(transferLine.Text);
-			sb.Append(@""" ErrorText=""");
-			sb.Append(transferLine.ErrorText);
 			sb.Append(@""" Length=""");
 			sb.Append(transferLine.Length.ToString(CultureInfo.InvariantCulture)); // Default is "G".
 			sb.Append(@""" />");

@@ -1486,6 +1486,19 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
+		/// Inlines an warning message.
+		/// </summary>
+		/// <remarks>
+		/// Intended to be used from "outside" of this <see cref="Terminal"/>.
+		/// Otherwise, InlineDisplayElement*() shall be used.
+		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Inline' is a correct English term in programming.")]
+		public virtual void InlineWarningMessage(DateTime timeStamp, Direction direction, string message)
+		{
+			InlineDisplayElement((IODirection)direction, new DisplayElement.WarningInfo(timeStamp, direction, message));
+		}
+
+		/// <summary>
 		/// Inlines an error message.
 		/// </summary>
 		/// <remarks>
@@ -1493,9 +1506,9 @@ namespace YAT.Domain
 		/// Otherwise, InlineDisplayElement*() shall be used.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Inline' is a correct English term in programming.")]
-		public virtual void InlineErrorMessage(Direction direction, string message, bool isWarningOnly)
+		public virtual void InlineErrorMessage(DateTime timeStamp, Direction direction, string message)
 		{
-			InlineDisplayElement((IODirection)direction, new DisplayElement.ErrorInfo(direction, message, isWarningOnly));
+			InlineDisplayElement((IODirection)direction, new DisplayElement.ErrorInfo(timeStamp, direction, message));
 		}
 
 		#endregion
@@ -1510,7 +1523,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual void EnqueueEasterEggMessage()
 		{
-			InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "The bites have been eaten by the rabbit ;-]", true));
+			InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "The bites have been eaten by the rabbit ;-]"));
 		}
 
 		#endregion
@@ -2121,7 +2134,7 @@ namespace YAT.Domain
 				// Do not lock (ClearRefreshEmptySyncObj)! That would lead to deadlocks if close/dispose
 				// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread!
 				{
-					InlineDisplayElement(e.Direction, new DisplayElement.ErrorInfo(e.TimeStamp, (Direction)e.Direction, e.Message, true));
+					InlineDisplayElement(e.Direction, new DisplayElement.WarningInfo(e.TimeStamp, (Direction)e.Direction, e.Message));
 				}
 			}
 
@@ -2177,7 +2190,10 @@ namespace YAT.Domain
 					default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + severity + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
-				InlineDisplayElement(direction, new DisplayElement.ErrorInfo(e.TimeStamp, (Direction)direction, message, isWarningOnly));
+				if (isWarningOnly)
+					InlineDisplayElement(direction, new DisplayElement.WarningInfo(e.TimeStamp, (Direction)direction, message));
+				else
+					InlineDisplayElement(direction, new DisplayElement.ErrorInfo(e.TimeStamp, (Direction)direction, message));
 
 				if (!isWarningOnly) // Non-Acceptable issues shall be shown in terminal text and forwarded as error event.
 					OnIOError(new IOErrorEventArgs(severity, direction, message));

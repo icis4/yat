@@ -72,6 +72,7 @@ namespace YAT.Domain
 	[XmlInclude(typeof(LineBreak))]
 	[XmlInclude(typeof(InlineElement))]
 	[XmlInclude(typeof(IOControlInfo))]
+	[XmlInclude(typeof(WarningInfo))]
 	[XmlInclude(typeof(ErrorInfo))]
 	public abstract class DisplayElement
 	{
@@ -610,6 +611,18 @@ namespace YAT.Domain
 			{
 			}
 
+			/// <summary></summary>
+			protected InlineElement(DateTime timeStamp, Direction direction, byte origin, string text)
+				: base(timeStamp, direction, origin, text, ElementAttributes.Inline)
+			{
+			}
+
+			/// <summary></summary>
+			protected InlineElement(DateTime timeStamp, Direction direction, byte[] origin, string text)
+				: base(timeStamp, direction, origin, text, ElementAttributes.Inline)
+			{
+			}
+
 			/// <summary>
 			/// Creates and returns a new object that is a deep-copy of this instance.
 			/// </summary>
@@ -644,11 +657,59 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// This element type should rather be called 'Error' because it applies to any errors
-		/// that shall be displayed in the terminal. However, 'Error' is a keyword in certain
-		/// .NET languages such as VB.NET. As a result, any identifier called 'Error' or 'error'
-		/// will cause StyleCop/FxCop to issue a severe warning. So 'ErrorInfo' is used instead.
-		/// </remarks>
+		/// Named "WarningInfo" rather than just "Warning" for orthogonality with <see cref="ErrorInfo"/>.
+		/// <para>
+		/// Note that related format setting is called "WarningFormat", i.e. without "Info".
+		/// </para></remarks>
+		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
+		public class WarningInfo : InlineElement
+		{
+			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
+			[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Parameterless' is a correct English term.")]
+			public WarningInfo()
+				: base()
+			{
+			}
+
+			/// <summary></summary>
+			public WarningInfo(string message, bool omitBracketsAndLabel = false)
+				: this(DirectionDefault, message, omitBracketsAndLabel)
+			{
+			}
+
+			/// <summary></summary>
+			public WarningInfo(Direction direction, string message, bool omitBracketsAndLabel = false)
+				: this(TimeStampDefault, direction, message, omitBracketsAndLabel)
+			{
+			}
+
+			/// <summary></summary>
+			public WarningInfo(DateTime timeStamp, Direction direction, string message, bool omitBracketsAndLabel = false)
+				: this(timeStamp, direction, null, message, omitBracketsAndLabel)
+			{
+			}
+
+			/// <summary></summary>
+			public WarningInfo(DateTime timeStamp, Direction direction, byte origin, string message, bool omitBracketsAndLabel = false)
+				: this(timeStamp, direction, new byte[] { origin }, message, omitBracketsAndLabel)
+			{
+			}
+
+			/// <summary></summary>
+			public WarningInfo(DateTime timeStamp, Direction direction, byte[] origin, string message, bool omitBracketsAndLabel = false)
+				: base(timeStamp, direction, origin, (omitBracketsAndLabel ? message : "[Warning: " + message + "]"))
+			{
+			}
+		}
+
+		/// <remarks>
+		/// This element type should rather be called "Error" because it applies to any error
+		/// that shall be displayed in the terminal. However, "Error" is a keyword in certain
+		/// .NET languages such as VB.NET. As a result, any identifier called "Error" or "error"
+		/// will cause StyleCop/FxCop to issue a severe warning. So "ErrorInfo" is used instead.
+		/// <para>
+		/// Note that related format setting is called "ErrorFormat", i.e. without "Info".
+		/// </para></remarks>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
 		public class ErrorInfo : InlineElement
 		{
@@ -660,32 +721,32 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public ErrorInfo(string message)
-				: this(DirectionDefault, message)
+			public ErrorInfo(string message, bool omitBracketsAndLabel = false)
+				: this(DirectionDefault, message, omitBracketsAndLabel)
 			{
 			}
 
 			/// <summary></summary>
-			public ErrorInfo(Direction direction, string message)
-				: this(TimeStampDefault, direction, message, false)
+			public ErrorInfo(Direction direction, string message, bool omitBracketsAndLabel = false)
+				: this(TimeStampDefault, direction, message, omitBracketsAndLabel)
 			{
 			}
 
 			/// <summary></summary>
-			public ErrorInfo(DateTime timeStamp, Direction direction, string message)
-				: this(timeStamp, direction, message, false)
+			public ErrorInfo(DateTime timeStamp, Direction direction, string message, bool omitBracketsAndLabel = false)
+				: this(timeStamp, direction, null, message, omitBracketsAndLabel)
 			{
 			}
 
 			/// <summary></summary>
-			public ErrorInfo(Direction direction, string message, bool isWarningOnly)
-				: this(TimeStampDefault, direction, message, isWarningOnly)
+			public ErrorInfo(DateTime timeStamp, Direction direction, byte origin, string message, bool omitBracketsAndLabel = false)
+				: this(timeStamp, direction, new byte[] { origin }, message, omitBracketsAndLabel)
 			{
 			}
 
 			/// <summary></summary>
-			public ErrorInfo(DateTime timeStamp, Direction direction, string message, bool isWarningOnly)
-				: base(timeStamp, direction, (isWarningOnly ? ("[Warning: " + message + "]") : ("[Error: " + message + "]")))
+			public ErrorInfo(DateTime timeStamp, Direction direction, byte[] origin, string message, bool omitBracketsAndLabel = false)
+				: base(timeStamp, direction, origin, (omitBracketsAndLabel ? message : "[Error: " + message + "]"))
 			{
 			}
 		}
@@ -772,8 +833,20 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		protected DisplayElement(DateTime timeStamp, Direction direction, byte origin, string text, ElementAttributes attributes)
+			: this(timeStamp, direction, new byte[] { origin }, text, 0, attributes)
+		{
+		}
+
+		/// <summary></summary>
 		protected DisplayElement(DateTime timeStamp, Direction direction, byte origin, string text, int charCount, ElementAttributes attributes)
 			: this(timeStamp, direction, new byte[] { origin }, text, charCount, attributes)
+		{
+		}
+
+		/// <summary></summary>
+		protected DisplayElement(DateTime timeStamp, Direction direction, byte[] origin, string text, ElementAttributes attributes)
+			: this(timeStamp, direction, origin, text, 0, attributes)
 		{
 		}
 
@@ -963,6 +1036,7 @@ namespace YAT.Domain
 			else if (this is LineStart)        clone = new LineStart();
 			else if (this is LineBreak)        clone = new LineBreak();
 			else if (this is IOControlInfo)    clone = new IOControlInfo();
+			else if (this is WarningInfo)      clone = new WarningInfo();
 			else if (this is ErrorInfo)        clone = new ErrorInfo();
 			else throw (new TypeLoadException(MessageHelper.InvalidExecutionPreamble + "'" + GetType() + "' is a display element that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 

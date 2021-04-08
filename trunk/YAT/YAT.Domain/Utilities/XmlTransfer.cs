@@ -128,7 +128,6 @@ namespace YAT.Domain.Utilities
 	public class XmlTransferTextLine : XmlTransferLine
 	{
 		private string text;
-		private string errorText;
 		private int    length;
 
 		/// <summary></summary>
@@ -137,12 +136,11 @@ namespace YAT.Domain.Utilities
 		}
 
 		/// <summary></summary>
-		public XmlTransferTextLine(DateTime timeStamp, string device, Direction direction, string text, string errorText, int length)
+		public XmlTransferTextLine(DateTime timeStamp, string device, Direction direction, string text, int length)
 			: base(timeStamp, device, direction)
 		{
-			this.text      = text;
-			this.errorText = errorText;
-			this.length    = length;
+			this.text   = text;
+			this.length = length;
 		}
 
 		/// <summary></summary>
@@ -151,14 +149,6 @@ namespace YAT.Domain.Utilities
 		{
 			get { return (this.text); }
 			set { this.text = value;  }
-		}
-
-		/// <summary></summary>
-		[XmlAttribute("ErrorText")]
-		public virtual string ErrorText
-		{
-			get { return (this.errorText); }
-			set { this.errorText = value;  }
 		}
 
 		/// <summary></summary>

@@ -3035,7 +3035,11 @@ namespace YAT.Model
 				virtualLine.Add(new Domain.DisplayElement.InfoSeparator(sep));
 			}
 
-			virtualLine.Add(new Domain.DisplayElement.ErrorInfo(ts, (Domain.Direction)e.Direction, e.Message, (e.Severity == Domain.IOErrorSeverity.Acceptable)));
+			var isWarningOnly = (e.Severity == Domain.IOErrorSeverity.Acceptable);
+			if (isWarningOnly)
+				virtualLine.Add(new Domain.DisplayElement.WarningInfo(ts, (Domain.Direction)e.Direction, e.Message));
+			else
+				virtualLine.Add(new Domain.DisplayElement.ErrorInfo(ts, (Domain.Direction)e.Direction, e.Message));
 
 			virtualLine.Add(new Domain.DisplayElement.LineBreak());
 			return (virtualLine);

@@ -132,26 +132,21 @@ namespace YAT.Domain
 		{
 			bool isControl;
 			bool isByteToHide;
-			bool isError;
 
-			string text = ByteToText(b, ts, r, out isControl, out isByteToHide, out isError);
+			string text = ByteToText(b, ts, r, out isControl, out isByteToHide);
 
-			if      (isError)
-			{
-				return (new DisplayElement.ErrorInfo(ts, (Direction)dir, text));
-			}
-			else if (isByteToHide)
-			{
-				return (new DisplayElement.Nonentity()); // Return nothing, ignore the character, this results in hiding.
-			}
-			else if (isControl)
+			if (isControl)
 			{
 				if (RadixIsStringOrChar(r) && TerminalSettings.CharReplace.ReplaceControlChars)
 					return (CreateControlElement(b, ts, dir, text));
 				else
 					return (CreateDataElement(b, ts, dir, text));
 			}
-			else // Neither 'isError' nor 'isByteToHide' nor 'isError' => Use normal data element:
+			else if (isByteToHide)
+			{
+				return (new DisplayElement.Nonentity()); // Return nothing, ignore the character, this results in hiding.
+			}
+			else // Neither 'isControl' nor 'isByteToHide' => Use normal data element:
 			{
 				return (CreateDataElement(b, ts, dir, text));
 			}
@@ -164,7 +159,7 @@ namespace YAT.Domain
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		protected virtual string ByteToText(byte b, DateTime ts, Radix r, out bool isControl, out bool isByteToHide, out bool isError)
+		protected virtual string ByteToText(byte b, DateTime ts, Radix r, out bool isControl, out bool isByteToHide)
 		{
 			isByteToHide = IsByteToHide(b);
 
@@ -181,7 +176,6 @@ namespace YAT.Domain
 			//    bar. Also note that most users won't notice or care.
 
 			isControl = Ascii.IsControl(b);
-			isError = false;
 
 			switch (r)
 			{

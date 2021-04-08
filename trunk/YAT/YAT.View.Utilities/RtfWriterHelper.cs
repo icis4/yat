@@ -61,8 +61,9 @@ namespace YAT.View.Utilities
 		private static Font staticDirectionFontCache;
 		private static Font staticLengthFontCache;
 		private static Font staticIOControlFontCache;
+		private static Font staticWarningFontCache;
 		private static Font staticErrorFontCache;
-		private static Font staticWhiteSpacesFontCache;
+		private static Font staticWhiteSpaceFontCache;
 
 		/// <remarks>
 		/// Pragmatic implementation of copying RTF to the clipboard. 'netrtfwriter' is only used for stream-based logging.
@@ -204,6 +205,12 @@ namespace YAT.View.Utilities
 				color     = settings.IOControlFormat.Color;
 				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticIOControlFontCache, fontName, fontSize, fontStyle);
 			}
+			else if (element is DisplayElement.WarningInfo)
+			{
+				fontStyle = settings.WarningFormat.FontStyle;
+				color     = settings.WarningFormat.Color;
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticWarningFontCache, fontName, fontSize, fontStyle);
+			}
 			else if (element is DisplayElement.ErrorInfo)
 			{
 				fontStyle = settings.ErrorFormat.FontStyle;
@@ -216,9 +223,9 @@ namespace YAT.View.Utilities
 			         (element is DisplayElement.LineStart)        ||
 			         (element is DisplayElement.LineBreak))
 			{
-				fontStyle = settings.WhiteSpacesFormat.FontStyle;
-				color     = settings.WhiteSpacesFormat.Color;
-				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticWhiteSpacesFontCache, fontName, fontSize, fontStyle);
+				fontStyle = settings.WhiteSpaceFormat.FontStyle;
+				color     = settings.WhiteSpaceFormat.Color;
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticWhiteSpaceFontCache, fontName, fontSize, fontStyle);
 			}
 			else
 			{

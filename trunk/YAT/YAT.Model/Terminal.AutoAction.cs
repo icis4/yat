@@ -756,7 +756,7 @@ namespace YAT.Model
 			}
 			else
 			{
-				this.terminal.InlineErrorMessage(Domain.Direction.Rx, messageOnFailure, true);
+				this.terminal.InlineWarningMessage(triggerTimeStamp, Domain.Direction.Rx, messageOnFailure);
 			}
 		}
 
