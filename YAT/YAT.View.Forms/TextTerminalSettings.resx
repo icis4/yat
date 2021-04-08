@@ -135,7 +135,10 @@ Note that some encodings (e.g. Big5, GBK, GB2312, KSC,...)
 automatically replace invalid byte(s) with a question mark.
 
 Discarding the invalid byte(s) is not recommended for most
-use cases, as there will not be any indication on the mismatch.</value>
+use cases, as there will not be any indication on the mismatch.
+
+No matter what behavior is selected, the number of invalid
+bytes will be taken into account for the resulting line length.</value>
   </data>
   <data name="comboBox_RxEol.ToolTip" xml:space="preserve">
     <value>Either select a preset from the list, or fill in any sequence of bytes,
@@ -200,6 +203,6 @@ Alternatively, the \!(LineDelay()) or \!(LineInterval()) keyword can be used.
 &gt; The latter allows a more precise timing.</value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>61</value>
+    <value>60</value>
   </metadata>
 </root>
