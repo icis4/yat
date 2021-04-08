@@ -36,6 +36,9 @@ namespace YAT.View.Forms
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Elements = new System.Windows.Forms.GroupBox();
+			this.monitor_Warning = new YAT.View.Controls.Monitor();
+			this.label_Warning = new System.Windows.Forms.Label();
+			this.textFormat_Warning = new YAT.View.Controls.TextFormat();
 			this.monitor_WhiteSpace = new YAT.View.Controls.Monitor();
 			this.label_WhiteSpace = new System.Windows.Forms.Label();
 			this.textFormat_WhiteSpace = new YAT.View.Controls.TextFormat();
@@ -143,9 +146,11 @@ namespace YAT.View.Forms
 			// 
 			// groupBox_Elements
 			// 
-			this.groupBox_Elements.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this.groupBox_Elements.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Elements.Controls.Add(this.monitor_Warning);
+			this.groupBox_Elements.Controls.Add(this.label_Warning);
+			this.groupBox_Elements.Controls.Add(this.textFormat_Warning);
 			this.groupBox_Elements.Controls.Add(this.monitor_WhiteSpace);
 			this.groupBox_Elements.Controls.Add(this.label_WhiteSpace);
 			this.groupBox_Elements.Controls.Add(this.textFormat_WhiteSpace);
@@ -196,21 +201,56 @@ namespace YAT.View.Forms
 			this.groupBox_Elements.Controls.Add(this.button_Font);
 			this.groupBox_Elements.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Elements.Name = "groupBox_Elements";
-			this.groupBox_Elements.Size = new System.Drawing.Size(736, 457);
+			this.groupBox_Elements.Size = new System.Drawing.Size(736, 484);
 			this.groupBox_Elements.TabIndex = 0;
 			this.groupBox_Elements.TabStop = false;
 			this.groupBox_Elements.Text = "Elements";
+			// 
+			// monitor_Warning
+			// 
+			this.monitor_Warning.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Warning.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.monitor_Warning.Location = new System.Drawing.Point(111, 370);
+			this.monitor_Warning.Name = "monitor_Warning";
+			this.monitor_Warning.ShowStatusPanel = false;
+			this.monitor_Warning.Size = new System.Drawing.Size(275, 23);
+			this.monitor_Warning.TabIndex = 38;
+			this.monitor_Warning.TabStop = false;
+			this.monitor_Warning.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
+			// 
+			// label_Warning
+			// 
+			this.label_Warning.AutoSize = true;
+			this.label_Warning.Location = new System.Drawing.Point(12, 375);
+			this.label_Warning.Name = "label_Warning";
+			this.label_Warning.Size = new System.Drawing.Size(50, 13);
+			this.label_Warning.TabIndex = 37;
+			this.label_Warning.Text = "&Warning:";
+			// 
+			// textFormat_Warning
+			// 
+			this.textFormat_Warning.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textFormat_Warning.FormatColor = System.Drawing.Color.Black;
+			this.textFormat_Warning.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
+			this.textFormat_Warning.Location = new System.Drawing.Point(396, 370);
+			this.textFormat_Warning.Name = "textFormat_Warning";
+			this.textFormat_Warning.Size = new System.Drawing.Size(232, 23);
+			this.textFormat_Warning.TabIndex = 39;
+			this.textFormat_Warning.Tag = "12";
+			this.textFormat_Warning.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
+			this.textFormat_Warning.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
 			// monitor_WhiteSpace
 			// 
 			this.monitor_WhiteSpace.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_WhiteSpace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.monitor_WhiteSpace.Location = new System.Drawing.Point(111, 397);
+			this.monitor_WhiteSpace.Location = new System.Drawing.Point(111, 424);
 			this.monitor_WhiteSpace.Name = "monitor_WhiteSpace";
 			this.monitor_WhiteSpace.ShowStatusPanel = false;
 			this.monitor_WhiteSpace.Size = new System.Drawing.Size(275, 23);
-			this.monitor_WhiteSpace.TabIndex = 41;
+			this.monitor_WhiteSpace.TabIndex = 44;
 			this.monitor_WhiteSpace.TabStop = false;
 			this.monitor_WhiteSpace.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
@@ -218,10 +258,10 @@ namespace YAT.View.Forms
 			// 
 			this.label_WhiteSpace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_WhiteSpace.AutoSize = true;
-			this.label_WhiteSpace.Location = new System.Drawing.Point(12, 403);
+			this.label_WhiteSpace.Location = new System.Drawing.Point(12, 430);
 			this.label_WhiteSpace.Name = "label_WhiteSpace";
 			this.label_WhiteSpace.Size = new System.Drawing.Size(61, 13);
-			this.label_WhiteSpace.TabIndex = 40;
+			this.label_WhiteSpace.TabIndex = 43;
 			this.label_WhiteSpace.Text = "&Separators:";
 			// 
 			// textFormat_WhiteSpace
@@ -229,11 +269,11 @@ namespace YAT.View.Forms
 			this.textFormat_WhiteSpace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.textFormat_WhiteSpace.FormatColor = System.Drawing.Color.Black;
 			this.textFormat_WhiteSpace.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
-			this.textFormat_WhiteSpace.Location = new System.Drawing.Point(396, 397);
+			this.textFormat_WhiteSpace.Location = new System.Drawing.Point(396, 424);
 			this.textFormat_WhiteSpace.Name = "textFormat_WhiteSpace";
 			this.textFormat_WhiteSpace.Size = new System.Drawing.Size(232, 23);
-			this.textFormat_WhiteSpace.TabIndex = 42;
-			this.textFormat_WhiteSpace.Tag = "13";
+			this.textFormat_WhiteSpace.TabIndex = 45;
+			this.textFormat_WhiteSpace.Tag = "14";
 			this.textFormat_WhiteSpace.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			this.textFormat_WhiteSpace.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
@@ -277,10 +317,10 @@ namespace YAT.View.Forms
 			this.label_Remark3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Remark3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Remark3.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_Remark3.Location = new System.Drawing.Point(634, 423);
+			this.label_Remark3.Location = new System.Drawing.Point(634, 450);
 			this.label_Remark3.Name = "label_Remark3";
 			this.label_Remark3.Size = new System.Drawing.Size(96, 26);
-			this.label_Remark3.TabIndex = 44;
+			this.label_Remark3.TabIndex = 47;
 			this.label_Remark3.Text = "Background\r\nfor all elements.";
 			this.label_Remark3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
@@ -336,10 +376,10 @@ namespace YAT.View.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Remark2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Remark2.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_Remark2.Location = new System.Drawing.Point(634, 260);
+			this.label_Remark2.Location = new System.Drawing.Point(634, 294);
 			this.label_Remark2.Name = "label_Remark2";
-			this.label_Remark2.Size = new System.Drawing.Size(96, 163);
-			this.label_Remark2.TabIndex = 45;
+			this.label_Remark2.Size = new System.Drawing.Size(96, 156);
+			this.label_Remark2.TabIndex = 48;
 			this.label_Remark2.Text = "Style and color\r\nper element type.";
 			this.label_Remark2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
@@ -348,20 +388,20 @@ namespace YAT.View.Forms
 			this.label_Remark1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Remark1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Remark1.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.label_Remark1.Location = new System.Drawing.Point(634, 222);
+			this.label_Remark1.Location = new System.Drawing.Point(634, 264);
 			this.label_Remark1.Name = "label_Remark1";
 			this.label_Remark1.Size = new System.Drawing.Size(96, 26);
-			this.label_Remark1.TabIndex = 46;
+			this.label_Remark1.TabIndex = 49;
 			this.label_Remark1.Text = "Font and size\r\nfor all elements.";
 			this.label_Remark1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// button_Background
 			// 
 			this.button_Background.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Background.Location = new System.Drawing.Point(492, 424);
+			this.button_Background.Location = new System.Drawing.Point(492, 451);
 			this.button_Background.Name = "button_Background";
 			this.button_Background.Size = new System.Drawing.Size(136, 23);
-			this.button_Background.TabIndex = 43;
+			this.button_Background.TabIndex = 46;
 			this.button_Background.Text = "&Background Color...";
 			this.button_Background.UseVisualStyleBackColor = true;
 			this.button_Background.Click += new System.EventHandler(this.button_Background_Click);
@@ -441,11 +481,11 @@ namespace YAT.View.Forms
 			this.monitor_Error.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Error.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.monitor_Error.Location = new System.Drawing.Point(111, 370);
+			this.monitor_Error.Location = new System.Drawing.Point(111, 397);
 			this.monitor_Error.Name = "monitor_Error";
 			this.monitor_Error.ShowStatusPanel = false;
 			this.monitor_Error.Size = new System.Drawing.Size(275, 23);
-			this.monitor_Error.TabIndex = 38;
+			this.monitor_Error.TabIndex = 41;
 			this.monitor_Error.TabStop = false;
 			this.monitor_Error.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
@@ -556,10 +596,10 @@ namespace YAT.View.Forms
 			// label_Error
 			// 
 			this.label_Error.AutoSize = true;
-			this.label_Error.Location = new System.Drawing.Point(12, 375);
+			this.label_Error.Location = new System.Drawing.Point(12, 402);
 			this.label_Error.Name = "label_Error";
 			this.label_Error.Size = new System.Drawing.Size(32, 13);
-			this.label_Error.TabIndex = 37;
+			this.label_Error.TabIndex = 40;
 			this.label_Error.Text = "&Error:";
 			// 
 			// label_Length
@@ -639,11 +679,11 @@ namespace YAT.View.Forms
 			this.textFormat_Error.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.textFormat_Error.FormatColor = System.Drawing.Color.Black;
 			this.textFormat_Error.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
-			this.textFormat_Error.Location = new System.Drawing.Point(396, 370);
+			this.textFormat_Error.Location = new System.Drawing.Point(396, 397);
 			this.textFormat_Error.Name = "textFormat_Error";
 			this.textFormat_Error.Size = new System.Drawing.Size(232, 23);
-			this.textFormat_Error.TabIndex = 39;
-			this.textFormat_Error.Tag = "12";
+			this.textFormat_Error.TabIndex = 42;
+			this.textFormat_Error.Tag = "13";
 			this.textFormat_Error.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			this.textFormat_Error.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
@@ -754,10 +794,10 @@ namespace YAT.View.Forms
 			// button_Font
 			// 
 			this.button_Font.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Font.Location = new System.Drawing.Point(643, 193);
+			this.button_Font.Location = new System.Drawing.Point(643, 235);
 			this.button_Font.Name = "button_Font";
 			this.button_Font.Size = new System.Drawing.Size(75, 23);
-			this.button_Font.TabIndex = 47;
+			this.button_Font.TabIndex = 50;
 			this.button_Font.Text = "&Font...";
 			this.button_Font.UseVisualStyleBackColor = true;
 			this.button_Font.Click += new System.EventHandler(this.button_Font_Click);
@@ -765,7 +805,7 @@ namespace YAT.View.Forms
 			// button_Defaults
 			// 
 			this.button_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Defaults.Location = new System.Drawing.Point(765, 205);
+			this.button_Defaults.Location = new System.Drawing.Point(765, 247);
 			this.button_Defaults.Name = "button_Defaults";
 			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
 			this.button_Defaults.TabIndex = 6;
@@ -775,9 +815,8 @@ namespace YAT.View.Forms
 			// 
 			// label_Example
 			// 
-			this.label_Example.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Example.AutoSize = true;
-			this.label_Example.Location = new System.Drawing.Point(24, 711);
+			this.label_Example.Location = new System.Drawing.Point(24, 738);
 			this.label_Example.Name = "label_Example";
 			this.label_Example.Size = new System.Drawing.Size(50, 13);
 			this.label_Example.TabIndex = 2;
@@ -785,7 +824,7 @@ namespace YAT.View.Forms
 			// 
 			// groupBox_Options
 			// 
-			this.groupBox_Options.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.groupBox_Options.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Options.Controls.Add(this.comboBox_ContentSeparator);
 			this.groupBox_Options.Controls.Add(this.label_ContentSeparator);
@@ -810,7 +849,7 @@ namespace YAT.View.Forms
 			this.groupBox_Options.Controls.Add(this.comboBox_TimeDurationFormatPreset);
 			this.groupBox_Options.Controls.Add(this.label_InfoEnclosure);
 			this.groupBox_Options.Controls.Add(this.label_InfoSeparator);
-			this.groupBox_Options.Location = new System.Drawing.Point(12, 475);
+			this.groupBox_Options.Location = new System.Drawing.Point(12, 502);
 			this.groupBox_Options.Name = "groupBox_Options";
 			this.groupBox_Options.Size = new System.Drawing.Size(736, 216);
 			this.groupBox_Options.TabIndex = 1;
@@ -1080,9 +1119,10 @@ namespace YAT.View.Forms
 			// monitor_Example
 			// 
 			this.monitor_Example.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_Example.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.monitor_Example.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.monitor_Example.Location = new System.Drawing.Point(123, 706);
+			this.monitor_Example.Location = new System.Drawing.Point(123, 733);
 			this.monitor_Example.Name = "monitor_Example";
 			this.monitor_Example.ShowStatusPanel = false;
 			this.monitor_Example.Size = new System.Drawing.Size(625, 63);
@@ -1096,7 +1136,7 @@ namespace YAT.View.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(855, 784);
+			this.ClientSize = new System.Drawing.Size(855, 811);
 			this.Controls.Add(this.groupBox_Options);
 			this.Controls.Add(this.monitor_Example);
 			this.Controls.Add(this.label_Example);
@@ -1104,10 +1144,11 @@ namespace YAT.View.Forms
 			this.Controls.Add(this.groupBox_Elements);
 			this.Controls.Add(this.button_Cancel);
 			this.Controls.Add(this.button_OK);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
+			this.MinimumSize = new System.Drawing.Size(871, 850);
 			this.Name = "FormatSettings";
+			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Format Settings";
@@ -1204,5 +1245,8 @@ namespace YAT.View.Forms
 		private System.Windows.Forms.Label label_WhiteSpace;
 		private Controls.TextFormat textFormat_WhiteSpace;
 		private Controls.Monitor monitor_WhiteSpace;
+		private Controls.Monitor monitor_Warning;
+		private System.Windows.Forms.Label label_Warning;
+		private Controls.TextFormat textFormat_Warning;
 	}
 }

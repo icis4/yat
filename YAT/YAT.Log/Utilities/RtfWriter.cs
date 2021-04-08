@@ -83,6 +83,7 @@ namespace YAT.Log.Utilities
 		private FormatDescriptor directionFormat;
 		private FormatDescriptor lengthFormat;
 		private FormatDescriptor ioControlFormat;
+		private FormatDescriptor warningFormat;
 		private FormatDescriptor errorFormat;
 		private FormatDescriptor whiteSpacesFormat;
 
@@ -128,8 +129,9 @@ namespace YAT.Log.Utilities
 			this.directionFormat    = new FormatDescriptor(settings.DirectionFormat.FontStyle,    this.document.createColor(settings.DirectionFormat.Color),    this.document.createColor(settings.BackColor));
 			this.lengthFormat       = new FormatDescriptor(settings.LengthFormat.FontStyle,       this.document.createColor(settings.LengthFormat.Color),       this.document.createColor(settings.BackColor));
 			this.ioControlFormat    = new FormatDescriptor(settings.IOControlFormat.FontStyle,    this.document.createColor(settings.IOControlFormat.Color),    this.document.createColor(settings.BackColor));
+			this.warningFormat      = new FormatDescriptor(settings.WarningFormat.FontStyle,      this.document.createColor(settings.WarningFormat.Color),      this.document.createColor(settings.BackColor));
 			this.errorFormat        = new FormatDescriptor(settings.ErrorFormat.FontStyle,        this.document.createColor(settings.ErrorFormat.Color),        this.document.createColor(settings.BackColor));
-			this.whiteSpacesFormat  = new FormatDescriptor(settings.WhiteSpacesFormat.FontStyle,  this.document.createColor(settings.WhiteSpacesFormat.Color),  this.document.createColor(settings.BackColor));
+			this.whiteSpacesFormat  = new FormatDescriptor(settings.WhiteSpaceFormat.FontStyle,   this.document.createColor(settings.WhiteSpaceFormat.Color),   this.document.createColor(settings.BackColor));
 
 			// Header:
 			var header = this.document.Header.addParagraph();
@@ -170,6 +172,7 @@ namespace YAT.Log.Utilities
 			         (element is DisplayElement.LineStart)        ||
 			         (element is DisplayElement.LineBreak))       { format = this.whiteSpacesFormat;  }
 			else if ( element is DisplayElement.IOControlInfo)    { format = this.ioControlFormat;    }
+			else if ( element is DisplayElement.WarningInfo)      { format = this.warningFormat;      }
 			else if ( element is DisplayElement.ErrorInfo)        { format = this.errorFormat;        }
 			else
 			{

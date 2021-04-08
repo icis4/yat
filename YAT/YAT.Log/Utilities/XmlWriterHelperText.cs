@@ -96,11 +96,9 @@ namespace YAT.Log.Utilities
 
 			bool success = true;
 
-			string textStr = "";
-			string errorStr = "";
-
 			DateTime timeStamp = DisplayElement.TimeStampDefault;
-			string deviceStr = "";
+			string device = "";
+			string text = "";
 			int length = 0;
 
 			bool containsTx = false;
@@ -113,7 +111,7 @@ namespace YAT.Log.Utilities
 					var casted = (de as DisplayElement.TxData);
 					if (casted != null)
 					{
-						textStr += casted.Text;
+						text += casted.Text;
 						containsTx = true;
 						continue; // Immediately continue, makes no sense to also try other types.
 					}
@@ -122,7 +120,7 @@ namespace YAT.Log.Utilities
 					var casted = (de as DisplayElement.TxControl);
 					if (casted != null)
 					{
-						textStr += casted.Text;
+						text += casted.Text;
 						containsTx = true;
 						continue; // Immediately continue, makes no sense to also try other types.
 					}
@@ -131,7 +129,7 @@ namespace YAT.Log.Utilities
 					var casted = (de as DisplayElement.RxData);
 					if (casted != null)
 					{
-						textStr += casted.Text;
+						text += casted.Text;
 						containsRx = true;
 						continue; // Immediately continue, makes no sense to also try other types.
 					}
@@ -140,7 +138,7 @@ namespace YAT.Log.Utilities
 					var casted = (de as DisplayElement.RxControl);
 					if (casted != null)
 					{
-						textStr += casted.Text;
+						text += casted.Text;
 						containsRx = true;
 						continue; // Immediately continue, makes no sense to also try other types.
 					}
@@ -149,7 +147,15 @@ namespace YAT.Log.Utilities
 					var casted = (de as DisplayElement.IOControlInfo);
 					if (casted != null)
 					{
-						textStr += casted.Text;
+						text += casted.Text;
+						continue; // Immediately continue, makes no sense to also try other types.
+					}
+				}
+				{
+					var casted = (de as DisplayElement.WarningInfo);
+					if (casted != null)
+					{
+						text += casted.Text;
 						continue; // Immediately continue, makes no sense to also try other types.
 					}
 				}
@@ -157,7 +163,7 @@ namespace YAT.Log.Utilities
 					var casted = (de as DisplayElement.ErrorInfo);
 					if (casted != null)
 					{
-						errorStr += casted.Text;
+						text += casted.Text;
 						continue; // Immediately continue, makes no sense to also try other types.
 					}
 				}
@@ -175,7 +181,7 @@ namespace YAT.Log.Utilities
 					var casted = (de as DisplayElement.DeviceInfo);
 					if (casted != null)
 					{
-						deviceStr = casted.Text;
+						device = casted.Text;
 						continue; // Immediately continue, makes no sense to also try other types.
 					}
 				}
@@ -211,7 +217,7 @@ namespace YAT.Log.Utilities
 			else
 				direction = Direction.None;
 
-			transferLine = new XmlTransferTextLine(timeStamp, deviceStr, direction, textStr, errorStr, length);
+			transferLine = new XmlTransferTextLine(timeStamp, device, direction, text, length);
 
 			return (success);
 		}

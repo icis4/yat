@@ -28,7 +28,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
@@ -760,8 +759,8 @@ namespace YAT.View.Forms
 					monitor_TimeStamp, monitor_TimeSpan, monitor_TimeDelta, monitor_TimeDuration,
 					monitor_Device, monitor_Direction, monitor_Length,
 					monitor_IOControl,
-					monitor_Error,
-					monitor_WhiteSpace
+					monitor_Warning, monitor_Error,
+					monitor_WhiteSpace // See "YAT.Format.Settings.WhiteSpaceFormat" for explanation on "WhiteSpace" vs. "Separators".
 				};
 
 				this.textFormats = new Controls.TextFormat[]
@@ -770,8 +769,8 @@ namespace YAT.View.Forms
 					textFormat_TimeStamp, textFormat_TimeSpan, textFormat_TimeDelta, textFormat_TimeDuration,
 					textFormat_Device, textFormat_Direction, textFormat_Length,
 					textFormat_IOControl,
-					textFormat_Error,
-					textFormat_WhiteSpace
+					textFormat_Warning, textFormat_Error,
+					textFormat_WhiteSpace // See "YAT.Format.Settings.WhiteSpaceFormat" for explanation on "WhiteSpace" vs. "Separators".
 				};
 
 				comboBox_ContentSeparator.Items.Clear();
@@ -829,10 +828,12 @@ namespace YAT.View.Forms
 				case  9: return (this.formatSettingsInEdit.DirectionFormat);
 				case 10: return (this.formatSettingsInEdit.LengthFormat);
 				case 11: return (this.formatSettingsInEdit.IOControlFormat);
-				case 12: return (this.formatSettingsInEdit.ErrorFormat);
-				case 13: return (this.formatSettingsInEdit.WhiteSpacesFormat);
+				case 12: return (this.formatSettingsInEdit.WarningFormat);
+				case 13: return (this.formatSettingsInEdit.ErrorFormat);
+				case 14: return (this.formatSettingsInEdit.WhiteSpaceFormat); // See "WhiteSpaceFormat" for explanation on "WhiteSpace" vs. "Separators".
+
+				default:  throw (new ArgumentOutOfRangeException("index", index, MessageHelper.InvalidExecutionPreamble + "There is no format at index '" + index + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-			throw (new ArgumentOutOfRangeException("index", index, MessageHelper.InvalidExecutionPreamble + "There is no format at index '" + index + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 		}
 
 		private void GetFormatFromControl(int index)
@@ -932,7 +933,7 @@ namespace YAT.View.Forms
 			var infoEnclosureLeft  = this.infoEnclosure.ToEnclosureLeft();
 			var infoEnclosureRight = this.infoEnclosure.ToEnclosureRight();
 
-			var exampleLines = new Domain.DisplayLineCollection(14); // Preset the required capacity to improve memory management.
+			var exampleLines = new Domain.DisplayLineCollection(15); // Preset the required capacity to improve memory management.
 
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxData(now, 0x41, "A")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxControl(now, 0x13, "<CR>")));
@@ -946,6 +947,7 @@ namespace YAT.View.Forms
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.DirectionInfo(Domain.Direction.Tx,                                       infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.ContentLength(0,                                                         infoEnclosureLeft, infoEnclosureRight)));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.IOControlInfo("RTS=on")));
+			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.WarningInfo("Message")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.ErrorInfo("Message")));
 			exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.InfoSeparator("_-°,;")));
 
@@ -1006,6 +1008,8 @@ namespace YAT.View.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeSpanInfo(diff, this.timeSpanFormat, infoEnclosureLeft, infoEnclosureRight));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeDeltaInfo(delta, this.timeDeltaFormat, infoEnclosureLeft, infoEnclosureRight));
+			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
+			exampleComplete.Enqueue(new Domain.DisplayElement.WarningInfo("Message"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.InfoSeparator(infoSeparator));
 			exampleComplete.Enqueue(new Domain.DisplayElement.ErrorInfo("Message"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());

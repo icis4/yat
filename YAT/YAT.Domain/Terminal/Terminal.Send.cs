@@ -1049,7 +1049,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "This keyword only applies to serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "This keyword only applies to serial COM ports."));
 					}
 
 					break;
@@ -1111,7 +1111,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "This keyword only applies to serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "This keyword only applies to serial COM ports."));
 					}
 
 					break;
@@ -1142,7 +1142,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Baud rate can only be changed on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Baud rate can only be changed on serial COM ports."));
 					}
 
 					break;
@@ -1173,7 +1173,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Stop bits can only be changed on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Stop bits can only be changed on serial COM ports."));
 					}
 
 					break;
@@ -1204,7 +1204,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Data bits can only be changed on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Data bits can only be changed on serial COM ports."));
 					}
 
 					break;
@@ -1235,7 +1235,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Parity can only be changed on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Parity can only be changed on serial COM ports."));
 					}
 
 					break;
@@ -1266,7 +1266,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Flow control can only be changed on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Flow control can only be changed on serial COM ports."));
 					}
 
 					break;
@@ -1296,12 +1296,12 @@ namespace YAT.Domain
 						}
 						else
 						{
-							InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the RTS signal is not possible when automatic hardware or RS-485 flow control is active.", true));
+							InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Modifying the RTS signal is not possible when automatic hardware or RS-485 flow control is active."));
 						}
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the RTS signal is only supported on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Modifying the RTS signal is only supported on serial COM ports."));
 					}
 
 					break;
@@ -1331,12 +1331,12 @@ namespace YAT.Domain
 						}
 						else
 						{
-							InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the RTS signal is not possible when automatic hardware or RS-485 flow control is active.", true));
+							InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Modifying the RTS signal is not possible when automatic hardware or RS-485 flow control is active."));
 						}
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the RTS signal is only supported on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Modifying the RTS signal is only supported on serial COM ports."));
 					}
 
 					break;
@@ -1366,12 +1366,12 @@ namespace YAT.Domain
 						}
 						else
 						{
-							InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the RTS signal is not possible when automatic hardware or RS-485 flow control is active.", true));
+							InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Modifying the RTS signal is not possible when automatic hardware or RS-485 flow control is active."));
 						}
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the RTS signal is only supported on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Modifying the RTS signal is only supported on serial COM ports."));
 					}
 
 					break;
@@ -1401,12 +1401,12 @@ namespace YAT.Domain
 						}
 						else
 						{
-							InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the DTR signal is not possible with the current settings.", true));
+							InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Modifying the DTR signal is not possible with the current settings."));
 						}
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the DTR signal is only supported on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Modifying the DTR signal is only supported on serial COM ports."));
 					}
 
 					break;
@@ -1436,12 +1436,12 @@ namespace YAT.Domain
 						}
 						else
 						{
-							InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the DTR signal is not possible with the current settings.", true));
+							InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Modifying the DTR signal is not possible with the current settings."));
 						}
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the DTR signal is only supported on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Modifying the DTR signal is only supported on serial COM ports."));
 					}
 
 					break;
@@ -1471,12 +1471,12 @@ namespace YAT.Domain
 						}
 						else
 						{
-							InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the DTR signal is not possible with the current settings.", true));
+							InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Modifying the DTR signal is not possible with the current settings."));
 						}
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Modifying the DTR signal is only supported on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Modifying the DTR signal is only supported on serial COM ports."));
 					}
 
 					break;
@@ -1504,7 +1504,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Output break is only supported on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Output break is only supported on serial COM ports."));
 					}
 
 					break;
@@ -1532,7 +1532,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Output break is only supported on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Output break is only supported on serial COM ports."));
 					}
 
 					break;
@@ -1560,7 +1560,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Output break is only supported on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Output break is only supported on serial COM ports."));
 					}
 
 					break;
@@ -1578,7 +1578,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Framing errors can only be configured on serial COM ports."));
 					}
 
 					break;
@@ -1596,7 +1596,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Framing errors can only be configured on serial COM ports."));
 					}
 
 					break;
@@ -1614,7 +1614,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Framing errors can only be configured on serial COM ports.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Framing errors can only be configured on serial COM ports."));
 					}
 
 					break;
@@ -1638,7 +1638,7 @@ namespace YAT.Domain
 					}
 					else
 					{
-						InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(DateTime.Now, Direction.Tx, "Report ID can only be used with USB Ser/HID.", true));
+						InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, "Report ID can only be used with USB Ser/HID."));
 					}
 
 					break;
@@ -1798,7 +1798,7 @@ namespace YAT.Domain
 				else
 					message = droppedCount + " bytes not sent anymore due to break."; // Using "byte" rather than "octet" as that is more common, and .NET uses "byte" as well.
 
-				InlineDisplayElement(IODirection.Tx, new DisplayElement.ErrorInfo(Direction.Tx, message, true));
+				InlineDisplayElement(IODirection.Tx, new DisplayElement.WarningInfo(DateTime.Now, Direction.Tx, message));
 
 				// Note a suboptimality (bug #352) described in Terminal.InlineDisplayElement():
 				// The above warning message may be appended at a suboptiomal location, e.g.

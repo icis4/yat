@@ -66,8 +66,9 @@ namespace YAT.View.Controls
 		private static Font staticDirectionFontCache;
 		private static Font staticLengthFontCache;
 		private static Font staticIOControlFontCache;
+		private static Font staticWarningFontCache;
 		private static Font staticErrorFontCache;
-		private static Font staticWhiteSpacesFontCache;
+		private static Font staticWhiteSpaceFontCache;
 
 		/// <summary>String format used for drawing line numbers.</summary>
 		private static TextFormatFlags staticLineNumberFormat =
@@ -269,6 +270,12 @@ namespace YAT.View.Controls
 				fontStyle = settings.IOControlFormat.FontStyle;
 				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticIOControlFontCache, fontName, fontSize, fontStyle);
 			}
+			else if (element is Domain.DisplayElement.WarningInfo)
+			{
+				foreColor = settings.WarningFormat.Color;
+				fontStyle = settings.WarningFormat.FontStyle;
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticWarningFontCache, fontName, fontSize, fontStyle);
+			}
 			else if (element is Domain.DisplayElement.ErrorInfo)
 			{
 				foreColor = settings.ErrorFormat.Color;
@@ -281,9 +288,9 @@ namespace YAT.View.Controls
 			         (element is Domain.DisplayElement.LineStart)        ||
 			         (element is Domain.DisplayElement.LineBreak))
 			{
-				foreColor = settings.WhiteSpacesFormat.Color;
-				fontStyle = settings.WhiteSpacesFormat.FontStyle;
-				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticWhiteSpacesFontCache, fontName, fontSize, fontStyle);
+				foreColor = settings.WhiteSpaceFormat.Color;
+				fontStyle = settings.WhiteSpaceFormat.FontStyle;
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticWhiteSpaceFontCache, fontName, fontSize, fontStyle);
 			}
 			else
 			{

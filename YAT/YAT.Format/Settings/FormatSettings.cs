@@ -45,13 +45,16 @@ namespace YAT.Format.Settings
 		public static readonly Color InfoColorDefault = Color.Green;
 
 		/// <remarks>Color.Black = 000000.</remarks>
-		public static readonly Color WhiteSpacesColorDefault = Color.Black;
+		public static readonly Color WhiteSpaceColorDefault = Color.Black;
 
-		/// <remarks>Color.Goldenrod = FFD700.</remarks>
+		/// <remarks>Color.Gold = FFD700.</remarks>
 		public static readonly Color IOControlColorDefault = Color.Gold;
 
-		/// <remarks>Color.DarkOrange = FF8C00.</remarks>
-		public static readonly Color ErrorColorDefault = Color.DarkOrange;
+		/// <remarks>Color.Orange = FFA500.</remarks>
+		public static readonly Color WarningColorDefault = Color.Orange;
+
+		/// <remarks>Color.OrangeRed = FF4500.</remarks>
+		public static readonly Color ErrorColorDefault = Color.OrangeRed;
 
 		/// <remarks><see cref="SystemColors.Window"/>.</remarks>
 		public static readonly Color BackColorDefault = SystemColors.Window;
@@ -72,8 +75,9 @@ namespace YAT.Format.Settings
 		private TextFormat directionFormat;
 		private TextFormat lengthFormat;
 		private TextFormat ioControlFormat;
+		private TextFormat warningFormat;
 		private TextFormat errorFormat;
-		private TextFormat whiteSpacesFormat;
+		private TextFormat whiteSpaceFormat;
 
 		private BackFormat backFormat;
 
@@ -98,7 +102,7 @@ namespace YAT.Format.Settings
 		public FormatSettings(FormatSettings rhs)
 			: base(rhs)
 		{
-			FontFormat        = new FontFormat(rhs.FontFormat);
+			FontFormat = new FontFormat(rhs.FontFormat);
 
 			FormattingEnabled = rhs.FormattingEnabled;
 
@@ -114,10 +118,11 @@ namespace YAT.Format.Settings
 			DirectionFormat    = new TextFormat(rhs.DirectionFormat);
 			LengthFormat       = new TextFormat(rhs.LengthFormat);
 			IOControlFormat    = new TextFormat(rhs.IOControlFormat);
+			WarningFormat      = new TextFormat(rhs.WarningFormat);
 			ErrorFormat        = new TextFormat(rhs.ErrorFormat);
-			WhiteSpacesFormat  = new TextFormat(rhs.WhiteSpacesFormat);
+			WhiteSpaceFormat   = new TextFormat(rhs.WhiteSpaceFormat);
 
-			BackFormat         = new BackFormat(rhs.BackFormat);
+			BackFormat  = new BackFormat(rhs.BackFormat);
 
 			ClearChanged();
 		}
@@ -145,8 +150,9 @@ namespace YAT.Format.Settings
 			DirectionFormat    = new TextFormat(InfoColorDefault,        false, false, false, false);
 			LengthFormat       = new TextFormat(InfoColorDefault,        false, false, false, false);
 			IOControlFormat    = new TextFormat(IOControlColorDefault,    true, false, false, false); // Bold.
+			WarningFormat      = new TextFormat(WarningColorDefault,      true, false, false, false); // Bold.
 			ErrorFormat        = new TextFormat(ErrorColorDefault,        true, false, false, false); // Bold.
-			WhiteSpacesFormat  = new TextFormat(WhiteSpacesColorDefault, false, false, false, false);
+			WhiteSpaceFormat   = new TextFormat(WhiteSpaceColorDefault,  false, false, false, false);
 
 			BackFormat = new BackFormat(BackColorDefault);
 		}
@@ -382,6 +388,21 @@ namespace YAT.Format.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("WarningFormat")]
+		public TextFormat WarningFormat
+		{
+			get { return (this.warningFormat); }
+			set
+			{
+				if (this.warningFormat != value)
+				{
+					this.warningFormat = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("ErrorFormat")]
 		public TextFormat ErrorFormat
 		{
@@ -397,18 +418,21 @@ namespace YAT.Format.Settings
 		}
 
 		/// <remarks>
-		/// "WhiteSpaces" is a bit misleading, as the format also applies to non-white-spaced
+		/// "WhiteSpace" is a bit misleading, as the format also applies to non-white-spaced
 		/// separators. But for a YAT monitor perspective, those are also considered "white-space".
-		/// </remarks>
-		[XmlElement("WhiteSpacesFormat")]
-		public TextFormat WhiteSpacesFormat
+		/// <para>
+		/// Note that the format settings dialog uses term "Separators" which is considered more
+		/// comprehensive to the users.
+		/// </para></remarks>
+		[XmlElement("WhiteSpaceFormat")]
+		public TextFormat WhiteSpaceFormat
 		{
-			get { return (this.whiteSpacesFormat); }
+			get { return (this.whiteSpaceFormat); }
 			set
 			{
-				if (this.whiteSpacesFormat != value)
+				if (this.whiteSpaceFormat != value)
 				{
-					this.whiteSpacesFormat = value;
+					this.whiteSpaceFormat = value;
 					SetMyChanged();
 				}
 			}
@@ -480,8 +504,9 @@ namespace YAT.Format.Settings
 				hashCode = (hashCode * 397) ^ (DirectionFormat    != null ? DirectionFormat   .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (LengthFormat       != null ? LengthFormat      .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (IOControlFormat    != null ? IOControlFormat   .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (WarningFormat      != null ? WarningFormat     .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (ErrorFormat        != null ? ErrorFormat       .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (WhiteSpacesFormat  != null ? WhiteSpacesFormat .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (WhiteSpaceFormat   != null ? WhiteSpaceFormat  .GetHashCode() : 0);
 
 				hashCode = (hashCode * 397) ^ (BackFormat         != null ? BackFormat        .GetHashCode() : 0);
 
@@ -530,8 +555,9 @@ namespace YAT.Format.Settings
 				ObjectEx.Equals(DirectionFormat,    other.DirectionFormat)    &&
 				ObjectEx.Equals(LengthFormat,       other.LengthFormat)       &&
 				ObjectEx.Equals(IOControlFormat,    other.IOControlFormat)    &&
+				ObjectEx.Equals(WarningFormat,      other.WarningFormat)      &&
 				ObjectEx.Equals(ErrorFormat,        other.ErrorFormat)        &&
-				ObjectEx.Equals(WhiteSpacesFormat,  other.WhiteSpacesFormat)  &&
+				ObjectEx.Equals(WhiteSpaceFormat,   other.WhiteSpaceFormat)   &&
 
 				ObjectEx.Equals(BackFormat,         other.BackFormat)
 			);
