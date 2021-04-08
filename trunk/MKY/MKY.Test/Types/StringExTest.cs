@@ -448,7 +448,7 @@ namespace MKY.Test.Types
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		[Test, TestCaseSource(typeof(TrimTestData), "TestCasesEndWhiteSpace")]
-		public virtual void TrimEndOfWhiteSpaces(string str, int expectedLength, char[] trimChars)
+		public virtual void TrimEndOfWhiteSpace(string str, int expectedLength, char[] trimChars)
 		{
 			var trim = str.TrimEnd(trimChars);
 
