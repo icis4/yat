@@ -41,6 +41,8 @@ using NUnit.Framework;
 
 namespace YAT.Domain.Test.Parser
 {
+	using EncodingTestDataTuple = Tuple<Encoding, string, byte[]>;
+
 	/// <summary></summary>
 	public static class ParserTestData
 	{
@@ -337,180 +339,194 @@ namespace YAT.Domain.Test.Parser
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Don't care, straightforward test implementation.")]
-		public static IEnumerable<Tuple<Encoding, string, byte[]>> TestCaseTuples
+		public static IEnumerable<EncodingTestDataTuple> TestCaseTuples
 		{
 			get
 			{
 				// ASCII:
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.ASCII, "abc", new byte[] { 0x61, 0x62, 0x63 }));
+				var e = Encoding.ASCII;
+				yield return (new EncodingTestDataTuple(e, "abc", new byte[] { 0x61, 0x62, 0x63 }));
 
 				// Windows-1252 [1252]:
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Windows1252), "abc", new byte[] { 0x61, 0x62, 0x63 }));
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Windows1252), "äöü", new byte[] { 0xE4, 0xF6, 0xFC }));
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Windows1252), "ÄÖÜ", new byte[] { 0xC4, 0xD6, 0xDC }));
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Windows1252), "$£€", new byte[] { 0x24, 0xA3, 0x80 }));
-				                                                                                                    //// "čěř" not supported
-				                                                                                                    //// "一二州" not supported
-				                                                                                                    //// "︙" not supported
-				                                                                                                    //// "𝄞" not supported
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Windows1252), @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 }));
+				e = EncodingEx.GetEncoding(SupportedEncoding.Windows1252);
+				yield return (new EncodingTestDataTuple(e, "abc", new byte[] { 0x61, 0x62, 0x63 }));
+				yield return (new EncodingTestDataTuple(e, "äöü", new byte[] { 0xE4, 0xF6, 0xFC }));
+				yield return (new EncodingTestDataTuple(e, "ÄÖÜ", new byte[] { 0xC4, 0xD6, 0xDC }));
+				yield return (new EncodingTestDataTuple(e, "$£€", new byte[] { 0x24, 0xA3, 0x80 }));
+				                                      //// "čěř" not supported
+				                                      //// "一二州" not supported
+				                                      //// "︙" not supported
+				                                      //// "𝄞" not supported
+				yield return (new EncodingTestDataTuple(e, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 }));
 
 			////// UTF-7 [65000] removed as that encoding belongs to the class of Base64 and Quoted-Printable (FR #407).
-			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "abc", new byte[] { 0x61, 0x62, 0x63 }));
-			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "äöü", new byte[] { 0x2B, 0x41, 0x4F, 0x51, 0x41, 0x39, 0x67, 0x44, 0x38, 0x2D })); // +AOQA9gD8-
-			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "ÄÖÜ", new byte[] { 0x2B, 0x41, 0x4D, 0x51, 0x41, 0x31, 0x67, 0x44, 0x63, 0x2D })); // +AMQA1gDc-
-			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "$£€", new byte[] { 0x2B, 0x41, 0x43, 0x51, 0x41, 0x6F, 0x79, 0x43, 0x73, 0x2D })); // +ACQAoyCs-
-			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "čěř", new byte[] { 0x2B, 0x41, 0x51, 0x30, 0x42, 0x47, 0x77, 0x46, 0x5A, 0x2D })); // +AQ0BGwFZ-
-			////                                                                 //// yi er zhou is U+4E00 U+4E8C U+5DDE
-			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "一二州", new byte[] { 0x2B, 0x54, 0x67, 0x42, 0x4F, 0x6A, 0x46, 0x33, 0x65, 0x2D })); // +TgBOjF3e-
-			////                                                                 //// "Vertical Horizontal Ellipsis" is U+FE19
-			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "︙", new byte[] { 0x2B, 0x2F, 0x68, 0x6B, 0x2D })); // +/hk-
-			////                                                                 //// "Notenschlüssel" is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
-			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, "𝄞", new byte[] { 0x2B, 0x32, 0x44, 0x54, 0x64, 0x48, 0x67, 0x2D })); // +2DTdHg-
+			////e = Encoding.UTF7;
+			////yield return (new EncodingTestDataTuple(e, "abc", new byte[] { 0x61, 0x62, 0x63 }));
+			////yield return (new EncodingTestDataTuple(e, "äöü", new byte[] { 0x2B, 0x41, 0x4F, 0x51, 0x41, 0x39, 0x67, 0x44, 0x38, 0x2D })); // +AOQA9gD8-
+			////yield return (new EncodingTestDataTuple(e, "ÄÖÜ", new byte[] { 0x2B, 0x41, 0x4D, 0x51, 0x41, 0x31, 0x67, 0x44, 0x63, 0x2D })); // +AMQA1gDc-
+			////yield return (new EncodingTestDataTuple(e, "$£€", new byte[] { 0x2B, 0x41, 0x43, 0x51, 0x41, 0x6F, 0x79, 0x43, 0x73, 0x2D })); // +ACQAoyCs-
+			////yield return (new EncodingTestDataTuple(e, "čěř", new byte[] { 0x2B, 0x41, 0x51, 0x30, 0x42, 0x47, 0x77, 0x46, 0x5A, 0x2D })); // +AQ0BGwFZ-
+			////                                           //// yi er zhou is U+4E00 U+4E8C U+5DDE
+			////yield return (new EncodingTestDataTuple(e, "一二州", new byte[] { 0x2B, 0x54, 0x67, 0x42, 0x4F, 0x6A, 0x46, 0x33, 0x65, 0x2D })); // +TgBOjF3e-
+			////                                           //// "Vertical Horizontal Ellipsis" is U+FE19
+			////yield return (new EncodingTestDataTuple(e, "︙", new byte[] { 0x2B, 0x2F, 0x68, 0x6B, 0x2D })); // +/hk-
+			////                                           //// "Notenschlüssel" is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
+			////yield return (new EncodingTestDataTuple(e, "𝄞", new byte[] { 0x2B, 0x32, 0x44, 0x54, 0x64, 0x48, 0x67, 0x2D })); // +2DTdHg-
 			////
-			////yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF7, @"0\0<CR>1\n2", new byte[] { 0x30, 0x2B, 0x41, 0x41, 0x41, 0x2D, 0x0D, 0x31, 0x0A, 0x32 })); // 0+AAA-\r1\n2
+			////yield return (new EncodingTestDataTuple(e, @"0\0<CR>1\n2", new byte[] { 0x30, 0x2B, 0x41, 0x41, 0x41, 0x2D, 0x0D, 0x31, 0x0A, 0x32 })); // 0+AAA-\r1\n2
 
 				// UTF-8 [65001]:
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "abc", new byte[] { 0x61, 0x62, 0x63 }));
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "äöü", new byte[] { 0xC3, 0xA4, 0xC3, 0xB6, 0xC3, 0xBC }));
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "ÄÖÜ", new byte[] { 0xC3, 0x84, 0xC3, 0x96, 0xC3, 0x9C }));
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "$£€", new byte[] { 0x24, 0xC2, 0xA3, 0xE2, 0x82, 0xAC })); // 1-2-3 bytes!
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "čěř", new byte[] { 0xC4, 0x8D, 0xC4, 0x9B, 0xC5, 0x99 }));
-				                                                                 //// yi er zhou is U+4E00 U+4E8C U+5DDE
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "一二州", new byte[] { 0xE4, 0xB8, 0x80, 0xE4, 0xBA, 0x8C, 0xE5, 0xB7, 0x9E }));
-				                                                                 //// "Vertical Horizontal Ellipsis" is U+FE19
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "︙", new byte[] { 0xEF, 0xB8, 0x99 }));
-				                                                                 //// "Notenschlüssel" is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, "𝄞", new byte[] { 0xF0, 0x9D, 0x84, 0x9E }));
+				e = Encoding.UTF8;
+				yield return (new EncodingTestDataTuple(e, "abc", new byte[] { 0x61, 0x62, 0x63 }));
+				yield return (new EncodingTestDataTuple(e, "äöü", new byte[] { 0xC3, 0xA4, 0xC3, 0xB6, 0xC3, 0xBC }));
+				yield return (new EncodingTestDataTuple(e, "ÄÖÜ", new byte[] { 0xC3, 0x84, 0xC3, 0x96, 0xC3, 0x9C }));
+				yield return (new EncodingTestDataTuple(e, "$£€", new byte[] { 0x24, 0xC2, 0xA3, 0xE2, 0x82, 0xAC })); // 1-2-3 bytes!
+				yield return (new EncodingTestDataTuple(e, "čěř", new byte[] { 0xC4, 0x8D, 0xC4, 0x9B, 0xC5, 0x99 }));
+				                                           //// yi er zhou is U+4E00 U+4E8C U+5DDE
+				yield return (new EncodingTestDataTuple(e, "一二州", new byte[] { 0xE4, 0xB8, 0x80, 0xE4, 0xBA, 0x8C, 0xE5, 0xB7, 0x9E }));
+				                                           //// "Vertical Horizontal Ellipsis" is U+FE19
+				yield return (new EncodingTestDataTuple(e, "︙", new byte[] { 0xEF, 0xB8, 0x99 }));
+				                                           //// "Notenschlüssel" is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
+				yield return (new EncodingTestDataTuple(e, "𝄞", new byte[] { 0xF0, 0x9D, 0x84, 0x9E }));
 
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF8, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 }));
+				yield return (new EncodingTestDataTuple(e, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 }));
 
 				// UTF-16 (little endian, i.e. machine endianness) [1200]:
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.Unicode, "abc", new byte[] { 0x61, 0x00, 0x62, 0x00, 0x63, 0x00 }));
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.Unicode, "äöü", new byte[] { 0xE4, 0x00, 0xF6, 0x00, 0xFC, 0x00 }));
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.Unicode, "ÄÖÜ", new byte[] { 0xC4, 0x00, 0xD6, 0x00, 0xDC, 0x00 }));
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.Unicode, "$£€", new byte[] { 0x24, 0x00, 0xA3, 0x00, 0xAC, 0x20 }));
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.Unicode, "čěř", new byte[] { 0x0D, 0x01, 0x1B, 0x01, 0x59, 0x01 }));
-				                                                                    //// yi er zhou is U+4E00 U+4E8C U+5DDE
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.Unicode, "一二州", new byte[] { 0x00, 0x4E, 0x8C, 0x4E, 0xDE, 0x5D }));
-				                                                                    //// "Vertical Horizontal Ellipsis" is U+FE19
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.Unicode, "︙", new byte[] { 0x19, 0xFE }));
-				                                                                    //// "Notenschlüssel" is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.Unicode, "𝄞", new byte[] { 0x34, 0xD8, 0x1E, 0xDD }));
-				                                                                                          //// |           |           |           |           |           |           |
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.Unicode, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x31, 0x00, 0x0A, 0x00, 0x32, 0x00 }));
+				e = Encoding.Unicode;
+				yield return (new EncodingTestDataTuple(e, "abc", new byte[] { 0x61, 0x00, 0x62, 0x00, 0x63, 0x00 }));
+				yield return (new EncodingTestDataTuple(e, "äöü", new byte[] { 0xE4, 0x00, 0xF6, 0x00, 0xFC, 0x00 }));
+				yield return (new EncodingTestDataTuple(e, "ÄÖÜ", new byte[] { 0xC4, 0x00, 0xD6, 0x00, 0xDC, 0x00 }));
+				yield return (new EncodingTestDataTuple(e, "$£€", new byte[] { 0x24, 0x00, 0xA3, 0x00, 0xAC, 0x20 }));
+				yield return (new EncodingTestDataTuple(e, "čěř", new byte[] { 0x0D, 0x01, 0x1B, 0x01, 0x59, 0x01 }));
+				                                           //// yi er zhou is U+4E00 U+4E8C U+5DDE
+				yield return (new EncodingTestDataTuple(e, "一二州", new byte[] { 0x00, 0x4E, 0x8C, 0x4E, 0xDE, 0x5D }));
+				                                           //// "Vertical Horizontal Ellipsis" is U+FE19
+				yield return (new EncodingTestDataTuple(e, "︙", new byte[] { 0x19, 0xFE }));
+				                                           //// "Notenschlüssel" is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
+				yield return (new EncodingTestDataTuple(e, "𝄞", new byte[] { 0x34, 0xD8, 0x1E, 0xDD }));
+				                                                                 //// |           |           |           |           |           |           |
+				yield return (new EncodingTestDataTuple(e, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x31, 0x00, 0x0A, 0x00, 0x32, 0x00 }));
 
 				// UTF-16 (big endian, i.e. network endianness) [1201]:
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.BigEndianUnicode, "abc", new byte[] { 0x00, 0x61, 0x00, 0x62, 0x00, 0x63 }));
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.BigEndianUnicode, "äöü", new byte[] { 0x00, 0xE4, 0x00, 0xF6, 0x00, 0xFC }));
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.BigEndianUnicode, "ÄÖÜ", new byte[] { 0x00, 0xC4, 0x00, 0xD6, 0x00, 0xDC }));
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.BigEndianUnicode, "$£€", new byte[] { 0x00, 0x24, 0x00, 0xA3, 0x20, 0xAC }));
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.BigEndianUnicode, "čěř", new byte[] { 0x01, 0x0D, 0x01, 0x1B, 0x01, 0x59 }));
-				                                                                             //// yi er zhou is U+4E00 U+4E8C U+5DDE
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.BigEndianUnicode, "一二州", new byte[] { 0x4E, 0x00, 0x4E, 0x8C, 0x5D, 0xDE }));
-				                                                                             //// "Vertical Horizontal Ellipsis" is U+FE19
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.BigEndianUnicode, "︙", new byte[] { 0xFE, 0x19 }));
-				                                                                             //// "Notenschlüssel" is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.BigEndianUnicode, "𝄞", new byte[] { 0xD8, 0x34, 0xDD, 0x1E }));
-				                                                                                                   //// |           |           |           |           |           |           |
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.BigEndianUnicode, @"0\0<CR>1\n2", new byte[] { 0x00, 0x30, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x31, 0x00, 0x0A, 0x00, 0x32 }));
+				e = Encoding.BigEndianUnicode;
+				yield return (new EncodingTestDataTuple(e, "abc", new byte[] { 0x00, 0x61, 0x00, 0x62, 0x00, 0x63 }));
+				yield return (new EncodingTestDataTuple(e, "äöü", new byte[] { 0x00, 0xE4, 0x00, 0xF6, 0x00, 0xFC }));
+				yield return (new EncodingTestDataTuple(e, "ÄÖÜ", new byte[] { 0x00, 0xC4, 0x00, 0xD6, 0x00, 0xDC }));
+				yield return (new EncodingTestDataTuple(e, "$£€", new byte[] { 0x00, 0x24, 0x00, 0xA3, 0x20, 0xAC }));
+				yield return (new EncodingTestDataTuple(e, "čěř", new byte[] { 0x01, 0x0D, 0x01, 0x1B, 0x01, 0x59 }));
+				                                           //// yi er zhou is U+4E00 U+4E8C U+5DDE
+				yield return (new EncodingTestDataTuple(e, "一二州", new byte[] { 0x4E, 0x00, 0x4E, 0x8C, 0x5D, 0xDE }));
+				                                           //// "Vertical Horizontal Ellipsis" is U+FE19
+				yield return (new EncodingTestDataTuple(e, "︙", new byte[] { 0xFE, 0x19 }));
+				                                           //// "Notenschlüssel" is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
+				yield return (new EncodingTestDataTuple(e, "𝄞", new byte[] { 0xD8, 0x34, 0xDD, 0x1E }));
+				                                                                 //// |           |           |           |           |           |           |
+				yield return (new EncodingTestDataTuple(e, @"0\0<CR>1\n2", new byte[] { 0x00, 0x30, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x31, 0x00, 0x0A, 0x00, 0x32 }));
 
 				// UTF-32 (little endian, i.e. machine endianness) [12000]:
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF32, "abc", new byte[] { 0x61, 0x00, 0x00, 0x00, 0x62, 0x00, 0x00, 0x00, 0x63, 0x00, 0x00, 0x00 }));
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF32, "äöü", new byte[] { 0xE4, 0x00, 0x00, 0x00, 0xF6, 0x00, 0x00, 0x00, 0xFC, 0x00, 0x00, 0x00 }));
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF32, "ÄÖÜ", new byte[] { 0xC4, 0x00, 0x00, 0x00, 0xD6, 0x00, 0x00, 0x00, 0xDC, 0x00, 0x00, 0x00 }));
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF32, "$£€", new byte[] { 0x24, 0x00, 0x00, 0x00, 0xA3, 0x00, 0x00, 0x00, 0xAC, 0x20, 0x00, 0x00 }));
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF32, "čěř", new byte[] { 0x0D, 0x01, 0x00, 0x00, 0x1B, 0x01, 0x00, 0x00, 0x59, 0x01, 0x00, 0x00 }));
-				                                                                  //// yi er zhou is U+4E00 U+4E8C U+5DDE
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF32, "一二州", new byte[] { 0x00, 0x4E, 0x00, 0x00, 0x8C, 0x4E, 0x00, 0x00, 0xDE, 0x5D, 0x00, 0x00 }));
-				                                                                  //// "Vertical Horizontal Ellipsis" is U+FE19
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF32, "︙", new byte[] { 0x19, 0xFE, 0x00, 0x00 }));
-				                                                                  //// "Notenschlüssel" is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF32, "𝄞", new byte[] { 0x1E, 0xD1, 0x01, 0x00 }));
-				                                                                                        //// |                       |                       |                       |                       |                       |                       |
-				yield return (new Tuple<Encoding, string, byte[]>(Encoding.UTF32, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x31, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x32, 0x00, 0x00, 0x00 }));
+				e = Encoding.UTF32;
+				yield return (new EncodingTestDataTuple(e, "abc", new byte[] { 0x61, 0x00, 0x00, 0x00, 0x62, 0x00, 0x00, 0x00, 0x63, 0x00, 0x00, 0x00 }));
+				yield return (new EncodingTestDataTuple(e, "äöü", new byte[] { 0xE4, 0x00, 0x00, 0x00, 0xF6, 0x00, 0x00, 0x00, 0xFC, 0x00, 0x00, 0x00 }));
+				yield return (new EncodingTestDataTuple(e, "ÄÖÜ", new byte[] { 0xC4, 0x00, 0x00, 0x00, 0xD6, 0x00, 0x00, 0x00, 0xDC, 0x00, 0x00, 0x00 }));
+				yield return (new EncodingTestDataTuple(e, "$£€", new byte[] { 0x24, 0x00, 0x00, 0x00, 0xA3, 0x00, 0x00, 0x00, 0xAC, 0x20, 0x00, 0x00 }));
+				yield return (new EncodingTestDataTuple(e, "čěř", new byte[] { 0x0D, 0x01, 0x00, 0x00, 0x1B, 0x01, 0x00, 0x00, 0x59, 0x01, 0x00, 0x00 }));
+				                                           //// yi er zhou is U+4E00 U+4E8C U+5DDE
+				yield return (new EncodingTestDataTuple(e, "一二州", new byte[] { 0x00, 0x4E, 0x00, 0x00, 0x8C, 0x4E, 0x00, 0x00, 0xDE, 0x5D, 0x00, 0x00 }));
+				                                           //// "Vertical Horizontal Ellipsis" is U+FE19
+				yield return (new EncodingTestDataTuple(e, "︙", new byte[] { 0x19, 0xFE, 0x00, 0x00 }));
+				                                           //// "Notenschlüssel" is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
+				yield return (new EncodingTestDataTuple(e, "𝄞", new byte[] { 0x1E, 0xD1, 0x01, 0x00 }));
+				                                                                 //// |                       |                       |                       |                       |                       |                       |
+				yield return (new EncodingTestDataTuple(e, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x31, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x32, 0x00, 0x00, 0x00 }));
 
 				// UTF-32 (big endian, i.e. network endianness) [12001]:
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "abc", new byte[] { 0x00, 0x00, 0x00, 0x61, 0x00, 0x00, 0x00, 0x62, 0x00, 0x00, 0x00, 0x63 }));
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "äöü", new byte[] { 0x00, 0x00, 0x00, 0xE4, 0x00, 0x00, 0x00, 0xF6, 0x00, 0x00, 0x00, 0xFC }));
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "ÄÖÜ", new byte[] { 0x00, 0x00, 0x00, 0xC4, 0x00, 0x00, 0x00, 0xD6, 0x00, 0x00, 0x00, 0xDC }));
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "$£€", new byte[] { 0x00, 0x00, 0x00, 0x24, 0x00, 0x00, 0x00, 0xA3, 0x00, 0x00, 0x20, 0xAC }));
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "čěř", new byte[] { 0x00, 0x00, 0x01, 0x0D, 0x00, 0x00, 0x01, 0x1B, 0x00, 0x00, 0x01, 0x59 }));
-				                                                                                                     //// yi er zhou is U+4E00 U+4E8C U+5DDE
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "一二州", new byte[] { 0x00, 0x00, 0x4E, 0x00, 0x00, 0x00, 0x4E, 0x8C, 0x00, 0x00, 0x5D, 0xDE }));
-				                                                                                                     //// "Vertical Horizontal Ellipsis" is U+FE19
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "︙", new byte[] { 0x00, 0x00, 0xFE, 0x19 }));
-				                                                                                                     //// "Notenschlüssel" is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), "𝄞", new byte[] { 0x00, 0x01, 0xD1, 0x1E }));
-				                                                                                                                           //// |                       |                       |                       |                       |                       |                       |
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.UTF32BE), @"0\0<CR>1\n2", new byte[] { 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x31, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x32 }));
+				e = EncodingEx.GetEncoding(SupportedEncoding.UTF32BE);
+				yield return (new EncodingTestDataTuple(e, "abc", new byte[] { 0x00, 0x00, 0x00, 0x61, 0x00, 0x00, 0x00, 0x62, 0x00, 0x00, 0x00, 0x63 }));
+				yield return (new EncodingTestDataTuple(e, "äöü", new byte[] { 0x00, 0x00, 0x00, 0xE4, 0x00, 0x00, 0x00, 0xF6, 0x00, 0x00, 0x00, 0xFC }));
+				yield return (new EncodingTestDataTuple(e, "ÄÖÜ", new byte[] { 0x00, 0x00, 0x00, 0xC4, 0x00, 0x00, 0x00, 0xD6, 0x00, 0x00, 0x00, 0xDC }));
+				yield return (new EncodingTestDataTuple(e, "$£€", new byte[] { 0x00, 0x00, 0x00, 0x24, 0x00, 0x00, 0x00, 0xA3, 0x00, 0x00, 0x20, 0xAC }));
+				yield return (new EncodingTestDataTuple(e, "čěř", new byte[] { 0x00, 0x00, 0x01, 0x0D, 0x00, 0x00, 0x01, 0x1B, 0x00, 0x00, 0x01, 0x59 }));
+				                                           //// yi er zhou is U+4E00 U+4E8C U+5DDE
+				yield return (new EncodingTestDataTuple(e, "一二州", new byte[] { 0x00, 0x00, 0x4E, 0x00, 0x00, 0x00, 0x4E, 0x8C, 0x00, 0x00, 0x5D, 0xDE }));
+				                                           //// "Vertical Horizontal Ellipsis" is U+FE19
+				yield return (new EncodingTestDataTuple(e, "︙", new byte[] { 0x00, 0x00, 0xFE, 0x19 }));
+				                                           //// "Notenschlüssel" is U+1D11E but U+10000 and above not supported by .NET Framework 4.x (see FR #329 for more information)
+				yield return (new EncodingTestDataTuple(e, "𝄞", new byte[] { 0x00, 0x01, 0xD1, 0x1E }));
+				                                                                 //// |                       |                       |                       |                       |                       |                       |
+				yield return (new EncodingTestDataTuple(e, @"0\0<CR>1\n2", new byte[] { 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0D, 0x00, 0x00, 0x00, 0x31, 0x00, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00, 0x32 }));
 
 				// Big5 [950]:
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Big5), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Big5), "äöü", new byte[] { 0x61, 0x6F, 0x75 })); // Umlaute not supported, i.e. resulting in "aou"
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Big5), "ÄÖÜ", new byte[] { 0x41, 0x4F, 0x55 })); // Umlaute not supported, i.e. resulting in "aou"
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Big5), "$£€", new byte[] { 0x24, 0xA2, 0x47, 0xA3, 0xE1 })); // 1-2-2 bytes
-				                                                                                             //// "čěř" not supported
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Big5), "一二州", new byte[] { 0xA4, 0x40, 0xA4, 0x47, 0xA6, 0x7B }));
-				                                                                                             //// "︙" not supported
-				                                                                                             //// "𝄞" not supported
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Big5), @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 })); // same as ASCII
+				e = EncodingEx.GetEncoding(SupportedEncoding.Big5);
+				yield return (new EncodingTestDataTuple(e, "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
+				yield return (new EncodingTestDataTuple(e, "äöü", new byte[] { 0x61, 0x6F, 0x75 })); // Umlaute not supported, i.e. resulting in "aou"
+				yield return (new EncodingTestDataTuple(e, "ÄÖÜ", new byte[] { 0x41, 0x4F, 0x55 })); // Umlaute not supported, i.e. resulting in "AOU"
+				yield return (new EncodingTestDataTuple(e, "$£€", new byte[] { 0x24, 0xA2, 0x47, 0xA3, 0xE1 })); // 1-2-2 bytes
+				                                      //// "čěř" not supported
+				yield return (new EncodingTestDataTuple(e, "一二州", new byte[] { 0xA4, 0x40, 0xA4, 0x47, 0xA6, 0x7B }));
+				                                      //// "︙" not supported
+				                                      //// "𝄞" not supported
+				yield return (new EncodingTestDataTuple(e, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 })); // same as ASCII
 
-				// GBK [936]:                                                                              // is GBK!
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
-				                                                                                               //// "äöü" not supported
-				                                                                                               //// "ÄÖÜ" not supported
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "$£", new byte[] { 0x24, 0xA1, 0xEA })); // € not supported
-				                                                                                               //// "čěř" not supported
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.GB2312), "一二州", new byte[] { 0xD2, 0xBB, 0xB6, 0xFE, 0xD6, 0xDD }));
-				                                                                                               //// "︙", not supported
-				                                                                                               //// "𝄞", not supported
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.GB2312), @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 })); // same as ASCII
+				// GBK [936]:                                // is GBK!
+				e = EncodingEx.GetEncoding(SupportedEncoding.GB2312);
+				yield return (new EncodingTestDataTuple(e, "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
+				                                      //// "äöü" not supported
+				                                      //// "ÄÖÜ" not supported
+				yield return (new EncodingTestDataTuple(e, "$£", new byte[] { 0x24, 0xA1, 0xEA })); // € not supported
+				                                      //// "čěř" not supported
+				yield return (new EncodingTestDataTuple(e, "一二州", new byte[] { 0xD2, 0xBB, 0xB6, 0xFE, 0xD6, 0xDD }));
+				                                      //// "︙", not supported
+				                                      //// "𝄞", not supported
+				yield return (new EncodingTestDataTuple(e, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 })); // same as ASCII
 
-				// GB2312 (-80) [20936]:                                                                   // is GB2312!
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.X_CP20936), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
-				                                                                                                  //// "äöü" not supported
-				                                                                                                  //// "ÄÖÜ" not supported
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.X_CP20936), "$", new byte[] { 0x24 })); // only $ supported
-				                                                                                                  //// "čěř" not supported
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.X_CP20936), "一二州", new byte[] { 0xD2, 0xBB, 0xB6, 0xFE, 0xD6, 0xDD }));
-				                                                                                                  //// "︙" not supported
-				                                                                                                  //// "𝄞" not supported
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.X_CP20936), @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 })); // same as ASCII
+				// GB2312 (-80) [20936]:                     // is GB2312!
+				e = EncodingEx.GetEncoding(SupportedEncoding.X_CP20936);
+				yield return (new EncodingTestDataTuple(e, "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
+				                                      //// "äöü" not supported
+				                                      //// "ÄÖÜ" not supported
+				yield return (new EncodingTestDataTuple(e, "$", new byte[] { 0x24 })); // only $ supported
+				                                      //// "čěř" not supported
+				yield return (new EncodingTestDataTuple(e, "一二州", new byte[] { 0xD2, 0xBB, 0xB6, 0xFE, 0xD6, 0xDD }));
+				                                      //// "︙" not supported
+				                                      //// "𝄞" not supported
+				yield return (new EncodingTestDataTuple(e, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 })); // same as ASCII
 
 				// GB18030 [54936]:
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.GB18030),   "ü", new byte[] { 0xA8, 0xB9 })); // only ü supported
-				                                                                                                //// "ÄÖÜ" not supported
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "$€",  new byte[] { 0x24, 0xA2, 0xE3 })); // £ not supported
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.GB18030),  "ě",  new byte[] { 0xA8, 0xA7 })); // only ě supported
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "一二州", new byte[] { 0xD2, 0xBB, 0xB6, 0xFE, 0xD6, 0xDD }));
-				                                                                                                //// "︙" not supported
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.GB18030), "𝄞", new byte[] { 0x94, 0x32, 0xBE, 0x34 }));
+				e = EncodingEx.GetEncoding(SupportedEncoding.GB18030);
+				yield return (new EncodingTestDataTuple(e, "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
+				yield return (new EncodingTestDataTuple(e,   "ü", new byte[] { 0xA8, 0xB9 })); // only ü supported
+				                                      //// "ÄÖÜ" not supported
+				yield return (new EncodingTestDataTuple(e, "$€",  new byte[] { 0x24, 0xA2, 0xE3 })); // £ not supported
+				yield return (new EncodingTestDataTuple(e,  "ě",  new byte[] { 0xA8, 0xA7 })); // only ě supported
+				yield return (new EncodingTestDataTuple(e, "一二州", new byte[] { 0xD2, 0xBB, 0xB6, 0xFE, 0xD6, 0xDD }));
+				                                      //// "︙" not supported
+				yield return (new EncodingTestDataTuple(e, "𝄞", new byte[] { 0x94, 0x32, 0xBE, 0x34 }));
 
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.GB18030), @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 })); // same as ASCII
+				yield return (new EncodingTestDataTuple(e, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 })); // same as ASCII
 
 				// KSC [949]:
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "äöü", new byte[] { 0x61, 0x6F, 0x75 })); // Umlaute not supported, i.e. resulting in "aou"
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "ÄÖÜ", new byte[] { 0x41, 0x4F, 0x55 })); // Umlaute not supported, i.e. resulting in "aou"
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "$£€", new byte[] { 0x24, 0xA1, 0xCC, 0xA2, 0xE6 })); // 1-2-2 bytes
-				                                                                                                       //// "čěř" not supported
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), "一二州", new byte[] { 0xEC, 0xE9, 0xEC, 0xA3, 0xF1, 0xB6 }));
-				                                                                                                       //// "︙" not supported
-				                                                                                                       //// "𝄞" not supported
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987), @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 })); // same as ASCII
+				e = EncodingEx.GetEncoding(SupportedEncoding.KS_C_5601_1987);
+				yield return (new EncodingTestDataTuple(e, "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
+				yield return (new EncodingTestDataTuple(e, "äöü", new byte[] { 0x61, 0x6F, 0x75 })); // Umlaute not supported, i.e. resulting in "aou"
+				yield return (new EncodingTestDataTuple(e, "ÄÖÜ", new byte[] { 0x41, 0x4F, 0x55 })); // Umlaute not supported, i.e. resulting in "AOU"
+				yield return (new EncodingTestDataTuple(e, "$£€", new byte[] { 0x24, 0xA1, 0xCC, 0xA2, 0xE6 })); // 1-2-2 bytes
+				                                      //// "čěř" not supported
+				yield return (new EncodingTestDataTuple(e, "一二州", new byte[] { 0xEC, 0xE9, 0xEC, 0xA3, 0xF1, 0xB6 }));
+				                                      //// "︙" not supported
+				                                      //// "𝄞" not supported
+				yield return (new EncodingTestDataTuple(e, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 })); // same as ASCII
 
 				// Shift-JIS [932]:
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "äöü", new byte[] { 0x61, 0x6F, 0x75 })); // Umlaute not supported, i.e. resulting in "aou"
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "ÄÖÜ", new byte[] { 0x41, 0x4F, 0x55 })); // Umlaute not supported, i.e. resulting in "aou"
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "$£",  new byte[] { 0x24, 0x81, 0x92 })); // only $ and £ supported
-				                                                                                                  //// "čěř" not supported
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), "一二州", new byte[] { 0x88, 0xEA, 0x93, 0xF1, 0x8F, 0x42 }));
-				                                                                                                  //// "︙" not supported
-				                                                                                                  //// "𝄞" not supported
-				yield return (new Tuple<Encoding, string, byte[]>(EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS), @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 })); // same as ASCII
+				e = EncodingEx.GetEncoding(SupportedEncoding.Shift_JIS);
+				yield return (new EncodingTestDataTuple(e, "abc", new byte[] { 0x61, 0x62, 0x63 })); // same as ASCII
+				yield return (new EncodingTestDataTuple(e, "äöü", new byte[] { 0x61, 0x6F, 0x75 })); // Umlaute not supported, i.e. resulting in "aou"
+				yield return (new EncodingTestDataTuple(e, "ÄÖÜ", new byte[] { 0x41, 0x4F, 0x55 })); // Umlaute not supported, i.e. resulting in "AOU"
+				yield return (new EncodingTestDataTuple(e, "$£",  new byte[] { 0x24, 0x81, 0x92 })); // only $ and £ supported
+				                                      //// "čěř" not supported
+				yield return (new EncodingTestDataTuple(e, "一二州", new byte[] { 0x88, 0xEA, 0x93, 0xF1, 0x8F, 0x42 }));
+				                                      //// "︙" not supported
+				                                      //// "𝄞" not supported
+				yield return (new EncodingTestDataTuple(e, @"0\0<CR>1\n2", new byte[] { 0x30, 0x00, 0x0D, 0x31, 0x0A, 0x32 })); // same as ASCII
 			}
 		}
 
@@ -527,7 +543,7 @@ namespace YAT.Domain.Test.Parser
 					var text     = tuple.Item2;
 					var data     = tuple.Item3;
 
-					yield return (new TestCaseData(tuple.Item1, tuple.Item2, tuple.Item3).SetName((EncodingEx)encoding + ", " + text));
+					yield return (new TestCaseData(encoding, text, data).SetName((EncodingEx)encoding + ", " + text));
 				}
 			}
 		}

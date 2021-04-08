@@ -151,7 +151,6 @@ namespace YAT.Domain.Test.TextTerminal
 				settingsA.TextTerminal.Encoding = (EncodingEx)encoding;
 				settingsA.TextTerminal.TxEol = eolAB;
 				settingsA.TextTerminal.RxEol = eolBA;
-
 				using (var terminalA = TerminalFactory.CreateTerminal(settingsA))
 				{
 					try

@@ -154,6 +154,7 @@
     <Compile Include="Settings\TerminalSettings.cs" />
     <Compile Include="Settings\DisplaySettings.cs" />
     <Compile Include="Settings\SendSettings.cs" />
+    <Compile Include="TextTerminal\DecodingMismatchBehavior.cs" />
     <Compile Include="TextTerminal\TextProcessState.cs" />
     <Compile Include="TextTerminal\CharSubstitution.cs" />
     <Compile Include="TextSettings\TextTerminalSettings.cs" />

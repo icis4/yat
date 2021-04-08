@@ -205,14 +205,14 @@ namespace YAT.Domain
 								{
 									pendingMultiBytesToDecode.Clear();               // Reset decoding stream.
 
-									return (CreateInvalidBytesWarning(decodingArray, ts, dir, e));
+									return (HandleInvalidBytes(decodingArray, ts, dir, e));
 								}
 							}
 							else // (effectiveCharCount > 1) => Code doesn't fit into a single u16 value, thus more than one character will be returned.
 							{
 								pendingMultiBytesToDecode.Clear();                   // Reset decoding stream.
 
-								return (CreateOutsideUnicodePlane0Warning(decodingArray, ts, dir, e));
+								return (HandleOutsideUnicodePlane0(decodingArray, ts, dir, e));
 							}
 						}
 						else // Non-Unicode DBCS/MBCS.
@@ -265,14 +265,14 @@ namespace YAT.Domain
 									{
 										pendingMultiBytesToDecode.Clear(); // Reset decoding stream.
 
-										return (CreateInvalidBytesWarning(decodingArray, ts, dir, e));
+										return (HandleInvalidBytes(decodingArray, ts, dir, e));
 									}
 								}
 								else // (effectiveCharCount > 1)
 								{
 									pendingMultiBytesToDecode.Clear(); // Reset decoding stream.
 
-									return (CreateInvalidBytesWarning(decodingArray, ts, dir, e));
+									return (HandleInvalidBytes(decodingArray, ts, dir, e));
 								}
 							} // ASCII or lead or trailing byte
 						} // Unicode/Non-Unicode
@@ -301,7 +301,7 @@ namespace YAT.Domain
 			}
 			else // Decoder has failed:
 			{
-				return (CreateInvalidByteWarning(b, ts, dir, e));
+				return (HandleInvalidByte(b, ts, dir, e));
 			}
 		}
 
@@ -356,50 +356,190 @@ namespace YAT.Domain
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateInvalidByteWarning(byte b, DateTime ts, IODirection dir, Encoding e)
+		protected virtual DisplayElement HandleInvalidByte(byte b, DateTime ts, IODirection dir, Encoding e)
 		{
-			var byteAsString = ByteHelper.FormatHexString(b, TerminalSettings.Display.ShowRadix);
+			switch (TextTerminalSettings.DecodingMismatchBehavior)
+			{
+				case DecodingMismatchBehavior.ComprehensiveWarning:                         return (CreateComprehensiveInvalidByteWarning(b, ts, dir, e));
+				case DecodingMismatchBehavior.UnicodeReplacementCharacterAndCompactWarning: return (CreateReplacementCharacterAndCompactInvalidByteWarning(b, ts, dir, e, "�"));
+				case DecodingMismatchBehavior.UnicodeReplacementCharacter:                  return (CreateReplacementCharacterElement(b, ts, dir, "�"));
+				case DecodingMismatchBehavior.QuestionMarkAndCompactWarning:                return (CreateReplacementCharacterAndCompactInvalidByteWarning(b, ts, dir, e, "?"));
+				case DecodingMismatchBehavior.QuestionMark:                                 return (CreateReplacementCharacterElement(b, ts, dir, "?"));
+				case DecodingMismatchBehavior.Discard:                                      return (CreateDiscardElement(b, ts, dir));
 
-			var sb = new StringBuilder();
-			sb.Append("'");
-			sb.Append(byteAsString);
-			sb.Append("' is an invalid '");
-			sb.Append(((EncodingEx)e).DisplayName);
-			sb.Append("' byte!");
-
-			return (new DisplayElement.ErrorInfo(ts, (Direction)dir, sb.ToString(), true));
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + TextTerminalSettings.DecodingMismatchBehavior.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "a", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateInvalidBytesWarning(byte[] a, DateTime ts, IODirection dir, Encoding e)
+		protected virtual DisplayElement HandleInvalidBytes(byte[] a, DateTime ts, IODirection dir, Encoding e)
+		{
+			switch (TextTerminalSettings.DecodingMismatchBehavior)
+			{
+				case DecodingMismatchBehavior.ComprehensiveWarning:                         return (CreateComprehensiveInvalidBytesWarning(a, ts, dir, e));
+				case DecodingMismatchBehavior.UnicodeReplacementCharacterAndCompactWarning: return (CreateReplacementCharacterAndCompactInvalidBytesWarning(a, ts, dir, e, "�"));
+				case DecodingMismatchBehavior.UnicodeReplacementCharacter:                  return (CreateReplacementCharacterElement(a, ts, dir, "�"));
+				case DecodingMismatchBehavior.QuestionMarkAndCompactWarning:                return (CreateReplacementCharacterAndCompactInvalidBytesWarning(a, ts, dir, e, "?"));
+				case DecodingMismatchBehavior.QuestionMark:                                 return (CreateReplacementCharacterElement(a, ts, dir, "?"));
+				case DecodingMismatchBehavior.Discard:                                      return (CreateDiscardElement(a, ts, dir));
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + TextTerminalSettings.DecodingMismatchBehavior.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "a", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement HandleOutsideUnicodePlane0(byte[] a, DateTime ts, IODirection dir, Encoding e)
+		{
+			switch (TextTerminalSettings.DecodingMismatchBehavior)
+			{
+				case DecodingMismatchBehavior.ComprehensiveWarning:                         return (CreateComprehensiveOutsideUnicodePlane0Warning(a, ts, dir, e));
+				case DecodingMismatchBehavior.UnicodeReplacementCharacterAndCompactWarning: return (CreateReplacementCharacterAndCompactInvalidBytesWarning(a, ts, dir, e, "�"));
+				case DecodingMismatchBehavior.UnicodeReplacementCharacter:                  return (CreateReplacementCharacterElement(a, ts, dir, "�"));
+				case DecodingMismatchBehavior.QuestionMarkAndCompactWarning:                return (CreateReplacementCharacterAndCompactInvalidBytesWarning(a, ts, dir, e, "?"));
+				case DecodingMismatchBehavior.QuestionMark:                                 return (CreateReplacementCharacterElement(a, ts, dir, "?"));
+				case DecodingMismatchBehavior.Discard:                                      return (CreateDiscardElement(a, ts, dir));
+
+				default: throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + TextTerminalSettings.DecodingMismatchBehavior.ToString() + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateComprehensiveInvalidByteWarning(byte b, DateTime ts, IODirection dir, Encoding e)
+		{
+			var byteAsString = ByteHelper.FormatHexString(b, TerminalSettings.Display.ShowRadix);
+
+			var sb = new StringBuilder();
+			sb.Append(@""""); // Not using [...] as that is the warning enclosure.
+			sb.Append(byteAsString);
+			sb.Append(@""" is an invalid '");
+			sb.Append(((EncodingEx)e).DisplayName);
+			sb.Append("' byte!");
+
+			return (new DisplayElement.WarningInfo(ts, (Direction)dir, b, sb.ToString()));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "a", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateComprehensiveInvalidBytesWarning(byte[] a, DateTime ts, IODirection dir, Encoding e)
 		{
 			var bytesAsString = ByteHelper.FormatHexString(a, TerminalSettings.Display.ShowRadix);
 
 			var sb = new StringBuilder();
-			sb.Append(@"""");
+			sb.Append(@""""); // Not using [...] as that is the warning enclosure.
 			sb.Append(bytesAsString);
 			sb.Append(@""" is an invalid '");
 			sb.Append(((EncodingEx)e).DisplayName);
 			sb.Append("' byte sequence!");
 
-			return (new DisplayElement.ErrorInfo(ts, (Direction)dir, sb.ToString(), true));
+			return (new DisplayElement.WarningInfo(ts, (Direction)dir, a, sb.ToString()));
 		}
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "a", Justification = "Short and compact for improved readability.")]
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
-		protected virtual DisplayElement CreateOutsideUnicodePlane0Warning(byte[] a, DateTime ts, IODirection dir, Encoding e)
+		protected virtual DisplayElement CreateComprehensiveOutsideUnicodePlane0Warning(byte[] a, DateTime ts, IODirection dir, Encoding e)
 		{
 			var bytesAsString = ByteHelper.FormatHexString(a, TerminalSettings.Display.ShowRadix);
 
 			var sb = new StringBuilder();
-			sb.Append(@"Configured Unicode encoding mismatches byte sequence """);
+			sb.Append(@""""); // Not using [...] as that is the warning enclosure.
 			sb.Append(bytesAsString);
-			sb.Append(@""" which is outside the Unicode basic multilingual plane (plane 0) and not supported by the .NET Framework and thus " + ApplicationEx.CommonName + " (yet).");
+			sb.Append(@""" is a byte sequence outside the Unicode basic multilingual plane (plane 0)! Only Unicode plane 0 is supported by .NET Framework and thus " + ApplicationEx.CommonName + " (yet).");
 
-			return (new DisplayElement.ErrorInfo(ts, (Direction)dir, sb.ToString(), true));
+			return (new DisplayElement.WarningInfo(ts, (Direction)dir, a, sb.ToString()));
+		}
+
+		/// <remarks>
+		/// <see cref="DisplayElement"/> requires a string, thus using <c>string</c> instead of <c>char</c> for replacement character.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateReplacementCharacterAndCompactInvalidByteWarning(byte b, DateTime ts, IODirection dir, Encoding e, string replacementCharacter)
+		{
+			var byteAsString = ByteHelper.FormatHexString(b, TerminalSettings.Display.ShowRadix);
+
+			var sb = new StringBuilder();
+			sb.Append(replacementCharacter);
+			sb.Append("["); // Manually adding [...] to be able to combine replacement character and byte value.
+			sb.Append(byteAsString);
+			sb.Append("]");
+
+			return (new DisplayElement.WarningInfo(ts, (Direction)dir, b, sb.ToString(), omitBracketsAndLabel: true));
+		}
+
+		/// <remarks>
+		/// <see cref="DisplayElement"/> requires a string, thus using <c>string</c> instead of <c>char</c> for replacement character.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "a", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "e", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateReplacementCharacterAndCompactInvalidBytesWarning(byte[] a, DateTime ts, IODirection dir, Encoding e, string replacementCharacter)
+		{
+			var bytesAsString = ByteHelper.FormatHexString(a, TerminalSettings.Display.ShowRadix);
+
+			var sb = new StringBuilder();
+			sb.Append(replacementCharacter);
+			sb.Append("["); // Manually adding [...] to be able to combine replacement character and byte sequence.
+			sb.Append(bytesAsString);
+			sb.Append("]");
+
+			return (new DisplayElement.WarningInfo(ts, (Direction)dir, a, sb.ToString(), omitBracketsAndLabel: true));
+		}
+
+		/// <remarks>
+		/// <see cref="DisplayElement"/> requires a string, thus using <c>string</c> instead of <c>char</c> for replacement character.
+		/// </remarks>
+		/// <remarks>
+		/// Using <see cref="DisplayElement.WarningInfo"/> rather than <see cref="DisplayElement.TxData"/> or <see cref="DisplayElement.RxData"/> to enable coloring.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateReplacementCharacterElement(byte b, DateTime ts, IODirection dir, string replacementCharacter)
+		{
+			return (new DisplayElement.WarningInfo(ts, (Direction)dir, b, replacementCharacter, omitBracketsAndLabel: true));
+		}
+
+		/// <remarks>
+		/// <see cref="DisplayElement"/> requires a string, thus using <c>string</c> instead of <c>char</c> for replacement character.
+		/// </remarks>
+		/// <remarks>
+		/// Using <see cref="DisplayElement.WarningInfo"/> rather than <see cref="DisplayElement.TxData"/> or <see cref="DisplayElement.RxData"/> to enable coloring.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "a", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateReplacementCharacterElement(byte[] a, DateTime ts, IODirection dir, string replacementCharacter)
+		{
+			return (new DisplayElement.WarningInfo(ts, (Direction)dir, a, replacementCharacter, omitBracketsAndLabel: true));
+		}
+
+		/// <remarks>
+		/// <see cref="DisplayElement"/> requires a string, thus using <c>string</c> instead of <c>char</c> for replacement character.
+		/// </remarks>
+		/// <remarks>
+		/// Using <see cref="DisplayElement.WarningInfo"/> rather than <see cref="DisplayElement.TxData"/> or <see cref="DisplayElement.RxData"/> to enable coloring.
+		/// Using <see cref="DisplayElement.WarningInfo"/> rather than <see cref="DisplayElement.Nonentity"/> to keep correct byte count.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateDiscardElement(byte b, DateTime ts, IODirection dir)
+		{
+			return (new DisplayElement.WarningInfo(ts, (Direction)dir, b, "", omitBracketsAndLabel: true));
+		}
+
+		/// <remarks>
+		/// <see cref="DisplayElement"/> requires a string, thus using <c>string</c> instead of <c>char</c> for replacement character.
+		/// </remarks>
+		/// <remarks>
+		/// Using <see cref="DisplayElement.WarningInfo"/> rather than <see cref="DisplayElement.TxData"/> or <see cref="DisplayElement.RxData"/> to enable coloring.
+		/// Using <see cref="DisplayElement.WarningInfo"/> rather than <see cref="DisplayElement.Nonentity"/> to keep correct byte count.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "a", Justification = "Short and compact for improved readability.")]
+		protected virtual DisplayElement CreateDiscardElement(byte[] a, DateTime ts, IODirection dir)
+		{
+			return (new DisplayElement.WarningInfo(ts, (Direction)dir, a, "", omitBracketsAndLabel: true));
 		}
 
 		/// <remarks>This text specific implementation is based on <see cref="DisplayElementCollection.CharCount"/>.</remarks>
@@ -982,10 +1122,10 @@ namespace YAT.Domain
 					lineState.Exceeded = true; // Keep in mind and notify once:
 
 					var message = "Maximal number of characters per line exceeded! Check the line break settings in Terminal > Settings > Text or increase the limit in Terminal > Settings > Advanced.";
-					lineState.Elements.Add(new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true)); // Create two separate elements...
+					lineState.Elements.Add(new DisplayElement.WarningInfo(ts, (Direction)dir, message)); // Create two separate elements...
 
 					CreateCollectionIfIsNull(ref elementsToAdd);
-					elementsToAdd.Add(     new DisplayElement.ErrorInfo(ts, (Direction)dir, message, true)); // ...to ensure decoupling.
+					elementsToAdd.Add(     new DisplayElement.WarningInfo(ts, (Direction)dir, message)); // ...to ensure decoupling.
 				}
 
 				if (isBackspaceToExecute)

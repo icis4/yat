@@ -63,6 +63,8 @@ using YAT.Domain.Utilities;
 
 namespace YAT.Domain.Test.Terminal
 {
+	using SendTestDataTuple = Tuple<TerminalType, SettingsFlavor, TestCaseData>;
+
 	#region Enums
 
 	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
@@ -244,7 +246,7 @@ namespace YAT.Domain.Test.Terminal
 		/// generated here and then some are removed by the I/O dependent generation further below.
 		/// again.
 		/// </remarks>
-		private static IEnumerable<Tuple<TerminalType, SettingsFlavor, TestCaseData>> Tests
+		private static IEnumerable<SendTestDataTuple> Tests
 		{
 			get
 			{
@@ -270,7 +272,7 @@ namespace YAT.Domain.Test.Terminal
 
 							var nameSuffix = string.Format(CultureInfo.CurrentCulture, "_{0}_{1}_{2}", tt, flavor, fileKey);
 							var tcd = new TestCaseData(fileInfo, sendMethod).SetName(nameSuffix);
-							yield return (new Tuple<TerminalType, SettingsFlavor, TestCaseData>(tt, flavor, tcd));
+							yield return (new SendTestDataTuple(tt, flavor, tcd));
 						}
 
 						// Generated arguments must either be...
@@ -380,7 +382,7 @@ namespace YAT.Domain.Test.Terminal
 			}
 		}
 
-		private static TestCaseData ComplementTestCase(Tuple<TerminalType, SettingsFlavor, TestCaseData> t, TestCaseData tc)
+		private static TestCaseData ComplementTestCase(SendTestDataTuple tuple, TestCaseData tc)
 		{
 			// Generated arguments must either be...
 			//    settings, fileInfo, sendMethod, timeout
@@ -392,7 +394,7 @@ namespace YAT.Domain.Test.Terminal
 
 			if (settingsA.IO.IOType == IOType.SerialPort) // Ignore settingsB (yet).
 			{
-				if (t.Item2 == SettingsFlavor.Modified)
+				if (tuple.Item2 == SettingsFlavor.Modified)
 					ModifySerialPortSettings(tc);
 			}
 

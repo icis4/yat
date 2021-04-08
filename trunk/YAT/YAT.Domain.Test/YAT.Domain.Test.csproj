@@ -104,6 +104,7 @@
     <Compile Include="Terminal\KeywordsSerialPortTest.cs" />
     <Compile Include="Terminal\KeywordTimeStampTest.cs" />
     <Compile Include="Terminal\BreakTest.cs" />
+    <Compile Include="TextTerminal\DecodingTest.cs" />
     <Compile Include="TextTerminal\LineSendDelayTest.cs" />
     <Compile Include="TextTerminal\FormatTest.cs" />
     <Compile Include="TextTerminal\GlueCharsOfLineTest.SerialPortLoopbackSelfs.cs" />
