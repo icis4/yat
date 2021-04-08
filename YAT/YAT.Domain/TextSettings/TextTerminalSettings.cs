@@ -52,12 +52,6 @@ namespace YAT.Domain.Settings
 		// Constants
 		//==========================================================================================
 
-		/// <summary></summary>
-		public const bool SeparateTxRxEolDefault = false;
-
-		/// <summary></summary>
-		public static readonly string EolDefault = EolEx.Parse(Environment.NewLine);
-
 		/// <summary>
 		/// Default is <see cref="EncodingEx.Default"/> which is <see cref="SupportedEncoding.UTF8"/>
 		/// which corresponds to <see cref="Encoding.UTF8"/>.
@@ -66,6 +60,15 @@ namespace YAT.Domain.Settings
 		/// <see cref="Encoding.Default"/> must not be used because that is limited to an ANSI code page.
 		/// </remarks>
 		public const int EncodingDefault = (int)EncodingEx.Default;
+
+		/// <summary></summary>
+		public const DecodingMismatchBehavior DecodingMismatchBehaviorDefault = DecodingMismatchBehaviorEx.Default;
+
+		/// <summary></summary>
+		public const bool SeparateTxRxEolDefault = false;
+
+		/// <summary></summary>
+		public static readonly string EolDefault = EolEx.Parse(Environment.NewLine);
 
 		/// <summary></summary>
 		public const bool ShowEolDefault = false;
@@ -123,10 +126,12 @@ namespace YAT.Domain.Settings
 		// Fields
 		//==========================================================================================
 
+		private int    encoding;
+		private DecodingMismatchBehavior decodingMismatchBehavior;
+
 		private bool   separateTxRxEol;
 		private string txEol;
 		private string rxEol;
-		private int    encoding;
 		private bool   showEol;
 
 		private bool separateTxRxDisplay;
@@ -173,11 +178,13 @@ namespace YAT.Domain.Settings
 		public TextTerminalSettings(TextTerminalSettings rhs)
 			: base(rhs)
 		{
-			SeparateTxRxEol  = rhs.SeparateTxRxEol;
-			TxEol            = rhs.TxEol;
-			RxEol            = rhs.RxEol;
-			Encoding         = rhs.Encoding;
-			ShowEol          = rhs.ShowEol;
+			Encoding                 = rhs.Encoding;
+			DecodingMismatchBehavior = rhs.DecodingMismatchBehavior;
+
+			SeparateTxRxEol = rhs.SeparateTxRxEol;
+			TxEol           = rhs.TxEol;
+			RxEol           = rhs.RxEol;
+			ShowEol         = rhs.ShowEol;
 
 			SeparateTxRxDisplay =               rhs.SeparateTxRxDisplay;
 			TxDisplay = new TextDisplaySettings(rhs.TxDisplay);
@@ -200,11 +207,13 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			SeparateTxRxEol  = SeparateTxRxEolDefault;
-			TxEol            = EolDefault;
-			RxEol            = EolDefault;
-			Encoding         = EncodingDefault;
-			ShowEol          = ShowEolDefault;
+			Encoding                 = EncodingDefault;
+			DecodingMismatchBehavior = DecodingMismatchBehaviorDefault;
+
+			SeparateTxRxEol = SeparateTxRxEolDefault;
+			TxEol           = EolDefault;
+			RxEol           = EolDefault;
+			ShowEol         = ShowEolDefault;
 
 			SeparateTxRxDisplay = SeparateTxRxDisplayDefault;
 			GlueCharsOfLine     = GlueCharsOfLineDefault;
@@ -244,6 +253,36 @@ namespace YAT.Domain.Settings
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary></summary>
+		[XmlElement("Encoding")]
+		public virtual int Encoding
+		{
+			get { return (this.encoding); }
+			set
+			{
+				if (this.encoding != value)
+				{
+					this.encoding = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("DecodingMismatchBehavior")]
+		public virtual DecodingMismatchBehavior DecodingMismatchBehavior
+		{
+			get { return (this.decodingMismatchBehavior); }
+			set
+			{
+				if (this.decodingMismatchBehavior != value)
+				{
+					this.decodingMismatchBehavior = value;
+					SetMyChanged();
+				}
+			}
+		}
 
 		/// <summary></summary>
 		[XmlElement("SeparateTxRxEol")]
@@ -297,21 +336,6 @@ namespace YAT.Domain.Settings
 				// Do not redirect on 'set'. this would not be an understandable behavior.
 				// It could even confuse the user, e.g. when temporarily separating the settings,
 				// and then load them again from XML => temporary settings get lost.
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("Encoding")]
-		public virtual int Encoding
-		{
-			get { return (this.encoding); }
-			set
-			{
-				if (this.encoding != value)
-				{
-					this.encoding = value;
-					SetMyChanged();
-				}
 			}
 		}
 
@@ -510,10 +534,12 @@ namespace YAT.Domain.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
+				hashCode = (hashCode * 397) ^  Encoding                .GetHashCode();
+				hashCode = (hashCode * 397) ^  DecodingMismatchBehavior.GetHashCode();
+
 				hashCode = (hashCode * 397) ^  SeparateTxRxEol      .GetHashCode();
 				hashCode = (hashCode * 397) ^ (TxEol != null ? TxEol.GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (RxEol != null ? RxEol.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^  Encoding             .GetHashCode();
 				hashCode = (hashCode * 397) ^  ShowEol              .GetHashCode();
 
 				hashCode = (hashCode * 397) ^  SeparateTxRxDisplay.GetHashCode();
@@ -552,10 +578,12 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
+				Encoding                .Equals(other.Encoding)                 &&
+				DecodingMismatchBehavior.Equals(other.DecodingMismatchBehavior) &&
+
 				SeparateTxRxEol       .Equals(other.SeparateTxRxEol) &&
 				StringEx.EqualsOrdinal(TxEol, other.TxEol)           &&
 				StringEx.EqualsOrdinal(RxEol, other.RxEol)           &&
-				Encoding              .Equals(other.Encoding)        &&
 				ShowEol               .Equals(other.ShowEol)         &&
 
 				SeparateTxRxDisplay.Equals(other.SeparateTxRxDisplay) &&

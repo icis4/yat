@@ -851,7 +851,7 @@ namespace MKY.Text
 		}
 
 		/// <summary>
-		/// Returns whether this instance is using the default encoding.
+		/// Returns whether this instance represents the default encoding.
 		/// </summary>
 		public virtual bool IsDefault
 		{
@@ -862,7 +862,23 @@ namespace MKY.Text
 		}
 
 		/// <summary>
-		/// Returns whether this instance is using one of the Unicode encodings (UTF/UCS).
+		/// Gets a value indicating whether the current encoding uses single-byte code points.
+		/// </summary>
+		public virtual bool IsSingleByte
+		{
+			get { return (Encoding.GetEncoding(CodePage).IsSingleByte); }
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether the current encoding uses multi-byte code points.
+		/// </summary>
+		public virtual bool IsMultiByte
+		{
+			get { return (!IsSingleByte); }
+		}
+
+		/// <summary>
+		/// Returns whether this instance represents one of the Unicode encodings (UTF/UCS).
 		/// </summary>
 		/// <remarks>
 		/// UTF-7 is *not* a Unicode encoding.
@@ -891,7 +907,7 @@ namespace MKY.Text
 		}
 
 		/// <summary>
-		/// Returns whether this instance is using one of the big-endian Unicode encodings (UTF16BE or UTF32BE).
+		/// Returns whether this instance represents one of the big-endian Unicode encodings (UTF16BE or UTF32BE).
 		/// </summary>
 		public virtual bool IsUnicodeBigEndian
 		{
@@ -946,7 +962,7 @@ namespace MKY.Text
 		}
 
 		/// <summary>
-		/// Returns the fragment byte count if this instance is using one of the Unicode encodings.
+		/// Returns the fragment byte count if this instance represents one of the Unicode encodings.
 		/// </summary>
 		/// <remarks>
 		/// Value equals <see cref="GetMinByteCount()"/> for Unicode encodings.

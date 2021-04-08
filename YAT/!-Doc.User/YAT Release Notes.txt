@@ -94,7 +94,10 @@ New:
 Important changes:
 - YAT now checks whether DejaVu fonts are installed, and whether a monospaced font is used in the
   terminals. The user gets warned if either is not given (feature request #341).
-- <<<<<<<<<<<<<<<<<<<<<Behavior on Unicode decoding mismatch can now be configured in [Terminal > Settings... > Text... > ???????????????]>>>>>>>>>>>>>>>>>>>>>> (feature request #436).
+- Behavior on multi-byte character set decoding mismatch can now be configured in the terminal
+  settings [Terminal > Settings... > Text...] (feature request #436).
+- Separate colors for warnings and errors (related to feature request #436). On existing terminals,
+  separate colors will have to be explicitly activated by [View > Format... > Defaults...].
 - Find text can now automatically be set by either selecting a line in a monitor or by selecting the
   whole or parts of a line in [Copy of Active Line] (related to feature requests #424 and #434).
 - Log dialog now more clearly states "root directory and file name base" (part of feat. req. #435).

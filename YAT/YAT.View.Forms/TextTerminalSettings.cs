@@ -41,6 +41,8 @@ using MKY.Text;
 using MKY.Text.RegularExpressions;
 using MKY.Windows.Forms;
 
+//// "YAT.Domain" is explicitly used due to ambiguity among "YAT.Settings" and "Domain.Settings".
+
 #endregion
 
 #region Module-level FxCop suppressions
@@ -167,6 +169,14 @@ namespace YAT.View.Forms
 				return;
 
 			this.settingsInEdit.Encoding = (EncodingEx)comboBox_Encoding.SelectedItem;
+		}
+
+		private void comboBox_DecodingMismatchBehavior_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.DecodingMismatchBehavior = (Domain.DecodingMismatchBehaviorEx)comboBox_DecodingMismatchBehavior.SelectedItem;
 		}
 
 		private void checkBox_SeparateTxRxEol_CheckedChanged(object sender, EventArgs e)
@@ -634,15 +644,21 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
+				// Encoding:
+				comboBox_Encoding.Items.Clear();
+				comboBox_Encoding.Items.AddRange(EncodingEx.GetItems());
+
+				comboBox_DecodingMismatchBehavior.Items.Clear();
+				comboBox_DecodingMismatchBehavior.Items.AddRange(Domain.DecodingMismatchBehaviorEx.GetItems());
+
+				// EOL:
 				comboBox_TxEol.Items.Clear();
 				comboBox_TxEol.Items.AddRange(Domain.EolEx.GetItems());
 
 				comboBox_RxEol.Items.Clear();
 				comboBox_RxEol.Items.AddRange(Domain.EolEx.GetItems());
 
-				comboBox_Encoding.Items.Clear();
-				comboBox_Encoding.Items.AddRange(EncodingEx.GetItems());
-
+				// Send:
 				var linkText = ".NET Regex Quick Reference";
 				var linkUri = @"https://docs.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference";
 				linkLabel_Regex.Links.Clear();
@@ -661,7 +677,13 @@ namespace YAT.View.Forms
 			try
 			{
 				// Encoding:
-				comboBox_Encoding.SelectedItem = (EncodingEx)this.settingsInEdit.Encoding;
+				var encoding = (EncodingEx)this.settingsInEdit.Encoding;
+				comboBox_Encoding.SelectedItem = encoding;
+
+				bool isMultiByte = encoding.IsMultiByte;
+				label_DecodingMismatchBehavior   .Enabled = isMultiByte;
+				comboBox_DecodingMismatchBehavior.Enabled = isMultiByte;
+				comboBox_DecodingMismatchBehavior.SelectedItem = (Domain.DecodingMismatchBehaviorEx)this.settingsInEdit.DecodingMismatchBehavior;
 
 				// EOL:
 				bool separateEol = this.settingsInEdit.SeparateTxRxEol;
