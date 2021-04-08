@@ -1027,9 +1027,9 @@ namespace YAT.Domain.Test
 		}
 
 		/// <summary></summary>
-		public static void AssertRxContent(Domain.Terminal terminal, IEnumerable<string> expectedContentPattern)
+		public static void AssertRxContent(Domain.Terminal terminal, IEnumerable<string> expectedContent)
 		{
-			AssertContent(terminal, RepositoryType.Rx, expectedContentPattern, ComparisonType.String);
+			AssertContent(terminal, RepositoryType.Rx, expectedContent, ComparisonType.String);
 		}
 
 		/// <remarks>
