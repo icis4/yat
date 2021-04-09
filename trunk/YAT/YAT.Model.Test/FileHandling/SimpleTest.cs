@@ -87,7 +87,7 @@ namespace YAT.Model.Test.FileHandling
 			ApplicationSettings.Create(ApplicationSettingsFileAccess.ReadSharedWriteIfOwned);
 			ApplicationSettings.Load();
 
-			// Allow modification of auto-save setting.
+			// Allow modification of auto-save settings:
 			this.autoOpenWorkspaceToRestore = ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace;
 			this.autoSaveWorkspaceToRestore = ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace;
 			this.workspaceFilePathToRestore = ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath;
@@ -98,12 +98,12 @@ namespace YAT.Model.Test.FileHandling
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			// Restore auto-save of workspace settings.
+			// Restore auto-save of workspace settings:
 			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = this.autoOpenWorkspaceToRestore;
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = this.autoSaveWorkspaceToRestore;
 			ApplicationSettings.LocalUserSettings.AutoWorkspace.FilePath    = this.workspaceFilePathToRestore;
 
-			// Restore 'normal' file-based application settings.
+			// Restore 'normal' file-based application settings:
 			ApplicationSettings.SaveLocalUserSettings();
 			ApplicationSettings.CloseAndDispose();
 
@@ -122,7 +122,7 @@ namespace YAT.Model.Test.FileHandling
 		[SetUp]
 		public virtual void SetUp()
 		{
-			// By default, reset the application settings to their defaults before running any test.
+			// By default, reset the application settings to their defaults before running any test:
 			ApplicationSettings.LocalUserSettings.General.AutoOpenWorkspace = true;
 			ApplicationSettings.LocalUserSettings.General.AutoSaveWorkspace = true;
 			ApplicationSettings.LocalUserSettings.AutoWorkspace.ResetFilePath();
