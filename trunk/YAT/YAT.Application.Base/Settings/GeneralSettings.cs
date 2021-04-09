@@ -41,10 +41,12 @@ namespace YAT.Application.Settings
 		/// <summary></summary>
 		public const string AutoSaveWorkspaceFileNamePrefix = "Workspace-";
 
+		private bool checkFontAvailability;
 		private bool autoOpenWorkspace;
 		private bool autoSaveWorkspace;
 		private bool useRelativePaths;
 
+		private bool checkTerminalFont;
 		private bool notifyNonAvailableIO;
 
 		private bool retrieveSerialPortCaptions;
@@ -77,20 +79,23 @@ namespace YAT.Application.Settings
 		public GeneralSettings(GeneralSettings rhs)
 			: base(rhs)
 		{
-			AutoOpenWorkspace = rhs.AutoOpenWorkspace;
-			AutoSaveWorkspace = rhs.AutoSaveWorkspace;
-			UseRelativePaths  = rhs.UseRelativePaths;
+			CheckFontAvailability           = rhs.CheckFontAvailability;
 
-			NotifyNonAvailableIO = rhs.NotifyNonAvailableIO;
+			AutoOpenWorkspace               = rhs.AutoOpenWorkspace;
+			AutoSaveWorkspace               = rhs.AutoSaveWorkspace;
+			UseRelativePaths                = rhs.UseRelativePaths;
 
-			RetrieveSerialPortCaptions = rhs.RetrieveSerialPortCaptions;
-			DetectSerialPortsInUse     = rhs.DetectSerialPortsInUse;
-			AskForAlternateSerialPort  = rhs.AskForAlternateSerialPort;
+			CheckTerminalFont               = rhs.CheckTerminalFont;
+			NotifyNonAvailableIO            = rhs.NotifyNonAvailableIO;
+
+			RetrieveSerialPortCaptions      = rhs.RetrieveSerialPortCaptions;
+			DetectSerialPortsInUse          = rhs.DetectSerialPortsInUse;
+			AskForAlternateSerialPort       = rhs.AskForAlternateSerialPort;
 
 			AskForAlternateNetworkInterface = rhs.AskForAlternateNetworkInterface;
 
-			MatchUsbSerial           = rhs.MatchUsbSerial;
-			AskForAlternateUsbDevice = rhs.AskForAlternateUsbDevice;
+			MatchUsbSerial                  = rhs.MatchUsbSerial;
+			AskForAlternateUsbDevice        = rhs.AskForAlternateUsbDevice;
 
 			ClearChanged();
 		}
@@ -102,20 +107,23 @@ namespace YAT.Application.Settings
 		{
 			base.SetMyDefaults();
 
-			AutoOpenWorkspace = true;
-			AutoSaveWorkspace = true;
-			UseRelativePaths  = true;
+			CheckFontAvailability           = true;
 
-			NotifyNonAvailableIO = true;
+			AutoOpenWorkspace               = true;
+			AutoSaveWorkspace               = true;
+			UseRelativePaths                = true;
 
-			RetrieveSerialPortCaptions = true;
-			DetectSerialPortsInUse     = true;
-			AskForAlternateSerialPort  = true;
+			CheckTerminalFont               = true;
+			NotifyNonAvailableIO            = true;
+
+			RetrieveSerialPortCaptions      = true;
+			DetectSerialPortsInUse          = true;
+			AskForAlternateSerialPort       = true;
 
 			AskForAlternateNetworkInterface = true;
 
-			MatchUsbSerial           = true;
-			AskForAlternateUsbDevice = true;
+			MatchUsbSerial                  = true;
+			AskForAlternateUsbDevice        = true;
 		}
 
 		#region Properties
@@ -123,8 +131,23 @@ namespace YAT.Application.Settings
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
+		[XmlElement("CheckFontAvailability")]
+		public virtual bool CheckFontAvailability
+		{
+			get { return (this.checkFontAvailability); }
+			set
+			{
+				if (this.checkFontAvailability != value)
+				{
+					this.checkFontAvailability = value;
+					SetMyChanged();
+				}
+			}
+		}
+
 		/// <summary>
-		/// Auto save of workspace means that the last open workspace will tried to be automatically
+		/// Auto open of workspace means that the previously open workspace will automatically be
 		/// opened when starting the application.
 		/// </summary>
 		[XmlElement("AutoOpenWorkspace")]
@@ -170,6 +193,21 @@ namespace YAT.Application.Settings
 				if (this.useRelativePaths != value)
 				{
 					this.useRelativePaths = value;
+					SetMyChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("CheckTerminalFont")]
+		public virtual bool CheckTerminalFont
+		{
+			get { return (this.checkTerminalFont); }
+			set
+			{
+				if (this.checkTerminalFont != value)
+				{
+					this.checkTerminalFont = value;
 					SetMyChanged();
 				}
 			}
@@ -300,20 +338,23 @@ namespace YAT.Application.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ AutoOpenWorkspace.GetHashCode();
-				hashCode = (hashCode * 397) ^ AutoSaveWorkspace.GetHashCode();
-				hashCode = (hashCode * 397) ^ UseRelativePaths .GetHashCode();
+				hashCode = (hashCode * 397) ^ CheckFontAvailability          .GetHashCode();
 
-				hashCode = (hashCode * 397) ^ NotifyNonAvailableIO.GetHashCode();
+				hashCode = (hashCode * 397) ^ AutoOpenWorkspace              .GetHashCode();
+				hashCode = (hashCode * 397) ^ AutoSaveWorkspace              .GetHashCode();
+				hashCode = (hashCode * 397) ^ UseRelativePaths               .GetHashCode();
 
-				hashCode = (hashCode * 397) ^ RetrieveSerialPortCaptions.GetHashCode();
-				hashCode = (hashCode * 397) ^ DetectSerialPortsInUse    .GetHashCode();
-				hashCode = (hashCode * 397) ^ AskForAlternateSerialPort .GetHashCode();
+				hashCode = (hashCode * 397) ^ CheckTerminalFont              .GetHashCode();
+				hashCode = (hashCode * 397) ^ NotifyNonAvailableIO           .GetHashCode();
+
+				hashCode = (hashCode * 397) ^ RetrieveSerialPortCaptions     .GetHashCode();
+				hashCode = (hashCode * 397) ^ DetectSerialPortsInUse         .GetHashCode();
+				hashCode = (hashCode * 397) ^ AskForAlternateSerialPort      .GetHashCode();
 
 				hashCode = (hashCode * 397) ^ AskForAlternateNetworkInterface.GetHashCode();
 
-				hashCode = (hashCode * 397) ^ MatchUsbSerial          .GetHashCode();
-				hashCode = (hashCode * 397) ^ AskForAlternateUsbDevice.GetHashCode();
+				hashCode = (hashCode * 397) ^ MatchUsbSerial                 .GetHashCode();
+				hashCode = (hashCode * 397) ^ AskForAlternateUsbDevice       .GetHashCode();
 
 				return (hashCode);
 			}
@@ -344,20 +385,23 @@ namespace YAT.Application.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				AutoOpenWorkspace.Equals(other.AutoOpenWorkspace) &&
-				AutoSaveWorkspace.Equals(other.AutoSaveWorkspace) &&
-				UseRelativePaths .Equals(other.UseRelativePaths)  &&
+				CheckFontAvailability          .Equals(other.CheckFontAvailability)           &&
 
-				NotifyNonAvailableIO.Equals(other.NotifyNonAvailableIO) &&
+				AutoOpenWorkspace              .Equals(other.AutoOpenWorkspace)               &&
+				AutoSaveWorkspace              .Equals(other.AutoSaveWorkspace)               &&
+				UseRelativePaths               .Equals(other.UseRelativePaths)                &&
 
-				RetrieveSerialPortCaptions.Equals(other.RetrieveSerialPortCaptions) &&
-				DetectSerialPortsInUse    .Equals(other.DetectSerialPortsInUse)     &&
-				AskForAlternateSerialPort .Equals(other.AskForAlternateSerialPort)  &&
+				CheckTerminalFont              .Equals(other.CheckTerminalFont)               &&
+				NotifyNonAvailableIO           .Equals(other.NotifyNonAvailableIO)            &&
+
+				RetrieveSerialPortCaptions     .Equals(other.RetrieveSerialPortCaptions)      &&
+				DetectSerialPortsInUse         .Equals(other.DetectSerialPortsInUse)          &&
+				AskForAlternateSerialPort      .Equals(other.AskForAlternateSerialPort)       &&
 
 				AskForAlternateNetworkInterface.Equals(other.AskForAlternateNetworkInterface) &&
 
-				MatchUsbSerial          .Equals(other.MatchUsbSerial)           &&
-				AskForAlternateUsbDevice.Equals(other.AskForAlternateUsbDevice)
+				MatchUsbSerial                 .Equals(other.MatchUsbSerial)                  &&
+				AskForAlternateUsbDevice       .Equals(other.AskForAlternateUsbDevice)
 			);
 		}
 

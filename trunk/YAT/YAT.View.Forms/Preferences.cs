@@ -22,12 +22,19 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Windows.Forms;
 
 using MKY.Windows.Forms;
 
 using YAT.Settings.Application;
+
+#endregion
 
 namespace YAT.View.Forms
 {
@@ -57,7 +64,7 @@ namespace YAT.View.Forms
 			InitializeComponent();
 
 			KeepAndCloneAndAttachSettings(settings);
-			InitializeControls();
+
 		////SetControls() is initially called in the 'Shown' event handler.
 		}
 
@@ -130,6 +137,14 @@ namespace YAT.View.Forms
 		// Controls Event Handlers
 		//==========================================================================================
 
+		private void checkBox_CheckFontAvailability_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.General.CheckFontAvailability = checkBox_CheckFontAvailability.Checked;
+		}
+
 		private void checkBox_ShowTerminalInfo_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
@@ -176,6 +191,14 @@ namespace YAT.View.Forms
 				return;
 
 			this.settingsInEdit.General.UseRelativePaths = checkBox_UseRelativePaths.Checked;
+		}
+
+		private void checkBox_CheckTerminalFont_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.settingsInEdit.General.CheckTerminalFont = checkBox_CheckTerminalFont.Checked;
 		}
 
 		private void checkBox_NotifyNonAvailableIO_CheckedChanged(object sender, EventArgs e)
@@ -269,42 +292,31 @@ namespace YAT.View.Forms
 		// Non-Public Methods
 		//==========================================================================================
 
-		private void InitializeControls()
-		{
-			this.isSettingControls.Enter();
-			try
-			{
-				// Nothing to do yet.
-			}
-			finally
-			{
-				this.isSettingControls.Leave();
-			}
-		}
-
 		private void SetControls()
 		{
 			this.isSettingControls.Enter();
 			try
 			{
-				checkBox_ShowTerminalInfo.Checked = this.settingsInEdit.MainWindow.ShowTerminalInfo;
-				checkBox_ShowTime.Checked         = this.settingsInEdit.MainWindow.ShowTime;
-				checkBox_ShowChrono.Checked       = this.settingsInEdit.MainWindow.ShowChrono;
+				checkBox_CheckFontAvailability.Checked           = this.settingsInEdit.General.CheckFontAvailability;
+				checkBox_ShowTerminalInfo.Checked                = this.settingsInEdit.MainWindow.ShowTerminalInfo;
+				checkBox_ShowTime.Checked                        = this.settingsInEdit.MainWindow.ShowTime;
+				checkBox_ShowChrono.Checked                      = this.settingsInEdit.MainWindow.ShowChrono;
 
-				checkBox_AutoOpenWorkspace.Checked = this.settingsInEdit.General.AutoOpenWorkspace;
-				checkBox_AutoSaveWorkspace.Checked = this.settingsInEdit.General.AutoSaveWorkspace;
-				checkBox_UseRelativePaths.Checked  = this.settingsInEdit.General.UseRelativePaths;
+				checkBox_AutoOpenWorkspace.Checked               = this.settingsInEdit.General.AutoOpenWorkspace;
+				checkBox_AutoSaveWorkspace.Checked               = this.settingsInEdit.General.AutoSaveWorkspace;
+				checkBox_UseRelativePaths.Checked                = this.settingsInEdit.General.UseRelativePaths;
 
-				checkBox_NotifyNonAvailableIO.Checked = this.settingsInEdit.General.NotifyNonAvailableIO;
+				checkBox_CheckTerminalFont.Checked               = this.settingsInEdit.General.CheckTerminalFont;
+				checkBox_NotifyNonAvailableIO.Checked            = this.settingsInEdit.General.NotifyNonAvailableIO;
 
-				checkBox_RetrieveSerialPortCaptions.Checked   = this.settingsInEdit.General.RetrieveSerialPortCaptions;
-				checkBox_DetectSerialPortsInUse.Checked       = this.settingsInEdit.General.DetectSerialPortsInUse;
-				checkBox_AskForAlternateSerialPort.Checked    = this.settingsInEdit.General.AskForAlternateSerialPort;
+				checkBox_RetrieveSerialPortCaptions.Checked      = this.settingsInEdit.General.RetrieveSerialPortCaptions;
+				checkBox_DetectSerialPortsInUse.Checked          = this.settingsInEdit.General.DetectSerialPortsInUse;
+				checkBox_AskForAlternateSerialPort.Checked       = this.settingsInEdit.General.AskForAlternateSerialPort;
 
-				checkBox_AskForAlternateNetworkInterface.Checked    = this.settingsInEdit.General.AskForAlternateNetworkInterface;
+				checkBox_AskForAlternateNetworkInterface.Checked = this.settingsInEdit.General.AskForAlternateNetworkInterface;
 
-				checkBox_MatchUsbSerial.Checked              = this.settingsInEdit.General.MatchUsbSerial;
-				checkBox_AskForAlternateUsbDevice.Checked    = this.settingsInEdit.General.AskForAlternateUsbDevice;
+				checkBox_MatchUsbSerial.Checked                  = this.settingsInEdit.General.MatchUsbSerial;
+				checkBox_AskForAlternateUsbDevice.Checked        = this.settingsInEdit.General.AskForAlternateUsbDevice;
 			}
 			finally
 			{
