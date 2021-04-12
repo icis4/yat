@@ -44,9 +44,6 @@ namespace YAT.Format.Settings
 		/// <remarks>Color.Green = 008000.</remarks>
 		public static readonly Color InfoColorDefault = Color.Green;
 
-		/// <remarks>Color.Black = 000000.</remarks>
-		public static readonly Color WhiteSpaceColorDefault = Color.Black;
-
 		/// <remarks>Color.Gold = FFD700.</remarks>
 		public static readonly Color IOControlColorDefault = Color.Gold;
 
@@ -55,6 +52,9 @@ namespace YAT.Format.Settings
 
 		/// <remarks>Color.OrangeRed = FF4500.</remarks>
 		public static readonly Color ErrorColorDefault = Color.OrangeRed;
+
+		/// <remarks>Color.Black = 000000.</remarks>
+		public static readonly Color SeparatorColorDefault = Color.Black;
 
 		/// <remarks><see cref="SystemColors.Window"/>.</remarks>
 		public static readonly Color BackColorDefault = SystemColors.Window;
@@ -77,7 +77,7 @@ namespace YAT.Format.Settings
 		private TextFormat ioControlFormat;
 		private TextFormat warningFormat;
 		private TextFormat errorFormat;
-		private TextFormat whiteSpaceFormat;
+		private TextFormat separatorFormat;
 
 		private BackFormat backFormat;
 
@@ -120,7 +120,7 @@ namespace YAT.Format.Settings
 			IOControlFormat    = new TextFormat(rhs.IOControlFormat);
 			WarningFormat      = new TextFormat(rhs.WarningFormat);
 			ErrorFormat        = new TextFormat(rhs.ErrorFormat);
-			WhiteSpaceFormat   = new TextFormat(rhs.WhiteSpaceFormat);
+			SeparatorFormat    = new TextFormat(rhs.SeparatorFormat);
 
 			BackFormat  = new BackFormat(rhs.BackFormat);
 
@@ -138,21 +138,21 @@ namespace YAT.Format.Settings
 
 			FormattingEnabled = true;
 
-			TxDataFormat       = new TextFormat(TxColorDefault,           true, false, false, false); // Bold.
-			TxControlFormat    = new TextFormat(TxColorDefault,          false, false, false, false);
-			RxDataFormat       = new TextFormat(RxColorDefault,           true, false, false, false); // Bold.
-			RxControlFormat    = new TextFormat(RxColorDefault,          false, false, false, false);
-			TimeStampFormat    = new TextFormat(InfoColorDefault,        false, false, false, false);
-			TimeSpanFormat     = new TextFormat(InfoColorDefault,        false, false, false, false);
-			TimeDeltaFormat    = new TextFormat(InfoColorDefault,        false, false, false, false);
-			TimeDurationFormat = new TextFormat(InfoColorDefault,        false, false, false, false);
-			DeviceFormat       = new TextFormat(InfoColorDefault,        false, false, false, false);
-			DirectionFormat    = new TextFormat(InfoColorDefault,        false, false, false, false);
-			LengthFormat       = new TextFormat(InfoColorDefault,        false, false, false, false);
-			IOControlFormat    = new TextFormat(IOControlColorDefault,    true, false, false, false); // Bold.
-			WarningFormat      = new TextFormat(WarningColorDefault,      true, false, false, false); // Bold.
-			ErrorFormat        = new TextFormat(ErrorColorDefault,        true, false, false, false); // Bold.
-			WhiteSpaceFormat   = new TextFormat(WhiteSpaceColorDefault,  false, false, false, false);
+			TxDataFormat       = new TextFormat(TxColorDefault,         true, false, false, false); // Bold.
+			TxControlFormat    = new TextFormat(TxColorDefault,        false, false, false, false);
+			RxDataFormat       = new TextFormat(RxColorDefault,         true, false, false, false); // Bold.
+			RxControlFormat    = new TextFormat(RxColorDefault,        false, false, false, false);
+			TimeStampFormat    = new TextFormat(InfoColorDefault,      false, false, false, false);
+			TimeSpanFormat     = new TextFormat(InfoColorDefault,      false, false, false, false);
+			TimeDeltaFormat    = new TextFormat(InfoColorDefault,      false, false, false, false);
+			TimeDurationFormat = new TextFormat(InfoColorDefault,      false, false, false, false);
+			DeviceFormat       = new TextFormat(InfoColorDefault,      false, false, false, false);
+			DirectionFormat    = new TextFormat(InfoColorDefault,      false, false, false, false);
+			LengthFormat       = new TextFormat(InfoColorDefault,      false, false, false, false);
+			IOControlFormat    = new TextFormat(IOControlColorDefault,  true, false, false, false); // Bold.
+			WarningFormat      = new TextFormat(WarningColorDefault,    true, false, false, false); // Bold.
+			ErrorFormat        = new TextFormat(ErrorColorDefault,      true, false, false, false); // Bold.
+			SeparatorFormat    = new TextFormat(SeparatorColorDefault, false, false, false, false);
 
 			BackFormat = new BackFormat(BackColorDefault);
 		}
@@ -418,21 +418,24 @@ namespace YAT.Format.Settings
 		}
 
 		/// <remarks>
-		/// "WhiteSpace" is a bit misleading, as the format also applies to non-white-spaced
-		/// separators. But for a YAT monitor perspective, those are also considered "white-space".
+		/// XML tag is "WhiteSpacesFormat" for backward compatibility.
+		/// May be changed to "SeparatorFormat" once bugs #232 "Issues with TolerantXmlSerializer"
+		/// and #246 "Issues with AlternateTolerantXmlSerializer" have been fixed.
 		/// <para>
-		/// Note that the format settings dialog uses term "Separators" which is considered more
-		/// comprehensive to the users.
-		/// </para></remarks>
-		[XmlElement("WhiteSpaceFormat")]
-		public TextFormat WhiteSpaceFormat
+		/// Could be named plural "Separators" as there are multiple types of separators, "Content"
+		/// and "Info", but this just looks awkward in several locations. And the other formats do
+		/// not use plural neither.
+		/// </para>
+		/// </remarks>
+		[XmlElement("WhiteSpacesFormat")]
+		public TextFormat SeparatorFormat
 		{
-			get { return (this.whiteSpaceFormat); }
+			get { return (this.separatorFormat); }
 			set
 			{
-				if (this.whiteSpaceFormat != value)
+				if (this.separatorFormat != value)
 				{
-					this.whiteSpaceFormat = value;
+					this.separatorFormat = value;
 					SetMyChanged();
 				}
 			}
@@ -506,7 +509,7 @@ namespace YAT.Format.Settings
 				hashCode = (hashCode * 397) ^ (IOControlFormat    != null ? IOControlFormat   .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (WarningFormat      != null ? WarningFormat     .GetHashCode() : 0);
 				hashCode = (hashCode * 397) ^ (ErrorFormat        != null ? ErrorFormat       .GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ (WhiteSpaceFormat   != null ? WhiteSpaceFormat  .GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (SeparatorFormat    != null ? SeparatorFormat   .GetHashCode() : 0);
 
 				hashCode = (hashCode * 397) ^ (BackFormat         != null ? BackFormat        .GetHashCode() : 0);
 
@@ -557,7 +560,7 @@ namespace YAT.Format.Settings
 				ObjectEx.Equals(IOControlFormat,    other.IOControlFormat)    &&
 				ObjectEx.Equals(WarningFormat,      other.WarningFormat)      &&
 				ObjectEx.Equals(ErrorFormat,        other.ErrorFormat)        &&
-				ObjectEx.Equals(WhiteSpaceFormat,   other.WhiteSpaceFormat)   &&
+				ObjectEx.Equals(SeparatorFormat,    other.SeparatorFormat)    &&
 
 				ObjectEx.Equals(BackFormat,         other.BackFormat)
 			);

@@ -68,7 +68,7 @@ namespace YAT.View.Controls
 		private static Font staticIOControlFontCache;
 		private static Font staticWarningFontCache;
 		private static Font staticErrorFontCache;
-		private static Font staticWhiteSpaceFontCache;
+		private static Font staticSeparatorFontCache;
 
 		/// <summary>String format used for drawing line numbers.</summary>
 		private static TextFormatFlags staticLineNumberFormat =
@@ -288,9 +288,9 @@ namespace YAT.View.Controls
 			         (element is Domain.DisplayElement.LineStart)        ||
 			         (element is Domain.DisplayElement.LineBreak))
 			{
-				foreColor = settings.WhiteSpaceFormat.Color;
-				fontStyle = settings.WhiteSpaceFormat.FontStyle;
-				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticWhiteSpaceFontCache, fontName, fontSize, fontStyle);
+				foreColor = settings.SeparatorFormat.Color;
+				fontStyle = settings.SeparatorFormat.FontStyle;
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticSeparatorFontCache, fontName, fontSize, fontStyle);
 			}
 			else
 			{
