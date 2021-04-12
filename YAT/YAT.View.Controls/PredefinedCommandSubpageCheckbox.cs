@@ -22,12 +22,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
 using System.ComponentModel;
-using System.Globalization;
 using System.Windows.Forms;
-
-using MKY;
 
 using YAT.Model.Types;
 
