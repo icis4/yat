@@ -63,7 +63,7 @@ namespace YAT.View.Utilities
 		private static Font staticIOControlFontCache;
 		private static Font staticWarningFontCache;
 		private static Font staticErrorFontCache;
-		private static Font staticWhiteSpaceFontCache;
+		private static Font staticSeparatorFontCache;
 
 		/// <remarks>
 		/// Pragmatic implementation of copying RTF to the clipboard. 'netrtfwriter' is only used for stream-based logging.
@@ -223,9 +223,9 @@ namespace YAT.View.Utilities
 			         (element is DisplayElement.LineStart)        ||
 			         (element is DisplayElement.LineBreak))
 			{
-				fontStyle = settings.WhiteSpaceFormat.FontStyle;
-				color     = settings.WhiteSpaceFormat.Color;
-				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticWhiteSpaceFontCache, fontName, fontSize, fontStyle);
+				fontStyle = settings.SeparatorFormat.FontStyle;
+				color     = settings.SeparatorFormat.Color;
+				font      = DrawingEx.UpdateCacheIfAnyHasChanged(ref staticSeparatorFontCache, fontName, fontSize, fontStyle);
 			}
 			else
 			{

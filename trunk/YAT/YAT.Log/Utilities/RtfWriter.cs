@@ -85,7 +85,7 @@ namespace YAT.Log.Utilities
 		private FormatDescriptor ioControlFormat;
 		private FormatDescriptor warningFormat;
 		private FormatDescriptor errorFormat;
-		private FormatDescriptor whiteSpacesFormat;
+		private FormatDescriptor separatorFormat;
 
 		private StreamWriter writer;
 		private object writerSyncObj = new object();
@@ -131,7 +131,7 @@ namespace YAT.Log.Utilities
 			this.ioControlFormat    = new FormatDescriptor(settings.IOControlFormat.FontStyle,    this.document.createColor(settings.IOControlFormat.Color),    this.document.createColor(settings.BackColor));
 			this.warningFormat      = new FormatDescriptor(settings.WarningFormat.FontStyle,      this.document.createColor(settings.WarningFormat.Color),      this.document.createColor(settings.BackColor));
 			this.errorFormat        = new FormatDescriptor(settings.ErrorFormat.FontStyle,        this.document.createColor(settings.ErrorFormat.Color),        this.document.createColor(settings.BackColor));
-			this.whiteSpacesFormat  = new FormatDescriptor(settings.WhiteSpaceFormat.FontStyle,   this.document.createColor(settings.WhiteSpaceFormat.Color),   this.document.createColor(settings.BackColor));
+			this.separatorFormat    = new FormatDescriptor(settings.SeparatorFormat.FontStyle,    this.document.createColor(settings.SeparatorFormat.Color),    this.document.createColor(settings.BackColor));
 
 			// Header:
 			var header = this.document.Header.addParagraph();
@@ -170,7 +170,7 @@ namespace YAT.Log.Utilities
 			         (element is DisplayElement.ContentSeparator) ||
 			         (element is DisplayElement.InfoSeparator)    ||
 			         (element is DisplayElement.LineStart)        ||
-			         (element is DisplayElement.LineBreak))       { format = this.whiteSpacesFormat;  }
+			         (element is DisplayElement.LineBreak))       { format = this.separatorFormat;    }
 			else if ( element is DisplayElement.IOControlInfo)    { format = this.ioControlFormat;    }
 			else if ( element is DisplayElement.WarningInfo)      { format = this.warningFormat;      }
 			else if ( element is DisplayElement.ErrorInfo)        { format = this.errorFormat;        }

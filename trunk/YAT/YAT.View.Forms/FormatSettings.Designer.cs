@@ -39,9 +39,9 @@ namespace YAT.View.Forms
 			this.monitor_Warning = new YAT.View.Controls.Monitor();
 			this.label_Warning = new System.Windows.Forms.Label();
 			this.textFormat_Warning = new YAT.View.Controls.TextFormat();
-			this.monitor_WhiteSpace = new YAT.View.Controls.Monitor();
-			this.label_WhiteSpace = new System.Windows.Forms.Label();
-			this.textFormat_WhiteSpace = new YAT.View.Controls.TextFormat();
+			this.monitor_Separator = new YAT.View.Controls.Monitor();
+			this.label_Separator = new System.Windows.Forms.Label();
+			this.textFormat_Separator = new YAT.View.Controls.TextFormat();
 			this.monitor_IOControl = new YAT.View.Controls.Monitor();
 			this.label_IOControl = new System.Windows.Forms.Label();
 			this.textFormat_IOControl = new YAT.View.Controls.TextFormat();
@@ -151,9 +151,9 @@ namespace YAT.View.Forms
 			this.groupBox_Elements.Controls.Add(this.monitor_Warning);
 			this.groupBox_Elements.Controls.Add(this.label_Warning);
 			this.groupBox_Elements.Controls.Add(this.textFormat_Warning);
-			this.groupBox_Elements.Controls.Add(this.monitor_WhiteSpace);
-			this.groupBox_Elements.Controls.Add(this.label_WhiteSpace);
-			this.groupBox_Elements.Controls.Add(this.textFormat_WhiteSpace);
+			this.groupBox_Elements.Controls.Add(this.monitor_Separator);
+			this.groupBox_Elements.Controls.Add(this.label_Separator);
+			this.groupBox_Elements.Controls.Add(this.textFormat_Separator);
 			this.groupBox_Elements.Controls.Add(this.monitor_IOControl);
 			this.groupBox_Elements.Controls.Add(this.label_IOControl);
 			this.groupBox_Elements.Controls.Add(this.textFormat_IOControl);
@@ -241,41 +241,41 @@ namespace YAT.View.Forms
 			this.textFormat_Warning.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
 			this.textFormat_Warning.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
-			// monitor_WhiteSpace
+			// monitor_Separator
 			// 
-			this.monitor_WhiteSpace.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
-			this.monitor_WhiteSpace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.monitor_Separator.ActiveConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Separator.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.monitor_WhiteSpace.Location = new System.Drawing.Point(111, 424);
-			this.monitor_WhiteSpace.Name = "monitor_WhiteSpace";
-			this.monitor_WhiteSpace.ShowStatusPanel = false;
-			this.monitor_WhiteSpace.Size = new System.Drawing.Size(275, 23);
-			this.monitor_WhiteSpace.TabIndex = 44;
-			this.monitor_WhiteSpace.TabStop = false;
-			this.monitor_WhiteSpace.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Separator.Location = new System.Drawing.Point(111, 424);
+			this.monitor_Separator.Name = "monitor_Separator";
+			this.monitor_Separator.ShowStatusPanel = false;
+			this.monitor_Separator.Size = new System.Drawing.Size(275, 23);
+			this.monitor_Separator.TabIndex = 44;
+			this.monitor_Separator.TabStop = false;
+			this.monitor_Separator.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
-			// label_WhiteSpace
+			// label_Separator
 			// 
-			this.label_WhiteSpace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_WhiteSpace.AutoSize = true;
-			this.label_WhiteSpace.Location = new System.Drawing.Point(12, 430);
-			this.label_WhiteSpace.Name = "label_WhiteSpace";
-			this.label_WhiteSpace.Size = new System.Drawing.Size(61, 13);
-			this.label_WhiteSpace.TabIndex = 43;
-			this.label_WhiteSpace.Text = "&Separators:";
+			this.label_Separator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_Separator.AutoSize = true;
+			this.label_Separator.Location = new System.Drawing.Point(12, 430);
+			this.label_Separator.Name = "label_Separator";
+			this.label_Separator.Size = new System.Drawing.Size(61, 13);
+			this.label_Separator.TabIndex = 43;
+			this.label_Separator.Text = "&Separator:";
 			// 
-			// textFormat_WhiteSpace
+			// textFormat_Separator
 			// 
-			this.textFormat_WhiteSpace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textFormat_WhiteSpace.FormatColor = System.Drawing.Color.Black;
-			this.textFormat_WhiteSpace.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
-			this.textFormat_WhiteSpace.Location = new System.Drawing.Point(396, 424);
-			this.textFormat_WhiteSpace.Name = "textFormat_WhiteSpace";
-			this.textFormat_WhiteSpace.Size = new System.Drawing.Size(232, 23);
-			this.textFormat_WhiteSpace.TabIndex = 45;
-			this.textFormat_WhiteSpace.Tag = "14";
-			this.textFormat_WhiteSpace.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
-			this.textFormat_WhiteSpace.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
+			this.textFormat_Separator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textFormat_Separator.FormatColor = System.Drawing.Color.Black;
+			this.textFormat_Separator.FormatFont = new System.Drawing.Font("DejaVu Sans Mono", 8.25F);
+			this.textFormat_Separator.Location = new System.Drawing.Point(396, 424);
+			this.textFormat_Separator.Name = "textFormat_Separator";
+			this.textFormat_Separator.Size = new System.Drawing.Size(232, 23);
+			this.textFormat_Separator.TabIndex = 45;
+			this.textFormat_Separator.Tag = "14";
+			this.textFormat_Separator.FormatChanged += new System.EventHandler(this.textFormat_FormatChanged);
+			this.textFormat_Separator.CustomColorsChanged += new System.EventHandler(this.textFormat_CustomColorsChanged);
 			// 
 			// monitor_IOControl
 			// 
@@ -1242,9 +1242,9 @@ namespace YAT.View.Forms
 		private Controls.TextFormat textFormat_IOControl;
 		private MKY.Windows.Forms.ComboBoxEx comboBox_ContentSeparator;
 		private System.Windows.Forms.Label label_ContentSeparator;
-		private System.Windows.Forms.Label label_WhiteSpace;
-		private Controls.TextFormat textFormat_WhiteSpace;
-		private Controls.Monitor monitor_WhiteSpace;
+		private System.Windows.Forms.Label label_Separator;
+		private Controls.TextFormat textFormat_Separator;
+		private Controls.Monitor monitor_Separator;
 		private Controls.Monitor monitor_Warning;
 		private System.Windows.Forms.Label label_Warning;
 		private Controls.TextFormat textFormat_Warning;
