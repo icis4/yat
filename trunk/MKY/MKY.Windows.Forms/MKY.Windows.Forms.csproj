@@ -97,6 +97,17 @@
       <DependentUpon>Chronometer.cs</DependentUpon>
     </Compile>
     <Compile Include="ComboBoxWorkaround.cs" />
+    <Compile Include="ExtendedMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExtendedMessageBox.Designer.cs">
+      <DependentUpon>ExtendedMessageBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ToolStripComboBoxEx.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -164,6 +175,14 @@
     <EmbeddedResource Include="Chronometer.resx">
       <DependentUpon>Chronometer.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExtendedMessageBox.resx">
+      <DependentUpon>ExtendedMessageBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="StatusBox.resx">
       <SubType>Designer</SubType>
