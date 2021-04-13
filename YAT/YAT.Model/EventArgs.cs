@@ -23,10 +23,9 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
-
-using YAT.Model.Types;
 
 namespace YAT.Model
 {
@@ -114,13 +113,36 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		public MessageInputEventArgs(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
+		public MessageInputEventArgs(string text, string caption, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
 		{
 			Text          = text;
 			Caption       = caption;
 			Buttons       = buttons;
 			Icon          = icon;
 			DefaultButton = defaultButton;
+		}
+	}
+
+	/// <summary></summary>
+	public class ExtendedMessageInputEventArgs : MessageInputEventArgs
+	{
+		/// <summary></summary>
+		public ICollection<LinkLabel.Link> Links { get; }
+
+		/// <summary></summary>
+		public string CheckText { get; }
+
+		/// <summary></summary>
+		public bool CheckValue { get; set; }
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public ExtendedMessageInputEventArgs(string text, ICollection<LinkLabel.Link> links, string caption, string checkText, bool checkValue, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
+			: base(text, caption, buttons, icon, defaultButton)
+		{
+			Links      = links;
+			CheckText  = checkText;
+			CheckValue = checkValue;
 		}
 	}
 

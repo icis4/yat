@@ -344,7 +344,7 @@ namespace YAT.View.Forms
 						break;
 					}
 
-					case Model.MainResult.ApplicationStartError:
+					case Model.MainResult.ApplicationLaunchError:
 					{
 						if (showErrorModally)
 						{
@@ -371,7 +371,7 @@ namespace YAT.View.Forms
 						break;
 					}
 
-					case Model.MainResult.ApplicationStartCancel:
+					case Model.MainResult.ApplicationLaunchCancel:
 					{
 						if (showErrorModally)
 						{
@@ -4052,18 +4052,19 @@ namespace YAT.View.Forms
 			if (this.main != null)
 			{
 			#if (WITH_SCRIPTING)
-				this.main.Launched               += main_Launched;
+				this.main.Launched                    += main_Launched;
 			#endif
-				this.main.WorkspaceOpened        += main_WorkspaceOpened;
-				this.main.WorkspaceSaved         += main_WorkspaceSaved;
-				this.main.WorkspaceClosed        += main_WorkspaceClosed;
+				this.main.WorkspaceOpened             += main_WorkspaceOpened;
+				this.main.WorkspaceSaved              += main_WorkspaceSaved;
+				this.main.WorkspaceClosed             += main_WorkspaceClosed;
 
-				this.main.FixedStatusTextRequest += main_FixedStatusTextRequest;
-				this.main.TimedStatusTextRequest += main_TimedStatusTextRequest;
-				this.main.MessageInputRequest    += main_MessageInputRequest;
-				this.main.CursorRequest          += main_CursorRequest;
+				this.main.FixedStatusTextRequest      += main_FixedStatusTextRequest;
+				this.main.TimedStatusTextRequest      += main_TimedStatusTextRequest;
+				this.main.MessageInputRequest         += main_MessageInputRequest;
+				this.main.ExtendedMessageInputRequest += main_ExtendedMessageInputRequest;
+				this.main.CursorRequest               += main_CursorRequest;
 
-				this.main.Exited                 += main_Exited;
+				this.main.Exited                      += main_Exited;
 			}
 		}
 
@@ -4072,18 +4073,19 @@ namespace YAT.View.Forms
 			if (this.main != null)
 			{
 			#if (WITH_SCRIPTING)
-				this.main.Launched               -= main_Launched;
+				this.main.Launched                    -= main_Launched;
 			#endif
-				this.main.WorkspaceOpened        -= main_WorkspaceOpened;
-				this.main.WorkspaceSaved         -= main_WorkspaceSaved;
-				this.main.WorkspaceClosed        -= main_WorkspaceClosed;
+				this.main.WorkspaceOpened             -= main_WorkspaceOpened;
+				this.main.WorkspaceSaved              -= main_WorkspaceSaved;
+				this.main.WorkspaceClosed             -= main_WorkspaceClosed;
 
-				this.main.FixedStatusTextRequest -= main_FixedStatusTextRequest;
-				this.main.TimedStatusTextRequest -= main_TimedStatusTextRequest;
-				this.main.MessageInputRequest    -= main_MessageInputRequest;
-				this.main.CursorRequest          -= main_CursorRequest;
+				this.main.FixedStatusTextRequest      -= main_FixedStatusTextRequest;
+				this.main.TimedStatusTextRequest      -= main_TimedStatusTextRequest;
+				this.main.MessageInputRequest         -= main_MessageInputRequest;
+				this.main.ExtendedMessageInputRequest -= main_ExtendedMessageInputRequest;
+				this.main.CursorRequest               -= main_CursorRequest;
 
-				this.main.Exited                 -= main_Exited;
+				this.main.Exited                      -= main_Exited;
 			}
 		}
 
@@ -4137,8 +4139,16 @@ namespace YAT.View.Forms
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void main_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
-			DialogResult dr;
-			dr = MessageBoxEx.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
+			var dr = MessageBoxEx.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
+			e.Result = dr;
+		}
+
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void main_ExtendedMessageInputRequest(object sender, Model.ExtendedMessageInputEventArgs e)
+		{
+			var checkValue = e.CheckValue;
+			var dr = ExtendedMessageBox.Show(this, e.Text, e.Links, e.Caption, e.CheckText, ref checkValue, e.Buttons, e.Icon, e.DefaultButton);
+			e.CheckValue = checkValue;
 			e.Result = dr;
 		}
 

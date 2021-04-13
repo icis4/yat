@@ -92,8 +92,8 @@ New:
 - [Find All] added, with shortcut [Alt+Shift+L], incl. live update (feature requests #424 and #434).
 
 Important changes:
-- YAT now checks whether DejaVu fonts are installed, and whether a monospaced font is used in the
-  terminals. The user gets warned if either is not given (feature request #341).
+- YAT now checks whether the DejaVu monospaced font is available, and whether a monospaced font
+  is used for the terminals. The user gets warned if either is not given (feature request #341).
 - Behavior on multi-byte character set decoding mismatch can now be configured in the terminal
   settings [Terminal > Settings... > Text...] (feature request #436).
 - Separate colors for warnings and errors (related to feature request #436). On existing terminals,
