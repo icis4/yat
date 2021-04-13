@@ -116,8 +116,8 @@ namespace YAT.Application
 			"  -1      Command line error",
 			"  -2      System environment error",
 			"  -3      Application settings error",
-			"  -4      Application start cancel",
-			"  -5      Application start error",
+			"  -4      Application launch cancel",
+			"  -5      Application launch error",
 			"  -6      Application run error",
 			"  -7      Application exit error",
 			"  -8      Unhandled exception",
@@ -1340,8 +1340,8 @@ namespace YAT.Application
 			{
 				case Model.MainResult.Success:                  return (MainResult.Success);
 				case Model.MainResult.CommandLineError:         return (MainResult.CommandLineError);
-				case Model.MainResult.ApplicationStartCancel:   return (MainResult.ApplicationStartCancel);
-				case Model.MainResult.ApplicationStartError:    return (MainResult.ApplicationStartError);
+				case Model.MainResult.ApplicationLaunchCancel:  return (MainResult.ApplicationLaunchCancel);
+				case Model.MainResult.ApplicationLaunchError:   return (MainResult.ApplicationLaunchError);
 				case Model.MainResult.ApplicationRunError:      return (MainResult.ApplicationRunError);
 				case Model.MainResult.ApplicationExitError:     return (MainResult.ApplicationExitError);
 				case Model.MainResult.UnhandledException:       return (MainResult.UnhandledException);

@@ -42,8 +42,8 @@ namespace YAT.Model
 	#endif
 		Success                  =  0,
 		CommandLineError         = -1,
-		ApplicationStartCancel   = -2,
-		ApplicationStartError    = -3,
+		ApplicationLaunchCancel  = -2,
+		ApplicationLaunchError   = -3,
 		ApplicationRunError      = -4,
 		ApplicationExitError     = -5,
 		UnhandledException       = -6,

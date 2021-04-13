@@ -112,7 +112,7 @@ namespace YAT.View.Forms
 			linkLabel_Copyright.Text += textBefore;
 			linkStart = linkLabel_Copyright.Text.Length;
 			linkLabel_Copyright.Text += textLink;
-			linkLabel_Copyright.Links.Add(linkStart, textLink.Length, "http://www.hsr.ch/");
+			linkLabel_Copyright.Links.Add(linkStart, textLink.Length, "https://www.ost.ch/");
 			linkLabel_Copyright.Text += textAfter;
 
 			// Trademark:
@@ -144,7 +144,7 @@ namespace YAT.View.Forms
 			linkLabel_Description.Text += textBefore;
 			linkStart = linkLabel_Description.Text.Length;
 			linkLabel_Description.Text += textLink;
-			linkLabel_Description.Links.Add(linkStart, textLink.Length, "http://www.mt.com/");
+			linkLabel_Description.Links.Add(linkStart, textLink.Length, "https://www.mt.com/");
 			linkLabel_Description.Text += textAfter;
 
 			// Platform:
@@ -160,14 +160,14 @@ namespace YAT.View.Forms
 			linkLabel_Monitoring.Text += textBefore;
 			linkStart = linkLabel_Monitoring.Text.Length;
 			linkLabel_Monitoring.Text += textLink;
-			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "http://www.hhdsoftware.com/");
+			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "https://www.hhdsoftware.com/");
 			linkLabel_Monitoring.Text += textAfter;
 			textLink  =                                                                                                           "free edition";
 			textAfter =                                                                                                                       "." + Environment.NewLine +
 			            "Alternatively, obtain a non-intrusive monitor/sniffer/spy cable e.g. ";
 			linkStart = linkLabel_Monitoring.Text.Length;
 			linkLabel_Monitoring.Text += textLink;
-			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "http://freeserialanalyzer.com/");
+			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "https://freeserialanalyzer.com/");
 			linkLabel_Monitoring.Text += textAfter;
 			textLink  =                                                                      "EZ-Tap";
 			textAfter =                                                                            ", or, assemble your own cable as described" + Environment.NewLine +
@@ -192,7 +192,7 @@ namespace YAT.View.Forms
 			textAfter =                                                    " (bidir or unidir, full or half duplex, with or without control lines).";
 			linkStart = linkLabel_Monitoring.Text.Length;
 			linkLabel_Monitoring.Text += textLink;
-			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "http://www.compuphase.com/electronics/rs232split.htm");
+			linkLabel_Monitoring.Links.Add(linkStart, textLink.Length, "https://www.compuphase.com/electronics/rs232split.htm");
 			linkLabel_Monitoring.Text += textAfter;
 
 			// Virtual serial ports:
@@ -209,7 +209,7 @@ namespace YAT.View.Forms
 			textAfter =                                                                                                                ", or" + Environment.NewLine;
 			linkStart = linkLabel_VirtualPorts.Text.Length;
 			linkLabel_VirtualPorts.Text += textLink;
-			linkLabel_VirtualPorts.Links.Add(linkStart, textLink.Length, "http://www.taltech.com/tcpcom");
+			linkLabel_VirtualPorts.Links.Add(linkStart, textLink.Length, "https://www.taltech.com/tcpcom");
 			linkLabel_VirtualPorts.Text += textAfter;
 			textBefore = "the open source ";
 			textLink   =                 "com0com+hub4com";
@@ -270,7 +270,7 @@ namespace YAT.View.Forms
 			linkLabel_BasedOn.Text += textBefore;
 			linkStart = linkLabel_BasedOn.Text.Length;
 			linkLabel_BasedOn.Text += textLink;
-			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "http://www.codeproject.com/KB/cs/USB_HID.aspx?msg=2816038");
+			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "https://www.codeproject.com/Articles/18099/A-USB-HID-Component-for-C");
 			textBefore =                                                                       "/";
 			textLink   =                                                                        "UsbHid";
 			textAfter  =                                                                              "...";
@@ -296,7 +296,7 @@ namespace YAT.View.Forms
 			linkLabel_BasedOn.Text += textBefore;
 			linkStart = linkLabel_BasedOn.Text.Length;
 			linkLabel_BasedOn.Text += textLink;
-			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "http://www.gimp.org/");
+			linkLabel_BasedOn.Links.Add(linkStart, textLink.Length, "https://www.gimp.org/");
 			linkLabel_BasedOn.Text += textAfter;
 			linkLabel_BasedOn.Text += Environment.NewLine;
 		#endif
@@ -392,7 +392,7 @@ namespace YAT.View.Forms
 			linkLabel_DevelopedWith.Text += textBefore;
 			linkStart = linkLabel_DevelopedWith.Text.Length;
 			linkLabel_DevelopedWith.Text += textLink;
-			linkLabel_DevelopedWith.Links.Add(linkStart, textLink.Length, "http://submain.com/products/ghostdoc.aspx");
+			linkLabel_DevelopedWith.Links.Add(linkStart, textLink.Length, "https://submain.com/ghostdoc/");
 			linkLabel_DevelopedWith.Text += textAfter;
 			linkLabel_DevelopedWith.Text += Environment.NewLine;
 
@@ -402,7 +402,7 @@ namespace YAT.View.Forms
 			linkLabel_DevelopedWith.Text += textBefore;
 			linkStart = linkLabel_DevelopedWith.Text.Length;
 			linkLabel_DevelopedWith.Text += textLink;
-			linkLabel_DevelopedWith.Links.Add(linkStart, textLink.Length, "http://www.nunit.org/");
+			linkLabel_DevelopedWith.Links.Add(linkStart, textLink.Length, "https://nunit.org/");
 			linkLabel_DevelopedWith.Text += textAfter;
 			linkLabel_DevelopedWith.Text += Environment.NewLine;
 

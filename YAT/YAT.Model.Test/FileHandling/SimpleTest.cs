@@ -818,7 +818,7 @@ namespace YAT.Model.Test.FileHandling
 				step = "Step 3: ";
 				int countBefore = this.main_MessageInputRequest_Cancel_counter;
 				m.MessageInputRequest += main_MessageInputRequest_Cancel;
-				success = (m.Launch() == MainResult.ApplicationStartCancel);
+				success = (m.Launch() == MainResult.ApplicationLaunchCancel);
 				Assert.That(success, Is.True, step + "Main could be launched even though workspace file is missing!");
 				m.MessageInputRequest -= main_MessageInputRequest_Cancel;
 				int countAfter = this.main_MessageInputRequest_Cancel_counter;
