@@ -34,8 +34,106 @@ namespace MKY.Windows.Forms
 	/// <summary>
 	/// Provides a simple text input box similar to <see cref="MessageBox"/>.
 	/// </summary>
+	/// <remarks><para>
+	/// The API follows the API of <see cref="MessageBox"/>, i.e. based on static methods.
+	/// </para><para>
+	/// <see cref="Control.RightToLeft"/> is not supported.
+	/// </para></remarks>
 	public partial class TextInputBox : Form
 	{
+		#region Static Methods
+		//==========================================================================================
+		// Static Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Displays a input box in front of the specified object and with the specified
+		/// text and caption and returns the result.
+		/// </summary>
+		/// <param name="owner">
+		/// An implementation of <see cref="IWin32Window"/> that will own the modal dialog box.
+		/// </param>
+		/// <param name="text">
+		/// The text to display in the input box.
+		/// </param>
+		/// <param name="caption">
+		/// The text to display in the title bar of the input box.
+		/// </param>
+		/// <param name="initialInputText">
+		/// The initial text that is in the input box.
+		/// </param>
+		/// <param name="inputText">
+		/// The text that was entered in the input box.
+		/// </param>
+		/// <returns>
+		/// One of the <see cref="DialogResult"/> values.
+		/// </returns>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Text that is input needs to be returned in addition to the dialog result.")]
+		[ModalBehaviorContract(ModalBehavior.Always)]
+		public static DialogResult Show(IWin32Window owner, string text, string caption, string initialInputText, out string inputText)
+		{
+			return (Show(owner, text, caption, initialInputText, null, out inputText));
+		}
+
+		/// <summary>
+		/// Displays a input box in front of the specified object and with the specified
+		/// text and caption and returns the result.
+		/// </summary>
+		/// <param name="owner">
+		/// An implementation of <see cref="IWin32Window"/> that will own the modal dialog box.
+		/// </param>
+		/// <param name="text">
+		/// The text to display in the input box.
+		/// </param>
+		/// <param name="caption">
+		/// The text to display in the title bar of the input box.
+		/// </param>
+		/// <param name="initialInputText">
+		/// The initial text that is in the input box.
+		/// </param>
+		/// <param name="inputValidationCallback">
+		/// Input validation callback.
+		/// </param>
+		/// <param name="inputText">
+		/// The text that was entered in the input box.
+		/// </param>
+		/// <returns>
+		/// One of the <see cref="DialogResult"/> values.
+		/// </returns>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Text that is input needs to be returned in addition to the dialog result.")]
+		[ModalBehaviorContract(ModalBehavior.Always)]
+		public static DialogResult Show(IWin32Window owner, string text, string caption, string initialInputText, EventHandler<StringCancelEventArgs> inputValidationCallback, out string inputText)
+		{
+			var box = new TextInputBox(text, caption, initialInputText);
+
+			DialogResult dr;
+
+			ContextMenuStripShortcutModalFormWorkaround.EnterModalForm();
+			try
+			{
+				if (inputValidationCallback != null)
+					box.Validating += inputValidationCallback;
+
+				dr = box.ShowDialog(owner);
+			}
+			finally
+			{
+				if (inputValidationCallback != null)
+					box.Validating -= inputValidationCallback;
+
+				ContextMenuStripShortcutModalFormWorkaround.LeaveModalForm();
+			}
+
+			if (dr == DialogResult.OK)
+				inputText = box.InputText;
+			else
+				inputText = "";
+
+			return (dr);
+		}
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -61,6 +159,12 @@ namespace MKY.Windows.Forms
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <remarks>Default constructor needed for designer support.</remarks>
+		public TextInputBox()
+		{
+			InitializeComponent();
+		}
+
 		/// <summary></summary>
 		protected TextInputBox(string text, string caption, string initialInputText)
 		{
@@ -68,6 +172,7 @@ namespace MKY.Windows.Forms
 
 			Text = caption;
 			label_Text.Text = text;
+
 			this.inputTextInEdit = initialInputText;
 
 			// SetControls() is initially called in the 'Shown' event handler.
@@ -155,98 +260,6 @@ namespace MKY.Windows.Forms
 		private void SetControls()
 		{
 			textBox_InputText.Text = this.inputTextInEdit;
-		}
-
-		#endregion
-
-		#region Public Static Methods
-		//==========================================================================================
-		// Public Static Methods
-		//==========================================================================================
-
-		/// <summary>
-		/// Displays a input box in front of the specified object and with the specified
-		/// text and caption and returns the result.
-		/// </summary>
-		/// <param name="owner">
-		/// An implementation of System.Windows.Forms.IWin32Window that will own the modal dialog box.
-		/// </param>
-		/// <param name="text">
-		/// The text to display in the input box.
-		/// </param>
-		/// <param name="caption">
-		/// The text to display in the title bar of the input box.
-		/// </param>
-		/// <param name="initialInputText">
-		/// The initial text that is in the input box.
-		/// </param>
-		/// <param name="inputText">
-		/// The text that was entered in the input box.
-		/// </param>
-		/// <returns>
-		/// One of the System.Windows.Forms.DialogResult values.
-		/// </returns>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Text that is input needs to be returned in addition to the dialog result.")]
-		[ModalBehaviorContract(ModalBehavior.Always)]
-		public static DialogResult Show(IWin32Window owner, string text, string caption, string initialInputText, out string inputText)
-		{
-			return (Show(owner, text, caption, initialInputText, null, out inputText));
-		}
-
-		/// <summary>
-		/// Displays a input box in front of the specified object and with the specified
-		/// text and caption and returns the result.
-		/// </summary>
-		/// <param name="owner">
-		/// An implementation of System.Windows.Forms.IWin32Window that will own the modal dialog box.
-		/// </param>
-		/// <param name="text">
-		/// The text to display in the input box.
-		/// </param>
-		/// <param name="caption">
-		/// The text to display in the title bar of the input box.
-		/// </param>
-		/// <param name="initialInputText">
-		/// The initial text that is in the input box.
-		/// </param>
-		/// <param name="inputValidationCallback">
-		/// Input validation callback.
-		/// </param>
-		/// <param name="inputText">
-		/// The text that was entered in the input box.
-		/// </param>
-		/// <returns>
-		/// One of the System.Windows.Forms.DialogResult values.
-		/// </returns>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Text that is input needs to be returned in addition to the dialog result.")]
-		[ModalBehaviorContract(ModalBehavior.Always)]
-		public static DialogResult Show(IWin32Window owner, string text, string caption, string initialInputText, EventHandler<StringCancelEventArgs> inputValidationCallback, out string inputText)
-		{
-			DialogResult dr;
-			var tib = new TextInputBox(text, caption, initialInputText);
-
-			ContextMenuStripShortcutModalFormWorkaround.EnterModalForm();
-			try
-			{
-				if (inputValidationCallback != null)
-					tib.Validating += inputValidationCallback;
-
-				dr = tib.ShowDialog(owner);
-			}
-			finally
-			{
-				if (inputValidationCallback != null)
-					tib.Validating -= inputValidationCallback;
-
-				ContextMenuStripShortcutModalFormWorkaround.LeaveModalForm();
-			}
-
-			if (dr == DialogResult.OK)
-				inputText = tib.InputText;
-			else
-				inputText = "";
-
-			return (dr);
 		}
 
 		#endregion

@@ -30,7 +30,7 @@
 		{
 			this.label_Status1 = new System.Windows.Forms.Label();
 			this.label_Status2 = new System.Windows.Forms.Label();
-			this.checkBox_Setting = new System.Windows.Forms.CheckBox();
+			this.checkBox_Check = new System.Windows.Forms.CheckBox();
 			this.panel_Lower = new System.Windows.Forms.Panel();
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.panel_Lower.SuspendLayout();
@@ -39,7 +39,7 @@
 			// label_Status1
 			// 
 			this.label_Status1.AutoSize = true;
-			this.label_Status1.Location = new System.Drawing.Point(12, 15);
+			this.label_Status1.Location = new System.Drawing.Point(12, 23);
 			this.label_Status1.Name = "label_Status1";
 			this.label_Status1.Size = new System.Drawing.Size(55, 13);
 			this.label_Status1.TabIndex = 1;
@@ -48,24 +48,24 @@
 			// label_Status2
 			// 
 			this.label_Status2.AutoSize = true;
-			this.label_Status2.Location = new System.Drawing.Point(12, 30);
+			this.label_Status2.Location = new System.Drawing.Point(12, 38);
 			this.label_Status2.Name = "label_Status2";
 			this.label_Status2.Size = new System.Drawing.Size(55, 13);
 			this.label_Status2.TabIndex = 2;
 			this.label_Status2.Text = "<Status2>";
 			// 
-			// checkBox_Setting
+			// checkBox_Check
 			// 
-			this.checkBox_Setting.AutoSize = true;
-			this.checkBox_Setting.Checked = true;
-			this.checkBox_Setting.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox_Setting.Location = new System.Drawing.Point(15, 56);
-			this.checkBox_Setting.Name = "checkBox_Setting";
-			this.checkBox_Setting.Size = new System.Drawing.Size(71, 17);
-			this.checkBox_Setting.TabIndex = 3;
-			this.checkBox_Setting.Text = "<Setting>";
-			this.checkBox_Setting.UseVisualStyleBackColor = true;
-			this.checkBox_Setting.Visible = false;
+			this.checkBox_Check.AutoSize = true;
+			this.checkBox_Check.Checked = true;
+			this.checkBox_Check.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox_Check.Location = new System.Drawing.Point(15, 79);
+			this.checkBox_Check.Name = "checkBox_Check";
+			this.checkBox_Check.Size = new System.Drawing.Size(90, 17);
+			this.checkBox_Check.TabIndex = 3;
+			this.checkBox_Check.Text = "<CheckText>";
+			this.checkBox_Check.UseVisualStyleBackColor = true;
+			this.checkBox_Check.Visible = false;
 			// 
 			// panel_Lower
 			// 
@@ -73,7 +73,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.panel_Lower.BackColor = System.Drawing.SystemColors.Control;
 			this.panel_Lower.Controls.Add(this.button_Cancel);
-			this.panel_Lower.Location = new System.Drawing.Point(0, 51);
+			this.panel_Lower.Location = new System.Drawing.Point(0, 73);
 			this.panel_Lower.Name = "panel_Lower";
 			this.panel_Lower.Size = new System.Drawing.Size(228, 40);
 			this.panel_Lower.TabIndex = 0;
@@ -96,9 +96,9 @@
 			this.AutoSize = true;
 			this.BackColor = System.Drawing.SystemColors.Window;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(228, 91);
+			this.ClientSize = new System.Drawing.Size(228, 113);
 			this.Controls.Add(this.panel_Lower);
-			this.Controls.Add(this.checkBox_Setting);
+			this.Controls.Add(this.checkBox_Check);
 			this.Controls.Add(this.label_Status2);
 			this.Controls.Add(this.label_Status1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -117,7 +117,7 @@
 
 		private System.Windows.Forms.Label label_Status1;
 		private System.Windows.Forms.Label label_Status2;
-		private System.Windows.Forms.CheckBox checkBox_Setting;
+		private System.Windows.Forms.CheckBox checkBox_Check;
 		private System.Windows.Forms.Panel panel_Lower;
 		private System.Windows.Forms.Button button_Cancel;
 	}

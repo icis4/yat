@@ -147,7 +147,7 @@ namespace MKY.IO
 			//  > It's more difficult to find related files.
 			if (!acceptExistingFile && File.Exists(filePath))
 			{
-				const int Max = 999999999; // Pretty close to int.MaxValue, and ridiculously long for the number of files in a directory...
+				const int Max = 999999999; // Pretty close to int.MaxValue, and ridiculously large for the number of files in a directory...
 				string istr = "";
 				int i = 0;
 				for (i = 0; i <= Max; i++)

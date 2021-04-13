@@ -40,13 +40,13 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		public static DialogResult Show(string text, string caption)
 		{
-			return (Show(text, caption));
+			return (Show(null, text, caption));
 		}
 
 		/// <summary></summary>
 		public static DialogResult Show(string text, string caption, MessageBoxButtons buttons)
 		{
-			return (Show(text, caption, buttons));
+			return (Show(null, text, caption, buttons));
 		}
 
 		/// <summary></summary>
