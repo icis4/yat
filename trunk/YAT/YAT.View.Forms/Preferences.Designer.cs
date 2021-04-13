@@ -39,6 +39,9 @@
 			this.checkBox_MatchUsbSerial = new System.Windows.Forms.CheckBox();
 			this.label_UsbDeviceDiscovery = new System.Windows.Forms.Label();
 			this.groupBox_Main = new System.Windows.Forms.GroupBox();
+			this.label_MainStatusBar = new System.Windows.Forms.Label();
+			this.label_MainOnStartup = new System.Windows.Forms.Label();
+			this.checkBox_CheckFontAvailability = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowTime = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowChrono = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowTerminalInfo = new System.Windows.Forms.CheckBox();
@@ -57,13 +60,10 @@
 			this.groupBox_NetworkInterfaces = new System.Windows.Forms.GroupBox();
 			this.label_NetworkInterfaceAvailability = new System.Windows.Forms.Label();
 			this.groupBox_Terminals = new System.Windows.Forms.GroupBox();
+			this.label_OnTerminalOpening = new System.Windows.Forms.Label();
+			this.checkBox_CheckTerminalFont = new System.Windows.Forms.CheckBox();
 			this.checkBox_NotifyNonAvailableIO = new System.Windows.Forms.CheckBox();
 			this.label_IOAvailability = new System.Windows.Forms.Label();
-			this.checkBox_CheckFontAvailability = new System.Windows.Forms.CheckBox();
-			this.label_MainOnStartup = new System.Windows.Forms.Label();
-			this.label_MainStatusBar = new System.Windows.Forms.Label();
-			this.checkBox_CheckTerminalFont = new System.Windows.Forms.CheckBox();
-			this.label_OnTerminalOpening = new System.Windows.Forms.Label();
 			this.groupBox_UsbDevices.SuspendLayout();
 			this.groupBox_Main.SuspendLayout();
 			this.groupBox_SerialPorts.SuspendLayout();
@@ -181,6 +181,35 @@
 			this.groupBox_Main.TabIndex = 0;
 			this.groupBox_Main.TabStop = false;
 			this.groupBox_Main.Text = "&Main";
+			// 
+			// label_MainStatusBar
+			// 
+			this.label_MainStatusBar.AutoSize = true;
+			this.label_MainStatusBar.Location = new System.Drawing.Point(9, 61);
+			this.label_MainStatusBar.Name = "label_MainStatusBar";
+			this.label_MainStatusBar.Size = new System.Drawing.Size(77, 13);
+			this.label_MainStatusBar.TabIndex = 2;
+			this.label_MainStatusBar.Text = "In status bar,...";
+			// 
+			// label_MainOnStartup
+			// 
+			this.label_MainOnStartup.AutoSize = true;
+			this.label_MainOnStartup.Location = new System.Drawing.Point(9, 19);
+			this.label_MainOnStartup.Name = "label_MainOnStartup";
+			this.label_MainOnStartup.Size = new System.Drawing.Size(68, 13);
+			this.label_MainOnStartup.TabIndex = 0;
+			this.label_MainOnStartup.Text = "On startup,...";
+			// 
+			// checkBox_CheckFontAvailability
+			// 
+			this.checkBox_CheckFontAvailability.AutoSize = true;
+			this.checkBox_CheckFontAvailability.Location = new System.Drawing.Point(12, 37);
+			this.checkBox_CheckFontAvailability.Name = "checkBox_CheckFontAvailability";
+			this.checkBox_CheckFontAvailability.Size = new System.Drawing.Size(264, 17);
+			this.checkBox_CheckFontAvailability.TabIndex = 1;
+			this.checkBox_CheckFontAvailability.Text = "...check that \'Deja Vu Sans Mono\' font is available";
+			this.checkBox_CheckFontAvailability.UseVisualStyleBackColor = true;
+			this.checkBox_CheckFontAvailability.CheckedChanged += new System.EventHandler(this.checkBox_CheckFontAvailability_CheckedChanged);
 			// 
 			// checkBox_ShowTime
 			// 
@@ -392,6 +421,26 @@
 			this.groupBox_Terminals.TabStop = false;
 			this.groupBox_Terminals.Text = "&Terminals";
 			// 
+			// label_OnTerminalOpening
+			// 
+			this.label_OnTerminalOpening.AutoSize = true;
+			this.label_OnTerminalOpening.Location = new System.Drawing.Point(9, 19);
+			this.label_OnTerminalOpening.Name = "label_OnTerminalOpening";
+			this.label_OnTerminalOpening.Size = new System.Drawing.Size(137, 13);
+			this.label_OnTerminalOpening.TabIndex = 0;
+			this.label_OnTerminalOpening.Text = "When opening a terminal,...";
+			// 
+			// checkBox_CheckTerminalFont
+			// 
+			this.checkBox_CheckTerminalFont.AutoSize = true;
+			this.checkBox_CheckTerminalFont.Location = new System.Drawing.Point(12, 37);
+			this.checkBox_CheckTerminalFont.Name = "checkBox_CheckTerminalFont";
+			this.checkBox_CheckTerminalFont.Size = new System.Drawing.Size(216, 17);
+			this.checkBox_CheckTerminalFont.TabIndex = 1;
+			this.checkBox_CheckTerminalFont.Text = "...check that a monospaced font is used";
+			this.checkBox_CheckTerminalFont.UseVisualStyleBackColor = true;
+			this.checkBox_CheckTerminalFont.CheckedChanged += new System.EventHandler(this.checkBox_CheckTerminalFont_CheckedChanged);
+			// 
 			// checkBox_NotifyNonAvailableIO
 			// 
 			this.checkBox_NotifyNonAvailableIO.AutoSize = true;
@@ -411,55 +460,6 @@
 			this.label_IOAvailability.Size = new System.Drawing.Size(263, 13);
 			this.label_IOAvailability.TabIndex = 2;
 			this.label_IOAvailability.Text = "When a port/interface/device is no longer available,...";
-			// 
-			// checkBox_CheckFontAvailability
-			// 
-			this.checkBox_CheckFontAvailability.AutoSize = true;
-			this.checkBox_CheckFontAvailability.Location = new System.Drawing.Point(12, 37);
-			this.checkBox_CheckFontAvailability.Name = "checkBox_CheckFontAvailability";
-			this.checkBox_CheckFontAvailability.Size = new System.Drawing.Size(260, 17);
-			this.checkBox_CheckFontAvailability.TabIndex = 1;
-			this.checkBox_CheckFontAvailability.Text = "...check that \'Deja Vu Sans Mono\' font is available";
-			this.checkBox_CheckFontAvailability.UseVisualStyleBackColor = true;
-			this.checkBox_CheckFontAvailability.CheckedChanged += new System.EventHandler(this.checkBox_CheckFontAvailability_CheckedChanged);
-			// 
-			// label_MainOnStartup
-			// 
-			this.label_MainOnStartup.AutoSize = true;
-			this.label_MainOnStartup.Location = new System.Drawing.Point(9, 19);
-			this.label_MainOnStartup.Name = "label_MainOnStartup";
-			this.label_MainOnStartup.Size = new System.Drawing.Size(65, 13);
-			this.label_MainOnStartup.TabIndex = 0;
-			this.label_MainOnStartup.Text = "On startup...";
-			// 
-			// label_MainStatusBar
-			// 
-			this.label_MainStatusBar.AutoSize = true;
-			this.label_MainStatusBar.Location = new System.Drawing.Point(9, 61);
-			this.label_MainStatusBar.Name = "label_MainStatusBar";
-			this.label_MainStatusBar.Size = new System.Drawing.Size(74, 13);
-			this.label_MainStatusBar.TabIndex = 2;
-			this.label_MainStatusBar.Text = "In status bar...";
-			// 
-			// checkBox_CheckTerminalFont
-			// 
-			this.checkBox_CheckTerminalFont.AutoSize = true;
-			this.checkBox_CheckTerminalFont.Location = new System.Drawing.Point(12, 37);
-			this.checkBox_CheckTerminalFont.Name = "checkBox_CheckTerminalFont";
-			this.checkBox_CheckTerminalFont.Size = new System.Drawing.Size(216, 17);
-			this.checkBox_CheckTerminalFont.TabIndex = 1;
-			this.checkBox_CheckTerminalFont.Text = "...check that a monospaced font is used";
-			this.checkBox_CheckTerminalFont.UseVisualStyleBackColor = true;
-			this.checkBox_CheckTerminalFont.CheckedChanged += new System.EventHandler(this.checkBox_CheckTerminalFont_CheckedChanged);
-			// 
-			// label_OnTerminalOpening
-			// 
-			this.label_OnTerminalOpening.AutoSize = true;
-			this.label_OnTerminalOpening.Location = new System.Drawing.Point(9, 19);
-			this.label_OnTerminalOpening.Name = "label_OnTerminalOpening";
-			this.label_OnTerminalOpening.Size = new System.Drawing.Size(134, 13);
-			this.label_OnTerminalOpening.TabIndex = 0;
-			this.label_OnTerminalOpening.Text = "When opening a terminal...";
 			// 
 			// Preferences
 			// 

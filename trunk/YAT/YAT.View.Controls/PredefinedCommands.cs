@@ -671,7 +671,7 @@ namespace YAT.View.Controls
 
 		private void AdjustSubpagePanel(PredefinedCommandPageLayout layout)
 		{
-			SuspendLayout(); // Useful as the 'Size' and 'Location' properties of the underlying sets will get changed.
+			SuspendLayout(); // Useful as "Size" and "Location" of the underlying sets will get changed.
 			this.isSettingControls.Enter();
 			try
 			{

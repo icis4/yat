@@ -2524,7 +2524,8 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None)
 		{
 			if (this.launchArgs.Interactive)
 			{

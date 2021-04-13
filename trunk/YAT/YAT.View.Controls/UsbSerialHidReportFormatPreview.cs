@@ -318,7 +318,7 @@ namespace YAT.View.Controls
 
 		private void SetControls()
 		{
-			SuspendLayout(); // Useful as the 'Size' and 'Location' properties will get changed.
+			SuspendLayout(); // Useful as "Size" and "Location" will get changed.
 			this.isSettingControls.Enter();
 			try
 			{

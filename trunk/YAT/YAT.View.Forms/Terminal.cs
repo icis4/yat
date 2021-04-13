@@ -5930,7 +5930,7 @@ namespace YAT.View.Forms
 			WindowState = this.settingsRoot.Window.State;
 			if (WindowState == FormWindowState.Normal)
 			{
-				SuspendLayout(); // Useful as the 'Size' and 'Location' properties will get changed.
+				SuspendLayout(); // Useful as "Size" and "Location" will get changed.
 				try
 				{
 					StartPosition = FormStartPosition.Manual;
@@ -5969,7 +5969,7 @@ namespace YAT.View.Forms
 
 		private void LayoutTerminal()
 		{
-			SuspendLayout(); // Useful as the 'Size' and 'Location' properties will get changed.
+			SuspendLayout(); // Useful as "Size" and "Location" will get changed.
 			this.isSettingControls.Enter();
 			try
 			{
@@ -6641,7 +6641,7 @@ namespace YAT.View.Forms
 		{
 			this.settingsRoot.Layout.MonitorOrientation = orientation;
 
-			SuspendLayout(); // Useful as the 'Size' and 'Location' properties will get changed.
+			SuspendLayout(); // Useful as "Size" and "Location" will get changed.
 			try
 			{
 				splitContainer_TxMonitor.Orientation = orientation;
@@ -6655,7 +6655,7 @@ namespace YAT.View.Forms
 
 		private void SetMonitorSettings()
 		{
-			SuspendLayout(); // Useful as the 'Size' and 'Location' properties will get changed.
+			SuspendLayout(); // Useful as "Size" and "Location" will get changed.
 			try
 			{
 				monitor_Tx   .MaxLineCount = this.settingsRoot.Display.MaxLineCount;
