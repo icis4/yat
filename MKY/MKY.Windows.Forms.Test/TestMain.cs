@@ -40,6 +40,11 @@ namespace MKY.Windows.Forms.Test
 			InitializeComponent();
 		}
 
+		private void button_TestMessageBoxes_Click(object sender, EventArgs e)
+		{
+			MessageBoxesTest.Run(this);
+		}
+
 		private void button_TextInputControls_Click(object sender, EventArgs e)
 		{
 			var f = new TextInputTest();
