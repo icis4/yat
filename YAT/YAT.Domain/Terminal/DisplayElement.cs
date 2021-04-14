@@ -852,10 +852,10 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		protected DisplayElement(DateTime timeStamp, Direction direction, byte[] origin, string text, int charCount, ElementAttributes attributes)
-		{                                                                   // Makes sense since elements of the same type will be appended.
+		{                                                                   // Makes sense since elements of the same type will likely be appended.
 			var l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 			l.Add(new Pair<byte[], string>(origin, text));
-			Initialize(timeStamp, direction, l, text, charCount, origin.Length, attributes);
+			Initialize(timeStamp, direction, l, text, charCount, ((origin != null) ? (origin.Length) : (0)), attributes);
 		}
 
 		private void Initialize(DateTime timeStamp, Direction direction, List<Pair<byte[], string>> origin, string text, int charCount, int byteCount, ElementAttributes attributes)
@@ -1233,15 +1233,17 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		private static Pair<byte[], string> PerformDeepClone(Pair<byte[], string> originItem)
-		{                                                              // Shallow copy of array is good enough for byte[].
-			return (new Pair<byte[], string>((byte[])originItem.Value1.Clone(), originItem.Value2));
+		{                                                                               // Shallow copy of array is good enough for byte[].
+			var clonedOrigin = (byte[])((originItem.Value1 != null) ? (originItem.Value1.Clone()) : null);
+			var clonedText   =           originItem.Value2;
+			return (new Pair<byte[], string>(clonedOrigin, clonedText));
 		}
 
 		private static List<Pair<byte[], string>> PerformDeepClone(List<Pair<byte[], string>> origin)
 		{
 			if (origin != null)
 			{
-				List<Pair<byte[], string>> clone = new List<Pair<byte[], string>>(origin.Capacity); // Preset the required capacity to improve memory management.
+				var clone = new List<Pair<byte[], string>>(origin.Capacity); // Preset the required capacity to improve memory management.
 
 				foreach (Pair<byte[], string> originItem in origin)
 					clone.Add(PerformDeepClone(originItem));
@@ -1252,19 +1254,6 @@ namespace YAT.Domain
 			{
 				return (null);
 			}
-		}
-
-		private static string OriginToDiagnosticsString(Pair<byte[], string> originItem, bool showRadix)
-		{
-			var sb = new StringBuilder();
-
-			sb.Append(@"""");
-			sb.Append(originItem.Value2);
-			sb.Append(@""" (");
-			sb.Append(Utilities.ByteHelper.FormatHexString(originItem.Value1, showRadix));
-			sb.Append(@")");
-
-			return (sb.ToString());
 		}
 
 		#endregion
