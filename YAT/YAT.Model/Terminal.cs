@@ -5796,27 +5796,26 @@ namespace YAT.Model
 			if (this.log != null)
 			{
 				// Attention:
-				// Similar code exists in View.Forms.Main.OpenDefaultLogDirectory().
-				// Changes here may have to be applied there too.
+				// Similar code exists in...
+				// ...View.Forms.Main.OpenDefaultLogDirectory().
+				// ...View.Forms.LogSettings.button_OpenRootDirectory_Click().
+				// Changes here likely have to be applied there too.
 
-				string rootDirectoyPath = this.log.Settings.RootDirectoryPath;
+				var rootDirectoyPath = this.log.Settings.RootDirectoryPath;
 
 				// Create directory if not existing yet:
-				if (!Directory.Exists(Path.GetDirectoryName(rootDirectoyPath)))
+				if (!Directory.Exists(rootDirectoyPath))
 				{
 					try
 					{
-						Directory.CreateDirectory(Path.GetDirectoryName(rootDirectoyPath));
+						Directory.CreateDirectory(rootDirectoyPath);
 					}
 					catch (Exception exCreate)
 					{
-						string message = "Unable to create folder." + Environment.NewLine + Environment.NewLine +
-						                 "System error message:" + Environment.NewLine + exCreate.Message;
-
 						OnMessageInputRequest
 						(
-							message,
-							"Folder Error",
+							Utilities.MessageHelper.ComposeMessage("Unable to create log folder", rootDirectoyPath, exCreate),
+							"Log Folder Error",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Error
 						);

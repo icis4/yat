@@ -315,7 +315,7 @@ namespace YAT.View.Forms
 			if (this.result != Model.MainResult.Success)
 			{
 				bool showErrorModally = this.main.LaunchArgs.Interactive;
-				bool keepOpenOnError  = this.main.LaunchArgs.KeepOpenOnNonSuccess;
+				bool keepOpenOnNonSuccess = this.main.LaunchArgs.KeepOpenOnNonSuccess;
 
 				switch (this.result)
 				{
@@ -414,8 +414,22 @@ namespace YAT.View.Forms
 				#endif
 				}
 
-				if (!keepOpenOnError)
-					Close();
+				switch (this.result)
+				{
+					case Model.MainResult.ApplicationLaunchCancel:
+					{
+						Close(); // Close in any case, user intentionally canceled.
+						break;
+					}
+
+					default:
+					{
+						if (!keepOpenOnNonSuccess)
+							Close();
+
+						break;
+					}
+				}
 			}
 			else // Model.MainResult.Success:
 			{
@@ -1690,7 +1704,7 @@ namespace YAT.View.Forms
 						triggerTextIsSupported     = trigger.TextIsSupported;
 						triggerRegexIsSupported    = trigger.RegexIsSupported;
 
-						var ris = new List<AutoResponseEx>(activeTerminal.SettingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(activeTerminal.SettingsFilePath)));
+						var ris = new List<AutoResponseEx>(activeTerminal.SettingsRoot.GetValidAutoResponseItems(PathEx.GetDirectoryPath(activeTerminal.SettingsFilePath)));
 						ris.AddRange(AutoResponseEx.CommonRegexReplacementPatterns.Select(x => new AutoResponseEx(x)).ToArray());
 						ris.AddRange(ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitResponses.ConvertAll(new Converter<RecentItem<string>, AutoResponseEx>((x) => { return (x.Item); })));
 						responseItems              = ris.ToArray();
@@ -2818,28 +2832,27 @@ namespace YAT.View.Forms
 		private void OpenDefaultLogDirectory()
 		{
 			// Attention:
-			// Similar code exists in Model.Terminal.OpenLogDirectory().
-			// Changes here may have to be applied there too.
+			// Similar code exists in...
+			// ...Model.Terminal.OpenLogDirectory().
+			// ...View.Forms.LogSettings.button_OpenRootDirectory_Click().
+			// Changes here likely have to be applied there too.
 
 			string rootPath = ApplicationSettings.LocalUserSettings.Paths.LogFiles;
 
 			// Create directory if not existing yet:
-			if (!Directory.Exists(Path.GetDirectoryName(rootPath)))
+			if (!Directory.Exists(rootPath))
 			{
 				try
 				{
-					Directory.CreateDirectory(Path.GetDirectoryName(rootPath));
+					Directory.CreateDirectory(rootPath);
 				}
 				catch (Exception exCreate)
 				{
-					string message = "Unable to create folder." + Environment.NewLine + Environment.NewLine +
-					                    "System error message:" + Environment.NewLine + exCreate.Message;
-
 					MessageBoxEx.Show
 					(
 						this,
-						message,
-						"Folder Error",
+						Model.Utilities.MessageHelper.ComposeMessage("Unable to create log folder", rootPath, exCreate),
+						"Log Folder Error",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
 					);
@@ -3968,12 +3981,15 @@ namespace YAT.View.Forms
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowPreferences()
 		{
-			var f = new Preferences(ApplicationSettings.LocalUserSettings);
+			var f = new Preferences(ApplicationSettings.LocalUserSettings, ApplicationSettings.RoamingUserSettings);
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
-				ApplicationSettings.LocalUserSettings.MainWindow = f.SettingsResult.MainWindow;
-				ApplicationSettings.LocalUserSettings.General    = f.SettingsResult.General;
+				ApplicationSettings.LocalUserSettings.MainWindow = f.LocalUserSettingsResult.MainWindow;
+				ApplicationSettings.LocalUserSettings.General    = f.LocalUserSettingsResult.General;
 				ApplicationSettings.SaveLocalUserSettings();
+
+				ApplicationSettings.RoamingUserSettings.Font = f.RoamingUserSettingsResult.Font;
+				ApplicationSettings.SaveRoamingUserSettings();
 			}
 		}
 
@@ -4474,7 +4490,7 @@ namespace YAT.View.Forms
 			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
 			{
-				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.MainFiles = PathEx.GetDirectoryPath(ofd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 
 				Refresh(); // Ensure that form has been refreshed before continuing.
@@ -4703,7 +4719,7 @@ namespace YAT.View.Forms
 			ofd.InitialDirectory = ApplicationSettings.LocalUserSettings.Paths.MainFiles;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
 			{
-				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.MainFiles = PathEx.GetDirectoryPath(ofd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 
 				Refresh(); // Ensure that form has been refreshed before continuing.
@@ -4733,7 +4749,7 @@ namespace YAT.View.Forms
 			var dr = sfd.ShowDialog(this);
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
 			{
-				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.MainFiles = PathEx.GetDirectoryPath(sfd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 
 				Refresh(); // Ensure that form has been refreshed before continuing.
