@@ -192,25 +192,28 @@ namespace YAT.View.Forms
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private void button_OpenRootDirectory_Click(object sender, EventArgs e)
 		{
+			// Attention:
+			// Similar code exists in...
+			// ...View.Forms.Main.OpenDefaultLogDirectory().
+			// ...Model.Terminal.OpenLogDirectory().
+			// Changes here likely have to be applied there too.
+
 			// Create directory if not existing yet:
-			if (!Directory.Exists(Path.GetDirectoryName(this.settingsInEdit.RootDirectoryPath)))
+			if (!Directory.Exists(this.settingsInEdit.RootDirectoryPath))
 			{
 				try
 				{
-					Directory.CreateDirectory(Path.GetDirectoryName(this.settingsInEdit.RootDirectoryPath));
+					Directory.CreateDirectory(this.settingsInEdit.RootDirectoryPath);
 				}
 				catch (Exception exCreate)
 				{
-					string message = "Unable to create folder." + Environment.NewLine + Environment.NewLine +
-					                 "System error message:" + Environment.NewLine + exCreate.Message;
-
 					MessageBoxEx.Show
 					(
 						Parent,
-						message,
-						"Folder Error",
+						Model.Utilities.MessageHelper.ComposeMessage("Unable to create log folder", this.settingsInEdit.RootDirectoryPath, exCreate),
+						"Log Folder Error",
 						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
+						MessageBoxIcon.Error
 					);
 
 					return;
@@ -221,16 +224,13 @@ namespace YAT.View.Forms
 			Exception exBrowse;
 			if (!DirectoryEx.TryBrowse(this.settingsInEdit.RootDirectoryPath, out exBrowse))
 			{
-				string message = "Unable to open folder." + Environment.NewLine + Environment.NewLine +
-				                 "System error message:" + Environment.NewLine + exBrowse.Message;
-
 				MessageBoxEx.Show
 				(
 					Parent,
-					message,
-					"Folder Error",
+					Model.Utilities.MessageHelper.ComposeMessage("Unable to open log folder", this.settingsInEdit.RootDirectoryPath, exBrowse),
+					"Log Folder Error",
 					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning
+					MessageBoxIcon.Error
 				);
 
 				return;
@@ -749,10 +749,10 @@ namespace YAT.View.Forms
 			ofd.CheckFileExists = false;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
 			{
-				ApplicationSettings.LocalUserSettings.Paths.LogFiles = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.LogFiles = PathEx.GetDirectoryPath(ofd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 
-				this.settingsInEdit.RootDirectoryPath = Path.GetDirectoryName(ofd.FileName);
+				this.settingsInEdit.RootDirectoryPath = PathEx.GetDirectoryPath(ofd.FileName);
 				this.settingsInEdit.FileNameBase = Path.GetFileNameWithoutExtension(ofd.FileName);
 			}
 		}
