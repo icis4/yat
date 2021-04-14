@@ -37,7 +37,7 @@ namespace MKY.Windows.Forms.Test
 			var text = "A";
 
 			var caption = "TC00 'Default'";
-	/*		AssertThat(ExtendedMessageBox.Show(owner, text, caption), DialogResult.OK);
+			AssertThat(ExtendedMessageBox.Show(owner, text, caption), DialogResult.OK);
 			AssertThat(MessageBoxEx      .Show(owner, text, caption), DialogResult.OK);
 
 			caption = "TC10 'Min N'"; // "N" = "None" but that would be too wide to keep minimum.
@@ -99,7 +99,7 @@ namespace MKY.Windows.Forms.Test
 			caption = "TC53 'Default Button 3'";
 			AssertThat(ExtendedMessageBox.Show(owner, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3), DialogResult.Cancel);
 			AssertThat(MessageBoxEx      .Show(owner, text, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3), DialogResult.Cancel);
-*/
+
 			caption = "TC61 'Check Keep'";
 			var checkText = "Keep";
 			var checkValue = false;
