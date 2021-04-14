@@ -41,12 +41,10 @@ namespace YAT.Application.Settings
 		/// <summary></summary>
 		public const string AutoSaveWorkspaceFileNamePrefix = "Workspace-";
 
-		private bool checkFontAvailability;
 		private bool autoOpenWorkspace;
 		private bool autoSaveWorkspace;
 		private bool useRelativePaths;
 
-		private bool checkTerminalFont;
 		private bool notifyNonAvailableIO;
 
 		private bool retrieveSerialPortCaptions;
@@ -79,13 +77,10 @@ namespace YAT.Application.Settings
 		public GeneralSettings(GeneralSettings rhs)
 			: base(rhs)
 		{
-			CheckFontAvailability           = rhs.CheckFontAvailability;
-
 			AutoOpenWorkspace               = rhs.AutoOpenWorkspace;
 			AutoSaveWorkspace               = rhs.AutoSaveWorkspace;
 			UseRelativePaths                = rhs.UseRelativePaths;
 
-			CheckTerminalFont               = rhs.CheckTerminalFont;
 			NotifyNonAvailableIO            = rhs.NotifyNonAvailableIO;
 
 			RetrieveSerialPortCaptions      = rhs.RetrieveSerialPortCaptions;
@@ -107,13 +102,10 @@ namespace YAT.Application.Settings
 		{
 			base.SetMyDefaults();
 
-			CheckFontAvailability           = true;
-
 			AutoOpenWorkspace               = true;
 			AutoSaveWorkspace               = true;
 			UseRelativePaths                = true;
 
-			CheckTerminalFont               = true;
 			NotifyNonAvailableIO            = true;
 
 			RetrieveSerialPortCaptions      = true;
@@ -130,21 +122,6 @@ namespace YAT.Application.Settings
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
-
-		/// <summary></summary>
-		[XmlElement("CheckFontAvailability")]
-		public virtual bool CheckFontAvailability
-		{
-			get { return (this.checkFontAvailability); }
-			set
-			{
-				if (this.checkFontAvailability != value)
-				{
-					this.checkFontAvailability = value;
-					SetMyChanged();
-				}
-			}
-		}
 
 		/// <summary>
 		/// Auto open of workspace means that the previously open workspace will automatically be
@@ -193,21 +170,6 @@ namespace YAT.Application.Settings
 				if (this.useRelativePaths != value)
 				{
 					this.useRelativePaths = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("CheckTerminalFont")]
-		public virtual bool CheckTerminalFont
-		{
-			get { return (this.checkTerminalFont); }
-			set
-			{
-				if (this.checkTerminalFont != value)
-				{
-					this.checkTerminalFont = value;
 					SetMyChanged();
 				}
 			}
@@ -338,13 +300,10 @@ namespace YAT.Application.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ CheckFontAvailability          .GetHashCode();
-
 				hashCode = (hashCode * 397) ^ AutoOpenWorkspace              .GetHashCode();
 				hashCode = (hashCode * 397) ^ AutoSaveWorkspace              .GetHashCode();
 				hashCode = (hashCode * 397) ^ UseRelativePaths               .GetHashCode();
 
-				hashCode = (hashCode * 397) ^ CheckTerminalFont              .GetHashCode();
 				hashCode = (hashCode * 397) ^ NotifyNonAvailableIO           .GetHashCode();
 
 				hashCode = (hashCode * 397) ^ RetrieveSerialPortCaptions     .GetHashCode();
@@ -385,13 +344,10 @@ namespace YAT.Application.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				CheckFontAvailability          .Equals(other.CheckFontAvailability)           &&
-
 				AutoOpenWorkspace              .Equals(other.AutoOpenWorkspace)               &&
 				AutoSaveWorkspace              .Equals(other.AutoSaveWorkspace)               &&
 				UseRelativePaths               .Equals(other.UseRelativePaths)                &&
 
-				CheckTerminalFont              .Equals(other.CheckTerminalFont)               &&
 				NotifyNonAvailableIO           .Equals(other.NotifyNonAvailableIO)            &&
 
 				RetrieveSerialPortCaptions     .Equals(other.RetrieveSerialPortCaptions)      &&

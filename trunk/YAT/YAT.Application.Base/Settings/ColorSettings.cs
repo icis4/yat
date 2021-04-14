@@ -23,79 +23,58 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Xml.Serialization;
 
-using MKY;
+using MKY.Collections;
+using MKY.Collections.Specialized;
 
-namespace YAT.Format.Types
+namespace YAT.Application.Settings
 {
 	/// <summary></summary>
-	[SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Justification = "Only used to hold font settings.")]
-	[Serializable]
-	public class FontFormat : IEquatable<FontFormat>
+	public class ColorSettings : MKY.Settings.SettingsItem, IEquatable<ColorSettings>
 	{
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
+		/// <summary></summary>
+		public const int CustomColorsMaxCount = 16;
+
+		private RecentItemCollection<string> customColors;
 
 		/// <summary></summary>
-		public const string DirectoryNameDefault = "DejaVu Font";
-
-		/// <summary></summary>
-		public const string FileNameDefault = "DejaVuSansMono.ttf";
-
-		/// <summary></summary>
-		public const string NameDefault = "DejaVu Sans Mono";
-
-		/// <summary></summary>
-		public const float SizeDefault = 8.25f;
-
-		/// <summary></summary>
-		public const FontStyle StyleDefault = FontStyle.Regular;
-
-		#endregion
-
-		private string name;
-		private float size;
-		private FontStyle style;
-		private Font font;
-
-		/// <summary></summary>
-		public FontFormat()
+		public ColorSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			this.name  = NameDefault;
-			this.size  = SizeDefault;
-			this.style = StyleDefault;
-			MakeFont();
 		}
 
 		/// <summary></summary>
-		public FontFormat(string name, float size, FontStyle style)
+		public ColorSettings(MKY.Settings.SettingsType settingsType)
+			: base(settingsType)
 		{
-			this.name  = name;
-			this.size  = size;
-			this.style = style;
-			MakeFont();
+			SetMyDefaults();
+			ClearChanged();
 		}
 
-		/// <summary></summary>
-		public FontFormat(FontFormat rhs)
+		/// <remarks>
+		/// Fields are assigned via properties even though changed flag will be cleared anyway.
+		/// There potentially is additional code that needs to be run within the property method.
+		/// </remarks>
+		public ColorSettings(ColorSettings rhs)
+			: base(rhs)
 		{
-			this.name  = rhs.name;
-			this.size  = rhs.size;
-			this.style = rhs.style;
-			MakeFont();
+			CustomColors = new RecentItemCollection<string>(rhs.CustomColors);
+
+			ClearChanged();
 		}
 
-		private void MakeFont()
+		/// <remarks>
+		/// Fields are assigned via properties to ensure correct setting of changed flag.
+		/// </remarks>
+		protected override void SetMyDefaults()
 		{
-			if (this.font != null)
-				this.font.Dispose();
+			base.SetMyDefaults();
 
-			this.font = new Font(this.name, this.size, this.style);
+			CustomColors = new RecentItemCollection<string>(CustomColorsMaxCount);
 		}
 
 		#region Properties
@@ -103,54 +82,63 @@ namespace YAT.Format.Types
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
-		[XmlElement("Name")]
-		public virtual string Name
+		/// <remarks>
+		/// Using string because...
+		/// ...<see cref="Color"/> does not implement <see cref="IEquatable{T}"/> that is needed for a recent item collection, and because...
+		/// ...<see cref="Color"/> cannot be serialized.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
+		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
+		[XmlElement("CustomColors")]
+		public RecentItemCollection<string> CustomColors
 		{
-			get { return (this.name); }
+			get { return (this.customColors); }
 			set
 			{
-				this.name = value;
-				MakeFont();
+				if (this.customColors != value)
+				{
+					this.customColors = value;
+					SetMyChanged();
+				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("Size")]
-		public virtual float Size
+		public int[] CustomColorsToWin32()
 		{
-			get { return (this.size); }
-			set
+			var l = new List<int>(this.customColors.Count);
+
+			foreach (RecentItem<string> ri in this.customColors)
 			{
-				this.size = value;
-				MakeFont();
+				Color c = ColorTranslator.FromHtml(ri.Item);
+				int win32 = ColorTranslator.ToWin32(c);
+				l.Add(win32);
 			}
+
+			return (l.ToArray());
 		}
 
 		/// <summary></summary>
-		[XmlElement("Style")]
-		public virtual FontStyle Style
+		public bool UpdateCustomColorsFromWin32(int[] customColors)
 		{
-			get { return (this.style); }
-			set
-			{
-				this.style = value;
-				MakeFont();
-			}
-		}
+			// Do not add 'White', as that...
+			// ...is the default color, and...
+			// ...is available predefined anyway.
+			int win32White = ColorTranslator.ToWin32(Color.White);
 
-		/// <summary></summary>
-		[XmlIgnore]
-		public virtual Font Font
-		{
-			get { return (this.font); }
-			set
+			List<string> otherThanWhite = new List<string>(customColors.Length);
+
+			foreach (int win32 in customColors)
 			{
-				this.name = value.Name;
-				this.size = value.Size;
-				this.style = value.Style;
-				MakeFont();
+				if (win32 != win32White)
+				{
+					Color c = ColorTranslator.FromWin32(win32);
+					string html = ColorTranslator.ToHtml(c);
+					otherThanWhite.Add(html);
+				}
 			}
+
+			return (this.customColors.UpdateFrom(otherThanWhite));
 		}
 
 		#endregion
@@ -171,11 +159,9 @@ namespace YAT.Format.Types
 		{
 			unchecked
 			{
-				int hashCode;
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode =                   (Name != null ? Name.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ Size               .GetHashCode();
-				hashCode = (hashCode * 397) ^ Style              .GetHashCode();
+				hashCode = (hashCode * 397) ^ (CustomColors != null ? CustomColors.GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -186,7 +172,7 @@ namespace YAT.Format.Types
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as FontFormat));
+			return (Equals(obj as ColorSettings));
 		}
 
 		/// <summary>
@@ -196,7 +182,7 @@ namespace YAT.Format.Types
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(FontFormat other)
+		public bool Equals(ColorSettings other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
@@ -204,18 +190,16 @@ namespace YAT.Format.Types
 
 			return
 			(
-			////base.Equals(other) is not required when deriving from 'object'.
+				base.Equals(other) && // Compare all settings nodes.
 
-				StringEx.EqualsOrdinalIgnoreCase(Name, other.Name) &&
-				Size .Equals(other.Size) &&
-				Style.Equals(other.Style)
+				IEnumerableEx.ItemsEqual(CustomColors, other.CustomColors)
 			);
 		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(FontFormat lhs, FontFormat rhs)
+		public static bool operator ==(ColorSettings lhs, ColorSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -228,7 +212,7 @@ namespace YAT.Format.Types
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(FontFormat lhs, FontFormat rhs)
+		public static bool operator !=(ColorSettings lhs, ColorSettings rhs)
 		{
 			return (!(lhs == rhs));
 		}

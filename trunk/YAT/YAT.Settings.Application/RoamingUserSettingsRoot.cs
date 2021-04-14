@@ -52,11 +52,13 @@ namespace YAT.Settings.Application
 	public class RoamingUserSettingsRoot : MKY.Settings.SettingsItem, IEquatable<RoamingUserSettingsRoot>, IAlternateXmlElementProvider
 	{
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
-		private string settingsVersion = "1.3.0";
+		private string settingsVersion = "1.4.0";
 
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
 		private string productVersion = ApplicationEx.ProductVersion;
 
+		private ColorSettings color;
+		private FontSettings font;
 		private SocketSettings socket;
 		private FindSettings find;
 		private AutoActionSettings autoAction;
@@ -72,6 +74,8 @@ namespace YAT.Settings.Application
 		public RoamingUserSettingsRoot()
 			: base(MKY.Settings.SettingsType.Explicit)
 		{
+			Color        = new ColorSettings(MKY.Settings.SettingsType.Explicit);
+			Font         = new FontSettings(MKY.Settings.SettingsType.Explicit);
 			Socket       = new SocketSettings(MKY.Settings.SettingsType.Explicit);
 			Find         = new FindSettings(MKY.Settings.SettingsType.Explicit);
 			AutoAction   = new AutoActionSettings(MKY.Settings.SettingsType.Explicit);
@@ -90,6 +94,8 @@ namespace YAT.Settings.Application
 		public RoamingUserSettingsRoot(RoamingUserSettingsRoot rhs)
 			: base(rhs)
 		{
+			Color        = new ColorSettings(rhs.Color);
+			Font         = new FontSettings(rhs.Font);
 			Socket       = new SocketSettings(rhs.Socket);
 			Find         = new FindSettings(rhs.Find);
 			AutoAction   = new AutoActionSettings(rhs.AutoAction);
@@ -144,6 +150,40 @@ namespace YAT.Settings.Application
 		{
 			get { return (new UserTimeStamp(DateTime.Now, Environment.UserName)); }
 			set { /* Do nothing, this meta XML element is read-only. */ }
+		}
+
+		/// <summary></summary>
+		[XmlElement("Color")]
+		public virtual ColorSettings Color
+		{
+			get { return (this.color); }
+			set
+			{
+				if (this.color != value)
+				{
+					var oldNode = this.color;
+					this.color = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("Font")]
+		public virtual FontSettings Font
+		{
+			get { return (this.font); }
+			set
+			{
+				if (this.font != value)
+				{
+					var oldNode = this.font;
+					this.font = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
 		}
 
 		/// <summary></summary>
@@ -281,6 +321,7 @@ namespace YAT.Settings.Application
 		/*	new AlternateXmlElement(new string[] { "#document"             },                    "Settings",              new string[] { "RoamingUserSettings" } ), => Accidentally named the root explicitly. Should be renamed, but doesn't work because root is not properly handled by the alternate tolerant deserialization. To be solved using XML transformation. */
 			new AlternateXmlElement(new string[] { "#document", "Settings" },                    "SettingsName",          new string[] { "FileType" } ),
 			new AlternateXmlElement(new string[] { "#document", "Settings" },                    "Mark",                  new string[] { "Saved" } ),
+		/*	new AlternateXmlElement(new string[] { "#document", "Settings", "Color" }            "CustomColors",          new string[] { "View", "CustomColors" ), => Should be move, but doesn't work because it got moved over two levels. Should be solved using XML transformation. */
 			new AlternateXmlElement(new string[] { "#document", "Settings", "Find", "Options" }, "EnableRegex",           new string[] { "UseRegex" } ),
 			new AlternateXmlElement(new string[] { "#document", "Settings", "View" },            "FindIsVisible",         new string[] { "FindVisible" } ),
 			new AlternateXmlElement(new string[] { "#document", "Settings", "View" },            "AutoActionIsVisible",   new string[] { "AutoActionVisible" } ),

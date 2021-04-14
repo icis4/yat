@@ -791,7 +791,7 @@ namespace YAT.View.Forms
 						sendTextEnabled = false;
 				}
 
-				bool sendFileEnabled = this.settingsRoot.SendFile.Command.IsValidFilePath(Path.GetDirectoryName(this.terminal.SettingsFilePath));
+				bool sendFileEnabled = this.settingsRoot.SendFile.Command.IsValidFilePath(PathEx.GetDirectoryPath(this.terminal.SettingsFilePath));
 
 				// Set the menu item properties:
 				//
@@ -864,7 +864,7 @@ namespace YAT.View.Forms
 				var triggerTextIsSupported  = trigger.TextIsSupported;
 				var triggerRegexIsSupported = trigger.RegexIsSupported;
 
-				var ris = new List<AutoResponseEx>(this.settingsRoot.GetValidAutoResponseItems(Path.GetDirectoryName(this.terminal.SettingsFilePath)));
+				var ris = new List<AutoResponseEx>(this.settingsRoot.GetValidAutoResponseItems(PathEx.GetDirectoryPath(this.terminal.SettingsFilePath)));
 				ris.AddRange(AutoResponseEx.CommonRegexReplacementPatterns.Select(x => new AutoResponseEx(x)).ToArray());
 				ris.AddRange(ApplicationSettings.RoamingUserSettings.AutoResponse.RecentExplicitResponses.ConvertAll(new Converter<RecentItem<string>, AutoResponseEx>((x) => { return (x.Item); })));
 
@@ -3871,7 +3871,7 @@ namespace YAT.View.Forms
 						sendTextEnabled = false;
 				}
 
-				bool sendFileEnabled = this.settingsRoot.SendFile.Command.IsValidFilePath(Path.GetDirectoryName(this.terminal.SettingsFilePath));
+				bool sendFileEnabled = this.settingsRoot.SendFile.Command.IsValidFilePath(PathEx.GetDirectoryPath(this.terminal.SettingsFilePath));
 
 				// Set the menu item properties
 				//
@@ -6252,7 +6252,7 @@ namespace YAT.View.Forms
 			try
 			{
 				predefined.ParseModeForText                 = this.settingsRoot.Send.Text.ToParseMode();
-				predefined.RootDirectoryForFile             = Path.GetDirectoryName(this.terminal.SettingsFilePath);
+				predefined.RootDirectoryForFile             = PathEx.GetDirectoryPath(this.terminal.SettingsFilePath);
 				predefined.TerminalIsReadyToSendForSomeTime = this.terminal.IsReadyToSendForSomeTime; // Using 'ForSomeTime' reduces flickering.
 			}
 			finally
@@ -6308,7 +6308,7 @@ namespace YAT.View.Forms
 				send.UseExplicitDefaultRadix          = this.settingsRoot.Send.UseExplicitDefaultRadix;
 				send.ParseModeForText                 = this.settingsRoot.Send.Text.ToParseMode();
 				send.SendTextImmediately              = this.settingsRoot.Send.Text.SendImmediately;
-				send.RootDirectoryForFile             = Path.GetDirectoryName(this.terminal.SettingsFilePath);
+				send.RootDirectoryForFile             = PathEx.GetDirectoryPath(this.terminal.SettingsFilePath);
 				send.TerminalIsReadyToSendForSomeTime = this.terminal.IsReadyToSendForSomeTime; // Using 'ForSomeTime' reduces flickering.
 			}
 			finally
@@ -6890,20 +6890,25 @@ namespace YAT.View.Forms
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowFormatSettings()
 		{
-			int[] customColors = ApplicationSettings.RoamingUserSettings.View.CustomColorsToWin32();
+			int[] customColors = ApplicationSettings.RoamingUserSettings.Color.CustomColorsToWin32();
+			bool showMonospaceFontsOnly = ApplicationSettings.RoamingUserSettings.Font.ShowMonospaceOnly;
 
 			var f = new FormatSettings(this.settingsRoot.Format, customColors,
 			                           this.settingsRoot.Display.ContentSeparator, this.settingsRoot.Display.InfoSeparator, this.settingsRoot.Display.InfoEnclosure,
-			                           this.settingsRoot.Display.TimeStampUseUtc, this.settingsRoot.Display.TimeStampFormat, this.settingsRoot.Display.TimeSpanFormat, this.settingsRoot.Display.TimeDeltaFormat, this.settingsRoot.Display.TimeDurationFormat);
+			                           this.settingsRoot.Display.TimeStampUseUtc, this.settingsRoot.Display.TimeStampFormat, this.settingsRoot.Display.TimeSpanFormat, this.settingsRoot.Display.TimeDeltaFormat, this.settingsRoot.Display.TimeDurationFormat,
+			                           showMonospaceFontsOnly);
 
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
 				this.settingsRoot.Format = f.FormatSettingsResult;
 
+				bool roamingUserSettingsHaveToBeSaved = false;
+
 				if (!ArrayEx.ValuesEqual(customColors, f.CustomColors))
 				{
-					ApplicationSettings.RoamingUserSettings.View.UpdateCustomColorsFromWin32(f.CustomColors);
-					ApplicationSettings.SaveRoamingUserSettings();
+					ApplicationSettings.RoamingUserSettings.Color.UpdateCustomColorsFromWin32(f.CustomColors);
+
+					roamingUserSettingsHaveToBeSaved = true;
 				}
 
 				this.settingsRoot.Display.ContentSeparator = f.ContentSeparatorResult;
@@ -6915,6 +6920,18 @@ namespace YAT.View.Forms
 				this.settingsRoot.Display.TimeSpanFormat     = f.TimeSpanFormatResult;
 				this.settingsRoot.Display.TimeDeltaFormat    = f.TimeDeltaFormatResult;
 				this.settingsRoot.Display.TimeDurationFormat = f.TimeDurationFormatResult;
+
+				if (showMonospaceFontsOnly != f.ShowMonospaceFontsOnlyResult)
+				{
+					ApplicationSettings.RoamingUserSettings.Font.ShowMonospaceOnly = f.ShowMonospaceFontsOnlyResult;
+
+					roamingUserSettingsHaveToBeSaved = true;
+				}
+
+				if (roamingUserSettingsHaveToBeSaved)
+				{
+					ApplicationSettings.SaveRoamingUserSettings();
+				}
 			}
 		}
 
@@ -6965,7 +6982,7 @@ namespace YAT.View.Forms
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
 			{
 				ApplicationSettings.RoamingUserSettings.Extensions.MonitorFiles = Path.GetExtension(sfd.FileName);
-				ApplicationSettings.LocalUserSettings.Paths.MonitorFiles = Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.MonitorFiles = PathEx.GetDirectoryPath(sfd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 				ApplicationSettings.SaveRoamingUserSettings();
 
@@ -7176,7 +7193,7 @@ namespace YAT.View.Forms
 				this.settingsRoot.TerminalType,
 				this.settingsRoot.Send.UseExplicitDefaultRadix,
 				this.settingsRoot.Send.Text.ToParseMode(),
-				Path.GetDirectoryName(this.terminal.SettingsFilePath),
+				PathEx.GetDirectoryPath(this.terminal.SettingsFilePath),
 				pageId,
 				commandId,
 				IndicatedName
@@ -8645,7 +8662,7 @@ namespace YAT.View.Forms
 			var dr = sfd.ShowDialog(this);
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
 			{
-				ApplicationSettings.LocalUserSettings.Paths.MainFiles = Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.MainFiles = PathEx.GetDirectoryPath(sfd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 
 				Refresh(); // Ensure that form has been refreshed before continuing.
