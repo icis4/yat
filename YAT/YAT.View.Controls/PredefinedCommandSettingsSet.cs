@@ -463,7 +463,7 @@ namespace YAT.View.Controls
 
 					if (textBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
 						textBox_SingleLineText.ForeColor = SystemColors.ControlText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-					                                               //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
+					                                               //// Time consuming operation! See 'FontEx.DefaultFontItalic' for background!
 					if (textBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
 						textBox_SingleLineText.Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
 				}
@@ -699,7 +699,7 @@ namespace YAT.View.Controls
 					{
 						if (textBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
 							textBox_SingleLineText.ForeColor = SystemColors.ControlText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-						                                               //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
+						                                               //// Time consuming operation! See 'FontEx.DefaultFontItalic' for background!
 						if (textBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
 							textBox_SingleLineText.Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
 
@@ -738,7 +738,7 @@ namespace YAT.View.Controls
 					{
 						if (pathLabel_FilePath.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
 							pathLabel_FilePath.ForeColor = SystemColors.ControlText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-						                                           //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
+						                                           //// Time consuming operation! See 'FontEx.DefaultFontItalic' for background!
 						if (pathLabel_FilePath.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
 							pathLabel_FilePath.Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
 
@@ -748,9 +748,9 @@ namespace YAT.View.Controls
 					{
 						if (pathLabel_FilePath.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 							pathLabel_FilePath.ForeColor = SystemColors.GrayText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-						                                         //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
-						if (pathLabel_FilePath.Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
-							pathLabel_FilePath.Font = DrawingEx.DefaultFontItalic;  // Improves because 'Font' is managed by a 'PropertyStore'.
+						                                      //// Time consuming operation! See 'FontEx.DefaultFontItalic' for background!
+						if (pathLabel_FilePath.Font != FontEx.DefaultFontItalic) // Improve performance by only assigning if different.
+							pathLabel_FilePath.Font = FontEx.DefaultFontItalic;  // Improves because 'Font' is managed by a 'PropertyStore'.
 
 						pathLabel_FilePath.Text = Command.UndefinedFilePathText;
 					}
@@ -768,9 +768,9 @@ namespace YAT.View.Controls
 					{
 						if (textBox_SingleLineText.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 							textBox_SingleLineText.ForeColor = SystemColors.GrayText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-						                                             //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
-						if (textBox_SingleLineText.Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
-							textBox_SingleLineText.Font = DrawingEx.DefaultFontItalic;  // Improves because 'Font' is managed by a 'PropertyStore'.
+						                                          //// Time consuming operation! See 'FontEx.DefaultFontItalic' for background!
+						if (textBox_SingleLineText.Font != FontEx.DefaultFontItalic) // Improve performance by only assigning if different.
+							textBox_SingleLineText.Font = FontEx.DefaultFontItalic;  // Improves because 'Font' is managed by a 'PropertyStore'.
 
 						textBox_SingleLineText.Text = Command.EnterTextText;
 					}

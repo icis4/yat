@@ -40,7 +40,7 @@ namespace MKY.Windows.Forms
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			// Try to fit file path with path ellipsis:
-			TextFormatFlags pathEllipsisFlags = DrawingEx.ConvertContentAlignmentToTextFormatFlags(TextAlign);
+			TextFormatFlags pathEllipsisFlags = ContentAlignmentEx.ConvertTo(TextAlign);
 
 			if (RightToLeft == RightToLeft.Yes)
 				pathEllipsisFlags |= TextFormatFlags.RightToLeft;
@@ -56,7 +56,7 @@ namespace MKY.Windows.Forms
 			else
 			{
 				// Path ellipsis, don't fit, draw text with end ellipsis:
-				TextFormatFlags endEllipsisFlags = DrawingEx.ConvertContentAlignmentToTextFormatFlags(TextAlign);
+				TextFormatFlags endEllipsisFlags = ContentAlignmentEx.ConvertTo(TextAlign);
 
 				if (RightToLeft == RightToLeft.Yes)
 					endEllipsisFlags |= TextFormatFlags.RightToLeft;
