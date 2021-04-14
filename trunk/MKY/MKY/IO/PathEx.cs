@@ -433,7 +433,7 @@ namespace MKY.IO
 			if (!Path.IsPathRooted(filePath))      return (new PathCompareResult(false, filePath));
 
 			string fileName = Path.GetFileName(filePath);
-			PathCompareResult pcr = DoCompareDirectoryPaths(directoryPath, Path.GetDirectoryName(filePath));
+			PathCompareResult pcr = DoCompareDirectoryPaths(directoryPath, GetDirectoryPath(filePath));
 			pcr.RelativePath += (Path.DirectorySeparatorChar + fileName);
 			return (pcr);
 		}
@@ -454,7 +454,7 @@ namespace MKY.IO
 			if (!Path.IsPathRooted(filePath))      return (new PathCompareResult(false));
 			if (!Path.IsPathRooted(directoryPath)) return (new PathCompareResult(false, directoryPath));
 
-			return (DoCompareDirectoryPaths(Path.GetDirectoryName(filePath), directoryPath));
+			return (DoCompareDirectoryPaths(GetDirectoryPath(filePath), directoryPath));
 		}
 
 		/// <summary>
@@ -473,7 +473,7 @@ namespace MKY.IO
 			if (!Path.IsPathRooted(filePathA)) return (new PathCompareResult(false));
 			if (!Path.IsPathRooted(filePathB)) return (new PathCompareResult(false, filePathB));
 
-			PathCompareResult pcr = DoCompareDirectoryPaths(Path.GetDirectoryName(filePathA), Path.GetDirectoryName(filePathB));
+			PathCompareResult pcr = DoCompareDirectoryPaths(GetDirectoryPath(filePathA), GetDirectoryPath(filePathB));
 			pcr.RelativePath += (Path.DirectorySeparatorChar + Path.GetFileName(filePathB));
 			return (pcr);
 		}
@@ -522,7 +522,7 @@ namespace MKY.IO
 			if (string.IsNullOrEmpty(filePath))    return (directoryPath);
 
 			string fileName = Path.GetFileName(filePath);
-			string absolutePath = DoCombineDirectoryPaths(directoryPath, Path.GetDirectoryName(filePath));
+			string absolutePath = DoCombineDirectoryPaths(directoryPath, GetDirectoryPath(filePath));
 			string combined = Path.Combine(absolutePath, fileName);
 			return (combined);
 		}
@@ -545,7 +545,7 @@ namespace MKY.IO
 
 			if (string.IsNullOrEmpty(directoryPath)) return (filePath);
 
-			return (DoCombineDirectoryPaths(Path.GetDirectoryName(filePath), directoryPath));
+			return (DoCombineDirectoryPaths(GetDirectoryPath(filePath), directoryPath));
 		}
 
 		/// <summary>
@@ -566,7 +566,7 @@ namespace MKY.IO
 
 			if (string.IsNullOrEmpty(filePathB)) return (filePathA);
 
-			string absolutePath = DoCombineDirectoryPaths(Path.GetDirectoryName(filePathA), Path.GetDirectoryName(filePathB));
+			string absolutePath = DoCombineDirectoryPaths(GetDirectoryPath(filePathA), GetDirectoryPath(filePathB));
 			string combined = Path.Combine(absolutePath, Path.GetFileName(filePathB));
 			return (combined);
 		}
@@ -911,7 +911,7 @@ namespace MKY.IO
 			// Get directory and file name:
 			if (pathInfo != null)
 			{
-				dirPath = Path.GetDirectoryName(path);
+				dirPath = GetDirectoryPath(path);
 				dirInfo = new DirectoryInfo(dirPath);
 
 				fileName = Path.GetFileName(path);
@@ -961,7 +961,7 @@ namespace MKY.IO
 		public static IEnumerable<string> DistinctDirectories(IEnumerable<string> paths)
 		{
 			var nonNullOrEmptyPaths = paths.Select(p => p).Where(p => !string.IsNullOrEmpty(p));
-			return (nonNullOrEmptyPaths.Select(p => Path.GetDirectoryName(p))
+			return (nonNullOrEmptyPaths.Select(p => GetDirectoryPath(p))
 			                           .Distinct(Comparer));
 		}
 
@@ -970,11 +970,22 @@ namespace MKY.IO
 		#region Get...()
 
 		/// <summary>
+		/// Returns the directory information for the specified path string.
+		/// </summary>
+		/// <remarks>
+		/// Same as <see cref="Path.GetDirectoryName"/>, but with the proper method name.
+		/// </remarks>
+		public static string GetDirectoryPath(string path)
+		{
+			return (Path.GetDirectoryName(path));
+		}
+
+		/// <summary>
 		/// Returns the name of the given path.
 		/// </summary>
 		/// <remarks>
-		/// Opposed to <see cref="Path.GetDirectoryName"/>, this method returns the directory name
-		/// only, not the full directory path.
+		/// Opposed to <see cref="Path.GetDirectoryName"/>, this method returns the directory
+		/// name only, not the full directory path.
 		/// </remarks>
 		public static string GetDirectoryNameOnly(string path)
 		{
@@ -982,7 +993,7 @@ namespace MKY.IO
 				return (null);
 
 			if (File.Exists(path)) // Strip file name if path refers to a file.
-				path = Path.GetDirectoryName(path);
+				path = GetDirectoryPath(path);
 
 			var di = new DirectoryInfo(path);
 			return (di.Name);

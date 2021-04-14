@@ -38,6 +38,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY.Diagnostics;
+using MKY.IO;
 using MKY.Xml;
 
 #endregion
@@ -373,7 +374,7 @@ namespace MKY.Settings
 					if (FilePathIsDefined)
 					{
 						// Find all valid directories of older versions:
-						string productSettingsPath = Path.GetDirectoryName(Path.GetDirectoryName(FilePath));
+						string productSettingsPath = PathEx.GetDirectoryPath(PathEx.GetDirectoryPath(FilePath));
 						string[] allDirectories = Directory.GetDirectories(productSettingsPath);
 						List<string> oldDirectories = new List<string>();
 						Version currentVersion = new Version(Application.ProductVersion);

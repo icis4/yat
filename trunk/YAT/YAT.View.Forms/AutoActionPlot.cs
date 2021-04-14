@@ -593,7 +593,7 @@ namespace YAT.View.Forms
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
 			{
 				ApplicationSettings.RoamingUserSettings.Extensions.PlotFiles = Path.GetExtension(sfd.FileName);
-				ApplicationSettings.LocalUserSettings.Paths.PlotFiles = Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.PlotFiles = PathEx.GetDirectoryPath(sfd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 				ApplicationSettings.SaveRoamingUserSettings();
 

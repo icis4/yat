@@ -674,7 +674,7 @@ namespace YAT.View.Controls
 					}
 				}
 
-				ApplicationSettings.LocalUserSettings.Paths.SendFiles = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.SendFiles = PathEx.GetDirectoryPath(ofd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 				ApplicationSettings.SaveRoamingUserSettings();
 
