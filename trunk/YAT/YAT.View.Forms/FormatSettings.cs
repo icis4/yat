@@ -31,9 +31,11 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
+using System.Text;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Drawing;
 using MKY.Windows.Forms;
 
 #endregion
@@ -72,6 +74,8 @@ namespace YAT.View.Forms
 		private string timeDeltaFormat;
 		private string timeDurationFormat;
 
+		private bool showMonospaceFontsOnly;
+
 		private Domain.SeparatorEx contentSeparator;
 		private Domain.SeparatorEx infoSeparator;
 		private Domain.EnclosureEx infoEnclosure;
@@ -92,7 +96,8 @@ namespace YAT.View.Forms
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
 		public FormatSettings(Format.Settings.FormatSettings formatSettings, int[] customColors,
 		                      Domain.SeparatorEx contentSeparator, Domain.SeparatorEx infoSeparator, Domain.EnclosureEx infoEnclosure,
-		                      bool timeStampUseUtc, string timeStampFormat, string timeSpanFormat, string timeDeltaFormat, string timeDurationFormat)
+		                      bool timeStampUseUtc, string timeStampFormat, string timeSpanFormat, string timeDeltaFormat, string timeDurationFormat,
+		                      bool showMonospaceFontsOnly)
 		{
 			InitializeComponent();
 
@@ -113,6 +118,8 @@ namespace YAT.View.Forms
 			this.timeDeltaFormat    = timeDeltaFormat;
 			this.timeDurationFormat = timeDurationFormat;
 
+			this.showMonospaceFontsOnly = showMonospaceFontsOnly;
+
 			InitializeControls();
 		////SetControls() is initially called in the 'Shown' event handler.
 		}
@@ -124,7 +131,9 @@ namespace YAT.View.Forms
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Not "Result" as they are implicitly handled.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Same type as ColorDialog.CustomColors.")]
 		public int[] CustomColors
 		{
@@ -184,6 +193,12 @@ namespace YAT.View.Forms
 		public string TimeDurationFormatResult
 		{
 			get { return (this.timeDurationFormat); }
+		}
+
+		/// <summary></summary>
+		public bool ShowMonospaceFontsOnlyResult
+		{
+			get { return (this.showMonospaceFontsOnly); }
 		}
 
 		#endregion
@@ -252,6 +267,15 @@ namespace YAT.View.Forms
 				return;
 
 			GetCustomColorsFromControl(ControlEx.TagToInt32(sender));
+			SetControls();
+		}
+
+		private void checkBox_MonospaceFontsOnly_CheckedChanged(object sender, EventArgs e)
+		{
+			if (this.isSettingControls)
+				return;
+
+			this.showMonospaceFontsOnly = checkBox_MonospaceFontsOnly.Checked;
 			SetControls();
 		}
 
@@ -737,6 +761,8 @@ namespace YAT.View.Forms
 				this.timeDeltaFormat    = Domain.Settings.DisplaySettings.TimeDeltaFormatDefault;
 				this.timeDurationFormat = Domain.Settings.DisplaySettings.TimeDurationFormatDefault;
 
+				this.showMonospaceFontsOnly = Application.Settings.FontSettings.ShowMonospaceOnlyDefault;
+
 				SetControls();
 			}
 		}
@@ -760,7 +786,7 @@ namespace YAT.View.Forms
 					monitor_Device, monitor_Direction, monitor_Length,
 					monitor_IOControl,
 					monitor_Warning, monitor_Error,
-					monitor_WhiteSpace // See "YAT.Format.Settings.WhiteSpaceFormat" for explanation on "WhiteSpace" vs. "Separators".
+					monitor_Separator
 				};
 
 				this.textFormats = new Controls.TextFormat[]
@@ -770,7 +796,7 @@ namespace YAT.View.Forms
 					textFormat_Device, textFormat_Direction, textFormat_Length,
 					textFormat_IOControl,
 					textFormat_Warning, textFormat_Error,
-					textFormat_WhiteSpace // See "YAT.Format.Settings.WhiteSpaceFormat" for explanation on "WhiteSpace" vs. "Separators".
+					textFormat_Separator
 				};
 
 				comboBox_ContentSeparator.Items.Clear();
@@ -830,7 +856,7 @@ namespace YAT.View.Forms
 				case 11: return (this.formatSettingsInEdit.IOControlFormat);
 				case 12: return (this.formatSettingsInEdit.WarningFormat);
 				case 13: return (this.formatSettingsInEdit.ErrorFormat);
-				case 14: return (this.formatSettingsInEdit.WhiteSpaceFormat); // See "WhiteSpaceFormat" for explanation on "WhiteSpace" vs. "Separators".
+				case 14: return (this.formatSettingsInEdit.SeparatorFormat);
 
 				default:  throw (new ArgumentOutOfRangeException("index", index, MessageHelper.InvalidExecutionPreamble + "There is no format at index '" + index + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
@@ -864,6 +890,7 @@ namespace YAT.View.Forms
 				}
 
 				checkBox_EnableFormatting.Checked = this.formatSettingsInEdit.FormattingEnabled;
+				checkBox_MonospaceFontsOnly.Checked = this.showMonospaceFontsOnly;
 
 				for (int i = 0; i < this.textFormats.Length; i++)
 				{
@@ -1021,7 +1048,7 @@ namespace YAT.View.Forms
 		private void ShowFontDialog()
 		{
 			FontDialog fd;
-			Font f = this.formatSettingsInEdit.Font;
+			Font f = null;
 			bool fontOK = false;
 			bool cancel = false;
 			do
@@ -1030,7 +1057,9 @@ namespace YAT.View.Forms
 				fd.Font = this.formatSettingsInEdit.Font;
 				fd.ShowColor = false; // Color is selected by display element format.
 				fd.ShowEffects = false; // Effects make no sense.
-				fd.AllowVerticalFonts = false; // Not supported by YAT
+				fd.AllowVerticalFonts = false; // Not supported by YAT.
+				fd.FixedPitchOnly = this.showMonospaceFontsOnly;
+
 				if (fd.ShowDialog(this) != DialogResult.OK)
 				{
 					cancel = true;
@@ -1038,17 +1067,29 @@ namespace YAT.View.Forms
 				else
 				{
 					// Check chosen font:
-					try
+					Exception exceptionOnFailure;
+					fontOK = FontEx.TryGet(fd.Font.Name, fd.Font.Size, FontStyle.Regular, out f, out exceptionOnFailure);
+					if (!fontOK)
 					{
-						f = new Font(fd.Font.Name, fd.Font.Size, FontStyle.Regular);
-						fontOK = true;
-					}
-					catch (ArgumentException)
-					{
+						var lead = new StringBuilder();
+						lead.Append("Font '");
+						lead.Append(fd.Font.Name);
+						lead.Append("' could not be created with size ");
+						lead.Append(fd.Font.Size);
+						lead.Append(" and regular style!");
+
+						var secondary = "Select a different font.";
+
+						string text;
+						if (exceptionOnFailure is NotSupportedException) // Makes little sense to replicate this information.
+							text = lead.ToString();
+						else
+							text = Model.Utilities.MessageHelper.ComposeMessage(lead.ToString(), exceptionOnFailure, secondary);
+
 						var dr = MessageBoxEx.Show
 						(
 							this,
-							"Font '" + fd.Font.Name + "' does not support regular style. Select a different font.",
+							text,
 							"Font Not Supported",
 							MessageBoxButtons.OKCancel,
 							MessageBoxIcon.Exclamation
@@ -1062,7 +1103,8 @@ namespace YAT.View.Forms
 
 			if (fontOK)
 			{
-				if ((f.Name != this.formatSettingsInEdit.Font.Name) || (f.Size != this.formatSettingsInEdit.Font.Size))
+				if ((f.Name != this.formatSettingsInEdit.Font.Name) ||
+				    (f.Size != this.formatSettingsInEdit.Font.Size))
 				{
 					this.formatSettingsInEdit.Font = f;
 					SetControls();

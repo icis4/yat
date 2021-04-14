@@ -94,6 +94,7 @@ New:
 Important changes:
 - YAT now checks whether the DejaVu monospaced font is available, and whether a monospaced font
   is used for the terminals. The user gets warned if either is not given (feature request #341).
+- [View > Format... > Font...] now by default only shows monospaced fonts (related to req. #341).
 - Behavior on multi-byte character set decoding mismatch can now be configured in the terminal
   settings [Terminal > Settings... > Text...] (feature request #436).
 - Separate colors for warnings and errors (related to feature request #436). On existing terminals,
@@ -104,9 +105,10 @@ Important changes:
 - Help window is again sizeable to display more/all content (related to earlier feature req. #237).
 
 Fixed bugs:
+- Handling of missing log file folder fixed.
+- 'NullReferenceException' when handling backspace with preceeding spaces fixed.
 - Handling of trigger of automatic actions and responses fixed and improved (bugs #504 and #505).
 - Plot window related 'NullReferenceException' when closing YAT fixed.
-- <<<<<<<<<<<<<<<<<<<<<'NullReferenceException'>>>>>>>>>>>>>>>>>>>>>> when handling backspace with preceeding spaces fixed.
 
 Limitations and known issues:
 - Same as previous release, see below.
