@@ -28,12 +28,17 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Windows.Forms;
 
+using MKY;
 using MKY.IO;
+
+using YAT.Format.Types;
 
 #endregion
 
@@ -139,6 +144,67 @@ namespace YAT.Model.Utilities
 			}
 
 			return (sb.ToString());
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		public static void MakeMissingFontMessage(string fontName, Exception exceptionOnFailure, out StringBuilder text, out List<LinkLabel.Link> links)
+		{
+			text = new StringBuilder();
+			links = new List<LinkLabel.Link>();
+
+			var lead = "The " + ApplicationEx.CommonName + " default font '" + fontName + "' is not available!";
+			if (exceptionOnFailure is NotSupportedException) // Makes little sense to replicate this information.
+				text.Append(lead);
+			else
+				text.Append(ComposeMessage(lead, exceptionOnFailure));
+
+			text.AppendLine();
+			text.AppendLine();
+
+			text.Append("The font gets installed along with " + ApplicationEx.CommonName + " when using one of the installer packages available at ");
+			var linkStart = text.Length;
+			var textLink = "SourceForge.net";
+			links.Add(new LinkLabel.Link(linkStart, textLink.Length, "https://sourceforge.net/projects/y-a-terminal/"));
+			text.Append(textLink);
+			text.Append(".");
+
+			text.AppendLine();
+			text.AppendLine();
+
+			string[] fontFilePaths;
+			try
+			{
+				fontFilePaths = Directory.GetFiles(ApplicationEx.ExecutableDirectoryPath, FontFormat.FileNameDefault, SearchOption.AllDirectories);
+			}
+			catch
+			{
+				fontFilePaths = null;
+			}
+
+			if (!ArrayEx.IsNullOrEmpty(fontFilePaths))
+			{
+				var fontSubdirectoryPath = PathEx.GetDirectoryPath(fontFilePaths[0]);
+
+				text.Append("The font is also available in the ");
+				linkStart = text.Length;
+				textLink = PathEx.GetDirectoryNameOnly(fontSubdirectoryPath);
+				links.Add(new LinkLabel.Link(linkStart, textLink.Length, fontSubdirectoryPath));
+				text.Append(textLink);
+				text.Append(" subdirectory of the running application.");
+			}
+			else
+			{
+				text.Append("The font can also be downloaded from the ");
+				linkStart = text.Length;
+				textLink = "DejaVu Github page";
+				links.Add(new LinkLabel.Link(linkStart, textLink.Length, "https://dejavu-fonts.github.io/"));
+				text.Append(textLink);
+				text.Append(".");
+			}
+
+			text.Append(" Installing the font requires administrator privileges.");
 		}
 
 		/// <summary></summary>

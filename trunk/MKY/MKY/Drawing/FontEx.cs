@@ -22,6 +22,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
@@ -90,6 +91,125 @@ namespace MKY.Drawing
 				}
 
 				return (staticDefaultFontItalicCache);
+			}
+		}
+
+		/// <summary>
+		/// Tries to initialize a new <see cref="Font"/> using a specified name, size and style.
+		/// </summary>
+		/// <param name="familiyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
+		/// <param name="emSize">The em-size, in points, of the new font.</param>
+		/// <param name="style">The <see cref="FontStyle"/> of the new font.</param>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		public static bool TryGet(string familiyName, float emSize, FontStyle style = FontStyle.Regular)
+		{
+			Font font;
+			return (TryGet(familiyName, emSize, style, out font));
+		}
+
+		/// <summary>
+		/// Tries to initialize a new <see cref="Font"/> using a specified name, size and style.
+		/// </summary>
+		/// <param name="familiyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
+		/// <param name="emSize">The em-size, in points, of the new font.</param>
+		/// <param name="font">The new <see cref="Font"/> if available; otherwise, <c>null</c>.</param>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		public static bool TryGet(string familiyName, float emSize, out Font font)
+		{
+			return (TryGet(familiyName, emSize, FontStyle.Regular, out font));
+		}
+
+		/// <summary>
+		/// Tries to initialize a new <see cref="Font"/> using a specified name, size and style.
+		/// </summary>
+		/// <param name="familiyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
+		/// <param name="emSize">The em-size, in points, of the new font.</param>
+		/// <param name="style">The <see cref="FontStyle"/> of the new font.</param>
+		/// <param name="font">The new <see cref="Font"/> if available; otherwise, <c>null</c>.</param>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		public static bool TryGet(string familiyName, float emSize, FontStyle style, out Font font)
+		{
+			Exception exceptionOnFailure;
+			return (TryGet(familiyName, emSize, style, out font, out exceptionOnFailure));
+		}
+
+		/// <summary>
+		/// Tries to initialize a new <see cref="Font"/> using a specified name, size and style.
+		/// </summary>
+		/// <param name="familiyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
+		/// <param name="emSize">The em-size, in points, of the new font.</param>
+		/// <param name="exceptionOnFailure">Exception object, in case of failure.</param>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		public static bool TryGet(string familiyName, float emSize, out Exception exceptionOnFailure)
+		{
+			Font font;
+			return (TryGet(familiyName, emSize, out font, out exceptionOnFailure));
+		}
+
+		/// <summary>
+		/// Tries to initialize a new <see cref="Font"/> using a specified name, size and style.
+		/// </summary>
+		/// <param name="familiyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
+		/// <param name="emSize">The em-size, in points, of the new font.</param>
+		/// <param name="style">The <see cref="FontStyle"/> of the new font.</param>
+		/// <param name="exceptionOnFailure">Exception object, in case of failure.</param>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		public static bool TryGet(string familiyName, float emSize, FontStyle style, out Exception exceptionOnFailure)
+		{
+			Font font;
+			return (TryGet(familiyName, emSize, style, out font, out exceptionOnFailure));
+		}
+
+		/// <summary>
+		/// Tries to initialize a new <see cref="Font"/> using a specified name, size and style.
+		/// </summary>
+		/// <param name="familiyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
+		/// <param name="emSize">The em-size, in points, of the new font.</param>
+		/// <param name="font">The new <see cref="Font"/> if available; otherwise, <c>null</c>.</param>
+		/// <param name="exceptionOnFailure">Exception object, in case of failure.</param>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		public static bool TryGet(string familiyName, float emSize, out Font font, out Exception exceptionOnFailure)
+		{
+			return (TryGet(familiyName, emSize, FontStyle.Regular, out font, out exceptionOnFailure));
+		}
+
+		/// <summary>
+		/// Tries to initialize a new <see cref="Font"/> using a specified name, size and style.
+		/// </summary>
+		/// <param name="familiyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
+		/// <param name="emSize">The em-size, in points, of the new font.</param>
+		/// <param name="style">The <see cref="FontStyle"/> of the new font.</param>
+		/// <param name="font">The new <see cref="Font"/> if available; otherwise, <c>null</c>.</param>
+		/// <param name="exceptionOnFailure">Exception object, in case of failure.</param>
+		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		/// <exception cref="ArgumentException"><paramref name="emSize"/> is less than or equal to 0, evaluates to infinity, or is not a valid number.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="familiyName"/> is <c>null</c> or <see cref="string.Empty"/>.</exception>
+		/// <exception cref="NotSupportedException"><paramref name="familiyName"/> is not available in the environment.</exception>
+		public static bool TryGet(string familiyName, float emSize, FontStyle style, out Font font, out Exception exceptionOnFailure)
+		{
+			try
+			{
+				font = new Font(familiyName, emSize, style);
+
+				// Just creating the font is not sufficient. The following check is required:
+				if (font.Name == familiyName)
+				{
+					exceptionOnFailure = null;
+					return (true);
+				}
+				else
+				{
+					font = null;
+					exceptionOnFailure = new NotSupportedException(familiyName + " is not available in the environment!");
+					return (false);
+				}
+			}
+			catch (Exception ex)
+			{
+				font = null;
+				exceptionOnFailure = ex;
+				return (false);
 			}
 		}
 

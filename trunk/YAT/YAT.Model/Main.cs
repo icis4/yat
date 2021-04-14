@@ -31,16 +31,16 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
-#if (WITH_SCRIPTING)
 using System.Text;
-#endif
 using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
 using MKY.Diagnostics;
+using MKY.Drawing;
 using MKY.IO;
 using MKY.Settings;
 
@@ -122,6 +122,9 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
+
+		/// <summary></summary>
+		public event EventHandler<ExtendedMessageInputEventArgs> ExtendedMessageInputRequest;
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<Cursor>> CursorRequest;
@@ -352,6 +355,24 @@ namespace YAT.Model
 			this.scriptBridge = new ScriptBridge(this, this.launchArgs.ScriptRunIsRequested);
 		#endif
 
+			// Checks:
+			if (ApplicationSettings.RoamingUserSettings.Font.CheckAvailability)
+			{
+				bool check = true;
+				bool cancelLaunch = CheckFontAvailabilityAndPotentiallyCancelLaunch(ref check);
+
+				if (!check)
+				{
+					ApplicationSettings.RoamingUserSettings.Font.CheckAvailability = false;
+					ApplicationSettings.SaveRoamingUserSettings();
+				}
+
+				if (cancelLaunch)
+				{
+					return (MainResult.ApplicationLaunchCancel);
+				}
+			}
+
 			// Start according to the start requests:
 			bool success = false;
 
@@ -412,7 +433,7 @@ namespace YAT.Model
 
 								// Not creating create a new empty workspace allows the user to exit YAT,
 								// restore the .yaw file, and try again.
-								return (MainResult.ApplicationStartCancel);
+								return (MainResult.ApplicationLaunchCancel);
 							}
 
 							// [OK] => A new empty workspace will be created below.
@@ -454,7 +475,7 @@ namespace YAT.Model
 			}
 			else
 			{
-				return (MainResult.ApplicationStartError);
+				return (MainResult.ApplicationLaunchError);
 			}
 		}
 
@@ -1312,8 +1333,69 @@ namespace YAT.Model
 			}
 		}
 
+		/// <summary></summary>
+		protected virtual bool CheckFontAvailabilityAndPotentiallyCancelLaunch(ref bool check)
+		{
+			var fontName = Format.Types.FontFormat.NameDefault;
+			var fontSize = Format.Types.FontFormat.SizeDefault;
+			var fontOK = false;
+			var retry = false;
+
+			do
+			{
+				Exception exceptionOnFailure;
+				fontOK = FontEx.TryGet(fontName, fontSize, FontStyle.Regular, out exceptionOnFailure);
+				if (!fontOK)
+				{
+					StringBuilder text;
+					List<LinkLabel.Link> links;
+					Utilities.MessageHelper.MakeMissingFontMessage(fontName, exceptionOnFailure, out text, out links);
+
+					text.AppendLine();
+					text.AppendLine();
+
+					text.Append("[Abort] to exit " + ApplicationEx.CommonName + ". ");
+					text.Append("[Retry] to check availability again (e.g. after having installed the font). ");
+					text.Append("[Ignore] to launch " + ApplicationEx.CommonName + " nevertheless.");
+
+					var dr = OnExtendedMessageInputRequest
+					(
+						text.ToString(),
+						links,
+						"Font Not Available",
+						"On startup, check that 'Deja Vu Sans Mono' font is available",
+						ref check,
+						MessageBoxButtons.AbortRetryIgnore,
+						MessageBoxIcon.Exclamation
+					);
+
+					switch (dr)
+					{
+						case DialogResult.Abort:
+							return (true);
+
+						case DialogResult.Retry:
+							retry = true;
+							break;
+
+						case DialogResult.Ignore:
+						case DialogResult.Cancel: // This is the case when closing the dialog by [x]. Canceling launch seems inappropriate for this case.
+							retry = false;
+							break;
+
+						default:
+							throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The dialog result must be 'AbortRetryIgnore'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					}
+				}
+			}
+			while (retry);
+
+			return (false);
+		}
+
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		private void CleanupLocalUserDirectory()
+		protected virtual void CleanupLocalUserDirectory()
 		{
 			// Get all file paths in default directory:
 			var localUserDirectoryFilePaths = new List<string>();
@@ -2426,7 +2508,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
+		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
 		{
 			if (this.launchArgs.Interactive)
 			{
@@ -2446,6 +2528,44 @@ namespace YAT.Model
 				#endif
 				}
 
+				return (e.Result);
+			}
+			else
+			{
+				return (DialogResult.None);
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		protected virtual DialogResult OnExtendedMessageInputRequest(string text, string caption, string checkText, ref bool checkValue, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
+		{
+			return (OnExtendedMessageInputRequest(text, null, caption, checkText, ref checkValue, buttons, icon, defaultButton));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		protected virtual DialogResult OnExtendedMessageInputRequest(string text, ICollection<LinkLabel.Link> links, string caption, string checkText, ref bool checkValue, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
+		{
+			if (this.launchArgs.Interactive)
+			{
+				DebugMessage(text);
+
+				OnCursorReset(); // Just in case...
+
+				var e = new ExtendedMessageInputEventArgs(text, links, caption, checkText, checkValue, buttons, icon, defaultButton);
+				this.eventHelper.RaiseSync<ExtendedMessageInputEventArgs>(ExtendedMessageInputRequest, this, e);
+
+				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
+				{
+				#if (DEBUG)
+					Debugger.Break();
+				#else
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Message Input' request by main has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				#endif
+				}
+
+				checkValue = e.CheckValue;
 				return (e.Result);
 			}
 			else
