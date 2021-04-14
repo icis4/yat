@@ -92,6 +92,7 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="ApplicationEx.cs" />
+    <Compile Include="Settings\FontSettings.cs" />
     <Compile Include="Settings\AutoActionSettings.cs" />
     <Compile Include="Settings\AutoResponseSettings.cs" />
     <Compile Include="Settings\AutoTriggerSettings.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Settings\RecentFileSettings.cs" />
     <Compile Include="Settings\SocketSettings.cs" />
     <Compile Include="Settings\PlotSettings.cs" />
+    <Compile Include="Settings\ColorSettings.cs" />
     <Compile Include="Settings\WindowSettings.cs" />
     <Compile Include="Types\FindOptions.cs" />
     <Compile Include="Utilities\ExtensionHelper.cs" />

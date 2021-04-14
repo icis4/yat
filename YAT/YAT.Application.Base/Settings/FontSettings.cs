@@ -23,79 +23,64 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
 using System.Xml.Serialization;
 
-using MKY;
-
-namespace YAT.Format.Types
+namespace YAT.Application.Settings
 {
 	/// <summary></summary>
-	[SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Justification = "Only used to hold font settings.")]
-	[Serializable]
-	public class FontFormat : IEquatable<FontFormat>
+	public class FontSettings : MKY.Settings.SettingsItem, IEquatable<FontSettings>
 	{
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
+		/// <summary></summary>
+		public const bool CheckAvailabilityDefault = true;
 
 		/// <summary></summary>
-		public const string DirectoryNameDefault = "DejaVu Font";
+		public const bool CheckTerminalDefault = true;
 
 		/// <summary></summary>
-		public const string FileNameDefault = "DejaVuSansMono.ttf";
+		public const bool ShowMonospaceOnlyDefault = true;
+
+		private bool checkAvailability;
+		private bool checkTerminal;
+		private bool showMonospaceOnly;
 
 		/// <summary></summary>
-		public const string NameDefault = "DejaVu Sans Mono";
-
-		/// <summary></summary>
-		public const float SizeDefault = 8.25f;
-
-		/// <summary></summary>
-		public const FontStyle StyleDefault = FontStyle.Regular;
-
-		#endregion
-
-		private string name;
-		private float size;
-		private FontStyle style;
-		private Font font;
-
-		/// <summary></summary>
-		public FontFormat()
+		public FontSettings()
+			: this(MKY.Settings.SettingsType.Explicit)
 		{
-			this.name  = NameDefault;
-			this.size  = SizeDefault;
-			this.style = StyleDefault;
-			MakeFont();
 		}
 
 		/// <summary></summary>
-		public FontFormat(string name, float size, FontStyle style)
+		public FontSettings(MKY.Settings.SettingsType settingsType)
+			: base(settingsType)
 		{
-			this.name  = name;
-			this.size  = size;
-			this.style = style;
-			MakeFont();
+			SetMyDefaults();
+			ClearChanged();
 		}
 
-		/// <summary></summary>
-		public FontFormat(FontFormat rhs)
+		/// <remarks>
+		/// Fields are assigned via properties even though changed flag will be cleared anyway.
+		/// There potentially is additional code that needs to be run within the property method.
+		/// </remarks>
+		public FontSettings(FontSettings rhs)
+			: base(rhs)
 		{
-			this.name  = rhs.name;
-			this.size  = rhs.size;
-			this.style = rhs.style;
-			MakeFont();
+			CheckAvailability = rhs.CheckAvailability;
+			CheckTerminal     = rhs.CheckTerminal;
+			ShowMonospaceOnly = rhs.ShowMonospaceOnly;
+
+			ClearChanged();
 		}
 
-		private void MakeFont()
+		/// <remarks>
+		/// Fields are assigned via properties to ensure correct setting of changed flag.
+		/// </remarks>
+		protected override void SetMyDefaults()
 		{
-			if (this.font != null)
-				this.font.Dispose();
+			base.SetMyDefaults();
 
-			this.font = new Font(this.name, this.size, this.style);
+			CheckAvailability = CheckAvailabilityDefault;
+			CheckTerminal     = CheckTerminalDefault;
+			ShowMonospaceOnly = ShowMonospaceOnlyDefault;
 		}
 
 		#region Properties
@@ -104,52 +89,47 @@ namespace YAT.Format.Types
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("Name")]
-		public virtual string Name
+		[XmlElement("CheckAvailability")]
+		public virtual bool CheckAvailability
 		{
-			get { return (this.name); }
+			get { return (this.checkAvailability); }
 			set
 			{
-				this.name = value;
-				MakeFont();
+				if (this.checkAvailability != value)
+				{
+					this.checkAvailability = value;
+					SetMyChanged();
+				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("Size")]
-		public virtual float Size
+		[XmlElement("CheckTerminal")]
+		public virtual bool CheckTerminal
 		{
-			get { return (this.size); }
+			get { return (this.checkTerminal); }
 			set
 			{
-				this.size = value;
-				MakeFont();
+				if (this.checkTerminal != value)
+				{
+					this.checkTerminal = value;
+					SetMyChanged();
+				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("Style")]
-		public virtual FontStyle Style
+		[XmlElement("ShowMonospaceOnly")]
+		public virtual bool ShowMonospaceOnly
 		{
-			get { return (this.style); }
+			get { return (this.showMonospaceOnly); }
 			set
 			{
-				this.style = value;
-				MakeFont();
-			}
-		}
-
-		/// <summary></summary>
-		[XmlIgnore]
-		public virtual Font Font
-		{
-			get { return (this.font); }
-			set
-			{
-				this.name = value.Name;
-				this.size = value.Size;
-				this.style = value.Style;
-				MakeFont();
+				if (this.showMonospaceOnly != value)
+				{
+					this.showMonospaceOnly = value;
+					SetMyChanged();
+				}
 			}
 		}
 
@@ -171,11 +151,11 @@ namespace YAT.Format.Types
 		{
 			unchecked
 			{
-				int hashCode;
+				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode =                   (Name != null ? Name.GetHashCode() : 0);
-				hashCode = (hashCode * 397) ^ Size               .GetHashCode();
-				hashCode = (hashCode * 397) ^ Style              .GetHashCode();
+				hashCode = (hashCode * 397) ^ CheckAvailability.GetHashCode();
+				hashCode = (hashCode * 397) ^ CheckTerminal    .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowMonospaceOnly.GetHashCode();
 
 				return (hashCode);
 			}
@@ -186,7 +166,7 @@ namespace YAT.Format.Types
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as FontFormat));
+			return (Equals(obj as FontSettings));
 		}
 
 		/// <summary>
@@ -196,7 +176,7 @@ namespace YAT.Format.Types
 		/// Use properties instead of fields to determine equality. This ensures that 'intelligent'
 		/// properties, i.e. properties with some logic, are also properly handled.
 		/// </remarks>
-		public bool Equals(FontFormat other)
+		public bool Equals(FontSettings other)
 		{
 			if (ReferenceEquals(other, null)) return (false);
 			if (ReferenceEquals(this, other)) return (true);
@@ -204,18 +184,18 @@ namespace YAT.Format.Types
 
 			return
 			(
-			////base.Equals(other) is not required when deriving from 'object'.
+				base.Equals(other) && // Compare all settings nodes.
 
-				StringEx.EqualsOrdinalIgnoreCase(Name, other.Name) &&
-				Size .Equals(other.Size) &&
-				Style.Equals(other.Style)
+				CheckAvailability.Equals(other.CheckAvailability) &&
+				CheckTerminal    .Equals(other.CheckTerminal)     &&
+				ShowMonospaceOnly.Equals(other.ShowMonospaceOnly)
 			);
 		}
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(FontFormat lhs, FontFormat rhs)
+		public static bool operator ==(FontSettings lhs, FontSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))  return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -228,7 +208,7 @@ namespace YAT.Format.Types
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(FontFormat lhs, FontFormat rhs)
+		public static bool operator !=(FontSettings lhs, FontSettings rhs)
 		{
 			return (!(lhs == rhs));
 		}

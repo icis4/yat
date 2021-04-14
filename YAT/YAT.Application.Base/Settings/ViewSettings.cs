@@ -23,30 +23,19 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
 using System.Xml.Serialization;
-
-using MKY.Collections;
-using MKY.Collections.Specialized;
 
 namespace YAT.Application.Settings
 {
 	/// <summary></summary>
 	public class ViewSettings : MKY.Settings.SettingsItem, IEquatable<ViewSettings>
 	{
-		/// <summary></summary>
-		public const int MaxCustomColors = 16;
-
 		private bool findIsVisible;
 		private bool autoActionIsVisible;
 		private bool autoResponseIsVisible;
 	#if (WITH_SCRIPTING)
 		private bool scriptPanelIsVisible;
 	#endif
-
-		private RecentItemCollection<string> customColors;
 
 		/// <summary></summary>
 		public ViewSettings()
@@ -76,8 +65,6 @@ namespace YAT.Application.Settings
 			ScriptPanelIsVisible  = rhs.ScriptPanelIsVisible;
 		#endif
 
-			CustomColors = new RecentItemCollection<string>(rhs.CustomColors);
-
 			ClearChanged();
 		}
 
@@ -94,8 +81,6 @@ namespace YAT.Application.Settings
 		#if (WITH_SCRIPTING)
 			ScriptPanelIsVisible  = false;
 		#endif
-
-			CustomColors = new RecentItemCollection<string>(MaxCustomColors);
 		}
 
 		#region Properties
@@ -167,65 +152,6 @@ namespace YAT.Application.Settings
 
 	#endif // WITH_SCRIPTING
 
-		/// <remarks>
-		/// Using string because...
-		/// ...<see cref="Color"/> does not implement <see cref="IEquatable{T}"/> that is needed for a recent item collection, and because...
-		/// ...<see cref="Color"/> cannot be serialized.
-		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Public getter is required for default XML serialization/deserialization.")]
-		[SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Public setter is required for default XML serialization/deserialization.")]
-		[XmlElement("CustomColors")]
-		public RecentItemCollection<string> CustomColors
-		{
-			get { return (this.customColors); }
-			set
-			{
-				if (this.customColors != value)
-				{
-					this.customColors = value;
-					SetMyChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		public int[] CustomColorsToWin32()
-		{
-			var l = new List<int>(this.customColors.Count);
-
-			foreach (RecentItem<string> ri in this.customColors)
-			{
-				Color c = ColorTranslator.FromHtml(ri.Item);
-				int win32 = ColorTranslator.ToWin32(c);
-				l.Add(win32);
-			}
-
-			return (l.ToArray());
-		}
-
-		/// <summary></summary>
-		public bool UpdateCustomColorsFromWin32(int[] customColors)
-		{
-			// Do not add 'White', as that...
-			// ...is the default color, and...
-			// ...is available predefined anyway.
-			int win32White = ColorTranslator.ToWin32(Color.White);
-
-			List<string> otherThanWhite = new List<string>(customColors.Length);
-
-			foreach (int win32 in customColors)
-			{
-				if (win32 != win32White)
-				{
-					Color c = ColorTranslator.FromWin32(win32);
-					string html = ColorTranslator.ToHtml(c);
-					otherThanWhite.Add(html);
-				}
-			}
-
-			return (this.customColors.UpdateFrom(otherThanWhite));
-		}
-
 		#endregion
 
 		#region Object Members
@@ -252,8 +178,6 @@ namespace YAT.Application.Settings
 			#if (WITH_SCRIPTING)
 				hashCode = (hashCode * 397) ^ ScriptPanelIsVisible .GetHashCode();
 			#endif
-
-				hashCode = (hashCode * 397) ^ (CustomColors != null ? CustomColors.GetHashCode() : 0);
 
 				return (hashCode);
 			}
@@ -284,14 +208,14 @@ namespace YAT.Application.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				FindIsVisible        .Equals(other.FindIsVisible)         &&
-				AutoActionIsVisible  .Equals(other.AutoActionIsVisible)   &&
-				AutoResponseIsVisible.Equals(other.AutoResponseIsVisible) &&
-			#if (WITH_SCRIPTING)
-				ScriptPanelIsVisible .Equals(other.ScriptPanelIsVisible)  &&
+				FindIsVisible        .Equals(other.FindIsVisible)          &&
+				AutoActionIsVisible  .Equals(other.AutoActionIsVisible)    &&
+			#if (!WITH_SCRIPTING)
+				AutoResponseIsVisible.Equals(other.AutoResponseIsVisible)
+			#else
+				AutoResponseIsVisible.Equals(other.AutoResponseIsVisible)  &&
+				ScriptPanelIsVisible .Equals(other.ScriptPanelIsVisible)
 			#endif
-
-				IEnumerableEx.ItemsEqual(CustomColors, other.CustomColors)
 			);
 		}
 

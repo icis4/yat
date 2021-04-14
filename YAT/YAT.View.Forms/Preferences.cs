@@ -48,8 +48,11 @@ namespace YAT.View.Forms
 
 		private SettingControlsHelper isSettingControls;
 
-		private LocalUserSettingsRoot settings;
-		private LocalUserSettingsRoot settingsInEdit;
+		private LocalUserSettingsRoot localUserSettings;
+		private LocalUserSettingsRoot localUserSettingsInEdit;
+
+		private RoamingUserSettingsRoot roamingUserSettings;
+		private RoamingUserSettingsRoot roamingUserSettingsInEdit;
 
 		#endregion
 
@@ -59,11 +62,11 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Preferences(LocalUserSettingsRoot settings)
+		public Preferences(LocalUserSettingsRoot localUserSettings, RoamingUserSettingsRoot roamingUserSettings)
 		{
 			InitializeComponent();
 
-			KeepAndCloneAndAttachSettings(settings);
+			KeepAndCloneAndAttachSettings(localUserSettings, roamingUserSettings);
 
 		////SetControls() is initially called in the 'Shown' event handler.
 		}
@@ -76,9 +79,15 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public LocalUserSettingsRoot SettingsResult
+		public LocalUserSettingsRoot LocalUserSettingsResult
 		{
-			get { return (this.settings); }
+			get { return (this.localUserSettings); }
+		}
+
+		/// <summary></summary>
+		public RoamingUserSettingsRoot RoamingUserSettingsResult
+		{
+			get { return (this.roamingUserSettings); }
 		}
 
 		#endregion
@@ -88,17 +97,24 @@ namespace YAT.View.Forms
 		// Settings
 		//==========================================================================================
 
-		private void KeepAndCloneAndAttachSettings(LocalUserSettingsRoot settings)
+		private void KeepAndCloneAndAttachSettings(LocalUserSettingsRoot localUserSettings, RoamingUserSettingsRoot roamingUserSettings)
 		{
-			this.settings = settings;
-			this.settingsInEdit = new LocalUserSettingsRoot(settings); // Clone to ensure decoupling.
-			this.settingsInEdit.Changed += settingsInEdit_Changed;
+			this.localUserSettings = localUserSettings;
+			this.localUserSettingsInEdit = new LocalUserSettingsRoot(localUserSettings); // Clone to ensure decoupling.
+			this.localUserSettingsInEdit.Changed += settingsInEdit_Changed;
+
+			this.roamingUserSettings = roamingUserSettings;
+			this.roamingUserSettingsInEdit = new RoamingUserSettingsRoot(roamingUserSettings); // Clone to ensure decoupling.
+			this.roamingUserSettingsInEdit.Changed += settingsInEdit_Changed;
 		}
 
 		private void DetachAndAcceptSettings()
 		{
-			this.settingsInEdit.Changed -= settingsInEdit_Changed;
-			this.settings = this.settingsInEdit;
+			this.localUserSettingsInEdit.Changed -= settingsInEdit_Changed;
+			this.localUserSettings = this.localUserSettingsInEdit;
+
+			this.roamingUserSettingsInEdit.Changed -= settingsInEdit_Changed;
+			this.roamingUserSettings = this.roamingUserSettingsInEdit;
 		}
 
 		private void settingsInEdit_Changed(object sender, MKY.Settings.SettingsEventArgs e)
@@ -142,7 +158,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.General.CheckFontAvailability = checkBox_CheckFontAvailability.Checked;
+			this.roamingUserSettingsInEdit.Font.CheckAvailability = checkBox_CheckFontAvailability.Checked;
 		}
 
 		private void checkBox_ShowTerminalInfo_CheckedChanged(object sender, EventArgs e)
@@ -150,7 +166,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.MainWindow.ShowTerminalInfo = checkBox_ShowTerminalInfo.Checked;
+			this.localUserSettingsInEdit.MainWindow.ShowTerminalInfo = checkBox_ShowTerminalInfo.Checked;
 		}
 
 		private void checkBox_ShowTime_CheckedChanged(object sender, EventArgs e)
@@ -158,7 +174,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.MainWindow.ShowTime = checkBox_ShowTime.Checked;
+			this.localUserSettingsInEdit.MainWindow.ShowTime = checkBox_ShowTime.Checked;
 		}
 
 		private void checkBox_ShowChrono_CheckedChanged(object sender, EventArgs e)
@@ -166,7 +182,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.MainWindow.ShowChrono = checkBox_ShowChrono.Checked;
+			this.localUserSettingsInEdit.MainWindow.ShowChrono = checkBox_ShowChrono.Checked;
 		}
 
 		private void checkBox_AutoOpenWorkspace_CheckedChanged(object sender, EventArgs e)
@@ -174,7 +190,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.General.AutoOpenWorkspace = checkBox_AutoOpenWorkspace.Checked;
+			this.localUserSettingsInEdit.General.AutoOpenWorkspace = checkBox_AutoOpenWorkspace.Checked;
 		}
 
 		private void checkBox_AutoSaveWorkspace_CheckedChanged(object sender, EventArgs e)
@@ -182,7 +198,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.General.AutoSaveWorkspace = checkBox_AutoSaveWorkspace.Checked;
+			this.localUserSettingsInEdit.General.AutoSaveWorkspace = checkBox_AutoSaveWorkspace.Checked;
 		}
 
 		private void checkBox_UseRelativePaths_CheckedChanged(object sender, EventArgs e)
@@ -190,7 +206,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.General.UseRelativePaths = checkBox_UseRelativePaths.Checked;
+			this.localUserSettingsInEdit.General.UseRelativePaths = checkBox_UseRelativePaths.Checked;
 		}
 
 		private void checkBox_CheckTerminalFont_CheckedChanged(object sender, EventArgs e)
@@ -198,7 +214,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.General.CheckTerminalFont = checkBox_CheckTerminalFont.Checked;
+			this.roamingUserSettingsInEdit.Font.CheckTerminal = checkBox_CheckTerminalFont.Checked;
 		}
 
 		private void checkBox_NotifyNonAvailableIO_CheckedChanged(object sender, EventArgs e)
@@ -206,7 +222,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.General.NotifyNonAvailableIO = checkBox_NotifyNonAvailableIO.Checked;
+			this.localUserSettingsInEdit.General.NotifyNonAvailableIO = checkBox_NotifyNonAvailableIO.Checked;
 		}
 
 		private void checkBox_RetrieveSerialPortCaptions_CheckedChanged(object sender, EventArgs e)
@@ -214,7 +230,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.General.RetrieveSerialPortCaptions = checkBox_RetrieveSerialPortCaptions.Checked;
+			this.localUserSettingsInEdit.General.RetrieveSerialPortCaptions = checkBox_RetrieveSerialPortCaptions.Checked;
 		}
 
 		private void checkBox_DetectSerialPortsInUse_CheckedChanged(object sender, EventArgs e)
@@ -222,7 +238,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.General.DetectSerialPortsInUse = checkBox_DetectSerialPortsInUse.Checked;
+			this.localUserSettingsInEdit.General.DetectSerialPortsInUse = checkBox_DetectSerialPortsInUse.Checked;
 		}
 
 		private void checkBox_AskForAlternateSerialPort_CheckedChanged(object sender, EventArgs e)
@@ -230,7 +246,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.General.AskForAlternateSerialPort = checkBox_AskForAlternateSerialPort.Checked;
+			this.localUserSettingsInEdit.General.AskForAlternateSerialPort = checkBox_AskForAlternateSerialPort.Checked;
 		}
 
 		private void checkBox_AskForAlternateNetworkInterface_CheckedChanged(object sender, EventArgs e)
@@ -238,7 +254,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.General.AskForAlternateNetworkInterface = checkBox_AskForAlternateNetworkInterface.Checked;
+			this.localUserSettingsInEdit.General.AskForAlternateNetworkInterface = checkBox_AskForAlternateNetworkInterface.Checked;
 		}
 
 		private void checkBox_MatchUsbSerial_CheckedChanged(object sender, EventArgs e)
@@ -246,7 +262,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.General.MatchUsbSerial = checkBox_MatchUsbSerial.Checked;
+			this.localUserSettingsInEdit.General.MatchUsbSerial = checkBox_MatchUsbSerial.Checked;
 		}
 
 		private void checkBox_AskForAlternateUsbDevice_CheckedChanged(object sender, EventArgs e)
@@ -254,7 +270,7 @@ namespace YAT.View.Forms
 			if (this.isSettingControls)
 				return;
 
-			this.settingsInEdit.General.AskForAlternateUsbDevice = checkBox_AskForAlternateUsbDevice.Checked;
+			this.localUserSettingsInEdit.General.AskForAlternateUsbDevice = checkBox_AskForAlternateUsbDevice.Checked;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -281,7 +297,8 @@ namespace YAT.View.Forms
 				)
 				== DialogResult.Yes)
 			{
-				this.settingsInEdit.SetDefaults();
+				this.localUserSettingsInEdit.SetDefaults();
+				this.roamingUserSettingsInEdit.SetDefaults();
 			}
 		}
 
@@ -297,26 +314,26 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				checkBox_CheckFontAvailability.Checked           = this.settingsInEdit.General.CheckFontAvailability;
-				checkBox_ShowTerminalInfo.Checked                = this.settingsInEdit.MainWindow.ShowTerminalInfo;
-				checkBox_ShowTime.Checked                        = this.settingsInEdit.MainWindow.ShowTime;
-				checkBox_ShowChrono.Checked                      = this.settingsInEdit.MainWindow.ShowChrono;
+				checkBox_CheckFontAvailability.Checked           = this.roamingUserSettingsInEdit.Font.CheckAvailability;
+				checkBox_ShowTerminalInfo.Checked                = this.localUserSettingsInEdit.MainWindow.ShowTerminalInfo;
+				checkBox_ShowTime.Checked                        = this.localUserSettingsInEdit.MainWindow.ShowTime;
+				checkBox_ShowChrono.Checked                      = this.localUserSettingsInEdit.MainWindow.ShowChrono;
 
-				checkBox_AutoOpenWorkspace.Checked               = this.settingsInEdit.General.AutoOpenWorkspace;
-				checkBox_AutoSaveWorkspace.Checked               = this.settingsInEdit.General.AutoSaveWorkspace;
-				checkBox_UseRelativePaths.Checked                = this.settingsInEdit.General.UseRelativePaths;
+				checkBox_AutoOpenWorkspace.Checked               = this.localUserSettingsInEdit.General.AutoOpenWorkspace;
+				checkBox_AutoSaveWorkspace.Checked               = this.localUserSettingsInEdit.General.AutoSaveWorkspace;
+				checkBox_UseRelativePaths.Checked                = this.localUserSettingsInEdit.General.UseRelativePaths;
 
-				checkBox_CheckTerminalFont.Checked               = this.settingsInEdit.General.CheckTerminalFont;
-				checkBox_NotifyNonAvailableIO.Checked            = this.settingsInEdit.General.NotifyNonAvailableIO;
+				checkBox_CheckTerminalFont.Checked               = this.roamingUserSettingsInEdit.Font.CheckTerminal;
+				checkBox_NotifyNonAvailableIO.Checked            = this.localUserSettingsInEdit.General.NotifyNonAvailableIO;
 
-				checkBox_RetrieveSerialPortCaptions.Checked      = this.settingsInEdit.General.RetrieveSerialPortCaptions;
-				checkBox_DetectSerialPortsInUse.Checked          = this.settingsInEdit.General.DetectSerialPortsInUse;
-				checkBox_AskForAlternateSerialPort.Checked       = this.settingsInEdit.General.AskForAlternateSerialPort;
+				checkBox_RetrieveSerialPortCaptions.Checked      = this.localUserSettingsInEdit.General.RetrieveSerialPortCaptions;
+				checkBox_DetectSerialPortsInUse.Checked          = this.localUserSettingsInEdit.General.DetectSerialPortsInUse;
+				checkBox_AskForAlternateSerialPort.Checked       = this.localUserSettingsInEdit.General.AskForAlternateSerialPort;
 
-				checkBox_AskForAlternateNetworkInterface.Checked = this.settingsInEdit.General.AskForAlternateNetworkInterface;
+				checkBox_AskForAlternateNetworkInterface.Checked = this.localUserSettingsInEdit.General.AskForAlternateNetworkInterface;
 
-				checkBox_MatchUsbSerial.Checked                  = this.settingsInEdit.General.MatchUsbSerial;
-				checkBox_AskForAlternateUsbDevice.Checked        = this.settingsInEdit.General.AskForAlternateUsbDevice;
+				checkBox_MatchUsbSerial.Checked                  = this.localUserSettingsInEdit.General.MatchUsbSerial;
+				checkBox_AskForAlternateUsbDevice.Checked        = this.localUserSettingsInEdit.General.AskForAlternateUsbDevice;
 			}
 			finally
 			{
