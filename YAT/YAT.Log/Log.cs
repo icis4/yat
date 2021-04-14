@@ -224,8 +224,9 @@ namespace YAT.Log
 					MakeUniqueFilePath();
 
 					// Create directory if not existing yet:
-					if (!Directory.Exists(Path.GetDirectoryName(this.filePath)))
-						Directory.CreateDirectory(Path.GetDirectoryName(this.filePath));
+					var directoryPath = PathEx.GetDirectoryPath(this.filePath);
+					if (!Directory.Exists(directoryPath))
+						Directory.CreateDirectory(directoryPath);
 
 					// Create new file:
 					this.fileStream = File.Open(this.filePath, FileMode.Create, FileAccess.Write, FileShare.Read);
@@ -243,8 +244,9 @@ namespace YAT.Log
 					{
 						MakeFilePath();
 
-						if (!Directory.Exists(Path.GetDirectoryName(this.filePath)))
-							Directory.CreateDirectory(Path.GetDirectoryName(this.filePath));
+						var directoryPath = PathEx.GetDirectoryPath(this.filePath);
+						if (!Directory.Exists(directoryPath))
+							Directory.CreateDirectory(directoryPath);
 
 						this.fileStream = File.Open(this.filePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
 					}

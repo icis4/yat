@@ -160,7 +160,7 @@ namespace YAT.View.Utilities
 			var dr = sfd.ShowDialog(owner);
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(sfd.FileName)))
 			{
-				ApplicationSettings.LocalUserSettings.Paths.CommandFiles = Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.CommandFiles = PathEx.GetDirectoryPath(sfd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 
 				Exception ex;
@@ -342,7 +342,7 @@ namespace YAT.View.Utilities
 			var dr = ofd.ShowDialog(owner);
 			if ((dr == DialogResult.OK) && (!string.IsNullOrEmpty(ofd.FileName)))
 			{
-				ApplicationSettings.LocalUserSettings.Paths.CommandFiles = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.LocalUserSettings.Paths.CommandFiles = PathEx.GetDirectoryPath(ofd.FileName);
 				ApplicationSettings.SaveLocalUserSettings();
 
 				Exception ex;

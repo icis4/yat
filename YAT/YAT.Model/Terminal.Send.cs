@@ -447,9 +447,10 @@ namespace YAT.Model
 		{
 			AssertUndisposed();
 
-			if (c.IsValidFilePath(Path.GetDirectoryName(SettingsFilePath)))
+			var settingsFileDirectoryPath = PathEx.GetDirectoryPath(SettingsFilePath);
+			if (c.IsValidFilePath(settingsFileDirectoryPath))
 			{
-				string absoluteFilePath = PathEx.GetNormalizedRootedExpandingEnvironmentVariables(Path.GetDirectoryName(SettingsFilePath), c.FilePath);
+				string absoluteFilePath = PathEx.GetNormalizedRootedExpandingEnvironmentVariables(settingsFileDirectoryPath, c.FilePath);
 
 				this.terminal.SendFile(absoluteFilePath, c.DefaultRadix);
 
@@ -511,7 +512,7 @@ namespace YAT.Model
 
 					return (true);
 				}
-				else if (c.IsValidFilePath(Path.GetDirectoryName(SettingsFilePath)))
+				else if (c.IsValidFilePath(PathEx.GetDirectoryPath(SettingsFilePath)))
 				{
 					SendFile(c);
 
@@ -550,7 +551,7 @@ namespace YAT.Model
 					this.settingsRoot.SendText.Command = new Command(c); // Clone to ensure decoupling.
 					return (true);
 				}
-				else if (c.IsValidFilePath(Path.GetDirectoryName(SettingsFilePath)))
+				else if (c.IsValidFilePath(PathEx.GetDirectoryPath(SettingsFilePath)))
 				{
 					this.settingsRoot.SendFile.Command = new Command(c); // Clone to ensure decoupling.
 					return (true);

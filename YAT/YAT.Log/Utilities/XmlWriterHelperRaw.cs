@@ -33,6 +33,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 using MKY.Collections.Generic;
+using MKY.IO;
 using MKY.Xml.Schema;
 using MKY.Xml.Serialization;
 
@@ -59,7 +60,11 @@ namespace YAT.Log.Utilities
 				XmlSerializerEx.SerializeToFile(type, transferLines, filePath);
 
 				if (addSchema)
-					XmlSchemaEx.WriteToFile(type, Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
+				{
+					string directoryPath = PathEx.GetDirectoryPath(filePath);
+					string fileName = Path.GetFileNameWithoutExtension(filePath);
+					XmlSchemaEx.WriteToFile(type, directoryPath, fileName);
+				}
 
 				return (count);
 			}

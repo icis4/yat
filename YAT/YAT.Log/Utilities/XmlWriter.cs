@@ -35,6 +35,7 @@ using System.Text;
 using System.Threading;
 
 using MKY;
+using MKY.IO;
 using MKY.Xml.Schema;
 
 using YAT.Domain;
@@ -303,9 +304,9 @@ namespace YAT.Log.Utilities
 			if (addSchema)
 			{
 				Type type = typeof(List<XmlTransferRawLine>);
-				string directory = Path.GetDirectoryName(schemaFilePath);
+				string directoryPath = PathEx.GetDirectoryPath(schemaFilePath);
 				string fileName = Path.GetFileNameWithoutExtension(schemaFilePath);
-				XmlSchemaEx.WriteToFile(type, directory, fileName);
+				XmlSchemaEx.WriteToFile(type, directoryPath, fileName);
 			}
 		}
 
@@ -376,9 +377,9 @@ namespace YAT.Log.Utilities
 			if (addSchema)
 			{
 				Type type = typeof(List<XmlTransferTextLine>);
-				string directory = Path.GetDirectoryName(schemaFilePath);
+				string directoryPath = PathEx.GetDirectoryPath(schemaFilePath);
 				string fileName = Path.GetFileNameWithoutExtension(schemaFilePath);
-				XmlSchemaEx.WriteToFile(type, directory, fileName);
+				XmlSchemaEx.WriteToFile(type, directoryPath, fileName);
 			}
 		}
 

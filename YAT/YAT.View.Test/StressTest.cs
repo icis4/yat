@@ -200,7 +200,7 @@ namespace YAT.View.Test
 			string currentDirectoryToRestore = Environment.CurrentDirectory;
 			try
 			{
-				Environment.CurrentDirectory = Path.GetDirectoryName(transmitFilePath);
+				Environment.CurrentDirectory = PathEx.GetDirectoryPath(transmitFilePath);
 				RunTransmission(workspaceSettingsFilePath, Path.GetFileName(transmitFilePath));
 			}
 			finally

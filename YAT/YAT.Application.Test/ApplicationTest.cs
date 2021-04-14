@@ -532,7 +532,7 @@ namespace YAT.Application.Test
 		/// </summary>
 		protected virtual string CloneForTest(string filePath, string fileNamePatternToClone)
 		{
-			var path = Path.GetDirectoryName(filePath);
+			var path = PathEx.GetDirectoryPath(filePath);
 			foreach (var src in Directory.GetFiles(path, fileNamePatternToClone))
 			{
 				var dest = this.tempPath + Path.DirectorySeparatorChar + Path.GetFileName(src);

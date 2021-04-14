@@ -722,7 +722,7 @@ namespace YAT.Model.Test.FileHandling
 			string currentDirectoryToRestore = Environment.CurrentDirectory;
 			try
 			{
-				Environment.CurrentDirectory = Path.GetDirectoryName(this.normalTerminal1FilePath);
+				Environment.CurrentDirectory = PathEx.GetDirectoryPath(this.normalTerminal1FilePath);
 				success = UseCase6and6a("UC6a: ", Path.GetFileName(this.normalTerminal1FilePath));
 			}
 			finally
