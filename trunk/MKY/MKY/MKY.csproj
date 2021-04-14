@@ -135,7 +135,8 @@
     <Compile Include="Diagnostics\TraceEx.cs" />
     <Compile Include="Diagnostics\TraceWrapper.cs" />
     <Compile Include="Drawing\ColorTranslatorEx.cs" />
-    <Compile Include="Drawing\DrawingEx.cs" />
+    <Compile Include="Drawing\FontEx.cs" />
+    <Compile Include="Drawing\ContentAlignmentEx.cs" />
     <Compile Include="Drawing\RotateFlipTypeEx.cs" />
     <Compile Include="Globalization\CultureInfoEx.cs" />
     <Compile Include="Guid\GuidEx.cs" />

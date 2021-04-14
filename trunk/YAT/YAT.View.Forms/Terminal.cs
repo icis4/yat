@@ -3670,7 +3670,7 @@ namespace YAT.View.Forms
 						{
 							if (this.menuItems_Commands[i].ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
 								this.menuItems_Commands[i].ForeColor = SystemColors.ControlText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-							                                                   //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
+							                                                   //// Time consuming operation! See 'FontEx.DefaultFontItalic' for background!
 							if (this.menuItems_Commands[i].Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
 								this.menuItems_Commands[i].Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
 
@@ -3686,9 +3686,9 @@ namespace YAT.View.Forms
 						{
 							if (this.menuItems_Commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
 								this.menuItems_Commands[i].ForeColor = SystemColors.GrayText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-							                                                 //// Time consuming operation! See 'DrawingEx.DefaultFontItalic' for background!
-							if (this.menuItems_Commands[i].Font != DrawingEx.DefaultFontItalic) // Improve performance by only assigning if different.
-								this.menuItems_Commands[i].Font = DrawingEx.DefaultFontItalic;  // Improves because 'Font' is managed by a 'PropertyStore'.
+							                                              //// Time consuming operation! See 'FontEx.DefaultFontItalic' for background!
+							if (this.menuItems_Commands[i].Font != FontEx.DefaultFontItalic) // Improve performance by only assigning if different.
+								this.menuItems_Commands[i].Font = FontEx.DefaultFontItalic;  // Improves because 'Font' is managed by a 'PropertyStore'.
 
 							this.menuItems_Commands[i].Text = MenuEx.PrependIndex(i + 1, Command.DefineCommandText);
 						}
