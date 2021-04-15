@@ -74,7 +74,7 @@ namespace YAT.View.Forms
 		private string timeDeltaFormat;
 		private string timeDurationFormat;
 
-		private bool showMonospaceFontsOnly;
+		private bool showMonospacedFontsOnly;
 
 		private Domain.SeparatorEx contentSeparator;
 		private Domain.SeparatorEx infoSeparator;
@@ -97,7 +97,7 @@ namespace YAT.View.Forms
 		public FormatSettings(Format.Settings.FormatSettings formatSettings, int[] customColors,
 		                      Domain.SeparatorEx contentSeparator, Domain.SeparatorEx infoSeparator, Domain.EnclosureEx infoEnclosure,
 		                      bool timeStampUseUtc, string timeStampFormat, string timeSpanFormat, string timeDeltaFormat, string timeDurationFormat,
-		                      bool showMonospaceFontsOnly)
+		                      bool showMonospacedFontsOnly)
 		{
 			InitializeComponent();
 
@@ -118,7 +118,7 @@ namespace YAT.View.Forms
 			this.timeDeltaFormat    = timeDeltaFormat;
 			this.timeDurationFormat = timeDurationFormat;
 
-			this.showMonospaceFontsOnly = showMonospaceFontsOnly;
+			this.showMonospacedFontsOnly = showMonospacedFontsOnly;
 
 			InitializeControls();
 		////SetControls() is initially called in the 'Shown' event handler.
@@ -196,9 +196,9 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
-		public bool ShowMonospaceFontsOnlyResult
+		public bool ShowMonospacedFontsOnlyResult
 		{
-			get { return (this.showMonospaceFontsOnly); }
+			get { return (this.showMonospacedFontsOnly); }
 		}
 
 		#endregion
@@ -270,12 +270,36 @@ namespace YAT.View.Forms
 			SetControls();
 		}
 
-		private void checkBox_MonospaceFontsOnly_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_MonospacedFontsOnly_CheckedChanged(object sender, EventArgs e)
 		{
 			if (this.isSettingControls)
 				return;
 
-			this.showMonospaceFontsOnly = checkBox_MonospaceFontsOnly.Checked;
+			if (!checkBox_MonospacedFontsOnly.Checked)
+			{
+				var text = new StringBuilder(Model.Utilities.MessageHelper.MakeFontMonospacedRecommendation());
+				text.AppendLine();
+				text.AppendLine();
+				text.Append("Are you sure to disable this setting?");
+
+				var dr = MessageBoxEx.Show
+				(
+					this,
+					text.ToString(),
+					"Recommendation",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Question,
+					MessageBoxDefaultButton.Button2
+				);
+
+				if (dr == DialogResult.No) // Revert:
+				{
+					SetControls();
+					return;
+				}
+			}
+
+			this.showMonospacedFontsOnly = checkBox_MonospacedFontsOnly.Checked;
 			SetControls();
 		}
 
@@ -761,7 +785,7 @@ namespace YAT.View.Forms
 				this.timeDeltaFormat    = Domain.Settings.DisplaySettings.TimeDeltaFormatDefault;
 				this.timeDurationFormat = Domain.Settings.DisplaySettings.TimeDurationFormatDefault;
 
-				this.showMonospaceFontsOnly = Application.Settings.FontSettings.ShowMonospaceOnlyDefault;
+				this.showMonospacedFontsOnly = Application.Settings.FontSettings.ShowMonospaceOnlyDefault;
 
 				SetControls();
 			}
@@ -890,7 +914,7 @@ namespace YAT.View.Forms
 				}
 
 				checkBox_EnableFormatting.Checked = this.formatSettingsInEdit.FormattingEnabled;
-				checkBox_MonospaceFontsOnly.Checked = this.showMonospaceFontsOnly;
+				checkBox_MonospacedFontsOnly.Checked = this.showMonospacedFontsOnly;
 
 				for (int i = 0; i < this.textFormats.Length; i++)
 				{
@@ -1047,20 +1071,39 @@ namespace YAT.View.Forms
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void ShowFontDialog()
 		{
-			FontDialog fd;
-			Font f = null;
+			Font fontSelectedAndConfirmed;
+			var dr = ShowFontDialog(this, this.formatSettingsInEdit.Font, this.showMonospacedFontsOnly, out fontSelectedAndConfirmed);
+			if (dr == DialogResult.OK)
+			{
+				if ((fontSelectedAndConfirmed.Name != this.formatSettingsInEdit.Font.Name) ||
+				    (fontSelectedAndConfirmed.Size != this.formatSettingsInEdit.Font.Size))
+				{
+					this.formatSettingsInEdit.Font = fontSelectedAndConfirmed;
+					SetControls();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		public static DialogResult ShowFontDialog(IWin32Window owner, Font fontInitial, bool showMonospacedFontsOnly, out Font fontSelectedAndConfirmed)
+		{
+			DialogResult result;
+			fontSelectedAndConfirmed = null;
+
 			bool fontOK = false;
 			bool cancel = false;
 			do
 			{
-				fd = new FontDialog();
-				fd.Font = this.formatSettingsInEdit.Font;
+				var fd = new FontDialog();
+				fd.Font = fontInitial;
 				fd.ShowColor = false; // Color is selected by display element format.
 				fd.ShowEffects = false; // Effects make no sense.
 				fd.AllowVerticalFonts = false; // Not supported by YAT.
-				fd.FixedPitchOnly = this.showMonospaceFontsOnly;
+				fd.FixedPitchOnly = showMonospacedFontsOnly;
 
-				if (fd.ShowDialog(this) != DialogResult.OK)
+				result = fd.ShowDialog(owner);
+				if (result != DialogResult.OK)
 				{
 					cancel = true;
 				}
@@ -1068,7 +1111,7 @@ namespace YAT.View.Forms
 				{
 					// Check chosen font:
 					Exception exceptionOnFailure;
-					fontOK = FontEx.TryGet(fd.Font.Name, fd.Font.Size, FontStyle.Regular, out f, out exceptionOnFailure);
+					fontOK = FontEx.TryGet(fd.Font.Name, fd.Font.Size, FontStyle.Regular, out fontSelectedAndConfirmed, out exceptionOnFailure);
 					if (!fontOK)
 					{
 						var lead = new StringBuilder();
@@ -1086,30 +1129,22 @@ namespace YAT.View.Forms
 						else
 							text = Model.Utilities.MessageHelper.ComposeMessage(lead.ToString(), exceptionOnFailure, secondary);
 
-						var dr = MessageBoxEx.Show
+						result = MessageBoxEx.Show
 						(
-							this,
+							owner,
 							text,
 							"Font Not Supported",
 							MessageBoxButtons.OKCancel,
 							MessageBoxIcon.Exclamation
 						);
 
-						cancel = (dr != DialogResult.OK);
+						cancel = (result != DialogResult.OK);
 					}
 				}
 			}
 			while (!fontOK && !cancel);
 
-			if (fontOK)
-			{
-				if ((f.Name != this.formatSettingsInEdit.Font.Name) ||
-				    (f.Size != this.formatSettingsInEdit.Font.Size))
-				{
-					this.formatSettingsInEdit.Font = f;
-					SetControls();
-				}
-			}
+			return (result);
 		}
 
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]

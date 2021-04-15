@@ -437,7 +437,7 @@
 			this.checkBox_CheckTerminalFont.Name = "checkBox_CheckTerminalFont";
 			this.checkBox_CheckTerminalFont.Size = new System.Drawing.Size(216, 17);
 			this.checkBox_CheckTerminalFont.TabIndex = 1;
-			this.checkBox_CheckTerminalFont.Text = "...check that a monospaced font is used";
+			this.checkBox_CheckTerminalFont.Text = "...check whether a monospaced font is used";
 			this.checkBox_CheckTerminalFont.UseVisualStyleBackColor = true;
 			this.checkBox_CheckTerminalFont.CheckedChanged += new System.EventHandler(this.checkBox_CheckTerminalFont_CheckedChanged);
 			// 

@@ -34,7 +34,7 @@ namespace MKY.Drawing
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
 	public static class FontEx
 	{
-		private static Font staticPreviousDefaultFont = SystemFonts.DefaultFont;
+		private static Font staticDefaultFontCache = SystemFonts.DefaultFont;
 		private static Font staticDefaultFontItalicCache = new Font(SystemFonts.DefaultFont, FontStyle.Italic);
 
 		/// <summary>
@@ -56,7 +56,7 @@ namespace MKY.Drawing
 		/// System.Diagnostics.Trace.WriteLine("DF = " + System.Diagnostics.Stopwatch.GetTimestamp());
 		///
 		/// if (someControl.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-		///     someControl.Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
+		///     someControl.Font = SystemFonts.DefaultFont;  // Improves because "Font" is managed by a "PropertyStore".
 		///
 		/// System.Diagnostics.Trace.WriteLine("DF = " + System.Diagnostics.Stopwatch.GetTimestamp());
 		/// </code>
@@ -70,7 +70,7 @@ namespace MKY.Drawing
 		/// System.Diagnostics.Trace.WriteLine("IT = " + System.Diagnostics.Stopwatch.GetTimestamp());
 		///
 		/// if (someControl.Font != defaultFontItalic) // Improve performance by only assigning if different.
-		///     someControl.Font = defaultFontItalic;  // Improves because 'Font' is managed by a 'PropertyStore'.
+		///     someControl.Font = defaultFontItalic;  // Improves because "Font" is managed by a "PropertyStore".
 		///
 		/// System.Diagnostics.Trace.WriteLine("IT = " + System.Diagnostics.Stopwatch.GetTimestamp());
 		/// </code>
@@ -84,9 +84,9 @@ namespace MKY.Drawing
 			get
 			{
 				// Recreate font if system font has changed:
-				if (staticPreviousDefaultFont != SystemFonts.DefaultFont)
+				if (staticDefaultFontCache != SystemFonts.DefaultFont)
 				{
-					staticPreviousDefaultFont = SystemFonts.DefaultFont;
+					staticDefaultFontCache = SystemFonts.DefaultFont;
 					staticDefaultFontItalicCache = new Font(SystemFonts.DefaultFont, FontStyle.Italic);
 				}
 
@@ -211,6 +211,62 @@ namespace MKY.Drawing
 				exceptionOnFailure = ex;
 				return (false);
 			}
+		}
+
+		/// <summary>
+		/// Determines whether the <see cref="Font"/> of the given <paramref name="familiyName"/> is monospaced.
+		/// </summary>
+		/// <remarks><para>
+		/// Using "monospaced" instead of "fixed width" same as in <see cref="FontFamily.GenericMonospace"/>.
+		/// Using "monospaced" instead of "monospace" same as in:
+		/// <list type="bullet">
+		/// <item><description>"\DejaVu\README.md" "Mono = monospaced".</description></item>
+		/// <item><description>https://en.wikipedia.org/wiki/Monospaced_font "A monospaced font, also called a fixed-pitch, fixed-width, or non-proportional font".</description></item>
+		/// </list>
+		/// </para><para>
+		/// Based on https://social.msdn.microsoft.com/forums/windows/en-US/5b582b96-ade5-4354-99cf-3fe64cc6b53b/determining-if-font-is-monospaced.
+		/// </para></remarks>
+		/// <param name="familiyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the <see cref="Font"/> to evaluate.</param>
+		/// <returns><c>true</c> if monospaced; otherwise, <c>false</c>.</returns>
+		public static bool IsMonospaced(string familiyName)
+		{
+			var font = new Font(familiyName, staticDefaultFontCache.Size); // Using the cache as "SystemFonts.DefaultFont" is a time consuming operation! See "DefaultFontItalic" for background!
+			return (IsMonospaced(font));
+		}
+
+		/// <summary>
+		/// Determines whether the given <paramref name="font"/> is monospaced.
+		/// </summary>
+		/// <remarks><para>
+		/// Using "monospaced" instead of "fixed width" same as in <see cref="FontFamily.GenericMonospace"/>.
+		/// Using "monospaced" instead of "monospace" same as in:
+		/// <list type="bullet">
+		/// <item><description>"\DejaVu\README.md" "Mono = monospaced".</description></item>
+		/// <item><description>https://en.wikipedia.org/wiki/Monospaced_font "A monospaced font, also called a fixed-pitch, fixed-width, or non-proportional font".</description></item>
+		/// </list>
+		/// </para><para>
+		/// Based on https://social.msdn.microsoft.com/forums/windows/en-US/5b582b96-ade5-4354-99cf-3fe64cc6b53b/determining-if-font-is-monospaced.
+		/// </para></remarks>
+		/// <param name="font">The <see cref="Font"/> to evaluate.</param>
+		/// <returns><c>true</c> if monospaced; otherwise, <c>false</c>.</returns>
+		public static bool IsMonospaced(Font font)
+		{
+			var dummyControl = new System.Windows.Forms.Label();
+			var g = dummyControl.CreateGraphics();
+
+			var chars = new char[] { 'a', 'D', 'l', 't', 'Z', '#', '.' };
+			var width0 = g.MeasureString(chars[0].ToString(), font).Width;
+			if (DoubleEx.AlmostEquals(width0, 0.0))
+				throw (new InvalidOperationException("The width of a character cannot be almost 0!"));
+
+			for (int i = 1; i < chars.Length; i++)
+			{
+				var widthI = g.MeasureString(chars[i].ToString(), font).Width;
+				if (DoubleEx.RatherNotEquals(width0, widthI))
+					return (false);
+			}
+
+			return (true);
 		}
 
 		/// <summary>

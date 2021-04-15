@@ -45,6 +45,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -57,6 +58,7 @@ using MKY;
 using MKY.Collections;
 using MKY.Contracts;
 using MKY.Diagnostics;
+using MKY.Drawing;
 using MKY.IO;
 using MKY.Settings;
 using MKY.Text;
@@ -421,6 +423,12 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
+
+		/// <summary></summary>
+		public event EventHandler<ExtendedMessageInputEventArgs> ExtendedMessageInputRequest;
+
+		/// <summary></summary>
+		public event EventHandler<DialogEventArgs> FontDialogRequest;
 
 		/// <summary></summary>
 		public event EventHandler<DialogEventArgs> SaveAsFileDialogRequest;
@@ -1241,6 +1249,26 @@ namespace YAT.Model
 
 			DebugMessage("Launching...");
 
+			// Checks:
+			if (ApplicationSettings.RoamingUserSettings.Font.CheckTerminal)
+			{
+				bool check = true;
+				Font newFont;
+				bool changeFont = CheckFontAndPotentiallyChangeFont(ref check, SettingsRoot.Format.Font, out newFont);
+
+				if (!check)
+				{
+					ApplicationSettings.RoamingUserSettings.Font.CheckTerminal = false;
+					ApplicationSettings.SaveRoamingUserSettings();
+				}
+
+				if (changeFont)
+				{
+					SettingsRoot.Format.Font = newFont;
+				}
+			}
+
+			// Start auxiliaries:
 			StartRates();
 		////StartChronos() is not needed, chronos will be started/stopped in the terminal_IOChanged event handler.
 
@@ -3895,6 +3923,88 @@ namespace YAT.Model
 
 		#endregion
 
+		#region Domain > Check Font
+		//------------------------------------------------------------------------------------------
+		// Domain > Check Font
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		protected virtual bool CheckFontAndPotentiallyChangeFont(ref bool check, Font font, out Font newFont)
+		{
+			if (!FontEx.IsMonospaced(font))
+			{
+				// Font preference:
+				string newFontHint = null;
+				if (FontEx.TryGet("DejaVu Sans Mono", font.Size, out newFont))
+				{
+					newFontHint = "the " + ApplicationEx.CommonName + " default font";
+				}
+				else
+				{
+					if (FontEx.TryGet("Consolas", font.Size, out newFont))
+					{
+						newFontHint = "the default of the Windows console as well as Visual Studio and Programmer's Notepad";
+					}
+					else
+					{
+						if (FontEx.TryGet("Lucida Console", font.Size, out newFont))
+						{
+							newFontHint = "the default of e.g. the PowerShell ISE";
+						}
+						else
+						{
+							if (FontEx.TryGet("Courier New", font.Size, out newFont))
+							{
+								newFontHint = "the default of e.g. Notepad++";
+							}
+						}
+					}
+				}
+
+				StringBuilder text;
+				Utilities.MessageHelper.MakeFontNotMonospacedMessage(IndicatedName, font.Name, out text);
+
+				text.AppendLine();
+				text.AppendLine();
+
+				if (newFont != null)
+				{
+					text.Append("Switch to '");
+					text.Append(newFont.Name);
+					text.Append("', ");
+					text.Append(newFontHint);
+					text.Append("?");
+				}
+				else
+				{
+					text.Append("Select a different font?");
+				}
+
+				var dr = OnExtendedMessageInputRequest
+				(
+					text.ToString(),
+					"Font Not Monospaced",
+					"When opening a terminal, check whether a monospaced font is used.", // Unusual period, making
+					ref check,                                                           // setting text consistent
+					MessageBoxButtons.YesNo,                                             // with message text for
+					MessageBoxIcon.Exclamation                                           // this dialog.
+				);
+
+				if (dr == DialogResult.Yes)
+				{
+		//			if (newFont != null)
+		//				return (true);
+		//			else                       // This request will handle everything,
+						OnFontDialogRequest(); // neither "newFont" nor "true" needed here.
+				}
+			}
+
+			newFont = null;
+			return (false);
+		}
+
+		#endregion
+
 		#region Domain > Check I/O
 		//------------------------------------------------------------------------------------------
 		// Domain > Check I/O
@@ -3910,7 +4020,7 @@ namespace YAT.Model
 		/// open/check/start sequence.
 		/// </remarks>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
-		public virtual CheckResult CheckIOAvailability()
+		protected virtual CheckResult CheckIOAvailability()
 		{
 			switch (SettingsRoot.IOType)
 			{
@@ -6113,13 +6223,8 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
-		{
-			return (OnMessageInputRequest(text, caption, buttons, icon, MessageBoxDefaultButton.Button1));
-		}
-
-		/// <summary></summary>
-		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
 		{
 			if (this.launchArgs.Interactive)
 			{
@@ -6136,6 +6241,74 @@ namespace YAT.Model
 					Debugger.Break();
 				#else
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Message Input' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				#endif
+				}
+
+				return (e.Result);
+			}
+			else
+			{
+				return (DialogResult.None);
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		protected virtual DialogResult OnExtendedMessageInputRequest(string text, string caption, string checkText, ref bool checkValue, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
+		{
+			return (OnExtendedMessageInputRequest(text, null, caption, checkText, ref checkValue, buttons, icon, defaultButton));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		protected virtual DialogResult OnExtendedMessageInputRequest(string text, ICollection<LinkLabel.Link> links, string caption, string checkText, ref bool checkValue, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
+		{
+			if (this.launchArgs.Interactive)
+			{
+				DebugMessage(text);
+
+				OnCursorReset(); // Just in case...
+
+				var e = new ExtendedMessageInputEventArgs(text, links, caption, checkText, checkValue, buttons, icon, defaultButton);
+				this.eventHelper.RaiseSync<ExtendedMessageInputEventArgs>(ExtendedMessageInputRequest, this, e);
+
+				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
+				{
+				#if (DEBUG)
+					Debugger.Break();
+				#else
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Message Input' request by main has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				#endif
+				}
+
+				checkValue = e.CheckValue;
+				return (e.Result);
+			}
+			else
+			{
+				return (DialogResult.None);
+			}
+		}
+
+		/// <summary>
+		/// Requests to show the 'Font' dialog to let the user chose a file path.
+		/// If confirmed, the terminal's font will have been changed.
+		/// </summary>
+		protected virtual DialogResult OnFontDialogRequest()
+		{
+			if (this.launchArgs.Interactive)
+			{
+				OnCursorReset(); // Just in case...
+
+				var e = new DialogEventArgs();
+				this.eventHelper.RaiseSync<DialogEventArgs>(FontDialogRequest, this, e);
+
+				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
+				{
+				#if (DEBUG)
+					Debugger.Break();
+				#else
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by terminal '" + Caption + "' has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				#endif
 				}
 

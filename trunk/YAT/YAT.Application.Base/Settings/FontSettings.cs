@@ -41,7 +41,7 @@ namespace YAT.Application.Settings
 
 		private bool checkAvailability;
 		private bool checkTerminal;
-		private bool showMonospaceOnly;
+		private bool showMonospacedOnly;
 
 		/// <summary></summary>
 		public FontSettings()
@@ -64,9 +64,9 @@ namespace YAT.Application.Settings
 		public FontSettings(FontSettings rhs)
 			: base(rhs)
 		{
-			CheckAvailability = rhs.CheckAvailability;
-			CheckTerminal     = rhs.CheckTerminal;
-			ShowMonospaceOnly = rhs.ShowMonospaceOnly;
+			CheckAvailability  = rhs.CheckAvailability;
+			CheckTerminal      = rhs.CheckTerminal;
+			ShowMonospacedOnly = rhs.ShowMonospacedOnly;
 
 			ClearChanged();
 		}
@@ -78,9 +78,9 @@ namespace YAT.Application.Settings
 		{
 			base.SetMyDefaults();
 
-			CheckAvailability = CheckAvailabilityDefault;
-			CheckTerminal     = CheckTerminalDefault;
-			ShowMonospaceOnly = ShowMonospaceOnlyDefault;
+			CheckAvailability  = CheckAvailabilityDefault;
+			CheckTerminal      = CheckTerminalDefault;
+			ShowMonospacedOnly = ShowMonospaceOnlyDefault;
 		}
 
 		#region Properties
@@ -118,16 +118,18 @@ namespace YAT.Application.Settings
 			}
 		}
 
-		/// <summary></summary>
-		[XmlElement("ShowMonospaceOnly")]
-		public virtual bool ShowMonospaceOnly
+		/// <remarks>
+		/// See <see cref="MKY.Drawing.FontEx.IsMonospaced(string)"/> for background on using term "monospaced".
+		/// </remarks>
+		[XmlElement("ShowMonospacedOnly")]
+		public virtual bool ShowMonospacedOnly
 		{
-			get { return (this.showMonospaceOnly); }
+			get { return (this.showMonospacedOnly); }
 			set
 			{
-				if (this.showMonospaceOnly != value)
+				if (this.showMonospacedOnly != value)
 				{
-					this.showMonospaceOnly = value;
+					this.showMonospacedOnly = value;
 					SetMyChanged();
 				}
 			}
@@ -153,9 +155,9 @@ namespace YAT.Application.Settings
 			{
 				int hashCode = base.GetHashCode(); // Get hash code of all settings nodes.
 
-				hashCode = (hashCode * 397) ^ CheckAvailability.GetHashCode();
-				hashCode = (hashCode * 397) ^ CheckTerminal    .GetHashCode();
-				hashCode = (hashCode * 397) ^ ShowMonospaceOnly.GetHashCode();
+				hashCode = (hashCode * 397) ^ CheckAvailability .GetHashCode();
+				hashCode = (hashCode * 397) ^ CheckTerminal     .GetHashCode();
+				hashCode = (hashCode * 397) ^ ShowMonospacedOnly.GetHashCode();
 
 				return (hashCode);
 			}
@@ -186,9 +188,9 @@ namespace YAT.Application.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				CheckAvailability.Equals(other.CheckAvailability) &&
-				CheckTerminal    .Equals(other.CheckTerminal)     &&
-				ShowMonospaceOnly.Equals(other.ShowMonospaceOnly)
+				CheckAvailability .Equals(other.CheckAvailability) &&
+				CheckTerminal     .Equals(other.CheckTerminal)     &&
+				ShowMonospacedOnly.Equals(other.ShowMonospacedOnly)
 			);
 		}
 

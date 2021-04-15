@@ -343,17 +343,11 @@ namespace YAT.Model
 
 			DebugMessage("Launching...");
 
-			// Process command line args into start requests:
+			// Process command line args into launch requests:
 			if (!ProcessCommandLineArgsIntoLaunchRequests())
 			{
 				return (MainResult.CommandLineError);
 			}
-
-			// Application will start, hence initialize required resources:
-			ProcessorLoad.Initialize();
-		#if (WITH_SCRIPTING)
-			this.scriptBridge = new ScriptBridge(this, this.launchArgs.ScriptRunIsRequested);
-		#endif
 
 			// Checks:
 			if (ApplicationSettings.RoamingUserSettings.Font.CheckAvailability)
@@ -373,7 +367,13 @@ namespace YAT.Model
 				}
 			}
 
-			// Start according to the start requests:
+			// Application will launch, hence initialize required resources:
+			ProcessorLoad.Initialize();
+		#if (WITH_SCRIPTING)
+			this.scriptBridge = new ScriptBridge(this, this.launchArgs.ScriptRunIsRequested);
+		#endif
+
+			// Start according to the launch requests:
 			bool success = false;
 
 			bool workspaceIsRequested = (this.launchArgs.WorkspaceSettingsHandler != null);
@@ -395,7 +395,7 @@ namespace YAT.Model
 				}
 
 				// Note that existing auto workspace settings are kept as they are, such they can
-				// again be used at the next 'normal' (i.e. without command line args) start of YAT.
+				// again be used at the next 'normal' (i.e. without command line args) launch of YAT.
 			}
 
 			if (!success && ApplicationSettings.LocalUserSettingsAreCurrentlyOwnedByThisInstance && !this.commandLineArgs.Empty)
@@ -491,7 +491,7 @@ namespace YAT.Model
 		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1515:SingleLineCommentMustBePrecededByBlankLine", Justification = "Consistent section titles.")]
 		private bool ProcessCommandLineArgsIntoLaunchRequests()
 		{
-			// Always create start requests to ensure that object exists.
+			// Always create launch requests to ensure that object exists.
 			this.launchArgs = new MainLaunchArgs();
 
 			// Process and validate command line arguments:
@@ -1362,11 +1362,11 @@ namespace YAT.Model
 					(
 						text.ToString(),
 						links,
-						"Font Not Available",
-						"On startup, check that 'Deja Vu Sans Mono' font is available",
-						ref check,
-						MessageBoxButtons.AbortRetryIgnore,
-						MessageBoxIcon.Exclamation
+						"Default Font Not Available",
+						"On startup, check that 'Deja Vu Sans Mono' font is available.", // Unusual period, making
+						ref check,                                                       // setting text consistent
+						MessageBoxButtons.AbortRetryIgnore,                              // with message text for
+						MessageBoxIcon.Exclamation                                       // this dialog.
 					);
 
 					switch (dr)
