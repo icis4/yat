@@ -1,5 +1,5 @@
 ﻿
-YAT uses two separate setup projects for x86 and x64. See 'ProjectSetup.txt' for details.
+YAT uses two separate setup projects for x86 and x64. See "ProjectSetup.txt" for details.
 
 Both projects are configured according to the following steps, changes have to be applied to both.
 Keeping both projects in-sync based on text of .vdproj isn't feasible (tried 2015-04-03).

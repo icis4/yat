@@ -39,7 +39,7 @@ namespace MKY.Net
 	public static class Local
 	{
 		/// <summary></summary>
-		private const int FindAvailableTcpPortAttempts = 7; // Should be sufficient, see 'TcpListener' remarks below.
+		private const int FindAvailableTcpPortAttempts = 7; // Should be sufficient, see "TcpListener" remarks below.
 
 		/// <summary></summary>
 		private static string FindAvailableTcpPortAttemptsErrorMessage

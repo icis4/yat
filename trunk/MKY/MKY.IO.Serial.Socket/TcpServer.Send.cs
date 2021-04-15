@@ -191,7 +191,7 @@ namespace MKY.IO.Serial.Socket
 			// 1212 bytes is the maximum safe payload for IPv6-only routes.
 			//  > Using these. If this ever becomes an issue, it will have to be configured.
 			//
-			// See 'SocketDefaults' for measurements.
+			// See "SocketDefaults" for measurements.
 
 			const int SafePayloadLengthOnIPv4 = 516;
 			const int SafePayloadLengthOnIPv6 = 1220;

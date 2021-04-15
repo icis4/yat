@@ -8,7 +8,7 @@ This USB library consists of the following main parts:
  > HidDeviceCollection       => Collection that enumerates USB HID devices
  > HidDevice                 => Inherits from Device and adds HID specific functionality such as HID reports
  > SerialHidDeviceCollection => Collection that enumerates USB Ser/HID devices
- > SerialHidDevice           => Read/Write from/to a serial stream (see 'SerHID Profile Description.txt' for details)
+ > SerialHidDevice           => Read/Write from/to a serial stream (see "SerHID Profile Description.txt" for details)
 
 
 Architecture

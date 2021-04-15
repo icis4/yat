@@ -144,7 +144,7 @@ namespace MKY.Test.Xml.Serialization
 		[Test]
 		public virtual void TestSimpleEnumExSerialization()
 		{
-		#if (FALSE) // See 'summary' above.
+		#if (FALSE) // See summary above.
 			string filePath;
 			OrientationEx x;
 
@@ -174,7 +174,7 @@ namespace MKY.Test.Xml.Serialization
 		[Test]
 		public virtual void TestComplexEnumSerialization()
 		{
-		#if (FALSE) // See 'summary' above.
+		#if (FALSE) // See summary above.
 			string filePath;
 			SupportedEncoding e;
 
@@ -205,7 +205,7 @@ namespace MKY.Test.Xml.Serialization
 		[Test]
 		public virtual void TestComplexEnumExSerialization()
 		{
-		#if (FALSE) // See 'summary' above.
+		#if (FALSE) // See summary above.
 			string filePath;
 			EncodingEx x;
 

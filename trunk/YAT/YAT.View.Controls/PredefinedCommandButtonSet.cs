@@ -539,13 +539,13 @@ namespace YAT.View.Controls
 
 					if (isDefined)
 					{
-						if (!this.buttons_commands_wasDefined[i]) // Improve performance by only accessing 'SystemFonts.DefaultFont' when really needed!
+						if (!this.buttons_commands_wasDefined[i]) // Improve performance by only accessing "SystemFonts.DefaultFont" when really needed!
 						{
 							if (this.buttons_commands[i].ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-								this.buttons_commands[i].ForeColor = SystemColors.ControlText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-								                                             //// Time consuming operation! See 'FontEx.DefaultFontItalic' for background!
+								this.buttons_commands[i].ForeColor = SystemColors.ControlText;  // Improves because "ForeColor" is managed by a "PropertyStore".
+								                                             //// Time consuming operation! See "FontEx.DefaultFontItalic" for background!
 							if (this.buttons_commands[i].Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-								this.buttons_commands[i].Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
+								this.buttons_commands[i].Font = SystemFonts.DefaultFont;  // Improves because "Font" is managed by a "PropertyStore".
 						}
 
 						bool isValid = (this.terminalIsReadyToSendForSomeTime && this.commands[commandIndex].IsValid(this.parseModeForText, this.rootDirectoryForFile));
@@ -557,10 +557,10 @@ namespace YAT.View.Controls
 						if (this.buttons_commands_wasDefined[i]) // Improve performance by only accessing 'FontEx.DefaultFontItalic' when really needed!
 						{
 							if (this.buttons_commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-								this.buttons_commands[i].ForeColor = SystemColors.GrayText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-							                                            //// Time consuming operation! See 'FontEx.DefaultFontItalic' for background!
+								this.buttons_commands[i].ForeColor = SystemColors.GrayText;  // Improves because "ForeColor" is managed by a "PropertyStore".
+							                                            //// Time consuming operation! See "FontEx.DefaultFontItalic" for background!
 							if (this.buttons_commands[i].Font != FontEx.DefaultFontItalic) // Improve performance by only assigning if different.
-								this.buttons_commands[i].Font = FontEx.DefaultFontItalic;  // Improves because 'Font' is managed by a 'PropertyStore'.
+								this.buttons_commands[i].Font = FontEx.DefaultFontItalic;  // Improves because "Font" is managed by a "PropertyStore".
 						}
 
 						this.buttons_commands[i].Enabled = true;

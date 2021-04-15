@@ -310,7 +310,7 @@ namespace YAT.Domain.Settings
 						// In YAT practise (e.g. 'Huge.txt'):
 						//  > ~19.5 KiByte/s for [Debug]
 						//  > ~43.6 KiByte/s for [Release]
-						// See 'MKY.IO.Serial.Socket.SocketDefaults' for measurements.
+						// See "MKY.IO.Serial.Socket.SocketDefaults" for measurements.
 					#if (DEBUG)
 						return (19.5);
 					#else

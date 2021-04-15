@@ -78,7 +78,7 @@ namespace MKY.Xml.Serialization
 		public TolerantXmlSerializer(Type type)
 		{
 			this.type = type;
-			this.defaultDocument = XmlDocumentEx.CreateDefaultDocument(type, XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
+			this.defaultDocument = XmlDocumentEx.CreateDefaultDocument(type, XmlSchemaEx.GuidSchema); // GUID extension, for details see "GuidSchema".
 
 		#if (WRITE_SCHEMAS_TO_FILES)
 			WriteSchemasToFiles(this.defaultDocument.Schemas, "DefaultSchema");
