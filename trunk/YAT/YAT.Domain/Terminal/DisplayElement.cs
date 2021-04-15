@@ -852,9 +852,15 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		protected DisplayElement(DateTime timeStamp, Direction direction, byte[] origin, string text, int charCount, ElementAttributes attributes)
-		{                                                                   // Makes sense since elements of the same type will likely be appended.
-			var l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-			l.Add(new Pair<byte[], string>(origin, text));
+		{
+			List<Pair<byte[], string>> l = null;
+
+			if (!ArrayEx.IsNullOrEmpty(origin))
+			{                                                               // Makes sense since elements of the same type will likely be appended.
+				l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
+				l.Add(new Pair<byte[], string>(origin, text));
+
+			}
 			Initialize(timeStamp, direction, l, text, charCount, ((origin != null) ? (origin.Length) : (0)), attributes);
 		}
 
@@ -1053,33 +1059,6 @@ namespace YAT.Domain
 			return (clone);
 		}
 
-	#if (DEBUG) // No longer needed (YAGNI), but keeping for reference and potential future use (!YAGNI).
-		/// <remarks>
-		/// <paramref name="origin"/> must correspond to a single byte or character, i.e. result
-		/// in a single element, same as when creating elements "the normal way". ASCII mnemonics
-		/// (e.g. <![CDATA[<CR>]]>) are considered a single shown character.
-		/// </remarks>
-		public virtual DisplayElement RecreateFromOrigin(Pair<byte[], string> origin)
-		{
-			var clone = Clone(); // Ensure to recreate the proper type.
-
-			// Keep time stamp, direction and attributes.
-
-			// Replace origin and byteCount:
-			var clonedOrigin = new List<Pair<byte[], string>>(1); // Preset the required capacity to improve memory management.
-			clonedOrigin.Add(PerformDeepClone(origin));
-			clone.origin = clonedOrigin;
-			clone.byteCount = origin.Value1.Length;
-
-			// Replace text and charCount:
-			string text = origin.Value2;
-			clone.text = text;
-			clone.charCount = 1; // See remark.
-
-			return (clone);
-		}
-	#endif
-
 		/// <summary>
 		/// Returns <c>true</c> if <paramref name="other"/> can be appended to this element.
 		/// </summary>
@@ -1233,10 +1212,8 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		private static Pair<byte[], string> PerformDeepClone(Pair<byte[], string> originItem)
-		{                                                                               // Shallow copy of array is good enough for byte[].
-			var clonedOrigin = (byte[])((originItem.Value1 != null) ? (originItem.Value1.Clone()) : null);
-			var clonedText   =           originItem.Value2;
-			return (new Pair<byte[], string>(clonedOrigin, clonedText));
+		{                                                              // Shallow copy of array is good enough for byte[].
+			return (new Pair<byte[], string>((byte[])originItem.Value1.Clone(), originItem.Value2));
 		}
 
 		private static List<Pair<byte[], string>> PerformDeepClone(List<Pair<byte[], string>> origin)
