@@ -228,6 +228,54 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Design", "3 - Design", 
 		YAT\!-Doc.Project\3 - Design\YAT-Design-TestGeneration.txt = YAT\!-Doc.Project\3 - Design\YAT-Design-TestGeneration.txt
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6 - Release", "6 - Release", "{219CA8A7-5399-4512-A009-B924DE775D32}"
+	ProjectSection(SolutionItems) = preProject
+		YAT\!-Doc.Project\6 - Release\CloneReadMe.x64.cmd = YAT\!-Doc.Project\6 - Release\CloneReadMe.x64.cmd
+		YAT\!-Doc.Project\6 - Release\CopyRelNotes.cmd = YAT\!-Doc.Project\6 - Release\CopyRelNotes.cmd
+		YAT\!-Doc.Project\6 - Release\CopySupplements.cmd = YAT\!-Doc.Project\6 - Release\CopySupplements.cmd
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Distribution Template", "Distribution Template", "{F09586E2-1DE8-480A-840A-EBC6783F5090}"
+	ProjectSection(SolutionItems) = preProject
+		YAT\!-Doc.Project\6 - Release\Distribution Template\YAT Release Notes - ReadMe.txt = YAT\!-Doc.Project\6 - Release\Distribution Template\YAT Release Notes - ReadMe.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup.x64", "Setup.x64", "{2602ACA5-2291-49BE-AF7B-374121B67ED2}"
+	ProjectSection(SolutionItems) = preProject
+		YAT\!-Doc.Project\6 - Release\Distribution Template\Setup.x64\!-ReadMe.txt = YAT\!-Doc.Project\6 - Release\Distribution Template\Setup.x64\!-ReadMe.txt
+		YAT\!-Doc.Project\6 - Release\Distribution Template\Setup.x64\YAT Release Notes.txt = YAT\!-Doc.Project\6 - Release\Distribution Template\Setup.x64\YAT Release Notes.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup.x64 with Prerequisites", "Setup.x64 with Prerequisites", "{E99E5A14-B792-4BE6-A0FB-410AC33B5AFA}"
+	ProjectSection(SolutionItems) = preProject
+		YAT\!-Doc.Project\6 - Release\Distribution Template\Setup.x64 with Prerequisites\!-ReadMe.txt = YAT\!-Doc.Project\6 - Release\Distribution Template\Setup.x64 with Prerequisites\!-ReadMe.txt
+		YAT\!-Doc.Project\6 - Release\Distribution Template\Setup.x64 with Prerequisites\YAT Release Notes.txt = YAT\!-Doc.Project\6 - Release\Distribution Template\Setup.x64 with Prerequisites\YAT Release Notes.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup.x86", "Setup.x86", "{88F39AAD-C9CC-4EC7-9C42-5ED64801EE48}"
+	ProjectSection(SolutionItems) = preProject
+		YAT\!-Doc.Project\6 - Release\Distribution Template\Setup.x86\!-ReadMe.txt = YAT\!-Doc.Project\6 - Release\Distribution Template\Setup.x86\!-ReadMe.txt
+		YAT\!-Doc.Project\6 - Release\Distribution Template\Setup.x86\YAT Release Notes.txt = YAT\!-Doc.Project\6 - Release\Distribution Template\Setup.x86\YAT Release Notes.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup.x86 with Prerequisites", "Setup.x86 with Prerequisites", "{8435322F-991C-4702-92F1-6A1A5280FCDE}"
+	ProjectSection(SolutionItems) = preProject
+		YAT\!-Doc.Project\6 - Release\Distribution Template\Setup.x86 with Prerequisites\!-ReadMe.txt = YAT\!-Doc.Project\6 - Release\Distribution Template\Setup.x86 with Prerequisites\!-ReadMe.txt
+		YAT\!-Doc.Project\6 - Release\Distribution Template\Setup.x86 with Prerequisites\YAT Release Notes.txt = YAT\!-Doc.Project\6 - Release\Distribution Template\Setup.x86 with Prerequisites\YAT Release Notes.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "x64 Binaries", "x64 Binaries", "{B1EFA79A-7508-4CF9-8D2F-55141B599F32}"
+	ProjectSection(SolutionItems) = preProject
+		YAT\!-Doc.Project\6 - Release\Distribution Template\x64 Binaries\!-ReadMe.txt = YAT\!-Doc.Project\6 - Release\Distribution Template\x64 Binaries\!-ReadMe.txt
+		YAT\!-Doc.Project\6 - Release\Distribution Template\x64 Binaries\YAT Release Notes.txt = YAT\!-Doc.Project\6 - Release\Distribution Template\x64 Binaries\YAT Release Notes.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "x86 Binaries", "x86 Binaries", "{4846FAA8-DFBB-403D-B69D-71C803A4108E}"
+	ProjectSection(SolutionItems) = preProject
+		YAT\!-Doc.Project\6 - Release\Distribution Template\x86 Binaries\!-ReadMe.txt = YAT\!-Doc.Project\6 - Release\Distribution Template\x86 Binaries\!-ReadMe.txt
+		YAT\!-Doc.Project\6 - Release\Distribution Template\x86 Binaries\YAT Release Notes.txt = YAT\!-Doc.Project\6 - Release\Distribution Template\x86 Binaries\YAT Release Notes.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -1813,5 +1861,13 @@ Global
 		{D33931A1-0F8B-4524-A5D1-3891B88C21E5} = {3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}
 		{CC52F824-9F5E-4119-82A3-55D8DE4D469D} = {3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}
 		{80D266AB-B759-480B-916A-C2701D8C1E09} = {CC52F824-9F5E-4119-82A3-55D8DE4D469D}
+		{219CA8A7-5399-4512-A009-B924DE775D32} = {CC52F824-9F5E-4119-82A3-55D8DE4D469D}
+		{F09586E2-1DE8-480A-840A-EBC6783F5090} = {219CA8A7-5399-4512-A009-B924DE775D32}
+		{2602ACA5-2291-49BE-AF7B-374121B67ED2} = {F09586E2-1DE8-480A-840A-EBC6783F5090}
+		{E99E5A14-B792-4BE6-A0FB-410AC33B5AFA} = {F09586E2-1DE8-480A-840A-EBC6783F5090}
+		{88F39AAD-C9CC-4EC7-9C42-5ED64801EE48} = {F09586E2-1DE8-480A-840A-EBC6783F5090}
+		{8435322F-991C-4702-92F1-6A1A5280FCDE} = {F09586E2-1DE8-480A-840A-EBC6783F5090}
+		{B1EFA79A-7508-4CF9-8D2F-55141B599F32} = {F09586E2-1DE8-480A-840A-EBC6783F5090}
+		{4846FAA8-DFBB-403D-B69D-71C803A4108E} = {F09586E2-1DE8-480A-840A-EBC6783F5090}
 	EndGlobalSection
 EndGlobal

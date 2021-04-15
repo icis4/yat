@@ -149,12 +149,12 @@ namespace YAT.Model.Utilities
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
-		public static void MakeMissingFontMessage(string fontName, Exception exceptionOnFailure, out StringBuilder text, out List<LinkLabel.Link> links)
+		public static void MakeMissingFontMessage(string defaultFontName, Exception exceptionOnFailure, out StringBuilder text, out List<LinkLabel.Link> links)
 		{
 			text = new StringBuilder();
 			links = new List<LinkLabel.Link>();
 
-			var lead = "The " + ApplicationEx.CommonName + " default font '" + fontName + "' is not available!";
+			var lead = "The " + ApplicationEx.CommonName + " default font '" + defaultFontName + "' is not available!";
 			if (exceptionOnFailure is NotSupportedException) // Makes little sense to replicate this information.
 				text.Append(lead);
 			else
@@ -196,7 +196,7 @@ namespace YAT.Model.Utilities
 			}
 			else
 			{
-				text.Append("The font can also be downloaded from the ");
+				text.Append("The font is also available in any of the YAT binary packages at the link above or can be downloaded from the ");
 				linkStart = text.Length;
 				textLink = "DejaVu Github page";
 				links.Add(new LinkLabel.Link(linkStart, textLink.Length, "https://dejavu-fonts.github.io/"));
@@ -205,6 +205,25 @@ namespace YAT.Model.Utilities
 			}
 
 			text.Append(" Installing the font requires administrator privileges.");
+		}
+
+		/// <summary></summary>
+		public static string MakeFontMonospacedRecommendation()
+		{
+			return ("For best readability, it is highly recommended to use a monospaced font.");
+		}
+
+		/// <summary></summary>
+		public static void MakeFontNotMonospacedMessage(string terminalName, string currentFontName, out StringBuilder text)
+		{
+			text = new StringBuilder();
+
+			text.Append("The font of '");
+			text.Append(terminalName);
+			text.Append("' is currently configured to '");
+			text.Append(currentFontName);
+			text.Append("' which is not monospaced. ");
+			text.Append(MakeFontMonospacedRecommendation());
 		}
 
 		/// <summary></summary>

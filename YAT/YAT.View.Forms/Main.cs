@@ -4113,6 +4113,7 @@ namespace YAT.View.Forms
 		//------------------------------------------------------------------------------------------
 
 	#if (WITH_SCRIPTING)
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void main_Launched(object sender, EventArgs e)
 		{
 			this.main.ScriptBridge.ScriptDialogOpened += new ScriptBridge.ScriptDialogOpenedDelegate(scriptBridge_ScriptDialogOpened);
@@ -4121,6 +4122,7 @@ namespace YAT.View.Forms
 		}
 	#endif
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void main_WorkspaceOpened(object sender, EventArgs<Model.Workspace> e)
 		{
 			this.workspace = e.Value;
@@ -4129,6 +4131,7 @@ namespace YAT.View.Forms
 			SetWorkspaceControls();
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void main_WorkspaceSaved(object sender, EventArgs<Model.Workspace> e)
 		{
 			SetWorkspaceControls();
@@ -4137,21 +4140,25 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// Workspace::Closed event is handled at workspace_Closed().
 		/// </remarks>
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void main_WorkspaceClosed(object sender, EventArgs e)
 		{
 			SetWorkspaceControls();
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void main_TimedStatusTextRequest(object sender, EventArgs<string> e)
 		{
 			SetTimedStatusText(e.Value);
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void main_FixedStatusTextRequest(object sender, EventArgs<string> e)
 		{
 			SetFixedStatusText(e.Value);
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void main_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
@@ -4159,6 +4166,7 @@ namespace YAT.View.Forms
 			e.Result = dr;
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private void main_ExtendedMessageInputRequest(object sender, Model.ExtendedMessageInputEventArgs e)
 		{
@@ -4174,6 +4182,7 @@ namespace YAT.View.Forms
 			Cursor = e.Value;
 		}
 
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
 		private void main_Exited(object sender, EventArgs<Model.MainResult> e)
 		{
 			if (this.result == Model.MainResult.Success) // Use provided 'Exited' result if previously not failed,

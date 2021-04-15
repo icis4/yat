@@ -363,9 +363,9 @@ namespace YAT.View.Forms
 
 			this.mdiParent = MdiParent;
 
-			PerformSplitContainerScalingWorkaround(); // See 'SplitContainerHelper' for background.
+			PerformSplitContainerScalingWorkaround(); // See "SplitContainerHelper" for background.
 
-			LayoutTerminal(); // Reapply layouting for proper behavior 'Send' panel if [Send Text | File] is hidden. \remind (2018-04-08 / MKY) bug #412 "Issue with send panel".
+			LayoutTerminal(); // Reapply layouting for proper behavior "Send" panel if [Send Text | File] is hidden. \remind (2018-04-08 / MKY) bug #412 "Issue with send panel".
 
 			SetTerminalControls(); // Immediately set terminal controls so the terminal "looks nice" from the very start.
 
@@ -3669,10 +3669,10 @@ namespace YAT.View.Forms
 						if (updateAppearance)
 						{
 							if (this.menuItems_Commands[i].ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-								this.menuItems_Commands[i].ForeColor = SystemColors.ControlText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-							                                                   //// Time consuming operation! See 'FontEx.DefaultFontItalic' for background!
+								this.menuItems_Commands[i].ForeColor = SystemColors.ControlText;  // Improves because "ForeColor" is managed by a "PropertyStore".
+							                                                   //// Time consuming operation! See "FontEx.DefaultFontItalic" for background!
 							if (this.menuItems_Commands[i].Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-								this.menuItems_Commands[i].Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
+								this.menuItems_Commands[i].Font = SystemFonts.DefaultFont;  // Improves because "Font" is managed by a "PropertyStore".
 
 							this.menuItems_Commands[i].Text = MenuEx.PrependIndex(i + 1, commands[i].Description);
 						}
@@ -3685,10 +3685,10 @@ namespace YAT.View.Forms
 						if (updateAppearance)
 						{
 							if (this.menuItems_Commands[i].ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-								this.menuItems_Commands[i].ForeColor = SystemColors.GrayText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-							                                              //// Time consuming operation! See 'FontEx.DefaultFontItalic' for background!
+								this.menuItems_Commands[i].ForeColor = SystemColors.GrayText;  // Improves because "ForeColor" is managed by a "PropertyStore".
+							                                              //// Time consuming operation! See "FontEx.DefaultFontItalic" for background!
 							if (this.menuItems_Commands[i].Font != FontEx.DefaultFontItalic) // Improve performance by only assigning if different.
-								this.menuItems_Commands[i].Font = FontEx.DefaultFontItalic;  // Improves because 'Font' is managed by a 'PropertyStore'.
+								this.menuItems_Commands[i].Font = FontEx.DefaultFontItalic;  // Improves because "Font" is managed by a "PropertyStore".
 
 							this.menuItems_Commands[i].Text = MenuEx.PrependIndex(i + 1, Command.DefineCommandText);
 						}
@@ -6891,12 +6891,12 @@ namespace YAT.View.Forms
 		private void ShowFormatSettings()
 		{
 			int[] customColors = ApplicationSettings.RoamingUserSettings.Color.CustomColorsToWin32();
-			bool showMonospaceFontsOnly = ApplicationSettings.RoamingUserSettings.Font.ShowMonospaceOnly;
+			bool showMonospacedFontsOnly = ApplicationSettings.RoamingUserSettings.Font.ShowMonospacedOnly;
 
 			var f = new FormatSettings(this.settingsRoot.Format, customColors,
 			                           this.settingsRoot.Display.ContentSeparator, this.settingsRoot.Display.InfoSeparator, this.settingsRoot.Display.InfoEnclosure,
 			                           this.settingsRoot.Display.TimeStampUseUtc, this.settingsRoot.Display.TimeStampFormat, this.settingsRoot.Display.TimeSpanFormat, this.settingsRoot.Display.TimeDeltaFormat, this.settingsRoot.Display.TimeDurationFormat,
-			                           showMonospaceFontsOnly);
+			                           showMonospacedFontsOnly);
 
 			if (ContextMenuStripShortcutModalFormWorkaround.InvokeShowDialog(f, this) == DialogResult.OK)
 			{
@@ -6921,9 +6921,9 @@ namespace YAT.View.Forms
 				this.settingsRoot.Display.TimeDeltaFormat    = f.TimeDeltaFormatResult;
 				this.settingsRoot.Display.TimeDurationFormat = f.TimeDurationFormatResult;
 
-				if (showMonospaceFontsOnly != f.ShowMonospaceFontsOnlyResult)
+				if (showMonospacedFontsOnly != f.ShowMonospacedFontsOnlyResult)
 				{
-					ApplicationSettings.RoamingUserSettings.Font.ShowMonospaceOnly = f.ShowMonospaceFontsOnlyResult;
+					ApplicationSettings.RoamingUserSettings.Font.ShowMonospacedOnly = f.ShowMonospacedFontsOnlyResult;
 
 					roamingUserSettingsHaveToBeSaved = true;
 				}
@@ -7508,6 +7508,8 @@ namespace YAT.View.Forms
 				this.terminal.ResetStatusTextRequest             += terminal_ResetStatusTextRequest;
 				this.terminal.CursorRequest                      += terminal_CursorRequest;
 				this.terminal.MessageInputRequest                += terminal_MessageInputRequest;
+				this.terminal.ExtendedMessageInputRequest        += terminal_ExtendedMessageInputRequest;
+				this.terminal.FontDialogRequest                  += terminal_FontDialogRequest;
 				this.terminal.SaveAsFileDialogRequest            += terminal_SaveAsFileDialogRequest;
 				this.terminal.SaveCommandPageAsFileDialogRequest += terminal_SaveCommandPageAsFileDialogRequest;
 				this.terminal.OpenCommandPageFileDialogRequest   += terminal_OpenCommandPageFileDialogRequest;
@@ -7561,6 +7563,8 @@ namespace YAT.View.Forms
 				this.terminal.ResetStatusTextRequest             -= terminal_ResetStatusTextRequest;
 				this.terminal.CursorRequest                      -= terminal_CursorRequest;
 				this.terminal.MessageInputRequest                -= terminal_MessageInputRequest;
+				this.terminal.ExtendedMessageInputRequest        -= terminal_ExtendedMessageInputRequest;
+				this.terminal.FontDialogRequest                  -= terminal_FontDialogRequest;
 				this.terminal.SaveAsFileDialogRequest            -= terminal_SaveAsFileDialogRequest;
 				this.terminal.SaveCommandPageAsFileDialogRequest -= terminal_SaveCommandPageAsFileDialogRequest;
 				this.terminal.OpenCommandPageFileDialogRequest   -= terminal_OpenCommandPageFileDialogRequest;
@@ -7678,7 +7682,7 @@ namespace YAT.View.Forms
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
 		private List<string> terminal_IOError_MessageBoxShowActiveMessages = new List<string>(); // No preset needed, default behavior is good enough.
 
-		private void terminal_IOError_MessageBoxShow(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
+		private void terminal_IOError_MessageBoxShow(string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
 		{
 			// Prevent repeating errors from being repeated. In the past this has happend e.g. in
 			// case of framing errors on invalid baud rate. This has resulted message boxes across
@@ -7694,7 +7698,8 @@ namespace YAT.View.Forms
 					message,
 					caption,
 					buttons,
-					icon
+					icon,
+					defaultButton
 				);
 
 				terminal_IOError_MessageBoxShowActiveMessages.Remove(message);
@@ -8024,6 +8029,22 @@ namespace YAT.View.Forms
 		{
 			Refresh(); // Ensure that form has been refreshed before showing the message box.
 			e.Result = MessageBoxEx.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private void terminal_ExtendedMessageInputRequest(object sender, Model.ExtendedMessageInputEventArgs e)
+		{
+			var checkValue = e.CheckValue;
+			var dr = ExtendedMessageBox.Show(this, e.Text, e.Links, e.Caption, e.CheckText, ref checkValue, e.Buttons, e.Icon, e.DefaultButton);
+			e.CheckValue = checkValue;
+			e.Result = dr;
+		}
+
+		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
+		private void terminal_FontDialogRequest(object sender, Model.DialogEventArgs e)
+		{
+			e.Result = ShowTerminalFontDialog();
 		}
 
 		[CallingContract(IsAlwaysMainThread = true, Rationale = "Synchronized from the invoking thread onto the main thread.")]
@@ -8640,6 +8661,23 @@ namespace YAT.View.Forms
 		//------------------------------------------------------------------------------------------
 		// Terminal > Settings
 		//------------------------------------------------------------------------------------------
+
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		private DialogResult ShowTerminalFontDialog()
+		{                                                                          // Restrict to monospaced fonts no matter what "RoamingUserSettings.Font.ShowMonospacedOnly"
+			Font fontSelectedAndConfirmed;                                         // is configured to. The user does not have the option to configure the behavior here.
+			var dr = FormatSettings.ShowFontDialog(this, settingsRoot.Format.Font, true, out fontSelectedAndConfirmed);
+			if (dr == DialogResult.OK)
+			{
+				if ((fontSelectedAndConfirmed.Name != settingsRoot.Format.Font.Name) ||
+				    (fontSelectedAndConfirmed.Size != settingsRoot.Format.Font.Size))
+				{
+					settingsRoot.Format.Font = fontSelectedAndConfirmed;
+				}
+			}
+
+			return (dr);
+		}
 
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		private DialogResult ShowSaveTerminalAsFileDialog()

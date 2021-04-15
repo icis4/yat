@@ -36,6 +36,7 @@ namespace YAT.View.Forms
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Elements = new System.Windows.Forms.GroupBox();
+			this.checkBox_MonospacedFontsOnly = new System.Windows.Forms.CheckBox();
 			this.monitor_Warning = new YAT.View.Controls.Monitor();
 			this.label_Warning = new System.Windows.Forms.Label();
 			this.textFormat_Warning = new YAT.View.Controls.TextFormat();
@@ -116,7 +117,6 @@ namespace YAT.View.Forms
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.colorDialog = new System.Windows.Forms.ColorDialog();
 			this.monitor_Example = new YAT.View.Controls.Monitor();
-			this.checkBox_MonospaceFontsOnly = new System.Windows.Forms.CheckBox();
 			this.groupBox_Elements.SuspendLayout();
 			this.groupBox_Options.SuspendLayout();
 			this.SuspendLayout();
@@ -149,7 +149,7 @@ namespace YAT.View.Forms
 			// 
 			this.groupBox_Elements.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Elements.Controls.Add(this.checkBox_MonospaceFontsOnly);
+			this.groupBox_Elements.Controls.Add(this.checkBox_MonospacedFontsOnly);
 			this.groupBox_Elements.Controls.Add(this.monitor_Warning);
 			this.groupBox_Elements.Controls.Add(this.label_Warning);
 			this.groupBox_Elements.Controls.Add(this.textFormat_Warning);
@@ -207,6 +207,19 @@ namespace YAT.View.Forms
 			this.groupBox_Elements.TabIndex = 0;
 			this.groupBox_Elements.TabStop = false;
 			this.groupBox_Elements.Text = "Elements";
+			// 
+			// checkBox_MonospacedFontsOnly
+			// 
+			this.checkBox_MonospacedFontsOnly.AutoSize = true;
+			this.checkBox_MonospacedFontsOnly.CheckAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this.checkBox_MonospacedFontsOnly.Location = new System.Drawing.Point(643, 185);
+			this.checkBox_MonospacedFontsOnly.Name = "checkBox_MonospacedFontsOnly";
+			this.checkBox_MonospacedFontsOnly.Size = new System.Drawing.Size(73, 44);
+			this.checkBox_MonospacedFontsOnly.TabIndex = 51;
+			this.checkBox_MonospacedFontsOnly.Text = "&Monospaced\r\nfonts only";
+			this.checkBox_MonospacedFontsOnly.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this.checkBox_MonospacedFontsOnly.UseVisualStyleBackColor = true;
+			this.checkBox_MonospacedFontsOnly.CheckedChanged += new System.EventHandler(this.checkBox_MonospacedFontsOnly_CheckedChanged);
 			// 
 			// monitor_Warning
 			// 
@@ -1132,19 +1145,6 @@ namespace YAT.View.Forms
 			this.monitor_Example.TabStop = false;
 			this.monitor_Example.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			// 
-			// checkBox_MonospaceFontsOnly
-			// 
-			this.checkBox_MonospaceFontsOnly.AutoSize = true;
-			this.checkBox_MonospaceFontsOnly.CheckAlign = System.Drawing.ContentAlignment.BottomCenter;
-			this.checkBox_MonospaceFontsOnly.Location = new System.Drawing.Point(647, 185);
-			this.checkBox_MonospaceFontsOnly.Name = "checkBox_MonospaceFontsOnly";
-			this.checkBox_MonospaceFontsOnly.Size = new System.Drawing.Size(67, 44);
-			this.checkBox_MonospaceFontsOnly.TabIndex = 51;
-			this.checkBox_MonospaceFontsOnly.Text = "&Monospace\r\nfonts only";
-			this.checkBox_MonospaceFontsOnly.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-			this.checkBox_MonospaceFontsOnly.UseVisualStyleBackColor = true;
-			this.checkBox_MonospaceFontsOnly.CheckedChanged += new System.EventHandler(this.checkBox_MonospaceFontsOnly_CheckedChanged);
-			// 
 			// FormatSettings
 			// 
 			this.AcceptButton = this.button_OK;
@@ -1263,6 +1263,6 @@ namespace YAT.View.Forms
 		private Controls.Monitor monitor_Warning;
 		private System.Windows.Forms.Label label_Warning;
 		private Controls.TextFormat textFormat_Warning;
-		private System.Windows.Forms.CheckBox checkBox_MonospaceFontsOnly;
+		private System.Windows.Forms.CheckBox checkBox_MonospacedFontsOnly;
 	}
 }
