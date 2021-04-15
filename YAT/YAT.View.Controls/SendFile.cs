@@ -571,10 +571,10 @@ namespace YAT.View.Controls
 				if (selectedIndex != ControlEx.InvalidIndex)
 				{
 					if (pathComboBox_FilePath.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-						pathComboBox_FilePath.ForeColor = SystemColors.ControlText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-					                                              //// Time consuming operation! See 'FontEx.DefaultFontItalic' for background!
+						pathComboBox_FilePath.ForeColor = SystemColors.ControlText;  // Improves because "ForeColor" is managed by a "PropertyStore".
+					                                              //// Time consuming operation! See "FontEx.DefaultFontItalic" for background!
 					if (pathComboBox_FilePath.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-						pathComboBox_FilePath.Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
+						pathComboBox_FilePath.Font = SystemFonts.DefaultFont;  // Improves because "Font" is managed by a "PropertyStore".
 
 					if (pathComboBox_FilePath.SelectedIndex != selectedIndex) // Improve performance by only assigning if different.
 						pathComboBox_FilePath.SelectedIndex = selectedIndex;
@@ -582,10 +582,10 @@ namespace YAT.View.Controls
 				else
 				{
 					if (pathComboBox_FilePath.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-						pathComboBox_FilePath.ForeColor = SystemColors.GrayText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-					                                         //// Time consuming operation! See 'FontEx.DefaultFontItalic' for background!
+						pathComboBox_FilePath.ForeColor = SystemColors.GrayText;  // Improves because "ForeColor" is managed by a "PropertyStore".
+					                                         //// Time consuming operation! See "FontEx.DefaultFontItalic" for background!
 					if (pathComboBox_FilePath.Font != FontEx.DefaultFontItalic) // Improve performance by only assigning if different.
-						pathComboBox_FilePath.Font = FontEx.DefaultFontItalic;  // Improves because 'Font' is managed by a 'PropertyStore'.
+						pathComboBox_FilePath.Font = FontEx.DefaultFontItalic;  // Improves because "Font" is managed by a "PropertyStore".
 
 					if (pathComboBox_FilePath.SelectedIndex != 0) // Improve performance by only assigning if different.
 						pathComboBox_FilePath.SelectedIndex = 0; // Results in 'Command.UndefinedFilePathText'.

@@ -722,10 +722,10 @@ namespace YAT.View.Controls
 						comboBox_SingleLineText.Text = "";
 
 						if (comboBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-							comboBox_SingleLineText.ForeColor = SystemColors.ControlText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-						                                                //// Time consuming operation! See 'FontEx.DefaultFontItalic' for background!
+							comboBox_SingleLineText.ForeColor = SystemColors.ControlText;  // Improves because "ForeColor" is managed by a "PropertyStore".
+						                                                //// Time consuming operation! See "FontEx.DefaultFontItalic" for background!
 						if (comboBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-							comboBox_SingleLineText.Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
+							comboBox_SingleLineText.Font = SystemFonts.DefaultFont;  // Improves because "Font" is managed by a "PropertyStore".
 					}
 					finally
 					{
@@ -997,20 +997,20 @@ namespace YAT.View.Controls
 						if (this.command.IsText)
 						{
 							if (comboBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-								comboBox_SingleLineText.ForeColor = SystemColors.ControlText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-							                                                //// Time consuming operation! See 'FontEx.DefaultFontItalic' for background!
+								comboBox_SingleLineText.ForeColor = SystemColors.ControlText;  // Improves because "ForeColor" is managed by a "PropertyStore".
+							                                                //// Time consuming operation! See "FontEx.DefaultFontItalic" for background!
 							if (comboBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-								comboBox_SingleLineText.Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
+								comboBox_SingleLineText.Font = SystemFonts.DefaultFont;  // Improves because "Font" is managed by a "PropertyStore".
 
 							ComboBoxHelper.UpdateTextKeepingCursorAndSelection(comboBox_SingleLineText, this.command.SingleLineText);
 						}
 						else
 						{
 							if (comboBox_SingleLineText.ForeColor != SystemColors.GrayText) // Improve performance by only assigning if different.
-								comboBox_SingleLineText.ForeColor = SystemColors.GrayText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-							                                           //// Time consuming operation! See 'FontEx.DefaultFontItalic' for background!
+								comboBox_SingleLineText.ForeColor = SystemColors.GrayText;  // Improves because "ForeColor" is managed by a "PropertyStore".
+							                                           //// Time consuming operation! See "FontEx.DefaultFontItalic" for background!
 							if (comboBox_SingleLineText.Font != FontEx.DefaultFontItalic) // Improve performance by only assigning if different.
-								comboBox_SingleLineText.Font = FontEx.DefaultFontItalic;  // Improves because 'Font' is managed by a 'PropertyStore'.
+								comboBox_SingleLineText.Font = FontEx.DefaultFontItalic;  // Improves because "Font" is managed by a "PropertyStore".
 
 							comboBox_SingleLineText.Text = Command.EnterTextText;
 						}
@@ -1018,10 +1018,10 @@ namespace YAT.View.Controls
 					else
 					{
 						if (comboBox_SingleLineText.ForeColor != SystemColors.ControlText) // Improve performance by only assigning if different.
-							comboBox_SingleLineText.ForeColor = SystemColors.ControlText;  // Improves because 'ForeColor' is managed by a 'PropertyStore'.
-						                                                //// Time consuming operation! See 'FontEx.DefaultFontItalic' for background!
+							comboBox_SingleLineText.ForeColor = SystemColors.ControlText;  // Improves because "ForeColor" is managed by a "PropertyStore".
+						                                                //// Time consuming operation! See "FontEx.DefaultFontItalic" for background!
 						if (comboBox_SingleLineText.Font != SystemFonts.DefaultFont) // Improve performance by only assigning if different.
-							comboBox_SingleLineText.Font = SystemFonts.DefaultFont;  // Improves because 'Font' is managed by a 'PropertyStore'.
+							comboBox_SingleLineText.Font = SystemFonts.DefaultFont;  // Improves because "Font" is managed by a "PropertyStore".
 
 						if (this.command.IsText && !this.command.IsPartialText)
 						{

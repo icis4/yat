@@ -71,7 +71,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void ArchiveLocalUserSettings()
 		{
-			var document = XmlDocumentEx.CreateDefaultDocument(typeof(LocalUserSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
+			var document = XmlDocumentEx.CreateDefaultDocument(typeof(LocalUserSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see "GuidSchema".
 			ArchiveSchema (document, StaticPaths.DirectoryPath, "LocalUserSettingsSchema");
 			ArchiveDefault(document, StaticPaths.DirectoryPath, "LocalUserSettingsDefault");
 		}
@@ -80,7 +80,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void ArchiveRoamingUserSettings()
 		{
-			var document = XmlDocumentEx.CreateDefaultDocument(typeof(RoamingUserSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
+			var document = XmlDocumentEx.CreateDefaultDocument(typeof(RoamingUserSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see "GuidSchema".
 			ArchiveSchema (document, StaticPaths.DirectoryPath, "RoamingUserSettingsSchema");
 			ArchiveDefault(document, StaticPaths.DirectoryPath, "RoamingUserSettingsDefault");
 		}
@@ -89,7 +89,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void ArchiveCommandSettings()
 		{
-			var document = XmlDocumentEx.CreateDefaultDocument(typeof(CommandSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
+			var document = XmlDocumentEx.CreateDefaultDocument(typeof(CommandSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see "GuidSchema".
 			ArchiveSchema (document, StaticPaths.DirectoryPath, "CommandDefinitionSchema");
 			ArchiveDefault(document, StaticPaths.DirectoryPath, "CommandDefinitionDefault");
 		}
@@ -98,7 +98,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void ArchiveCommandPageSettings()
 		{
-			var document = XmlDocumentEx.CreateDefaultDocument(typeof(CommandPageSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
+			var document = XmlDocumentEx.CreateDefaultDocument(typeof(CommandPageSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see "GuidSchema".
 			ArchiveSchema (document, StaticPaths.DirectoryPath, "CommandPageDefinitionSchema");
 			ArchiveDefault(document, StaticPaths.DirectoryPath, "CommandPageDefinitionDefault");
 		}
@@ -107,7 +107,7 @@ namespace YAT.Settings.Model.Test
 		[Test]
 		public virtual void ArchiveCommandPagesSettings()
 		{
-			var document = XmlDocumentEx.CreateDefaultDocument(typeof(CommandPagesSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
+			var document = XmlDocumentEx.CreateDefaultDocument(typeof(CommandPagesSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see "GuidSchema".
 			ArchiveSchema (document, StaticPaths.DirectoryPath, "CommandPagesDefinitionSchema");
 			ArchiveDefault(document, StaticPaths.DirectoryPath, "CommandPagesDefinitionDefault");
 		}
@@ -119,7 +119,7 @@ namespace YAT.Settings.Model.Test
 			// Terminal settings may rely on properly loaded applications settings.
 			SelectiveTestSetUp();
 
-			var document = XmlDocumentEx.CreateDefaultDocument(typeof(TerminalSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
+			var document = XmlDocumentEx.CreateDefaultDocument(typeof(TerminalSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see "GuidSchema".
 			ArchiveSchema (document, StaticPaths.DirectoryPath, "TerminalSettingsSchema");
 			ArchiveDefault(document, StaticPaths.DirectoryPath, "TerminalSettingsDefault");
 
@@ -133,7 +133,7 @@ namespace YAT.Settings.Model.Test
 			// Workspace settings may rely on properly loaded applications settings.
 			SelectiveTestSetUp();
 
-			var document = XmlDocumentEx.CreateDefaultDocument(typeof(WorkspaceSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see 'GuidSchema'.
+			var document = XmlDocumentEx.CreateDefaultDocument(typeof(WorkspaceSettingsRoot), XmlSchemaEx.GuidSchema); // GUID extension, for details see "GuidSchema".
 			ArchiveSchema (document, StaticPaths.DirectoryPath, "WorkspaceSettingsSchema");
 			ArchiveDefault(document, StaticPaths.DirectoryPath, "WorkspaceSettingsDefault");
 
