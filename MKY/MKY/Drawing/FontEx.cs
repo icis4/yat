@@ -23,6 +23,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
@@ -251,18 +252,24 @@ namespace MKY.Drawing
 		/// <returns><c>true</c> if monospaced; otherwise, <c>false</c>.</returns>
 		public static bool IsMonospaced(Font font)
 		{
-			var dummyControl = new System.Windows.Forms.Label();
+			var dummyControl = new System.Windows.Forms.Label(); // By default, a label is displayed with its "AutoSize" property set to false and...
+			Debug.Assert(dummyControl.AutoSize == false);
+			Debug.Assert(dummyControl.Width >= (font.Size * 2));
+
+			// It is safe to create a graphics canvas:
 			var g = dummyControl.CreateGraphics();
 
-			var chars = new char[] { 'a', 'D', 'l', 't', 'Z', '#', '.' };
-			var width0 = g.MeasureString(chars[0].ToString(), font).Width;
-			if (DoubleEx.AlmostEquals(width0, 0.0))
-				throw (new InvalidOperationException("The width of a character cannot be almost 0!"));
+			// Letter O is typically one of the biggest letters and ideal as reference:
+			var char0 = 'O';
+			var width0 = g.MeasureString(char0.ToString(), font).Width; // e.g. 12.48 for Arial 8.25 and 10.47 for Courier New 8.25.
+			Debug.Assert(SingleEx.RatherNotEquals(width0, 0.0f, 3)); // ~‰ is way good enough.
 
-			for (int i = 1; i < chars.Length; i++)
+			// Use a variety of characters to compare against:
+			var charsI = new char[] { '.', '#', 'i', 'Z' }; // Attention, a space ' ' doesn't work, it would result
+			foreach (var charI in charsI)                   // in 3.67 for Arial 8.25 as well as for Courier New 8.25!
 			{
-				var widthI = g.MeasureString(chars[i].ToString(), font).Width;
-				if (DoubleEx.RatherNotEquals(width0, widthI))
+				var widthI = g.MeasureString(charI.ToString(), font).Width;
+				if (SingleEx.RatherNotEquals(width0, widthI, 3)) // ~‰ is way good enough.
 					return (false);
 			}
 
