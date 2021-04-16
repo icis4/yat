@@ -133,7 +133,7 @@ namespace MKY.Time
 
 			var binWidth = (interval / NumberOfBinsPerInterval);
 			var remainder = Math.IEEERemainder(window, binWidth);
-			if (!DoubleEx.AlmostEquals(Math.Abs(remainder), 0.0))
+			if (!DoubleEx.RatherEqualsIntegral(Math.Abs(remainder), 0.0))
 				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'window' = '" + window + "' must be a multiple of 'interval / NumberOfBinsPerInterval' = '" + (interval / NumberOfBinsPerInterval) + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "window"));
 
 			this.interval = interval;
@@ -172,7 +172,7 @@ namespace MKY.Time
 
 				var binWidth = (value / NumberOfBinsPerInterval);
 				var remainder = Math.IEEERemainder(Window, binWidth);
-				if (!DoubleEx.AlmostEquals(Math.Abs(remainder), 0.0))
+				if (!DoubleEx.RatherEqualsIntegral(Math.Abs(remainder), 0.0))
 					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'Window' = '" + Window + "' must be a multiple of 'Interval / NumberOfBinsPerInterval' = '" + (Interval / NumberOfBinsPerInterval) + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "value"));
 
 				this.interval = value;
@@ -204,7 +204,7 @@ namespace MKY.Time
 
 				var binWidth = (Interval / NumberOfBinsPerInterval);
 				var remainder = Math.IEEERemainder(value, binWidth);
-				if (!DoubleEx.AlmostEquals(Math.Abs(remainder), 0.0))
+				if (!DoubleEx.RatherEqualsIntegral(Math.Abs(remainder), 0.0))
 					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'Window' = '" + Window + "' must be a multiple of 'Interval / NumberOfBinsPerInterval' = '" + (Interval / NumberOfBinsPerInterval) + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "value"));
 
 				this.window = value;

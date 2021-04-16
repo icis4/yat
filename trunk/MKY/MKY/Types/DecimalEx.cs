@@ -67,18 +67,29 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Evaluates whether the two given values are almost equal integral values.
+		/// Evaluates whether the integral part of the two given values is equal or almost equal.
 		/// </summary>
 		/// <remarks>
-		/// Same as <code>AlmostEquals(lhs, rhs, 0)</code>.
+		/// Same as <code>RatherEquals(lhs, rhs, 0)</code>.
 		/// </remarks>
-		public static bool AlmostEquals(decimal lhs, decimal rhs)
+		public static bool RatherEqualsIntegral(decimal lhs, decimal rhs)
 		{
-			return (AlmostEquals(lhs, rhs, 0));
+			return (RatherEquals(lhs, rhs, 0));
 		}
 
 		/// <summary>
-		/// Evaluates whether the two given values are almost equal,
+		/// Evaluates whether the two given values are equal or almost equal floating point values.
+		/// </summary>
+		/// <remarks>
+		/// Same as <code>RatherEquals(lhs, rhs, 28)</code>.
+		/// </remarks>
+		public static bool RatherEquals(decimal lhs, decimal rhs)
+		{
+			return (RatherEquals(lhs, rhs, 28));
+		}
+
+		/// <summary>
+		/// Evaluates whether the two given values are equal or almost equal,
 		/// taking the given number of decimals into account.
 		/// </summary>
 		/// <exception cref="ArgumentOutOfRangeException">
@@ -87,7 +98,7 @@ namespace MKY
 		/// <remarks>
 		/// Using term "decimals" same as e.g. <see cref="Math.Round(decimal, int)"/>.
 		/// </remarks>
-		public static bool AlmostEquals(decimal lhs, decimal rhs, int decimals)
+		public static bool RatherEquals(decimal lhs, decimal rhs, int decimals)
 		{
 			decimal diff = Math.Abs(lhs - rhs);
 
@@ -139,16 +150,27 @@ namespace MKY
 		/// </remarks>
 		public static bool RatherNotEquals(decimal lhs, decimal rhs, int decimals)
 		{
-			return (!AlmostEquals(lhs, rhs, decimals));
+			return (!RatherEquals(lhs, rhs, decimals));
 		}
 
 		/// <summary>
-		/// Evaluates whether the two given values are rather not equal integral values.
+		/// Evaluates whether the two given values are rather not equal floating point values.
+		/// </summary>
+		/// <remarks>
+		/// Same as <code>RatherNotEquals(lhs, rhs, 28)</code>.
+		/// </remarks>
+		public static bool RatherNotEquals(decimal lhs, decimal rhs)
+		{
+			return (RatherNotEquals(lhs, rhs, 28));
+		}
+
+		/// <summary>
+		/// Evaluates whether the integral part of the two given values is rather not equal.
 		/// </summary>
 		/// <remarks>
 		/// Same as <code>RatherNotEquals(lhs, rhs, 0)</code>.
 		/// </remarks>
-		public static bool RatherNotEquals(decimal lhs, decimal rhs)
+		public static bool RatherNotEqualsIntegral(decimal lhs, decimal rhs)
 		{
 			return (RatherNotEquals(lhs, rhs, 0));
 		}
@@ -167,8 +189,8 @@ namespace MKY
 			}
 			else
 			{
-				min = int.MaxValue;
-				max = int.MinValue;
+				min = decimal.MaxValue;
+				max = decimal.MinValue;
 
 				foreach (var item in collection)
 				{

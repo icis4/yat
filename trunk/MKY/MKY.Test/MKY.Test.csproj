@@ -85,6 +85,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -101,6 +102,7 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationTemplate\Generator.cs" />
     <Compile Include="Devices\UsbHub.cs" />
+    <Compile Include="Drawing\FontExTest.cs" />
     <Compile Include="Equality\Data.cs" />
     <Compile Include="Equality\Configuration.cs" />
     <Compile Include="Equality\Methods\Generic.cs" />
@@ -155,6 +157,9 @@
     <Compile Include="Time\TimeSpanTest.cs" />
     <Compile Include="Types\ArrayExTest.cs" />
     <Compile Include="Types\ByteExTest.cs" />
+    <Compile Include="Types\DecimalExTest.cs" />
+    <Compile Include="Types\SingleExTest.cs" />
+    <Compile Include="Types\DoubleExTest.cs" />
     <Compile Include="Types\StringExTest.cs" />
     <Compile Include="Types\Int32ExTest.cs" />
     <Compile Include="Types\UInt64ExTest.cs" />
