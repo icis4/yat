@@ -161,7 +161,7 @@ namespace MKY.Test.Time
 			Assert.That(rate.Update(20), Is.True);
 			Assert.That(rate.Value, Is.EqualTo(80));
 
-			if (DoubleEx.AlmostEquals(interval, IntervalNormal)) // Timing controlled tests are limited to work for intervals of 1 second, in order to guarentee timing accuracy.
+			if (DoubleEx.RatherEqualsIntegral(interval, IntervalNormal)) // Timing controlled tests are limited to work for intervals of 1 second, in order to guarentee timing accuracy.
 			{
 				// --- 0 ~ 20 ms have passed since 'initial' ---
 
@@ -216,7 +216,7 @@ namespace MKY.Test.Time
 			Assert.That(rate.Update(20), Is.True);
 			Assert.That(rate.Value, Is.EqualTo(48));
 
-			if (DoubleEx.AlmostEquals(interval, IntervalNormal)) // Timing controlled tests are limited to work for intervals of 1 second, in order to guarentee timing accuracy.
+			if (DoubleEx.RatherEqualsIntegral(interval, IntervalNormal)) // Timing controlled tests are limited to work for intervals of 1 second, in order to guarentee timing accuracy.
 			{
 				// --- 0 ~ 20 ms have passed since 'initial' ---
 
@@ -291,7 +291,7 @@ namespace MKY.Test.Time
 			Assert.That(rate.Update(20), Is.True);
 			Assert.That(rate.Value, Is.EqualTo(60));
 
-			if (DoubleEx.AlmostEquals(interval, IntervalNormal)) // Timing controlled tests are limited to work for intervals of 1 second, in order to guarentee timing accuracy.
+			if (DoubleEx.RatherEqualsIntegral(interval, IntervalNormal)) // Timing controlled tests are limited to work for intervals of 1 second, in order to guarentee timing accuracy.
 			{
 				// --- 0 ~ 20 ms have passed since 'initial' ---
 

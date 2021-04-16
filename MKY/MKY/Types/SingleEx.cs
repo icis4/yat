@@ -67,18 +67,29 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Evaluates whether the two given values are almost equal integral values.
+		/// Evaluates whether the integral part of the two given values is equal or almost equal.
 		/// </summary>
 		/// <remarks>
-		/// Same as <code>AlmostEquals(lhs, rhs, 0)</code>.
+		/// Same as <code>RatherEquals(lhs, rhs, 0)</code>.
 		/// </remarks>
-		public static bool AlmostEquals(float lhs, float rhs)
+		public static bool RatherEqualsIntegral(float lhs, float rhs)
 		{
-			return (AlmostEquals(lhs, rhs, 0));
+			return (RatherEquals(lhs, rhs, 0));
 		}
 
 		/// <summary>
-		/// Evaluates whether the two given values are almost equal,
+		/// Evaluates whether the two given values are equal or almost equal floating point values.
+		/// </summary>
+		/// <remarks>
+		/// Same as <code>RatherEquals(lhs, rhs, 7)</code>.
+		/// </remarks>
+		public static bool RatherEquals(float lhs, float rhs)
+		{
+			return (RatherEquals(lhs, rhs, 7));
+		}
+
+		/// <summary>
+		/// Evaluates whether the two given values are equal or almost equal,
 		/// taking the given number of digits into account.
 		/// </summary>
 		/// <exception cref="ArgumentOutOfRangeException">
@@ -87,7 +98,7 @@ namespace MKY
 		/// <remarks>
 		/// Using term "digits" same as e.g. <see cref="Math.Round(double, int)"/>.
 		/// </remarks>
-		public static bool AlmostEquals(float lhs, float rhs, int digits)
+		public static bool RatherEquals(float lhs, float rhs, int digits)
 		{
 			float diff = Math.Abs(lhs - rhs);
 
@@ -118,16 +129,27 @@ namespace MKY
 		/// </remarks>
 		public static bool RatherNotEquals(float lhs, float rhs, int digits)
 		{
-			return (!AlmostEquals(lhs, rhs, digits));
+			return (!RatherEquals(lhs, rhs, digits));
 		}
 
 		/// <summary>
-		/// Evaluates whether the two given values are rather not equal integral values.
+		/// Evaluates whether the two given values are rather not equal floating point values.
+		/// </summary>
+		/// <remarks>
+		/// Same as <code>RatherNotEquals(lhs, rhs, 7)</code>.
+		/// </remarks>
+		public static bool RatherNotEquals(float lhs, float rhs)
+		{
+			return (RatherNotEquals(lhs, rhs, 7));
+		}
+
+		/// <summary>
+		/// Evaluates whether the integral part of the two given values is rather not equal.
 		/// </summary>
 		/// <remarks>
 		/// Same as <code>RatherNotEquals(lhs, rhs, 0)</code>.
 		/// </remarks>
-		public static bool RatherNotEquals(float lhs, float rhs)
+		public static bool RatherNotEqualsIntegral(float lhs, float rhs)
 		{
 			return (RatherNotEquals(lhs, rhs, 0));
 		}
