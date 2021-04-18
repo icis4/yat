@@ -106,7 +106,7 @@ Important changes:
 
 Fixed bugs:
 - Handling of missing log file folder fixed.
-- 'NullReferenceException' when handling backspace with preceeding spaces fixed.
+- Issues when backspace was preceeded by space(s) fixed.
 - Handling of trigger of automatic actions and responses fixed and improved (bugs #504 and #505).
 - Plot window related 'NullReferenceException' when closing YAT fixed.
 

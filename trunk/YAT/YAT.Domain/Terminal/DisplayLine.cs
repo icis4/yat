@@ -476,13 +476,19 @@ namespace YAT.Domain
 		/// <summary>
 		/// Removes the last "true" character from the <see cref="DisplayElementCollection"/>.
 		/// </summary>
-		/// <remarks>
+		/// <remarks><para>
 		/// Needed to handle backspace, thus applies to data content only.
-		/// </remarks>
+		/// </para><para>
+		/// Trailing content separator is not removed here, it must be removed before calling this
+		/// method. This is because this method in case of e.g. a space cannot tell whether the
+		/// space is "true" content or a separator appended. Because for performance reasons,
+		/// "DisplayElement.AcceptsAppendOf()" allows whitespace content separators to be appended
+		/// to the preceeding element.
+		/// </para></remarks>
 		/// <exception cref="InvalidOperationException">
 		/// The collection is empty - or - contains no content character.
 		/// </exception>
-		public virtual void RemoveLastDataContentChar(string contentSeparator)
+		public virtual void RemoveLastDataContentChar()
 		{
 			if (Count == 0)
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The collection is empty!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
@@ -510,12 +516,12 @@ namespace YAT.Domain
 						var formerCharCount = current.CharCount;
 						var formerByteCount = current.ByteCount;
 
-						current.RemoveTrailingContentSeparator(contentSeparator);
-						current.RemoveLastContentChar(); // A single element can be removed,
-						                               //// done after adjusting the counts.
+						current.RemoveLastContentChar(); // A single element can be removed,...
+
 						this.charCount -= (formerCharCount - current.CharCount);
 						this.byteCount -= (formerByteCount - current.ByteCount);
-						break;
+
+						break;                          // ...done after having adjusting the counts.
 					}
 				}
 			}
@@ -534,8 +540,8 @@ namespace YAT.Domain
 				var last = this.Last();
 				if (last is DisplayElement.ContentSeparator)
 					RemoveLast();
-				else if (last.IsContent)
-					last.RemoveTrailingContentSeparator(contentSeparator);
+				else if (last.IsContent) // Required because, for performance reasons, "DisplayElement.AcceptsAppendOf()" allows whitespace
+					last.RemoveTrailingContentSeparator(contentSeparator); // content separators to be appended to the preceeding element.
 			}
 		}
 

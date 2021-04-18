@@ -868,7 +868,7 @@ namespace YAT.Domain
 		{
 			this.timeStamp  = timeStamp;
 			this.direction  = direction;
-			this.origin     = origin;
+			this.origin     = origin; // While most origins are a single char, e.g. 'Ä', some are not, e.g. <CR>, thus string rather than char.
 			this.text       = text;
 			this.charCount  = charCount;
 			this.byteCount  = byteCount;
@@ -1139,27 +1139,31 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Needed to handle backspace; consequence of <see cref="Append(DisplayElement)"/> above.
 		/// </remarks>
+		/// <exception cref="InvalidOperationException">
+		/// The element is no <see cref="ElementAttributes.Content"/>.
+		/// -or-
+		/// The element contains text but the origin is empty.
+		/// </exception>
 		public virtual void RemoveLastContentChar()
 		{
 			if (!IsContent)
 				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The element is no content!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
-			if (this.origin.Count == 0)
-				throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The origin is empty!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			if (this.text.Length > 0) // Calling this method shall be permitted for zeor-length elements, same as e.g. string.Remove(0, 0) is permitted.
+			{
+				if (this.origin.Count == 0)
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "The element contains text but the origin is empty!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
-			// Retrieve the last char:
-			var textLength = this.text.Length;
-			var charToRemove = this.text.Substring(textLength - 2, 1); // GetByteCount() further below requires a string (or char array), not a single char.
+				// Remove the last char:
+				this.text = this.text.Substring(0, (this.text.Length - 1));
+				this.charCount--;
 
-			// Remove the last char:
-			this.text = this.text.Substring(0, textLength - 1);
-			this.charCount--;
-
-			// Remove the related origin:
-			var originToRemove = this.origin.Last();              // Simply remove the last origin item.
-			var byteCountToRemove = originToRemove.Value1.Length; // This approach covers cases where e.g.
-			this.origin.RemoveAt(this.origin.Count - 1);          // substitution is active (e.g. 'a' -> 'A').
-			this.byteCount -= byteCountToRemove;
+				// Remove the related origin:
+				var originToRemove = this.origin.Last();              // Simply remove the last origin item.
+				var byteCountToRemove = originToRemove.Value1.Length; // This approach covers cases where e.g.
+				this.origin.RemoveAt(this.origin.Count - 1);          // substitution is active (e.g. 'a' -> 'A').
+				this.byteCount -= byteCountToRemove;
+			}
 		}
 
 		/// <summary>

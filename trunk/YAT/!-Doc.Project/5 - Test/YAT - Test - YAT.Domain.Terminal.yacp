@@ -30,7 +30,7 @@
       <IsDefined>true</IsDefined>
       <Description>Partial Line</Description>
       <DefaultRadix>String</DefaultRadix>
-      <CommandLines>ABCDEF\!(NoEOL)</CommandLines>
+      <CommandLines>AB  CD\!(NoEOL)</CommandLines>
       <IsFilePath>false</IsFilePath>
       <FilePath />
     </Commands>

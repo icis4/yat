@@ -1137,7 +1137,7 @@ namespace YAT.Domain
 					if (lineState.Elements.DataContentCharCount > 0)
 					{
 						// ...remove it in the current line...
-						lineState.Elements.RemoveLastDataContentChar(TerminalSettings.Display.ContentSeparatorCache);
+						lineState.Elements.RemoveLastDataContentChar();
 						RemoveContentSeparatorAsNeeded(dir, lineState.Elements);
 
 						if (!ICollectionEx.IsNullOrEmpty(elementsToAdd))
@@ -1145,7 +1145,7 @@ namespace YAT.Domain
 							if (elementsToAdd.DataContentCharCount > 0)
 							{
 								// ..as well as in the pending elements:
-								elementsToAdd.RemoveLastDataContentChar(TerminalSettings.Display.ContentSeparatorCache);
+								elementsToAdd.RemoveLastDataContentChar();
 								RemoveContentSeparatorAsNeeded(dir, elementsToAdd);
 							}
 							else
