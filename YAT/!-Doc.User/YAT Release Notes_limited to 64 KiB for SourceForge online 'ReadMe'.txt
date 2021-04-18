@@ -84,21 +84,31 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.4.1 :: 2021-03-xx
+YAT 2.4.1 :: 2021-04-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
 - Quick reference (PDF) added. Accessible via [Windows > Start > YAT] and [YAT > Help].
-- [Find All] added, including live update (feature requests #424 and #434).
+- [Find All] added, with shortcut [Alt+Shift+L], incl. live update (feature requests #424 and #434).
 
 Important changes:
+- YAT now checks whether the DejaVu monospaced font is available, and whether a monospaced font
+  is used for the terminals. The user gets warned if either is not given (feature request #341).
+- [View > Format... > Font...] now by default only shows monospaced fonts (related to req. #341).
+- Behavior on multi-byte character set decoding mismatch can now be configured in the terminal
+  settings [Terminal > Settings... > Text...] (feature request #436).
+- Separate colors for warnings and errors (related to feature request #436). On existing terminals,
+  separate colors will have to be explicitly activated by [View > Format... > Defaults...].
+- Find text can now automatically be set by either selecting a line in a monitor or by selecting the
+  whole or parts of a line in [Copy of Active Line] (related to feature requests #424 and #434).
 - Log dialog now more clearly states "root directory and file name base" (part of feat. req. #435).
 - Help window is again sizeable to display more/all content (related to earlier feature req. #237).
 
 Fixed bugs:
+- Handling of missing log file folder fixed.
+- Issues when backspace was preceeded by space(s) fixed.
 - Handling of trigger of automatic actions and responses fixed and improved (bugs #504 and #505).
-- Plot window related NullReferenceException when closing YAT fixed.
-- <<<<<<<<<<<<<<<<<<<<<NullReferenceException>>>>>>>>>>>>>>>>>>>>>> when handling backspace with preceeding spaces fixed.
+- Plot window related 'NullReferenceException' when closing YAT fixed.
 
 Limitations and known issues:
 - Same as previous release, see below.
