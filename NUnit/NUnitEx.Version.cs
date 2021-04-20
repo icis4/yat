@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// NUnit Version 1.0.22
+// NUnitEx Version 1.0.23
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -34,9 +34,9 @@ using System.Reflection;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")] => 'Build' will indicate number of days since 2000-01-01.
 //                                      => 'Revision' will indicate number of seconds since midnight divided by two.
-[assembly: AssemblyVersion("1.0.22.*")]
-[assembly: AssemblyFileVersion("1.0.22.0")]
-[assembly: AssemblyInformationalVersion("1.0.22")]
+[assembly: AssemblyVersion("1.0.23.*")]
+[assembly: AssemblyFileVersion("1.0.23.0")]
+[assembly: AssemblyInformationalVersion("1.0.23")]
 
 //==================================================================================================
 // End of
