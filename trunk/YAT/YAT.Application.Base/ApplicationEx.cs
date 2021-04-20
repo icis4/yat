@@ -8,7 +8,7 @@
 // $Date$
 // $Author$
 // ------------------------------------------------------------------------------------------------
-// YAT Version 2.4.0
+// YAT Version 2.4.1
 // ------------------------------------------------------------------------------------------------
 // See release notes for product version details.
 // See SVN change log for file revision details.
@@ -22,7 +22,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-//    System is not used for making origin more obvious.
+//// "System" is explicitly used for making origin more obvious.
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
