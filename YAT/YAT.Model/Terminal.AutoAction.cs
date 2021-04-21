@@ -269,14 +269,14 @@ namespace YAT.Model
 											this.autoActionTriggerHelper.ResetByteSequence(repositoryType);
 											de.Highlight = shallHighlight;
 
-											// Signal the trigger:
-											triggers.Add(new Tuple<DateTime, string, MatchCollection, CountsRatesTuple>(de.TimeStamp, elements.Text, null, dataStatus));
+											// Signal the trigger:                              // (includeMetaData ? elements.Text : elements.ContentText) with FR #431.
+											triggers.Add(new Tuple<DateTime, string, MatchCollection, CountsRatesTuple>(de.TimeStamp, elements.ContentText, null, dataStatus));
 
-											// Note that 'elements.Text' is not perfect, as it could only contain parts of
-											// the trigger. However, using the trigger sequence formatted with...
+											// Note that 'elements.[Content]Text' is not perfect, as it could only contain
+											// parts of the trigger. However, using the trigger sequence formatted with...
 											// this.terminal.Format(triggerSequence, Domain.IODirection.Rx)
 											// ...in RequestAutoActionMessage() isn't perfect either, as it will *never*
-											// contain more than the trigger. Thus preferring 'Elements.Text'.
+											// contain more than the trigger. Thus preferring 'Elements.[Content]Text'.
 										}
 										else
 										{
@@ -337,15 +337,15 @@ namespace YAT.Model
 						{
 							if (this.autoActionTriggerHelper != null)
 							{
-								MatchCollection triggerMatches;
-								int triggerCount = this.autoActionTriggerHelper.TextTriggerCount(dl.Text, out triggerMatches);
+								MatchCollection triggerMatches;  // (includeMetaData ? dl.Text : dl.ContentText) with FR #431.
+								int triggerCount = this.autoActionTriggerHelper.TextTriggerCount(dl.ContentText, out triggerMatches);
 								if (triggerCount > 0)
 								{
 									dl.Highlight = shallHighlight;
 
 									// Signal the trigger(s):
-									for (int i = 0; i < triggerCount; i++)
-										triggers.Add(new Tuple<DateTime, string, MatchCollection, CountsRatesTuple>(dl.TimeStamp, dl.Text, triggerMatches, dataStatus));
+									for (int i = 0; i < triggerCount; i++)                        // (includeMetaData ? dl.Text : dl.ContentText) with FR #431.
+										triggers.Add(new Tuple<DateTime, string, MatchCollection, CountsRatesTuple>(dl.TimeStamp, dl.ContentText, triggerMatches, dataStatus));
 								}
 							}
 							else
@@ -416,7 +416,7 @@ namespace YAT.Model
 							}
 							else // IsTextTriggered
 							{
-								isTriggered = this.autoActionTriggerHelper.TextTriggerSuccess(dl.Text);
+								isTriggered = this.autoActionTriggerHelper.TextTriggerSuccess(dl.ContentText); // (includeMetaData ? dl.Text : dl.ContentText) with FR #431.
 							}
 						}
 						else
@@ -430,7 +430,7 @@ namespace YAT.Model
 						case AutoAction.Filter:   if ( isTriggered) { lines.Add(dl); } break;
 						case AutoAction.Suppress: if (!isTriggered) { lines.Add(dl); } break;
 
-						default: throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "Only 'Filter' and 'Suppress' are evaluated here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+						default: throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "Only 'Filter' and 'Suppress' are evaluated here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 					}
 				} // if (direction != Tx)
 			} // foreach (linesInitially)
@@ -656,7 +656,7 @@ namespace YAT.Model
 
 				default:
 				{
-					throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "'" + action + "' is an automatic action that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + action + "' is an automatic action that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}
@@ -702,7 +702,7 @@ namespace YAT.Model
 					return (true);
 
 				default:
-					throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "'" + action + "' is an automatic action that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + action + "' is an automatic action that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -778,7 +778,7 @@ namespace YAT.Model
 				case AutoAction.HistogramHorizontal:           CreateYPlotItem(          plotAction,                   triggerMatches,             out pi);    messageOnFailure = null; return (true);
 				case AutoAction.HistogramVertical:             CreateYPlotItem(          plotAction,                   triggerMatches,             out pi);    messageOnFailure = null; return (true);
 
-				default: throw (new ArgumentOutOfRangeException("plot", plotAction, MKY.MessageHelper.InvalidExecutionPreamble + "'" + plotAction.ToString() + "' is a plot type that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("plot", plotAction, MessageHelper.InvalidExecutionPreamble + "'" + plotAction.ToString() + "' is a plot type that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 
@@ -794,7 +794,7 @@ namespace YAT.Model
 				case (AutoAction.PlotByteCountRate): label = "bytes"; txCount = dataStatus.Counts.TxBytes; txRate = dataStatus.Rates.TxBytes; rxCount = dataStatus.Counts.RxBytes; rxRate = dataStatus.Rates.RxBytes; break;
 				case (AutoAction.PlotLineCountRate): label = "lines"; txCount = dataStatus.Counts.TxLines; txRate = dataStatus.Rates.TxLines; rxCount = dataStatus.Counts.RxLines; rxRate = dataStatus.Rates.RxLines; break;
 
-				default: throw (new ArgumentOutOfRangeException("plotAction", plotAction, MKY.MessageHelper.InvalidExecutionPreamble + "'" + plotAction + "' is a plot action that is not (yet) supported for counts/rates!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException("plotAction", plotAction, MessageHelper.InvalidExecutionPreamble + "'" + plotAction + "' is a plot action that is not (yet) supported for counts/rates!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 
 			var xValue = new Tuple<string, double>("Time Stamp", triggerTimeStamp.ToOADate());

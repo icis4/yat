@@ -145,7 +145,7 @@ Highlight color (typically blue) indicates 'not found anymore'.
 Dark control color (typically dark grey) indicates 'invalid pattern'.</value>
   </data>
   <data name="toolStripComboBox_MainTool_AutoAction_Trigger.ToolTipText" xml:space="preserve">
-    <value>Configure Automatic Action Trigger.
+    <value>Configure Automatic Action Trigger
 
 Either refer to one of the commands, or fill in any sequence of bytes,
 e.g. "&lt;ETB&gt;&lt;NUL&gt;" or "\h(17 00)", or any other parseable text, e.g. ";".
@@ -176,11 +176,12 @@ Note that...
   <data name="toolStripComboBox_MainTool_AutoAction_Action.ToolTipText" xml:space="preserve">
     <value>Enable / Disable Automatic Action
 
-[Line/Scatter/Histogram] require a trigger that is based on a regular expression containing at least one
-capture (i.e. a pattern in parentheses, e.g. "(\d+)") which is used to retrieve the values to plot.
+[Line/Scatter/Histogram] require a trigger that is based on a regular expression containing at least
+one capture (i.e. a pattern in parentheses, e.g. "(\d+)") which is used to retrieve the values to plot.
 
-All captures will be treated as Y values, unless for actions stating "(X = ...)" where the first capture
-will be treated as the X value.
+All captures will be treated as Y values, except for actions stating "(X = Time)" which treat the first
+capture as a Date/Time value. Actions stating "(X = TimeStamp)" use the value [View > Show Time Stamp]
+for the x-axis.
 
 Date/Time values are converted to "OLE Automation Date" values. Google that term for details.
 
@@ -196,7 +197,7 @@ Note that...
 ...[Plot ... Count/Rate] are applied to any trigger and to received as well as sent data.</value>
   </data>
   <data name="toolStripComboBox_MainTool_AutoResponse_Trigger.ToolTipText" xml:space="preserve">
-    <value>Configure Automatic Response Trigger.
+    <value>Configure Automatic Response Trigger
 
 Either refer to one of the commands, or fill in any sequence of bytes,
 e.g. "&lt;ETB&gt;&lt;NUL&gt;" or "\h(17 00)", or any other parseable text, e.g. ";".

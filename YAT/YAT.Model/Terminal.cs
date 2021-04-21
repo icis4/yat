@@ -3762,9 +3762,9 @@ namespace YAT.Model
 
 			// AutoAction:
 			if (SettingsRoot.AutoAction.IsActive && (SettingsRoot.AutoAction.Trigger == AutoTrigger.AnyLine))
-			{
-				foreach (var dl in e.Lines)
-					EnqueueAutoAction(dl.TimeStamp, dl.Text, null, DataStatus);
+			{                 // (includeMetaData ? dl.Text
+				foreach (var dl in e.Lines)    // : dl.ContentText) with FR #431.
+					EnqueueAutoAction(dl.TimeStamp, dl.ContentText, null, DataStatus);
 
 				// Note that trigger line is not highlighted if [Trigger == AnyLine] since that
 				// would result in all received lines highlighted.
