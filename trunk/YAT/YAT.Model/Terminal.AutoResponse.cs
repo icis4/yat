@@ -302,8 +302,8 @@ namespace YAT.Model
 						{
 							if (this.autoResponseTriggerHelper != null)
 							{
-								MatchCollection triggerMatches;
-								int triggerCount = this.autoResponseTriggerHelper.TextTriggerCount(dl.Text, out triggerMatches);
+								MatchCollection triggerMatches;    // (includeMetaData ? dl.Text : dl.ContentText) with FR #431.
+								int triggerCount = this.autoResponseTriggerHelper.TextTriggerCount(dl.ContentText, out triggerMatches);
 								if (triggerCount > 0)
 								{
 									dl.Highlight = true;
@@ -476,7 +476,7 @@ namespace YAT.Model
 
 				default:
 				{
-					throw (new InvalidOperationException(MKY.MessageHelper.InvalidExecutionPreamble + "'" + response + "' is an automatic response that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MKY.MessageHelper.SubmitBug));
+					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "'" + response + "' is an automatic response that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 			}
 		}

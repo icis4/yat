@@ -166,11 +166,15 @@ Applies to [Send Text], [Send File] as well as [Predefined Commands].</value>
     <value>1016, 17</value>
   </metadata>
   <data name="toolStripComboBox_TerminalMenu_Send_AutoResponse_Trigger.ToolTipText" xml:space="preserve">
-    <value>Configure Automatic Response Trigger,
-either refer to one of the commands,
-or fill-in any text, optionally including a regular expression.
+    <value>Configure Automatic Response Trigger
 
-Some useful regular expression capture patterns (use without surrounding quotes):
+Either refer to one of the commands, or fill in any sequence of bytes,
+e.g. "&lt;ETB&gt;&lt;NUL&gt;" or "\h(17 00)", or any other parseable text, e.g. ";".
+The trigger will be based on the resulting byte sequence of the command.
+
+Optionally, [Use Text] to switch to a trigger based on the resulting text. With this option, optionally
+[Enable Regular Expression]. Some useful expression patterns (use without surrounding quotes):
+
 Integral numbers: "([-+]?\d+)"
 Floating point numbers in normal format: "([-+]?(?:\d+(?:\.\d*)?|\.\d+))"
 Floating point numbers in scientific format: "([-+]?(?:\d+(?:\.\d*)?|\.\d+)[Ee][-+]?\d+)"
@@ -181,7 +185,14 @@ A single capital letter: "\b([A-Z]{1})\b"
 A string of 2..4 letters: "\b([A-Za-z]{2,4})\b"
 
 Google for ".NET Regular Expression Quick Reference" for details on syntax.
-Google for "C# Regex Tester" for online tools to help creating regular expressions.</value>
+Google for "C# Regex Tester" for online tools to help creating regular expressions.
+It is recommended to test regular expression patterns before applying them.
+
+Note that...
+...[Any Line] is not available if action is [Highlight] or [Suppress], as that
+      would result in all received lines being highlighted or suppressed.
+...same as other actions, [Filter] and [Suppress] are only applied to received data.
+...[Plot ... Count/Rate] are applied to any trigger and to received as well as sent data.</value>
   </data>
   <data name="toolStripMenuItem_TerminalMenu_Send_AutoResponse_Response_EnableReplace.ToolTipText" xml:space="preserve">
     <value>Requires that trigger uses text with enabled regular expression,
@@ -196,11 +207,15 @@ The $1 replacement tag will be filled with 99, resulting in sending 99XYZ.
 Replacement tags are $1, $2,... (regular expression syntax).</value>
   </data>
   <data name="toolStripComboBox_TerminalMenu_Receive_AutoAction_Trigger.ToolTipText" xml:space="preserve">
-    <value>Configure Automatic Action Trigger,
-either refer to one of the commands,
-or fill-in any text, optionally including a regular expression.
+    <value>Configure Automatic Action Trigger
 
-Some useful regular expression capture patterns (use without surrounding quotes):
+Either refer to one of the commands, or fill in any sequence of bytes,
+e.g. "&lt;ETB&gt;&lt;NUL&gt;" or "\h(17 00)", or any other parseable text, e.g. ";".
+The trigger will be based on the resulting byte sequence of the command.
+
+Optionally, [Use Text] to switch to a trigger based on the resulting text. With this option, optionally
+[Enable Regular Expression]. Some useful expression patterns (use without surrounding quotes):
+
 Integral numbers: "([-+]?\d+)"
 Floating point numbers in normal format: "([-+]?(?:\d+(?:\.\d*)?|\.\d+))"
 Floating point numbers in scientific format: "([-+]?(?:\d+(?:\.\d*)?|\.\d+)[Ee][-+]?\d+)"
@@ -212,25 +227,30 @@ A string of 2..4 letters: "\b([A-Za-z]{2,4})\b"
 
 Google for ".NET Regular Expression Quick Reference" for details on syntax.
 Google for "C# Regex Tester" for online tools to help creating regular expressions.
-
-Note that...
-...[Any Line] is not available if action is [Highlight] or [Suppress], as that would otherwise result in all received lines being highlighted or suppressed.
-...same as other actions, [Filter] and [Suppress] are only applied to received data.
-...only [Plot ... Count/Rate] are also applied to sent data.</value>
+It is recommended to test regular expression patterns before applying them.</value>
   </data>
   <data name="toolStripComboBox_TerminalMenu_Receive_AutoAction_Action.ToolTipText" xml:space="preserve">
     <value>Enable / Disable Automatic Action
 
-[Line/Scatter/Histogram] require that trigger is based on a regular expression, as the regular expression captures (e.g. "([-+]?\d+)") are used to retrieve the values to plot.
-All captures will be treated as Y values, unless for action stating "(X = Time)" where the first capture will be treated as the X value.
+[Line/Scatter/Histogram] require a trigger that is based on a regular expression containing at least
+one capture (i.e. a pattern in parentheses, e.g. "(\d+)") which is used to retrieve the values to plot.
+
+All captures will be treated as Y values, except for actions stating "(X = Time)" which treat the first
+capture as a Date/Time value. Actions stating "(X = TimeStamp)" use the value [View > Show Time Stamp]
+for the x-axis.
+
 Date/Time values are converted to "OLE Automation Date" values. Google that term for details.
-Captures that can neither be converted to an integral or floating point number, nor a date/time value, are treated as strings. Strings are converted to a value by summing the code of each character. This allows plotting elements defined by characters (e.g. A, B, C) or even whole strings.
+
+Captures that can neither be converted to an integral nor floating point number, nor a date/time value,
+are treated as strings. Strings are converted to a value by summing the code of each character.
+This allows plotting elements defined by characters (e.g. A, B, C) or even whole strings.
 
 Note that...
 ...trigger is highlighted for every action except [Filter], [Suppress] and [Line/Scatter/Histogram].
-...[Highlight] and [Suppress] is not available if trigger is [Any Line], as that would otherwise result in all received lines being highlighted or suppressed.
+...[Highlight] and [Suppress] is not available if trigger is [Any Line], as that
+      would result in all received lines being highlighted or suppressed.
 ...same as other actions, [Filter] and [Suppress] are only applied to received data.
-...only [Plot ... Count/Rate] are also applied to sent data.</value>
+...[Plot ... Count/Rate] are applied to any trigger and to received as well as sent data.</value>
   </data>
   <metadata name="statusStrip_Terminal.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>990, 56</value>

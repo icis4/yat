@@ -108,6 +108,8 @@ Fixed bugs:
 - Handling of missing log file folder fixed.
 - Issues when backspace was preceeded by space(s) fixed.
 - Handling of trigger of automatic actions and responses fixed and improved (bugs #504 and #505).
+- Plotting no longer takes time stamp and other meta info into account (bug #509). The option will
+  again become available in a dedicated action/response configuration dialog (future feature #431).
 - Plot window related 'NullReferenceException' when closing YAT fixed.
 
 Limitations and known issues:
