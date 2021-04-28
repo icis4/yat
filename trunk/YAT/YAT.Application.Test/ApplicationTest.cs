@@ -31,6 +31,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Forms;
 
+using MKY.CommandLine;
 using MKY.IO;
 using MKY.Settings;
 using MKY.Windows.Forms;
@@ -142,7 +143,7 @@ namespace YAT.Application.Test
 		[Test]
 		public virtual void TestEmptyCommandLine()
 		{
-			var main = new Main(EmptyArgs);
+			var main = new Main(ArgsDefault.Empty);
 
 			PrepareRunAndVerifyResult(main, MainResult.Success);
 
@@ -220,7 +221,7 @@ namespace YAT.Application.Test
 		[Test]
 		public virtual void TestEmptyCommandLineRun()
 		{
-			var main = new Main(EmptyArgs);
+			var main = new Main(ArgsDefault.Empty);
 
 			RunAndVerifyApplicationWithoutView(main);
 		}
@@ -305,7 +306,7 @@ namespace YAT.Application.Test
 			if (dr != DialogResult.OK)
 				Assert.Ignore("Tester has canceled");
 
-			var main = new Main(EmptyArgs);
+			var main = new Main(ArgsDefault.Empty);
 
 			RunAndVerifyApplicationWithView(main);
 

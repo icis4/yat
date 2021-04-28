@@ -140,6 +140,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.RequestedTransmitText,               Is.Null.Or.Empty);
 				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 				Assert.That(m.LaunchArgs.IsAutoRun,                           Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,                          Is.False);
 
 				Assert.That(m.LaunchArgs.KeepOpen,             Is.True);
 				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.True);
@@ -168,6 +169,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(TerminalFilePath));
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                    Is.False);
 				Assert.That(m.LaunchArgs.IsAutoRun,                                Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,                               Is.False);
 			}
 
 			using (var m = new Main(new CommandLineArgs(new string[] { TerminalFilePath })))
@@ -179,6 +181,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(TerminalFilePath));
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                    Is.False);
 				Assert.That(m.LaunchArgs.IsAutoRun,                                Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,                               Is.False);
 			}
 		}
 
@@ -202,6 +205,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Null);
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                     Is.False);
 				Assert.That(m.LaunchArgs.IsAutoRun,                                 Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,                                Is.False);
 			}
 
 			using (var m = new Main(new CommandLineArgs(new string[] { WorkspaceFilePath })))
@@ -213,6 +217,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Null);
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                     Is.False);
 				Assert.That(m.LaunchArgs.IsAutoRun,                                 Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,                                Is.False);
 			}
 		}
 
@@ -237,6 +242,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler,  Is.Null);
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,    Is.False);
 				Assert.That(m.LaunchArgs.IsAutoRun,                Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,               Is.False);
 			}
 
 			using (var m = new Main(new CommandLineArgs(new string[] { EmptyTerminalFilePath })))
@@ -247,6 +253,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler,  Is.Null);
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,    Is.False);
 				Assert.That(m.LaunchArgs.IsAutoRun,                Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,               Is.False);
 			}
 
 			Trace.Write(" > ** INFO: End of test.");
@@ -273,6 +280,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler,  Is.Null);
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,    Is.False);
 				Assert.That(m.LaunchArgs.IsAutoRun,                Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,               Is.False);
 			}
 
 			using (var m = new Main(new CommandLineArgs(new string[] { EmptyWorkspaceFilePath })))
@@ -283,6 +291,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler,  Is.Null);
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,    Is.False);
 				Assert.That(m.LaunchArgs.IsAutoRun,                Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,               Is.False);
 			}
 
 			Trace.Write(" > ** INFO: End of test.");
@@ -309,6 +318,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Null);
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                     Is.False);
 				Assert.That(m.LaunchArgs.IsAutoRun,                                 Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,                                Is.False);
 			}
 
 			// Terminal only:
@@ -320,7 +330,8 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                  Is.Not.Null);
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(Terminal1FilePath));
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                    Is.False);
-				Assert.That(m.LaunchArgs.IsAutoRun,                                 Is.False);
+				Assert.That(m.LaunchArgs.IsAutoRun,                                Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,                               Is.False);
 			}
 
 			// Workspace + Terminal = Terminal (the last argument is used):
@@ -332,7 +343,8 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                  Is.Not.Null);
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(Terminal1FilePath));
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                    Is.False);
-				Assert.That(m.LaunchArgs.IsAutoRun,                                 Is.False);
+				Assert.That(m.LaunchArgs.IsAutoRun,                                Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,                               Is.False);
 			}
 
 			// Terminal + Workspace = Workspace (the last argument is used):
@@ -345,6 +357,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler,                   Is.Null);
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                     Is.False);
 				Assert.That(m.LaunchArgs.IsAutoRun,                                 Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,                                Is.False);
 			}
 
 			// Terminal1 + Terminal2 = Terminal2 (the last argument is used):
@@ -357,6 +370,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.TerminalSettingsHandler.SettingsFilePath, Is.EqualTo(Terminal2FilePath));
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,                    Is.False);
 				Assert.That(m.LaunchArgs.IsAutoRun,                                Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,                               Is.False);
 			}
 
 			// Invalid file:
@@ -389,6 +403,7 @@ namespace YAT.Model.Test
 				Assert.That(hasRecent, Is.True);
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 				Assert.That(m.LaunchArgs.IsAutoRun,             Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,            Is.False);
 			}
 		}
 
@@ -409,6 +424,7 @@ namespace YAT.Model.Test
 
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 				Assert.That(m.LaunchArgs.IsAutoRun,             Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,            Is.False);
 			}
 		}
 
@@ -457,6 +473,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.RequestedTransmitText,               Is.Null.Or.Empty);
 				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 				Assert.That(m.LaunchArgs.IsAutoRun,                           Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,                          Is.False);
 
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 
@@ -502,6 +519,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.RequestedTransmitText,               Is.Null.Or.Empty);
 				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 				Assert.That(m.LaunchArgs.IsAutoRun,                           Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,                          Is.False);
 
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 
@@ -547,6 +565,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.RequestedTransmitText,               Is.Null.Or.Empty);
 				Assert.That(m.LaunchArgs.RequestedTransmitFilePath,           Is.Null.Or.Empty);
 				Assert.That(m.LaunchArgs.IsAutoRun,                           Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,                          Is.False);
 
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 
@@ -581,6 +600,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,               Is.False);
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.False);
 				Assert.That(m.LaunchArgs.IsAutoRun,                           Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,                          Is.False);
 
 				Assert.That(m.LaunchArgs.KeepOpen,             Is.True);
 				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.True);
@@ -614,6 +634,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,               Is.False);
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.False);
 				Assert.That(m.LaunchArgs.IsAutoRun,                           Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,                          Is.False);
 
 				Assert.That(m.LaunchArgs.KeepOpen,             Is.True);
 				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.True);
@@ -647,6 +668,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,               Is.False);
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.True);
 				Assert.That(m.LaunchArgs.IsAutoRun,                           Is.True);
+				Assert.That(m.LaunchArgs.IsAutoExit,                          Is.True);
 
 				Assert.That(m.LaunchArgs.KeepOpen,             Is.False);
 				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.True);
@@ -682,6 +704,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,               Is.False);
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.True);
 				Assert.That(m.LaunchArgs.IsAutoRun,                           Is.True);
+				Assert.That(m.LaunchArgs.IsAutoExit,                          Is.True);
 
 				Assert.That(m.LaunchArgs.KeepOpen,             Is.False);
 				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.True);
@@ -716,6 +739,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,               Is.False);
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.True);
 				Assert.That(m.LaunchArgs.IsAutoRun,                           Is.True);
+				Assert.That(m.LaunchArgs.IsAutoExit,                          Is.True);
 
 				Assert.That(m.LaunchArgs.KeepOpen,             Is.False);
 				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.True);
@@ -752,6 +776,7 @@ namespace YAT.Model.Test
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog,               Is.False);
 				Assert.That(m.LaunchArgs.PerformOperationOnRequestedTerminal, Is.True);
 				Assert.That(m.LaunchArgs.IsAutoRun,                           Is.True);
+				Assert.That(m.LaunchArgs.IsAutoExit,                          Is.True);
 
 				Assert.That(m.LaunchArgs.KeepOpen,             Is.False);
 				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.True);
@@ -780,6 +805,7 @@ namespace YAT.Model.Test
 
 				Assert.That(m.LaunchArgs.ShowNewTerminalDialog, Is.False);
 				Assert.That(m.LaunchArgs.IsAutoRun,             Is.False);
+				Assert.That(m.LaunchArgs.IsAutoExit,            Is.False);
 
 				Assert.That(m.LaunchArgs.KeepOpen,             Is.False);
 				Assert.That(m.LaunchArgs.KeepOpenOnNonSuccess, Is.False);
