@@ -104,6 +104,9 @@ Important changes:
 - Log dialog now more clearly states "root directory and file name base" (part of feat. req. #435).
 - Help window is again sizeable to display more/all content (related to earlier feature req. #237).
 - Command line argument errors are better reported now (bug #503).
+- Builds reverted from 'x64' to 'Any CPU' for providing compatibility with MSIL projects that make
+  direct use of YAT/MKY/OxyPlot/RtfWriter/ALAZ assemblies (bug #507, related to recent upgrade to
+  .NET Runtime 4 and .NET Framework 4.8 (feature request #229)).
 
 Fixed bugs:
 - Handling of missing log file folder fixed.
@@ -190,7 +193,7 @@ Important changes:
 - [Terminal > Settings... > Advanced...] dialog rearranged for better fitting screen.
 - Upgrade to .NET Runtime 4 and .NET Framework 4.8 (part of feature request #229, precondition for
   new automatic actions [Chart/Plot/Histogram] and upcoming feature request #74 [Scripting]).
-  Consequently, x64 distributions no longer need to be 'AnyCPU' builds (former limitation).
+  Consequently, x64 distributions no longer need to be 'Any CPU' builds and are 'x64' builds now.
 - Improved error message in case the required version of .NET is missing.
 - Additional command line option [--version]. Better command line message box (feature req. #383).
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
@@ -360,7 +363,6 @@ Fixed bugs:
 - Binary terminals: Synchronization on timed line break added (related to feature request #340).
 
 Limitations and known issues:
-- x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
 - General limitations of .NET Framework:
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - General limitations of .NET Windows.Forms:
@@ -437,7 +439,6 @@ Fixed bugs:
 - 'NullReferenceException' under certain conditions when .yat file got deleted fixed (bug #407).
 
 Limitations and known issues:
-- x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
 - General limitations of .NET Framework:
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - General limitations of .NET Windows.Forms:
@@ -524,7 +525,6 @@ Fixed bugs:
 - 'ArgumentOutOfRangeException' when command line arguments refer to an empty workspace fixed.
 
 Limitations and known issues:
-- x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
 - General limitations of .NET Framework:
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - General limitations of .NET Windows.Forms:
@@ -612,7 +612,6 @@ Fixed bugs:
 - System display scaling other than 100% mostly fixed for Win 7 and before (bugs #85, #235, #375).
 
 Limitations and known issues:
-- x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
 - General limitations of .NET Windows.Forms:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
@@ -699,7 +698,6 @@ Fixed bugs:
   catch-all of unhandled asynchronous exceptions improved (feature request #173).
 
 Limitations and known issues:
-- x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
 - General limitations of .NET Windows.Forms:
    > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
    > System errors are output in local language, even though YAT is all-English (bug #66).
