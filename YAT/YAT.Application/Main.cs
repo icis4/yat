@@ -54,6 +54,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 #if (HANDLE_UNHANDLED_EXCEPTIONS)
 using System.ComponentModel;
 #endif
@@ -97,42 +98,6 @@ namespace YAT.Application
 		//==========================================================================================
 		// Constants
 		//==========================================================================================
-
-		private const int DefaultTextWidth = 80;
-
-		private static readonly string[] ResultTextLines =
-		{
-			"Return values:",
-			"",
-		#if (WITH_SCRIPTING)
-			">= 4      Any other user defined script result",
-			"   3      Script result (e.g. 'Auxiliaries.StandardResult.User')",
-			"   2      Script result (e.g. 'Auxiliaries.StandardResult.Failure')",
-			"   1      Script result (e.g. 'Auxiliaries.StandardResult.Cancel')",
-			"   0      Success       (e.g. 'Auxiliaries.StandardResult.Success')",
-		#else
-			"   0      Success",
-		#endif
-			"  -1      Command line error",
-			"  -2      System environment error",
-			"  -3      Application settings error",
-			"  -4      Application launch cancel",
-			"  -5      Application launch error",
-			"  -6      Application run error",
-			"  -7      Application exit error",
-			"  -8      Unhandled exception",
-		#if (WITH_SCRIPTING)
-			"-100      Script invalid content",
-			"-101      Script stop on error",
-			"-102      Script exit",
-			"-103      Script user break",
-			"-104      Script unhandled exception",
-			"-105      Script invalid return value (legacy)",
-			"-106      Script thread abort",
-			"-107      Script remoting exception",
-			"-108      Script invalid operation"
-		#endif
-		};
 
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 
@@ -300,6 +265,8 @@ namespace YAT.Application
 		private MainResult Run(bool runFromConsole)
 		{
 			MainResult result;
+
+			bool run;
 			bool runWithView;
 			bool showHelp;
 			bool showLogo;
@@ -326,6 +293,7 @@ namespace YAT.Application
 			{
 				result = MainResult.Success;
 
+				run         = true;
 				runWithView = true; // By default, start YAT with view.
 				showHelp    = false;
 				showLogo    = false;
@@ -336,16 +304,27 @@ namespace YAT.Application
 			{
 				result = MainResult.CommandLineError;
 
-				runWithView = false; // YAT will not be started, instead the help will be shown.
+				run         = false; // YAT shall not be started, instead error and help shall be shown.
+				runWithView = false;
 				showHelp    = true;
 				showLogo    = false;
 				showVersion = false;
+
+				if (runFromConsole)
+					ShowErrorInConsole(this.commandLineArgs.InvalidArgs, this.commandLineArgs.InvalidationMessages);
+				else // if (this.commandLineArgs.Interactive) makes little sense here, the error must be indicated somehow.
+					ShowErrorInMessageBox(this.commandLineArgs.InvalidArgs, this.commandLineArgs.InvalidationMessages, ref showHelp);
+
+				// "Pure" invalid args errors are handled above, errors in processing the args are either
+				// handled in "View.Forms.Main.Main_Shown()" when fully running with view, or directly
+				// in "Run(bool, bool, ApplicationSettingsFileAccess, bool)" further below.
 			}
 			// Prio 2 = Valid:
 			else
 			{
 				result = MainResult.Success;
 
+				run         = true;
 				runWithView = this.commandLineArgs.ShowView;
 				showHelp    = this.commandLineArgs.HelpIsRequested;
 				showLogo    = this.commandLineArgs.LogoIsRequested;
@@ -356,11 +335,11 @@ namespace YAT.Application
 			if (showHelp || showLogo || showVersion)
 			{
 				if (runFromConsole)
-					ShowConsoleInfo(showHelp, showLogo, showVersion);
-				else
-					ShowMessageBoxInfo(showHelp, showLogo, showVersion);
+					ShowInfoInConsole(showHelp, showLogo, showVersion);
+				else // if (this.commandLineArgs.Interactive) makes no sense here, showing something is explicitly desired.
+					ShowInfoInMessageBox(showHelp, showLogo, showVersion);
 			}
-			else
+			else if (run)
 			{
 			#if (HANDLE_UNHANDLED_EXCEPTIONS)
 				try
@@ -384,6 +363,10 @@ namespace YAT.Application
 					}
 				}
 			#endif
+			}
+			else
+			{
+				// Do nothing, this applies e.g. in case of a command line error without showing the help.
 			}
 
 			return (result);
@@ -455,6 +438,16 @@ namespace YAT.Application
 			if (!runFromConsole && runWithView)
 			{
 				result = RunFullyWithView(applicationSettingsFileAccess, loadSettingsInWelcomeScreen);                        // 1, 2, 7
+
+				// "Pure" invalid args errors are handled in "Run(bool)" further above, errors in processing the args
+				// are typically handled in "View.Forms.Main.Main_Shown()", fallback here:
+				if ((result == MainResult.CommandLineError) && !this.commandLineArgs.ErrorHasBeenHandled)
+				{
+					var showHelp = true;
+					ShowErrorInMessageBox(this.commandLineArgs.InvalidArgs, this.commandLineArgs.InvalidationMessages, ref showHelp);
+					if (showHelp)
+						ShowInfoInMessageBox(showHelp: true, showLogo: false, showVersion: false);
+				}
 			}
 			else
 			{
@@ -467,14 +460,14 @@ namespace YAT.Application
 					result = RunFullyFromConsole(applicationSettingsFileAccess);                                              // 5, 6, 7
 				else
 					result = RunInvisible_ForTestOnly(applicationSettingsFileAccess);                                         //       7
-			}
 
-			if (result == MainResult.CommandLineError)
-			{
-				if (runFromConsole)
-					ShowConsoleInfo(showHelp: true, showLogo: false, showVersion: false);
-				else
-					ShowMessageBoxInfo(showHelp: true, showLogo: false, showVersion: false);
+				// "Pure" invalid args errors are handled in "Run(bool)" further above, errors in processing the args
+				// are either handled in "View.Forms.Main.Main_Shown()" or above when fully running with view, or here:
+				if ((result == MainResult.CommandLineError) && !this.commandLineArgs.ErrorHasBeenHandled)
+				{
+					ShowErrorInConsole(this.commandLineArgs.InvalidArgs, this.commandLineArgs.InvalidationMessages);
+					ShowInfoInConsole(showHelp: true, showLogo: false, showVersion: false);
+				}
 			}
 			                                                                //// Two args required to format without leading
 			DebugMessage("Exiting with {0} (0x{1:X}).", result, (int)result); // zeros, same as Visual Studio is doing, e.g.:
@@ -965,7 +958,7 @@ namespace YAT.Application
 							model.Exited += RunFullyFromConsole_Exited;
 
 							if (!model.LaunchArgs.IsAutoRun)     // "AutoRun" will eventually "Exit()", otherwise
-								model.Exit(Model.ExitMode.Auto); // (for testing purposes) "Exit()" immediately.
+								model.Exit(Model.ExitMode.Auto); // (e.g. for testing purposes) "Exit()" immediately.
 
 							while (model.IsUndisposed)
 							{
@@ -1114,7 +1107,7 @@ namespace YAT.Application
 							model.Exited += RunInvisible_Exited;
 
 							if (!model.LaunchArgs.IsAutoRun)     // "AutoRun" will eventually "Exit()", otherwise
-								model.Exit(Model.ExitMode.Auto); // (for testing purposes) "Exit()" immediately.
+								model.Exit(Model.ExitMode.Auto); // (e.g. for testing purposes) "Exit()" immediately.
 
 							while (model.IsUndisposed)
 							{
@@ -1190,54 +1183,67 @@ namespace YAT.Application
 
 		#endregion
 
-		#region Non-Public Methods > Help/Logo/Version
+		#region Non-Public Methods > Error/Help/Logo/Version
 		//------------------------------------------------------------------------------------------
-		// Non-Public Methods > Help/Logo/Version
+		// Non-Public Methods > Error/Help/Logo/Version
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Named "MessageBox" as a <see cref="MessageBox"/> is being shown.
+		/// </remarks>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		protected void ShowMessageBoxInfo(bool showHelp, bool showLogo, bool showVersion)
+		protected void ShowErrorInMessageBox(ICollection<string> invalidArgs, IReadOnlyList<string> invalidationMessages, ref bool showHelp)
 		{
-			if (showHelp) // Includes version and logo.
+			StringBuilder text;
+			Model.Utilities.MessageHelper.MakeCommandLineErrorMessage(invalidArgs, invalidationMessages, out text);
+			text.AppendLine();
+			text.AppendLine();
+			text.AppendLine("Show command line help?");                                     // This is the default representation on Windows.
+			text.Append(@"""" + ApplicationEx.ExecutableFileNameWithoutExtension + @"[.exe] /?"" may also be used for command line help.");
+
+			var dr = MessageBoxEx.Show
+			(
+				text.ToString(),
+				"Invalid Command Line",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Exclamation
+			);
+
+			showHelp = (dr == DialogResult.Yes);
+		}
+
+		/// <remarks>
+		/// Named "MessageBox" as either a <see cref="View.Forms.CommandLineMessageBox"/> or
+		/// a <see cref="MessageBox"/> is being shown.
+		/// </remarks>
+		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
+		protected void ShowInfoInMessageBox(bool showHelp, bool showLogo, bool showVersion)
+		{
+			if (showHelp) // Shall include version and logo:
 			{
-				var sb = new StringBuilder();
-
-				using (var writer = new StringWriter(sb))
-				{
-					WriteVersionAndLogo(writer, DefaultTextWidth, false);
-					WriteHelp(          writer, DefaultTextWidth);
-					WriteReturn(        writer, DefaultTextWidth, false);
-				}
-
 				var f = new View.Forms.CommandLineMessageBox
 				(
-					sb.ToString(),
+					CommandLineMessageHelper.GetVersionAndLogoAndHelpAndReturn(this.commandLineArgs.GetHelpText),
 					ApplicationEx.ProductName + " Command Line Help" // "YAT" or "YATConsole", corresponding to executable.
 				);
+
 				f.ShowDialog();
 			}
-			else if (showLogo) // Includes version.
+			else if (showLogo) // Shall include version:
 			{
-				var sb = new StringBuilder();
-
-				using (var writer = new StringWriter(sb))
-				{
-					WriteVersionAndLogo(writer, DefaultTextWidth, true);
-				}
-
 				var f = new View.Forms.CommandLineMessageBox
 				(
-					sb.ToString(),
+					CommandLineMessageHelper.GetVersionAndLogo(),
 					ApplicationEx.ProductName + " Logo" // "YAT" or "YATConsole", corresponding to executable.
 				);
+
 				f.ShowDialog();
 			}
-			else if (showVersion)
+			else if (showVersion) // Shall be the version number including caption and build info:
 			{
 				MessageBoxEx.Show
 				(
-					ApplicationEx.ProductCaptionAndVersionAndBuild,
+					CommandLineMessageHelper.GetVersion(),
 					ApplicationEx.ProductName + " Version", // "YAT" or "YATConsole", corresponding to executable.
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Information
@@ -1250,80 +1256,51 @@ namespace YAT.Application
 		}
 
 		/// <summary></summary>
-		protected void ShowConsoleInfo(bool showHelp, bool showLogo, bool showVersion)
+		protected void ShowErrorInConsole(ICollection<string> invalidArgs, IReadOnlyList<string> invalidationMessages)
+		{
+			// #1 PS C:\Program Files\YAT> .\YATConsole.exe -blabla
+			// #2
+			// #3 YATConsole could not be launched because the command line is invalid!
+			// #4
+			// #5 Invalid argument: "-blabla"
+			// #6
+			// #7 =======================================================================================================================
+			// #8
+			// #9 YATConsole <version> and then <logo> + <help> + <return>
+
+			StringBuilder text;
+			Model.Utilities.MessageHelper.MakeCommandLineErrorMessage(invalidArgs, invalidationMessages, out text);
+
+			using (var sr = new StringReader(text.ToString()))
+			{
+				string l;
+				while ((l = sr.ReadLine()) != null)
+					Console.Out.WriteLine(l); // Lines #3 though #5 (depending on length of error message).
+			}
+		}
+
+		/// <summary></summary>
+		protected void ShowInfoInConsole(bool showHelp, bool showLogo, bool showVersion)
 		{                                       // Lines that exactly match the number of characters would result
 			var maxWidth = (Console.WindowWidth - 1); // in an additional empty line (due to the added line break).
 			var writer = Console.Out;
 
-			if (showHelp) // Includes version and logo.
+			if (showHelp) // Shall include version and logo:
 			{
-				WriteVersionAndLogo(writer, maxWidth, false);
-				WriteHelp(          writer, maxWidth);
-				WriteReturn(        writer, maxWidth, true);
+				CommandLineMessageHelper.WriteVersionAndLogoAndHelpAndReturn(writer, maxWidth, this.commandLineArgs.GetHelpText);
 			}
-			else if (showLogo) // Includes version.
+			else if (showLogo) // Shall include version:
 			{
-				WriteVersionAndLogo(writer, maxWidth, true);
+				CommandLineMessageHelper.WriteVersionAndLogo(writer, maxWidth);
 			}
-			else if (showVersion)
+			else if (showVersion) // Shall just be the version number, neither caption nor build nor trailing empty line:
 			{
-				WriteVersion(writer);
+				CommandLineMessageHelper.WriteVersionOnly(writer);
 			}
 			else
 			{
 				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "This method requires that at least one of the parameter flags is set to 'true'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
-		}
-
-		/// <summary></summary>
-		protected static void WriteVersion(TextWriter writer)
-		{
-			writer.WriteLine(ApplicationEx.ProductVersion);
-		}
-
-		/// <summary></summary>
-		protected static void WriteVersionAndLogo(TextWriter writer, int maxWidth, bool isComplete)
-		{
-			var additionalIndent = "  "; // Additional spaces, similar to header of 'Release Notes' which uses a single space.
-
-			writer.WriteLine();
-			writer.WriteLine(new string('=', maxWidth)); // ==========...
-			writer.WriteLine();
-
-			writer.WriteLine(ApplicationEx.ProductCaptionAndVersionAndBuild + ":"); // Same as e.g. "Usage:" of help text.
-
-			foreach (var section in ApplicationEx.ProductLogoLineSections)
-			{
-				writer.WriteLine();
-
-				foreach (string line in section)
-					writer.WriteLine(additionalIndent + line);
-			}
-
-			writer.WriteLine();
-			writer.WriteLine(new string((isComplete ? '=' : '-'), maxWidth)); // ==========... or ----------...
-			writer.WriteLine();
-		}
-
-		/// <summary></summary>
-		protected void WriteHelp(TextWriter writer, int maxWidth)
-		{
-			writer.Write(this.commandLineArgs.GetHelpText(maxWidth));
-		}
-
-		/// <summary></summary>
-		protected static void WriteReturn(TextWriter writer, int maxWidth, bool additionalEmptyLine)
-		{
-			writer.WriteLine();
-
-			foreach (var line in ResultTextLines)
-				writer.WriteLine(line);
-
-			writer.WriteLine();
-			writer.WriteLine(new string('=', maxWidth)); // **********...
-
-			if (additionalEmptyLine)
-				writer.WriteLine();
 		}
 
 		#endregion
