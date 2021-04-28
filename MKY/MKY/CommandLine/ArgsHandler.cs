@@ -169,6 +169,8 @@ namespace MKY.CommandLine
 		private bool hasBeenProcessed; // = false;
 		private bool hasBeenValidated; // = false;
 
+		private List<string> invalidationMessages; // = null;
+
 		#endregion
 
 		#region Object Lifetime
@@ -220,7 +222,7 @@ namespace MKY.CommandLine
 		/// </remarks>
 		public bool IsValid
 		{
-			get { return (HasBeenValidated && InvalidArgsCount <= 0); }
+			get { return (HasBeenValidated && (InvalidArgsCount == 0) && (InvalidationMessagesCount == 0)); }
 		}
 
 		/// <summary>
@@ -330,7 +332,7 @@ namespace MKY.CommandLine
 		}
 
 		/// <summary>
-		/// Gets the total invalid argument count.
+		/// Gets the invalid argument count.
 		/// </summary>
 		public int InvalidArgsCount
 		{
@@ -356,7 +358,7 @@ namespace MKY.CommandLine
 		/// </summary>
 		public bool HasNoArgs
 		{
-			get { return (ArgsCount <= 0); }
+			get { return (ArgsCount == 0); }
 		}
 
 		/// <summary>
@@ -366,10 +368,38 @@ namespace MKY.CommandLine
 		{
 			get
 			{
-				if (this.args != null)
-					return (this.args[index]);
+				if (this.args != null)         // Even though the default value of a C# main(string[]) is an empty string[],
+					return (this.args[index]); // not null, this handler implementation is robust enough to cover such case.
 
 				return (null);
+			}
+		}
+
+		/// <summary>
+		/// Gets the invalidation messages.
+		/// </summary>
+		public ReadOnlyCollection<string> InvalidationMessages
+		{
+			get
+			{
+				if (this.invalidationMessages != null)
+					return (this.invalidationMessages.AsReadOnly());
+
+				return (null);
+			}
+		}
+
+		/// <summary>
+		/// Gets the invalidation message count.
+		/// </summary>
+		public int InvalidationMessagesCount
+		{
+			get
+			{
+				if (this.invalidationMessages != null)
+					return (this.invalidationMessages.Count);
+
+				return (0);
 			}
 		}
 
@@ -876,20 +906,14 @@ namespace MKY.CommandLine
 		}
 
 		/// <summary>
-		/// Invalidates the command line argument object by adding a dedicated string to the invalid
-		/// args list.
+		/// Invalidates the command line argument object by a dedicated message.
 		/// </summary>
-		protected virtual void Invalidate(string invalidationMessage)
+		public virtual void Invalidate(string invalidationMessage)
 		{
-			this.invalidArgs.Add(@"!""" + invalidationMessage + @"""");
-		}
+			if (this.invalidationMessages == null)
+				this.invalidationMessages = new List<string>(); // No preset needed, default behavior is good enough.
 
-		/// <summary>
-		/// Determines whether the specified argument starts with "!".
-		/// </summary>
-		protected virtual bool IsInvalidationStart(string arg)
-		{
-			return (arg.StartsWith("!", StringComparison.OrdinalIgnoreCase));
+			this.invalidationMessages.Add(invalidationMessage);
 		}
 
 		#endregion
@@ -952,8 +976,8 @@ namespace MKY.CommandLine
 			this.optionFields    = new List<FieldInfo>();
 
 			// Process the arguments:
-			if (this.args != null)
-			{
+			if (this.args != null) // Even though the default value of a C# main(string[]) is an empty string[],
+			{                      // not null, this handler implementation is robust enough to cover such case.
 				for (int i = 0; i < this.args.Length; i++)
 				{
 					string thisArg = this.args[i];
@@ -1261,7 +1285,7 @@ namespace MKY.CommandLine
 						}
 
 						// Long name, only if there is no short nor 'normal' name:
-						if (names.Length <= 0)
+						if (names.Length == 0)
 						{
 							names.Append("--" + field.Name.ToLowerInvariant());
 							names.Append(valueTypeString);
