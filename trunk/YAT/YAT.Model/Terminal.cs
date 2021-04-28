@@ -3935,26 +3935,22 @@ namespace YAT.Model
 			{
 				// Font preference:
 				string newFontHint = null;
-				if (FontEx.TryGet("DejaVu Sans Mono", font.Size, out newFont))
-				{
+				if (FontEx.TryGet("DejaVu Sans Mono", font.Size, out newFont)) {
 					newFontHint = "the " + ApplicationEx.CommonName + " default font";
 				}
 				else
 				{
-					if (FontEx.TryGet("Consolas", font.Size, out newFont))
-					{
+					if (FontEx.TryGet("Consolas", font.Size, out newFont)) {
 						newFontHint = "the default of the Windows console as well as Visual Studio and Programmer's Notepad";
 					}
 					else
 					{
-						if (FontEx.TryGet("Lucida Console", font.Size, out newFont))
-						{
+						if (FontEx.TryGet("Lucida Console", font.Size, out newFont)) {
 							newFontHint = "the default of e.g. the PowerShell ISE";
 						}
 						else
 						{
-							if (FontEx.TryGet("Courier New", font.Size, out newFont))
-							{
+							if (FontEx.TryGet("Courier New", font.Size, out newFont)) {
 								newFontHint = "the default of e.g. Notepad++";
 							}
 						}
@@ -3963,10 +3959,8 @@ namespace YAT.Model
 
 				StringBuilder text;
 				Utilities.MessageHelper.MakeFontNotMonospacedMessage(IndicatedName, font.Name, out text);
-
 				text.AppendLine();
 				text.AppendLine();
-
 				if (newFont != null)
 				{
 					text.Append("Switch to '");
@@ -3992,9 +3986,9 @@ namespace YAT.Model
 
 				if (dr == DialogResult.Yes)
 				{
-		//			if (newFont != null)
-		//				return (true);
-		//			else                       // This request will handle everything,
+					if (newFont != null)
+						return (true);
+					else                       // This request will handle everything,
 						OnFontDialogRequest(); // neither "newFont" nor "true" needed here.
 				}
 			}
