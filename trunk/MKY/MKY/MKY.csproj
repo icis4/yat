@@ -106,6 +106,7 @@
     <Compile Include="Collections\IEnumerableEx.cs" />
     <Compile Include="Collections\NamedStringDictionary.cs" />
     <Compile Include="Collections\StringKeyValuePair.cs" />
+    <Compile Include="CommandLine\ArgsDefault.cs" />
     <Compile Include="CommandLine\ArgsHandler.cs" />
     <Compile Include="CommandLine\OptionArgAttribute.cs" />
     <Compile Include="CommandLine\ValueArgAttribute.cs" />
