@@ -28,6 +28,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -36,6 +37,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Collections;
 using MKY.IO;
 
 using YAT.Format.Types;
@@ -65,42 +67,42 @@ namespace YAT.Model.Utilities
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static string ComposeMessage(string lead, string leadAddOn, Exception ex, string secondaryLead = null, string secondaryText = null)
 		{
-			var sb = new StringBuilder(lead);
+			var text = new StringBuilder(lead);
 
 			if (!string.IsNullOrEmpty(leadAddOn))
 			{
-				sb.Append(" ");
-				sb.Append(leadAddOn);
+				text.Append(" ");
+				text.Append(leadAddOn);
 			}
 
 			if (ex != null)
 			{
 				if (ex is System.Xml.XmlException)
 				{
-					sb.AppendLine();
-					sb.AppendLine();
-					sb.AppendLine("XML error message:");
-					sb.Append    (ex.Message);
+					text.AppendLine();
+					text.AppendLine();
+					text.AppendLine("XML error message:");
+					text.Append    (ex.Message);
 
 					var inner = ex.InnerException;
 					if (inner != null)
 					{
-						sb.AppendLine();
-						sb.AppendLine();
-						sb.Append    ("File error message (");
-						sb.Append    (ex.InnerException.GetType());
-						sb.AppendLine(                      "):");
-						sb.Append    (ex.InnerException.Message);
+						text.AppendLine();
+						text.AppendLine();
+						text.Append    ("File error message (");
+						text.Append    (ex.InnerException.GetType());
+						text.AppendLine(                      "):");
+						text.Append    (ex.InnerException.Message);
 
 						inner = inner.InnerException;
 						while (inner != null)
 						{
-							sb.AppendLine();
-							sb.AppendLine();
-							sb.Append    ("Additional error message (");
-							sb.Append    (inner.GetType());
-							sb.AppendLine(                            "):");
-							sb.Append    (inner.Message);
+							text.AppendLine();
+							text.AppendLine();
+							text.Append    ("Additional error message (");
+							text.Append    (inner.GetType());
+							text.AppendLine(                            "):");
+							text.Append    (inner.Message);
 
 							inner = inner.InnerException;
 						}
@@ -108,22 +110,22 @@ namespace YAT.Model.Utilities
 				}
 				else
 				{
-					sb.AppendLine();
-					sb.AppendLine();
-					sb.Append    ("System error message (");
-					sb.Append    (ex.GetType());
-					sb.AppendLine(                        "):");
-					sb.Append    (ex.Message);
+					text.AppendLine();
+					text.AppendLine();
+					text.Append    ("System error message (");
+					text.Append    (ex.GetType());
+					text.AppendLine(                        "):");
+					text.Append    (ex.Message);
 
 					var inner = ex.InnerException;
 					while (inner != null)
 					{
-						sb.AppendLine();
-						sb.AppendLine();
-						sb.Append    ("Additional error message (");
-						sb.Append    (inner.GetType());
-						sb.AppendLine(                            "):");
-						sb.Append    (inner.Message);
+						text.AppendLine();
+						text.AppendLine();
+						text.Append    ("Additional error message (");
+						text.Append    (inner.GetType());
+						text.AppendLine(                            "):");
+						text.Append    (inner.Message);
 
 						inner = inner.InnerException;
 					}
@@ -132,18 +134,65 @@ namespace YAT.Model.Utilities
 
 			if (!string.IsNullOrEmpty(secondaryLead))
 			{
-				sb.AppendLine();
-				sb.AppendLine();
-				sb.Append    (secondaryLead);
+				text.AppendLine();
+				text.AppendLine();
+				text.Append    (secondaryLead);
 
 				if (!string.IsNullOrEmpty(secondaryText))
 				{
-					sb.AppendLine(); // Line break after secondary lead above.
-					sb.Append    (secondaryText);
+					text.AppendLine(); // Line break after secondary lead above.
+					text.Append    (secondaryText);
 				}
 			}
 
-			return (sb.ToString());
+			return (text.ToString());
+		}
+
+		/// <summary></summary>
+		public static void MakeCommandLineErrorMessage(ICollection<string> invalidArgs, IReadOnlyList<string> invalidationMessages, out StringBuilder text)
+		{
+			text = new StringBuilder();
+
+			text.Append(ApplicationEx.ProductName); // "YAT" or "YATConsole", as indicated in main title bar.
+			text.Append(" could not be launched because the command line is invalid!");
+
+			var hasInvalidArgs = !ICollectionEx.IsNullOrEmpty((ICollection)invalidArgs);
+			if (hasInvalidArgs)
+			{
+				text.AppendLine(); // Add separating empty line as the following message is not a proper sentence.
+				text.AppendLine();
+				text.Append(((invalidArgs.Count == 1) ? "Invalid argument: " : "Invalid arguments: "));
+				text.Append(IEnumerableEx.ItemsToString(invalidArgs, '"'));
+			}
+
+			if (!ICollectionEx.IsNullOrEmpty((ICollection)invalidationMessages))
+			{
+				// Prepending something like "Additional information:" makes little sense, the messages are good ennough.
+				if (invalidationMessages.Count == 1)
+				{
+					if (hasInvalidArgs) // Add separating empty line only if invalid args are already given:
+					{
+						text.AppendLine();
+						text.AppendLine();
+					}
+
+					text.Append(" ");
+					text.Append(invalidationMessages[0]);
+				}
+				else
+				{
+					text.AppendLine(); // Add separating empty line in any case:
+					text.AppendLine();
+
+					for (int i = 0; i < invalidationMessages.Count; i++)
+					{
+						if (i < (invalidationMessages.Count - 1))
+							text.AppendLine(invalidationMessages[i]);
+						else
+							text.Append(invalidationMessages[i]);
+					}
+				}
+			}
 		}
 
 		/// <summary></summary>

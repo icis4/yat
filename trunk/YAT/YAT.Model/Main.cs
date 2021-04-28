@@ -39,6 +39,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.CommandLine;
 using MKY.Diagnostics;
 using MKY.Drawing;
 using MKY.IO;
@@ -216,6 +217,17 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
+		public virtual CommandLineArgs CommandLineArgs
+		{
+			get
+			{
+			////AssertUndisposed() shall not be called from this simple get-property.
+
+				return (this.commandLineArgs);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual MainLaunchArgs LaunchArgs
 		{
 			get
@@ -310,6 +322,14 @@ namespace YAT.Model
 		//==========================================================================================
 		// Launch
 		//==========================================================================================
+
+		/// <summary>
+		/// This method is used to reset the command line arguments to launch with default values.
+		/// </summary>
+		public virtual void ResetCommandLineArgs()
+		{
+			this.commandLineArgs = new CommandLineArgs(ArgsDefault.Empty);
+		}
 
 		/// <summary>
 		/// This method is used to test the command line argument processing.
@@ -588,8 +608,8 @@ namespace YAT.Model
 						this.launchArgs.WorkspaceSettingsHandler = sh;
 					}
 					else
-					{                                                                                                           // Neither '.' nor '!' shall be appended, the file path will be.
-						this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("Unable to open workspace file", absoluteFilePath, ex);
+					{                                                                                                        // Neither '.' nor '!' shall be appended, the file path will be.
+						this.commandLineArgs.Invalidate(Utilities.MessageHelper.ComposeMessage("Unable to open workspace file", absoluteFilePath, ex));
 						return (false);
 					}
 				}
@@ -603,8 +623,8 @@ namespace YAT.Model
 						this.launchArgs.TerminalSettingsHandler = sh;
 					}
 					else
-					{                                                                                                          // Neither '.' nor '!' shall be appended, the file path will be.
-						this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("Unable to open terminal file", absoluteFilePath, ex);
+					{                                                                                                       // Neither '.' nor '!' shall be appended, the file path will be.
+						this.commandLineArgs.Invalidate(Utilities.MessageHelper.ComposeMessage("Unable to open terminal file", absoluteFilePath, ex));
 						return (false);
 					}
 				}
@@ -663,7 +683,7 @@ namespace YAT.Model
 							// OK, both refer to no terminal, i.e. disabled the operation.
 						}
 						else {
-							this.launchArgs.MessageOnFailure = string.Format(CultureInfo.CurrentCulture, "If dynamic as well as fixed terminal ID is given, both IDs must either be 0 (active) or -1 (invalid), but dynamic ID = {0} and fixed ID = {1}", requestedDynamicTerminalId, requestedFixedTerminalId);
+							this.commandLineArgs.Invalidate(string.Format(CultureInfo.CurrentCulture, "If dynamic as well as fixed terminal ID is given, both IDs must either be 0 (active) or -1 (invalid), but dynamic ID = {0} and fixed ID = {1}", requestedDynamicTerminalId, requestedFixedTerminalId));
 							return (false);
 						}
 					}
@@ -688,7 +708,7 @@ namespace YAT.Model
 							this.launchArgs.RequestedDynamicTerminalId = TerminalIds.InvalidDynamicId; // Usable to disable the operation.
 						}
 						else {
-							this.launchArgs.MessageOnFailure = string.Format(CultureInfo.CurrentCulture, "A terminal with dynamic ID = {0} is not available", requestedDynamicTerminalId);
+							this.commandLineArgs.Invalidate(string.Format(CultureInfo.CurrentCulture, "A terminal with dynamic ID = {0} is not available", requestedDynamicTerminalId));
 							return (false);
 						}
 
@@ -723,7 +743,7 @@ namespace YAT.Model
 
 							if (string.IsNullOrEmpty(terminalFilePathOfGivenId))
 							{
-								this.launchArgs.MessageOnFailure = string.Format(CultureInfo.CurrentCulture, "A terminal with fixed ID = {0} is not available", requestedFixedTerminalId);
+								this.commandLineArgs.Invalidate(string.Format(CultureInfo.CurrentCulture, "A terminal with fixed ID = {0} is not available", requestedFixedTerminalId));
 								return (false);
 							}
 
@@ -744,7 +764,7 @@ namespace YAT.Model
 						}
 						else
 						{
-							this.launchArgs.MessageOnFailure = exceptionOnFailure.Message;
+							this.commandLineArgs.Invalidate(exceptionOnFailure.Message);
 							return (false);
 						}
 					}
@@ -833,7 +853,7 @@ namespace YAT.Model
 					}
 					else
 					{
-						this.launchArgs.MessageOnFailure = messageOnFailure;
+						this.commandLineArgs.Invalidate(messageOnFailure);
 						return (false);
 					}
 				}
@@ -849,14 +869,14 @@ namespace YAT.Model
 							this.launchArgs.PerformOperationOnRequestedTerminal = true;
 						}
 						else
-						{                                                                                                             // Neither '.' nor '!' shall be appended, the file path will be.
-							this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("File to transmit does not exist", absoluteFilePath);
+						{                                                                                                          // Neither '.' nor '!' shall be appended, the file path will be.
+							this.commandLineArgs.Invalidate(Utilities.MessageHelper.ComposeMessage("File to transmit does not exist", absoluteFilePath));
 							return (false);
 						}
 					}
 					else
 					{
-						this.launchArgs.MessageOnFailure = "File to transmit is undefined!";
+						this.commandLineArgs.Invalidate("File to transmit is undefined!");
 						return (false);
 					}
 				}
@@ -1350,10 +1370,8 @@ namespace YAT.Model
 					StringBuilder text;
 					List<LinkLabel.Link> links;
 					Utilities.MessageHelper.MakeMissingFontMessage(fontName, exceptionOnFailure, out text, out links);
-
 					text.AppendLine();
 					text.AppendLine();
-
 					text.Append("[Abort] to exit " + ApplicationEx.CommonName + ". ");
 					text.Append("[Retry] to check availability again (e.g. after having installed the font). ");
 					text.Append("[Ignore] to launch " + ApplicationEx.CommonName + " nevertheless.");
@@ -1766,7 +1784,7 @@ namespace YAT.Model
 
 		private void workspace_ExitRequest(object sender, EventArgs e)
 		{
-			Exit(LaunchArgs.IsAutoRun ? ExitMode.Auto : ExitMode.Manual);
+			Exit(LaunchArgs.IsAutoExit ? ExitMode.Auto : ExitMode.Manual);
 		}
 
 		#endregion

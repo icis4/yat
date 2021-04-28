@@ -103,6 +103,7 @@ Important changes:
   whole or parts of a line in [Copy of Active Line] (related to feature requests #424 and #434).
 - Log dialog now more clearly states "root directory and file name base" (part of feat. req. #435).
 - Help window is again sizeable to display more/all content (related to earlier feature req. #237).
+- Command line argument errors are better reported now (bug #503).
 
 Fixed bugs:
 - Handling of missing log file folder fixed.

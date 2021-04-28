@@ -248,10 +248,6 @@ namespace YAT.Model
 		public bool NonInteractive;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
-		public string MessageOnFailure;
-
-		/// <summary></summary>
 		public WorkspaceLaunchArgs ToWorkspaceLaunchArgs()
 		{
 			var args = new WorkspaceLaunchArgs();
@@ -287,6 +283,17 @@ namespace YAT.Model
 				return (PerformOperationOnRequestedTerminal || ScriptRunIsRequested);
 			#endif
 			}
+		}
+
+		/// <summary>
+		/// Returns whether the application will automatically exit, e.g. after an automatic run.
+		/// </summary>
+		/// <remarks>
+		/// Same as <see cref="IsAutoRun"/> (yet), no need for separate handling (yet).
+		/// </remarks>
+		public bool IsAutoExit
+		{
+			get { return (IsAutoRun); }
 		}
 	}
 

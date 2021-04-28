@@ -71,6 +71,7 @@ using MKY.Windows.Forms;
 using MT.Albatros.Core;
 #endif
 
+using YAT.Application;
 using YAT.Application.Settings;
 using YAT.Application.Utilities;
 using YAT.Model.Types;
@@ -286,6 +287,21 @@ namespace YAT.View.Forms
 		// Form Event Handlers
 		//==========================================================================================
 
+		/// <remarks>
+		/// Separate method for reuse twice.
+		/// </remarks>
+		private Model.MainResult Main_Shown_Launch(out bool showErrorsModally, out bool keepOpenOnNonSuccess)
+		{
+			this.isLayoutingMdi = true;      // Temporarily notify MDI layouting to prevent that
+			var result = this.main.Launch(); // initial layouting overwrites the workspace settings.
+			this.isLayoutingMdi = false;
+
+			showErrorsModally = this.main.LaunchArgs.Interactive;             // By default, "Interactive" is true and "KeepOpenOnNonSuccess" is false but may have been changed,
+			keepOpenOnNonSuccess = this.main.LaunchArgs.KeepOpenOnNonSuccess; // even when the args as a whole are invalid. Thus, taking these options into account does make sense.
+
+			return (result);
+		}
+
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
@@ -304,99 +320,113 @@ namespace YAT.View.Forms
 		[ModalBehaviorContract(ModalBehavior.InCaseOfNonUserError, Approval = "LaunchArgs are considered to decide on behavior.")]
 		private void Main_Shown(object sender, EventArgs e)
 		{
+			bool showErrorsModally;
+			bool keepOpenOnNonSuccess;
+
 			this.isInitiating = false;
 
 			SetControls();
 
-			this.isLayoutingMdi = true;       // Temporarily notify MDI layouting to prevent that
-			this.result = this.main.Launch(); // initial layouting overwrites the workspace settings.
-			this.isLayoutingMdi = false;
+			this.result = Main_Shown_Launch(out showErrorsModally, out keepOpenOnNonSuccess);
+
+			if (this.result == Model.MainResult.CommandLineError) // Potentially try again with reset command line args:
+			{
+				if (showErrorsModally)
+				{
+					StringBuilder text;
+					Model.Utilities.MessageHelper.MakeCommandLineErrorMessage(this.main.CommandLineArgs.InvalidArgs, this.main.CommandLineArgs.InvalidationMessages, out text);
+					text.AppendLine();
+					text.AppendLine();
+					text.Append("Ignore and launch with default command line arguments instead?");
+
+					var dr = MessageBoxEx.Show
+					(
+						this,
+						text.ToString(),
+						"Invalid Command Line",
+						MessageBoxButtons.YesNo,
+						MessageBoxIcon.Exclamation,
+						MessageBoxDefaultButton.Button2 // [No]
+					);
+
+					if (dr == DialogResult.Yes) // Try again with reset command line args:
+					{
+						this.main.ResetCommandLineArgs();
+
+						this.result = Main_Shown_Launch(out showErrorsModally, out keepOpenOnNonSuccess);
+					}
+					else
+					{
+						this.main.CommandLineArgs.ErrorHasBeenHandled = true;
+					}
+				}
+			} // Model.MainResult.CommandLineError
 
 			if (this.result != Model.MainResult.Success)
 			{
-				bool showErrorModally = this.main.LaunchArgs.Interactive;
-				bool keepOpenOnNonSuccess = this.main.LaunchArgs.KeepOpenOnNonSuccess;
-
 				switch (this.result)
 				{
 					case Model.MainResult.CommandLineError:
 					{
-						if (showErrorModally)
+						if (showErrorsModally)
 						{
-							var name = ApplicationEx.ExecutableFileNameWithoutExtension;
+							var text = new StringBuilder();
 
-							var sb = new StringBuilder();
-							sb.Append(ApplicationEx.ProductName); // "YAT" or "YATConsole", as indicated in main title bar.
-							sb.Append(" could not be started because the given command line is invalid!");
-							sb.AppendLine();
-							sb.AppendLine();
-							sb.Append(@"Use """ + name + @"[.exe] /?"" for command line help.");
+							text.AppendLine("Show command line help?");                                     // This is the default representation on Windows.
+							text.Append(@"""" + ApplicationEx.ExecutableFileNameWithoutExtension + @"[.exe] /?"" may also be used for command line help.");
 
-							MessageBoxEx.Show
+							var dr = MessageBoxEx.Show
 							(
 								this,
-								sb.ToString(),
+								text.ToString(),
 								"Invalid Command Line",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Exclamation
+								MessageBoxButtons.YesNo,
+								MessageBoxIcon.Question
 							);
+
+							if (dr == DialogResult.Yes)
+							{
+								var f = new CommandLineMessageBox
+								(
+									CommandLineMessageHelper.GetVersionAndLogoAndHelpAndReturn(this.main.CommandLineArgs.GetHelpText),
+									ApplicationEx.ProductName + " Command Line Help" // "YAT" or "YATConsole", corresponding to executable.
+								);
+
+								f.ShowDialog();
+							}
 						}
+
 						break;
 					}
 
 					case Model.MainResult.ApplicationLaunchError:
-					{
-						if (showErrorModally)
-						{
-							var sb = new StringBuilder();
-							sb.Append(ApplicationEx.ProductName); // "YAT" or "YATConsole", as indicated in main title bar.
-							sb.Append(" could not be started with the given settings!");
-
-							if (!string.IsNullOrEmpty(this.main.LaunchArgs.MessageOnFailure))
-							{
-								sb.AppendLine();
-								sb.AppendLine();
-								sb.Append(this.main.LaunchArgs.MessageOnFailure);
-							}
-
-							MessageBoxEx.Show
-							(
-								this,
-								sb.ToString(),
-								"Start Error",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Error
-							);
-						}
-						break;
-					}
-
 					case Model.MainResult.ApplicationLaunchCancel:
 					{
-						if (showErrorModally)
+						if (showErrorsModally)
 						{
-							// Nothing to do, user intentionally canceled.
+							// Nothing to do, "Model.Main.Launch()" does the user interaction.
 						}
+
 						break;
 					}
 
 					case Model.MainResult.ApplicationRunError:
 					{
-						if (showErrorModally)
+						if (showErrorsModally)
 						{
-							var sb = new StringBuilder();
-							sb.Append(ApplicationEx.ProductName); // "YAT" or "YATConsole", as indicated in main title bar.
-							sb.Append(" could not execute the requested operation!");
+							var text = new StringBuilder(ApplicationEx.ProductName); // "YAT" or "YATConsole", as indicated in main title bar.
+							text.Append(" could not run the requested operation!");
 
 							MessageBoxEx.Show
 							(
 								this,
-								sb.ToString(),
-								"Execution Error",
+								text.ToString(),
+								"Run Error",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Error
 							);
 						}
+
 						break;
 					}
 
@@ -412,13 +442,14 @@ namespace YAT.View.Forms
 					// Note that the above switch/case deals with the result of 'Launch()'
 					// and thus does not need to deal with the script result (> 0).
 				#endif
-				}
+				} // switch (this.result)
 
 				switch (this.result)
 				{
 					case Model.MainResult.ApplicationLaunchCancel:
 					{
 						Close(); // Close in any case, user intentionally canceled.
+
 						break;
 					}
 
@@ -429,7 +460,7 @@ namespace YAT.View.Forms
 
 						break;
 					}
-				}
+				} // switch (this.result)
 			}
 			else // Model.MainResult.Success:
 			{

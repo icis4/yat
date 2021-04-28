@@ -501,6 +501,19 @@ namespace YAT.Model
 
 		#endregion
 
+		#region Public Auto-Properties = Auxiliary Options
+		//==========================================================================================
+		// Public Auto-Properties = Auxiliary Options
+		//==========================================================================================
+
+		/// <summary>
+		/// Indicates whether, e.g. in case of invalid args, the error has already been handled,
+		/// e.g. an error message has been shown.
+		/// </summary>
+		public virtual bool ErrorHasBeenHandled { get; set; } // = false;
+
+		#endregion
+
 		#region Object Lifetime
 		//==========================================================================================
 		// Object Lifetime
@@ -544,8 +557,8 @@ namespace YAT.Model
 				if (!File.Exists(filePath))
 				{
 					RequestedFilePath = null;
-					Invalidate("Requested file does not exist");
-					BooleanEx.ClearIfSet(ref isValid);
+					Invalidate(@"Requested file """ + filePath + @""" does not exist!");
+					isValid = false;
 				}
 				else
 				{
@@ -554,8 +567,8 @@ namespace YAT.Model
 					    !ExtensionHelper.IsTerminalFile (filePath))
 					{
 						RequestedFilePath = null;
-						Invalidate("Requested file is neither a workspace nor a terminal file");
-						BooleanEx.ClearIfSet(ref isValid);
+						Invalidate(@"Requested file """ + filePath + @""" is neither a workspace nor a terminal file!");
+						isValid = false;
 					}
 				#else
 					// Any extension shall be usable as a script file.
@@ -583,16 +596,16 @@ namespace YAT.Model
 							}
 							else
 							{
-								Invalidate("Requested file is neither a workspace nor a terminal file");
-								BooleanEx.ClearIfSet(ref isValid);
+								Invalidate(@"Requested file """ + mostRecent + @""" is neither a workspace nor a terminal file!");
+								isValid = false;
 							}
 
 							// Note that script files are not contained in recents.
 						}
 						else
 						{
-							Invalidate("Requested file does not exist");
-							BooleanEx.ClearIfSet(ref isValid);
+							Invalidate(@"Requested file """ + mostRecent + @""" does not exist!");
+							isValid = false;
 						}
 					}
 				}
@@ -606,7 +619,7 @@ namespace YAT.Model
 				{
 					RequestedTransmitText = null;
 					Invalidate(messageOnFailure);
-					BooleanEx.ClearIfSet(ref isValid);
+					isValid = false;
 				}
 			}
 
@@ -617,8 +630,8 @@ namespace YAT.Model
 				if (!File.Exists(filePath)) // May be absolute or relative to current directory.
 				{
 					RequestedTransmitFilePath = null;
-					Invalidate("Requested file does not exist");
-					BooleanEx.ClearIfSet(ref isValid);
+					Invalidate(@"Requested file """ + filePath + @""" does not exist!");
+					isValid = false;
 				}
 			}
 
@@ -627,8 +640,8 @@ namespace YAT.Model
 			{
 				TileHorizontal = false;
 				TileVertical   = false;
-				Invalidate("Tile horizontal and vertical simultaneously is not possible");
-				BooleanEx.ClearIfSet(ref isValid);
+				Invalidate("Tile horizontal and vertical is not possible simultaneously!");
+				isValid = false;
 			}
 
 			return (isValid);
@@ -644,10 +657,10 @@ namespace YAT.Model
 		#if (WITH_SCRIPTING)
 			var anyScript    = "<Script>"    + ExtensionHelper.ScriptExtension;
 		#endif
-			var myWorkspace = "MyWorkspace" + ExtensionHelper.WorkspaceExtension;
-			var myTerminal  = "MyTerminal"  + ExtensionHelper.TerminalExtension;
+			var myWorkspace  = "MyWorkspace" + ExtensionHelper.WorkspaceExtension;
+			var myTerminal   = "MyTerminal"  + ExtensionHelper.TerminalExtension;
 		#if (WITH_SCRIPTING)
-			var myScript    = "MyScript"    + ExtensionHelper.ScriptExtension;
+			var myScript     = "MyScript"    + ExtensionHelper.ScriptExtension;
 		#endif
 			var name = ApplicationEx.ExecutableFileNameWithoutExtension; // The executable name shall be used as *the* name, as
 			var helpText = new StringBuilder();                          // only that is relevant to the user of the command line.
