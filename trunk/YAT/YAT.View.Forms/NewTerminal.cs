@@ -277,6 +277,7 @@ namespace YAT.View.Forms
 		////if (this.isSettingControls)
 		////	return; shall not be done, as...
 		////	...the control will automatically switch the interface if not or no longer available.
+		////	...the control may automatically switch restrict broadcast for TCP/IP sockets.
 		////	...the control may automatically switch the port for e.g. UDP/IP PairSocket.
 		////	...the control may automatically switch related settings such as Ser/HID presets.
 		////	...this event handler only updates the settings tree anyway.

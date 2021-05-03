@@ -89,9 +89,10 @@ namespace MKY.Net
 		private const string Localhost_string     = "[localhost]";
 		private const string Localhost_stringOld2 = "<localhost>"; // Backward compatibility.
 		private const string Localhost_stringOld1 =  "localhost";  // Backward compatibility.
-
 		private const string IPv4Localhost_string = "IPv4 localhost";
-		private const string Broadcast_string     = "[broadcast]";
+
+		/// <remarks>Required for not having to replicate tag "[broadcast]".</remarks>
+		public const string Broadcast_string      = "[broadcast]";
 		private const string IPv4Broadcast_string = "IPv4 broadcast";
 		private const string IPv6Localhost_string = "IPv6 localhost";
 
@@ -214,7 +215,7 @@ namespace MKY.Net
 						return (true);
 
 					default:
-						return (false);
+						return (IPAddressEx.IsLocalhost(Address));
 				}
 			}
 		}
@@ -231,7 +232,7 @@ namespace MKY.Net
 						return (true);
 
 					default:
-						return (false);
+						return (IPAddressEx.IsBroadcast(Address));
 				}
 			}
 		}
@@ -524,7 +525,7 @@ namespace MKY.Net
 					IPAddress address;
 					if (IPAddress.TryParse(s, out address)) // Valid explicit?
 					{
-						result = new IPHostEx(address);
+						result = new IPHostEx(s, address);
 						return (true);
 					}
 				}

@@ -81,7 +81,55 @@ namespace MKY.Net
 		}
 
 		/// <summary>
-		/// Determines whether the specified address is a multicast address.
+		/// Determines whether the specified address is an IP localhost address.
+		/// </summary>
+		public static bool IsLocalhost(IPAddress address)
+		{
+			switch (address.AddressFamily)
+			{
+				case AddressFamily.InterNetwork:   return (IsIPv4Localhost(address));
+				case AddressFamily.InterNetworkV6: return (IsIPv6Localhost(address));
+
+				default: throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "This method requires 'AddressFamily.InterNetwork' or 'AddressFamily.InterNetworkV6'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+	////public static bool IsLocalhost(string ipString) makes no sense, it would not take e.g. IPHostEx "[localhost]" into account.
+
+		/// <summary>
+		/// Determines whether the specified address is the IPv4 localhost address.
+		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv4...")]
+		public static bool IsIPv4Localhost(IPAddress address)
+		{                   // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+			return (address.Equals(IPAddress.Loopback));
+		}
+
+	////public static bool IsIPv4Localhost(string ipString) makes no sense, it would not take e.g. IPHostEx "IPv4 localhost" into account.
+
+		/// <summary>
+		/// Determines whether the specified address is the IPv6 localhost address.
+		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv6...")]
+		public static bool IsIPv6Localhost(IPAddress address)
+		{                   // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+			return (address.Equals(IPAddress.IPv6Loopback));
+		}
+
+	////public static bool IsIPv6Localhost(string ipString) makes no sense, it would not take e.g. IPHostEx "IPv6 localhost" into account.
+
+		/// <summary>
+		/// Determines whether the specified address is an IP broadcast address.
+		/// </summary>
+		public static bool IsBroadcast(IPAddress address)
+		{                   // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
+			return (address.Equals(IPAddress.Broadcast));
+		}
+
+	////public static bool IsBroadcast(string ipString) makes no sense, it would not take e.g. IPHostEx "[broadcast]" into account.
+
+		/// <summary>
+		/// Determines whether the specified address is an IP multicast address.
 		/// </summary>
 		public static bool IsMulticast(IPAddress address)
 		{
@@ -94,6 +142,8 @@ namespace MKY.Net
 			}
 		}
 
+	////public static bool IsMulticast(string ipString) makes no sense, it would not take e.g. a potential IPHostEx "[multicast]" into account.
+
 		/// <summary>
 		/// Determines whether the specified address is an IPv4 multicast address.
 		/// </summary>
@@ -104,6 +154,8 @@ namespace MKY.Net
 			var octet1 = addressBytes[0];
 			return ((octet1 >= 224) && (octet1 <= 239));
 		}
+
+	////public static bool IsIPv4Multicast(string ipString) makes no sense, it would not take e.g. a potential IPHostEx "IPv4 multicast" into account.
 
 		/// <summary>
 		/// Determines whether the specified <see cref="IPAddress"/> instances are considered equal.
