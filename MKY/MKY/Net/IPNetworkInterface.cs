@@ -639,7 +639,7 @@ namespace MKY.Net
 					IPAddress address;
 					if (IPAddress.TryParse(s, out address)) // Valid explicit?
 					{
-						result = new IPNetworkInterfaceEx(address);
+						result = new IPNetworkInterfaceEx(address); // IPNetworkInterfaceEx does not support explicitly setting e.g. "127.0.0.1" as string.
 						return (true);
 					}
 				}

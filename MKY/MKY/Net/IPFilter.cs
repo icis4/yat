@@ -261,7 +261,7 @@ namespace MKY.Net
 						return (true);
 
 					default:
-						return (false);
+						return (IPAddressEx.IsLocalhost(Address));
 				}
 			}
 		}
@@ -666,7 +666,7 @@ namespace MKY.Net
 					IPAddress address;
 					if (IPAddress.TryParse(s, out address)) // Valid explicit?
 					{
-						result = new IPFilterEx(address);
+						result = new IPFilterEx(s, address);
 						return (true);
 					}
 				}

@@ -943,7 +943,7 @@ namespace MKY.IO
 		/// </summary>
 		public static IEnumerable<string> Distinct(IEnumerable<string> paths)
 		{
-			var nonNullOrEmptyPaths = paths.Select(p => p).Where(p => !string.IsNullOrEmpty(p));
+			var nonNullOrEmptyPaths = paths.Where(p => !string.IsNullOrEmpty(p));
 			return (nonNullOrEmptyPaths.Distinct(Comparer));
 		}
 
@@ -960,7 +960,7 @@ namespace MKY.IO
 		/// </summary>
 		public static IEnumerable<string> DistinctDirectories(IEnumerable<string> paths)
 		{
-			var nonNullOrEmptyPaths = paths.Select(p => p).Where(p => !string.IsNullOrEmpty(p));
+			var nonNullOrEmptyPaths = paths.Where(p => !string.IsNullOrEmpty(p));
 			return (nonNullOrEmptyPaths.Select(p => GetDirectoryPath(p))
 			                           .Distinct(Comparer));
 		}

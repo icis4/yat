@@ -49,11 +49,14 @@ namespace MKY.Test.Net
 		// Constants
 		//==========================================================================================
 
-		private const string LocalhostString     = "[localhost]";
-		private const string IPv4LocalhostString = "IPv4 localhost (127.0.0.1)";
-		private const string BroadcastString     = "[broadcast]";
-		private const string IPv4BroadcastString = "IPv4 broadcast (255.255.255.255)";
-		private const string IPv6LocalhostString = "IPv6 localhost (::1)";
+		private const string LocalhostString            = "[localhost]";
+		private const string IPv4LocalhostString        = "IPv4 localhost (127.0.0.1)";
+		private const string IPv4LocalhostAddressString = "127.0.0.1";
+		private const string IPv6LocalhostString        = "IPv6 localhost (::1)";
+		private const string IPv6LocalhostAddressString = "::1";
+
+		private const string BroadcastString            = "[broadcast]";
+		private const string IPv4BroadcastString        = "IPv4 broadcast (255.255.255.255)";
 
 		private static readonly IPAddress SomeIPv4Address = new IPAddress(new byte[] { 1, 2, 3, 4 });
 		private const string SomeIPv4AddressString = "1.2.3.4";
@@ -73,20 +76,25 @@ namespace MKY.Test.Net
 		{
 			get
 			{
-				yield return (new TestCaseData(new IPHostEx(IPHost.Localhost),			IPHost.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("Localhost_HostType"));
-				yield return (new TestCaseData(new IPHostEx(IPHost.IPv4Localhost),		IPHost.IPv4Localhost,	IPAddress.Loopback,		IPv4LocalhostString)	.SetName("IPv4Localhost_HostType"));
-				yield return (new TestCaseData(new IPHostEx(IPHost.Broadcast),			IPHost.Broadcast,		IPAddress.Broadcast,	BroadcastString)		.SetName("Broadcast_HostType"));
-				yield return (new TestCaseData(new IPHostEx(IPHost.IPv4Broadcast),		IPHost.IPv4Broadcast,	IPAddress.Broadcast,	IPv4BroadcastString)	.SetName("IPv4Broadcast_HostType"));
-				yield return (new TestCaseData(new IPHostEx(IPHost.IPv6Localhost),		IPHost.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)	.SetName("IPv6Localhost_HostType"));
+				yield return (new TestCaseData(new IPHostEx(IPHost.Localhost),										IPHost.Localhost,		IPAddress.Loopback,		LocalhostString)			.SetName("Localhost_HostType"));
+				yield return (new TestCaseData(new IPHostEx(IPHost.IPv4Localhost),									IPHost.IPv4Localhost,	IPAddress.Loopback,		IPv4LocalhostString)		.SetName("IPv4Localhost_HostType"));
+				yield return (new TestCaseData(new IPHostEx(IPHost.IPv6Localhost),									IPHost.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)		.SetName("IPv6Localhost_HostType"));
 
-				yield return (new TestCaseData(new IPHostEx(IPAddress.Loopback),		IPHost.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("Localhost_HostAddress"));
-				yield return (new TestCaseData(new IPHostEx(IPAddress.Loopback),		IPHost.IPv4Localhost,	IPAddress.Loopback,		LocalhostString)		.SetName("IPv4Localhost_HostAddress"));
-				yield return (new TestCaseData(new IPHostEx(IPAddress.Broadcast),		IPHost.Broadcast,		IPAddress.Broadcast,	BroadcastString)		.SetName("Broadcast_HostAddress"));
-				yield return (new TestCaseData(new IPHostEx(IPAddress.Broadcast),		IPHost.IPv4Broadcast,	IPAddress.Broadcast,	BroadcastString)		.SetName("IPv4Broadcast_HostAddress"));
-				yield return (new TestCaseData(new IPHostEx(IPAddress.IPv6Loopback),	IPHost.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)	.SetName("IPv6Localhost_HostAddress"));
+				yield return (new TestCaseData(new IPHostEx(IPAddress.Loopback),									IPHost.Localhost,		IPAddress.Loopback,		LocalhostString)			.SetName("Localhost_HostAddress"));
+				yield return (new TestCaseData(new IPHostEx(IPAddress.Loopback),									IPHost.IPv4Localhost,	IPAddress.Loopback,		LocalhostString)			.SetName("IPv4Localhost_HostAddress"));
+				yield return (new TestCaseData(new IPHostEx(IPAddress.IPv6Loopback),								IPHost.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)		.SetName("IPv6Localhost_HostAddress"));
 
-				yield return (new TestCaseData(new IPHostEx(SomeIPv4Address),			IPHost.Explicit,		SomeIPv4Address,		SomeIPv4AddressString)	.SetName("SomeIPv4Address"));
-				yield return (new TestCaseData(new IPHostEx(SomeIPv6Address),			IPHost.Explicit,		SomeIPv6Address,		SomeIPv6AddressString)	.SetName("SomeIPv6Address"));
+				yield return (new TestCaseData(new IPHostEx(IPv4LocalhostAddressString, IPAddress.Loopback),		IPHost.Explicit,		IPAddress.Loopback,		IPv4LocalhostAddressString)	.SetName("IPv4Localhost_ExplicitAddress"));
+				yield return (new TestCaseData(new IPHostEx(IPv6LocalhostAddressString, IPAddress.IPv6Loopback),	IPHost.Explicit,		IPAddress.IPv6Loopback,	IPv6LocalhostAddressString)	.SetName("IPv6Localhost_ExplicitAddress"));
+
+				yield return (new TestCaseData(new IPHostEx(IPHost.Broadcast),										IPHost.Broadcast,		IPAddress.Broadcast,	BroadcastString)			.SetName("Broadcast_HostType"));
+				yield return (new TestCaseData(new IPHostEx(IPHost.IPv4Broadcast),									IPHost.IPv4Broadcast,	IPAddress.Broadcast,	IPv4BroadcastString)		.SetName("IPv4Broadcast_HostType"));
+
+				yield return (new TestCaseData(new IPHostEx(IPAddress.Broadcast),									IPHost.Broadcast,		IPAddress.Broadcast,	BroadcastString)			.SetName("Broadcast_HostAddress"));
+				yield return (new TestCaseData(new IPHostEx(IPAddress.Broadcast),									IPHost.IPv4Broadcast,	IPAddress.Broadcast,	BroadcastString)			.SetName("IPv4Broadcast_HostAddress"));
+
+				yield return (new TestCaseData(new IPHostEx(SomeIPv4Address),										IPHost.Explicit,		SomeIPv4Address,		SomeIPv4AddressString)		.SetName("SomeIPv4Address"));
+				yield return (new TestCaseData(new IPHostEx(SomeIPv6Address),										IPHost.Explicit,		SomeIPv6Address,		SomeIPv6AddressString)		.SetName("SomeIPv6Address"));
 			}
 		}
 

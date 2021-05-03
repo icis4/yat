@@ -28,9 +28,11 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Windows.Forms;
@@ -56,6 +58,7 @@ namespace YAT.View.Controls
 		//==========================================================================================
 
 		private const SocketType SocketTypeDefault                         =  SocketTypeEx.Default;
+		private const SocketType SocketTypeDefaultForBroadcast             =  SocketType.UdpClient;
 
 		private static readonly IPHostEx RemoteHostDefault                 =  MKY.IO.Serial.Socket.SocketSettings.RemoteHostDefault;
 		private const int                RemotePortDefault                 =  MKY.IO.Serial.Socket.SocketSettings.RemotePortDefault;
@@ -176,11 +179,21 @@ namespace YAT.View.Controls
 				if (this.socketType != value)
 				{
 					this.socketType = value;
-					SetControls();
 
-					// Ensure that a localhost pair socket does not use the same port twice:
-					if ((this.socketType == SocketType.UdpPairSocket) &&
-					    (RemoteHost.IsLocalhost) && (RemoteUdpPort == LocalUdpPort))
+					if ((!((SocketTypeEx)SocketType).SupportsBroadcast) && RemoteHost.IsBroadcast) // Restrict broadcast:
+					{
+						// Attention:
+						// The above check is done in five locations:
+						//  > SocketType { set }
+						//  > RemoteHost { set }
+						//  > LocalFiler { set }
+						//  > comboBox_RemoteHost_Validating()
+						//  > comboBox_LocalFiler_Validating()
+						// Changes above may have to be applied at the other locations too.
+
+						RemoteHost = RemoteHostDefault;
+					}
+					else if ((this.socketType == SocketType.UdpPairSocket) && (RemoteHost.IsLocalhost) && (RemoteUdpPort == LocalUdpPort)) // Ensure that a localhost pair socket does not use the same port twice:
 					{
 						if (RemoteUdpPort < IPEndPoint.MaxPort)
 							LocalUdpPort = (RemoteUdpPort + 1);
@@ -193,6 +206,10 @@ namespace YAT.View.Controls
 						//  > comboBox_RemotePort_Validating()
 						//  > comboBox_LocalPort_Validating()
 						// Changes above may have to be applied at the other two locations too.
+					}
+					else
+					{
+						SetControls(); // "SetControls()" is otherwise called by "LocalUdpPort" or "RemoteHost" above.
 					}
 				}
 			}
@@ -210,7 +227,25 @@ namespace YAT.View.Controls
 				    (value.Address.Equals(IPAddress.Loopback))) // Always SetControls() to be able to
 				{                                               //   deal with the different types of
 					this.remoteHost = value;                    //   localhost/loopback.
-					SetControls();
+
+					if (this.remoteHost.IsBroadcast && (!((SocketTypeEx)SocketType).SupportsBroadcast)) // Restrict broadcast:
+					{
+						// Attention:
+						// The above check is done in five locations:
+						//  > SocketType { set }
+						//  > RemoteHost { set }
+						//  > LocalFiler { set }
+						//  > comboBox_RemoteHost_Validating()
+						//  > comboBox_LocalFiler_Validating()
+						// Changes above may have to be applied at the other locations too.
+
+						SocketType = SocketTypeDefaultForBroadcast;
+					}
+					else
+					{
+						SetControls(); // "SetControls()" is otherwise called by "SocketType" above.
+					}
+
 					OnRemoteHostChanged(EventArgs.Empty);
 				}
 			}
@@ -278,6 +313,18 @@ namespace YAT.View.Controls
 			get { return (this.localFilter); }
 			set
 			{
+				if (IPAddressEx.IsBroadcast(value)) // Restrict broadcast:
+					throw (new ArgumentOutOfRangeException("value", value, MessageHelper.InvalidExecutionPreamble + IPHostEx.Broadcast_string + " address filter is not supported!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+
+				// Attention:
+				// The above check is done in five locations:
+				//  > SocketType { set }
+				//  > RemoteHost { set }
+				//  > LocalFiler { set }
+				//  > comboBox_RemoteHost_Validating()
+				//  > comboBox_LocalFiler_Validating()
+				// Changes above may have to be applied at the other locations too.
+
 				if ((this.localFilter != value)            ||
 				    (value.Address.Equals(IPAddress.Any))  ||  // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 				    (value.Address.Equals(IPAddress.IPv6Any))) // Allow SetControls() to be able to
@@ -473,10 +520,35 @@ namespace YAT.View.Controls
 			else
 			{
 				// Immediately try to resolve the corresponding remote IP address:
-				IPHostEx ipHost;
-				if (IPHostEx.TryParseAndResolve(comboBox_RemoteHost.Text, out ipHost))
+				if (IPHostEx.TryParseAndResolve(comboBox_RemoteHost.Text, out remoteHost))
 				{
-					RemoteHost = ipHost;
+					// Attention:
+					// The below check is done in five locations:
+					//  > SocketType { set }
+					//  > RemoteHost { set }
+					//  > LocalFiler { set }
+					//  > comboBox_RemoteHost_Validating()
+					//  > comboBox_LocalFiler_Validating()
+					// Changes below may have to be applied at the other locations too.
+
+					var socketTypeEx = ((SocketTypeEx)SocketType);
+					if (!(remoteHost.IsBroadcast) || socketTypeEx.SupportsBroadcast) // No need to restrict broadcast:
+					{
+						RemoteHost = remoteHost;
+					}
+					else // Restrict broadcast:
+					{
+						MessageBoxEx.Show
+						(
+							this,
+							IPHostEx.Broadcast_string + " is not supported for a " + socketTypeEx + "!",
+							"Invalid Input",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Error
+						);
+
+						e.Cancel = true;
+					}
 				}
 				else
 				{
@@ -516,10 +588,34 @@ namespace YAT.View.Controls
 			else
 			{
 				// Immediately try to resolve the corresponding IP address:
-				IPFilterEx ipAddressFilter;
-				if (IPFilterEx.TryParseAndResolve(comboBox_LocalFilter.Text, out ipAddressFilter))
+				if (IPFilterEx.TryParseAndResolve(comboBox_LocalFilter.Text, out localFilter))
 				{
-					LocalFilter = ipAddressFilter;
+					// Attention:
+					// The below check is done in five locations:
+					//  > SocketType { set }
+					//  > RemoteHost { set }
+					//  > LocalFiler { set }
+					//  > comboBox_RemoteHost_Validating()
+					//  > comboBox_LocalFiler_Validating()
+					// Changes below may have to be applied at the other locations too.
+
+					if (!(IPAddressEx.IsBroadcast(localFilter))) // No need to restrict broadcast:
+					{
+						LocalFilter = localFilter;
+					}
+					else // Restrict broadcast:
+					{
+						MessageBoxEx.Show
+						(
+							this,
+							IPHostEx.Broadcast_string + " address filter is not supported!",
+							"Invalid Input",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Error
+						);
+
+						e.Cancel = true;
+					}
 				}
 				else
 				{
@@ -718,11 +814,19 @@ namespace YAT.View.Controls
 			this.isSettingControls.Enter();
 			try
 			{
+				var supportsBroadcast = ((SocketTypeEx)SocketType).SupportsBroadcast;
 				comboBox_RemoteHost.Items.Clear();
-				if (RecentRemoteHosts != null) {                                                   // Make sure to only list the item, in its type.
-					comboBox_RemoteHost.Items.AddRange(RecentRemoteHosts.ConvertAll(x => (object)x.Item).ToArray());
-				}                                                                                       // Recent items shall be listed first.
-				foreach (var item in IPHostEx.GetItems(((SocketTypeEx)SocketType).SupportsBroadcast)) { // Predefined items shall be listed after.
+				if (RecentRemoteHosts != null) {
+					IEnumerable<string> itemsConfirmed;
+					if (supportsBroadcast) { // No need to restrict broadcast:
+						itemsConfirmed = RecentRemoteHosts.Select(x => x.Item);
+					}
+					else { // Restrict broadcast:
+						itemsConfirmed = RecentRemoteHosts.Select(x => x.Item).Where(item => !((IPHostEx)item).IsBroadcast);
+					}
+					comboBox_RemoteHost.Items.AddRange(itemsConfirmed.Cast<object>().ToArray());
+				}                                                            // Recent items shall be listed first.
+				foreach (var item in IPHostEx.GetItems(supportsBroadcast)) { // Predefined items shall be listed after.
 					var casted = (string)item; // Make sure to compare (and list) identical types!
 					if (!comboBox_RemoteHost.Items.Contains(casted)) // Same as .Distinct(), but explicitly controlling the order.
 						comboBox_RemoteHost.Items.Add(item); // Make sure to list the item in its type! "IPv4 localhost (127.0.0.1)" would

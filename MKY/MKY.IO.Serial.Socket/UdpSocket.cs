@@ -813,8 +813,7 @@ namespace MKY.IO.Serial.Socket
 				//                     192.20.255.255 or 190.20.0.0).
 				// (https://www.juniper.net/documentation/en_US/junose15.1/topics/concept/ip-broadcast-addressing-overview.html)
 
-				var localFilterCasted = (IPHostEx)this.localFilter.Address;
-				if (localFilterCasted.IsBroadcast) // = limited broadcast (255.255.255.255)
+				if (IPAddressEx.IsBroadcast(this.localFilter.Address)) // = limited broadcast (255.255.255.255)
 				{                                                // Filtering for limited broadcast address (255.255.255.255) doesn't work.
 					this.localFilter = (IPFilterEx)IPFilter.Any; // Nothing would be received => using any address (0.0.0.0) instead.
 				}
