@@ -88,7 +88,8 @@ namespace YAT.Domain.Parser
 			@"Enable [Explicit Default Radix] to switch default radix to a different setting than string." + Environment.NewLine +
 			Environment.NewLine +
 			@"In addition, C-style escape sequences are supported:" + Environment.NewLine +
-			@"""\r\n"" alternative to ""<CR><LF>""" + Environment.NewLine +
+			@"""\r\n"" alternatives to ""<CR><LF>""" + Environment.NewLine +
+			@"""\a\b\e\t"" alternatives to ""<BEL><BS><ESC><TAB>""" + Environment.NewLine +
 			@"""\0"" alternative to ""<NUL>"" or ""\d(0)"" or ""\h(0)""" + Environment.NewLine +
 			@"""\01"" alternative to ""\o(1)""" + Environment.NewLine +
 			@"""\12"" alternative to ""\d(12)""" + Environment.NewLine +

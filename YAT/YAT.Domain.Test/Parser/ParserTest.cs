@@ -69,20 +69,21 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData("	",	new byte[] { 0x09 } ).SetName("Whitespace Tab"));
 
 				// C-style escape:
-				yield return (new TestCaseData(@"\0",		new byte[] { 0x00 } ).SetName("C-style <NUL>"));
-				yield return (new TestCaseData(@"\0ABC",	new byte[] { 0x00, 0x41, 0x42, 0x43 }).SetName("C-style <NUL> with following characters"));
-				yield return (new TestCaseData(@"\a",		new byte[] { 0x07 } ).SetName("C-style <BEL>"));
-				yield return (new TestCaseData(@"\A",		new byte[] { 0x07 } ).SetName("C-style capital <BEL>"));
-				yield return (new TestCaseData(@"\b",		new byte[] { 0x08 } ).SetName("C-style <BS>"));
-				yield return (new TestCaseData(@"\bABC",	new byte[] { 0x08, 0x41, 0x42, 0x43 }).SetName("C-style <BS> with following characters"));
-				yield return (new TestCaseData(@"\t",		new byte[] { 0x09 } ).SetName("C-style <TAB>"));
-				yield return (new TestCaseData(@"\v",		new byte[] { 0x0B } ).SetName("C-style <VT>"));
-				yield return (new TestCaseData(@"\r",		new byte[] { 0x0D } ).SetName("C-style <CR>"));
-				yield return (new TestCaseData(@"\n",		new byte[] { 0x0A } ).SetName("C-style <LF>"));
-				yield return (new TestCaseData(@"\r\n",		new byte[] { 0x0D, 0x0A } ).SetName("C-style <CR><LF>"));
-				yield return (new TestCaseData(@"\r \n",	new byte[] { 0x0D, 0x20, 0x0A }).SetName("C-style <CR> <LF>"));
-				yield return (new TestCaseData(@"\R\N",		new byte[] { 0x0D, 0x0A }).SetName("C-style <CR><LF> capital"));
-				yield return (new TestCaseData(@"\f",		new byte[] { 0x0C } ).SetName("C-style <FF>"));
+				yield return (new TestCaseData(@"\0",			new byte[] { 0x00 } ).SetName("C-style <NUL>"));
+				yield return (new TestCaseData(@"\0ABC",		new byte[] { 0x00, 0x41, 0x42, 0x43 }).SetName("C-style <NUL> with following characters"));
+				yield return (new TestCaseData(@"\a",			new byte[] { 0x07 } ).SetName("C-style <BEL>"));
+				yield return (new TestCaseData(@"\A",			new byte[] { 0x07 } ).SetName("C-style capital <BEL>"));
+				yield return (new TestCaseData(@"\b",			new byte[] { 0x08 } ).SetName("C-style <BS>"));
+				yield return (new TestCaseData(@"\bABC",		new byte[] { 0x08, 0x41, 0x42, 0x43 }).SetName("C-style <BS> with following characters"));
+				yield return (new TestCaseData(@"\t",			new byte[] { 0x09 } ).SetName("C-style <TAB>"));
+				yield return (new TestCaseData(@"\v",			new byte[] { 0x0B } ).SetName("C-style <VT>"));
+				yield return (new TestCaseData(@"\r",			new byte[] { 0x0D } ).SetName("C-style <CR>"));
+				yield return (new TestCaseData(@"\n",			new byte[] { 0x0A } ).SetName("C-style <LF>"));
+				yield return (new TestCaseData(@"\r\n",			new byte[] { 0x0D, 0x0A } ).SetName("C-style <CR><LF>"));
+				yield return (new TestCaseData(@"\r \n",		new byte[] { 0x0D, 0x20, 0x0A }).SetName("C-style <CR> <LF>"));
+				yield return (new TestCaseData(@"\R\N",			new byte[] { 0x0D, 0x0A }).SetName("C-style <CR><LF> capital"));
+				yield return (new TestCaseData(@"\f",			new byte[] { 0x0C } ).SetName("C-style <FF>"));
+				yield return (new TestCaseData(@"\e",			new byte[] { 0x1B } ).SetName("C-style <ESC>"));
 				yield return (new TestCaseData(@"C-style\r\nis like\tthis", new byte[] { 0x43, 0x2D, 0x73, 0x74, 0x79, 0x6C, 0x65, 0x0D, 0x0A, 0x69, 0x73, 0x20, 0x6C, 0x69, 0x6B, 0x65, 0x09, 0x74, 0x68, 0x69, 0x73 }).SetName("C-style string"));
 				yield return (new TestCaseData(@"\0b",			new byte[] {      }).SetName("C-style binary value empty"));
 				yield return (new TestCaseData(@"\0b1",			new byte[] { 0x01 }).SetName("C-style binary value 1 digit"));

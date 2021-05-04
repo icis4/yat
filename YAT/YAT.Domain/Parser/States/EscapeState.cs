@@ -257,17 +257,6 @@ namespace YAT.Domain.Parser
 					return (true);
 				}
 
-				case 'n': // C-style <LF>.
-				case 'N':
-				{
-					byte[] a = parser.GetBytes('\n');
-					parser.BytesWriter.Write(a, 0, a.Length);
-					parser.CommitPendingBytes();
-					parser.HasFinished = true;
-					ChangeState(parser, null);
-					return (true);
-				}
-
 				case 'r': // C-style <CR>.
 				case 'R':
 				{
@@ -279,10 +268,32 @@ namespace YAT.Domain.Parser
 					return (true);
 				}
 
+				case 'n': // C-style <LF>.
+				case 'N':
+				{
+					byte[] a = parser.GetBytes('\n');
+					parser.BytesWriter.Write(a, 0, a.Length);
+					parser.CommitPendingBytes();
+					parser.HasFinished = true;
+					ChangeState(parser, null);
+					return (true);
+				}
+
 				case 'f': // C-style <FF>.
 				case 'F':
 				{
 					byte[] a = parser.GetBytes('\f');
+					parser.BytesWriter.Write(a, 0, a.Length);
+					parser.CommitPendingBytes();
+					parser.HasFinished = true;
+					ChangeState(parser, null);
+					return (true);
+				}
+
+				case 'e': // C-style <ESC>. This is not part of the ISO-standard but "GCC evaluates the escape sequences '\e' and '\E' to this".
+				case 'E': // A warning is output when building -pedantic: "non-ISO-standard escape sequence, '\e' (gcc 8.3.0 on Debian 4.19.181-1 (2021-03-19))"
+				{         // non-standard because some character encodings do not support <ESC>, but that is not given for any of the platforms YAT runs on.
+					byte[] a = parser.GetBytes('\x1B'); // \e is not supported by C#.
 					parser.BytesWriter.Write(a, 0, a.Length);
 					parser.CommitPendingBytes();
 					parser.HasFinished = true;
