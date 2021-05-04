@@ -95,6 +95,7 @@ Important changes:
 - YAT now checks whether the DejaVu monospaced font is available, and whether a monospaced font
   is used for the terminals. The user gets warned if either is not given (feature request #341).
 - [View > Format... > Font...] now by default only shows monospaced fonts (related to req. #341).
+- Parser now supports the non-standard but common C-style '\e'.
 - Behavior on multi-byte character set decoding mismatch can now be configured in the terminal
   settings [Terminal > Settings... > Text...] (feature request #436).
 - Separate colors for warnings and errors (related to feature request #436). On existing terminals,
