@@ -881,7 +881,7 @@ namespace YAT.View.Forms
 				SetAutoResponseTriggerOptionControls(triggerTextIsSupported, triggerRegexIsSupported);
 				SetAutoResponseResponseOptionControls(triggerTextIsSupported, triggerRegexIsSupported, responseReplaceIsSupported);
 
-				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Enabled = (this.settingsRoot.AutoResponse.Trigger.IsActive || this.settingsRoot.AutoResponse.Response.IsActive);
+				toolStripMenuItem_TerminalMenu_Send_AutoResponse_Deactivate.Enabled = this.settingsRoot.AutoResponse.IsActive;
 			}
 			finally
 			{
@@ -1429,7 +1429,7 @@ namespace YAT.View.Forms
 				SetAutoActionTriggerOptionControls(triggerTextIsSupported, triggerRegexIsSupported);
 			////SetAutoActionActionOptionControls() is not needed (yet) because there are no such options (yet).
 
-				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Enabled = (this.settingsRoot.AutoAction.Trigger.IsActive || this.settingsRoot.AutoAction.Action.IsActive);
+				toolStripMenuItem_TerminalMenu_Receive_AutoAction_Deactivate.Enabled = this.settingsRoot.AutoAction.IsActive;
 			}
 			finally
 			{
