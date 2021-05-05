@@ -17,7 +17,7 @@
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS;TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\YAT.View.Test.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug Test\YAT.View.Test.xml</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -29,7 +29,7 @@
     <DefineConstants>TRACE;TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\YAT.View.Test.xml</DocumentationFile>
+    <DocumentationFile>bin\Release Test\YAT.View.Test.xml</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -147,7 +147,7 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

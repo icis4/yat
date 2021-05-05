@@ -17,7 +17,7 @@
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS;TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\YAT.Application.Test.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug Test\YAT.Application.Test.xml</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -29,7 +29,7 @@
     <DefineConstants>TRACE;TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\YAT.Application.Test.xml</DocumentationFile>
+    <DocumentationFile>bin\Release Test\YAT.Application.Test.xml</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>

@@ -18,7 +18,7 @@
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS;TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\MKY.Windows.Forms.Test.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug Test\MKY.Windows.Forms.Test.xml</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -30,7 +30,7 @@
     <DefineConstants>TRACE;TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\MKY.Windows.Forms.Test.xml</DocumentationFile>
+    <DocumentationFile>bin\Release Test\MKY.Windows.Forms.Test.xml</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
