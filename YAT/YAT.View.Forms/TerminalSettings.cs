@@ -88,7 +88,7 @@ namespace YAT.View.Forms
 
 			// Set visible/invisible before accessing any settings, to ensure that the correct
 			// control is shown in case one of the settings leads to an exception (e.g. bug #307).
-			SetControlsVisibiliy(this.settingsInEdit.Terminal.IO.IOType);
+			SetControlsVisibiliy();
 
 			// SetControls() is initially called in the 'Shown' event handler.
 		}
@@ -572,6 +572,8 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
+				SetControlsVisibiliy();
+
 				var tt = this.settingsInEdit.Terminal.TerminalType;
 				terminalSelection.TerminalType = tt;
 
@@ -597,9 +599,6 @@ namespace YAT.View.Forms
 				toolTip.SetToolTip(button_TextOrBinarySettings, toolTipCaption);
 
 				var ioType = this.settingsInEdit.Terminal.IO.IOType;
-
-				SetControlsVisibiliy(ioType);
-
 				terminalSelection.IOType = ioType;
 
 				var forceSerialPortListRefresh = (serialPortSelection.PortId != this.settingsInEdit.Terminal.IO.SerialPort.PortId); // Required to potentially perform fallback to default other than COM1.
@@ -680,11 +679,13 @@ namespace YAT.View.Forms
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		private void SetControlsVisibiliy(Domain.IOType ioType)
+		private void SetControlsVisibiliy()
 		{
-			bool isSerialPort   = ((Domain.IOTypeEx)ioType).IsSerialPort;
-			bool isSocket       = ((Domain.IOTypeEx)ioType).IsSocket;
-			bool isUsbSerialHid = ((Domain.IOTypeEx)ioType).IsUsbSerialHid;
+			var ioType = this.settingsInEdit.Terminal.IO.IOType;
+
+			var isSerialPort   = ((Domain.IOTypeEx)ioType).IsSerialPort;
+			var isSocket       = ((Domain.IOTypeEx)ioType).IsSocket;
+			var isUsbSerialHid = ((Domain.IOTypeEx)ioType).IsUsbSerialHid;
 
 			serialPortSelection.Visible = isSerialPort;
 			serialPortSettings.Visible  = isSerialPort;

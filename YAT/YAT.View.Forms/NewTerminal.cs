@@ -73,7 +73,7 @@ namespace YAT.View.Forms
 
 			// Set visible/invisible before accessing any settings, to ensure that the correct
 			// control is shown in case one of the settings leads to an exception (e.g. bug #307).
-			SetControlsVisibiliy(this.newTerminalSettingsInEdit.IOType);
+			SetControlsVisibiliy();
 
 			// SetControls() is initially called in the 'Shown' event handler.
 		}
@@ -207,6 +207,9 @@ namespace YAT.View.Forms
 		////	...this event handler only updates the settings tree anyway.
 
 			this.newTerminalSettingsInEdit.SerialPortId = serialPortSelection.PortId;
+
+			// Enable OK button if port is valid:
+			SetControlsEnabled();
 		}
 
 		private void serialPortSettings_BaudRateChanged(object sender, EventArgs e)
@@ -401,6 +404,9 @@ namespace YAT.View.Forms
 			// but only if change was not triggered by setting the controls (via SetControls()):
 			if (!this.isSettingControls)
 				usbSerialHidDeviceSettings.SetDeviceInfoIncludingUpdateOfPresets(di);
+
+			// Enable OK button if device is valid:
+			SetControlsEnabled();
 		}
 
 		private void usbSerialHidDeviceSettings_PresetChanged(object sender, EventArgs e)
@@ -507,13 +513,13 @@ namespace YAT.View.Forms
 			this.isSettingControls.Enter();
 			try
 			{
-				terminalSelection.TerminalType = this.newTerminalSettingsInEdit.TerminalType;
+				SetControlsVisibiliy();
 
-				Domain.IOType ioType = this.newTerminalSettingsInEdit.IOType;
+				var terminalType = this.newTerminalSettingsInEdit.TerminalType;
+				var ioType       = this.newTerminalSettingsInEdit.IOType;
 
-				SetControlsVisibiliy(ioType);
-
-				terminalSelection.IOType = ioType;
+				terminalSelection.TerminalType = terminalType;
+				terminalSelection.IOType       = ioType;
 
 				var forceSerialPortListRefresh = (serialPortSelection.PortId != this.newTerminalSettingsInEdit.SerialPortId); // Required to potentially perform fallback to default other than COM1.
 
@@ -578,13 +584,7 @@ namespace YAT.View.Forms
 				this.SetControls_ioTypeOld = ioType;
 
 				// Finally, enable OK button if port/device is valid:
-				bool isValid = true;
-				switch (ioType)
-				{
-					case Domain.IOType.SerialPort:   isValid = serialPortSelection        .IsValid; break;
-					case Domain.IOType.UsbSerialHid: isValid = usbSerialHidDeviceSelection.IsValid; break;
-				}
-				button_OK.Enabled = isValid;
+				SetControlsEnabled();
 			}
 			finally
 			{
@@ -598,11 +598,13 @@ namespace YAT.View.Forms
 		///
 		/// Saying hello to StyleCop ;-.
 		/// </remarks>
-		private void SetControlsVisibiliy(Domain.IOType ioType)
+		private void SetControlsVisibiliy()
 		{
-			bool isSerialPort   = ((Domain.IOTypeEx)ioType).IsSerialPort;
-			bool isSocket       = ((Domain.IOTypeEx)ioType).IsSocket;
-			bool isUsbSerialHid = ((Domain.IOTypeEx)ioType).IsUsbSerialHid;
+			var ioType = this.newTerminalSettingsInEdit.IOType;
+
+			var isSerialPort   = ((Domain.IOTypeEx)ioType).IsSerialPort;
+			var isSocket       = ((Domain.IOTypeEx)ioType).IsSocket;
+			var isUsbSerialHid = ((Domain.IOTypeEx)ioType).IsUsbSerialHid;
 
 			serialPortSelection.Visible = isSerialPort;
 			serialPortSettings .Visible = isSerialPort;
@@ -612,6 +614,19 @@ namespace YAT.View.Forms
 
 			usbSerialHidDeviceSelection.Visible = isUsbSerialHid;
 			usbSerialHidDeviceSettings .Visible = isUsbSerialHid;
+		}
+
+		private void SetControlsEnabled()
+		{
+			bool isValid = true;
+
+			switch (this.newTerminalSettingsInEdit.IOType)
+			{
+				case Domain.IOType.SerialPort:   isValid = serialPortSelection        .IsValid; break;
+				case Domain.IOType.UsbSerialHid: isValid = usbSerialHidDeviceSelection.IsValid; break;
+			}
+
+			button_OK.Enabled = isValid;
 		}
 
 		private void UpdateNewTerminalSettings()
