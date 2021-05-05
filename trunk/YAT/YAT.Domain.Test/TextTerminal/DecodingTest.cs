@@ -57,6 +57,7 @@ namespace YAT.Domain.Test.TextTerminal
 		/// Separate implementation rather than using <see cref="YAT.Domain.TextTerminal"/> for
 		/// separation of tester and testee.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Testee' is a common term in engineering.")]
 		public static string GetExpectedComprehensiveInvalidBytesWarning(byte[] invalidData, Encoding encoding)
 		{
 			var invalidDataAsString = ByteHelper.FormatHexString(invalidData, showRadix: true);
@@ -68,6 +69,7 @@ namespace YAT.Domain.Test.TextTerminal
 		/// Separate implementation rather than using <see cref="YAT.Domain.TextTerminal"/> for
 		/// separation of tester and testee.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Testee' is a common term in engineering.")]
 		public static string GetExpectedComprehensiveOutsideUnicodePlane0Warning(byte[] invalidData)
 		{
 			var invalidDataAsString = ByteHelper.FormatHexString(invalidData, showRadix: true);
@@ -79,6 +81,7 @@ namespace YAT.Domain.Test.TextTerminal
 		/// Separate implementation rather than using <see cref="YAT.Domain.TextTerminal"/> for
 		/// separation of tester and testee.
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Testee' is a common term in engineering.")]
 		public static string GetExpectedCompactWarning(byte[] invalidData)
 		{
 			var invalidDataAsString = ByteHelper.FormatHexString(invalidData, showRadix: true);

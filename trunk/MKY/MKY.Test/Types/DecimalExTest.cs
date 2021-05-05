@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 using NUnit.Framework;
 
@@ -38,6 +39,8 @@ namespace MKY.Test.Types
 		/// <summary></summary>
 		public static IEnumerable TestCases
 		{
+			[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1021:NegativeSignsMustBeSpacedCorrectly", Justification = "Alignment.")]
+			[SuppressMessage("StyleCop.CSharp.SpacingRules", "SA1022:PositiveSignsMustBeSpacedCorrectly", Justification = "Alignment.")]
 			get
 			{
 				yield return (new TestCaseData(decimal.MaxValue, (decimal.MaxValue - 0.00000000000000000000000000001m), true));

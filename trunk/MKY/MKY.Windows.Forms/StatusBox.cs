@@ -42,7 +42,7 @@ namespace MKY.Windows.Forms
 	/// <list type="bullet">
 	/// <item><description>Buttons are right-aligned.</description></item>
 	/// <item><description>Minimum height is 152 pixels.</description></item>
-	///</list></para><para>
+	/// </list></para><para>
 	/// <see cref="Control.RightToLeft"/> is not supported.
 	/// </para></remarks>
 	public partial class StatusBox : Form

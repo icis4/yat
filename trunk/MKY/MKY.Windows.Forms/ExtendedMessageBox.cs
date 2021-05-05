@@ -195,6 +195,12 @@ namespace MKY.Windows.Forms
 		/// <param name="caption">
 		/// The text to display in the title bar of the status box.
 		/// </param>
+		/// <param name="checkText">
+		/// The text of the setting check box.
+		/// </param>
+		/// <param name="checkValue">
+		/// The value of the setting.
+		/// </param>
 		/// <param name="buttons">
 		/// One of the <see cref="MessageBoxButtons"/> values that specifies which buttons to display in the message box.
 		/// </param>
@@ -203,12 +209,6 @@ namespace MKY.Windows.Forms
 		/// </param>
 		/// <param name="defaultButton">
 		/// One of the <see cref="MessageBoxDefaultButton"/> values that specifies the default button for the message box.
-		/// </param>
-		/// <param name="checkText">
-		/// The text of the setting check box.
-		/// </param>
-		/// <param name="checkValue">
-		/// The value of the setting.
 		/// </param>
 		/// <returns>
 		/// One of the <see cref="DialogResult"/> values.
@@ -237,6 +237,12 @@ namespace MKY.Windows.Forms
 		/// <param name="caption">
 		/// The text to display in the title bar of the status box.
 		/// </param>
+		/// <param name="checkText">
+		/// The text of the setting check box.
+		/// </param>
+		/// <param name="checkValue">
+		/// The value of the setting.
+		/// </param>
 		/// <param name="buttons">
 		/// One of the <see cref="MessageBoxButtons"/> values that specifies which buttons to display in the message box.
 		/// </param>
@@ -245,12 +251,6 @@ namespace MKY.Windows.Forms
 		/// </param>
 		/// <param name="defaultButton">
 		/// One of the <see cref="MessageBoxDefaultButton"/> values that specifies the default button for the message box.
-		/// </param>
-		/// <param name="checkText">
-		/// The text of the setting check box.
-		/// </param>
-		/// <param name="checkValue">
-		/// The value of the setting.
 		/// </param>
 		/// <returns>
 		/// One of the <see cref="DialogResult"/> values.
@@ -354,14 +354,14 @@ namespace MKY.Windows.Forms
 
 			if (icon == MessageBoxIcon.None)
 			{
-				const int offsetTop = (34 - 25); // Designer retrieved values.
-				label.Top -= offsetTop; // Move up a bit, or a bit more if already adjusted for more than a line.
+				const int OffsetTop = (34 - 25); // Designer retrieved values.
+				label.Top -= OffsetTop; // Move up a bit, or a bit more if already adjusted for more than a line.
 
-				const int offsetLeft = (58 - 9); // Designer retrieved values.
-				label.Left -= offsetLeft; // Align the label to the left.
+				const int OffsetLeft = (58 - 9); // Designer retrieved values.
+				label.Left -= OffsetLeft; // Align the label to the left.
 
 				var maximumSize = label.MaximumSize; // width = 331
-				maximumSize.Width += offsetLeft; // Adjust the maximum width accordingly.
+				maximumSize.Width += OffsetLeft; // Adjust the maximum width accordingly.
 				label.MaximumSize = maximumSize; // width = 372
 
 				if (label.Height < (designerLabelHeight * 2)) // < 26

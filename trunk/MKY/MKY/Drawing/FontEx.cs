@@ -103,6 +103,8 @@ namespace MKY.Drawing
 		/// <param name="style">The <see cref="FontStyle"/> of the new font.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using same parameter name as 'System.Drawing.Font'.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Using 'em-size' same as 'System.Drawing.Font'.")]
 		public static bool TryGet(string familiyName, float emSize, FontStyle style = FontStyle.Regular)
 		{
 			Font font;
@@ -116,6 +118,8 @@ namespace MKY.Drawing
 		/// <param name="emSize">The em-size, in points, of the new font.</param>
 		/// <param name="font">The new <see cref="Font"/> if available; otherwise, <c>null</c>.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using same parameter name as 'System.Drawing.Font'.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Using 'em-size' same as 'System.Drawing.Font'.")]
 		public static bool TryGet(string familiyName, float emSize, out Font font)
 		{
 			return (TryGet(familiyName, emSize, FontStyle.Regular, out font));
@@ -129,6 +133,8 @@ namespace MKY.Drawing
 		/// <param name="style">The <see cref="FontStyle"/> of the new font.</param>
 		/// <param name="font">The new <see cref="Font"/> if available; otherwise, <c>null</c>.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using same parameter name as 'System.Drawing.Font'.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Using 'em-size' same as 'System.Drawing.Font'.")]
 		public static bool TryGet(string familiyName, float emSize, FontStyle style, out Font font)
 		{
 			Exception exceptionOnFailure;
@@ -142,6 +148,8 @@ namespace MKY.Drawing
 		/// <param name="emSize">The em-size, in points, of the new font.</param>
 		/// <param name="exceptionOnFailure">Exception object, in case of failure.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using same parameter name as 'System.Drawing.Font'.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Using 'em-size' same as 'System.Drawing.Font'.")]
 		public static bool TryGet(string familiyName, float emSize, out Exception exceptionOnFailure)
 		{
 			Font font;
@@ -156,6 +164,8 @@ namespace MKY.Drawing
 		/// <param name="style">The <see cref="FontStyle"/> of the new font.</param>
 		/// <param name="exceptionOnFailure">Exception object, in case of failure.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using same parameter name as 'System.Drawing.Font'.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Using 'em-size' same as 'System.Drawing.Font'.")]
 		public static bool TryGet(string familiyName, float emSize, FontStyle style, out Exception exceptionOnFailure)
 		{
 			Font font;
@@ -170,6 +180,8 @@ namespace MKY.Drawing
 		/// <param name="font">The new <see cref="Font"/> if available; otherwise, <c>null</c>.</param>
 		/// <param name="exceptionOnFailure">Exception object, in case of failure.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using same parameter name as 'System.Drawing.Font'.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Using 'em-size' same as 'System.Drawing.Font'.")]
 		public static bool TryGet(string familiyName, float emSize, out Font font, out Exception exceptionOnFailure)
 		{
 			return (TryGet(familiyName, emSize, FontStyle.Regular, out font, out exceptionOnFailure));
@@ -187,6 +199,8 @@ namespace MKY.Drawing
 		/// <exception cref="ArgumentException"><paramref name="emSize"/> is less than or equal to 0, evaluates to infinity, or is not a valid number.</exception>
 		/// <exception cref="ArgumentNullException"><paramref name="familiyName"/> is <c>null</c> or <see cref="string.Empty"/>.</exception>
 		/// <exception cref="NotSupportedException"><paramref name="familiyName"/> is not available in the environment.</exception>
+		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using same parameter name as 'System.Drawing.Font'.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Using 'em-size' same as 'System.Drawing.Font'.")]
 		public static bool TryGet(string familiyName, float emSize, FontStyle style, out Font font, out Exception exceptionOnFailure)
 		{
 			try
@@ -229,6 +243,7 @@ namespace MKY.Drawing
 		/// </para></remarks>
 		/// <param name="familiyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the <see cref="Font"/> to evaluate.</param>
 		/// <returns><c>true</c> if monospaced; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Monospaced' is a correct English term.")]
 		public static bool IsMonospaced(string familiyName)
 		{
 			var font = new Font(familiyName, staticDefaultFontCache.Size); // Using the cache as "SystemFonts.DefaultFont" is a time consuming operation! See "DefaultFontItalic" for background!
@@ -250,11 +265,14 @@ namespace MKY.Drawing
 		/// </para></remarks>
 		/// <param name="font">The <see cref="Font"/> to evaluate.</param>
 		/// <returns><c>true</c> if monospaced; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Monospaced' is a correct English term.")]
 		public static bool IsMonospaced(Font font)
 		{
+			const string AssertJustification = "Assert documented behavior of a 'System.Windows.Forms.Label' required for this method to succeed.";
+
 			var dummyControl = new System.Windows.Forms.Label(); // By default, a label is displayed with its "AutoSize" property set to false and...
-			Debug.Assert(dummyControl.AutoSize == false);
-			Debug.Assert(dummyControl.Width >= (font.Size * 2));
+			Debug.Assert((dummyControl.AutoSize == false),        AssertJustification);
+			Debug.Assert((dummyControl.Width >= (font.Size * 2)), AssertJustification);
 
 			// It is safe to create a graphics canvas:
 			var g = dummyControl.CreateGraphics();
@@ -262,7 +280,7 @@ namespace MKY.Drawing
 			// Letter O is typically one of the biggest letters and ideal as reference:
 			var char0 = 'O';
 			var width0 = g.MeasureString(char0.ToString(), font).Width; // e.g. 12.48 for Arial 8.25 and 10.47 for Courier New 8.25.
-			Debug.Assert(SingleEx.RatherNotEquals(width0, 0.0f, 3)); // ~‰ is way good enough.
+			Debug.Assert(SingleEx.RatherNotEquals(width0, 0.0f, 3), AssertJustification); // ~‰ is way good enough.
 
 			// Use a variety of characters to compare against:
 			var charsI = new char[] { '.', '#', 'i', 'Z' }; // Attention, a space ' ' doesn't work, it would result
