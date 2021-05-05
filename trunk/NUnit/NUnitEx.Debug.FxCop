@@ -22,7 +22,7 @@
   <TargetFrameworkVersion>3.5</TargetFrameworkVersion>
  </ProjectOptions>
  <Targets>
-  <Target Name="$(ProjectDir)/NUnitEx/bin/Debug/NUnitEx.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/NUnitEx/bin/Debug Test/NUnitEx.dll" Analyze="True" AnalyzeAllChildren="True" />
  </Targets>
  <Rules>
   <RuleFiles>
