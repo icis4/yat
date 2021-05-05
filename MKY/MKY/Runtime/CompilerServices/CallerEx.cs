@@ -50,6 +50,7 @@ namespace MKY.Runtime.CompilerServices
 		/// the <code>nameof()</code> operator, as that operator requires to provide the very method
 		/// name, whereas with this method the method does not need any identifier.
 		/// </para></remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 		public static string GetCallerMemberName([CallerMemberName] string callerMemberName = "")
 		{
 			return (callerMemberName);

@@ -144,6 +144,7 @@ namespace MKY.IO.Serial
 		/// <c>true</c> if the I/O provider is started and the underlying I/O instance is open and/or
 		/// connected to a remote resource as of the most recent operation; otherwise, <c>false</c>.
 		/// </returns>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Ser/HID' just happens to contain 'Ser'...")]
 		bool IsConnected { get; }
 
 		/// <summary>

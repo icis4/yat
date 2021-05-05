@@ -662,6 +662,7 @@ namespace YAT.Domain
 		/// Note that related format setting is called "WarningFormat", i.e. without "Info".
 		/// </para></remarks>
 		[SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "Emphasize scope.")]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Orthogonality' is a correct English term.")]
 		public class WarningInfo : InlineElement
 		{
 			/// <remarks>This parameterless constructor is required for <see cref="Clone"/>.</remarks>
@@ -859,7 +860,6 @@ namespace YAT.Domain
 			{                                                               // Makes sense since elements of the same type will likely be appended.
 				l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
 				l.Add(new Pair<byte[], string>(origin, text));
-
 			}
 			Initialize(timeStamp, direction, l, text, charCount, ((origin != null) ? (origin.Length) : (0)), attributes);
 		}

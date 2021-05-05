@@ -2679,7 +2679,7 @@ namespace YAT.View.Forms
 
 		/// <remarks>
 		/// When a child/terminal is available, its find logic/model will save the pattern.
-		/// Ff no child/terminal is available, the user shall still be able to change the pattern.
+		/// If no child/terminal is available, the user shall still be able to change the pattern.
 		/// </remarks>
 		protected virtual void SaveFindPatternAnyway(string pattern)
 		{

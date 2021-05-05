@@ -23,6 +23,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace YAT.Application.Settings
@@ -121,6 +122,7 @@ namespace YAT.Application.Settings
 		/// <remarks>
 		/// See <see cref="MKY.Drawing.FontEx.IsMonospaced(string)"/> for background on using term "monospaced".
 		/// </remarks>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Monospaced' is a correct English term.")]
 		[XmlElement("ShowMonospacedOnly")]
 		public virtual bool ShowMonospacedOnly
 		{

@@ -425,6 +425,7 @@ namespace YAT.Model
 		/// Using term 'Transmit' to prevent short name conflict of "tt" with "st" = Start Terminal.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'tt' is the abbreviation for the above option but StyleCop isn't able to deal with such abbreviations...")]
 		[OptionArg(Name = "TransmitFile", ShortName = "tf", Description = "Transmit the given file using the terminal specified.")]
 		public string RequestedTransmitFilePath;
 

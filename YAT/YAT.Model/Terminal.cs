@@ -863,7 +863,7 @@ namespace YAT.Model
 
 		/// <remarks>
 		/// Opposed to <see cref="IsSending"/>, where the amount of data expected for sending is
-		/// known by the caller, there is no information on the availability and amout of data
+		/// known by the caller, there is no information on the availability and amount of data
 		/// for receiving, nor any way to determine whether data may be coming in soon. Thus, an
 		/// "IsReceiving" property makes little sense. Instead, this time stamp may be used to
 		/// determine for how long the I/O instance has not been receiving data anymore, and can

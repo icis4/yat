@@ -483,7 +483,7 @@ namespace YAT.Domain
 		/// method. This is because this method in case of e.g. a space cannot tell whether the
 		/// space is "true" content or a separator appended. Because for performance reasons,
 		/// "DisplayElement.AcceptsAppendOf()" allows whitespace content separators to be appended
-		/// to the preceeding element.
+		/// to the preceding element.
 		/// </para></remarks>
 		/// <exception cref="InvalidOperationException">
 		/// The collection is empty - or - contains no content character.

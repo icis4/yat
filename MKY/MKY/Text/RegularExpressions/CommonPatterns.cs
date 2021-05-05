@@ -125,11 +125,13 @@ namespace MKY.Text.RegularExpressions
 		/// <summary>
 		/// IPv4 address in dot format, e.g. "127.0.0.0".
 		/// </summary>                       // Grouping only, no capturing. No capture groups necessary anyway, string can be parsed by 'System.Net.IPAddress.[Try]Parse()'.
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv4...")]
 		public const string IPv4Address = @"(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
 
 		/// <summary>
 		/// IPv4 netmask in dot format, e.g. "255.255.255.0".
-		/// </summary>                       // Grouping only, no capturing. No capture groups necessary anyway, string can be parsed by 'System.Net.IPAddress.[Try]Parse()'.
+		/// </summary>
+		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv4...")]
 		public const string IPv4Netmask = IPv4Address;
 	}
 }
