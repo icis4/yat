@@ -22,6 +22,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.CommandLine
 {
@@ -34,6 +35,7 @@ namespace MKY.CommandLine
 		/// The default value of a C# <code>main(string[])</code> is an
 		/// empty <see cref="string"/> <see cref="Array"/>, not <c>null</c>.
 		/// </summary>
+		[SuppressMessage("Microsoft.Security", "CA2105:ArrayFieldsShouldNotBeReadOnly", Justification = "Agree. But main() does need a string[], and always having to convert e.g. a ReadOnlyCollection ToArray() doesn't make much sense. Will be truly solvable with .NET 5+ ImmutableArray.")]
 		public static readonly string[] Empty = new string[] { };
 	}
 }

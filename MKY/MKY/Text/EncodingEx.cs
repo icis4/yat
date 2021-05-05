@@ -872,6 +872,7 @@ namespace MKY.Text
 		/// <summary>
 		/// Gets a value indicating whether the current encoding uses multi-byte code points.
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiByte'?")]
 		public virtual bool IsMultiByte
 		{
 			get { return (!IsSingleByte); }

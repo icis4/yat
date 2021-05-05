@@ -256,7 +256,7 @@ namespace MKY.Windows.Forms
 		/// One of the <see cref="DialogResult"/> values.
 		/// </returns>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
-		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Setting is required to be received, modified and returned.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Setting is required to be received, modified and returned.")]
 		[ModalBehaviorContract(ModalBehavior.Always)]
 		public static DialogResult Show(IWin32Window owner, string text, ICollection<LinkLabel.Link> links, string caption, string checkText, ref bool checkValue, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
 		{
@@ -292,6 +292,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Setting is required to be received, modified and returned.")]
 		protected ExtendedMessageBox(string text, ICollection<LinkLabel.Link> links, string caption, string checkText, ref bool checkValue, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
 		{
 			InitializeComponent();

@@ -98,117 +98,120 @@ namespace MKY.Drawing
 		/// <summary>
 		/// Tries to initialize a new <see cref="Font"/> using a specified name, size and style.
 		/// </summary>
-		/// <param name="familiyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
+		/// <param name="familyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
 		/// <param name="emSize">The em-size, in points, of the new font.</param>
 		/// <param name="style">The <see cref="FontStyle"/> of the new font.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using same parameter name as 'System.Drawing.Font'.")]
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Using 'em-size' same as 'System.Drawing.Font'.")]
-		public static bool TryGet(string familiyName, float emSize, FontStyle style = FontStyle.Regular)
+		public static bool TryGet(string familyName, float emSize, FontStyle style = FontStyle.Regular)
 		{
 			Font font;
-			return (TryGet(familiyName, emSize, style, out font));
+			return (TryGet(familyName, emSize, style, out font));
 		}
 
 		/// <summary>
 		/// Tries to initialize a new <see cref="Font"/> using a specified name, size and style.
 		/// </summary>
-		/// <param name="familiyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
+		/// <param name="familyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
 		/// <param name="emSize">The em-size, in points, of the new font.</param>
 		/// <param name="font">The new <see cref="Font"/> if available; otherwise, <c>null</c>.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using same parameter name as 'System.Drawing.Font'.")]
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Using 'em-size' same as 'System.Drawing.Font'.")]
-		public static bool TryGet(string familiyName, float emSize, out Font font)
+		public static bool TryGet(string familyName, float emSize, out Font font)
 		{
-			return (TryGet(familiyName, emSize, FontStyle.Regular, out font));
+			return (TryGet(familyName, emSize, FontStyle.Regular, out font));
 		}
 
 		/// <summary>
 		/// Tries to initialize a new <see cref="Font"/> using a specified name, size and style.
 		/// </summary>
-		/// <param name="familiyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
+		/// <param name="familyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
 		/// <param name="emSize">The em-size, in points, of the new font.</param>
 		/// <param name="style">The <see cref="FontStyle"/> of the new font.</param>
 		/// <param name="font">The new <see cref="Font"/> if available; otherwise, <c>null</c>.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using same parameter name as 'System.Drawing.Font'.")]
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Using 'em-size' same as 'System.Drawing.Font'.")]
-		public static bool TryGet(string familiyName, float emSize, FontStyle style, out Font font)
+		public static bool TryGet(string familyName, float emSize, FontStyle style, out Font font)
 		{
 			Exception exceptionOnFailure;
-			return (TryGet(familiyName, emSize, style, out font, out exceptionOnFailure));
+			return (TryGet(familyName, emSize, style, out font, out exceptionOnFailure));
 		}
 
 		/// <summary>
 		/// Tries to initialize a new <see cref="Font"/> using a specified name, size and style.
 		/// </summary>
-		/// <param name="familiyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
+		/// <param name="familyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
 		/// <param name="emSize">The em-size, in points, of the new font.</param>
 		/// <param name="exceptionOnFailure">Exception object, in case of failure.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using same parameter name as 'System.Drawing.Font'.")]
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Using 'em-size' same as 'System.Drawing.Font'.")]
-		public static bool TryGet(string familiyName, float emSize, out Exception exceptionOnFailure)
+		public static bool TryGet(string familyName, float emSize, out Exception exceptionOnFailure)
 		{
 			Font font;
-			return (TryGet(familiyName, emSize, out font, out exceptionOnFailure));
+			return (TryGet(familyName, emSize, out font, out exceptionOnFailure));
 		}
 
 		/// <summary>
 		/// Tries to initialize a new <see cref="Font"/> using a specified name, size and style.
 		/// </summary>
-		/// <param name="familiyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
+		/// <param name="familyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
 		/// <param name="emSize">The em-size, in points, of the new font.</param>
 		/// <param name="style">The <see cref="FontStyle"/> of the new font.</param>
 		/// <param name="exceptionOnFailure">Exception object, in case of failure.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using same parameter name as 'System.Drawing.Font'.")]
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Using 'em-size' same as 'System.Drawing.Font'.")]
-		public static bool TryGet(string familiyName, float emSize, FontStyle style, out Exception exceptionOnFailure)
+		public static bool TryGet(string familyName, float emSize, FontStyle style, out Exception exceptionOnFailure)
 		{
 			Font font;
-			return (TryGet(familiyName, emSize, style, out font, out exceptionOnFailure));
+			return (TryGet(familyName, emSize, style, out font, out exceptionOnFailure));
 		}
 
 		/// <summary>
 		/// Tries to initialize a new <see cref="Font"/> using a specified name, size and style.
 		/// </summary>
-		/// <param name="familiyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
+		/// <param name="familyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
 		/// <param name="emSize">The em-size, in points, of the new font.</param>
 		/// <param name="font">The new <see cref="Font"/> if available; otherwise, <c>null</c>.</param>
 		/// <param name="exceptionOnFailure">Exception object, in case of failure.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using same parameter name as 'System.Drawing.Font'.")]
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Using 'em-size' same as 'System.Drawing.Font'.")]
-		public static bool TryGet(string familiyName, float emSize, out Font font, out Exception exceptionOnFailure)
+		public static bool TryGet(string familyName, float emSize, out Font font, out Exception exceptionOnFailure)
 		{
-			return (TryGet(familiyName, emSize, FontStyle.Regular, out font, out exceptionOnFailure));
+			return (TryGet(familyName, emSize, FontStyle.Regular, out font, out exceptionOnFailure));
 		}
 
 		/// <summary>
 		/// Tries to initialize a new <see cref="Font"/> using a specified name, size and style.
 		/// </summary>
-		/// <param name="familiyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
+		/// <param name="familyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the new <see cref="Font"/>.</param>
 		/// <param name="emSize">The em-size, in points, of the new font.</param>
 		/// <param name="style">The <see cref="FontStyle"/> of the new font.</param>
 		/// <param name="font">The new <see cref="Font"/> if available; otherwise, <c>null</c>.</param>
 		/// <param name="exceptionOnFailure">Exception object, in case of failure.</param>
 		/// <returns><c>true</c> if successful; otherwise, <c>false</c>.</returns>
 		/// <exception cref="ArgumentException"><paramref name="emSize"/> is less than or equal to 0, evaluates to infinity, or is not a valid number.</exception>
-		/// <exception cref="ArgumentNullException"><paramref name="familiyName"/> is <c>null</c> or <see cref="string.Empty"/>.</exception>
-		/// <exception cref="NotSupportedException"><paramref name="familiyName"/> is not available in the environment.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="familyName"/> is <c>null</c> or <see cref="string.Empty"/>.</exception>
+		/// <exception cref="NotSupportedException"><paramref name="familyName"/> is not available in the environment.</exception>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using same parameter name as 'System.Drawing.Font'.")]
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Using 'em-size' same as 'System.Drawing.Font'.")]
-		public static bool TryGet(string familiyName, float emSize, FontStyle style, out Font font, out Exception exceptionOnFailure)
+		public static bool TryGet(string familyName, float emSize, FontStyle style, out Font font, out Exception exceptionOnFailure)
 		{
 			try
 			{
-				font = new Font(familiyName, emSize, style);
+				font = new Font(familyName, emSize, style);
 
 				// Just creating the font is not sufficient. The following check is required:
-				if (font.Name == familiyName)
+				if (font.Name == familyName)
 				{
 					exceptionOnFailure = null;
 					return (true);
@@ -216,7 +219,7 @@ namespace MKY.Drawing
 				else
 				{
 					font = null;
-					exceptionOnFailure = new NotSupportedException(familiyName + " is not available in the environment!");
+					exceptionOnFailure = new NotSupportedException(familyName + " is not available in the environment!");
 					return (false);
 				}
 			}
@@ -229,7 +232,7 @@ namespace MKY.Drawing
 		}
 
 		/// <summary>
-		/// Determines whether the <see cref="Font"/> of the given <paramref name="familiyName"/> is monospaced.
+		/// Determines whether the <see cref="Font"/> of the given <paramref name="familyName"/> is monospaced.
 		/// </summary>
 		/// <remarks><para>
 		/// Using "monospaced" instead of "fixed width" same as in <see cref="FontFamily.GenericMonospace"/>.
@@ -241,12 +244,13 @@ namespace MKY.Drawing
 		/// </para><para>
 		/// Based on https://social.msdn.microsoft.com/forums/windows/en-US/5b582b96-ade5-4354-99cf-3fe64cc6b53b/determining-if-font-is-monospaced.
 		/// </para></remarks>
-		/// <param name="familiyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the <see cref="Font"/> to evaluate.</param>
+		/// <param name="familyName">A <c>string</c> representation of the <see cref="FontFamily"/> for the <see cref="Font"/> to evaluate.</param>
 		/// <returns><c>true</c> if monospaced; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Monospaced", Justification = "'Monospaced' is a correct English term.")]
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Monospaced' is a correct English term.")]
-		public static bool IsMonospaced(string familiyName)
+		public static bool IsMonospaced(string familyName)
 		{
-			var font = new Font(familiyName, staticDefaultFontCache.Size); // Using the cache as "SystemFonts.DefaultFont" is a time consuming operation! See "DefaultFontItalic" for background!
+			var font = new Font(familyName, staticDefaultFontCache.Size); // Using the cache as "SystemFonts.DefaultFont" is a time consuming operation! See "DefaultFontItalic" for background!
 			return (IsMonospaced(font));
 		}
 
@@ -265,6 +269,7 @@ namespace MKY.Drawing
 		/// </para></remarks>
 		/// <param name="font">The <see cref="Font"/> to evaluate.</param>
 		/// <returns><c>true</c> if monospaced; otherwise, <c>false</c>.</returns>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Monospaced", Justification = "'Monospaced' is a correct English term.")]
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Monospaced' is a correct English term.")]
 		public static bool IsMonospaced(Font font)
 		{

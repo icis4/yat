@@ -119,8 +119,12 @@ namespace MKY.Text.RegularExpressions
 
 		/// <summary>
 		/// MAC address in colon format, e.g. "01:23:45:67:89:AB".
-		/// </summary>                      // Grouping only, no capturing. No capture groups necessary anyway, string converted 'ToUpper()' can be parsed by 'System.Net.NetworkInformation.PhysicalAddress.[Try]Parse()'.
-		public const string MACAddress = @"(?:(?:[0-9A-Fa-f]{2}):){5}(?:[0-9A-Fa-f]{2})";
+		/// </summary>
+		/// <remarks>
+		/// Named "PhysicalAddress" rather than "MAC" or "Mac" same as
+		/// <see cref="System.Net.NetworkInformation.PhysicalAddress"/>.
+		/// </remarks>                           // Grouping only, no capturing. No capture groups necessary anyway, string converted 'ToUpper()' can be parsed by 'System.Net.NetworkInformation.PhysicalAddress.[Try]Parse()'.
+		public const string PhysicalAddress = @"(?:(?:[0-9A-Fa-f]{2}):){5}(?:[0-9A-Fa-f]{2})";
 
 		/// <summary>
 		/// IPv4 address in dot format, e.g. "127.0.0.0".
@@ -131,6 +135,7 @@ namespace MKY.Text.RegularExpressions
 		/// <summary>
 		/// IPv4 netmask in dot format, e.g. "255.255.255.0".
 		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Netmask", Justification = "'Netmask' is a common term in IP networking.")]
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Well, 'Pv' is just a part of IPv4...")]
 		public const string IPv4Netmask = IPv4Address;
 	}

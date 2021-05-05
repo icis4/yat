@@ -53,6 +53,7 @@ namespace MKY.Drawing
 		/// <param name="textFormatFlags"><see cref="TextFormatFlags"/> to be changed.</param>
 		/// <returns>Changed <see cref="TextFormatFlags"/>.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags", Justification = "Name is given by the .NET framework.")]
 		public static TextFormatFlags ApplyTo(ContentAlignment contentAlignment, TextFormatFlags textFormatFlags = TextFormatFlags.Default)
 		{
 			// ATTENTION
@@ -115,6 +116,7 @@ namespace MKY.Drawing
 					textFormatFlags |= TextFormatFlags.Right;
 					break;
 			}
+
 			return (textFormatFlags);
 		}
 	}
