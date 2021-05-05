@@ -23,22 +23,22 @@
  </ProjectOptions>
  <Targets>
   <Target Name="$(ProjectDir)/YAT.Application.Base/bin/Debug/YAT.Application.Base.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/YAT.Application.Test/bin/Debug/YAT.Application.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/YAT.Application.Test/bin/Debug Test/YAT.Application.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Application/bin/Debug/YAT.Application.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/YAT.Domain.Test/bin/Debug/YAT.Domain.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/YAT.Domain.Test/bin/Debug Test/YAT.Domain.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Domain/bin/Debug/YAT.Domain.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Format/bin/Debug/YAT.Format.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Log/bin/Debug/YAT.Log.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Model.Base/bin/Debug/YAT.Model.Base.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/YAT.Model.Test/bin/Debug/YAT.Model.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/YAT.Model.Test/bin/Debug Test/YAT.Model.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Model/bin/Debug/YAT.Model.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Settings.Application/bin/Debug/YAT.Settings.Application.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/YAT.Settings.Model.Test/bin/Debug/YAT.Settings.Model.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/YAT.Settings.Model.Test/bin/Debug Test/YAT.Settings.Model.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Settings.Model/bin/Debug/YAT.Settings.Model.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/YAT.Test/bin/Debug/YAT.Test.exe" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/YAT.Test/bin/Debug Test/YAT.Test.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.View.Controls/bin/Debug/YAT.View.Controls.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.View.Forms/bin/Debug/YAT.View.Forms.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/YAT.View.Test/bin/Debug/YAT.View.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/YAT.View.Test/bin/Debug Test/YAT.View.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.View.Utilities/bin/Debug/YAT.View.Utilities.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT/bin/Debug/YAT.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YATConsole/bin/Debug/YATConsole.exe" Analyze="True" AnalyzeAllChildren="True" />

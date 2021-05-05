@@ -25,20 +25,20 @@
   <AssemblyReferenceDirectories>
    <Directory>$(ProjectDir)/MKY.IO/bin/Debug/</Directory>
   </AssemblyReferenceDirectories>
-  <Target Name="$(ProjectDir)/MKY.IO.Ports.Test/bin/Debug/MKY.IO.Ports.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/MKY.IO.Ports.Test/bin/Debug Test/MKY.IO.Ports.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Ports/bin/Debug/MKY.IO.Ports.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/MKY.IO.Serial.SerialPort.Test/bin/Debug/MKY.IO.Serial.SerialPort.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/MKY.IO.Serial.SerialPort.Test/bin/Debug Test/MKY.IO.Serial.SerialPort.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Serial.SerialPort/bin/Debug/MKY.IO.Serial.SerialPort.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/MKY.IO.Serial.Socket.Test/bin/Debug/MKY.IO.Serial.Socket.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/MKY.IO.Serial.Socket.Test/bin/Debug Test/MKY.IO.Serial.Socket.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Serial.Socket/bin/Debug/MKY.IO.Serial.Socket.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/MKY.IO.Serial.Usb.Test/bin/Debug/MKY.IO.Serial.Usb.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/MKY.IO.Serial.Usb.Test/bin/Debug Test/MKY.IO.Serial.Usb.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Serial.Usb/bin/Debug/MKY.IO.Serial.Usb.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Serial/bin/Debug/MKY.IO.Serial.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/MKY.IO.Usb.Test/bin/Debug/MKY.IO.Usb.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/MKY.IO.Usb.Test/bin/Debug Test/MKY.IO.Usb.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Usb/bin/Debug/MKY.IO.Usb.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/MKY.Net.Test/bin/Debug/MKY.Net.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/MKY.Test/bin/Debug/MKY.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/MKY.Win32.Test/bin/Debug/MKY.Win32.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/MKY.Net.Test/bin/Debug Test/MKY.Net.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/MKY.Test/bin/Debug Test/MKY.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/MKY.Win32.Test/bin/Debug Test/MKY.Win32.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.Win32/bin/Debug/MKY.Win32.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.Windows.Forms/bin/Debug/MKY.Windows.Forms.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY/bin/Debug/MKY.dll" Analyze="True" AnalyzeAllChildren="True" />
