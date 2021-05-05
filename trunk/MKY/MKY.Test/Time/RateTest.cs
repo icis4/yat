@@ -69,6 +69,7 @@ namespace MKY.Test.Time
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this test.")]
 		[Test]
 		public virtual void TestCreate_IntervalEqualsWindow()
 		{
@@ -84,6 +85,7 @@ namespace MKY.Test.Time
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this test.")]
 		[Test]
 		public virtual void TestCreate_IntervalLessThanWindowWithEvenRatio()
 		{
@@ -95,6 +97,7 @@ namespace MKY.Test.Time
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this test.")]
 		[Test]
 		public virtual void TestCreate_IntervalLessThanWindowWithOddRatio()
 		{
@@ -106,6 +109,7 @@ namespace MKY.Test.Time
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this test.")]
 		[Test, AssertThrowsCategory]
 		public virtual void TestCreate_IntervalGreaterThanWindow()
 		{
@@ -139,6 +143,7 @@ namespace MKY.Test.Time
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this test.")]
 		[Test, Sequential] // Sequential for minutes, seconds and milliseconds.
 		public virtual void TestUpdateTimed_IntervalEqualsWindow
 		(
@@ -194,6 +199,7 @@ namespace MKY.Test.Time
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this test.")]
 		[Test, Sequential] // Sequential for minutes, seconds and milliseconds.
 		public virtual void TestUpdateTimed_IntervalLessThanWindowWithEvenRatio
 		(
@@ -269,6 +275,7 @@ namespace MKY.Test.Time
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this test.")]
 		[Test, Sequential] // Sequential for minutes, seconds and milliseconds.
 		public virtual void TestUpdateTimed_IntervalLessThanWindowWithOddRatio
 		(
@@ -344,6 +351,7 @@ namespace MKY.Test.Time
 		/// Tested for 'normal' sub-second values only; testing sub-millisecond values is not
 		/// feasible with <see cref="DateTime"/> and <see cref="TimeSpan"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this test.")]
 		[Test]
 		public virtual void TestUpdateAbsolute_IntervalEqualsWindow
 		(
@@ -400,6 +408,7 @@ namespace MKY.Test.Time
 		/// Tested for 'normal' sub-second values only; testing sub-millisecond values is not
 		/// feasible with <see cref="DateTime"/> and <see cref="TimeSpan"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this test.")]
 		[Test]
 		public virtual void TestUpdateAbsolute_IntervalLessThanWindowWithEvenRatio
 		(
@@ -456,6 +465,7 @@ namespace MKY.Test.Time
 		/// Tested for 'normal' sub-second values only; testing sub-millisecond values is not
 		/// feasible with <see cref="DateTime"/> and <see cref="TimeSpan"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize variational manner of this test.")]
 		[Test]
 		public virtual void TestUpdateAbsolute_IntervalLessThanWindowWithOddRatio
 		(

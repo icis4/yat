@@ -50,6 +50,7 @@ namespace MKY.Runtime.CompilerServices
 		/// the <code>nameof()</code> operator, as that operator requires to provide the very method
 		/// name, whereas with this method the method does not need any identifier.
 		/// </para></remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters are required for 'Caller*Attribute'.")]
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 		public static string GetCallerMemberName([CallerMemberName] string callerMemberName = "")
 		{
@@ -62,6 +63,7 @@ namespace MKY.Runtime.CompilerServices
 		/// <remarks>
 		/// Based on <see cref="CallerFilePathAttribute"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters are required for 'Caller*Attribute'.")]
 		public static string GetCallerFilePath([CallerFilePath] string callerFilePath = "")
 		{
 			return (callerFilePath);
@@ -73,6 +75,7 @@ namespace MKY.Runtime.CompilerServices
 		/// <remarks>
 		/// Based on <see cref="CallerLineNumberAttribute"/>.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters are required for 'Caller*Attribute'.")]
 		public static int GetCallerLineNumber([CallerLineNumber] int callerLineNumber = 0)
 		{
 			return (callerLineNumber);

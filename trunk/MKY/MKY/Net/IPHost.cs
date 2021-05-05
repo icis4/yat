@@ -92,6 +92,8 @@ namespace MKY.Net
 		private const string IPv4Localhost_string = "IPv4 localhost";
 
 		/// <remarks>Required for not having to replicate tag "[broadcast]".</remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize relation with 'IPHost.Broadcast'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "string", Justification = "See above.")]
 		public const string Broadcast_string      = "[broadcast]";
 		private const string IPv4Broadcast_string = "IPv4 broadcast";
 		private const string IPv6Localhost_string = "IPv6 localhost";

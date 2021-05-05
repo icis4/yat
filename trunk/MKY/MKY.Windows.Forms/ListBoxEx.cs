@@ -1039,6 +1039,7 @@ namespace MKY.Windows.Forms
 		/// <remarks>
 		/// Note that items gets deselected if another control gets the focus.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public bool VerticalScrollToBottomIfNoVisibleItemIsSelected(bool clearSelected = true)
 		{
 			bool hasClearedSelected;
@@ -1051,6 +1052,7 @@ namespace MKY.Windows.Forms
 		/// <remarks>
 		/// Note that items gets deselected if another control gets the focus.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public bool VerticalScrollToBottomIfNoVisibleItemIsSelected(bool clearSelected, out bool hasClearedSelected)
 		{
 			hasClearedSelected = false;
@@ -1079,6 +1081,7 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Vertically scroll the list to the bottom if no visible items are selected, except for the last.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public bool VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastFewItemsIsSelected(bool clearSelected = true)
 		{
 			bool hasClearedSelected;
@@ -1088,6 +1091,7 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Vertically scroll the list to the bottom if no visible items are selected, except for the last.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public bool VerticalScrollToBottomIfNoVisibleItemOrOnlyOneOfTheLastFewItemsIsSelected(bool clearSelected, out bool hasClearedSelected)
 		{
 			if (VerticalScrollToBottomIfNoVisibleItemIsSelected(clearSelected, out hasClearedSelected))
@@ -1104,6 +1108,7 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Vertically scroll the list to the bottom if only one of the last items is selected.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public bool VerticalScrollToBottomIfOnlyOneOfTheLastFewItemsIsSelected(bool clearSelected = true)
 		{
 			bool hasClearedSelected;
@@ -1113,6 +1118,7 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Vertically scroll the list to the bottom if only one of the last items is selected.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public bool VerticalScrollToBottomIfOnlyOneOfTheLastFewItemsIsSelected(bool clearSelected, out bool hasClearedSelected)
 		{
 			hasClearedSelected = false;

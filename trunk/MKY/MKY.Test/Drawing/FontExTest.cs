@@ -21,6 +21,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 using MKY.Drawing;
 
 using NUnit.Framework;
@@ -42,6 +44,7 @@ namespace MKY.Test.Drawing
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Monospaced", Justification = "'Monospaced' is a correct English term.")]
 		[Test]
 		public virtual void IsMonospaced()
 		{
