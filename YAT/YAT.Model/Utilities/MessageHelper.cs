@@ -149,6 +149,7 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		public static void MakeCommandLineErrorMessage(ICollection<string> invalidArgs, IReadOnlyList<string> invalidationMessages, out StringBuilder text)
 		{
 			text = new StringBuilder();
@@ -198,6 +199,7 @@ namespace YAT.Model.Utilities
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		public static void MakeMissingFontMessage(string defaultFontName, Exception exceptionOnFailure, out StringBuilder text, out List<LinkLabel.Link> links)
 		{
 			text = new StringBuilder();
@@ -257,12 +259,15 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Monospaced", Justification = "'Monospaced' is a correct English term.")]
 		public static string MakeFontMonospacedRecommendation()
 		{
 			return ("For best readability, it is highly recommended to use a monospaced font.");
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Monospaced", Justification = "'Monospaced' is a correct English term.")]
 		public static void MakeFontNotMonospacedMessage(string terminalName, string currentFontName, out StringBuilder text)
 		{
 			text = new StringBuilder();

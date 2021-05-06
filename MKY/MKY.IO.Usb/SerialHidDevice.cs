@@ -1057,7 +1057,7 @@ namespace MKY.IO.Usb
 				sb.AppendLine(@""":");
 				sb.AppendLine();
 
-				if (ex.Message.EndsWith(Environment.NewLine, StringComparison.OrdinalIgnoreCase))
+				if (StringEx.EndsWithOrdinalIgnoreCase(ex.Message, Environment.NewLine))
 					sb.Append    (ex.Message);
 				else
 					sb.AppendLine(ex.Message);
@@ -1173,7 +1173,7 @@ namespace MKY.IO.Usb
 				sb.AppendLine(@""":");
 				sb.AppendLine();
 
-				if (ex.Message.EndsWith(Environment.NewLine, StringComparison.OrdinalIgnoreCase))
+				if (StringEx.EndsWithOrdinalIgnoreCase(ex.Message, Environment.NewLine))
 					sb.Append    (ex.Message);
 				else
 					sb.AppendLine(ex.Message);

@@ -599,8 +599,11 @@ namespace MKY.Net
 
 		/// <remarks>
 		/// The list of fixed items of this extended enum.
-		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Symmetricity with Enum.GetNames() and Enum.GetValues().")]
+		/// <para>
+		/// Method instead of property for orthogonality with <see cref="Enum.GetNames(Type)"/> and
+		/// <see cref="Enum.GetValues(Type)"/>.
+		/// </para></remarks>
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remarks.")]
 		public static ReadOnlyCollection<IPFilterEx> GetItems()
 		{
 			if (staticItems == null)

@@ -161,6 +161,7 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi", Justification = "What's wrong with 'MultiLine'?")]
 		[Test]
 		public virtual void TestEmptyThenDescriptionThenMultiLineText()
 		{

@@ -38,7 +38,8 @@ namespace YAT.Application.Settings
 		public const bool CheckTerminalDefault = true;
 
 		/// <summary></summary>
-		public const bool ShowMonospaceOnlyDefault = true;
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Monospaced", Justification = "'Monospaced' is a correct English term.")]
+		public const bool ShowMonospacedOnlyDefault = true;
 
 		private bool checkAvailability;
 		private bool checkTerminal;
@@ -81,7 +82,7 @@ namespace YAT.Application.Settings
 
 			CheckAvailability  = CheckAvailabilityDefault;
 			CheckTerminal      = CheckTerminalDefault;
-			ShowMonospacedOnly = ShowMonospaceOnlyDefault;
+			ShowMonospacedOnly = ShowMonospacedOnlyDefault;
 		}
 
 		#region Properties
@@ -122,6 +123,7 @@ namespace YAT.Application.Settings
 		/// <remarks>
 		/// See <see cref="MKY.Drawing.FontEx.IsMonospaced(string)"/> for background on using term "monospaced".
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Monospaced", Justification = "'Monospaced' is a correct English term.")]
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Monospaced' is a correct English term.")]
 		[XmlElement("ShowMonospacedOnly")]
 		public virtual bool ShowMonospacedOnly

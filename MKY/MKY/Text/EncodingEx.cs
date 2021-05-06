@@ -937,7 +937,7 @@ namespace MKY.Text
 		/// Method instead of property for same signature as <see cref="Encoding.GetMaxByteCount(int)"/>,
 		/// though without 'charCount' parameter (method is limited to return count for a single character).
 		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remark above.")]
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remarks.")]
 		public virtual int GetMinByteCount()
 		{
 			switch ((SupportedEncoding)CodePage)

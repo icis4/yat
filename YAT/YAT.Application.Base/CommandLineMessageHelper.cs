@@ -28,6 +28,8 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Text;
 
@@ -90,7 +92,10 @@ namespace YAT.Application
 
 		/// <remarks>
 		/// Does not include a trailing empty line.
-		/// </remarks>
+		/// <para>
+		/// Method instead of property for orthogonality with <see cref="GetVersionAndLogoAndHelpAndReturn(Func{int, string})"/>.
+		/// </para></remarks>
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remarks.")]
 		public static string GetVersion()
 		{
 			return (ApplicationEx.ProductCaptionAndVersionAndBuild);
@@ -98,12 +103,15 @@ namespace YAT.Application
 
 		/// <remarks>
 		/// Does not include a trailing empty line.
-		/// </remarks>
+		/// <para>
+		/// Method instead of property for orthogonality with <see cref="GetVersionAndLogoAndHelpAndReturn(Func{int, string})"/>.
+		/// </para></remarks>
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remarks.")]
 		public static string GetVersionAndLogo()
 		{
 			var sb = new StringBuilder();
 
-			using (var writer = new StringWriter(sb))
+			using (var writer = new StringWriter(sb, CultureInfo.CurrentCulture))
 			{
 				WriteVersionAndLogo(writer, DefaultTextWidth, appendEmptyLine: false);
 			}
@@ -118,7 +126,7 @@ namespace YAT.Application
 		{
 			var sb = new StringBuilder();
 
-			using (var writer = new StringWriter(sb))
+			using (var writer = new StringWriter(sb, CultureInfo.CurrentCulture))
 			{
 				WriteVersionAndLogoAndHelpAndReturn(writer, DefaultTextWidth, getHelpText, appendEmptyLine: false);
 			}

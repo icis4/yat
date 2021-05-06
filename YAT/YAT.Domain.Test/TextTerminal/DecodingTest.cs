@@ -30,6 +30,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Text;
 
 using MKY.Net.Test;
@@ -61,7 +62,7 @@ namespace YAT.Domain.Test.TextTerminal
 		public static string GetExpectedComprehensiveInvalidBytesWarning(byte[] invalidData, Encoding encoding)
 		{
 			var invalidDataAsString = ByteHelper.FormatHexString(invalidData, showRadix: true);
-			var text = string.Format(@"[Warning: ""{0}"" is an invalid '{1}' byte sequence!]", invalidDataAsString, ((EncodingEx)encoding).DisplayName);
+			var text = string.Format(CultureInfo.InvariantCulture, @"[Warning: ""{0}"" is an invalid '{1}' byte sequence!]", invalidDataAsString, ((EncodingEx)encoding).DisplayName);
 			return (text);
 		}
 
@@ -73,7 +74,7 @@ namespace YAT.Domain.Test.TextTerminal
 		public static string GetExpectedComprehensiveOutsideUnicodePlane0Warning(byte[] invalidData)
 		{
 			var invalidDataAsString = ByteHelper.FormatHexString(invalidData, showRadix: true);
-			var text = string.Format(@"[Warning: ""{0}"" is a byte sequence outside the Unicode basic multilingual plane (plane 0)! Only Unicode plane 0 is supported by .NET Framework and thus YAT (yet).]", invalidDataAsString);
+			var text = string.Format(CultureInfo.InvariantCulture, @"[Warning: ""{0}"" is a byte sequence outside the Unicode basic multilingual plane (plane 0)! Only Unicode plane 0 is supported by .NET Framework and thus YAT (yet).]", invalidDataAsString);
 			return (text);
 		}
 
@@ -85,7 +86,7 @@ namespace YAT.Domain.Test.TextTerminal
 		public static string GetExpectedCompactWarning(byte[] invalidData)
 		{
 			var invalidDataAsString = ByteHelper.FormatHexString(invalidData, showRadix: true);
-			var text = string.Format(@"[{0}]", invalidDataAsString);
+			var text = string.Format(CultureInfo.InvariantCulture, @"[{0}]", invalidDataAsString);
 			return (text);
 		}
 

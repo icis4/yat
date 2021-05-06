@@ -98,7 +98,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Note that it is not possible to mark a property with [Conditional("TEST")].
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize purpose of this property.")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize purpose.")]
 		public bool DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly { get; set; }
 
 		/// <summary>

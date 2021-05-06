@@ -477,10 +477,11 @@ namespace YAT.Model
 		public bool KeepOpen;
 
 		/// <remarks>
-		/// Named 'NonSuccess' in code, as this related to everything but <see cref="MainResult.Success"/>.
+		/// Named 'NonSuccess' in code, as this is related to everything but <see cref="MainResult.Success"/>.
 		/// But primary user name shall be 'Error', as that is more intuitive, especially for non-script users.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "NonSuccess", Justification = "Emphasize this is related to everything but 'MainResult.Success'.")]
 		[CLSCompliant(false)]        // Arrays as attribute args are not CLS-compliant.
 		[OptionArg(Names = new string[] { "KeepOpenOnError", "KeepOpenOnNonSuccess" }, ShortNames = new string[] { "ke", "kpe", "kpn" }, Description =
 			"Keep " + ApplicationEx.ProductNameConstWorkaround + " open in case there is an error while performing the requested operation, or the operation could not be completed successfully. " +

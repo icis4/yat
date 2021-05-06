@@ -259,7 +259,10 @@ namespace YAT.Domain.Parser
 		/// <summary>
 		/// Gets the maximum arguments count for this keyword.
 		/// </summary>
-		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Naming same as 'GetItems()'.")]
+		/// <remarks>
+		/// Method instead of property for orthogonality with <see cref="GetItems()"/>.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remarks.")]
 		public virtual int GetMaxArgsCount()
 		{
 			switch ((Keyword)UnderlyingEnum)

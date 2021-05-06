@@ -907,6 +907,7 @@ namespace YAT.Application
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 	#endif
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		protected MainResult RunFullyFromConsole(ApplicationSettingsFileAccess applicationSettingsFileAccess)
 		{
 			MessageHelper.RequestSupport =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
@@ -1057,6 +1058,8 @@ namespace YAT.Application
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 	#endif
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize the purpose.")]
+		[SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", Justification = "Project does target .NET 4 but FxCop cannot handle that, project must be upgraded to Visual Studio Code Analysis (FR #231).")]
 		protected MainResult RunInvisible_ForTestOnly(ApplicationSettingsFileAccess applicationSettingsFileAccess)
 		{
 			MessageHelper.RequestSupport =      "Support may be requested at <sourceforge.net/projects/y-a-terminal/support/>.";
@@ -1191,8 +1194,9 @@ namespace YAT.Application
 		/// <remarks>
 		/// Named "MessageBox" as a <see cref="MessageBox"/> is being shown.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "2#", Justification = "Required for modifying the flag.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		protected void ShowErrorInMessageBox(ICollection<string> invalidArgs, IReadOnlyList<string> invalidationMessages, ref bool showHelp)
+		protected static void ShowErrorInMessageBox(ICollection<string> invalidArgs, IReadOnlyList<string> invalidationMessages, ref bool showHelp)
 		{
 			StringBuilder text;
 			Model.Utilities.MessageHelper.MakeCommandLineErrorMessage(invalidArgs, invalidationMessages, out text);
@@ -1256,7 +1260,7 @@ namespace YAT.Application
 		}
 
 		/// <summary></summary>
-		protected void ShowErrorInConsole(ICollection<string> invalidArgs, IReadOnlyList<string> invalidationMessages)
+		protected static void ShowErrorInConsole(ICollection<string> invalidArgs, IReadOnlyList<string> invalidationMessages)
 		{
 			// #1 PS C:\Program Files\YAT> .\YATConsole.exe -blabla
 			// #2

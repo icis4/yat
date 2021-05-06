@@ -100,6 +100,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Resume", Justification = "Resume() as method name is the obvious name and should be OK for other languages.")]
 		public virtual void Resume()
 		{
 			IsActive = true;

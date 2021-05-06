@@ -91,6 +91,7 @@ namespace YAT.View.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Monospaced", Justification = "'Monospaced' is a correct English term.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1115:ParameterMustFollowComma",                       Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "There are too many parameters to pass.")]
 		[SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines",      Justification = "There are too many parameters to pass.")]
@@ -196,6 +197,7 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Monospaced", Justification = "'Monospaced' is a correct English term.")]
 		public bool ShowMonospacedFontsOnlyResult
 		{
 			get { return (this.showMonospacedFontsOnly); }
@@ -577,7 +579,7 @@ namespace YAT.View.Forms
 			try
 			{
 				var item = TimeSpan.Zero;
-				item.ToString(format);
+				item.ToString(format, CultureInfo.InvariantCulture); // Probing only.
 
 				return (true);
 			}
@@ -785,7 +787,7 @@ namespace YAT.View.Forms
 				this.timeDeltaFormat    = Domain.Settings.DisplaySettings.TimeDeltaFormatDefault;
 				this.timeDurationFormat = Domain.Settings.DisplaySettings.TimeDurationFormatDefault;
 
-				this.showMonospacedFontsOnly = Application.Settings.FontSettings.ShowMonospaceOnlyDefault;
+				this.showMonospacedFontsOnly = Application.Settings.FontSettings.ShowMonospacedOnlyDefault;
 
 				SetControls();
 			}
@@ -1085,6 +1087,8 @@ namespace YAT.View.Forms
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Monospaced", Justification = "'Monospaced' is a correct English term.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		public static DialogResult ShowFontDialog(IWin32Window owner, Font fontInitial, bool showMonospacedFontsOnly, out Font fontSelectedAndConfirmed)
 		{
