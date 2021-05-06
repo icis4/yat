@@ -185,7 +185,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Note that it is not possible to mark a property with [Conditional("TEST")].
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize purpose of this property.")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize purpose.")]
 		public bool DoNotDetachSettingsBecauseTheyAreRequiredForVerification_ForTestOnly { get; set; }
 
 		/// <summary>
@@ -960,7 +960,7 @@ namespace YAT.Model
 		}
 
 		/// <remarks>Only to be used for testing.</remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize purpose of this property.")]
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize purpose.")]
 		public virtual Domain.Terminal UnderlyingDomain_ForTestOnly
 		{
 			get
@@ -3929,6 +3929,8 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "Setting is required to be received, modified and returned.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual bool CheckFontAndPotentiallyChangeFont(ref bool check, Font font, out Font newFont)
 		{
 			if (!FontEx.IsMonospaced(font))
@@ -6248,6 +6250,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Setting is required to be received, modified and returned.")]
 		protected virtual DialogResult OnExtendedMessageInputRequest(string text, string caption, string checkText, ref bool checkValue, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
 		{
 			return (OnExtendedMessageInputRequest(text, null, caption, checkText, ref checkValue, buttons, icon, defaultButton));
@@ -6255,6 +6258,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Setting is required to be received, modified and returned.")]
 		protected virtual DialogResult OnExtendedMessageInputRequest(string text, ICollection<LinkLabel.Link> links, string caption, string checkText, ref bool checkValue, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
 		{
 			if (this.launchArgs.Interactive)

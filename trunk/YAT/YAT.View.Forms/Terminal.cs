@@ -81,10 +81,11 @@ using YAT.View.Utilities;
 // Module-level FxCop suppressions
 //==================================================================================================
 
-[module: SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", Scope = "member", Target = "YAT.View.Forms.Terminal.#InitializeComponent()", MessageId = "System.TimeSpan.Parse(System.String)", Justification = "Designer generated!")]
-[module: SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Scope = "member", Target = "YAT.View.Forms.Terminal.#InitializeComponent()", Justification = "The timer is only used for a well-defined interval.")]
-[module: SuppressMessage("Microsoft.Naming", "CA1703:ResourceStringsShouldBeSpelledCorrectly", Scope = "resource", Target = "YAT.View.Forms.Terminal.resources", MessageId = "A-Za-z", Justification = "This is a valid regular expression.")]
-[module: SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "YAT.View.Forms.Terminal.#toolTip", Justification = "This is a bug in FxCop.")]
+[module: SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider",                     Scope = "member",   Target = "YAT.View.Forms.Terminal.#InitializeComponent()", MessageId = "System.TimeSpan.Parse(System.String)", Justification = "Designer generated!")]
+[module: SuppressMessage("Microsoft.Mobility",      "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Scope = "member",   Target = "YAT.View.Forms.Terminal.#InitializeComponent()", Justification = "The timer is only used for a well-defined interval.")]
+[module: SuppressMessage("Microsoft.Naming",        "CA1703:ResourceStringsShouldBeSpelledCorrectly",    Scope = "resource", Target = "YAT.View.Forms.Terminal.resources", MessageId = "A-Za-z", Justification = "This is a valid regular expression.")]
+[module: SuppressMessage("Microsoft.Naming",        "CA1703:ResourceStringsShouldBeSpelledCorrectly",    Scope = "resource", Target = "YAT.View.Forms.Terminal.resources", MessageId = "parseable",  Justification = "'parseable' is a correct English term.")]
+[module: SuppressMessage("Microsoft.Performance",   "CA1823:AvoidUnusedPrivateFields",                   Scope = "member",   Target = "YAT.View.Forms.Terminal.#toolTip", Justification = "This is a bug in FxCop.")]
 
 #endregion
 
@@ -8251,7 +8252,7 @@ namespace YAT.View.Forms
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation completes in any case.")]
-		[SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals", Justification = "Well...")]
+		[SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals", Justification = "Agree, could be refactored. Could be.")]
 		private void SetIOControlControls()
 		{
 			SuspendLayout(); // Prevent flickering when visibility of status labels temporarily changes.

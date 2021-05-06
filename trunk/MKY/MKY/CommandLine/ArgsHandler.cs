@@ -564,11 +564,11 @@ namespace MKY.CommandLine
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		protected virtual bool IsOptionStart(string arg, out int pos)
 		{
-			if      (arg.StartsWith("--", StringComparison.OrdinalIgnoreCase)) // Attention: "--" must be tested before "-" because
-				pos = 2;                   //            "--" also is "-"!
-			else if (arg.StartsWith("-",  StringComparison.OrdinalIgnoreCase))
+			if      (StringEx.StartsWithOrdinalIgnoreCase(arg, "--")) // Attention: "--" must be tested before "-" because
+				pos = 2;                                              //            "--" also is "-"!
+			else if (StringEx.StartsWithOrdinalIgnoreCase(arg, "-"))
 				pos = 1;
-			else if (arg.StartsWith("/",  StringComparison.OrdinalIgnoreCase) && AllowForwardSlash)
+			else if (StringEx.StartsWithOrdinalIgnoreCase(arg, "/") && AllowForwardSlash)
 				pos = 1;
 			else
 				pos = 0;

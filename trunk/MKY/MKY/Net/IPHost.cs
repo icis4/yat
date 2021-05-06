@@ -458,8 +458,11 @@ namespace MKY.Net
 
 		/// <remarks>
 		/// The list of items of this extended enum, depending on whether broadcast shall be included or not.
-		/// </remarks>
-		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "Symmetricity with Enum.GetNames() and Enum.GetValues().")]
+		/// <para>
+		/// Method instead of property for orthogonality with <see cref="Enum.GetNames(Type)"/> and
+		/// <see cref="Enum.GetValues(Type)"/>.
+		/// </para></remarks>
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Justification = "See remarks.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public static ReadOnlyCollection<IPHostEx> GetItems(bool includeBroadcast = true)
 		{

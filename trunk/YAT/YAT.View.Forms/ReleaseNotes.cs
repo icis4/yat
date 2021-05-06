@@ -45,11 +45,9 @@ namespace YAT.View.Forms
 	/// </remarks>
 	public partial class ReleaseNotes : Form
 	{
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private const string FileName = ApplicationEx.CommonName + " Release Notes.txt"; // Fixed to "YAT".
 
-		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
-		private static readonly string RuntimeRelativeFilePath = FileName;
+		private const string RuntimeRelativeFilePath = FileName;
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This is a 'readonly', thus meant to be constant.")]
 		private static readonly string DevelopmentRelativeFilePath =

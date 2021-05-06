@@ -87,9 +87,10 @@ using YAT.View.Utilities;
 // Module-level FxCop suppressions
 //==================================================================================================
 
-[module: SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Scope = "member", Target = "YAT.View.Forms.Main.#InitializeComponent()", Justification = "Well, any better idea on how to implement a millisecond update ticker? And, the timer is only used if the user choses so.")]
-[module: SuppressMessage("Microsoft.Naming", "CA1703:ResourceStringsShouldBeSpelledCorrectly", Scope = "resource", Target = "YAT.View.Forms.Main.resources", MessageId = "A-Za-z", Justification = "This is a valid regular expression.")]
-[module: SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope = "member", Target = "YAT.View.Forms.Main.#toolTip", Justification = "This is a bug in FxCop.")]
+[module: SuppressMessage("Microsoft.Mobility",    "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Scope = "member",   Target = "YAT.View.Forms.Main.#InitializeComponent()", Justification = "Well, any better idea on how to implement a millisecond update ticker? And, the timer is only used if the user choses so.")]
+[module: SuppressMessage("Microsoft.Naming",      "CA1703:ResourceStringsShouldBeSpelledCorrectly",    Scope = "resource", Target = "YAT.View.Forms.Main.resources", MessageId = "A-Za-z", Justification = "This is a valid regular expression.")]
+[module: SuppressMessage("Microsoft.Naming",      "CA1703:ResourceStringsShouldBeSpelledCorrectly",    Scope = "resource", Target = "YAT.View.Forms.Main.resources", MessageId = "parseable",  Justification = "'parseable' is a correct English term.")]
+[module: SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields",                   Scope = "member",   Target = "YAT.View.Forms.Main.#toolTip", Justification = "This is a bug in FxCop.")]
 
 #endregion
 
@@ -1331,7 +1332,7 @@ namespace YAT.View.Forms
 				toolStripButton_MainTool_Terminal_SaveToFile     .Enabled = childIsReady;
 				toolStripButton_MainTool_Terminal_Print          .Enabled = childIsReady;
 
-				toolStripButton_MainTool_SetFindControls(childIsReady); // See remark of that method.
+				toolStripButton_MainTool_SetFindControls(); // See remark of that method.
 
 				bool logIsOn = false;
 				if (childIsReady)
@@ -1377,7 +1378,7 @@ namespace YAT.View.Forms
 		/// <remarks>
 		/// Separated to prevent flickering of other text/combo controls when editing the search pattern.
 		/// </remarks>
-		private void toolStripButton_MainTool_SetFindControls(bool childIsReady)
+		private void toolStripButton_MainTool_SetFindControls()
 		{
 			this.isSettingControls.Enter();
 			try
@@ -4351,9 +4352,7 @@ namespace YAT.View.Forms
 		/// </remarks>
 		private void SetFindControls()
 		{
-			bool childIsReady = (ActiveMdiChild != null);
-
-			toolStripButton_MainTool_SetFindControls(childIsReady); // See remark above.
+			toolStripButton_MainTool_SetFindControls(); // See remark above.
 		}
 
 		private void SetChildControls()
@@ -4461,12 +4460,12 @@ namespace YAT.View.Forms
 			}
 		}
 
-		private void StartApplicationFile(string filePath)
+		private static void StartApplicationFile(string filePath)
 		{
 			Exception ex;
 			if (!EnvironmentEx.TryStartFile(filePath, out ex))
 			{
-				MessageBox.Show
+				MessageBoxEx.Show
 				(
 					Model.Utilities.MessageHelper.ComposeMessage("Unable to open application file", filePath, ex),
 					"Application File Error",

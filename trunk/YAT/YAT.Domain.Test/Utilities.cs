@@ -114,6 +114,7 @@ namespace YAT.Domain.Test
 		public const int WaitIntervalForIsNoLongerSending = WaitIntervalForStateChange;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Reverification", Justification = "Sounds like what it is meant for.")]
 		public const int WaitTimeoutForReverification = (2 * WaitTimeoutForLineTransmission); // 600 ms.
 
 		/// <summary></summary>

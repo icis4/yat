@@ -241,6 +241,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "NonSuccess", Justification = "Emphasize this is related to everything but 'MainResult.Success'.")]
 		public bool KeepOpenOnNonSuccess;
 
 		/// <summary></summary>
@@ -315,6 +316,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = VisibilitySuppressionJustification)]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "NonSuccess", Justification = "Emphasize this is related to everything but 'MainResult.Success'.")]
 		public bool KeepOpenOnNonSuccess;
 
 		/// <summary></summary>

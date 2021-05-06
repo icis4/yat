@@ -52,6 +52,7 @@ using MKY.Windows.Forms;
 
 [module: SuppressMessage("Microsoft.Naming", "CA1701:ResourceStringCompoundWordsShouldBeCasedCorrectly", Scope = "resource", Target = "YAT.View.Forms.TextTerminalSettings.resources", MessageId = "whitespace", Justification = "'whitespace' is a common term in programming.")]
 [module: SuppressMessage("Microsoft.Naming", "CA1703:ResourceStringsShouldBeSpelledCorrectly",           Scope = "resource", Target = "YAT.View.Forms.TextTerminalSettings.resources", MessageId = "parseable",  Justification = "'parseable' is a correct English term.")]
+[module: SuppressMessage("Microsoft.Naming", "CA1703:ResourceStringsShouldBeSpelledCorrectly",           Scope = "resource", Target = "YAT.View.Forms.TextTerminalSettings.resources", MessageId = "Fh",         Justification = "Well, 'FFh'...")]
 
 #endregion
 

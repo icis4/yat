@@ -673,30 +673,35 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 			public WarningInfo(string message, bool omitBracketsAndLabel = false)
 				: this(DirectionDefault, message, omitBracketsAndLabel)
 			{
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 			public WarningInfo(Direction direction, string message, bool omitBracketsAndLabel = false)
 				: this(TimeStampDefault, direction, message, omitBracketsAndLabel)
 			{
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 			public WarningInfo(DateTime timeStamp, Direction direction, string message, bool omitBracketsAndLabel = false)
 				: this(timeStamp, direction, null, message, omitBracketsAndLabel)
 			{
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 			public WarningInfo(DateTime timeStamp, Direction direction, byte origin, string message, bool omitBracketsAndLabel = false)
 				: this(timeStamp, direction, new byte[] { origin }, message, omitBracketsAndLabel)
 			{
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 			public WarningInfo(DateTime timeStamp, Direction direction, byte[] origin, string message, bool omitBracketsAndLabel = false)
 				: base(timeStamp, direction, origin, (omitBracketsAndLabel ? message : "[Warning: " + message + "]"))
 			{
@@ -722,30 +727,35 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 			public ErrorInfo(string message, bool omitBracketsAndLabel = false)
 				: this(DirectionDefault, message, omitBracketsAndLabel)
 			{
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 			public ErrorInfo(Direction direction, string message, bool omitBracketsAndLabel = false)
 				: this(TimeStampDefault, direction, message, omitBracketsAndLabel)
 			{
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 			public ErrorInfo(DateTime timeStamp, Direction direction, string message, bool omitBracketsAndLabel = false)
 				: this(timeStamp, direction, null, message, omitBracketsAndLabel)
 			{
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 			public ErrorInfo(DateTime timeStamp, Direction direction, byte origin, string message, bool omitBracketsAndLabel = false)
 				: this(timeStamp, direction, new byte[] { origin }, message, omitBracketsAndLabel)
 			{
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 			public ErrorInfo(DateTime timeStamp, Direction direction, byte[] origin, string message, bool omitBracketsAndLabel = false)
 				: base(timeStamp, direction, origin, (omitBracketsAndLabel ? message : "[Error: " + message + "]"))
 			{
@@ -1182,7 +1192,7 @@ namespace YAT.Domain
 
 			if (Text.Length > 0)
 			{
-				if (Text.EndsWith(contentSeparator))
+				if (Text.EndsWith(contentSeparator, StringComparison.CurrentCulture))
 				{
 					var textLengthWithoutContentSeparator = (Text.Length - contentSeparator.Length);
 					Text = Text.Substring(0, textLengthWithoutContentSeparator);

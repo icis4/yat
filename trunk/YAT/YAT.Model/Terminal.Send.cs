@@ -199,6 +199,7 @@ namespace YAT.Model
 		/// </summary>
 		/// <param name="text">Text to be sent.</param>
 		/// <param name="addToRecents">Determines whether the command is added to <see cref="SendTextSettings.RecentCommands"/>.</param>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Recents", Justification = "Multiple items.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendText(string text, bool addToRecents = true)
 		{
@@ -215,6 +216,7 @@ namespace YAT.Model
 		/// </summary>
 		/// <param name="command">Text command to be sent.</param>
 		/// <param name="addToRecents">Determines whether the command is added to <see cref="SendTextSettings.RecentCommands"/>.</param>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Recents", Justification = "Multiple items.")]
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
 		public virtual void SendText(Command command, bool addToRecents = true)
 		{
@@ -250,6 +252,7 @@ namespace YAT.Model
 		/// Separate 'DoSend...()' method for obvious handling of 'UseExplicitDefaultRadix'.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "c", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Recents", Justification = "Multiple items.")]
 		protected virtual void DoSendText(Command c, bool addToRecents)
 		{
 			AssertUndisposed();
@@ -409,6 +412,7 @@ namespace YAT.Model
 		/// <param name="filePath">File to be sent.</param>
 		/// <param name="addToRecents">Determines whether the command is added to <see cref="SendTextSettings.RecentCommands"/>.</param>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Recents", Justification = "Multiple items.")]
 		public virtual void SendFile(string filePath, bool addToRecents = true)
 		{
 		////AssertUndisposed() is called by 'Send...()' below.
@@ -425,6 +429,7 @@ namespace YAT.Model
 		/// <param name="command">File to be sent.</param>
 		/// <param name="addToRecents">Determines whether the command is added to <see cref="SendTextSettings.RecentCommands"/>.</param>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Recents", Justification = "Multiple items.")]
 		public virtual void SendFile(Command command, bool addToRecents = true)
 		{
 		////AssertUndisposed() is called by 'DoSend...' below.
@@ -442,6 +447,7 @@ namespace YAT.Model
 		/// Separate 'DoSend...()' method for obvious handling of 'UseExplicitDefaultRadix'.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "c", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Recents", Justification = "Multiple items.")]
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'symmetricity' is a correct English term.")]
 		protected virtual void DoSendFile(Command c, bool addToRecents)
 		{

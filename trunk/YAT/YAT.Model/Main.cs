@@ -508,6 +508,7 @@ namespace YAT.Model
 		/// Process the command line arguments according to their priority and translate them into
 		/// launch requests.
 		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals", Justification = "Agree, could be refactored. Could be.")]
 		[SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1515:SingleLineCommentMustBePrecededByBlankLine", Justification = "Consistent section titles.")]
 		private bool ProcessCommandLineArgsIntoLaunchRequests()
 		{
@@ -983,7 +984,7 @@ namespace YAT.Model
 		/// Unfortunately, 'normal' terminal settings and new terminal settings are defined rather
 		/// differently. Therefore, this implementation looks a bit weird.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals", Justification = "Well...")]
+		[SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals", Justification = "Agree, could be refactored. Could be.")]
 		private bool ProcessCommandLineArgsIntoExistingTerminalSettings(Domain.Settings.TerminalSettings terminalSettings)
 		{
 			if (this.commandLineArgs.OptionIsGiven("TerminalType"))
@@ -1354,6 +1355,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "0#", Justification = "Setting is required to be received, modified and returned.")]
 		protected virtual bool CheckFontAvailabilityAndPotentiallyCancelLaunch(ref bool check)
 		{
 			var fontName = Format.Types.FontFormat.NameDefault;
@@ -1554,6 +1556,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Recents", Justification = "Multiple items.")]
 		public virtual void ClearRecents()
 		{
 			AssertUndisposed();
@@ -1577,6 +1580,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Note that it is not possible to mark a void-method with [Conditional("TEST")].
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = "Emphasize purpose of this method.")]
 		public virtual MainResult Exit_ForTestOnly()
 		{
 			return (Exit(ExitMode.Manual));
@@ -1591,7 +1595,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "0#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#", Justification = "Multiple return values are required, and 'out' is preferred to 'ref'.")]
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Exit", Justification = "Exit() as method name is the obvious name and should be OK for other languages, .NET itself uses it in Application.Exit().")]
 		public virtual MainResult Exit(ExitMode exitMode, out bool cancel)
 		{
@@ -2556,6 +2560,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "3#", Justification = "Setting is required to be received, modified and returned.")]
 		protected virtual DialogResult OnExtendedMessageInputRequest(string text, string caption, string checkText, ref bool checkValue, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
 		{
 			return (OnExtendedMessageInputRequest(text, null, caption, checkText, ref checkValue, buttons, icon, defaultButton));
@@ -2563,6 +2568,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "Default parameters may result in cleaner code and clearly indicate the default behavior.")]
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "4#", Justification = "Setting is required to be received, modified and returned.")]
 		protected virtual DialogResult OnExtendedMessageInputRequest(string text, ICollection<LinkLabel.Link> links, string caption, string checkText, ref bool checkValue, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1)
 		{
 			if (this.launchArgs.Interactive)
