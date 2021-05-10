@@ -144,6 +144,15 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+  <xs:complexType name="FindSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="AllIsActive" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
   <xs:complexType name="LogSettings">
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
@@ -204,6 +213,7 @@
           <xs:element minOccurs="0" maxOccurs="1" name="DirectionFormat" type="TextFormat" />
           <xs:element minOccurs="0" maxOccurs="1" name="LengthFormat" type="TextFormat" />
           <xs:element minOccurs="0" maxOccurs="1" name="IOControlFormat" type="TextFormat" />
+          <xs:element minOccurs="0" maxOccurs="1" name="WarningFormat" type="TextFormat" />
           <xs:element minOccurs="0" maxOccurs="1" name="ErrorFormat" type="TextFormat" />
           <xs:element minOccurs="0" maxOccurs="1" name="WhiteSpacesFormat" type="TextFormat" />
           <xs:element minOccurs="0" maxOccurs="1" name="BackFormat" type="BackFormat" />
@@ -382,10 +392,11 @@
     <xs:complexContent mixed="false">
       <xs:extension base="SettingsItem">
         <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="Encoding" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="DecodingMismatchBehavior" type="DecodingMismatchBehavior" />
           <xs:element minOccurs="1" maxOccurs="1" name="SeparateTxRxEol" type="xs:boolean" />
           <xs:element minOccurs="0" maxOccurs="1" name="TxEol" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="RxEol" type="xs:string" />
-          <xs:element minOccurs="1" maxOccurs="1" name="Encoding" type="xs:int" />
           <xs:element minOccurs="1" maxOccurs="1" name="ShowEol" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="SeparateTxRxDisplay" type="xs:boolean" />
           <xs:element minOccurs="0" maxOccurs="1" name="TxDisplay" type="TextDisplaySettings" />
@@ -399,6 +410,16 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+  <xs:simpleType name="DecodingMismatchBehavior">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ComprehensiveWarning" />
+      <xs:enumeration value="UnicodeReplacementCharacterAndCompactWarning" />
+      <xs:enumeration value="UnicodeReplacementCharacter" />
+      <xs:enumeration value="QuestionMarkAndCompactWarning" />
+      <xs:enumeration value="QuestionMark" />
+      <xs:enumeration value="Discard" />
+    </xs:restriction>
+  </xs:simpleType>
   <xs:complexType name="TextLineSendDelaySettingTuple">
     <xs:sequence>
       <xs:element minOccurs="1" maxOccurs="1" name="Enabled" type="xs:boolean" />
@@ -869,6 +890,7 @@
           <xs:element minOccurs="0" maxOccurs="1" name="AutoResponse" type="AutoResponseSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="Format" type="FormatSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="Log" type="LogSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Find" type="FindSettings" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
