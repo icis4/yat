@@ -323,7 +323,7 @@ namespace YAT.Settings.Model.Test
 			FilePaths_Current.AddWorkspaceFile(WorkspaceSettingsTestCase.W_10_Matthias, "10 - Matthias.yaw");
 
 			// 2.4.1:
-			FilePaths_2_4_1 = new Files("2021-05-10 - YAT 2.4.1");
+			FilePaths_2_4_1 = new Files("2021-05-15 - YAT 2.4.1");
 			FilePaths_2_4_1.AddTerminalFile(TerminalSettingsTestCase.T_00_COM1_Closed_Default, "00 - COM1 - Closed - Default.yat");
 			FilePaths_2_4_1.AddTerminalFile(TerminalSettingsTestCase.T_00_COM2_Closed_Default, "00 - COM2 - Closed - Default.yat");
 			FilePaths_2_4_1.AddTerminalFile(TerminalSettingsTestCase.T_01_COM101_Open_Default, "01 - COM101 - Open.yat");
