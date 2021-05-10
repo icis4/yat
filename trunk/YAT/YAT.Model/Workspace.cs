@@ -2539,7 +2539,7 @@ namespace YAT.Model
 				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
 				{
 				#if (DEBUG)
-					Debugger.Break();
+					Debugger.Break(); // OK as conditional and disabled by default.
 				#else
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Message Input' request by the workspace has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				#endif
@@ -2569,7 +2569,7 @@ namespace YAT.Model
 				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
 				{
 				#if (DEBUG)
-					Debugger.Break();
+					Debugger.Break(); // OK as conditional and disabled by default.
 				#else
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by the workspace has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				#endif
@@ -2599,7 +2599,7 @@ namespace YAT.Model
 				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
 				{
 				#if (DEBUG)
-					Debugger.Break();
+					Debugger.Break(); // OK as conditional and disabled by default.
 				#else
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "A 'Save As' request by the workspace has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				#endif
@@ -2629,7 +2629,7 @@ namespace YAT.Model
 				if (e.Result == DialogResult.None) // Ensure that request has been processed by the application (as well as during testing)!
 				{
 				#if (DEBUG)
-					Debugger.Break();
+					Debugger.Break(); // OK as conditional and disabled by default.
 				#else
 					throw (new InvalidOperationException(MessageHelper.InvalidExecutionPreamble + "An 'Open' request by the workspace has not been processed by the application!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				#endif
