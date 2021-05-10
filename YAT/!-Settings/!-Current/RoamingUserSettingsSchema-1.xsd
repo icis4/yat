@@ -10,6 +10,8 @@
           <xs:element minOccurs="0" maxOccurs="1" name="ProductVersion" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="Warning" type="xs:string" />
           <xs:element minOccurs="1" maxOccurs="1" name="Mark" type="UserTimeStamp" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Font" type="FontSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Color" type="ColorSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="Socket" type="SocketSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="Find" type="FindSettings" />
           <xs:element minOccurs="0" maxOccurs="1" name="AutoAction" type="AutoActionSettings" />
@@ -53,16 +55,9 @@
           <xs:element minOccurs="1" maxOccurs="1" name="FindIsVisible" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="AutoActionIsVisible" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="AutoResponseIsVisible" type="xs:boolean" />
-          <xs:element minOccurs="0" maxOccurs="unbounded" name="CustomColors" type="RecentItemOfString" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
-  </xs:complexType>
-  <xs:complexType name="RecentItemOfString">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="1" name="Item" type="xs:string" />
-      <xs:element minOccurs="1" maxOccurs="1" name="TimeStamp" type="xs:dateTime" />
-    </xs:sequence>
   </xs:complexType>
   <xs:complexType name="AutoTriggerSettings">
     <xs:complexContent mixed="false">
@@ -72,6 +67,12 @@
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="RecentItemOfString">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Item" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TimeStamp" type="xs:dateTime" />
+    </xs:sequence>
   </xs:complexType>
   <xs:complexType name="AutoResponseSettings">
     <xs:complexContent mixed="false">
@@ -121,6 +122,26 @@
       <xs:element minOccurs="1" maxOccurs="1" name="Item" type="xs:int" />
       <xs:element minOccurs="1" maxOccurs="1" name="TimeStamp" type="xs:dateTime" />
     </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ColorSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="CustomColors" type="RecentItemOfString" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FontSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="CheckAvailability" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CheckTerminal" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ShowMonospacedOnly" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="UserTimeStamp">
     <xs:sequence>

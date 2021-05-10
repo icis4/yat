@@ -57,8 +57,8 @@ namespace YAT.Settings.Application
 		/// <remarks>Is basically constant, but must be a variable for automatic XML serialization.</remarks>
 		private string productVersion = ApplicationEx.ProductVersion;
 
-		private ColorSettings color;
 		private FontSettings font;
+		private ColorSettings color;
 		private SocketSettings socket;
 		private FindSettings find;
 		private AutoActionSettings autoAction;
@@ -74,8 +74,8 @@ namespace YAT.Settings.Application
 		public RoamingUserSettingsRoot()
 			: base(MKY.Settings.SettingsType.Explicit)
 		{
-			Color        = new ColorSettings(MKY.Settings.SettingsType.Explicit);
 			Font         = new FontSettings(MKY.Settings.SettingsType.Explicit);
+			Color        = new ColorSettings(MKY.Settings.SettingsType.Explicit);
 			Socket       = new SocketSettings(MKY.Settings.SettingsType.Explicit);
 			Find         = new FindSettings(MKY.Settings.SettingsType.Explicit);
 			AutoAction   = new AutoActionSettings(MKY.Settings.SettingsType.Explicit);
@@ -94,8 +94,8 @@ namespace YAT.Settings.Application
 		public RoamingUserSettingsRoot(RoamingUserSettingsRoot rhs)
 			: base(rhs)
 		{
-			Color        = new ColorSettings(rhs.Color);
 			Font         = new FontSettings(rhs.Font);
+			Color        = new ColorSettings(rhs.Color);
 			Socket       = new SocketSettings(rhs.Socket);
 			Find         = new FindSettings(rhs.Find);
 			AutoAction   = new AutoActionSettings(rhs.AutoAction);
@@ -153,23 +153,6 @@ namespace YAT.Settings.Application
 		}
 
 		/// <summary></summary>
-		[XmlElement("Color")]
-		public virtual ColorSettings Color
-		{
-			get { return (this.color); }
-			set
-			{
-				if (this.color != value)
-				{
-					var oldNode = this.color;
-					this.color = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
-
-					AttachOrReplaceOrDetachNode(oldNode, value);
-				}
-			}
-		}
-
-		/// <summary></summary>
 		[XmlElement("Font")]
 		public virtual FontSettings Font
 		{
@@ -180,6 +163,23 @@ namespace YAT.Settings.Application
 				{
 					var oldNode = this.font;
 					this.font = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
+
+					AttachOrReplaceOrDetachNode(oldNode, value);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("Color")]
+		public virtual ColorSettings Color
+		{
+			get { return (this.color); }
+			set
+			{
+				if (this.color != value)
+				{
+					var oldNode = this.color;
+					this.color = value; // New node must be referenced before replacing node below! Replace will invoke the 'Changed' event!
 
 					AttachOrReplaceOrDetachNode(oldNode, value);
 				}
