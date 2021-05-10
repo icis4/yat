@@ -260,13 +260,13 @@ namespace YAT.Domain.Parser
 						}
 						else
 						{
-							var sb = new StringBuilder();
-							sb.Append(@"Character sequence """);
-							sb.Append(parseChar);
-							sb.Append(nextChar);
-							sb.Append(@""" is not a valid numeric prefix. Valid are ""0"" (octal), ""0x"" (hexadecimal) and ""0b"" (binary).");
+							var message = new StringBuilder();
+							message.Append(@"Character sequence """);
+							message.Append(parseChar);
+							message.Append(nextChar);
+							message.Append(@""" is not a valid numeric prefix. Valid are ""0"" (octal), ""0x"" (hexadecimal) and ""0b"" (binary).");
 
-							formatException = new FormatException(sb.ToString());
+							formatException = new FormatException(message.ToString());
 							return (false);
 						}
 					}
@@ -345,40 +345,38 @@ namespace YAT.Domain.Parser
 					}
 				}
 
-				var sb = new StringBuilder();
-
-				sb.Append("Character '");
-				sb.Append((char)parseChar);
-				sb.Append("' (0x");
-				sb.Append(parseChar.ToString("X", CultureInfo.InvariantCulture));
-				sb.Append(") is invalid for ");
+				var message = new StringBuilder();
+				message.Append("Character '");
+				message.Append((char)parseChar);
+				message.Append("' (0x");
+				message.Append(parseChar.ToString("X", CultureInfo.InvariantCulture));
+				message.Append(") is invalid for ");
 
 				switch (this.radix)
 				{
-					case Radix.Bin: sb.Append("binary");      break;
-					case Radix.Oct: sb.Append("octal");       break;
-					case Radix.Dec: sb.Append("decimal");     break;
-					case Radix.Hex: sb.Append("hexadecimal"); break;
+					case Radix.Bin: message.Append("binary");      break;
+					case Radix.Oct: message.Append("octal");       break;
+					case Radix.Dec: message.Append("decimal");     break;
+					case Radix.Hex: message.Append("hexadecimal"); break;
 
 					default: throw (new ArgumentOutOfRangeException("radix", radix, MessageHelper.InvalidExecutionPreamble + "'" + radix + "' radix is not supported for numeric values!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
-				sb.Append(" values.");
+				message.Append(" values.");
 
-				formatException = new FormatException(sb.ToString());
+				formatException = new FormatException(message.ToString());
 				return (false);
 			}
 			else if (this.internalState == InternalState.AfterTrailingWhiteSpace)
 			{
-				var sb = new StringBuilder();
+				var message = new StringBuilder();
+				message.Append("Closing parenthesis expected instead of character '");
+				message.Append((char)parseChar);
+				message.Append("' (0x");
+				message.Append(parseChar.ToString("X", CultureInfo.InvariantCulture));
+				message.Append(").");
 
-				sb.Append("Closing parenthesis expected instead of character '");
-				sb.Append((char)parseChar);
-				sb.Append("' (0x");
-				sb.Append(parseChar.ToString("X", CultureInfo.InvariantCulture));
-				sb.Append(").");
-
-				formatException = new FormatException(sb.ToString());
+				formatException = new FormatException(message.ToString());
 				return (false);
 			}
 			else
@@ -393,22 +391,22 @@ namespace YAT.Domain.Parser
 
 			if (currentArgsCount >= maxArgsCount)
 			{
-				var sb = new StringBuilder();
-				sb.Append("Keyword '");
-				sb.Append(this.keyword);
+				var message = new StringBuilder();
+				message.Append("Keyword '");
+				message.Append(this.keyword);
 
 				if (currentArgsCount == 0)
 				{
-					sb.Append("' does not support arguments.");
+					message.Append("' does not support arguments.");
 				}
 				else
 				{
-					sb.Append("' only supports up to ");
-					sb.Append(maxArgsCount.ToString(CultureInfo.InvariantCulture));
-					sb.Append(" arguments.");
+					message.Append("' only supports up to ");
+					message.Append(maxArgsCount.ToString(CultureInfo.InvariantCulture));
+					message.Append(" arguments.");
 				}
 
-				ex = new FormatException(sb.ToString());
+				ex = new FormatException(message.ToString());
 				return (false);
 			}
 			else
@@ -428,31 +426,32 @@ namespace YAT.Domain.Parser
 			if ((!TryParseNumericItem(s, this.radix, out result)) ||
 			    (!me.Validate(i, result)))
 			{
-				var sb = new StringBuilder();
-				sb.Append(@"""");
+				var message = new StringBuilder();
+				message.Append(@"""");
 
 				switch (this.radix)
 				{
-					case Radix.Bin: sb.Append("0b"); break;
-					case Radix.Oct: sb.Append("0");  break;
-					case Radix.Dec: sb.Append("");   break;
-					case Radix.Hex: sb.Append("0x"); break;
+					case Radix.Bin: message.Append("0b"); break;
+					case Radix.Oct: message.Append("0");  break;
+					case Radix.Dec: message.Append("");   break;
+					case Radix.Hex: message.Append("0x"); break;
 
 					default: throw (new ArgumentOutOfRangeException("radix", radix, MessageHelper.InvalidExecutionPreamble + "'" + radix + "' radix is not supported for numeric values!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 				}
 
-				sb.Append(s);
-				sb.Append(@"""");
-				sb.Append(" is no valid ");
-				sb.Append(i.ToString(CultureInfo.InvariantCulture));
-				sb.Append(Int32Ex.ToEnglishSuffix(i));
-				sb.Append(" argument for keyword '");
-				sb.Append(this.keyword);
-				sb.Append("'. Argument must be ");
-				sb.Append(me.GetValidationFragment(i));
-				sb.Append(".");
+				var iForMessage = (i + 1);
+				message.Append(s);
+				message.Append(@"""");
+				message.Append(" is no valid ");
+				message.Append(iForMessage.ToString(CultureInfo.InvariantCulture));
+				message.Append(Int32Ex.ToEnglishSuffix(iForMessage));
+				message.Append(" argument for keyword '");
+				message.Append(this.keyword);
+				message.Append("'. Argument must be ");
+				message.Append(me.GetValidationFragment(i));
+				message.Append(".");
 
-				ex = new FormatException(sb.ToString());
+				ex = new FormatException(message.ToString());
 				return (false);
 			}
 			else

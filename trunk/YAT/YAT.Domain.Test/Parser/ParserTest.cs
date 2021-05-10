@@ -797,7 +797,7 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"A\d(7A)",		@"A\d(7",		@"""A"" of ""7A"" is an invalid decimal value.").SetName("Invalid decimal digit 1"));
 				yield return (new TestCaseData(@"A\d(7AA)",		@"A\d(7",		@"""A"" of ""7A"" is an invalid decimal value.").SetName("Invalid decimal digit 2"));
 
-				yield return (new TestCaseData(@"A\e(AA)",		@"A\",			@"Character 'e' (0x65) is an invalid escape character.").SetName("Invalid escape character"));
+				yield return (new TestCaseData(@"A\g(AA)",		@"A\",			@"Character 'g' (0x67) is an invalid escape character.").SetName("Invalid escape character"));
 
 				yield return (new TestCaseData(@"A\",			@"A",			@"Incomplete escape sequence.").SetName("Incomplete escape sequence 1"));
 				yield return (new TestCaseData(@"A\\\",			@"A\\",			@"Incomplete escape sequence.").SetName("Incomplete escape sequence 2"));
@@ -809,9 +809,9 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData(@"\!(OutputBreakOff(10))",		@"\!(OutputBreakOff(",		@"Keyword 'OutputBreakOff' does not support arguments.").SetName("Keyword 'OutputBreakOff' with arguments"));
 				yield return (new TestCaseData(@"\!(OutputBreakToggle(10))",	@"\!(OutputBreakToggle(",	@"Keyword 'OutputBreakToggle' does not support arguments.").SetName("Keyword 'OutputBreakToggle' with arguments"));
 
-				yield return (new TestCaseData(@"\!(ReportId(-1))",		@"\!(ReportId(-1",		@"""-1"" is no valid 0th argument for keyword 'ReportId'. Argument must be an integer value within 0..255 specifying the report ID."));
-				yield return (new TestCaseData(@"\!(ReportId(256))",	@"\!(ReportId(256",		@"""256"" is no valid 0th argument for keyword 'ReportId'. Argument must be an integer value within 0..255 specifying the report ID."));
-				yield return (new TestCaseData(@"\!(ReportId(0x100))",	@"\!(ReportId(0x100",	@"""0x100"" is no valid 0th argument for keyword 'ReportId'. Argument must be an integer value within 0..255 specifying the report ID."));
+				yield return (new TestCaseData(@"\!(ReportId(-1))",		@"\!(ReportId(-1",		@"""-1"" is no valid 1st argument for keyword 'ReportId'. Argument must be an integer value within 0..255 specifying the report ID."));
+				yield return (new TestCaseData(@"\!(ReportId(256))",	@"\!(ReportId(256",		@"""256"" is no valid 1st argument for keyword 'ReportId'. Argument must be an integer value within 0..255 specifying the report ID."));
+				yield return (new TestCaseData(@"\!(ReportId(0x100))",	@"\!(ReportId(0x100",	@"""0x100"" is no valid 1st argument for keyword 'ReportId'. Argument must be an integer value within 0..255 specifying the report ID."));
 
 				yield return (new TestCaseData(@"\!(ZZZ_FIT(1 2 3))",		@"\!(ZZZ_FIT(1 ",		@"Closing parenthesis expected instead of character '2' (0x32)."));
 				yield return (new TestCaseData(@"\!(ZZZ_FIT(1.2.3))",		@"\!(ZZZ_FIT(1",		@"Character '.' (0x2E) is invalid for decimal values."));
