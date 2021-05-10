@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Settings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SettingsName>YAT Terminal Settings</SettingsName>
-  <SettingsVersion>1.8.0</SettingsVersion>
-  <ProductVersion>2.4.0</ProductVersion>
+  <SettingsVersion>1.8.1</SettingsVersion>
+  <ProductVersion>2.4.1</ProductVersion>
   <Warning>Modifying structure and/or content may cause undefined behavior!</Warning>
   <Mark>
-    <TimeStamp>2021-01-26T14:39:55.8065639+01:00</TimeStamp>
+    <TimeStamp>2021-05-10T15:47:11.6028449+02:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Mark>
   <AutoSaved>false</AutoSaved>
@@ -187,10 +187,11 @@
         </SignalXOnPeriodically>
       </Send>
       <TextTerminal>
+        <Encoding>1252</Encoding>
+        <DecodingMismatchBehavior>ComprehensiveWarning</DecodingMismatchBehavior>
         <SeparateTxRxEol>false</SeparateTxRxEol>
         <TxEol>&lt;CR&gt;&lt;LF&gt;</TxEol>
         <RxEol>&lt;CR&gt;&lt;LF&gt;</RxEol>
-        <Encoding>1252</Encoding>
         <ShowEol>false</ShowEol>
         <SeparateTxRxDisplay>false</SeparateTxRxDisplay>
         <TxDisplay>
@@ -366,6 +367,10 @@
         <Color>Gold</Color>
         <FontStyle>Bold</FontStyle>
       </IOControlFormat>
+      <WarningFormat>
+        <Color>Orange</Color>
+        <FontStyle>Bold</FontStyle>
+      </WarningFormat>
       <ErrorFormat>
         <Color>#FF8000</Color>
         <FontStyle>Bold</FontStyle>
@@ -402,6 +407,9 @@
       <TextEncoding>UTF8</TextEncoding>
       <EmitEncodingPreamble>true</EmitEncodingPreamble>
     </Log>
+    <Find>
+      <AllIsActive>false</AllIsActive>
+    </Find>
   </Explicit>
   <Implicit>
     <TerminalIsStarted>true</TerminalIsStarted>
