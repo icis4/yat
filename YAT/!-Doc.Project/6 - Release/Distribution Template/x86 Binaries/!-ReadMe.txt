@@ -34,8 +34,9 @@
 x86 (32-bit) -vs- x64 (64-bit)
 ----------------------------------------------------------------------------------------------------
 
-YAT can be installed as x86 or x64 application. x86 works on either 32-bit or 64-bit systems whereas
-x64 only works on 64-bit systems.
+YAT can be installed as x86 or x64 application. x86 works on either 32-bit or 64-bit systems, given
+a 64-bit system provides 32-bit compatibility. x64 also works on either 32-bit or 64-bit systems, as
+YAT x64 is built as 'Any CPU' for providing compatibility with MSIL projects.
 
 
 ====================================================================================================
