@@ -84,7 +84,7 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
-YAT 2.4.1 :: 2021-04-xx
+YAT 2.4.1 :: 2021-05-15
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -111,7 +111,7 @@ Important changes:
 
 Fixed bugs:
 - Handling of missing log file folder fixed.
-- Issues when backspace was preceeded by space(s) fixed.
+- Issues when backspace was preceded by space(s) fixed.
 - [broadcast] recently selected for UDP/IP remote host is no longer listed for TCP/IP (bug #508).
 - Handling of trigger of automatic actions and responses fixed and improved (bugs #504 and #505).
 - Plotting no longer takes time stamp and other meta info into account (bug #509). The option will
