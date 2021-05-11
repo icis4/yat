@@ -30,11 +30,12 @@ namespace YAT
 	/// <summary>
 	/// Application main class of YAT for 'normal' operation with view.
 	/// </summary>
-	/// <remarks>
+	/// <remarks><para>
 	/// This class is separated into its own .exe project for those who want to use YAT components
 	/// within their own application context.
-	/// </remarks>
-	/// <remarks>Sealed to fulfill FxCop "CA1052:StaticHolderTypesShouldBeSealed".</remarks>
+	/// </para><para>
+	/// Sealed to fulfill FxCop "CA1052:StaticHolderTypesShouldBeSealed".
+	/// </para></remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public sealed class YAT
 	{
