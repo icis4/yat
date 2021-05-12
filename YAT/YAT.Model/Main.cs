@@ -646,13 +646,13 @@ namespace YAT.Model
 						string messageOnError;
 						if (!ProcessCommandLineArgsIntoScriptLaunchOptions(absoluteFilePath, out messageOnError))
 						{
-							this.launchArgs.MessageOnFailure = messageOnError;
+							this.commandLineArgs.Invalidate(messageOnError);
 							return (false);
 						}
 					}
 					else
-					{                                                                                                        // Neither '.' nor '!' shall be appended, the file path will be.
-						this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("Script file does not exist", absoluteFilePath);
+					{                                                                                                     // Neither '.' nor '!' shall be appended, the file path will be.
+						this.commandLineArgs.Invalidate(Utilities.MessageHelper.ComposeMessage("Script file does not exist", absoluteFilePath));
 						return (false);
 					}
 				}
@@ -899,19 +899,19 @@ namespace YAT.Model
 						string messageOnFailure;
 						if (!ProcessCommandLineArgsIntoScriptLaunchOptions(absoluteFilePath, out messageOnFailure))
 						{
-							this.launchArgs.MessageOnFailure = messageOnFailure;
+							this.commandLineArgs.Invalidate(messageOnFailure);
 							return (false);
 						}
 					}
 					else
-					{                                                                                                        // Neither '.' nor '!' shall be appended, the file path will be.
-						this.launchArgs.MessageOnFailure = Utilities.MessageHelper.ComposeMessage("Script file does not exist", absoluteFilePath);
+					{                                                                                                     // Neither '.' nor '!' shall be appended, the file path will be.
+						this.commandLineArgs.Invalidate(Utilities.MessageHelper.ComposeMessage("Script file does not exist", absoluteFilePath));
 						return (false);
 					}
 				}
 				else
 				{
-					this.launchArgs.MessageOnFailure = "Script file path is undefined!";
+					this.commandLineArgs.Invalidate("Script file path is undefined!");
 					return (false);
 				}
 			}
