@@ -42,7 +42,7 @@ SET _target=.\Distribution Template\x86 Binaries\
 COPY /Y "%_source%" "%_target%"
 
 :: SourceForge ReadMe:
-SET _source=..\..\!-Doc.User\YAT Release Notes_limited to 64k for SourceForge online 'ReadMe'.txt
+SET _source=..\..\!-Doc.User\YAT Release Notes_limited to 64 KiB for SourceForge online 'ReadMe'.txt
 SET _targetName=YAT Release Notes - ReadMe.txt
 SET _targetPath=.\Distribution Template\%_targetName%
 COPY /Y "%_source%" "%_targetPath%"

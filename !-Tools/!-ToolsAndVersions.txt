@@ -7,7 +7,7 @@ Resources
 
 Repo
   > SourceForge    Allura
-  > TortoiseSVN    1.9.7.27907
+  > TortoiseSVN    1.14.0
   > AnkhSVN        2.6.12735                                [2.7.12815 already installed for VS2017]
 
 Development
@@ -17,7 +17,6 @@ Development
   > VSI            1.0.0.1                                      [0.8.4 already installed for VS2017]
   > NUnit          2.64
   > FxCop          10
-  > GhostDoc       2018.2.19060
 
 Testing
   > VSPE           0.938.4.846
@@ -25,7 +24,7 @@ Testing
   > YAT TestBoard  1.0.0
 
 Documentation
-  > Libre Office   6.1.5.2
+  > Libre Office   6.4.3.2
 
 ----------------
-2019-06-08 / MKY
+2021-05-15 / MKY
