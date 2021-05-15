@@ -84,15 +84,48 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
+YAT 2.4.1 :: 2021-05-15
+----------------------------------------------------------------------------------------------------
+
+New:
+- Quick reference (PDF) added. Accessible via [Windows > Start > YAT] and [YAT > Help].
+- [Find All] added, with shortcut [Alt+Shift+L], incl. live update (feature requests #424 and #434).
+
+Important changes:
+- YAT now checks whether the DejaVu monospaced font is available, and whether a monospaced font
+  is used for the terminals. The user gets warned if either is not given (feature request #341).
+- [View > Format... > Font...] now by default only shows monospaced fonts (related to req. #341).
+- Parser now supports the non-standard but common C-style '\e'.
+- Behavior on multi-byte character set decoding mismatch can now be configured in the terminal
+  settings [Terminal > Settings... > Text...] (feature request #436).
+- Separate colors for warnings and errors (related to feature request #436). On existing terminals,
+  separate colors will have to be explicitly activated by [View > Format... > Defaults...].
+- Find text can now automatically be set by either selecting a line in a monitor or by selecting the
+  whole or parts of a line in [Copy of Active Line] (related to feature requests #424 and #434).
+- Log dialog now more clearly states "root directory and file name base" (part of feat. req. #435).
+- Help window is again sizeable to display more/all content (related to earlier feature req. #237).
+- Command line argument errors are better reported now (bug #503).
+- Builds reverted from 'x64' to 'Any CPU' for providing compatibility with MSIL projects that make
+  direct use of YAT/MKY/OxyPlot/RtfWriter/ALAZ assemblies (bug #507, related to recent upgrade to
+  .NET Runtime 4 and .NET Framework 4.8 (feature request #229)).
+
+Fixed bugs:
+- Handling of missing log file folder fixed.
+- Issues when backspace was preceded by space(s) fixed.
+- [broadcast] recently selected for UDP/IP remote host is no longer listed for TCP/IP (bug #508).
+- Handling of trigger of automatic actions and responses fixed and improved (bugs #504 and #505).
+- Plotting no longer takes time stamp and other meta info into account (bug #509). The option will
+  again become available in a dedicated action/response configuration dialog (future feature #431).
+- Plot window related 'NullReferenceException' when closing YAT fixed.
+
+Limitations and known issues:
+- Same as previous release, see below.
+
+
 YAT 2.4.0 :: 2021-01-29
 ----------------------------------------------------------------------------------------------------
 
 New:
-- USB Ser/HID now takes the HID usage page and ID into account, allowing working with devices that
-  implement multiple usages (e.g. a standard interface and a firmware upgrade interface) (bug #480).
-- Support for concurrent sending, i.e. multiple commands can be active simultaneously (feat. #387).
-  Useful e.g. for sending a text command while a repeating text command is already ongoing.
-  Can be enabled at [Terminal > Settings... > Advanced... > Send > Allow concurrent sending].
 - Text terminals: Option to glue characters of a line together, enabled by default, resulting in
   fewer line breaks when sending and receiving in full-duplex (related to feat. #19 and bug #176).
 - Text terminals: Option to wait for response, resulting in request and response being displayed
@@ -102,6 +135,9 @@ New:
   [Terminal > Settings... > Advanced... > Send > Buffer not more than baud rate permits] which
   limits the send rate and lets an active hardware or software flow control do its job even for
   small buffers and large amount of data.
+- Support for concurrent sending, i.e. multiple commands can be active simultaneously (feat. #387).
+  Useful e.g. for sending a text command while a repeating text command is already ongoing.
+  Can be enabled at [Terminal > Settings... > Advanced... > Send > Allow concurrent sending].
 - Content separator can now be configured. Useful for e.g. displaying or logging hex data without
   separating spaces, e.g. "414243", using [None]. Separator format can now also be configured.
 - Additional keyword \!(TimeStamp) allowing injection of current date/time (feature request #400).
@@ -112,6 +148,8 @@ New:
 - Additional keywords \!(RtsOn|Off|Toggle) and \!(DtrOn|Off|Toggle) allowing to change serial COM
   port signals on-the-fly (feature request #408). Also work with predefined commands and shortcuts.
 - Additional option to disable warnings like "XOff state, retaining data..." on sending.
+- USB Ser/HID now takes the HID usage page and ID into account, allowing working with devices that
+  implement multiple usages (e.g. a standard interface and a firmware upgrade interface) (bug #480).
 - Automatic actions and responses now support multiple triggers within a line or chunk.
 - Automatic actions and responses now support text triggers, optionally incl. regular expression.
 - Automatic actions and responses now list recent used trigger and response texts.
@@ -157,7 +195,7 @@ Important changes:
 - [Terminal > Settings... > Advanced...] dialog rearranged for better fitting screen.
 - Upgrade to .NET Runtime 4 and .NET Framework 4.8 (part of feature request #229, precondition for
   new automatic actions [Chart/Plot/Histogram] and upcoming feature request #74 [Scripting]).
-  Consequently, x64 distributions no longer need to be 'AnyCPU' builds (former limitation).
+  Consequently, x64 distributions no longer need to be 'Any CPU' builds and are 'x64' builds now.
 - Improved error message in case the required version of .NET is missing.
 - Additional command line option [--version]. Better command line message box (feature req. #383).
 - Project/Assembly structure slightly refined (preparing upcoming feature request #74).
@@ -327,7 +365,6 @@ Fixed bugs:
 - Binary terminals: Synchronization on timed line break added (related to feature request #340).
 
 Limitations and known issues:
-- x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
 - General limitations of .NET Framework:
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - General limitations of .NET Windows.Forms:
@@ -404,7 +441,6 @@ Fixed bugs:
 - 'NullReferenceException' under certain conditions when .yat file got deleted fixed (bug #407).
 
 Limitations and known issues:
-- x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
 - General limitations of .NET Framework:
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - General limitations of .NET Windows.Forms:
@@ -491,7 +527,6 @@ Fixed bugs:
 - 'ArgumentOutOfRangeException' when command line arguments refer to an empty workspace fixed.
 
 Limitations and known issues:
-- x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
 - General limitations of .NET Framework:
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - General limitations of .NET Windows.Forms:
@@ -579,7 +614,6 @@ Fixed bugs:
 - System display scaling other than 100% mostly fixed for Win 7 and before (bugs #85, #235, #375).
 
 Limitations and known issues:
-- x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
 - General limitations of .NET Windows.Forms:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
@@ -666,7 +700,6 @@ Fixed bugs:
   catch-all of unhandled asynchronous exceptions improved (feature request #173).
 
 Limitations and known issues:
-- x64 distributions are 'AnyCPU' builds due to limitations of VS2015 on .NET 3.5 SP1 (feat. #229).
 - General limitations of .NET Windows.Forms:
    > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
    > System errors are output in local language, even though YAT is all-English (bug #66).
@@ -719,7 +752,7 @@ YAT 2.0 Alpha 2            Version 1.99.3  :: 2007-02-07
 YAT 2.0 Alpha 1            Version 1.99.0  :: 2007-01-23
 
 Content of the above historical versions has been removed in order to compact this file such it fits
-the SourceForge limitation of 64 KB for the online release notes.
+the SourceForge limitation of 64 KiB for the online release notes.
 
 
 
@@ -732,7 +765,7 @@ XTerm232 1.0.1 :: 2003-10-30
 XTerm232 1.0.0 :: 2003-10-14
 
 Content of the above historical versions has been removed in order to compact this file such it fits
-the SourceForge limitation of 64 KB for the online release notes.
+the SourceForge limitation of 64 KiB for the online release notes.
 
 
 ====================================================================================================
@@ -750,7 +783,7 @@ public around the same time as YAT. And, 4.0 buzzes more anyway (industry 4.0 an
 ----------------------------------------------------------------------------------------------------
 
 
-YAT 4 with Scripting :: Expected in late 2021 or 2022
+YAT 4 with Scripting :: Expected in 2022
 ----------------------------------------------------------------------------------------------------
 YAT 4.0 will feature the integration of a scripting environment, based on the CSScript engine.
 Scripting will allow you to script YAT and automate repetitive tasks, use it for test automation,
