@@ -140,11 +140,11 @@ Counts LOC (physical), SLOC (source only) and CLOC (comments only) for the curre
 .OUTPUTS
 Returns a hash table of the counts.
 #>
-function Count-LOC([Switch]$GeneratedOnly)
+function Count-LOC([Switch]$Generated)
 {
 	# Count:
 	$Patterns = @("*.Designer.cs", "*.Generated.cs")
-	if ($GeneratedOnly) {
+	if ($Generated) {
 		$files = Get-ChildItem -File -Include $Patterns -Recurse
 	}
 	else {
@@ -209,11 +209,13 @@ Write-Verbose "...""$ROOT_DIRECTORY"""
 # Processing
 #---------------------------------------------------------------------------------------------------
 
-$thirdPartyPaths = @("ALAZ\Source", "CSScript\Source", "netrtfwriter\RtfWriter", "OxyPlot\Source")
-$proprietaryPaths = @("MKY", "NUnit", "YAT")
+#$thirdPartyPaths = @("ALAZ\Source", "CSScript\Source", "netrtfwriter\RtfWriter", "OxyPlot\Source")
+$thirdPartyPaths = @("ALAZ\Source", "netrtfwriter\RtfWriter", "OxyPlot\Source")
+$proprietaryPaths = @("MKY", "NUnit\NUnitEx", "YAT")
 
 Write-Host ""
-Write-Host "3rd Party            (ALAZ, CSScript"
+#Write-Host "3rd Party            (ALAZ, CSScript"
+Write-Host "3rd Party                      (ALAZ"
 Write-Host "              netrtfwriter, OxyPlot)"
 Write-Host "===================================="
 
@@ -232,7 +234,7 @@ foreach ($thirdPartyPath in $thirdPartyPaths) {
 $message = $thirdPartyCounts.GetEnumerator() | Sort Value | Out-String
 Write-Host $message
 
-Write-Host "Proprietary        (MKY, NUnit, YAT)"
+Write-Host "Proprietary      (MKY, NUnitEx, YAT)"
 Write-Host "===================================="
 
 $proprietaryGeneratedCounts = Create-Counts
@@ -260,11 +262,11 @@ foreach ($proprietaryPath in $proprietaryPaths) {
 			$proprietaryTestCounts = Add-Counts $proprietaryTestCounts $currentCounts
 		}
 		else {
-			$currentCounts = Count-LOC
-			$proprietaryWrittenCounts = Add-Counts $proprietaryWrittenCounts $currentCounts
-
-			$currentCounts = Count-LOC -GeneratedOnly
+			$currentCounts = Count-LOC -Generated
 			$proprietaryGeneratedCounts = Add-Counts $proprietaryGeneratedCounts $currentCounts
+
+			$currentCounts = Count-LOC # Not -Generated means -Written.
+			$proprietaryWrittenCounts = Add-Counts $proprietaryWrittenCounts $currentCounts
 		}
 	}
 }
@@ -306,16 +308,17 @@ Write-Verbose "...""$START_DIRECTORY"""
 # Return
 #---------------------------------------------------------------------------------------------------
 
-if ($verbose) {
-	$message = $result.GetEnumerator() | Sort Value | Out-String
-	$message = $message -Replace "`n","" -Replace "`r",""
-	Write-Verbose $message
-}
-
 Write-Host "           S U M M A R Y            "
 Write-Host "===================================="
+$message = $result.GetEnumerator() | Sort Value | Out-String
+Write-Host $message
+Write-Host "(LOC  = physical lines of code, incl. empty lines)"
+Write-Host "(CLOC = lines of code with comments, complete or partial)"
+Write-Host "(SLOC = lines of code relevant for the compiler)"
+Write-Host "(Generated|Written|Test are exclusive)"
+Write-Host ""
 
-Write-Output $result
+Write-Output $result | Out-Null
 
 
 #===================================================================================================
