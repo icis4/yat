@@ -1272,6 +1272,8 @@ namespace YAT.Application
 			// #8
 			// #9 YATConsole <version> and then <logo> + <help> + <return>
 
+			Console.Out.WriteLine(); // Line #2.
+
 			StringBuilder text;
 			Model.Utilities.MessageHelper.MakeCommandLineErrorMessage(invalidArgs, invalidationMessages, out text);
 
