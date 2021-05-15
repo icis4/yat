@@ -1,0 +1,21 @@
+﻿
+Terminal that you can use
+-------------------------
+
+YAT, is actually short for Yet Another Terminal and can operate and debug serial communications.
+
+YAT is an accessible and handy tool that supports RS-232/422/423/485 as well as TCP-Client/Server/AutoSocket, UDP and USB Ser/HID.
+
+Here are some key features of "YAT":
+
+· Serial terminal (connection endpoint)
+· Sends single-line commands, multi-line commands and files
+· Unlimited number of predefined commands
+· Versatile monitoring of sent and received data
+· Advanced settings for text and binary sessions
+· Workspace supporting multiple terminals
+
+
+
+---------------------------------------------
+Added 2011-12-12 / 1.99.28 Beta 4 Candidate 1

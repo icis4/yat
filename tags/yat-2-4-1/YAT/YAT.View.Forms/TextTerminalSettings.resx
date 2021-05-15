@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="comboBox_DecodingMismatchBehavior.ToolTip" xml:space="preserve">
+    <value>Comprehensive warnings will indicate the invalid byte(s), the
+encoding in use and hints on how to prevent the mismatch.
+
+For compactness, choose to replace the invalid byte(s) by a
+replacement character, optionally followed by the indication
+of the invalid byte(s), e.g. "�[FFh FFh]".
+
+The Unicode replacement character '�' is U+FFFD.
+The question mark '?' is 0x3F / U+003F.
+
+Note that some encodings (e.g. Big5, GBK, GB2312, KSC,...)
+automatically replace invalid byte(s) with a question mark.
+
+Discarding the invalid byte(s) is not recommended for most
+use cases, as there will not be any indication on the mismatch.
+
+No matter what behavior is selected, the number of invalid
+bytes will be taken into account for the resulting line length.</value>
+  </data>
+  <data name="comboBox_RxEol.ToolTip" xml:space="preserve">
+    <value>Either select a preset from the list, or fill in any sequence of bytes,
+e.g. "&lt;ETB&gt;&lt;NUL&gt;" or "\h(17 00)", or any other parseable text, e.g. ";".
+
+Contact YAT via "Help &gt; Request Feature" to request additional presets.
+
+Note that [Binary] terminals offer alternative ways to configure line break.</value>
+  </data>
+  <data name="label_RxEol.ToolTip" xml:space="preserve">
+    <value>Either select a preset from the list, or fill in any sequence of bytes,
+e.g. "&lt;ETB&gt;&lt;NUL&gt;" or "\h(17 00)", or any other parseable text, e.g. ";".
+
+Contact YAT via "Help &gt; Request Feature" to request additional presets.
+
+Note that [Binary] terminals offer alternative ways to configure line break.</value>
+  </data>
+  <data name="comboBox_TxEol.ToolTip" xml:space="preserve">
+    <value>Either select a preset from the list, or fill in any sequence of bytes,
+e.g. "&lt;ETB&gt;&lt;NUL&gt;" or "\h(17 00)", or any other parseable text, e.g. ";".
+
+Contact YAT via "Help &gt; Request Feature" to request additional presets.
+
+Note that [Binary] terminals offer alternative ways to configure line break.</value>
+  </data>
+  <data name="label_TxEol.ToolTip" xml:space="preserve">
+    <value>Either select a preset from the list, or fill in any sequence of bytes,
+e.g. "&lt;ETB&gt;&lt;NUL&gt;" or "\h(17 00)", or any other parseable text, e.g. ";".
+
+Contact YAT via "Help &gt; Request Feature" to request additional presets.
+
+Note that [Binary] terminals offer alternative ways to configure line break.</value>
+  </data>
+  <data name="groupBox_Exclude.ToolTip" xml:space="preserve">
+    <value>By default, some common patters are prepared:
+ &gt; //... and /*...*/ (C/C++/C#/Java/...-style comments)
+ &gt; #... (Shell-style comments)
+ &gt; REM... or ::... and %=...=% (DOS-style comments)
+
+End-of-line patterns omit leading whitespace by prepending "\s*".
+Inline patters do not include surrounding whitespace, unless the pattern spans over the whole line "^\s*" ... "\s*$".
+All patterns apply a positive lookahead to prevent accepting the pattern inside quoted strings, though allowing escapes.
+To request additional default patters or suggestions on how to improve the patterns, please contact YAT.
+Visit the given link to find detailed information about the .NET regex syntax.</value>
+  </data>
+  <data name="checkBox_WaitForResponse.ToolTip" xml:space="preserve">
+    <value>This option results in request and response to be displayed
+adjacently and is useful for sending multi-line commands
+and files with ping-pong-style command sets.
+
+Note that enabling this option will reduce throughput, as
+commands and responses will no longer be full-duplex.
+
+Also note that [Terminal &gt; Settings... &gt; Advanced...] offers
+other means to limit sending for e.g. serial COM ports.</value>
+  </data>
+  <data name="checkBox_Delay.ToolTip" xml:space="preserve">
+    <value>This option is one of two ways to delay while sending. It supports adding a fixed delay each N lines.
+
+Alternatively, the \!(LineDelay()) or \!(LineInterval()) keyword can be used.
+&gt; The first is equal to setting "each 1 line".
+&gt; The latter allows a more precise timing.</value>
+  </data>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>60</value>
+  </metadata>
+</root>

@@ -1,0 +1,192 @@
+﻿
+Code
+----
+
+Keep code line below 120 characters.
+Note that headers are 100 characters.
+
+
+Assemblies
+----------
+
+Sign all library/dll assemblies using the strong name tool:
+1. Open the Visual Studio command prompt with administrator rights
+2. Go to "C:\"
+3. Run "sn -k <FileName>.snk"
+4. Move the .snk file to the "\Properties" directory of the project
+5. Project Properties > Signing > Sign
+
+Note that it is not possible to link to an .snk file. Thus, it is not possible
+to create a single .snk file for collection of assemblies and than link to that
+single file from the various projects.
+
+Enforce CLS compliance
+[assembly: CLSCompliant(true)]
+
+Define CODE_ANALYSIS
+
+Use StyleCop
+
+Use FxCop
+
+
+Comments
+--------
+
+Use "Identifier" and "Term" rather than 'Identifier' or 'Term' to refer to code or a term.
+Rationale: More natural, standard C# comments also quote identifiers.
+
+Use special tags
+\todo        :   \todo: <Description>        or   \todo (<Date> / <Author>): <Description>)
+\fixme       :   \fixme: <Description>       or   \fixme (<Date> / <Author>): <Description>)
+\remind      :   \remind: <Description>      or   \remind (<Date> / <Author>): <Description>)
+
+Use special temporary tags
+\PENDING
+\TEMP
+\DEBUG
+\TRACE
+
+Use <c>null</c>
+Use <c>true</c>
+Use <c>false</c>
+
+Generics     : <see cref="T:Type`1"/>
+Methods      : <see cref="Add()"/>           or   <see cref="Add"/>   if ambiguous
+
+
+Preprocessor statements
+-----------------------
+
+Use
+#if (FALSE)
+to permanently disable blocks of code.
+FALSE is never defined in C#, #if (FALSE) clearly states that block isn't in use.
+
+Use
+#if (DEFINE | !DEFINE)
+			try
+			{
+#endif
+to enable or disable blocks of code depending on configuration switches or write preprocessor
+statements one level out of normal code structure to clearly show that these statements
+		#if (DEFINE | !DEFINE)
+			try
+			{
+		#endif
+do not belong to the normal code. Decide on variant a) or b) for better readability.
+
+Use
+#if (DEFINE)
+rather then
+#if DEFINE
+for more similarity with if (condition),
+
+
+Classes
+-------
+Use static classes instead of Singletons
+
+
+Static Classes
+--------------
+Use e.g. 'public static' instead of 'static public'
+Use e.g. 'public static new' instead of something else
+
+
+Inheritance
+-----------
+- Implement IEquatable
+- Implement ICloneable (Problem: return type is object)
+- Implement TryParse() and Parse()
+- Use and TryParse() instead of Parse()
+
+Do not use extension methods <Method> (this…) as they could lead to future incompatibilities
+if the additional methods are supported by a future version of .NET with same parameters but
+differing functionality.
+
+
+Events
+------
+Use "EventArgs.Empty" instead of "new EventArgs()".
+Use MKY.EventHelper.
+
+
+Disposal/Finalization
+---------------------
+According to 'Template.cs'.
+
+
+Equality
+--------
+> Always implement operators ==/!= on value types
+> Where needed, implement implement operators ==/!= on value types and IEquatable<T> on reference types
+   > Improves performance
+> See Template.cs for implementation
+> Also see MKY.Test.EqualityAnalysis
+
+
+Variables
+---------
+- Do not re-initialize fields with default value of respective type
+- Always initialize local variables
+
+
+Properties
+----------
+- Write..
+	if (this.<field> != value)
+	{
+		this.<field> = value;
+  ..instead of..
+	if (value != this.<field>)
+	{
+		this.<field> = value;
+  to improve readability and reduce the risk of copy-paste errors.
+
+
+Console
+-------
+- Use Console.Out or Console.Error to emphasize the output stream, do not use Console itself.
+
+
+Useful .NET classes
+-------------------
+- Console.Title/.ForegroundColor/.ResetColor
+- System.Media.SystemSounds
+- DefaultFontValue
+
+
+Timers
+------
+
+Prefer Threading.Timer over Timers.Timer.
+
+Use Timers.Timer...
+...in a component environment when using SynchronizationObject.
+...when e.SignalTime is needed.
+
+
+Threading
+---------
+
+Threads should never be aborted. The thread that calls Abort() might block if the thread that is being aborted is in a protected region of code, such as a catch block, finally block, or constrained execution region. If the thread that calls Abort holds a lock that the aborted thread requires, a deadlock can occur.
+Reference:
+http://stackoverflow.com/questions/7634797/why-threadabortexception-does-not-throw-in-catch-block
+http://msdn.microsoft.com/en-us/library/5b50fdsz.aspx
+
+
+Globalization
+-------------
+Use 'CurrentCulture' for numbers/formats and the like.
+Use 'CurrentUICulture' for adapting to the language.
+
+
+Known issues
+------------
+- Die ReadLine() Methode der .NET Komponente funktioniert nicht zuverlässig mit USB-RS232 Konvertern
+
+
+Further input
+-------------
+- "Excel sample [.NET Framework]"

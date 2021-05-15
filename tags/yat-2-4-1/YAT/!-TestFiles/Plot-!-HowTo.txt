@@ -1,0 +1,34 @@
+
+Note that .ods or .xlsx intentionally isn't committed to source control.
+This saves approx. 100 MB of repo space.
+
+1. Open OpenOffice Calc or Microsoft Excel or something equivalent
+2. Fill in the following values and formula:
+    A1: 0
+    B1: =SIN((A1/360)*2*PI())
+    C1: =43831+(A1/86400)
+    D1: =ROUND       || =RUNDEN(B1*360; 2)
+    E1: =ROUND       || =RUNDEN(B1*360; 0)
+    F1: =IF          || =WENN(B1>=0; 100; -100)
+    G1: =CHAR        || =ZEICHEN(65+(ABS(E1)/15))
+    H1: =CONCATENATE || =VERKETTEN("A"; G1; "Z")
+3. Format:
+    A (whole row): Date/Time, e.g....
+    ...Excel: JJJJ-MM-TT"T"hh:mm:ss (ISO8601 format)
+4. Extend:
+    A2: =A1+1
+    B1:H1 copy and paste to B2:H2
+5. Complete short series by selecting A2:H2 and drag down to row 361
+6. Complete long series by selecting A361:F361 and then...
+    ...Calc: [Ctrl+Shift+End], [Ctrl+D]
+    ...Excel: [Ctrl+C], [Ctrl+Shift+ArrowDown], [Ctrl+V]
+7. Export short series by selecting then copy-pasting to a text editor
+    Save D1 through D361 to Plot-1-Double.txt
+    Save E1 through E361 to Plot-2-Integer.txt
+    Save H1 through H361 to Plot-3-String.txt
+    Save D1:H1 through D361:H361 to Plot-4-Combined.txt
+    Save C1:H1 through C361:H361 to Plot-5-CombinedTime.txt
+8. Export long series by exporting as tab separated .txt
+    Copy E:F to a new file (values only)
+    Save file to Plot-6-IntegersEnormous.txt
+    Open file in text editor and remove trailing empty line

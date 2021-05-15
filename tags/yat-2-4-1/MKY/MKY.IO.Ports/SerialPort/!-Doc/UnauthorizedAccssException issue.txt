@@ -1,0 +1,14 @@
+﻿
+Almost the same as "ObjectDisposedException issue", just at a slightly different location and message:
+
+Type: System.UnauthorizedAccessException
+Message: Access to the port is denied.
+Source: System
+Stack:
+   at System.IO.Ports.InternalResources.WinIOError(Int32 errorCode, String str)
+   at System.IO.Ports.SerialStream.EventLoopRunner.CallEvents(Int32 nativeEvents)
+   at System.IO.Ports.SerialStream.EventLoopRunner.WaitForCommEvent()
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.ThreadHelper.ThreadStart()
+
+YAT bug reports #254, #442, #502,...

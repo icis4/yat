@@ -1,0 +1,32 @@
+﻿
+Currently to be found at http://msdn.microsoft.com/en-us/library/bb429476.aspx
+
+
+General
+-------
+
+FxCop exists in 2 different versions:
+> Stand-alone
+> Embedded into Visual Studio as "Code Analysis"
+
+The second option is only available in the more sophisticated (and more expensive) versions of Visual Studio.
+
+
+Inheritance
+-----------
+
+Note that FxCop is not capable to properly inherit settings and suppressions from the parent element, whereas StyleCop is.
+Thus, all suppressions must be placed at the very location of the rule violation.
+
+
+In-Code Suppressions
+--------------------
+
+If really needed, suppress rules in-code using the following attribute:
+[SuppressMessage(<FxCop :: Message :: Copy As :: SuppressMessage :: Paste>)]
+
+Place FxCop suppressions AFTER StyleCop suppressions, rationale:
+> Logical order: Style check should be performed BEFORE
+> Dependencies:  StyleCop also checks the suppression statements
+
+Such suppressions only work when CODE_ANALYSIS is defined as a conditional compilation symbol in each project, for all build configurations.

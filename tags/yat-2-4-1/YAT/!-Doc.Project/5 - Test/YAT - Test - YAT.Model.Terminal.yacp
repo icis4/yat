@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SettingsName>YAT Command Page Definition</SettingsName>
+  <SettingsVersion>1.0.2</SettingsVersion>
+  <ProductVersion>2.1.1</ProductVersion>
+  <Warning>Modifying structure and/or content may cause undefined behavior!</Warning>
+  <Mark>
+    <TimeStamp>2019-12-07T20:43:24.3390822+01:00</TimeStamp>
+    <UserName>Matthias</UserName>
+  </Mark>
+  <Page>
+    <PageName>Page 1</PageName>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>ABC</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>ABC</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>ABC\!(NoEOL)</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>ABC\!(NoEOL)</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>xyz</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>xyz</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>xyz\!(NoEOL)</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>xyz\!(NoEOL)</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>ABC\!(EOL)xyz</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>ABC\!(EOL)xyz</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>ABC\!(EOL)xyz\!(LineRepeat(100))</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>ABC\!(EOL)xyz\!(LineRepeat(100))</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>false</IsDefined>
+      <Description />
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines />
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>false</IsDefined>
+      <Description />
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines />
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>ab</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>ab</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>123abc456</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>123abc456</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>123ABC456</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>123ABC456</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>45</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>45</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+  </Page>
+</Settings>

@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F489B948-95CF-49FE-B9AA-A51654F5688B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MKY</RootNamespace>
+    <AssemblyName>MKY</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Properties\MKY.snk</AssemblyOriginatorKeyFile>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\MKY.xml</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\MKY.xml</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\MKY.Version.cs">
+      <Link>Properties\MKY.Version.cs</Link>
+    </Compile>
+    <Compile Include="Collections\ICollectionEx.cs" />
+    <Compile Include="Collections\Generic\Quadruple.cs" />
+    <Compile Include="Collections\Generic\Triple.cs" />
+    <Compile Include="Collections\Generic\Pair.cs" />
+    <Compile Include="Collections\Generic\VarianceWorkaround.cs" />
+    <Compile Include="Collections\ObjectModel\ReadOnlyCollectionEx.cs" />
+    <Compile Include="Collections\Specialized\RecentItem.cs" />
+    <Compile Include="Collections\Specialized\Histogram.cs" />
+    <Compile Include="Collections\Specialized\RecentItemCollection.cs" />
+    <Compile Include="Collections\IListEx.cs" />
+    <Compile Include="Collections\IEnumeratorEx.cs" />
+    <Compile Include="Collections\IEnumerableEx.cs" />
+    <Compile Include="Collections\NamedStringDictionary.cs" />
+    <Compile Include="Collections\StringKeyValuePair.cs" />
+    <Compile Include="CommandLine\ArgsDefault.cs" />
+    <Compile Include="CommandLine\ArgsHandler.cs" />
+    <Compile Include="CommandLine\OptionArgAttribute.cs" />
+    <Compile Include="CommandLine\ValueArgAttribute.cs" />
+    <Compile Include="ComponentModel\CancelEventArgs.cs" />
+    <Compile Include="Configuration\MergeableConfigurationSection.cs" />
+    <Compile Include="Configuration\Provider.cs" />
+    <Compile Include="Configuration\SelectionSection.cs" />
+    <Compile Include="Configuration\TemplateGenerator.cs" />
+    <Compile Include="Configuration\Selector.cs" />
+    <Compile Include="Contracts\CallingContract.cs" />
+    <Compile Include="Contracts\ImmutableContract.cs" />
+    <Compile Include="Data\DataItem.cs" />
+    <Compile Include="Data\EventArgs.cs" />
+    <Compile Include="Diagnostics\AnyWriter.cs" />
+    <Compile Include="Diagnostics\AnyWriterWrapper.cs" />
+    <Compile Include="ConsoleEx.cs" />
+    <Compile Include="Diagnostics\ConsoleWrapper.cs" />
+    <Compile Include="Diagnostics\DebugDisposal.cs" />
+    <Compile Include="Diagnostics\DebugEventManagement.cs" />
+    <Compile Include="Diagnostics\DebugEx.cs" />
+    <Compile Include="Diagnostics\DebugFinalization.cs" />
+    <Compile Include="Diagnostics\DebugWrapper.cs" />
+    <Compile Include="Diagnostics\DiagnosticsWriterOutput.cs" />
+    <Compile Include="Diagnostics\IDiagnosticsWriter.cs" />
+    <Compile Include="Diagnostics\ProcessorLoad.cs" />
+    <Compile Include="Diagnostics\StopwatchEx.cs" />
+    <Compile Include="Diagnostics\TraceEx.cs" />
+    <Compile Include="Diagnostics\TraceWrapper.cs" />
+    <Compile Include="Drawing\ColorTranslatorEx.cs" />
+    <Compile Include="Drawing\FontEx.cs" />
+    <Compile Include="Drawing\ContentAlignmentEx.cs" />
+    <Compile Include="Drawing\RotateFlipTypeEx.cs" />
+    <Compile Include="Globalization\CultureInfoEx.cs" />
+    <Compile Include="Guid\GuidEx.cs" />
+    <Compile Include="Guid\GuidList.cs" />
+    <Compile Include="Guid\IGuidProvider.cs" />
+    <Compile Include="DisposableBase.cs" />
+    <Compile Include="IO\DirectoryEx.cs" />
+    <Compile Include="IO\FileEx.cs" />
+    <Compile Include="IO\LogFile.cs" />
+    <Compile Include="IO\PathEx.cs" />
+    <Compile Include="IO\StreamEx.cs" />
+    <Compile Include="IO\Temp.cs" />
+    <Compile Include="IO\TextEx.cs" />
+    <Compile Include="MarshalByRefWrapper.cs" />
+    <Compile Include="Collections\Specialized\TimedMovingAverage.cs" />
+    <Compile Include="Collections\Specialized\MovingAverage.cs" />
+    <Compile Include="Media\SystemSoundsEx.cs" />
+    <Compile Include="Net\Browser.cs" />
+    <Compile Include="Net\IPAddressEx.cs" />
+    <Compile Include="Net\IPEndPointEx.cs" />
+    <Compile Include="Net\IPFilter.cs" />
+    <Compile Include="Net\IPHost.cs" />
+    <Compile Include="Net\IPNetworkInterface.cs" />
+    <Compile Include="Net\IPNetworkInterfaceCollection.cs" />
+    <Compile Include="Net\IPNetworkInterfaceDescriptorPair.cs" />
+    <Compile Include="Net\IPNetworkInterfacePredicates.cs" />
+    <Compile Include="Net\Local.cs" />
+    <Compile Include="Net\RecentIPFilterCollection.cs" />
+    <Compile Include="Net\RecentIPHostCollection.cs" />
+    <Compile Include="Net\Sockets\SocketEx.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Random\RandomEx.cs" />
+    <Compile Include="Reflection\InvocationHelper.cs" />
+    <Compile Include="Runtime\CompilerServices\CallerEx.cs" />
+    <Compile Include="Runtime\InteropServices\IntPtrEx.cs" />
+    <Compile Include="Settings\ApplicationSettingsHandler.cs" />
+    <Compile Include="Settings\DocumentSettingsHandler.cs" />
+    <Compile Include="Settings\EventArgs.cs" />
+    <Compile Include="Text\RegularExpressions\CommonPatternsWithSubCaptures.cs" />
+    <Compile Include="Text\RegularExpressions\MatchCollectionEx.cs" />
+    <Compile Include="Text\RegularExpressions\RegexEx.cs" />
+    <Compile Include="Threading\ThreadEx.cs" />
+    <Compile Include="Time\UserTimeStamp.cs" />
+    <Compile Include="Settings\SettingsFileHandler.cs" />
+    <Compile Include="Settings\SettingsItem.cs" />
+    <Compile Include="Text\RegularExpressions\CommonPatterns.cs" />
+    <Compile Include="Text\Ascii.cs" />
+    <Compile Include="Text\EncodingEx.cs" />
+    <Compile Include="Text\Escape.cs" />
+    <Compile Include="Threading\MainThreadHelper.cs" />
+    <Compile Include="Time\Chronometer.cs" />
+    <Compile Include="Time\DateTimeEx.cs" />
+    <Compile Include="Time\Rate.cs" />
+    <Compile Include="Time\RateProvider.cs" />
+    <Compile Include="Time\TimeSpanEx.cs" />
+    <Compile Include="Time\TimeStampItem.cs" />
+    <Compile Include="Time\TimeTickItem.cs" />
+    <Compile Include="Types\ArrayEx.cs" />
+    <Compile Include="Types\BitConverterEx.cs" />
+    <Compile Include="Types\BooleanEx.cs" />
+    <Compile Include="Types\ByteEx.cs" />
+    <Compile Include="Types\CharEx.cs" />
+    <Compile Include="Types\DecimalEx.cs" />
+    <Compile Include="Types\DoubleEx.cs" />
+    <Compile Include="Types\EnumEx.cs" />
+    <Compile Include="Types\Int64Ex.cs" />
+    <Compile Include="Types\Int32Ex.cs" />
+    <Compile Include="Types\ObjectEx.cs" />
+    <Compile Include="Types\SingleEx.cs" />
+    <Compile Include="Types\StringEx.cs" />
+    <Compile Include="Types\UInt64Ex.cs" />
+    <Compile Include="Usb\Descriptors.cs" />
+    <Compile Include="Windows.Forms\FormEx.cs" />
+    <Compile Include="Windows.Forms\DialogResultEx.cs" />
+    <Compile Include="Windows.Forms\ApplicationEx.cs" />
+    <Compile Include="Windows.Forms\ComboBoxHelper.cs" />
+    <Compile Include="Windows.Forms\ContextMenuStripShortcutModalFormWorkaround.cs" />
+    <Compile Include="Windows.Forms\ContextMenuStripShortcutTargetWorkaround.cs" />
+    <Compile Include="Windows.Forms\ControlEx.cs" />
+    <Compile Include="Windows.Forms\KeysEx.cs" />
+    <Compile Include="Windows.Forms\LayoutInfo.cs" />
+    <Compile Include="Windows.Forms\LinkHelper.cs" />
+    <Compile Include="Windows.Forms\MenuEx.cs" />
+    <Compile Include="Windows.Forms\MessageBoxEx.cs" />
+    <Compile Include="Windows.Forms\ModalBehavior.cs" />
+    <Compile Include="Windows.Forms\NativeMessageHandler.cs" />
+    <Compile Include="Windows.Forms\OrientationEx.cs" />
+    <Compile Include="Windows.Forms\ScreenEx.cs" />
+    <Compile Include="Windows.Forms\SuspendUpdateHelper.cs" />
+    <Compile Include="Windows.Forms\SettingControlsHelper.cs" />
+    <Compile Include="Windows.Forms\SizeHelper.cs" />
+    <Compile Include="Windows.Forms\SplitContainerHelper.cs" />
+    <Compile Include="Windows.Forms\ToolStripMenuItemEx.cs" />
+    <Compile Include="Windows.Forms\ToolStripComboBoxHelper.cs" />
+    <Compile Include="Xml\Schema\XmlSchemaEx.cs" />
+    <Compile Include="Xml\Serialization\AlternateTolerantXmlSerializer.cs" />
+    <Compile Include="Xml\Serialization\TolerantXmlSerializer.cs" />
+    <Compile Include="Xml\Serialization\XmlSerializerEx.cs" />
+    <Compile Include="Xml\AlternateXmlElement.cs" />
+    <Compile Include="Xml\XmlDocumentEx.cs" />
+    <Compile Include="ConvertEx.cs" />
+    <Compile Include="EnvironmentEx.cs" />
+    <Compile Include="EventHelper.cs" />
+    <Compile Include="EventArgs.cs" />
+    <Compile Include="EventHandlerHelper.cs" />
+    <Compile Include="ExceptionHelper.cs" />
+    <Compile Include="IDisposableEx.cs" />
+    <Compile Include="MessageHelper.cs" />
+    <Compile Include="Unused.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\MKY.snk" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

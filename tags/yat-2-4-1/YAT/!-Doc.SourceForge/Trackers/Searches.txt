@@ -1,0 +1,11 @@
+﻿
+1 - New					status:unread OR assigned_to:""
+2 - Open Now			(status:open* OR status:pending) AND _priority:[7 TO 9]
+3 - Open Soon			(status:open* OR status:pending) AND _priority:[6 TO 9]
+4 - Open All			status:open* OR status:pending
+5 - Closed Fixed		status:closed-fixed OR status:closed-duplicate
+6 - Closed Rejected		status:closed-rejected OR status:wont-fix
+7 - Closed All			status:closed* OR status:wont-fix
+8 - All					!status:dummy
+
+Not possible to nicely set order of columns and sort...

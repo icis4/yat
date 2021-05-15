@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="checkBox_AllowConcurrency.ToolTip" xml:space="preserve">
+    <value>By default, commands are sent strictly sequentially, i.e. only one command can be active
+at a time. Enabling this option allows multiple commands being active simultaneously.
+Useful e.g. for sending a text command while a repeating text command is already ongoing.
+Applies to [Send Text], [Send File] as well as [Predefined Commands].</value>
+  </data>
+  <data name="checkBox_BufferMaxBaudRate.ToolTip" xml:space="preserve">
+    <value>Limiting writing to the output buffer prevents data loss for e.g.
+USB/COM and SPI/COM converters that have a hardware output
+buffer that is much smaller than the typical software output buffer
+but do not feed the buffer state back to the respective driver.
+
+Examples of such limited devices:
+- Some Prolific USB/COM converters are limited to 356 bytes.
+- Some Dell/Intel SPI/COM converters are limited to 56 bytes.
+
+As a consequence, such devices will drop data in case YAT and the
+underlying operating system writes faster to the output buffer than
+the baud rate permits.
+
+Either, tell YAT to limit writing to the speed the baud rate permits
+(less a safety margin), or tell YAT to limit sending by one of the
+other settings.
+
+In order to prevent potential data loss, this setting is enabled by
+default. It must be deactivated for optimizing for the highest
+possible send rate. This will work fine for e.g. FTDI converters as
+well as MCT and Prolific converters at high baud rates.</value>
+  </data>
+  <data name="checkBox_OutputBufferSize.ToolTip" xml:space="preserve">
+    <value>This settings overrides the system's default value of 2048 bytes.
+
+Enlarging the output buffer may increase the send rate.
+
+Limiting the output buffer may improve the responsiveness of flow
+flow control, i.e. sending will be suspended sooner.
+
+Limiting the size of the output buffer may also prevent data loss for
+e.g. USB/COM and SPI/COM converters that have a hardware output
+buffer that is much smaller than the typical software output buffer
+but do not feed the buffer state back to the respective driver.
+
+Examples of such limited devices:
+- Some Prolific USB/COM converters are limited to 356 bytes.
+- Some Dell/Intel SPI/COM converters are limited to 56 bytes.
+
+As a consequence, such devices will drop data in case YAT and the
+underlying operating system writes faster to the output buffer than
+the baud rate permits.
+
+Either, if the size of the hardware buffer is known, tell YAT to reduce
+the software buffer accordingly, or tell YAT to limit sending by one
+of the other settings.</value>
+  </data>
+  <data name="checkBox_MaxChunkSizeEnable.ToolTip" xml:space="preserve">
+    <value>Limiting the chunk size improves the responsiveness of hardware
+and/or software flow control, i.e. sending will be suspended sooner.
+Enlarging the chunk size may increase throughput.
+
+In order to prevent potential data loss, this setting is enabled by
+default. It must be deactivated for optimizing for the highest
+possible send rate. This will work fine for e.g. FTDI converters as
+well as MCT and Prolific converters at high baud rates.</value>
+  </data>
+  <data name="checkBox_IncludeIOWarnings.ToolTip" xml:space="preserve">
+    <value>Include I/O warnings in monitor view, for...
+...all terminal types: Send interruption (disconnect, break).
+...serial COM ports: Flow control (hardware, software), break state.
+...USB Ser/HID devices: Flow control (software).
+
+Examples:
+"XOff state, retaining data..."
+"5 bytes not sent anymore due to break."</value>
+  </data>
+  <data name="checkBox_IncludeIOControl.ToolTip" xml:space="preserve">
+    <value>Include I/O control events in monitor view, for...
+...serial COM ports: Flow control (hardware, software), break state.
+...USB Ser/HID devices: Flow control (software).
+
+Example:
+"[RTS=on,DTR=on][CTS=on,DSR=on,DCD=on]"</value>
+  </data>
+  <data name="checkBox_GlueCharsOfLine.ToolTip" xml:space="preserve">
+    <value>This option reduces the number of line breaks in the
+[Bidirectional Panel] when direction (or I/O device)
+changes.
+
+Disabling this option increases the accuracy in terms of
+chronological sequence but may result in lines additionally
+being broken when sending and receiving in full-duplex.
+
+This option is only available for text terminals.</value>
+  </data>
+  <data name="textBox_MaxLineLength.ToolTip" xml:space="preserve">
+    <value>Limiting the maximal number of characters/bytes per line is
+useful to improve performance. Unlimited lines could result in
+excessive processing, leading to an unresponsive application, in
+case of improperly configured line breaks.</value>
+  </data>
+  <data name="checkBox_DeviceLineBreak.ToolTip" xml:space="preserve">
+    <value>Available for TCP/IP and UDP/IP servers. Useful if server
+is connected to multiple clients (multiple I/O devices).
+
+Default is enabled.
+
+When the reduce/glue option is enabled below, this
+option is only relevant after the timeout has elapsed.</value>
+  </data>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>60</value>
+  </metadata>
+</root>

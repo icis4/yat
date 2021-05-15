@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E9FF1D5E-84E0-4ADB-94EC-662903931295}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>YAT.Model</RootNamespace>
+    <AssemblyName>YAT.Model.Base</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Properties\YAT.snk</AssemblyOriginatorKeyFile>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\YAT.Model.Base.xml</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\YAT.Model.Base.xml</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\YAT.Version.cs">
+      <Link>Properties\YAT.Version.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\AutoTriggerSettings.cs" />
+    <Compile Include="Settings\AutoActionSettings.cs" />
+    <Compile Include="Settings\AutoResponseSettings.cs" />
+    <Compile Include="Settings\LayoutSettings.cs" />
+    <Compile Include="Settings\NewTerminalSettings.cs" />
+    <Compile Include="Settings\PredefinedCommandSettings.cs" />
+    <Compile Include="Settings\FindSettings.cs" />
+    <Compile Include="Settings\PredefinedSettings.cs" />
+    <Compile Include="Settings\SendFileSettings.cs" />
+    <Compile Include="Settings\SendTextSettings.cs" />
+    <Compile Include="Settings\TerminalSettingsItem.cs" />
+    <Compile Include="Settings\WorkspaceSettings.cs" />
+    <Compile Include="Types\AutoAction.cs" />
+    <Compile Include="Types\AutoResponse.cs" />
+    <Compile Include="Types\AutoTrigger.cs" />
+    <Compile Include="Types\AutoResponseOptions.cs" />
+    <Compile Include="Types\Command.cs" />
+    <Compile Include="Types\EventArgs.cs" />
+    <Compile Include="Types\AutoTriggerOptions.cs" />
+    <Compile Include="Types\PredefinedCommandPage.cs" />
+    <Compile Include="Types\PredefinedCommandPageCollection.cs" />
+    <Compile Include="Types\PredefinedCommandPageLayout.cs" />
+    <Compile Include="Types\WorkspaceLayout.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\YAT.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial.SerialPort\MKY.IO.Serial.SerialPort.csproj">
+      <Project>{57CDE954-53C3-48A1-AE20-A52A5F387855}</Project>
+      <Name>MKY.IO.Serial.SerialPort</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial.Socket\MKY.IO.Serial.Socket.csproj">
+      <Project>{A19A5215-89AB-49F7-BE7B-32A886A76F0C}</Project>
+      <Name>MKY.IO.Serial.Socket</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial.Usb\MKY.IO.Serial.Usb.csproj">
+      <Project>{925A9CE4-F45B-4665-ADA5-20C832AAA986}</Project>
+      <Name>MKY.IO.Serial.Usb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Ports\MKY.IO.Ports.csproj">
+      <Project>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</Project>
+      <Name>MKY.IO.Ports</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial\MKY.IO.Serial.csproj">
+      <Project>{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}</Project>
+      <Name>MKY.IO.Serial</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Usb\MKY.IO.Usb.csproj">
+      <Project>{1B657329-940D-4AA1-9768-431288B555E2}</Project>
+      <Name>MKY.IO.Usb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
+      <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
+      <Name>MKY</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Domain\YAT.Domain.csproj">
+      <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>
+      <Name>YAT.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Application.Base\YAT.Application.Base.csproj">
+      <Project>{A3E80010-9146-47EF-87B0-138A60406A9E}</Project>
+      <Name>YAT.Application.Base</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

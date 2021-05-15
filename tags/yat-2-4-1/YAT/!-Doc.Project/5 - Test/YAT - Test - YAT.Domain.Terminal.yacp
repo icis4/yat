@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SettingsName>YAT Command Page Definition</SettingsName>
+  <SettingsVersion>1.0.2</SettingsVersion>
+  <ProductVersion>2.1.91</ProductVersion>
+  <Warning>Modifying structure and/or content may cause undefined behavior!</Warning>
+  <Mark>
+    <TimeStamp>2020-07-20T15:01:05.6151228+02:00</TimeStamp>
+    <UserName>Matthias</UserName>
+  </Mark>
+  <Page>
+    <PageName>Page 1</PageName>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>Combined A</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>ABCD&lt;BEL&gt;&lt;BS&gt;&lt;TAB&gt;XYZ</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>Combined B</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>ABCD&lt;BEL&gt;&lt;TAB&gt;&lt;BS&gt;XYZ</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>Partial Line</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>AB  CD\!(NoEOL)</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>Backspace</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>&lt;BS&gt;\!(NoEOL)</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>&lt;8 lines...&gt; [A] [AB] [ABC] [ABCD] [ABCDE] [ABCDEF] [ABCDEFG] [ABCDEFGH]</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>A</CommandLines>
+      <CommandLines>AB</CommandLines>
+      <CommandLines>ABC</CommandLines>
+      <CommandLines>ABCD</CommandLines>
+      <CommandLines>ABCDE</CommandLines>
+      <CommandLines>ABCDEF</CommandLines>
+      <CommandLines>ABCDEFG</CommandLines>
+      <CommandLines>ABCDEFGH</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>A\!(EOL)AB\!(Delay(1000))ABC</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>A\!(EOL)AB\!(Delay(1000))ABC</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description />
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>A&lt;CR&gt;\!(Delay(1000))B</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>ABCD\!(NoEOL)</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>ABCD\!(NoEOL)</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>ABCDEF</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>ABCDEF</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>&lt;2 lines...&gt; [A] [B\!(Delay(1000))ABC]</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>A</CommandLines>
+      <CommandLines>B\!(Delay(1000))ABC</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>123ABC123</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>123ABC123</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+    <Commands>
+      <IsDefined>true</IsDefined>
+      <Description>23&lt;NUL&gt;1</Description>
+      <DefaultRadix>String</DefaultRadix>
+      <CommandLines>23&lt;NUL&gt;1</CommandLines>
+      <IsFilePath>false</IsFilePath>
+      <FilePath />
+    </Commands>
+  </Page>
+</Settings>

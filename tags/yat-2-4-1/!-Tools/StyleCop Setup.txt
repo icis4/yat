@@ -1,0 +1,148 @@
+﻿
+Currently to be found at http://stylecop.codeplex.com/
+Formerly  to be found at http://code.msdn.microsoft.com/sourceanalysis
+
+
+Inheritance
+-----------
+
+Note that StyleCop is capable to properly inherit settings and suppressions from the parent element, whereas FxCop isn't.
+Thus, suppressions may be placed at a parent element, not only at the very location of the rule violation.
+
+
+Filing
+------
+
+Place StyleCop settings into solution folder and inherit settings in each project whenever applicable.
+
+Do not merge settings for third-party projects...
+...and use the third-party provided settings instead.
+...and disable all rules if third-party supplies no settings.
+
+
+Rules
+-----
+
+Disable detailed settings
+- C# > Analyzer designer files
+  > The Visual Studio designer doesn't create StyleCop compatible code.
+
+Enable all rules including
+- C# > Documentation > Element Documentation > PropertyDocumentationMustHaveValue (SA1609)
+- C# > Documentation > Element Documentation > PropertyDocumentationMustHaveValueText (SA1610)
+- C# > Documentation > Element Documentation > DocumentationTextMustBeginWithACapitalLetter (SA1628)
+- C# > Documentation > Element Documentation > DocumentationTextMustEndWithAPeriod (SA1629)
+- C# > Documentation > File Headers > FileHeaderMustHaveSummary (SA1639)
+
+Keep the following rules disabled (default)
+- C# > Readability > Regions > DoNotUseRegions (SA1124)
+
+Disable the following rules
+- C# > Documentation > Element Documentation > ElementsMustBeDocumented (SA1600)
+  > Private methods, e.g. control event handlers, don't need to be documented.
+  > Public, protected and internal elements are checked by the compiler itself.
+- C# > Documentation > Element Documentation > EnumerationItemsMustBeDocumented (SA1602)
+  > Conflicts with '#pragma warning disable 1591' to make long enumeration more readable.
+- C# > Documentation > Element Documentation > PropertySummaryDocumentationMustMatchAccessors (SA1623)
+  > Actual text shall describe the purpose as clear as possible.
+- C# > Documentation > Element Documentation > DocumentationTextMustBeginWithACapitalLetter (SA1628)
+  > Conflicts with valid C# comments '<c>true</c> to...' or '<c>false</c> to...'.
+- C# > Documentation > Element Documentation > DestructorSummaryDocumentationMustBeginWithStandardText (SA1643)
+  > Actual text shall describe the purpose as clear as possible.
+- C# > Documentation > Element Documentation > DocumentationHeadersMustNotContainBlankLines (SA1644)
+  > Any good reason for this?
+- C# > Documentation > File Headers > FileHeaderMustShowCopyright (SA1634)
+  > YAT/MKY file headers already contain copyright information in a user readable and SVN compatible form.
+- C# > Documentation > File Headers > FileHeaderMustHaveSummary (SA1639)
+  > File headers and their tags aren't processed by the .NET documentation. Makes not much sense to add documentation then.
+- C# > Layout > Curly Brackets > CurlyBracketsForMultiLineStatementsMustNotShareLine (SA1500)
+  > Allow properties' get/set to be written on a single line.
+- C# > Layout > Curly Brackets > StatementMustNotBeOnSingleLine (SA1501)
+  > Prevents certain compact table-like implementations of try-catch.
+- C# > Layout > Curly Brackets > ElementMustNotBeOnSingleLine (SA1502)
+  > Allow properties' get/set to be written on a single line.
+- C# > Layout > Curly Brackets > CurlyBracketsMustNotBeOmitted (SA1503)
+  > Allow single statements (e.g. within 'if') to be implemented without curly bracktes.
+- C# > Layout > Curly Brackets > AllAccessorsMustBeMultiLineOrSingleLine (SA1504)
+  > Often, get is single-line, and set is multi-line.
+- C# > Layout > Line Spacing > SingleLineCommentsMustNotBeFollowedByBlankLine (SA1512)
+  > Developers may place comments anywhere where appropriate.
+- C# > Layout > Line Spacing > ClosingBurlyBracketMustBeFollowedByBlankLine (SA1513)
+  > ?!?.
+- C# > Layout > Line Spacing > ElementsMustBeSeparatedByBlankLine (SA1516)
+  > Why not write a compact list? Very well readable like a table.
+- C# > Maintainability > Parenthesis > StatementMustNotUseUnnecessaryParenthesis (SA1119)
+  > Keyword expressions such as 'return (<Expression>)' and 'throw (<Expression>)' are better readable when additional parenthesis are used.
+  > Mathematical and logical expressions may be better readable when additional parenthesis are used. This is to be decided by the implementer.
+- C# > Maintainability > File Contents > FileMayOnlyContainASingleClass (SA1402)
+  > Simple types like Exceptions or EventArgs should be placed into a single file. Unfortunately, StyleCop suppression cannot be applied on file level.
+- C# > Naming > ElementMustBeginWithUpperCaseLetter (SA1300)
+  > Control event handlers are prefixed by the control's name in Visual Studio.
+- C# > Ordering > Element Order > UsingDirectivesMustBePlacedWithinNamespace (SA1200)
+  > Visual Studio places using directives outside namespace itself, looks like a Microsoft internal strife.
+- C# > Ordering > Element Order > ElementsMustAppearInTheCorrectOrder (SA1201)
+  > According to UML, events are placed before methods.
+- C# > Ordering > Element Order > ElementsMustBeOrderedByAccess (SA1202)
+  > There are good reasons why a private method is placed right next to a public method.
+- C# > Ordering > Element Order > StaticElementsMustAppearBeforeInstanceElements (SA1204)
+  > Prevents placing operator overloads to the end of a file.
+- C# > Readability > Member Access > PrefixLocalCallsWithThis (SA1101)
+  > Prefixing local calls with this. reduces readability.
+- C# > Readability > Method Parameter Placement > OpeningParenthesisMustBeOnDeclarationLine (SA1110)
+  > Prevents readable implementation of multi-argument constructors.
+- C# > Readability > Method Parameter Placement > ClosingParenthesisMustBeOnDeclarationLine (SA1111)
+  > Prevents readable implementation of multi-argument constructors.
+- C# > Readability > Statements > CodeMustNotContainMultipleStatementsOnOneLine (SA1107)
+  > Too restrictive, in some cases this really makes sense.
+- C# > Readability > Statements > BlockStatementsMustNotContainEmbeddedComments (SA1108)
+  > ?!?.
+- C# > Readability > Strings > UseStringEmptyForEmptyStrings (SA1122)
+  > "" is way more obvious and readable then string.Empty. It's the task of the compiler to optimize this.
+- C# > Readability > Strings > PrefixCallsCorrectly (SA1126)
+  > Doesn't make any sense to me...
+- C# > Spacing > SingleLineCommentsMustBeginWithSingleSpace (SA1005)
+  > Allow headers to be framed with '//===============...' or '//---------------...' or similar.
+- C# > Spacing > OpeningParenthesisMustBeSpacedCorrectly (SA1008)
+  > Prevents readable implementation of multi-argument methods.
+- C# > Spacing > ClosingParenthesisMustBeSpacedCorrectly (SA1009)
+  > Prevents readable implementation of multi-argument methods.
+- C# > Spacing > OpeningSquareBracketsMustBeSpacedCorrectly (SA1010)
+  > Prevents readable implementation of incrementing items.
+- C# > Spacing > ClosingCurlyBracketsMustBeSpacedCorrectly (SA1013)
+  > Prevents implementation of table-style aligned code.
+- C# > Spacing > ClosingGenericBracketsMustBeSpacedCorrectly (SA1015)
+  > Prevents implementation of table-style aligned code.
+- C# > Spacing > MemberAccessSymbolsMustBeSpacedCorrectly (SA1019)
+  > Prevents implementation of table-style aligned code.
+- C# > Spacing > CodeMustNotContainMultipleWhitespaceInRow (SA1025)
+  > In many cases, table-style aligned code is more readable than not aligned code.
+- C# > Spacing > TabsMustNotBeUsed (SA1027)
+  > So far tabs have always been preferred, no reason why this shouldn't be the case anymore.
+
+Temporarily disable the following rules during transition from non-StyleCop to StyleCop
+- C# > Documentation > Element Documentation > ElementDocumentationMustHaveSummary (SA1604)
+- C# > Documentation > Element Documentation > PartialElementDocumentationMustHaveSummary (SA1605)
+- C# > Documentation > Element Documentation > ElementDocumentationMustHaveSummaryText (SA1606)
+- C# > Documentation > Element Documentation > PartialElementDocumentationMustHaveSummaryText (SA1607)
+- C# > Documentation > Element Documentation > PropertyDocumentationMustHaveValue (SA1609)
+- C# > Documentation > Element Documentation > ElementParametersMustBeDocumented (SA1611)
+- C# > Documentation > Element Documentation > ElementReturnValueMustBeDocumented (SA1615)
+
+Add the following prefixes to the list of allowed Hungarian prefixes
+- io (Input/Output)
+- ip (Internet Protocol)
+- rx (Receive)
+- tx (Transmit)
+
+
+In-Code Suppressions
+--------------------
+
+If really needed, suppress rules in-code using the following attribute:
+[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", Justification = "\fill-in")]
+
+Place StyleCop suppressions BEFORE FxCop suppressions, rationale:
+> Logical order: Style check should be performed BEFORE
+> Dependencies:  StyleCop also checks the suppression statements
+
+Such suppressions only work when CODE_ANALYSIS is defined as a conditional compilation symbol in each project, for all build configurations.

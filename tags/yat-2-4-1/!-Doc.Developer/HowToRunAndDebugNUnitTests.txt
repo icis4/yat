@@ -1,0 +1,59 @@
+﻿
+0.	Precondition
+	------------
+	> Serial COM ports
+		> Install VSPE
+	> Network
+		> Install WinPcap
+			> All defaults
+		> Install OpenVPN
+			> Check "TAP-Win32 Virtual Ethernet Adapter"
+			> Uncheck everything else
+		> Setup
+			> System > Network > Connections
+				> Rename connection to "OpenVPN Virtual Ethernet Adapter"
+					(NUnit category names must not contain ',', '!', '+' or '-', thus "TAP-Win32" is not valid!)
+				> Right-click > Properties
+					> "Configure..."
+						> "Configure..." > Advanced
+							> Media Status = Always Connected
+				> Right-click > Properties
+					> IPv4 > Properties
+						> Set IP address to "10.0.0.1"
+						> Set net mask to "255.255.255.0"
+				> Right-click > Properties
+					> IPv6 > Properties
+						> Set IP address to "fd00::1"
+						> Set net prefix to "64"
+
+
+1.	Configure environment
+	---------------------
+	> Use physical or VSPE ports COM101 and COM102
+		> Execute "\!-Tools\VSPE Runtime Config - COM101 paired with COM102.cmd"
+	> Use WinPcap and OpenVPN TAP adapter
+
+
+2.	Start NUnit from within Visual Studio
+	-------------------------------------
+	> Run "Menu > Tools > External Tools > NUnit"
+
+
+3.	Run an NUnit test
+	-----------------
+	> Select a test and select "Run"
+
+
+4.	Run all NUnit tests
+	-------------------
+	> Open categories
+	> Add and exclude categories depending on required tests and test machine
+	> Select test root and select "Run"
+
+
+5.	Debug NUnit test from within Visual Studio
+	------------------------------------------
+	> Select "Menu > Debug > Attach to Process..."
+		> Select process "NUnit"
+	> Confirm "Attach"
+	> Set breakpoints in tests or tested code as ususal

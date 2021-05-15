@@ -1,0 +1,67 @@
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00800000
+X-Mozilla-Keys:                                                                                 
+Message-ID: <4BBBA167.5080101@users.sourceforge.net>
+Date: Tue, 06 Apr 2010 23:02:31 +0200
+From: maettu_this <maettu_this@users.sourceforge.net>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; de; rv:1.9.1.9) Gecko/20100317 Thunderbird/3.0.4
+MIME-Version: 1.0
+To: jan@lvr.com
+Subject: Feedback regarding 'generic_hid_cs_46'
+Content-Type: text/plain; charset=ISO-8859-15; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Hi Jan,
+
+I have created a 'MKY.IO.Usb' library merging ideas from your 
+'generic_hid' and two other libraries for a SourceForge hosted project 
+where I needed a USB HID based serial communcation implementation. The 
+project is called 'YAT- Yet Another Terminal' and features a terminal to 
+operate and debug serial communications. 'YAT' supports 
+RS-232/422/423/485 as well as TCP-Client/Server/AutoSocket and UDP. 
+Currently I am adding support for USB Ser/HID. You can find 'YAT' on 
+http://sourceforge.net/projects/y-a-terminal/.
+
+In the meantime 'MKY.IO.Usb' partly works and I wanted to give you some 
+feedback regarding 'generic_hid_cs_46' that I have collected while 
+working on 'MKY.IO.Usb':
+
+Overall
+- Debuggung/DeviceMgmt/FileIO/Hid should be static classes
+ > They contain no state
+ > They directly related to the static Win32 API
+- API function descriptions should be placed to function declarations 
+instead of function calls
+- 'using' statements in a file should all be placed together, not 
+separated by the file header
+- 'internal' should only be used where really needed
+
+Hid.cs
+- DisplayException must not be part of the library. Instead, an Error 
+event might be useful
+ > A library must not directly affect the user interface
+
+Reports
+- Abstract base classes should be interfaces
+- Report classes should be named InputReport.. and OutputReport.. for 
+consistency with .NET naming
+- Statement "Read is declared as a Sub rather than as a Function because 
+asynchronous reads use a
+   callback method that can access parameters passed by ByRef but not 
+Function return values." is
+   not valid for .NET. All methods can be called synchronously AND 
+asynchronously.
+
+FrmMain.cs
+- FindTheHid() doesn't support handling multiple devices with same vid/pid
+- Main parts of the implementation should be placed into a separate 
+class called something like 'GenericHidDevice'
+
+Details about the reasons to merge the three libraries and more detailed 
+information on 'MKY.IO.Usb' can be found in the YAT SVN repository under 
+https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Usb/_Doc/MKY.IO.Usb.txt.
+
+I am happy to share thoughts and suggestions.
+
+Best regards,
+Matthias

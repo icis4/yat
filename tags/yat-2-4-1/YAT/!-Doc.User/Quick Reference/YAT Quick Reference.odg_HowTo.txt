@@ -1,0 +1,15 @@
+
+YAT
+---
+
+1. Modify:
+    "Page 1 of 2"
+    "Page 1 of 1"
+
+2. [File > Export As > PDF > Page 1] to local directory
+
+
+Albatros
+--------
+
+1. [File > Export As > PDF > All Pages] to "..\..\..\Albatros\Albatros-QuickReference"

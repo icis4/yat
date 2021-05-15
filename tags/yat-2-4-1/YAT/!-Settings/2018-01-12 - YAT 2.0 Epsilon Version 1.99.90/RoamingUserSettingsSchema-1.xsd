@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="RoamingUserSettings" nillable="true" type="RoamingUserSettingsRoot" />
+  <xs:complexType name="RoamingUserSettingsRoot">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="FileType" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="SettingsVersion" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="ProductVersion" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Warning" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Saved" type="SaveInfo" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Socket" type="SocketSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="Find" type="FindSettings" />
+          <xs:element minOccurs="0" maxOccurs="1" name="View" type="ViewSettings" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SettingsItem" abstract="true" />
+  <xs:complexType name="ViewSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="FindVisible" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AutoActionVisible" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AutoResponseVisible" type="xs:boolean" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="CustomColors" type="RecentItemOfString" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="RecentItemOfString">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Item" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TimeStamp" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FindSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="1" name="ActivePattern" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="RecentPatterns" type="RecentItemOfString" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Options" type="FindOptions" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FindOptions">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="CaseSensitive" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="WholeWord" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SocketSettings">
+    <xs:complexContent mixed="false">
+      <xs:extension base="SettingsItem">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="RecentRemoteHosts" type="RecentItemOfString" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="RecentLocalFilters" type="RecentItemOfString" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="RecentPorts" type="RecentItemOfInt32" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="RecentItemOfInt32">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Item" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="TimeStamp" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SaveInfo">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="TimeStamp" type="xs:dateTime" />
+      <xs:element minOccurs="0" maxOccurs="1" name="UserName" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

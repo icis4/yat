@@ -1,0 +1,62 @@
+@ECHO OFF
+
+::==================================================================================================
+:: YAT - Yet Another Terminal.
+:: Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
+:: Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
+:: ------------------------------------------------------------------------------------------------
+:: File based on:
+::  URL:                       svn.code.sf.net/p/y-a-terminal/code/trunk/!-Tools/MT-SICS%20TCP-IP%20Device%20Start.cmd.template $
+:: $URL$
+::  Revision: <REVISION>
+:: $Revision$
+::  Date: <DATE/TIME>
+:: $Date$
+::  Author: <AUTHOR>
+:: $Author$
+:: ------------------------------------------------------------------------------------------------
+:: See release notes for product version details.
+:: See SVN change log for file revision details.
+::
+::     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+::     Attention: Windows/DOS requires that this file is encoded in ASCII/ANSI and not UTF-8!
+::     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+::
+:: Author(s): Matthias Klaey
+:: ------------------------------------------------------------------------------------------------
+:: Copyright © 2003-2021 Matthias Kläy.
+:: All rights reserved.
+:: ------------------------------------------------------------------------------------------------
+:: This source code is licensed under the GNU LGPL.
+:: See http://www.gnu.org/licenses/lgpl.html for license details.
+::==================================================================================================
+
+::==================================================================================================
+:: Purpose
+:: ------------------------------------------------------------------------------------------------
+:: This helper batch redirects from generic calling script to machine dependent executable.
+::==================================================================================================
+
+::==================================================================================================
+:: HowTo
+:: ------------------------------------------------------------------------------------------------
+:: 1. Copy this helper batch template into the directory where the test executable resides.
+:: 2. Remove the ".template" suffix from the file name.
+:: 3. Adapt the file meta information ($$ tags).
+:: 4. Adapt the below <DEVICE> placeholder to the desired executable name.
+:: 5. Add the directory to the system's PATH.
+::==================================================================================================
+
+SETLOCAL
+
+SET MT_SICS_EXE=<DEVICE>.exe
+
+START /MIN "MT-SICS TCP-IP Device" %MT_SICS_EXE%
+
+ENDLOCAL
+
+::==================================================================================================
+:: End of file based on:
+::  URL:                       svn.code.sf.net/p/y-a-terminal/code/trunk/!-Tools/MT-SICS%20TCP-IP%20Device%20Start.cmd.template
+:: $URL$
+::==================================================================================================

@@ -1,0 +1,52 @@
+﻿
+Takes approx. 20 minutes, given the procedure remains.
+Years in this file shall/will be updated along with updating the code.
+
+0.	Makes sure that all files have been committed.
+
+1.	Open Visual Studio (without opening the solution).
+	(This step is required because the .vdproj files cannot be edited while the solution is open.)
+
+2.	Search/replace "\Trunk" for the following expressions (match case and whole word) throughout...
+	*.vdproj
+	...and update year:
+	 > "Copyright © 2003-2021 Matthias Kläy." => 4 replacements
+
+3.	Open the solution.
+
+4.	[Build > Batch Build... > Select All > Clean] the solution in order to...
+	...speed up search/replace.
+	...speed up verification throughout "\Trunk\*.*".
+
+5.	Search/replace solution (includes this file) for the following expressions (match case and whole word) throughout...
+	*.*
+	...and update year:                 (approx. counts for feasibility check)
+	 > "Copyright © 2003-2021 Matthias Kläy."  => ~497 replacements
+	 > "Copyright © 2007-2021 Matthias Kläy."  => ~192 replacements
+	 > "Copyright © 2010-2021 Matthias Kläy."  =>  ~72 replacements
+	 > "Copyright © 2008-2021 Mettler-Toledo." => ~331 replacements (=> scripting, testing)
+	 > "Copyright © 2014-2021 Mettler-Toledo." =>   ~6 replacements (=> scripting templates)
+	 > "Copyright © 2017-2021 Mettler-Toledo." => ~303 replacements (=> scripting examples, NUnit testing)
+	 > "Copyright © 2020-2021 Mettler-Toledo." =>   ~2 replacements (=> YAT integration)
+	 > "Copyright © 2020-2021 Matthias Kläy."  =>   ~2 replacements
+	 > " and © 2003-2021 Matthias Kläy."       =>    2 replacements
+	 > "2021, Matthias Kläy"                   =>    2 replacements
+
+6.	Then, search "\Trunk" (neither match case and nor whole word) throughout...
+	*.*
+	...and verify that the following expressions are no more found...
+	...except within SVN, 3rd party, archives and other explainable locations:
+	 > "2021 " (<= incl. space!), where year = 2021 is the 'old' year
+	    > 5 occurrences in "\MKY\MKY.IO.Ports.Test\WorkaroundAnalysis\" expected and to be done manually
+	    > 14 occurrences in "\MKY\MKY.IO.Ports.Test\WorkaroundAnalysis\!-Archive\" expected and to be kept at 2017
+	 > "201\d " (<= incl. space!) using RegEx
+	 > "202[^2] " (<= incl. space!) using RegEx, where year = 2022 is already the 'new' year
+
+7.	Commit all changes, verifying that SVN properties of all files are up-to-date.
+
+(Note that this procedure "schlägt drei weitere Fliegen auf einen Streich":
+ > Detection whether all intended files are included in the solution.
+ > Detection whether there are superfluous files in "\Trunk".
+ > Detection whether SVN properties of all files are up-to-date.)
+
+Finally, consider to also check for trailing whitespace according to HowToRemoveTrailingWhitespace.txt.

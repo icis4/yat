@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <FileType>YAT Workspace Settings</FileType>
+  <SettingsVersion>1.2.2</SettingsVersion>
+  <ProductVersion>1.99.90</ProductVersion>
+  <Warning>Modifying this file may cause undefined behavior!</Warning>
+  <Saved>
+    <TimeStamp>2018-01-10T22:01:40.1154237+01:00</TimeStamp>
+    <UserName>Matthias</UserName>
+  </Saved>
+  <AutoSaved>false</AutoSaved>
+  <Workspace>
+    <Layout>Automatic</Layout>
+  </Workspace>
+</Settings>

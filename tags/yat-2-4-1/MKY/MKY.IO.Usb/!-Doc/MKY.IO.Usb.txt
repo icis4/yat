@@ -1,0 +1,91 @@
+﻿
+MKY.IO.Usb
+==========
+
+This USB library consists of the following main parts:
+ > DeviceCollection          => Collection that enumerates USB devices
+ > Device                    => Encapsulates basic USB functionality such as VID/PID/Manufacturer/Product/Serial/Connect/Disconnect
+ > HidDeviceCollection       => Collection that enumerates USB HID devices
+ > HidDevice                 => Inherits from Device and adds HID specific functionality such as HID reports
+ > SerialHidDeviceCollection => Collection that enumerates USB Ser/HID devices
+ > SerialHidDevice           => Read/Write from/to a serial stream (see "SerHID Profile Description.txt" for details)
+
+
+Architecture
+------------
+
+In order to use MKY.IO.Usb, the following assemblies are required:
+ > MKY                       => Basic utilities and USB specific utilities in MKY.Utilities.Usb
+ > MKY.Win32                 => Wrappers for Win32 API functions and types (system32/kernel32/user32/setupapi/hid)
+ > MKY.IO.Usb                => This USB library itself
+
+In addition, there are the following supporting projects:
+ > MKY.Test                  => NUnit based test environment for MKY
+ > MKY.Win32.Test            => NUnit based test environment for MKY.Win32
+ > MKY.IO.Usb.Test           => NUnit based test environment for MKY.IO.Usb
+ > MKY.IO.Usb.Demo           => Demo client showing the basic use of MKY.IO.Usb
+
+Optionally, a higher level generic I/O interface is available:
+ > MKY.IO.Serial             => Generic I/O interface for various kinds of serial communications
+ > MKY.IO.Serial.Usb         => USB Ser/HID implementation of the generic I/O interface
+ > MKY.IO.Serial.Usb.Test    => NUnit based test environment for MKY.IO.Serial.Usb
+
+
+Base
+----
+
+MKY.IO.Usb is based on three existing libraries available on the web:
+ > 'GenericHid' from <http://www.lvr.com/hidpage.htm>
+ > 'UsbLibrary' from <http://www.codeproject.com/KB/cs/USB_HID.aspx?msg=2816038>
+ > 'UsbHid'     from <http://www.florian-leitner.de/index.php/category/usb-hid-library/>
+
+The approach of merging these libraries into MKY.IO.Usb was chosen due to:
+ > None of the libraries provided all the features required for USB Ser/HID for YAT
+ > Need for a compact though complete library for USB Ser/HID for YAT
+
+An alternative would have been to make use of a Windows/.NET port of 'libusb'. Such approach is shown in 'libusb.NET'/'libusb.NET.Test' in SVN revision 276. 'libusb.NET' uses the 'winbows_backend' port of 'libusb'. 'libusb.NET' is based on 'SharpUSBLib' by Mike Krüger.
+
+However, experience has shown that this 'libusb' based approach isn't feasible:
+ > The API of 'libusb' isn't a good match for a C#.NET based project
+ > 'libusb' doesn't easily fit into a managed .NET solution
+ > 'libusb' is implemented platform dependent and must be separately built for Win32/x86 and Win64/x64
+ > 'libusb' only provides the basic USB functions but no HID specifics
+ > 'libusb windows_backend' doesn't yet support detection of hot plug-in/out
+ > 'libusb-win32' seems to have serious portability issues on Vista, Win7, x64
+ > 'libusb-win32' is based on libusb-0.1.12 but libusb-1.0 has been available since 2008-12
+
+Way more promising is 'LibUsbDotNet' by Travis Robinson on <https://sourceforge.net/projects/libusbdotnet/>. 'LibUsbDotNet' is implemented very clean and features a very complete set of USB functionality. 'LibUsbDotNet' supports 'libusb windows_backend' as well as 'libusb-win32' and 'WinUSB' (also see below). 'LibUsbDotNet' is platform independent, rather big and seems to contain no Ser/HID specifics either.
+
+In the end, for YAT, it proved much more straight-forward to go for a lightweight MKY.IO.Usb focusing on Ser/HID.
+
+
+hid.dll vs winusb.dll
+---------------------
+
+Windows provides different dll's that deal with USB:
+ > hid.dll    => Rather old infrastructure that provides basic USB functionality
+ > winusb.dll => New infrastructure, available in Vista and above
+
+At first, WinUSB looks more promising than HID. Especially because HID only provides limited functions
+to control the low-level operations such as SetDescriptor() or GetDescriptor(). However, the WinUSB API
+is only useful with devices that provide a WinUSB based driver. See
+http://download.microsoft.com/download/9/C/5/9C5B2167-8017-4BAE-9FDE-D599BAC8184A/WinUsb_HowTo.docx
+for details.
+
+Currently, MKY.IO.Usb only supports true HID devices, i.e. devices that are handled by HID.
+
+
+Implementation Details
+----------------------
+
+ > Read/Write is done via 'FileStream'
+ > File handle is created via 'CreateFile()' (kernel32.dll) providing an HID device path retrieved via the Windows device management infrastructure (setupapi.dll, user32.dll)
+
+This implementation has been challenged by [FR#186  HID data transfer](https://sourceforge.net/p/y-a-terminal/feature-requests/186/)
+that requests using 'HidD_SetOutputReport()' instead of the file.
+
+
+----------------------
+2019-07 / Matthias Kläy
+2012-12 / Matthias Kläy
+2010-04 / Matthias Kläy

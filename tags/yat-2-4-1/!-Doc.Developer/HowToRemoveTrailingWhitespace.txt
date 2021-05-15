@@ -1,0 +1,30 @@
+﻿
+Takes approx. 10 minutes, given the procedure remains.
+
+0.	Makes sure that all files have been committed.
+
+1.	Open the solution in Visual Studio.
+
+2.	[Build > Batch Build... > Select All > Clean] the solution in order to...
+	...speed up search/replace.
+	...speed up verification throughout "\Trunk".
+
+3.	Search "\Trunk" for "^[^\S\r\n]+(?=\r?$)" using RegEx (= empty lines but containing whitespace)...
+	...throughout *.cs;*.txt;*.bat;*.cmd and manually remove trailing whitespace.
+
+	Removal has to be done manually because...
+	...3rd party code must not be changed.
+	...*.Designer.cs must not be changed.
+	Manual removal is OK since there should only be few findings.
+
+4.	Search "\Trunk" for "[^\S\r\n]+(?=\r?$)" using RegEx (= non-empty lines containing trailing whitespace)...
+	...throughout *.cs;*.txt;*.bat;*.cmd and manually remove trailing whitespace.
+
+	Removal has to be done manually because...
+	...3rd party code must not be changed.
+	...*.Designer.cs must not be changed.
+	..."/// " is contained in documentation blocks.
+	Manual removal is a bit cumbersome. It could be replaced by a script that filters the files
+	and excludes accepted locations.
+
+5.	Commit all changes, ensuring that 3rd party and designer generated code remains untouched.

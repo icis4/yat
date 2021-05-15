@@ -1,0 +1,75 @@
+﻿
+Frame
+-----
+
+Hi,
+Anonymous requester or anybody else who sees this,
+
+Best regards,
+Matthias
+
+
+Contact YAT (!! GMX email address shall not become globally visible !!)
+-----------
+
+If this doesn't help,
+Either
+
+reply here or send an email via the SourceForge mail feature (if you have a SourceForge account) or send an email to the address shown in YAT's [Help > About...] dialog
+
+
+Bug/Feature/Discussion
+----------------------
+
+<<>> has been fixed and YAT <x.y.z> is about to be released <<soon|within a month or two|... >>.
+<<>> is implemented and YAT <x.y.z> is about to be released <<soon|within a month or two|... >>.
+
+If you'd like <preliminary|beta> binaries to [get the bug fixed|try out the new feature],
+<<<Contact YAT>>>
+and I will provide YAT <preliminary|beta> binaries via dropbox.
+
+(!! No need to ask for true email !! Add user to dropbox (should work) and also share link !!)
+
+
+Dropbox Access (!! Dropbox link shall not become globally visible !!)
+--------------
+
+I have just given you access to the YAT <preliminary|beta> binaries at dropbox.
+Here is the link to the YAT <preliminary|beta> binaries at dropbox: <<>>.
+
+
+Binaries
+--------
+
+Simply extract the binaries to a temporary location and run "YAT.exe".
+Either, extract the binaries to a temporary location and run "YAT.exe", or replace the files in "C:\Program Files\YAT".
+
+See preliminary release notes for the list of changes since YAT <x.y.z>.
+
+Let me know whether your use cases are covered now or whether something is missing or not working as expected.
+Any other finding or feedback to YAT is also highly appreciated.
+
+YAT <x.y.z> is expected <<soon|within a month or two|... >>, depending on <preliminary|beta> feedback.
+
+
+Donation
+--------
+
+Thanks very much for your donation :-) Hope YAT works as expected! Let me know in case you have any kind of feedback such as suggestions or issues you run into.
+
+(Also see recent "YAT says thanks!" emails.)
+
+
+Mail Notification
+-----------------
+
+In order to get a notice once YAT <x.y.z> is ready,
+Note that
+
+you can sign up for the YAT release notification at https://sourceforge.net/p/y-a-terminal/mailman/. As visible in the mail archive at https://sourceforge.net/p/y-a-terminal/mailman/y-a-terminal-users/, no spam, just one notification email per release, unless you keep the SourceForge newsletters activated.
+
+
+Hmm
+---
+
+Hmm, is not hearing anything the way it should be? For having a tool for free? Getting feedback is the only pay a developer of an open source project like YAT gets. Getting none is the opposite...

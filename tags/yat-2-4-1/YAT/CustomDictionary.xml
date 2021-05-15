@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dictionary>
+  <Words>
+    <Recognized>
+      <Word>c</Word>
+      <Word>s</Word>
+      <Word>str</Word>
+      <Word>strA</Word>
+      <Word>strB</Word>
+      <Word>obj</Word>
+      <Word>lhs</Word>
+      <Word>rhs</Word>
+      <Word>Equatable</Word>
+      <Word>Mergeable</Word>
+      <Word>Sendable</Word>
+      <Word>Transmissive</Word>
+      <Word>Chrono</Word>
+      <Word>Eol</Word>
+      <Word>Rx</Word>
+      <Word>Tx</Word>
+      <Word>Bidir</Word>
+      <Word>Lookahead</Word>
+      <Word>Prepending</Word>
+    </Recognized>
+    <DiscreteExceptions>
+      <Term>InCase</Term>
+      <Term>multiLine</Term>
+      <Term>MultiLine</Term>
+      <Term>SomeTime</Term>
+      <Term>TimeStamp</Term>
+      <Term>whitespace</Term>
+    </DiscreteExceptions>
+  </Words>
+  <Acronyms>
+    <CasingExceptions>
+      <Acronym>YAT</Acronym>
+    </CasingExceptions>
+  </Acronyms>
+</Dictionary>

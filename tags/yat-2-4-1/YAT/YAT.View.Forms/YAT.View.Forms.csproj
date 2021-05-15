@@ -1,0 +1,502 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A1060959-580E-4493-BA51-4A3A7CDE1E88}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>YAT.View.Forms</RootNamespace>
+    <AssemblyName>YAT.View.Forms</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Properties\YAT.snk</AssemblyOriginatorKeyFile>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\YAT.View.Forms.xml</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\YAT.View.Forms.xml</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="OxyPlot, Version=2.0.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\OxyPlot\Binaries\OxyPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot.WindowsForms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=245eacd6b5d2d338, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\OxyPlot\Binaries\OxyPlot.WindowsForms.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\YAT.Version.cs">
+      <Link>Properties\YAT.Version.cs</Link>
+    </Compile>
+    <Compile Include="About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BinaryTerminalSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BinaryTerminalSettings.Designer.cs">
+      <DependentUpon>BinaryTerminalSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AdvancedTerminalSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdvancedTerminalSettings.Designer.cs">
+      <DependentUpon>AdvancedTerminalSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormatSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormatSettings.Designer.cs">
+      <DependentUpon>FormatSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AutoActionPlotHelp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AutoActionPlotHelp.Designer.cs">
+      <DependentUpon>AutoActionPlotHelp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Help.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Help.Designer.cs">
+      <DependentUpon>Help.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LogSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LogSettings.Designer.cs">
+      <DependentUpon>LogSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewTerminal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewTerminal.Designer.cs">
+      <DependentUpon>NewTerminal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AutoActionPlot.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AutoActionPlot.Designer.cs">
+      <DependentUpon>AutoActionPlot.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PredefinedCommandSettings.Designer.cs">
+      <DependentUpon>PredefinedCommandSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Preferences.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Preferences.Designer.cs">
+      <DependentUpon>Preferences.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="CommandLineMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CommandLineMessageBox.Designer.cs">
+      <DependentUpon>CommandLineMessageBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReleaseNotes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReleaseNotes.Designer.cs">
+      <DependentUpon>ReleaseNotes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Terminal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Terminal.Designer.cs">
+      <DependentUpon>Terminal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TerminalSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TerminalSettings.Designer.cs">
+      <DependentUpon>TerminalSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TextTerminalSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TextTerminalSettings.Designer.cs">
+      <DependentUpon>TextTerminalSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FeedbackInstructions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FeedbackInstructions.Designer.cs">
+      <DependentUpon>FeedbackInstructions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Types\AutoContentState.cs" />
+    <Compile Include="Types\FindResult.cs" />
+    <Compile Include="UnhandledException.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UnhandledException.Designer.cs">
+      <DependentUpon>UnhandledException.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PredefinedCommandSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UnhandledExceptionHandler.cs" />
+    <Compile Include="WelcomeScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WelcomeScreen.Designer.cs">
+      <DependentUpon>WelcomeScreen.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AutoActionPlot.resx">
+      <DependentUpon>AutoActionPlot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BinaryTerminalSettings.resx">
+      <DependentUpon>BinaryTerminalSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AdvancedTerminalSettings.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AdvancedTerminalSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormatSettings.resx">
+      <DependentUpon>FormatSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AutoActionPlotHelp.resx">
+      <DependentUpon>AutoActionPlotHelp.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Help.resx">
+      <DependentUpon>Help.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogSettings.resx">
+      <DependentUpon>LogSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewTerminal.resx">
+      <DependentUpon>NewTerminal.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Preferences.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Preferences.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CommandLineMessageBox.resx">
+      <DependentUpon>CommandLineMessageBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReleaseNotes.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ReleaseNotes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Terminal.resx">
+      <DependentUpon>Terminal.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TerminalSettings.resx">
+      <DependentUpon>TerminalSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TextTerminalSettings.resx">
+      <DependentUpon>TextTerminalSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FeedbackInstructions.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FeedbackInstructions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnhandledException.resx">
+      <DependentUpon>UnhandledException.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PredefinedCommandSettings.resx">
+      <DependentUpon>PredefinedCommandSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WelcomeScreen.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WelcomeScreen.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\YAT.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ALAZ\Source\ALAZ.SystemEx.NetEx\ALAZ.SystemEx.NetEx.csproj">
+      <Project>{25162422-3B32-4FB3-8A99-6BCFBE30D9AE}</Project>
+      <Name>ALAZ.SystemEx.NetEx</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ALAZ\Source\ALAZ.SystemEx\ALAZ.SystemEx.csproj">
+      <Project>{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2}</Project>
+      <Name>ALAZ.SystemEx</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Ports\MKY.IO.Ports.csproj">
+      <Project>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</Project>
+      <Name>MKY.IO.Ports</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial.SerialPort\MKY.IO.Serial.SerialPort.csproj">
+      <Project>{57CDE954-53C3-48A1-AE20-A52A5F387855}</Project>
+      <Name>MKY.IO.Serial.SerialPort</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial.Socket\MKY.IO.Serial.Socket.csproj">
+      <Project>{A19A5215-89AB-49F7-BE7B-32A886A76F0C}</Project>
+      <Name>MKY.IO.Serial.Socket</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial.Usb\MKY.IO.Serial.Usb.csproj">
+      <Project>{925A9CE4-F45B-4665-ADA5-20C832AAA986}</Project>
+      <Name>MKY.IO.Serial.Usb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial\MKY.IO.Serial.csproj">
+      <Project>{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}</Project>
+      <Name>MKY.IO.Serial</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Usb\MKY.IO.Usb.csproj">
+      <Project>{1B657329-940D-4AA1-9768-431288B555E2}</Project>
+      <Name>MKY.IO.Usb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
+      <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
+      <Name>MKY</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.Windows.Forms\MKY.Windows.Forms.csproj">
+      <Project>{CB2E6173-CB9F-4FB4-8948-30D04D4BAE50}</Project>
+      <Name>MKY.Windows.Forms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Application.Base\YAT.Application.Base.csproj">
+      <Project>{A3E80010-9146-47EF-87B0-138A60406A9E}</Project>
+      <Name>YAT.Application.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Domain\YAT.Domain.csproj">
+      <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>
+      <Name>YAT.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Format\YAT.Format.csproj">
+      <Project>{7A7D2DB5-90CC-4BF0-9C80-FA7B8F6AAC74}</Project>
+      <Name>YAT.Format</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Log\YAT.Log.csproj">
+      <Project>{7B0B343D-F992-4A1E-8E07-CB8EC651A5E6}</Project>
+      <Name>YAT.Log</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Model.Base\YAT.Model.Base.csproj">
+      <Project>{E9FF1D5E-84E0-4ADB-94EC-662903931295}</Project>
+      <Name>YAT.Model.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Model\YAT.Model.csproj">
+      <Project>{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}</Project>
+      <Name>YAT.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Settings.Application\YAT.Settings.Application.csproj">
+      <Project>{69a8cbb4-7d00-4a3d-9cf7-220dd02c2eb7}</Project>
+      <Name>YAT.Settings.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Settings.Model\YAT.Settings.Model.csproj">
+      <Project>{FE2D334F-B2D8-4A07-B63D-93BA775DBBCF}</Project>
+      <Name>YAT.Settings.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.View.Controls\YAT.View.Controls.csproj">
+      <Project>{0762E929-7EB5-4BDA-9018-DBA94DA8BDE5}</Project>
+      <Name>YAT.View.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.View.Utilities\YAT.View.Utilities.csproj">
+      <Project>{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}</Project>
+      <Name>YAT.View.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\LGPL\Image_LGPLv3_147x51.png" />
+    <Content Include="Resources\LGPL\Image_LGPLv3_88x31.png" />
+    <Content Include="Resources\Status\Image_Status_Red_12x12.png" />
+    <Content Include="Resources\Status\Image_Status_Green_12x12.png" />
+    <Content Include="Resources\Status\Image_Status_Grey_12x12.png" />
+    <Content Include="Resources\Status\Image_Status_Yellow_12x12.png" />
+    <Content Include="Resources\Tool\Image_Tool_accept_button_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_accept_document_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_application_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_application_add_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_application_add_32x32.png" />
+    <Content Include="Resources\Tool\Image_Tool_application_cascade_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_application_delete_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_application_edit_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_application_get_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_application_lightning_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_application_put_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_application_tile_horizontal_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_application_tile_vertical_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_arrow_refresh_small_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_autoresponders_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_comments_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_comments_delete_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_control_pause_blue_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_control_pause_blue_32x32.png" />
+    <Content Include="Resources\Tool\Image_Tool_control_play_blue_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_control_play_blue_32x32.png" />
+    <Content Include="Resources\Tool\Image_Tool_control_stop_blue_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_control_stop_blue_32x32.png" />
+    <Content Include="Resources\Tool\Image_Tool_database_repeat_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_delete_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_email_delete_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_file_extension_chm_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_file_extension_pdf_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_folder_add_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_folder_explorer_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_font_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_font_add_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_font_delete_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_formatting_text_containing_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_gift_add_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_help_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_help_32x32.png" />
+    <Content Include="Resources\Tool\Image_Tool_information_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_information_32x32.png" />
+    <Content Include="Resources\Tool\Image_Tool_layer_save_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_lightning_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_new_window_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_page_white_delete_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_page_white_edit_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_page_white_lightning_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_page_white_magnify_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_preferences_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_printer_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_save_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_save_all_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_save_as_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_script_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_script_add_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_script_delete_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_script_edit_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_script_error_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_script_gear_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_script_go_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_script_lightning_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_script_save_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_setting_tools_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_table_export_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_table_import_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_table_lightning_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_table_link_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_table_refresh_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_table_rows_insert_above_word_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_table_rows_insert_below_word_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_table_save_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_table_tab_search_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_text_exports_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_text_imports_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_token_literal_text_16x16.png" />
+    <Content Include="Resources\Tool\Image_Tool_token_match_character_literally_16x16.png" />
+    <Content Include="Resources\YAT\Icon_YAT.ico" />
+    <Content Include="Resources\YAT\Icon_YAT_TerminalSettings.ico" />
+    <Content Include="Resources\YAT\Icon_YAT_UserSettings.ico" />
+    <Content Include="Resources\YAT\Icon_YAT_WorkspaceSettings.ico" />
+    <Content Include="Resources\YAT\Image_YAT_16x16.png" />
+    <Content Include="Resources\YAT\Image_YAT_32x32.png" />
+    <Content Include="Resources\YAT\Image_YAT_48x48.png" />
+    <Content Include="Resources\YAT\Image_YAT_64x64.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

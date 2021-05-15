@@ -1,0 +1,8 @@
+﻿
+x64
+ProductCode = {8125CDEA-2804-4B9E-9C34-1BC68031A50F}
+UpgradeCode = {6013B81A-B607-4E05-AFE6-E920B31F4CBC} (Same as x64 ! Must be kept for a new version !!)
+
+x86
+ProductCode = {43EE35D5-24C1-4062-B349-7D8FA1D86246}
+UpgradeCode = {6013B81A-B607-4E05-AFE6-E920B31F4CBC} (Same as x64 ! Must be kept for a new version !!)

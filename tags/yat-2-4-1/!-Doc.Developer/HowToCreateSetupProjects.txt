@@ -1,0 +1,91 @@
+﻿
+YAT uses two separate setup projects for x86 and x64. See "ProjectSetup.txt" for details.
+
+Both projects are configured according to the following steps, changes have to be applied to both.
+Keeping both projects in-sync based on text of .vdproj isn't feasible (tried 2015-04-03).
+
+The current installer infrastructure has some issues:
+ > Warning "The value of the 'PublicKey' attribute in '.NET Framework 3.5 SP1' does not match that of file...
+    => Use of .NET 4.0 or higher is required.
+ > Resource editor does not properly generate resources for x64 configuration
+    => Use of .NET 4.0 or higher is required.
+
+First warning is currently ignored.
+Second issue is worked-around by deploying 'AnyCPU' builds in case of x64.
+
+This all is described in #229 "Upgrade to .NET 4.0 or higher". This is a follow-up to:
+ > #191 "YAT should be installed in x64 program folder in case of AnyCPU build"
+ > #175 "Add additional solution platforms"
+
+Not yet upgrading to .NET 4.0 because Win7 by default only has .NET 3.5 installed. Wait for upgrade to .NET 4.0 for a few more years.
+
+
+Setup project configuration
+---------------------------
+
+1. Create two new VSI projects
+2. Create two additional project configurations "Setup" and "Setup with Prerequisites"
+3. Create two according solution configurations and configure them for 'AnyCPU' as well as x86 and x64
+4. Build the solution for...
+   ...x86      => x86 installer
+   ...'AnyCPU' => x64 installer (see #229 "Upgrade to .NET 4.0 or higher" for rationale)
+5. Set x86 and x64 as 'TargetPlatform'
+6. Configure the project
+    > Outputs:
+       > Setup.x86\YAT-x86.msi
+       > Setup.x86 with Prerequisites\YAT-x86.msi
+       > Setup.x64\YAT-x64.msi
+       > Setup.x64 with Prerequisites\YAT-x64.msi
+    > Optimization:
+       > Setup = Speed
+       > Setup with Prerequisites = Size
+    > Prerequisites:
+       > .NET 3.5 SP1
+       > Windows Installer 4.5
+7. Configure 'File System'
+    > Application Folder
+       > [Program...Folder][Manufacturer]\[ProductName] => [Program...Folder]\[ProductName]
+       > Add primary output of "YAT" and "YATConsole"
+          > Release x86 => x86
+          > Release 'AnyCPU' => x64
+       > Add additional file "YAT Release Notes"
+       > Add folders "DejaVu Info" and "Installer"
+       > Add Installer banner
+       > Add DejaVu info files
+    > Replace 'User's Desktop' by 'Fonts Folder'
+       > Add DejaVu fonts
+    > User's Programs Menu
+       > Add new shortcut
+          > Name = "YAT"
+          > Target = Primary output
+          > Icon = Primary output #1
+          > Description = YAT - Yet Another Terminal
+8. Configure 'File Types'
+    > Name =        "YAT Terminal Settings"     "YAT User Settings"     "YAT Workspace Settings"
+    > Description = "YAT Terminal Settings"     "YAT User Settings"     "YAT Workspace Settings"
+    > Command =     Primary output              <DITO>                  <DITO>
+    > Extensions =  yat                         yau                     yaw
+    > Icon =        Primary output #2           #3                      #4
+9. Configure 'User Interface'
+    > Banner = Banner.bmp for all dialogs
+    > Copyright = YAT is licensed under the GNU LGPL.                                                                                See http://www.gnu.org/licenses/lgpl.html for license details.                                   Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.                    Copyright © 2003-2021 Matthias Kläy. All rights reserved.
+10. Configure 'Launch Conditions'
+    > .NET = 3.5
+11. Project Properties
+    > Icon = Primary output #1
+    > Author = Matthias Kläy
+    > Description = YAT - Yet Another Terminal
+    > DetectNewer = True
+    > InstallAll = True
+    > Keywords = Terminal; RS-232; RS-422; RS-423; RS-485; TCP/IP; UDP/IP; USB Ser/HID; Matthias Kläy; HSR; Mettler-Toledo; SourceForge
+    > Localization = English
+    > Manufacturer = YAT
+    > Manufacturer URL = https://sourceforge.net/projects/y-a-terminal/
+    > Support URL = https://sourceforge.net/projects/y-a-terminal/
+    > Product = YAT
+    > RemovePrevious = True
+    > Subject = YAT - Yet Another Terminal
+    > Title = YAT 2.0 Beta 4 Candidate 3 Development
+    > UpgradeCode = 6013B81A-B607-4E05-AFE6-E920B31F4CBC
+    > Version = 1.99.31
+    > ProductCode = E57CEC25-AE3B-4EC3-8FA6-23ADB0A8E376
