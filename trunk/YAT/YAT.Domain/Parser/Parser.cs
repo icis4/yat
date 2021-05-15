@@ -75,10 +75,10 @@ namespace YAT.Domain.Parser
 			@"Octal ""\o(117 113)""" + Environment.NewLine +
 			@"Decimal ""\d(79 75)""" + Environment.NewLine +
 			@"Hexadecimal ""\h(4F 4B)""" + Environment.NewLine +
-			@"Character ""\c(O K)""" + Environment.NewLine +
 			@"String ""\s(OK)""" + Environment.NewLine +
-			@"ASCII controls (0x00..0x1F and 0x7F) ""<CR><LF>""" + Environment.NewLine +
+			@"Character ""\c(O K)""" + Environment.NewLine +
 			@"Unicode notation ""\U+20AC"" or ""\U(20AC)""" + Environment.NewLine +
+			@"ASCII controls (0x00..0x1F and 0x7F) ""<CR><LF>""" + Environment.NewLine +
 			Environment.NewLine +
 			@"Format specifiers are case insensitive, e.g. ""\H"" = ""\h"", ""4f"" = ""4F"", ""<lf>"" = ""<LF>""" + Environment.NewLine +
 			@"Formats can also be applied on each value, e.g. ""\d(79)\d(75)""" + Environment.NewLine +
