@@ -324,7 +324,7 @@ namespace MKY.IO.Ports
 		{
 			DebugEventManagement.DebugWriteAllEventRemains(this);
 
-			Dispose(false);
+			Dispose(false); // Not deriving from "DisposableEx" as already deriving from "System.IO.Ports.SerialPort".
 
 			DebugDisposal.DebugNotifyFinalizerInsteadOfDispose(this);
 		}

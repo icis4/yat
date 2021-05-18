@@ -42,7 +42,9 @@
 // Using
 //==================================================================================================
 
+#if (DEBUGGER_BREAK_HOOK)
 using System;
+#endif
 using System.Configuration;
 #if (DEBUG)
 using System.Diagnostics;
@@ -50,9 +52,13 @@ using System.Diagnostics;
 using System.IO;
 #if (DEBUG)
 using System.Text;
+#endif
 #if (DEBUGGER_BREAK_HOOK)
 using System.Windows.Forms;
 #endif
+
+#if (DEBUGGER_BREAK_HOOK)
+using MKY.Windows.Forms;
 #endif
 
 #endregion
@@ -142,11 +148,11 @@ namespace MKY.Configuration
 			Environment.NewLine +
 			"It as a workaround to e.g. allow debugging of NUnit test generation:" + Environment.NewLine +
 			Environment.NewLine +
-			"    1. Attach the Visual Studio Debugger to NUnit [Ctrl+Alt+P]." + Environment.NewLine +
-			"    2. [Debug > Break All] or [Ctrl+Alt+Break]." + Environment.NewLine +
-			"    3. Set breakpoints as needed." + Environment.NewLine +
-			"    4. [Debug > Continue] or [F5]." + Environment.NewLine +
-			"    5. Confirm this message with [OK].";
+			"    1. Attach the Debugger to e.g. NUnit [Ctrl+Alt+P]." + Environment.NewLine +
+			"    2. [Debug > Break All] or [Ctrl+Alt+Break]" + Environment.NewLine +
+			"        and/or set breakpoints as needed." + Environment.NewLine +
+			"    3. [Debug > Continue] or [F5]." + Environment.NewLine +
+			"    4. Confirm this message with [OK].";
 
 		private static bool staticDebuggerBreakHookOnce; // = false;
 	#endif
@@ -205,22 +211,23 @@ namespace MKY.Configuration
 				if (Selector.TryGetSelectedConfiguration<T>(solutionConfiguration, selectionGroupName, sectionsGroupName, out selectedSolutionConfiguration))
 				{
 				#if (DEBUG)
-					sb = new StringBuilder();
-					sb.Append("Solution test configuration of ");
-					sb.Append(selectionGroupName);
-					sb.Append(" successfully loaded from ");
-					sb.AppendLine();
-					sb.AppendLine(solutionConfiguration.FilePath);
-					Debug.Write(sb.ToString());
-
 				#if (DEBUGGER_BREAK_HOOK)
 					if (!staticDebuggerBreakHookOnce)
 					{
 						staticDebuggerBreakHookOnce = true;
-						MessageBox.Show(staticDebuggerBreakHookMessage, typeof(Provider).FullName);
+						MessageBoxEx.Show(staticDebuggerBreakHookMessage, typeof(Provider).FullName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 					}
 				#endif
+
+					sb = new StringBuilder();
+					sb.Append("Solution test configuration of ");
+					sb.Append(selectionGroupName);
+					sb.Append(" successfully loaded from");
+					sb.AppendLine();
+					sb.AppendLine(solutionConfiguration.FilePath);
+					Debug.Write(sb.ToString());
 				#endif
+
 					// Override with and/or add user configuration where requested:
 					string userFilePath;
 					if (EnvironmentEx.TryGetFilePathFromEnvironmentVariableAndVerify(userConfigurationEnvironmentVariableName, out userFilePath))
@@ -235,40 +242,39 @@ namespace MKY.Configuration
 							{
 								selectedSolutionConfiguration.MergeWith(selectedUserConfiguration);
 							#if (DEBUG)
-								sb = new StringBuilder();
-								sb.Append("Configuration of ");
-								sb.Append(selectionGroupName);
-								sb.Append(" successfully merged with user configuration from ");
-								sb.AppendLine();
-								sb.AppendLine(userConfiguration.FilePath);
-								Debug.Write(sb.ToString());
-
 							#if (DEBUGGER_BREAK_HOOK)
 								if (!staticDebuggerBreakHookOnce)
 								{
 									staticDebuggerBreakHookOnce = true;
-									MessageBox.Show(staticDebuggerBreakHookMessage, typeof(Provider).FullName);
+									MessageBoxEx.Show(staticDebuggerBreakHookMessage, typeof(Provider).FullName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 								}
 							#endif
+
+								sb = new StringBuilder();
+								sb.Append("Configuration of ");
+								sb.Append(selectionGroupName);
+								sb.Append(" successfully merged with user configuration from");
+								sb.AppendLine();
+								sb.AppendLine(userConfiguration.FilePath);
+								Debug.Write(sb.ToString());
 							#endif
 							}
 						}
 					#if (DEBUG)
 						else
 						{
-							sb = new StringBuilder();
-							sb.Append("Failed to load user configuration from ");
-							sb.AppendLine();
-							sb.AppendLine(userFilePath);
-							Debug.Write(sb.ToString());
-
 						#if (DEBUGGER_BREAK_HOOK)
 							if (!staticDebuggerBreakHookOnce)
 							{
 								staticDebuggerBreakHookOnce = true;
-								MessageBox.Show(staticDebuggerBreakHookMessage, typeof(Provider).FullName);
+								MessageBoxEx.Show(staticDebuggerBreakHookMessage, typeof(Provider).FullName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 							}
 						#endif
+
+							sb = new StringBuilder();
+							sb.AppendLine("Failed to load user configuration from");
+							sb.AppendLine(userFilePath);
+							Debug.Write(sb.ToString());
 						}
 					#endif
 					}
@@ -278,21 +284,21 @@ namespace MKY.Configuration
 			#if (DEBUG)
 				else
 				{
-					sb = new StringBuilder();
-					sb.Append("Failed to load solution configuration of ");
-					sb.Append(selectionGroupName);
-					sb.Append(" from ");
-					sb.AppendLine();
-					sb.AppendLine(solutionConfiguration.FilePath);
-					Debug.Write(sb.ToString());
-
 				#if (DEBUGGER_BREAK_HOOK)
 					if (!staticDebuggerBreakHookOnce)
 					{
 						staticDebuggerBreakHookOnce = true;
-						MessageBox.Show(staticDebuggerBreakHookMessage, typeof(Provider).FullName);
+						MessageBoxEx.Show(staticDebuggerBreakHookMessage, typeof(Provider).FullName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 					}
 				#endif
+
+					sb = new StringBuilder();
+					sb.Append("Failed to load solution configuration of ");
+					sb.Append(selectionGroupName);
+					sb.Append(" from");
+					sb.AppendLine();
+					sb.AppendLine(solutionConfiguration.FilePath);
+					Debug.Write(sb.ToString());
 				}
 			#endif
 			}
@@ -309,7 +315,7 @@ namespace MKY.Configuration
 				if (!staticDebuggerBreakHookOnce)
 				{
 					staticDebuggerBreakHookOnce = true;
-					MessageBox.Show(staticDebuggerBreakHookMessage, typeof(Provider).FullName);
+					MessageBoxEx.Show(staticDebuggerBreakHookMessage, typeof(Provider).FullName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				}
 			#endif
 			}
