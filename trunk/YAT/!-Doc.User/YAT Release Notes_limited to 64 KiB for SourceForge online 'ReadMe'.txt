@@ -228,7 +228,7 @@ Fixed bugs:
 - Handling of [Preferences... > ...take serial number/string into account] fixed (rel. to bug #480).
 - Consequence of .NET upgrade (former limitations of .NET Runtime 2 and .NET Framework 3.5):
    > System display scaling other than 100% (96 DPI) no longer result in minor distortions on Win 7
-     (bugs #85, #235, #375) nor some blurring on Win 8 and above (feature request #310).
+     (bugs #85, #235, #375) nor some blurring on Win 8 and above (feature requests #310 and #360).
    > Use of serial COM ports on disconnect, undock or hibernate without closing the port should
      no longer result in an 'ObjectDisposedException' or 'UnauthorizedAccessException' (bugs #224,
      #254, #293, #316, #317, #345, #382, #385, #387, #401, #442) and should neither result in
@@ -369,7 +369,7 @@ Limitations and known issues:
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - General limitations of .NET Windows.Forms:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
-     before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
+     before (bugs #85, #235, #375) and some blurring on Win 8 and above (feat. reqs. #310 and #360).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
    > System errors are output in local language, even though YAT is all-English (bug #66).
    > Tool strip combo box slightly flickers when updating item list, e.g. [Find Pattern] (bug #402).
