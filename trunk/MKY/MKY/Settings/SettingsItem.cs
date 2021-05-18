@@ -103,7 +103,8 @@ namespace MKY.Settings
 		[SuppressMessage("Microsoft.Performance", "CA1821:RemoveEmptyFinalizers", Justification = "See remarks.")]
 		~SettingsItem()
 		{
-			// Do not Diagnostics.DebugEventManagement.DebugNotifyAllEventRemains(this) as XML deserialization doesn't Free() items (didn't Dispose() either...).
+		////Diagnostics.DebugEventManagement.DebugWriteAllEventRemains(this) shall not be called as XML deserialization doesn't Free() items (didn't Dispose() either...).
+
 			Diagnostics.DebugFinalization.DebugNotifyFinalizerAndCheckWhetherOverdue(this);
 		}
 

@@ -189,8 +189,8 @@ namespace MKY.Windows.Forms
 			// Debugging a) and b) is not that easy, thus using a message box to output details.
 			using (var sw = new System.IO.StringWriter())
 			{
-				Diagnostics.AnyWriter.WriteStack(sw, this.GetType(), "imageRotationOld = " + this.ApplyImageRotation_imageRotationOld + " / imageRotation = " + this.imageRotation + " / DesignMode = " + this.DesignMode);
-				MessageBox.Show(sw.ToString());
+				Diagnostics.AnyWriter.WriteStack(sw, this.GetType(), "imageRotationOld = " + this.ApplyBaseImageRotation_imageRotationOld + " / imageRotation = " + this.imageRotation + " / DesignMode = " + this.DesignMode);
+				MessageBoxEx.Show(sw.ToString(), typeof(PictureBoxEx).FullName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 			}
 		#endif
 
@@ -221,8 +221,8 @@ namespace MKY.Windows.Forms
 			// Debugging a) and b) is not that easy, thus using a message box to output details.
 			using (var sw = new System.IO.StringWriter())
 			{
-				Diagnostics.AnyWriter.WriteStack(sw, this.GetType(), "imageRotationOld = " + this.ApplyImageRotation_imageRotationOld + " / imageRotation = " + this.imageRotation + " / DesignMode = " + this.DesignMode);
-				MessageBox.Show(sw.ToString());
+				Diagnostics.AnyWriter.WriteStack(sw, this.GetType(), "imageRotationOld = " + this.ApplyBaseImageRotation_imageRotationOld + " / imageRotation = " + this.imageRotation + " / DesignMode = " + this.DesignMode);
+				MessageBoxEx.Show(sw.ToString(), typeof(PictureBoxEx).FullName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 			}
 		#endif
 
