@@ -60,10 +60,10 @@ namespace MKY.IO.Usb
 		public DateTime TimeStamp { get; }
 
 		/// <summary></summary>
-		public DataEventArgs(byte[] data)
+		public DataEventArgs(byte[] data, DateTime timeStamp)
 		{
 			Data      = data;
-			TimeStamp = DateTime.Now;
+			TimeStamp = timeStamp;
 		}
 
 		/// <summary></summary>
@@ -113,7 +113,8 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public ErrorEventArgs(string message)
 		{
-			Message = message;
+			Message   = message;
+			TimeStamp = DateTime.Now;
 		}
 	}
 }

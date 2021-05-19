@@ -52,7 +52,6 @@ using System.Globalization;
 //// "System.Net.Sockets" as well.
 using System.Threading;
 
-using MKY.Collections.Generic;
 using MKY.Contracts;
 using MKY.Diagnostics;
 using MKY.Net;
@@ -152,7 +151,7 @@ namespace MKY.IO.Serial.Socket
 		/// Async receiving. The capacity is set large enough to reduce the number of resizing
 		/// operations while adding items.
 		/// </remarks>
-		private Queue<Pair<byte, System.Net.IPEndPoint>> receiveQueue = new Queue<Pair<byte, System.Net.IPEndPoint>>(ReceiveQueueInitialCapacity);
+		private Queue<Tuple<byte[], DateTime, System.Net.IPEndPoint>> receiveQueue = new Queue<Tuple<byte[], DateTime, System.Net.IPEndPoint>>(ReceiveQueueInitialCapacity);
 		private bool receiveThreadRunFlag;
 		private AutoResetEvent receiveThreadEvent;
 		private Thread receiveThread;

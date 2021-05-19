@@ -44,6 +44,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -93,7 +94,7 @@ namespace MKY.IO.Serial.Socket
 				for (int i = 0; i < data.Length; i++)
 				{
 					// Wait until there is space in the send queue:
-					while (this.sendQueue.Count >= SendQueueFixedCapacity) // No lock required, just checking for full.
+					while (this.sendQueue.Count >= SendQueueCapacity) // No lock required, just checking for full.
 					{
 						var isInDisposal = IsInDisposal;
 						if (isInDisposal || !IsTransmissive) // Check disposal state first!
@@ -373,16 +374,24 @@ namespace MKY.IO.Serial.Socket
 						{                                                // could be busy mostly locking the object.
 							try
 							{
-								byte[] data;
+								Tuple<byte[], DateTime>[] chunks;
 								lock (this.dataSentQueue) // Lock is required because "Queue<T>" is not synchronized.
 								{
-									data = this.dataSentQueue.ToArray();
+									chunks = this.dataSentQueue.ToArray();
 									this.dataSentQueue.Clear();
 								}
 
-								DebugDataSentDequeue(data.Length);
+								var timeStamp = chunks[0].Item2; // The least recent time stamp shall be indicated.
 
-								OnDataSent(new SocketDataSentEventArgs(data, remoteEndPoint));
+								var estimatedCapacity = chunks[0].Item1.Length;
+								estimatedCapacity *= chunks.Length;
+								var data = new List<byte>(estimatedCapacity); // Preset the estimated capacity to improve memory management.
+								foreach (var chunk in chunks)
+									data.AddRange(chunk.Item1);
+
+								DebugDataSentDequeue(data.Count);
+
+								OnDataSent(new SocketDataSentEventArgs(data.ToArray(), timeStamp, remoteEndPoint));
 							}
 							finally
 							{

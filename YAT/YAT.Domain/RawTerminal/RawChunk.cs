@@ -80,12 +80,6 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public RawChunk(IList<byte> content, string device, IODirection direction)
-			: this(content, DateTime.Now, device, direction)
-		{
-		}
-
-		/// <summary></summary>
 		public RawChunk(IList<byte> content, DateTime timeStamp, string device, IODirection direction)
 		{
 			var contentCopy = new byte[content.Count];

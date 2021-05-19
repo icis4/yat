@@ -115,12 +115,6 @@ namespace MKY.IO.Serial
 	public abstract class DataSentEventArgs : DataEventArgs
 	{
 		/// <summary></summary>
-		protected DataSentEventArgs(byte[] data)
-			: base(data)
-		{
-		}
-
-		/// <summary></summary>
 		protected DataSentEventArgs(byte[] data, DateTime timeStamp)
 			: base(data, timeStamp)
 		{

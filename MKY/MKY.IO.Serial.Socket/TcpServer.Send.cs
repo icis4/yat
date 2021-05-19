@@ -96,7 +96,7 @@ namespace MKY.IO.Serial.Socket
 				for (int i = 0; i < data.Length; i++)
 				{
 					// Wait until there is space in the send queue:
-					while (this.sendQueue.Count >= SendQueueFixedCapacity) // No lock required, just checking for full.
+					while (this.sendQueue.Count >= SendQueueCapacity) // No lock required, just checking for full.
 					{
 						var isInDisposal = IsInDisposal;
 						if (isInDisposal || !IsTransmissive) // Check disposal state first!
@@ -375,32 +375,40 @@ namespace MKY.IO.Serial.Socket
 							{
 								System.Net.IPEndPoint remoteEndPoint = null;
 								List<byte> data;
+								DateTime timeStamp;
 
 								lock (this.dataSentQueue) // Lock is required because "Queue<T>" is not synchronized.
 								{
-									data = new List<byte>(this.dataSentQueue.Count); // Preset the required capacity to improve memory management.
+									var firstChunk = this.dataSentQueue.Peek();
+									timeStamp = firstChunk.Item2; // The least recent time stamp shall be indicated.
+
+									var estimatedCapacity = firstChunk.Item1.Length;
+									estimatedCapacity *= this.dataSentQueue.Count;
+									data = new List<byte>(estimatedCapacity); // Preset the estimated capacity to improve memory management.
 
 									while (this.dataSentQueue.Count > 0)
 									{
-										Pair<byte, System.Net.IPEndPoint> item;
+										Tuple<byte[], DateTime, System.Net.IPEndPoint> chunk;
 
-										// First, peek to check whether data refers to a different end point:
-										item = this.dataSentQueue.Peek();
+										// First, peek to check what end point next chunk refers to:
+										chunk = this.dataSentQueue.Peek();
 
-										if (remoteEndPoint == null)
-											remoteEndPoint = item.Value2;
-										else if (remoteEndPoint != item.Value2)
+										if (remoteEndPoint == null) {
+											remoteEndPoint = chunk.Item3;
+										}
+										else if (remoteEndPoint != chunk.Item3) {
 											break; // Break as soon as data of a different end point is available.
+										}          // Receiving from different end point will continue immediately.
 
 										// If still the same end point, dequeue the item to acknowledge it's gone:
-										item = this.dataSentQueue.Dequeue();
-										data.Add(item.Value1);
+										chunk = this.dataSentQueue.Dequeue();
+										data.AddRange(chunk.Item1);
 									}
 								}
 
 								DebugDataSentDequeue(data.Count);
 
-								OnDataSent(new SocketDataSentEventArgs(data.ToArray(), remoteEndPoint));
+								OnDataSent(new SocketDataSentEventArgs(data.ToArray(), timeStamp, remoteEndPoint));
 							}
 							finally
 							{
