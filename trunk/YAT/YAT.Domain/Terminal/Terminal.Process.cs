@@ -1094,9 +1094,9 @@ namespace YAT.Domain
 		#endif
 
 		#if (WITH_SCRIPTING)
-			Add(                   repositoryType,               elementsToAdd, linesToAdd, receivedScriptLinesToAdd);
+			Add(                   repositoryType,                   elementsToAdd,     linesToAdd,     receivedScriptLinesToAdd);
 		#else
-			Add(                   repositoryType,               elementsToAdd, linesToAdd);
+			Add(                   repositoryType,                   elementsToAdd,     linesToAdd);
 		#endif
 		}
 
@@ -1116,9 +1116,9 @@ namespace YAT.Domain
 		#endif
 
 		#if (WITH_SCRIPTING)
-			Add(                      repositoryType,          elementsToAdd, linesToAdd, receivedScriptLinesToAdd);
+			Add(                      repositoryType,              elementsToAdd,     linesToAdd,     receivedScriptLinesToAdd);
 		#else
-			Add(                      repositoryType,          elementsToAdd, linesToAdd);
+			Add(                      repositoryType,              elementsToAdd,     linesToAdd);
 		#endif
 		}
 
@@ -1262,9 +1262,9 @@ namespace YAT.Domain
 		#endif
 
 		#if (WITH_SCRIPTING)
-			Add(                  repositoryType,          elementsToAdd, linesToAdd, receivedScriptLinesToAdd);
+			Add(                  repositoryType,              elementsToAdd,     linesToAdd,     receivedScriptLinesToAdd);
 		#else
-			Add(                  repositoryType,          elementsToAdd, linesToAdd);
+			Add(                  repositoryType,              elementsToAdd,     linesToAdd);
 		#endif
 		}
 
@@ -1284,9 +1284,9 @@ namespace YAT.Domain
 		#endif
 
 		#if (WITH_SCRIPTING)
-			Add(                  repositoryType,          elementsToAdd, linesToAdd, receivedScriptLinesToAdd);
+			Add(                  repositoryType,              elementsToAdd,     linesToAdd,     receivedScriptLinesToAdd);
 		#else
-			Add(                  repositoryType,          elementsToAdd, linesToAdd);
+			Add(                  repositoryType,              elementsToAdd,     linesToAdd);
 		#endif
 		}
 
@@ -1306,9 +1306,9 @@ namespace YAT.Domain
 		#endif
 
 		#if (WITH_SCRIPTING)
-			Add(                         repositoryType,                    elementsToAdd, linesToAdd, receivedScriptLinesToAdd);
+			Add(                         repositoryType,                        elementsToAdd,     linesToAdd,     receivedScriptLinesToAdd);
 		#else
-			Add(                         repositoryType,                    elementsToAdd, linesToAdd);
+			Add(                         repositoryType,                        elementsToAdd,     linesToAdd);
 		#endif
 		}
 
