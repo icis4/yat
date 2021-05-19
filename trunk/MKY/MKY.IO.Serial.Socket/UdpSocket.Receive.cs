@@ -87,6 +87,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			DebugReceive("Receive callback...");
 
+			var timeStamp = DateTime.Now;
 			var asyncState = (AsyncReceiveState)(ar.AsyncState);
 
 			// Ensure that async receive is discarded after close/dispose:
@@ -161,12 +162,7 @@ namespace MKY.IO.Serial.Socket
 					{
 						DebugReceive(string.Format("Enqueuing {0} byte(s)...", data.Length));
 
-						foreach (byte b in data)
-							this.receiveQueue.Enqueue(new Pair<byte, System.Net.IPEndPoint>(b, remoteEndPoint));
-
-						// Note that individual bytes are enqueued, not array of bytes. Analysis has
-						// shown that this is faster than enqueuing arrays, since this callback will
-						// mostly be called with rather low numbers of bytes.
+						this.receiveQueue.Enqueue(new Tuple<byte[], DateTime, System.Net.IPEndPoint>(data, timeStamp, remoteEndPoint));
 					}
 
 					SignalReceiveThreadSafely();
@@ -276,33 +272,40 @@ namespace MKY.IO.Serial.Socket
 							{
 								System.Net.IPEndPoint remoteEndPoint = null;
 								List<byte> data;
+								DateTime timeStamp;
 
 								lock (this.receiveQueue) // Lock is required because "Queue<T>" is not synchronized.
 								{
-									data = new List<byte>(this.receiveQueue.Count); // Preset the required capacity to improve memory management.
+									var firstChunk = this.receiveQueue.Peek();
+									timeStamp = firstChunk.Item2; // The least recent time stamp shall be indicated.
+
+									var estimatedCapacity = firstChunk.Item1.Length;
+									estimatedCapacity *= this.receiveQueue.Count;
+									data = new List<byte>(estimatedCapacity); // Preset the estimated capacity to improve memory management.
 
 									while (this.receiveQueue.Count > 0)
 									{
-										Pair<byte, System.Net.IPEndPoint> item;
+										Tuple<byte[], DateTime, System.Net.IPEndPoint> chunk;
 
-										// First, peek to check what end point the data refers to:
-										item = this.receiveQueue.Peek();
+										// First, peek to check what end point next chunk refers to:
+										chunk = this.receiveQueue.Peek();
 
 										if (remoteEndPoint == null) {
-											remoteEndPoint = item.Value2;
+											remoteEndPoint = chunk.Item3;
 										}
-										else if (remoteEndPoint != item.Value2) {
+										else if (remoteEndPoint != chunk.Item3) {
 											break; // Break as soon as data of a different end point is available.
 										}          // Receiving from different end point will continue immediately.
 
 										// If still the same end point, dequeue the item to acknowledge it's gone:
-										item = this.receiveQueue.Dequeue();
-										data.Add(item.Value1);
+										chunk = this.receiveQueue.Dequeue();
+										data.AddRange(chunk.Item1);
 									}
 								}
 
 								DebugReceive(string.Format("...{0} byte(s) from {1} dequeued", data.Count, remoteEndPoint));
-								OnDataReceived(new SocketDataReceivedEventArgs(data.ToArray(), remoteEndPoint));
+
+								OnDataReceived(new SocketDataReceivedEventArgs(data.ToArray(), timeStamp, remoteEndPoint));
 							}
 							finally
 							{

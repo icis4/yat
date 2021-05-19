@@ -84,6 +84,14 @@ Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
 3. History of Changes in YAT
 ====================================================================================================
 
+YAT 2.4.2 :: 2021-xx-xx
+----------------------------------------------------------------------------------------------------
+
+Important changes:
+- Accuracy of time stamps on sending improved for all I/O types (bug #514).
+- Accuracy of time stamps on receiving improved for UDP/IP sockets (feature request #442).
+
+
 YAT 2.4.1 :: 2021-05-15
 ----------------------------------------------------------------------------------------------------
 

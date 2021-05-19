@@ -795,6 +795,7 @@ namespace MKY.IO.Usb
 			// OnDataReceived has been called before.
 
 			int bytesReceived = 0;
+
 			if (IsOpen)
 			{
 				lock (this.receiveQueue) // Lock is required because "Queue<T>" is not synchronized.
@@ -809,6 +810,7 @@ namespace MKY.IO.Usb
 			{
 				data = new byte[] { };
 			}
+
 			return (bytesReceived);
 		}
 
@@ -1033,6 +1035,8 @@ namespace MKY.IO.Usb
 								foreach (byte b in input.Payload) // Only enqueue the retrieved payload.
 									this.receiveQueue.Enqueue(b);
 							}
+
+							// Note FR #442 "I/O providers chould indicate a more accurate time stamp when data has been received".
 						}
 
 						// Signal thread:
@@ -1045,7 +1049,7 @@ namespace MKY.IO.Usb
 			}
 			catch (IOException ex) // Includes Close().
 			{
-				string message = "Disconnect detected while reading from USB Ser/HID device.";
+				var message = "Disconnect detected while reading from USB Ser/HID device.";
 				DebugEx.WriteException(GetType(), ex, message);
 				OnDisconnected(EventArgs.Empty);
 			}
@@ -1067,7 +1071,7 @@ namespace MKY.IO.Usb
 				sb.AppendLine();
 				sb.Append    ("Change the settings, then close and reopen the device and try again.");
 
-				string message = sb.ToString();
+				var message = sb.ToString();
 				DebugEx.WriteException(GetType(), ex, message);
 				OnIOError(new ErrorEventArgs(message));
 			}
@@ -1157,12 +1161,14 @@ namespace MKY.IO.Usb
 
 				foreach (byte[] report in output.Reports)
 				{
+					var timeStamp = DateTime.Now; // Prevent misordering by taking time stamp *before* writing.
+
 					this.stream.Write(report, 0, report.Length);
 
 					if (this.includeNonPayloadData)
-						OnDataSent(new DataEventArgs(report)); // Include the whole report.
+						OnDataSent(new DataEventArgs(report, timeStamp)); // Include the whole report.
 					else
-						OnDataSent(new DataEventArgs(payload)); // Only include the payload.
+						OnDataSent(new DataEventArgs(payload, timeStamp)); // Only include the payload.
 				}
 			}
 			catch (Exception ex)
@@ -1191,7 +1197,7 @@ namespace MKY.IO.Usb
 					sb.Append("Change the settings, then close and reopen the device and try again.");
 				}
 
-				string message = sb.ToString();
+				var message = sb.ToString();
 				DebugEx.WriteException(GetType(), ex, message);
 				OnIOError(new ErrorEventArgs(message));
 			}

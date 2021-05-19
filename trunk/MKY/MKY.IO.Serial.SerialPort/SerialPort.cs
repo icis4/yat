@@ -1182,7 +1182,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// The limitation can be made visible by placing debug outputs at various locations in the
 		/// following methods:
 		/// <see cref="Send(byte[])"/>, <see cref="SignalSendThreadSafely"/>, <see cref="SendThread"/>,
-		/// <see cref="TryWriteChunkToPort(int, out List{byte}, out bool, out bool, out bool, out DateTime)"/>
+		/// <see cref="TryWriteChunkToPort(int, out List{byte}, out DateTime, out bool, out bool, out bool, out DateTime)"/>
 		///
 		/// The debug outputs reveal that the two send calls ("A" and "B+EOL") of course result in
 		/// scheduling of two threads: The terminal send thread and the I/O send thread.

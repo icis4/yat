@@ -21,6 +21,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
+
 using MKY.IO.Ports;
 
 namespace MKY.IO.Serial.SerialPort
@@ -56,14 +58,14 @@ namespace MKY.IO.Serial.SerialPort
 		private SerialPortId portId;
 
 		/// <summary></summary>
-		public SerialDataSentEventArgs(byte data, SerialPortId portId)
-			: this(new byte[] { data }, portId)
+		public SerialDataSentEventArgs(byte data, DateTime timeStamp, SerialPortId portId)
+			: this(new byte[] { data }, timeStamp, portId)
 		{
 		}
 
 		/// <summary></summary>
-		public SerialDataSentEventArgs(byte[] data, SerialPortId portId)
-			: base(data)
+		public SerialDataSentEventArgs(byte[] data, DateTime timeStamp, SerialPortId portId)
+			: base(data, timeStamp)
 		{
 			this.portId = portId;
 		}

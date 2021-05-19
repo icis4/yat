@@ -539,11 +539,12 @@ namespace MKY.IO.Serial.SerialPort
 										chunkZeroLoopCount = 0;
 									#endif
 
+										DateTime writeTimeStamp;
 										List<byte> effectiveChunkData;
 										bool signalIOControlChanged;
 										DateTime signalIOControlChangedTimeStamp;
 
-										if (TryWriteChunkToPort(maxChunkSize, out effectiveChunkData, out isWriteTimeout, out isOutputBreak, out signalIOControlChanged, out signalIOControlChangedTimeStamp))
+										if (TryWriteChunkToPort(maxChunkSize, out effectiveChunkData, out writeTimeStamp, out isWriteTimeout, out isOutputBreak, out signalIOControlChanged, out signalIOControlChangedTimeStamp))
 										{
 										#if (DEBUG_SEND)
 											writeFailLoopCount = 0;
@@ -552,7 +553,7 @@ namespace MKY.IO.Serial.SerialPort
 											var effectiveChunkDataCount = effectiveChunkData.Count;
 
 											DebugSend("Signaling {0} byte(s) sent...", effectiveChunkDataCount);
-											OnDataSent(new SerialDataSentEventArgs(effectiveChunkData.ToArray(), PortId));
+											OnDataSent(new SerialDataSentEventArgs(effectiveChunkData.ToArray(), writeTimeStamp, PortId));
 											DebugSend("...signaling done");
 
 											// Update the send rates with the effective chunk size of the current interval.
@@ -704,12 +705,13 @@ namespace MKY.IO.Serial.SerialPort
 
 		private bool TryWriteXOnOrXOffAndNotify(byte b, out bool isWriteTimeout, out bool isOutputBreak)
 		{
+			DateTime writeTimeStamp;
 			bool signalIOControlChanged;
 			DateTime signalIOControlChangedTimeStamp;
 
-			if (TryWriteByteToPort(b, out isWriteTimeout, out isOutputBreak, out signalIOControlChanged, out signalIOControlChangedTimeStamp))
+			if (TryWriteByteToPort(b, out writeTimeStamp, out isWriteTimeout, out isOutputBreak, out signalIOControlChanged, out signalIOControlChangedTimeStamp))
 			{
-				OnDataSent(new SerialDataSentEventArgs(b, PortId)); // Skip I/O synchronization for simplicity.
+				OnDataSent(new SerialDataSentEventArgs(b, writeTimeStamp, PortId)); // Skip I/O synchronization for simplicity.
 
 				if (signalIOControlChanged)
 					OnIOControlChanged(new EventArgs<DateTime>(signalIOControlChangedTimeStamp));
@@ -725,8 +727,9 @@ namespace MKY.IO.Serial.SerialPort
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool TryWriteByteToPort(byte b, out bool isWriteTimeout, out bool isOutputBreak, out bool signalIOControlChanged, out DateTime signalIOControlChangedTimeStamp)
+		private bool TryWriteByteToPort(byte b, out DateTime writeTimeStamp, out bool isWriteTimeout, out bool isOutputBreak, out bool signalIOControlChanged, out DateTime signalIOControlChangedTimeStamp)
 		{
+			writeTimeStamp         = DateTime.MinValue;
 			isWriteTimeout         = false;
 			isOutputBreak          = false;
 			signalIOControlChanged = false;
@@ -752,8 +755,8 @@ namespace MKY.IO.Serial.SerialPort
 				DebugSendWrite("Trying to write 1 byte to port...");
 
 				// Try to write the byte, will raise a 'TimeoutException' if not possible:
-				byte[] a = { b };
-				this.port.Write(a, 0, 1); // Do not lock, may take some time!
+				writeTimeStamp = DateTime.Now; // Prevent misordering by taking time stamp *before* writing.
+				this.port.Write(new byte[] { b }, 0, 1); // Do not lock, may take some time!
 				writeSuccess = true;
 
 				DebugSendWrite("...writing done");
@@ -812,8 +815,9 @@ namespace MKY.IO.Serial.SerialPort
 		/// Changes here may have to be applied there too.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
-		private bool TryWriteChunkToPort(int maxChunkSize, out List<byte> effectiveChunkData, out bool isWriteTimeout, out bool isOutputBreak, out bool signalIOControlChanged, out DateTime signalIOControlChangedTimeStamp)
+		private bool TryWriteChunkToPort(int maxChunkSize, out List<byte> effectiveChunkData, out DateTime writeTimeStamp, out bool isWriteTimeout, out bool isOutputBreak, out bool signalIOControlChanged, out DateTime signalIOControlChangedTimeStamp)
 		{
+			writeTimeStamp         = DateTime.MinValue;
 			isWriteTimeout         = false;
 			isOutputBreak          = false;
 			signalIOControlChanged = false;
@@ -851,6 +855,7 @@ namespace MKY.IO.Serial.SerialPort
 				DebugSendWrite("Trying to write {0} byte(s) to port...", triedChunkSize);
 
 				// Try to write the chunk, will raise a 'TimeoutException' if not possible:
+				writeTimeStamp = DateTime.Now; // Prevent misordering by taking time stamp *before* writing.
 				this.port.Write(a, 0, triedChunkSize); // Do not lock, may take some time!
 				writeSuccess = true;
 

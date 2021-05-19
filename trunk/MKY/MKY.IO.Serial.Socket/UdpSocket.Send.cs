@@ -272,9 +272,11 @@ namespace MKY.IO.Serial.Socket
 								lock (this.socketSyncObj)
 									remoteEndPoint = new System.Net.IPEndPoint(this.remoteHost, this.remotePort);
 
+								var sendTimeStamp = DateTime.Now; // Prevent misordering by taking time stamp *before* sending.
+
 								this.socket.Send(data, data.Length, remoteEndPoint);
 
-								OnDataSent(new SocketDataSentEventArgs(data, remoteEndPoint));
+								OnDataSent(new SocketDataSentEventArgs(data, sendTimeStamp, remoteEndPoint));
 							}
 							catch (System.Net.Sockets.SocketException ex)
 							{

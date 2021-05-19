@@ -66,7 +66,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-using MKY.Collections.Generic;
 using MKY.Contracts;
 using MKY.Diagnostics;
 using MKY.Net;
@@ -140,8 +139,7 @@ namespace MKY.IO.Serial.Socket
 		/// </summary>
 		public const int ConnectionAllowanceDefault = int.MaxValue;
 
-		private const int SendQueueFixedCapacity       = ALAZEx.MessageBufferSizeDefault;
-		private const int DataSentQueueInitialCapacity = ALAZEx.MessageBufferSizeDefault;
+		private const int SendQueueCapacity = ALAZEx.MessageBufferSizeDefault;
 
 		internal const int SocketStopTimeout = 1000; // Best guess... It just applies in case of a deadlock inside the ALAZ socket.
 		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
@@ -190,17 +188,13 @@ namespace MKY.IO.Serial.Socket
 
 		private object dataEventSyncObj = new object();
 
-		private Queue<byte> sendQueue = new Queue<byte>(SendQueueFixedCapacity);
+		private Queue<byte> sendQueue = new Queue<byte>(SendQueueCapacity);
 		private bool sendThreadRunFlag;
 		private AutoResetEvent sendThreadEvent;
 		private Thread sendThread;
 		private object sendThreadSyncObj = new object();
 
-		/// <remarks>
-		/// Async event handling. The capacity is set large enough to reduce the number of resizing
-		/// operations while adding items.
-		/// </remarks>
-		private Queue<Pair<byte, System.Net.IPEndPoint>> dataSentQueue = new Queue<Pair<byte, System.Net.IPEndPoint>>(DataSentQueueInitialCapacity);
+		private Queue<Tuple<byte[], DateTime, System.Net.IPEndPoint>> dataSentQueue = new Queue<Tuple<byte[], DateTime, System.Net.IPEndPoint>>(); // No preset needed for this "ChunkQueue", default behavior is good enough.
 		private bool dataSentThreadRunFlag;
 		private AutoResetEvent dataSentThreadEvent;
 		private Thread dataSentThread;
@@ -1098,11 +1092,19 @@ namespace MKY.IO.Serial.Socket
 
 			lock (this.dataEventSyncObj)
 			{
+				// Opposed to sending, where the time stamp must be taken *before* sending,
+				// taking the time stamp *after* receiving in "SocketDataReceivedEventArgs"
+				// is good enough to not lead to misorderings.
+				//
+				// Still, note that FR #230 "replace ALAZ by something simpler/better/newer"
+				// requests to reuse the time stamp given by the underlying socket.
+				var timeStamp = DateTime.Now;
+
 				// This receive callback is always asychronous, thus the event handler can
 				// be called directly. It is also ensured that the event handler is called
 				// sequentially because the 'BeginReceive()' method is only called after
 				// the event handler has returned.
-				OnDataReceived(new SocketDataReceivedEventArgs((byte[])e.Buffer.Clone(), e.Connection.RemoteEndPoint));
+				OnDataReceived(new SocketDataReceivedEventArgs((byte[])e.Buffer.Clone(), timeStamp, e.Connection.RemoteEndPoint));
 			}
 
 			e.Connection.BeginReceive(); // Continue receiving.
@@ -1122,6 +1124,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			if (!IsUndisposed) // Ignore async callbacks during closing.
 				return;
+
+			var timeStamp = DateTime.Now; // Note that FR #230 "replace ALAZ by something simpler/better/newer" requests to reuse the time stamp given by the underlying socket.
 
 			lock (this.stateSyncObj)
 			{
@@ -1146,12 +1150,7 @@ namespace MKY.IO.Serial.Socket
 			{
 				lock (this.dataSentQueue) // Lock is required because "Queue<T>" is not synchronized.
 				{
-					foreach (byte b in e.Buffer)
-						this.dataSentQueue.Enqueue(new Pair<byte, System.Net.IPEndPoint>(b, e.Connection.RemoteEndPoint));
-
-					// Note that individual bytes are enqueued, not array of bytes. Analysis has
-					// shown that this is faster than enqueuing arrays, since this callback will
-					// mostly be called with rather low numbers of bytes.
+					this.dataSentQueue.Enqueue(new Tuple<byte[], DateTime, System.Net.IPEndPoint>(e.Buffer, timeStamp, e.Connection.RemoteEndPoint));
 				}
 
 				DebugDataSentEnqueue(e.Buffer.Length);

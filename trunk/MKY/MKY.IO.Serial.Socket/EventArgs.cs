@@ -21,6 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Net;
 
 namespace MKY.IO.Serial.Socket
@@ -31,14 +32,14 @@ namespace MKY.IO.Serial.Socket
 		private IPEndPoint remoteEndPoint;
 
 		/// <summary></summary>
-		public SocketDataSentEventArgs(byte data, IPEndPoint remoteEndPoint)
-			: this(new byte[] { data }, remoteEndPoint)
+		public SocketDataSentEventArgs(byte data, DateTime timeStamp, IPEndPoint remoteEndPoint)
+			: this(new byte[] { data }, timeStamp, remoteEndPoint)
 		{
 		}
 
 		/// <summary></summary>
-		public SocketDataSentEventArgs(byte[] data, IPEndPoint remoteEndPoint)
-			: base(data)
+		public SocketDataSentEventArgs(byte[] data, DateTime timeStamp, IPEndPoint remoteEndPoint)
+			: base(data, timeStamp)
 		{
 			this.remoteEndPoint = remoteEndPoint;
 		}
@@ -56,14 +57,14 @@ namespace MKY.IO.Serial.Socket
 		private IPEndPoint remoteEndPoint;
 
 		/// <summary></summary>
-		public SocketDataReceivedEventArgs(byte data, IPEndPoint remoteEndPoint)
-			: this(new byte[] { data }, remoteEndPoint)
+		public SocketDataReceivedEventArgs(byte data, DateTime timeStamp, IPEndPoint remoteEndPoint)
+			: this(new byte[] { data }, timeStamp, remoteEndPoint)
 		{
 		}
 
 		/// <summary></summary>
-		public SocketDataReceivedEventArgs(byte[] data, IPEndPoint remoteEndPoint)
-			: base(data)
+		public SocketDataReceivedEventArgs(byte[] data, DateTime timeStamp, IPEndPoint remoteEndPoint)
+			: base(data, timeStamp)
 		{
 			this.remoteEndPoint = remoteEndPoint;
 		}
