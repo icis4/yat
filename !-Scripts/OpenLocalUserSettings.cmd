@@ -5,10 +5,10 @@
 :: Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 :: Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 :: ------------------------------------------------------------------------------------------------
-:: $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/!-Scripts/CallPowerShellScript.cmd $
-:: $Revision: 3584 $
-:: $Date: 2021-01-04 16:40:12 +0100 (Mo., 04 Jan 2021) $
-:: $Author: maettu_this $
+:: $URL$
+:: $Revision$
+:: $Date$
+:: $Author$
 :: ------------------------------------------------------------------------------------------------
 :: See release notes for product version details.
 :: See SVN change log for file revision details.
@@ -35,5 +35,5 @@ ENDLOCAL
 
 ::==================================================================================================
 :: End of
-:: $URL: https://svn.code.sf.net/p/y-a-terminal/code/trunk/!-Scripts/CallPowerShellScript.cmd $
+:: $URL$
 ::==================================================================================================
