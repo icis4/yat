@@ -41,7 +41,7 @@ N/A Build the "Debug Test with Binaries Source" configuration for "YAT".
 HowTo Use Source
 ----------------
 In the past, with OxyPlot 1.0.0, it was possible to use source code debugging.
-With OxyPlot 2.0.0, which no longer contain VS2015 projects, this is no longer possible.
+With OxyPlot 2.0.0 this was no longer possible for VS2015, as it no longer contained VS2015 projects.
 YAT SVN revision #3540 removed the source code integration from the YAT solution.
 Still, the approach and modifications needed are documented here for reminding.
 

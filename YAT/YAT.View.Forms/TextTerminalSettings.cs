@@ -572,7 +572,7 @@ namespace YAT.View.Forms
 			this.settingsInEdit.TextExclusion.Enabled = checkBox_Exclude.Checked;
 		}
 
-		private void stringListEdit_ExcludePatterns_Validating(object sender, StringCancelEventArgs e)
+		private void stringListEdit_ExcludePatterns_Validating(object sender, CancelEventArgs<string> e)
 		{
 			if (this.isSettingControls)
 				return;

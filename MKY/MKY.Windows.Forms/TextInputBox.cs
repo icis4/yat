@@ -102,7 +102,7 @@ namespace MKY.Windows.Forms
 		/// </returns>
 		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "5#", Justification = "Text that is input needs to be returned in addition to the dialog result.")]
 		[ModalBehaviorContract(ModalBehavior.Always)]
-		public static DialogResult Show(IWin32Window owner, string text, string caption, string initialInputText, EventHandler<StringCancelEventArgs> inputValidationCallback, out string inputText)
+		public static DialogResult Show(IWin32Window owner, string text, string caption, string initialInputText, EventHandler<CancelEventArgs<string>> inputValidationCallback, out string inputText)
 		{
 			var box = new TextInputBox(text, caption, initialInputText);
 
@@ -150,7 +150,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public new event EventHandler<StringCancelEventArgs> Validating;
+		public new event EventHandler<CancelEventArgs<string>> Validating;
 
 		#endregion
 
@@ -230,7 +230,7 @@ namespace MKY.Windows.Forms
 		private void textBox_InputText_Validating(object sender, CancelEventArgs e)
 		{
 			var text = textBox_InputText.Text;
-			var args = new StringCancelEventArgs(text);
+			var args = new CancelEventArgs<string>(text);
 
 			OnValidating(args);
 
@@ -270,7 +270,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnValidating(StringCancelEventArgs e)
+		protected virtual void OnValidating(CancelEventArgs<string> e)
 		{
 			EventHelper.RaiseSync(Validating, this, e);
 		}

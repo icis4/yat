@@ -27,32 +27,21 @@ using System.ComponentModel;
 namespace MKY.ComponentModel
 {
 	/// <summary>
-	/// Cancel event args with a string value.
+	/// Cancel event args with a value.
 	/// </summary>
-	/// <remarks>
-	/// \remind (2017-07-23 / MKY)
-	/// This class could be implemented with a generic type argument instead of being fixed to
-	/// <see cref="string"/>. However, the VS2015 designer cannot cope with generic event args!
-	/// Findings:
-	///  > Designer cannot display the 'SendCommandRequest' of 'SendText' as well as 'Send'.
-	///  > It crashes again and again! But is this indeed the root cause?
-	///
-	/// \todo
-	/// Check again with VS2017+.
-	/// </remarks>
-	public class StringCancelEventArgs : CancelEventArgs
+	public class CancelEventArgs<T> : CancelEventArgs
 	{
 		/// <summary></summary>
-		public string Value { get; }
+		public T Value { get; }
 
 		/// <summary></summary>
-		public StringCancelEventArgs(string value)
+		public CancelEventArgs(T value)
 		{
 			Value = value;
 		}
 
 		/// <summary></summary>
-		public StringCancelEventArgs(string value, bool cancel)
+		public CancelEventArgs(T value, bool cancel)
 			: base(cancel)
 		{
 			Value = value;

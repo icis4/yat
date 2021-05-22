@@ -92,7 +92,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised when sending the command is requested.")]
-		public event EventHandler<SendTextOptionEventArgs> SendTextCommandRequest;
+		public event EventHandler<EventArgs<SendTextOption>> SendTextCommandRequest;
 
 		/// <summary></summary>
 		[Category("Property Changed")]
@@ -359,7 +359,7 @@ namespace YAT.View.Controls
 			OnTextFocusedChanged(e);
 		}
 
-		private void sendText_SendCommandRequest(object sender, SendTextOptionEventArgs e)
+		private void sendText_SendCommandRequest(object sender, EventArgs<SendTextOption> e)
 		{
 			OnSendTextCommandRequest(e);
 		}
@@ -421,7 +421,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		protected virtual void OnSendTextCommandRequest(SendTextOptionEventArgs e)
+		protected virtual void OnSendTextCommandRequest(EventArgs<SendTextOption> e)
 		{
 			EventHelper.RaiseSync(SendTextCommandRequest, this, e);
 		}

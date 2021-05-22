@@ -59,7 +59,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public new event EventHandler<StringCancelEventArgs> Validating;
+		public new event EventHandler<CancelEventArgs<string>> Validating;
 
 		/// <summary></summary>
 		public event EventHandler ListChanged;
@@ -144,7 +144,7 @@ namespace MKY.Windows.Forms
 			}
 		}
 
-		private void TextInputBox_Validating(object sender, StringCancelEventArgs e)
+		private void TextInputBox_Validating(object sender, CancelEventArgs<string> e)
 		{
 			OnValidating(e);
 		}
@@ -271,7 +271,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnValidating(StringCancelEventArgs e)
+		protected virtual void OnValidating(CancelEventArgs<string> e)
 		{
 			EventHelper.RaiseSync(Validating, this, e);
 		}
