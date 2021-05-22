@@ -266,18 +266,18 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public static SerialHidDeviceSettingsPresetEx[] GetItems()
 		{
-			var a = new List<SerialHidDeviceSettingsPresetEx>(8); // Preset the required capacity to improve memory management.
-
-			a.Add(new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.None));
-			a.Add(new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.Plain));
-			a.Add(new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.Common));
-			a.Add(new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.LengthIndicated));
-			a.Add(new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.ZeroTerminated));
-			a.Add(new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.MT_SerHid));
-			a.Add(new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.Signal11_HidApi));
-			a.Add(new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.TI_HidApi));
-			a.Add(new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.YAT));
-
+			var a = new List<SerialHidDeviceSettingsPresetEx>(8) // Preset the required capacity to improve memory management.
+			{
+				new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.None),
+				new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.Plain),
+				new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.Common),
+				new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.LengthIndicated),
+				new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.ZeroTerminated),
+				new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.MT_SerHid),
+				new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.Signal11_HidApi),
+				new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.TI_HidApi),
+				new SerialHidDeviceSettingsPresetEx(SerialHidDeviceSettingsPreset.YAT)
+			};
 			return (a.ToArray());
 		}
 

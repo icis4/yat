@@ -112,17 +112,17 @@ namespace YAT.Model.Types
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future patterns may have to implement more logic.")]
 		static AutoTriggerEx()
 		{
-			var l = new List<string>(8); // Preset the required capacity to improve memory management.
-
-			l.Add("(" + CommonPatterns.IntegralNumber            + ")");
-			l.Add("(" + CommonPatterns.FloatingPointNormal       + ")");
-			l.Add("(" + CommonPatterns.FloatingPointScientific   + ")");
-			l.Add("(" + CommonPatterns.FloatingPointAny          + ")");
-			l.Add("(" + CommonPatterns.TimeWithColons            + ")");
-			l.Add("(" + CommonPatterns.DateWithHyphensDescending + ")");
-			l.Add(@"\b([A-Z]{1})\b");
-			l.Add(@"\b([A-Za-z]{2,4})\b");
-
+			var l = new List<string>(8) // Preset the required capacity to improve memory management.
+			{
+				"(" + CommonPatterns.IntegralNumber            + ")",
+				"(" + CommonPatterns.FloatingPointNormal       + ")",
+				"(" + CommonPatterns.FloatingPointScientific   + ")",
+				"(" + CommonPatterns.FloatingPointAny          + ")",
+				"(" + CommonPatterns.TimeWithColons            + ")",
+				"(" + CommonPatterns.DateWithHyphensDescending + ")",
+				@"\b([A-Z]{1})\b",
+				@"\b([A-Za-z]{2,4})\b"
+			};
 			CommonRegexCapturePatterns = l.AsReadOnly();
 		}
 

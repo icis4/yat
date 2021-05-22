@@ -146,12 +146,12 @@ namespace MKY.IO.Serial.Usb
 		/// </remarks>
 		public static SerialHidFlowControlEx[] GetItems()
 		{
-			var a = new List<SerialHidFlowControlEx>(3); // Preset the required capacity to improve memory management.
-
-			a.Add(new SerialHidFlowControlEx(SerialHidFlowControl.None));
-			a.Add(new SerialHidFlowControlEx(SerialHidFlowControl.Software));
-			a.Add(new SerialHidFlowControlEx(SerialHidFlowControl.ManualSoftware));
-
+			var a = new List<SerialHidFlowControlEx>(3) // Preset the required capacity to improve memory management.
+			{
+				new SerialHidFlowControlEx(SerialHidFlowControl.None),
+				new SerialHidFlowControlEx(SerialHidFlowControl.Software),
+				new SerialHidFlowControlEx(SerialHidFlowControl.ManualSoftware)
+			};
 			return (a.ToArray());
 		}
 

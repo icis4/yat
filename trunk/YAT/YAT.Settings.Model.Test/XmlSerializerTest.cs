@@ -129,11 +129,11 @@ namespace YAT.Settings.Model.Test
 		public virtual void TestRecentSerialization()
 		{
 			var filePath = Temp.MakeTempFilePath(GetType(), "RecentFileSettings", FileExtension);
-
-			var ric = new RecentItemCollection<string>();
-			ric.Add("RIA");
-			ric.Add("RIB");
-
+			var ric = new RecentItemCollection<string>(2) // Preset the required capacity to improve memory management.
+			{
+				"RIA",
+				"RIB"
+			};
 			var rfs = new RecentFileSettings();
 			rfs.FilePaths = ric;
 			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(typeof(RecentFileSettings), rfs, filePath);
@@ -158,11 +158,12 @@ namespace YAT.Settings.Model.Test
 			pcp.Commands.Add(new Command("Hallo", new string[] { "Wält"  }));
 			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(typeof(PredefinedCommandPage), pcp, filePath);
 
-			var c = new PredefinedCommandPageCollection();
-			c.Add(pcp);
-			c.Add(pcp);
-
 			filePath = Temp.MakeTempFilePath(GetType(), "PredefinedCommandSettings", FileExtension);
+			var c = new PredefinedCommandPageCollection(2) // Preset the required capacity to improve memory management.
+			{
+				pcp,
+				pcp
+			};
 			var pcs = new PredefinedCommandSettings();
 			pcs.Pages = c;
 			MKY.Test.Xml.Serialization.XmlSerializerTest.TestSerializationChain(typeof(PredefinedCommandSettings), pcs, filePath);

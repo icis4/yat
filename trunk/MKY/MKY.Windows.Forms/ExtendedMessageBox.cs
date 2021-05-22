@@ -78,33 +78,41 @@ namespace MKY.Windows.Forms
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic, and anyway, performance isn't an issue here.")]
 		static ExtendedMessageBox()
 		{
-			staticButtonCountLookup = new Dictionary<MessageBoxButtons, int>(6); // Preset the required capacity to improve memory management.
-			staticButtonCountLookup.Add(MessageBoxButtons.OK,               1);
-			staticButtonCountLookup.Add(MessageBoxButtons.OKCancel,         2);
-			staticButtonCountLookup.Add(MessageBoxButtons.AbortRetryIgnore, 3);
-			staticButtonCountLookup.Add(MessageBoxButtons.YesNoCancel,      3);
-			staticButtonCountLookup.Add(MessageBoxButtons.YesNo,            2);
-			staticButtonCountLookup.Add(MessageBoxButtons.RetryCancel,      2);
+			staticButtonCountLookup = new Dictionary<MessageBoxButtons, int>(6) // Preset the required capacity to improve memory management.
+			{
+				{ MessageBoxButtons.OK,               1 },
+				{ MessageBoxButtons.OKCancel,         2 },
+				{ MessageBoxButtons.AbortRetryIgnore, 3 },
+				{ MessageBoxButtons.YesNoCancel,      3 },
+				{ MessageBoxButtons.YesNo,            2 },
+				{ MessageBoxButtons.RetryCancel,      2 }
+			};
 
 			// A is the right-most button and always visible:
-			staticButtonALookup = new Dictionary<MessageBoxButtons, Tuple<string, DialogResult>>(6); // Preset the required capacity to improve memory management.
-			staticButtonALookup.Add(MessageBoxButtons.OK,               new Tuple<string, DialogResult>("OK",      DialogResult.OK));     // [OK] and standard
-			staticButtonALookup.Add(MessageBoxButtons.OKCancel,         new Tuple<string, DialogResult>("Cancel",  DialogResult.Cancel)); // [Cancel] do not have
-			staticButtonALookup.Add(MessageBoxButtons.AbortRetryIgnore, new Tuple<string, DialogResult>("&Ignore", DialogResult.Ignore)); // & on a "MessageBox".
-			staticButtonALookup.Add(MessageBoxButtons.YesNoCancel,      new Tuple<string, DialogResult>("&Cancel", DialogResult.Cancel));
-			staticButtonALookup.Add(MessageBoxButtons.YesNo,            new Tuple<string, DialogResult>("&No",     DialogResult.No));
-			staticButtonALookup.Add(MessageBoxButtons.RetryCancel,      new Tuple<string, DialogResult>("&Cancel",  DialogResult.Cancel));
+			staticButtonALookup = new Dictionary<MessageBoxButtons, Tuple<string, DialogResult>>(6) // Preset the required capacity to improve memory management.
+			{
+				{ MessageBoxButtons.OK,               new Tuple<string, DialogResult>("OK",      DialogResult.OK)      }, // [OK] and standard
+				{ MessageBoxButtons.OKCancel,         new Tuple<string, DialogResult>("Cancel",  DialogResult.Cancel)  }, // [Cancel] do not have
+				{ MessageBoxButtons.AbortRetryIgnore, new Tuple<string, DialogResult>("&Ignore", DialogResult.Ignore)  }, // & on a "MessageBox".
+				{ MessageBoxButtons.YesNoCancel,      new Tuple<string, DialogResult>("&Cancel", DialogResult.Cancel)  },
+				{ MessageBoxButtons.YesNo,            new Tuple<string, DialogResult>("&No",     DialogResult.No)      },
+				{ MessageBoxButtons.RetryCancel,      new Tuple<string, DialogResult>("&Cancel",  DialogResult.Cancel) }
+			};
 
-			staticButtonBLookup = new Dictionary<MessageBoxButtons, Tuple<string, DialogResult>>(5); // Preset the required capacity to improve memory management.
-			staticButtonBLookup.Add(MessageBoxButtons.OKCancel,         new Tuple<string, DialogResult>("OK",      DialogResult.OK));
-			staticButtonBLookup.Add(MessageBoxButtons.AbortRetryIgnore, new Tuple<string, DialogResult>("&Retry",  DialogResult.Retry));
-			staticButtonBLookup.Add(MessageBoxButtons.YesNoCancel,      new Tuple<string, DialogResult>("&No",     DialogResult.No));
-			staticButtonBLookup.Add(MessageBoxButtons.YesNo,            new Tuple<string, DialogResult>("&Yes",    DialogResult.Yes));
-			staticButtonBLookup.Add(MessageBoxButtons.RetryCancel,      new Tuple<string, DialogResult>("&Retry",  DialogResult.Retry));
+			staticButtonBLookup = new Dictionary<MessageBoxButtons, Tuple<string, DialogResult>>(5) // Preset the required capacity to improve memory management.
+			{
+				{ MessageBoxButtons.OKCancel,         new Tuple<string, DialogResult>("OK",      DialogResult.OK)    },
+				{ MessageBoxButtons.AbortRetryIgnore, new Tuple<string, DialogResult>("&Retry",  DialogResult.Retry) },
+				{ MessageBoxButtons.YesNoCancel,      new Tuple<string, DialogResult>("&No",     DialogResult.No)    },
+				{ MessageBoxButtons.YesNo,            new Tuple<string, DialogResult>("&Yes",    DialogResult.Yes)   },
+				{ MessageBoxButtons.RetryCancel,      new Tuple<string, DialogResult>("&Retry",  DialogResult.Retry) }
+			};
 
-			staticButtonCLookup = new Dictionary<MessageBoxButtons, Tuple<string, DialogResult>>(2); // Preset the required capacity to improve memory management.
-			staticButtonCLookup.Add(MessageBoxButtons.AbortRetryIgnore, new Tuple<string, DialogResult>("&Abort",  DialogResult.Abort));
-			staticButtonCLookup.Add(MessageBoxButtons.YesNoCancel,      new Tuple<string, DialogResult>("&Yes",    DialogResult.Yes));
+			staticButtonCLookup = new Dictionary<MessageBoxButtons, Tuple<string, DialogResult>>(2) // Preset the required capacity to improve memory management.
+			{
+				{ MessageBoxButtons.AbortRetryIgnore, new Tuple<string, DialogResult>("&Abort",  DialogResult.Abort) },
+				{ MessageBoxButtons.YesNoCancel,      new Tuple<string, DialogResult>("&Yes",    DialogResult.Yes)   }
+			};
 		}
 
 		#endregion

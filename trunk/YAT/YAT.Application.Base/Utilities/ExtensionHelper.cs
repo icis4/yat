@@ -494,13 +494,15 @@ namespace YAT.Application.Utilities
 		public static ReadOnlyCollection<string> ControlLogExtensions
 		{
 			get
-			{                            // See comment below!
-				var l = new List<string>(4); // Preset the required capacity to improve memory management.
-				l.Add(".txt");
-				l.Add(".text");
-				l.Add(".log");
-				l.Add(".rtf");
-			////l.Add(".xml"); not supported (yet).
+			{
+				var l = new List<string>(4) // Preset the required capacity to improve memory management.
+				{
+					".txt",
+					".text",
+					".log",
+					".rtf"
+				////".xml" is not supported (yet).
+				};
 				return (l.AsReadOnly());
 			}
 		}
@@ -516,12 +518,14 @@ namespace YAT.Application.Utilities
 		{
 			get
 			{
-				var l = new List<string>(5); // Preset the required capacity to improve memory management.
-				l.Add(".txt");
-				l.Add(".text");
-				l.Add(".log");
-				l.Add(".rtf");
-				l.Add(".xml");
+				var l = new List<string>(5) // Preset the required capacity to improve memory management.
+				{
+					".txt",
+					".text",
+					".log",
+					".rtf",
+					".xml"
+				};
 				return (l.AsReadOnly());
 			}
 		}
@@ -577,11 +581,13 @@ namespace YAT.Application.Utilities
 		{
 			get
 			{
-				var l = new List<string>(4); // Preset the required capacity to improve memory management.
-				l.Add(".dat");
-				l.Add(".bin");
-				l.Add(".binary");
-				l.Add(".xml");
+				var l = new List<string>(4) // Preset the required capacity to improve memory management.
+				{
+					".dat",
+					".bin",
+					".binary",
+					".xml"
+				};
 				return (l.AsReadOnly());
 			}
 		}

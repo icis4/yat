@@ -121,22 +121,24 @@ namespace MKY.IO.Ports.Test
 		/// </summary>
 		public ConfigurationSection()
 		{
-			this.properties = new ConfigurationPropertyCollection();
+			this.properties = new ConfigurationPropertyCollection
+			{
+				this.portA,
+				this.portB,
 
-			this.properties.Add(this.portA);
-			this.properties.Add(this.portB);
+				this.mtSicsDeviceA,
+				this.mtSicsDeviceB,
 
-			this.properties.Add(this.mtSicsDeviceA);
-			this.properties.Add(this.mtSicsDeviceB);
+				this.tiLaunchPadDeviceA,
+				this.tiLaunchPadDeviceB,
 
-			this.properties.Add(this.tiLaunchPadDeviceA);
-			this.properties.Add(this.tiLaunchPadDeviceB);
+				this.loopbackPairs,
+				this.loopbackSelfs
+			};
 
-			this.properties.Add(this.loopbackPairs);
 			var pairs = (SerialPortPairConfigurationElementCollection)this["LoopbackPairs"];
 			pairs.Add("COM1", "COM2");
 
-			this.properties.Add(this.loopbackSelfs);
 			var selfs = (SerialPortConfigurationElementCollection)this["LoopbackSelfs"];
 			selfs.Add("COM3");
 		}

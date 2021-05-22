@@ -71,12 +71,13 @@ namespace YAT.Model.Test.Transmission
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future test cases may have to implement more logic, and anyway, performance isn't an issue here.")]
 		static MTSicsDeviceTestData()
 		{
-			Commands = new List<Pair<Pair<string, string>, TimeSpan>>(4); // Preset the required capacity to improve memory management.
-			                                                                                                                                          // Time in ms per cycle, including overhead.
-			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"S",  @"S S       0.00 g"),                                  TimeSpan.FromSeconds(150.0 / 1000)));
-			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"SI", @"S S       0.00 g"),                                  TimeSpan.FromSeconds(125.0 / 1000)));
-			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"I1", @"I1 A ""0123"" ""2.30"" ""2.22"" ""2.33"" ""2.20"""), TimeSpan.FromSeconds(125.0 / 1000)));
-			Commands.Add(new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"I6", @"ES"),                                                TimeSpan.FromSeconds(125.0 / 1000)));
+			Commands = new List<Pair<Pair<string, string>, TimeSpan>>(4) // Preset the required capacity to improve memory management.
+			{                                                                                                                                   // Time in ms per cycle, including overhead.
+				new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"S",  @"S S       0.00 g"),                                  TimeSpan.FromSeconds(150.0 / 1000)),
+				new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"SI", @"S S       0.00 g"),                                  TimeSpan.FromSeconds(125.0 / 1000)),
+				new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"I1", @"I1 A ""0123"" ""2.30"" ""2.22"" ""2.33"" ""2.20"""), TimeSpan.FromSeconds(125.0 / 1000)),
+				new Pair<Pair<string, string>, TimeSpan>(new Pair<string, string>(@"I6", @"ES"),                                                TimeSpan.FromSeconds(125.0 / 1000))
+			};
 		}
 
 		#endregion

@@ -155,18 +155,18 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static PredefinedCommandPageLayoutEx[] GetItems()
 		{
-			var a = new List<PredefinedCommandPageLayoutEx>(9); // Preset the required capacity to improve memory management.
-
-			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.OneByOne));
-			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.TwoByOne));
-			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.ThreeByOne));
-			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.OneByTwo));
-			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.TwoByTwo));
-			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.ThreeByTwo));
-			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.OneByThree));
-			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.TwoByThree));
-			a.Add(new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.ThreeByThree));
-
+			var a = new List<PredefinedCommandPageLayoutEx>(9) // Preset the required capacity to improve memory management.
+			{
+				new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.OneByOne),
+				new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.TwoByOne),
+				new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.ThreeByOne),
+				new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.OneByTwo),
+				new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.TwoByTwo),
+				new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.ThreeByTwo),
+				new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.OneByThree),
+				new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.TwoByThree),
+				new PredefinedCommandPageLayoutEx(PredefinedCommandPageLayout.ThreeByThree)
+			};
 			return (a.ToArray());
 		}
 

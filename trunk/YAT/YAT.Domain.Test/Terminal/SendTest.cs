@@ -108,15 +108,17 @@ namespace YAT.Domain.Test.Terminal
 		{
 			get
 			{
-				var l = new List<Tuple<StressFile, SendMethod>>(7); // Preset the required capacity to improve memory management.
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Normal,                SendMethod.File));
-			////l.Add(new Tuple<StressFile, SendMethod>(StressFile.Large,                 SendMethod.File)); // Covered by 'LargeWithLongLines' below.
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.LargeWithLongLines,    SendMethod.File)); // 'Huge' would take too long for serial COM ports with defaults.
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Huge,                  SendMethod.File)); // Covered by 'HugeWithVeryLongLines' below, but needed until FR #375 has been resolved.
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.HugeWithVeryLongLines, SendMethod.File)); // 'Enormous' would take too long.
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.LongLine,              SendMethod.TextLine));
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.VeryLongLine,          SendMethod.TextLine));
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.EnormousLine,          SendMethod.TextLine));
+				var l = new List<Tuple<StressFile, SendMethod>>(7) // Preset the required capacity to improve memory management.
+				{
+					new Tuple<StressFile, SendMethod>(StressFile.Normal,                SendMethod.File),
+				////new Tuple<StressFile, SendMethod>(StressFile.Large,                 SendMethod.File), // Covered by 'LargeWithLongLines' below.
+					new Tuple<StressFile, SendMethod>(StressFile.LargeWithLongLines,    SendMethod.File), // 'Huge' would take too long for serial COM ports with defaults.
+					new Tuple<StressFile, SendMethod>(StressFile.Huge,                  SendMethod.File), // Covered by 'HugeWithVeryLongLines' below, but needed until FR #375 has been resolved.
+					new Tuple<StressFile, SendMethod>(StressFile.HugeWithVeryLongLines, SendMethod.File), // 'Enormous' would take too long.
+					new Tuple<StressFile, SendMethod>(StressFile.LongLine,              SendMethod.TextLine),
+					new Tuple<StressFile, SendMethod>(StressFile.VeryLongLine,          SendMethod.TextLine),
+					new Tuple<StressFile, SendMethod>(StressFile.EnormousLine,          SendMethod.TextLine)
+				}
 				return (l);
 
 				// Could be extended by 'SendMethod.Text'/'TextLines' and a 'LineCount'.
@@ -130,13 +132,15 @@ namespace YAT.Domain.Test.Terminal
 		{
 			get
 			{
-				var l = new List<Tuple<StressFile, SendMethod>>(6); // Preset the required capacity to improve memory management.
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Normal,       SendMethod.File));
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Large,        SendMethod.File)); // 'Huge' would take too long for serial COM ports with defaults.
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.Huge,         SendMethod.File)); // 'Enormous' would take too long.
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.LongLine,     SendMethod.TextLine));
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.VeryLongLine, SendMethod.TextLine));
-				l.Add(new Tuple<StressFile, SendMethod>(StressFile.EnormousLine, SendMethod.TextLine));
+				var l = new List<Tuple<StressFile, SendMethod>>(6) // Preset the required capacity to improve memory management.
+				{
+					new Tuple<StressFile, SendMethod>(StressFile.Normal,       SendMethod.File),
+					new Tuple<StressFile, SendMethod>(StressFile.Large,        SendMethod.File), // 'Huge' would take too long for serial COM ports with defaults.
+					new Tuple<StressFile, SendMethod>(StressFile.Huge,         SendMethod.File), // 'Enormous' would take too long.
+					new Tuple<StressFile, SendMethod>(StressFile.LongLine,     SendMethod.TextLine),
+					new Tuple<StressFile, SendMethod>(StressFile.VeryLongLine, SendMethod.TextLine),
+					new Tuple<StressFile, SendMethod>(StressFile.EnormousLine, SendMethod.TextLine)
+				};
 				return (l);
 
 				// Could be extended by 'SendMethod.Text'/'TextLines' and a 'LineCount'.

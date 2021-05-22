@@ -329,36 +329,36 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static AutoActionEx[] GetItems()
 		{
-			var a = new List<AutoActionEx>(23); // Preset the required capacity to improve memory management.
+			var a = new List<AutoActionEx>(23) // Preset the required capacity to improve memory management.
+			{
+				new AutoActionEx(AutoAction.None),
 
-			a.Add(new AutoActionEx(AutoAction.None));
+				new AutoActionEx(AutoAction.Highlight),
+				new AutoActionEx(AutoAction.Filter),
+				new AutoActionEx(AutoAction.Suppress),
 
-			a.Add(new AutoActionEx(AutoAction.Highlight));
-			a.Add(new AutoActionEx(AutoAction.Filter));
-			a.Add(new AutoActionEx(AutoAction.Suppress));
+				new AutoActionEx(AutoAction.Beep),
+				new AutoActionEx(AutoAction.ShowMessageBox),
 
-			a.Add(new AutoActionEx(AutoAction.Beep));
-			a.Add(new AutoActionEx(AutoAction.ShowMessageBox));
+				new AutoActionEx(AutoAction.PlotByteCountRate),
+				new AutoActionEx(AutoAction.PlotLineCountRate),
+				new AutoActionEx(AutoAction.LineChartIndex),
+				new AutoActionEx(AutoAction.LineChartTime),
+				new AutoActionEx(AutoAction.LineChartTimeStamp),
+				new AutoActionEx(AutoAction.ScatterPlot),
+				new AutoActionEx(AutoAction.HistogramHorizontal),
+				new AutoActionEx(AutoAction.HistogramVertical),
 
-			a.Add(new AutoActionEx(AutoAction.PlotByteCountRate));
-			a.Add(new AutoActionEx(AutoAction.PlotLineCountRate));
-			a.Add(new AutoActionEx(AutoAction.LineChartIndex));
-			a.Add(new AutoActionEx(AutoAction.LineChartTime));
-			a.Add(new AutoActionEx(AutoAction.LineChartTimeStamp));
-			a.Add(new AutoActionEx(AutoAction.ScatterPlot));
-			a.Add(new AutoActionEx(AutoAction.HistogramHorizontal));
-			a.Add(new AutoActionEx(AutoAction.HistogramVertical));
-
-			a.Add(new AutoActionEx(AutoAction.ClearRepositories));
-			a.Add(new AutoActionEx(AutoAction.ClearRepositoriesOnSubsequentRx));
-			a.Add(new AutoActionEx(AutoAction.ResetCountAndRate));
-			a.Add(new AutoActionEx(AutoAction.SwitchLogOn));
-			a.Add(new AutoActionEx(AutoAction.SwitchLogOff));
-			a.Add(new AutoActionEx(AutoAction.ToggleLogOnOrOff));
-			a.Add(new AutoActionEx(AutoAction.Stop));
-			a.Add(new AutoActionEx(AutoAction.CloseTerminal));
-			a.Add(new AutoActionEx(AutoAction.ExitApplication));
-
+				new AutoActionEx(AutoAction.ClearRepositories),
+				new AutoActionEx(AutoAction.ClearRepositoriesOnSubsequentRx),
+				new AutoActionEx(AutoAction.ResetCountAndRate),
+				new AutoActionEx(AutoAction.SwitchLogOn),
+				new AutoActionEx(AutoAction.SwitchLogOff),
+				new AutoActionEx(AutoAction.ToggleLogOnOrOff),
+				new AutoActionEx(AutoAction.Stop),
+				new AutoActionEx(AutoAction.CloseTerminal),
+				new AutoActionEx(AutoAction.ExitApplication)
+			};
 			return (a.ToArray());
 		}
 
@@ -367,15 +367,15 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static AutoActionEx[] GetLineScatterHistogramPlotItems()
 		{
-			var a = new List<AutoActionEx>(6); // Preset the required capacity to improve memory management.
-
-			a.Add(new AutoActionEx(AutoAction.LineChartIndex));
-			a.Add(new AutoActionEx(AutoAction.LineChartTime));
-			a.Add(new AutoActionEx(AutoAction.LineChartTimeStamp));
-			a.Add(new AutoActionEx(AutoAction.ScatterPlot));
-			a.Add(new AutoActionEx(AutoAction.HistogramHorizontal));
-			a.Add(new AutoActionEx(AutoAction.HistogramVertical));
-
+			var a = new List<AutoActionEx>(6) // Preset the required capacity to improve memory management.
+			{
+				new AutoActionEx(AutoAction.LineChartIndex),
+				new AutoActionEx(AutoAction.LineChartTime),
+				new AutoActionEx(AutoAction.LineChartTimeStamp),
+				new AutoActionEx(AutoAction.ScatterPlot),
+				new AutoActionEx(AutoAction.HistogramHorizontal),
+				new AutoActionEx(AutoAction.HistogramVertical)
+			};
 			return (a.ToArray());
 		}
 

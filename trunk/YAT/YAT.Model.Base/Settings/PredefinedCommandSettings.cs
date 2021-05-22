@@ -159,9 +159,11 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public virtual void ClearAndCreateDefaultPage()
 		{
-			this.pages = new PredefinedCommandPageCollection();
-			this.pages.Add(PredefinedCommandPageCollection.DefaultPage);
-			SetMyChanged();
+			this.pages = new PredefinedCommandPageCollection
+			{
+				PredefinedCommandPageCollection.DefaultPage
+			};
+			SetMyChanged(); // Manual change required because underlying collection is modified.
 		}
 
 		/// <summary>

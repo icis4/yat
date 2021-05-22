@@ -82,11 +82,13 @@ namespace YAT.Application.Settings
 			RecentLocalFilters = new RecentIPFilterCollection(MaxRecentItems);
 			//// Standard hosts are automatically added by the collection.
 
-			RecentPorts = new RecentItemCollection<int>(MaxRecentItems);
-			RecentPorts.Add(MKY.IO.Serial.Socket.SocketSettings.LocalPortDefault);
-			RecentPorts.Add(MKY.IO.Serial.Socket.SocketSettings.LocalPortDefault + 1); // Higher value shall be on top.
-			RecentPorts.Add(MKY.IO.Serial.Socket.SocketSettings.RemotePortDefault);
-			RecentPorts.Add(MKY.IO.Serial.Socket.SocketSettings.RemotePortDefault + 1); // Remote value shall be on very top.
+			RecentPorts = new RecentItemCollection<int>(MaxRecentItems) // Preset the maximum capacity to improve memory management.
+			{
+				MKY.IO.Serial.Socket.SocketSettings.LocalPortDefault,
+				MKY.IO.Serial.Socket.SocketSettings.LocalPortDefault + 1, // Higher value shall be on top.
+				MKY.IO.Serial.Socket.SocketSettings.RemotePortDefault,
+				MKY.IO.Serial.Socket.SocketSettings.RemotePortDefault + 1 // Remote value shall be on very top.
+			};
 			SetChanged(); // Manual change required because underlying collection is modified.
 		}
 

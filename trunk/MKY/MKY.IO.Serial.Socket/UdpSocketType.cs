@@ -118,12 +118,12 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		public static UdpSocketTypeEx[] GetItems()
 		{
-			var a = new List<UdpSocketTypeEx>(3); // Preset the required capacity to improve memory management.
-
-			a.Add(new UdpSocketTypeEx(UdpSocketType.Client));
-			a.Add(new UdpSocketTypeEx(UdpSocketType.Server));
-			a.Add(new UdpSocketTypeEx(UdpSocketType.PairSocket));
-
+			var a = new List<UdpSocketTypeEx>(3) // Preset the required capacity to improve memory management.
+			{
+				new UdpSocketTypeEx(UdpSocketType.Client),
+				new UdpSocketTypeEx(UdpSocketType.Server),
+				new UdpSocketTypeEx(UdpSocketType.PairSocket)
+			};
 			return (a.ToArray());
 		}
 

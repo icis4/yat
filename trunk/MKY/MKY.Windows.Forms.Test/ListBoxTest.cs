@@ -72,13 +72,15 @@ namespace MKY.Windows.Forms.Test
 		{
 			InitializeComponent();
 
-			this.listBoxes = new List<ListBox>(6); // Preset the required capacity to improve memory management.
-			this.listBoxes.Add(listBox_Normal);
-			this.listBoxes.Add(listBox_OwnerDrawFixed);
-			this.listBoxes.Add(listBoxEx_Normal);
-			this.listBoxes.Add(listBoxEx_OwnerDrawFixed);
-			this.listBoxes.Add(fastListBox_Normal);
-			this.listBoxes.Add(fastListBox_OwnerDrawFixed);
+			this.listBoxes = new List<ListBox>(6) // Preset the required capacity to improve memory management.
+			{
+				listBox_Normal,
+				listBox_OwnerDrawFixed,
+				listBoxEx_Normal,
+				listBoxEx_OwnerDrawFixed,
+				fastListBox_Normal,
+				fastListBox_OwnerDrawFixed
+			};
 
 			this.formatFlags  = TextFormatFlags.Default;
 			this.formatFlags |= TextFormatFlags.SingleLine;

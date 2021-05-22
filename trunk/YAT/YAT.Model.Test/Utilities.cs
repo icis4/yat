@@ -766,10 +766,10 @@ namespace YAT.Model.Test
 		{
 			bool isFirst = true; // Using do-while, first check state.
 			int waitTime = 0;
-			int txByteCount = 0;
-			int txLineCount = 0;
-			int rxByteCount = 0;
-			int rxLineCount = 0;
+			int txByteCount;
+			int txLineCount;
+			int rxByteCount;
+			int rxLineCount;
 			StringBuilder sb;
 
 			do

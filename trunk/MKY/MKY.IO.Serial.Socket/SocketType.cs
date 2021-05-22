@@ -227,15 +227,15 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		public static SocketTypeEx[] GetItems()
 		{
-			var a = new List<SocketTypeEx>(6); // Preset the required capacity to improve memory management.
-
-			a.Add(new SocketTypeEx(SocketType.TcpClient));
-			a.Add(new SocketTypeEx(SocketType.TcpServer));
-			a.Add(new SocketTypeEx(SocketType.TcpAutoSocket));
-			a.Add(new SocketTypeEx(SocketType.UdpClient));
-			a.Add(new SocketTypeEx(SocketType.UdpServer));
-			a.Add(new SocketTypeEx(SocketType.UdpPairSocket));
-
+			var a = new List<SocketTypeEx>(6) // Preset the required capacity to improve memory management.
+			{
+				new SocketTypeEx(SocketType.TcpClient),
+				new SocketTypeEx(SocketType.TcpServer),
+				new SocketTypeEx(SocketType.TcpAutoSocket),
+				new SocketTypeEx(SocketType.UdpClient),
+				new SocketTypeEx(SocketType.UdpServer),
+				new SocketTypeEx(SocketType.UdpPairSocket)
+			};
 			return (a.ToArray());
 		}
 

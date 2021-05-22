@@ -143,11 +143,13 @@ namespace YAT.Model.Test.Connection
 
 				// Prepare stimulus and expected:
 				Types.Command emptyCommand = new Types.Command("");
-				var l = new List<byte>(4); // Preset the required capacity to improve memory management.
-				l.Add(0x45); // 'E'
-				l.Add(0x53); // 'S'
-				l.Add(0x0D); // <CR>
-				l.Add(0x0A); // <LF>
+				var l = new List<byte>(4) // Preset the required capacity to improve memory management.
+				{
+					0x45, // 'E'
+					0x53, // 'S'
+					0x0D, // <CR>
+					0x0A  // <LF>
+				};
 				byte[] emptyCommandExpected = l.ToArray();
 				int expectedTotalLineCount = 0;
 				int expectedTotalByteCount = 0;
@@ -328,11 +330,13 @@ namespace YAT.Model.Test.Connection
 
 				// Prepare stimulus and expected:
 				var emptyCommand = new Types.Command("");
-				var l = new List<byte>(4); // Preset the required capacity to improve memory management.
-				l.Add(0x45); // 'E'
-				l.Add(0x53); // 'S'
-				l.Add(0x0D); // <CR>
-				l.Add(0x0A); // <LF>
+				var l = new List<byte>(4) // Preset the required capacity to improve memory management.
+				{
+					0x45, // 'E'
+					0x53, // 'S'
+					0x0D, // <CR>
+					0x0A  // <LF>
+				};
 				var emptyCommandExpected = l.ToArray();
 				int expectedTotalRxLineCount = 0;
 				int expectedTotalRxByteCount = 0;
