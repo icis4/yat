@@ -5256,7 +5256,7 @@ namespace YAT.View.Forms
 			this.send.TabIndex = 0;
 			this.send.TextCommandChanged += new System.EventHandler(this.send_TextCommandChanged);
 			this.send.TextFocusedChanged += new System.EventHandler(this.send_TextFocusChanged);
-			this.send.SendTextCommandRequest += new System.EventHandler<YAT.View.Controls.SendTextOptionEventArgs>(this.send_SendTextCommandRequest);
+			this.send.SendTextCommandRequest += new System.EventHandler<MKY.EventArgs<YAT.View.Controls.SendTextOption>>(this.send_SendTextCommandRequest);
 			this.send.FileCommandChanged += new System.EventHandler(this.send_FileCommandChanged);
 			this.send.SendFileCommandRequest += new System.EventHandler(this.send_SendFileCommandRequest);
 			this.send.SizeChanged += new System.EventHandler(this.send_SizeChanged);

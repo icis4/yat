@@ -171,7 +171,7 @@ namespace YAT.View.Controls
 		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised when sending the command is requested.")]
-		public event EventHandler<SendTextOptionEventArgs> SendCommandRequest;
+		public event EventHandler<EventArgs<SendTextOption>> SendCommandRequest;
 
 		#endregion
 

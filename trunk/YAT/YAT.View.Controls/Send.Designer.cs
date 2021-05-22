@@ -96,7 +96,7 @@
 			this.sendText.TabIndex = 0;
 			this.sendText.CommandChanged += new System.EventHandler(this.sendText_CommandChanged);
 			this.sendText.TextFocusedChanged += new System.EventHandler(this.sendText_TextFocusedChanged);
-			this.sendText.SendCommandRequest += new System.EventHandler<YAT.View.Controls.SendTextOptionEventArgs>(this.sendText_SendCommandRequest);
+			this.sendText.SendCommandRequest += new System.EventHandler<MKY.EventArgs<YAT.View.Controls.SendTextOption>>(this.sendText_SendCommandRequest);
 			// 
 			// panel_SendFile
 			// 

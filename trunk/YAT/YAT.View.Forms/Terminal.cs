@@ -4404,7 +4404,7 @@ namespace YAT.View.Forms
 			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
 		}
 
-		private void send_SendTextCommandRequest(object sender, SendTextOptionEventArgs e)
+		private void send_SendTextCommandRequest(object sender, EventArgs<SendTextOption> e)
 		{
 			if (this.terminal != null)
 			{

@@ -14,45 +14,55 @@ Installation
 
 Ensure that English language pack is included
 
-Addtionally for VS2015
+Addtionally for VS2019
+ > 'Help Viewer'
+ > 'Microsoft Visual Studio Installer Projects'
  > 'Microsoft .NET Framework 4.8 Developer Pack' (ndp48-devpack-enu.exe)
- > 'NuGet-Package-Manager' (NuGet.Tools.vsix)
+ > 'NUnit Test Adapter'
+ > 'Multiline Search and Replace'
+ > 'Trailing Whitespace Visualizer'
 
 
 Visual Studio
 -------------
 
-Help > Set Preference > Help Viewer
-  > Add content to local documentation
-    > VisualStudio Fundamentals
-    > VisualStudio VB and C#
-    > VisualStudio C++
-    > .NET 3.5
-    > .NET 4.0
-    > .NET 4.5/4.6
-    > Windows API Reference
-    > Windows Debugging
-    > Windows Desktop App Development
+Help > Set Preference > Help Viewer (precondition: 'Help Viewer' installed, see further above)
+ > Default selection
+    - ASP.NET
+    - Visual F#
+    - Visual Studio 2017*
+    + Programming Reference for Windows API Reference
+    + Windows Debugging
+    + Windows Desktop App Development
 
 Tools > Options...
-  > Environment
+ > Environment
     > International Settings > English
-  > Text Editor
+    > Trailing Whitespace
+        > Ignore Pattern
+            + .resx
+            > \node_modules\, \bower_components\, \typings\, \lib\, \Symbols\, .min., .md, .markdown, .designer., .resx
+ > Text Editor
     > All Languages > General > Settings > Line numbers = yes
     > C# > Tabs > Keep tabs
-         > Code Style > Qualify field access with 'this' = Prefer 'this.' / Suggestion
-         > Formatting > 5 x auto = no
          > Advanced > Place 'System' usings first
                     > Separate using directive groups
-  > Debugging
+         > Code Style > General > Qualify field access with 'this' = Prefer 'this.' / Suggestion
+                      > Formatting > General > 5 x auto = no
+                                   > Indentation > Indent case contents (when block) = no
+ > Debugging
     > General > Break when exceptions cross AppDomain or managed/native boundaries = yes
               > Step over properties and operators = no
               > Require source files to excatly match the original version = no
 
+(Note: Manual settings are used rather than [EditorConfig] in order to always start with default
+       settings when upgrading to a new Visual Studio version)
+
 Edit > Advanced
-  > View White Space = true
+ > View White Space = true
 
 View > Output
+View > Error List
 
 
 NuGet
@@ -117,7 +127,7 @@ Toolbar
 Customize > Commands
     > Toolbar > Standard
         > Solution Configuration > Modifiy Selection
-            > Width = 360
+            > Width = 300
 
 
 Hints

@@ -433,7 +433,7 @@ namespace YAT.View.Forms
 			this.stringListEdit_ExcludePatterns.Size = new System.Drawing.Size(279, 201);
 			this.stringListEdit_ExcludePatterns.StringList = new string[0];
 			this.stringListEdit_ExcludePatterns.TabIndex = 1;
-			this.stringListEdit_ExcludePatterns.Validating += new System.EventHandler<MKY.ComponentModel.StringCancelEventArgs>(this.stringListEdit_ExcludePatterns_Validating);
+			this.stringListEdit_ExcludePatterns.Validating += new System.EventHandler<MKY.ComponentModel.CancelEventArgs<string>>(this.stringListEdit_ExcludePatterns_Validating);
 			this.stringListEdit_ExcludePatterns.ListChanged += new System.EventHandler(this.stringListEdit_ExcludePatterns_ListChanged);
 			// 
 			// checkBox_Exclude
