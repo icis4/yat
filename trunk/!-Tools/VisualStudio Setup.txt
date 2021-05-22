@@ -14,13 +14,18 @@ Installation
 
 Ensure that English language pack is included
 
-Addtionally for VS2019
+Components
  > 'Help Viewer'
+
+Extensions
  > 'Microsoft Visual Studio Installer Projects'
- > 'Microsoft .NET Framework 4.8 Developer Pack' (ndp48-devpack-enu.exe)
  > 'NUnit Test Adapter'
  > 'Multiline Search and Replace'
  > 'Trailing Whitespace Visualizer'
+ > 'AnkhSVN'
+
+Manually
+ > 'Microsoft .NET Framework 4.8 Developer Pack' (ndp48-devpack-enu.exe)
 
 
 Visual Studio
