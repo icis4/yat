@@ -1,0 +1,10 @@
+﻿
+Pre-build Step
+--------------
+
+Project > Properties > Build Events > Pre-build
+
+$(ProjectDir)\..\..\!-Scripts\TouchFile.cmd "$(ProjectDir)\App.config"
+
+Sets the "App.config" to the same time stamp as the resulting executable.
+Otherwise, the deployed "App.config" file time stamp would reflect the SVN checkout time stamp.

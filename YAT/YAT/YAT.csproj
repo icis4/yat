@@ -115,6 +115,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="YAT.csproj.ReadMe.txt" />
     <EmbeddedResource Include="Resources\YAT\Icon_YAT.ico" />
     <EmbeddedResource Include="Resources\YAT\Icon_YAT_TerminalSettings.ico" />
     <EmbeddedResource Include="Resources\YAT\Icon_YAT_UserSettings.ico" />
@@ -131,6 +132,9 @@
     <None Include="YAT.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>$(ProjectDir)\..\..\!-Scripts\TouchFile.cmd "$(ProjectDir)\App.config"</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
