@@ -115,12 +115,12 @@ namespace MKY.IO.Serial.Socket
 		/// </remarks>
 		public static UdpServerSendModeEx[] GetItems()
 		{
-			var a = new List<UdpServerSendModeEx>(3); // Preset the required capacity to improve memory management.
-
-			a.Add(new UdpServerSendModeEx(UdpServerSendMode.None));
-			a.Add(new UdpServerSendModeEx(UdpServerSendMode.First));
-			a.Add(new UdpServerSendModeEx(UdpServerSendMode.MostRecent));
-
+			var a = new List<UdpServerSendModeEx>(3) // Preset the required capacity to improve memory management.
+			{
+				new UdpServerSendModeEx(UdpServerSendMode.None),
+				new UdpServerSendModeEx(UdpServerSendMode.First),
+				new UdpServerSendModeEx(UdpServerSendMode.MostRecent)
+			};
 			return (a.ToArray());
 		}
 

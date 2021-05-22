@@ -165,16 +165,16 @@ namespace YAT.Model.Types
 		/// </remarks>
 		public static WorkspaceLayoutEx[] GetItems()
 		{
-			var a = new List<WorkspaceLayoutEx>(7); // Preset the required capacity to improve memory management.
-
-			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.Automatic));
-			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.Cascade));
-			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.TileHorizontal));
-			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.TileVertical));
-			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.Manual));
-			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.Minimize));
-			a.Add(new WorkspaceLayoutEx(WorkspaceLayout.Maximize));
-
+			var a = new List<WorkspaceLayoutEx>(7) // Preset the required capacity to improve memory management.
+			{
+				new WorkspaceLayoutEx(WorkspaceLayout.Automatic),
+				new WorkspaceLayoutEx(WorkspaceLayout.Cascade),
+				new WorkspaceLayoutEx(WorkspaceLayout.TileHorizontal),
+				new WorkspaceLayoutEx(WorkspaceLayout.TileVertical),
+				new WorkspaceLayoutEx(WorkspaceLayout.Manual),
+				new WorkspaceLayoutEx(WorkspaceLayout.Minimize),
+				new WorkspaceLayoutEx(WorkspaceLayout.Maximize)
+			};
 			return (a.ToArray());
 		}
 

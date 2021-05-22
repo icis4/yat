@@ -825,13 +825,13 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.Up()
 			// Changes here may have to be applied there too.
 
-			Command sc = null; // s = source
+			Command sc; // s = source
 			if (TryGetCommandFromId(selectedCommandId, out sc))
 				sc = new Command(sc); // Clone to ensure decoupling.
 
 			targetCommandId = ((selectedCommandId > PredefinedCommandPage.FirstCommandIdPerPage) ? (selectedCommandId - 1) : (lastCommandIdPerPage));
 
-			Command tc = null; // t = target
+			Command tc; // t = target
 			if (TryGetCommandFromId(targetCommandId, out tc))
 				tc = new Command(tc); // Clone to ensure decoupling.
 
@@ -887,13 +887,13 @@ namespace YAT.View.Forms
 			// ...View.Forms.Terminal.Down()
 			// Changes here may have to be applied there too.
 
-			Command sc = null; // s = source
+			Command sc; // s = source
 			if (TryGetCommandFromId(selectedCommandId, out sc))
 				sc = new Command(sc); // Clone to ensure decoupling.
 
 			targetCommandId = ((selectedCommandId < lastCommandIdPerPage) ? (selectedCommandId + 1) : (PredefinedCommandPage.FirstCommandIdPerPage));
 
-			Command tc = null; // t = target
+			Command tc; // t = target
 			if (TryGetCommandFromId(targetCommandId, out tc))
 				tc = new Command(tc); // Clone to ensure decoupling.
 
@@ -1035,33 +1035,37 @@ namespace YAT.View.Forms
 			////label_Data.Left is kept at the designed location.
 			}
 
-			this.predefinedCommandSettingsSetLabels = new List<Label>(PredefinedCommandPage.CommandCapacityPerSubpage); // Preset the required capacity to improve memory management.
-			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_1);
-			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_2);
-			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_3);
-			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_4);
-			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_5);
-			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_6);
-			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_7);
-			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_8);
-			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_9);
-			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_10);
-			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_11);
-			this.predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_12);
+			this.predefinedCommandSettingsSetLabels = new List<Label>(PredefinedCommandPage.CommandCapacityPerSubpage) // Preset the required capacity to improve memory management.
+			{
+				label_predefinedCommandSettingsSet_1,
+				label_predefinedCommandSettingsSet_2,
+				label_predefinedCommandSettingsSet_3,
+				label_predefinedCommandSettingsSet_4,
+				label_predefinedCommandSettingsSet_5,
+				label_predefinedCommandSettingsSet_6,
+				label_predefinedCommandSettingsSet_7,
+				label_predefinedCommandSettingsSet_8,
+				label_predefinedCommandSettingsSet_9,
+				label_predefinedCommandSettingsSet_10,
+				label_predefinedCommandSettingsSet_11,
+				label_predefinedCommandSettingsSet_12
+			};
 
-			this.predefinedCommandSettingsSets = new List<Controls.PredefinedCommandSettingsSet>(PredefinedCommandPage.CommandCapacityPerSubpage); // Preset the required capacity to improve memory management.
-			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_1);
-			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_2);
-			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_3);
-			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_4);
-			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_5);
-			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_6);
-			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_7);
-			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_8);
-			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_9);
-			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_10);
-			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_11);
-			this.predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_12);
+			this.predefinedCommandSettingsSets = new List<Controls.PredefinedCommandSettingsSet>(PredefinedCommandPage.CommandCapacityPerSubpage) // Preset the required capacity to improve memory management.
+			{
+				predefinedCommandSettingsSet_1,
+				predefinedCommandSettingsSet_2,
+				predefinedCommandSettingsSet_3,
+				predefinedCommandSettingsSet_4,
+				predefinedCommandSettingsSet_5,
+				predefinedCommandSettingsSet_6,
+				predefinedCommandSettingsSet_7,
+				predefinedCommandSettingsSet_8,
+				predefinedCommandSettingsSet_9,
+				predefinedCommandSettingsSet_10,
+				predefinedCommandSettingsSet_11,
+				predefinedCommandSettingsSet_12
+			};
 		}
 
 		private void SetControls()

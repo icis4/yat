@@ -116,12 +116,12 @@ namespace MKY.IO.Serial.SerialPort
 		/// </remarks>
 		public static SerialControlPinStateEx[] GetItems()
 		{
-			var a = new List<SerialControlPinStateEx>(3); // Preset the required capacity to improve memory management.
-
-			a.Add(new SerialControlPinStateEx(SerialControlPinState.Automatic));
-			a.Add(new SerialControlPinStateEx(SerialControlPinState.Disabled));
-			a.Add(new SerialControlPinStateEx(SerialControlPinState.Enabled));
-
+			var a = new List<SerialControlPinStateEx>(3) // Preset the required capacity to improve memory management.
+			{
+				new SerialControlPinStateEx(SerialControlPinState.Automatic),
+				new SerialControlPinStateEx(SerialControlPinState.Disabled),
+				new SerialControlPinStateEx(SerialControlPinState.Enabled)
+			};
 			return (a.ToArray());
 		}
 

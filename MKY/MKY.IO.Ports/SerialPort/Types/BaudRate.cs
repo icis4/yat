@@ -254,43 +254,43 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public static BaudRateEx[] GetItems()
 		{
-			var a = new List<BaudRateEx>(32); // Preset the required capacity to improve memory management.
+			var a = new List<BaudRateEx>(32) // Preset the required capacity to improve memory management.
+			{
+				new BaudRateEx(BaudRate.Baud75),
+				new BaudRateEx(BaudRate.Baud110),
+				new BaudRateEx(BaudRate.Baud134),
+				new BaudRateEx(BaudRate.Baud150),
+				new BaudRateEx(BaudRate.Baud300),
+				new BaudRateEx(BaudRate.Baud600),
+				new BaudRateEx(BaudRate.Baud1200),
+				new BaudRateEx(BaudRate.Baud1800),
+				new BaudRateEx(BaudRate.Baud2400),
+				new BaudRateEx(BaudRate.Baud4800),
+				new BaudRateEx(BaudRate.Baud7200),
+				new BaudRateEx(BaudRate.Baud9600),
+				new BaudRateEx(BaudRate.Baud14400),
+				new BaudRateEx(BaudRate.Baud19200),
+				new BaudRateEx(BaudRate.Baud28800),
+				new BaudRateEx(BaudRate.Baud33600),
+				new BaudRateEx(BaudRate.Baud38400),
+				new BaudRateEx(BaudRate.Baud57600),
+				new BaudRateEx(BaudRate.Baud115200),
+				new BaudRateEx(BaudRate.Baud128000),
+				new BaudRateEx(BaudRate.Baud230400),
+				new BaudRateEx(BaudRate.Baud256000),
+				new BaudRateEx(BaudRate.Baud460800),
+				new BaudRateEx(BaudRate.Baud921600),
+				new BaudRateEx(BaudRate.Baud960000),
+				new BaudRateEx(BaudRate.Baud1000000),
+				new BaudRateEx(BaudRate.Baud1200000),
+				new BaudRateEx(BaudRate.Baud1500000),
+				new BaudRateEx(BaudRate.Baud2000000),
+				new BaudRateEx(BaudRate.Baud3000000),
+				new BaudRateEx(BaudRate.Baud6000000),
+				new BaudRateEx(BaudRate.Baud12000000)
 
-			a.Add(new BaudRateEx(BaudRate.Baud75));
-			a.Add(new BaudRateEx(BaudRate.Baud110));
-			a.Add(new BaudRateEx(BaudRate.Baud134));
-			a.Add(new BaudRateEx(BaudRate.Baud150));
-			a.Add(new BaudRateEx(BaudRate.Baud300));
-			a.Add(new BaudRateEx(BaudRate.Baud600));
-			a.Add(new BaudRateEx(BaudRate.Baud1200));
-			a.Add(new BaudRateEx(BaudRate.Baud1800));
-			a.Add(new BaudRateEx(BaudRate.Baud2400));
-			a.Add(new BaudRateEx(BaudRate.Baud4800));
-			a.Add(new BaudRateEx(BaudRate.Baud7200));
-			a.Add(new BaudRateEx(BaudRate.Baud9600));
-			a.Add(new BaudRateEx(BaudRate.Baud14400));
-			a.Add(new BaudRateEx(BaudRate.Baud19200));
-			a.Add(new BaudRateEx(BaudRate.Baud28800));
-			a.Add(new BaudRateEx(BaudRate.Baud33600));
-			a.Add(new BaudRateEx(BaudRate.Baud38400));
-			a.Add(new BaudRateEx(BaudRate.Baud57600));
-			a.Add(new BaudRateEx(BaudRate.Baud115200));
-			a.Add(new BaudRateEx(BaudRate.Baud128000));
-			a.Add(new BaudRateEx(BaudRate.Baud230400));
-			a.Add(new BaudRateEx(BaudRate.Baud256000));
-			a.Add(new BaudRateEx(BaudRate.Baud460800));
-			a.Add(new BaudRateEx(BaudRate.Baud921600));
-			a.Add(new BaudRateEx(BaudRate.Baud960000));
-			a.Add(new BaudRateEx(BaudRate.Baud1000000));
-			a.Add(new BaudRateEx(BaudRate.Baud1200000));
-			a.Add(new BaudRateEx(BaudRate.Baud1500000));
-			a.Add(new BaudRateEx(BaudRate.Baud2000000));
-			a.Add(new BaudRateEx(BaudRate.Baud3000000));
-			a.Add(new BaudRateEx(BaudRate.Baud6000000));
-			a.Add(new BaudRateEx(BaudRate.Baud12000000));
-
-			// This method shall only return the fixed items, 'Explicit' is not added therefore.
-
+				// This method shall only return the fixed items, 'Explicit' is therefore not added.
+			};
 			return (a.ToArray());
 		}
 

@@ -110,16 +110,17 @@ namespace MKY.IO.Usb.Test
 		/// </summary>
 		public ConfigurationSection()
 		{
-			this.properties = new ConfigurationPropertyCollection();
+			this.properties = new ConfigurationPropertyCollection
+			{
+				this.deviceA,
+				this.deviceB,
 
-			this.properties.Add(this.deviceA);
-			this.properties.Add(this.deviceB);
+				this.mtSicsDeviceA,
+				this.mtSicsDeviceB,
 
-			this.properties.Add(this.mtSicsDeviceA);
-			this.properties.Add(this.mtSicsDeviceB);
-
-			this.properties.Add(this.tiLaunchPadDeviceA);
-			this.properties.Add(this.tiLaunchPadDeviceB);
+				this.tiLaunchPadDeviceA,
+				this.tiLaunchPadDeviceB
+			};
 		}
 
 		#endregion

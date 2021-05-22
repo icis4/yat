@@ -98,12 +98,13 @@ namespace MKY.Net.Test
 		/// </summary>
 		public ConfigurationSection()
 		{
-			this.properties = new ConfigurationPropertyCollection();
+			this.properties = new ConfigurationPropertyCollection
+			{
+				this.ipv4SpecificInterface,
+				this.ipv6SpecificInterface,
 
-			this.properties.Add(this.ipv4SpecificInterface);
-			this.properties.Add(this.ipv6SpecificInterface);
-
-			this.properties.Add(this.mtSicsDeviceTcpPort);
+				this.mtSicsDeviceTcpPort
+			};
 		}
 
 		#endregion

@@ -113,10 +113,10 @@ namespace YAT.Model.Types
 		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Future patterns may have to implement more logic.")]
 		static AutoResponseEx()
 		{
-			var l = new List<string>(1); // Preset the required capacity to improve memory management.
-
-			l.Add("$1");
-
+			var l = new List<string>(1) // Preset the required capacity to improve memory management.
+			{
+				"$1"
+			};
 			CommonRegexReplacementPatterns = l.AsReadOnly();
 		}
 

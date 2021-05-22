@@ -107,14 +107,18 @@ namespace YAT.Domain.Test.TextTerminal
 							Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 							Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-							var expectedContentPatternA = new List<string>(); // Applies to bidir only.
-							expectedContentPatternA.Add(EscapeRegex("(") + Utilities.TimeStampRegexPattern + EscapeRegex(") (<<) ABC<CR><LF> (5) (0.000)"));
-							expectedContentPatternA.Add(EscapeRegex("(") + Utilities.TimeStampRegexPattern + EscapeRegex(") (>>) ABC<CR><LF> (5) (0.000)"));
+							var expectedContentPatternA = new List<string>(2) // Applies to bidir only.
+							{
+								EscapeRegex("(") + Utilities.TimeStampRegexPattern + EscapeRegex(") (<<) ABC<CR><LF> (5) (0.000)"),
+								EscapeRegex("(") + Utilities.TimeStampRegexPattern + EscapeRegex(") (>>) ABC<CR><LF> (5) (0.000)")
+							};
 							Utilities.AssertBidirContentPattern(terminalA, expectedContentPatternA);
 
-							var expectedContentPatternB = new List<string>(); // Applies to bidir only.
-							expectedContentPatternB.Add(EscapeRegex("(>>) ABC<CR><LF>"));
-							expectedContentPatternB.Add(EscapeRegex("(<<) ABC<CR><LF>"));
+							var expectedContentPatternB = new List<string>(2) // Applies to bidir only.
+							{
+								EscapeRegex("(>>) ABC<CR><LF>"),
+								EscapeRegex("(<<) ABC<CR><LF>")
+							};
 							Utilities.AssertBidirContentPattern(terminalB, expectedContentPatternB);
 
 							for (int i = 0; i < 2; i++) // ...twice doing...
@@ -305,14 +309,18 @@ namespace YAT.Domain.Test.TextTerminal
 							Utilities.WaitForSendingAndAssertCounts(  terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA);
 							Utilities.WaitForReceivingAndAssertCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
-							var expectedContentPatternA = new List<string>(); // Applies to bidir only.
-							expectedContentPatternA.Add(EscapeRegex("(") + Utilities.TimeStampRegexPattern + EscapeRegex(") (<<) ABC<CR><LF> (5) (0.000)"));
-							expectedContentPatternA.Add(EscapeRegex("(") + Utilities.TimeStampRegexPattern + EscapeRegex(") (>>) ABC<CR><LF> (5) (0.000)"));
+							var expectedContentPatternA = new List<string>(2) // Applies to bidir only.
+							{
+								EscapeRegex("(") + Utilities.TimeStampRegexPattern + EscapeRegex(") (<<) ABC<CR><LF> (5) (0.000)"),
+								EscapeRegex("(") + Utilities.TimeStampRegexPattern + EscapeRegex(") (>>) ABC<CR><LF> (5) (0.000)")
+							};
 							Utilities.AssertBidirContentPattern(terminalA, expectedContentPatternA);
 
-							var expectedContentPatternB = new List<string>(); // Applies to bidir only.
-							expectedContentPatternB.Add(EscapeRegex("(>>) ABC<CR><LF>"));
-							expectedContentPatternB.Add(EscapeRegex("(<<) ABC<CR><LF>"));
+							var expectedContentPatternB = new List<string>(2) // Applies to bidir only.
+							{
+								EscapeRegex("(>>) ABC<CR><LF>"),
+								EscapeRegex("(<<) ABC<CR><LF>")
+							};
 							Utilities.AssertBidirContentPattern(terminalB, expectedContentPatternB);
 
 							for (int i = 0; i < 2; i++) // ...twice doing...

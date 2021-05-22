@@ -145,12 +145,12 @@ namespace MKY.IO.Serial.Usb
 		/// </remarks>
 		public static SerialHidFlowControlPresetEx[] GetItems()
 		{
-			var a = new List<SerialHidFlowControlPresetEx>(8); // Preset the required capacity to improve memory management.
-
-			a.Add(new SerialHidFlowControlPresetEx(SerialHidFlowControlPreset.None));
-			a.Add(new SerialHidFlowControlPresetEx(SerialHidFlowControlPreset.MT_SerHid));
-			a.Add(new SerialHidFlowControlPresetEx(SerialHidFlowControlPreset.YAT));
-
+			var a = new List<SerialHidFlowControlPresetEx>(3) // Preset the required capacity to improve memory management.
+			{
+				new SerialHidFlowControlPresetEx(SerialHidFlowControlPreset.None),
+				new SerialHidFlowControlPresetEx(SerialHidFlowControlPreset.MT_SerHid),
+				new SerialHidFlowControlPresetEx(SerialHidFlowControlPreset.YAT)
+			};
 			return (a.ToArray());
 		}
 

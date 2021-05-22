@@ -304,7 +304,6 @@ namespace YAT.Domain
 			public virtual void Change(DateTime timeStamp, string format, bool useUtc, string enclosureLeft, string enclosureRight)
 			{
 				TimeStamp = timeStamp;
-				Direction = direction;
 				Text = ToText(timeStamp, format, useUtc, enclosureLeft, enclosureRight);
 			}
 		}
@@ -868,8 +867,10 @@ namespace YAT.Domain
 
 			if (!ArrayEx.IsNullOrEmpty(origin))
 			{                                                               // Makes sense since elements of the same type will likely be appended.
-				l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine); // Preset the typical capacity to improve memory management.
-				l.Add(new Pair<byte[], string>(origin, text));
+				l = new List<Pair<byte[], string>>(DisplayElementCollection.TypicalNumberOfElementsPerLine) // Preset the typical capacity to improve memory management.
+				{
+					new Pair<byte[], string>(origin, text)
+				};
 			}
 			Initialize(timeStamp, direction, l, text, charCount, ((origin != null) ? (origin.Length) : (0)), attributes);
 		}

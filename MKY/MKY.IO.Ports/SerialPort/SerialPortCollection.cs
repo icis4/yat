@@ -143,7 +143,7 @@ namespace MKY.IO.Ports
 					DebugVerboseIndent("Adding ports of local machine...");
 					foreach (string portName in portNames)
 					{
-						DebugVerboseIndent((portName != null) ? portName : "(null)");
+						DebugVerboseIndent(portName ?? "(null)");
 
 						if (!string.IsNullOrEmpty(portName)) // "If the registry contains stale or otherwise incorrect data then the GetPortNames method will return incorrect data."
 							Add(new SerialPortId(portName));
