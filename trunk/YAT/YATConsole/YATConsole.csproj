@@ -140,8 +140,12 @@
     <Content Include="..\YAT\Resources\YAT\Image_YAT_WorkspaceSettings_64x64.png">
       <Link>Resources\YAT\Image_YAT_WorkspaceSettings_64x64.png</Link>
     </Content>
+    <Content Include="YATConsole.csproj.ReadMe.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>$(ProjectDir)\..\..\!-Scripts\TouchFile.cmd "$(ProjectDir)\App.config"</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
