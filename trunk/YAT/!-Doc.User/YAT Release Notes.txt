@@ -91,7 +91,7 @@ Important changes:
 - Accuracy of time stamps on sending improved for all I/O types (bug #514).
 - Accuracy of time stamps on receiving improved for UDP/IP sockets (feature request #442).
 - Upgrade to Visual Studio 2019 (feature request #441).
-- Prebuild step now ensures that time stamp of App.config files reflect the build time (bug #515).
+- App.config file time stamps now reflect the build time of the binaries (bug #515).
 
 Limitations and known issues:
 - Same as previous releases, see further below.
