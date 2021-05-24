@@ -239,8 +239,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			// Assert by-reference arguments:
 
-			if (remoteHost     == null) throw (new ArgumentNullException("remoteHost",     MessageHelper.InvalidExecutionPreamble + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			if (localInterface == null) throw (new ArgumentNullException("localInterface", MessageHelper.InvalidExecutionPreamble + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			if (remoteHost     == null) throw (new ArgumentNullException(nameof(remoteHost),     MessageHelper.InvalidExecutionPreamble + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			if (localInterface == null) throw (new ArgumentNullException(nameof(localInterface), MessageHelper.InvalidExecutionPreamble + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			// All arguments are defined!
 

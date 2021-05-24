@@ -560,14 +560,14 @@ namespace YAT.Model.Types
 				else if (IsMultiLineText)
 				{
 					var sb = new StringBuilder();
-					sb.Append("<");
+					sb.Append('<');
 					sb.Append(MultiLineText.Length.ToString(CultureInfo.CurrentCulture));
 					sb.Append(" " + LinesText + ">");
 					for (int i = 0; i < MultiLineText.Length; i++)
 					{
 						sb.Append(" [");
 						sb.Append(MultiLineText[i]);
-						sb.Append("]");
+						sb.Append(']');
 					}
 					return (sb.ToString());
 				}
@@ -921,7 +921,7 @@ namespace YAT.Model.Types
 			if (other != null) // Using 'Description' as this is visible to the user.
 				return (string.Compare(Description, other.Description, StringComparison.CurrentCulture));
 			else
-				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify a 'Command'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "obj"));
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify a 'Command'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, nameof(obj)));
 		}
 
 		/// <summary></summary>

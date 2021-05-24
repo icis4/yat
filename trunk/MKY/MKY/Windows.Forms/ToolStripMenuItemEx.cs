@@ -64,10 +64,10 @@ namespace MKY.Windows.Forms
 					return (int.Parse(tag, NumberStyles.Integer, CultureInfo.InvariantCulture)); // Throw if invalid format.
 				}
 
-				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Sender has an invalid tag '" + tag + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "sender"));
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Sender has an invalid tag '" + tag + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, nameof(sender)));
 			}
 
-			throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + sender + "' is no 'ToolStripMenuItem'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "sender"));
+			throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + sender + "' is no 'ToolStripMenuItem'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, nameof(sender)));
 		}
 	}
 }

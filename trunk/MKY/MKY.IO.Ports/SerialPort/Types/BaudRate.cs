@@ -135,7 +135,7 @@ namespace MKY.IO.Ports
 			{
 				throw (new ArgumentOutOfRangeException
 				(
-					"baudRate",
+					nameof(baudRate),
 					baudRate,
 					"Baud rate must be a potentially valid baud rate value!"
 				)); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.

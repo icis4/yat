@@ -916,7 +916,7 @@ namespace YAT.Log.Settings
 				case LogType.Raw:     return ("Raw");
 				case LogType.Neat:    return ("Neat");
 			}
-			throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Log type '" + type + "' unknown!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "type"));
+			throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Log type '" + type + "' unknown!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, nameof(type)));
 		}
 
 		private static string ToDirectionString(LogDirection direction)
@@ -927,7 +927,7 @@ namespace YAT.Log.Settings
 				case LogDirection.Bidir: return ("Bidir");
 				case LogDirection.Rx:    return ("Rx");
 			}
-			throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Log direction '" + direction + "' unknown!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "direction"));
+			throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "Log direction '" + direction + "' unknown!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, nameof(direction)));
 		}
 
 		private string ToFileNamePostFixString(LogType type, LogDirection direction)

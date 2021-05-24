@@ -182,7 +182,7 @@ namespace MKY.Windows.Forms
 		protected void Register(Form mainForm)
 		{
 			if (mainForm == null)
-				throw (new ArgumentNullException("mainForm", MessageHelper.InvalidExecutionPreamble + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new ArgumentNullException(nameof(mainForm), MessageHelper.InvalidExecutionPreamble + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			this.mainForm = mainForm;
 
@@ -210,7 +210,7 @@ namespace MKY.Windows.Forms
 				if (this.mainForm.InvokeRequired)
 				{
 					var methodToSynchronize = new Action<Form>(UnregisterMainFormSynchronized);
-					object[] args = { mainForm };
+					object[] args = { this.mainForm };
 					this.mainForm.Invoke(methodToSynchronize, args);
 				}
 				else
@@ -264,7 +264,7 @@ namespace MKY.Windows.Forms
 		{
 			try
 			{
-				messageCallback(ref m);
+				this.messageCallback(ref m);
 			}
 			catch (Exception ex)
 			{

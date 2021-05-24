@@ -330,7 +330,7 @@ namespace YAT.Domain
 			a.Add(new SeparatorEx(Separator.Semicolon));
 			a.Add(new SeparatorEx(Separator.SemicolonWithSpace));
 
-			// This method shall only return the fixed items, 'Explicit' is not added therefore.
+			// This method shall only return the fixed items, 'Explicit' is therefore not added.
 
 			return (a.ToArray());
 		}

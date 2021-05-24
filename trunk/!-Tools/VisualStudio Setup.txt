@@ -3,7 +3,8 @@ Edition
 -------
 
 Community Edition:
-"An unlimited number of users within an organization can use Visual Studio Community for the following scenarios:
+"An unlimited number of users within an organization can use
+ Visual Studio Community for the following scenarios:
   > in a classroom learning environment,
   > for academic research,
   > or for contributing to open source projects."
@@ -23,9 +24,17 @@ Extensions
  > 'Multiline Search and Replace'
  > 'Trailing Whitespace Visualizer'
  > 'AnkhSVN'
+ > 'GhostDoc Community'
 
 Manually
  > 'Microsoft .NET Framework 4.8 Developer Pack' (ndp48-devpack-enu.exe)
+
+Note that not (yet) configuring "own" projects for NuGet packages
+'Microsoft.CodeAnalysis.NetAnalyzers' and 'StyleCop.Analyzers' because of:
+ > Still don't like the NuGet approach (installation dependet relative paths,...).
+ > Build takes ages opposed to just approx. 30 seconds in the past.
+The first could be solved by using the [PackageReference] instead of the [Packages.config] approach.
+The second could be solved by dedicated project configurations (with and without code analysis activated).
 
 
 Visual Studio
@@ -83,7 +92,7 @@ Using NuGet to get binaries (e.g. OxyPlot) but not in projects/solution directly
        > Version changes require unnecessary changes in projects.
        > Version changes require unnecessary operations in SVN.
     > Some projects, e.g. CS-Script, do not release NuGet packages for 'hot fixes'.
-    > Some projects, e.g. ScottPlot, load much too mcuh into NuGet packages.
+    > Some projects, e.g. ScottPlot, load much too much into NuGet packages.
        > A total of 24 files (5.5 MiB), while only a single file (140 KiB) is needed.
 
 

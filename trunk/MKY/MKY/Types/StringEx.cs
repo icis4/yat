@@ -249,7 +249,7 @@ namespace MKY
 		public static int CountLeft(string str, params char[] countChars)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			if (countChars != null)
 			{
@@ -288,7 +288,7 @@ namespace MKY
 		public static int CountRight(string str, params char[] countChars)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			if (countChars != null)
 			{
@@ -334,7 +334,7 @@ namespace MKY
 		public static int ContainingCount(string str, string value, StringComparison comparisonType)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			int count = 0;
 
@@ -356,7 +356,7 @@ namespace MKY
 		public static int ContainingWholeWordCount(string str, string value, StringComparison comparisonType)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			int count = 0;
 
@@ -377,7 +377,7 @@ namespace MKY
 		public static bool ContainsAny(string str, char[] anyOf)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			return (str.IndexOfAny(anyOf) >= 0);
 		}
@@ -406,7 +406,7 @@ namespace MKY
 		public static bool ContainsAny(string str, IEnumerable<string> values)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			foreach (string v in values)
 			{
@@ -435,7 +435,7 @@ namespace MKY
 		public static bool StartsWithOrdinal(string str, string value)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			return (str.StartsWith(value, StringComparison.Ordinal));
 		}
@@ -451,7 +451,7 @@ namespace MKY
 		public static bool StartsWithOrdinalIgnoreCase(string str, string value)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			return (str.StartsWith(value, StringComparison.OrdinalIgnoreCase));
 		}
@@ -496,7 +496,7 @@ namespace MKY
 		public static bool StartsWithAny(string str, IEnumerable<string> values, bool ignoreCase, CultureInfo culture)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			foreach (string v in values)
 			{
@@ -521,7 +521,7 @@ namespace MKY
 		public static bool StartsWithAny(string str, IEnumerable<string> values, StringComparison comparisonType)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			foreach (string v in values)
 			{
@@ -569,7 +569,7 @@ namespace MKY
 		public static bool EndsWithOrdinalIgnoreCase(string str, string value)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			return (str.EndsWith(value, StringComparison.OrdinalIgnoreCase));
 		}
@@ -588,7 +588,7 @@ namespace MKY
 		public static string Left(string str, int length)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			if (length >= str.Length)
 				return (str);
@@ -605,7 +605,7 @@ namespace MKY
 		public static string Mid(string str, int begin, int end)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			if (begin >= end)
 				return ("");
@@ -624,7 +624,7 @@ namespace MKY
 		public static string Right(string str, int length)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			if (length >= str.Length)
 				return (str);
@@ -646,7 +646,7 @@ namespace MKY
 		public static string Limit(string str, int length)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			if (str.Length <= length)
 				return (str);
@@ -668,7 +668,7 @@ namespace MKY
 		public static string[] SplitLeft(string str, int length)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			string left = Left(str, length);
 			string right = Right(str, (str.Length - left.Length));
@@ -686,14 +686,16 @@ namespace MKY
 		public static string[] SplitRight(string str, int length)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			string right = Right(str, length);
 			string left = Left(str, (str.Length - right.Length));
 
-			var l = new List<string>(2); // Preset the required capacity to improve memory management.
-			l.Add(left);
-			l.Add(right);
+			var l = new List<string>(2) // Preset the required capacity to improve memory management.
+			{
+				left,
+				right
+			};
 			return (l.ToArray());
 		}
 
@@ -704,7 +706,7 @@ namespace MKY
 		public static string[] SplitFixedLength(string str, int desiredChunkLength)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			var l = new List<string>(str.Length); // Preset the required capacity to improve memory management.
 			for (int i = 0; i < str.Length; i += desiredChunkLength)
@@ -723,7 +725,7 @@ namespace MKY
 		public static string[] SplitLexically(string str, int desiredChunkLength)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			List<string> chunks = new List<string>(ListInitialCapacityDefault); // Preset the initial capacity to improve memory management.
 			string[] newLineSeparators = new string[] { Environment.NewLine, "\n", "\r" };
@@ -738,7 +740,7 @@ namespace MKY
 		private static string[] SplitLexicallyWithoutTakingNewLineIntoAccount(string str, int desiredChunkLength)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			var spaces = new List<int>(ListInitialCapacityDefault); // Preset the initial capacity to improve memory management.
 
@@ -809,7 +811,7 @@ namespace MKY
 		public static string Trim(string str, int maxLength, params char[] trimChars)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			if (trimChars != null)
 			{
@@ -853,7 +855,7 @@ namespace MKY
 		public static string TrimSymmetrical(string str, int maxLength, params char[] trimChars)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			if (trimChars != null)
 			{
@@ -893,7 +895,7 @@ namespace MKY
 		public static string TrimSymmetrical(string str, params char[] trimChars)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			if (trimChars != null)
 			{
@@ -938,7 +940,7 @@ namespace MKY
 		public static string Space(string str, char space)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			var sb = new StringBuilder((str.Length * 2) - 1);
 
@@ -975,7 +977,7 @@ namespace MKY
 		public static int IndexOfSameCharacterClass(string str, int startIndex)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			int i = startIndex;
 
@@ -1044,7 +1046,7 @@ namespace MKY
 		public static int IndexOfWholeWord(string str, string value, int startIndex, StringComparison comparisonType)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			int i = startIndex;  // Using string.IndexOf() because string.Contains() does not allow controlling culture and case.
 			while ((i < str.Length) && ((i = str.IndexOf(value, i, comparisonType)) != InvalidIndex))
@@ -1107,7 +1109,7 @@ namespace MKY
 		public static int IndexOfOutsideDoubleQuotes(string str, string searchString, int startIndex, int count, StringComparison comparisonType)
 		{
 			if (str == null)
-				throw (new ArgumentNullException("str"));
+				throw (new ArgumentNullException(nameof(str)));
 
 			string substring = str.Substring(startIndex, count); // Crop the string as desired.
 

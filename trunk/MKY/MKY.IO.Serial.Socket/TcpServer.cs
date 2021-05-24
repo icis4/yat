@@ -265,7 +265,7 @@ namespace MKY.IO.Serial.Socket
 		{
 			// Assert by-reference arguments:
 
-			if (localInterface == null) throw (new ArgumentNullException("localInterface", MessageHelper.InvalidExecutionPreamble + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			if (localInterface == null) throw (new ArgumentNullException(nameof(localInterface), MessageHelper.InvalidExecutionPreamble + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			// All arguments are defined!
 

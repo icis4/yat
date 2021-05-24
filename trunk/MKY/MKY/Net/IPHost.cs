@@ -131,7 +131,7 @@ namespace MKY.Net
 		public IPHostEx(IPAddress address)
 		{
 			if (address == null)
-				throw (new ArgumentNullException("address", "An IP address is required!"));
+				throw (new ArgumentNullException(nameof(address), "An IP address is required!"));
 
 			                 // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 			if      (address.Equals(IPAddress.Loopback))     { SetUnderlyingEnum(IPHost.Localhost);     this.explicitAddress = IPAddress.None; }
@@ -479,7 +479,7 @@ namespace MKY.Net
 
 			items.Add(new IPHostEx(IPHost.IPv6Localhost));
 
-			// The shall only contain the fixed items, 'Explicit' is not added therefore.
+			// This method shall only return the fixed items, 'Explicit' is therefore not added.
 
 			return (items.AsReadOnly());
 		}

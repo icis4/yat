@@ -671,7 +671,7 @@ namespace MKY.IO.Usb
 		protected Device(Guid classGuid, string path)
 		{
 			if (path == null)
-				throw (new ArgumentNullException("path", "A path is required for this constructor! Without a path, use one of the other constructors."));
+				throw (new ArgumentNullException(nameof(path), "A path is required for this constructor! Without a path, use one of the other constructors."));
 
 			this.classGuid = classGuid; // The USB class GUID arg is forseen for future use.
 
@@ -684,7 +684,7 @@ namespace MKY.IO.Usb
 			}
 			else // Ensure that 'Info' is always defined!
 			{
-				throw (new ArgumentException("No device could be created for the given path! Make sure the path is valid or use one of the other constructors.", "path"));
+				throw (new ArgumentException("No device could be created for the given path! Make sure the path is valid or use one of the other constructors.", nameof(path)));
 			}
 		}
 

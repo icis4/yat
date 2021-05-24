@@ -129,12 +129,12 @@ namespace MKY.Time
 		public Rate(double interval, double window)
 		{
 			if (window < interval)
-				throw (new ArgumentOutOfRangeException("window", window, MessageHelper.InvalidExecutionPreamble + "'window' = '" + window + "' must be equal or larger than 'interval' = '" + interval + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new ArgumentOutOfRangeException(nameof(window), window, MessageHelper.InvalidExecutionPreamble + "'window' = '" + window + "' must be equal or larger than 'interval' = '" + interval + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			var binWidth = (interval / NumberOfBinsPerInterval);
 			var remainder = Math.IEEERemainder(window, binWidth);
 			if (!DoubleEx.RatherEqualsIntegral(Math.Abs(remainder), 0.0))
-				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'window' = '" + window + "' must be a multiple of 'interval / NumberOfBinsPerInterval' = '" + (interval / NumberOfBinsPerInterval) + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "window"));
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'window' = '" + window + "' must be a multiple of 'interval / NumberOfBinsPerInterval' = '" + (interval / NumberOfBinsPerInterval) + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, nameof(window)));
 
 			this.interval = interval;
 			this.window   = window;
@@ -168,12 +168,12 @@ namespace MKY.Time
 			set
 			{
 				if (value > Window)
-					throw (new ArgumentOutOfRangeException("value", value, MessageHelper.InvalidExecutionPreamble + "'Interval' must be equal or less than 'Window' = '" + Window + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException(nameof(value), value, MessageHelper.InvalidExecutionPreamble + "'Interval' must be equal or less than 'Window' = '" + Window + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 				var binWidth = (value / NumberOfBinsPerInterval);
 				var remainder = Math.IEEERemainder(Window, binWidth);
 				if (!DoubleEx.RatherEqualsIntegral(Math.Abs(remainder), 0.0))
-					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'Window' = '" + Window + "' must be a multiple of 'Interval / NumberOfBinsPerInterval' = '" + (Interval / NumberOfBinsPerInterval) + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "value"));
+					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'Window' = '" + Window + "' must be a multiple of 'Interval / NumberOfBinsPerInterval' = '" + (Interval / NumberOfBinsPerInterval) + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, nameof(value)));
 
 				this.interval = value;
 				PrepareBins();
@@ -200,12 +200,12 @@ namespace MKY.Time
 			set
 			{
 				if (value < Interval)
-					throw (new ArgumentOutOfRangeException("value", value, MessageHelper.InvalidExecutionPreamble + "'Window' must be equal or larger than 'Interval' = '" + interval + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+					throw (new ArgumentOutOfRangeException(nameof(value), value, MessageHelper.InvalidExecutionPreamble + "'Window' must be equal or larger than 'Interval' = '" + Interval + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 				var binWidth = (Interval / NumberOfBinsPerInterval);
 				var remainder = Math.IEEERemainder(value, binWidth);
 				if (!DoubleEx.RatherEqualsIntegral(Math.Abs(remainder), 0.0))
-					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'Window' = '" + Window + "' must be a multiple of 'Interval / NumberOfBinsPerInterval' = '" + (Interval / NumberOfBinsPerInterval) + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "value"));
+					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'Window' = '" + Window + "' must be a multiple of 'Interval / NumberOfBinsPerInterval' = '" + (Interval / NumberOfBinsPerInterval) + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, nameof(value)));
 
 				this.window = value;
 				PrepareBins();
@@ -241,7 +241,7 @@ namespace MKY.Time
 		{
 			get
 			{
-				if (LastItemTimeStamp == default(DateTime))
+				if (LastItemTimeStamp == default)
 					return (false);
 				else
 					return (((DateTime.Now - LastItemTimeStamp).TotalMilliseconds) < Interval);
@@ -253,7 +253,7 @@ namespace MKY.Time
 		{
 			get
 			{
-				if (LastItemTimeStamp == default(DateTime))
+				if (LastItemTimeStamp == default)
 					return (0);
 				else
 					return ((int)Math.Floor(((DateTime.Now - LastItemTimeStamp).TotalMilliseconds) / Interval));

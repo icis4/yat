@@ -207,7 +207,7 @@ namespace YAT.Model.Types
 
 					sb.Append(" (linked to ");
 					sb.Append(Path.GetFileName(LinkFilePath));
-					sb.Append(")");
+					sb.Append(')');
 
 					return (sb.ToString());
 				}
@@ -320,7 +320,7 @@ namespace YAT.Model.Types
 			{
 				sb.Append(" (linked to ");
 				sb.Append(Path.GetFileName(page.LinkFilePath));
-				sb.Append(")");
+				sb.Append(')');
 			}
 
 			return (sb.ToString());
@@ -363,7 +363,7 @@ namespace YAT.Model.Types
 		public virtual void SetCommand(int index, Command command)
 		{
 			if ((index < 0) || (index >= MaxCommandCapacityPerPage))
-				throw (new ArgumentOutOfRangeException("index", index, MessageHelper.InvalidExecutionPreamble + "'" + index + "' is an invalid command index!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new ArgumentOutOfRangeException(nameof(index), index, MessageHelper.InvalidExecutionPreamble + "'" + index + "' is an invalid command index!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			if ((command != null) && (command.IsDefinedOrHasDescription)) // Prevent dummy commands from being added to the list.
 			{
@@ -396,7 +396,7 @@ namespace YAT.Model.Types
 		public virtual void ClearCommand(int index)
 		{
 			if ((index < 0) || (index >= MaxCommandCapacityPerPage))
-				throw (new ArgumentOutOfRangeException("index", index, MessageHelper.InvalidExecutionPreamble + "'" + index + "' is an invalid command index!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				throw (new ArgumentOutOfRangeException(nameof(index), index, MessageHelper.InvalidExecutionPreamble + "'" + index + "' is an invalid command index!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			if (index < Commands.Count)
 			{
@@ -588,7 +588,7 @@ namespace YAT.Model.Types
 			if (other != null)
 				return (string.Compare(this.Name, other.Name, StringComparison.CurrentCulture));
 			else
-				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify a 'PredefinedCommandPage'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "obj"));
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify a 'PredefinedCommandPage'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, nameof(obj)));
 		}
 
 		/// <summary></summary>

@@ -69,7 +69,7 @@ namespace MKY.Win32.DotNet
 		private SerialPortPatcher(string portName)
 		{
 			if (string.IsNullOrEmpty(portName) || !StringEx.StartsWithOrdinalIgnoreCase(portName, "COM"))
-				throw (new ArgumentException(@"Invalid serial port name, must be ""COM...""!", "portName"));
+				throw (new ArgumentException(@"Invalid serial port name, must be ""COM...""!", nameof(portName)));
 
 			SafeFileHandle h = FileIO.NativeMethods.CreateFile
 			(
@@ -100,7 +100,7 @@ namespace MKY.Win32.DotNet
 
 					default:
 					{
-						throw (new ArgumentException("Invalid serial port handle", "portName"));
+						throw (new ArgumentException("Invalid serial port handle", nameof(portName)));
 					}
 				}
 			}

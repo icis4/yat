@@ -330,14 +330,15 @@ namespace YAT.Domain
 		/// </remarks>
 		public static EnclosureEx[] GetItems()
 		{
-			var a = new List<EnclosureEx>(4); // Preset the required capacity to improve memory management.
+			var a = new List<EnclosureEx>(4) // Preset the required capacity to improve memory management.
+			{
+				new EnclosureEx(Enclosure.None),
+				new EnclosureEx(Enclosure.Parentheses),
+				new EnclosureEx(Enclosure.SquareBrackets),
+				new EnclosureEx(Enclosure.CurlyBraces)
 
-			a.Add(new EnclosureEx(Enclosure.None));
-			a.Add(new EnclosureEx(Enclosure.Parentheses));
-			a.Add(new EnclosureEx(Enclosure.SquareBrackets));
-			a.Add(new EnclosureEx(Enclosure.CurlyBraces));
-
-			// This method shall only return the fixed items, 'Explicit' is not added therefore.
+				// This method shall only return the fixed items, 'Explicit' is therefore not added.
+			};
 
 			return (a.ToArray());
 		}
