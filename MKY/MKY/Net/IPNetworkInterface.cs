@@ -137,7 +137,7 @@ namespace MKY.Net
 			if (string.IsNullOrEmpty(description)) // Defined by address only.
 			{
 				if (address == null)
-					throw (new ArgumentNullException("address", "An IP address is required when interface description is not given!"));
+					throw (new ArgumentNullException(nameof(address), "An IP address is required when interface description is not given!"));
 
 				                 // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 				if      (address.Equals(IPAddress.Any))          { SetUnderlyingEnum(IPNetworkInterface.Any);          this.explicitAddress = IPAddress.None; }
@@ -587,16 +587,17 @@ namespace MKY.Net
 		/// </remarks>
 		public static IPNetworkInterfaceEx[] GetItems()
 		{
-			var a = new List<IPNetworkInterfaceEx>(6); // Preset the required capacity to improve memory management.
+			var a = new List<IPNetworkInterfaceEx>(6) // Preset the required capacity to improve memory management.
+			{
+				new IPNetworkInterfaceEx(IPNetworkInterface.Any),
+				new IPNetworkInterfaceEx(IPNetworkInterface.Loopback),
+				new IPNetworkInterfaceEx(IPNetworkInterface.IPv4Any),
+				new IPNetworkInterfaceEx(IPNetworkInterface.IPv4Loopback),
+				new IPNetworkInterfaceEx(IPNetworkInterface.IPv6Any),
+				new IPNetworkInterfaceEx(IPNetworkInterface.IPv6Loopback)
 
-			a.Add(new IPNetworkInterfaceEx(IPNetworkInterface.Any));
-			a.Add(new IPNetworkInterfaceEx(IPNetworkInterface.Loopback));
-			a.Add(new IPNetworkInterfaceEx(IPNetworkInterface.IPv4Any));
-			a.Add(new IPNetworkInterfaceEx(IPNetworkInterface.IPv4Loopback));
-			a.Add(new IPNetworkInterfaceEx(IPNetworkInterface.IPv6Any));
-			a.Add(new IPNetworkInterfaceEx(IPNetworkInterface.IPv6Loopback));
-
-			// This method shall only return the fixed items, 'Explicit' is not added therefore.
+				// This method shall only return the fixed items, 'Explicit' is therefore not added.
+			};
 
 			return (a.ToArray());
 		}

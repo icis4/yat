@@ -777,7 +777,7 @@ namespace YAT.View.Controls
 					this.isValidated = true; // Implicitly in any case.
 
 					ConfirmPartialText(Domain.Terminal.ConvertToSendableText(e.KeyChar));
-					OnSendCommandRequest(new SendTextOptionEventArgs(SendTextOption.Normal));
+					OnSendCommandRequest(new EventArgs<SendTextOption>(SendTextOption.Normal));
 				}
 			}
 			DebugUserInputLeave();
@@ -1244,19 +1244,19 @@ namespace YAT.View.Controls
 			if (this.sendImmediately)
 			{
 				ConfirmPartialTextEolCommand();
-				OnSendCommandRequest(new SendTextOptionEventArgs(option));
+				OnSendCommandRequest(new EventArgs<SendTextOption>(option));
 			}
 			else
 			{
 				if (this.isValidated)
 				{
 					ConfirmCommand(); // Required to invoke OnCommandChanged().
-					OnSendCommandRequest(new SendTextOptionEventArgs(option));
+					OnSendCommandRequest(new EventArgs<SendTextOption>(option));
 				}
 				else
 				{
 					if (ValidateChildren()) // comboBox_SingleLineText_Validating() will call ConfirmSingleLineText().
-						OnSendCommandRequest(new SendTextOptionEventArgs(option));
+						OnSendCommandRequest(new EventArgs<SendTextOption>(option));
 				}
 			}
 		}
@@ -1294,7 +1294,7 @@ namespace YAT.View.Controls
 		}
 
 		/// <summary></summary>
-		protected virtual void OnSendCommandRequest(SendTextOptionEventArgs e)
+		protected virtual void OnSendCommandRequest(EventArgs<SendTextOption> e)
 		{
 			EventHelper.RaiseSync(SendCommandRequest, this, e);
 		}

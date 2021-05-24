@@ -138,10 +138,11 @@ namespace MKY.IO.Usb
 		public HidDeviceInfo(string path)
 		{
 			if (path == null)
-				throw (new ArgumentNullException("path", "A path is required for this constructor! Without a path, use one of the other constructors."));
+				throw (new ArgumentNullException(nameof(path), "A path is required for this constructor! Without a path, use one of the other constructors."));
 
 			int vendorId, productId;
 			string manufacturer, product, serial;
+			int usagePage, usageId;
 			if (HidDevice.TryGetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serial, out usagePage, out usageId))
 				Initialize(path, vendorId, productId, manufacturer, product, serial, usagePage, usageId);
 			else
@@ -207,10 +208,10 @@ namespace MKY.IO.Usb
 		private void Initialize(int vendorId, int productId, int usagePage, int usageId)
 		{
 			if (!IsValidUsageIdOrAny(usagePage))
-				throw (new ArgumentOutOfRangeException("usagePage", usagePage, "'" + usagePage + "' is an invalid usage page!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
+				throw (new ArgumentOutOfRangeException(nameof(usagePage), usagePage, "'" + usagePage + "' is an invalid usage page!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			if (!IsValidUsageIdOrAny(usageId))
-				throw (new ArgumentOutOfRangeException("usageId", usageId, "'" + usageId + "' is an invalid usage ID!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
+				throw (new ArgumentOutOfRangeException(nameof(usageId), usageId, "'" + usageId + "' is an invalid usage ID!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			Initialize(vendorId, productId);
 
@@ -223,10 +224,10 @@ namespace MKY.IO.Usb
 		private void Initialize(int vendorId, int productId, string serial, int usagePage, int usageId)
 		{
 			if (!IsValidUsageIdOrAny(usagePage))
-				throw (new ArgumentOutOfRangeException("usagePage", usagePage, "'" + usagePage + "' is an invalid usage page!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
+				throw (new ArgumentOutOfRangeException(nameof(usagePage), usagePage, "'" + usagePage + "' is an invalid usage page!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			if (!IsValidUsageIdOrAny(usageId))
-				throw (new ArgumentOutOfRangeException("usageId", usageId, "'" + usageId + "' is an invalid usage ID!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
+				throw (new ArgumentOutOfRangeException(nameof(usageId), usageId, "'" + usageId + "' is an invalid usage ID!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			Initialize(vendorId, productId, serial);
 
@@ -238,10 +239,10 @@ namespace MKY.IO.Usb
 		private void Initialize(string path, int vendorId, int productId, string manufacturer, string product, string serial, int usagePage, int usageId)
 		{
 			if (!IsValidUsageIdOrAny(usagePage))
-				throw (new ArgumentOutOfRangeException("usagePage", usagePage, "'" + usagePage + "' is an invalid usage page!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
+				throw (new ArgumentOutOfRangeException(nameof(usagePage), usagePage, "'" + usagePage + "' is an invalid usage page!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			if (!IsValidUsageIdOrAny(usageId))
-				throw (new ArgumentOutOfRangeException("usageId", usageId, "'" + usageId + "' is an invalid usage ID!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
+				throw (new ArgumentOutOfRangeException(nameof(usageId), usageId, "'" + usageId + "' is an invalid usage ID!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			Initialize(path, vendorId, productId, manufacturer, product, serial);
 
@@ -409,13 +410,13 @@ namespace MKY.IO.Usb
 				var sb = new StringBuilder(base.ToString(insertVidPid));
 				                               //// "Company (VID:0ABC) Product (PID:1234) 000123A"
 				if (sb.Length > 0)
-					sb.Append(" ");              // "Company (VID:0ABC) Product (PID:1234) 000123A "
+					sb.Append(' ');              // "Company (VID:0ABC) Product (PID:1234) 000123A "
 
 				sb.Append("(USAGE:");
 				sb.Append(UsagePageString);      // "Company (VID:0ABC) Product (PID:1234) 000123A (USAGE:FF00"
-				sb.Append("/");
+				sb.Append('/');
 				sb.Append(UsageIdString);        // "Company (VID:0ABC) Product (PID:1234) 000123A (USAGE:FF00/0001)"
-				sb.Append(")");
+				sb.Append(')');
 
 				return (sb.ToString());
 			}
@@ -451,11 +452,11 @@ namespace MKY.IO.Usb
 				var sb = new StringBuilder(base.ToShortString());
 				                                   //// "VID:1234 PID:1234"
 				if (sb.Length > 0)
-					sb.Append(" ");                  // "VID:1234 PID:1234 "
+					sb.Append(' ');                  // "VID:1234 PID:1234 "
 
 				sb.Append("USAGE:");
 				sb.Append(UsagePageString);          // "VID:1234 PID:1234 USAGE:FF00"
-				sb.Append("/");
+				sb.Append('/');
 				sb.Append(UsageIdString);            // "VID:1234 PID:1234 USAGE:FF00/0001"
 
 				return (sb.ToString());
@@ -906,7 +907,7 @@ namespace MKY.IO.Usb
 			}
 			else
 			{
-				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify an '" + typeof(HidDeviceInfo).Name + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "obj"));
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify an '" + typeof(HidDeviceInfo).Name + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, nameof(obj)));
 			}
 		}
 

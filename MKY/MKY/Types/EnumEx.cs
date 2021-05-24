@@ -329,7 +329,7 @@ namespace MKY
 			if (other != null)
 				return (UnderlyingEnum.CompareTo(other.UnderlyingEnum));
 			else
-				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify an 'EnumEx'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "obj"));
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify an 'EnumEx'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, nameof(obj)));
 		}
 
 		/// <summary></summary>

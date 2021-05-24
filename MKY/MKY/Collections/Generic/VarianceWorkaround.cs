@@ -227,7 +227,7 @@ namespace MKY.Collections.Generic
 				if (item is S)
 					this.source.Add((S)item);
 				else
-					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "The given item of type '" + item.GetType() + "' is not variance compatible with type " + typeof(S) + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "item"));
+					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "The given item of type '" + item.GetType() + "' is not variance compatible with type " + typeof(S) + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, nameof(item)));
 			}
 
 			/// <summary></summary>
@@ -342,7 +342,7 @@ namespace MKY.Collections.Generic
 				if (item is S)
 					this.source.Insert(index, (S)item);
 				else
-					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "The given item of type '" + item.GetType() + "' is not variance compatible with type " + typeof(S) + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "item"));
+					throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "The given item of type '" + item.GetType() + "' is not variance compatible with type " + typeof(S) + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, nameof(item)));
 			}
 
 			/// <summary></summary>
@@ -363,7 +363,7 @@ namespace MKY.Collections.Generic
 					if (value is S)
 						this.source[index] = (S)value;
 					else
-						throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "The given value of type '" + value.GetType() + "' is not variance compatible with type " + typeof(S) + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "value"));
+						throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "The given value of type '" + value.GetType() + "' is not variance compatible with type " + typeof(S) + "!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, nameof(value)));
 				}
 			}
 		}

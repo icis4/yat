@@ -320,8 +320,8 @@ namespace MKY.IO.Serial.Socket
 		{
 			// Assert by-reference arguments:
 
-			if (remoteHost     == null) throw (new ArgumentNullException("remoteHost",     MessageHelper.InvalidExecutionPreamble + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			if (localInterface == null) throw (new ArgumentNullException("localInterface", MessageHelper.InvalidExecutionPreamble + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			if (remoteHost     == null) throw (new ArgumentNullException(nameof(remoteHost),     MessageHelper.InvalidExecutionPreamble + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			if (localInterface == null) throw (new ArgumentNullException(nameof(localInterface), MessageHelper.InvalidExecutionPreamble + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 
 			// All arguments are defined!
 
@@ -516,7 +516,7 @@ namespace MKY.IO.Serial.Socket
 
 				lock (this.socketConnectionSyncObj)
 				{
-					count = ((socketConnection != null) ? (1) : (0));
+					count = ((this.socketConnection != null) ? (1) : (0));
 				}
 
 				return (count);
@@ -1396,9 +1396,9 @@ namespace MKY.IO.Serial.Socket
 				var sb = new StringBuilder();
 				sb.Append("Could not connect to TCP/IP server ");
 				sb.Append(this.remoteHost.Address);
-				sb.Append(":");
+				sb.Append(':');
 				sb.Append(this.remotePort);
-				sb.Append("."); // Not "!" as this is 'Acceptable'.
+				sb.Append('.'); // Not "!" as this is 'Acceptable'.
 
 				// Appending "Socket error message: " + ex.Message makes no sense as it always is "Reconnect attempt".
 

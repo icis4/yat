@@ -443,12 +443,12 @@ namespace MKY.Test.Devices
 			switch (device)
 			{
 				case UsbHubDevices.None:
-				case UsbHubDevices.All:  throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "This method requires a dedicated device, not '" + device + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "device"));
+				case UsbHubDevices.All:  throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "This method requires a dedicated device, not '" + device + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, nameof(device)));
 
 				case UsbHubDevices.Hub1: return (ConfigurationProvider.Configuration.UsbHub1);
 				case UsbHubDevices.Hub2: return (ConfigurationProvider.Configuration.UsbHub2);
 
-				default: throw (new ArgumentOutOfRangeException("device", device, MessageHelper.InvalidExecutionPreamble + "'" + device + "' identifies a device that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+				default: throw (new ArgumentOutOfRangeException(nameof(device), device, MessageHelper.InvalidExecutionPreamble + "'" + device + "' identifies a device that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
 			}
 		}
 

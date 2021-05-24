@@ -281,7 +281,7 @@ namespace MKY.IO.Ports
 				{
 					throw (new ArgumentOutOfRangeException
 					(
-						"value",
+						nameof(value),
 						value,
 						"Standard port numbers are " + FirstStandardPortNumber + " to " + LastStandardPortNumber + "!"
 					)); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
@@ -728,7 +728,7 @@ namespace MKY.IO.Ports
 			}
 			else
 			{
-				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify a 'SerialPortId!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "obj"));
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify a 'SerialPortId!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, nameof(obj)));
 			}
 		}
 

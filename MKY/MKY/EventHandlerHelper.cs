@@ -103,7 +103,7 @@ namespace MKY
 		public static ICollection<Pair<EventInfo, Delegate>> GetEventSinks(object obj, string eventName = null)
 		{
 			if (obj == null)
-				throw (new ArgumentNullException("obj", "An object is required!"));
+				throw (new ArgumentNullException(nameof(obj), "An object is required!"));
 
 			var type = obj.GetType();
 			var allEventFields = GetEventFields(type);

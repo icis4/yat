@@ -229,10 +229,10 @@ namespace MKY.IO.Usb
 		protected virtual void Initialize(string path, int vendorId, int productId, string manufacturer, string product, string serial)
 		{
 			if (!IsValidVendorId(vendorId))
-				throw (new ArgumentOutOfRangeException("vendorId", vendorId, "'" + vendorId + "' is an invalid vendor ID!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
+				throw (new ArgumentOutOfRangeException(nameof(vendorId), vendorId, "'" + vendorId + "' is an invalid vendor ID!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			if (!IsValidProductId(productId))
-				throw (new ArgumentOutOfRangeException("productId", productId, "'" + productId + "' is an invalid product ID!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
+				throw (new ArgumentOutOfRangeException(nameof(productId), productId, "'" + productId + "' is an invalid product ID!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 
 			this.path         = path;
 
@@ -438,17 +438,17 @@ namespace MKY.IO.Usb
 			if (insertVidPid)
 			{
 				if (sb.Length > 0)
-					sb.Append(" ");              // "Company "
+					sb.Append(' ');              // "Company "
 
 				sb.Append("(VID:");
 				sb.Append(VendorIdString);       // "Company (VID:0ABC)"
-				sb.Append(")");
+				sb.Append(')');
 			}
 
 			if (!string.IsNullOrEmpty(Product))
 			{
 				if (sb.Length > 0)
-					sb.Append(" ");              // "Company (VID:0ABC) "
+					sb.Append(' ');              // "Company (VID:0ABC) "
 
 				sb.Append(Product);              // "Company (VID:0ABC) Product"
 			}
@@ -456,17 +456,17 @@ namespace MKY.IO.Usb
 			if (insertVidPid)
 			{
 				if (sb.Length > 0)
-					sb.Append(" ");              // "Company (VID:0ABC) Product "
+					sb.Append(' ');              // "Company (VID:0ABC) Product "
 
 				sb.Append("(PID:");
 				sb.Append(ProductIdString);      // "Company (VID:0ABC) Product (PID:1234)"
-				sb.Append(")");
+				sb.Append(')');
 			}
 
 			if (!string.IsNullOrEmpty(Serial))
 			{
 				if (sb.Length > 0)
-					sb.Append(" ");              // "Company (VID:0ABC) Product (PID:1234) "
+					sb.Append(' ');              // "Company (VID:0ABC) Product (PID:1234) "
 
 				sb.Append(Serial);               // "Company (VID:0ABC) Product (PID:1234) 000123A"
 			}
@@ -906,7 +906,7 @@ namespace MKY.IO.Usb
 			}
 			else
 			{
-				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify a '" + typeof(DeviceInfo).Name + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, "obj"));
+				throw (new ArgumentException(MessageHelper.InvalidExecutionPreamble + "'" + obj.ToString() + "' does not specify a '" + typeof(DeviceInfo).Name + "'!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug, nameof(obj)));
 			}
 		}
 

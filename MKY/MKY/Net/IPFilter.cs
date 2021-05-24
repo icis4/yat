@@ -151,7 +151,7 @@ namespace MKY.Net
 		public IPFilterEx(IPAddress address)
 		{
 			if (address == null)
-				throw (new ArgumentNullException("address", "An IP address is required!"));
+				throw (new ArgumentNullException(nameof(address), "An IP address is required!"));
 
 			                 // IPAddress does not override the ==/!= operators, thanks Microsoft guys...
 			if      (address.Equals(IPAddress.Any))          { SetUnderlyingEnum(IPFilter.Any);           this.ipv4MaskBytes = 0xFFFFFFFF;                                                      }
@@ -608,16 +608,17 @@ namespace MKY.Net
 		{
 			if (staticItems == null)
 			{
-				staticItems = new List<IPFilterEx>(6); // Preset the required capacity to improve memory management.
+				staticItems = new List<IPFilterEx>(6) // Preset the required capacity to improve memory management.
+				{
+					new IPFilterEx(IPFilter.Any),
+					new IPFilterEx(IPFilter.Localhost),
+					new IPFilterEx(IPFilter.IPv4Any),
+					new IPFilterEx(IPFilter.IPv4Localhost),
+					new IPFilterEx(IPFilter.IPv6Any),
+					new IPFilterEx(IPFilter.IPv6Localhost)
 
-				staticItems.Add(new IPFilterEx(IPFilter.Any));
-				staticItems.Add(new IPFilterEx(IPFilter.Localhost));
-				staticItems.Add(new IPFilterEx(IPFilter.IPv4Any));
-				staticItems.Add(new IPFilterEx(IPFilter.IPv4Localhost));
-				staticItems.Add(new IPFilterEx(IPFilter.IPv6Any));
-				staticItems.Add(new IPFilterEx(IPFilter.IPv6Localhost));
-
-				// The shall only contain the fixed items, 'Explicit' is not added therefore.
+					// This method shall only return the fixed items, 'Explicit' is therefore not added.
+				};
 			}
 
 			return (staticItems.AsReadOnly());

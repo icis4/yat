@@ -311,7 +311,7 @@ namespace MKY.IO.Serial.SerialPort
 					if (value != null)
 						this.settings = value;
 					else
-						throw (new ArgumentNullException("value", "Settings cannot be changed to 'null'!"));
+						throw (new ArgumentNullException(nameof(value), "Settings cannot be changed to 'null'!"));
 				}
 				else
 				{
