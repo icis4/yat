@@ -115,7 +115,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="YAT.csproj.ReadMe.txt" />
     <EmbeddedResource Include="Resources\YAT\Icon_YAT.ico" />
     <EmbeddedResource Include="Resources\YAT\Icon_YAT_TerminalSettings.ico" />
     <EmbeddedResource Include="Resources\YAT\Icon_YAT_UserSettings.ico" />
@@ -130,6 +129,7 @@
     <None Include="Properties\YAT.snk" />
     <None Include="Resources\YAT.res" />
     <None Include="YAT.cd" />
+    <None Include="YAT.csproj.ReadMe.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
