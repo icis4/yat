@@ -106,6 +106,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Properties\YAT.snk" />
+    <None Include="YATConsole.csproj.ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\YAT\Properties\Resources.resx">
@@ -140,12 +141,10 @@
     <Content Include="..\YAT\Resources\YAT\Image_YAT_WorkspaceSettings_64x64.png">
       <Link>Resources\YAT\Image_YAT_WorkspaceSettings_64x64.png</Link>
     </Content>
-    <Content Include="YATConsole.csproj.ReadMe.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>$(ProjectDir)\..\..\!-Scripts\TouchFile.cmd "$(ProjectDir)\App.config"
-$(ProjectDir)\..\..\!-Scripts\TouchFile.cmd "$(ProjectDir)\..\YAT.Setup\!-Graphics\Banner.bmp"</PreBuildEvent>
+    <PreBuildEvent>$(ProjectDir)\..\..\!-Scripts\TouchFile.cmd "$(ProjectDir)\App.config"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
