@@ -29,11 +29,11 @@
 PUSHD ..
 
 ECHO Cleaning all \bin directories . . .
-FOR /R %%I IN (.) DO CALL "!-Scripts\CleanDir.cmd" "%%I" "bin"
+FOR /R %%I IN (.) DO CALL ".\!-Scripts\CleanDir.cmd" "%%I" "bin"
 ECHO ...successfully cleaned
 
 ECHO Cleaning all \obj directories . . .
-FOR /R %%I IN (.) DO CALL "!-Scripts\CleanDir.cmd" "%%I" "obj"
+FOR /R %%I IN (.) DO CALL ".\!-Scripts\CleanDir.cmd" "%%I" "obj"
 ECHO ...successfully cleaned
 
 ECHO Cleaning all temporary files in ALAZ source and demos . . .

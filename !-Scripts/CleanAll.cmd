@@ -26,13 +26,12 @@
 :: See http://www.gnu.org/licenses/lgpl.html for license details.
 ::==================================================================================================
 
-:: First clean the large temporaries => speed up subsequent cleans:
+:: First clean the many temporaries => speed up subsequent cleans:
 CALL CleanAll-Temp.cmd
 
 :: Then clean the remaining stuff in alphabetical order:
 CALL CleanAll-Analyzer.cmd
 CALL CleanAll-Options.cmd
-CALL CleanAll-SCM.cmd
 CALL CleanAll-Setup.cmd
 
 ::==================================================================================================
