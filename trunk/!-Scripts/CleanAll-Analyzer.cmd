@@ -29,11 +29,11 @@
 PUSHD ..
 
 ECHO Cleaning all StyleCop temporaries . . .
-FOR /R %%I IN (.) DO CALL "!-Scripts\CleanDir.cmd" "%%I" "*.StyleCop"
+FOR /R %%I IN (.) DO CALL ".\!-Scripts\CleanDir.cmd" "%%I" "*.StyleCop"
 ECHO . . . successfully cleaned
 
 ECHO Cleaning all StyleCop caches . . .
-FOR /R %%I IN (.) DO CALL "!-Scripts\CleanFiles.cmd" "%%I" "StyleCop.Cache"
+FOR /R %%I IN (.) DO CALL ".\!-Scripts\CleanFiles.cmd" "%%I" "StyleCop.Cache"
 ECHO . . . successfully cleaned
 
 POPD
