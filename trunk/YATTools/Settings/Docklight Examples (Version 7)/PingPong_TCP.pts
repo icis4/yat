@@ -1,0 +1,7 @@
+DL_SCRIPTVERSION
+1
+58079
+
+' See the notepad of the PingPong_TCP_Server.ptp project 
+' for more information
+DL.OpenProject "PingPong_TCP_Server.ptp"

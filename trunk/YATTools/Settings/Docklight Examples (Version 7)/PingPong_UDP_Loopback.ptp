@@ -1,0 +1,59 @@
+VERSION
+7
+
+COMMSETTINGS
+0
+1
+2
+9600
+2
+63
+4
+0
+0
+
+COMMDISPLAY
+0
+
+COMMCHANNELS
+UDP:LOCALHOST:50000
+COM2
+
+SEND
+0
+Ping
+2D 2D 2D 2D 6F 20 50 69 6E 67
+0
+5
+
+SEND
+1
+Pong
+6F 2D 2D 2D 2D 20 50 6F 6E 67
+0
+5
+
+RECEIVE
+0
+Ping received
+50 69 6E 67
+1
+1
+COMMENT "Ping" received
+0
+1
+0
+0
+
+RECEIVE
+1
+Pong received
+50 6F 6E 67
+0
+1
+COMMENT "Pong" received
+0
+1
+0
+0
+
