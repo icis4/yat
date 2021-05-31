@@ -26,14 +26,8 @@
 :: See http://www.gnu.org/licenses/lgpl.html for license details.
 ::==================================================================================================
 
-PUSHD ..
-
-ECHO Cleaning temporary setup directories . . .
-RMDIR /S /Q ".\YAT.Setup\Release"
-RMDIR /S /Q ".\YAT.Setup\Release with Redistributable"
-ECHO . . . successfully cleaned
-
-POPD
+:: Re-direct to the generic helper batch script, forwarding all arguments, e.g. -Verbose:
+CALL .\CallPowerShellScript.cmd .\Clean.ps1 -Analyzer %*
 
 ::==================================================================================================
 :: End of

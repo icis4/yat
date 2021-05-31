@@ -26,28 +26,8 @@
 :: See http://www.gnu.org/licenses/lgpl.html for license details.
 ::==================================================================================================
 
-IF %1=="" GOTO :NoPath
-IF %2=="" GOTO :NoDirectory
-
-::--------------------------------------------------------------------------------------------------
-PUSHD %1
-
-ECHO Cleaning %2 in %cd% . . .
-RMDIR /S /Q %2
-
-POPD
-GOTO :End
-::--------------------------------------------------------------------------------------------------
-
-:NoPath
-ECHO Parameter 1 must be a valid directory path!
-GOTO :End
-
-:NoDirectory
-ECHO Parameter 2 must be a valid directory name!
-GOTO :End
-
-:End
+:: Re-direct to the generic helper batch script, forwarding all arguments, e.g. -Verbose:
+CALL .\CallPowerShellScript.cmd .\Clean.ps1 -All %*
 
 ::==================================================================================================
 :: End of
