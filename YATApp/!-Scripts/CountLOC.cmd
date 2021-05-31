@@ -26,7 +26,7 @@
 :: See http://www.gnu.org/licenses/lgpl.html for license details.
 ::==================================================================================================
 
-:: Re-direct to the generic helper batch file, forwarding all arguments:
+:: Re-direct to the generic helper batch script, forwarding all arguments, e.g. -Verbose:
 CALL .\CallPowerShellScript.cmd .\CountLOC.ps1 %*
 
 :: Let the user see the results:

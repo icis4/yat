@@ -26,13 +26,8 @@
 :: See http://www.gnu.org/licenses/lgpl.html for license details.
 ::==================================================================================================
 
-:: First clean the many temporaries => speed up subsequent cleans:
-CALL CleanAll-Temp.cmd
-
-:: Then clean the remaining stuff in alphabetical order:
-CALL CleanAll-Analyzer.cmd
-CALL CleanAll-Options.cmd
-CALL CleanAll-Setup.cmd
+:: Re-direct to the generic helper batch script, forwarding all arguments, e.g. -Verbose:
+CALL .\CallPowerShellScript.cmd .\Clean.ps1 -Temp %*
 
 ::==================================================================================================
 :: End of

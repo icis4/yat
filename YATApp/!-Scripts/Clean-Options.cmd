@@ -26,17 +26,8 @@
 :: See http://www.gnu.org/licenses/lgpl.html for license details.
 ::==================================================================================================
 
-PUSHD ..
-
-ECHO Cleaning solution user options . . .
-".\!-Scripts\CleanDir.cmd" ".\.vs" "."
-ECHO . . . successfully cleaned
-
-ECHO Cleaning all project user options . . .
-FOR /R %%I IN (.) DO CALL ".\!-Scripts\CleanFiles.cmd" "%%I" "*.csproj.user"
-ECHO . . . successfully cleaned
-
-POPD
+:: Re-direct to the generic helper batch script, forwarding all arguments, e.g. -Verbose:
+CALL .\CallPowerShellScript.cmd .\Clean.ps1 -Options %*
 
 ::==================================================================================================
 :: End of
