@@ -118,7 +118,7 @@ namespace YAT.Domain.Test.Terminal
 					new Tuple<StressFile, SendMethod>(StressFile.LongLine,              SendMethod.TextLine),
 					new Tuple<StressFile, SendMethod>(StressFile.VeryLongLine,          SendMethod.TextLine),
 					new Tuple<StressFile, SendMethod>(StressFile.EnormousLine,          SendMethod.TextLine)
-				}
+				};
 				return (l);
 
 				// Could be extended by 'SendMethod.Text'/'TextLines' and a 'LineCount'.
