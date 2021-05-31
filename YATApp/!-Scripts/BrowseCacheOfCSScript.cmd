@@ -28,8 +28,9 @@
 
 SETLOCAL
 
-SET "_path=%USERPROFILE%\AppData\Roaming\YAT"
-START "" "%_path%"
+::                                                        Trailing backslash required for EXIST!
+SET "_path=%USERPROFILE%\AppData\Local\Temp\CSSCRIPT\Cache\"
+IF EXIST "%_path%" START "" "%_path%"
 
 ENDLOCAL
 

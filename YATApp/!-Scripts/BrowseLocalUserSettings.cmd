@@ -28,8 +28,9 @@
 
 SETLOCAL
 
-SET "_path=%USERPROFILE%\AppData\Local\Temp\nunit20\ShadowCopyCache"
-START "" "%_path%"
+::                                        Trailing backslash required for EXIST!
+SET "_path=%USERPROFILE%\AppData\Local\YAT\"
+IF EXIST "%_path%" START "" "%_path%"
 
 ENDLOCAL
 
