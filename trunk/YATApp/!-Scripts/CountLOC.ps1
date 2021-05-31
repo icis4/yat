@@ -1,4 +1,4 @@
-#===================================================================================================
+ï»¿#===================================================================================================
 # YAT - Yet Another Terminal.
 # Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 # Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
@@ -12,7 +12,7 @@
 # See SVN change log for file revision details.
 # Author(s): Matthias Klaey
 # -------------------------------------------------------------------------------------------------
-# Copyright © 2003-2021 Matthias Kläy.
+# Copyright Â© 2003-2021 Matthias KlÃ¤y.
 # All rights reserved.
 # -------------------------------------------------------------------------------------------------
 # This source code is licensed under the GNU LGPL.
@@ -194,11 +194,11 @@ $MY_NAME = $MyInvocation.MyCommand.Name
 $MY_PATH = [System.IO.Path]::GetDirectoryName($MyInvocation.MyCommand.Path)
 
 # Save the initial location:
-$START_DIRECTORY = Get-Location # 'Get-Location' is the PowerShell equivalent to 'pwd'.
+$START_DIRECTORY = Get-Location
 Write-Verbose "Script has been started in..."
 Write-Verbose "...""$START_DIRECTORY"""
 
-# Go to project root:
+# Go to solution root:
 Set-Location ..
 $ROOT_DIRECTORY = Get-Location
 Write-Verbose "Current directory changed to..."
@@ -299,7 +299,7 @@ $result = Add-Counts $result $proprietaryTestCounts
 #---------------------------------------------------------------------------------------------------
 
 # Restore the initial location:
-Set-Location $START_DIRECTORY # 'Set-Location' is the PowerShell equivalent to 'cd'.
+Set-Location $START_DIRECTORY
 Write-Verbose "Current directory restored to..."
 Write-Verbose "...""$START_DIRECTORY"""
 
