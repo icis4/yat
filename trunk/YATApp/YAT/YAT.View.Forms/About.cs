@@ -387,16 +387,6 @@ namespace YAT.View.Forms
 			linkLabel_DevelopedWith.Text += Environment.NewLine;
 
 			textBefore = "...";
-			textLink   =    "GhostDoc";
-			textAfter  =            "...";
-			linkLabel_DevelopedWith.Text += textBefore;
-			linkStart = linkLabel_DevelopedWith.Text.Length;
-			linkLabel_DevelopedWith.Text += textLink;
-			linkLabel_DevelopedWith.Links.Add(linkStart, textLink.Length, "https://submain.com/ghostdoc/");
-			linkLabel_DevelopedWith.Text += textAfter;
-			linkLabel_DevelopedWith.Text += Environment.NewLine;
-
-			textBefore = "...";
 			textLink   =    "NUnit";
 			textAfter  =         "...";
 			linkLabel_DevelopedWith.Text += textBefore;
@@ -406,25 +396,45 @@ namespace YAT.View.Forms
 			linkLabel_DevelopedWith.Text += textAfter;
 			linkLabel_DevelopedWith.Text += Environment.NewLine;
 
+			textBefore = "...";
+			textLink   =    "7-Zip";
+			textAfter  =         "...";
+			linkLabel_DevelopedWith.Text += textBefore;
+			linkStart = linkLabel_DevelopedWith.Text.Length;
+			linkLabel_DevelopedWith.Text += textLink;
+			linkLabel_DevelopedWith.Links.Add(linkStart, textLink.Length, "https://www.7-zip.org/");
+			linkLabel_DevelopedWith.Text += textAfter;
+			linkLabel_DevelopedWith.Text += Environment.NewLine;
+
+			textBefore = "...";
+			textLink   =    "GhostDoc";
+			textAfter  =            "...";
+			linkLabel_DevelopedWith.Text += textBefore;
+			linkStart = linkLabel_DevelopedWith.Text.Length;
+			linkLabel_DevelopedWith.Text += textLink;
+			linkLabel_DevelopedWith.Links.Add(linkStart, textLink.Length, "https://submain.com/ghostdoc/");
+			linkLabel_DevelopedWith.Text += textAfter;
+			linkLabel_DevelopedWith.Text += Environment.NewLine;
+
 		#if (!WITH_SCRIPTING)
+			textBefore = "...documentation, test and release management using ";
+			textLink   =                                                     "LibreOffice";
+			textAfter  =                                                                "...";
+			linkLabel_DevelopedWith.Text += textBefore;
+			linkStart = linkLabel_DevelopedWith.Text.Length;
+			linkLabel_DevelopedWith.Text += textLink;
+			linkLabel_DevelopedWith.Links.Add(linkStart, textLink.Length, "https://www.documentfoundation.org/");
+			linkLabel_DevelopedWith.Text += textAfter;
+
 			textBefore = "...hosting and change management on ";
 			textLink   =                                     "SourceForge.net";
-			textAfter  =                                                    "...";
+			textAfter  =                                                    ".";
 			linkLabel_DevelopedWith.Text += textBefore;
 			linkStart = linkLabel_DevelopedWith.Text.Length;
 			linkLabel_DevelopedWith.Text += textLink;
 			linkLabel_DevelopedWith.Links.Add(linkStart, textLink.Length, "https://sourceforge.net/");
 			linkLabel_DevelopedWith.Text += textAfter;
 			linkLabel_DevelopedWith.Text += Environment.NewLine;
-
-			textBefore = "...documentation, test and release management using ";
-			textLink   =                                                     "LibreOffice";
-			textAfter  =                                                                ".";
-			linkLabel_DevelopedWith.Text += textBefore;
-			linkStart = linkLabel_DevelopedWith.Text.Length;
-			linkLabel_DevelopedWith.Text += textLink;
-			linkLabel_DevelopedWith.Links.Add(linkStart, textLink.Length, "https://www.documentfoundation.org/");
-			linkLabel_DevelopedWith.Text += textAfter;
 		#endif
 
 			// Thanks:
