@@ -1,4 +1,4 @@
-
+﻿
 Note that .ods or .xlsx intentionally isn't committed to source control.
 This saves approx. 100 MB of repo space.
 
