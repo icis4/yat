@@ -1,4 +1,4 @@
-#===================================================================================================
+ï»¿#===================================================================================================
 # YAT - Yet Another Terminal.
 # Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 # Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
@@ -12,7 +12,7 @@
 # See SVN change log for file revision details.
 # Author(s): Matthias Klaey
 # -------------------------------------------------------------------------------------------------
-# Copyright © 2003-2021 Matthias Kläy.
+# Copyright Â© 2003-2021 Matthias KlÃ¤y.
 # All rights reserved.
 # -------------------------------------------------------------------------------------------------
 # This source code is licensed under the GNU LGPL.
