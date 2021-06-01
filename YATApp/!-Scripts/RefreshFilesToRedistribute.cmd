@@ -51,12 +51,12 @@ FOR /F "tokens=* usebackq" %%I IN (`DIR ".\!-Packages\dejavu-fonts-ttf-*" /B /S`
 ECHO.
 ECHO DejaVu package is located in %_zipFilePath%
 ECHO Extracting infos . . .
-SET _mainDir="dejavu-fonts-ttf-2.37"
+SET _iniDir="dejavu-fonts-ttf-*"
 SET _outPath=".\"
-%_exe% e %_zipFilePath% -o%_outPath% "%_mainDir%\*" -x!"%_mainDir%\*\" -y
+%_exe% e %_zipFilePath% -o%_outPath% "%_iniDir%\*" -x!"%_iniDir%\*\" -y
 ECHO Extracting monospaced fonts . . .
 SET _outPath=".\ttf\"
-%_exe% e %_zipFilePath% -o%_outPath% "%_mainDir%\ttf\*Mono*" -y
+%_exe% e %_zipFilePath% -o%_outPath% "%_iniDir%\ttf\*Mono*" -y
 POPD
 
 GOTO :End
