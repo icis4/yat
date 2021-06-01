@@ -42,18 +42,18 @@
 
 SETLOCAL
 
-SET _cmd=USBHubControl.exe
+SET _exe=USBHubControl.exe
 
 :: Verify that executable is available via the system's PATH:
-WHERE %_cmd% >NUL 2>&1
+WHERE %_exe% >NUL 2>&1
 IF NOT %ERRORLEVEL% == 0 GOTO :NoExe
 
 :: Reset both hubs:
 ECHO.
 ECHO Hub 1: Disabling devices . . .
-%_cmd% A6YJ5BDF 000000
+%_exe% A6YJ5BDF 000000
 ECHO Hub 2: Disabling devices . . .
-%_cmd% A6YJ5A78 000000
+%_exe% A6YJ5A78 000000
 :: Time required for execution is below 3 seconds.
 :: Time required to unload the drivers is below 6 seconds.
 ::  => 9 seconds timeout:
@@ -63,7 +63,7 @@ TIMEOUT 9
 :: Start hub 1 'USB'
 ECHO.
 ECHO Hub 1: Enabling devices . . .
-%_cmd% A6YJ5BDF 010111
+%_exe% A6YJ5BDF 010111
 :: !!! "Out 6" is disabled (010111 instead of 110111) because TI LauchPad composite devices don't work concurrently !!!
 :: Time required for execution is below 3 seconds.
 :: Time required to load the drivers is below 6 seconds.
@@ -76,7 +76,7 @@ TIMEOUT 9
 :: Must be done in reversed order, enumeration/configuration of higher devices otherwise may fail.
 ECHO.
 ECHO Hub 2: Enabling higher pair of devices . . .
-%_cmd% A6YJ5A78 001100
+%_exe% A6YJ5A78 001100
 :: Time required for execution is below 3 seconds.
 :: Time required to load the drivers is below 6 seconds.
 ::  => 9 seconds timeout:
@@ -84,7 +84,7 @@ TIMEOUT 9
 :: Note that the timeouts also need to be configured in 'MKY.Test.Devices.UsbHubControl'.
 ECHO.
 ECHO Hub 2: Adding lower pair of devices . . .
-%_cmd% A6YJ5A78 001111
+%_exe% A6YJ5A78 001111
 :: Time required for execution is below 3 seconds.
 :: Time required to load the drivers is below 6 seconds.
 ::  => 9 seconds timeout:

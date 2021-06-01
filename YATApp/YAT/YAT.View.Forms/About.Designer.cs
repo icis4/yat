@@ -72,7 +72,7 @@
 			// 
 			this.button_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Close.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_Close.Location = new System.Drawing.Point(537, 566);
+			this.button_Close.Location = new System.Drawing.Point(537, 579);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
 			this.button_Close.TabIndex = 0;
@@ -194,7 +194,7 @@
 			this.linkLabel_Home.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Home.AutoSize = true;
 			this.linkLabel_Home.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Home.Location = new System.Drawing.Point(12, 558);
+			this.linkLabel_Home.Location = new System.Drawing.Point(12, 571);
 			this.linkLabel_Home.Name = "linkLabel_Home";
 			this.linkLabel_Home.Size = new System.Drawing.Size(479, 13);
 			this.linkLabel_Home.TabIndex = 16;
@@ -230,7 +230,7 @@
 			this.linkLabel_Author.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Author.AutoSize = true;
 			this.linkLabel_Author.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Author.Location = new System.Drawing.Point(12, 576);
+			this.linkLabel_Author.Location = new System.Drawing.Point(12, 589);
 			this.linkLabel_Author.Name = "linkLabel_Author";
 			this.linkLabel_Author.Size = new System.Drawing.Size(65, 13);
 			this.linkLabel_Author.TabIndex = 17;
@@ -308,7 +308,7 @@
 			this.linkLabel_Thanks.AutoSize = true;
 			this.linkLabel_Thanks.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.linkLabel_Thanks.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Thanks.Location = new System.Drawing.Point(12, 540);
+			this.linkLabel_Thanks.Location = new System.Drawing.Point(12, 553);
 			this.linkLabel_Thanks.Name = "linkLabel_Thanks";
 			this.linkLabel_Thanks.Size = new System.Drawing.Size(454, 13);
 			this.linkLabel_Thanks.TabIndex = 15;
@@ -335,7 +335,7 @@
 			this.linkLabel_DevelopedWith.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_DevelopedWith.Location = new System.Drawing.Point(12, 444);
 			this.linkLabel_DevelopedWith.Name = "linkLabel_DevelopedWith";
-			this.linkLabel_DevelopedWith.Size = new System.Drawing.Size(316, 91);
+			this.linkLabel_DevelopedWith.Size = new System.Drawing.Size(322, 104);
 			this.linkLabel_DevelopedWith.TabIndex = 14;
 			this.linkLabel_DevelopedWith.Text = resources.GetString("linkLabel_DevelopedWith.Text");
 			// 
@@ -345,7 +345,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Close;
-			this.ClientSize = new System.Drawing.Size(624, 601);
+			this.ClientSize = new System.Drawing.Size(624, 614);
 			this.Controls.Add(this.linkLabel_DevelopedWith);
 			this.Controls.Add(this.linkLabel_TerminalEmulator);
 			this.Controls.Add(this.linkLabel_Thanks);
