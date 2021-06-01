@@ -198,7 +198,7 @@ function Clean-Temporaries()
 		Write-Verbose "...found none"
 	}
 
-	# Additionally for ALAZ:
+	# Additionally for ALAZ, in case the script is called from within the root directory:
 	$alazDirectoryName = ".\ALAZ\"
 	if (Test-Path -Path $alazDirectoryName -PathType Container) {
 		Push-Location
