@@ -635,7 +635,7 @@ namespace YAT.Model
 					return (false);
 				}
 			#else
-				else //            incl. IsScriptFile(requestedFilePath) but not limited to, any extension shall be usable as a script file.
+				else //  incl. ...Helper.IsScriptFile(requestedFilePath) but not limited to, as any extension shall be usable as a script file.
 				{
 					var absoluteFilePath = PathEx.GetNormalizedRootedExpandingEnvironmentVariables(requestedFilePath); // !string.IsNullOrEmpty() for sure, see further above.
 					if (File.Exists(absoluteFilePath)) // Validate fully expanded absolute path...

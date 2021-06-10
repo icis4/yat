@@ -657,12 +657,12 @@ namespace YAT.Model
 			var anyWorkspace = "<Workspace>" + ExtensionHelper.WorkspaceExtension;
 			var anyTerminal  = "<Terminal>"  + ExtensionHelper.TerminalExtension;
 		#if (WITH_SCRIPTING)
-			var anyScript    = "<Script>"    + ExtensionHelper.ScriptExtension;
+			var anyScript    = "<Script>"    + ExtensionHelper.StandardScriptExtension;
 		#endif
 			var myWorkspace  = "MyWorkspace" + ExtensionHelper.WorkspaceExtension;
 			var myTerminal   = "MyTerminal"  + ExtensionHelper.TerminalExtension;
 		#if (WITH_SCRIPTING)
-			var myScript     = "MyScript"    + ExtensionHelper.ScriptExtension;
+			var myScript     = "MyScript"    + ExtensionHelper.StandardScriptExtension;
 		#endif
 			var name = ApplicationEx.ExecutableFileNameWithoutExtension; // The executable name shall be used as *the* name, as
 			var helpText = new StringBuilder();                          // only that is relevant to the user of the command line.

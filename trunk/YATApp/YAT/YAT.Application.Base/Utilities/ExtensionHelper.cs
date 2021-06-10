@@ -162,17 +162,26 @@ namespace YAT.Application.Utilities
 
 	#if (WITH_SCRIPTING)
 
-		private static string scriptExtension = ".cs";
+		private static string standardScriptExtension = ".cs";
+		private static string[] alternativeScriptExtensions = new string[] { ".csharp", ".C#" };
 
 		/// <summary>
 		/// Allows to alter the file extension used for script files,
 		/// e.g. ".xy" instead of ".cs".
 		/// </summary>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to deal with file extensions such as '.ab1'...")]
-		public static string ScriptExtension
+		public static string StandardScriptExtension
 		{
-			get { return (scriptExtension); }
-			set { scriptExtension = value;  }
+			get { return (standardScriptExtension); }
+			set { standardScriptExtension = value;  }
+		}
+
+		/// <summary>
+		/// Alternative non-standard/non-common extensions that shall be treated as script as well.
+		/// </summary>
+		public static string[] AlternativeScriptExtensions
+		{
+			get { return (alternativeScriptExtensions); }
 		}
 
 		/// <remarks>
@@ -180,7 +189,13 @@ namespace YAT.Application.Utilities
 		/// </remarks>
 		public static bool IsScriptExtension(string extension)
 		{
-			return (PathEx.Equals(extension, ScriptExtension));
+			if (PathEx.Equals(extension, StandardScriptExtension))
+				return (true);
+
+			if (PathEx.EqualsAny(extension, AlternativeScriptExtensions))
+				return (true);
+
+			return (false);
 		}
 
 		/// <summary></summary>
@@ -193,7 +208,7 @@ namespace YAT.Application.Utilities
 		/// <summary></summary>
 		public static string ScriptFilesFilter
 		{
-			get { return ("C# Files (*" + ScriptExtension + ")|*" + ScriptExtension); }
+			get { return ("C# Files (*" + StandardScriptExtension + ")|*" + StandardScriptExtension); }
 		}
 
 		/// <summary></summary>
