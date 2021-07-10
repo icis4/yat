@@ -63,10 +63,12 @@ new feature request ticket and describe the impacts/rationale/use case as detail
 2. Execution
 ====================================================================================================
 
-Run YAT by selecting "Start > Programs > YAT > YAT".
+"Start > Programs > YAT > YAT" or
+start "C:\<Program Files>\YAT\YAT.exe" for normal execution.
+Start "C:\<Program Files>\YAT\YATConsole.exe" for console execution.
 
-Use "C:\<Program Files>\YAT\YAT.exe" to run YAT normally.
-Use "C:\<Program Files>\YAT\YATConsole.exe" to run YAT from console.
+In normal execution, infos/warnings/errors are shown on the user interface, whereas in console
+execution, notifications are returned via stdout/stderr and there will be no blocking modal dialogs.
 
 
 ****************************************************************************************************
