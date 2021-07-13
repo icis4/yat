@@ -1,17 +1,25 @@
 ﻿
-Most projects within YAT contain 'Any CPU', x86 as well as x64 configurations.
-See below for details on 'Any CPU' as well as x86 and x64.
+YAT projects stick to the Visual Studio default as much as possible. Exceptions:
+ > Non-imporant defaults are removed = implicitly stated rather than explicitly
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>false</Deterministic>
 
+YAT (and especially MKY) projects stick to the most recent possible 'ToolsVersion' for allowing
+YAT to be opened with older versions of Visual Studio. 'ToolsVersion' shall only be upgraded when
+there are good reasons.
+
+Most YAT projects contain 'Any CPU', x86 as well as x64 configurations.
+See further below for details on 'Any CPU' as well as x86 and x64.
 
 Project > Build > General
 	@ Debug (all platforms)
+		Define TRACE
+		Define DEBUG
 		CODE_ANALYSIS
 		(@ Test projects = CODE_ANALYSIS;TEST (no space!))
-		Define DEBUG
-		Define TRACE
 	@ Release (all platforms)
-		(@ Test projects = TEST)
 		Define TRACE
+		(@ Test projects = TEST)
 		Optimize code
 
 Project > Build > Output
@@ -35,10 +43,9 @@ that is excuted on the embedded system. To support such use cases, YAT...
 ...projects contain x86 (and x64) configurations.
 ...a YAT assembly based solution can build and release x86 (and x64) configurations.
 
-(Still, 'AnyCPU' configurations are kept for those users who directly use YAT projects/code.)
-
-To provide this support to the end user, YAT must be built with x86 and x64 respectively, And, it
-must also be distributed as such.
+To provide this support to the end user, YAT must be built with x86 (and x64) respectively, And, it
+must also be distributed as such. So far, only x86 is required, x64 is distributed as 'AnyCPU'. See
+"\YAT\!-Doc.Project\6 - Release\YAT - Release.ods" for more information.
 
 Rules:
 > x86 EXEs/DLLs must be combined with x86 DLLs
@@ -46,6 +53,6 @@ Rules:
 > 'Any CPU' EXEs/DLLs must be combined with 'Any CPU' DLLs
 
 Optimization:
-> 'Any CPU' enables the .NET CLR to perform target-dependent optimizations
-> There are different opinions on the real benefits of such optimizations, you find pro's and con's
-> Nevertheless, the optimizations could at least result in better speed
+> 'Any CPU' enables the .NET CLR to perform target-dependent optimizations.
+> There are different opinions on the real benefits of such optimizations, you find pro's and con's.
+> Nevertheless, the optimizations could at least result in better speed.
