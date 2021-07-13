@@ -3,6 +3,9 @@ YAT projects stick to the Visual Studio default as much as possible. Exceptions:
  > Non-imporant defaults are removed = implicitly stated rather than explicitly
     <FileAlignment>512</FileAlignment>
     <Deterministic>false</Deterministic>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    ...
 
 YAT (and especially MKY) projects stick to the most recent possible 'ToolsVersion' for allowing
 YAT to be opened with older versions of Visual Studio. 'ToolsVersion' shall only be upgraded when
