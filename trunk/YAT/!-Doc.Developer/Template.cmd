@@ -26,7 +26,7 @@
 :: See http://www.gnu.org/licenses/lgpl.html for license details.
 ::==================================================================================================
 
-IF %1=="" GOTO :SomeError
+IF "%~1"=="" GOTO SomeError
 
 ::--------------------------------------------------------------------------------------------------
 PUSHD %1
@@ -34,12 +34,12 @@ PUSHD %1
 ECHO Do something . . .
 
 POPD
-GOTO :End
+GOTO End
 ::--------------------------------------------------------------------------------------------------
 
 :SomeError
 ECHO Parameter 1 must be . . .
-GOTO :End
+GOTO End
 
 :End
 

@@ -47,7 +47,7 @@ SET _cmd="MT-SICS TCP-IP Device Start.cmd"
 
 :: Verify that command is available via the system's PATH:
 WHERE %_cmd% >NUL 2>&1
-IF NOT %ERRORLEVEL% == 0 GOTO :NoCommand
+IF NOT %ERRORLEVEL% == 0 GOTO NoCommand
 
 :: Get executable directory (required below):
 FOR /F "tokens=* USEBACKQ" %%A IN (`WHERE %_cmd%`) DO (
@@ -61,7 +61,7 @@ CD /D %_cmdDir%
 :: Invoke command:
 CALL %_cmd%
 
-GOTO :End
+GOTO End
 
 :NoCommand
 ECHO.
@@ -69,7 +69,7 @@ ECHO The required %_cmd% is not available!
 ECHO Make sure the containing directory has been added to the system's PATH environment variable!
 ECHO.
 PAUSE
-GOTO :End
+GOTO End
 
 :GetDirOfFile <IN_PathOfFile> <OUT_Result>
 (

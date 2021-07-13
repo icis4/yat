@@ -48,7 +48,7 @@ SETLOCAL
 SET _verbose='FALSE'
 
 :: Retrieve the first argument which is the PowerShell script to be called:
-SET _script=%1
+SET "_script=%~1"
 IF %_verbose%=='TRUE' ECHO Script is %_script%
 
 :: Get the length of the first argument to prepare retrieving the subsequent arguments:
@@ -61,7 +61,7 @@ IF DEFINED # (
     IF %_verbose%=='TRUE' (
         ECHO Retrieving script path length... Currently at %_len%...
     )
-    GOTO :StrLenLoop
+    GOTO StrLenLoop
 )
 IF %_verbose%=='TRUE' ECHO Script path length is %_len%
 
