@@ -46,7 +46,7 @@ SET _exe=USBHubControl.exe
 
 :: Verify that executable is available via the system's PATH:
 WHERE %_exe% >NUL 2>&1
-IF NOT %ERRORLEVEL% == 0 GOTO :NoExe
+IF NOT %ERRORLEVEL% == 0 GOTO NoExe
 
 :: Reset both hubs:
 ECHO.
@@ -91,7 +91,7 @@ ECHO Hub 2: Adding lower pair of devices . . .
 TIMEOUT 9
 :: Note that the timeouts also need to be configured in 'MKY.Test.Devices.UsbHubControl'.
 
-GOTO :End
+GOTO End
 
 :NoExe
 ECHO.
@@ -100,7 +100,7 @@ ECHO Make sure that the "MCD Conline USB HUB" drivers are installed, and. . .
 ECHO . . ."<MCD USBHubMonitor>\Tools\CommandLine" has been added to the system's PATH!
 ECHO.
 PAUSE
-GOTO :End
+GOTO End
 
 :End
 
