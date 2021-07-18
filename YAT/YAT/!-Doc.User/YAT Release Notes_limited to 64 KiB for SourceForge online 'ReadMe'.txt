@@ -89,12 +89,16 @@ execution, notifications are returned via stdout/stderr and there will be no blo
 YAT 2.4.2 :: 2021-xx-xx
 ----------------------------------------------------------------------------------------------------
 
+New:
+- Script to convert Docklight settings files (.ptp) to YAT (.yat) (feature request #429),
+  available at https://sourceforge.net/p/y-a-terminal/code/HEAD/tree/trunk/YATTools/Settings/.
+
 Important changes:
 - Accuracy of time stamps on sending improved for all I/O types (bug #514).
 - Accuracy of time stamps on receiving improved for UDP/IP sockets (feature request #442).
 - Upgrade to Visual Studio 2019 (feature request #441).
 - App.config file time stamps now reflect the build time of the binaries (bug #515).
-- 3rd party file time stamps are preserved now, i.e. reflect the original time (bug #515).
+- 3rd party file time stamps are preserved now, i.e. reflect the original time stamp (bug #515).
 
 Limitations and known issues:
 - Same as previous releases, see further below.

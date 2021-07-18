@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4602F90E-BE1A-406C-B59E-744C41163337}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>YATTools.Settings</RootNamespace>
+    <AssemblyName>YATTools.Settings</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MKY">
+      <HintPath>C:\Program Files\YAT\MKY.dll</HintPath>
+    </Reference>
+    <Reference Include="MKY.IO.Ports, Version=1.0.30.30061, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\YAT\MKY.IO.Ports.dll</HintPath>
+    </Reference>
+    <Reference Include="MKY.IO.Serial.SerialPort, Version=1.0.30.30061, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\YAT\MKY.IO.Serial.SerialPort.dll</HintPath>
+    </Reference>
+    <Reference Include="MKY.IO.Serial.Socket, Version=1.0.30.30061, Culture=neutral, PublicKeyToken=a4e36ad94a33606a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\YAT\MKY.IO.Serial.Socket.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="YAT.Domain, Version=2.4.1.30062, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\YAT\YAT.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="YAT.Model.Base, Version=2.4.1.30062, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\YAT\YAT.Model.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="YAT.Settings.Application">
+      <HintPath>C:\Program Files\YAT\YAT.Settings.Application.dll</HintPath>
+    </Reference>
+    <Reference Include="YAT.Settings.Model">
+      <HintPath>C:\Program Files\YAT\YAT.Settings.Model.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\YAT\YAT\YAT.Version.cs">
+      <Link>Properties\YAT.Version.cs</Link>
+    </Compile>
+    <Compile Include="..\Convert-DocklightToYAT.cs">
+      <Link>Convert-DocklightToYAT.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Convert-DocklightToYAT.ps1">
+      <Link>Convert-DocklightToYAT.ps1</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\!-ReadMe.txt">
+      <Link>!-ReadMe.txt</Link>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
