@@ -40,7 +40,6 @@ namespace YATTools.Settings.DocklightToYAT
 	using System.Text;
 
 	using MKY.Net;
-	using MKY.IO;
 	using MKY.IO.Serial.SerialPort;
 	using MKY.IO.Serial.Socket;
 	using MKY.Settings;
@@ -51,6 +50,14 @@ namespace YATTools.Settings.DocklightToYAT
 	using YAT.Settings.Application;
 	using YAT.Settings.Model;
 
+	/// <summary>
+	/// This CS-Script based conversion script parses a Docklight settings file (.ptp) and creates the
+	/// corresponding YAT terminal settings file (.yat), in best-effort manner.
+	/// </summary>
+	/// <remarks>
+	/// Technically, this script could be implemented as part of <c>Convert-DocklightToYAT.ps1</c> in
+	/// PowerShell. However, this would be (another) PowerShell nightmare...
+	/// </remarks>
 	public static class Convert
 	{
 		/// <summary>
@@ -64,7 +71,7 @@ namespace YATTools.Settings.DocklightToYAT
 		/// <param name="args">
 		/// <list type="number">
 		/// <item><description>The absolute or relative path to a Docklight settings file (.ptp)</description></item>
-		/// <item><description>The absolute or relative path for converting the YAT terminal file (.yat) to</description></item>
+		/// <item><description>The absolute or relative path for converting the YAT terminal file (.yat) to, optional</description></item>
 		/// </list>
 		/// </param>
 		/// <returns>
@@ -77,47 +84,53 @@ namespace YATTools.Settings.DocklightToYAT
 		/// </returns>
 		public static int Main(string[] args)
 		{
+			Console.WriteLine("Processing args...");
 			string inputFilePath, outputFilePath;
 			int result = ProcessArgs(args, out inputFilePath, out outputFilePath);
 			if (result != Success)
 			{
-				Console.WriteLine("Failed to process args!");
+				Console.Error.WriteLine("Failed!");
 				return (result);
 			}
 
+			Console.WriteLine(@"Trying to read Docklight sections from ""{0}""...", inputFilePath);
 			string version;
 			string[] commSettings;
 			string[] commChannels;
 			List<string[]> sendButtons;
 			if (!TryReadDocklightSections(inputFilePath, out version, out commSettings, out commChannels, out sendButtons))
 			{
-				Console.WriteLine(@"Failed to read Docklight sections from ""{0}""!", inputFilePath);
+				Console.Error.WriteLine(@"Failed to read Docklight sections from ""{0}""!", inputFilePath);
 				return (1);
 			}
 
+			Console.WriteLine("Parsing VERSION...");
 			int versionAsInt;
 			if (!int.TryParse(version, out versionAsInt))
 			{
-				Console.WriteLine(@"""{0}"" does not seem to be a Docklight settings file!", inputFilePath);
+				Console.Error.WriteLine(@"""{0}"" does not seem to be a Docklight settings file!", inputFilePath);
 				return (2);
 			}
 
+			Console.WriteLine("Parsing COMMSETTINGS/COMMCHANNELS...");
 			IOSettings ioSettings;
 			if (!TryParseComm(commSettings, commChannels, out ioSettings))
 			{
-				Console.WriteLine(@"Failed to parse COMM* content from ""{0}""!", inputFilePath);
+				Console.Error.WriteLine(@"Failed to parse COMM* content from ""{0}""!", inputFilePath);
 				return (3);
 			}
 
+			Console.WriteLine("Parsing SEND...");
 			PredefinedCommandPage predefinedCommandPage;
 			if (!TryParseSend(sendButtons, out predefinedCommandPage))
 			{
-				Console.WriteLine(@"Failed to parse SEND content from ""{0}""!", inputFilePath);
+				Console.Error.WriteLine(@"Failed to parse SEND content from ""{0}""!", inputFilePath);
 				return (4);
 			}
 
 		////if (!TryParseReceive(receive)) is not supported by this script (yet).
 
+			Console.WriteLine("Creating YAT terminals settings...");
 			ApplicationSettings.Create(ApplicationSettingsFileAccess.None); // Required to create a terminals settings object.
 
 			var yatSettings = new TerminalSettingsRoot();
@@ -139,29 +152,81 @@ namespace YATTools.Settings.DocklightToYAT
 			inputFilePath = null;
 			outputFilePath = null;
 
-			if (args.Length < 2)
+			if ((args.Length < 1) || (args.Length > 2))
 			{
-				Console.WriteLine("Invalid number of args! Script must always be called with 2 args.");
+				Console.Error.WriteLine("Invalid number of args! Script must be called with 1 or 2 args.");
 				return (-1);
 			}
 
 			if (!File.Exists(args[0]))
 			{
-				Console.WriteLine(@"Invalid input file! File ""{0}"" does not exist!", args[0]);
+				Console.Error.WriteLine(@"Invalid input file! File ""{0}"" does not exist!", args[0]);
 				return (-2);
 			}
 
-			inputFilePath = PathEx.GetNormalizedRootedExpandingEnvironmentVariables(args[0]);
+			inputFilePath = GetNormalizedRootedExpandingEnvironmentVariables(args[0]);
 
-			if (!PathEx.IsValid(args[1]))
+			if (args.Length == 1)
 			{
-				Console.WriteLine(@"Invalid output path! Path ""{0}"" is not valid!", args[1]);
-				return (-3);
+				outputFilePath = Path.GetFileNameWithoutExtension(inputFilePath) + ".yat";
+			}
+			else // .Length == 2)
+			{
+				if (string.IsNullOrEmpty(args[1]))
+				{
+					Console.Error.WriteLine(@"Invalid output path! Path ""{0}"" is empty!", args[1]);
+					return (-3);
+				}
+
+				try
+				{
+					Path.GetFullPath(args[1]); // Throws if path is invalid.
+				}
+				catch
+				{
+					Console.Error.WriteLine(@"Invalid output path! Path ""{0}"" is not valid!", args[1]);
+					return (-4);
+				}
+
+				outputFilePath = GetNormalizedRootedExpandingEnvironmentVariables(args[1]);
 			}
 
-			outputFilePath = PathEx.GetNormalizedRootedExpandingEnvironmentVariables(args[1]);
-
 			return (Success);
+		}
+
+		/// <summary>
+		/// Resolves the absolute location to the given file path and normalizes it, expanding environment variables.
+		/// </summary>
+		private static string GetNormalizedRootedExpandingEnvironmentVariables(string filePath)
+		{
+			if (Path.IsPathRooted(filePath))
+				return (Path.GetFullPath(Environment.ExpandEnvironmentVariables(filePath)));
+			else
+				return (CombineDirectoryAndFilePaths(Environment.CurrentDirectory, Environment.ExpandEnvironmentVariables(filePath)));
+		}
+
+		/// <summary>
+		/// Resolves <paramref name="filePath"/> relative to <paramref name="directoryPath"/> and
+		/// returns normalized absolute path of file.
+		/// </summary>
+		private static string CombineDirectoryAndFilePaths(string directoryPath, string filePath)
+		{
+			if ( Path.IsPathRooted(filePath))      return (filePath);
+			if (!Path.IsPathRooted(directoryPath)) return (null);
+
+			if (string.IsNullOrEmpty(filePath))    return (directoryPath);
+
+			var combinedDirectoryPath = Path.Combine(directoryPath, GetDirectoryPath(filePath));
+			var combinedFilePath = Path.Combine(combinedDirectoryPath, Path.GetFileName(filePath));
+			return (combinedFilePath);
+		}
+
+		/// <remarks>
+		/// Same as <see cref="Path.GetDirectoryName"/>, but with the proper method name.
+		/// </remarks>
+		private static string GetDirectoryPath(string path)
+		{
+			return (Path.GetDirectoryName(path));
 		}
 
 		/// <remarks>
@@ -204,7 +269,7 @@ namespace YATTools.Settings.DocklightToYAT
 						{
 							if (sectionContent.Count < 1)
 							{
-								Console.WriteLine(@"Section ""{0}"" is incomplete!", sectionName);
+								Console.Error.WriteLine(@"Section ""{0}"" is incomplete!", sectionName);
 								return (false);
 							}
 
@@ -219,7 +284,7 @@ namespace YATTools.Settings.DocklightToYAT
 									}
 									else
 									{
-										Console.WriteLine(@"Section ""{0}"" is too long!", sectionName);
+										Console.Error.WriteLine(@"Section ""{0}"" is too long!", sectionName);
 										return (false);
 									}
 								}
@@ -244,7 +309,7 @@ namespace YATTools.Settings.DocklightToYAT
 
 								default: // COMMDISPLAY, VERSATAP, CHANNELALIAS, RECEIVE
 								{
-									Console.WriteLine(@"Section ""{0}"" is not (yet) supported by this script and will be ignored.", sectionName);
+									Console.Error.WriteLine(@"Section ""{0}"" is not (yet) supported by this script and will be ignored.", sectionName);
 									break;
 								}
 							}
@@ -269,12 +334,12 @@ namespace YATTools.Settings.DocklightToYAT
 
 		private static bool TryParseComm(string[] commSettings, string[] commChannels, out IOSettings ioSettings)
 		{
-			MKY.IO.Ports.SerialPortId portId;                                    // applies to version 7
-			if ((commChannels.Length == 0) || MKY.IO.Ports.SerialPortId.TryParse(commChannels[0], out portId))
-			{                      // \\ applies to version 8
+			MKY.IO.Ports.SerialPortId portId;                                                       // applies to version 7
+			if (((commChannels == null) || (commChannels.Length == 0)) || MKY.IO.Ports.SerialPortId.TryParse(commChannels[0], out portId))
+			{                        // \\ applies to version 8
 				if (commSettings.Length != 9)
 				{
-					Console.WriteLine("COMMSETTINGS section does not consist of 9 entries!");
+					Console.Error.WriteLine("COMMSETTINGS section does not consist of 9 entries!");
 					ioSettings = null;
 					return (false);
 				}
@@ -294,21 +359,21 @@ namespace YATTools.Settings.DocklightToYAT
 					int mode;
 					if (!int.TryParse(commSettings[0], out mode))
 					{
-						Console.WriteLine("COMMSETTINGS entry #1 value = {0} is an invalid mode!", commSettings[0]);
+						Console.Error.WriteLine("COMMSETTINGS entry #1 value = {0} is an invalid mode!", commSettings[0]);
 						ioSettings = null;
 						return (false);
 					}
 
 					if (mode != 0)
 					{
-						Console.WriteLine("Script (so far) only supports COMMSETTINGS entry #1 mode = 0 (send/receive) but mode = {0}!", commSettings[0]);
+						Console.Error.WriteLine("Script (so far) only supports COMMSETTINGS entry #1 mode = 0 (send/receive) but mode = {0}!", commSettings[0]);
 						ioSettings = null;
 						return (false);
 					}
 
 					if (!MKY.IO.Ports.SerialPortId.TryParse(commSettings[1], out portId))
 					{
-						Console.WriteLine("COMMSETTINGS entry #2 value = {0} is an invalid serial COM port ID!", commSettings[1]);
+						Console.Error.WriteLine("COMMSETTINGS entry #2 value = {0} is an invalid serial COM port ID!", commSettings[1]);
 						ioSettings = null;
 						return (false);
 					}
@@ -318,7 +383,7 @@ namespace YATTools.Settings.DocklightToYAT
 					int baudRate;
 					if (!int.TryParse(commSettings[3], out baudRate))
 					{
-						Console.WriteLine("COMMSETTINGS entry #4 value = {0} is an invalid baud rate value!", commSettings[3]);
+						Console.Error.WriteLine("COMMSETTINGS entry #4 value = {0} is an invalid baud rate value!", commSettings[3]);
 						ioSettings = null;
 						return (false);
 					}
@@ -326,7 +391,7 @@ namespace YATTools.Settings.DocklightToYAT
 					int parityDocklight;
 					if (!int.TryParse(commSettings[4], out parityDocklight) || (parityDocklight < 0) || (parityDocklight > 4))
 					{
-						Console.WriteLine("COMMSETTINGS entry #5 value = {0} is an invalid parity value!", commSettings[4]);
+						Console.Error.WriteLine("COMMSETTINGS entry #5 value = {0} is an invalid parity value!", commSettings[4]);
 						ioSettings = null;
 						return (false);
 					}
@@ -348,7 +413,7 @@ namespace YATTools.Settings.DocklightToYAT
 					int dataBitsDocklight;
 					if (!int.TryParse(commSettings[6], out dataBitsDocklight) || (dataBitsDocklight < 0) || (dataBitsDocklight > 4))
 					{
-						Console.WriteLine("COMMSETTINGS entry #7 value = {0} is an invalid data bits value!", commSettings[6]);
+						Console.Error.WriteLine("COMMSETTINGS entry #7 value = {0} is an invalid data bits value!", commSettings[6]);
 						ioSettings = null;
 						return (false);
 					}
@@ -358,7 +423,7 @@ namespace YATTools.Settings.DocklightToYAT
 					{
 						case 0:
 						{
-							Console.WriteLine("COMMSETTINGS entry #7 value = 0 (stop bits = 4) is not supported by YAT!");
+							Console.Error.WriteLine("COMMSETTINGS entry #7 value = 0 (stop bits = 4) is not supported by YAT!");
 							ioSettings = null;
 							return (false);
 						}
@@ -374,7 +439,7 @@ namespace YATTools.Settings.DocklightToYAT
 					int stopBitsDocklight;
 					if (!int.TryParse(commSettings[7], out stopBitsDocklight) || (stopBitsDocklight < 0) || (stopBitsDocklight > 2))
 					{
-						Console.WriteLine("COMMSETTINGS entry #8 value = {0} is an invalid stop bits value!", commSettings[7]);
+						Console.Error.WriteLine("COMMSETTINGS entry #8 value = {0} is an invalid stop bits value!", commSettings[7]);
 						ioSettings = null;
 						return (false);
 					}
@@ -392,7 +457,7 @@ namespace YATTools.Settings.DocklightToYAT
 					int flowControlDocklight;
 					if (!int.TryParse(commSettings[8], out flowControlDocklight) || (flowControlDocklight < 0) || (flowControlDocklight > 4))
 					{
-						Console.WriteLine("COMMSETTINGS entry #9 value = {0} is an invalid flowControl value!", commSettings[8]);
+						Console.Error.WriteLine("COMMSETTINGS entry #9 value = {0} is an invalid flowControl value!", commSettings[8]);
 						ioSettings = null;
 						return (false);
 					}
@@ -431,7 +496,7 @@ namespace YATTools.Settings.DocklightToYAT
 						}
 						else
 						{
-							Console.WriteLine("LOCALHOST value {0} is an invalid TCP port!", split[1]);
+							Console.Error.WriteLine("LOCALHOST value {0} is an invalid TCP port!", split[1]);
 							ioSettings = null;
 							return (false);
 						}
@@ -447,7 +512,7 @@ namespace YATTools.Settings.DocklightToYAT
 						}
 						else
 						{
-							Console.WriteLine("SERVER value {0} is an invalid TCP port!", split[1]);
+							Console.Error.WriteLine("SERVER value {0} is an invalid TCP port!", split[1]);
 							ioSettings = null;
 							return (false);
 						}
@@ -465,7 +530,7 @@ namespace YATTools.Settings.DocklightToYAT
 							}
 							else
 							{
-								Console.WriteLine("UDP value {0} is an invalid UDP port!", split[2]);
+								Console.Error.WriteLine("UDP value {0} is an invalid UDP port!", split[2]);
 								ioSettings = null;
 								return (false);
 							}
@@ -484,14 +549,14 @@ namespace YATTools.Settings.DocklightToYAT
 								}
 								else
 								{
-									Console.WriteLine("UDP value {0} is an invalid UDP port!", split[3]);
+									Console.Error.WriteLine("UDP value {0} is an invalid UDP port!", split[3]);
 									ioSettings = null;
 									return (false);
 								}
 							}
 							else
 							{
-								Console.WriteLine("UDP value {0} is an invalid UDP port!", split[2]);
+								Console.Error.WriteLine("UDP value {0} is an invalid UDP port!", split[2]);
 								ioSettings = null;
 								return (false);
 							}
@@ -500,7 +565,7 @@ namespace YATTools.Settings.DocklightToYAT
 				}
 			}
 
-			Console.WriteLine("Failed to parse I/O type from COMMCHANNELS!");
+			Console.Error.WriteLine("Failed to parse I/O type from COMMCHANNELS!");
 			ioSettings = null;
 			return (false);
 		}
@@ -514,7 +579,7 @@ namespace YATTools.Settings.DocklightToYAT
 				var send = sendButtons[i];
 				if (send.Length != 5)
 				{
-					Console.WriteLine("SEND section #{0} does not consist of 5 entries!", i);
+					Console.Error.WriteLine("SEND section #{0} does not consist of 5 entries!", i);
 					return (false);
 				}
 				else
@@ -536,7 +601,7 @@ namespace YATTools.Settings.DocklightToYAT
 					int index;
 					if (!int.TryParse(send[0], out index) && (index < 0) && (index >= PredefinedCommandPage.MaxCommandCapacityPerPage))
 					{
-						Console.WriteLine("SEND section #{0} entry #1 value = {1} does not define a valid index!", i, send[0]);
+						Console.Error.WriteLine("SEND section #{0} entry #1 value = {1} does not define a valid index!", i, send[0]);
 						return (false);
 					}
 
