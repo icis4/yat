@@ -59,3 +59,10 @@ Optimization:
 > 'Any CPU' enables the .NET CLR to perform target-dependent optimizations.
 > There are different opinions on the real benefits of such optimizations, you find pro's and con's.
 > Nevertheless, the optimizations could at least result in better speed.
+
+
+Deterministic = false
+---------------------
+There is no true reason for this yet. Of course it would be "nice" to have binary equal builts. But
+enabling 'Deterministic' conflicts with the version's wildcard '*', which is also a "nice" feature.
+So keeping the setting disabled until there is a true reason.
