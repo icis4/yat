@@ -26,7 +26,7 @@
 
 <#
 .SYNOPSIS
-Converts a Docklight settings file to .yat format. SCRIPT IS YET EXPERIMENTAL AND LIMITED!
+Converts a Docklight settings file in best-effort manner to .yat format.
 
 .DESCRIPTION
 This script is a response to YAT feature request #429 'docklight file type' at
@@ -170,21 +170,21 @@ foreach ($inputFilePath in $inputFilePaths) {
 
 	Write-Verbose "Processing ""$inputFilePath""..."
 
+	# .\cscs.exe -dir:"C:\Program Files\YAT" .\Convert-DocklightToYAT.cs ".\SomeFile.ptp" ".\SomeFile.yat"
+	$cscsCmd = ".\cscs.exe"
+	if ($OutputPath -eq $null) {
+		$cscsArgs = -dir:$YATPath .\Convert-DocklightToYAT.cs $inputFilePath
+	}
+	else {
+		$outputFileName = (Get-Item $inputFilePath).Basename + ".yat"
+		$outputFilePath = JoinPath $OutputPath -ChildPath $outputFileName
+		$cscsArgs = -dir:$YATPath .\Convert-DocklightToYAT.cs $inputFilePath $outputFilePath
 
-if out == null
-cscs.exe -dir:$YATPath Convert-DocklightToYAT.cs $inputFilePath
-else
-cscs.exe -dir:$YATPath Convert-DocklightToYAT.cs $inputFilePath $outputPath
+		Write-Verbose "...to""$outputFilePath""..."
+	}
 
-	Write-Verbose "Extracting Docklight settings to YAT terminal settings object..."
-	Get-CommChannel( $inputFileRaw, [ref]$terminalSettingsRoot)
-	Get-CommSettings($inputFileRaw, [ref]$terminalSettingsRoot) # Get serial port settings in any case.
-	Get-SendButtons( $inputFileRaw, [ref]$terminalSettingsRoot)
-
-	$outputFilePath = "$inputFilePath.yat"
-	Write-Verbose "Saving ""$outputFilePath""..."
-	$saveSuccess = Save-TerminalSettingsFile($outputFilePath, [ref]$terminalSettingsRoot)
-	if ($saveSuccess) {
+	$cscsResult = & $cscsCmd --% $cscsArgs
+	if ($cscsResult -eq 0) {
 		$fileSuccessCounter++
 	}
 }

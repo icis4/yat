@@ -46,7 +46,6 @@
       <HintPath>C:\Program Files\YAT\MKY.IO.Serial.Socket.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
     <Reference Include="YAT.Domain, Version=2.4.1.30062, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\YAT\YAT.Domain.dll</HintPath>
