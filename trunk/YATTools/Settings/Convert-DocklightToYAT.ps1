@@ -75,6 +75,10 @@ prepare for this step, the script now is implemeneted in a hybrid manner:
     + ease of development (Visual Studio,...)
     - additional tool/exe
 
+Another consideration is handish vs. engine based parsing. The CS-Script based script currently
+parses the Docklight file in a handish manner. Alternatively, a (gold) parser engine could have
+been used instead. However, this seems over the top, given the few 100 lines of handish code.
+
 .PARAMETER YATPath
 The path to YAT executables. The default is "C:\Program Files\YAT".
 The path is needed to retrieve the YAT terminal settings schema.
@@ -118,7 +122,7 @@ param
 	$InputFilePathPattern = "*.ptp",
 
 	[Parameter(Mandatory=$false)]
-	[Alias("Output", "OutputPath")]
+	[Alias("Output")]
 	[string]
 	$OutputPath = $null
 )
@@ -145,6 +149,12 @@ $MY_PATH = [System.IO.Path]::GetDirectoryName($MyInvocation.MyCommand.Path)
 # Check the availability of the YAT executables:
 if (Get-Command "$YATPath\YAT.exe") {
 	Write-Verbose "YAT is available at ""$YATPath""."
+
+	$versionOfYATAsString = & $YATPath\YATConsole.exe --version
+	$versionOfYATAsObject = [System.Version]$versionOfYATAsString
+	if ($versionOfYATAsObject -lt  [System.Version]"2.4.0") {
+		throw "YAT is available at ""$YATPath"" but version is lower than 2.4.0!" # Output error and exit.
+	}
 }
 else {
 	throw "YAT is not available at ""$YATPath""!" # Output error and exit.
@@ -172,19 +182,37 @@ foreach ($inputFilePath in $inputFilePaths) {
 
 	# .\cscs.exe -dir:"C:\Program Files\YAT" .\Convert-DocklightToYAT.cs ".\SomeFile.ptp" ".\SomeFile.yat"
 	$cscsCmd = ".\cscs.exe"
-	if ($OutputPath -eq $null) {
-		$cscsArgs = -dir:$YATPath .\Convert-DocklightToYAT.cs $inputFilePath
+
+	$outputFileName = (Get-Item $inputFilePath).Basename + ".yat"
+	if (-not $OutputPath) {
+		$outputFilePath = Join-Path (Get-Item $inputFilePath).DirectoryName -ChildPath $outputFileName # Required for verbose output.
+		$cscsArgs = "-dir:""$YATPath"" .\Convert-DocklightToYAT.cs ""$inputFilePath"""
 	}
 	else {
-		$outputFileName = (Get-Item $inputFilePath).Basename + ".yat"
-		$outputFilePath = JoinPath $OutputPath -ChildPath $outputFileName
-		$cscsArgs = -dir:$YATPath .\Convert-DocklightToYAT.cs $inputFilePath $outputFilePath
-
-		Write-Verbose "...to""$outputFilePath""..."
+		$outputFilePath = Join-Path $OutputPath -ChildPath $outputFileName
+		$cscsArgs = "-dir:""$YATPath"" .\Convert-DocklightToYAT.cs ""$inputFilePath"" ""$outputFilePath"""
 	}
 
-	$cscsResult = & $cscsCmd --% $cscsArgs
-	if ($cscsResult -eq 0) {
+	Write-Verbose "...to ""$outputFilePath""..."
+
+	Write-Verbose "cscsCmd = $cscsCmd"
+	Write-Verbose "cscsArgs = $cscsArgs"
+
+	$escape = '--%' # Workaround proposed by https://stackoverflow.com/questions/18923315/using-in-powershell.
+	& $cscsCmd $escape $cscsArgs
+	$cscsResult = $LASTEXITCODE
+
+	Write-Verbose "...resulted in ""$cscsResult"""
+	if ($cscsResult -eq 0) { # cscs.exe returning 0 means success.
+
+		# Workaround to limitation in YAT 2.4.1 settings:
+		# Settings will inject the calling product's name and version.
+		# The calling product is cscs.exe... Upps...
+		(Get-Content $outputFilePath) | Foreach-Object {
+			$_ -replace "<ProductVersion>\d+\.\d+\.\d+\.\d+</ProductVersion>", "<ProductVersion>$versionOfYATAsString</ProductVersion>" `
+			   -replace "C# Script engine", "YAT"
+		} | Set-Content $outputFilePath
+
 		$fileSuccessCounter++
 	}
 }
