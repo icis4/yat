@@ -7,13 +7,12 @@ The scripts convert a Docklight settings file to .yat format, in best-effort man
 
 Precondition
 ------------
-YAT binaries of version 2.4.0 or above are available.
+Available YAT binaries of version 2.4.0 or above.
 
 
 Usage
 -----
-1. Download the 5 files of this directory to a local folder.
-    > !-ReadMe.txt                              -> This 'ReadMe'.
+1. Download the following files of this directory to a local folder:
     > Convert-DocklightToYAT.cs                 -> A CS-Script based conversion script.
     > Convert-DocklightToYAT.ps1                -> The main script initiating the conversion.
     > cscs.exe                                  -> CS-Script required by the above two scripts.

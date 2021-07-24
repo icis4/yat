@@ -74,6 +74,9 @@
     <None Include="..\Convert-DocklightToYAT.ps1">
       <Link>Convert-DocklightToYAT.ps1</Link>
     </None>
+    <None Include="..\Test Script\Test Convert-DocklightToYAT.cmd">
+      <Link>Test Script\Test Convert-DocklightToYAT.cmd</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\!-ReadMe.txt">

@@ -44,6 +44,7 @@ namespace YATTools.Settings.DocklightToYAT
 	using MKY.IO.Serial.Socket;
 	using MKY.Settings;
 
+	using YAT.Domain;
 	using YAT.Domain.Settings;
 	using YAT.Model.Settings;
 	using YAT.Model.Types;
@@ -84,12 +85,11 @@ namespace YATTools.Settings.DocklightToYAT
 		/// </returns>
 		public static int Main(string[] args)
 		{
-			Console.WriteLine("Processing args...");
 			string inputFilePath, outputFilePath;
 			int result = ProcessArgs(args, out inputFilePath, out outputFilePath);
 			if (result != Success)
 			{
-				Console.Error.WriteLine("Failed!");
+				Console.Error.WriteLine("Failed to process args!");
 				return (result);
 			}
 
@@ -111,6 +111,7 @@ namespace YATTools.Settings.DocklightToYAT
 				Console.Error.WriteLine(@"""{0}"" does not seem to be a Docklight settings file!", inputFilePath);
 				return (2);
 			}
+			Console.WriteLine("...is {0}.", versionAsInt);
 
 			Console.WriteLine("Parsing COMMSETTINGS/COMMCHANNELS...");
 			IOSettings ioSettings;
@@ -119,6 +120,7 @@ namespace YATTools.Settings.DocklightToYAT
 				Console.Error.WriteLine(@"Failed to parse COMM* content from ""{0}""!", inputFilePath);
 				return (3);
 			}
+			Console.WriteLine("...is {0}.", ioSettings.ToShortIOString());
 
 			Console.WriteLine("Parsing SEND...");
 			PredefinedCommandPage predefinedCommandPage;
@@ -127,6 +129,7 @@ namespace YATTools.Settings.DocklightToYAT
 				Console.Error.WriteLine(@"Failed to parse SEND content from ""{0}""!", inputFilePath);
 				return (4);
 			}
+			Console.WriteLine("...found {0} commands.", predefinedCommandPage.DefinedCommandCount);
 
 		////if (!TryParseReceive(receive)) is not supported by this script (yet).
 
@@ -140,9 +143,11 @@ namespace YATTools.Settings.DocklightToYAT
 			predefinedCommand.Pages.Add(predefinedCommandPage);
 			yatSettings.PredefinedCommand = predefinedCommand;
 
+			Console.WriteLine(@"Saving YAT terminals settings to ""{0}""...", outputFilePath);
 			var yatSettingsHandler = new DocumentSettingsHandler<TerminalSettingsRoot>(yatSettings);
 			yatSettingsHandler.SettingsFilePath = outputFilePath;
 			yatSettingsHandler.Save();
+			Console.WriteLine("...succeeded.");
 
 			return (Success);
 		}
@@ -164,11 +169,12 @@ namespace YATTools.Settings.DocklightToYAT
 				return (-2);
 			}
 
+		////inputFilePath = PathEx.GetNormalizedRootedExpandingEnvironmentVariables(args[0]); \remind (2021-07-24 / MKY) to be activated as soon as fixed for YAT 2.4.2
 			inputFilePath = GetNormalizedRootedExpandingEnvironmentVariables(args[0]);
 
 			if (args.Length == 1)
 			{
-				outputFilePath = Path.GetFileNameWithoutExtension(inputFilePath) + ".yat";
+				outputFilePath = GetDirectoryPath(inputFilePath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(inputFilePath) + ".yat";
 			}
 			else // .Length == 2)
 			{
@@ -188,6 +194,7 @@ namespace YATTools.Settings.DocklightToYAT
 					return (-4);
 				}
 
+			////outputFilePath = PathEx.GetNormalizedRootedExpandingEnvironmentVariables(args[1]); \remind (2021-07-24 / MKY) to be activated as soon as fixed for YAT 2.4.2
 				outputFilePath = GetNormalizedRootedExpandingEnvironmentVariables(args[1]);
 			}
 
@@ -267,13 +274,15 @@ namespace YATTools.Settings.DocklightToYAT
 						// Commit a completed section:
 						if (sectionName != null)
 						{
-							if (sectionContent.Count < 1)
+							var sectionNameToUpper = sectionName.ToUpperInvariant(); // Section names should already be UPPER, but one can never know...
+
+							if ((sectionContent.Count < 1) && (!sectionNameToUpper.Equals("CHANNELALIAS"))) // This section may be empty.
 							{
 								Console.Error.WriteLine(@"Section ""{0}"" is incomplete!", sectionName);
 								return (false);
 							}
 
-							switch (sectionName.ToUpperInvariant()) // Section names should already be UPPER, but one can never know...
+							switch (sectionNameToUpper)
 							{
 								case "VERSION":
 								{
@@ -309,7 +318,7 @@ namespace YATTools.Settings.DocklightToYAT
 
 								default: // COMMDISPLAY, VERSATAP, CHANNELALIAS, RECEIVE
 								{
-									Console.Error.WriteLine(@"Section ""{0}"" is not (yet) supported by this script and will be ignored.", sectionName);
+									Console.WriteLine(@"Section ""{0}"" is not (yet) supported by this script and will be ignored.", sectionName);
 									break;
 								}
 							}
@@ -334,153 +343,8 @@ namespace YATTools.Settings.DocklightToYAT
 
 		private static bool TryParseComm(string[] commSettings, string[] commChannels, out IOSettings ioSettings)
 		{
-			MKY.IO.Ports.SerialPortId portId;                                                       // applies to version 7
-			if (((commChannels == null) || (commChannels.Length == 0)) || MKY.IO.Ports.SerialPortId.TryParse(commChannels[0], out portId))
-			{                        // \\ applies to version 8
-				if (commSettings.Length != 9)
-				{
-					Console.Error.WriteLine("COMMSETTINGS section does not consist of 9 entries!");
-					ioSettings = null;
-					return (false);
-				}
-				else
-				{
-					// COMMSETTINGS
-					// 0    -> mode (0 = send/receive => single port, 1 = monitoring => port pair)
-					// COM1 -> main port
-					// COM2 -> aux port (in use for monitoring)
-					// 9600 -> baud rate
-					// 2    -> parity (0..4 = even/mark/none/odd/space)
-					// 0    -> partiy error char
-					// 4    -> data bits (0..4 = 4/5/6/7/8)
-					// 0    -> stop bits (0..2 = 1/1.5/2)
-					// 0    -> flow control (0..4 = off/manual HW/HW/SW/RS485)
-
-					int mode;
-					if (!int.TryParse(commSettings[0], out mode))
-					{
-						Console.Error.WriteLine("COMMSETTINGS entry #1 value = {0} is an invalid mode!", commSettings[0]);
-						ioSettings = null;
-						return (false);
-					}
-
-					if (mode != 0)
-					{
-						Console.Error.WriteLine("Script (so far) only supports COMMSETTINGS entry #1 mode = 0 (send/receive) but mode = {0}!", commSettings[0]);
-						ioSettings = null;
-						return (false);
-					}
-
-					if (!MKY.IO.Ports.SerialPortId.TryParse(commSettings[1], out portId))
-					{
-						Console.Error.WriteLine("COMMSETTINGS entry #2 value = {0} is an invalid serial COM port ID!", commSettings[1]);
-						ioSettings = null;
-						return (false);
-					}
-
-					// commSettings[2] 'aux port' does not need to be considered (yet).
-
-					int baudRate;
-					if (!int.TryParse(commSettings[3], out baudRate))
-					{
-						Console.Error.WriteLine("COMMSETTINGS entry #4 value = {0} is an invalid baud rate value!", commSettings[3]);
-						ioSettings = null;
-						return (false);
-					}
-
-					int parityDocklight;
-					if (!int.TryParse(commSettings[4], out parityDocklight) || (parityDocklight < 0) || (parityDocklight > 4))
-					{
-						Console.Error.WriteLine("COMMSETTINGS entry #5 value = {0} is an invalid parity value!", commSettings[4]);
-						ioSettings = null;
-						return (false);
-					}
-
-					System.IO.Ports.Parity parity;
-					switch (parityDocklight)
-					{
-						case 0: parity = System.IO.Ports.Parity.Even;  break;
-						case 1: parity = System.IO.Ports.Parity.Mark;  break;
-						case 2: parity = System.IO.Ports.Parity.None;  break;
-						case 3: parity = System.IO.Ports.Parity.Odd;   break;
-						case 4: parity = System.IO.Ports.Parity.Space; break;
-
-						default: throw (new InvalidOperationException("'parityDocklight' cannot have value " + parityDocklight + " here!"));
-					}
-
-					// commSettings[5] 'parity error char' is not considered (yet).
-
-					int dataBitsDocklight;
-					if (!int.TryParse(commSettings[6], out dataBitsDocklight) || (dataBitsDocklight < 0) || (dataBitsDocklight > 4))
-					{
-						Console.Error.WriteLine("COMMSETTINGS entry #7 value = {0} is an invalid data bits value!", commSettings[6]);
-						ioSettings = null;
-						return (false);
-					}
-
-					MKY.IO.Ports.DataBits dataBits;
-					switch (dataBitsDocklight)
-					{
-						case 0:
-						{
-							Console.Error.WriteLine("COMMSETTINGS entry #7 value = 0 (stop bits = 4) is not supported by YAT!");
-							ioSettings = null;
-							return (false);
-						}
-
-						case 1: dataBits = MKY.IO.Ports.DataBits.Five;  break;
-						case 2: dataBits = MKY.IO.Ports.DataBits.Six;   break;
-						case 3: dataBits = MKY.IO.Ports.DataBits.Seven; break;
-						case 4: dataBits = MKY.IO.Ports.DataBits.Eight; break;
-
-						default: throw (new InvalidOperationException("'dataBitsDocklight' cannot have value " + dataBitsDocklight + " here!"));
-					}
-
-					int stopBitsDocklight;
-					if (!int.TryParse(commSettings[7], out stopBitsDocklight) || (stopBitsDocklight < 0) || (stopBitsDocklight > 2))
-					{
-						Console.Error.WriteLine("COMMSETTINGS entry #8 value = {0} is an invalid stop bits value!", commSettings[7]);
-						ioSettings = null;
-						return (false);
-					}
-
-					System.IO.Ports.StopBits stopBits;
-					switch (stopBitsDocklight)
-					{
-						case 0: stopBits = System.IO.Ports.StopBits.One;          break;
-						case 1: stopBits = System.IO.Ports.StopBits.OnePointFive; break;
-						case 2: stopBits = System.IO.Ports.StopBits.Two;          break;
-
-						default: throw (new InvalidOperationException("'stopBitsDocklight' cannot have value " + stopBitsDocklight + " here!"));
-					}
-
-					int flowControlDocklight;
-					if (!int.TryParse(commSettings[8], out flowControlDocklight) || (flowControlDocklight < 0) || (flowControlDocklight > 4))
-					{
-						Console.Error.WriteLine("COMMSETTINGS entry #9 value = {0} is an invalid flowControl value!", commSettings[8]);
-						ioSettings = null;
-						return (false);
-					}
-
-					SerialFlowControl flowControl;
-					switch (flowControlDocklight)
-					{
-						case 0: flowControl = SerialFlowControl.None;           break;
-						case 1: flowControl = SerialFlowControl.ManualHardware; break;
-						case 2: flowControl = SerialFlowControl.Hardware;       break;
-						case 3: flowControl = SerialFlowControl.Software;       break;
-						case 4: flowControl = SerialFlowControl.RS485;          break;
-
-						default: throw (new InvalidOperationException("'flowControlDocklight' cannot have value " + flowControlDocklight + " here!"));
-					}
-
-					var communication = new SerialCommunicationSettings(baudRate, dataBits, parity, stopBits, flowControl);
-					ioSettings = new IOSettings();
-					ioSettings.SerialPort = new SerialPortSettings(portId, communication);
-					return (true);
-				}
-			}
-			else // TCP or UDP?
+			// TCP or UDP?
+			if ((commChannels != null) && (commChannels.Length > 0))
 			{
 				var split = commChannels[0].Split(':');
 				if (split.Length > 1)
@@ -491,6 +355,7 @@ namespace YATTools.Settings.DocklightToYAT
 						if (int.TryParse(split[1], out remoteTcpPort) && (remoteTcpPort >= 0) && (remoteTcpPort <= 65535))
 						{
 							ioSettings = new IOSettings();
+							ioSettings.IOType = IOType.TcpClient;
 							ioSettings.Socket = new SocketSettings(SocketType.TcpClient, (IPHostEx)IPHost.IPv4Localhost, remoteTcpPort, 0);
 							return (true);
 						}
@@ -507,6 +372,7 @@ namespace YATTools.Settings.DocklightToYAT
 						if (int.TryParse(split[1], out localTcpPort) && (localTcpPort >= 0) && (localTcpPort <= 65535))
 						{
 							ioSettings = new IOSettings();
+							ioSettings.IOType = IOType.TcpServer;
 							ioSettings.Socket = new SocketSettings(SocketType.TcpServer, SocketSettings.RemoteHostDefault, 0, 0, SocketSettings.LocalInterfaceDefault, SocketSettings.LocalFilterDefault, localTcpPort, 0);
 							return (true);
 						}
@@ -525,6 +391,7 @@ namespace YATTools.Settings.DocklightToYAT
 							if (int.TryParse(split[2], out remoteUdpPort) && (remoteUdpPort >= 0) && (remoteUdpPort <= 65535))
 							{
 								ioSettings = new IOSettings();
+								ioSettings.IOType = IOType.UdpClient;
 								ioSettings.Socket = new SocketSettings(SocketType.UdpClient, SocketSettings.RemoteHostDefault, 0, remoteUdpPort, SocketSettings.LocalInterfaceDefault, SocketSettings.LocalFilterDefault, 0, 0);
 								return (true);
 							}
@@ -544,6 +411,7 @@ namespace YATTools.Settings.DocklightToYAT
 								if (int.TryParse(split[3], out localUdpPort) && (localUdpPort  >= 0) && (localUdpPort <= 65535))
 								{
 									ioSettings = new IOSettings();
+									ioSettings.IOType = IOType.UdpPairSocket;
 									ioSettings.Socket = new SocketSettings(SocketType.UdpPairSocket, SocketSettings.RemoteHostDefault, 0, remoteUdpPort, SocketSettings.LocalInterfaceDefault, SocketSettings.LocalFilterDefault, 0, localUdpPort);
 									return (true);
 								}
@@ -565,9 +433,151 @@ namespace YATTools.Settings.DocklightToYAT
 				}
 			}
 
-			Console.Error.WriteLine("Failed to parse I/O type from COMMCHANNELS!");
-			ioSettings = null;
-			return (false);
+			// Serial COM!
+			if (commSettings.Length != 9)
+			{
+				Console.Error.WriteLine("COMMSETTINGS section does not consist of 9 entries!");
+				ioSettings = null;
+				return (false);
+			}
+			else
+			{
+				// COMMSETTINGS
+				// 0    -> mode (0 = send/receive => single port, 1 = monitoring => port pair)
+				// COM1 -> main port
+				// COM2 -> aux port (in use for monitoring)
+				// 9600 -> baud rate
+				// 2    -> parity (0..4 = even/mark/none/odd/space)
+				// 0    -> partiy error char
+				// 4    -> data bits (0..4 = 4/5/6/7/8)
+				// 0    -> stop bits (0..2 = 1/1.5/2)
+				// 0    -> flow control (0..4 = off/manual HW/HW/SW/RS485)
+
+				int mode;
+				if (!int.TryParse(commSettings[0], out mode))
+				{
+					Console.Error.WriteLine("COMMSETTINGS entry #1 value = {0} is an invalid mode!", commSettings[0]);
+					ioSettings = null;
+					return (false);
+				}
+
+				if (mode != 0)
+				{
+					Console.Error.WriteLine("Script (so far) only supports COMMSETTINGS entry #1 mode = 0 (send/receive) but mode = {0}!", commSettings[0]);
+					ioSettings = null;
+					return (false);
+				}
+
+				MKY.IO.Ports.SerialPortId portId;
+				if (!MKY.IO.Ports.SerialPortId.TryParse(commSettings[1], out portId))
+				{
+					Console.Error.WriteLine("COMMSETTINGS entry #2 value = {0} is an invalid serial COM port ID!", commSettings[1]);
+					ioSettings = null;
+					return (false);
+				}
+
+				// commSettings[2] 'aux port' does not need to be considered (yet).
+
+				int baudRate;
+				if (!int.TryParse(commSettings[3], out baudRate))
+				{
+					Console.Error.WriteLine("COMMSETTINGS entry #4 value = {0} is an invalid baud rate value!", commSettings[3]);
+					ioSettings = null;
+					return (false);
+				}
+
+				int parityDocklight;
+				if (!int.TryParse(commSettings[4], out parityDocklight) || (parityDocklight < 0) || (parityDocklight > 4))
+				{
+					Console.Error.WriteLine("COMMSETTINGS entry #5 value = {0} is an invalid parity value!", commSettings[4]);
+					ioSettings = null;
+					return (false);
+				}
+
+				System.IO.Ports.Parity parity;
+				switch (parityDocklight)
+				{
+					case 0: parity = System.IO.Ports.Parity.Even;  break;
+					case 1: parity = System.IO.Ports.Parity.Mark;  break;
+					case 2: parity = System.IO.Ports.Parity.None;  break;
+					case 3: parity = System.IO.Ports.Parity.Odd;   break;
+					case 4: parity = System.IO.Ports.Parity.Space; break;
+
+					default: throw (new InvalidOperationException("'parityDocklight' cannot have value " + parityDocklight + " here!"));
+				}
+
+				// commSettings[5] 'parity error char' is not considered (yet).
+
+				int dataBitsDocklight;
+				if (!int.TryParse(commSettings[6], out dataBitsDocklight) || (dataBitsDocklight < 0) || (dataBitsDocklight > 4))
+				{
+					Console.Error.WriteLine("COMMSETTINGS entry #7 value = {0} is an invalid data bits value!", commSettings[6]);
+					ioSettings = null;
+					return (false);
+				}
+
+				MKY.IO.Ports.DataBits dataBits;
+				switch (dataBitsDocklight)
+				{
+					case 0:
+					{
+						Console.Error.WriteLine("COMMSETTINGS entry #7 value = 0 (stop bits = 4) is not supported by YAT!");
+						ioSettings = null;
+						return (false);
+					}
+
+					case 1: dataBits = MKY.IO.Ports.DataBits.Five;  break;
+					case 2: dataBits = MKY.IO.Ports.DataBits.Six;   break;
+					case 3: dataBits = MKY.IO.Ports.DataBits.Seven; break;
+					case 4: dataBits = MKY.IO.Ports.DataBits.Eight; break;
+
+					default: throw (new InvalidOperationException("'dataBitsDocklight' cannot have value " + dataBitsDocklight + " here!"));
+				}
+
+				int stopBitsDocklight;
+				if (!int.TryParse(commSettings[7], out stopBitsDocklight) || (stopBitsDocklight < 0) || (stopBitsDocklight > 2))
+				{
+					Console.Error.WriteLine("COMMSETTINGS entry #8 value = {0} is an invalid stop bits value!", commSettings[7]);
+					ioSettings = null;
+					return (false);
+				}
+
+				System.IO.Ports.StopBits stopBits;
+				switch (stopBitsDocklight)
+				{
+					case 0: stopBits = System.IO.Ports.StopBits.One;          break;
+					case 1: stopBits = System.IO.Ports.StopBits.OnePointFive; break;
+					case 2: stopBits = System.IO.Ports.StopBits.Two;          break;
+
+					default: throw (new InvalidOperationException("'stopBitsDocklight' cannot have value " + stopBitsDocklight + " here!"));
+				}
+
+				int flowControlDocklight;
+				if (!int.TryParse(commSettings[8], out flowControlDocklight) || (flowControlDocklight < 0) || (flowControlDocklight > 4))
+				{
+					Console.Error.WriteLine("COMMSETTINGS entry #9 value = {0} is an invalid flowControl value!", commSettings[8]);
+					ioSettings = null;
+					return (false);
+				}
+
+				SerialFlowControl flowControl;
+				switch (flowControlDocklight)
+				{
+					case 0: flowControl = SerialFlowControl.None;           break;
+					case 1: flowControl = SerialFlowControl.ManualHardware; break;
+					case 2: flowControl = SerialFlowControl.Hardware;       break;
+					case 3: flowControl = SerialFlowControl.Software;       break;
+					case 4: flowControl = SerialFlowControl.RS485;          break;
+
+					default: throw (new InvalidOperationException("'flowControlDocklight' cannot have value " + flowControlDocklight + " here!"));
+				}
+
+				var communication = new SerialCommunicationSettings(baudRate, dataBits, parity, stopBits, flowControl);
+				ioSettings = new IOSettings();
+				ioSettings.IOType = IOType.SerialPort;
+				ioSettings.SerialPort = new SerialPortSettings(portId, communication);
+				return (true);
+			}
 		}
 
 		private static bool TryParseSend(List<string[]> sendButtons, out PredefinedCommandPage predefinedCommandPage)
