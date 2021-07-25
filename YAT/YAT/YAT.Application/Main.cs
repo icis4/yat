@@ -84,13 +84,12 @@ namespace YAT.Application
 	/// <remarks>
 	/// This class is separated into its own project for those who want to use YAT components within
 	/// their own context.
-	/// </remarks>
-	/// <remarks>
+	/// <para>
 	/// This class could have been implemented as a partial class to ease separation and diffing
 	/// among the four run variants. However, partial classes don't support preprocessor based
 	/// configuration, which is used to configure the run behavior among DEBUG and RELEASE, thus
 	/// not implemented as a partial class.
-	/// </remarks>
+	/// </para></remarks>
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Order according to meaning.")]
 	public class Main
 	{

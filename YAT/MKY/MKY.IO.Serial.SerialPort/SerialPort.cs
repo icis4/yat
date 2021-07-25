@@ -73,10 +73,9 @@ namespace MKY.IO.Serial.SerialPort
 	/// <item><description>...adds advanced flow control management (manual flow control).</description></item>
 	/// <item><description>...adds advanced break management.</description></item>
 	/// </list>
-	/// </remarks>
-	/// <remarks>
+	/// <para>
 	/// This class is implemented using partial classes separating sending/receiving functionality.
-	/// </remarks>
+	/// </para></remarks>
 	[SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "Semantic of readonly fields is constant.")]
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "StyleCop isn't able to skip URLs...")]
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Different root namespace.")]
