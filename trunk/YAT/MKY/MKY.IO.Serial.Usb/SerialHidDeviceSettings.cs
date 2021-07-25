@@ -377,6 +377,18 @@ namespace MKY.IO.Serial.Usb
 		}
 
 		/// <summary>
+		/// Returns device info and major communication settings as a single string.
+		/// </summary>
+		public virtual string ToShortSettingsString()
+		{
+			return
+			(
+				ToShortDeviceInfoString() + ", " +
+				((SerialHidFlowControlEx)FlowControl).ToShortString()
+			);
+		}
+
+		/// <summary>
 		/// Serves as a hash function for a particular type.
 		/// </summary>
 		/// <remarks>

@@ -521,11 +521,11 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary>
 		/// Returns port ID and port settings as a single string.
 		/// </summary>
-		public virtual string ToShortString()
+		public virtual string ToShortSettingsString()
 		{
 			return
 			(
-				PortId.ToString() + ", " +
+				ToShortPortString() + ", " +
 				Communication.ToString()
 			);
 		}
