@@ -1287,9 +1287,9 @@ namespace YAT.Application
 
 		/// <summary></summary>
 		protected void ShowInfoInConsole(bool showHelp, bool showLogo, bool showVersion)
-		{                                       // Lines that exactly match the number of characters would result
-			var maxWidth = (Console.WindowWidth - 1); // in an additional empty line (due to the added line break).
-			var writer = Console.Out;
+		{
+			var writer = Console.Out;                                                      // Lines that exactly match the number of characters would result
+			var maxWidth = (CommandLineMessageHelper.ConsoleWindowWidthOrDefaultTextWidth - 1); // in an additional empty line (due to the added line break).
 
 			if (showHelp) // Shall include version and logo:
 			{

@@ -47,6 +47,14 @@ namespace YAT.Application
 		// Constants
 		//==========================================================================================
 
+		/// <remarks><para>
+		/// Corresponds to width of "YAT.View.Forms.CommandLineMessageBox".
+		/// </para><para>
+		/// Also corresponds to default width of Unix/Linux.
+		/// </para><para>
+		/// But modern Windows uses a default width of 120 characters. This is anticipated by
+		/// adapting to <see cref="Console.WindowWidth"/> where possible.
+		/// </para></remarks>
 		private const int DefaultTextWidth = 80;
 
 		private static readonly string[] ResultTextLines =
@@ -82,6 +90,41 @@ namespace YAT.Application
 			"-108      Script invalid operation"
 		#endif
 		};
+
+		#endregion
+
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		/// <summary>
+		/// Gets <see cref="Console.WindowWidth"/> if available, or <see cref="DefaultTextWidth"/>.
+		/// </summary>
+		public static int ConsoleWindowWidthOrDefaultTextWidth
+		{
+			get
+			{
+				try
+				{
+					return (Console.WindowWidth);
+
+					// May throw, e.g. when called from within PowerShell ISE:
+					//
+					// Unbehandelte Ausnahme: System.IO.IOException: Das Handle ist ungltig.
+					// bei System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+					// bei System.Console.GetBufferInfo(Boolean throwOnNoConsole, Boolean& succeeded)
+					// bei System.Console.get_WindowWidth()
+					// bei YAT.Application.Main.ShowInfoInConsole(Boolean showHelp, Boolean showLogo, Boolean showVersion)
+					// bei YAT.Application.Main.Run(Boolean runFromConsole)
+					// bei YAT.YATConsole.Main(String[] commandLineArgs)
+				}
+				catch (IOException)
+				{
+					return (DefaultTextWidth);
+				}
+			}
+		}
 
 		#endregion
 
