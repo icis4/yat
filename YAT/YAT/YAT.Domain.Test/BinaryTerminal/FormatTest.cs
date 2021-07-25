@@ -70,7 +70,7 @@ namespace YAT.Domain.Test.BinaryTerminal
 		/// <summary></summary>
 		public static string ToExpectedText(byte[] data, string text, Encoding encoding, Radix radix)
 		{
-			UnusedArg.PreventAnalysisWarning(encoding, "Not needed (yet) but already here for orthogonality with TextTerminal.FormatTest.ToExpectedText()");
+			UnusedParam.PreventAnalysisWarning(encoding, "Not needed (yet) but already here for orthogonality with TextTerminal.FormatTest.ToExpectedText()");
 
 			switch (radix)
 			{
