@@ -64,10 +64,9 @@ namespace MKY.IO.Serial.Usb
 	/// <item><description>...wraps <see cref="IO.Usb.SerialHidDevice"/> with send/receive FIFOs.</description></item>
 	/// <item><description>...adds software flow control (XOn/XOff).</description></item>
 	/// </list>
-	/// </remarks>
-	/// <remarks>
+	/// <para>
 	/// This class is implemented using partial classes separating sending/receiving functionality.
-	/// </remarks>
+	/// </para></remarks>
 	public partial class SerialHidDevice : DisposableBase, IIOProvider, IXOnXOffHandler
 	{
 		#region Constants
