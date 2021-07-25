@@ -258,7 +258,7 @@ namespace MKY.IO.Usb.Test
 		[Test, TestCaseSource(typeof(DeviceInfoTestData), "TestCases")]
 		public virtual void TestSerialization(bool isValid, int vendorId, int productId, bool matchSerial, string serial, string[] descriptors)
 		{
-			UnusedArg.PreventAnalysisWarning(descriptors, "Argument is required by other test case(s) that share the same test data.");
+			UnusedParam.PreventAnalysisWarning(descriptors, "Argument is required by other test case(s) that share the same test data.");
 
 			// Attention:
 			// Similar code exists in HidDeviceInfoTest.TestSerialization().

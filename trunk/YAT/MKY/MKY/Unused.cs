@@ -42,7 +42,7 @@ namespace MKY
 		/// </remarks>
 		public static void PreventCompilerWarning(EventHandler handler, string justification)
 		{
-			UnusedArg.PreventAnalysisWarning(justification, "Argument is solely used for stating justification right where issues occurs.");
+			UnusedParam.PreventAnalysisWarning(justification, "Parameter is solely used for stating justification right where issues occurs.");
 
 			if (handler != null)
 				return;
@@ -63,7 +63,7 @@ namespace MKY
 		/// <typeparam name="T">The type of the generic event handler.</typeparam>
 		public static void PreventCompilerWarning<T>(EventHandler<T> handler, string justification) where T : EventArgs
 		{
-			UnusedArg.PreventAnalysisWarning(justification, "Argument is solely used for stating justification right where issues occurs.");
+			UnusedParam.PreventAnalysisWarning(justification, "Parameter is solely used for stating justification right where issues occurs.");
 
 			if (handler != null)
 				return;
@@ -72,11 +72,16 @@ namespace MKY
 		}
 	}
 
-	/// <summary></summary>
-	public static class UnusedArg
+	/// <remarks>
+	/// Using term "param" rather than "arg" as the parameter (formal parameter) is unused, not the
+	/// argument (actual parameter).
+	/// <para>
+	/// Also note FxCop "CA1801:ReviewUnusedParameters", using term "param" as well.
+	/// </para></remarks>
+	public static class UnusedParam
 	{
 		/// <summary>
-		/// Utility method that can be applied to unused arguments to prevent compiler warnings.
+		/// Utility method that can be applied to unused parameters to prevent compiler warnings.
 		/// </summary>
 		/// <remarks>
 		/// <paramref name="justification"/> is mandatory, same as SA1404:CSharp.Maintainability
@@ -88,7 +93,7 @@ namespace MKY
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static void PreventCompilerWarning(object obj, string justification)
 		{
-			PreventAnalysisWarning(justification, "Argument is solely used for stating justification right where issues occurs.");
+			PreventAnalysisWarning(justification, "Parameter is solely used for stating justification right where issues occurs.");
 
 			if (obj != null)
 				return;
@@ -97,7 +102,7 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Utility method that can be applied to unused arguments to prevent code analysis warnings (e.g. FxCop).
+		/// Utility method that can be applied to unused parameters to prevent code analysis warnings (e.g. FxCop).
 		/// </summary>
 		/// <remarks>
 		/// Prevents FxCop "CA1801:ReviewUnusedParameters".
@@ -137,7 +142,7 @@ namespace MKY
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static void PreventCompilerWarning(object obj, string justification)
 		{
-			PreventAnalysisWarning(justification, "Argument is solely used for stating justification right where issues occurs.");
+			PreventAnalysisWarning(justification, "Parameter is solely used for stating justification right where issues occurs.");
 
 			if (obj != null)
 				return;
@@ -187,7 +192,7 @@ namespace MKY
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "obj", Justification = "'obj' is commonly used throughout the .NET framework.")]
 		public static void PreventCompilerWarning<T>(out T obj, string justification)
 		{
-			UnusedArg.PreventAnalysisWarning(justification, "Argument is solely used for stating justification right where issues occurs.");
+			UnusedParam.PreventAnalysisWarning(justification, "Parameter is solely used for stating justification right where issues occurs.");
 
 			obj = default(T);
 		}

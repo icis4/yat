@@ -777,7 +777,7 @@ namespace MKY.IO.Serial.SerialPort
 			#if (DEBUG_SEND_WRITE)
 				DebugEx.WriteException(GetType(), ex, "Time-out while writing to port!");
 			#else
-				UnusedArg.PreventCompilerWarning(ex, "Exception object is only needed when writing debug output.");
+				UnusedParam.PreventCompilerWarning(ex, "Exception object is only needed when writing debug output.");
 			#endif
 				isWriteTimeout = true;
 
@@ -891,7 +891,7 @@ namespace MKY.IO.Serial.SerialPort
 			#if (DEBUG_SEND_WRITE)
 				DebugEx.WriteException(GetType(), ex, "Time-out while writing to port!");
 			#else
-				UnusedArg.PreventCompilerWarning(ex, "Exception object is only needed when writing debug output.");
+				UnusedParam.PreventCompilerWarning(ex, "Exception object is only needed when writing debug output.");
 			#endif
 				effectiveChunkData = null;
 				isWriteTimeout = true;
