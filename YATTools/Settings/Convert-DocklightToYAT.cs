@@ -120,7 +120,8 @@ namespace YATTools.Settings.DocklightToYAT
 				Console.Error.WriteLine(@"Failed to parse COMM* content from ""{0}""!", inputFilePath);
 				return (3);
 			}
-			Console.WriteLine("...is {0}.", ioSettings.ToShortIOString());
+		////Console.WriteLine(@"...is ""{0}"".", ioSettings.ToShortSettingsString()); \remind (2021-07-25 / MKY) to be activated as soon as available by YAT 2.4.2
+			Console.WriteLine(@"...is {0}.", ioSettings.ToShortIOString());
 
 			Console.WriteLine("Parsing SEND...");
 			PredefinedCommandPage predefinedCommandPage;

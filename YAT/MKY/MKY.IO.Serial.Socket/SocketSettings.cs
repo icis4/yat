@@ -590,6 +590,18 @@ namespace MKY.IO.Serial.Socket
 		}
 
 		/// <summary>
+		/// Returns socket type and end point as a single string.
+		/// </summary>
+		public virtual string ToShortSettingsString()
+		{
+			return
+			(
+				((SocketTypeEx)Type).ToString() + ", " +
+				ToShortEndPointString()
+			);
+		}
+
+		/// <summary>
 		/// Serves as a hash function for a particular type.
 		/// </summary>
 		/// <remarks>

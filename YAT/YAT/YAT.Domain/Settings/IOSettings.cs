@@ -665,6 +665,30 @@ namespace YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
+		public virtual string ToShortSettingsString()
+		{
+			switch (ioType)
+			{
+				case IOType.SerialPort:
+					return (this.serialPort.ToShortSettingsString());
+
+				case IOType.TcpClient:
+				case IOType.TcpServer:
+				case IOType.TcpAutoSocket:
+				case IOType.UdpClient:
+				case IOType.UdpServer:
+				case IOType.UdpPairSocket:
+					return (this.socket.ToShortSettingsString());
+
+				case IOType.UsbSerialHid:
+					return (this.usbSerialHidDevice.ToShortSettingsString());
+
+				default:
+					throw (new NotSupportedException(MessageHelper.InvalidExecutionPreamble + "'" + ioType + "' is an item that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
