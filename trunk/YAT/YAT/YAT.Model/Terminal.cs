@@ -995,7 +995,7 @@ namespace YAT.Model
 				if (SettingsRoot != null)
 				{
 					if (SettingsRoot.IOType == Domain.IOType.SerialPort)
-						return (SettingsRoot.IO.SerialPort.PortId);
+						return (SettingsRoot.IO.SerialPort.ToPortNameString());
 				}
 
 				return (null);

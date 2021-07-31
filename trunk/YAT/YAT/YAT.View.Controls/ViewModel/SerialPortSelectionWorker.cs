@@ -214,7 +214,11 @@ namespace YAT.View.Controls
 
 		private void ports_DetectPortsInUseCallback(object sender, SerialPortChangedAndCancelEventArgs e)
 		{
-			OnStatus2Changed(new EventArgs<string>("Scanning " + e.Port.ToNameAndCaptionString() + "..."));
+			string portNameAndCaption = "";
+			if (e.Port != null)
+				portNameAndCaption = " " + e.Port.ToNameAndCaptionString();
+
+			OnStatus2Changed(new EventArgs<string>("Scanning" + portNameAndCaption + "..."));
 
 			lock (this.cancelSyncObj)
 				e.Cancel = this.cancel;

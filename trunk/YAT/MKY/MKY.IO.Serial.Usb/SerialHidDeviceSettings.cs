@@ -95,7 +95,7 @@ namespace MKY.IO.Serial.Usb
 
 		private bool includeNonPayloadData;
 
-		private const string Undefined = "(undefined)";
+		private const string Undefined = "(Undefined)";
 
 		#endregion
 

@@ -122,7 +122,7 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary></summary>
 		public const bool NoSendOnInputBreakDefault = false;
 
-		private const string Undefined = "(undefined)";
+		private const string Undefined = "(Undefined)"; // Upper case same as "COM1" or "None".
 
 		#endregion
 
@@ -508,6 +508,24 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 		// Object Members
 		//==========================================================================================
+
+		/// <summary></summary>
+		public virtual string ToPortNameString()
+		{
+			if (PortId != null)
+				return (PortId.Name);
+			else
+				return (Undefined);
+		}
+
+		/// <summary></summary>
+		public virtual string ToPortNameAndCaptionString()
+		{
+			if (PortId != null)
+				return (PortId.ToNameAndCaptionString());
+			else
+				return (Undefined);
+		}
 
 		/// <summary></summary>
 		public virtual string ToShortPortString()

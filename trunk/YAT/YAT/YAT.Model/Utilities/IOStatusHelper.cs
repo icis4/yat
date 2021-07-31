@@ -53,17 +53,17 @@ namespace YAT.Model.Utilities
 						bool autoReopenEnabled;
 
 						var port = (terminal.UnderlyingIOProvider as MKY.IO.Serial.SerialPort.SerialPort);
-						if (port != null) // Effective settings from port object:
+						if (port != null) // Effective values from port object:
 						{
 							var settings = port.Settings;
-							portNameAndCaption = settings.PortId.ToNameAndCaptionString();
+							portNameAndCaption = settings.ToPortNameAndCaptionString();
 							communication      = settings.Communication.ToString();
 							autoReopenEnabled  = settings.AutoReopen.Enabled;
 						}
-						else // Fallback to settings object tree;
+						else // Fallback to settings object tree:
 						{
 							var settings = settingsRoot.IO.SerialPort;
-							portNameAndCaption = settings.PortId.ToNameAndCaptionString();
+							portNameAndCaption = settings.ToPortNameAndCaptionString();
 							communication      = settings.Communication.ToString();
 							autoReopenEnabled  = settings.AutoReopen.Enabled;
 						}
