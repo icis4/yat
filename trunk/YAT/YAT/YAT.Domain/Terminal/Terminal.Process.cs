@@ -260,6 +260,37 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
+		protected virtual string ByteToControlCharReplacementString(byte b, ControlCharRadix r)
+		{
+			switch (r)
+			{
+				case ControlCharRadix.SymbolChar:
+					return (ByteToControlSymbolString(b));
+
+				case ControlCharRadix.Bin:
+				case ControlCharRadix.Oct:
+				case ControlCharRadix.Dec:
+				case ControlCharRadix.Hex:
+					return (ByteToNumericRadixString(b, (Radix)r));
+
+				case ControlCharRadix.AsciiMnemonic:
+					return (ByteToAsciiString(b)); // Method will also handle 'ReplaceBackspace' and 'ReplaceTab'.
+
+				default: // Includes 'String' and 'Unicode' which are not supported for control character replacement.
+					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' is an ASCII control character radix that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
+			}
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
+		protected virtual string ByteToControlSymbolString(byte b)
+		{
+			return (Ascii.ConvertToSymbolString(b));
+		}
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
 		protected virtual string ByteToAsciiString(byte b)
 		{
 		////if      ((b == '\a') && !TerminalSettings.CharReplace.ReplaceBell) does not exist; CharAction.BeepOnBell exists but is handled elsewhere.
@@ -331,27 +362,6 @@ namespace YAT.Domain
 				return ("U+" + value.ToString("X4", CultureInfo.InvariantCulture));
 			else                               // Note limitation FR #329: Unicode is limited to the basic multilingual plane (U+0000..U+FFFF).
 				return (       value.ToString("X4", CultureInfo.InvariantCulture));
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "b", Justification = "Short and compact for improved readability.")]
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "r", Justification = "Short and compact for improved readability.")]
-		protected virtual string ByteToControlCharReplacementString(byte b, ControlCharRadix r)
-		{
-			switch (r)
-			{
-				case ControlCharRadix.Bin:
-				case ControlCharRadix.Oct:
-				case ControlCharRadix.Dec:
-				case ControlCharRadix.Hex:
-					return (ByteToNumericRadixString(b, (Radix)TerminalSettings.CharReplace.ControlCharRadix));
-
-				case ControlCharRadix.AsciiMnemonic:
-					return (ByteToAsciiString(b));
-
-				default: // Includes 'String', 'Char' and 'Unicode' which are not supported for control character replacement.
-					throw (new ArgumentOutOfRangeException("r", r, MessageHelper.InvalidExecutionPreamble + "'" + r + "' is an ASCII control character radix that is not (yet) supported here!" + Environment.NewLine + Environment.NewLine + MessageHelper.SubmitBug));
-			}
 		}
 
 		/// <summary></summary>

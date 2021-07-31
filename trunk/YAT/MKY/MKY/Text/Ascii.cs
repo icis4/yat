@@ -45,17 +45,25 @@ namespace MKY.Text
 		public const int MnemonicMaxLength = 4;
 
 		/// <summary>
-		/// Returns whether the given byte is a control byte.
+		/// Returns whether the given byte is a control byte, without space.
 		/// </summary>
 		public static bool IsControl(byte code)
 		{
-			return ((code  < 0x20) || (code == 0x7F));
+			return ((code < 0x20) || (code == 0x7F));
 		}
 
 		/// <summary>
-		/// Converts an ASCII code into according mnemonic.
+		/// Returns whether the given byte is a control byte, including space.
 		/// </summary>
-		/// <exception cref="ArgumentOutOfRangeException">Thrown if code out of range 0x00 to 0x1F, 0x7F.</exception>
+		public static bool IsControlIncludingSpace(byte code)
+		{
+			return ((code <= 0x20) || (code == 0x7F));
+		}
+
+		/// <summary>
+		/// Converts an ASCII code into corresponding mnemonic.
+		/// </summary>
+		/// <exception cref="ArgumentOutOfRangeException">Thrown if code out of range 0x00 to 0x20, 0x7F.</exception>
 		public static string ConvertToMnemonic(byte code)
 		{
 			switch (code)
@@ -92,15 +100,18 @@ namespace MKY.Text
 				case 0x1D: return ("GS");
 				case 0x1E: return ("RS");
 				case 0x1F: return ("US");
+				case 0x20: return ("SP");
+
 				case 0x7F: return ("DEL");
+
+				default: throw (new ArgumentOutOfRangeException("code", code, "Code hex(" + code.ToString("X2", CultureInfo.InvariantCulture) + ") is no ASCII control code!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 			}
-			throw (new ArgumentOutOfRangeException("code", code, "Code hex(" + code.ToString("X2", CultureInfo.InvariantCulture) + ") is no ASCII control code!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 		}
 
 		/// <summary>
-		/// Converts an ASCII code into according description.
+		/// Converts an ASCII code into corresponding description.
 		/// </summary>
-		/// <exception cref="ArgumentOutOfRangeException">Thrown if code out of range 0x00 to 0x1F, 0x7F.</exception>
+		/// <exception cref="ArgumentOutOfRangeException">Thrown if code out of range 0x00 to 0x20, 0x7F.</exception>
 		public static string ConvertToDescription(byte code)
 		{
 			switch (code)
@@ -137,13 +148,16 @@ namespace MKY.Text
 				case 0x1D: return ("Group separator");
 				case 0x1E: return ("Record separator");
 				case 0x1F: return ("Unit separator");
+				case 0x20: return ("Space");
+
 				case 0x7F: return ("Delete");
+
+				default: throw (new ArgumentOutOfRangeException("code", code, "Code hex(" + code.ToString("X2", CultureInfo.InvariantCulture) + ") is no ASCII control code!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 			}
-			throw (new ArgumentOutOfRangeException("code", code, "Code hex(" + code.ToString("X2", CultureInfo.InvariantCulture) + ") is no ASCII control code!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 		}
 
 		/// <summary>
-		/// Converts an ASCII mnemonic into according code. Case-insensitive.
+		/// Converts an ASCII mnemonic into corresponding code. Case-insensitive.
 		/// </summary>
 		/// <exception cref="FormatException">Thrown if mnemonic unknown.</exception>
 		/// <remarks>
@@ -159,7 +173,7 @@ namespace MKY.Text
 		}
 
 		/// <summary>
-		/// Converts an ASCII mnemonic into according code. Case-insensitive.
+		/// Converts an ASCII mnemonic into corresponding code. Case-insensitive.
 		/// </summary>
 		/// <remarks>
 		/// Following the convention of the .NET framework, whitespace is trimmed from <paramref name="mnemonic"/>.
@@ -200,9 +214,27 @@ namespace MKY.Text
 				case "GS":  result = 0x1D; return (true);
 				case "RS":  result = 0x1E; return (true);
 				case "US":  result = 0x1F; return (true);
+				case "SP":  result = 0x20; return (true);
+
 				case "DEL": result = 0x7F; return (true);
+
 				default:    result = 0x00; return (false);
 			}
+		}
+
+		/// <summary>
+		/// Converts an ASCII code into corresponding Unicode symbol character.
+		/// </summary>
+		/// <exception cref="ArgumentOutOfRangeException">Thrown if code out of range 0x00 to 0x20, 0x7F.</exception>
+		public static string ConvertToSymbolString(byte code)
+		{
+			if (code <= 0x20)
+				return (char.ConvertFromUtf32(0x2400 + code));
+
+			if (code == 0x7F)
+				return (char.ConvertFromUtf32(0x2421));
+
+			throw (new ArgumentOutOfRangeException("code", code, "Code hex(" + code.ToString("X2", CultureInfo.InvariantCulture) + ") is no ASCII control code!")); // Do not decorate with 'InvalidExecutionPreamble/SubmitBug' as this exception is eligible during normal execution.
 		}
 	}
 }

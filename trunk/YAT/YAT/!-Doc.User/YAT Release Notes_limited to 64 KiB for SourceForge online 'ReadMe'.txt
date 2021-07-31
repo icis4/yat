@@ -99,6 +99,11 @@ Important changes:
 - Upgrade to Visual Studio 2019 (feature request #441).
 - App.config file time stamps now reflect the build time of the binaries (bug #515).
 - 3rd party file time stamps are preserved now, i.e. reflect the original time stamp (bug #515).
+- ASCII control character replacement setting [Character] migrated to [Symbol Character] resulting
+  in displaying as Unicode symbols U+2400..241F as well as U+2421 (bug #517, feature request #34).
+
+Fixed bugs:
+- ASCII control character replacement setting [Character] no longer results in exception (bug #517).
 
 Limitations and known issues:
 - Same as previous releases, see further below.

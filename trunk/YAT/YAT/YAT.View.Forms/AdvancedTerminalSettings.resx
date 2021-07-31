@@ -228,6 +228,17 @@ Default is enabled.
 When the reduce/glue option is enabled below, this
 option is only relevant after the timeout has elapsed.</value>
   </data>
+  <data name="comboBox_ControlCharacterRadix.ToolTip" xml:space="preserve">
+    <value>[Symbol Character] will result in displaying the ASCII
+control characters as Unicode symbols U+2400..241F
+as well as U+2421.
+[Symbol Character] is only useful for fonts supporting
+these Unicode symbols.
+
+[Ascii Mnemonic] will result in displaying the ASCII
+mnemonic text, e.g. &lt;CR&gt;.
+[Ascii Mnemonic] is the default setting.</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>60</value>
   </metadata>
