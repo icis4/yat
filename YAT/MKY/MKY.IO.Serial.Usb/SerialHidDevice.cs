@@ -79,7 +79,7 @@ namespace MKY.IO.Serial.Usb
 
 		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
 
-		private const string Undefined = "(undefined)";
+		private const string Undefined = "(Undefined)";
 
 		#endregion
 

@@ -116,7 +116,7 @@ namespace MKY.IO.Ports
 
 		private const string PortSettingsDefault = "9600, 8, None, 1, None";
 
-		private const string Undefined = "(undefined)";
+		private const string Undefined = "(Undefined)"; // Upper case same as "COM1" or "None".
 
 		private const int PortOpenTimeout = 5000; // Best guess... Pretty long, but better than deadlocking.
 
