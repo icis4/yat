@@ -54,11 +54,23 @@ namespace YAT.Domain
 		String = Radix.String,
 
 		/// <remarks>
-		/// Keep this item to ensure that items can 1:1 be mapped to <see cref="Radix"/>
-		/// and that additional items get distinct enum identifiers.
+		/// <see cref="Radix.Char"/> control character replacement is useful for fonts implementing
+		/// the Unicode "Control Pictures" block at U+2400 and above.
 		/// </remarks>
-		[Obsolete("Char makes no sense for control character replacement, as control characters are not printable.")]
-		Char = Radix.Char,
+		SymbolChar = Radix.Char,
+
+		/// <remarks>
+		/// Backward compatibility.
+		/// <para>
+		/// Must be located after corresponding item, as XML serialization will serialize the first
+		/// item with matching value!
+		/// </para><para>
+		/// And attention, item must not be marked with an <see cref="ObsoleteAttribute"/>, that
+		/// would let XML deserialization ignore the item!
+		/// See https://docs.microsoft.com/en-us/dotnet/api/system.xml.serialization.xmlserializer
+		/// section "Objects marked with the <see cref="ObsoleteAttribute"/> no longer serialized".
+		/// </para></remarks>
+		Char = SymbolChar,
 
 		Bin = Radix.Bin,
 		Oct = Radix.Oct,
@@ -86,7 +98,8 @@ namespace YAT.Domain
 	{
 		#region String Definitions
 
-		private const string AsciiMnemonic_string = "ASCII mnemonics";
+		private const string SymbolChar_string = "Symbol Character";
+		private const string AsciiMnemonic_string = "ASCII Mnemonic";
 
 		#endregion
 
@@ -114,6 +127,7 @@ namespace YAT.Domain
 		{
 			switch ((ControlCharRadix)UnderlyingEnum)
 			{
+				case ControlCharRadix.SymbolChar:    return (SymbolChar_string);
 				case ControlCharRadix.AsciiMnemonic: return (AsciiMnemonic_string);
 				default:                             return (base.ToString());
 			}
@@ -137,8 +151,11 @@ namespace YAT.Domain
 			// Re-use items from base:
 			foreach (var radix in radices)
 			{
-				if (radix == Radix.String) // String makes no sense for single byte/character replacement.
-					continue;              // See remark for 'ControlCharRadix.String' for details.
+				if (radix == Radix.String)  // String makes no sense for single byte/character replacement.
+					continue;               // See remark for 'ControlCharRadix.String' for details.
+
+			////if (radix == Radix.Char)    // Char does make sense for single byte/character replacement.
+			////	continue;               // See remark for 'ControlCharRadix.SymbolChar' for details.
 
 				if (radix == Radix.Unicode) // Unicode makes no sense for single byte/character replacement.
 					continue;               // See remark for 'ControlCharRadix.Unicode' for details.
@@ -200,6 +217,11 @@ namespace YAT.Domain
 			if (StringEx.EqualsOrdinalIgnoreCase(s, AsciiMnemonic_string))
 			{
 				result = new ControlCharRadixEx(ControlCharRadix.AsciiMnemonic);
+				return (false);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase(s, SymbolChar_string)) // Backward compatibility 'Char' will be covered by 'Radix' below.
+			{
+				result = new ControlCharRadixEx(ControlCharRadix.SymbolChar);
 				return (false);
 			}
 			else

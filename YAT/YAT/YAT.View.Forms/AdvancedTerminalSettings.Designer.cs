@@ -1318,6 +1318,7 @@
 			this.comboBox_ControlCharacterRadix.Name = "comboBox_ControlCharacterRadix";
 			this.comboBox_ControlCharacterRadix.Size = new System.Drawing.Size(121, 21);
 			this.comboBox_ControlCharacterRadix.TabIndex = 1;
+			this.toolTip.SetToolTip(this.comboBox_ControlCharacterRadix, resources.GetString("comboBox_ControlCharacterRadix.ToolTip"));
 			this.comboBox_ControlCharacterRadix.SelectedIndexChanged += new System.EventHandler(this.comboBox_ControlCharacterRadix_SelectedIndexChanged);
 			// 
 			// checkBox_ReplaceTab
