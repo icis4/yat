@@ -513,9 +513,9 @@ namespace YAT.View.Controls
 					}
 					else // ports.Count == 0
 					{
-						// Ensure that the settings item is nulled and reset by SetControls().
-						// Set property instead of member to ensure that changed event is raised.
-						PortId = null;
+						// Setting shall be kept even though port is not available, i.e. settings
+						// item shall not be nulled here. This corresponds to behavior of Windows
+						// and other terminals, where default of COM1 is kept even if not available.
 
 						if (scanSuccess)
 							ShowNoneAvailableMessage();
