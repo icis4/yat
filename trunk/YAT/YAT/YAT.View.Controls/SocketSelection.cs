@@ -944,9 +944,8 @@ namespace YAT.View.Controls
 					}
 					else // localInterfaces.Count == 0
 					{
-						// Ensure that the settings item is nulled and reset by SetControls().
-						// Set property instead of member to ensure that changed event is raised.
-						LocalInterface = null;
+						// Setting shall be kept even though device is not available, i.e. settings
+						// item shall not be nulled here. It is up to the user on how to proceed.
 
 						ShowNoneAvailableMessage();
 					}
