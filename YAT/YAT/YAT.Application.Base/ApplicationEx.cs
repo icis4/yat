@@ -26,6 +26,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 
 using MKY.IO;
 
@@ -54,20 +55,52 @@ namespace YAT
 	#endif
 
 		/// <summary>
-		/// Constant string to expand the application's product name in places where neither
-		/// <see cref="ProductName"/> nor <see cref="System.Windows.Forms.Application.ProductName"/>
-		/// can be used, e.g. in case of attribute arguments.
+		/// Constant string to expand the application's product name in places where
+		/// <see cref="ProductName"/> cannot be used, e.g. in case of attribute arguments.
 		/// </summary>
 	#if (!WITH_SCRIPTING)
-		public const string ProductNameConstWorkaround = "YAT"; // Should be "YAT" or "YATConsole", but fixed for simplicity.
+		public const string ProductNameConstWorkaround = "YAT";
 	#else                       // Note that making name 'Albatros' publicly visible is doesn't matter anymore, several SourceForge tickets created by UFi contain "Albatros" anyway.
-		public const string ProductNameConstWorkaround = "Albatros"; // Should be "Albatros" or "AlbatrosConsole", but fixed for simplicity.
+		public const string ProductNameConstWorkaround = "Albatros";
 	#endif
 
-		/// <summary>The product name.</summary>
-		public static readonly string ProductName = System.Windows.Forms.Application.ProductName;
+		/// <summary>
+		/// Same as <see cref="ProductNameConstWorkaround"/> but for the console variant.
+		/// </summary>
+	#if (!WITH_SCRIPTING)
+		public const string ConsoleProductNameConstWorkaround = "YATConsole";
+	#else                              // Note that making name 'Albatros' publicly visible is doesn't matter anymore, several SourceForge tickets created by UFi contain "Albatros" anyway.
+		public const string ConsoleProductNameConstWorkaround = "AlbatrosConsole";
+	#endif
 
-		/// <summary>The build designation.</summary>
+		/// <summary>
+		/// The product name associated with <see cref="System.Windows.Forms.Application"/>.
+		/// </summary>
+		public static readonly string AssociatedProductName = System.Windows.Forms.Application.ProductName;
+
+		/// <summary>
+		/// The <see cref="AssociatedProductName"/> is known.
+		/// </summary>
+		public static readonly bool AssociatedProductNameIsKnown;
+
+		/// <summary>
+		/// The product name effectively in use.
+		/// </summary>
+		/// <remarks>
+		/// There is an issue with <see cref="System.Windows.Forms.Application.ProductName"/>. If
+		/// YAT assemblies are used by an external application, e.g. NUnit (testing), CS-Script
+		/// (running a script referring to YAT assemblies, e.g. the Docklight conversion script)
+		/// or any other application, <see cref="System.Windows.Forms.Application.ProductName"/>
+		/// will state the name of that external application. This is fixed by this property. It
+		/// will check the product name, and if unknown, fall back to a known product name. The
+		/// fall back will be <see cref="ProductNameConstWorkaround"/> or
+		/// <see cref="ConsoleProductNameConstWorkaround"/>.
+		/// </remarks>
+		public static readonly string ProductName; // Initialized by the static constructor.
+
+		/// <summary>
+		/// The build designation.
+		/// </summary>
 	#if (!WITH_SCRIPTING)                              // Leading space for non-empty strings!
 		public const string ProductBuildDesignation = ""; // This is to be used for final releases.
 	////public const string ProductBuildDesignation = " 2.x.0 Beta Version";
@@ -77,29 +110,44 @@ namespace YAT
 		public const string ProductBuildDesignation = "";
 	#endif
 
-		/// <summary>The product caption that combines product name and build designation.</summary>
+		/// <summary>
+		/// The product caption that combines product name and build designation.
+		/// </summary>
 		public static readonly string ProductCaption = ProductName + ProductBuildDesignation;
 
-		/// <summary>The product version.</summary>
-		public static readonly string ProductVersion = System.Windows.Forms.Application.ProductVersion;
+		/// <summary>
+		/// The product version associated with <see cref="System.Windows.Forms.Application"/>.
+		/// </summary>
+		public static readonly string AssociatedProductVersion = System.Windows.Forms.Application.ProductVersion;
+
+		/// <summary>
+		/// The product version effectively in use.
+		/// </summary>
+		/// <remarks>
+		/// See remarks at <see cref="ProductName"/> further above.
+		/// </remarks>
+		public static readonly string ProductVersion; // Initialized by the static constructor.
 
 		/// <summary>
 		/// The product version including <see cref="System.Version.Revision"/>.
 		/// </summary>
 		/// <remarks>
-		/// <see cref="ProductVersion"/> uses the <see cref="System.Reflection.AssemblyInformationalVersionAttribute"/>
+		/// <see cref="ProductVersion"/> uses the <see cref="AssemblyInformationalVersionAttribute"/>
 		/// that hides the <see cref="System.Version.Revision"/> part.
 		/// </remarks>
 		public static System.Version ProductFullVersionValue
 		{
-			get { return (System.Reflection.Assembly.GetEntryAssembly().GetName().Version); }
+			get { return (Assembly.GetExecutingAssembly().GetName().Version); }
+
+			// Using "GetExecutingAssembly()" rather than "GetEntryAssembly()" for preventing issue
+			// described by "ProductName" further above.
 		}
 
 		/// <summary>
 		/// The product version including <see cref="System.Version.Revision"/>.
 		/// </summary>
 		/// <remarks>
-		/// <see cref="ProductVersion"/> uses the <see cref="System.Reflection.AssemblyInformationalVersionAttribute"/>
+		/// <see cref="ProductVersion"/> uses the <see cref="AssemblyInformationalVersionAttribute"/>
 		/// that hides the <see cref="System.Version.Revision"/> part.
 		/// </remarks>
 		/// <remarks>
@@ -259,6 +307,57 @@ namespace YAT
 
 		/// <summary>The Linux operating system prerequisite.</summary>
 		public static readonly string PrerequisiteLinux = "Linux with Mono 4.8.0 or later";
+
+		/// <summary>
+		/// Indicates whether the application is a <see cref="System.Windows.Forms"/> application.
+		/// </summary>
+		public static bool IsWindowsFormsApplication;
+
+		/// <summary>
+		/// Indicates whether the application is a console application.
+		/// </summary>
+		public static bool IsConsoleApplication;
+
+		/// <summary>
+		/// The static constructor.
+		/// </summary>
+		static ApplicationEx()
+		{
+			switch (AssociatedProductName)
+			{
+				// Implemented by a sequence of conditions rather than a lookup for performance and
+				// simplicity. Using a lookup would also require to add as soon as adding another
+				// subproduct, so no real benefit.
+
+				case ProductNameConstWorkaround:
+				case ConsoleProductNameConstWorkaround:
+				{
+					AssociatedProductNameIsKnown = true;
+					break;
+				}
+
+				default:
+				{
+					AssociatedProductNameIsKnown = false;
+					break;
+				}
+			}
+
+			if (AssociatedProductNameIsKnown)
+			{
+				ProductName = AssociatedProductName;
+				ProductVersion = AssociatedProductVersion;
+			}
+			else
+			{
+				if (IsConsoleApplication)
+					ProductName = ConsoleProductNameConstWorkaround;
+				else // incl. IsWindowsFormsApplication
+					ProductName = ProductNameConstWorkaround;
+
+				ProductVersion = "2.4.1"; // Same as "AssemblyInformationalVersion" of "YAT.Version.cs".
+			}
+		}
 	}
 }
 

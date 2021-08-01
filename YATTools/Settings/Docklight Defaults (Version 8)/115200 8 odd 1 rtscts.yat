@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Settings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SettingsName>YAT Terminal Settings</SettingsName>
   <SettingsVersion>1.8.1</SettingsVersion>
   <ProductVersion>2.4.1</ProductVersion>
   <Warning>Modifying structure and/or content may cause undefined behavior!</Warning>
   <Mark>
-    <TimeStamp>2021-07-25T01:09:59.1160378+02:00</TimeStamp>
+    <TimeStamp>2021-08-01T13:54:17.5123165+02:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Mark>
   <AutoSaved>false</AutoSaved>
