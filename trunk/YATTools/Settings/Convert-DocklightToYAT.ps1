@@ -146,11 +146,13 @@ if (!$PSBoundParameters.TryGetValue('Debug', [ref]$debug)) { $debug = $false }
 $MY_NAME = $MyInvocation.MyCommand.Name
 $MY_PATH = [System.IO.Path]::GetDirectoryName($MyInvocation.MyCommand.Path)
 
-# Check the availability of the YAT executables:
-if (Get-Command "$YATPath\YAT.exe") {
+# Check the availability of the YAT executable, expecting the assemblies are there as well:
+if (Get-Command "$YATPath\YATConsole.exe") {
 	Write-Verbose "YAT is available at ""$YATPath""."
 
 	$versionOfYATAsString = & $YATPath\YATConsole.exe --version
+	Write-Verbose "YAT version is $versionOfYATAsString."
+
 	$versionOfYATAsObject = [System.Version]$versionOfYATAsString
 	if ($versionOfYATAsObject -lt  [System.Version]"2.4.0") {
 		throw "YAT is available at ""$YATPath"" but version is lower than 2.4.0!" # Output error and exit.

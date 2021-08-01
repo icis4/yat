@@ -165,7 +165,7 @@ namespace MKY.Settings
 					////// (sub)settings to the new version before accessing them.
 
 						var sb = new StringBuilder();
-						sb.Append(Application.ProductName);
+						sb.Append(Application.ProductName); // Location shall reflect the associated product.
 						sb.Append("."); // e.g. "YAT.LocalUserSettings" same as namespaces.
 						sb.Append(this.name);
 					////sb.Append(Path.DirectorySeparatorChar); // e.g. "YAT.LocalUserSettings\x.y.z" same
@@ -377,7 +377,7 @@ namespace MKY.Settings
 						string productSettingsPath = PathEx.GetDirectoryPath(PathEx.GetDirectoryPath(FilePath));
 						string[] allDirectories = Directory.GetDirectories(productSettingsPath);
 						List<string> oldDirectories = new List<string>();
-						Version currentVersion = new Version(Application.ProductVersion);
+						Version currentVersion = new Version(Application.ProductVersion); // Version shall reflect the associated product.
 						foreach (string directory in allDirectories)
 						{
 							try

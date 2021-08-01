@@ -240,6 +240,8 @@ namespace YAT.Application
 		/// </summary>
 		public virtual MainResult Run()
 		{
+			ApplicationEx.IsWindowsFormsApplication = true;
+
 			return (Run(false));
 		}
 
@@ -248,6 +250,8 @@ namespace YAT.Application
 		/// </summary>
 		public virtual MainResult RunFromConsole()
 		{
+			ApplicationEx.IsConsoleApplication = true;
+
 			return (Run(true));
 		}
 
@@ -1360,7 +1364,7 @@ namespace YAT.Application
 
 			message.Append("An unhandled synchronous ");
 			message.Append(ToName(ex));           // "loading" or "preparing" or "running"
-			message.Append(" occurred while " + state + " " + System.Windows.Forms.Application.ProductName + ".");
+			message.Append(" occurred while " + state + " " + ApplicationEx.ProductName + ".");
 
 			// "FileNotFoundException" message in case of a .NET version mismatch can e.g. be:
 			//                         "Could not load file or assembly 'System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=..."
@@ -1385,7 +1389,7 @@ namespace YAT.Application
 			var message = new StringBuilder();
 			message.Append("An unhandled asynchronous synchronized ");
 			message.Append(ToName(ex));
-			message.Append(" occurred while running " + System.Windows.Forms.Application.ProductName + ".");
+			message.Append(" occurred while running " + ApplicationEx.ProductName + ".");
 			return (message.ToString());
 		}
 
@@ -1394,7 +1398,7 @@ namespace YAT.Application
 			var message = new StringBuilder();
 			message.Append("An unhandled asynchronous non-synchronized ");
 			message.Append(ToName(ex));
-			message.Append(" occurred while running " + System.Windows.Forms.Application.ProductName + ".");
+			message.Append(" occurred while running " + ApplicationEx.ProductName + ".");
 			return (message.ToString());
 		}
 
