@@ -1,2 +1,0 @@
-﻿
-Control characters implemented, but low readability
