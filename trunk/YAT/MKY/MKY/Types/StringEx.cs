@@ -248,8 +248,7 @@ namespace MKY
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		public static int CountLeft(string str, params char[] countChars)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			if (countChars != null)
 			{
@@ -287,8 +286,7 @@ namespace MKY
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		public static int CountRight(string str, params char[] countChars)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			if (countChars != null)
 			{
@@ -333,8 +331,7 @@ namespace MKY
 		/// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
 		public static int ContainingCount(string str, string value, StringComparison comparisonType)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			int count = 0;
 
@@ -355,8 +352,7 @@ namespace MKY
 		/// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
 		public static int ContainingWholeWordCount(string str, string value, StringComparison comparisonType)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			int count = 0;
 
@@ -376,8 +372,7 @@ namespace MKY
 		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static bool ContainsAny(string str, char[] anyOf)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			return (str.IndexOfAny(anyOf) >= 0);
 		}
@@ -402,11 +397,12 @@ namespace MKY
 		/// <param name="values">The strings to compare with.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
 		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="values"/> is null.</exception>
 		/// <exception cref="ArgumentNullException">One of the <paramref name="values"/> is null.</exception>
 		public static bool ContainsAny(string str, IEnumerable<string> values)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str    == null) throw (new ArgumentNullException(nameof(str)));
+			if (values == null) throw (new ArgumentNullException(nameof(values)));
 
 			foreach (string v in values)
 			{
@@ -434,8 +430,7 @@ namespace MKY
 		/// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
 		public static bool StartsWithOrdinal(string str, string value)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			return (str.StartsWith(value, StringComparison.Ordinal));
 		}
@@ -450,8 +445,7 @@ namespace MKY
 		/// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
 		public static bool StartsWithOrdinalIgnoreCase(string str, string value)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			return (str.StartsWith(value, StringComparison.OrdinalIgnoreCase));
 		}
@@ -492,11 +486,12 @@ namespace MKY
 		/// <param name="culture">Cultural information that determines how this string and value are compared. If culture is null, the current culture is used.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
 		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="values"/> is null.</exception>
 		/// <exception cref="ArgumentNullException">One of the <paramref name="values"/> is null.</exception>
 		public static bool StartsWithAny(string str, IEnumerable<string> values, bool ignoreCase, CultureInfo culture)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str    == null) throw (new ArgumentNullException(nameof(str)));
+			if (values == null) throw (new ArgumentNullException(nameof(values)));
 
 			foreach (string v in values)
 			{
@@ -516,12 +511,13 @@ namespace MKY
 		/// <param name="comparisonType">One of the <see cref="StringComparison"/> values that determines how the strings and the value are compared.</param>
 		/// <returns>true if <paramref name="str"/> matches the beginning of a comparing string; otherwise, false.</returns>
 		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="values"/> is null.</exception>
 		/// <exception cref="ArgumentNullException">One of the <paramref name="values"/> is null.</exception>
 		/// <exception cref="ArgumentException">comparisonType is not a <see cref="StringComparison"/> value.</exception>
 		public static bool StartsWithAny(string str, IEnumerable<string> values, StringComparison comparisonType)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str    == null) throw (new ArgumentNullException(nameof(str)));
+			if (values == null) throw (new ArgumentNullException(nameof(values)));
 
 			foreach (string v in values)
 			{
@@ -568,8 +564,7 @@ namespace MKY
 		/// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
 		public static bool EndsWithOrdinalIgnoreCase(string str, string value)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			return (str.EndsWith(value, StringComparison.OrdinalIgnoreCase));
 		}
@@ -667,8 +662,7 @@ namespace MKY
 		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static string[] SplitLeft(string str, int length)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			string left = Left(str, length);
 			string right = Right(str, (str.Length - left.Length));
@@ -685,8 +679,7 @@ namespace MKY
 		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static string[] SplitRight(string str, int length)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			string right = Right(str, length);
 			string left = Left(str, (str.Length - right.Length));
@@ -705,8 +698,7 @@ namespace MKY
 		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static string[] SplitFixedLength(string str, int desiredChunkLength)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			var l = new List<string>(str.Length); // Preset the required capacity to improve memory management.
 			for (int i = 0; i < str.Length; i += desiredChunkLength)
@@ -724,8 +716,7 @@ namespace MKY
 		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static string[] SplitLexically(string str, int desiredChunkLength)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			List<string> chunks = new List<string>(ListInitialCapacityDefault); // Preset the initial capacity to improve memory management.
 			string[] newLineSeparators = new string[] { Environment.NewLine, "\n", "\r" };
@@ -739,8 +730,7 @@ namespace MKY
 		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		private static string[] SplitLexicallyWithoutTakingNewLineIntoAccount(string str, int desiredChunkLength)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			var spaces = new List<int>(ListInitialCapacityDefault); // Preset the initial capacity to improve memory management.
 
@@ -810,8 +800,7 @@ namespace MKY
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		public static string Trim(string str, int maxLength, params char[] trimChars)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			if (trimChars != null)
 			{
@@ -854,8 +843,7 @@ namespace MKY
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		public static string TrimSymmetrical(string str, int maxLength, params char[] trimChars)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			if (trimChars != null)
 			{
@@ -894,8 +882,7 @@ namespace MKY
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "chars", Justification = "Parameter naming as similar string methods.")]
 		public static string TrimSymmetrical(string str, params char[] trimChars)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			if (trimChars != null)
 			{
@@ -939,8 +926,7 @@ namespace MKY
 		[SuppressMessage("Microsoft.Naming", "CA1719:ParameterNamesShouldNotMatchMemberNames", MessageId = "1#", Justification = "Intentionally using the same parameter name to emphasize purpose.")]
 		public static string Space(string str, char space)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			var sb = new StringBuilder((str.Length * 2) - 1);
 
@@ -976,8 +962,7 @@ namespace MKY
 		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static int IndexOfSameCharacterClass(string str, int startIndex)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			int i = startIndex;
 
@@ -1045,8 +1030,7 @@ namespace MKY
 		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null.</exception>
 		public static int IndexOfWholeWord(string str, string value, int startIndex, StringComparison comparisonType)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			int i = startIndex;  // Using string.IndexOf() because string.Contains() does not allow controlling culture and case.
 			while ((i < str.Length) && ((i = str.IndexOf(value, i, comparisonType)) != InvalidIndex))
@@ -1108,8 +1092,7 @@ namespace MKY
 		[SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string", Justification = "Parameter naming as similar string methods.")]
 		public static int IndexOfOutsideDoubleQuotes(string str, string searchString, int startIndex, int count, StringComparison comparisonType)
 		{
-			if (str == null)
-				throw (new ArgumentNullException(nameof(str)));
+			if (str == null) throw (new ArgumentNullException(nameof(str)));
 
 			string substring = str.Substring(startIndex, count); // Crop the string as desired.
 
