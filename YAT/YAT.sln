@@ -49,7 +49,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Scripts", "!-Scripts", "{
 		!-Scripts\Clean.ps1 = !-Scripts\Clean.ps1
 		!-Scripts\CountLOC.cmd = !-Scripts\CountLOC.cmd
 		!-Scripts\CountLOC.ps1 = !-Scripts\CountLOC.ps1
-		!-Scripts\RefreshFilesToRedistribute.cmd = !-Scripts\RefreshFilesToRedistribute.cmd
 		!-Scripts\TouchFile.cmd = !-Scripts\TouchFile.cmd
 	EndProjectSection
 EndProject
@@ -64,13 +63,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-TestConfig", "!-TestConfi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Tools", "!-Tools", "{42B01A8E-BCFE-4A8F-BA2B-3B15AC1BB2A3}"
 	ProjectSection(SolutionItems) = preProject
-		!-Tools\!-ToolsAndVersions.txt = !-Tools\!-ToolsAndVersions.txt
 		!-Tools\FxCop Setup.txt = !-Tools\FxCop Setup.txt
 		!-Tools\MCD Conline USB HUB 6-Port Runtime Config.cmd = !-Tools\MCD Conline USB HUB 6-Port Runtime Config.cmd
 		!-Tools\MT-SICS TCP-IP Device Start.cmd = !-Tools\MT-SICS TCP-IP Device Start.cmd
 		!-Tools\MT-SICS TCP-IP Device Start.cmd.template = !-Tools\MT-SICS TCP-IP Device Start.cmd.template
 		!-Tools\NUnit Setup.txt = !-Tools\NUnit Setup.txt
 		!-Tools\StyleCop Setup.txt = !-Tools\StyleCop Setup.txt
+		!-Tools\SVN Hooks - ReadMe.txt = !-Tools\SVN Hooks - ReadMe.txt
 		!-Tools\SVN Setup.txt = !-Tools\SVN Setup.txt
 		!-Tools\VisualStudio Setup.txt = !-Tools\VisualStudio Setup.txt
 		!-Tools\VSPE Setup.txt = !-Tools\VSPE Setup.txt

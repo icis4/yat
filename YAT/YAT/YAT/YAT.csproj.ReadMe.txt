@@ -8,16 +8,3 @@ $(ProjectDir)\..\..\!-Scripts\TouchFile.cmd "$(ProjectDir)\App.config"
 
 Sets the "App.config" to the same time stamp as the resulting executable.
 Otherwise, the deployed "App.config" file time stamp would reflect the SVN checkout time stamp.
-
-
-Pre-build Step for "Banner.bmp"
--------------------------------
-
-$(ProjectDir)\..\..\!-Scripts\TouchFile.cmd "$(ProjectDir)\..\YAT.Setup\!-Graphics\Banner.bmp"
-
-Sets the "Banner.bmp" to the same time stamp as the resulting executable.
-This is a best-effort approach. Unfortunately, the "Setup" project does not support pre-build steps.
-
-Only done by this main "YAT" project,...
-...makes little sense to do this twice.
-...prevents concurrent file access issues.
