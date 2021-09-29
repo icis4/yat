@@ -6,9 +6,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{F2871B3F-52AF-4EFB-BACD-2A24F8BC3873}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>YATInfra.SVN.StartCommit</RootNamespace>
-    <AssemblyName>YATInfra.SVN.StartCommit</AssemblyName>
-    <StartupObject>YATInfra.SVN.StartCommit.Program</StartupObject>
+    <RootNamespace>YATInfra.SVNHooks.StartCommit</RootNamespace>
+    <AssemblyName>YATInfra.SVNHooks.StartCommit</AssemblyName>
+    <StartupObject>YATInfra.SVNHooks.StartCommit.Program</StartupObject>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -40,4 +40,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if $(ConfigurationName)==Release copy "$(TargetDir)YATInfra.SVNHooks.StartCommit.exe" "$(ProjectDir)..\..\..\YAT\!-Tools\SVN Hook - StartCommit.exe" /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>
