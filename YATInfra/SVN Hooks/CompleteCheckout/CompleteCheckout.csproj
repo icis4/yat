@@ -6,9 +6,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D497CC7C-BA0D-4438-93E5-D0C91750B470}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>YATInfra.SVN.CompleteCheckout</RootNamespace>
-    <AssemblyName>YATInfra.SVN.CompleteCheckout</AssemblyName>
-    <StartupObject>YATInfra.SVN.CompleteCheckout.Program</StartupObject>
+    <RootNamespace>YATInfra.SVNHooks.CompleteCheckout</RootNamespace>
+    <AssemblyName>YATInfra.SVNHooks.CompleteCheckout</AssemblyName>
+    <StartupObject>YATInfra.SVNHooks.CompleteCheckout.Program</StartupObject>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -40,4 +40,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if $(ConfigurationName)==Release copy "$(TargetDir)YATInfra.SVNHooks.CompleteCheckout.exe" "$(ProjectDir)..\..\..\YAT\!-Tools\SVN Hook - CompleteCheckout.exe" /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>
