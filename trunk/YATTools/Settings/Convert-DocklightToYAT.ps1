@@ -8,6 +8,8 @@
 # $Date$
 # $Author$
 # -------------------------------------------------------------------------------------------------
+# YAT Version 2.4.0 or above.
+# ------------------------------------------------------------------------------------------------
 # See release notes for product version details.
 # See SVN change log for file revision details.
 # Author(s): Matthias Klaey
