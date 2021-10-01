@@ -5,7 +5,13 @@ VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartCommit", "StartCommit\StartCommit.csproj", "{F2871B3F-52AF-4EFB-BACD-2A24F8BC3873}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompleteCheckout", "CompleteCheckout\CompleteCheckout.csproj", "{D497CC7C-BA0D-4438-93E5-D0C91750B470}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostUpdate", "PostUpdate\PostUpdate.csproj", "{D497CC7C-BA0D-4438-93E5-D0C91750B470}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!-Doc", "!-Doc", "{2F9EB3C4-BFB5-465A-B0AC-2450100776C9}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\YAT\!-Tools\SVN Hooks - ReadMe.txt = ..\..\YAT\!-Tools\SVN Hooks - ReadMe.txt
+		..\..\YAT\!-Tools\SVN Setup.txt = ..\..\YAT\!-Tools\SVN Setup.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

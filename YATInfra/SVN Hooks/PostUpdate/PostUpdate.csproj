@@ -6,10 +6,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D497CC7C-BA0D-4438-93E5-D0C91750B470}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>YATInfra.SVNHooks.CompleteCheckout</RootNamespace>
-    <AssemblyName>YATInfra.SVNHooks.CompleteCheckout</AssemblyName>
-    <StartupObject>YATInfra.SVNHooks.CompleteCheckout.Program</StartupObject>
+    <RootNamespace>YATInfra.SVNHooks.PostUpdate</RootNamespace>
+    <AssemblyName>YATInfra.SVNHooks.PostUpdate</AssemblyName>
+    <StartupObject>YATInfra.SVNHooks.PostUpdate.Program</StartupObject>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Properties\YATInfra.snk</AssemblyOriginatorKeyFile>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,13 +37,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\YATInfra.snk" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName)==Release copy "$(TargetDir)YATInfra.SVNHooks.CompleteCheckout.exe" "$(ProjectDir)..\..\..\YAT\!-Tools\SVN Hook - CompleteCheckout.exe" /Y</PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName)==Release copy "$(TargetDir)YATInfra.SVNHooks.PostUpdate.exe" "$(ProjectDir)..\..\..\YAT\!-Tools\SVN Hook - PostUpdate.exe" /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
