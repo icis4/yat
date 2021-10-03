@@ -1,5 +1,6 @@
 ﻿
-For all MKY and YAT projects:
+For all MKY and YAT projects
+----------------------------
 
 Properties
   > svn:keywords
@@ -8,3 +9,21 @@ Properties
       > Value = URL Author Date Revision
 
 Settings can be imported from "SVNSetup.svnprops"
+
+
+For working copy
+----------------
+
+Settings > Hook Scripts
+ > Post-Update
+    > Path = <Workspace>
+    > Command = <Workspace>\YAT\!-Tools\SVN Hook - PostUpdate.exe
+    > Wait = yes
+    > Hide = yes
+    > Always = no (force flag)
+ > Start-Commit
+    > Path = <Workspace>
+    > Command = <Workspace>\YAT\!-Tools\SVN Hook - StartCommit.exe
+    > Wait = yes
+    > Hide = yes
+    > Always = no (force flag)
