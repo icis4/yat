@@ -33,7 +33,8 @@ namespace YATInfra.SVNHooks
 		UnhandledException = -2,
 		CommandLineError = -1,
 		Success = 0,
-		TimeStampFileError = 1
+		Cancel = 1,
+		TimeStampFileError = 2
 	}
 
 	public static class TimeStampFileHelper
@@ -55,7 +56,8 @@ namespace YATInfra.SVNHooks
 			if (lineSplit.Length != 2)
 			{
 				var caption = ".timestamp File Error";
-				var message = new StringBuilder("A .timestamp file must contain lines separated by '|'!");
+				var message = new StringBuilder();
+				message.AppendLine("A .timestamp file must contain lines separated by '|'!");
 				message.AppendLine();
 				message.AppendLine("Line:");
 				message.AppendLine(line);
@@ -70,7 +72,8 @@ namespace YATInfra.SVNHooks
 			if (!DateTime.TryParse(timeStampString, out timeStamp))
 			{
 				var caption = ".timestamp File Error";
-				var message = new StringBuilder("A .timestamp file must contain valid time stamps!");
+				var message = new StringBuilder();
+				message.AppendLine("A .timestamp file must contain valid time stamps!");
 				message.AppendLine();
 				message.AppendLine("Time Stamp:");
 				message.AppendLine(timeStampString);
@@ -88,7 +91,8 @@ namespace YATInfra.SVNHooks
 			if (string.IsNullOrWhiteSpace(fileNamePattern))
 			{
 				var caption = ".timestamp File Error";
-				var message = new StringBuilder("A .timestamp file must contain valid file name patterns!");
+				var message = new StringBuilder();
+				message.AppendLine("A .timestamp file must contain valid file name patterns!");
 				message.AppendLine();
 				message.AppendLine("File Name Pattern:");
 				message.AppendLine(fileNamePattern);

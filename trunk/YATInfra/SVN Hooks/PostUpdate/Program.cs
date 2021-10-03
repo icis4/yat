@@ -55,7 +55,8 @@ namespace YATInfra.SVNHooks.PostUpdate
 			catch (Exception ex)
 			{
 				var caption = "'Post-Update' Hook Unhandled Exception";
-				var message = new StringBuilder("The 'Post-Update' hook has resulted in an unhandled exception!");
+				var message = new StringBuilder();
+				message.AppendLine("The 'Post-Update' hook has resulted in an unhandled exception!");
 				message.AppendLine();
 				message.AppendLine(ex.Message);
 				MessageBox.Show(message.ToString(), caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -68,7 +69,8 @@ namespace YATInfra.SVNHooks.PostUpdate
 			if ((args == null) || (args.Length != 6))
 			{
 				var caption = "'Post-Update' Hook Error";
-				var message = new StringBuilder("The 'Post-Update' hook requires 6 arguments 'PATH DEPTH REVISION ERROR CWD RESULTPATH'!");
+				var message = new StringBuilder();
+				message.AppendLine("The 'Post-Update' hook requires 6 arguments 'PATH DEPTH REVISION ERROR CWD RESULTPATH'!");
 				if (args != null) {
 					message.AppendLine();
 					message.AppendLine("Args:");
@@ -118,6 +120,8 @@ namespace YATInfra.SVNHooks.PostUpdate
 
 		private static Result RestoreTimeStampIfGiven(string filePath)
 		{
+			filePath = Path.GetFullPath(filePath); // Remember: / instead of \ is used by SVN!
+
 			var directoryPath = Path.GetDirectoryName(filePath);
 			var timeStampFilePath = Path.Combine(directoryPath, TimeStampFileHelper.FileName);
 			if (File.Exists(timeStampFilePath))
@@ -137,8 +141,7 @@ namespace YATInfra.SVNHooks.PostUpdate
 						var filePathsCovered = Directory.GetFiles(directoryPath, fileNamePattern);
 						foreach (var filePathCovered in filePathsCovered)
 						{
-							var filePathNormalized = Path.GetFullPath(filePath); // Remember: / instead of \ is used by SVN!
-							if (filePathNormalized == filePathCovered)
+							if (filePathCovered == filePath)
 							{
 								File.SetCreationTime(filePath, timeStamp);   // "File.Set*Time": The value is expressed in local time.
 								File.SetLastWriteTime(filePath, timeStamp);  // Corresponds to the value shown by e.g. the Windows Explorer.
