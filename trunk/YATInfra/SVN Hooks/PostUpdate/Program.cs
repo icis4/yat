@@ -29,20 +29,10 @@ using System.Windows.Forms;
 
 namespace YATInfra.SVNHooks.PostUpdate
 {
-	public class Program
+	public static class Program
 	{
-		private enum Result
-		{
-			UnhandledException = -2,
-			CommandLineError = -1,
-			Success = 0,
-			TimeStampFileError = 1
-		}
-
-		private const string TimeStampFileName = ".timestamp";
-
 		/// <summary>
-		/// Mains the specified arguments.
+		/// The 'Post-Update' hook.
 		/// </summary>
 		/// <param name="args">
 		/// Args are PATH DEPTH REVISION ERROR CWD RESULTPATH (from "Client Side Hook Scripts"
@@ -64,7 +54,7 @@ namespace YATInfra.SVNHooks.PostUpdate
 			}
 			catch (Exception ex)
 			{
-				var caption = "'Post-Update' Unhandled Exception";
+				var caption = "'Post-Update' Hook Unhandled Exception";
 				var message = new StringBuilder("The 'Post-Update' hook has resulted in an unhandled exception!");
 				message.AppendLine();
 				message.AppendLine(ex.Message);
@@ -77,7 +67,7 @@ namespace YATInfra.SVNHooks.PostUpdate
 		{
 			if ((args == null) || (args.Length != 6))
 			{
-				var caption = "'Post-Update' Error";
+				var caption = "'Post-Update' Hook Error";
 				var message = new StringBuilder("The 'Post-Update' hook requires 6 arguments 'PATH DEPTH REVISION ERROR CWD RESULTPATH'!");
 				if (args != null) {
 					message.AppendLine();
@@ -106,41 +96,19 @@ namespace YATInfra.SVNHooks.PostUpdate
 
 			// The result paths (args[5]) is what is needed. The file will contain directory as well
 			// as file paths, e.g.:
+			//
 			// D:/Workspace/YAT/Trunk/YAT
 			// D:/Workspace/YAT/Trunk/YAT/netrtfwriter/README.txt
+			//
+			// Attention: / instead of \ is used by SVN!
 
 			foreach (var resultPath in resultPaths)
 			{
 				if (File.Exists(resultPath))
 				{
-					var directoryPath = Path.GetDirectoryName(resultPath);
-					var timeStampFilePath = Path.Combine(directoryPath, TimeStampFileName);
-					if (File.Exists(timeStampFilePath))
-					{
-						var timeStampLines = File.ReadAllLines(timeStampFilePath);
-						foreach (var timeStampLine in timeStampLines)
-						{
-							if (!string.IsNullOrWhiteSpace(timeStampLine)) // Allow leading, separating or trailing empty lines.
-							{
-								DateTime timeStamp;
-								string searchPattern;
-								var result = ValidateTimeStampLine(timeStampFilePath, timeStampLine, out timeStamp, out searchPattern);
-								if (result != Result.Success) {
-									return (result);
-								}
-
-								var filePaths = Directory.GetFiles(directoryPath, searchPattern);
-								foreach (var filePath in filePaths)
-								{
-									if (filePath != timeStampFilePath) // This is the case when pattern is "*".
-									{
-										File.SetCreationTime(filePath, timeStamp);
-										File.SetLastWriteTime(filePath, timeStamp);
-										File.SetLastAccessTime(filePath, timeStamp);
-									}
-								}
-							}
-						}
+					var result = RestoreTimeStampIfGiven(resultPath);
+					if (result != Result.Success) {
+						return (result);
 					}
 				}
 			}
@@ -148,60 +116,37 @@ namespace YATInfra.SVNHooks.PostUpdate
 			return (Result.Success);
 		}
 
-		private static Result ValidateTimeStampLine(string filePath, string line, out DateTime timeStamp, out string searchPattern)
+		private static Result RestoreTimeStampIfGiven(string filePath)
 		{
-			timeStamp = DateTime.MinValue;
-			searchPattern = null;
-
-			var lineSplit = line.Split('|');
-			if (lineSplit.Length != 2)
+			var directoryPath = Path.GetDirectoryName(filePath);
+			var timeStampFilePath = Path.Combine(directoryPath, TimeStampFileHelper.FileName);
+			if (File.Exists(timeStampFilePath))
 			{
-				var caption = ".timestamp File Error";
-				var message = new StringBuilder("A .timestamp file must contain lines separated by '|'!");
-				message.AppendLine();
-				message.AppendLine("Line:");
-				message.AppendLine(line);
-				message.AppendLine();
-				message.AppendLine("File:");
-				message.AppendLine(filePath);
-				MessageBox.Show(message.ToString(), caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return (Result.TimeStampFileError);
-			}
+				var timeStampLines = File.ReadAllLines(timeStampFilePath);
+				foreach (var timeStampLine in timeStampLines)
+				{
+					if (!string.IsNullOrWhiteSpace(timeStampLine)) // Allow leading, separating and trailing empty lines.
+					{
+						DateTime timeStamp;
+						string fileNamePattern;
+						var result = TimeStampFileHelper.ValidateLine(timeStampFilePath, timeStampLine, out timeStamp, out fileNamePattern);
+						if (result != Result.Success) {
+							return (result);
+						}
 
-			var timeStampString = lineSplit[0];
-			if (!DateTime.TryParse(timeStampString, out timeStamp))
-			{
-				var caption = ".timestamp File Error";
-				var message = new StringBuilder("A .timestamp file must contain valid time stamps!");
-				message.AppendLine();
-				message.AppendLine("Time Stamp:");
-				message.AppendLine(timeStampString);
-				message.AppendLine();
-				message.AppendLine("Line:");
-				message.AppendLine(line);
-				message.AppendLine();
-				message.AppendLine("File:");
-				message.AppendLine(filePath);
-				MessageBox.Show(message.ToString(), caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return (Result.TimeStampFileError);
-			}
-
-			searchPattern = lineSplit[1];
-			if (string.IsNullOrWhiteSpace(searchPattern))
-			{
-				var caption = ".timestamp File Error";
-				var message = new StringBuilder("A .timestamp file must contain valid file search patterns!");
-				message.AppendLine();
-				message.AppendLine("File Search Pattern:");
-				message.AppendLine(searchPattern);
-				message.AppendLine();
-				message.AppendLine("Line:");
-				message.AppendLine(line);
-				message.AppendLine();
-				message.AppendLine("File:");
-				message.AppendLine(filePath);
-				MessageBox.Show(message.ToString(), caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return (Result.TimeStampFileError);
+						var filePathsCovered = Directory.GetFiles(directoryPath, fileNamePattern);
+						foreach (var filePathCovered in filePathsCovered)
+						{
+							var filePathNormalized = Path.GetFullPath(filePath); // Remember: / instead of \ is used by SVN!
+							if (filePathNormalized == filePathCovered)
+							{
+								File.SetCreationTime(filePath, timeStamp);   // "File.Set*Time": The value is expressed in local time.
+								File.SetLastWriteTime(filePath, timeStamp);  // Corresponds to the value shown by e.g. the Windows Explorer.
+								File.SetLastAccessTime(filePath, timeStamp); // This eases manually setting the time stamp in the file.
+							}
+						}
+					}
+				}
 			}
 
 			return (Result.Success);
