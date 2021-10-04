@@ -299,6 +299,9 @@ namespace YAT
 			}
 		}
 
+		/// <summary>The .NET Runtime prerequisite.</summary>
+		public static readonly string PrerequisiteRuntime = ".NET Runtime 4";
+
 		/// <summary>The .NET Framework prerequisite.</summary>
 		public static readonly string PrerequisiteFramework = ".NET Framework 4.8";
 

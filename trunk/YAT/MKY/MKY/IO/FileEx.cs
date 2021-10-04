@@ -304,8 +304,8 @@ namespace MKY.IO
 					separator = ""; // Allow '+' concatenation below.
 
 				string extension = Path.GetExtension(initialFilePath);
-				string filePathWithoutExtension = Path.ChangeExtension(initialFilePath, null);
-				string uniqueFilePath;
+				string filePathWithoutExtension = Path.ChangeExtension(initialFilePath, null); // ChangeExtension() allows changing on a complete path
+				string uniqueFilePath;                                                         // as GetFilePathWithoutExtension() doesn't exist.
 
 				int i = -1; // Initialize to -1 and increment before first use.
 				string postfix = "";
