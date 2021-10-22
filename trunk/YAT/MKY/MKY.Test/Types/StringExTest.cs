@@ -297,6 +297,7 @@ namespace MKY.Test.Types
 				yield return (new TestCaseData("a a",  3, null));
 			}
 		}
+
 		#endregion
 	}
 

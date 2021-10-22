@@ -28,9 +28,6 @@
 
 using System;
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
-
-using MKY.Time;
 
 using NUnit.Framework;
 
@@ -124,6 +121,7 @@ namespace MKY.Test.Time
 				yield return (new TestCaseData(new TimeSpan(10, 12, 13, 14, 15), "^d.ddd^",       "10.509"));
 			}
 		}
+
 		#endregion
 	}
 

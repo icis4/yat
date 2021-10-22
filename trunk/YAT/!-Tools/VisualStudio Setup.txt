@@ -132,8 +132,8 @@ Shortcuts
 Tools > Options
  > Environment > Keyboard
     > Show "Tools.External"
-       > Command4 (NUnit)
-          > Alt+N (Global)
+       > Command2 (NUnit)
+          > Alt+U (Global)
 
 
 Toolbar

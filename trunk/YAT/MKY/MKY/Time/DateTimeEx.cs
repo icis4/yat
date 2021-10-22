@@ -23,11 +23,32 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
 // MKY.Times for consistency with the System namespace.
 namespace MKY
 {
+	/// <summary>
+	/// <see cref="DateTime"/> utility methods.
+	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "'Ex' emphasizes that it's an extension to an existing class and not a replacement as '2' would emphasize.")]
+	public static class DateTimeEx
+	{
+		/// <summary>
+		/// Compares two specified <see cref="DateTime"/> objects ignoring anything below seconds.
+		/// </summary>
+		public static bool EqualsUptoSeconds(DateTime valueA, DateTime valueB)
+		{
+			if (valueA.Date   != valueB.Date)   return false;
+			if (valueA.Hour   != valueB.Hour)   return false;
+			if (valueA.Minute != valueB.Minute) return false;
+			if (valueA.Second != valueB.Second) return false;
+
+			return (true);
+		}
+	}
+
 	/// <summary></summary>
 	public class DateTimeEventArgs : EventArgs
 	{
