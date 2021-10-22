@@ -150,6 +150,7 @@
     <Compile Include="Settings\SettingsTest.cs" />
     <Compile Include="TestTypes.cs" />
     <Compile Include="Threading\ThreadExTest.cs" />
+    <Compile Include="Time\DateTimeTest.cs" />
     <Compile Include="Time\RateTest.cs" />
     <Compile Include="Time\TimeSpanTest.cs" />
     <Compile Include="Types\ArrayExTest.cs" />
