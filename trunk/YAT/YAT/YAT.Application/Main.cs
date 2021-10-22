@@ -130,7 +130,7 @@ namespace YAT.Application
 		// Static Fields
 		//==========================================================================================
 
-		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
+		private static readonly Random staticRandom = new Random(RandomEx.NextRandomSeed());
 
 		#endregion
 
@@ -140,13 +140,13 @@ namespace YAT.Application
 		//==========================================================================================
 
 		// Command line options:
-		private string[] commandLineArgsStrings;
-		private CommandLineArgs commandLineArgs;
+		private readonly string[] commandLineArgsStrings;
+		private readonly CommandLineArgs commandLineArgs;
 
 	#if (HANDLE_UNHANDLED_EXCEPTIONS)
 		// Invocation synchronization objects:
 		private ISynchronizeInvoke mainThreadSynchronizer;
-		private object mainThreadSynchronizerSyncObj = new object();
+		private readonly object mainThreadSynchronizerSyncObj = new object();
 	#endif
 
 		#endregion
@@ -1201,8 +1201,7 @@ namespace YAT.Application
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
 		protected static void ShowErrorInMessageBox(ICollection<string> invalidArgs, IReadOnlyList<string> invalidationMessages, ref bool showHelp)
 		{
-			StringBuilder text;
-			Model.Utilities.MessageHelper.MakeCommandLineErrorMessage(invalidArgs, invalidationMessages, out text);
+			Model.Utilities.MessageHelper.MakeCommandLineErrorMessage(invalidArgs, invalidationMessages, out StringBuilder text);
 			text.AppendLine();
 			text.AppendLine();
 			text.AppendLine("Show command line help?");                                     // This is the default representation on Windows.
@@ -1277,8 +1276,7 @@ namespace YAT.Application
 
 			Console.Out.WriteLine(); // Line #2.
 
-			StringBuilder text;
-			Model.Utilities.MessageHelper.MakeCommandLineErrorMessage(invalidArgs, invalidationMessages, out text);
+			Model.Utilities.MessageHelper.MakeCommandLineErrorMessage(invalidArgs, invalidationMessages, out StringBuilder text);
 
 			using (var sr = new StringReader(text.ToString()))
 			{

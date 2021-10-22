@@ -75,23 +75,23 @@ namespace YAT.Model
 
 		private int autoActionCount;
 		private Utilities.AutoTriggerHelper autoActionTriggerHelper;
-		private object autoActionTriggerHelperSyncObj = new object();
+		private readonly object autoActionTriggerHelperSyncObj = new object();
 
 		private bool autoActionClearRepositoriesOnSubsequentRxIsArmed; // = false;
 		private DateTime autoActionClearRepositoriesTriggerTimeStamp; // = DateTime.MinValue;
 		private string autoActionClearRepositoriesTriggerText; // = null;
 		private MatchCollection autoActionClearRepositoriesTriggerMatches; // = null;
 		private CountsRatesTuple autoActionClearRepositoriesDataStatus; // = { 0, 0, 0, 0 };
-		private object autoActionClearRepositoriesSyncObj = new object();
+		private readonly object autoActionClearRepositoriesSyncObj = new object();
 
 		private bool autoActionCloseOrExitHasBeenTriggered; // = false;
-		private object autoActionCloseOrExitSyncObj = new object();
+		private readonly object autoActionCloseOrExitSyncObj = new object();
 
 		private Queue<Tuple<AutoAction, DateTime, string, MatchCollection, CountsRatesTuple>> autoActionQueue = new Queue<Tuple<AutoAction, DateTime, string, MatchCollection, CountsRatesTuple>>();
 		private bool autoActionThreadRunFlag;
 		private AutoResetEvent autoActionThreadEvent;
 		private Thread autoActionThread;
-		private object autoActionThreadSyncObj = new object();
+		private readonly object autoActionThreadSyncObj = new object();
 
 		/// <remarks>Public getter for simplicity (update of corresponding view).</remarks>
 		/// <remarks><see cref="AutoActionPlotModelSyncObj"/> must be locked when accessing this property!</remarks>

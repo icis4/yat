@@ -75,7 +75,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		private static int staticInstanceCounter;
-		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
+		private static readonly Random staticRandom = new Random(RandomEx.NextRandomSeed());
 
 		#endregion
 
@@ -153,24 +153,24 @@ namespace YAT.Domain
 		/// Temporarily disabling this handling/workaround can be useful for debugging, i.e. to
 		/// continue program execution even in case of exceptions and let the debugger handle it.
 		/// </remarks>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RawTerminal).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
-	////private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RawTerminal).FullName); // See remarks above!
+		private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RawTerminal).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
+	////private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(RawTerminal).FullName); // See remarks above!
 
-		private int instanceId;
+		private readonly int instanceId;
 
 		private Settings.BufferSettings bufferSettings;
 
 		private RawRepository txRepository;
 		private RawRepository bidirRepository;
 		private RawRepository rxRepository;
-		private object repositorySyncObj = new object();
+		private readonly object repositorySyncObj = new object();
 
 		private Settings.IOSettings ioSettings;
 		private IIOProvider io;
-		private object ioDataSyncObj = new object();
+		private readonly object ioDataSyncObj = new object();
 
 		private DateTime lastReceivedChunkTimeStamp;
-		private object lastReceivedChunkTimeStampSyncObj = new object();
+		private readonly object lastReceivedChunkTimeStampSyncObj = new object();
 
 		#endregion
 

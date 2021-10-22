@@ -121,9 +121,9 @@ namespace MKY.IO.Serial.Socket
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(UdpSocket).FullName);
+		private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(UdpSocket).FullName);
 
-		private int instanceId;
+		private readonly int instanceId;
 		private UdpSocketType socketType;
 
 		private IPHostEx remoteHost;
@@ -135,17 +135,17 @@ namespace MKY.IO.Serial.Socket
 		private UdpServerSendMode serverSendMode;
 
 		private SocketState state = SocketState.Closed;
-		private object stateSyncObj = new object();
+		private readonly object stateSyncObj = new object();
 
 		private System.Net.Sockets.UdpClient socket;
-		private object socketSyncObj = new object();
-		private object dataEventSyncObj = new object();
+		private readonly object socketSyncObj = new object();
+		private readonly object dataEventSyncObj = new object();
 
 		private Queue<byte> sendQueue = new Queue<byte>(SendQueueFixedCapacity);
 		private bool sendThreadRunFlag;
 		private AutoResetEvent sendThreadEvent;
 		private Thread sendThread;
-		private object sendThreadSyncObj = new object();
+		private readonly object sendThreadSyncObj = new object();
 
 		/// <remarks>
 		/// Async receiving. The capacity is set large enough to reduce the number of resizing
@@ -155,7 +155,7 @@ namespace MKY.IO.Serial.Socket
 		private bool receiveThreadRunFlag;
 		private AutoResetEvent receiveThreadEvent;
 		private Thread receiveThread;
-		private object receiveThreadSyncObj = new object();
+		private readonly object receiveThreadSyncObj = new object();
 
 		#endregion
 

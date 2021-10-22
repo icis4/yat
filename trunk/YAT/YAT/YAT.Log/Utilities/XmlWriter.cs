@@ -57,7 +57,7 @@ namespace YAT.Log.Utilities
 		protected const string Schema = @"xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema""";
 
 		private StreamWriter writer;
-		private object writerSyncObj = new object();
+		private readonly object writerSyncObj = new object();
 
 		private int    indentSize = 2;
 		private string indentString = new string(' ', 2);

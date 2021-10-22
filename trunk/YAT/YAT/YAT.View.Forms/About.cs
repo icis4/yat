@@ -563,7 +563,7 @@ namespace YAT.View.Forms
 		private System.Threading.Timer timer_ExecuteManualTest3; // Ambiguity with 'System.Windows.Forms.Timer'.
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private object timer_ExecuteManualTest3SyncObj = new object();
+		private readonly object timer_ExecuteManualTest3SyncObj = new object();
 
 		/// <summary>
 		/// Test case 3: Unhandled asynchronous non-synchronized exceptions.

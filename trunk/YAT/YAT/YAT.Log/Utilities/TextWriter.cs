@@ -45,7 +45,7 @@ namespace YAT.Log.Utilities
 	public class TextWriter : DisposableBase
 	{
 		private StreamWriter writer;
-		private object writerSyncObj = new object();
+		private readonly object writerSyncObj = new object();
 
 		/// <summary></summary>
 		public TextWriter(FileStream stream, Encoding encoding)

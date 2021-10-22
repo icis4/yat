@@ -80,7 +80,7 @@ namespace YAT.Model
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Main).FullName);
+		private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Main).FullName);
 
 		private CommandLineArgs commandLineArgs;
 		private MainLaunchArgs launchArgs;
@@ -94,10 +94,10 @@ namespace YAT.Model
 		private MainResult result = MainResult.Success;
 
 		private System.Threading.Timer operationTimer; // Ambiguity with 'System.Windows.Forms.Timer'.
-		private object operationTimerSyncObj = new object();
+		private readonly object operationTimerSyncObj = new object();
 
 		private System.Threading.Timer exitTimer; // Ambiguity with 'System.Windows.Forms.Timer'.
-		private object exitTimerSyncObj = new object();
+		private readonly object exitTimerSyncObj = new object();
 
 		#endregion
 
@@ -2190,7 +2190,7 @@ namespace YAT.Model
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private object operationTimer_Periodic_Elapsed_SyncObj = new object();
+		private readonly object operationTimer_Periodic_Elapsed_SyncObj = new object();
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private void operationTimer_Periodic_Elapsed(object obj)
@@ -2410,7 +2410,7 @@ namespace YAT.Model
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private object exitTimer_Periodic_Elapsed_SyncObj = new object();
+		private readonly object exitTimer_Periodic_Elapsed_SyncObj = new object();
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that all potential exceptions are handled.")]
 		private void exitTimer_Periodic_Elapsed(object obj)

@@ -69,7 +69,7 @@ namespace YAT.Log
 
 		private Timer flushTimer;
 		private Random flushTimerRandom;
-		private object flushTimerSyncObj = new object();
+		private readonly object flushTimerSyncObj = new object();
 
 		#endregion
 

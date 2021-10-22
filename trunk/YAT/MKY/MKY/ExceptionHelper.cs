@@ -41,7 +41,7 @@ namespace MKY
 		public string Owner { get; protected set; }
 
 		private Dictionary<Type, bool> exceptionTypesToIgnore = new Dictionary<Type, bool>(); // No preset needed, default behavior is good enough.
-		private object exceptionTypesToIgnoreSyncObj = new object();
+		private readonly object exceptionTypesToIgnoreSyncObj = new object();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExceptionHelper"/> class.

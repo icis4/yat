@@ -151,7 +151,7 @@ namespace MKY.IO.Serial.Socket
 		// Static Fields
 		//==========================================================================================
 
-		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
+		private static readonly Random staticRandom = new Random(RandomEx.NextRandomSeed());
 
 	#if (DEBUG_STATIC_SOCKET_LIST)
 		private static List<ALAZ.SystemEx.NetEx.SocketsEx.SocketServer> staticSocketList = new List<ALAZ.SystemEx.NetEx.SocketsEx.SocketServer>();
@@ -164,12 +164,12 @@ namespace MKY.IO.Serial.Socket
 		// Fields
 		//==========================================================================================
 
-		private int instanceId;
+		private readonly int instanceId;
 
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(TcpServer).FullName);
+		private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(TcpServer).FullName);
 
 		private IPNetworkInterfaceEx localInterface;
 		private int localPort;
@@ -179,26 +179,26 @@ namespace MKY.IO.Serial.Socket
 		private int stateCount; // = 0;
 		private bool stateTokenForStopAndDispose; // = false;
 		private SocketState stateIntendedAfterStopAndDispose;
-		private object stateSyncObj = new object();
+		private readonly object stateSyncObj = new object();
 
 		private ALAZ.SystemEx.NetEx.SocketsEx.SocketServer socket;
-		private object socketSyncObj = new object();
+		private readonly object socketSyncObj = new object();
 
 		private List<ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection> socketConnections = new List<ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection>();
 
-		private object dataEventSyncObj = new object();
+		private readonly object dataEventSyncObj = new object();
 
 		private Queue<byte> sendQueue = new Queue<byte>(SendQueueCapacity);
 		private bool sendThreadRunFlag;
 		private AutoResetEvent sendThreadEvent;
 		private Thread sendThread;
-		private object sendThreadSyncObj = new object();
+		private readonly object sendThreadSyncObj = new object();
 
 		private Queue<Tuple<byte[], DateTime, System.Net.IPEndPoint>> dataSentQueue = new Queue<Tuple<byte[], DateTime, System.Net.IPEndPoint>>(); // No preset needed for this "ChunkQueue", default behavior is good enough.
 		private bool dataSentThreadRunFlag;
 		private AutoResetEvent dataSentThreadEvent;
 		private Thread dataSentThread;
-		private object dataSentThreadSyncObj = new object();
+		private readonly object dataSentThreadSyncObj = new object();
 
 		#endregion
 

@@ -56,7 +56,7 @@ namespace YAT.Log
 		private XmlWriterText xmlWriter;
 		private RtfWriter rtfWriter;
 		private TextWriter textWriter;
-		private object writerSyncObj = new object();
+		private readonly object writerSyncObj = new object();
 
 		/// <summary></summary>
 		public TextLog(bool enabled, Func<string> makeFilePath, string nameSeparator, LogFileWriteMode writeMode, Encoding encoding, FormatSettings format)

@@ -627,7 +627,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Device).FullName);
+		private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Device).FullName);
 
 		private Guid classGuid;
 		private DeviceInfo info;

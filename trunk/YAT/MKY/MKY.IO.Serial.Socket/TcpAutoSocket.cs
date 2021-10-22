@@ -167,12 +167,12 @@ namespace MKY.IO.Serial.Socket
 		// Fields
 		//==========================================================================================
 
-		private int instanceId;
+		private readonly int instanceId;
 
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(TcpAutoSocket).FullName);
+		private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(TcpAutoSocket).FullName);
 
 		private IPHostEx remoteHost;
 		private int remotePort;
@@ -180,13 +180,13 @@ namespace MKY.IO.Serial.Socket
 		private int localPort;
 
 		private SocketState state = SocketState.Reset;
-		private object stateSyncObj = new object();
+		private readonly object stateSyncObj = new object();
 
 		private TcpClient client;
 		private TcpServer server;
 
 		private int startCycleCounter; // = 0;
-		private object startCycleCounterSyncObj = new object();
+		private readonly object startCycleCounterSyncObj = new object();
 
 		#endregion
 

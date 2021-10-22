@@ -87,8 +87,8 @@ namespace MKY.Time
 		/// Temporarily disabling this handling/workaround can be useful for debugging, i.e. to
 		/// continue program execution even in case of exceptions and let the debugger handle it.
 		/// </remarks>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Chronometer).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
-	////private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Chronometer).FullName); // See remarks above!
+		private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Chronometer).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
+	////private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Chronometer).FullName); // See remarks above!
 
 		private System.Timers.Timer secondTicker; // Ambiguity with 'System.Threading.Timer'.
 		private DateTime startTimeStamp = DateTime.Now;
@@ -318,7 +318,7 @@ namespace MKY.Time
 		//==========================================================================================
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private object secondTicker_Periodic_Elapsed_SyncObj = new object();
+		private readonly object secondTicker_Periodic_Elapsed_SyncObj = new object();
 
 		private void secondTicker_Periodic_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{

@@ -70,7 +70,7 @@ namespace MKY.Settings
 		private List<SettingsItem> nodes;      // = null;
 		private bool haveChanged;              // = false;
 		private int changeEventSuspendedCount; // = 0;
-		private object changeEventSuspendedCountSyncObj = new object();
+		private readonly object changeEventSuspendedCountSyncObj = new object();
 
 		/// <summary></summary>
 		public event EventHandler<SettingsEventArgs> Changed;

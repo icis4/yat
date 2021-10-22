@@ -88,7 +88,7 @@ namespace YAT.Log.Utilities
 		private FormatDescriptor separatorFormat;
 
 		private StreamWriter writer;
-		private object writerSyncObj = new object();
+		private readonly object writerSyncObj = new object();
 
 		/// <summary></summary>
 		public RtfWriter(FileStream stream, FormatSettings settings)

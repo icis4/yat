@@ -104,7 +104,7 @@ namespace YAT.Model
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Workspace).FullName);
+		private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Workspace).FullName);
 
 		private WorkspaceLaunchArgs launchArgs;
 		private Guid guid;
@@ -615,7 +615,7 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private object settingsRoot_Changed_SyncObj = new object();
+		private readonly object settingsRoot_Changed_SyncObj = new object();
 
 		private void settingsRoot_Changed(object sender, SettingsEventArgs e)
 		{

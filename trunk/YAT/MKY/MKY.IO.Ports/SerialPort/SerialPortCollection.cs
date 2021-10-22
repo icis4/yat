@@ -76,7 +76,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// A dedicated event helper to allow ignoring the 'ThreadAbortException' when cancelling.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(SerialPortCollection).FullName);
+		private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(SerialPortCollection).FullName);
 
 		/// <summary>
 		/// The port that is currently in use, e.g. "(in use by this serial port)" of "COM1 - (in use by this serial port)".
