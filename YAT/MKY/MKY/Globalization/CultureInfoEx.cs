@@ -56,12 +56,25 @@ namespace MKY.Globalization
 			if (l.Contains(ci))
 				return (ci);
 
-			// 3rd prio: English (United States)
-			ci = CultureInfo.GetCultureInfo("en-US");
-			if (l.Contains(ci))
-				return (ci);
+			// 3rd prio: English (World)
+			try
+			{
+				ci = CultureInfo.GetCultureInfo("en-001");
+				if (l.Contains(ci))
+					return (ci);
+			}
+			catch (CultureNotFoundException) {}
 
-			// 4th prio: The first entry in the list
+			// 4th prio: English (United States)
+			try
+			{
+				ci = CultureInfo.GetCultureInfo("en-US");
+				if (l.Contains(ci))
+					return (ci);
+			}
+			catch (CultureNotFoundException) {}
+
+			// 5th prio: The first entry in the list
 			return (l[0]);
 		}
 
@@ -87,12 +100,25 @@ namespace MKY.Globalization
 			if (l.Contains(ci))
 				return (ci);
 
-			// 3rd prio: English (United States)
-			ci = CultureInfo.GetCultureInfo("en-US");
-			if (l.Contains(ci))
-				return (ci);
+			// 3rd prio: English (World)
+			try
+			{
+				ci = CultureInfo.GetCultureInfo("en-001");
+				if (l.Contains(ci))
+					return (ci);
+			}
+			catch (CultureNotFoundException) {}
 
-			// 4th prio: The first entry in the list
+			// 4th prio: English (United States)
+			try
+			{
+				ci = CultureInfo.GetCultureInfo("en-US");
+				if (l.Contains(ci))
+					return (ci);
+			}
+			catch (CultureNotFoundException) {}
+
+			// 5th prio: The first entry in the list
 			return (l[0]);
 		}
 	}
