@@ -109,6 +109,22 @@ namespace YATInfra.SVNHooks
 			return (Result.Success);
 		}
 	}
+
+	public static class DebuggerHookHelper
+	{
+		public static readonly string Message =
+			"This is an intended break while running SVN." + Environment.NewLine +
+			Environment.NewLine +
+			"It allows debugging hooks without without having to change the hook's command line in the SVN settings:" + Environment.NewLine +
+			Environment.NewLine +
+			"    1. Attach the Debugger to TortoiseSVN [Ctrl+Alt+P]." + Environment.NewLine +
+			"    2. [Debug > Break All] or [Ctrl+Alt+Break]" + Environment.NewLine +
+			"        and/or set breakpoints as needed." + Environment.NewLine +
+			"    3. [Debug > Continue] or [F5]." + Environment.NewLine +
+			"    4. Confirm this message with [OK].";
+
+		public static bool Once; // = false;
+	}
 }
 
 //==================================================================================================

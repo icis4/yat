@@ -22,10 +22,31 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Debug SVN hooks without having to change the SVN hook's command line in the SVN settings:
+////#define DEBUGGER_BREAK_HOOK
+
+#endif
+
+#endregion
+
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+
+#endregion
 
 namespace YATInfra.SVNHooks.PostUpdate
 {
@@ -43,6 +64,14 @@ namespace YATInfra.SVNHooks.PostUpdate
 		/// </returns>
 		private static int Main(string[] args)
 		{
+		#if (DEBUGGER_BREAK_HOOK)
+			if (!DebuggerHookHelper.Once)
+			{
+				DebuggerHookHelper.Once = true;
+				MessageBox.Show(DebuggerHookHelper.Message, typeof(Program).FullName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+			}
+		#endif
+
 			try
 			{
 				var result = ValidateArgs(args);

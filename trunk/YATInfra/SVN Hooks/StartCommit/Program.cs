@@ -22,10 +22,33 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Configuration
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+#if (DEBUG)
+
+	// Debug SVN hooks without having to change the SVN hook's command line in the SVN settings:
+////#define DEBUGGER_BREAK_HOOK
+
+#endif
+
+#endregion
+
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+
+using MKY;
+
+#endregion
 
 namespace YATInfra.SVNHooks.StartCommit
 {
@@ -43,6 +66,14 @@ namespace YATInfra.SVNHooks.StartCommit
 		/// </returns>
 		private static int Main(string[] args)
 		{
+		#if (DEBUGGER_BREAK_HOOK)
+			if (!DebuggerHookHelper.Once)
+			{
+				DebuggerHookHelper.Once = true;
+				MessageBox.Show(DebuggerHookHelper.Message, typeof(Program).FullName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+			}
+		#endif
+
 			try
 			{
 				var result = ValidateArgs(args);
@@ -159,16 +190,16 @@ namespace YATInfra.SVNHooks.StartCommit
 								continue;
 							}
 
-							var timeStampNew = File.GetLastWriteTime(filePathCovered); // "File.GetLastWriteTime": The value is expressed in local time.
-							if (timeStampNew != timeStampOld)                          // Corresponds to the value shown by e.g. the Windows Explorer.
-							{                                                          // This eases manually setting the time stamp in the file.
+							var timeStampNew = File.GetLastWriteTime(filePathCovered);     // "File.GetLastWriteTime": The value is expressed in local time.
+							if (!DateTimeEx.EqualsUptoSeconds(timeStampNew, timeStampOld)) // Corresponds to the value shown by e.g. the Windows Explorer.
+							{                                                              // This eases manually setting the time stamp in the file.
 								var timeStampString = timeStampNew.ToString(TimeStampFileHelper.Format);
 								timeStampLines[i] = string.Format("{0}|{1}", timeStampString, fileNamePattern);
 								timeStampLinesHaveChanged = true;
 
 								var caption = "'Start-Commit' Hook Notification";
 								var message = new StringBuilder();
-								message.AppendLine("The 'Start-Commit' hook has updated a time stamp.");
+								message.AppendLine("The 'Start-Commit' hook has updated a time stamp:");
 								message.AppendLine();
 								message.AppendLine("File:");
 								message.AppendLine(filePathCovered);
@@ -193,7 +224,7 @@ namespace YATInfra.SVNHooks.StartCommit
 					// Note that "File.WriteAllLines()" appends a trailing empty line. While not ideal and typically not done
 					// with e.g. XML files, this is also typically done for source code files, thus considered acceptable.
 					// https://stackoverflow.com/questions/11689337/net-file-writealllines-leaves-empty-line-at-the-end-of-file
-					// half way down the page shows a "WriteAllLinesBetter()", but as mentioned above, not needed here.
+					// half way down the page shows a "WriteAllLinesBetter()", but as mentioned above, not necessary here.
 				}
 			}
 

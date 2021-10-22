@@ -40,6 +40,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\YAT\MKY\MKY\Time\DateTimeEx.cs">
+      <Link>DateTimeEx.cs</Link>
+    </Compile>
     <Compile Include="..\Common.cs">
       <Link>Common.cs</Link>
     </Compile>
@@ -51,6 +54,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName)==Release copy "$(TargetDir)YATInfra.SVNHooks.StartCommit.exe" "$(ProjectDir)..\..\..\YAT\!-Tools\SVN Hook - StartCommit.exe" /Y</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetDir)YATInfra.SVNHooks.StartCommit.exe" "$(ProjectDir)..\..\..\YAT\!-Tools\SVN Hook - StartCommit.exe" /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
