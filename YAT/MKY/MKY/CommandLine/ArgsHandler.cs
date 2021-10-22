@@ -151,11 +151,11 @@ namespace MKY.CommandLine
 		// Fields
 		//==========================================================================================
 
-		private bool supportValueArgs;       // = false;
-		private bool supportOptionArgs;      // = false;
-		private bool supportArrayOptionArgs; // = false;
+		private readonly bool supportValueArgs;       // = false;
+		private readonly bool supportOptionArgs;      // = false;
+		private readonly bool supportArrayOptionArgs; // = false;
 
-		private string[] args; // = null;
+		private readonly string[] args; // = null;
 
 		private Dictionary<string, object> argsOverride; // = null;
 
@@ -1090,11 +1090,15 @@ namespace MKY.CommandLine
 		{
 			this.arrayOptionField = field;
 
-			this.arrayOptionValues = new List<object>();
-			this.arrayOptionValues.Add(value);
+			this.arrayOptionValues = new List<object>
+			{
+				value
+			};
 
-			this.arrayOptionStrings = new List<string>();
-			this.arrayOptionStrings.Add(arg);
+			this.arrayOptionStrings = new List<string>
+			{
+				arg
+			};
 		}
 
 		private void ContinueArrayOption(string arg)
