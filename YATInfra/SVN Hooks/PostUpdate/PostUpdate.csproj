@@ -51,6 +51,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName)==Release copy "$(TargetDir)YATInfra.SVNHooks.PostUpdate.exe" "$(ProjectDir)..\..\..\YAT\!-Tools\SVN Hook - PostUpdate.exe" /Y</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetDir)YATInfra.SVNHooks.PostUpdate.exe" "$(ProjectDir)..\..\..\YAT\!-Tools\SVN Hook - PostUpdate.exe" /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>

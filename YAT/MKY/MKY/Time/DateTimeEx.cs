@@ -36,7 +36,7 @@ namespace MKY
 	public static class DateTimeEx
 	{
 		/// <summary>
-		/// Compares two specified <see cref="DateTime"/> objects ignoring anything below seconds.
+		/// Compares two specified <see cref="DateTime"/> values ignoring anything below seconds.
 		/// </summary>
 		public static bool EqualsUptoSeconds(DateTime valueA, DateTime valueB)
 		{

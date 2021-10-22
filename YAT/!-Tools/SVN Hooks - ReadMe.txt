@@ -7,7 +7,7 @@ Hooks in use:
  > Post-Update [SVN Hook - PostUpdate.exe] version 1.0.0.0 (2021-10-03)
 
 Hooks are .NET 4.8 AnyCPU console applications copied here from the ..\..\YATInfra\SVN projects.
-Hooks are [Release] builds. For debugging, configure SVN client to the corresponding \bin folder.
+Hooks are [Release] builds. For debugging, activate DEBUGGER_BREAK_HOOK and build [Debug].
 
 Note that build artefact related files are touched/stamped using pre-build steps according to:
  > ..\YAT\YAT\YAT.csproj.ReadMe.txt
