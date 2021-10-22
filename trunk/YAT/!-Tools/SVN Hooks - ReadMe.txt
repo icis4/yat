@@ -3,8 +3,8 @@ The SVN hooks save and restore the original time stamp of non-built and 3rd part
 The SVN hook approach has been chosen after considering various approaches (see further below).
 
 Hooks in use:
- > Start-Commit [SVN Hook - StartCommit.exe] version 1.0.0.0 (2021-10-03)
- > Post-Update [SVN Hook - PostUpdate.exe] version 1.0.0.0 (2021-10-03)
+ > Start-Commit [SVN Hook - StartCommit.exe] version 1.0.1.0 (2021-10-22)
+ > Post-Update [SVN Hook - PostUpdate.exe] version 1.0.0.1 (2021-10-22)
 
 Hooks are .NET 4.8 AnyCPU console applications copied here from the ..\..\YATInfra\SVN projects.
 Hooks are [Release] builds. For debugging, activate DEBUGGER_BREAK_HOOK and build [Debug].
