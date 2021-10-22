@@ -51,7 +51,7 @@ namespace MKY.Data
 	[Serializable]
 	public abstract class DataItem : IEquatable<DataItem>
 	{
-		private List<DataItem> nodes;          // = null;
+		private readonly List<DataItem> nodes; // = null;
 		private bool haveChanged;              // = false;
 		private int changeEventSuspendedCount; // = 0;
 		private readonly object changeEventSuspendedCountSyncObj = new object();

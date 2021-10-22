@@ -65,11 +65,11 @@ namespace MKY.Settings
 	[Serializable]
 	public abstract class SettingsItem : IEquatable<SettingsItem>
 	{
-		private SettingsType settingsType;
+		private readonly SettingsType settingsType;
 
-		private List<SettingsItem> nodes;      // = null;
-		private bool haveChanged;              // = false;
-		private int changeEventSuspendedCount; // = 0;
+		private readonly List<SettingsItem> nodes; // = null;
+		private bool haveChanged;                  // = false;
+		private int changeEventSuspendedCount;     // = 0;
 		private readonly object changeEventSuspendedCountSyncObj = new object();
 
 		/// <summary></summary>
