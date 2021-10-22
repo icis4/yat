@@ -193,15 +193,15 @@ namespace YAT.Domain
 		protected bool SendThreadsArePermitted { get; private set; }
 
 		private int isSendingCount; // = 0;
-		private object isSendingCountSyncObj = new object();
+		private readonly object isSendingCountSyncObj = new object();
 		private int isSendingForSomeTimeCount; // = 0;
-		private object isSendingForSomeTimeCountSyncObj = new object();
+		private readonly object isSendingForSomeTimeCountSyncObj = new object();
 
 		private ManualResetEvent packetGateEvent = new ManualResetEvent(false);
-		private object packetGateSyncObj = new object();
+		private readonly object packetGateSyncObj = new object();
 
 		private bool breakState;
-		private object breakStateSyncObj = new object();
+		private readonly object breakStateSyncObj = new object();
 
 		private Timer periodicXOnTimer;
 

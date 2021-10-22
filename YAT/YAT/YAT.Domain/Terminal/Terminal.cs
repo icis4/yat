@@ -206,10 +206,10 @@ namespace YAT.Domain
 		/// Temporarily disabling this handling/workaround can be useful for debugging, i.e. to
 		/// continue program execution even in case of exceptions and let the debugger handle it.
 		/// </remarks>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
-	////private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName); // See remarks above!
+		private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
+	////private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName); // See remarks above!
 
-		private int instanceId;
+		private readonly int instanceId;
 
 		private Settings.TerminalSettings terminalSettings;
 
@@ -217,15 +217,15 @@ namespace YAT.Domain
 		private DateTime timeSpanBase;
 
 		private IOControlState ioControlStateCache;
-		private object ioControlStateCacheSyncObj = new object();
+		private readonly object ioControlStateCacheSyncObj = new object();
 
 	#if (WITH_SCRIPTING)
 
 		private Queue<ScriptMessage> availableReceivedMessagesForScripting = new Queue<ScriptMessage>();
 		private ScriptMessage lastEnqueuedReceivedMessageForScripting; // = null;
-		private object lastEnqueuedReceivedMessageForScriptingSyncObj = new object();
+		private readonly object lastEnqueuedReceivedMessageForScriptingSyncObj = new object();
 		private ScriptMessage lastDequeuedReceivedMessageForScripting; // = null;
-		private object lastDequeuedReceivedMessageForScriptingSyncObj = new object();
+		private readonly object lastDequeuedReceivedMessageForScriptingSyncObj = new object();
 
 	#endif
 
@@ -1246,7 +1246,7 @@ namespace YAT.Domain
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private object periodicXOnTimer_Periodic_Elapsed_SyncObj = new object();
+		private readonly object periodicXOnTimer_Periodic_Elapsed_SyncObj = new object();
 
 		private void periodicXOnTimer_Periodic_Elapsed(object obj)
 		{

@@ -53,7 +53,7 @@ namespace YAT.Log
 
 		private XmlWriterRaw xmlWriter;
 		private BinaryWriter binaryWriter;
-		private object writerSyncObj = new object();
+		private readonly object writerSyncObj = new object();
 
 		/// <summary></summary>
 		public RawLog(bool enabled, Func<string> makeFilePath, string nameSeparator, LogFileWriteMode writeMode, Encoding encoding)

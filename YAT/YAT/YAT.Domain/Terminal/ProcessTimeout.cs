@@ -43,11 +43,11 @@ namespace YAT.Domain
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(ProcessTimeout).FullName);
+		private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(ProcessTimeout).FullName);
 
 		private int timeout;
 		private Timer timer;
-		private object timerSyncObj = new object();
+		private readonly object timerSyncObj = new object();
 
 		/// <summary></summary>
 		public event EventHandler<EventArgs<DateTime>> Elapsed;

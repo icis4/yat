@@ -35,7 +35,7 @@ namespace MKY.IO.Serial.Socket
 		//==========================================================================================
 
 		private static int staticInstanceCounter;
-		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
+		private static readonly Random staticRandom = new Random(RandomEx.NextRandomSeed());
 
 		#endregion
 

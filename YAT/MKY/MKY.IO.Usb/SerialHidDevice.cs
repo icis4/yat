@@ -161,7 +161,7 @@ namespace MKY.IO.Usb
 		// Static Fields
 		//==========================================================================================
 
-		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
+		private static readonly Random staticRandom = new Random(RandomEx.NextRandomSeed());
 
 		#endregion
 
@@ -332,10 +332,10 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(SerialHidDevice).FullName);
+		private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(SerialHidDevice).FullName);
 
 		private State state = State.Reset;
-		private object stateSyncObj = new object();
+		private readonly object stateSyncObj = new object();
 
 		private bool matchSerial = MatchSerialDefault;
 
@@ -361,7 +361,7 @@ namespace MKY.IO.Usb
 		private bool receiveThreadRunFlag;
 		private AutoResetEvent receiveThreadEvent;
 		private Thread receiveThread;
-		private object receiveThreadSyncObj = new object();
+		private readonly object receiveThreadSyncObj = new object();
 
 		#endregion
 

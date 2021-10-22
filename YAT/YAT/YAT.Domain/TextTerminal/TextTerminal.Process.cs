@@ -85,7 +85,7 @@ namespace YAT.Domain
 
 		private ProcessTimeout glueCharsOfLineTimeout;
 
-		private object waitForResponseClearanceSyncObj = new object();
+		private readonly object waitForResponseClearanceSyncObj = new object();
 		private int waitForResponseResponseCounter; // = 0 and will again be initialized to that.
 		private int waitForResponseClearanceCounter; // = 0 but will be initialized to settings.
 		private DateTime waitForResponseClearanceTimeStamp; // = MinValue and will again be initialized to that.

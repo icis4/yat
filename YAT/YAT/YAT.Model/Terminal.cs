@@ -116,7 +116,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		private static int staticSequentialIdCounter = SequentialIdCounterDefault;
-		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
+		private static readonly Random staticRandom = new Random(RandomEx.NextRandomSeed());
 
 		#endregion
 
@@ -232,8 +232,8 @@ namespace YAT.Model
 		/// Temporarily disabling this handling/workaround can be useful for debugging, i.e. to
 		/// continue program execution even in case of exceptions and let the debugger handle it.
 		/// </remarks>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
-	////private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName); // See remarks above!
+		private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName, exceptionHandling: EventHelper.ExceptionHandlingMode.DiscardDisposedTarget);
+	////private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(Terminal).FullName); // See remarks above!
 
 		private TerminalLaunchArgs launchArgs;
 		private Guid guid;
@@ -274,17 +274,17 @@ namespace YAT.Model
 	////private RateProvider bidirLineRate would technically be possible, but doesn't make much sense.
 		private RateProvider rxLineRate;
 
-	////private object countsRatesSyncObj = new object(); \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
+	////private readonly object countsRatesSyncObj = new object(); \remind (MKY / 2020-01-10) doesn't work (yet) as changing rates invokes events leading to synchronization deadlocks.
 
 	#if (WITH_SCRIPTING)
 
 		// Scripting:
 		private string lastSentMessageByScripting; // = null;
-		private object lastSentMessageByScriptingSyncObj = new object();
+		private readonly object lastSentMessageByScriptingSyncObj = new object();
 		private bool isAutoSocket;      // = false;
 		private int receivedXOnOffsetForScripting;  // = 0;
 		private int receivedXOffOffsetForScripting; // = 0;
-		private object receivedXOnXOffForScriptingSyncObj = new object();
+		private readonly object receivedXOnXOffForScriptingSyncObj = new object();
 
 	#endif
 

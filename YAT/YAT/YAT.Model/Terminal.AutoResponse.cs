@@ -72,13 +72,13 @@ namespace YAT.Model
 
 		private int autoResponseCount;
 		private Utilities.AutoTriggerHelper autoResponseTriggerHelper;
-		private object autoResponseTriggerHelperSyncObj = new object();
+		private readonly object autoResponseTriggerHelperSyncObj = new object();
 
 		private Queue<Tuple<byte[], string, MatchCollection>> autoResponseQueue = new Queue<Tuple<byte[], string, MatchCollection>>();
 		private bool autoResponseThreadRunFlag;
 		private AutoResetEvent autoResponseThreadEvent;
 		private Thread autoResponseThread;
-		private object autoResponseThreadSyncObj = new object();
+		private readonly object autoResponseThreadSyncObj = new object();
 
 		#endregion
 

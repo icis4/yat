@@ -106,7 +106,6 @@ namespace MKY.IO.Serial.SerialPort
 		private const int ReceiveQueueInitialCapacity = Ports.SerialPortEx.ReadBufferSizeDefault;
 
 		private const int ThreadWaitTimeout = 500; // Enough time to let the threads join...
-		private const int AliveInterval     = 500;
 
 		private const int IOControlChangedTimeout = 47; // Time-out is fixed to 47 ms (a prime number).
 
@@ -123,7 +122,7 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 
 		private static int staticInstanceCounter;
-		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
+		private static readonly Random staticRandom = new Random(RandomEx.NextRandomSeed());
 
 		#endregion
 
@@ -147,59 +146,59 @@ namespace MKY.IO.Serial.SerialPort
 		// Fields
 		//==========================================================================================
 
-		private int instanceId;
+		private readonly int instanceId;
 
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(SerialPort).FullName);
+		private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(SerialPort).FullName);
 
 		private State state = State.Reset;
-		private object stateSyncObj = new object(); // Required as port will be disposed and recreated on open/close.
+		private readonly object stateSyncObj = new object(); // Required as port will be disposed and recreated on open/close.
 
 		private SerialPortSettings settings;
 
 		private MKY.IO.Ports.ISerialPort port;
-		private object portSyncObj = new object(); // Required as port will be disposed and recreated on open/close.
+		private readonly object portSyncObj = new object(); // Required as port will be disposed and recreated on open/close.
 
-		private Queue<byte> sendQueue = new Queue<byte>(SendQueueInitialCapacity);
+		private readonly Queue<byte> sendQueue = new Queue<byte>(SendQueueInitialCapacity);
 		private bool sendThreadRunFlag;
 		private AutoResetEvent sendThreadEvent;
 		private Thread sendThread;
-		private object sendThreadSyncObj = new object();
+		private readonly object sendThreadSyncObj = new object();
 
 		/// <remarks>
 		/// Async receiving. The capacity is set large enough to reduce the number of resizing
 		/// operations while adding items.
 		/// </remarks>
-		private Queue<byte> receiveQueue = new Queue<byte>(ReceiveQueueInitialCapacity);
+		private readonly Queue<byte> receiveQueue = new Queue<byte>(ReceiveQueueInitialCapacity);
 		private bool receiveThreadRunFlag;
 		private AutoResetEvent receiveThreadEvent;
 		private Thread receiveThread;
-		private object receiveThreadSyncObj = new object();
+		private readonly object receiveThreadSyncObj = new object();
 
 		/// <remarks>
 		/// Only used with <see cref="SerialFlowControl.ManualSoftware"/>
 		/// and <see cref="SerialFlowControl.ManualCombined"/>.
 		/// </remarks>
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Emphasize the existance of the interface in use.")]
-		private IXOnXOffHelper iXOnXOffHelper = new IXOnXOffHelper();
+		private readonly IXOnXOffHelper iXOnXOffHelper = new IXOnXOffHelper();
 
-		private object dataEventSyncObj = new object();
+		private readonly object dataEventSyncObj = new object();
 
 		private System.Timers.Timer ioControlEventTimeout; // Ambiguity with 'System.Threading.Timer'.
-		private object ioControlEventTimeoutSyncObj = new object();
+		private readonly object ioControlEventTimeoutSyncObj = new object();
 		private long nextIOControlEventTickStamp; // Ticks as defined by 'Stopwatch'.
-		private object nextIOControlEventTickStampSyncObj = new object();
+		private readonly object nextIOControlEventTickStampSyncObj = new object();
 
 		/// <summary>
 		/// Alive timer detects port disconnects, i.e. when a USB to serial converter is disconnected.
 		/// </summary>
 		private System.Threading.Timer aliveMonitorTimeout; // Explicit for ambiguity with 'System.Timers.Timer'.
-		private object aliveMonitorTimeoutSyncObj = new object();
+		private readonly object aliveMonitorTimeoutSyncObj = new object();
 
 		private System.Threading.Timer reopenTimeout; // Explicit for ambiguity with 'System.Timers.Timer'.
-		private object reopenTimeoutSyncObj = new object();
+		private readonly object reopenTimeoutSyncObj = new object();
 
 		#endregion
 
@@ -1763,7 +1762,7 @@ namespace MKY.IO.Serial.SerialPort
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private object aliveMonitorTimeout_Periodic_Elapsed_SyncObj = new object();
+		private readonly object aliveMonitorTimeout_Periodic_Elapsed_SyncObj = new object();
 
 		private void aliveMonitorTimeout_Periodic_Elapsed(object obj)
 		{

@@ -39,19 +39,19 @@ namespace MKY.IO.Serial
 		/// Input XOn/XOff reflects the XOn/XOff state of this serial port itself, i.e. this computer.
 		/// </summary>
 		private bool inputIsXOn;
-		private object inputIsXOnSyncObj = new object();
+		private readonly object inputIsXOnSyncObj = new object();
 
 		/// <summary>
 		/// Output XOn/XOff reflects the XOn/XOff state of the communication counterpart, i.e. a device.
 		/// </summary>
 		private bool outputIsXOn;
-		private object outputIsXOnSyncObj = new object();
+		private readonly object outputIsXOnSyncObj = new object();
 
 		/// <remarks>
 		/// In case of manual XOn/XOff, input is initialized to XOn.
 		/// </remarks>
 		private bool manualInputWasXOn = true;
-		private object manualInputWasXOnSyncObj = new object();
+		private readonly object manualInputWasXOnSyncObj = new object();
 
 		private int sentXOnCount;
 		private int sentXOffCount;

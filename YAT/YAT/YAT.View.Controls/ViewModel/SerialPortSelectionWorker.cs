@@ -45,7 +45,7 @@ namespace YAT.View.Controls
 		/// <summary>
 		/// A dedicated event helper to allow ignoring the 'ThreadAbortException' when cancelling.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(SerialPortSelectionWorker).FullName);
+		private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(SerialPortSelectionWorker).FullName);
 
 		private SerialPortCollection ports;
 
@@ -54,7 +54,7 @@ namespace YAT.View.Controls
 		private InUseInfo activePortInUseInfo;
 
 		private bool cancel; // = false;
-		private object cancelSyncObj = new object();
+		private readonly object cancelSyncObj = new object();
 
 		private bool isBusy = true;
 

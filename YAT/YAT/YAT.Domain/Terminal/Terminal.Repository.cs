@@ -56,7 +56,7 @@ namespace YAT.Domain
 		private DisplayRepository txRepository;
 		private DisplayRepository bidirRepository;
 		private DisplayRepository rxRepository;
-		private object repositorySyncObj = new object();
+		private readonly object repositorySyncObj = new object();
 
 		#endregion
 

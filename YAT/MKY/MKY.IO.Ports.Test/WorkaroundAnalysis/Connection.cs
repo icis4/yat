@@ -34,7 +34,7 @@ namespace MKY.IO.Ports.Test.WorkaroundAnalysis
 		public string PortName { get; protected set; }
 
 		private SerialPort port;
-		private object portSynObj = new object();
+		private readonly object portSynObj = new object();
 
 		public Connection(string portName)
 		{

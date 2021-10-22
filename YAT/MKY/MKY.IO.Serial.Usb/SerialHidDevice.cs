@@ -89,7 +89,7 @@ namespace MKY.IO.Serial.Usb
 		//==========================================================================================
 
 		private static int staticInstanceCounter;
-		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
+		private static readonly Random staticRandom = new Random(RandomEx.NextRandomSeed());
 
 		#endregion
 
@@ -113,24 +113,24 @@ namespace MKY.IO.Serial.Usb
 		// Fields
 		//==========================================================================================
 
-		private int instanceId;
+		private readonly int instanceId;
 
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(SerialHidDevice).FullName);
+		private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(SerialHidDevice).FullName);
 
 		private SerialHidDeviceSettings settings;
 
 		private IO.Usb.SerialHidDevice device;
-		private object deviceSyncObj = new object();
-		private object dataEventSyncObj = new object();
+		private readonly object deviceSyncObj = new object();
+		private readonly object dataEventSyncObj = new object();
 
 		private Queue<byte> sendQueue = new Queue<byte>(SendQueueFixedCapacity);
 		private bool sendThreadRunFlag;
 		private AutoResetEvent sendThreadEvent;
 		private Thread sendThread;
-		private object sendThreadSyncObj = new object();
+		private readonly object sendThreadSyncObj = new object();
 
 		/// <remarks>
 		/// Async receiving. The capacity is set large enough to reduce the number of resizing
@@ -140,7 +140,7 @@ namespace MKY.IO.Serial.Usb
 		private bool receiveThreadRunFlag;
 		private AutoResetEvent receiveThreadEvent;
 		private Thread receiveThread;
-		private object receiveThreadSyncObj = new object();
+		private readonly object receiveThreadSyncObj = new object();
 
 		/// <remarks>
 		/// Only used with <see cref="SerialHidFlowControl.Software"/>

@@ -83,7 +83,7 @@ namespace MKY.IO.Ports
 		// Static Fields
 		//==========================================================================================
 
-		private static Random staticRandom = new Random(RandomEx.NextRandomSeed());
+		private static readonly Random staticRandom = new Random(RandomEx.NextRandomSeed());
 
 		#endregion
 
@@ -130,7 +130,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// A dedicated event helper to allow discarding exceptions when object got disposed.
 		/// </summary>
-		private EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(SerialPortEx).FullName);
+		private readonly EventHelper.Item eventHelper = EventHelper.CreateItem(typeof(SerialPortEx).FullName);
 
 		/// <remarks>
 		/// Required for patches to the 'ObjectDisposedException' issue described in <see cref="Close"/>.
@@ -143,7 +143,7 @@ namespace MKY.IO.Ports
 
 		private bool inputBreak;       // = false
 		private bool inputBreakSignal; // = false
-		private object inputBreakSyncObj = new object();
+		private readonly object inputBreakSyncObj = new object();
 
 		private int inputBreakCount;  // = 0
 		private int outputBreakCount; // = 0
@@ -562,12 +562,14 @@ namespace MKY.IO.Ports
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				var settings = new SerialPortSettings();
-				settings.BaudRate  =  (BaudRateEx)base.BaudRate;
-				settings.DataBits  =  (DataBitsEx)base.DataBits;
-				settings.Parity    =    (ParityEx)base.Parity;
-				settings.StopBits  =  (StopBitsEx)base.StopBits;
-				settings.Handshake = (HandshakeEx)base.Handshake;
+				var settings = new SerialPortSettings
+				{
+					BaudRate  = (BaudRateEx) base.BaudRate,
+					DataBits  = (DataBitsEx) base.DataBits,
+					Parity    = (ParityEx)   base.Parity,
+					StopBits  = (StopBitsEx) base.StopBits,
+					Handshake = (HandshakeEx)base.Handshake
+				};
 
 				return (settings);
 			}
