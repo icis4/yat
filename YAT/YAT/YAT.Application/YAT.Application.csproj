@@ -96,6 +96,10 @@
     <None Include="Properties\YAT.snk" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MKY\MKY.Win32\MKY.Win32.csproj">
+      <Project>{877baa28-c2a6-41ec-bede-27b396fa8e20}</Project>
+      <Name>MKY.Win32</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY</Name>

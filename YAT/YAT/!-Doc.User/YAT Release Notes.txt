@@ -122,6 +122,7 @@ Important changes:
 - 3rd party use of YAT assemblies, e.g. with PowerShell or CS-Script, product name and version now
   reflect the YAT name and version rather than the 3rd party executable's. Especially applies to
   name and version stated when writing settings files (related to feature request #429).
+- System error messages and standard message box buttons are now in English (bug #66).
 - ASCII control character replacement setting [Character] migrated to [Symbol Character] resulting
   in displaying as Unicode symbols U+2400..241F as well as U+2421 (bug #517, feature request #34).
 
@@ -130,7 +131,7 @@ Fixed bugs:
   (TargetInvocationException) (bugs #517 and #521).
 
 Limitations and known issues:
-- Same as previous releases, see further below.
+- Same as previous releases, see further below, except bug #66 no longer applies.
 
 
 YAT 2.4.1 :: 2021-05-15
@@ -290,7 +291,7 @@ Limitations and known issues:
 - General limitations of .NET Framework:
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - General limitations of .NET Windows.Forms:
-   > System errors are output in local language, even though YAT is all-English (bug #66).
+   > System error messages are output in local language, even though YAT is all-English (bug #66).
    > Main window status bar tooltips may flicker in case window is maximized (bug #488).
    > Tool strip combo box slightly flickers when updating item list, e.g. [Find Pattern] (bug #402).
    > Combo box cannot restore some corner-case cursor positions (bug #403).
@@ -420,7 +421,7 @@ Limitations and known issues:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feat. reqs. #310 and #360).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
-   > System errors are output in local language, even though YAT is all-English (bug #66).
+   > System error messages are output in local language, even though YAT is all-English (bug #66).
    > Tool strip combo box slightly flickers when updating item list, e.g. [Find Pattern] (bug #402).
    > Combo box cannot restore some corner-case cursor positions (bug #403).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
@@ -496,7 +497,7 @@ Limitations and known issues:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
-   > System errors are output in local language, even though YAT is all-English (bug #66).
+   > System error messages are output in local language, even though YAT is all-English (bug #66).
    > Tool strip combo box slightly flickers when updating item list, e.g. [Find Pattern] (bug #402).
    > Combo box cannot restore some corner-case cursor positions (bug #403).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
@@ -582,7 +583,7 @@ Limitations and known issues:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
-   > System errors are output in local language, even though YAT is all-English (bug #66).
+   > System error messages are output in local language, even though YAT is all-English (bug #66).
    > Tool strip combo box slightly flickers when updating item list, e.g. [Find Pattern] (bug #402).
    > Combo box cannot restore some corner-case cursor positions (bug #403).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
@@ -667,7 +668,7 @@ Limitations and known issues:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
-   > System errors are output in local language, even though YAT is all-English (bug #66).
+   > System error messages are output in local language, even though YAT is all-English (bug #66).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
      if that is contained in the item list, e.g. the recent [Send Text] items (bug #347).
    > Automatic completion for e.g. [Send Text] is not feasible to implement (feature request #227).
@@ -751,7 +752,7 @@ Fixed bugs:
 Limitations and known issues:
 - General limitations of .NET Windows.Forms:
    > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
-   > System errors are output in local language, even though YAT is all-English (bug #66).
+   > System error messages are output in local language, even though YAT is all-English (bug #66).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
      if that is contained in the item list, e.g. the recent [Send Text] items (bug #347).
    > Automatic completion for e.g. [Send Text] is not feasible to implement (feature request #227).
@@ -898,7 +899,7 @@ Fixed bugs:
 Limitations and known issues:
 - General limitations of .NET Windows.Forms:
    > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
-   > System errors are output in local language, even though YAT is all-English (bug #66).
+   > System error messages are output in local language, even though YAT is all-English (bug #66).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
      if that is contained in the item list, e.g. the recent [Send Text] items (bug #347).
    > Automatic completion for e.g. [Send Text] is not feasible to implement (feature request #227).
@@ -1027,7 +1028,7 @@ Limitations and known issues:
    > If YAT is not the active application, two clicks are required to execute an action. Reason:
      In .NET Windows.Forms the first click only activates the application but doesn't execute
      anything (bug #210)
-   > System errors are output in local language, even though YAT is all-English (bug #66)
+   > System error messages are output in local language, even though YAT is all-English (bug #66)
    > Automatic horizontal scrolling of monitors is not feasible to implement (feature request #163)
 - MDI limitations of .NET Windows.Forms
    > Issues with frame (bugs #29 and #30)
@@ -1140,7 +1141,7 @@ Limitations and known issues:
    > If YAT is not the active application, two clicks are required to execute an action. Reason:
      In .NET Windows.Forms the first click only activates the application but doesn't execute
      anything (bug #3454532>#210)
-   > System errors are output in local language, even though YAT is all-English (bug #1927786>#66)
+   > System error messages are output in local language, even though YAT is all-English (bug #1927786>#66)
 - MDI limitations of .NET Windows.Forms
    > Issues with frame (bugs #1808492>#29 and #1808493>#30)
    > Issues with window list (bugs #1808494>#31, #2846917>#119, #3160095>#180 and #3454550>#213)
@@ -1229,7 +1230,7 @@ Fixed bugs:
 
 Limitations and known issues:
 - General limitations of .NET Windows.Forms
-   > System errors are output in local language, even though YAT is all-English (bug #1927786)
+   > System error messages are output in local language, even though YAT is all-English (bug #1927786)
 - MDI limitations of .NET
    > Issues with frame (bugs #1808492 and #1808493)
    > Issues with window list (bugs #1808494, #2846917 and #3160095)

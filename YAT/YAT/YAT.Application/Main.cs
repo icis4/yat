@@ -34,8 +34,8 @@
 
 #else // RELEASE
 
-	// Enable unhandled exception handling:
-	#define HANDLE_UNHANDLED_EXCEPTIONS // Enabled for 'Release' => handled by the application.
+// Enable unhandled exception handling:
+#define HANDLE_UNHANDLED_EXCEPTIONS // Enabled for 'Release' => handled by the application.
 
 #endif // DEBUG|RELEASE
 
@@ -67,9 +67,11 @@ using System.Threading;
 using System.Windows.Forms; // In addition, several locations explicitly use "System.Windows.Forms" to prevent naming conflicts with "MKY.Windows.Forms" and "YAT.Application".
 
 using MKY;
+using MKY.Diagnostics;
 using MKY.Settings;
 using MKY.Threading;
-using MKY.Windows.Forms; // In addition, several locations explicitly use "MKY.Windows.Forms' to prevent naming conflicts with "System.Windows.Forms" and "YAT.Application".
+using MKY.Windows.Forms; // In addition, several locations explicitly use "MKY.Windows.Forms" to prevent naming conflicts with "System.Windows.Forms" and "YAT.Application".
+//// "MKY.Win32" is explicitly used to prevent ambiguity among "MKY.Win32.Console" and "System.Console".
 
 using YAT.Settings.Application;
 //// "YAT.View.Forms" is explicitly used to prevent naming conflicts with same-named "YAT.Application" classes like "Main".
@@ -269,107 +271,156 @@ namespace YAT.Application
 		{
 			MainResult result;
 
-			bool run;
-			bool runWithView;
-			bool showHelp;
-			bool showLogo;
-			bool showVersion;
-
-			// Process and validate command line arguments:
-			if (this.commandLineArgs != null)
-				this.commandLineArgs.ProcessAndValidate();
-
-			// In normal operation this is the location where the command line arguments are
-			// processed and validated for a first time, even BEFORE the application settings have
-			// been created/loaded. Then they will be processed and validated for a second time
-			// AFTER the application settings were created/loaded. This second processing happens
-			// in 'YAT.Model.Main.ProcessCommandLineArgsIntoLaunchRequests()'.
+			// YAT is all-English. But underlying system messages would be localized to the default "UICulture", e.g.
+			// try { File.ReadAllLines(@"C:\Inexistent.ext"); } catch (Exception ex) { }
+			// would result in:
+			// "Die Datei "C:\Nonexistent.ext" konnte nicht gefunden werden." on a Swiss German machine.
+			// Setting the thread's "UICulture" to English changes this to:
+			// "Could not find file 'C:\Nonexistent.ext'."
 			//
-			// In case of automated testing, the command line arguments will be processed and
-			// validated in 'PrepareRun_ForTestOnly()' above, and also in YAT.Model.Main.
+			// Is switching to "en" really the best in every case?
+			// Pros:
+			//  > Consistently all-English
+			//  > Error messages in e.g. bug reports in English
+			// Cons:
+			//  > If the underlying system is localized, why not use it?
+			//  > Some users may better understand the details of an issue in their natural language.
 			//
-			// Calling ProcessAndValidate() multiple times doesn't matter, this use case is
-			// supported by 'MKY.CommandLine.ArgsHandler'.
-
-			// Prio 0 = None:
-			if (this.commandLineArgs == null || this.commandLineArgs.HasNoArgs)
+			// Considered adding a setting to [File > Preferences]. But this would mean to immediately update all existing
+			// threads, e.g. the Send/Receive threads of the available terminals. This seems way over the top. Seems
+			// better to use all-English until somebody has a good reason against.
+			//
+			// The functionality is tested as part of [Help > About] triggered tests.
+			try
 			{
-				result = MainResult.Success;
-
-				run         = true;
-				runWithView = true; // By default, start YAT with view.
-				showHelp    = false;
-				showLogo    = false;
-				showVersion = false;
+				var englishCulture = new CultureInfo("en", true);
+				CultureInfo.DefaultThreadCurrentUICulture = englishCulture;
+				CultureInfo.CurrentUICulture = englishCulture; // The "CultureInfo.CurrentUICulture" property is equivalent to the "Thread.CurrentThread.CurrentUICulture" property.
 			}
-			// Prio 1 = Invalid:
-			else if ((this.commandLineArgs != null) && (!this.commandLineArgs.IsValid))
+			catch (CultureNotFoundException ex)
 			{
-				result = MainResult.CommandLineError;
-
-				run         = false; // YAT shall not be started, instead error and help shall be shown.
-				runWithView = false;
-				showHelp    = true;
-				showLogo    = false;
-				showVersion = false;
-
-				if (runFromConsole)
-					ShowErrorInConsole(this.commandLineArgs.InvalidArgs, this.commandLineArgs.InvalidationMessages);
-				else // if (this.commandLineArgs.Interactive) makes little sense here, the error must be indicated somehow.
-					ShowErrorInMessageBox(this.commandLineArgs.InvalidArgs, this.commandLineArgs.InvalidationMessages, ref showHelp);
-
-				// "Pure" invalid args errors are handled above, errors in processing the args are either
-				// handled in "View.Forms.Main.Main_Shown()" when fully running with view, or directly
-				// in "Run(bool, bool, ApplicationSettingsFileAccess, bool)" further below.
-			}
-			// Prio 2 = Valid:
-			else
-			{
-				result = MainResult.Success;
-
-				run         = true;
-				runWithView = this.commandLineArgs.ShowView;
-				showHelp    = this.commandLineArgs.HelpIsRequested;
-				showLogo    = this.commandLineArgs.LogoIsRequested;
-				showVersion = this.commandLineArgs.VersionIsRequested;
+				DebugEx.WriteException(GetType(), ex, "Exception while creating English culture!");
 			}
 
-			// Show info or run application:
-			if (showHelp || showLogo || showVersion)
+			// Funny, the above patch does not change the language of message box buttons, on Windows, e.g.
+			// [Ja] [Nein] [Cancel]
+			// on a Swiss German machine.
+			//
+			// Another patch is required, though unfortunately:
+			// "MessageBoxManager functionality is enabled on current thread only."
+			// Accepting this limitation, almost all message boxes are shown by the main thread anyway.
+			if (EnvironmentEx.IsStandardWindows)
+				MKY.Win32.MessageBoxManager.Register();
+
+			try
 			{
-				if (runFromConsole)
-					ShowInfoInConsole(showHelp, showLogo, showVersion);
-				else // if (this.commandLineArgs.Interactive) makes no sense here, showing something is explicitly desired.
-					ShowInfoInMessageBox(showHelp, showLogo, showVersion);
-			}
-			else if (run)
-			{
-			#if (HANDLE_UNHANDLED_EXCEPTIONS)
-				try
-			#endif
+				bool run;
+				bool runWithView;
+				bool showHelp;
+				bool showLogo;
+				bool showVersion;
+
+				// Process and validate command line arguments:
+				if (this.commandLineArgs != null)
+					this.commandLineArgs.ProcessAndValidate();
+
+				// In normal operation this is the location where the command line arguments are
+				// processed and validated for a first time, even BEFORE the application settings have
+				// been created/loaded. Then they will be processed and validated for a second time
+				// AFTER the application settings were created/loaded. This second processing happens
+				// in 'YAT.Model.Main.ProcessCommandLineArgsIntoLaunchRequests()'.
+				//
+				// In case of automated testing, the command line arguments will be processed and
+				// validated in 'PrepareRun_ForTestOnly()' above, and also in YAT.Model.Main.
+				//
+				// Calling ProcessAndValidate() multiple times doesn't matter, this use case is
+				// supported by 'MKY.CommandLine.ArgsHandler'.
+
+				// Prio 0 = None:
+				if (this.commandLineArgs == null || this.commandLineArgs.HasNoArgs)
 				{
-					result = Run(runFromConsole, runWithView, ApplicationSettingsFileAccess.ReadSharedWriteIfOwned, true);
+					result = MainResult.Success;
+
+					run         = true;
+					runWithView = true; // By default, start YAT with view.
+					showHelp    = false;
+					showLogo    = false;
+					showVersion = false;
 				}
-			#if (HANDLE_UNHANDLED_EXCEPTIONS)
-				catch (Exception ex)
+				// Prio 1 = Invalid:
+				else if ((this.commandLineArgs != null) && (!this.commandLineArgs.IsValid))
 				{
-					var message = ToSynchronousExceptionMessage(ex, "loading", out result);
+					result = MainResult.CommandLineError;
+
+					run         = false; // YAT shall not be started, instead error and help shall be shown.
+					runWithView = false;
+					showHelp    = true;
+					showLogo    = false;
+					showVersion = false;
 
 					if (runFromConsole)
-					{
-						Console.Error.WriteLine(message);
-						ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
-					}
-					else if (this.commandLineArgs.Interactive)
-					{
-						View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.Synchronous, false);
-					}
+						ShowErrorInConsole(this.commandLineArgs.InvalidArgs, this.commandLineArgs.InvalidationMessages);
+					else // if (this.commandLineArgs.Interactive) makes little sense here, the error must be indicated somehow.
+						ShowErrorInMessageBox(this.commandLineArgs.InvalidArgs, this.commandLineArgs.InvalidationMessages, ref showHelp);
+
+					// "Pure" invalid args errors are handled above, errors in processing the args are either
+					// handled in "View.Forms.Main.Main_Shown()" when fully running with view, or directly
+					// in "Run(bool, bool, ApplicationSettingsFileAccess, bool)" further below.
 				}
-			#endif
+				// Prio 2 = Valid:
+				else
+				{
+					result = MainResult.Success;
+
+					run         = true;
+					runWithView = this.commandLineArgs.ShowView;
+					showHelp    = this.commandLineArgs.HelpIsRequested;
+					showLogo    = this.commandLineArgs.LogoIsRequested;
+					showVersion = this.commandLineArgs.VersionIsRequested;
+				}
+
+				// Show info or run application:
+				if (showHelp || showLogo || showVersion)
+				{
+					if (runFromConsole)
+						ShowInfoInConsole(showHelp, showLogo, showVersion);
+					else // if (this.commandLineArgs.Interactive) makes no sense here, showing something is explicitly desired.
+						ShowInfoInMessageBox(showHelp, showLogo, showVersion);
+				}
+				else if (run)
+				{
+				#if (HANDLE_UNHANDLED_EXCEPTIONS)
+					try
+				#endif
+					{
+						result = Run(runFromConsole, runWithView, ApplicationSettingsFileAccess.ReadSharedWriteIfOwned, true);
+					}
+				#if (HANDLE_UNHANDLED_EXCEPTIONS)
+					catch (Exception ex)
+					{
+						var message = ToSynchronousExceptionMessage(ex, "loading", out result);
+
+						if (runFromConsole)
+						{
+							Console.Error.WriteLine(message);
+							ConsoleEx.Error.WriteException(GetType(), ex); // Message has already been output onto console.
+						}
+						else if (this.commandLineArgs.Interactive)
+						{
+							View.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, View.Forms.UnhandledExceptionType.Synchronous, false);
+						}
+					}
+				#endif
+				}
+				else
+				{
+					// Do nothing, this applies e.g. in case of a command line error without showing the help.
+				}
 			}
-			else
+			finally
 			{
-				// Do nothing, this applies e.g. in case of a command line error without showing the help.
+				if (EnvironmentEx.IsStandardWindows)
+					MKY.Win32.MessageBoxManager.Unregister();
 			}
 
 			return (result);

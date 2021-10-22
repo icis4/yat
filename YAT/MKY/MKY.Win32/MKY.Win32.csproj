@@ -90,6 +90,7 @@
     <Compile Include="Console.cs" />
     <Compile Include="FileApi.cs" />
     <Compile Include="DotNet\SerialPortPatcher.cs" />
+    <Compile Include="MessageBoxManager.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Window.cs" />
     <Compile Include="WinBase.cs" />

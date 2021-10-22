@@ -119,17 +119,19 @@ Important changes:
 - Upgrade to Visual Studio 2019 (feature request #441).
 - App.config file time stamps now reflect the build time of the binaries (bug #515).
 - 3rd party file time stamps are preserved now, i.e. reflect the original time stamp (bug #515).
-- In 3rd party use of YAT assemblies, e.g. with PowerShell or CS-Script, product name and version
-  now reflect the YAT name and version rather than the 3rd party executable's. Especially applies
-  to name and version stated when writing settings files (related to feature request #429).
+- 3rd party use of YAT assemblies, e.g. with PowerShell or CS-Script, product name and version now
+  reflect the YAT name and version rather than the 3rd party executable's. Especially applies to
+  name and version stated when writing settings files (related to feature request #429).
+- System error messages and standard message box buttons are now in English (bug #66).
 - ASCII control character replacement setting [Character] migrated to [Symbol Character] resulting
   in displaying as Unicode symbols U+2400..241F as well as U+2421 (bug #517, feature request #34).
 
 Fixed bugs:
-- ASCII control character replacement setting [Character] no longer results in exception (bug #517).
+- ASCII control character replacement setting [Character] no longer results in an exception
+  (TargetInvocationException) (bugs #517 and #521).
 
 Limitations and known issues:
-- Same as previous releases, see further below.
+- Same as previous releases, see further below, except bug #66 no longer applies.
 
 
 YAT 2.4.1 :: 2021-05-15
@@ -289,7 +291,7 @@ Limitations and known issues:
 - General limitations of .NET Framework:
    > Unicode is limited to the basic multilingual plane (U+0000..U+FFFF) (feature request #329).
 - General limitations of .NET Windows.Forms:
-   > System errors are output in local language, even though YAT is all-English (bug #66).
+   > System error messages are output in local language, even though YAT is all-English (bug #66).
    > Main window status bar tooltips may flicker in case window is maximized (bug #488).
    > Tool strip combo box slightly flickers when updating item list, e.g. [Find Pattern] (bug #402).
    > Combo box cannot restore some corner-case cursor positions (bug #403).
@@ -419,7 +421,7 @@ Limitations and known issues:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feat. reqs. #310 and #360).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
-   > System errors are output in local language, even though YAT is all-English (bug #66).
+   > System error messages are output in local language, even though YAT is all-English (bug #66).
    > Tool strip combo box slightly flickers when updating item list, e.g. [Find Pattern] (bug #402).
    > Combo box cannot restore some corner-case cursor positions (bug #403).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
@@ -495,7 +497,7 @@ Limitations and known issues:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
-   > System errors are output in local language, even though YAT is all-English (bug #66).
+   > System error messages are output in local language, even though YAT is all-English (bug #66).
    > Tool strip combo box slightly flickers when updating item list, e.g. [Find Pattern] (bug #402).
    > Combo box cannot restore some corner-case cursor positions (bug #403).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
@@ -581,7 +583,7 @@ Limitations and known issues:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
-   > System errors are output in local language, even though YAT is all-English (bug #66).
+   > System error messages are output in local language, even though YAT is all-English (bug #66).
    > Tool strip combo box slightly flickers when updating item list, e.g. [Find Pattern] (bug #402).
    > Combo box cannot restore some corner-case cursor positions (bug #403).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
@@ -666,7 +668,7 @@ Limitations and known issues:
    > System display scaling other than 100% (96 DPI) results in minor distortions on Win 7 and
      before (bugs #85, #235, #375) and some blurring on Win 8 and above (feature request #310).
      The latter will be fixed with upgrading to .NET 4.7+ (feature request #229).
-   > System errors are output in local language, even though YAT is all-English (bug #66).
+   > System error messages are output in local language, even though YAT is all-English (bug #66).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
      if that is contained in the item list, e.g. the recent [Send Text] items (bug #347).
    > Automatic completion for e.g. [Send Text] is not feasible to implement (feature request #227).
@@ -750,7 +752,7 @@ Fixed bugs:
 Limitations and known issues:
 - General limitations of .NET Windows.Forms:
    > System display scaling other than 100% results in partly clipped controls (bugs #85 and #235).
-   > System errors are output in local language, even though YAT is all-English (bug #66).
+   > System error messages are output in local language, even though YAT is all-English (bug #66).
    > Combo box text is compared case insensitively against item list, e.g. "aa" is changed to "AA"
      if that is contained in the item list, e.g. the recent [Send Text] items (bug #347).
    > Automatic completion for e.g. [Send Text] is not feasible to implement (feature request #227).
