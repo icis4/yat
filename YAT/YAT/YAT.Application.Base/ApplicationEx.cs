@@ -113,7 +113,14 @@ namespace YAT
 		/// <summary>
 		/// The product caption that combines product name and build designation.
 		/// </summary>
-		public static readonly string ProductCaption = ProductName + ProductBuildDesignation;
+		/// <remarks>
+		/// Must be 'get' rather than 'readonly' as the underlying <see cref="ProductName"/> is
+		/// initialized by the static constructor.
+		/// </remarks>
+		public static string ProductCaption
+		{
+			get { return (ProductName + ProductBuildDesignation); }
+		}
 
 		/// <summary>
 		/// The product version associated with <see cref="System.Windows.Forms.Application"/>.
@@ -175,22 +182,37 @@ namespace YAT
 	////public const string ProductVersionStabilityIndication = " Preliminary";
 	////public const string ProductVersionStabilityIndication = " Development";
 
-		/// <summary>The product version that combines product version and version stability indication.</summary>
-		public static readonly string ProductVersionWithStabilityIndication = ProductVersion + ProductVersionStabilityIndication;
+		/// <summary>
+		/// The product version that combines product version and version stability indication.
+		/// </summary>
+		/// <remarks>
+		/// Must be 'get' rather than 'readonly' as <see cref="ProductVersion"/> is
+		/// initialized by the static constructor.
+		/// </remarks>
+		public static string ProductVersionWithStabilityIndication
+		{
+			get { return (ProductVersion + ProductVersionStabilityIndication); }
+		}
 
 		/// <summary>
 		/// The product caption and version.
 		/// </summary>
-		/// <remarks>
+		/// <remarks><para>
 		/// No longer using "Version" inbetween as many other applications which don't, e.g.
 		///  > TortoiseSVN 1.9.7, Build 27907
 		///  > Syncovery 7.68 build 446
 		///  > FreeFileSync 9.9 [2018-03-09]
 		///  > Firefox 59.0.2 (64-Bit) + Thunderbird 52.7.0 (32-Bit)
 		/// Release sections in release notes no longer use "Version" either.
-		/// </remarks>
+		/// </para><para>
+		/// Must be 'get' rather than 'readonly' as the underlying <see cref="ProductName"/> and
+		/// <see cref="ProductVersion"/> are initialized by the static constructor.
+		/// </para></remarks>
 		[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "'Syncovery' is a product name.")]
-		public static readonly string ProductCaptionAndVersion = ProductCaption + " " + ProductVersionWithStabilityIndication;
+		public static string ProductCaptionAndVersion
+		{
+			get { return (ProductCaption + " " + ProductVersionWithStabilityIndication); }
+		}
 
 		/// <summary>
 		/// The product caption and version including build/revision.
