@@ -29,6 +29,8 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 using MKY.Windows.Forms;
@@ -509,17 +511,19 @@ namespace YAT.View.Forms
 
 		[SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Justification = "Intentionally raising the most general exception to ensure that EVERY exception handler really catches it.")]
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void label_ExecuteManualTest1_Click(object sender, EventArgs e)
+		private void label_RunManualTest1_Click(object sender, EventArgs e)
 		{
 			string message =
 				"You have clicked on a hidden button that is used for " + ApplicationEx.ProductName + " internal testing." + Environment.NewLine + Environment.NewLine +
-				"Would you like to immediately throw an exception to test that unhandled synchronous exceptions are handled properly?";
+				"Would you like to throw an exception to test that unhandled synchronous exceptions are handled properly?" + Environment.NewLine + Environment.NewLine +
+				"Note that the all-English test will be performed along with.";
 
-			if (TestExecutionIsIntended(message) &&
+			if (TestRunIsIntended(message) &&
 			    TestPreconditionIsGiven(typeof(Exception)))
 			{
-				Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
+				RunAllEnglishTest(); // Verifies that system error messages are localized to English.
 
+				Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
 				throw (new InvalidOperationException("Unhandled synchronous exception test :: This is the outer exception.", new InvalidOperationException("This is the inner exception.")));
 
 				// Using explicit exception types...
@@ -529,18 +533,17 @@ namespace YAT.View.Forms
 		}
 
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void label_ExecuteManualTest2_Click(object sender, EventArgs e)
+		private void label_RunManualTest2_Click(object sender, EventArgs e)
 		{
 			string message =
 				"You have clicked on a hidden button that is used for " + ApplicationEx.ProductName + " internal testing." + Environment.NewLine + Environment.NewLine +
-				"Would you like to start a Windows.Forms timer throwing an exception to test that unhandled asynchronous synchronized exceptions are handled properly?";
+				"Would you like to start a Windows.Forms timer throwing an exception to test that unhandled asynchronous synchronized exceptions are handled properly?" + Environment.NewLine + Environment.NewLine +
+				"Note that the all-English test will be performed along with.";
 
-			if (TestExecutionIsIntended(message) &&
+			if (TestRunIsIntended(message) &&
 			    TestPreconditionIsGiven(typeof(Exception)))
 			{
-				Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
-
-				timer_ExecuteManualTest2.Start();
+				timer_RunManualTest2.Start();
 			}
 		}
 
@@ -549,9 +552,13 @@ namespace YAT.View.Forms
 		/// i.e. is single-threaded. No synchronization or prevention of a race condition is needed.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Justification = "Intentionally raising the most general exception to ensure that EVERY exception handler really catches it.")]
-		private void timer_ExecuteManualTest2_Tick(object sender, EventArgs e)
+		private void timer_RunManualTest2_Tick(object sender, EventArgs e)
 		{
-			timer_ExecuteManualTest2.Stop();
+			timer_RunManualTest2.Stop();
+
+			RunAllEnglishTest(); // Verifies that system error messages are localized to English.
+
+			Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
 			throw (new InvalidOperationException("Unhandled asynchronous synchronized exception test :: This is the outer exception.", new InvalidOperationException("This is the inner exception.")));
 
 			// Using explicit exception types...
@@ -560,44 +567,47 @@ namespace YAT.View.Forms
 		}
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private System.Threading.Timer timer_ExecuteManualTest3; // Ambiguity with 'System.Windows.Forms.Timer'.
+		private System.Threading.Timer timer_RunManualTest3; // Ambiguity with 'System.Windows.Forms.Timer'.
 
 		[SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Clear separation of related item and field name.")]
-		private readonly object timer_ExecuteManualTest3SyncObj = new object();
+		private readonly object timer_RunManualTest3SyncObj = new object();
 
 		/// <summary>
 		/// Test case 3: Unhandled asynchronous non-synchronized exceptions.
 		/// </summary>
 		[ModalBehaviorContract(ModalBehavior.Always, Approval = "Always used to intentionally display a modal dialog.")]
-		private void label_ExecuteManualTest3_Click(object sender, EventArgs e)
+		private void label_RunManualTest3_Click(object sender, EventArgs e)
 		{
 			string message =
 				"You have clicked on a hidden button that is used for " + ApplicationEx.ProductName + " internal testing." + Environment.NewLine + Environment.NewLine +
-				"Would you like to start a System.Threading timer throwing an exception to test that unhandled asynchronous non-synchronized exceptions are handled properly?";
+				"Would you like to start a System.Threading timer throwing an exception to test that unhandled asynchronous non-synchronized exceptions are handled properly?" + Environment.NewLine + Environment.NewLine +
+				"Note that the all-English test will be performed along with.";
 
-			if (TestExecutionIsIntended(message) &&
+			if (TestRunIsIntended(message) &&
 			    TestPreconditionIsGiven(typeof(Exception)))
 			{
-				Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
-
-				lock (this.timer_ExecuteManualTest3SyncObj)
+				lock (this.timer_RunManualTest3SyncObj)
 				{
-					var callback = new System.Threading.TimerCallback(timer_ExecuteManualTest3_OneShot_Elapsed);
+					var callback = new System.Threading.TimerCallback(timer_RunManualTest3_OneShot_Elapsed);
 					var dueTime = 100;
 					var period = System.Threading.Timeout.Infinite; // One-Shot!
 
-					this.timer_ExecuteManualTest3 = new System.Threading.Timer(callback, null, dueTime, period);
+					this.timer_RunManualTest3 = new System.Threading.Timer(callback, null, dueTime, period);
 				}
 			}
 		}
 
 		[SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Justification = "Intentionally raising the most general exception to ensure that EVERY exception handler really catches it.")]
-		private void timer_ExecuteManualTest3_OneShot_Elapsed(object obj)
+		private void timer_RunManualTest3_OneShot_Elapsed(object obj)
 		{
 			// Non-periodic timer, only a single callback can be active at a time.
 			// There is no need to synchronize concurrent callbacks to this event handler.
 
-			timer_ExecuteManualTest3_Dispose();
+			timer_RunManualTest3_Dispose();
+
+			RunAllEnglishTest(); // Verifies that system error messages are localized to English.
+
+			Cursor = Cursors.WaitCursor; // Verify that cursor is reset by the unhandled exception handler.
 			throw (new InvalidOperationException("Unhandled asynchronous non-synchronized exception test :: This is the outer exception.", new InvalidOperationException("This is the inner exception.")));
 
 			// Using explicit exception types...
@@ -605,25 +615,25 @@ namespace YAT.View.Forms
 			// ...and since exception handling uses the general exception type to prevent subsequent exceptions.
 		}
 
-		private void timer_ExecuteManualTest3_Dispose()
+		private void timer_RunManualTest3_Dispose()
 		{
-			lock (this.timer_ExecuteManualTest3SyncObj)
+			lock (this.timer_RunManualTest3SyncObj)
 			{
-				if (this.timer_ExecuteManualTest3 != null)
+				if (this.timer_RunManualTest3 != null)
 				{
-					this.timer_ExecuteManualTest3.Dispose();
-					this.timer_ExecuteManualTest3 = null;
+					this.timer_RunManualTest3.Dispose();
+					this.timer_RunManualTest3 = null;
 				}
 			}
 		}
 
-		private bool TestExecutionIsIntended(string message)
+		private bool TestRunIsIntended(string message)
 		{
 			var dr = MessageBoxEx.Show
 			(
 				this,
 				message,
-				"Execute " + ApplicationEx.CommonName + " Internal Test?",
+				"Run " + ApplicationEx.CommonName + " Internal Test?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,
 				MessageBoxDefaultButton.Button2
@@ -656,6 +666,41 @@ namespace YAT.View.Forms
 			}
 
 			return (true);
+		}
+
+		private void RunAllEnglishTest()
+		{
+			bool inexistentExists;
+
+			do
+			{
+				var message = new StringBuilder();
+				message.AppendLine("The all-English test has just been triggered.");
+				message.AppendLine();
+				message.AppendLine("The following system error message must be in English:");
+
+				try
+				{
+					File.ReadAllLines(@"C:\Inexistent.ext");
+					inexistentExists = true;
+					message.Append(@"Upps, nöd klappet, offesichtlich git's ""C:\Inexistent.ext"". Bitte lösche und namal mache.");
+				}
+				catch (Exception ex)
+				{
+					inexistentExists = false;
+					message.AppendLine(ex.Message);
+				}
+
+				MessageBoxEx.Show
+				(
+					this,
+					message.ToString(),
+					"All-English Test",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Information
+				);
+			}
+			while (inexistentExists);
 		}
 
 		#endregion

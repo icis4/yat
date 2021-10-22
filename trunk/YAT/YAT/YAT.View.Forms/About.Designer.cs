@@ -18,7 +18,7 @@
 			// Dispose of managed resources:
 			if (disposing)
 			{
-				timer_ExecuteManualTest3_Dispose();
+				timer_RunManualTest3_Dispose();
 			}
 
 			// Dispose of designer generated managed resources:
@@ -57,10 +57,10 @@
 			this.pictureBox_License = new System.Windows.Forms.PictureBox();
 			this.linkLabel_License = new System.Windows.Forms.LinkLabel();
 			this.linkLabel_VirtualPorts = new System.Windows.Forms.LinkLabel();
-			this.label_ExecuteManualTest1 = new System.Windows.Forms.Label();
-			this.label_ExecuteManualTest2 = new System.Windows.Forms.Label();
-			this.label_ExecuteManualTest3 = new System.Windows.Forms.Label();
-			this.timer_ExecuteManualTest2 = new System.Windows.Forms.Timer(this.components);
+			this.label_RunManualTest1 = new System.Windows.Forms.Label();
+			this.label_RunManualTest2 = new System.Windows.Forms.Label();
+			this.label_RunManualTest3 = new System.Windows.Forms.Label();
+			this.timer_RunManualTest2 = new System.Windows.Forms.Timer(this.components);
 			this.linkLabel_Thanks = new System.Windows.Forms.LinkLabel();
 			this.linkLabel_TerminalEmulator = new System.Windows.Forms.LinkLabel();
 			this.linkLabel_DevelopedWith = new System.Windows.Forms.LinkLabel();
@@ -271,36 +271,36 @@
 			this.linkLabel_VirtualPorts.Text = resources.GetString("linkLabel_VirtualPorts.Text");
 			this.linkLabel_VirtualPorts.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
-			// label_ExecuteManualTest1
+			// label_RunManualTest1
 			// 
-			this.label_ExecuteManualTest1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_ExecuteManualTest1.Location = new System.Drawing.Point(611, 56);
-			this.label_ExecuteManualTest1.Name = "label_ExecuteManualTest1";
-			this.label_ExecuteManualTest1.Size = new System.Drawing.Size(16, 16);
-			this.label_ExecuteManualTest1.TabIndex = 18;
-			this.label_ExecuteManualTest1.Click += new System.EventHandler(this.label_ExecuteManualTest1_Click);
+			this.label_RunManualTest1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_RunManualTest1.Location = new System.Drawing.Point(611, 56);
+			this.label_RunManualTest1.Name = "label_RunManualTest1";
+			this.label_RunManualTest1.Size = new System.Drawing.Size(16, 16);
+			this.label_RunManualTest1.TabIndex = 18;
+			this.label_RunManualTest1.Click += new System.EventHandler(this.label_RunManualTest1_Click);
 			// 
-			// label_ExecuteManualTest2
+			// label_RunManualTest2
 			// 
-			this.label_ExecuteManualTest2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_ExecuteManualTest2.Location = new System.Drawing.Point(611, 142);
-			this.label_ExecuteManualTest2.Name = "label_ExecuteManualTest2";
-			this.label_ExecuteManualTest2.Size = new System.Drawing.Size(16, 16);
-			this.label_ExecuteManualTest2.TabIndex = 19;
-			this.label_ExecuteManualTest2.Click += new System.EventHandler(this.label_ExecuteManualTest2_Click);
+			this.label_RunManualTest2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_RunManualTest2.Location = new System.Drawing.Point(611, 142);
+			this.label_RunManualTest2.Name = "label_RunManualTest2";
+			this.label_RunManualTest2.Size = new System.Drawing.Size(16, 16);
+			this.label_RunManualTest2.TabIndex = 19;
+			this.label_RunManualTest2.Click += new System.EventHandler(this.label_RunManualTest2_Click);
 			// 
-			// label_ExecuteManualTest3
+			// label_RunManualTest3
 			// 
-			this.label_ExecuteManualTest3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label_ExecuteManualTest3.Location = new System.Drawing.Point(611, 291);
-			this.label_ExecuteManualTest3.Name = "label_ExecuteManualTest3";
-			this.label_ExecuteManualTest3.Size = new System.Drawing.Size(16, 16);
-			this.label_ExecuteManualTest3.TabIndex = 20;
-			this.label_ExecuteManualTest3.Click += new System.EventHandler(this.label_ExecuteManualTest3_Click);
+			this.label_RunManualTest3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_RunManualTest3.Location = new System.Drawing.Point(611, 291);
+			this.label_RunManualTest3.Name = "label_RunManualTest3";
+			this.label_RunManualTest3.Size = new System.Drawing.Size(16, 16);
+			this.label_RunManualTest3.TabIndex = 20;
+			this.label_RunManualTest3.Click += new System.EventHandler(this.label_RunManualTest3_Click);
 			// 
-			// timer_ExecuteManualTest2
+			// timer_RunManualTest2
 			// 
-			this.timer_ExecuteManualTest2.Tick += new System.EventHandler(this.timer_ExecuteManualTest2_Tick);
+			this.timer_RunManualTest2.Tick += new System.EventHandler(this.timer_RunManualTest2_Tick);
 			// 
 			// linkLabel_Thanks
 			// 
@@ -349,9 +349,9 @@
 			this.Controls.Add(this.linkLabel_DevelopedWith);
 			this.Controls.Add(this.linkLabel_TerminalEmulator);
 			this.Controls.Add(this.linkLabel_Thanks);
-			this.Controls.Add(this.label_ExecuteManualTest3);
-			this.Controls.Add(this.label_ExecuteManualTest2);
-			this.Controls.Add(this.label_ExecuteManualTest1);
+			this.Controls.Add(this.label_RunManualTest3);
+			this.Controls.Add(this.label_RunManualTest2);
+			this.Controls.Add(this.label_RunManualTest1);
 			this.Controls.Add(this.linkLabel_License);
 			this.Controls.Add(this.pictureBox_License);
 			this.Controls.Add(this.linkLabel_Trademark);
@@ -402,10 +402,10 @@
 		private System.Windows.Forms.PictureBox pictureBox_License;
 		private System.Windows.Forms.LinkLabel linkLabel_License;
 		private System.Windows.Forms.LinkLabel linkLabel_VirtualPorts;
-		private System.Windows.Forms.Label label_ExecuteManualTest1;
-		private System.Windows.Forms.Label label_ExecuteManualTest2;
-		private System.Windows.Forms.Label label_ExecuteManualTest3;
-		private System.Windows.Forms.Timer timer_ExecuteManualTest2;
+		private System.Windows.Forms.Label label_RunManualTest1;
+		private System.Windows.Forms.Label label_RunManualTest2;
+		private System.Windows.Forms.Label label_RunManualTest3;
+		private System.Windows.Forms.Timer timer_RunManualTest2;
 		private System.Windows.Forms.LinkLabel linkLabel_Thanks;
 		private System.Windows.Forms.LinkLabel linkLabel_TerminalEmulator;
 		private System.Windows.Forms.LinkLabel linkLabel_DevelopedWith;
