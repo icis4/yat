@@ -65,7 +65,6 @@ using System.Runtime.InteropServices;
 [assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MKY.Globalization",            Justification = "Name of namespace is given by the .NET framework.")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MKY.Media",                    Justification = "Name of namespace is given by the .NET framework.")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MKY.Net.Sockets",              Justification = "Name of namespace is given by the .NET framework.")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MKY.Recent",                   Justification = "Name of namespace is given by the .NET framework.")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MKY.Reflection",               Justification = "Name of namespace is given by the .NET framework.")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MKY.Runtime.CompilerServices", Justification = "Name of namespace is given by the .NET framework.")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "MKY.Runtime.InteropServices",  Justification = "Name of namespace is given by the .NET framework.")]
