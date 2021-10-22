@@ -3,10 +3,10 @@
 // Visit YAT at https://sourceforge.net/projects/y-a-terminal/.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL: svn+ssh://maettu_this@svn.code.sf.net/p/y-a-terminal/code/trunk/YAT/!-Doc.Developer/Template.cs $
-// $Revision: 3643 $
-// $Date: 2021-01-26 12:14:15 +0100 (Di., 26 Jan 2021) $
-// $Author: maettu_this $
+// $URL$
+// $Revision$
+// $Date$
+// $Author$
 // ------------------------------------------------------------------------------------------------
 // YAT Version 2.4.1
 // ------------------------------------------------------------------------------------------------
@@ -129,5 +129,5 @@ namespace YATInfra.SVNHooks
 
 //==================================================================================================
 // End of
-// $URL: svn+ssh://maettu_this@svn.code.sf.net/p/y-a-terminal/code/trunk/YAT/!-Doc.Developer/Template.cs $
+// $URL$
 //==================================================================================================
