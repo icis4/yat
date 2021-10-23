@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Security.Permissions;
 
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, UnmanagedCode = true)]
+
 namespace MKY.Win32
 {
 	public class MessageBoxManager
