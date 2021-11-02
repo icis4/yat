@@ -781,29 +781,33 @@ namespace YAT.Model.Test
 
 				txByteCount = terminalTx.TxByteCount;
 				if (txByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+					Trace.WriteLine("Repository:" + Environment.NewLine + terminalTx.UnderlyingDomain_ForTestOnly.RepositoryToString(RepositoryType.Tx));
 					Assert.Fail("Number of sent bytes = " + txByteCount +
-					            " mismatches expected = " + expectedTotalByteCount + ".");
+					            " mismatches expected = " + expectedTotalByteCount + ". See output for details.");
 				}
 
 				txLineCount = terminalTx.TxLineCount;
 				if (expectedTotalLineCount != IgnoreCount) {
 					if (txLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+						Trace.WriteLine("Repository:" + Environment.NewLine + terminalTx.UnderlyingDomain_ForTestOnly.RepositoryToString(RepositoryType.Tx));
 						Assert.Fail("Number of sent lines = " + txLineCount +
-						            " mismatches expected = " + expectedTotalLineCount + ".");
+						            " mismatches expected = " + expectedTotalLineCount + ". See output for details.");
 					}
 				}
 
 				rxByteCount = terminalRx.RxByteCount;
 				if (rxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+					Trace.WriteLine("Repository:" + Environment.NewLine + terminalRx.UnderlyingDomain_ForTestOnly.RepositoryToString(RepositoryType.Rx));
 					Assert.Fail("Number of received bytes = " + rxByteCount +
-					            " mismatches expected = " + expectedTotalByteCount + ".");
+					            " mismatches expected = " + expectedTotalByteCount + ". See output for details.");
 				}
 
 				rxLineCount = terminalRx.RxLineCount;
 				if (expectedTotalLineCount != IgnoreCount) {
 					if (rxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+						Trace.WriteLine("Repository:" + Environment.NewLine + terminalRx.UnderlyingDomain_ForTestOnly.RepositoryToString(RepositoryType.Rx));
 						Assert.Fail("Number of received lines = " + rxLineCount +
-						            " mismatches expected = " + expectedTotalLineCount + ".");
+						            " mismatches expected = " + expectedTotalLineCount + ". See output for details.");
 					}
 				}
 
@@ -816,23 +820,27 @@ namespace YAT.Model.Test
 					}
 
 					if (txByteCount < expectedTotalByteCount) {
+						Trace.WriteLine("Repository:" + Environment.NewLine + terminalTx.UnderlyingDomain_ForTestOnly.RepositoryToString(RepositoryType.Tx));
 						sb.Append(" Number of sent bytes = " + txByteCount +
-						          " mismatches expected = " + expectedTotalByteCount + ".");
+						          " mismatches expected = " + expectedTotalByteCount + ". See output for details.");
 					}
 
 					if (txLineCount < expectedTotalLineCount) {
+						Trace.WriteLine("Repository:" + Environment.NewLine + terminalTx.UnderlyingDomain_ForTestOnly.RepositoryToString(RepositoryType.Tx));
 						sb.Append(" Number of sent lines = " + txLineCount +
-						          " mismatches expected = " + expectedTotalLineCount + ".");
+						          " mismatches expected = " + expectedTotalLineCount + ". See output for details.");
 					}
 
 					if (rxByteCount < expectedTotalByteCount) {
+						Trace.WriteLine("Repository:" + Environment.NewLine + terminalRx.UnderlyingDomain_ForTestOnly.RepositoryToString(RepositoryType.Rx));
 						sb.Append(" Number of received bytes = " + rxByteCount +
-						          " mismatches expected = " + expectedTotalByteCount + ".");
+						          " mismatches expected = " + expectedTotalByteCount + ". See output for details.");
 					}
 
 					if (rxLineCount < expectedTotalLineCount) {
+						Trace.WriteLine("Repository:" + Environment.NewLine + terminalRx.UnderlyingDomain_ForTestOnly.RepositoryToString(RepositoryType.Rx));
 						sb.Append(" Number of received lines = " + rxLineCount +
-						          " mismatches expected = " + expectedTotalLineCount + ".");
+						          " mismatches expected = " + expectedTotalLineCount + ". See output for details.");
 					}
 
 					Assert.Fail(sb.ToString());
@@ -886,7 +894,7 @@ namespace YAT.Model.Test
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Reverification", Justification = "'Reverification' is a correct English term.")]
 		public static void WaitForReverification()
 		{
-			Domain.Test.Utilities.WaitForReverification();
+			Domain.Test.Utilities.WaitBeforeReverification();
 		}
 
 		#endregion
