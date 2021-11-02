@@ -700,7 +700,7 @@ namespace YAT.Domain.Test.Terminal
 			Utilities.AssertRxContentPattern(terminalRx, expectedContentPattern);
 
 			// Wait to ensure that no operation is ongoing anymore and verify again:
-			Utilities.WaitForReverification();
+			Utilities.WaitBeforeReverification();
 
 			Utilities.AssertCounts(terminalTx, terminalRx, fileInfo.ByteCount, fileInfo.LineCount);
 

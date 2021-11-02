@@ -104,7 +104,7 @@ namespace YAT.Domain.Test.TextTerminal
 							Utilities.WaitForTransmissionAndAssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 							// Wait to ensure that no operation is ongoing anymore and verify again:
-							Utilities.WaitForReverification();
+							Utilities.WaitBeforeReverification();
 							Utilities.AssertCounts(terminalTx, terminalRx, expectedTotalByteCount, expectedTotalLineCount);
 
 							// Refresh and verify again:

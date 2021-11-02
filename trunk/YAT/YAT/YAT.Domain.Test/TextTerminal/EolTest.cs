@@ -241,7 +241,7 @@ namespace YAT.Domain.Test.TextTerminal
 								EolAwareWaitForTransmissionAndVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
 								// Wait to ensure that no operation is ongoing anymore and verify again:
-								Utilities.WaitForReverification();
+								Utilities.WaitBeforeReverification();
 								EolAwareVerifyCounts(terminalB, terminalA, eolIsSymmetric, expectedTotalByteCountB, expectedTotalLineCountB);
 
 								// Refresh and verify again:
@@ -357,7 +357,7 @@ namespace YAT.Domain.Test.TextTerminal
 							VerifyLineCount(terminalA, terminalB, 3);
 
 							// Wait to ensure that no operation is ongoing anymore and verify again:
-							Utilities.WaitForReverification();
+							Utilities.WaitBeforeReverification();
 							VerifyLineCount(terminalA, terminalB, 3);
 
 							// Refresh and verify again:
