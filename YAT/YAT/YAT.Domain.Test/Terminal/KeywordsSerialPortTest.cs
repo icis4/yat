@@ -95,7 +95,7 @@ namespace YAT.Domain.Test.Terminal
 								Utilities.TransmitAndAssertCounts(terminalB, terminalA, parser, "Pong B => A", ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
 
 								// Wait to ensure that no operation is ongoing anymore and verify again:
-								Utilities.WaitForReverification();
+								Utilities.WaitBeforeReverification();
 								Utilities.AssertCounts(terminalB, terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 								// Refresh and verify again:
@@ -129,7 +129,7 @@ namespace YAT.Domain.Test.Terminal
 								Utilities.TransmitAndAssertRxCounts(terminalB, terminalA, parser, "Swapped B => A", ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
 
 								// Wait to ensure that no operation is ongoing anymore and verify again:
-								Utilities.WaitForReverification();
+								Utilities.WaitBeforeReverification();
 								Utilities.AssertRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 								// Refresh and verify again:
@@ -168,7 +168,7 @@ namespace YAT.Domain.Test.Terminal
 								Utilities.TransmitAndAssertRxCounts(terminalB, terminalA, parser, "Changed dedicated B => A", ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
 
 								// Wait to ensure that no operation is ongoing anymore and verify again:
-								Utilities.WaitForReverification();
+								Utilities.WaitBeforeReverification();
 								Utilities.AssertRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 								// Refresh and verify again:
@@ -207,7 +207,7 @@ namespace YAT.Domain.Test.Terminal
 								Utilities.TransmitAndAssertRxCounts(terminalB, terminalA, parser, "Changed combined B => A", ref expectedTotalByteCountBA, ref expectedTotalLineCountBA);
 
 								// Wait to ensure that no operation is ongoing anymore and verify again:
-								Utilities.WaitForReverification();
+								Utilities.WaitBeforeReverification();
 								Utilities.AssertRxCounts(terminalA, expectedTotalByteCountBA, expectedTotalLineCountBA);
 
 								// Refresh and verify again:
@@ -422,7 +422,7 @@ namespace YAT.Domain.Test.Terminal
 								Utilities.AssertBidirContent(terminalA, expectedContentA);
 
 								// Wait to ensure that no operation is ongoing anymore and verify again:
-								Utilities.WaitForReverification();
+								Utilities.WaitBeforeReverification();
 								Utilities.AssertTxCounts(terminalA, expectedTotalByteCountAB, expectedTotalLineCountAB);
 								Utilities.AssertRxCounts(terminalB, expectedTotalByteCountAB, expectedTotalLineCountAB);
 								Utilities.AssertTxCounts(terminalB, expectedTotalByteCountBA, expectedTotalLineCountBA + 1); // See above.
