@@ -386,7 +386,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				// Do not lock() infinitly in a simple get-property.
+				// Do not lock() infinitely in a simple get-property.
 
 				if (Monitor.TryEnter(this.portSyncObj, ThreadWaitTimeout))
 				{
@@ -418,7 +418,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				// Do not lock() infinitly in a simple get-property.
+				// Do not lock() infinitely in a simple get-property.
 
 				if (Monitor.TryEnter(this.portSyncObj, ThreadWaitTimeout))
 				{
@@ -450,7 +450,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				// Do not lock() infinitly in a simple get-property.
+				// Do not lock() infinitely in a simple get-property.
 
 				if (Monitor.TryEnter(this.portSyncObj, ThreadWaitTimeout))
 				{
@@ -495,7 +495,7 @@ namespace MKY.IO.Serial.SerialPort
 			{
 			////AssertUndisposed() shall not be called from this simple get-property.
 
-				// Do not lock() infinitly in a simple get-property.
+				// Do not lock() infinitely in a simple get-property.
 
 				if (Monitor.TryEnter(this.portSyncObj, ThreadWaitTimeout))
 				{
