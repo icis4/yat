@@ -115,7 +115,7 @@ namespace YAT.Domain.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Reverification", Justification = "Sounds like what it is meant for.")]
-		public const int WaitTimeoutForReverification = (2 * WaitTimeoutForLineTransmission); // 600 ms.
+		public const int WaitTimeBeforeReverification = (2 * WaitTimeoutForLineTransmission); // 600 ms.
 
 		/// <summary></summary>
 		public const string LineExceededWarningPattern = @"\[Warning: Maximal number of (characters|bytes) per line exceeded! Check the line break settings in Terminal > Settings > (Text|Binary) or increase the limit in Terminal > Settings > Advanced.\]";
@@ -526,8 +526,8 @@ namespace YAT.Domain.Test
 			bool isFirst = true; // Using do-while, first check state.
 			int waitTime = 0;
 			int waitIntervalForTransmission = TimeoutToInterval(timeout);
-			int txByteCount = 0;
-			int txLineCount = 0;
+			int txByteCount;
+			int txLineCount;
 			StringBuilder sb;
 
 			do
@@ -539,15 +539,17 @@ namespace YAT.Domain.Test
 
 				txByteCount = terminalTx.GetRepositoryByteCount(RepositoryType.Tx);
 				if (txByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+					Trace.WriteLine("Repository:" + System.Environment.NewLine + terminalTx.RepositoryToString(RepositoryType.Tx));
 					Assert.Fail("Number of sent bytes = " + txByteCount +
-					            " mismatches expected = " + expectedTotalByteCount + ".");
+					            " mismatches expected = " + expectedTotalByteCount + ". See output for details.");
 				}
 
 				txLineCount = terminalTx.GetRepositoryLineCount(RepositoryType.Tx);
 				if (expectedTotalLineCount != IgnoreCount) {
 					if (txLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+						Trace.WriteLine("Repository:" + System.Environment.NewLine + terminalTx.RepositoryToString(RepositoryType.Tx));
 						Assert.Fail("Number of sent lines = " + txLineCount +
-						            " mismatches expected = " + expectedTotalLineCount + ".");
+						            " mismatches expected = " + expectedTotalLineCount + ". See output for details.");
 					}
 				}
 
@@ -560,13 +562,15 @@ namespace YAT.Domain.Test
 					}
 
 					if (txByteCount < expectedTotalByteCount) {
+						Trace.WriteLine("Repository:" + System.Environment.NewLine + terminalTx.RepositoryToString(RepositoryType.Tx));
 						sb.Append(" Number of sent bytes = " + txByteCount +
-						          " mismatches expected = " + expectedTotalByteCount + ".");
+						          " mismatches expected = " + expectedTotalByteCount + ". See output for details.");
 					}
 
 					if (txLineCount < expectedTotalLineCount) {
+						Trace.WriteLine("Repository:" + System.Environment.NewLine + terminalTx.RepositoryToString(RepositoryType.Tx));
 						sb.Append(" Number of sent lines = " + txLineCount +
-						          " mismatches expected = " + expectedTotalLineCount + ".");
+						          " mismatches expected = " + expectedTotalLineCount + ". See output for details.");
 					}
 
 					Assert.Fail(sb.ToString());
@@ -628,15 +632,17 @@ namespace YAT.Domain.Test
 
 				rxByteCount = terminalRx.GetRepositoryByteCount(RepositoryType.Rx);
 				if (rxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+					Trace.WriteLine("Repository:" + System.Environment.NewLine + terminalRx.RepositoryToString(RepositoryType.Rx));
 					Assert.Fail("Number of received bytes = " + rxByteCount +
-					            " mismatches expected = " + expectedTotalByteCount + ".");
+					            " mismatches expected = " + expectedTotalByteCount + ". See output for details.");
 				}
 
 				rxLineCount = terminalRx.GetRepositoryLineCount(RepositoryType.Rx);
 				if (expectedTotalLineCount != IgnoreCount) {
 					if (rxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+						Trace.WriteLine("Repository:" + System.Environment.NewLine + terminalRx.RepositoryToString(RepositoryType.Rx));
 						Assert.Fail("Number of received lines = " + rxLineCount +
-						            " mismatches expected = " + expectedTotalLineCount + ".");
+						            " mismatches expected = " + expectedTotalLineCount + ". See output for details.");
 					}
 				}
 
@@ -649,13 +655,15 @@ namespace YAT.Domain.Test
 					}
 
 					if (rxByteCount < expectedTotalByteCount) {
+						Trace.WriteLine("Repository:" + System.Environment.NewLine + terminalRx.RepositoryToString(RepositoryType.Rx));
 						sb.Append(" Number of received bytes = " + rxByteCount +
-						          " mismatches expected = " + expectedTotalByteCount + ".");
+						          " mismatches expected = " + expectedTotalByteCount + ". See output for details.");
 					}
 
 					if (rxLineCount < expectedTotalLineCount) {
+						Trace.WriteLine("Repository:" + System.Environment.NewLine + terminalRx.RepositoryToString(RepositoryType.Rx));
 						sb.Append(" Number of received lines = " + rxLineCount +
-						          " mismatches expected = " + expectedTotalLineCount + ".");
+						          " mismatches expected = " + expectedTotalLineCount + ". See output for details.");
 					}
 
 					Assert.Fail(sb.ToString());
@@ -722,29 +730,33 @@ namespace YAT.Domain.Test
 
 				txByteCount = terminalTx.GetRepositoryByteCount(RepositoryType.Tx);
 				if (txByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+					Trace.WriteLine("Repository:" + System.Environment.NewLine + terminalTx.RepositoryToString(RepositoryType.Tx));
 					Assert.Fail("Number of sent bytes = " + txByteCount +
-					            " mismatches expected = " + expectedTotalByteCount + ".");
+					            " mismatches expected = " + expectedTotalByteCount + ". See output for details.");
 				}
 
 				txLineCount = terminalTx.GetRepositoryLineCount(RepositoryType.Tx);
 				if (expectedTotalLineCount != IgnoreCount) {
 					if (txLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+						Trace.WriteLine("Repository:" + System.Environment.NewLine + terminalTx.RepositoryToString(RepositoryType.Tx));
 						Assert.Fail("Number of sent lines = " + txLineCount +
-						            " mismatches expected = " + expectedTotalLineCount + ".");
+						            " mismatches expected = " + expectedTotalLineCount + ". See output for details.");
 					}
 				}
 
 				rxByteCount = terminalRx.GetRepositoryByteCount(RepositoryType.Rx);
 				if (rxByteCount > expectedTotalByteCount) { // Break in case of too much data to improve speed of test.
+					Trace.WriteLine("Repository:" + System.Environment.NewLine + terminalRx.RepositoryToString(RepositoryType.Rx));
 					Assert.Fail("Number of received bytes = " + rxByteCount +
-					            " mismatches expected = " + expectedTotalByteCount + ".");
+					            " mismatches expected = " + expectedTotalByteCount + ". See output for details.");
 				}
 
 				rxLineCount = terminalRx.GetRepositoryLineCount(RepositoryType.Rx);
 				if (expectedTotalLineCount != IgnoreCount) {
 					if (rxLineCount > expectedTotalLineCount) { // Break in case of too much data to improve speed of test.
+						Trace.WriteLine("Repository:" + System.Environment.NewLine + terminalRx.RepositoryToString(RepositoryType.Rx));
 						Assert.Fail("Number of received lines = " + rxLineCount +
-						            " mismatches expected = " + expectedTotalLineCount + ".");
+						            " mismatches expected = " + expectedTotalLineCount + ". See output for details.");
 					}
 				}
 
@@ -757,23 +769,27 @@ namespace YAT.Domain.Test
 					}
 
 					if (txByteCount < expectedTotalByteCount) {
+						Trace.WriteLine("Repository:" + System.Environment.NewLine + terminalTx.RepositoryToString(RepositoryType.Tx));
 						sb.Append(" Number of sent bytes = " + txByteCount +
-						          " mismatches expected = " + expectedTotalByteCount + ".");
+						          " mismatches expected = " + expectedTotalByteCount + ". See output for details.");
 					}
 
 					if (txLineCount < expectedTotalLineCount) {
+						Trace.WriteLine("Repository:" + System.Environment.NewLine + terminalTx.RepositoryToString(RepositoryType.Tx));
 						sb.Append(" Number of sent lines = " + txLineCount +
-						          " mismatches expected = " + expectedTotalLineCount + ".");
+						          " mismatches expected = " + expectedTotalLineCount + ". See output for details.");
 					}
 
 					if (rxByteCount < expectedTotalByteCount) {
+						Trace.WriteLine("Repository:" + System.Environment.NewLine + terminalRx.RepositoryToString(RepositoryType.Rx));
 						sb.Append(" Number of received bytes = " + rxByteCount +
-						          " mismatches expected = " + expectedTotalByteCount + ".");
+						          " mismatches expected = " + expectedTotalByteCount + ". See output for details.");
 					}
 
 					if (rxLineCount < expectedTotalLineCount) {
+						Trace.WriteLine("Repository:" + System.Environment.NewLine + terminalRx.RepositoryToString(RepositoryType.Rx));
 						sb.Append(" Number of received lines = " + rxLineCount +
-						          " mismatches expected = " + expectedTotalLineCount + ".");
+						          " mismatches expected = " + expectedTotalLineCount + ". See output for details.");
 					}
 
 					Assert.Fail(sb.ToString());
@@ -820,9 +836,9 @@ namespace YAT.Domain.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Reverification", Justification = "'Reverification' is a correct English term.")]
-		public static void WaitForReverification()
+		public static void WaitBeforeReverification()
 		{
-			Thread.Sleep(WaitTimeoutForReverification);
+			Thread.Sleep(WaitTimeBeforeReverification);
 		}
 
 		#endregion
