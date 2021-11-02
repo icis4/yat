@@ -106,6 +106,8 @@
     <Compile Include="TextTerminal\FormatTest.cs" />
     <Compile Include="TextTerminal\GlueCharsOfLineTest.SerialPortLoopbackSelfs.cs" />
     <Compile Include="TextTerminal\GlueCharsOfLineTest.IPv4Loopback.cs" />
+    <Compile Include="TextTerminal\WaitForResponseTest.Infinite.cs" />
+    <Compile Include="TextTerminal\WaitForResponseTest.Default.cs" />
     <Compile Include="TextTerminal\WaitForResponseTest.cs" />
     <Compile Include="TextTerminal\EolTest.cs" />
     <Compile Include="TextTerminal\SubstitutionParserTest.cs" />
